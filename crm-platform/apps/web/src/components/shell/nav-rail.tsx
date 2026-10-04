@@ -7,7 +7,9 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useStoredValue } from '@/lib/use-stored-value';
 import { NavCollapsedContext } from './nav-context';
+import { useOptionalShellData } from './shell-data';
 import { BrandMark, ChevronIcon, CloseIcon, NavIcon } from './nav-icons';
 import { railSections, type NavSection } from './nav-model';
 
@@ -62,7 +64,7 @@ function PanelItem({
       ) : null}
     </>
   );
-  const row = 'flex items-center gap-3 rounded-xl px-3 py-2 text-sm';
+  const row = 'relative flex items-center gap-3 rounded-xl px-3 py-[9px] text-[13.5px] font-medium';
   if (item.comingSoon) {
     return (
       <span
@@ -83,7 +85,7 @@ function PanelItem({
         row,
         'outline-none transition focus-visible:ring-2 focus-visible:ring-nav-ring',
         active
-          ? 'bg-nav-active font-semibold text-nav-active-foreground'
+          ? 'bg-nav-active text-nav-active-foreground before:absolute before:-start-3 before:top-1/2 before:h-5 before:w-[3px] before:-translate-y-1/2 before:rounded-e-[3px] before:bg-nav-accent'
           : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
       )}
     >
@@ -97,6 +99,18 @@ function PanelItem({
  * A section is only ever built from items that survived the menu's gates, so a group with nothing visible has no
  * heading (an empty one is skipped here as well).
  */
+export const NAV_COLLAPSED_KEY = 'shell:nav:collapsed';
+
+/** Collapsed group ids, remembered per browser (Reference: localStorage, not per user or workspace). */
+export function parseCollapsed(raw: string | null): string[] {
+  try {
+    const v: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(v) ? v.filter((g): g is string => typeof g === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
 export function NavPanel({
   sections,
   activeId,
@@ -107,22 +121,47 @@ export function NavPanel({
   onNavigate?: () => void;
 }) {
   const t = useTranslations();
+  const tg = useTranslations('admin-console-shell.shell');
   const uid = useId();
+  const [raw, setRaw] = useStoredValue(NAV_COLLAPSED_KEY);
+  const collapsed = parseCollapsed(raw);
+  const toggle = (group: string) =>
+    setRaw(
+      JSON.stringify(
+        collapsed.includes(group) ? collapsed.filter((g) => g !== group) : [...collapsed, group],
+      ),
+    );
   return (
-    <nav aria-label={t('shell.mainMenu')} className="space-y-5 px-3 py-4">
+    <nav aria-label={t('shell.mainMenu')} className="px-3 py-2">
       {sections
         .filter((section) => section.items.length > 0)
         .map((section) => {
           const headingId = `${uid}-${section.group}`;
+          const listId = `${uid}-list-${section.group}`;
+          // The group holding the current page is always open, so the active entry is never hidden.
+          const holdsActive = section.items.some((i) => i.id === activeId);
+          const shut = collapsed.includes(section.group) && !holdsActive;
           return (
             <div key={section.group} role="group" aria-labelledby={headingId}>
-              <div
+              <button
                 id={headingId}
-                className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-nav-muted"
+                type="button"
+                aria-expanded={!shut}
+                aria-controls={listId}
+                aria-label={tg('toggleGroup', { group: t(`shell.groups.${section.group}`) })}
+                onClick={() => toggle(section.group)}
+                className="mb-1.5 mt-4 flex w-full items-center justify-between gap-2 rounded px-3 text-start font-mono text-[9px] uppercase tracking-[0.18em] text-nav-muted outline-none hover:text-nav-foreground focus-visible:ring-2 focus-visible:ring-nav-ring"
               >
-                {t(`shell.groups.${section.group}`)}
-              </div>
-              <ul className="space-y-0.5">
+                <span>{t(`shell.groups.${section.group}`)}</span>
+                <ChevronIcon
+                  dir="down"
+                  className={cn(
+                    'size-[11px] opacity-60 transition-transform',
+                    shut && '-rotate-90',
+                  )}
+                />
+              </button>
+              <ul id={listId} hidden={shut} className="space-y-0.5">
                 {section.items.map((item) => (
                   <li key={item.id}>
                     <PanelItem
@@ -144,6 +183,7 @@ export function NavPanel({
 /** Brand mark and wordmark at the top of the panel. */
 function PanelBrand({ collapsed, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   const t = useTranslations();
+  const tc = useTranslations('admin-console-shell.shell');
   return (
     <Link
       href="/"
@@ -153,8 +193,13 @@ function PanelBrand({ collapsed, onNavigate }: { collapsed?: boolean; onNavigate
     >
       <BrandMark className="size-8" />
       {!collapsed && (
-        <span className="truncate text-base font-semibold tracking-tight text-nav-active-foreground">
-          {t('common.appName')}
+        <span className="min-w-0 leading-tight">
+          <span className="block truncate font-serif text-xl tracking-tight text-nav-active-foreground">
+            {t('common.appName')}
+          </span>
+          <span className="block font-mono text-[8.5px] uppercase tracking-[0.2em] text-nav-muted">
+            {tc('railCaption')}
+          </span>
         </span>
       )}
     </Link>
@@ -264,6 +309,14 @@ export function NavRail({
           </>
         </div>
       )}
+      {pinned && footer && (
+        <div
+          data-testid="rail-workspace"
+          className="shrink-0 p-3 pb-1 [&_[role=menu]]:bottom-auto [&_[role=menu]]:top-full [&_[role=menu]]:mb-0 [&_[role=menu]]:mt-2"
+        >
+          <NavCollapsedContext.Provider value={false}>{footer}</NavCollapsedContext.Provider>
+        </div>
+      )}
       <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {pinned ? (
           <NavPanel sections={main} activeId={activeId} />
@@ -299,11 +352,15 @@ export function NavRail({
           )}
         </nav>
       )}
-      <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
-        {footer && (
-          <NavCollapsedContext.Provider value={!pinned}>{footer}</NavCollapsedContext.Provider>
-        )}
-      </div>
+      {pinned ? (
+        <WalletCard />
+      ) : (
+        footer && (
+          <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
+            <NavCollapsedContext.Provider value={true}>{footer}</NavCollapsedContext.Provider>
+          </div>
+        )
+      )}
       {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
       {tip &&
         typeof document !== 'undefined' &&
@@ -319,6 +376,36 @@ export function NavRail({
           document.body,
         )}
     </aside>
+  );
+}
+
+/** Reference's wallet card at the foot of the rail: caption and plan chip, the balance, and a "Top up" button (TW-ASHELL-015). */
+function WalletCard() {
+  const tw = useTranslations('admin-console-shell.shell');
+  const profile = useOptionalShellData()?.profile;
+  if (!profile?.walletLabel) return null;
+  return (
+    <div className="shrink-0 p-3.5" data-testid="rail-wallet">
+      <div className="rounded-2xl border border-nav-border bg-nav-hover/60 p-3.5">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-[9px] uppercase tracking-widest text-nav-muted">
+            {tw('wallet')}
+          </span>
+          <span className="rounded-full bg-nav-accent/15 px-2 py-0.5 font-mono text-[9px] text-nav-accent">
+            {profile.plan}
+          </span>
+        </div>
+        <div className="mt-1.5 text-[22px] font-semibold leading-none tabular-nums text-nav-active-foreground">
+          {profile.walletLabel}
+        </div>
+        <Link
+          href="/billing/wallet"
+          className="mt-2.5 block w-full rounded-full bg-nav-accent py-1.5 text-center text-[11.5px] font-semibold text-black outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-nav-ring"
+        >
+          {tw('topUp')}
+        </Link>
+      </div>
+    </div>
   );
 }
 

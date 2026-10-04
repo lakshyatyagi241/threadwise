@@ -114,7 +114,8 @@ export function AppShell({
   const wide = isFullWidthScreen(nav, settings, pathname);
   // On a full-width screen the menu is the slim rail; the expand button opens it for that visit only (the saved choice stays).
   const [openHere, setOpenHere] = useState<string | null>(null);
-  const pinned = wide ? openHere === pathname : pinnedRaw === '1';
+  // Reference's rail is always wide; collapsing it is an addition, so the default is open and only '0' means slim.
+  const pinned = wide ? openHere === pathname : pinnedRaw !== '0';
   const togglePinned = () =>
     wide ? setOpenHere(pinned ? null : pathname) : setPinned(pinned ? '0' : '1');
   const chromeHidden = useChromeHidden();

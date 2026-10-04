@@ -28,7 +28,14 @@ export const BAR_TARGETS: Partial<Record<NavLayoutKey, { nav?: string; tile?: st
   support: { nav: 'support' },
 };
 
+/** The header draws Channels with the network glyph; the Settings tile behind it uses another. */
+const BAR_ICONS: Partial<Record<NavLayoutKey, string>> = { devices: 'channels' };
+
 export const MORE_HREF = '/more';
+
+/** The header's own wording (Reference's header says "Unified Inbox" and "Channels"), one message per catalogue key. */
+export const barLabelKey = (key: NavLayoutKey): string =>
+  `admin-console-shell.topNav.labels.${key}`;
 
 export interface BarItem {
   key: NavLayoutKey;
@@ -62,8 +69,8 @@ export function resolveTopBar(
     out.push({
       key,
       href: entry.href,
-      labelKey: entry.labelKey,
-      icon: entry.icon,
+      labelKey: barLabelKey(key),
+      icon: BAR_ICONS[key] ?? entry.icon,
       locked: entry.locked,
     });
   }
