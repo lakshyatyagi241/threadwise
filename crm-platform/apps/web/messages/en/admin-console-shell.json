@@ -287,7 +287,8 @@
       "railLabel": "Settings sections",
       "personal": {
         "title": "Your account",
-        "body": "Profile, password and personal preferences."
+        "body": "Profile, password and personal preferences.",
+        "eyebrow": "Personal"
       },
       "api": {
         "restTitle": "General REST API",

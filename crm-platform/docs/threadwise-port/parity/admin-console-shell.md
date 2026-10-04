@@ -106,3 +106,22 @@ rebuilt. Also not compared screen by screen: command palette, quick access edito
 workspace settings tabs. Not rebuilt: 008, 025, 030, 036 (blocked as before), 045.
 
 Tests: web 4116 passed (384 files); `pnpm arch:check` fails on existing chat-conversations and flow-runtime-engine violations, none in this domain.
+
+## Round 4: blocked features re-attempted, More hub, bell, conformance
+
+tier P1 done (round 4): 008 (settings hub tile search), 018 (bell: Inbox eyebrow, serif title, Clear all and View all footer), 020 (More hub rebuilt).
+tier P2 done (round 4): 025 and 036 (workspace Branding tab and white-label shell), 042 (Sheets key status and webhook counts), 045 (data residency).
+
+- 036/025: owner-only Branding tab (`GET/POST /v2/shell/workspace/branding`, multipart). Colours live in `organizations.settings.branding`; logo and favicon bytes in the new tenant table
+  `workspace_brand_assets` (migration `20261025090000_ashell_workspace_brand_assets`, forced RLS). The shell applies colours as CSS variables, the logo in the top bar, and the favicon (Reference never applied it).
+  Tests: `apps/api/test/e2e/admin-console-shell/branding.e2e.spec.ts` (owner only, blank clears, absent untouched, #RRGGBB, SVG and fake images refused, one row per slot, tenant isolation) and `brand-css.test.ts`.
+- 045: `GET/PUT /v2/shell/workspace/data-residency` writes `workspace_settings.data_residency`, the column the translation router reads; the form is on Settings > Data (the DPA page, owned by CMS, shows the current mode).
+- 042: `GET /v2/shell/workspace/integrations` (my Sheets key suffix and times, never the hash; outbound and inbound webhook counts).
+- 018: `DELETE /v2/shell/notifications` (my notifications only, audited). The NOTIF module had no delete. ONE edit in `features/notifications-activity-audit/components/notification-bell.tsx`.
+- 008: the hub, KPI strip and quick buttons were already the SET page; added Reference's tile search (one edit in `platform-settings-branding-storage/components/settings-hub.tsx`).
+- 020: `GET /v2/shell/overview-stats` (one read per page, one savepoint per figure). The page has the live strip, Reference's 40 tool cards (shown only when our screen exists) with live footers, Navigation strip, tabs, and the side column.
+- Compared live with Reference (1360 px): More hub, Settings General and Branding. Fixed: rail card with icons and filled active pill, serif card titles, mono "Personal" card, dropzone icons.
+
+Intended differences added: Branding stores bytes in the database (interim, like the avatar) and accepts raster images only (SVG can carry script; Reference's `image` rule refused it in practice); colours are sent only when edited, so saving a logo never repaints with the defaults; the page background colour applies to the light theme only; residency form lives in Settings > Data; More hub cards for tools whose page does not exist here (Meta Ads, SMS, LINE, WeChat, Viber, TikTok, Quick Send, Lead Finder, Auto Reply, Message History, Notifications page, Google account, Call Logs, Forms, Link Generator, AI Training, Webhooks, Activity Log) appear automatically when the owning domain adds the screen; Settings tiles are not repeated in the grid; recent activity reads `audit_log` (module and action) because security events are privileged-only; AI Training shows assistants only; Connected counts devices only; Developers / API opens Settings > API and webhooks.
+
+Still blocked: 030 impersonation strip. Nothing mints an impersonation session: `PlatformInboxService.impersonate` (platform-support-desk) answers 501 and no module writes `impersonation_sessions`, so there is no claim for the strip to read. Not compared screen by screen: command palette, quick access editor, tour steps, sidebar mode, announcement bars.

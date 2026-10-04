@@ -21,7 +21,7 @@ export function DataTab() {
   return (
     <div className="space-y-5">
       <Card className="space-y-3 p-6">
-        <h2 className="text-xl font-semibold">{t('exportTitle')}</h2>
+        <h2 className="font-serif text-xl">{t('exportTitle')}</h2>
         <p className="text-xs text-muted-foreground">{t('exportNote')}</p>
         {!c.isOwner && (
           <p className="text-xs italic text-muted-foreground">{t('exportOwnerOnly')}</p>
