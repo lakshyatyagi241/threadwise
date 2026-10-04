@@ -3,7 +3,18 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Badge, Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
+import {
+  Badge,
+  Button,
+  Field,
+  Input,
+  Modal,
+  Select,
+  Spinner,
+  Textarea,
+  cn,
+  useToast,
+} from '@crm/ui';
 import {
   TCHAT_CHANNEL_DESCRIPTION_MAX,
   TCHAT_CHANNEL_NAME_MAX,
@@ -57,11 +68,16 @@ function CreateChannelForm({
   return (
     <form onSubmit={submit} className="space-y-4">
       <Field label={t('name')} htmlFor={`${id}-name`} hint={t('nameHint')}>
-        <div className="flex items-center gap-2">
-          <span aria-hidden="true" className="text-muted-foreground">
+        <div className="flex items-center">
+          <span
+            aria-hidden="true"
+            className="rounded-s-md border border-e-0 border-border bg-muted px-2 py-2 text-[13px] text-muted-foreground"
+          >
             #
           </span>
           <Input
+            className="rounded-s-none"
+            placeholder={t('namePlaceholder')}
             id={`${id}-name`}
             value={name}
             required
@@ -77,26 +93,37 @@ function CreateChannelForm({
           id={`${id}-desc`}
           value={description}
           maxLength={TCHAT_CHANNEL_DESCRIPTION_MAX}
+          placeholder={t('descriptionPlaceholder')}
           onChange={(e) => setDescription(e.target.value)}
         />
       </Field>
-      <fieldset className="space-y-2 text-sm">
-        <legend className="font-medium">{t('privacy')}</legend>
-        {(['public', 'private'] as const).map((v) => (
-          <label key={v} className="flex items-start gap-2">
-            <input
-              type="radio"
-              name={`${id}-type`}
-              checked={type === v}
-              onChange={() => setType(v)}
-              className="mt-1"
-            />
-            <span>
-              <span className="font-medium">{t(`${v}.label`)}</span>
-              <span className="block text-xs text-muted-foreground">{t(`${v}.hint`)}</span>
-            </span>
-          </label>
-        ))}
+      <fieldset className="space-y-1 text-sm">
+        <legend className="mb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+          {t('privacy')}
+        </legend>
+        <div className="flex gap-2">
+          {(['public', 'private'] as const).map((v) => (
+            <label
+              key={v}
+              className={cn(
+                'flex-1 cursor-pointer rounded-md border px-3 py-2 hover:border-primary',
+                type === v ? 'border-primary bg-success/10' : 'border-border',
+              )}
+            >
+              <input
+                type="radio"
+                name={`${id}-type`}
+                checked={type === v}
+                onChange={() => setType(v)}
+                className="me-1.5"
+              />
+              {t(`${v}.label`)}
+              <span className="mt-0.5 block text-[10.5px] text-muted-foreground">
+                {t(`${v}.hint`)}
+              </span>
+            </label>
+          ))}
+        </div>
       </fieldset>
       {error && (
         <p role="alert" className="text-sm text-danger">
@@ -190,6 +217,7 @@ function InviteForm({
           type="email"
           required
           maxLength={191}
+          placeholder={t('emailPlaceholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoFocus
@@ -199,15 +227,17 @@ function InviteForm({
         <Input
           id={`${id}-name`}
           maxLength={191}
+          placeholder={t('namePlaceholder')}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </Field>
-      <Field label={t('note')} htmlFor={`${id}-note`} hint={t('noteHint')}>
+      <Field label={t('note')} htmlFor={`${id}-note`}>
         <Textarea
           id={`${id}-note`}
           rows={3}
           maxLength={500}
+          placeholder={t('notePlaceholder')}
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />

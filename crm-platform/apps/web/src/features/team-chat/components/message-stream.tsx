@@ -2,10 +2,11 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
-import { Button, EmptyState, Spinner, cn } from '@crm/ui';
+import { Button, Spinner, cn } from '@crm/ui';
 import type { TchatMe, TchatMessageResponse } from '@crm/contracts';
 import { dayKey, formatDay, nearBottom } from '../lib/format';
 import { groupByDay, type Pending } from '../lib/thread';
+import { ChatBubbleIcon } from './icons';
 import { MessageItem, PendingItem } from './message-item';
 
 export interface MessageStreamProps {
@@ -110,13 +111,13 @@ export function MessageStream(props: MessageStreamProps) {
       }}
       data-testid="tchat-stream"
       className={cn(
-        'min-h-0 flex-1 overflow-y-auto px-4 py-3',
+        'min-h-0 flex-1 overflow-y-auto bg-muted/30 px-5 py-4',
         props.dragging && 'outline-2 -outline-offset-4 outline-dashed outline-primary',
       )}
     >
       {!props.loaded && !props.error && (
-        <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Spinner /> {t('loading')}
+        <p role="status" className="py-12 text-center font-mono text-xs text-muted-foreground">
+          {t('loading')}
         </p>
       )}
       {props.error && (
@@ -135,21 +136,23 @@ export function MessageStream(props: MessageStreamProps) {
       )}
 
       {empty && (
-        <EmptyState
-          title={t('emptyTitle', { name: props.channelName })}
-          message={t('emptyMessage')}
-          className="mt-6"
-        />
+        <div className="flex h-full min-h-[40vh] flex-col items-center justify-center px-6 text-center">
+          <ChatBubbleIcon className="mb-3 size-8 text-muted-foreground/60" strokeWidth={1.5} />
+          <p className="text-[13px] text-muted-foreground">
+            {t('emptyTitle', { name: props.channelName })}
+          </p>
+          <p className="mt-1 text-[11.5px] text-muted-foreground/80">{t('emptyMessage')}</p>
+        </div>
       )}
 
       {groups.map((g) => (
         <section key={g.key} aria-label={formatDay(g.at, locale)} className="mb-2">
-          <div className="my-3 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" />
-            <span>{formatDay(g.at, locale)}</span>
-            <span className="h-px flex-1 bg-border" />
+          <div className="my-3 text-center">
+            <span className="rounded-full bg-muted px-2.5 py-0.5 font-mono text-[10.5px] text-muted-foreground">
+              {formatDay(g.at, locale)}
+            </span>
           </div>
-          <ul className="space-y-3">
+          <ul className="space-y-1">
             {g.messages.map((m) => (
               <MessageItem
                 key={m.id}
