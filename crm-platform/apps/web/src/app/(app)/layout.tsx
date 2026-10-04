@@ -4,6 +4,8 @@ import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { AnnouncementBars } from '@/features/admin-console-shell/announcements/announcement-bars';
+import { fetchShellConfig } from '@/features/admin-console-shell/server';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
@@ -32,7 +34,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   // The plan's features lock the menu entries that need one and drive the paywall sheet; unknown (null) locks nothing.
-  const enabledFeatures = await fetchEnabledFeatures();
+  const [enabledFeatures, shellConfig] = await Promise.all([
+    fetchEnabledFeatures(),
+    fetchShellConfig(),
+  ]);
   const capabilities = {
     ...CAPABILITIES_UNKNOWN,
     permissions: new Set(Object.keys(session.permissions)),
@@ -60,9 +65,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
           settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
           theme={theme}
+          shell={shellConfig ?? undefined}
+          profile={{ plan: session.org.plan, role: session.roles[0]?.name ?? 'Member' }}
           navFooter={<WorkspaceSwitcher />}
           banners={
             <>
+              <AnnouncementBars />
               <TrialBar />
               <AccountBanners key="banners" />
             </>

@@ -2,41 +2,32 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useId, useState, type FormEvent } from 'react';
-import type { SetupBootstrapResponse, SetupStatusResponse } from '@crm/contracts';
+import { useCallback, useState, type ReactNode } from 'react';
+import type { SetupStatusResponse } from '@crm/contracts';
+import { Alert, cn } from '@crm/ui';
+import { InstallRunScreen } from './install-run';
 import {
-  Alert,
-  Badge,
-  Button,
-  Card,
-  Field,
-  Input,
-  PasswordInput,
-  Select,
-  Spinner,
-  cn,
-} from '@crm/ui';
-import { suggestSlug } from '@/features/auth-registration-security/guest/slug';
-import { TimezoneCombobox } from '@/features/auth-registration-security/shared/timezone-combobox';
-import { LOCALES } from '@/i18n/locales';
-import { languageName } from '@/features/auth-registration-security/platform/ui/language';
-import { bootstrapPlatform, verifySetupToken } from './setup-api';
+  AdminScreen,
+  ApplicationScreen,
+  DatabaseScreen,
+  LicenceScreen,
+  NodeScreen,
+  RequirementsScreen,
+  WelcomeScreen,
+} from './screens';
+import { verifyLicence, verifySetupToken } from './setup-api';
 import {
-  SETUP_STEPS,
+  RAIL,
   classifyFailure,
   emptyDraft,
-  firstInvalidStep,
-  passwordRules,
-  toRequest,
-  validateStep,
-  type FieldErrors,
-  type SetupDraft,
+  railIndex,
+  validateToken,
+  type Problem,
+  type Screen,
   type SetupFailure,
-  type SetupStep,
+  type WizardDraft,
 } from './setup-draft';
-
-const NS = 'install-update-licensing.setup';
-const PASSWORD_RULES = ['length', 'upper', 'lower', 'number', 'symbol', 'personal'] as const;
+import { NS, Tick, richTags } from './wizard-ui';
 
 function browserZone(): string {
   try {
@@ -46,402 +37,270 @@ function browserZone(): string {
   }
 }
 
+/** WaDesk's installer chrome: one centred card with the step rail on the left (lg and up) and the screen on the right. */
+function WizardFrame({
+  screen,
+  version,
+  children,
+}: {
+  screen: Screen;
+  version: string;
+  children: ReactNode;
+}) {
+  const t = useTranslations(NS);
+  const current = railIndex(screen);
+  const name = t(`steps.${RAIL[current - 1]!}`);
+  return (
+    <div className="relative z-10 flex max-h-[calc(100dvh-2rem)] w-full max-w-[1040px] overflow-hidden rounded-[26px] border border-border bg-background shadow-xl motion-safe:animate-[wiz-card-in_.45s_cubic-bezier(.22,1,.36,1)_both] sm:max-h-[calc(100dvh-3rem)]">
+      <aside className="relative hidden w-[300px] shrink-0 flex-col justify-between overflow-hidden border-e border-border bg-muted lg:flex">
+        <div className="pointer-events-none absolute -end-16 -top-16 size-52 rounded-full bg-primary/20 blur-3xl" />
+        <div className="relative z-10 px-8 pt-8">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="grid size-9 place-items-center rounded-xl bg-brand text-brand-foreground"
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="size-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 5h16v11H9l-5 4z" />
+              </svg>
+            </span>
+            <span className="font-serif text-[23px] leading-none tracking-[-0.01em]">
+              {t('brand')}
+            </span>
+          </div>
+          <div className="mt-7 space-y-2">
+            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
+              {t('railEyebrow')}
+            </div>
+            <h2 className="font-serif text-[21px] leading-[1.18] tracking-[-0.01em]">
+              {t.rich('railTitle', richTags)}
+            </h2>
+          </div>
+        </div>
+
+        <nav
+          className="relative z-10 flex min-h-0 flex-1 items-center px-6 py-6"
+          aria-label={t('stepsLabel')}
+        >
+          <ol className="w-full space-y-0.5">
+            {RAIL.map((step, i) => {
+              const n = i + 1;
+              const done = current > n;
+              const active = current === n;
+              return (
+                <li
+                  key={step}
+                  aria-current={active ? 'step' : undefined}
+                  className={cn(
+                    'flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 transition-all',
+                    active && 'bg-primary/15',
+                  )}
+                >
+                  {done ? (
+                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/20 text-brand">
+                      <Tick />
+                    </span>
+                  ) : active ? (
+                    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-brand font-mono text-[12px] font-semibold text-brand-foreground shadow-sm">
+                      {n}
+                    </span>
+                  ) : (
+                    <span className="grid size-7 shrink-0 place-items-center rounded-full border border-border bg-background font-mono text-[11px] text-muted-foreground">
+                      {n}
+                    </span>
+                  )}
+                  <span
+                    className={cn(
+                      'font-mono text-[12px] uppercase tracking-[0.14em] rtl:font-sans rtl:tracking-normal',
+                      active
+                        ? 'font-semibold text-brand'
+                        : done
+                          ? 'text-foreground'
+                          : 'text-muted-foreground',
+                    )}
+                  >
+                    {t(`steps.${step}`)}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+
+        <div className="relative z-10 px-8 pb-7">
+          <p className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span className="h-px w-6 bg-border" />
+            {t('railFooter', { version })}
+          </p>
+        </div>
+      </aside>
+
+      <main className="flex min-w-0 flex-1 flex-col">
+        <div className="border-b border-border px-6 pb-4 pt-6 lg:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <span className="font-serif text-[17px]">{t('brand')}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand">
+              {t('mobileStep', { n: current, total: RAIL.length, name })}
+            </span>
+          </div>
+          <div className="mt-3 h-1 w-full rounded-full bg-border" role="presentation">
+            <div
+              className="h-1 rounded-full bg-brand transition-all duration-500 motion-reduce:transition-none"
+              style={{ width: `${(current / RAIL.length) * 100}%` }}
+            />
+          </div>
+        </div>
+        <div
+          key={screen}
+          className="min-h-0 flex-1 overflow-y-auto bg-background px-7 py-7 motion-safe:animate-[wiz-step-in_.3s_ease-out_both] md:px-9"
+        >
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+}
+
 /**
- * First-run setup: prove the deploy-time token, create the platform owner, name the first workspace, review, create.
- * Steps are a client convenience only; the single bootstrap call re-checks everything on the server, so skipping a
- * step by hand gains nothing (the WaDesk wizard's gate lived on its pages).
+ * First-run setup: WaDesk's installer as a client stepper over the setup API (WD-INST-001, -002, -004 to -010).
+ * Screens are a convenience only; each server call re-checks the lock, the token and the order of the steps, so
+ * skipping a screen by hand gains nothing (the WaDesk wizard's gate lived on its pages).
  */
 export function SetupWizard({ status }: { status: SetupStatusResponse }) {
   const t = useTranslations(NS);
-  const idPrefix = useId();
-  const [step, setStep] = useState<SetupStep>('token');
-  const [draft, setDraft] = useState<SetupDraft>(() => emptyDraft(browserZone()));
-  const [errors, setErrors] = useState<FieldErrors>({});
-  const [failure, setFailure] = useState<SetupFailure | null>(null);
+  const [screen, setScreen] = useState<Screen>('welcome');
+  const [draft, setDraft] = useState<WizardDraft>(() => ({
+    ...emptyDraft({
+      timezone: browserZone(),
+      origin: typeof window === 'undefined' ? '' : window.location.origin,
+    }),
+    appName: t('brand'),
+  }));
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState<SetupBootstrapResponse | null>(null);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [failure, setFailure] = useState<SetupFailure | null>(null);
+  const [licenceOk, setLicenceOk] = useState(false);
+  const [finished, setFinished] = useState(false);
 
-  const notReady = status.prerequisites.filter((p) => !p.ok);
-  const disabled = !status.tokenConfigured;
-  const blocked = disabled || notReady.length > 0;
-  const stepIndex = SETUP_STEPS.indexOf(step);
-
-  const set = (patch: Partial<SetupDraft>) => {
+  const set = useCallback((patch: Partial<WizardDraft>) => {
     setDraft((d) => ({ ...d, ...patch }));
-    setErrors((e) => {
-      const next = { ...e };
-      for (const k of Object.keys(patch) as Array<keyof SetupDraft>) delete next[k];
-      return next;
-    });
+    setProblems([]);
     setFailure(null);
-  };
+  }, []);
 
-  const field = (name: keyof SetupDraft) => `${idPrefix}-${name}`;
-  const err = (name: keyof SetupDraft) => (errors[name] ? t(`errors.${errors[name]}`) : undefined);
+  const go = useCallback((next: Screen) => {
+    setFailure(null);
+    setProblems([]);
+    setScreen(next);
+  }, []);
 
-  /** Applies a server refusal to the form: back to the right step with the message next to the field. */
-  const fail = (f: SetupFailure) => {
+  /** A refusal from the server that sends the person back to the first screen, where the token lives. */
+  const onFailure = useCallback((f: SetupFailure) => {
     setFailure(f);
-    if (f.kind === 'token') {
-      setStep('token');
-      setErrors({ setupToken: 'tokenWrong' });
-    } else if (f.kind === 'slugTaken') {
-      setStep('organization');
-      setErrors({ slug: 'slugTaken' });
-    } else if (f.kind === 'fields') {
-      setStep(f.step);
-      setErrors(f.fields);
-    }
-  };
+    if (f.kind === 'completed') setFinished(true);
+    else setScreen('welcome');
+  }, []);
 
-  async function next(e: FormEvent) {
-    e.preventDefault();
-    if (busy || done) return;
-    const problems = validateStep(step, draft);
-    setErrors(problems);
-    if (Object.keys(problems).length > 0) return;
-    setFailure(null);
-
-    if (step === 'token') {
-      setBusy(true);
-      try {
-        await verifySetupToken(draft.setupToken.trim());
-        setStep('operator');
-      } catch (error) {
-        fail(classifyFailure(error));
-      } finally {
-        setBusy(false);
-      }
-      return;
-    }
-    if (step !== 'review') {
-      setStep(SETUP_STEPS[stepIndex + 1]!);
-      return;
-    }
-
-    const bad = firstInvalidStep(draft);
-    if (bad) {
-      setStep(bad);
-      setErrors(validateStep(bad, draft));
-      return;
-    }
+  async function begin() {
+    const found = validateToken(draft);
+    setProblems(found);
+    if (found.length) return;
     setBusy(true);
+    setFailure(null);
     try {
-      setDone(await bootstrapPlatform(toRequest(draft)));
-    } catch (error) {
-      fail(classifyFailure(error));
+      await verifySetupToken(draft.setupToken.trim());
+      setLicenceOk(false);
+      setScreen(status.licenceRequired ? 'licence' : 'requirements');
+    } catch (e) {
+      const f = classifyFailure(e);
+      if (f.kind === 'completed') setFinished(true);
+      else setFailure(f);
     } finally {
       setBusy(false);
     }
   }
 
-  if (done) return <Finished result={done} />;
-  if (failure?.kind === 'completed') return <Completed />;
+  async function verifyPurchase() {
+    setBusy(true);
+    setFailure(null);
+    try {
+      await verifyLicence(draft.setupToken.trim(), draft.purchaseCode.trim());
+      setLicenceOk(true);
+      setScreen('requirements');
+    } catch (e) {
+      const f = classifyFailure(e);
+      if (f.kind === 'token' || f.kind === 'completed') onFailure(f);
+      else setFailure(f);
+    } finally {
+      setBusy(false);
+    }
+  }
 
-  return (
-    <div className="mx-auto w-full max-w-xl space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">{t('title')}</h1>
-        <p className="text-sm text-muted-foreground">{t('intro')}</p>
-      </header>
-
-      <ol className="flex flex-wrap gap-2" aria-label={t('stepsLabel')}>
-        {SETUP_STEPS.map((s, i) => (
-          <li
-            key={s}
-            aria-current={s === step ? 'step' : undefined}
-            className={cn(
-              'flex items-center gap-2 rounded-full border px-3 py-1 text-xs',
-              s === step ? 'border-primary text-foreground' : 'border-border text-muted-foreground',
-            )}
-          >
-            <span className="font-mono">{i + 1}</span>
-            {t(`steps.${s}`)}
-          </li>
-        ))}
-      </ol>
-
-      {disabled && <Alert tone="warning">{t('disabled')}</Alert>}
-      {notReady.length > 0 && (
-        <Alert tone="danger" className="space-y-1">
-          <p className="font-medium">{t('notReady')}</p>
-          <ul className="list-disc ps-5">
-            {notReady.map((p) => (
-              <li key={p.key}>
-                {t(`prerequisites.${p.key}`)}
-                {p.detail ? ` (${p.detail})` : ''}
-              </li>
-            ))}
-          </ul>
-        </Alert>
-      )}
-      {failure?.kind === 'prerequisites' && <Alert tone="danger">{t('notReady')}</Alert>}
-      {failure?.kind === 'unknown' && (
-        <Alert tone="danger">
-          {t('errors.unexpected')}
-          {failure.requestId ? ` (${failure.requestId})` : ''}
-        </Alert>
-      )}
-
-      <Card>
-        <form onSubmit={next} noValidate className="space-y-4">
-          {step === 'token' && (
-            <Field
-              label={t('token.label')}
-              htmlFor={field('setupToken')}
-              hint={t('token.hint')}
-              error={err('setupToken')}
-            >
-              <PasswordInput
-                id={field('setupToken')}
-                value={draft.setupToken}
-                onChange={(e) => set({ setupToken: e.target.value })}
-                invalid={!!errors.setupToken}
-                autoComplete="off"
-                spellCheck={false}
-                disabled={blocked}
-                showLabel={t('show')}
-                hideLabel={t('hide')}
-              />
-            </Field>
-          )}
-
-          {step === 'operator' && (
-            <>
-              <Field
-                label={t('operator.fullName')}
-                htmlFor={field('fullName')}
-                error={err('fullName')}
-              >
-                <Input
-                  id={field('fullName')}
-                  value={draft.fullName}
-                  onChange={(e) => set({ fullName: e.target.value })}
-                  invalid={!!errors.fullName}
-                  autoComplete="name"
-                />
-              </Field>
-              <Field
-                label={t('operator.email')}
-                htmlFor={field('email')}
-                hint={t('operator.emailHint')}
-                error={err('email')}
-              >
-                <Input
-                  id={field('email')}
-                  type="email"
-                  value={draft.email}
-                  onChange={(e) => set({ email: e.target.value })}
-                  invalid={!!errors.email}
-                  autoComplete="email"
-                />
-              </Field>
-              <Field
-                label={t('operator.password')}
-                htmlFor={field('password')}
-                error={err('password')}
-              >
-                <PasswordInput
-                  id={field('password')}
-                  value={draft.password}
-                  onChange={(e) => set({ password: e.target.value })}
-                  invalid={!!errors.password}
-                  autoComplete="new-password"
-                  showLabel={t('show')}
-                  hideLabel={t('hide')}
-                />
-              </Field>
-              <PasswordChecklist draft={draft} />
-              <Field
-                label={t('operator.confirm')}
-                htmlFor={field('confirm')}
-                error={err('confirm')}
-              >
-                <PasswordInput
-                  id={field('confirm')}
-                  value={draft.confirm}
-                  onChange={(e) => set({ confirm: e.target.value })}
-                  invalid={!!errors.confirm}
-                  autoComplete="new-password"
-                  showLabel={t('show')}
-                  hideLabel={t('hide')}
-                />
-              </Field>
-            </>
-          )}
-
-          {step === 'organization' && (
-            <>
-              <Field
-                label={t('organization.name')}
-                htmlFor={field('orgName')}
-                error={err('orgName')}
-              >
-                <Input
-                  id={field('orgName')}
-                  value={draft.orgName}
-                  onChange={(e) =>
-                    set({
-                      orgName: e.target.value,
-                      ...(draft.slugEdited ? {} : { slug: suggestSlug(e.target.value) }),
-                    })
-                  }
-                  invalid={!!errors.orgName}
-                  autoComplete="organization"
-                />
-              </Field>
-              <Field
-                label={t('organization.slug')}
-                htmlFor={field('slug')}
-                hint={t('organization.slugHint')}
-                error={err('slug')}
-              >
-                <Input
-                  id={field('slug')}
-                  value={draft.slug}
-                  onChange={(e) => set({ slug: e.target.value.trim(), slugEdited: true })}
-                  invalid={!!errors.slug}
-                  autoCapitalize="none"
-                  spellCheck={false}
-                />
-              </Field>
-              <Field
-                label={t('organization.timezone')}
-                htmlFor={field('timezone')}
-                error={err('timezone')}
-              >
-                <TimezoneCombobox
-                  id={field('timezone')}
-                  value={draft.timezone}
-                  onChange={(timezone) => set({ timezone })}
-                  invalid={!!errors.timezone}
-                />
-              </Field>
-              <Field
-                label={t('organization.locale')}
-                htmlFor={field('locale')}
-                error={err('locale')}
-              >
-                <Select
-                  id={field('locale')}
-                  value={draft.locale}
-                  onChange={(e) => set({ locale: e.target.value })}
-                  invalid={!!errors.locale}
-                >
-                  {LOCALES.map((code) => (
-                    <option key={code} value={code}>
-                      {languageName(code)}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </>
-          )}
-
-          {step === 'review' && <Review draft={draft} />}
-
-          <div className="flex items-center justify-between gap-2 pt-2">
-            <Button
-              variant="ghost"
-              disabled={stepIndex === 0 || busy}
-              onClick={() => setStep(SETUP_STEPS[stepIndex - 1]!)}
-            >
-              {t('back')}
-            </Button>
-            <Button type="submit" disabled={busy || blocked}>
-              {busy && <Spinner label={t('working')} />}
-              {step === 'token' ? t('verify') : step === 'review' ? t('create') : t('continue')}
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+  const base = { draft, set, go, status };
+  const frame = (body: ReactNode) => (
+    <WizardFrame screen={screen} version={status.version}>
+      {finished ? <Completed /> : body}
+    </WizardFrame>
   );
-}
 
-function PasswordChecklist({ draft }: { draft: SetupDraft }) {
-  const t = useTranslations(NS);
-  const broken = new Set<string>(passwordRules(draft));
-  return (
-    <ul className="grid gap-1 text-xs sm:grid-cols-2" aria-label={t('operator.rulesLabel')}>
-      {PASSWORD_RULES.filter((r) => r !== 'personal' || broken.has(r)).map((rule) => {
-        const ok = !broken.has(rule) && draft.password.length > 0;
-        return (
-          <li key={rule} className={ok ? 'text-success' : 'text-muted-foreground'}>
-            <span aria-hidden="true">{ok ? '✓' : '·'} </span>
-            {t(`operator.rules.${rule}`)}
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-function Review({ draft }: { draft: SetupDraft }) {
-  const t = useTranslations(NS);
-  const rows: Array<[string, string]> = [
-    [t('operator.fullName'), draft.fullName],
-    [t('operator.email'), draft.email],
-    [t('organization.name'), draft.orgName],
-    [t('organization.slug'), draft.slug],
-    [t('organization.timezone'), draft.timezone],
-    [t('organization.locale'), languageName(draft.locale)],
-  ];
-  return (
-    <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">{t('review.intro')}</p>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
-        {rows.map(([k, v]) => (
-          <div key={k} className="contents">
-            <dt className="text-muted-foreground">{k}</dt>
-            <dd className="break-all font-medium">{v}</dd>
-          </div>
-        ))}
-      </dl>
-      <Alert tone="info">{t('review.mfaNote')}</Alert>
-    </div>
-  );
-}
-
-function Finished({ result }: { result: SetupBootstrapResponse }) {
-  const t = useTranslations(NS);
-  return (
-    <div className="mx-auto w-full max-w-xl space-y-4">
-      <Alert tone="success" className="space-y-1">
-        <p className="font-medium">{t('done.title')}</p>
-        <p>{t('done.body', { email: result.operator.email, org: result.organization.name })}</p>
-      </Alert>
-      <Card className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Badge tone="warning">{t('done.mfaBadge')}</Badge>
-          <p className="text-sm">{t('done.mfaNote')}</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/admin/login"
-            className="inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
-          >
-            {t('done.console')}
-          </Link>
-          <Link
-            href={`/login?org=${encodeURIComponent(result.organization.slug)}`}
-            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
-          >
-            {t('done.workspace')}
-          </Link>
-        </div>
-      </Card>
-    </div>
-  );
+  switch (screen) {
+    case 'welcome':
+      return frame(
+        <WelcomeScreen
+          {...base}
+          busy={busy}
+          problems={problems}
+          failure={failure}
+          onBegin={() => void begin()}
+        />,
+      );
+    case 'licence':
+      return frame(
+        <LicenceScreen
+          {...base}
+          busy={busy}
+          failure={failure}
+          verified={licenceOk}
+          onVerify={() => void verifyPurchase()}
+        />,
+      );
+    case 'requirements':
+      return frame(<RequirementsScreen {...base} onFailure={onFailure} />);
+    case 'database':
+      return frame(<DatabaseScreen {...base} />);
+    case 'application':
+      return frame(<ApplicationScreen {...base} />);
+    case 'admin':
+      return frame(<AdminScreen {...base} />);
+    case 'node':
+      return frame(<NodeScreen {...base} onInstall={() => go('install')} />);
+    case 'install':
+      return frame(
+        <InstallRunScreen
+          draft={draft}
+          status={status}
+          onFailure={onFailure}
+          onDone={() => window.location.assign('/admin/login')}
+        />,
+      );
+  }
 }
 
 function Completed() {
-  const t = useTranslations(NS);
+  const t = useTranslations(`${NS}.completed`);
   return (
-    <div className="mx-auto w-full max-w-xl space-y-4">
-      <Alert tone="warning">{t('completed.body')}</Alert>
+    <div className="space-y-4">
+      <Alert tone="warning" className="rounded-2xl">
+        {t('body')}
+      </Alert>
       <Link href="/login" className="text-sm underline">
-        {t('completed.login')}
+        {t('login')}
       </Link>
     </div>
   );

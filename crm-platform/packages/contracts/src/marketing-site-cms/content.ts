@@ -95,3 +95,12 @@ export const homepageSwitchRequestSchema = z.object({ enabled: z.boolean() });
 export type HomepageSwitchRequest = z.infer<typeof homepageSwitchRequestSchema>;
 export const homepageSwitchResponseSchema = z.object({ enabled: z.boolean() });
 export type HomepageSwitchResponse = z.infer<typeof homepageSwitchResponseSchema>;
+
+/** The editor's image upload (WD-CMS-027): at most 4 MB, as WaDesk's `max:4096`. */
+export const CMS_UPLOAD_MAX_BYTES = 4096 * 1024;
+export const cmsUploadKeySchema = z
+  .string()
+  .max(191)
+  .regex(/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/i);
+export const cmsUploadResponseSchema = z.object({ ok: z.literal(true), url: z.string() });
+export type CmsUploadResponse = z.infer<typeof cmsUploadResponseSchema>;

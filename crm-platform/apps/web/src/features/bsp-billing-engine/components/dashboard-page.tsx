@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, EmptyState, Spinner, StatTile } from '@crm/ui';
+import { Alert, Button, Card, Spinner, StatTile } from '@crm/ui';
 import type { BspDashboard } from '@crm/contracts';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -17,6 +18,7 @@ export function DashboardPage() {
   const t = useTranslations('bsp-billing-engine.dashboard');
   const tc = useTranslations('bsp-billing-engine.common');
   const locale = useLocale();
+  const [now] = useState(() => Date.now());
   const q = useQuery({
     queryKey: KEYS.dashboard(undefined),
     queryFn: ({ signal }) => operatorApi.dashboard(undefined, signal),
@@ -28,13 +30,28 @@ export function DashboardPage() {
       <PageHeader
         eyebrow={t('eyebrow')}
         title={t('title')}
-        description={q.data ? formatRange(q.data.from, q.data.to, locale) : undefined}
+        description={
+          q.data
+            ? formatRange(
+                q.data.from,
+                new Date(Math.min(Date.parse(q.data.to), now)).toISOString(), // WaDesk shows the current month up to today
+                locale,
+              )
+            : undefined
+        }
         actions={
-          <Link href="/admin/bsp/credit">
-            <Button variant="secondary" size="sm">
-              {t('linkConnect')}
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/admin/wallet/pricing">
+              <Button variant="secondary" size="sm">
+                {t('linkRates')}
+              </Button>
+            </Link>
+            <Link href="/admin/bsp/credit">
+              <Button variant="secondary" size="sm">
+                {t('linkConnect')}
+              </Button>
+            </Link>
+          </div>
         }
       />
       {q.isPending ? (
@@ -83,39 +100,45 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
       </div>
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('perWorkspace')}</h2>
-        {d.workspaces.length === 0 ? (
-          <EmptyState title={t('empty')} />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
-              <thead>
-                <tr className="border-b border-border text-xs text-muted-foreground">
-                  {COLUMNS.map((c) => (
-                    <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
-                      {t(`columns.${c}`)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {d.workspaces.map((w) => (
-                  <tr key={w.workspaceId} className="border-b border-border last:border-0">
-                    <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
-                    <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
-                    <td className="px-2 py-2 tabular-nums text-muted-foreground">
-                      {money(w.metaCost)}
-                    </td>
-                    <td className="px-2 py-2 font-medium tabular-nums text-success">
-                      {money(w.margin)}
-                    </td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
-                  </tr>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
+            <thead>
+              <tr className="border-b border-border text-xs text-muted-foreground">
+                {COLUMNS.map((c) => (
+                  <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
+                    {t(`columns.${c}`)}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              </tr>
+            </thead>
+            <tbody>
+              {d.workspaces.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={COLUMNS.length}
+                    className="px-2 py-8 text-center text-muted-foreground"
+                  >
+                    {t('empty')}
+                  </td>
+                </tr>
+              )}
+              {d.workspaces.map((w) => (
+                <tr key={w.workspaceId} className="border-b border-border last:border-0">
+                  <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
+                  <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
+                  <td className="px-2 py-2 tabular-nums text-muted-foreground">
+                    {money(w.metaCost)}
+                  </td>
+                  <td className="px-2 py-2 font-medium tabular-nums text-success">
+                    {money(w.margin)}
+                  </td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {d.hasMoreWorkspaces && <p className="text-xs text-muted-foreground">{t('more')}</p>}
       </Card>
     </>

@@ -1,7 +1,7 @@
 'use client';
 
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import type { DashRange } from '@crm/contracts';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { DashRange, QuickAccessItem } from '@crm/contracts';
 import { dashApi, type AnalyticsParams } from './service';
 
 export const useSummary = (range: DashRange) =>
@@ -27,3 +27,34 @@ export const useAnalytics = (p: AnalyticsParams) =>
     placeholderData: keepPreviousData,
     retry: false,
   });
+
+export const useWidgets = (range: DashRange) =>
+  useQuery({
+    queryKey: ['dash', 'widgets', range],
+    queryFn: ({ signal }) => dashApi.widgets(range, signal),
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+
+export const usePanels = (p: AnalyticsParams) =>
+  useQuery({
+    queryKey: ['dash', 'panels', p.range, p.from ?? '', p.to ?? ''],
+    queryFn: ({ signal }) => dashApi.panels(p, signal),
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+
+export const useQuickAccess = () =>
+  useQuery({
+    queryKey: ['dash', 'quick-access'],
+    queryFn: ({ signal }) => dashApi.quickAccess(signal),
+    retry: false,
+  });
+
+export const useSaveQuickAccess = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (items: QuickAccessItem[]) => dashApi.saveQuickAccess(items),
+    onSuccess: (data) => qc.setQueryData(['dash', 'quick-access'], data),
+  });
+};

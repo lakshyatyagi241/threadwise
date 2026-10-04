@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { loadSiteContent } from '@/features/marketing-site-cms/public/load';
+import { pageMetadata } from '@/features/marketing-site-cms/site/page-meta';
+import { SiteFrame } from '@/features/marketing-site-cms/site/site-frame';
+import { SitePage } from '@/features/marketing-site-cms/site/site-page';
 import {
   ShopHome,
   pageParam,
@@ -32,13 +36,13 @@ async function shopForRequestHost(): Promise<string | null> {
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const slug = await shopForRequestHost();
-  return slug ? shopHomeMetadata(slug, pageParam((await searchParams).page)) : {};
+  return slug ? shopHomeMetadata(slug, pageParam((await searchParams).page)) : pageMetadata('home');
 }
 
 /**
- * The home router (WD-AUTH-011): a signed-in visitor goes to their landing page, a platform operator to the
- * console, a lapsed session is refreshed first, and everyone else to sign-in. On a shop's own host the root is the
- * shop itself (WD-STORE-021).
+ * The home router (WD-AUTH-011): on a shop's own host the root is the shop itself (WD-STORE-021); otherwise a signed-in
+ * visitor goes to their landing page, a platform operator to the console and a lapsed session is refreshed first. A
+ * guest sees the marketing homepage (WD-CMS-001), or is sent to sign-in while the operator has the homepage switched off.
  */
 export default async function Home({ searchParams }: Props) {
   const shop = await shopForRequestHost();
@@ -48,5 +52,11 @@ export default async function Home({ searchParams }: Props) {
   if (expired) redirect('/api/auth/refresh?next=/');
   const operator = await getOperatorSession();
   if (operator.session) redirect('/admin');
-  redirect('/login');
+  const content = await loadSiteContent();
+  if (!content.homepageEnabled) redirect('/login');
+  return (
+    <SiteFrame content={content} current="/">
+      <SitePage page="home" content={content} />
+    </SiteFrame>
+  );
 }

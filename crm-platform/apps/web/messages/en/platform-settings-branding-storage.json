@@ -536,54 +536,58 @@
         },
         "fields": {
           "cookieBannerEnabled": {
-            "label": "Cookie banner enabled"
+            "label": "Banner enabled"
           },
           "cookieBannerStyle": {
-            "label": "Cookie banner style"
+            "label": "Banner style"
           },
           "cookieMessage": {
-            "label": "Cookie message"
+            "label": "Consent message"
           },
           "respectDoNotTrack": {
-            "label": "Respect do not track"
+            "label": "Respect Do-Not-Track",
+            "hint": "Browser sends DNT=1 → reject all"
           },
           "policyUrl": {
-            "label": "Policy URL"
+            "label": "Privacy policy URL",
+            "placeholder": "https://example.com/privacy"
           },
           "termsUrl": {
-            "label": "Terms URL"
+            "label": "Terms of service URL",
+            "placeholder": "https://example.com/terms"
           },
           "cookiesPolicyUrl": {
-            "label": "Cookies policy URL"
+            "label": "Cookies policy URL (Learn more)",
+            "placeholder": "https://example.com/cookies"
           },
           "gdprCompliance": {
-            "label": "GDPR compliance",
+            "label": "GDPR compliance (EU)",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "ccpaCompliance": {
-            "label": "CCPA compliance",
+            "label": "CCPA compliance (California)",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaSkipLink": {
-            "label": "ADA skip link",
+            "label": "Skip-to-content link",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaHighContrast": {
-            "label": "ADA high contrast",
+            "label": "Offer high-contrast mode",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaLargeText": {
-            "label": "ADA large text",
+            "label": "Offer large-text mode",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaReducedMotion": {
-            "label": "ADA reduced motion",
+            "label": "Respect prefers-reduced-motion",
             "hint": "Stored for your records. It does not change behaviour yet."
           }
         },
         "options": {
           "cookieBannerStyle": {
-            "bottom-bar": "Bottom sticky bar (recommended)",
+            "bottom-bar": "Bottom sticky bar — recommended",
             "top-bar": "Top sticky bar",
             "modal": "Centered modal"
           }
@@ -646,14 +650,14 @@
         },
         "fields": {
           "enabled": {
-            "label": "Enabled",
+            "label": "Inject in production",
             "hint": "Nothing below runs on the public site until this is on."
           },
           "css": {
-            "label": "CSS"
+            "label": "Custom CSS"
           },
           "js": {
-            "label": "JavaScript",
+            "label": "Custom JS",
             "hint": "Runs for every visitor. Only paste code you trust."
           }
         }
@@ -744,10 +748,10 @@
             "hint": "Prefix for the probe object. Uploads will use it once the file module lands."
           },
           "accessKeyId": {
-            "label": "Access key ID"
+            "label": "Access key ID *"
           },
           "secret": {
-            "label": "Secret access key",
+            "label": "Secret access key *",
             "hint": "Stored encrypted and never shown again.",
             "placeholder": "paste secret"
           },
@@ -756,7 +760,7 @@
             "placeholder": "us-east-1"
           },
           "bucket": {
-            "label": "Bucket"
+            "label": "Bucket *"
           },
           "endpoint": {
             "label": "Endpoint",
@@ -784,10 +788,10 @@
           "provider": {
             "s3": "Amazon S3",
             "wasabi": "Wasabi",
-            "bunny": "Bunny.net",
+            "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
             "r2": "Cloudflare R2",
-            "minio": "MinIO"
+            "minio": "MinIO / S3-compatible"
           },
           "visibility": {
             "private": "Private (signed URLs)",
@@ -1389,7 +1393,7 @@
       "privacy": {
         "title": "Privacy, GDPR & ADA",
         "eyebrow": "Admin - Compliance",
-        "description": "Cookie consent banner, policy URLs, GDPR / CCPA compliance and WCAG accessibility toggles. The same setting feeds the consent UI and gates every analytics integration.",
+        "description": "Cookie consent banner, policy URLs, GDPR/CCPA compliance, and WCAG accessibility toggles. Same setting feeds the consent UI and gates every analytics integration.",
         "sections": {
           "banner": {
             "title": "Banner & policy"
@@ -1398,7 +1402,8 @@
             "title": "GDPR & CCPA"
           },
           "accessibility": {
-            "title": "ADA / WCAG"
+            "title": "ADA / WCAG",
+            "description": "US Americans-with-Disabilities-Act + WCAG 2.1 AA-level affordances visitors can toggle."
           }
         },
         "guide": {
@@ -1443,7 +1448,7 @@
       },
       "custom": {
         "title": "Custom code",
-        "description": "Production custom styles and scripts for advanced branding and behaviour. Injected into public pages when enabled.",
+        "description": "Production custom styles and scripts for advanced branding and behavior. Injected into public pages when enabled.",
         "sections": {
           "code": {
             "title": "Custom code"
@@ -1503,7 +1508,14 @@
       "storage": {
         "title": "Cloud storage",
         "eyebrow": "Admin - Media storage",
-        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "description": "Send all client media attachments to your own bucket — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store — instead of the app server. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "status": {
+          "active": "Active: {provider}. New uploads go to your bucket.",
+          "configured": "Configured but turned off. Media still on the local disk. Test, then enable.",
+          "local": "Local disk (no cloud provider set up yet).",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
         "sections": {
           "provider": {
             "title": "Cloud media routing"

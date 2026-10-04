@@ -15,7 +15,14 @@ import { hasChoice, switchLocale, triggerCode } from './locale-switch';
  * registry, saves a signed-in user's pick on the server and always sets the session cookie, then refreshes in place.
  * Drop it into any header: it renders nothing when there is no choice to make.
  */
-export function LocaleSwitcher({ align = 'end' }: { align?: 'start' | 'end' }) {
+export function LocaleSwitcher({
+  align = 'end',
+  only,
+}: {
+  align?: 'start' | 'end';
+  /** Offer only these codes (a page whose catalog is complete in some languages only). */
+  only?: readonly string[];
+}) {
   const t = useTranslations('localization-translation.switcher');
   const locale = useLocale();
   const router = useRouter();
@@ -27,7 +34,7 @@ export function LocaleSwitcher({ align = 'end' }: { align?: 'start' | 'end' }) {
     queryFn: ({ signal }) =>
       apiFetch('/i18n/languages', { schema: activeLanguagesResponseSchema, signal }),
   });
-  const active = q.data?.data ?? [];
+  const active = (q.data?.data ?? []).filter((l) => !only || only.includes(l.code));
   if (!hasChoice(active)) return null;
 
   const pick = (code: string) =>

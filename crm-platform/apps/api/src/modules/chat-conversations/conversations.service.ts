@@ -10,6 +10,7 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { ConversationTranslationService } from '../localization-translation';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
@@ -54,6 +55,7 @@ export class ConversationsService implements ConversationsFacade {
     private readonly outbound: OutboundService,
     private readonly view: MessageViewService,
     private readonly mediaFetch: MediaFetchService,
+    private readonly translation: ConversationTranslationService,
   ) {}
 
   // --- threads -------------------------------------------------------------------------------------------------------------------
@@ -264,7 +266,8 @@ export class ConversationsService implements ConversationsFacade {
       return { rows: page.rows, hasMoreBefore, hasMoreAfter };
     });
     return {
-      data: this.view.respondMany(done.rows),
+      // Stored translations show only while translation is live for the workspace (WD-I18N-038).
+      data: await this.translation.threadView(orgId, this.view.respondMany(done.rows)),
       page: {
         hasMoreBefore: done.hasMoreBefore,
         hasMoreAfter: done.hasMoreAfter,

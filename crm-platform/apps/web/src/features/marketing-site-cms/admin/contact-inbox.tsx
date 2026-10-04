@@ -10,8 +10,8 @@ import {
   markAllCmsContactReadResponseSchema,
   type CmsContactMessage,
 } from '@crm/contracts';
-import { Badge, Button, Card, ConfirmDialog, EmptyState, Input, Select } from '@crm/ui';
-import { ActionError, ErrorBlock, LoadingBlock, NS, PageHeader, operatorFetch } from './shared';
+import { Badge, Button, Card, ConfirmDialog, EmptyState, Input } from '@crm/ui';
+import { ActionError, ErrorBlock, LoadingBlock, NS, operatorFetch } from './shared';
 
 const KEY = ['operator', 'cms', 'contact'];
 
@@ -23,8 +23,9 @@ export function ContactInbox() {
   const qc = useQueryClient();
   const [term, setTerm] = useState('');
   const [q, setQ] = useState('');
-  const [status, setStatus] = useState<'' | 'unread' | 'read'>('');
-  const [topic, setTopic] = useState<'' | (typeof CMS_CONTACT_TOPICS)[number]>('');
+  const [filter, setFilter] = useState<'' | 'unread' | (typeof CMS_CONTACT_TOPICS)[number]>('');
+  const status = filter === 'unread' ? 'unread' : '';
+  const topic = filter === 'unread' ? '' : filter;
   const [doomed, setDoomed] = useState<CmsContactMessage | null>(null);
 
   const list = useInfiniteQuery({
@@ -76,64 +77,69 @@ export function ContactInbox() {
     setQ(term.trim());
   };
 
+  const CHIPS = ['', 'unread', ...CMS_CONTACT_TOPICS] as const;
+  const chipLabel = (c: (typeof CHIPS)[number]) =>
+    c === ''
+      ? t('all')
+      : c === 'unread'
+        ? t('unread')
+        : t(`topic${c[0]!.toUpperCase()}${c.slice(1)}` as 'topicSales');
+
   return (
     <div className="space-y-5">
-      <PageHeader title={t('title')} description={t('description')} />
-      {summary && (
-        <div className="flex flex-wrap items-center gap-3">
-          <p className="text-sm text-muted-foreground">
-            {t('summary', { total: summary.total, unread: summary.unread })}
+      <Card className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-1">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            {t('eyebrow')}
           </p>
-          {summary.unread > 0 && (
-            <Button
-              size="sm"
-              variant="secondary"
-              disabled={readAll.isPending}
-              onClick={() => readAll.mutate()}
-            >
-              {t('markAllRead')}
-            </Button>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('title')}</h1>
+          {summary && (
+            <p className="text-sm text-muted-foreground">
+              {t('totalCount', { total: summary.total })} ·{' '}
+              <span className={summary.unread > 0 ? 'text-danger' : undefined}>
+                {t('unreadCount', { unread: summary.unread })}
+              </span>
+            </p>
           )}
         </div>
-      )}
-      <Card>
-        <form
-          onSubmit={submit}
-          className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]"
-          role="search"
-        >
-          <Input
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-            placeholder={t('search')}
-            aria-label={t('search')}
-          />
-          <Select
-            value={status}
-            aria-label={t('all')}
-            onChange={(e) => setStatus(e.target.value as typeof status)}
+        {summary && summary.unread > 0 && (
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={readAll.isPending}
+            onClick={() => readAll.mutate()}
           >
-            <option value="">{t('all')}</option>
-            <option value="unread">{t('unread')}</option>
-            <option value="read">{t('read')}</option>
-          </Select>
-          <Select
-            value={topic}
-            aria-label={t('allTopics')}
-            onChange={(e) => setTopic(e.target.value as typeof topic)}
-          >
-            <option value="">{t('allTopics')}</option>
-            {CMS_CONTACT_TOPICS.map((v) => (
-              <option key={v} value={v}>
-                {t(`topic${v[0]!.toUpperCase()}${v.slice(1)}` as 'topicSales')}
-              </option>
-            ))}
-          </Select>
-          <Button type="submit" variant="secondary">
-            {t('search')}
+            {t('markAllRead')}
           </Button>
-        </form>
+        )}
       </Card>
+      <form onSubmit={submit} role="search" className="flex flex-wrap items-center gap-2">
+        <Input
+          type="search"
+          className="min-w-0 flex-1 basis-64"
+          value={term}
+          onChange={(e) => setTerm(e.target.value)}
+          placeholder={t('search')}
+          aria-label={t('search')}
+        />
+        <div role="group" aria-label={t('filters')} className="flex flex-wrap gap-2">
+          {CHIPS.map((c) => (
+            <button
+              key={c || 'all'}
+              type="button"
+              aria-pressed={filter === c}
+              onClick={() => setFilter(c)}
+              className={
+                filter === c
+                  ? 'rounded-full bg-foreground px-4 py-1.5 text-sm text-background'
+                  : 'rounded-full border border-border px-4 py-1.5 text-sm hover:bg-muted'
+              }
+            >
+              {chipLabel(c)}
+            </button>
+          ))}
+        </div>
+      </form>
       <ActionError error={setRead.error ?? readAll.error ?? remove.error} />
       {list.isPending ? (
         <LoadingBlock />
@@ -142,35 +148,58 @@ export function ContactInbox() {
       ) : rows.length === 0 ? (
         <EmptyState title={t('empty')} message={t('emptyHint')} />
       ) : (
-        <ul className="divide-y divide-border rounded-md border border-border">
+        <ul className="space-y-3">
           {rows.map((m) => (
-            <li key={m.id} className="space-y-2 px-4 py-3">
-              <div className="flex flex-wrap items-center gap-3">
-                <p className={m.isRead ? 'font-medium' : 'font-semibold'}>{m.name}</p>
-                <span className="text-sm text-muted-foreground" dir="ltr">
-                  {m.email}
-                </span>
-                {m.topic && <Badge>{m.topic}</Badge>}
-                {!m.isRead && <Badge tone="warning">{t('unread')}</Badge>}
-                <span className="ms-auto text-xs text-muted-foreground">
-                  {when.format(new Date(m.createdAt))}
-                </span>
-              </div>
-              {m.company && <p className="text-xs text-muted-foreground">{m.company}</p>}
-              <p className="whitespace-pre-wrap text-sm">{m.message}</p>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  disabled={setRead.isPending}
-                  onClick={() => setRead.mutate(m)}
-                >
-                  {m.isRead ? t('markUnread') : t('markRead')}
-                </Button>
-                <Button size="sm" variant="danger" onClick={() => setDoomed(m)}>
-                  {tc('delete')}
-                </Button>
-              </div>
+            <li key={m.id}>
+              <Card className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {!m.isRead && (
+                      <span
+                        className="size-2 rounded-full bg-primary"
+                        role="img"
+                        aria-label={t('unread')}
+                      />
+                    )}
+                    <span className={m.isRead ? 'font-medium' : 'font-semibold'}>{m.name}</span>
+                    <a
+                      href={`mailto:${m.email}`}
+                      className="text-sm text-primary underline"
+                      dir="ltr"
+                    >
+                      {m.email}
+                    </a>
+                    {m.topic && <Badge>{m.topic}</Badge>}
+                    {m.company && (
+                      <span className="text-xs text-muted-foreground">· {m.company}</span>
+                    )}
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm">{m.message}</p>
+                  <p className="font-mono text-xs text-muted-foreground">
+                    {when.format(new Date(m.createdAt))}
+                    {m.ip ? ` · ${m.ip}` : ''}
+                  </p>
+                </div>
+                <div className="flex shrink-0 gap-2">
+                  <a
+                    href={`mailto:${m.email}?subject=${encodeURIComponent(t('replySubject'))}`}
+                    className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm"
+                  >
+                    {t('reply')}
+                  </a>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    disabled={setRead.isPending}
+                    onClick={() => setRead.mutate(m)}
+                  >
+                    {m.isRead ? t('markUnread') : t('markRead')}
+                  </Button>
+                  <Button size="sm" variant="danger" onClick={() => setDoomed(m)}>
+                    {tc('delete')}
+                  </Button>
+                </div>
+              </Card>
             </li>
           ))}
         </ul>

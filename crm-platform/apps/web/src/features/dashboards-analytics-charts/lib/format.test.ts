@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import { ApiError } from '@/lib/api/errors';
 import {
+  deltaOf,
+  followersLabel,
+  isForbidden,
+  formatMoney,
+  minutesLabel,
+  pickOption,
+  relativeSpan,
+  throughputCsv,
   barLength,
   compact,
   directionOf,
@@ -63,5 +72,57 @@ describe('format helpers', () => {
       ]).map((s) => s.pct),
     ).toEqual([60, 30, 10]);
     expect(shares([])).toEqual([]);
+  });
+});
+
+describe('admin helpers', () => {
+  it('formats money for the locale and falls back for an unknown currency', () => {
+    expect(formatMoney('1050', 'USD', 'en-US')).toBe('$1,050.00');
+    expect(formatMoney(19.5, 'usd', 'en-US', 0)).toBe('$20');
+    expect(formatMoney(5, 'not-a-code', 'en-US')).toBe('not-a-code 5.00');
+  });
+  it('reads a delta and a picker value', () => {
+    expect(deltaOf('31.25')).toBe(31.25);
+    expect(deltaOf('x')).toBe(0);
+    expect(pickOption('30d', ['7d', '30d'] as const, '7d')).toBe('30d');
+    expect(pickOption('banana', ['7d', '30d'] as const, '7d')).toBe('7d');
+  });
+});
+
+describe('dashboard helpers', () => {
+  it('durations: under an hour as minutes (12.5 rounds up), else hours and minutes, null is a dash', () => {
+    expect(minutesLabel(12.5)).toBe('13m');
+    expect(minutesLabel(125)).toBe('2h 5m');
+    expect(minutesLabel(null)).toBe('-');
+  });
+  it('relative spans pick minutes, hours or days', () => {
+    const now = new Date('2026-10-14T12:00:00Z');
+    expect(relativeSpan('2026-10-14T11:30:00Z', now, 'en')).toBe('30 minutes ago');
+    expect(relativeSpan('2026-10-14T09:00:00Z', now, 'en')).toBe('3 hours ago');
+    expect(relativeSpan('2026-10-12T12:00:00Z', now, 'en')).toBe('2 days ago');
+  });
+  it('the throughput export quotes every cell, one row per bucket', () => {
+    const csv = throughputCsv([{ label: 'Oct "1"', sent: 3, delivered: 2, failed: 1 }]);
+    expect(csv.split('\n')).toEqual([
+      '"Period","Sent","Delivered","Failed"',
+      '"Oct ""1""","3","2","1"',
+    ]);
+  });
+});
+
+describe('followersLabel', () => {
+  it('WD-DASH-008: plain below a thousand, one decimal and k from a thousand up', () => {
+    expect(followersLabel(999)).toBe('999');
+    expect(followersLabel(1000)).toBe('1.0k');
+    expect(followersLabel(1500)).toBe('1.5k');
+  });
+});
+
+describe('isForbidden', () => {
+  it('WD-DASH-001: only a 403 sends the member to the inbox', () => {
+    expect(isForbidden(new ApiError(403, 'FORBIDDEN', 'no'))).toBe(true);
+    expect(isForbidden(new ApiError(500, 'INTERNAL', 'boom'))).toBe(false);
+    expect(isForbidden(new Error('x'))).toBe(false);
+    expect(isForbidden(null)).toBe(false);
   });
 });

@@ -5,9 +5,10 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { customerTicketDetailSchema } from '@crm/contracts';
-import { Alert, Badge, Button, Card, Spinner, Textarea, cn } from '@crm/ui';
+import { Alert, Button, Card, Spinner, Textarea, cn } from '@crm/ui';
 import { apiFetch } from '@/lib/api/client';
-import { STATUS_TONE, errorKey, formatWhen } from '../lib/display';
+import { STATUS_PILL, errorKey, formatWhen } from '../lib/display';
+import { relativeTime } from '../lib/format';
 import { TICKETS_KEY } from './support-screen';
 
 const NS = 'platform-support-desk';
@@ -53,16 +54,27 @@ export function TicketThread({ id }: { id: string }) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5 p-4 sm:p-6">
-      <Link href="/support" className="text-sm text-muted-foreground hover:underline">
-        {t('back')}
-      </Link>
       <header className="space-y-2">
-        <p className="font-mono text-xs text-muted-foreground">#{d.ticketNumber}</p>
-        <h1 className="text-2xl font-semibold tracking-tight">{d.subject}</h1>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-          <Badge tone={STATUS_TONE[d.status]}>{ts(d.status)}</Badge>
-          <span>{t('opened', { date: formatWhen(d.createdAt, locale) })}</span>
-          {d.resolvedAt && <span>{t('resolved', { date: formatWhen(d.resolvedAt, locale) })}</span>}
+        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <Link href="/support" className="hover:text-foreground">
+            {t('crumb')}
+          </Link>{' '}
+          · #{d.ticketNumber}
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight">{d.subject}</h1>
+        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          <span
+            className={cn(
+              'rounded-full px-2.5 py-0.5 text-[11px] lowercase',
+              STATUS_PILL[d.status],
+            )}
+          >
+            {ts(d.status).replace('_', ' ')}
+          </span>
+          <span>{t('opened', { date: relativeTime(d.createdAt, locale) })}</span>
+          {d.resolvedAt && (
+            <span>{t('resolved', { date: relativeTime(d.resolvedAt, locale) })}</span>
+          )}
         </div>
       </header>
 
@@ -75,9 +87,11 @@ export function TicketThread({ id }: { id: string }) {
               m.role === 'support' ? 'border-primary/40 bg-primary/5' : 'border-border',
             )}
           >
-            <p className="mb-1 text-xs text-muted-foreground">
+            <p className="mb-1 font-mono text-[10.5px] text-muted-foreground">
               {m.role === 'support' ? t('support') : t('you')}
-              {m.role === 'initial' && ` - ${t('initial')}`} - {formatWhen(m.createdAt, locale)}
+              {m.role === 'initial'
+                ? ` · ${t('initial')}`
+                : ` · ${formatWhen(m.createdAt, locale)}`}
             </p>
             <p className="whitespace-pre-wrap text-sm">{m.body}</p>
           </li>
@@ -94,7 +108,7 @@ export function TicketThread({ id }: { id: string }) {
       ) : (
         <Card>
           <form onSubmit={submit} className="space-y-3">
-            <h2 className="text-sm font-semibold">{t('replyTitle')}</h2>
+            <h2 className="text-lg font-semibold">{t('replyTitle')}</h2>
             {d.status === 'resolved' && (
               <p className="text-xs text-muted-foreground">{t('reopenHint')}</p>
             )}
@@ -108,12 +122,17 @@ export function TicketThread({ id }: { id: string }) {
               placeholder={t('replyPlaceholder')}
               onChange={(e) => setBody(e.target.value)}
             />
-            <Button type="submit" disabled={reply.isPending || !body.trim()}>
-              {reply.isPending ? t('sending') : t('send')}
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" disabled={reply.isPending || !body.trim()}>
+                {reply.isPending ? t('sending') : t('send')}
+              </Button>
+            </div>
           </form>
         </Card>
       )}
+      <Link href="/support" className="inline-block text-xs text-primary hover:underline">
+        ← {t('back')}
+      </Link>
     </div>
   );
 }

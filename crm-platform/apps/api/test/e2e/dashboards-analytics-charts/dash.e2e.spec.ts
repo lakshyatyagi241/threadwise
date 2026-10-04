@@ -143,11 +143,11 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
       { status: 'sent', ago: '2 days' },
     ]);
     await seed(t, [
-      { status: 'delivered', ago: '1 day', read: true }, // read_at set while status stays delivered
-      { status: 'delivered', ago: '1 day', read: true },
-      { status: 'failed', ago: '1 day' },
-      { status: 'queued', ago: '1 day' },
-      { status: 'sent', ago: '1 day' },
+      { status: 'delivered', ago: '26 hours', read: true }, // read_at set while status stays delivered
+      { status: 'delivered', ago: '26 hours', read: true },
+      { status: 'failed', ago: '26 hours' },
+      { status: 'queued', ago: '26 hours' },
+      { status: 'sent', ago: '26 hours' },
     ]);
     // 30 inbound across two conversations (one legacy-stream row has no conversation)
     const c1 = await conversation(t);
@@ -424,6 +424,16 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
     const lines = res.text.trim().split('\r\n');
     expect(lines[0]).toBe('Metric,Value');
     expect(lines).toContain('Sent,1010');
+    // WaDesk's five rows: the range and the headline counts
+    expect(lines).toContain('Outbound messages,1010');
+    expect(
+      lines.some((l: string) => /^Range,\d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}$/.test(l)),
+    ).toBe(true);
+    for (const metric of ['Campaigns', 'Broadcasts', 'Contacts added'])
+      expect(lines.some((l: string) => new RegExp(`^${metric},\\d+$`).test(l))).toBe(true);
+    expect(res.headers['content-disposition']).toMatch(
+      /^attachment; filename="[a-z0-9-]+-analytics-\d{4}-\d{2}-\d{2}-\d{4}-\d{2}-\d{2}\.csv"$/,
+    );
     expect(lines.some((l: string) => l.startsWith('Date,Sent,Delivered,Failed,Queued'))).toBe(true);
     expect(lines.filter((l: string) => /^\d{4}-\d{2}-\d{2},/.test(l))).toHaveLength(8);
   });

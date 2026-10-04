@@ -16,7 +16,10 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { createdAt, idColumn, rowVersion, updatedAt } from '../columns';
+import { sql } from 'drizzle-orm';
+import { check, primaryKey } from 'drizzle-orm/pg-core';
+import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { organizations, users } from '../foundation';
 
 export const announcements = pgTable(
   'announcements',
@@ -224,3 +227,42 @@ export const pricingFaqs = pgTable(
 
 export type PricingFaqsRow = typeof pricingFaqs.$inferSelect;
 export type NewPricingFaqsRow = typeof pricingFaqs.$inferInsert;
+
+/** One vote per workspace user per article (migrations/20261019090000_cms_guidebook_votes.sql). Tenant data. */
+export const guidebookVotes = pgTable(
+  'guidebook_votes',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    articleId: idColumn('article_id').notNull(),
+    userId: idColumn('user_id').notNull(),
+    vote: text('vote').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('guidebook_votes_org_id_article_id_user_id_key').on(t.orgId, t.articleId, t.userId),
+    foreignKey({
+      name: 'guidebook_votes_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'guidebook_votes_article_id_fkey',
+      columns: [t.articleId],
+      foreignColumns: [guidebookArticles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'guidebook_votes_org_id_user_id_fkey',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    index('idx_guidebook_votes_article').on(t.articleId),
+    check('guidebook_votes_vote_check', sql`${t.vote} IN ('helpful', 'not_helpful')`),
+  ],
+);
+
+export type GuidebookVotesRow = typeof guidebookVotes.$inferSelect;
+export type NewGuidebookVotesRow = typeof guidebookVotes.$inferInsert;
