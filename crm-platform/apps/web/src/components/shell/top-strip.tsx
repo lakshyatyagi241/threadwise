@@ -177,6 +177,8 @@ export interface TopStripProps {
   jumpIndex: readonly JumpEntry[];
   wallet?: WalletChipData;
   bell?: ReactNode;
+  /** The gear for the settings behind the current screen (`PageSettingsShortcut`). */
+  pageSettings?: ReactNode;
   settingsHref?: string;
   helpItems?: readonly ResolvedNavItem[];
 }
@@ -195,6 +197,7 @@ export function TopStrip({
   jumpIndex,
   wallet,
   bell,
+  pageSettings,
   settingsHref,
   helpItems,
 }: TopStripProps) {
@@ -232,6 +235,7 @@ export function TopStrip({
             <span className="tabular-nums">{wallet.label}</span>
           </Link>
         )}
+        {pageSettings}
         {bell}
         <UserMenu user={user} theme={theme} settingsHref={settingsHref} helpItems={helpItems} />
       </div>

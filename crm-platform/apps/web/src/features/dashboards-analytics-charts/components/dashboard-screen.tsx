@@ -8,6 +8,7 @@ import { DASH_RANGES, dashRangeSchema, type DashRange } from '@crm/contracts';
 import { Button, Card, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
+import { flash } from '@/features/admin-console-shell/flash/flash-store';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
 import { BarChart, Legend, Sparkline } from './charts';
 import {
@@ -89,9 +90,13 @@ export function DashboardScreen() {
   const router = useRouter();
   const bounced = isForbidden(summary.error);
   // Reference sends an agent or viewer to the team inbox rather than showing an error.
+  const role = session.roles[0]?.name ?? 'Member';
   useEffect(() => {
-    if (bounced) router.replace('/inbox');
-  }, [bounced, router]);
+    if (!bounced) return;
+    // Reference's warning flash: "Your role (x) doesn't have access to that page" (rendered by the shell's flash host).
+    flash('roleDenied', 'warning', { role });
+    router.replace('/inbox');
+  }, [bounced, role, router]);
   const tz = session.org.timezone ?? 'UTC';
   const name = session.user.displayName ?? session.user.fullName;
 

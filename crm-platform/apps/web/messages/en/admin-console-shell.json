@@ -641,6 +641,10 @@
       "title": "Connect a number",
       "close": "Close",
       "connected": "Number connected"
+    },
+    "flash": {
+      "dismiss": "Dismiss",
+      "roleDenied": "Your role ({role}) doesn't have access to that page"
     }
   }
 }
