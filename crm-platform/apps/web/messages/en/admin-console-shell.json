@@ -295,8 +295,20 @@
         "rest2": "Every key is scoped to this workspace and can be revoked at any time.",
         "rest3": "Requests are limited per minute according to your plan.",
         "webhooksTitle": "Webhooks",
-        "webhooksBody": "Send events to your own endpoints and receive events from other tools.",
-        "manage": "Manage integrations"
+        "webhooksBody": "Push delivery, read, and reply events to any HTTPS endpoint.",
+        "manage": "Manage webhooks",
+        "sheetsTitle": "Google Sheets API key",
+        "sheetsBody": "Used by the Sheets add-on to push contacts and message rows into a sheet. The only personal token exposed today.",
+        "manageInAccount": "Manage in account",
+        "active": "Active",
+        "keyTimes": "generated {created} · last used {used}",
+        "never": "never",
+        "noKey": "No Sheets API key generated. Create one in",
+        "noKeyLink": "your account → Sheets add-on",
+        "outboundTitle": "Outbound endpoints",
+        "outboundBody": "Your workspace → your server (CRM hooks, send / reply events).",
+        "inboundTitle": "Inbound webhooks",
+        "inboundBody": "Your server → your workspace (incoming WABA / Unofficial API deliveries)."
       },
       "appearance": {
         "title": "Appearance",

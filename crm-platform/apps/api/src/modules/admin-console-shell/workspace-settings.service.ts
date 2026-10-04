@@ -14,6 +14,7 @@ import {
   type BrandSlot,
   type DeleteWorkspaceRequest,
   type NotificationPrefsResponse,
+  type IntegrationsSummaryResponse,
   type PreferencesResponse,
   type ResidencyResponse,
   type SaveResidencyRequest,
@@ -371,6 +372,39 @@ export class WorkspaceSettingsService {
       });
     });
     return this.residency();
+  }
+
+  // --- API and webhooks (TW-ASHELL-042) --------------------------------------------------------------------------------
+
+  /**
+   * Read-only counts for the informational tab. The caller's own Sheets key status (suffix and times only) and the number of
+   * outbound and inbound webhook endpoints of this workspace, both under row-level security. Any member reads.
+   */
+  async integrations(): Promise<IntegrationsSummaryResponse> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const key = await tx.execute(sql`
+        SELECT sheets_key_suffix AS suffix, sheets_key_created_at AS created_at, sheets_key_last_used_at AS last_used_at
+          FROM user_settings WHERE org_id = ${orgId} AND user_id = ${userId}
+      `);
+      const counts = await tx.execute(sql`
+        SELECT (SELECT count(*) FROM outbound_webhooks WHERE org_id = ${orgId})::int AS outbound,
+               (SELECT count(*) FROM webhooks WHERE org_id = ${orgId})::int AS inbound
+      `);
+      const k = key.rows[0] as
+        { suffix: string | null; created_at: Date | null; last_used_at: Date | null } | undefined;
+      const c = counts.rows[0] as { outbound: number; inbound: number };
+      return {
+        sheetsKey: k?.suffix
+          ? {
+              suffix: k.suffix,
+              createdAt: k.created_at ? new Date(k.created_at).toISOString() : null,
+              lastUsedAt: k.last_used_at ? new Date(k.last_used_at).toISOString() : null,
+            }
+          : null,
+        webhooks: { outbound: Number(c.outbound), inbound: Number(c.inbound) },
+      };
+    });
   }
 
   // --- Notifications (TW-ASHELL-038) -----------------------------------------------------------------------------------
