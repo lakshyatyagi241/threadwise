@@ -29,3 +29,21 @@ Conformance, read from `admin/ai-dashboard/index.blade.php` and `user/ai-usage/i
 Intended deviations (added): "Live" means active and the key decrypts (WaDesk showed the raw Active flag, inventory WD-AIADM-024 quirk 5); the "AI voice calls" figure is omitted until CALL writes voice usage (blocked); charts are bars built from @crm/ui tokens rather than WaDesk's inline SVG line, same data.
 
 The inventory "implemented / partial / dead-code" column describes WaDesk itself, not this port; the partial rows (002, 015, 016, 026) are partial in WaDesk and are ported with their documented behaviour.
+
+## Round 3: live comparison with the running WaDesk (admin AI keys, admin AI dashboard)
+
+Opened `/admin/api-keys` and `/admin/ai-dashboard` on the live WaDesk (22 providers, all disabled, no keys) and read the views and `AdminAiKeyController::FIELD_SCHEMA`. Fixed on the keys page:
+
+- Provider card name "Anthropic Claude" (new migration `20261025090000_aiadm_anthropic_claude_name`; WaDesk's seed names it so).
+- Card sub-line "provider: openai · default model: gpt-5.4-mini" (was "Provider id: ...").
+- Per-provider API key hint in WaDesk's words (all 22), required asterisk, `autocomplete=new-password`, placeholder "paste key here".
+- The optional text field is back: Organization ID (OpenAI), Project ID (Gemini), Default voice ID (ElevenLabs). WaDesk saves them and nothing reads them; reproduced deliberately (stored in `extra_config`, audited), so the card matches. Unlike WaDesk, a blank value clears it.
+- Field order and grouping as WaDesk: key, text field, max tokens (placeholder "e.g. 4096", WaDesk's hint), then a rule and Default model, Sort order; a custom stored model is listed last as "(custom)".
+- One flat list ordered by sort order (the Language models / Voice headings were removed; voice vendors sort last anyway).
+- Footer card "How these keys are used / Fallback chain" with WaDesk's text.
+
+Dashboard: copy, KPI strip, sections, key-health list (capitalised provider, model or "no default model", Off) already matched the live page; no change. The workspace usage page was not opened live (needs a registered workspace user); it follows `user/ai-usage/index.blade.php`.
+
+Remaining intended deviations on the keys page: last four characters of the saved key, "Extra models" and "Remove key" (no WaDesk equivalent), optimistic locking.
+
+Feature status: every feature of the index is built except WD-AIADM-018 (dead code in WaDesk, `AiTokenMeter.guard` has no callers; the guard exists as an operation, enforcement is not wired, on purpose). WD-AIADM-029 is docs-only in WaDesk; the port audits key changes (deliberate fix).

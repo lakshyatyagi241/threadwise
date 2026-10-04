@@ -185,6 +185,61 @@ export const aiProviderSlugSchema = z.enum(
   AI_PROVIDER_SLUGS as [AiProviderSlug, ...AiProviderSlug[]],
 );
 
+/** The hint under each provider's API key field, as WaDesk's field schema words it (WD-AIADM-002). */
+const KEY_HINTS: Record<string, string> = {
+  openai: 'Find at platform.openai.com/api-keys',
+  anthropic: 'Find at console.anthropic.com/settings/keys',
+  gemini: 'Generate at aistudio.google.com/app/apikey',
+  mistral: 'Generate at console.mistral.ai/api-keys',
+  openrouter:
+    'Create at openrouter.ai/keys — one key unlocks all 20 models (Claude, GPT, Gemini, Llama, DeepSeek, Mistral, Grok…).',
+  deepseek: 'Create at platform.deepseek.com/api_keys',
+  xai: 'Create at console.x.ai (xAI / Grok)',
+  perplexity: 'Create at perplexity.ai/settings/api',
+  groq: 'Create at console.groq.com/keys (fastest inference)',
+  qwen: 'Alibaba DashScope — create at dashscope.console.aliyun.com',
+  moonshot: 'Moonshot / Kimi — platform.moonshot.ai/console/api-keys',
+  zai: 'Z.ai / GLM — z.ai/manage-apikey/apikey-list',
+  cohere: 'Create at dashboard.cohere.com/api-keys',
+  nvidia: 'NVIDIA NIM — build.nvidia.com',
+  llama: 'Meta Llama API — llama.developer.meta.com',
+  huggingface: 'Hugging Face — huggingface.co/settings/tokens',
+  baidu: 'Baidu Ernie (Qianfan) — console.bce.baidu.com/qianfan',
+  ai21: 'AI21 (Jamba) — studio.ai21.com/account/api-key',
+  reka: 'Reka — platform.reka.ai',
+  yi: '01.AI (Yi) — platform.01.ai',
+  elevenlabs: 'Find at elevenlabs.io/app/settings/api-keys',
+  deepgram:
+    'Create at console.deepgram.com → API Keys. Powers AI voice-call speech-to-text (so the assistant can hear the caller).',
+};
+export const aiKeyHint = (slug: string): string => KEY_HINTS[slug] ?? '';
+
+/**
+ * The one optional text field a few cards carry next to the key. WaDesk saves it and nothing reads it (inventory
+ * WD-AIADM-002 quirk 2); it is kept so the card matches, and stored under `key` in `extra_config`.
+ */
+export const AI_TEXT_EXTRA_KEYS = ['organization', 'project_id', 'voice_id'] as const;
+export type AiTextExtraKey = (typeof AI_TEXT_EXTRA_KEYS)[number];
+export interface AiTextExtraDef {
+  key: AiTextExtraKey;
+  label: string;
+  hint: string;
+}
+const TEXT_EXTRAS: Record<string, AiTextExtraDef> = {
+  openai: {
+    key: 'organization',
+    label: 'Organization ID',
+    hint: 'Optional. e.g. org-xxxxxxxxxxxx',
+  },
+  gemini: { key: 'project_id', label: 'Project ID', hint: 'Optional. For Vertex AI billing.' },
+  elevenlabs: {
+    key: 'voice_id',
+    label: 'Default voice ID',
+    hint: "Optional. Voice used when caller hasn't picked one.",
+  },
+};
+export const aiTextExtra = (slug: string): AiTextExtraDef | null => TEXT_EXTRAS[slug] ?? null;
+
 /** The catalogue entry for a slug (trimmed and lower-cased first, as the resolver does), or undefined. */
 export function findAiProvider(slug: string): AiProviderDef | undefined {
   const s = slug.trim().toLowerCase();

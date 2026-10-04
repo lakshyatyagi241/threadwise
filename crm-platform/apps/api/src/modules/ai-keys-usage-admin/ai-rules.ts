@@ -1,4 +1,9 @@
-import { AI_USAGE_WINDOW_DAYS, type AiUsageWindow } from '@crm/contracts';
+import {
+  AI_TEXT_EXTRA_KEYS,
+  AI_USAGE_WINDOW_DAYS,
+  type AiTextExtraKey,
+  type AiUsageWindow,
+} from '@crm/contracts';
 
 /**
  * Pure rules of the AI keys domain (WD-AIADM-002, 003, 009, 010, 017, 019, 025..027), kept free of the database so
@@ -11,6 +16,8 @@ import { AI_USAGE_WINDOW_DAYS, type AiUsageWindow } from '@crm/contracts';
 export interface ProviderExtras {
   maxTokens: number | null;
   models: string[];
+  /** Organization ID / Project ID / Default voice ID, whichever the provider's card carries. Stored, never read. */
+  text: Partial<Record<AiTextExtraKey, string>>;
 }
 
 /**
@@ -18,7 +25,7 @@ export interface ProviderExtras {
  * "nothing set". WaDesk stored the ceiling as a string and read a non-numeric one as 0 (no cap); so does this.
  */
 export function parseExtras(raw: string | null | undefined): ProviderExtras {
-  const empty: ProviderExtras = { maxTokens: null, models: [] };
+  const empty: ProviderExtras = { maxTokens: null, models: [], text: {} };
   if (!raw) return empty;
   let json: unknown;
   try {
@@ -34,7 +41,12 @@ export function parseExtras(raw: string | null | undefined): ProviderExtras {
   const models = Array.isArray(obj.models)
     ? obj.models.filter((m): m is string => typeof m === 'string' && m.trim() !== '')
     : [];
-  return { maxTokens, models };
+  const text: ProviderExtras['text'] = {};
+  for (const k of AI_TEXT_EXTRA_KEYS) {
+    const v = obj[k];
+    if (typeof v === 'string' && v !== '') text[k] = v;
+  }
+  return { maxTokens, models, text };
 }
 
 /**
@@ -43,8 +55,9 @@ export function parseExtras(raw: string | null | undefined): ProviderExtras {
  */
 export function mergeExtras(
   stored: ProviderExtras,
-  patch: { maxTokens?: number | null; extraModels?: string[] },
+  patch: { maxTokens?: number | null; extraModels?: string[]; textExtra?: string },
   supportsMaxTokens: boolean,
+  textKey: AiTextExtraKey | null = null,
 ): { json: string; next: ProviderExtras } {
   const next: ProviderExtras = {
     maxTokens:
@@ -53,10 +66,16 @@ export function mergeExtras(
       patch.extraModels !== undefined
         ? [...new Set(patch.extraModels.map((m) => m.trim()))]
         : stored.models,
+    text: { ...stored.text },
   };
+  if (textKey && patch.textExtra !== undefined) {
+    if (patch.textExtra === '') delete next.text[textKey];
+    else next.text[textKey] = patch.textExtra;
+  }
   const out: Record<string, unknown> = {};
   if (next.maxTokens !== null) out.max_tokens = next.maxTokens;
   if (next.models.length > 0) out.models = next.models;
+  for (const k of AI_TEXT_EXTRA_KEYS) if (next.text[k] !== undefined) out[k] = next.text[k];
   return { json: JSON.stringify(out), next };
 }
 
