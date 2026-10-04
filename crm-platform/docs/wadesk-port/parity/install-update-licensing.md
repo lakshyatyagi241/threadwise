@@ -47,7 +47,8 @@ fidelity is therefore from the Blade/CSS source, not from pixels. Behaviour is c
 | 026 rollback and backup list            | No backups exist to list (021); forward-only migrations are a repo rule. Rollback is redeploying the previous image.                                  |
 
 These are listed in `featuresNotStarted` of the round report with this reason; none is a missed feature, but all are a
-conscious departure from "same behaviour" and need the owner's sign-off.
+conscious departure from "same behaviour". **Approved by the project owner on 2026-10-04**: the updater stays read-only
+(release info, health, migration ledger); a release ships as a new image and a rollback redeploys the previous image.
 
 ## Test evidence
 
