@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { setExportResponseSchema, setHubResponseSchema } from '@crm/contracts';
-import { Badge, Button, Card, Spinner, StatTile } from '@crm/ui';
+import { Badge, Button, Card, Input, Spinner, StatTile } from '@crm/ui';
+import { tileMatches } from '@/features/admin-console-shell/tile-search';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -24,6 +26,8 @@ export function SettingsHubPage() {
   const t = useTranslations(NS);
   const tn = useTranslations(`${NS}.hub`);
   const tc = useTranslations(`${NS}.cards`);
+  const ts = useTranslations('admin-console-shell.hubSearch');
+  const [search, setSearch] = useState('');
   const format = useFormatter();
   const toast = useToast();
   const { operator } = useOperator();
@@ -58,6 +62,8 @@ export function SettingsHubPage() {
   const state = new Map(groups.map((g) => [g.group, g]));
   const specs = new Map(GROUP_SPECS.map((s) => [s.id, s]));
   const external = new Map<string, string>(EXTERNAL_CARDS.map((c) => [c.id, c.href]));
+  const shown = (id: (typeof HUB_ORDER)[number]) =>
+    tileMatches(`${tc(`${id}.title`)} ${tc(`${id}.description`)} ${tc(`${id}.tags`)}`, search);
 
   return (
     <div className="space-y-6">
@@ -129,11 +135,21 @@ export function SettingsHubPage() {
         />
       </div>
 
+      <Input
+        type="search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder={ts('placeholder')}
+        aria-label={ts('placeholder')}
+        className="max-w-md"
+      />
+
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {HUB_ORDER.map((id, i) => {
           const spec = specs.get(id);
           const href = spec ? `/admin/settings/${spec.slug}` : external.get(id);
           if (!href) return null;
+          if (!shown(id)) return null;
           const s = spec ? state.get(spec.group) : undefined;
           return (
             <Link
@@ -170,6 +186,7 @@ export function SettingsHubPage() {
           );
         })}
       </div>
+      {!HUB_ORDER.some(shown) && <p className="text-sm text-muted-foreground">{ts('empty')}</p>}
       <p className="text-sm text-muted-foreground">{tn('others')}</p>
     </div>
   );

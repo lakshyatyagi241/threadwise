@@ -741,6 +741,10 @@
     "flash": {
       "dismiss": "Dismiss",
       "roleDenied": "Your role ({role}) doesn't have access to that page"
+    },
+    "hubSearch": {
+      "placeholder": "Search project settings...",
+      "empty": "No settings match your search."
     }
   }
 }
