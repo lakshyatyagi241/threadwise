@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Alert, Button, Card, Spinner, StatTile } from '@crm/ui';
 import type { BspDashboard } from '@crm/contracts';
@@ -14,6 +14,12 @@ import { formatMoney, formatRange } from '../lib/format';
 const COLUMNS = ['workspace', 'messages', 'revenue', 'metaCost', 'margin', 'wallet'] as const;
 
 /** The reseller's income page: this month's revenue, Meta cost and margin, and the same per workspace. */
+const walletRulesLink = (chunks: ReactNode) => (
+  <Link href="/admin/wallet/pricing" className="font-medium text-primary hover:underline">
+    {chunks}
+  </Link>
+);
+
 export function DashboardPage() {
   const t = useTranslations('bsp-billing-engine.dashboard');
   const tc = useTranslations('bsp-billing-engine.common');
@@ -28,19 +34,22 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={t('eyebrow')}
-        title={t('title')}
-        description={
+        eyebrow={
           q.data
-            ? formatRange(
+            ? `${t('eyebrow')} · ${formatRange(
                 q.data.from,
                 new Date(Math.min(Date.parse(q.data.to), now)).toISOString(), // WaDesk shows the current month up to today
                 locale,
-              )
-            : undefined
+              )}`
+            : t('eyebrow')
         }
+        title={t('title')}
+        description={t.rich('intro', { link: walletRulesLink })}
         actions={
           <div className="flex gap-2">
+            <Button size="sm" aria-current="page">
+              {t('linkPnl')}
+            </Button>
             <Link href="/admin/wallet/pricing">
               <Button variant="secondary" size="sm">
                 {t('linkRates')}
@@ -76,19 +85,11 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
   const x = d.totals;
   return (
     <>
-      <p className="max-w-3xl text-sm text-muted-foreground">{t('intro')}</p>
-      {x.unpricedMessages > 0 && (
-        <Alert tone="warning">{t('unpricedBanner', { count: x.unpricedMessages })}</Alert>
-      )}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatTile label={t('revenue')} value={money(x.revenue)} />
         <StatTile label={t('metaCost')} value={money(x.metaCost)} />
         <StatTile label={t('margin')} value={money(x.margin)} tone="accent" />
-        <StatTile
-          label={t('walletFloat')}
-          value={money(x.walletFloat)}
-          hint={t('walletFloatHint')}
-        />
+        <StatTile label={t('walletFloat')} value={money(x.walletFloat)} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:max-w-xl">
         <StatTile label={t('billed')} value={num.format(x.billedMessages)} />
@@ -98,6 +99,11 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
           tone={x.unpricedMessages > 0 ? 'warning' : 'default'}
         />
       </div>
+      {x.unpricedMessages > 0 && (
+        <Alert tone="warning">
+          {t.rich('unpricedBanner', { count: x.unpricedMessages, link: walletRulesLink })}
+        </Alert>
+      )}
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('perWorkspace')}</h2>
         <div className="overflow-x-auto">

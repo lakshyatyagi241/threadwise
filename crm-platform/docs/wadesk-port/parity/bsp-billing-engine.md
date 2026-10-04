@@ -20,20 +20,46 @@ real Postgres and a stand-in Graph API), `test/integration/bsp-billing-engine/al
 
 ## Blocked or not ported (recorded, not dropped)
 
-| Id                        | State      | Reason                                                                                                                                                                |
-| ------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Id                        | State      | Reason                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WD-BSP-012                | done       | Settle, refund and precheck run in the WALLET module (`wallet-message-billing`: `message-billing.service.ts`, `wallet-gate.service.ts`) and consume `BillingModeService` from this barrel; covered by `test/e2e/wallet-message-billing/engine.e2e.spec.ts` (reseller vs direct mode, idempotent charge, refund, empty-wallet free row) |
-| WD-BSP-013                | blocked    | The admin workspace form (create/edit with the reseller flag) is the workspace admin domain's screen; the wallet admin workspace detail already shows and sets the mode |
-| WD-BSP-017                | done       | `ratesEndpoint` and the token are this domain's settings; sync/import live in WALLET (`platform-rates.service.ts` `syncMeta` reads the BSP `connection.ratesEndpoint`; live fetch falls back to the bundled card) |
-| WD-BSP-002                | done       | Billing menu entries, "Message pricing" link on the credit page, "Rates & margin" link on the P&L page, and `/admin/bsp/rate-cards` redirects to `/admin/wallet/pricing` |
-| WD-BSP-018, 019, 020, 021 | not ported | Docs-only or dead code in WaDesk (no behaviour to port)                                                                                                               |
+| WD-BSP-013                | blocked    | The admin workspace form (create/edit with the reseller flag) is the workspace admin domain's screen; the wallet admin workspace detail already shows and sets the mode                                                                                                                                                                |
+| WD-BSP-017                | done       | `ratesEndpoint` and the token are this domain's settings; sync/import live in WALLET (`platform-rates.service.ts` `syncMeta` reads the BSP `connection.ratesEndpoint`; live fetch falls back to the bundled card)                                                                                                                      |
+| WD-BSP-002                | done       | Billing menu entries, "Message pricing" link on the credit page, "Rates & margin" link on the P&L page, and `/admin/bsp/rate-cards` redirects to `/admin/wallet/pricing`                                                                                                                                                               |
+| WD-BSP-018, 019, 020, 021 | not ported | Docs-only or dead code in WaDesk (no behaviour to port)                                                                                                                                                                                                                                                                                |
 
 ## Screens
 
-Not compared side by side with the running reference in this run (the reference was not opened); layout follows the inventory descriptions
-(KPI tiles, per-workspace table, two-card billing choice, three steps on the credit page).
+Round 5 conformance pass against the WaDesk Blade views `bsp/credit/index.blade.php` and `bsp/dashboard/index.blade.php` (read line by line; the live
+pages were not opened, the Blade source is what renders them). Fixed: page eyebrow, heading and intro on both pages; the P&L header pills (P&L,
+Rates & margin, Connect Meta) and the "Wallet rules" links; banner and table-heading copy; step titles, field labels, hints and placeholders of
+step 1 and step 2, the "stored encrypted" note beside Save, the red "Locked once attached" box, register column "Alloc ID" and lowercase
+status words, revoke confirmation, and the setup-guide copy with the Meta links.
 
+Deliberate differences on these screens:
+
+| Screen                       | WaDesk                                                                 | Here                                 | Why                                                                           |
+| ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| Credit, step 2 currency list | Every row of the `currencies` table (most are rejected by Meta, QUIRK) | Only the six currencies Meta accepts | Fixes the QUIRK in WD-BSP-003 rule 3                                          |
+| Credit, step 1               | No base-currency field                                                 | Extra "Base currency" field          | Needed for the income figures (`bsp_base_currency`, WD-BSP-006 settings note) |
+| Credit, Graph version        | Placeholder says v25.0, code default v26.0                             | v26.0 in both                        | WaDesk's own inconsistency; behaviour (v26.0) kept                            |
+| Credit, attach confirm       | Browser `confirm()`                                                    | `ConfirmDialog`                      | @crm/ui pattern                                                               |
+| Both                         | Serif display headings with an italic accent word                      | Platform page header                 | Platform design system                                                        |
+
+## Not ported on purpose
+
+WD-BSP-018 (markup configuration, docs only), WD-BSP-019 (dedicated BSP wallet, top-up packages, usage events, rate-card tables: tables exist in
+WaDesk migrations but no route, model use or screen), WD-BSP-020 (aggregator and partner credit sources, docs only; `bsp_credit_source` is never
+written), WD-BSP-021 (three-step share and revoke-by-discovery, docs only; the code performs only the single attach and DELETE already built in
+WD-BSP-006 and 009). The inventory feature index marks all four docs-only or dead-code.
+
+WD-BSP-013 stays blocked: the admin workspace create/edit form does not exist in this repo (no `admin/workspaces` controller in
+`apps/api/src/modules`, no `(admin)/.../workspaces` create or edit page under `apps/web/src/app`; the nearest screens are the wallet admin
+workspace list and detail). The toggle will be one additive edit once the workspace admin domain ships that form: a `billingMode` field wired through
+`BillingModeService` from this module's barrel. Until then the wallet admin detail sets the mode and audits it.
 
 Tier P0 done: WD-BSP-003, 004, 005, 006, 011, 012, 014, 016. Tier P1 done: WD-BSP-007, 008, 009, 010, 015, 017. Tier P2 done: WD-BSP-001, 002. WD-BSP-013 stays blocked on the workspace admin form.
 Round-3 note: the web unit tests (17) pass; the API e2e and integration suites were not re-run because the local Postgres was not reachable (docker daemon down).
 Round-4 verification (Postgres up, crm_bsp migrated, 178 migrations): API unit 39, BSP plus wallet-message-billing e2e 156 (6 files), integration 9, web 17 all pass; arch:check and db:verify-schema clean (0 errors). Remaining typecheck errors (8 in api specs, 1 in web plan-draft.test.ts) are in other domains' files. Screens were still not compared side by side with the running WaDesk.
+
+Round-5: tier P0/P1/P2 unchanged; screens conformed to the Blade source (see Screens); 013 re-checked and still blocked; 018 to 021 listed under "Not ported on purpose".
