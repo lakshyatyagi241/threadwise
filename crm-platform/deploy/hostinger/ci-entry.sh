@@ -25,6 +25,19 @@ case "$action" in
     [[ "$arg" =~ ^[a-f0-9]{7,40}$ ]] || { echo "bad tag" >&2; exit 2; }
     docker image inspect "desk-api:$arg" "desk-web:$arg" >/dev/null
     prev=$(grep '^IMAGE_TAG=' .env | cut -d= -f2 || true)
+    # The worker serves no HTTP, so "up" for it means its healthcheck (a recent heartbeat in Redis) says healthy. A container with
+    # no healthcheck defined (an older compose file) is not waited for.
+    worker_ready() {
+      local id state
+      for _ in $(seq 1 36); do
+        id=$(docker compose --env-file .env ps -q worker 2>/dev/null | head -1)
+        [ -n "$id" ] || { sleep 5; continue; }
+        state=$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$id" 2>/dev/null || echo unknown)
+        case "$state" in healthy | none) return 0 ;; esac
+        sleep 5
+      done
+      return 1
+    }
     setag() { sed -i '/^IMAGE_TAG=/d' .env; echo "IMAGE_TAG=$1" >> .env; }
     ready() { for _ in $(seq 1 36); do
         docker compose --env-file .env exec -T api node -e "fetch('http://127.0.0.1:3000/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))" 2>/dev/null && return 0
@@ -52,12 +65,12 @@ case "$action" in
       echo "migration failed; the running release is untouched" >&2; setag "${prev:-$arg}"; exit 1
     fi
     docker compose --env-file .env up -d api worker web
-    if ready; then
+    if ready && worker_ready; then
       echo "release $arg is up (previous: ${prev:-none})"
       # keep this and the previous release; drop older desk images
       docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($arg|${prev:-none})$" | xargs -r docker rmi 2>/dev/null || true
     else
-      echo "release $arg did not become ready; rolling back to ${prev:-none}" >&2
+      echo "release $arg did not become ready (api or worker); rolling back to ${prev:-none}" >&2
       if [ -n "$prev" ]; then setag "$prev"; docker compose --env-file .env up -d api worker web; fi
       exit 1
     fi

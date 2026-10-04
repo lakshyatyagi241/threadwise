@@ -275,9 +275,15 @@ services:
     # the default 10 s, a long job is abandoned and its outbox rows stay in 'processing'.
     stop_grace_period: 60s
     logging: *app-logging
-    # The image's HEALTHCHECK probes the API's HTTP port; the worker serves none.
+    # The image's HEALTHCHECK probes the API's HTTP port, which the worker does not serve. This one asks Redis whether the worker in
+    # this container has beaten in the last three intervals (see worker-probe.ts); the release waits for it to say healthy.
     healthcheck:
-      disable: true
+      test:
+        ['CMD', 'node', 'dist/src/modules/platform-infrastructure/observability/worker-probe.js']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     environment:
       <<: *api-env
       WORKER_MODE: 'true'
