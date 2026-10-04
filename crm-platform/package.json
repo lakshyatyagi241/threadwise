@@ -58,5 +58,15 @@
     "*.{json,md,yml,yaml}": [
       "prettier --write"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "multer": ">=2.4.0"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-gpj5-g38j-94v9"
+      ]
+    }
   }
 }
