@@ -92,6 +92,17 @@ export function cardState(g: AddonGrants, ownedCount: number): 'buy' | 'active' 
   return isStackable(g) ? 'buy_again' : 'active';
 }
 
+/**
+ * Where a purchase's term starts counting from. A normal add-on is a stackable boost: every purchase is a term of its own from `now`.
+ * The add-on that sells a Marketplace app is one subscription, not a boost: a second payment extends what is already paid for, so
+ * paying early never loses days (the plan domain's rule for a plan renewal). `currentEnd` is the latest end among the workspace's active
+ * rows of that add-on, or null when it has none, or one with no end.
+ */
+export function termBase(now: Date, isMarketplaceApp: boolean, currentEnd: Date | null): Date {
+  if (!isMarketplaceApp || currentEnd === null) return now;
+  return currentEnd.getTime() > now.getTime() ? currentEnd : now;
+}
+
 export type BillingUnit = 'days' | 'weeks' | 'months' | 'years';
 
 /**

@@ -11,6 +11,7 @@ import {
 } from './enums';
 import { marketListingSchema, marketOperatorVersionSchema } from './catalogue';
 import { marketManifestSchema, type MarketManifest } from './manifest';
+import { marketPricingViewSchema } from './pricing';
 import { recipeSchema, type MarketRecipe } from './recipe';
 
 /**
@@ -81,6 +82,8 @@ export type MarketOperatorCategoryList = z.infer<typeof marketOperatorCategoryLi
 export const marketOperatorAppListQuerySchema = z.object({
   status: marketAppStatusSchema.optional(),
   kind: marketAppKindSchema.optional(),
+  /** `paid`: priced listings; `free`: the rest. */
+  pricing: z.enum(['free', 'paid']).optional(),
   q: z.string().trim().max(80).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(50),
   cursor: cursorSchema.optional(),
@@ -99,6 +102,10 @@ export const marketOperatorAppSchema = z.object({
   featured: z.boolean(),
   /** The plan feature a workspace needs to install it (counting its billing add-ons), or null for every plan. */
   planFeature: z.string().nullable(),
+  /** What the app costs: the operator's catalogue pricing, which is the authority (the manifest's `pricing` is only a proposal). */
+  pricing: marketPricingViewSchema,
+  /** Workspaces whose subscription to it is in force (paid, trial or comp, not ending or ended). */
+  activeSubscriptions: z.number().int(),
   sortOrder: z.number().int(),
   connectorType: connectorTypeSchema.nullable(),
   /** The published version, or null when nothing is published. */

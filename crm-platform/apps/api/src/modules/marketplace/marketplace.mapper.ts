@@ -5,13 +5,17 @@ import {
   recipeSchema,
   type MarketAppCard,
   type MarketAppDetail,
+  type MarketCardPricing,
+  type MarketConnectionView,
   type MarketInstallation,
   type MarketListing,
   type MarketLock,
   type MarketManifest,
   type MarketRecipe,
+  type MarketSubscription,
   type RecipeSetupView,
 } from '@crm/contracts';
+import type { InboundDescription } from '../../infra/providers/marketplace';
 import type { CardRow, DetailRow } from './browse.repository';
 import type { InstallationRow } from './installations.repository';
 import { iso } from './sql-helpers';
@@ -34,8 +38,11 @@ export const readListing = (raw: unknown): MarketListing => {
   return r.success ? r.data : marketListingSchema.parse({});
 };
 
-export function toCard(row: CardRow, lock: MarketLock | null): MarketAppCard {
-  const manifest = readManifest(row.manifest);
+export function toCard(
+  row: CardRow,
+  lock: MarketLock | null,
+  pricing: MarketCardPricing,
+): MarketAppCard {
   const listing = readListing(row.listing);
   return {
     id: row.uuid,
@@ -48,8 +55,11 @@ export function toCard(row: CardRow, lock: MarketLock | null): MarketAppCard {
     firstParty: row.first_party,
     featured: row.featured,
     version: row.version,
-    pricing: manifest?.pricing ?? { model: 'free' },
+    // The operator's catalogue pricing is the authority; the manifest's `pricing` is only the developer's proposal and is not shown.
+    pricing,
     connectorType: (row.connector_type as MarketAppCard['connectorType']) ?? null,
+    maturity: listing.maturity ?? 'stable',
+    notice: listing.notice ?? null,
     installCount: row.install_count,
     publishedAt: iso(row.published_at),
     install: row.inst_uuid
@@ -83,10 +93,15 @@ export function toSetupView(recipe: MarketRecipe | null): RecipeSetupView | null
   };
 }
 
-export function toDetail(row: DetailRow, lock: MarketLock | null): MarketAppDetail {
+export function toDetail(
+  row: DetailRow,
+  lock: MarketLock | null,
+  pricing: MarketCardPricing,
+  subscription: MarketSubscription | null,
+): MarketAppDetail {
   const manifest = readManifest(row.manifest);
   return {
-    ...toCard(row, lock),
+    ...toCard(row, lock, pricing),
     description: manifest?.description ?? row.tagline,
     listing: readListing(row.listing),
     scopes: marketScopeSummaries(manifest?.scopes ?? []),
@@ -95,20 +110,37 @@ export function toDetail(row: DetailRow, lock: MarketLock | null): MarketAppDeta
     developer: manifest?.developer ?? null,
     changelog: row.changelog,
     setup: row.kind === 'integration' ? toSetupView(readRecipe(row.recipe)) : null,
+    subscription,
+  };
+}
+
+/** What the connection page shows of a pull connection's schedule: when it polls next, how far it has fetched, how often it may be asked. */
+function pullView(
+  recipe: MarketRecipe | null,
+  conn: NonNullable<InstallationRow['connection']>,
+): Pick<MarketConnectionView, 'nextPollAt' | 'syncedThrough' | 'minSyncIntervalSeconds'> {
+  const c = recipe?.connector;
+  if (!c || c.type !== 'pull')
+    return { nextPollAt: null, syncedThrough: null, minSyncIntervalSeconds: null };
+  const through = c.window && conn.pollCursor ? new Date(conn.pollCursor) : null;
+  return {
+    nextPollAt: conn.status === 'active' ? iso(conn.nextPollAt) : null,
+    syncedThrough: through && !Number.isNaN(through.getTime()) ? through.toISOString() : null,
+    minSyncIntervalSeconds: c.limits.minIntervalSeconds,
   };
 }
 
 export interface InstallationViewDeps {
   /** The public base address deliveries are posted to (APP_URL). */
   publicBase: string;
-  describeAuth: (
-    recipe: MarketRecipe,
-  ) => { auth: 'token' | 'hmac' | 'either'; tokenHeader: string; signatureHeader: string } | null;
+  describeAuth: (recipe: MarketRecipe) => InboundDescription | null;
 }
 
 export function toInstallationView(
   row: InstallationRow,
   deps: InstallationViewDeps,
+  pricing: MarketCardPricing,
+  subscription: MarketSubscription | null,
 ): MarketInstallation {
   const recipe = readRecipe(row.recipe);
   const pendingNew = row.pending
@@ -161,14 +193,18 @@ export function toInstallationView(
           inbound: inbound
             ? {
                 url: `${deps.publicBase.replace(/\/$/, '')}/v2/public/marketplace/hooks/${conn.publicKey}`,
-                method: 'POST',
+                method: inbound.methods[0] ?? 'POST',
                 auth: inbound.auth,
                 tokenHeader: inbound.tokenHeader,
                 signatureHeader: inbound.signatureHeader,
                 secretHint: conn.secretHint,
+                methods: inbound.methods,
+                formats: inbound.formats,
+                delivery: inbound.mode,
               }
             : null,
           pollIntervalSeconds: conn.pollIntervalSeconds,
+          ...pullView(recipe, conn),
           lastEventAt: iso(conn.lastEventAt),
           lastSuccessAt: iso(conn.lastSuccessAt),
           lastError: conn.lastError,
@@ -181,6 +217,9 @@ export function toInstallationView(
         }
       : null,
     killReason: row.killReason,
+    pauseReason: row.pausedBySubscription ? 'subscription_ended' : null,
+    pricing,
+    subscription,
     installedBy: row.installer ? { id: row.installer.uuid, name: row.installer.name } : null,
     installedAt: row.installedAt.toISOString(),
     rowVersion: row.rowVersion,

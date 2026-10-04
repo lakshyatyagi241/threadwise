@@ -12,10 +12,10 @@ import {
 import {
   marketDeveloperSchema,
   marketLinkSchema,
-  marketPricingSchema,
   marketSupportSchema,
   marketSurfaceSchema,
 } from './manifest';
+import { marketCardPricingSchema, marketSubscriptionSchema } from './pricing';
 import { recipeSetupViewSchema } from './recipe';
 import { marketScopeSummarySchema } from './scopes';
 
@@ -26,10 +26,23 @@ export const marketAppRefSchema = z.union([uuidSchema, marketSlugSchema]);
 
 const text = (max: number) => z.string().trim().max(max);
 
+/**
+ * How far a listing can be trusted to work without the customer's help. `stable`: works as described. `beta`: built from partial
+ * documentation or an unverified payload; it works but may need an adjustment after the first real lead. `needs_portal_setup`: nothing
+ * arrives until the portal's own team (an account manager) switches it on for the customer. Shown on the card and on the app page.
+ */
+export const MARKET_MATURITIES = ['stable', 'beta', 'needs_portal_setup'] as const;
+export const marketMaturitySchema = z.enum(MARKET_MATURITIES);
+export type MarketMaturity = z.infer<typeof marketMaturitySchema>;
+
 // --- listing content (platform-owned, edited by the operator) ----------------------------------------------------------------------
 
 export const marketListingSchema = z
   .object({
+    /** Absent reads as `stable`. */
+    maturity: marketMaturitySchema.optional(),
+    /** One plain sentence shown beside the maturity badge on the app page (what to expect, what the customer must ask the portal for). */
+    notice: text(600).nullable().optional(),
     /** The app's logo (an https image address). An integration without one falls back to the logo of its recipe. */
     logo: marketLinkSchema.nullable().default(null),
     /** The long description of the app page. Plain text; blank lines separate paragraphs. */
@@ -102,8 +115,13 @@ export const marketAppCardSchema = z.object({
   featured: z.boolean(),
   /** The published version a new install gets. */
   version: z.string(),
-  pricing: marketPricingSchema,
+  /** What the platform charges (the operator's catalogue pricing, never the manifest's proposal) and what that means for this workspace. */
+  pricing: marketCardPricingSchema,
   connectorType: connectorTypeSchema.nullable(),
+  /** Absent reads as `stable`; the server always sends it. */
+  maturity: marketMaturitySchema.optional(),
+  /** The listing's one-line notice (null when there is none). */
+  notice: z.string().nullable().optional(),
   installCount: z.number().int(),
   publishedAt: z.string().datetime().nullable(),
   /** The workspace's installation of it, when there is one. */
@@ -164,6 +182,8 @@ export const marketAppDetailSchema = marketAppCardSchema.extend({
   changelog: z.array(marketChangelogEntrySchema),
   /** What an admin fills in to set it up (integrations): field list and instructions, never endpoints or secrets. */
   setup: recipeSetupViewSchema.nullable(),
+  /** The workspace's subscription to this app, when it has one (paid, trial or comp). */
+  subscription: marketSubscriptionSchema.nullable(),
 });
 export type MarketAppDetail = z.infer<typeof marketAppDetailSchema>;
 

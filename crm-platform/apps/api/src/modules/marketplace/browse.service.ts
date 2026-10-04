@@ -16,6 +16,8 @@ import { BrowseRepository, type CardRow } from './browse.repository';
 import { MarketplaceAccess } from './marketplace-access.service';
 import { parseAppRef } from './marketplace-rules';
 import { readManifest, toCard, toDetail } from './marketplace.mapper';
+import { cardPricing, PricingAccess } from './pricing-access.service';
+import { toSubscriptionView } from './pricing-model';
 
 const SHELF_SIZE = 8;
 
@@ -30,6 +32,7 @@ export class BrowseService {
     private readonly db: DatabaseService,
     private readonly repo: BrowseRepository,
     private readonly access: MarketplaceAccess,
+    private readonly pricing: PricingAccess,
   ) {}
 
   async categories(q: MarketCategoryListQuery): Promise<MarketCategoryList> {
@@ -91,13 +94,24 @@ export class BrowseService {
     if (!row) throw this.notFound();
     const evaluate = await this.access.evaluator(orgId, installedCount);
     const lock = await evaluate(this.lockFacts(row));
-    return toDetail(row, lock);
+    const facts = { slug: row.slug, uuid: row.uuid, pricing: row.pricing, sub: row.sub };
+    const priced = cardPricing(facts, await (await this.pricing.evaluator(orgId))(facts));
+    const subscription = row.sub
+      ? toSubscriptionView(row.sub, row.pricing, row.status, new Date())
+      : null;
+    return toDetail(row, lock, priced, subscription);
   }
 
   private async cards(orgId: number, rows: CardRow[], installedCount: number) {
     const evaluate = await this.access.evaluator(orgId, installedCount);
+    const price = await this.pricing.evaluator(orgId);
     const out = [];
-    for (const r of rows) out.push(toCard(r, await evaluate(this.lockFacts(r))));
+    for (const r of rows) {
+      const facts = { slug: r.slug, uuid: r.uuid, pricing: r.pricing, sub: r.sub };
+      out.push(
+        toCard(r, await evaluate(this.lockFacts(r)), cardPricing(facts, await price(facts))),
+      );
+    }
     return out;
   }
 

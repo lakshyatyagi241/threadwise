@@ -38,6 +38,12 @@ export function tokenMatches(secret: string, header: string | undefined): boolea
   return equalText(header.trim().replace(/^Bearer\s+/i, ''), secret);
 }
 
+/** The secret carried as the second segment of the address. Constant time; nothing about a near miss is ever said. */
+export function pathTokenMatches(secret: string, token: string | undefined): boolean {
+  if (!token) return false;
+  return equalText(token, secret);
+}
+
 /** A new connection secret: 32 random bytes, URL-safe, with a prefix that says what it is when it turns up in a log or a chat. */
 export function newConnectionSecret(): string {
   return `mkt_${randomBytes(32).toString('base64url')}`;

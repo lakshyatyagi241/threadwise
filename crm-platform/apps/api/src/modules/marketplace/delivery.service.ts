@@ -55,6 +55,15 @@ export class DeliveryService {
     target: DeliveryTarget,
     leads: ConnectorLead[],
     rejected: number,
+    /** Why the unmappable items could not be read, for the connection's last error (default `unmappable_item`). */
+    rejectReason?: string,
+    opts: {
+      /**
+       * A poll whose window overlaps the last one fetches leads it already has: those are not deliveries, so they are neither counted nor
+       * marked as seen again (the connection page would otherwise show a "duplicate" for every lead on every poll).
+       */
+      quietRepeats?: boolean;
+    } = {},
   ): Promise<DeliveryCounts> {
     const { orgId } = target;
     const counts: DeliveryCounts = {
@@ -64,7 +73,7 @@ export class DeliveryService {
       failed: 0,
       rejected,
       pipelineDown: false,
-      firstError: rejected > 0 ? 'unmappable_item' : null,
+      firstError: rejected > 0 ? (rejectReason ?? 'unmappable_item') : null,
       outcomes: [],
     };
     let sourceId = target.leadSourceId;
@@ -73,6 +82,10 @@ export class DeliveryService {
       const known = await this.db.txAs({ orgId, userId: null }, (tx) =>
         this.repo.eventOf(tx, orgId, target.connectionId, lead.externalId),
       );
+      if (known?.status === 'accepted' && opts.quietRepeats) {
+        counts.received -= 1;
+        continue;
+      }
       if (known?.status === 'accepted') {
         await this.db.txAs({ orgId, userId: null }, (tx) =>
           this.repo.bumpSeen(tx, orgId, known.id),

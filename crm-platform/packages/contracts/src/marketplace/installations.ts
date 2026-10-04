@@ -10,6 +10,7 @@ import {
   marketInstallStatusSchema,
   marketSlugSchema,
 } from './enums';
+import { marketCardPricingSchema, marketSubscriptionSchema } from './pricing';
 import { marketScopeSummarySchema } from './scopes';
 
 /**
@@ -92,14 +93,30 @@ export const marketConnectionViewSchema = z.object({
   inbound: z
     .object({
       url: z.string(),
-      method: z.literal('POST'),
-      auth: z.enum(['token', 'hmac', 'either']),
+      /** The method a sender uses first (`GET` for a portal that delivers in the query string); `methods` lists every one the address answers. */
+      method: z.enum(['POST', 'GET']),
+      /**
+       * `path`: the secret is the last segment of the address, so the full address is `url` + `/` + the secret, which is shown once (in
+       * the answer that installs or rotates) and never again; `secretHint` says which one it is.
+       */
+      auth: z.enum(['token', 'hmac', 'either', 'path']),
       tokenHeader: z.string(),
       signatureHeader: z.string(),
       secretHint: z.string().nullable(),
+      methods: z.array(z.enum(['POST', 'GET'])).optional(),
+      /** `json`, `form`, `xml`, `query` (the URL's query string). */
+      formats: z.array(z.enum(['json', 'form', 'xml', 'query'])).optional(),
+      /** `async`: stored whole and answered at once, processed by the worker; `sync`: answered after the lead reached the pipeline. */
+      delivery: z.enum(['sync', 'async']).optional(),
     })
     .nullable(),
   pollIntervalSeconds: z.number().int().nullable(),
+  /** The next poll of a pull connection (null for the others, and while the connection is stopped). */
+  nextPollAt: z.string().datetime().nullable().optional(),
+  /** Leads up to this time have been fetched (a pull connection that works in time windows). */
+  syncedThrough: z.string().datetime().nullable().optional(),
+  /** Fewest seconds between two requests to the portal: what a Sync now waits for. */
+  minSyncIntervalSeconds: z.number().int().nullable().optional(),
   lastEventAt: z.string().datetime().nullable(),
   lastSuccessAt: z.string().datetime().nullable(),
   lastError: z.string().nullable(),
@@ -145,6 +162,12 @@ export const marketInstallationSchema = z.object({
   credentials: z.array(marketCredentialStateSchema),
   connection: marketConnectionViewSchema.nullable(),
   killReason: z.string().nullable(),
+  /** `subscription_ended`: paused because the paid app's subscription ended (data kept; subscribing again switches it back on). */
+  pauseReason: z.enum(['subscription_ended']).nullable(),
+  /** What the app costs and what that means for this workspace (the same view as the app page). */
+  pricing: marketCardPricingSchema,
+  /** The workspace's subscription to the app, when it has one. */
+  subscription: marketSubscriptionSchema.nullable(),
   installedBy: z.object({ id: uuidSchema, name: z.string() }).nullable(),
   installedAt: z.string().datetime(),
   rowVersion: z.number().int(),
@@ -177,6 +200,17 @@ export const marketTestResultSchema = z.object({
   checkedAt: z.string().datetime(),
 });
 export type MarketTestResult = z.infer<typeof marketTestResultSchema>;
+
+/**
+ * "Sync now" (a pull connection): the poll is brought forward, never faster than the portal allows. `runAt` is when it will run (now when
+ * the portal's minimum interval has passed, else the moment it does); a connection that had stopped on an error is started again.
+ */
+export const marketSyncResultSchema = z.object({
+  status: z.literal('scheduled'),
+  runAt: z.string().datetime(),
+  minIntervalSeconds: z.number().int(),
+});
+export type MarketSyncResult = z.infer<typeof marketSyncResultSchema>;
 
 export const marketSampleLeadResultSchema = z.object({
   status: z.enum(['accepted', 'duplicate']),

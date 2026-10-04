@@ -54,8 +54,9 @@ describe('connector registry', () => {
     ).toEqual(['email_parse', 'oauth', 'pull', 'push', 'webhook_relay']);
     expect(registry.isImplemented('webhook_relay')).toBe(true);
     expect(registry.isImplemented('push')).toBe(true);
-    // Frameworks only: the first portal recipe that needs each is verified against the portal, then the flag flips.
-    expect(registry.isImplemented('pull')).toBe(false);
+    // Pull went live with the first portal recipes (IndiaMART, Housing.com, TradeIndia). The others are frameworks only: the first
+    // recipe that needs each is verified against its portal, then the flag flips.
+    expect(registry.isImplemented('pull')).toBe(true);
     expect(registry.isImplemented('oauth')).toBe(false);
     expect(registry.isImplemented('email_parse')).toBe(false);
   });
@@ -63,7 +64,8 @@ describe('connector registry', () => {
   it('knows which types receive deliveries and which poll', () => {
     expect(isInbound(registry.get('webhook_relay'))).toBe(true);
     expect(isInbound(registry.get('push'))).toBe(true);
-    expect(isInbound(registry.get('pull'))).toBe(false);
+    // A pull type also receives, for a recipe that declares a `push` door (IndiaMART); for any other pull recipe it describes no address.
+    expect(isInbound(registry.get('pull'))).toBe(true);
     expect(isPuller(registry.get('pull'))).toBe(true);
     expect(isPuller(registry.get('webhook_relay'))).toBe(false);
   });
@@ -140,7 +142,7 @@ describe('delivery authentication', () => {
     expect(relay.authenticate(hmacOnly, headers({ 'x-marketplace-token': secret }), secret)).toBe(
       false,
     );
-    expect(relay.describeAuth(hmacOnly).auth).toBe('hmac');
+    expect(relay.describeAuth(hmacOnly)?.auth).toBe('hmac');
     expect(relay.secretFor(either, { portalKey: 'k' }, 'generated')).toBe('generated');
   });
 

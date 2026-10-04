@@ -64,8 +64,11 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'remove_branding', group: 'advanced', default: false },
   // The deals + tasks + pipelines area (TW-DEAL-001). Default true: every plan row that predates the key keeps the area it had.
   { key: 'sales_pipeline', group: 'advanced', default: true },
-  // Booking types, appointments and the public booking pages (TW-APPT-001). Default true: Reference's column default.
-  { key: 'appointment_booking', group: 'advanced', default: true },
+  // Booking types, appointments and the public booking pages (TW-APPT-001). Default FALSE since the owner decided (2026-10-04) that
+  // Appointments is the first paid first-party Marketplace app (listing `appointments`): the app owns this key, so no plan row that
+  // predates it grants it. Reference's column default was true; workspaces that already used booking are comped (migration
+  // `20261023090200_mkt_appointments_app.sql` and the operator's grandfather action).
+  { key: 'appointment_booking', group: 'advanced', default: false },
   // The website chatbot widget builder (TW-WGT-027). Default false: Reference's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
   { key: 'chatbot_widgets', group: 'messaging', default: false },
   // The WhatsApp catalog area (TW-CAT-001). Default false: Reference's `access_wa_storefront` column default.

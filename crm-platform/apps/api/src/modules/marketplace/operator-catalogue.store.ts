@@ -4,6 +4,7 @@ import type { Tx } from '@crm/db';
 import type { MarketAppKind, MarketAppStatus, MarketVersionStatus } from '@crm/contracts';
 import { PlatformStore } from '../auth';
 import { decodeKeyset, encodeKeyset, likePattern, type AppRef } from './marketplace-rules';
+import { APP_PRICING_COLUMNS_TEXT, readAppPricing, type AppPricingRow } from './pricing-model';
 import { jsonb, textArray, toDate } from './sql-helpers';
 
 type Raw = Record<string, unknown>;
@@ -22,6 +23,11 @@ export interface OpAppRow {
   firstParty: boolean;
   featured: boolean;
   planFeature: string | null;
+  pricing: AppPricingRow;
+  /** The add-on that sells the app exists (the app has been priced at least once). */
+  packExists: boolean;
+  /** Subscriptions in force: not ending, not ended. */
+  activeSubscriptions: number;
   sortOrder: number;
   connectorType: string | null;
   listing: Record<string, unknown>;
@@ -73,6 +79,10 @@ export interface OpCategoryRow {
 const APP_COLUMNS = sql.raw(`
   a.id, a.uuid, a.slug, a.kind, a.category_id, c.slug AS category_slug, c.name AS category_name, a.name, a.tagline, a.status, a.first_party,
   a.featured, a.plan_feature, a.sort_order, a.connector_type, a.listing, a.current_version_id, pv.version AS published_version,
+  ${APP_PRICING_COLUMNS_TEXT},
+  EXISTS (SELECT 1 FROM plans p WHERE p.marketplace_app_id = a.id) AS pack_exists,
+  (SELECT count(*)::int FROM marketplace_subscriptions s WHERE s.app_id = a.id AND s.status = 'active' AND NOT s.cancel_at_period_end
+     AND (s.current_period_end IS NULL OR s.current_period_end > now())) AS active_subs,
   (SELECT v.version FROM marketplace_app_versions v WHERE v.app_id = a.id ORDER BY v.created_at DESC, v.id DESC LIMIT 1) AS latest_version,
   a.install_count, a.kill_reason, a.killed_at, a.published_at, a.created_at, a.updated_at, a.row_version, a.created_at::text AS k0`);
 const APP_FROM = sql`
@@ -94,6 +104,9 @@ const toApp = (r: Raw): OpAppRow => ({
   firstParty: r.first_party as boolean,
   featured: r.featured as boolean,
   planFeature: (r.plan_feature as string | null) ?? null,
+  pricing: readAppPricing(r),
+  packExists: r.pack_exists === true,
+  activeSubscriptions: Number(r.active_subs ?? 0),
   sortOrder: Number(r.sort_order),
   connectorType: (r.connector_type as string | null) ?? null,
   listing: (r.listing as Record<string, unknown>) ?? {},
@@ -219,11 +232,20 @@ export class OperatorCatalogueStore {
 
   async apps(
     tx: Tx,
-    q: { status?: string; kind?: string; q?: string; limit: number; cursor?: string },
+    q: {
+      status?: string;
+      kind?: string;
+      pricing?: 'free' | 'paid';
+      q?: string;
+      limit: number;
+      cursor?: string;
+    },
   ): Promise<{ rows: OpAppRow[]; badCursor: boolean }> {
     const where: SQL[] = [sql`true`];
     if (q.status) where.push(sql`a.status = ${q.status}`);
     if (q.kind) where.push(sql`a.kind = ${q.kind}`);
+    if (q.pricing === 'free') where.push(sql`a.pricing_model = 'free'`);
+    if (q.pricing === 'paid') where.push(sql`a.pricing_model <> 'free'`);
     if (q.q)
       where.push(sql`(a.name ILIKE ${likePattern(q.q)} OR a.slug ILIKE ${likePattern(q.q)})`);
     if (q.cursor) {
@@ -289,6 +311,81 @@ export class OperatorCatalogueStore {
 
   async deleteApp(tx: Tx, id: number): Promise<void> {
     await tx.execute(sql`DELETE FROM marketplace_apps WHERE id = ${id}`);
+  }
+
+  // --- pricing ------------------------------------------------------------------------------------------------------------------------
+
+  /** Writes the operator's pricing of an app; false when `expectedVersion` is stale. */
+  async setPricing(
+    tx: Tx,
+    id: number,
+    p: {
+      model: string;
+      amount: string | null;
+      currency: string | null;
+      annualAmount: string | null;
+      trialDays: number;
+      purchasable: boolean;
+      includedPlanFeature: string | null;
+      includedMinPlan: string | null;
+      grantsPlanFeatures: string[];
+      grandfatherExisting: boolean;
+      priceChanged: boolean;
+    },
+    expectedVersion: number,
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE marketplace_apps SET
+        pricing_model = ${p.model}, price_amount = ${p.amount}::numeric, price_currency = ${p.currency},
+        annual_amount = ${p.annualAmount}::numeric, trial_days = ${p.trialDays}, purchasable = ${p.purchasable},
+        included_plan_feature = ${p.includedPlanFeature}, included_min_plan = ${p.includedMinPlan},
+        grants_plan_features = ${textArray(p.grantsPlanFeatures)}, grandfather_existing = ${p.grandfatherExisting},
+        price_changed_at = ${p.priceChanged ? sql`now()` : sql`price_changed_at`}
+      WHERE id = ${id} AND row_version = ${expectedVersion} RETURNING id`);
+    return (res.rows as Raw[]).length > 0;
+  }
+
+  /**
+   * Creates or updates the billing add-on that sells the app: one month, the app's price, granting the one feature key that entitles a
+   * workspace. Active while the app is paid; checkout, not this flag, decides whether the app may be sold right now.
+   */
+  async upsertPack(
+    tx: Tx,
+    p: {
+      appId: number;
+      slug: string;
+      name: string;
+      amount: string;
+      currency: string;
+      /** The feature keys the add-on grants: the app's own entitlement key, plus the plan features a first-party app owns. */
+      features: string[];
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO plans (slug, kind, name, amount, currency, billing_unit, billing_duration, is_free, is_lifetime, is_active, sort_order,
+                         cta_label, limits, features, marketplace_app_id)
+      VALUES (${p.slug}, 'addon', ${p.name}, ${p.amount}::numeric, ${p.currency}, 'months', 1, false, false, true, 9000,
+              'Subscribe', '{}'::jsonb, ${jsonb(Object.fromEntries(p.features.map((k) => [k, true])))}, ${p.appId})
+      ON CONFLICT (marketplace_app_id) WHERE marketplace_app_id IS NOT NULL DO UPDATE SET
+        name = EXCLUDED.name, amount = EXCLUDED.amount, currency = EXCLUDED.currency, is_active = true,
+        features = EXCLUDED.features`);
+  }
+
+  /** The app is free now: its add-on can no longer be bought. Workspaces that hold it keep it until it ends. */
+  async deactivatePack(tx: Tx, appId: number): Promise<void> {
+    await tx.execute(sql`UPDATE plans SET is_active = false WHERE marketplace_app_id = ${appId}`);
+  }
+
+  async currencyActive(tx: Tx, code: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM currencies WHERE upper(code) = ${code} AND is_active`,
+    );
+    return (res.rows as Raw[]).length > 0;
+  }
+
+  async planExists(tx: Tx, slug: string): Promise<boolean> {
+    const res = await tx.execute(sql`SELECT 1 FROM plans WHERE slug = ${slug} AND kind = 'plan'`);
+    return (res.rows as Raw[]).length > 0;
   }
 
   // --- versions -------------------------------------------------------------------------------------------------------------------------
@@ -458,7 +555,7 @@ export class OperatorCatalogueStore {
     const res = await tx.execute(sql`
       WITH k AS (
         UPDATE workspace_app_installations i
-           SET status = 'killed', killed_at = now(), kill_reason = ${reason}
+           SET status = 'killed', killed_at = now(), kill_reason = ${reason}, paused_by_subscription = false
          WHERE i.app_id = ${appId} AND i.status <> 'killed'
         RETURNING i.org_id, i.id, i.uuid
       ), cn AS (

@@ -15,29 +15,39 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   approveMarketVersionSchema,
+  cancelOperatorSubscriptionSchema,
+  compSubscriptionSchema,
   createMarketAppSchema,
   createMarketCategorySchema,
+  grandfatherSubscriptionsSchema,
   killMarketAppSchema,
   marketAppRefSchema,
   marketOperatorAppDetailQuerySchema,
   marketOperatorAppListQuerySchema,
   marketOperatorRequestListQuerySchema,
+  marketOperatorSubscriptionListQuerySchema,
   publishMarketAppSchema,
   rejectMarketVersionSchema,
   saveMarketVersionSchema,
+  setMarketPricingSchema,
   updateMarketAppSchema,
   updateMarketCategorySchema,
   updateMarketRequestSchema,
   uuidSchema,
   type ApproveMarketVersionInput,
+  type CancelOperatorSubscriptionInput,
+  type CompSubscriptionInput,
   type CreateMarketAppInput,
   type CreateMarketCategoryInput,
+  type GrandfatherSubscriptionsInput,
   type KillMarketAppInput,
   type MarketOperatorAppListQuery,
   type MarketOperatorRequestListQuery,
+  type MarketOperatorSubscriptionListQuery,
   type PublishMarketAppInput,
   type RejectMarketVersionInput,
   type SaveMarketVersionInput,
+  type SetMarketPricingInput,
   type UpdateMarketAppInput,
   type UpdateMarketCategoryInput,
   type UpdateMarketRequestInput,
@@ -50,6 +60,7 @@ import { OperatorGuard } from '../auth';
 import { PlatformPermission, PlatformPermissionGuard } from '../roles-permissions';
 import { OperatorCatalogueService } from './operator-catalogue.service';
 import { OperatorInsightsService } from './operator-insights.service';
+import { OperatorPricingService } from './operator-pricing.service';
 
 function operatorId(): number {
   const id = RequestContextStore.require().actorId;
@@ -59,6 +70,8 @@ function operatorId(): number {
 
 /** Either permission reads the catalogue; operating it is `manage`, deciding on a version is `review`. */
 const READ = ['platform.market.manage', 'platform.market.review'];
+/** The subscriptions view is money: the pricing key reads it too. */
+const READ_MONEY = ['platform.market.manage', 'platform.market.review', 'platform.market.pricing'];
 
 /**
  * The operator's Marketplace (`/v2/platform/marketplace`): the catalogue, its review and publish flow, hide and kill, the categories, the
@@ -73,6 +86,7 @@ export class PlatformMarketplaceController {
   constructor(
     private readonly catalogue: OperatorCatalogueService,
     private readonly insights: OperatorInsightsService,
+    private readonly pricing: OperatorPricingService,
   ) {}
 
   // --- categories -----------------------------------------------------------------------------------------------------------------
@@ -322,5 +336,87 @@ export class PlatformMarketplaceController {
   })
   unkill(@Param('ref', zodPipe(marketAppRefSchema)) ref: string) {
     return this.catalogue.unkill(ref);
+  }
+
+  // --- pricing and subscriptions -------------------------------------------------------------------------------------------------------
+
+  @Put('apps/:ref/pricing')
+  @PlatformPermission('platform.market.pricing')
+  @ApiOperation({
+    summary:
+      'Set what the app costs: free, or paid per month (price, currency, trial days, optional yearly price), whether it is on sale, and who gets it free (rowVersion required)',
+    description:
+      "The operator's pricing is the authority; the manifest's `pricing` is only a proposal. A paid app is sold as a billing add-on through the existing checkout. A price change applies to new subscriptions and to the next payment of an existing one.",
+  })
+  setPricing(
+    @Param('ref', zodPipe(marketAppRefSchema)) ref: string,
+    @Body(zodPipe(setMarketPricingSchema)) body: SetMarketPricingInput,
+  ) {
+    return this.pricing.setPricing(ref, body, operatorId());
+  }
+
+  @Get('subscriptions/summary')
+  @PlatformPermission(...READ_MONEY)
+  @ApiOperation({
+    summary:
+      'Per app: subscriptions by state and the monthly recurring revenue per currency (list price, active paid subscriptions only)',
+  })
+  subscriptionSummary() {
+    return this.pricing.summaryReport();
+  }
+
+  @Get('subscriptions')
+  @PlatformPermission(...READ_MONEY)
+  @ApiOperation({
+    summary:
+      'Who subscribes to what: workspace, app, state, source, renewal date (keyset paging; filter by app, state, source, workspace name)',
+  })
+  subscriptions(
+    @Query(zodPipe(marketOperatorSubscriptionListQuerySchema))
+    q: MarketOperatorSubscriptionListQuery,
+  ) {
+    return this.pricing.listSubscriptions(q);
+  }
+
+  @Post('apps/:ref/subscriptions/comp')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Give a workspace a paid app free, for a number of months or until revoked (audited; refused while the workspace pays)',
+  })
+  comp(
+    @Param('ref', zodPipe(marketAppRefSchema)) ref: string,
+    @Body(zodPipe(compSubscriptionSchema)) body: CompSubscriptionInput,
+  ) {
+    return this.pricing.comp(ref, body, operatorId());
+  }
+
+  @Post('apps/:ref/subscriptions/grandfather')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Comp every workspace that already has a plan feature this first-party app grants and has no subscription yet (dry run by default; the listing must be marked grandfather)',
+  })
+  grandfather(
+    @Param('ref', zodPipe(marketAppRefSchema)) ref: string,
+    @Body(zodPipe(grandfatherSubscriptionsSchema)) body: GrandfatherSubscriptionsInput,
+  ) {
+    return this.pricing.grandfather(ref, body, operatorId());
+  }
+
+  @Post('subscriptions/:id/cancel')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Cancel a workspace subscription at the end of its paid period, or now (the installation is paused and its data kept). Audited.',
+  })
+  cancelSubscription(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @Body(zodPipe(cancelOperatorSubscriptionSchema)) body: CancelOperatorSubscriptionInput,
+  ) {
+    return this.pricing.cancel(id, body, operatorId());
   }
 }

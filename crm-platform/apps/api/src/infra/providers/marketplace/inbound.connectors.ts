@@ -9,9 +9,10 @@ import type {
   ConnectorProblem,
   ConnectorTestResult,
   InboundConnectorType,
+  InboundDescription,
   InboundRequest,
 } from './connector.port';
-import { signatureMatches, tokenMatches } from './hook-auth';
+import { pathTokenMatches, signatureMatches, tokenMatches } from './hook-auth';
 import { mapDelivery } from './recipe-mapper';
 
 /** Runs the recipe's own sample through its mapping: the "test connection" of a type that receives deliveries (no network involved). */
@@ -53,20 +54,26 @@ export class WebhookRelayConnector implements InboundConnectorType {
       : [{ path: 'connector.type', message: 'This is not a webhook relay recipe.' }];
   }
 
-  describeAuth(recipe: MarketRecipe) {
-    const auth = recipe.connector.type === 'webhook_relay' ? recipe.connector.auth : 'either';
+  describeAuth(recipe: MarketRecipe): InboundDescription | null {
+    const c = recipe.connector;
+    if (c.type !== 'webhook_relay') return null;
+    const byPath = c.auth === 'path';
     return {
-      auth,
-      tokenHeader: MARKET_HOOK_TOKEN_HEADER,
-      signatureHeader: MARKET_HOOK_SIGNATURE_HEADER,
+      auth: c.auth,
+      tokenHeader: byPath ? '' : MARKET_HOOK_TOKEN_HEADER,
+      signatureHeader: byPath ? '' : MARKET_HOOK_SIGNATURE_HEADER,
+      methods: c.delivery.methods,
+      formats: c.delivery.formats,
+      mode: c.delivery.mode,
     };
   }
 
   authenticate(recipe: MarketRecipe, req: InboundRequest, secret: string): boolean {
-    const { auth } = this.describeAuth(recipe);
+    const auth = this.describeAuth(recipe)?.auth ?? 'either';
     const byToken = () => tokenMatches(secret, req.headers[MARKET_HOOK_TOKEN_HEADER]);
     const bySignature = () =>
       signatureMatches(secret, req.rawBody, req.headers[MARKET_HOOK_SIGNATURE_HEADER]);
+    if (auth === 'path') return pathTokenMatches(secret, req.pathToken);
     if (auth === 'token') return byToken();
     if (auth === 'hmac') return bySignature();
     return byToken() || bySignature();
@@ -108,25 +115,31 @@ export class PushConnector implements InboundConnectorType {
     return [];
   }
 
-  describeAuth(recipe: MarketRecipe) {
+  describeAuth(recipe: MarketRecipe): InboundDescription | null {
     const c = recipe.connector;
-    if (c.type !== 'push') {
-      return {
-        auth: 'either' as const,
-        tokenHeader: MARKET_HOOK_TOKEN_HEADER,
-        signatureHeader: MARKET_HOOK_SIGNATURE_HEADER,
-      };
+    if (c.type !== 'push') return null;
+    const delivery = {
+      methods: c.delivery.methods,
+      formats: c.delivery.formats,
+      mode: c.delivery.mode,
+    };
+    if (c.auth.scheme === 'path_token') {
+      return { auth: 'path', tokenHeader: '', signatureHeader: '', ...delivery };
     }
     const byToken = c.auth.scheme === 'header_token';
+    const header = (c.auth.header ?? '').toLowerCase();
     return {
-      auth: byToken ? ('token' as const) : ('hmac' as const),
-      tokenHeader: byToken ? c.auth.header.toLowerCase() : MARKET_HOOK_TOKEN_HEADER,
-      signatureHeader: byToken ? MARKET_HOOK_SIGNATURE_HEADER : c.auth.header.toLowerCase(),
+      auth: byToken ? 'token' : 'hmac',
+      tokenHeader: byToken ? header : MARKET_HOOK_TOKEN_HEADER,
+      signatureHeader: byToken ? MARKET_HOOK_SIGNATURE_HEADER : header,
+      ...delivery,
     };
   }
 
   authenticate(recipe: MarketRecipe, req: InboundRequest, secret: string): boolean {
     const d = this.describeAuth(recipe);
+    if (!d) return false;
+    if (d.auth === 'path') return pathTokenMatches(secret, req.pathToken);
     return d.auth === 'token'
       ? tokenMatches(secret, req.headers[d.tokenHeader])
       : signatureMatches(secret, req.rawBody, req.headers[d.signatureHeader]);

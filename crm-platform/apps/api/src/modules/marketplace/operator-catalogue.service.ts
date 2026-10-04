@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   compareMarketVersions,
+  coreFeatureDefault,
   ERROR_CODES,
   marketManifestSchema,
   validateMarketManifest,
@@ -40,6 +41,8 @@ import {
   type OpVersionRow,
 } from './operator-catalogue.store';
 import { parseAppRef, versionAllows, type AppRef } from './marketplace-rules';
+import { toPricingView } from './pricing-model';
+import { MarketSubscriptionLifecycle } from './subscription-lifecycle.service';
 import { readListing } from './marketplace.mapper';
 import { isUniqueViolation, iso } from './sql-helpers';
 
@@ -56,7 +59,7 @@ const toCategory = (c: OpCategoryRow): MarketOperatorCategory => ({
   rowVersion: c.rowVersion,
 });
 
-const toApp = (a: OpAppRow): MarketOperatorApp => ({
+export const toApp = (a: OpAppRow): MarketOperatorApp => ({
   id: a.uuid,
   slug: a.slug,
   kind: a.kind,
@@ -67,6 +70,8 @@ const toApp = (a: OpAppRow): MarketOperatorApp => ({
   firstParty: a.firstParty,
   featured: a.featured,
   planFeature: a.planFeature,
+  pricing: toPricingView(a.pricing, a.uuid, a.packExists),
+  activeSubscriptions: a.activeSubscriptions,
   sortOrder: a.sortOrder,
   connectorType: (a.connectorType as MarketOperatorApp['connectorType']) ?? null,
   publishedVersion: a.publishedVersion,
@@ -113,6 +118,7 @@ export class OperatorCatalogueService {
     private readonly store: OperatorCatalogueStore,
     private readonly audit: AuthAuditService,
     private readonly registry: ConnectorRegistry,
+    private readonly subscriptions: MarketSubscriptionLifecycle,
   ) {}
 
   // --- categories -------------------------------------------------------------------------------------------------------------------------
@@ -305,6 +311,11 @@ export class OperatorCatalogueService {
   async updateApp(ref: string, input: UpdateMarketAppInput): Promise<MarketOperatorAppDetail> {
     const slug = await this.store.tx(async (tx) => {
       const app = await this.requireApp(tx, ref, true);
+      // A third-party app can never own a plan feature: take the grant away before taking away the first-party flag.
+      if (input.firstParty === false && app.pricing.grantsPlanFeatures.length > 0)
+        throw AppError.validation('This app grants plan features, so it must stay first-party.', [
+          { path: 'firstParty', message: 'Remove the plan features this app grants first.' },
+        ]);
       const patch: Record<string, unknown> = {
         ...(input.tagline !== undefined ? { tagline: input.tagline } : {}),
         ...(input.listing !== undefined ? { listing: input.listing } : {}),
@@ -574,6 +585,25 @@ export class OperatorCatalogueService {
     const result = await this.store.tx(async (tx) => {
       const app = await this.requireApp(tx, ref, true);
       if (app.status === 'killed') throw this.killedRefusal();
+      if (app.pricing.pricingModel === 'paid_monthly' && app.pricing.priceAmount === null)
+        throw new AppError(
+          ERROR_CODES.MKT_VERSION_STATE,
+          'This is a paid app and its price is not set. Set the price before publishing.',
+          HttpStatus.CONFLICT,
+          [{ path: 'pricing', message: 'price_not_set' }],
+        );
+      // An app that owns a plan feature cannot go on sale while every plan still grants that feature by default: it would sell what everyone
+      // already has. Switch the registry default off first (after running the grandfather action while it is still on).
+      const everyoneHas = app.pricing.grantsPlanFeatures.filter(
+        (k) => coreFeatureDefault(k) === true,
+      );
+      if (everyoneHas.length > 0)
+        throw new AppError(
+          ERROR_CODES.MKT_VERSION_STATE,
+          `This app owns ${everyoneHas.join(', ')}, which every plan still grants by default. Switch the registry default off before publishing.`,
+          HttpStatus.CONFLICT,
+          everyoneHas.map((k) => ({ path: 'grantsPlanFeatures', message: k })),
+        );
       const v = await this.requireVersion(tx, app, picked.uuid, true);
       if (!versionAllows(v.status, 'publish')) throw this.versionState(v, 'published');
       const category = await this.requireCategory(tx, docs.manifest);
@@ -647,6 +677,8 @@ export class OperatorCatalogueService {
         kill_reason: input.reason,
       });
       const n = await this.store.killInstallations(tx, app.id, app, input.reason, operatorId);
+      // What was paid for runs to its end, but nothing renews: the app is withdrawn.
+      await this.subscriptions.cancelAllForApp(tx, app.id, app.slug, input.reason);
       await this.audit.record(tx, {
         event: 'platform.market.app_killed',
         status: 'warning',

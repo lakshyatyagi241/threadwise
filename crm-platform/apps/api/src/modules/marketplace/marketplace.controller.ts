@@ -25,6 +25,7 @@ import {
   marketRequestListQuerySchema,
   marketShelvesQuerySchema,
   sendSampleLeadSchema,
+  subscribeAppSchema,
   uninstallAppSchema,
   uuidSchema,
   type ConfigureInstallationInput,
@@ -38,6 +39,7 @@ import {
   type MarketInstallationListQuery,
   type MarketRequestListQuery,
   type SendSampleLeadInput,
+  type SubscribeAppInput,
   type UninstallAppInput,
 } from '@crm/contracts';
 import { Idempotent, RequirePermission } from '../../common/decorators';
@@ -45,7 +47,9 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { BrowseService } from './browse.service';
 import { InstallationsService } from './installations.service';
+import { PullSyncService } from './pull-sync.service';
 import { RequestsService } from './requests.service';
+import { SubscriptionsService } from './subscriptions.service';
 
 /**
  * The Marketplace for a workspace (`/v2/marketplace`): browse and search the catalogue, install with permission consent, configure,
@@ -63,6 +67,8 @@ export class MarketplaceController {
     private readonly browse: BrowseService,
     private readonly installations: InstallationsService,
     private readonly requests: RequestsService,
+    private readonly subscriptions: SubscriptionsService,
+    private readonly pullSync: PullSyncService,
   ) {}
 
   // --- browse -----------------------------------------------------------------------------------------------------------------------
@@ -116,6 +122,50 @@ export class MarketplaceController {
     @Body(zodPipe(installAppSchema)) body: InstallAppInput,
   ) {
     return this.installations.install(ref, body);
+  }
+
+  // --- paid apps --------------------------------------------------------------------------------------------------------------------
+
+  @Post('apps/:ref/subscribe')
+  @RequirePermission('market.apps.install')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Subscribe to a paid app: start its free trial (startTrial) or get the checkout page to pay on. Free and included apps need nothing.',
+    description:
+      'Payment is the existing checkout (`/billing/checkout/<packSlug>`); the add-on it buys is what entitles the workspace.',
+  })
+  subscribe(
+    @Param('ref', zodPipe(marketAppRefSchema)) ref: string,
+    @Body(zodPipe(subscribeAppSchema)) body: SubscribeAppInput,
+  ) {
+    return this.subscriptions.subscribe(ref, body);
+  }
+
+  @Post('apps/:ref/subscription/cancel')
+  @RequirePermission('market.apps.install')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Stop renewing a paid app. The period already paid for runs to its end, then the installation is paused and its data kept.',
+  })
+  cancelSubscription(@Param('ref', zodPipe(marketAppRefSchema)) ref: string) {
+    return this.subscriptions.cancel(ref);
+  }
+
+  @Post('apps/:ref/subscription/resume')
+  @RequirePermission('market.apps.install')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Take a cancellation back while the paid period is still running' })
+  resumeSubscription(@Param('ref', zodPipe(marketAppRefSchema)) ref: string) {
+    return this.subscriptions.resume(ref);
+  }
+
+  @Get('subscriptions')
+  @RequirePermission('market.apps.read')
+  @ApiOperation({ summary: "The workspace's own subscriptions to paid apps, newest first" })
+  mySubscriptions() {
+    return this.subscriptions.list();
   }
 
   @Get('installations')
@@ -205,6 +255,17 @@ export class MarketplaceController {
   @ApiOperation({ summary: 'Test the connection; the result also updates the installation health' })
   test(@Param('id', zodPipe(uuidSchema)) id: string) {
     return this.installations.test(id);
+  }
+
+  @Post('installations/:id/sync')
+  @RequirePermission('market.apps.manage')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Sync now: bring the next poll of a pull connection forward, as soon as the portal allows; a stopped connection is started again',
+  })
+  sync(@Param('id', zodPipe(uuidSchema)) id: string) {
+    return this.pullSync.syncNow(id);
   }
 
   @Post('installations/:id/sample')

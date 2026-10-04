@@ -48,6 +48,20 @@ export interface InboundRequest {
   rawBody: Buffer;
   /** Lower-case header names. */
   headers: Record<string, string | undefined>;
+  /** The secret carried as the second segment of the address (`/hooks/<publicKey>/<secret>`), when the request has one. */
+  pathToken?: string;
+}
+
+/** How a recipe's connection receives deliveries: what authenticates one, what it may carry, and when it is answered. */
+export interface InboundDescription {
+  /** `path`: the secret is in the address. */
+  auth: 'token' | 'hmac' | 'either' | 'path';
+  tokenHeader: string;
+  signatureHeader: string;
+  methods: Array<'POST' | 'GET'>;
+  formats: Array<'json' | 'form' | 'xml' | 'query'>;
+  /** `async`: stored whole and answered at once, processed by the worker. `sync`: answered after the lead reached the pipeline. */
+  mode: 'sync' | 'async';
 }
 
 export interface ConnectorContext {
@@ -58,16 +72,31 @@ export interface ConnectorContext {
 }
 
 export interface PullState {
+  /** The resume point: the greatest id seen (a `cursor` recipe) or the end of the last window as an ISO time (a `window` recipe). */
   cursor: string | null;
   /** The previous poll's time, for `{{since_iso}}`. */
   since: Date | null;
   now: Date;
+  /** A narrower window than the recipe's own, when the last one held more leads than one answer carries. */
+  windowSeconds?: number | null;
+  /** Test connection: a short recent window, and nothing is kept. */
+  test?: boolean;
 }
 
 export interface PullResult {
   leads: ConnectorLead[];
   rejected: Array<{ index: number; reason: string }>;
+  /** A `cursor` recipe: where the next poll resumes. */
   nextCursor: string | null;
+  /** A `window` recipe: the end of the window this poll covered (the next poll's high-water mark), and whether time is still left to cover. */
+  windowEnd?: Date | null;
+  behind?: boolean;
+  /** The window held more leads than one answer carries: nothing was mapped, ask again for a narrower one. */
+  overflow?: boolean;
+  /** How wide the window was, in seconds. */
+  windowSeconds?: number | null;
+  /** Items the portal returned (before mapping). */
+  fetched: number;
 }
 
 /** A failure a recipe's error mapping has classified: what the worker does about it and what the connection's health becomes. */
@@ -77,6 +106,8 @@ export class ConnectorError extends Error {
     message: string,
     readonly retry: boolean,
     readonly health: 'degraded' | 'error' | 'needs_reauth',
+    /** The portal's stated penalty or wait, in seconds: the next poll is no sooner. */
+    readonly retryAfterSeconds?: number,
   ) {
     super(message);
     this.name = 'ConnectorError';
@@ -102,12 +133,11 @@ export interface ConnectorType {
 
 /** A type that receives deliveries. */
 export interface InboundConnectorType extends ConnectorType {
-  /** How a delivery authenticates for this recipe (what the connection page tells the admin to send). */
-  describeAuth(recipe: MarketRecipe): {
-    auth: 'token' | 'hmac' | 'either';
-    tokenHeader: string;
-    signatureHeader: string;
-  };
+  /**
+   * How a delivery authenticates and what it may carry for this recipe (what the connection page tells the admin to send). Null when the
+   * recipe has no public address (a pull recipe that does not also receive).
+   */
+  describeAuth(recipe: MarketRecipe): InboundDescription | null;
   /** True when the request proves it came from the holder of `secret`. */
   authenticate(recipe: MarketRecipe, req: InboundRequest, secret: string): boolean;
   /** Which secret authenticates deliveries: the connection's generated one, or an auth field the recipe names. */

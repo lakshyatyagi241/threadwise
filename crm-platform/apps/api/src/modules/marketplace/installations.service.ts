@@ -44,6 +44,9 @@ import { LeadPipelineGateway } from './lead-pipeline.gateway';
 import { MarketplaceAccess, INSTALLED_APPS_LIMIT } from './marketplace-access.service';
 import { consentMatches, consentProblems, parseAppRef } from './marketplace-rules';
 import { readManifest, readRecipe, toInstallationView } from './marketplace.mapper';
+import { cardPricing, PricingAccess } from './pricing-access.service';
+import { toSubscriptionView } from './pricing-model';
+import { SubscriptionsService } from './subscriptions.service';
 import { RelayService } from './relay.service';
 import { isUniqueViolation } from './sql-helpers';
 import { AddonEntitlementService } from '../addons-extension-registry';
@@ -83,6 +86,8 @@ export class InstallationsService {
     private readonly pipeline: LeadPipelineGateway,
     private readonly delivery: DeliveryService,
     private readonly relay: RelayService,
+    private readonly pricing: PricingAccess,
+    private readonly subscriptions: SubscriptionsService,
     config: ConfigService<Env, true>,
   ) {
     this.publicBase = config.get('APP_URL', { infer: true });
@@ -94,14 +99,14 @@ export class InstallationsService {
     const { orgId } = RequestContextStore.require();
     const rows = await this.db.tx((tx) => this.repo.list(tx, orgId, q));
     const limit = await this.entitlements.limit(orgId, INSTALLED_APPS_LIMIT);
-    return { data: rows.map((r) => this.view(r)), usage: { installed: rows.length, limit } };
+    return { data: await this.viewMany(orgId, rows), usage: { installed: rows.length, limit } };
   }
 
   async get(uuid: string): Promise<MarketInstallation> {
     const { orgId } = RequestContextStore.require();
     const row = await this.db.tx((tx) => this.repo.byUuid(tx, orgId, uuid));
     if (!row) throw this.notInstalled();
-    return this.view(row);
+    return (await this.viewMany(orgId, [row]))[0]!;
   }
 
   async events(uuid: string, q: MarketConnectionEventsQuery): Promise<MarketConnectionEventList> {
@@ -142,7 +147,7 @@ export class InstallationsService {
     if (!ref) throw this.appNotFound();
 
     const pre = await this.db.tx(async (tx) => {
-      const target = await this.browse.installable(tx, ref);
+      const target = await this.browse.installable(tx, ref, ctx.orgId);
       if (!target)
         return {
           target: null,
@@ -199,6 +204,17 @@ export class InstallationsService {
       installed: false,
     });
     if (lock) throw this.locked(lock.reason, lock.key);
+
+    // A paid app needs its subscription first (or a plan that includes it): the entitlement service says, from the workspace's add-ons.
+    const priced = {
+      slug: target.slug,
+      uuid: target.appUuid,
+      pricing: target.pricing,
+      sub: target.sub,
+    };
+    const ev = await (await this.pricing.evaluator(ctx.orgId))(priced);
+    if (ev.access === 'subscription_required' || ev.access === 'not_for_sale')
+      throw this.subscriptionRequired(ev.access, cardPricing(priced, ev).checkoutPath);
 
     // Consent: the admin confirmed exactly the permission list of this version.
     if (!consentMatches(target.scopes, input.acceptedScopes)) {
@@ -323,7 +339,7 @@ export class InstallationsService {
     }
 
     const row = await this.db.tx((tx) => this.repo.byId(tx, ctx.orgId, id));
-    return { installation: this.view(row!), inboundSecret };
+    return { installation: (await this.viewMany(ctx.orgId, [row!]))[0]!, inboundSecret };
   }
 
   // --- consent for a new version --------------------------------------------------------------------------------------------------
@@ -435,6 +451,15 @@ export class InstallationsService {
         input.rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('Installation');
+      // New credentials restart a pull connection that stopped on a refusal: it polls again as soon as the portal allows.
+      if (merged && recipe?.connector.type === 'pull' && row.connection) {
+        await this.repo.resumePolling(
+          tx,
+          ctx.orgId,
+          row.connection.id,
+          recipe.connector.limits.minIntervalSeconds,
+        );
+      }
       // The audit row names what changed, never a value: a secret must not be recoverable from the trail.
       await this.audit.record(tx, {
         module: AUDIT_MODULE,
@@ -473,11 +498,23 @@ export class InstallationsService {
       if (row.status === 'killed') throw this.killed();
       const next = enabled ? 'active' : 'disabled';
       if (row.status === next) return;
+      // A pause the subscription caused is lifted by the subscription, or by an admin once the app is paid for again (never before).
+      if (enabled && row.pausedBySubscription) {
+        const priced = {
+          slug: row.app.slug,
+          uuid: row.app.uuid,
+          pricing: row.pricing,
+          sub: row.sub,
+        };
+        const ev = await (await this.pricing.evaluator(ctx.orgId))(priced);
+        if (ev.access === 'subscription_required' || ev.access === 'not_for_sale')
+          throw this.subscriptionRequired(ev.access, cardPricing(priced, ev).checkoutPath);
+      }
       const ok = await this.repo.update(
         tx,
         ctx.orgId,
         row.id,
-        { status: next, disabled_at: enabled ? null : new Date() },
+        { status: next, disabled_at: enabled ? null : new Date(), paused_by_subscription: false },
         rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('Installation');
@@ -529,6 +566,14 @@ export class InstallationsService {
         consentedBy: ctx.userId,
       });
       await this.repo.delete(tx, ctx.orgId, row.id);
+      // Uninstalling a paid app stops its renewal (the admin was told). The period already paid for stays, so reinstalling inside it is free.
+      const stoppedRenewal = await this.subscriptions.cancelOnUninstall(
+        tx,
+        ctx.orgId,
+        ctx.userId,
+        row.appId,
+        row.app.slug,
+      );
       await this.audit.record(tx, {
         module: AUDIT_MODULE,
         recordId: row.id,
@@ -549,6 +594,7 @@ export class InstallationsService {
           kind: row.app.kind,
           dataChoice: input.dataChoice,
           scopes: row.grantedScopes,
+          renewalStopped: stoppedRenewal,
         },
       });
       return manifest !== null && isLeadSource(manifest, recipe);
@@ -685,14 +731,29 @@ export class InstallationsService {
 
   // --- internals ------------------------------------------------------------------------------------------------------------------------
 
-  private view(row: InstallationRow): MarketInstallation {
-    return toInstallationView(row, {
-      publicBase: this.publicBase,
-      describeAuth: (recipe) => {
-        const t = this.registry.get(recipe.connector.type);
-        return isInbound(t) ? t.describeAuth(recipe) : null;
-      },
-    });
+  /** The pages' view of installations, with what the operator charges for the app and the workspace's subscription to it. */
+  private async viewMany(orgId: number, rows: InstallationRow[]): Promise<MarketInstallation[]> {
+    const price = await this.pricing.evaluator(orgId);
+    const now = new Date();
+    const out: MarketInstallation[] = [];
+    for (const row of rows) {
+      const facts = { slug: row.app.slug, uuid: row.app.uuid, pricing: row.pricing, sub: row.sub };
+      out.push(
+        toInstallationView(
+          row,
+          {
+            publicBase: this.publicBase,
+            describeAuth: (recipe) => {
+              const t = this.registry.get(recipe.connector.type);
+              return isInbound(t) ? t.describeAuth(recipe) : null;
+            },
+          },
+          cardPricing(facts, await price(facts)),
+          row.sub ? toSubscriptionView(row.sub, row.pricing, row.app.status, now) : null,
+        ),
+      );
+    }
+    return out;
   }
 
   private async lock(tx: Tx, orgId: number, uuid: string): Promise<InstallationRow> {
@@ -753,6 +814,21 @@ export class InstallationsService {
     );
   }
 
+  private subscriptionRequired(access: string, checkoutPath: string | null): AppError {
+    return new AppError(
+      access === 'not_for_sale'
+        ? ERROR_CODES.MKT_NOT_FOR_SALE
+        : ERROR_CODES.MKT_SUBSCRIPTION_REQUIRED,
+      access === 'not_for_sale'
+        ? 'This app is not being sold to new subscribers.'
+        : 'This is a paid app. Subscribe to install it.',
+      access === 'not_for_sale' ? HttpStatus.CONFLICT : HttpStatus.UNPROCESSABLE_ENTITY,
+      [
+        { path: 'reason', message: access },
+        ...(checkoutPath ? [{ path: 'checkoutPath', message: checkoutPath }] : []),
+      ],
+    );
+  }
   private appNotFound(): AppError {
     return new AppError(ERROR_CODES.MKT_APP_NOT_FOUND, 'App not found', HttpStatus.NOT_FOUND);
   }

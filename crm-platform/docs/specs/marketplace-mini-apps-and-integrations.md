@@ -40,7 +40,7 @@ Both are organised by **categories** and both are **installed per workspace**, s
 | Not in scope | Why |
 | --- | --- |
 | Running arbitrary third-party code inside our API process (Reference's ZIP-loader model) for tenants | Unsafe in a multi-tenant SaaS. Third-party mini apps run out of process (see 6.2). The existing ZIP installer stays an operator-only tool for first-party packages. |
-| A public revenue-share payments system for paid third-party apps | Needs legal, tax and payout work. v1 supports free apps and first-party paid add-ons through the existing billing add-ons; third-party paid apps are phase 4. |
+| Revenue share and payouts for paid third-party apps | Needs legal, tax and payout work. Paid apps themselves are built (6.6): the operator prices any listing, first-party or third-party, and the platform collects the money through the existing checkout; paying a developer their share is phase 4 (BL-074). |
 | Building every portal ourselves up front | We build the framework plus a prioritised first set; demand decides the rest, and partners can add more (see 7). |
 | A mobile app store | Web catalogue only. |
 | Auto-updating third-party apps without admin visibility | Permission increases always need a new consent. |
@@ -146,7 +146,18 @@ Legal and partner terms differ per portal (some require a signed partner agreeme
 
 ### 6.6 Pricing and plans
 
-v1: free apps and integrations, **plan-gated** categories, and **first-party paid add-ons** reusing the existing billing add-on mechanism (a package of type add-on with grants, purchased through checkout, merged into effective plan limits). Third-party paid apps and revenue share come in phase 4 after legal review. A workspace-level cap on installed apps can be a plan limit.
+**Built (owner requirement of 2026-10-04):** some apps and integrations are free and some are paid, **decided per listing by the platform operator in the admin**, for first-party and third-party apps alike, and a workspace can **buy a paid app on a monthly subscription** if it applies to it. Plan-gated categories and the `installed_apps` cap stay as they were.
+
+The design reuses, and does not replace, the billing machinery:
+
+- **The price is the operator's.** `marketplace_apps` carries `pricing_model` (`free` or `paid_monthly`), a monthly price and currency, optional trial days, an optional yearly price (stored, not billable yet), `purchasable` (stop selling to newcomers), and who gets the app free (a plan feature, or a minimum plan). The manifest's `pricing` is only the developer's proposal. Only the operator API (`platform.market.pricing`) writes it; a developer cannot change it after publishing.
+- **A paid app is a billing add-on.** Setting a price creates and maintains a `plans` row of kind `addon` (one month, the app's price, granting the feature key `mkt_<slug>`). The workspace pays through the existing checkout, gateway (test mode in development), order, coupon and tax; the add-on's purchase row (`workspace_addons`) entitles it; `AddonEntitlementService` merges the grant, so one entitlement service decides access, the installed list and the plan limits stay correct.
+- **A subscription ledger** (`marketplace_subscriptions`) records what the entitlement means to the Marketplace: purchase, trial or comp, cancel at period end, lapse. It follows the entitlement and never grants it.
+- **Flow:** Subscribe -> checkout -> entitlement -> the normal install and consent step. Cancel keeps access to the end of the paid period, then the installation is **paused** (data kept) with a clear banner; paying again resubscribes and switches it back on. Uninstalling cancels the renewal after a warning. The kill switch stops renewals. A worker sweep lapses expired subscriptions every minute, idempotently.
+- **First-party apps may own existing plan features** (owner requirement of 2026-10-04): the listing declares the plan feature keys a subscription grants (for example Appointments granting `appointment_booking`), the add-on carries them, and the plans domain's one resolver merges them, so the feature's existing gates keep working unchanged; the registry default of an owned feature must be off (publishing refuses otherwise); a listing can be marked "comp existing users" so the operator can give a comped subscription to the workspaces that already have the feature before it becomes an app. Appointments is the first such app: seeded as a draft (price unset, not in any plan, comp existing users), its feature default switched off (migration `20261023090200`); the operator prices it, comps the workspaces already using booking and publishes.
+- **Operator console:** a pricing control on the listing page, a pricing column and filter in the catalogue, and a subscriptions view with MRR per app, comp and cancel with audit.
+
+Decisions the owner can still reverse (each is recorded with its reason in [docs/api/marketplace.md](../api/marketplace.md#paid-and-free-apps-pricing-and-subscriptions) and in `docs/threadwise-port/parity/product-extensions.md`, item 21): a subscription is a **monthly prepaid term renewed by paying again** (automatic card renewal needs changes in the payments domain, BL-070); a price change applies to the next payment with no per-subscriber price lock (BL-071); annual billing is stored but not built (BL-072); the wallet does not pay (BL-073); revenue share and payouts to third-party developers are not built (BL-074); usage-based pricing is not built (BL-075); a workspace on a free plan may subscribe (a Marketplace app is not a boost on a paid plan).
 
 ### 6.7 Relationship to what exists
 
@@ -186,6 +197,9 @@ v1: free apps and integrations, **plan-gated** categories, and **first-party pai
 **M-10 Security baseline.** RLS on all tables; sealed secrets; signed webhooks; rate limits per app actor; audit of install, scope change, uninstall and every app-originated write; kill switch effective within one minute.
 
 **M-11 Docs.** Public developer docs: manifest reference, scopes, webhooks, sample app, and a recipe guide for lead portals.
+
+**M-18 Paid and free apps (owner requirement, built).** Operator-controlled pricing per listing (free or monthly, trial, included-in-plan, on-sale), a Subscribe flow through the existing checkout, entitlement merged by the add-ons entitlement service, cancel, lapse, resubscribe, comp, MRR, audit and outbox events. See 6.6.
+- Given an operator sets an app to paid, then a workspace sees its price, cannot install it without a subscription, installs it (with the normal consent step) once its payment is confirmed, and is paused with its data kept when the paid period ends without renewal.
 
 ### P1
 
@@ -253,7 +267,7 @@ Suggested start: Phase 0, then Phase 1 in parallel with the email and lead specs
 | --- | --- | --- |
 | 6 | Revenue share and payout model for paid third-party apps (phase 4). | Owner, Legal, Finance |
 | 7 | Can partners publish without a human review for apps that request only low-risk scopes? | Security |
-| 8 | Do installed apps count against a plan limit, a price, or neither in v1? | Product |
+| 8 | Do installed apps count against a plan limit, a price, or neither in v1? **Answered:** both are available per listing: the `installed_apps` plan limit, and the operator's price (6.6). | Product |
 | 9 | Should app catalogue content be translatable (en, ar, regional Indian languages)? | Product |
 | 10 | Data-residency and DPDP obligations for third-party apps that store customer data on their own servers. | Legal |
 | 11 | Branding: "Marketplace", "App Store" or "Apps"? | Product |

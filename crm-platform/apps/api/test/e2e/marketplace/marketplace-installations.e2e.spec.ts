@@ -208,8 +208,9 @@ describe('install a webhook lead source', () => {
     expect(again.status).toBe(409);
     expect(code(again)).toBe('MKT_ALREADY_INSTALLED');
     expect(stub.ensured).toHaveLength(1);
-    const card = marketAppListSchema.parse((await mp(A).get('/apps?kind=integration')).body)
-      .data[0]!;
+    const card = marketAppListSchema
+      .parse((await mp(A).get('/apps?kind=integration')).body)
+      .data.find((c) => c.slug === 'webhook')!;
     expect(card).toMatchObject({
       slug: 'webhook',
       installCount: 1,
@@ -1138,20 +1139,28 @@ describe('the kill switch', () => {
   });
 
   it('a killed app leaves the catalogue; a workspace that has it still sees it and can uninstall; a workspace that does not cannot install it', async () => {
-    expect(
+    // The killed Webhook is gone; what is left is the test's own listing and the lead portals the platform ships.
+    const left = async (t: Tenant) =>
       marketAppListSchema
-        .parse((await mp(E).get('/apps?kind=integration')).body)
-        .data.map((a) => a.slug),
-    ).toEqual(['acme-push']);
+        .parse((await mp(t).get('/apps?kind=integration')).body)
+        .data.map((a) => a.slug)
+        .sort();
+    const portals = [
+      'acres99',
+      'housing-com',
+      'indiamart',
+      'justdial',
+      'magicbricks',
+      'shiksha',
+      'sulekha',
+      'tradeindia',
+    ];
+    expect(await left(E)).toEqual(['acme-push', ...portals].sort());
     expect((await mp(E).get('/apps/webhook')).status).toBe(404);
     const refused = await mp(E).post('/apps/webhook/install', { acceptedScopes: ['leads.write'] });
     expect(refused.status).toBe(404);
     expect(code(refused)).toBe('MKT_APP_NOT_FOUND');
-    expect(
-      marketAppListSchema
-        .parse((await mp(A).get('/apps?kind=integration')).body)
-        .data.map((a) => a.slug),
-    ).toEqual(['acme-push']);
+    expect(await left(A)).toEqual(['acme-push', ...portals].sort());
     const page = (await mp(A).get('/apps/webhook')).body;
     expect(page).toMatchObject({ slug: 'webhook', install: { status: 'killed' } });
     const listed = marketInstallationListSchema.parse(
@@ -1220,7 +1229,6 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
     pull() as unknown as {
       fetchImpl: FetchLike;
       guard: (u: string) => Promise<void>;
-      implemented: boolean;
     };
   const calls: string[] = [];
 
@@ -1273,14 +1281,8 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
       scopes: ['leads.write'],
       connector: { type: 'pull' },
     };
-    // The type is a framework: it cannot be published until it is marked implemented. The test flips the flag for its own duration.
-    const registry = h.app.get(ConnectorRegistry);
-    (registry.get('pull') as unknown as { implemented: boolean }).implemented = true;
-    try {
-      await publishListing(h, tokens(), { manifest: manifest as never, recipe: recipe as never });
-    } finally {
-      (registry.get('pull') as unknown as { implemented: boolean }).implemented = false;
-    }
+    // The pull type is implemented (it came with the portal recipes), so a pull recipe publishes like any other.
+    await publishListing(h, tokens(), { manifest: manifest as never, recipe: recipe as never });
     const res = await mp(E).post('/apps/portal-pull/install', {
       acceptedScopes: ['leads.write'],
       credentials: { apiKey: 'portal-api-key-0001' },
@@ -1310,9 +1312,10 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
     pullInternals().fetchImpl = (u, i) => fakeFetch(u, i);
   }, 120_000);
 
-  it('a type that is only a framework could not be published without the flag (the listing exists because the test set it)', async () => {
-    expect(pullInternals().implemented).toBe(false);
-    expect(h.app.get(ConnectorRegistry).isImplemented('pull')).toBe(false);
+  it('the pull type is publishable (it came with the portal recipes); the types that are still only frameworks are not', async () => {
+    expect(h.app.get(ConnectorRegistry).isImplemented('pull')).toBe(true);
+    expect(h.app.get(ConnectorRegistry).isImplemented('oauth')).toBe(false);
+    expect(h.app.get(ConnectorRegistry).isImplemented('email_parse')).toBe(false);
   });
 
   it('a new pull connection is due at once; the sweep lists it; a poll fetches with the sealed key, hands the leads to the pipeline, moves the cursor and schedules the next poll', async () => {
@@ -1352,18 +1355,31 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
       await db.privileged((tx) => h.app.get(PullStateRepository).due(tx, 50)),
     ).not.toContainEqual({ orgId: E.orgId, connectionId });
 
-    // The next poll resumes from the cursor and the pipeline's idempotency absorbs a repeat.
+    // The portal's minimum interval is kept even when the schedule says now: a poll straight after another is not made.
     await h.owner.query(
       `UPDATE marketplace_connections SET next_poll_at = now() - interval '1 second' WHERE id = $1`,
       [connectionId],
     );
+    expect((await runner().run(E.orgId, connectionId)).status).toBe('skipped');
+    expect(calls).toHaveLength(1);
+
+    // Once it has passed, the next poll resumes from the cursor; what the portal repeats is not a delivery (the pipeline's idempotency
+    // would absorb it, and the connection page does not count it).
+    await h.owner.query(
+      `UPDATE marketplace_connections SET last_poll_at = now() - interval '1 hour', next_poll_at = now() - interval '1 second' WHERE id = $1`,
+      [connectionId],
+    );
     const again = await runner().run(E.orgId, connectionId);
-    expect(again).toMatchObject({ status: 'ok', accepted: 0, duplicates: 2 });
+    expect(again).toMatchObject({ status: 'ok', accepted: 0, duplicates: 0, failed: 0 });
     expect(calls[1]).toContain('?after=43');
   });
 
   it('a refusal by the portal that retrying cannot fix stops the connection and says why; a transient failure backs off and keeps it active', async () => {
     fakeFetch = async () => ({ status: 401, text: async () => '{"error":"bad key"}' });
+    await h.owner.query(
+      `UPDATE marketplace_connections SET last_poll_at = now() - interval '1 hour' WHERE id = $1`,
+      [connectionId],
+    );
     const refused = await runner().run(E.orgId, connectionId);
     expect(refused.status).toBe('failed');
     const stopped = (
@@ -1390,7 +1406,7 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
     expect((await runner().run(E.orgId, connectionId)).status).toBe('skipped');
 
     await h.owner.query(
-      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0 WHERE id = $1`,
+      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0, last_poll_at = now() - interval '1 hour' WHERE id = $1`,
       [connectionId],
     );
     fakeFetch = async () => ({ status: 503, text: async () => 'busy' });
@@ -1409,7 +1425,7 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
 
   it('a paused installation is not polled, and a poll that cannot reach the pipeline keeps its cursor so nothing is skipped', async () => {
     await h.owner.query(
-      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0, poll_cursor = '10' WHERE id = $1`,
+      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0, poll_cursor = '10', last_poll_at = now() - interval '1 hour' WHERE id = $1`,
       [connectionId],
     );
     fakeFetch = async () => ({
@@ -1429,6 +1445,10 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
       )[0]!.poll_cursor,
     ).toBe('10');
     pipelineUp(h, stub);
+    await h.owner.query(
+      `UPDATE marketplace_connections SET last_poll_at = now() - interval '1 hour' WHERE id = $1`,
+      [connectionId],
+    );
     expect(await runner().run(E.orgId, connectionId)).toMatchObject({ status: 'ok', accepted: 1 });
     expect(
       (
@@ -1459,7 +1479,7 @@ describe('the pull worker (framework): schedule, run, failure handling', () => {
       [E.orgId],
     );
     await h.owner.query(
-      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0, poll_cursor = '70', next_poll_at = now() - interval '1 second' WHERE id = $1`,
+      `UPDATE marketplace_connections SET status = 'active', consecutive_failures = 0, poll_cursor = '70', last_poll_at = now() - interval '1 hour', next_poll_at = now() - interval '1 second' WHERE id = $1`,
       [connectionId],
     );
     fakeFetch = async () => ({

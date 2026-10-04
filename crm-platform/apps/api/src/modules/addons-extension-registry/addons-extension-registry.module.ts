@@ -4,6 +4,7 @@ import { ENGINE_HANDSHAKE_PORT } from '../../infra/providers/addons-extension-re
 import { HttpEngineHandshakeAdapter } from '../../infra/providers/addons-extension-registry/http-engine-handshake.adapter';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AddonEntitlementService } from './addon-entitlement.service';
+import { AddonFulfilmentHooks } from './addon-fulfilment-hooks';
 import { AddonFulfilmentService } from './addon-fulfilment.service';
 import { AddonPackService } from './addon-pack.service';
 import { AddonsController } from './addons.controller';
@@ -37,6 +38,7 @@ import { WorkspaceAddonsService } from './workspace-addons.service';
     { provide: ENGINE_HANDSHAKE_PORT, useClass: HttpEngineHandshakeAdapter },
     AddonPackService,
     AddonEntitlementService,
+    AddonFulfilmentHooks,
     AddonFulfilmentService,
     WorkspaceAddonsService,
     ExtensionTokenService,
@@ -46,6 +48,7 @@ import { WorkspaceAddonsService } from './workspace-addons.service';
     ModuleGateGuard,
     EngineConnectionService,
     AddonEntitlementService,
+    AddonFulfilmentHooks,
     AddonFulfilmentService,
     ExtensionTokenService,
   ],
