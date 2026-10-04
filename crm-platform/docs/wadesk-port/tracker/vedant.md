@@ -649,7 +649,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLR-031 | in-progress |  | Sub-flow built (same workspace, published flows only, depth cap 10); the Chatbot hand-off to an AI agent waits for the AI agents domain: the executor and port are built and the port answers unavailable |
 | WD-FLR-032 | backend-done |  | Webhook node through the guarded fetch (no private hosts, no redirects, 5 MB cap), JSON-escaped variables, saved response; integrations-nodes e2e |
 | WD-FLR-033 | backend-done |  | Code node in a worker-thread vm with a memory cap and a 2 s limit; the ceiling (vm is not a hard security boundary) is written in the file header; integrations-nodes spec |
-| WD-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; there is no mysql2 driver in the repo, so the default adapter says so |
+| WD-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; the driver is not installed: `pnpm add mysql2` was tried and makes pnpm resolve a second copy of drizzle-orm (mysql2 is its optional peer), which breaks the API typecheck, so it needs a decision (an isolated package for the driver, or a pinned peer setting) before it goes in |
 | WD-FLR-035 | backend-done |  | Tag node on the run's contact (add or remove, by id or name); actions-nodes e2e. Does not fire tag_added flows, as WaDesk |
 | WD-FLR-036 | backend-done |  | Assign agent node through AssignmentService with the flow actor; actions-nodes e2e |
 | WD-FLR-037 | backend-done |  | Deal node creates or moves the contact's open deal through the stage engine; actions-nodes e2e |
