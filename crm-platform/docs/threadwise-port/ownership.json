@@ -282,7 +282,7 @@
    "cluster": "platform",
    "wave": 1,
    "estDays": 130,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "infra",
    "zone": [
     "apps/api/src/modules/platform-infrastructure/",

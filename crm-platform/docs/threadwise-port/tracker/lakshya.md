@@ -298,6 +298,73 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-I18N-038 | todo |  |  |
 | TW-I18N-039 | todo |  |  |
 
+## platform-infrastructure (infra)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-INFRA-001 | todo |  |  |
+| TW-INFRA-002 | todo |  |  |
+| TW-INFRA-003 | todo |  |  |
+| TW-INFRA-004 | todo |  |  |
+| TW-INFRA-005 | todo |  |  |
+| TW-INFRA-006 | todo |  |  |
+| TW-INFRA-007 | todo |  |  |
+| TW-INFRA-008 | todo |  |  |
+| TW-INFRA-009 | todo |  |  |
+| TW-INFRA-010 | todo |  |  |
+| TW-INFRA-011 | todo |  |  |
+| TW-INFRA-012 | todo |  |  |
+| TW-INFRA-013 | todo |  |  |
+| TW-INFRA-014 | todo |  |  |
+| TW-INFRA-015 | todo |  |  |
+| TW-INFRA-016 | todo |  |  |
+| TW-INFRA-017 | todo |  |  |
+| TW-INFRA-018 | todo |  |  |
+| TW-INFRA-019 | todo |  |  |
+| TW-INFRA-020 | todo |  |  |
+| TW-INFRA-021 | todo |  |  |
+| TW-INFRA-022 | todo |  |  |
+| TW-INFRA-023 | todo |  |  |
+| TW-INFRA-024 | todo |  |  |
+| TW-INFRA-025 | todo |  |  |
+| TW-INFRA-026 | todo |  |  |
+| TW-INFRA-027 | todo |  |  |
+| TW-INFRA-028 | todo |  |  |
+| TW-INFRA-029 | todo |  |  |
+| TW-INFRA-030 | todo |  |  |
+| TW-INFRA-031 | todo |  |  |
+| TW-INFRA-032 | todo |  |  |
+| TW-INFRA-033 | todo |  |  |
+| TW-INFRA-034 | todo |  |  |
+| TW-INFRA-035 | todo |  |  |
+| TW-INFRA-036 | todo |  |  |
+| TW-INFRA-037 | todo |  |  |
+| TW-INFRA-038 | todo |  |  |
+| TW-INFRA-039 | todo |  |  |
+| TW-INFRA-040 | todo |  |  |
+| TW-INFRA-041 | todo |  |  |
+| TW-INFRA-042 | todo |  |  |
+| TW-INFRA-043 | todo |  |  |
+| TW-INFRA-044 | todo |  |  |
+| TW-INFRA-045 | todo |  |  |
+| TW-INFRA-046 | todo |  |  |
+| TW-INFRA-047 | todo |  |  |
+| TW-INFRA-048 | todo |  |  |
+| TW-INFRA-049 | todo |  |  |
+| TW-INFRA-050 | todo |  |  |
+| TW-INFRA-051 | todo |  |  |
+| TW-INFRA-052 | todo |  |  |
+| TW-INFRA-053 | todo |  |  |
+| TW-INFRA-054 | todo |  |  |
+| TW-INFRA-055 | todo |  |  |
+| TW-INFRA-056 | todo |  |  |
+| TW-INFRA-057 | todo |  |  |
+| TW-INFRA-058 | todo |  |  |
+| TW-INFRA-059 | todo |  |  |
+| TW-INFRA-060 | todo |  |  |
+| TW-INFRA-061 | todo |  |  |
+| TW-INFRA-062 | todo |  |  |
+
 ## install-update-licensing (inst)
 
 | Feature | Status | PR | Notes |
