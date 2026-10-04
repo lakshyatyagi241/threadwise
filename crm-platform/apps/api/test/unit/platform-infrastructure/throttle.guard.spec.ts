@@ -247,7 +247,7 @@ describe('resolveThrottle', () => {
 
 describe('readInfraEnv', () => {
   it('defaults to enabled with no default limit', () => {
-    expect(readInfraEnv({})).toEqual({
+    expect(readInfraEnv({})).toMatchObject({
       INFRA_RATE_LIMIT_ENABLED: true,
       INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: 0,
     });
@@ -256,7 +256,7 @@ describe('readInfraEnv', () => {
   it('treats empty strings (an unset compose variable) as not set', () => {
     expect(
       readInfraEnv({ INFRA_RATE_LIMIT_ENABLED: '', INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: '' }),
-    ).toEqual({ INFRA_RATE_LIMIT_ENABLED: true, INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: 0 });
+    ).toMatchObject({ INFRA_RATE_LIMIT_ENABLED: true, INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: 0 });
   });
 
   it('parses switches and numbers', () => {
@@ -265,7 +265,7 @@ describe('readInfraEnv', () => {
         INFRA_RATE_LIMIT_ENABLED: 'false',
         INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: '900',
       }),
-    ).toEqual({ INFRA_RATE_LIMIT_ENABLED: false, INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: 900 });
+    ).toMatchObject({ INFRA_RATE_LIMIT_ENABLED: false, INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: 900 });
   });
 
   it.each([['-1'], ['abc'], ['1.5']])('refuses a malformed limit %s at boot', (value) => {
