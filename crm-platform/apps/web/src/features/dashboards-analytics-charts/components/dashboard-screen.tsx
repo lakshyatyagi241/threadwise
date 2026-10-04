@@ -99,9 +99,12 @@ export function DashboardScreen() {
   }, [bounced, role, router]);
   const [nowMs, setNowMs] = useState(0);
   useEffect(() => {
-    setNowMs(Date.now());
     const id = setInterval(() => setNowMs(Date.now()), 1000);
-    return () => clearInterval(id);
+    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
+    return () => {
+      clearInterval(id);
+      clearTimeout(t0);
+    };
   }, []);
   const syncedAgo = summary.dataUpdatedAt
     ? Math.max(0, Math.round((nowMs - summary.dataUpdatedAt) / 1000))
