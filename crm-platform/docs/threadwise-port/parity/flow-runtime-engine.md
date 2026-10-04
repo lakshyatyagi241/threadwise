@@ -63,3 +63,22 @@ one, the loop guard stays at 20, a flow ends only at an End node or when nothing
 The Runs, Run detail, Subscribers (with the Enroll panel and retry) and Analytics screens are new pages of ours: Reference had the analytics page
 and an enrolment panel inside the flows list, which belongs to the editor. The enrolment panel is on the subscribers page until the editor
 exists to host it. Differences in a screen are listed in the web agent's report in the feature folder README.
+
+## Nodes, integrations and the analytics screens (TW-FLR-026 to 069)
+
+- Built, each with unit and e2e specs in `test/unit|e2e/flow-runtime-engine/`: Template, Book appointment, Commerce shop, WhatsApp Form (the commerce group); AI, Sub-flow
+  and natural-language ordering; Webhook, Code, Google Sheets, Docs, Form and Meet, AI call; Tag, Assign agent, Deal, Copy-to-number, WhatsApp-to-Instagram link. The
+  analytics screen gained history, error and retry tabs. Evidence: 218 unit and 80 e2e tests in this domain, all passing; the analytics tabs were also opened in a real browser.
+  Nothing ran against real Google, MySQL, Meta or an AI vendor, and there is no Playwright twin run.
+- Deviations: conversation mode with extraction answers in plain language each turn and extracts once on exit (Reference forced JSON every turn, which sent raw JSON to the
+  customer); Sub-flow refuses an unpublished, paused or other-workspace flow (Reference served any id from any tenant) and does not return to the parent; with no AI agent engine,
+  Chatbot passes the node instead of ending the run; Webhook adds an `Idempotency-Key`, refuses private hosts and redirects, and its `_threadwise` envelope has empty device fields
+  because the run does not carry channel details; MySQL requires a public host; Google nodes use UTC; Google Form waits on a run, not on a `google_form_sessions` table, with a
+  per-org token; Tag acts on the contact, not the conversation, and removing a missing tag no longer creates it; Assign agent with a team and no member keeps the thread on the
+  team (only the manual strategy exists); Deal moves across pipelines with the deal and fires `deal.stage_changed`; Copy-to-number reads the 24-hour window from the target's own
+  thread; ordering takes the workspace from the API key, reads an English reply as typed and translates only when unclear; analytics counts launches that failed before a run
+  existed, dates are UTC, paging is by cursor, a retry that fails again is a 200 with `outcome: failed`, and "skipped" is an extra outcome.
+- Known limits: a Deal step can create two deals if its write loses the compare-and-set and the step re-runs (no idempotency key on deals); Mirror mode copies only what Message and
+  Media record; the Code node starts a worker per run and `vm` is not a hard security boundary.
+- Not built, with the reason: see the wiring map (AI agent hand-off, MySQL driver, voice call adapter, Google account store, shop adapter, voice and photo orders, Telegram
+  payment, the call flow).

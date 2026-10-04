@@ -1,4 +1,4 @@
-import { Module, type OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { NodeBridgeProbe } from '../../infra/providers/node-bridge-runtime/node-bridge.probe';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { CryptoService } from '../../common/crypto/crypto.service';
@@ -25,7 +25,8 @@ import { NodeTokenGuard } from './node-token.guard';
  * Registered in app.module.ts.
  */
 @Module({
-  imports: [ChatConversationsModule],
+  // forwardRef: the inbox reaches this module back through WABA and broadcasts.
+  imports: [forwardRef(() => ChatConversationsModule)],
   controllers: [NodeBridgeController, NodeInternalController],
   providers: [
     NodeBridgeSettingsService,
@@ -57,6 +58,7 @@ import { NodeTokenGuard } from './node-token.guard';
 })
 export class NodeBridgeRuntimeModule implements OnModuleInit {
   constructor(
+    @Inject(forwardRef(() => ChannelAdapterRegistry))
     private readonly channels: ChannelAdapterRegistry,
     private readonly qr: QrChannelAdapter,
   ) {}

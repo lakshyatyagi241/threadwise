@@ -3,6 +3,9 @@ import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-a
 import {
   authOf,
   type BusinessProfile,
+  type AppSubscriptionState,
+  type QrCodeInfo,
+  type SubscriptionDetail,
   type PhoneInfo,
   type PlatformReadiness,
   type SubscribeResult,
@@ -554,6 +557,186 @@ export class WabaAdminClient implements WabaAdminPort {
     );
   }
 
+  // --- the Meta app's own subscription and the per-WABA diagnostic (TW-WABA-002, 003, 015) -------------------------------
+
+  async getAppSubscription(app: { id: string; secret: string }): Promise<AppSubscriptionState> {
+    const res = await this.http.graph<{
+      data?: Array<{
+        object?: string;
+        callback_url?: string;
+        fields?: Array<string | { name?: string }>;
+      }>;
+    }>(`${app.id}|${app.secret}`, {
+      method: 'GET',
+      path: `/${app.id}/subscriptions`,
+      timeoutMs: 15_000,
+    });
+    const waba = (res.data ?? []).find((s) => s.object === 'whatsapp_business_account');
+    return {
+      hasWabaObject: Boolean(waba),
+      fields: (waba?.fields ?? [])
+        .map((f) => (typeof f === 'string' ? f : (f.name ?? '')))
+        .filter(Boolean),
+      callbackUrl: waba?.callback_url ?? null,
+    };
+  }
+
+  async setAppSubscription(
+    app: { id: string; secret: string },
+    input: { callbackUrl: string; verifyToken: string; fields: string[] },
+  ): Promise<void> {
+    const form = new FormData();
+    form.set('object', 'whatsapp_business_account');
+    form.set('callback_url', input.callbackUrl);
+    form.set('fields', input.fields.join(','));
+    form.set('verify_token', input.verifyToken);
+    await this.http.graph(`${app.id}|${app.secret}`, {
+      method: 'POST',
+      path: `/${app.id}/subscriptions`,
+      form,
+      timeoutMs: 20_000,
+    });
+  }
+
+  async getSubscriptionDetails(conn: WabaConnection): Promise<SubscriptionDetail[]> {
+    const res = await this.http.call<{
+      data?: Array<{
+        name?: string;
+        whatsapp_business_api_data?: { id?: string; name?: string; override_callback_uri?: string };
+      }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/subscribed_apps`,
+      timeoutMs: 12_000,
+    });
+    return (res.data ?? []).map((d) => ({
+      name: d.whatsapp_business_api_data?.name ?? d.name ?? null,
+      callbackUrl: d.whatsapp_business_api_data?.override_callback_uri ?? null,
+    }));
+  }
+
+  // --- analytics, username, QR codes (TW-WABA-023, 025, 027) -------------------------------------------------------
+
+  async getTemplateClicks(
+    conn: WabaConnection,
+    templateIds: string[],
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<number> {
+    const res = await this.http.call<{
+      data?: Array<{
+        data_points?: Array<{ template_id?: string; clicked?: Array<{ count?: number }> }>;
+      }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/template_analytics`,
+      query: {
+        start: String(startSeconds),
+        end: String(endSeconds),
+        granularity: 'DAILY',
+        metric_types: JSON.stringify(['CLICKED']),
+        template_ids: JSON.stringify(templateIds.map(Number)),
+      },
+      timeoutMs: 20_000,
+    });
+    return sumClicks(res, templateIds);
+  }
+
+  async enableTemplateInsights(conn: WabaConnection): Promise<void> {
+    const form = new FormData();
+    form.set('is_enabled_for_insights', 'true');
+    await this.http.call(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.wabaId}`,
+      form,
+      timeoutMs: 15_000,
+    });
+  }
+
+  async getConversationAnalytics(
+    conn: WabaConnection,
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<Array<{ conversation_type?: string; conversation?: number; cost?: number }>> {
+    const fields = `conversation_analytics.start(${startSeconds}).end(${endSeconds}).granularity(MONTHLY).dimensions(["CONVERSATION_TYPE"])`;
+    const res = await this.http.call<{
+      conversation_analytics?: {
+        data?: Array<{
+          data_points?: Array<{ conversation_type?: string; conversation?: number; cost?: number }>;
+        }>;
+      };
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}`,
+      query: { fields },
+      timeoutMs: 12_000,
+    });
+    return (res.conversation_analytics?.data ?? []).flatMap((d) => d.data_points ?? []);
+  }
+
+  async getReservedUsername(conn: WabaConnection): Promise<string | null> {
+    const res = await this.http.call<{ username?: string | { username?: string } }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}`,
+      query: { fields: 'username' },
+      timeoutMs: 12_000,
+    });
+    const u = typeof res.username === 'string' ? res.username : res.username?.username;
+    return u ? u.toLowerCase() : null;
+  }
+
+  async claimUsername(conn: WabaConnection, username: string): Promise<'reserved' | 'approved'> {
+    const form = new FormData();
+    form.set('username', username);
+    const res = await this.http.call<{ status?: string; username_status?: string }>(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/username`,
+      form,
+      timeoutMs: 20_000,
+    });
+    const s = String(res.status ?? res.username_status ?? 'reserved').toLowerCase();
+    return s === 'approved' ? 'approved' : 'reserved';
+  }
+
+  async releaseUsername(conn: WabaConnection): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'DELETE',
+      path: `/${conn.phoneNumberId}/username`,
+      timeoutMs: 20_000,
+    });
+  }
+
+  async listQrCodes(conn: WabaConnection): Promise<QrCodeInfo[]> {
+    const res = await this.http.call<{ data?: QrCodeRaw[] }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}/message_qrdls`,
+      query: { fields: 'code,prefilled_message,deep_link_url,qr_image_url' },
+      timeoutMs: 20_000,
+    });
+    return (res.data ?? []).map(toQr);
+  }
+
+  async createQrCode(conn: WabaConnection, prefilledMessage: string): Promise<QrCodeInfo> {
+    const form = new FormData();
+    form.set('prefilled_message', prefilledMessage);
+    form.set('generate_qr_image', 'PNG');
+    const res = await this.http.call<QrCodeRaw>(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/message_qrdls`,
+      form,
+      timeoutMs: 20_000,
+    });
+    return toQr({ ...res, prefilled_message: res.prefilled_message ?? prefilledMessage });
+  }
+
+  async deleteQrCode(conn: WabaConnection, code: string): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'DELETE',
+      path: `/${conn.phoneNumberId}/message_qrdls/${encodeURIComponent(code)}`,
+      timeoutMs: 20_000,
+    });
+  }
+
   // --- business profile --------------------------------------------------------------------------------------------
 
   async getBusinessProfile(conn: WabaConnection): Promise<BusinessProfile> {
@@ -604,6 +787,20 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 }
 
+interface QrCodeRaw {
+  code?: string;
+  prefilled_message?: string;
+  deep_link_url?: string;
+  qr_image_url?: string;
+}
+
+const toQr = (r: QrCodeRaw): QrCodeInfo => ({
+  code: r.code ?? '',
+  prefilledMessage: r.prefilled_message ?? '',
+  deepLinkUrl: r.deep_link_url ?? (r.code ? `https://wa.me/message/${r.code}` : null),
+  qrImageUrl: r.qr_image_url ?? null,
+});
+
 function asApiError(e: unknown): WabaApiError {
   return e instanceof WabaApiError ? e : WabaApiError.network(e);
 }
@@ -633,3 +830,23 @@ const notConfigured = (what: string) =>
     false,
     null,
   );
+
+/** Every button `count` of every day bucket, for the requested templates only (a response may carry others). */
+export function sumClicks(
+  res: {
+    data?: Array<{
+      data_points?: Array<{ template_id?: string | number; clicked?: Array<{ count?: number }> }>;
+    }>;
+  },
+  templateIds: string[],
+): number {
+  const wanted = new Set(templateIds.map(String));
+  let total = 0;
+  for (const bucket of res.data ?? []) {
+    for (const point of bucket.data_points ?? []) {
+      if (point.template_id !== undefined && !wanted.has(String(point.template_id))) continue;
+      for (const c of point.clicked ?? []) total += Number(c.count ?? 0);
+    }
+  }
+  return total;
+}

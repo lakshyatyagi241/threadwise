@@ -287,6 +287,10 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+
+  // companies (TW-CTP)
+  /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
+  COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)
@@ -494,6 +498,19 @@ export const ERROR_CODES = {
   CAT_NO_PHONE_NUMBER: 'CAT_NO_PHONE_NUMBER',
   /** A catalog link without a Meta catalog sends the shop link, and the workspace has no shop (TW-CAT-015). */
   CAT_NO_SHOP: 'CAT_NO_SHOP',
+
+  // storefront builder and public shop (TW-STORE)
+  STORE_SLUG_TAKEN: 'STORE_SLUG_TAKEN',
+  STORE_NO_SHOP: 'STORE_NO_SHOP',
+  STORE_NOT_AVAILABLE: 'STORE_NOT_AVAILABLE',
+  STORE_ITEMS_UNAVAILABLE: 'STORE_ITEMS_UNAVAILABLE',
+  STORE_COUPON_INVALID: 'STORE_COUPON_INVALID',
+  STORE_DEVICE_INVALID: 'STORE_DEVICE_INVALID',
+  STORE_RESET_NOT_CONFIRMED: 'STORE_RESET_NOT_CONFIRMED',
+  STORE_DOMAIN_NOT_SET: 'STORE_DOMAIN_NOT_SET',
+  STORE_WEBHOOK_REJECTED: 'STORE_WEBHOOK_REJECTED',
+  /** A shop is saved with no connected WhatsApp number in the workspace ("Connect WhatsApp first", TW-STORE-004). */
+  STORE_NO_SENDER: 'STORE_NO_SENDER',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

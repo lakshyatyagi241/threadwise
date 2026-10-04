@@ -71,7 +71,7 @@ export function ProductsScreen() {
   };
 
   return (
-    <div className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div>
       <section className="min-w-0 space-y-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

@@ -103,7 +103,12 @@ export class InboundIngestService {
     if (!found) return { outcome: 'dropped', reason: 'channel_missing' };
     const { row: channel, runtime } = found;
 
-    const peerKey = normalizePeerKey(channel.kind, m.peerKey);
+    // A group's id is an opaque token, not a phone number: key the thread on it as is, apart from any person's digits.
+    const peerKey = m.group
+      ? m.peerKey.trim()
+        ? `g:${m.peerKey.trim()}`.slice(0, 128)
+        : null
+      : normalizePeerKey(channel.kind, m.peerKey);
     if (!peerKey) return { outcome: 'dropped', reason: 'invalid_peer' };
 
     // A redelivery is the common duplicate: answer it before spending a file download on it. The ledger insert below stays the authority.
@@ -128,29 +133,35 @@ export class InboundIngestService {
     }
     if (result.outcome === 'stored') {
       if (stored.pending) await this.enqueueMediaFetch(orgId, result.message.uuid);
-      await this.realtime.messageStored(orgId, result.conv, result.message, result.changed, {
-        unread: true,
-      });
-      await this.hooks.run({
-        orgId,
-        channelId: channel.id,
-        conversationId: result.conv.id,
-        contactId: result.conv.contactId,
-        channelUuid: channel.uuid,
-        channelKind: channel.kind,
-        conversationUuid: result.conv.uuid,
-        messageUuid: result.message.uuid,
-        peerKey,
-        peerName: result.conv.peerName,
-        createdConversation: result.createdConversation,
-        message: {
-          kind: m.kind,
-          body: result.message.body,
-          meta: result.message.meta,
-          location: m.location ?? null,
-          mediaKey: result.message.mediaKey,
-        },
-      });
+      // Imported history is quiet: nobody is alerted to a message from months ago, and no flow, keyword reply or routing runs for it.
+      if (!m.history) {
+        await this.realtime.messageStored(orgId, result.conv, result.message, result.changed, {
+          unread: true,
+        });
+        // A group has many senders and bills per member: nothing auto-replies to it (TW-WABA-039).
+        if (!m.group) {
+          await this.hooks.run({
+            orgId,
+            channelId: channel.id,
+            conversationId: result.conv.id,
+            contactId: result.conv.contactId,
+            channelUuid: channel.uuid,
+            channelKind: channel.kind,
+            conversationUuid: result.conv.uuid,
+            messageUuid: result.message.uuid,
+            peerKey,
+            peerName: result.conv.peerName,
+            createdConversation: result.createdConversation,
+            message: {
+              kind: m.kind,
+              body: result.message.body,
+              meta: result.message.meta,
+              location: m.location ?? null,
+              mediaKey: result.message.mediaKey,
+            },
+          });
+        }
+      }
       return {
         outcome: 'stored',
         conversationUuid: result.conv.uuid,
@@ -185,13 +196,19 @@ export class InboundIngestService {
     let createdConversation = false;
     const peerName = m.peerName?.trim() || null;
 
+    // A group has no contact, and imported history creates none (it must not trigger the flows or alerts a new contact does).
+    const noContact = Boolean(m.group || m.history);
     if (!conv) {
-      const link = await this.linkContact(tx, orgId, channel.kind, peerKey, peerName);
+      const link = noContact
+        ? { contactId: null, needsContact: false }
+        : await this.linkContact(tx, orgId, channel.kind, peerKey, peerName);
       conv = await this.conversations.insert(tx, orgId, {
         channelId: channel.id,
         peerKey,
-        peerName,
-        title: defaultTitle(channel.kind, peerKey, peerName),
+        peerName: m.group ? null : peerName,
+        title: m.group
+          ? (m.group.title?.trim() || 'WhatsApp group').slice(0, 200)
+          : defaultTitle(channel.kind, peerKey, peerName),
         contactId: link.contactId,
         needsContact: link.needsContact,
       });
@@ -200,14 +217,14 @@ export class InboundIngestService {
       // A thread without a contact (the cap was reached, or the contact was deleted) tries again: the cap may have room now.
       const patch: { peerName?: string | null; contactId?: number | null; needsContact?: boolean } =
         {};
-      if (conv.contactId === null) {
+      if (conv.contactId === null && !noContact) {
         const link = await this.linkContact(tx, orgId, channel.kind, peerKey, peerName);
         if (link.contactId !== null || link.needsContact !== conv.needsContact) {
           patch.contactId = link.contactId;
           patch.needsContact = link.needsContact;
         }
       }
-      if (peerName && peerName !== conv.peerName) patch.peerName = peerName;
+      if (peerName && peerName !== conv.peerName && !m.group) patch.peerName = peerName;
       if (Object.keys(patch).length > 0) {
         await this.conversations.syncPeer(tx, orgId, conv.id, patch);
         conv = { ...conv, ...patch } as ConversationRow;
@@ -216,7 +233,11 @@ export class InboundIngestService {
 
     if (m.kind === 'reaction') return this.applyReaction(tx, orgId, channel, conv, m);
 
-    const alloc = await this.messages.allocate(tx);
+    let alloc = await this.messages.allocate(tx);
+    // History is backdated to when it was really sent (the partitioned table takes any date; older ones land in the default partition).
+    if (m.history) {
+      alloc = { ...alloc, createdAt: new Date(m.providerTimestamp).toISOString() };
+    }
     const fresh = await this.messages.ledgerInsert(
       tx,
       orgId,
@@ -265,28 +286,52 @@ export class InboundIngestService {
       };
     }
 
-    const { row: after, reopenedFrom } = await this.conversations.applyInbound(tx, orgId, conv.id, {
-      messageId: alloc.id,
-      arrivedAt: alloc.createdAt,
-      customerAt,
-      preview: previewOf({ kind, body, locationName: m.location?.name }),
-      windowHours,
-      active: true,
-    });
+    if (m.group) {
+      meta.group = {
+        id: m.peerKey,
+        participant: m.group.participant,
+        ...(m.group.participantName ? { senderName: m.group.participantName } : {}),
+      };
+    }
+    if (m.history) meta.historySync = true;
+    const outgoing = m.history?.direction === 'out';
+    const preview = previewOf({ kind, body, locationName: m.location?.name });
+    let reopenedFrom: string | null = null;
+    let after: ConversationRow;
+    if (m.history) {
+      after = await this.conversations.applyHistory(tx, orgId, conv.id, {
+        messageId: alloc.id,
+        at: alloc.createdAt,
+        inbound: !outgoing,
+        windowHours,
+        preview,
+      });
+    } else {
+      const applied = await this.conversations.applyInbound(tx, orgId, conv.id, {
+        messageId: alloc.id,
+        arrivedAt: alloc.createdAt,
+        customerAt,
+        preview,
+        windowHours,
+        active: true,
+      });
+      after = applied.row;
+      reopenedFrom = applied.reopenedFrom;
+    }
 
     await this.messages.insert(tx, orgId, {
       id: alloc.id,
       createdAt: alloc.createdAt,
       conversationId: conv.id,
       seq: after.msgSeq,
-      direction: 'in',
+      direction: outgoing ? 'out' : 'in',
       kind,
-      senderKind: 'customer',
+      senderKind: outgoing ? 'agent' : 'customer',
       body,
       media: stored.media,
       latitude: m.location?.latitude ?? null,
       longitude: m.location?.longitude ?? null,
-      status: 'received',
+      status: outgoing ? 'sent' : 'received',
       providerMessageId: m.providerMessageId,
       replyToMessageUuid: replyTo,
       meta,

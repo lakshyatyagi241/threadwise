@@ -10,3 +10,4 @@ export { TemplateSyncService } from './template-sync.service';
 export * from './template-linter';
 export * from './template-payload';
 export * from './template-variables';
+export type { FlowTemplate } from './flow-template';

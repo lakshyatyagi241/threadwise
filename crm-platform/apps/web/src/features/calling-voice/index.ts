@@ -9,9 +9,12 @@
  *     <OnCallPanel />
  *     ... <CallButton conversationId={c.id} displayName={c.title} contactId={c.contactId} />
  *   </CallingProvider>
+ *
+ * The WhatsApp health page draws `CallingToggleCard` for its number (`numberId` is the number's uuid), inside a `ToastProvider`.
  */
 export { CallingProvider, useCalling } from './components/calling-provider';
 export type { ActiveCall, CallingApi, OutboundCallInput } from './components/calling-provider';
 export { CallButton, type CallButtonProps } from './components/call-button';
+export { CallingToggleCard } from './components/calling-settings-screen';
 export { IncomingCallToast } from './components/incoming-call-toast';
 export { OnCallPanel } from './components/on-call-panel';
