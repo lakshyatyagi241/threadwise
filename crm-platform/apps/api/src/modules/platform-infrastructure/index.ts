@@ -1,0 +1,15 @@
+/**
+ * Public surface of the platform-infrastructure domain. Other modules import from here, never from the files behind it
+ * (architecture rule: no cross-module internals).
+ */
+export { PlatformInfrastructureModule } from './platform-infrastructure.module';
+export { Throttle, SkipThrottle } from './rate-limit/throttle.decorators';
+export { ThrottleGuard } from './rate-limit/throttle.guard';
+export { RateLimiter, type ConsumeResult } from './rate-limit/rate-limiter';
+export {
+  RATE_POLICIES,
+  type PolicyName,
+  type ThrottleInput,
+  type ThrottleSpec,
+  type ThrottleSubject,
+} from './rate-limit/rate-limit.policies';

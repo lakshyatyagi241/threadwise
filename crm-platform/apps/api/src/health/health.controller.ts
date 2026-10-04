@@ -14,6 +14,7 @@ import type { Response } from 'express';
 import { Public } from '../common/decorators';
 import { DatabaseService } from '../infra/db/database.service';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
+import { SkipThrottle } from '../modules/platform-infrastructure';
 
 interface DependencyCheck {
   status: 'up' | 'down';
@@ -34,6 +35,8 @@ interface DependencyCheck {
  */
 @ApiTags('health')
 @Public()
+// Probes are called every few seconds by the orchestrator and load balancer; a limit would turn a busy minute into an outage.
+@SkipThrottle()
 // Version-neutral: probes live at /health and /ready forever. An orchestrator
 // health check must not have to be updated because the API moved to v2.
 @Controller({ version: VERSION_NEUTRAL })
