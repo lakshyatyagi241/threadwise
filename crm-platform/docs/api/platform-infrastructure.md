@@ -81,3 +81,44 @@ process every 30 seconds. A throttle that turned a cache outage into an API outa
 
 Auth's `RateLimitService`, the storefront's `PublicRateLimiter` and the API-key guard keep their own counters and are
 unchanged. Their owners can move to `@Throttle` in their own PRs; nothing here forces it.
+
+## Redis locks and once-only gates (WD-INFRA-025)
+
+`RedisLockService` (exported from `modules/platform-infrastructure`) is the one place for mutual exclusion and "do this once"
+gates on Redis. WaDesk did this with `Cache::lock` / `Cache::add` on its database cache at about 200 call sites; this repo
+already has several hand-written versions (device lease, sender lease, dispatcher lock, webhook dedupe) that disagree on
+release safety and on what to do when Redis is down.
+
+```ts
+// run exclusive work; the lease is extended while it runs and always released
+const out = await this.locks.withLock(
+  `sched:sweep:${orgId}`,
+  { ttlMs: 30_000, onUnavailable: 'skip' },
+  async ({ signal }) => sweep(orgId, signal),
+);
+if (!out.acquired) return; // somebody else is sweeping
+
+// a dedupe window / "at most every N" gate
+if (!(await this.locks.once(`waba:in:${waMessageId}`, 3_600_000, 'proceed'))) return;
+```
+
+| Call                                   | Returns                                              | Use                                                                                                        |
+| -------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `acquire(key, {ttlMs, onUnavailable})` | `Lease` or `null`                                    | you manage the lifetime (`lease.renew()` / `lease.release()`)                                              |
+| `withLock(key, opts, fn)`              | `{acquired:false}` or `{acquired:true, value, lost}` | the normal case; `opts.wait` blocks until free, `fn` gets an `AbortSignal` that fires if the lease is lost |
+| `once(key, ttlMs, onUnavailable)`      | `boolean`                                            | first caller in the window gets `true`; nothing to release                                                 |
+
+- **Token-checked.** Release and renew are one Lua script that compares the stored token, so a holder whose lock expired can
+  never free or extend the next holder's. (A plain `GET` then `DEL`, as one existing lease does, can.)
+- **`onUnavailable` is required, with no default.** `skip` means "if Redis is down, act as if someone else holds it": use it for
+  anything where two runs do harm. `proceed` means run unprotected: use it where refusing would lose something, such as
+  dropping an inbound webhook because the dedupe store is down.
+- **Heartbeat.** `withLock` renews every third of the TTL (set `renewEveryMs: 0` to turn it off), so the TTL only needs to cover a
+  dead holder. If the lease is lost the signal aborts and the result has `lost: true`; if Redis is unreachable it counts as lost
+  only after a full TTL of silence.
+- **Not a fencing token.** A holder paused longer than the TTL can wake up believing it still holds the lock. Money and stock
+  also need a database constraint or row lock. This keeps duplicate work rare; it does not make it impossible.
+- **Keys** are yours: `<code>:<purpose>:<ids>`. Do not reuse a key that holds a counter or cached value.
+
+Existing hand-rolled versions are unchanged. Their owners can move over in their own PRs; for fixed-window counters (the
+segment, lead, public-link, appointment and marketplace throttles) use `RateLimiter` or `@Throttle` instead.
