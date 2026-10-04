@@ -43,3 +43,6 @@ dump.rdb
 
 # Logs of the local dev stack started by tools/dev-refresh.sh
 .dev-run/
+
+# Database dumps written by the backup service on the host (deploy/hostinger/docker-compose.yml)
+deploy/hostinger/backups/
