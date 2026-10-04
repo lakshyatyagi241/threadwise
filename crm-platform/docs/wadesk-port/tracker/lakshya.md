@@ -298,6 +298,73 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-I18N-038 | todo |  |  |
 | WD-I18N-039 | todo |  |  |
 
+## platform-infrastructure (infra)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-INFRA-001 | todo |  |  |
+| WD-INFRA-002 | todo |  |  |
+| WD-INFRA-003 | todo |  |  |
+| WD-INFRA-004 | todo |  |  |
+| WD-INFRA-005 | todo |  |  |
+| WD-INFRA-006 | todo |  |  |
+| WD-INFRA-007 | todo |  |  |
+| WD-INFRA-008 | todo |  |  |
+| WD-INFRA-009 | todo |  |  |
+| WD-INFRA-010 | todo |  |  |
+| WD-INFRA-011 | todo |  |  |
+| WD-INFRA-012 | todo |  |  |
+| WD-INFRA-013 | todo |  |  |
+| WD-INFRA-014 | todo |  |  |
+| WD-INFRA-015 | todo |  |  |
+| WD-INFRA-016 | todo |  |  |
+| WD-INFRA-017 | todo |  |  |
+| WD-INFRA-018 | todo |  |  |
+| WD-INFRA-019 | todo |  |  |
+| WD-INFRA-020 | todo |  |  |
+| WD-INFRA-021 | todo |  |  |
+| WD-INFRA-022 | todo |  |  |
+| WD-INFRA-023 | todo |  |  |
+| WD-INFRA-024 | todo |  |  |
+| WD-INFRA-025 | todo |  |  |
+| WD-INFRA-026 | todo |  |  |
+| WD-INFRA-027 | todo |  |  |
+| WD-INFRA-028 | todo |  |  |
+| WD-INFRA-029 | todo |  |  |
+| WD-INFRA-030 | todo |  |  |
+| WD-INFRA-031 | todo |  |  |
+| WD-INFRA-032 | todo |  |  |
+| WD-INFRA-033 | todo |  |  |
+| WD-INFRA-034 | todo |  |  |
+| WD-INFRA-035 | todo |  |  |
+| WD-INFRA-036 | todo |  |  |
+| WD-INFRA-037 | todo |  |  |
+| WD-INFRA-038 | todo |  |  |
+| WD-INFRA-039 | todo |  |  |
+| WD-INFRA-040 | todo |  |  |
+| WD-INFRA-041 | todo |  |  |
+| WD-INFRA-042 | todo |  |  |
+| WD-INFRA-043 | todo |  |  |
+| WD-INFRA-044 | todo |  |  |
+| WD-INFRA-045 | todo |  |  |
+| WD-INFRA-046 | todo |  |  |
+| WD-INFRA-047 | todo |  |  |
+| WD-INFRA-048 | todo |  |  |
+| WD-INFRA-049 | todo |  |  |
+| WD-INFRA-050 | todo |  |  |
+| WD-INFRA-051 | todo |  |  |
+| WD-INFRA-052 | todo |  |  |
+| WD-INFRA-053 | todo |  |  |
+| WD-INFRA-054 | todo |  |  |
+| WD-INFRA-055 | todo |  |  |
+| WD-INFRA-056 | todo |  |  |
+| WD-INFRA-057 | todo |  |  |
+| WD-INFRA-058 | todo |  |  |
+| WD-INFRA-059 | todo |  |  |
+| WD-INFRA-060 | todo |  |  |
+| WD-INFRA-061 | todo |  |  |
+| WD-INFRA-062 | todo |  |  |
+
 ## install-update-licensing (inst)
 
 | Feature | Status | PR | Notes |

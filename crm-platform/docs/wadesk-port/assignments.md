@@ -52,7 +52,7 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | auth-registration-security | auth | /auth | 1 | 128 | written | 49 |
 | install-update-licensing | inst | /install | 1 | 84 | written | 29 |
 | localization-translation | i18n | /i18n | 1 | 105 | written | 39 |
-| platform-infrastructure | infra | /infra | 1 | 130 | pending |  |
+| platform-infrastructure | infra | /infra | 1 | 130 | written | 62 |
 | platform-settings-branding-storage | set | /settings | 1 | 137 | written | 46 |
 | roles-permissions | rbac | /roles | 1 | 96 | written | 37 |
 | workspaces-teams-tenancy | wsp | /workspaces | 1 | 145 | written | 47 |

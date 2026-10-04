@@ -92,7 +92,7 @@
       "cluster": "platform",
       "days": 130,
       "wave": 1,
-      "inventory": "pending",
+      "inventory": "written",
       "routeBase": "infra"
     },
     {
