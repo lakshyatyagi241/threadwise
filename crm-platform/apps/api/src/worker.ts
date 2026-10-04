@@ -11,6 +11,11 @@ import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { SendGuardModule } from './modules/auth';
+import {
+  initSentry,
+  installProcessHandlers,
+  WorkerHeartbeatModule,
+} from './modules/platform-infrastructure';
 import { RealtimeEmitterModule } from './realtime';
 import { WorkersModule } from './workers/workers.module';
 
@@ -49,13 +54,23 @@ import { WorkersModule } from './workers/workers.module';
     // Publish-only realtime: jobs announce what they did; the API pods that hold the sockets deliver it.
     RealtimeEmitterModule,
     WorkersModule,
+    // Says the worker is alive and how far behind the outbox is, for /ready and the container healthcheck (WD-INFRA-015).
+    WorkerHeartbeatModule,
   ],
 })
 class WorkerModule {}
 
 async function bootstrap(): Promise<void> {
+  installProcessHandlers('worker');
+  initSentry('worker');
+
   // No HTTP listener at all — createApplicationContext, not create().
   const app = await NestFactory.createApplicationContext(WorkerModule, { bufferLogs: true });
+
+  // bufferLogs holds every log line in memory until a logger is attached or the buffer is flushed. Nothing here attaches one,
+  // and unlike NestFactory.create the application-context path does not flush on its own, so without this every Logger call in
+  // the worker (outbox failures, dead-lettered events, processor warnings) was neither printed nor released.
+  app.flushLogs();
 
   // In-flight jobs need to finish before the process exits, or a deploy leaves
   // half-processed outbox rows stuck in 'processing'.

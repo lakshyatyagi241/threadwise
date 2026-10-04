@@ -47,6 +47,19 @@ export const infraEnvSchema = z.object({
     blankToUndefined,
     z.coerce.number().int().min(1).max(10_240).default(4096),
   ),
+  /**
+   * How often each worker process says it is alive and samples the outbox. A worker counts as alive for three beats, so one
+   * missed beat (a long GC, a busy database) does not flap.
+   */
+  INFRA_WORKER_HEARTBEAT_SECONDS: z.preprocess(
+    blankToUndefined,
+    z.coerce.number().int().min(2).max(60).default(10),
+  ),
+  /** Readiness reports the outbox as lagging once its oldest due event has waited this long. Informational: never fails /ready. */
+  INFRA_OUTBOX_LAG_WARN_SECONDS: z.preprocess(
+    blankToUndefined,
+    z.coerce.number().int().min(1).max(86_400).default(60),
+  ),
 });
 
 export type InfraEnv = z.output<typeof infraEnvSchema>;
