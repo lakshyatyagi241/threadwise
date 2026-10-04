@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, iceServerSchema, type IceServer } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -63,4 +63,24 @@ export async function usableNumber(
     );
   }
   return { number, conn: resolved.conn };
+}
+
+/**
+ * The operator's ICE servers from `CALLING_ICE_SERVERS` (a JSON list of `{ urls, username?, credential? }`): an entry that does not
+ * fit is dropped, bad JSON gives nothing, and nothing makes the browser use the four public STUN servers. Reference read a window
+ * global for this; the list is the operator's, so it comes from the environment (TURN credentials never come from a request).
+ */
+export function parseIceServersEnv(text: string | undefined | null): IceServer[] {
+  if (!text?.trim()) return [];
+  let raw: unknown;
+  try {
+    raw = JSON.parse(text);
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((entry) => {
+    const parsed = iceServerSchema.safeParse(entry);
+    return parsed.success ? [parsed.data] : [];
+  });
 }

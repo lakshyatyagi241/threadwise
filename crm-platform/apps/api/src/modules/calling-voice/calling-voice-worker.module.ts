@@ -1,5 +1,7 @@
 import { Global, Module } from '@nestjs/common';
+import { RealtimeEmitterModule } from '../../realtime';
 import { WABA_CALLS_SINK_OVERRIDE } from '../whatsapp-cloud-api-waba';
+import { CallRealtimeConsumer } from './call-realtime.consumer';
 import { CallingVoiceModule } from './calling-voice.module';
 import { CallingWabaSink } from './calling-waba.sink';
 
@@ -12,8 +14,11 @@ import { CallingWabaSink } from './calling-waba.sink';
  */
 @Global()
 @Module({
-  imports: [CallingVoiceModule],
-  providers: [{ provide: WABA_CALLS_SINK_OVERRIDE, useExisting: CallingWabaSink }],
+  imports: [CallingVoiceModule, RealtimeEmitterModule],
+  providers: [
+    { provide: WABA_CALLS_SINK_OVERRIDE, useExisting: CallingWabaSink },
+    CallRealtimeConsumer,
+  ],
   exports: [WABA_CALLS_SINK_OVERRIDE],
 })
 export class CallingVoiceWorkerModule {}

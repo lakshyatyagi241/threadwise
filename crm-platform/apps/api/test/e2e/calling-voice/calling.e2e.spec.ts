@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   SDP_ANSWER,
   SDP_OFFER,
@@ -67,6 +67,27 @@ describe('the calling switch', () => {
       .post(`/v2/calling/numbers/${number.uuid}/toggle`)
       .send({ enable: false });
     expect(off.body).toEqual({ callingEnabled: false, callingEnabledAt: null });
+  });
+
+  it("serves the operator's ICE servers to people who may call, and an empty list when none is set", async () => {
+    const { t } = await setup('callice');
+    delete process.env.CALLING_ICE_SERVERS;
+    const none = await p.api.as(t.admin).get('/v2/calling/ice-servers');
+    expect(none.status).toBe(200);
+    expect(none.body).toEqual({ servers: [] });
+    process.env.CALLING_ICE_SERVERS = JSON.stringify([
+      { urls: 'turn:turn.example.org:3478', username: 'u', credential: 'p' },
+    ]);
+    try {
+      const some = await p.api.as(t.admin).get('/v2/calling/ice-servers');
+      expect(some.body.servers).toEqual([
+        { urls: 'turn:turn.example.org:3478', username: 'u', credential: 'p' },
+      ]);
+      const outsider = await p.api.member(t, 'noice', []);
+      expect((await p.api.as(outsider.token).get('/v2/calling/ice-servers')).status).toBe(403);
+    } finally {
+      delete process.env.CALLING_ICE_SERVERS;
+    }
   });
 
   it("refuses a coexistence number without asking Meta, and puts Meta's refusals in words", async () => {
@@ -399,6 +420,62 @@ describe('a customer calls', () => {
     const row = await callRow(p, id);
     expect(row).toMatchObject({ status: 'active', handler_type: 'operator' });
     expect((await p.api.as(t.admin).get('/v2/calling/calls/pending')).body.calls).toHaveLength(0);
+  });
+
+  it('writes a call.changed event when a call rings and when it is answered, and the consumer pushes it to the workspace', async () => {
+    const { RealtimeEmitter } = await import('../../../src/realtime');
+    const { CallRealtimeConsumer } =
+      await import('../../../src/modules/calling-voice/call-realtime.consumer');
+    const emit = vi.spyOn(p.h.app.get(RealtimeEmitter), 'emit');
+    const { t, number } = await setup('callpush');
+    const mid = metaId();
+    await deliver(p, number, {
+      id: mid,
+      event: 'connect',
+      direction: 'USER_INITIATED',
+      from: CUSTOMER,
+      to: number.phone.replace(/\D/g, ''),
+      timestamp: String(Math.floor(Date.now() / 1000)),
+      session: { sdp_type: 'offer', sdp: SDP_OFFER },
+    });
+    const id = (await p.api.as(t.admin).get('/v2/calling/calls/pending')).body.calls[0]
+      .id as string;
+    const outbox = async () =>
+      (
+        await p.h.owner.query(
+          `SELECT id, org_id, aggregate_id, payload FROM event_outbox
+            WHERE org_id = $1 AND event_type = 'call.changed' ORDER BY id`,
+          [t.orgId],
+        )
+      ).rows;
+    expect(await outbox()).toHaveLength(1);
+
+    expect(
+      (
+        await p.api
+          .as(t.admin)
+          .post(`/v2/calling/calls/${id}/accept`)
+          .send({ sdpAnswer: SDP_ANSWER })
+      ).status,
+    ).toBe(204);
+    const rows = await outbox();
+    expect(rows.length).toBeGreaterThanOrEqual(2);
+    expect(rows.map((r) => r.payload.step)).toEqual(
+      expect.arrayContaining(['connect', 'accept_sent']),
+    );
+
+    // The worker hands each to the consumer, which tells the workspace room the call's uuid and nothing else.
+    const consumer = p.h.app.get(CallRealtimeConsumer);
+    await consumer.handle({
+      id: String(rows[0].id),
+      orgId: t.orgId,
+      aggregateModule: 'wa_calls',
+      aggregateId: String(rows[0].aggregate_id),
+      eventType: 'call.changed',
+      payload: rows[0].payload,
+    });
+    expect(emit).toHaveBeenCalledWith(t.orgId, [{ kind: 'org' }], 'call.changed', { callId: id });
+    emit.mockRestore();
   });
 
   it('puts the call back in line when Meta refuses the accept', async () => {
