@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { INFRA_ENV, readInfraEnv } from '../../config/domains/platform-infrastructure.env';
 import { RedisLockService } from './coordination/redis-lock.service';
+import { WorkerStatusService } from './observability/worker-status.service';
 import { RateLimiter } from './rate-limit/rate-limiter';
 import { ThrottleGuard } from './rate-limit/throttle.guard';
 
@@ -20,7 +21,8 @@ import { ThrottleGuard } from './rate-limit/throttle.guard';
     RateLimiter,
     ThrottleGuard,
     RedisLockService,
+    WorkerStatusService,
   ],
-  exports: [RateLimiter, ThrottleGuard, RedisLockService],
+  exports: [RateLimiter, ThrottleGuard, RedisLockService, WorkerStatusService],
 })
 export class PlatformInfrastructureModule {}

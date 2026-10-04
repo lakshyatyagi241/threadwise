@@ -9,11 +9,17 @@ import { AppModule } from './app.module';
 import {
   corsIsClosedInProduction,
   corsOriginFor,
+  initSentry,
   installBodyLimits,
+  installProcessHandlers,
 } from './modules/platform-infrastructure';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
+  // First, so a failure while the application is still being built is reported too (WD-INFRA-018).
+  installProcessHandlers('api');
+  initSentry('api');
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     // Needed for webhook and public-API signature verification: the HMAC is

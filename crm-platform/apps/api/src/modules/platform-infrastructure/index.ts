@@ -39,3 +39,18 @@ export {
   type RotationOptions,
 } from './crypto-rotation/rotate-keys';
 export { looksSealed, mapSealed, collectSealed } from './crypto-rotation/envelope';
+export { WorkerHeartbeatModule } from './observability/worker-heartbeat.module';
+export {
+  WorkerStatusService,
+  type OutboxCheck,
+  type WorkersCheck,
+} from './observability/worker-status.service';
+export {
+  initSentry,
+  reportServerError,
+  flushSentry,
+  scrubSentryEvent,
+  scrubSentryTransaction,
+} from './observability/sentry';
+export { createFatalHandler, installProcessHandlers } from './observability/process-handlers';
+export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
