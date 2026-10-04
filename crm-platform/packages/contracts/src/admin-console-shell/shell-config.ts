@@ -101,3 +101,7 @@ export function greetingKey(hour: number): GreetingKey {
 
 /** First word of the name, as WaDesk's `explode(' ')[0]`. */
 export const firstName = (name: string): string => name.trim().split(/\s+/)[0] ?? '';
+
+/** DELETE /v2/shell/notifications: the bell's "Clear all" removed this many of my notifications (WD-ASHELL-018). */
+export const clearNotificationsResponseSchema = z.object({ cleared: z.number().int() });
+export type ClearNotificationsResponse = z.infer<typeof clearNotificationsResponseSchema>;

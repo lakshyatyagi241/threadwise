@@ -745,6 +745,11 @@
     "hubSearch": {
       "placeholder": "Search project settings...",
       "empty": "No settings match your search."
+    },
+    "bell": {
+      "eyebrow": "Inbox",
+      "clearAll": "Clear all",
+      "viewAll": "View all →"
     }
   }
 }
