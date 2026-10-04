@@ -1,0 +1,64 @@
+name: PR checks
+
+# Runs on every pull request into main that touches crm-platform. Nothing is deployed here: merging the PR is a push to main,
+# and that is what triggers "Deploy desk.wabo.ai". These checks are what should be green before you merge.
+on:
+  pull_request:
+    branches: [main]
+    paths: ['crm-platform/**', '.github/workflows/**']
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  api-and-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
+          restore-keys: pnpm-
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build
+      - name: API typecheck
+        run: pnpm --filter @crm/api exec tsc --noEmit -p tsconfig.json
+      - name: Web typecheck
+        run: cd apps/web && node scripts/gen-registry.mjs && pnpm exec tsc --noEmit -p .
+      - name: API unit tests
+        run: pnpm --filter @crm/api test
+
+  images:
+    # The two production images must still build: this is where a bad Dockerfile, a missing dependency or a failing `next build` shows up.
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build API image
+        uses: docker/build-push-action@v6
+        with:
+          context: crm-platform
+          file: crm-platform/apps/api/Dockerfile
+          push: false
+          cache-from: type=gha,scope=api
+      - name: Build web image
+        uses: docker/build-push-action@v6
+        with:
+          context: crm-platform
+          file: crm-platform/apps/web/Dockerfile
+          push: false
+          cache-from: type=gha,scope=web
