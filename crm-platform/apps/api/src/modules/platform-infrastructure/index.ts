@@ -13,3 +13,13 @@ export {
   type ThrottleSpec,
   type ThrottleSubject,
 } from './rate-limit/rate-limit.policies';
+export {
+  RedisLockService,
+  type AcquireOptions,
+  type Lease,
+  type LockedContext,
+  type LockResult,
+  type OnUnavailable,
+  type WaitOptions,
+  type WithLockOptions,
+} from './coordination/redis-lock.service';
