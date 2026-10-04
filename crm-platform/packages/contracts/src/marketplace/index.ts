@@ -7,6 +7,7 @@ export * from './enums';
 export * from './errors';
 export * from './scopes';
 export * from './manifest';
+export * from './pricing';
 export * from './recipe';
 export * from './catalogue';
 export * from './installations';

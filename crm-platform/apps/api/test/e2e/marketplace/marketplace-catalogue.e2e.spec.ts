@@ -99,7 +99,7 @@ afterAll(async () => {
 });
 
 describe('the seeded catalogue', () => {
-  it('shows a workspace every category of both tabs, with one published integration and nothing else', async () => {
+  it('shows a workspace every category of both tabs, with the lead sources published (the Webhook and the eight Indian portals) and nothing else', async () => {
     const mini = await mp(A).get('/categories?kind=mini_app');
     expect(mini.status, JSON.stringify(mini.body)).toBe(200);
     const miniList = marketCategoryListSchema.parse(mini.body);
@@ -119,13 +119,24 @@ describe('the seeded catalogue', () => {
       (await mp(A).get('/categories?kind=integration')).body,
     );
     expect(integ.data).toHaveLength(13);
-    expect(integ.data.find((c) => c.slug === 'lead-sources')?.appCount).toBe(1);
+    expect(integ.data.find((c) => c.slug === 'lead-sources')?.appCount).toBe(9);
     expect(integ.data.find((c) => c.slug === 'automation')?.name).toContain('Zapier');
     expect(integ.data.filter((c) => c.appCount > 0)).toHaveLength(1);
 
     const apps = marketAppListSchema.parse((await mp(A).get('/apps?kind=integration')).body);
-    expect(apps.data.map((a) => a.slug)).toEqual(['webhook']);
-    expect(apps.data[0]).toMatchObject({
+    expect(apps.data.map((a) => a.slug).sort()).toEqual([
+      'acres99',
+      'housing-com',
+      'indiamart',
+      'justdial',
+      'magicbricks',
+      'shiksha',
+      'sulekha',
+      'tradeindia',
+      'webhook',
+    ]);
+    const webhook = apps.data.find((a) => a.slug === 'webhook')!;
+    expect(webhook).toMatchObject({
       kind: 'integration',
       connectorType: 'webhook_relay',
       firstParty: true,
@@ -135,47 +146,49 @@ describe('the seeded catalogue', () => {
       install: null,
       locked: null,
       category: { slug: 'lead-sources' },
+      maturity: 'stable',
     });
-    expect(apps.data[0]!.id).toMatch(uuidRe);
+    expect(webhook.id).toMatch(uuidRe);
   });
 
-  it('the planned portals exist only as drafts: not in browse, search or a direct read, and none of them can be published', async () => {
-    for (const slug of [
-      'indiamart',
-      'justdial',
-      'acres99',
-      'magicbricks',
-      'housing-com',
-      'shiksha',
-    ]) {
+  it('the lead portals are published listings with a recipe, a maturity and a notice; the planning stubs are retired; nothing the research found no way to build is listed', async () => {
+    const maturity: Record<string, string> = {
+      indiamart: 'stable',
+      justdial: 'needs_portal_setup',
+      acres99: 'needs_portal_setup',
+      magicbricks: 'needs_portal_setup',
+      'housing-com': 'needs_portal_setup',
+      shiksha: 'needs_portal_setup',
+      sulekha: 'needs_portal_setup',
+      tradeindia: 'beta',
+    };
+    for (const [slug, expected] of Object.entries(maturity)) {
       const direct = await mp(A).get(`/apps/${slug}`);
-      expect(direct.status, slug).toBe(404);
-      expect(code(direct)).toBe('MKT_APP_NOT_FOUND');
+      expect(direct.status, slug).toBe(200);
+      const d = marketAppDetailSchema.parse(direct.body);
+      expect(d.maturity, slug).toBe(expected);
+      expect(d.listing.maturity, slug).toBe(expected);
+      expect(d.notice, slug).toBeTruthy();
+      expect(d.setup!.setupInstructions.length, slug).toBeGreaterThan(0);
+      expect(d.setup!.hasTestPayload, slug).toBe(true);
+    }
+    for (const slug of ['collegedunia', 'nobroker', 'quikr', 'cardekho', 'naukri']) {
+      expect((await mp(A).get(`/apps/${slug}`)).status, slug).toBe(404);
     }
     const search = marketAppListSchema.parse((await mp(A).get('/apps?q=india')).body);
-    expect(search.data).toEqual([]);
+    expect(search.data.map((a) => a.slug)).toContain('indiamart');
 
+    // No portal is left as a draft; the operator sees version 1.0.0 published and the first migration's 0.1.0 stub retired.
     const drafts = marketOperatorAppListSchema.parse((await ops().get('/apps?status=draft')).body);
-    expect(drafts.data.map((a) => a.slug).sort()).toEqual([
-      'acres99',
-      'housing-com',
-      'indiamart',
-      'justdial',
-      'magicbricks',
-      'shiksha',
-    ]);
-    for (const d of drafts.data) {
-      const detail = marketOperatorAppDetailSchema.parse((await ops().get(`/apps/${d.slug}`)).body);
-      expect(validateMarketManifest(detail.manifest).ok, d.slug).toBe(true);
-      expect(detail.versions[0]).toMatchObject({ version: '0.1.0', status: 'draft' });
+    expect(drafts.data.map((a) => a.slug).filter((x) => x in maturity)).toEqual([]);
+    for (const slug of Object.keys(maturity)) {
+      const detail = marketOperatorAppDetailSchema.parse((await ops().get(`/apps/${slug}`)).body);
+      expect(validateMarketManifest(detail.manifest).ok, slug).toBe(true);
+      // 1.0.0 is published; the first migration's 0.1.0 planning stub (the portals it listed) is retired.
+      expect(detail.versions.find((v) => v.version === '1.0.0')?.status, slug).toBe('published');
+      for (const v of detail.versions.filter((x) => x.version !== '1.0.0'))
+        expect([slug, v.version, v.status]).toEqual([slug, '0.1.0', 'retired']);
     }
-    // Approving one and trying to publish it: no recipe yet, and its connector type is not built.
-    const pm = platformApi(h, reviewerToken);
-    const d = marketOperatorAppDetailSchema.parse((await ops().get('/apps/indiamart')).body);
-    expect((await pm.post(`/apps/indiamart/versions/${d.versionId}/approve`, {})).status).toBe(200);
-    const publish = await pm.post('/apps/indiamart/publish', {});
-    expect(publish.status).toBe(422);
-    expect(code(publish)).toBe('MKT_RECIPE_INVALID');
   });
 
   it("an app's page carries what the admin needs and nothing internal: permissions in words, setup fields, changelog; never endpoints, mapping or test payloads", async () => {
@@ -245,7 +258,7 @@ describe('operator permissions', () => {
     );
   });
 
-  it('the two keys are platform system permissions held by Super Admin', async () => {
+  it('the three keys (manage, review, pricing) are platform system permissions held by Super Admin', async () => {
     const held = await h.owner.query(
       `SELECT p.name::text AS name FROM platform_role_permissions rp
          JOIN platform_permissions p ON p.id = rp.permission_id JOIN platform_roles r ON r.id = rp.role_id
@@ -253,6 +266,7 @@ describe('operator permissions', () => {
     );
     expect(held.rows.map((r) => r.name)).toEqual([
       'platform.market.manage',
+      'platform.market.pricing',
       'platform.market.review',
     ]);
     const rows = await h.owner.query(
@@ -260,6 +274,7 @@ describe('operator permissions', () => {
     );
     expect(rows.rows).toEqual([
       { name: 'platform.market.manage', is_system: true },
+      { name: 'platform.market.pricing', is_system: true },
       { name: 'platform.market.review', is_system: true },
     ]);
   });
@@ -378,7 +393,43 @@ describe('operator validation', () => {
     expect(JSON.stringify(res.body.errors)).toContain('manifest.module');
   });
 
-  it('a listing whose connector type is only a framework can be created and approved, never published', async () => {
+  it('a listing whose connector type is only a framework (email parsing) can be created and approved, never published', async () => {
+    const manifest = {
+      manifestVersion: 1,
+      id: 'email-test',
+      name: 'Email Test',
+      kind: 'integration',
+      category: 'lead-sources',
+      version: '1.0.0',
+      description: 'A portal whose alert emails are parsed, for the test.',
+      scopes: ['leads.write'],
+      connector: { type: 'email_parse' },
+    };
+    const recipe = {
+      schemaVersion: 1,
+      key: 'email-test',
+      name: 'Email Test',
+      category: 'lead-sources',
+      connector: {
+        type: 'email_parse',
+        senders: ['alerts@portal-example.com'],
+        rules: [{ to: 'phone', pattern: 'Phone: ([0-9 +]+)', required: true }],
+      },
+    };
+    const created = await ops().post('/apps', { tagline: 'A short line.', manifest, recipe });
+    expect(created.status, JSON.stringify(created.body)).toBe(201);
+    const ok = await platformApi(h, reviewerToken).post(
+      `/apps/email-test/versions/${created.body.versionId}/approve`,
+      {},
+    );
+    expect(ok.status).toBe(200);
+    const publish = await platformApi(h, reviewerToken).post('/apps/email-test/publish', {});
+    expect(publish.status).toBe(409);
+    expect(code(publish)).toBe('MKT_CONNECTOR_NOT_AVAILABLE');
+    expect((await mp(A).get('/apps/email-test')).status).toBe(404);
+  });
+
+  it('a pull listing publishes like any other now that the pull connector is built', async () => {
     const manifest = {
       manifestVersion: 1,
       id: 'pull-test',
@@ -405,15 +456,26 @@ describe('operator validation', () => {
     };
     const created = await ops().post('/apps', { tagline: 'A short line.', manifest, recipe });
     expect(created.status, JSON.stringify(created.body)).toBe(201);
-    const ok = await platformApi(h, reviewerToken).post(
-      `/apps/pull-test/versions/${created.body.versionId}/approve`,
-      {},
-    );
-    expect(ok.status).toBe(200);
-    const publish = await platformApi(h, reviewerToken).post('/apps/pull-test/publish', {});
-    expect(publish.status).toBe(409);
-    expect(code(publish)).toBe('MKT_CONNECTOR_NOT_AVAILABLE');
-    expect((await mp(A).get('/apps/pull-test')).status).toBe(404);
+    const pm = platformApi(h, reviewerToken);
+    expect(
+      (await pm.post(`/apps/pull-test/versions/${created.body.versionId}/approve`, {})).status,
+    ).toBe(200);
+    const publish = await pm.post('/apps/pull-test/publish', {});
+    expect(publish.status, JSON.stringify(publish.body)).toBe(200);
+    expect((await mp(A).get('/apps/pull-test')).status).toBe(200);
+    // A pull recipe whose window and signature contradict themselves is refused when it is saved, with the path of each problem.
+    const bad = await ops().post('/apps', {
+      tagline: 'A short line.',
+      manifest: { ...manifest, id: 'pull-bad', name: 'Pull Bad' },
+      recipe: {
+        ...recipe,
+        key: 'pull-bad',
+        connector: { ...recipe.connector, window: { format: 'epoch', maxSeconds: 3600 } },
+      },
+    });
+    expect(bad.status).toBe(422);
+    expect(code(bad)).toBe('MKT_RECIPE_INVALID');
+    expect(JSON.stringify(bad.body.errors)).toContain('window');
   });
 });
 
@@ -655,11 +717,12 @@ describe('browse and search', () => {
     expect(shelves.new.map((a) => a.slug)).toHaveLength(5);
     expect(shelves.featured.map((a) => a.slug).sort()).toEqual(['emi-calculator', 'quote-panel']);
     expect(shelves.popular).toHaveLength(5);
-    expect(
-      marketShelvesSchema
-        .parse((await mp(A).get('/shelves?kind=integration')).body)
-        .new.map((a) => a.slug),
-    ).toEqual(['webhook']);
+    const integrations = marketShelvesSchema.parse(
+      (await mp(A).get('/shelves?kind=integration')).body,
+    );
+    // Nine are published (the Webhook and eight portals) and a shelf holds eight: the newest.
+    expect(integrations.new).toHaveLength(8);
+    expect(integrations.featured.map((a) => a.slug).sort()).toEqual(['indiamart', 'webhook']);
     expect((await mp(A).get('/shelves')).status).toBe(422);
   });
 });
@@ -679,7 +742,7 @@ describe('locks: plan feature, billing add-on, module', () => {
       `UPDATE org_plan_state SET overrides = '{"features":{"analytics":false}}' WHERE org_id = $1`,
       [A.orgId],
     );
-    const card = marketAppListSchema.parse((await mp(A).get('/apps?q=pro')).body).data[0]!;
+    const card = marketAppListSchema.parse((await mp(A).get('/apps?q=pro%20report')).body).data[0]!;
     expect(card.locked).toEqual({
       reason: 'plan_feature',
       key: 'analytics',

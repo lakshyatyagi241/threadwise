@@ -7,16 +7,19 @@ import {
   index,
   integer,
   jsonb,
+  numeric,
   pgTable,
   primaryKey,
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { platformOperators } from '../auth-registration-security/core';
 import { organizations, users } from '../foundation';
+import { plans } from '../plans-subscriptions-trials/plans';
 
 /**
  * Mirror of 20261021090000_mkt_catalogue.sql and 20261021090100_mkt_installations.sql. The SQL is the source of truth; this file
@@ -30,6 +33,7 @@ export type MarketAppKind = 'mini_app' | 'integration';
 export type MarketAppStatus = 'draft' | 'in_review' | 'published' | 'hidden' | 'killed';
 export type MarketVersionStatus =
   'draft' | 'in_review' | 'approved' | 'rejected' | 'published' | 'retired';
+export type MarketPricingModel = 'free' | 'paid_monthly';
 export type MarketConnectorType = 'oauth' | 'push' | 'pull' | 'email_parse' | 'webhook_relay';
 
 export const marketplaceCategories = pgTable(
@@ -81,6 +85,26 @@ export const marketplaceApps = pgTable(
     publishedAt: timestamp('published_at', { withTimezone: true }),
     killedAt: timestamp('killed_at', { withTimezone: true }),
     killReason: text('kill_reason'),
+    /** The platform operator's pricing (20261023090000_mkt_pricing.sql). The manifest's own `pricing` is only the developer's proposal. */
+    pricingModel: text('pricing_model').$type<MarketPricingModel>().notNull().default('free'),
+    priceAmount: numeric('price_amount', { precision: 12, scale: 2 }),
+    priceCurrency: text('price_currency'),
+    annualAmount: numeric('annual_amount', { precision: 12, scale: 2 }),
+    trialDays: integer('trial_days').notNull().default(0),
+    purchasable: boolean('purchasable').notNull().default(true),
+    includedPlanFeature: text('included_plan_feature'),
+    includedMinPlan: text('included_min_plan').references(() => plans.slug, {
+      onUpdate: 'cascade',
+      onDelete: 'set null',
+    }),
+    priceChangedAt: timestamp('price_changed_at', { withTimezone: true }),
+    /** Plan feature keys a subscription to this FIRST-PARTY app grants; the app's add-on carries them. */
+    grantsPlanFeatures: text('grants_plan_features')
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
+    /** The operator may comp the workspaces that already have the granted features (an explicit action). */
+    grandfatherExisting: boolean('grandfather_existing').notNull().default(false),
     createdByOperatorId: idColumn('created_by_operator_id').references(() => platformOperators.id, {
       onDelete: 'set null',
     }),
@@ -89,6 +113,15 @@ export const marketplaceApps = pgTable(
     rowVersion: rowVersion(),
   },
   (t) => [
+    index('idx_marketplace_apps_pricing')
+      .on(t.pricingModel)
+      .where(sql`${t.pricingModel} <> 'free'`),
+    check('chk_marketplace_apps_pricing_model', sql`${t.pricingModel} in ('free', 'paid_monthly')`),
+    check(
+      'chk_marketplace_apps_pricing',
+      sql`(${t.pricingModel} = 'free' and ${t.priceAmount} is null and ${t.priceCurrency} is null and ${t.annualAmount} is null and ${t.trialDays} = 0 and ${t.includedPlanFeature} is null and ${t.includedMinPlan} is null and cardinality(${t.grantsPlanFeatures}) = 0 and not ${t.grandfatherExisting}) or (${t.pricingModel} = 'paid_monthly' and ((${t.priceAmount} > 0 and ${t.priceCurrency} ~ '^[A-Z]{3}$') or (${t.status} in ('draft', 'in_review') and ${t.priceAmount} is null and ${t.priceCurrency} is null)) and (${t.annualAmount} is null or ${t.annualAmount} > 0))`,
+    ),
+    check('chk_marketplace_apps_trial_days', sql`${t.trialDays} between 0 and 90`),
     index('idx_marketplace_apps_browse').on(t.kind, t.categoryId, t.status),
     index('idx_marketplace_apps_published_at')
       .on(t.publishedAt, t.id)
@@ -188,12 +221,18 @@ export const workspaceAppInstallations = pgTable(
     disabledAt: timestamp('disabled_at', { withTimezone: true }),
     killedAt: timestamp('killed_at', { withTimezone: true }),
     killReason: text('kill_reason'),
+    /** Paused because the paid app's subscription ended; resubscribing switches it back on (20261023090000_mkt_pricing.sql). */
+    pausedBySubscription: boolean('paused_by_subscription').notNull().default(false),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
+    check(
+      'chk_workspace_app_installations_paused',
+      sql`not ${t.pausedBySubscription} or ${t.status} = 'disabled'`,
+    ),
     unique('workspace_app_installations_org_id_uuid_key').on(t.orgId, t.uuid),
     unique('uq_workspace_app_installations_app').on(t.orgId, t.appId),
     foreignKey({
@@ -292,6 +331,11 @@ export const marketplaceConnections = pgTable(
     pollIntervalSeconds: integer('poll_interval_seconds'),
     nextPollAt: timestamp('next_poll_at', { withTimezone: true }),
     pollCursor: text('poll_cursor'),
+    /** When a request was last made to the portal; the portal's minimum interval and "Sync now" are kept against it. */
+    lastPollAt: timestamp('last_poll_at', { withTimezone: true }),
+    /** A narrower window than the recipe's, after a window held more leads than one answer can carry. */
+    pollWindowSeconds: integer('poll_window_seconds'),
+    lastPollLeads: integer('last_poll_leads'),
     leadSourceId: idColumn('lead_source_id'),
     lastEventAt: timestamp('last_event_at', { withTimezone: true }),
     lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
@@ -327,6 +371,10 @@ export const marketplaceConnections = pgTable(
     check(
       'chk_marketplace_connections_status',
       sql`${t.status} in ('active', 'paused', 'error', 'disabled')`,
+    ),
+    check(
+      'chk_marketplace_connections_window',
+      sql`${t.pollWindowSeconds} is null or ${t.pollWindowSeconds} > 0`,
     ),
   ],
 );
@@ -374,6 +422,70 @@ export const marketplaceConnectionEvents = pgTable(
   ],
 );
 export type MarketplaceConnectionEventsRow = typeof marketplaceConnectionEvents.$inferSelect;
+
+/** Mirror of 20261024090000_mkt_portal_engine.sql: a portal's delivery, stored whole before it is answered and processed by the worker. */
+export const marketplaceInboundEvents = pgTable(
+  'marketplace_inbound_events',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    connectionId: idColumn('connection_id').notNull(),
+    method: text('method').$type<'POST' | 'GET'>().notNull(),
+    format: text('format').$type<'json' | 'form' | 'xml' | 'query'>().notNull(),
+    contentType: text('content_type'),
+    /** The raw body, or the query string of a GET; NULL once processed. */
+    body: text('body'),
+    headers: jsonb('headers').$type<Record<string, string>>().notNull().default({}),
+    sourceIp: text('source_ip'),
+    status: text('status')
+      .$type<'received' | 'processing' | 'processed' | 'rejected' | 'failed'>()
+      .notNull()
+      .default('received'),
+    attempts: integer('attempts').notNull().default(0),
+    nextAttemptAt: timestamp('next_attempt_at', { withTimezone: true }).notNull().defaultNow(),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }),
+    error: text('error'),
+    leadsReceived: integer('leads_received').notNull().default(0),
+    leadsAccepted: integer('leads_accepted').notNull().default(0),
+    leadsDuplicate: integer('leads_duplicate').notNull().default(0),
+    leadsRejected: integer('leads_rejected').notNull().default(0),
+    receivedAt: timestamp('received_at', { withTimezone: true }).notNull().defaultNow(),
+    processedAt: timestamp('processed_at', { withTimezone: true }),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('marketplace_inbound_events_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'marketplace_inbound_events_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_marketplace_inbound_events_connection',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [marketplaceConnections.orgId, marketplaceConnections.id],
+    }).onDelete('cascade'),
+    index('idx_marketplace_inbound_events_due')
+      .on(t.nextAttemptAt)
+      .where(sql`${t.status} in ('received', 'failed')`),
+    index('idx_marketplace_inbound_events_stuck')
+      .on(t.claimedAt)
+      .where(sql`${t.status} = 'processing'`),
+    index('idx_marketplace_inbound_events_recent').on(t.orgId, t.connectionId, t.receivedAt, t.id),
+    index('idx_marketplace_inbound_events_age').on(t.receivedAt),
+    check(
+      'chk_marketplace_inbound_events_status',
+      sql`${t.status} in ('received', 'processing', 'processed', 'rejected', 'failed')`,
+    ),
+    check('chk_marketplace_inbound_events_method', sql`${t.method} in ('POST', 'GET')`),
+    check(
+      'chk_marketplace_inbound_events_format',
+      sql`${t.format} in ('json', 'form', 'xml', 'query')`,
+    ),
+  ],
+);
+export type MarketplaceInboundEventsRow = typeof marketplaceInboundEvents.$inferSelect;
 
 export const marketRequests = pgTable(
   'market_requests',
@@ -441,3 +553,65 @@ export const marketRequestVotes = pgTable(
   ],
 );
 export type MarketRequestVotesRow = typeof marketRequestVotes.$inferSelect;
+
+/**
+ * Mirror of 20261023090000_mkt_pricing.sql: one row per (workspace, app) for the whole relationship. It is NOT the entitlement (the add-on
+ * purchase row in `workspace_addons` is); it records cancel-at-period-end, lapse and comp for the manage page, the operator's view and the
+ * lapse sweep. Only the privileged path writes it.
+ */
+export const marketplaceSubscriptions = pgTable(
+  'marketplace_subscriptions',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    appId: idColumn('app_id')
+      .notNull()
+      .references(() => marketplaceApps.id, { onDelete: 'restrict' }),
+    packId: idColumn('pack_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'restrict' }),
+    status: text('status').$type<'active' | 'lapsed'>().notNull().default('active'),
+    source: text('source').$type<'purchase' | 'trial' | 'comp'>().notNull(),
+    cancelAtPeriodEnd: boolean('cancel_at_period_end').notNull().default(false),
+    amount: numeric('amount', { precision: 12, scale: 2 }),
+    currency: text('currency'),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    currentPeriodEnd: timestamp('current_period_end', { withTimezone: true }),
+    trialEndsAt: timestamp('trial_ends_at', { withTimezone: true }),
+    canceledAt: timestamp('canceled_at', { withTimezone: true }),
+    lapsedAt: timestamp('lapsed_at', { withTimezone: true }),
+    renewalsCount: integer('renewals_count').notNull().default(0),
+    compedByOperatorId: idColumn('comped_by_operator_id').references(() => platformOperators.id, {
+      onDelete: 'set null',
+    }),
+    compNote: text('comp_note'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('marketplace_subscriptions_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_marketplace_subscriptions_app').on(t.orgId, t.appId),
+    foreignKey({
+      name: 'marketplace_subscriptions_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    uniqueIndex('uq_marketplace_subscriptions_uuid').on(t.uuid),
+    index('idx_marketplace_subscriptions_app').on(t.appId, t.status),
+    index('idx_marketplace_subscriptions_org').on(t.orgId, t.status),
+    index('idx_marketplace_subscriptions_pack').on(t.packId),
+    index('idx_marketplace_subscriptions_comped_by').on(t.compedByOperatorId),
+    index('idx_marketplace_subscriptions_due')
+      .on(t.currentPeriodEnd)
+      .where(sql`${t.status} = 'active'`),
+    check('chk_marketplace_subscriptions_status', sql`${t.status} in ('active', 'lapsed')`),
+    check(
+      'chk_marketplace_subscriptions_source',
+      sql`${t.source} in ('purchase', 'trial', 'comp')`,
+    ),
+  ],
+);
+export type MarketplaceSubscriptionsRow = typeof marketplaceSubscriptions.$inferSelect;

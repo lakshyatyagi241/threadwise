@@ -54,6 +54,8 @@ export const QUEUES = {
   TPL_SWEEP: 'tpl-sweep',
   /** One job per due pull connection of the Marketplace (M-05): fetches the portal's new leads and hands them to the lead pipeline. Own queue: a slow portal must not hold a lead from another door. */
   MKT_PULL: 'mkt-pull',
+  /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
+  MKT_INBOUND: 'mkt-inbound',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

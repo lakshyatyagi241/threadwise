@@ -44,4 +44,13 @@ export const MKT_ERROR_CODES = {
   MKT_WEBHOOK_BAD_PAYLOAD: 'MKT_WEBHOOK_BAD_PAYLOAD',
   /** This installation has no connection that does what was asked (test, sample lead, rotate). */
   MKT_NO_CONNECTION: 'MKT_NO_CONNECTION',
+  /** A paid app needs a subscription (or an included plan) before it can be installed or switched back on. */
+  MKT_SUBSCRIPTION_REQUIRED: 'MKT_SUBSCRIPTION_REQUIRED',
+  /** The platform has stopped selling this app to new subscribers. */
+  MKT_NOT_FOR_SALE: 'MKT_NOT_FOR_SALE',
+  /** The free trial is not offered (the app has none, or the workspace has had its subscription already). */
+  MKT_TRIAL_UNAVAILABLE: 'MKT_TRIAL_UNAVAILABLE',
+  MKT_SUBSCRIPTION_NOT_FOUND: 'MKT_SUBSCRIPTION_NOT_FOUND',
+  /** The action does not fit the subscription's state (cancelling a comp, comping a workspace that already pays, resuming what was not cancelled). */
+  MKT_SUBSCRIPTION_STATE: 'MKT_SUBSCRIPTION_STATE',
 } as const;

@@ -3,6 +3,14 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { MarketAppKind } from '@crm/contracts';
 import { decodeKeyset, encodeKeyset, likePattern, type AppRef } from './marketplace-rules';
+import {
+  APP_PRICING_COLUMNS_TEXT,
+  SUBSCRIPTION_COLUMNS_TEXT,
+  readAppPricing,
+  readSubscription,
+  type AppPricingRow,
+  type SubscriptionRow,
+} from './pricing-model';
 
 type Raw = Record<string, unknown>;
 
@@ -30,6 +38,9 @@ export interface CardRow {
   inst_status: 'active' | 'disabled' | 'killed' | null;
   inst_health: 'unknown' | 'healthy' | 'degraded' | 'error' | 'needs_reauth' | null;
   needs_reconsent: boolean;
+  /** What the operator charges, and the workspace's own subscription to it (null when it has none). */
+  pricing: AppPricingRow;
+  sub: SubscriptionRow | null;
   /** Sort key values, for the next cursor. */
   keys: string[];
 }
@@ -104,6 +115,8 @@ function toCard(r: Raw, width: number): CardRow {
     inst_status: (r.inst_status as CardRow['inst_status']) ?? null,
     inst_health: (r.inst_health as CardRow['inst_health']) ?? null,
     needs_reconsent: Boolean(r.needs_reconsent),
+    pricing: readAppPricing(r),
+    sub: readSubscription(r),
     keys: Array.from({ length: width }, (_, i) => String(r[`k${i}`])),
   };
 }
@@ -113,7 +126,9 @@ const CARD_COLUMNS = sql.raw(`
   a.plan_feature, a.status, c.slug AS category_slug, c.name AS category_name, a.listing,
   coalesce(iv.version, cv.version) AS version, coalesce(iv.manifest, cv.manifest) AS manifest,
   coalesce(iv.recipe, cv.recipe) ->> 'logo' AS recipe_logo,
-  i.uuid AS inst_uuid, i.status AS inst_status, i.health_status AS inst_health, (i.pending_version_id IS NOT NULL) AS needs_reconsent`);
+  i.uuid AS inst_uuid, i.status AS inst_status, i.health_status AS inst_health, (i.pending_version_id IS NOT NULL) AS needs_reconsent,
+  ${APP_PRICING_COLUMNS_TEXT},
+  ${SUBSCRIPTION_COLUMNS_TEXT}`);
 
 /**
  * The workspace's reads of the catalogue. Everything runs in the caller's tenant transaction: row-level security already limits what a
@@ -197,6 +212,7 @@ export class BrowseRepository {
       JOIN marketplace_categories c ON c.id = a.category_id
       LEFT JOIN marketplace_app_versions cv ON cv.id = a.current_version_id
       LEFT JOIN workspace_app_installations i ON i.app_id = a.id AND i.org_id = ${orgId}
+      LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id AND s.org_id = ${orgId}
       LEFT JOIN marketplace_app_versions iv ON iv.id = i.installed_version_id
       WHERE ${sql.join(where, sql` AND `)} AND coalesce(iv.version, cv.version) IS NOT NULL
       ORDER BY ${order}
@@ -230,6 +246,7 @@ export class BrowseRepository {
       JOIN marketplace_categories c ON c.id = a.category_id
       LEFT JOIN marketplace_app_versions cv ON cv.id = a.current_version_id
       LEFT JOIN workspace_app_installations i ON i.app_id = a.id AND i.org_id = ${orgId}
+      LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id AND s.org_id = ${orgId}
       LEFT JOIN marketplace_app_versions iv ON iv.id = i.installed_version_id
       WHERE ${ref(r)} AND coalesce(iv.version, cv.version) IS NOT NULL`);
     const row = (res.rows as Raw[])[0];
@@ -245,6 +262,7 @@ export class BrowseRepository {
   async installable(
     tx: Tx,
     r: AppRef,
+    orgId: number,
   ): Promise<{
     appId: number;
     appUuid: string;
@@ -252,6 +270,8 @@ export class BrowseRepository {
     name: string;
     kind: MarketAppKind;
     planFeature: string | null;
+    pricing: AppPricingRow;
+    sub: SubscriptionRow | null;
     versionId: number;
     version: string;
     scopes: string[];
@@ -259,8 +279,10 @@ export class BrowseRepository {
     recipe: Record<string, unknown> | null;
   } | null> {
     const res = await tx.execute(sql`
-      SELECT a.id, a.uuid, a.slug, a.name, a.kind, a.plan_feature, v.id AS version_id, v.version, v.scopes, v.manifest, v.recipe
+      SELECT a.id, a.uuid, a.slug, a.name, a.kind, a.plan_feature, v.id AS version_id, v.version, v.scopes, v.manifest, v.recipe,
+             ${sql.raw(APP_PRICING_COLUMNS_TEXT)}, ${sql.raw(SUBSCRIPTION_COLUMNS_TEXT)}
       FROM marketplace_apps a JOIN marketplace_app_versions v ON v.id = a.current_version_id
+      LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id AND s.org_id = ${orgId}
       WHERE ${ref(r)} AND a.status = 'published' AND v.status = 'published'`);
     const row = (res.rows as Raw[])[0];
     if (!row) return null;
@@ -271,6 +293,8 @@ export class BrowseRepository {
       name: row.name as string,
       kind: row.kind as MarketAppKind,
       planFeature: (row.plan_feature as string | null) ?? null,
+      pricing: readAppPricing(row),
+      sub: readSubscription(row),
       versionId: Number(row.version_id),
       version: row.version as string,
       scopes: (row.scopes as string[]) ?? [],

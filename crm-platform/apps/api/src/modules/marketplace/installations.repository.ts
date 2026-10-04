@@ -9,6 +9,14 @@ import type {
   MarketInstallStatus,
 } from '@crm/contracts';
 import { decodeKeyset, encodeKeyset } from './marketplace-rules';
+import {
+  APP_PRICING_COLUMNS_TEXT,
+  SUBSCRIPTION_COLUMNS_TEXT,
+  readAppPricing,
+  readSubscription,
+  type AppPricingRow,
+  type SubscriptionRow,
+} from './pricing-model';
 import { jsonb, textArray, toDate } from './sql-helpers';
 
 type Raw = Record<string, unknown>;
@@ -22,6 +30,11 @@ export interface InstallationRow {
   installedVersionId: number;
   pendingVersionId: number | null;
   status: MarketInstallStatus;
+  /** Paused because the paid app's subscription ended (status is then `disabled`). */
+  pausedBySubscription: boolean;
+  /** What the operator charges for the app, and the workspace's subscription to it. */
+  pricing: AppPricingRow;
+  sub: SubscriptionRow | null;
   grantedScopes: string[];
   config: Record<string, unknown>;
   credentialsEnc: string | null;
@@ -75,7 +88,7 @@ export interface ConnectionRow {
 }
 
 const COLUMNS = sql.raw(`
-  i.id, i.uuid, i.org_id, i.app_id, i.installed_version_id, i.pending_version_id, i.status, i.granted_scopes, i.config, i.credentials_enc,
+  i.id, i.uuid, i.org_id, i.app_id, i.installed_version_id, i.pending_version_id, i.status, i.paused_by_subscription, i.granted_scopes, i.config, i.credentials_enc,
   i.credential_hints, i.health_status, i.health_checked_at, i.last_error, i.last_error_at, i.installed_at, i.kill_reason, i.row_version,
   a.uuid AS app_uuid, a.slug AS app_slug, a.name AS app_name, a.kind AS app_kind, a.status AS app_status, a.listing AS app_listing,
   a.connector_type AS app_connector, c.slug AS category_slug, c.name AS category_name,
@@ -86,7 +99,9 @@ const COLUMNS = sql.raw(`
   n.secret_hint AS conn_secret_hint, n.status AS conn_status, n.poll_interval_seconds AS conn_poll, n.next_poll_at AS conn_next_poll,
   n.poll_cursor AS conn_cursor, n.lead_source_id AS conn_lead_source, n.last_event_at AS conn_last_event, n.last_success_at AS conn_last_success,
   n.last_error AS conn_last_error, n.consecutive_failures AS conn_failures, n.received_count AS conn_received, n.accepted_count AS conn_accepted,
-  n.duplicate_count AS conn_duplicates, n.failed_count AS conn_failed`);
+  n.duplicate_count AS conn_duplicates, n.failed_count AS conn_failed,
+  ${APP_PRICING_COLUMNS_TEXT},
+  ${SUBSCRIPTION_COLUMNS_TEXT}`);
 
 const FROM = sql`
   FROM workspace_app_installations i
@@ -95,7 +110,8 @@ const FROM = sql`
   JOIN marketplace_app_versions iv ON iv.id = i.installed_version_id
   LEFT JOIN marketplace_app_versions pv ON pv.id = i.pending_version_id
   LEFT JOIN users u ON u.org_id = i.org_id AND u.id = i.installed_by
-  LEFT JOIN marketplace_connections n ON n.org_id = i.org_id AND n.installation_id = i.id`;
+  LEFT JOIN marketplace_connections n ON n.org_id = i.org_id AND n.installation_id = i.id
+  LEFT JOIN marketplace_subscriptions s ON s.org_id = i.org_id AND s.app_id = i.app_id`;
 
 export function toInstallation(r: Raw): InstallationRow {
   const listing = (r.app_listing as Record<string, unknown> | null) ?? {};
@@ -108,6 +124,9 @@ export function toInstallation(r: Raw): InstallationRow {
     installedVersionId: Number(r.installed_version_id),
     pendingVersionId: r.pending_version_id === null ? null : Number(r.pending_version_id),
     status: r.status as MarketInstallStatus,
+    pausedBySubscription: r.paused_by_subscription === true,
+    pricing: readAppPricing(r),
+    sub: readSubscription(r),
     grantedScopes: (r.granted_scopes as string[]) ?? [],
     config: (r.config as Record<string, unknown>) ?? {},
     credentialsEnc: (r.credentials_enc as string | null) ?? null,
@@ -174,6 +193,7 @@ export type InstallationPatch = Partial<{
   credentials_enc: string | null;
   credential_hints: Record<string, string>;
   status: MarketInstallStatus;
+  paused_by_subscription: boolean;
   disabled_at: Date | null;
   health_status: MarketHealth;
   health_checked_at: Date | null;
@@ -363,6 +383,23 @@ export class InstallationsRepository {
     );
   }
 
+  /**
+   * New credentials for a pull connection: one that stopped on a refusal or too many failures polls again, and one that was backing off
+   * does not wait the back-off out; the next poll is the soonest the portal's minimum interval allows. A paused connection stays paused.
+   */
+  async resumePolling(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    minIntervalSeconds: number,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE marketplace_connections SET
+        status = 'active', consecutive_failures = 0,
+        next_poll_at = GREATEST(now(), COALESCE(last_poll_at + (${minIntervalSeconds} || ' seconds')::interval, now()))
+      WHERE org_id = ${orgId} AND id = ${id} AND connector_type = 'pull' AND status IN ('active', 'error')`);
+  }
+
   async setLeadSource(tx: Tx, orgId: number, id: number, leadSourceId: number): Promise<void> {
     await tx.execute(
       sql`UPDATE marketplace_connections SET lead_source_id = ${leadSourceId} WHERE org_id = ${orgId} AND id = ${id}`,
@@ -394,14 +431,16 @@ export class InstallationsRepository {
         last_event_at = now(),
         last_success_at = CASE WHEN ${ok} THEN now() ELSE last_success_at END,
         consecutive_failures = CASE WHEN ${ok} THEN 0 WHEN ${o.failed > 0} THEN consecutive_failures + 1 ELSE consecutive_failures END,
-        last_error = CASE WHEN ${ok} THEN NULL WHEN ${o.error !== null} THEN ${o.error} ELSE last_error END,
-        last_error_at = CASE WHEN ${o.error !== null} THEN now() ELSE last_error_at END,
-        status = CASE WHEN ${ok} AND status = 'error' THEN 'active' ELSE status END
+        last_error = CASE WHEN ${ok} AND status <> 'error' THEN NULL WHEN ${o.error !== null} THEN ${o.error} ELSE last_error END,
+        last_error_at = CASE WHEN ${o.error !== null} THEN now() ELSE last_error_at END
       WHERE org_id = ${orgId} AND id = ${connectionId}`);
+    // A connection that polls AND receives (IndiaMART) and has stopped on a refused key stays stopped, and unhealthy, until the key is
+    // replaced: a lead that arrives by its push address says nothing about the key. (Only a pull connection is ever in `error`.)
     if (ok) {
       await tx.execute(sql`
         UPDATE workspace_app_installations SET health_status = 'healthy', health_checked_at = now(), last_error = NULL
-        WHERE org_id = ${orgId} AND id = ${installationId} AND status = 'active'`);
+        WHERE org_id = ${orgId} AND id = ${installationId} AND status = 'active'
+          AND NOT EXISTS (SELECT 1 FROM marketplace_connections WHERE org_id = ${orgId} AND id = ${connectionId} AND status = 'error')`);
     } else if (o.error !== null) {
       await tx.execute(sql`
         UPDATE workspace_app_installations SET

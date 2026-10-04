@@ -17,13 +17,22 @@ export const MARKET_HOOK_SIGNATURE_HEADER = 'x-marketplace-signature';
 /** The largest delivery accepted, in bytes. */
 export const MARKET_HOOK_MAX_BYTES = 256 * 1024;
 
+/**
+ * The address also takes the secret as the second path segment (`/hooks/<publicKey>/<secret>`, for a portal whose sender sets no header),
+ * accepts GET with a query string, form bodies and XML where the recipe says so, and for a portal recipe that asks for it stores the
+ * delivery whole and answers at once (`status: 'queued'`): the worker maps it and hands the leads to the pipeline, and a failure there is
+ * retried from the stored copy, so the sender (which turns itself off after a day or two of errors) never sees one.
+ */
 export const marketHookResultSchema = z.object({
-  status: z.enum(['accepted', 'duplicate']),
+  /** `queued`: stored and being processed (the counts below are then zero); the others are the outcome of a delivery handled inline. */
+  status: z.enum(['accepted', 'duplicate', 'queued']),
   /** Leads in the delivery: more than one when the recipe reads an array. */
   received: z.number().int(),
   accepted: z.number().int(),
   duplicates: z.number().int(),
   /** Leads in the delivery that the recipe's mapping could not turn into a lead (a required field is missing). */
   rejected: z.number().int(),
+  /** `queued` only: the stored delivery's id, to quote to support. */
+  event: z.string().uuid().optional(),
 });
 export type MarketHookResult = z.infer<typeof marketHookResultSchema>;

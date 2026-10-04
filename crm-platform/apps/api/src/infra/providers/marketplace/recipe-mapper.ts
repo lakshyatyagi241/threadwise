@@ -1,5 +1,11 @@
 import { createHash } from 'node:crypto';
-import type { MarketRecipe, RecipeFieldRule, RecipeSource } from '@crm/contracts';
+import type {
+  MarketRecipe,
+  RecipeDerivedId,
+  RecipeFieldRule,
+  RecipeSource,
+  RecipeTime,
+} from '@crm/contracts';
 import type { ConnectorFieldValue, ConnectorLead, ParsedDelivery } from './connector.port';
 
 /**
@@ -99,10 +105,23 @@ export function applyTransforms(
       case 'phone':
         v = toPhone(s, countryCode);
         break;
+      case 'unescape':
+        v = unescapeText(s);
+        break;
     }
     if (v === '') return undefined;
   }
   return v;
+}
+
+/**
+ * Some portals double-escape a buyer's message: the two characters backslash and `n` arrive where a line break was. Turns the common
+ * sequences back into the character; anything else with a backslash is left alone.
+ */
+export function unescapeText(s: string): string {
+  return s.replace(/\\([ntrb\\])/g, (_m, c: string) =>
+    c === 'n' ? '\n' : c === 't' ? '\t' : c === 'r' ? '\r' : c === 'b' ? '' : '\\',
+  );
 }
 
 // --- ids ---------------------------------------------------------------------------------------------------------------------------------
@@ -122,18 +141,80 @@ function stableStringify(v: Json, depth = 0): string {
     .join(',')}}`;
 }
 
-const isoOf = (v: Json): string | undefined => {
-  if (typeof v !== 'string' && typeof v !== 'number') return undefined;
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
-};
+/** A time the portal wrote, as an ISO instant. A time with no zone is the portal's own: `utcOffsetMinutes` east of UTC. */
+export function parseTime(
+  v: Json,
+  format: RecipeTime['format'],
+  utcOffsetMinutes: number,
+): string | undefined {
+  if (format === 'epoch_seconds' || format === 'epoch_millis') {
+    const n =
+      typeof v === 'number'
+        ? v
+        : typeof v === 'string' && /^\d{9,13}$/.test(v.trim())
+          ? Number(v.trim())
+          : Number.NaN;
+    if (!Number.isFinite(n)) return undefined;
+    const d = new Date(format === 'epoch_seconds' ? n * 1000 : n);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+  }
+  if (typeof v === 'number') {
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+  }
+  if (typeof v !== 'string') return undefined;
+  const text = v.trim();
+  const naive = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?$/.exec(text);
+  if (naive) {
+    const [, y, mo, d, h, mi, s] = naive;
+    const ms =
+      Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s ?? 0)) -
+      utcOffsetMinutes * 60_000;
+    const at = new Date(ms);
+    return Number.isNaN(at.getTime()) ? undefined : at.toISOString();
+  }
+  const at = new Date(text);
+  return Number.isNaN(at.getTime()) ? undefined : at.toISOString();
+}
+
+/** `d-` and 32 hex characters of the SHA-256 of the parts: the same lead, however the portal formats it, is the same id. */
+function derivedId(derive: RecipeDerivedId, parts: Array<string | undefined>): string | null {
+  if (parts.some((p) => p === undefined || p === '')) return null;
+  return `${derive.prefix}-${createHash('sha256').update(parts.join('\u001f')).digest('hex').slice(0, 32)}`;
+}
 
 // --- explicit mode ------------------------------------------------------------------------------------------------------------------------
+
+const mapped = (v: string, map: Record<string, string> | undefined): string => map?.[v] ?? v;
 
 function sourceValue(item: Json, src: RecipeSource | undefined): string | undefined {
   if (!src) return undefined;
   const v = 'from' in src ? scalarOf(readPath(item, src.from)) : scalarOf(src.const);
-  return v === undefined || v === null ? undefined : String(v).slice(0, 200);
+  if (v === undefined || v === null) return undefined;
+  const text = String(v);
+  return ('from' in src ? mapped(text, src.map) : text).slice(0, 200);
+}
+
+/** The first of a rule's paths that yields a usable value, after the rule's ignore list and transforms. */
+function ruleValue(
+  item: Json,
+  rule: RecipeFieldRule,
+  countryCode: string,
+): ConnectorFieldValue | undefined {
+  const ignored = new Set((rule.ignore ?? []).map((x) => x.trim().toLowerCase()));
+  const paths = rule.from !== undefined ? [rule.from, ...(rule.fallbackFrom ?? [])] : [];
+  const candidates: Array<ConnectorFieldValue | undefined> =
+    rule.from !== undefined
+      ? paths.map((p) => scalarOf(readPath(item, p)))
+      : [scalarOf(rule.const)];
+  for (const base of candidates) {
+    if (base === undefined || base === null) continue;
+    if (typeof base === 'string' && ignored.has(base.trim().toLowerCase())) continue;
+    const v = applyTransforms(base, rule.transform, countryCode);
+    if (v === undefined || v === null) continue;
+    return typeof v === 'string' && rule.map ? mapped(v, rule.map) : v;
+  }
+  return undefined;
 }
 
 function mapExplicit(
@@ -142,28 +223,43 @@ function mapExplicit(
 ): { lead: ConnectorLead } | { reason: string } {
   const fields: Record<string, ConnectorFieldValue> = {};
   for (const rule of mapping.fields as RecipeFieldRule[]) {
-    const base =
-      rule.from !== undefined ? scalarOf(readPath(item, rule.from)) : scalarOf(rule.const);
-    let v =
-      base === undefined
-        ? undefined
-        : applyTransforms(base, rule.transform, mapping.defaultCountryCode);
-    if (v === undefined && rule.default !== undefined) v = rule.default;
+    let v = ruleValue(item, rule, mapping.defaultCountryCode);
+    if (v === undefined && rule.default !== undefined) v = rule.default ?? undefined;
     if (v === undefined || v === null) {
       if (rule.required) return { reason: `missing_${rule.to}` };
       continue;
     }
     fields[rule.to] = v;
   }
-  const idRaw = mapping.externalId ? scalarOf(readPath(item, mapping.externalId.from)) : undefined;
+  let externalId: string | null = null;
+  if (mapping.externalId) {
+    const idRaw = scalarOf(readPath(item, mapping.externalId.from));
+    if (idRaw !== undefined && idRaw !== null) externalId = String(idRaw).slice(0, 200);
+  } else if (mapping.externalIdDerive) {
+    externalId = derivedId(
+      mapping.externalIdDerive,
+      mapping.externalIdDerive.parts.map((p) => {
+        const raw = scalarOf(readPath(item, p.from));
+        if (raw === undefined || raw === null) return undefined;
+        const v = applyTransforms(raw, p.transform, mapping.defaultCountryCode);
+        return v === undefined || v === null ? undefined : String(v);
+      }),
+    );
+  }
   const lead: ConnectorLead = {
-    externalId:
-      idRaw === undefined || idRaw === null ? payloadHashId(item) : String(idRaw).slice(0, 200),
+    externalId: externalId ?? payloadHashId(item),
     fields,
     raw: item,
   };
-  const at = mapping.receivedAt ? isoOf(readPath(item, mapping.receivedAt.from)) : undefined;
+  const at = mapping.receivedAt
+    ? parseTime(
+        readPath(item, mapping.receivedAt.from),
+        mapping.receivedAt.format,
+        mapping.receivedAt.utcOffsetMinutes,
+      )
+    : undefined;
   if (at) lead.receivedAt = at;
+  else if (mapping.receivedAtApproximate) fields.received_at_approximate = true;
   const a = mapping.attribution;
   if (a) {
     const attribution: NonNullable<ConnectorLead['attribution']> = {};
@@ -198,8 +294,12 @@ const ALIASES: Record<string, string[]> = {
     'whatsapp_number',
     'contact',
     'sender_mobile',
+    'lead_phone',
+    'mobile_no',
+    'phone_no',
+    'contact_no',
   ],
-  email: ['email', 'email_id', 'email_address', 'mail', 'sender_email'],
+  email: ['email', 'email_id', 'email_address', 'mail', 'sender_email', 'lead_email'],
   message: [
     'message',
     'requirement',
@@ -211,6 +311,12 @@ const ALIASES: Record<string, string[]> = {
     'inquiry',
     'query_message',
     'query',
+    // What the real-estate and trade portals call it (proposed payloads: remark at MagicBricks, QryInfo at 99acres, msg in a pull sheet).
+    'remark',
+    'remarks',
+    'msg',
+    'qryinfo',
+    'description',
   ],
   company: ['company', 'company_name', 'organization', 'organisation', 'sender_company'],
   city: ['city', 'location', 'sender_city'],
@@ -228,6 +334,7 @@ const ID_KEYS = [
   'reference',
   'ref',
   'unique_query_id',
+  'queryid',
 ];
 const TIME_KEYS = [
   'created_at',
@@ -239,6 +346,19 @@ const TIME_KEYS = [
   'created_time',
   'query_time',
 ];
+const COUNTRY_CODE_KEYS = ['country_code', 'countrycode', 'isd_code', 'dial_code'] as const;
+
+/** `+` and the country code in front of a national number, unless the number already carries one. Null when it is not a number. */
+function withCountryCode(raw: string, countryCode: string): string | null {
+  if (!countryCode) return null;
+  const bare = raw.replace(/[\s().-]/g, '');
+  if (bare.startsWith('+') || bare.startsWith('00')) return null;
+  const national = bare.replace(/^0+/, '');
+  if (!/^\d{6,15}$/.test(national)) return null;
+  const complete = national.startsWith(countryCode) && national.length >= countryCode.length + 10;
+  return `+${complete ? national : countryCode + national}`;
+}
+
 const ATTRIBUTION_KEYS = {
   platform: ['utm_source', 'platform', 'source'],
   campaign: ['utm_campaign', 'campaign', 'campaign_name'],
@@ -268,7 +388,18 @@ function flatten(
   if (s !== undefined && s !== null && prefix && !out.has(prefix)) out.set(prefix, s);
 }
 
-function mapAuto(item: Json): { lead: ConnectorLead } | { reason: string } {
+type AutoMapping = Extract<MarketRecipe['mapping'], { mode: 'auto' }>;
+const DEFAULT_AUTO: AutoMapping = {
+  mode: 'auto',
+  defaultCountryCode: '91',
+  receivedAtApproximate: false,
+  utcOffsetMinutes: 0,
+};
+
+function mapAuto(
+  item: Json,
+  mapping: AutoMapping = DEFAULT_AUTO,
+): { lead: ConnectorLead } | { reason: string } {
   if (item === null || typeof item !== 'object' || Array.isArray(item))
     return { reason: 'not_an_object' };
   const flat = new Map<string, ConnectorFieldValue>();
@@ -311,8 +442,14 @@ function mapAuto(item: Json): { lead: ConnectorLead } | { reason: string } {
         .add('surname');
     }
   }
+  if (typeof fields.phone === 'number') fields.phone = String(fields.phone);
+  // A portal that sends the country code apart from the number (`country_code: 91`, `phone: 9876543210`).
+  const ccKey = COUNTRY_CODE_KEYS.find((k) => flat.has(k));
+  const cc = ccKey ? String(flat.get(ccKey)).replace(/\D/g, '') : '';
+  if (ccKey && cc) used.add(ccKey);
   if (typeof fields.phone === 'string') {
-    const p = toPhone(fields.phone, '91');
+    const p =
+      withCountryCode(fields.phone, cc) ?? toPhone(fields.phone, mapping.defaultCountryCode);
     if (p) fields.phone = p;
   }
   if (typeof fields.email === 'string') fields.email = fields.email.toLowerCase();
@@ -333,15 +470,31 @@ function mapAuto(item: Json): { lead: ConnectorLead } | { reason: string } {
     fields[k] = v;
   }
 
+  let externalId: string | null =
+    idRaw === undefined || idRaw === null ? null : String(idRaw).slice(0, 200);
+  if (externalId === null && mapping.externalIdDerive) {
+    // The raw payload's own path first, then the flattened name (`Mobile` is found as `mobile`): a payload nobody has seen yet.
+    externalId = derivedId(
+      mapping.externalIdDerive,
+      mapping.externalIdDerive.parts.map((p) => {
+        const raw = scalarOf(readPath(item, p.from)) ?? flat.get(normaliseKey(p.from));
+        if (raw === undefined || raw === null) return undefined;
+        const v = applyTransforms(raw, p.transform, mapping.defaultCountryCode);
+        return v === undefined || v === null ? undefined : String(v);
+      }),
+    );
+  }
   const lead: ConnectorLead = {
-    externalId:
-      idRaw === undefined || idRaw === null ? payloadHashId(item) : String(idRaw).slice(0, 200),
+    externalId: externalId ?? payloadHashId(item),
     fields,
     raw: item,
   };
   const timeKey = TIME_KEYS.find((k) => flat.has(k));
-  const at = timeKey ? isoOf(flat.get(timeKey)) : undefined;
+  const at = timeKey ? parseTime(flat.get(timeKey), 'iso', mapping.utcOffsetMinutes) : undefined;
   if (at) lead.receivedAt = at;
+  else if (mapping.receivedAtApproximate) fields.received_at_approximate = true;
+  if (attribution.platform === undefined && mapping.platform)
+    attribution.platform = mapping.platform;
   if (Object.keys(attribution).length > 0) lead.attribution = attribution;
   return { lead };
 }
@@ -358,6 +511,12 @@ export function mapDelivery(recipe: MarketRecipe, body: Json): ParsedDelivery {
   } else {
     items = Array.isArray(body) ? body : [body];
   }
+  return mapItems(recipe, items);
+}
+
+/** The items of an answer already taken out of its wrapper, mapped one by one (a pull connector finds its own list). */
+export function mapItems(recipe: MarketRecipe, items: Json[]): ParsedDelivery {
+  const mapping = recipe.mapping;
   const leads: ConnectorLead[] = [];
   const rejected: ParsedDelivery['rejected'] = [];
   items.forEach((item, index) => {
@@ -365,7 +524,7 @@ export function mapDelivery(recipe: MarketRecipe, body: Json): ParsedDelivery {
       rejected.push({ index, reason: 'too_many_items' });
       return;
     }
-    const r = mapping.mode === 'explicit' ? mapExplicit(item, mapping) : mapAuto(item);
+    const r = mapping.mode === 'explicit' ? mapExplicit(item, mapping) : mapAuto(item, mapping);
     if ('lead' in r) leads.push(r.lead);
     else rejected.push({ index, reason: r.reason });
   });
