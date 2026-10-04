@@ -104,3 +104,10 @@ Screen `/flow-runtime/analytics` (tabs Overview, Execution history, Error logs, 
 The order trigger starts on three events, all read back by the order's uuid from `wa_orders` and handled as `order.placed`, so a repeat is the same enrolment (`order:<uuid>`):
 `order.placed` (the commerce contract), `store.order_placed` (the storefront checkout) and `whatsapp.order.received` (a catalog cart on WhatsApp, WD-WABA-042).
 Before this, the storefront emitted `store.order_placed` and nothing turned it into a flow trigger. Evidence: `flow-runtime.e2e.spec.ts` (store checkout and catalog cart, once per order).
+
+## Wired to the catalog and the inbox (this change)
+
+- A WhatsApp catalog cart captured by the WABA domain (`whatsapp.order.received`) resumes a shop node waiting on `purchased`: the cart is no longer a chat bubble, so `CatalogCartResume`
+  (an outbox consumer) finds the customer's live run on the number's channel and calls `CommerceResume.catalogCart`.
+- The catalog concierge answers a free-text product question after the flows had their turn: `CatalogConciergeListener` is an inbound listener marked `after`, and the inbound hooks now
+  run those last and tell them through `prior.consumed` whether a flow already took the message.

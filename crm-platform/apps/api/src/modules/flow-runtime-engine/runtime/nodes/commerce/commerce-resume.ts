@@ -1,4 +1,5 @@
 import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import {
   InboundMessageHooks,
@@ -10,6 +11,11 @@ import {
   type EcomFlowOrder,
   type EcomOrderListener,
 } from '../../../../shopify-woocommerce';
+import {
+  OutboxSubscriberRegistry,
+  type OutboxEvent,
+  type OutboxSubscriber,
+} from '../../../../../kernel/outbox/outbox-subscribers';
 import { FlowEngine } from '../../engine.service';
 import { RunRepository } from '../../run.repository';
 import type { RunState } from '../../types';
@@ -126,6 +132,27 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     return r === 'routed';
   }
 
+  /**
+   * A catalog cart the WABA domain captured as an order (`whatsapp.order.received`): the cart never becomes a chat bubble there, so the
+   * resume cannot ride on the stored inbound message; it is matched the same way, by the customer's live run on the channel of the
+   * number the cart was sent to (`channels.waba_config_id`).
+   */
+  async catalogCart(orgId: number, configId: number, phone: string): Promise<boolean> {
+    const peer = phone.replace(/\D+/g, '');
+    const live = await this.db.txAs({ orgId }, async (tx) => {
+      const res = (await tx.execute(
+        sql`SELECT id FROM channels WHERE org_id = ${orgId} AND waba_config_id = ${configId} ORDER BY id LIMIT 1`,
+      )) as unknown as { rows: Array<{ id: number | string }> };
+      const channel = res.rows[0];
+      return channel ? this.runs.liveByPeer(tx, orgId, Number(channel.id), peer) : null;
+    });
+    if (!live || live.status !== 'waiting' || live.wait?.handler !== 'CommerceShop') return false;
+    const r = await this.engine.deliverExternal(orgId, live.id, 'CommerceShop', {
+      order: { id: '', total: '', currency: '', provider: 'whatsapp_shop' },
+    });
+    return r === 'routed';
+  }
+
   // --- a store order ---------------------------------------------------------------------------------------------------------
 
   async onFlowOrder(o: EcomFlowOrder): Promise<void> {
@@ -140,5 +167,27 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     // The reference came from a customer's message or a store's order note: only a run id is looked up, never anything else.
     if (!UUID.test(ref)) return null;
     return this.db.txAs({ orgId }, (tx) => this.runs.byUuid(tx, orgId, ref));
+  }
+}
+
+/** Hears `whatsapp.order.received` (WD-WABA-042) and hands the cart to `CommerceResume`. Worker only, like the resume itself. */
+@Injectable()
+export class CatalogCartResume implements OutboxSubscriber, OnModuleInit {
+  readonly name = 'commerce-cart-resume';
+  readonly eventTypes = ['whatsapp.order.received'] as const;
+
+  constructor(
+    private readonly registry: OutboxSubscriberRegistry,
+    private readonly resume: CommerceResume,
+  ) {}
+
+  onModuleInit(): void {
+    this.registry.register(this);
+  }
+
+  async handle(event: OutboxEvent): Promise<void> {
+    const p = event.payload;
+    if (typeof p.phone !== 'string' || typeof p.connectionId !== 'number') return;
+    await this.resume.catalogCart(event.orgId, p.connectionId, p.phone);
   }
 }

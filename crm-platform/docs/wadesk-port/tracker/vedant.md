@@ -132,7 +132,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| WD-NODE-001 | blocked |  | no bridge process in this repo: the bridge runs as an in-app worker (decision E, settled in practice by the build and recorded in the wiring map); waits only for the team's sign-off to close it as wontfix |
 | WD-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
 | WD-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | WD-NODE-004 | backend-done |  | worker heartbeat in Redis (one key per running worker, 90 s); the console health card's Node check reads it (workers and devices held), falling back to the saved-address probe when no worker reports; no HTTP surface on the worker by design |
@@ -155,7 +155,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | WD-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
 | WD-NODE-023 | backend-done |  | media on the unofficial engine, Twilio and the Cloud API (public https link, caption with footer, document file name, no caption on audio); inline attachment_base64 not ported: media comes from a URL or storage, never from a request body |
-| WD-NODE-024 | in-progress |  | location, contact card and group message with mentions done; product catalog sends blocked on the catalog domain (CAT) and the template pipeline |
+| WD-NODE-024 | backend-done |  | location, contact card and group message with mentions; product catalog sends go through NodeCatalogBridge (the catalog's CatalogSendService and order acknowledgement now send through the in-process unofficial engine): text, a picture with its caption, and a carousel as an intro text plus one picture per card because the official library cannot send a carousel (WD-NODE-022); catalog-bridge.spec |
 | WD-NODE-025 | backend-done |  | react, pin, star, edit, delete through the owning socket; pin keeps WaDesk's fixed 24 hours (its duration choice never had an effect) |
 | WD-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
 | WD-NODE-027 | backend-done |  | Cloud API text transport (shared Meta provider) and a Twilio transport (text, media with caption, location); templates by ContentSid belong to the template pipeline; Twilio status callback belongs to the WhatsApp provider domain |

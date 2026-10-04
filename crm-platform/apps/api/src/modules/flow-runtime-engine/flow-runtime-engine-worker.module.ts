@@ -4,7 +4,9 @@ import { ChatConversationsModule } from '../chat-conversations';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
 import { FlowRuntimeEngineModule } from './flow-runtime-engine.module';
 import { CampaignFlowStarterImpl } from './runtime/campaign-flow-starter';
-import { CommerceResume } from './runtime/nodes/commerce/commerce-resume';
+import { CatalogProductsModule } from '../catalog-products';
+import { CatalogConciergeListener } from './runtime/nodes/commerce/catalog-concierge.listener';
+import { CatalogCartResume, CommerceResume } from './runtime/nodes/commerce/commerce-resume';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { FlowRunProcessor } from './runtime/flow-run.processor';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
@@ -21,6 +23,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowRuntimeEngineModule,
     ChatConversationsModule,
     CampaignsModule,
+    CatalogProductsModule,
     CommerceNodesModule,
     ShopifyWoocommerceModule,
   ],
@@ -30,6 +33,8 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowInboundService,
     FlowTriggerEventsConsumer,
     CommerceResume,
+    CatalogCartResume,
+    CatalogConciergeListener,
   ],
 })
 export class FlowRuntimeEngineWorkerModule implements OnModuleInit {
