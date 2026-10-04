@@ -225,6 +225,16 @@ function TemplatePickerDialog(props: TemplatePickerProps) {
             </p>
           )}
 
+          {list.data?.hasMore && (
+            <p
+              role="status"
+              data-testid="inbox-template-has-more"
+              className="text-xs text-muted-foreground"
+            >
+              {t('hasMore', { count: items.length })}
+            </p>
+          )}
+
           <ul
             className="max-h-[50vh] space-y-1.5 overflow-y-auto"
             data-testid="inbox-template-list"

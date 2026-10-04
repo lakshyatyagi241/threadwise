@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ERROR_CODES, type SendMessageInput } from '@crm/contracts';
+import { ERROR_CODES, INBOX_TEMPLATE_LIST_MAX, type SendMessageInput } from '@crm/contracts';
 import {
   RequestContextStore,
   type RequestContext,
@@ -41,6 +41,7 @@ function setup(
   opts: { rows?: TemplateRow[]; found?: TemplateRow | null; channelWaba?: number | null } = {},
 ) {
   const enqueueOutbound = vi.fn().mockResolvedValue({ message: { id: 'm1' } });
+  const listCalls: Array<Record<string, unknown>> = [];
   const tx = {};
   const service = new InboxThreadService(
     { tx: (fn: (t: unknown) => unknown) => fn(tx) } as never,
@@ -60,7 +61,10 @@ function setup(
       }),
     } as never,
     {
-      list: async () => opts.rows ?? [template()],
+      list: async (_tx: unknown, _org: number, filter: Record<string, unknown>) => {
+        listCalls.push(filter);
+        return opts.rows ?? [template()];
+      },
       findByUuid: async () => (opts.found === undefined ? template() : opts.found),
     } as never,
     { enqueueOutbound } as never,
@@ -77,7 +81,7 @@ function setup(
     );
   const list = (q: { q?: string } = {}) =>
     RequestContextStore.run(ctx, () => service.listTemplates(CONV, q));
-  return { send, list, enqueueOutbound };
+  return { send, list, enqueueOutbound, listCalls };
 }
 
 describe('InboxThreadService: sending a template', () => {
@@ -139,11 +143,10 @@ describe('InboxThreadService: sending a template', () => {
 });
 
 describe('InboxThreadService: listing templates', () => {
-  it('offers only the approved templates of this number, with the slots and the reason when blocked', async () => {
+  it('offers the approved templates of this number, with the slots and the reason when blocked', async () => {
     const { list } = setup({
       rows: [
         template(),
-        template({ uuid: 'a1', templateName: 'other_number', providerConfigId: 99 }),
         template({
           uuid: 'a2',
           templateName: 'pending_one',
@@ -153,7 +156,8 @@ describe('InboxThreadService: listing templates', () => {
         template({ uuid: 'a3', templateName: 'with_image', attachmentType: 'image' }),
       ],
     });
-    const { data } = await list();
+    const { data, hasMore } = await list();
+    expect(hasMore).toBe(false);
     expect(data.map((t) => t.name)).toEqual(['order_shipped', 'with_image']);
     expect(data[0]).toMatchObject({
       sendable: true,
@@ -167,8 +171,37 @@ describe('InboxThreadService: listing templates', () => {
     expect(data[1]).toMatchObject({ sendable: false, reason: 'media_header' });
   });
 
+  it('narrows to the conversation’s number in the query, so other numbers never fill the page', async () => {
+    const { list, listCalls } = setup();
+    await list({ q: 'ship' });
+    expect(listCalls).toEqual([
+      { limit: INBOX_TEMPLATE_LIST_MAX, status: 'approved', providerConfigId: WABA, q: 'ship' },
+    ]);
+  });
+
+  it('returns a full page and says there are more when the query found one row beyond it', async () => {
+    const many = Array.from({ length: INBOX_TEMPLATE_LIST_MAX + 1 }, (_, i) =>
+      template({ uuid: `t${i}`, templateName: `t_${i}` }),
+    );
+    const { list } = setup({ rows: many });
+    const { data, hasMore } = await list();
+    expect(data).toHaveLength(INBOX_TEMPLATE_LIST_MAX);
+    expect(hasMore).toBe(true);
+    expect(data.at(-1)?.name).toBe(`t_${INBOX_TEMPLATE_LIST_MAX - 1}`);
+  });
+
+  it('says there are no more when the page is exactly full', async () => {
+    const exact = Array.from({ length: INBOX_TEMPLATE_LIST_MAX }, (_, i) =>
+      template({ uuid: `t${i}`, templateName: `t_${i}` }),
+    );
+    const { list } = setup({ rows: exact });
+    const { data, hasMore } = await list();
+    expect(data).toHaveLength(INBOX_TEMPLATE_LIST_MAX);
+    expect(hasMore).toBe(false);
+  });
+
   it('offers nothing on a conversation that is not on a WhatsApp number', async () => {
     const { list } = setup({ channelWaba: null });
-    expect(await list()).toEqual({ data: [] });
+    expect(await list()).toEqual({ data: [], hasMore: false });
   });
 });
