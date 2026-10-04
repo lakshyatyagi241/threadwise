@@ -78,7 +78,12 @@ export function ConnectionCard({
 
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label={t('businessId')} htmlFor="bsp-business" error={invalidText('businessId')}>
+          <Field
+            label={t('businessId')}
+            htmlFor="bsp-business"
+            hint={t('businessIdHint')}
+            error={invalidText('businessId')}
+          >
             <Input
               id="bsp-business"
               inputMode="numeric"
@@ -115,6 +120,7 @@ export function ConnectionCard({
               id="bsp-credit"
               autoComplete="off"
               value={draft.extendedCreditId}
+              placeholder={t('creditLinePlaceholder')}
               disabled={!canEdit}
               onChange={(e) => set('extendedCreditId', e.target.value)}
             />
@@ -212,7 +218,8 @@ export function ConnectionCard({
         </div>
 
         {canEdit && (
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end gap-3">
+            <span className="text-xs text-muted-foreground">{t('tokenNote')}</span>
             <Button type="submit" disabled={save.isPending || !isDirty(draft, settings)}>
               {t('save')}
             </Button>

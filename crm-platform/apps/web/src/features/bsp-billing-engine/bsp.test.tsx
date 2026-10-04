@@ -137,7 +137,7 @@ describe('P&L report (TW-BSP-014, -015)', () => {
 
   it('warns about messages without a Meta cost', () => {
     const html = wrap(<DashboardReport d={dash({ unpricedMessages: 3 })} />);
-    expect(html).toContain('3 billed messages have');
+    expect(html).toContain('3 billed messages had');
   });
 
   it('lists each workspace with its margin and balance', () => {
