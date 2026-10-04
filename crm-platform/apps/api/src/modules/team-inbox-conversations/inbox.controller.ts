@@ -19,6 +19,7 @@ import {
   listConversationEventsQuerySchema,
   listConversationNotesQuerySchema,
   listConversationsQuerySchema,
+  listInboxTemplatesQuerySchema,
   listMessagesQuerySchema,
   markConversationReadSchema,
   sendMessageSchema,
@@ -27,6 +28,7 @@ import {
   type ListConversationEventsQuery,
   type ListConversationNotesQuery,
   type ListConversationsQuery,
+  type ListInboxTemplatesQuery,
   type ListMessagesQuery,
   type MarkConversationReadInput,
   type SendMessageInput,
@@ -132,6 +134,20 @@ export class InboxController {
     @Query(zodPipe(listMessagesQuerySchema)) query: ListMessagesQuery,
   ) {
     return this.thread.listMessages(id, query);
+  }
+
+  @Get('conversations/:id/templates')
+  @RequirePermission('inbox.conversation.reply')
+  @ApiOperation({
+    summary: 'The templates this conversation’s WhatsApp number can send',
+    description:
+      'Approved templates of the number the conversation runs on. One the inbox cannot fill in yet is listed with a `reason`. Send one with `POST .../messages` and `kind: template`.',
+  })
+  async templates(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(listInboxTemplatesQuerySchema)) query: ListInboxTemplatesQuery,
+  ) {
+    return this.thread.listTemplates(id, query);
   }
 
   @Post('conversations/:id/messages')
