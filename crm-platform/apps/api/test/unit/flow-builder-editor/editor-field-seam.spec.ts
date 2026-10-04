@@ -47,7 +47,7 @@ function readOf(g: FlowGraph): { props: Read; read: Read } {
 /** What the runtime reads once the reader has shaped the graph (the production path). */
 const compiled = (type: string, overrides: Read = {}) =>
   readOf(flbRuntimeNodeData(graphOf(type, overrides)));
-/** What `compileGraph` reads from the saved graph alone, before any FLR hook calls the shaper. */
+/** What `compileGraph` reads from the saved graph alone: it calls the shaper itself, so the reader's shaping changes nothing. */
 const compiledRaw = (type: string, overrides: Read = {}) => readOf(graphOf(type, overrides));
 
 describe('editor fields the runtime reads (already matching, and still matching after the shaper)', () => {
@@ -240,7 +240,9 @@ describe('editor fields the runtime reads under another name (mapped by flbToRun
     expect(readOf(flbRuntimeNodeData(g)).props.actions).toEqual([
       { type: 'url', label: 'Go', value: 'https://legacy.io' },
     ]);
-    expect(readOf(g).props.actions).toEqual([]);
+    expect(readOf(g).props.actions).toEqual([
+      { type: 'url', label: 'Go', value: 'https://legacy.io' },
+    ]);
   });
 });
 
@@ -415,15 +417,22 @@ describe('every node type of the catalogue: the field the executor reads is ther
   });
 });
 
-describe('FLR hook status: compileGraph alone does not yet call the shaper', () => {
-  /**
-   * These pin the state of the runtime compiler. They PASS today because the hook is not installed. When the FLR owner adds the one
-   * line (`flbToRuntimeData` inside `compileGraph`, see the report) the first assertion starts failing: delete this block then.
-   */
-  it('the unshaped graph still hands the executors the editor names for the mismatching types', () => {
-    expect(compiledRaw('ai', { save: 'answer' }).read.variable).toBeUndefined();
-    expect(compiledRaw('poll', { multi: true }).props.allowMultiple).toBe(false);
-    expect(compiledRaw('location', { lat: '1', lng: '2' }).props.latitude).toBe(0);
+describe('compileGraph itself applies the shaper (the FLR hook)', () => {
+  it('a graph straight from the editor reaches the executors with the runtime names, shaped by the reader or not', () => {
+    expect(compiledRaw('ai', { save: 'answer' }).read.variable).toBe('answer');
+    expect(compiledRaw('poll', { multi: true }).props.allowMultiple).toBe(true);
+    expect(compiledRaw('location', { lat: '1', lng: '2' }).props).toMatchObject({
+      latitude: 1,
+      longitude: 2,
+    });
+    for (const [type, save] of [
+      ['ai', { save: 'answer', fields: 'a, b' }],
+      ['poll', { multi: true }],
+      ['location', { lat: '1.5', lng: '2.5' }],
+      ['webhook', { save: 'api' }],
+    ] as const) {
+      expect(compiledRaw(type, save), type).toEqual(compiled(type, save));
+    }
   });
 });
 
