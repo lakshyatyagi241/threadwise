@@ -105,6 +105,12 @@ export class WorkspaceSettingsController {
     });
   }
 
+  @Get('integrations')
+  @ApiOperation({ summary: 'Sheets key status and webhook counts (API and webhooks tab)' })
+  integrations() {
+    return this.settings.integrations();
+  }
+
   @Get('data-residency')
   @ApiOperation({ summary: 'Which translation providers may receive message text' })
   residency() {

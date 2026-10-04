@@ -247,3 +247,18 @@ export type ResidencyResponse = z.infer<typeof residencyResponseSchema>;
 export const saveResidencyRequestSchema = z.object({ residency: dataResidencySchema });
 export type SaveResidencyRequest = z.infer<typeof saveResidencyRequestSchema>;
 export const DATA_RESIDENCY_MODES = dataResidencySchema.options;
+
+// --- API and webhooks (WD-ASHELL-042) --------------------------------------------------------------------------------
+
+/** The informational tab: my Sheets add-on key (never the secret) and how many webhook endpoints this workspace has. */
+export const integrationsSummaryResponseSchema = z.object({
+  sheetsKey: z
+    .object({
+      suffix: z.string(),
+      createdAt: z.string().nullable(),
+      lastUsedAt: z.string().nullable(),
+    })
+    .nullable(),
+  webhooks: z.object({ outbound: z.number().int(), inbound: z.number().int() }),
+});
+export type IntegrationsSummaryResponse = z.infer<typeof integrationsSummaryResponseSchema>;

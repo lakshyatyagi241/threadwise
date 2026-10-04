@@ -161,3 +161,50 @@ describe('Data residency (WD-ASHELL-045)', () => {
     expect((await res(other.admin)).body.residency).toBe('any');
   });
 });
+
+describe('API and webhooks tab (WD-ASHELL-042)', () => {
+  const get = (token: string) =>
+    api.http().get('/v2/shell/workspace/integrations').set(bearer(token));
+
+  it('shows no key and zero endpoints for a fresh workspace', async () => {
+    const res = await get(t.admin);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ sheetsKey: null, webhooks: { outbound: 0, inbound: 0 } });
+  });
+
+  it('shows my key suffix and times (never a secret) and the workspace webhook counts', async () => {
+    await h.owner.query(
+      `INSERT INTO user_settings (org_id, user_id, sheets_key_hash, sheets_key_suffix, sheets_key_created_at, sheets_key_last_used_at)
+       VALUES ($1, $2, 'hash', 'abcd', now() - interval '2 days', now() - interval '1 hour')
+       ON CONFLICT (org_id, user_id) DO UPDATE SET sheets_key_hash = 'hash', sheets_key_suffix = 'abcd',
+         sheets_key_created_at = now() - interval '2 days', sheets_key_last_used_at = now() - interval '1 hour'`,
+      [t.orgId, t.adminUserId],
+    );
+    for (const n of [1, 2]) {
+      await h.owner.query(
+        `INSERT INTO outbound_webhooks (org_id, name, url, events) VALUES ($1, $2, 'https://x.test/h', '[]'::jsonb)`,
+        [t.orgId, `out${n}`],
+      );
+    }
+    await h.owner.query(
+      `INSERT INTO webhooks (org_id, name, webhook_url) VALUES ($1, 'in', 'https://x.test/in')`,
+      [t.orgId],
+    );
+    const res = await get(t.admin);
+    expect(res.body.webhooks).toEqual({ outbound: 2, inbound: 1 });
+    expect(res.body.sheetsKey.suffix).toBe('abcd');
+    expect(res.body.sheetsKey.lastUsedAt).toBeTruthy();
+    expect(JSON.stringify(res.body)).not.toContain('hash');
+  });
+
+  it('a teammate sees the same counts but not my key, and another workspace sees neither', async () => {
+    expect((await get(member.token)).body).toMatchObject({
+      sheetsKey: null,
+      webhooks: { outbound: 2, inbound: 1 },
+    });
+    expect((await get(other.admin)).body).toEqual({
+      sheetsKey: null,
+      webhooks: { outbound: 0, inbound: 0 },
+    });
+  });
+});

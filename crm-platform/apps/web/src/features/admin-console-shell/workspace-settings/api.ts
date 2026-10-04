@@ -3,6 +3,7 @@ import {
   exportCountsResponseSchema,
   notificationPrefsResponseSchema,
   preferencesResponseSchema,
+  integrationsSummaryResponseSchema,
   residencyResponseSchema,
   workspaceBrandingResponseSchema,
   workspaceSettingsResponseSchema,
@@ -172,3 +173,13 @@ export function useSaveResidency() {
     onSuccess: (data) => qc.setQueryData(RESIDENCY, data),
   });
 }
+
+export const useIntegrationsSummary = () =>
+  useQuery({
+    queryKey: ['shell', 'workspace', 'integrations'] as const,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/integrations', {
+        schema: integrationsSummaryResponseSchema,
+        signal,
+      }),
+  });
