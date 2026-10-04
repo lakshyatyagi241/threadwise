@@ -67,8 +67,12 @@ describe('extras (TW-AIADM-002, 009)', () => {
   });
 
   it('stores an empty object when nothing is set, and round-trips what it stores', () => {
-    expect(mergeExtras({ maxTokens: null, models: [] }, {}, true).json).toBe('{}');
-    const { json, next } = mergeExtras({ maxTokens: null, models: [] }, { maxTokens: 5 }, true);
+    expect(mergeExtras({ maxTokens: null, models: [], text: {} }, {}, true).json).toBe('{}');
+    const { json, next } = mergeExtras(
+      { maxTokens: null, models: [], text: {} },
+      { maxTokens: 5 },
+      true,
+    );
     expect(parseExtras(json)).toEqual(next);
   });
 });
