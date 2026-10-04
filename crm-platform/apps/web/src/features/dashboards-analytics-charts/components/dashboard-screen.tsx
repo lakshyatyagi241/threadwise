@@ -297,8 +297,30 @@ export function DashboardScreen() {
               >
                 {f ? (
                   <>
+                    {s && (
+                      <Legend
+                        series={[
+                          {
+                            name: t('throughput.sent'),
+                            color: 'var(--brand)',
+                            total: s.current.sent,
+                          },
+                          {
+                            name: t('throughput.delivered'),
+                            color: 'var(--success)',
+                            total: s.current.delivered,
+                          },
+                          {
+                            name: t('throughput.failed'),
+                            color: 'var(--danger)',
+                            total: s.current.failed,
+                          },
+                        ]}
+                      />
+                    )}
                     <BarChart
                       emptyAxes
+                      hideLegend
                       label={t('throughput.title')}
                       labels={f.starts.map(label)}
                       series={[
@@ -313,25 +335,6 @@ export function DashboardScreen() {
                     />
                     {s && (
                       <>
-                        <Legend
-                          series={[
-                            {
-                              name: t('throughput.sent'),
-                              color: 'var(--brand)',
-                              total: s.current.sent,
-                            },
-                            {
-                              name: t('throughput.delivered'),
-                              color: 'var(--success)',
-                              total: s.current.delivered,
-                            },
-                            {
-                              name: t('throughput.failed'),
-                              color: 'var(--danger)',
-                              total: s.current.failed,
-                            },
-                          ]}
-                        />
                         <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
                           <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
                           <Tile

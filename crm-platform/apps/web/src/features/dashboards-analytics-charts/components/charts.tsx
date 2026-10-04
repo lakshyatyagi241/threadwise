@@ -28,6 +28,7 @@ export function BarChart({
   label,
   stacked = false,
   emptyAxes = false,
+  hideLegend = false,
 }: {
   labels: string[];
   series: Series[];
@@ -36,6 +37,7 @@ export function BarChart({
   stacked?: boolean;
   /** Draw the 0..2 axes with no bars when there is no data (Reference's throughput card) instead of the empty text. */
   emptyAxes?: boolean;
+  hideLegend?: boolean;
 }) {
   const t = useTranslations('dashboards-analytics-charts.chart');
   const totals = labels.map((_, i) => series.reduce((a, s) => a + (s.values[i] ?? 0), 0));
@@ -120,7 +122,7 @@ export function BarChart({
           );
         })}
       </svg>
-      <Legend series={series} />
+      {!hideLegend && <Legend series={series} />}
       <table className="sr-only">
         <caption>{label}</caption>
         <thead>
