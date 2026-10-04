@@ -77,3 +77,13 @@ export function activeNavId(
   if (entry && entryHref && entryHref.length >= tile.href.length) return entry;
   return items.some((i) => i.id === SETTINGS_NAV_ID) ? SETTINGS_NAV_ID : entry;
 }
+
+/** Whether the screen at `pathname` asked for the full width (`fullWidth` on its menu entry), so the menu should slim down. */
+export function isFullWidthScreen(
+  items: readonly ResolvedNavItem[],
+  tiles: readonly ResolvedSettingsTile[],
+  pathname: string,
+): boolean {
+  const id = activeNavId(items, tiles, pathname);
+  return id !== undefined && items.some((i) => i.id === id && i.fullWidth === true);
+}

@@ -19,6 +19,8 @@ export const FLR_ERROR_CODES = {
   FLR_RUN_STATE_CONFLICT: 'FLR_RUN_STATE_CONFLICT',
   /** Only a failed run can be retried. */
   FLR_NOT_RETRYABLE: 'FLR_NOT_RETRYABLE',
+  /** The run was retried less than FLOW_RETRY_COOLDOWN_SECONDS ago. */
+  FLR_RETRY_TOO_SOON: 'FLR_RETRY_TOO_SOON',
   /** The conversation named to start a flow on is not in this workspace. */
   FLR_CONVERSATION_NOT_FOUND: 'FLR_CONVERSATION_NOT_FOUND',
 } as const;

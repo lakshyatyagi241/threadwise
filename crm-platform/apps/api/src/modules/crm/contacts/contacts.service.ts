@@ -51,6 +51,12 @@ export interface ResolveContactInput {
   name?: string | null;
   /** Where the contact came from (`contacts.source`). */
   source?: string;
+  /**
+   * A bulk import, not live engagement (WhatsApp Business app address-book sync): no `contact.created` event, so no flow enrolment
+   * and no notification fires for each synced number; and a blank name on a contact that already exists is filled in (a name
+   * somebody wrote is never replaced).
+   */
+  quiet?: boolean;
 }
 
 export type ResolvedContact =
@@ -337,7 +343,10 @@ export class ContactsService {
     const viaIdentity = await this.repo.findByIdentity(tx, orgId, input.kind, value);
     if (viaIdentity !== undefined) {
       const uuid = await this.uuidOf(tx, orgId, viaIdentity);
-      if (uuid) return { outcome: 'found', contactId: viaIdentity, uuid };
+      if (uuid) {
+        if (input.quiet) await this.fillBlankName(tx, orgId, viaIdentity, input.name);
+        return { outcome: 'found', contactId: viaIdentity, uuid };
+      }
     }
 
     const stored = await tx.execute(
@@ -352,6 +361,7 @@ export class ContactsService {
     const known = stored.rows[0] as { id: number | string; uuid: string } | undefined;
     if (known) {
       await this.repo.addIdentity(tx, orgId, Number(known.id), input.kind, value);
+      if (input.quiet) await this.fillBlankName(tx, orgId, Number(known.id), input.name);
       return { outcome: 'found', contactId: Number(known.id), uuid: known.uuid };
     }
 
@@ -402,19 +412,36 @@ export class ContactsService {
     });
     await this.repo.addIdentity(tx, orgId, created.id, input.kind, value);
     await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
-    await this.outbox.emit(tx, {
-      aggregateModule: MODULE_KEY,
-      aggregateId: created.id,
-      eventType: 'contact.created',
-      payload: {
-        uuid: created.uuid,
-        displayId,
-        ...(input.kind === 'email' ? { email: value } : { phone: value }),
-        via: input.source ?? 'inbound',
-      },
-      orgId,
-    });
+    if (!input.quiet) {
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE_KEY,
+        aggregateId: created.id,
+        eventType: 'contact.created',
+        payload: {
+          uuid: created.uuid,
+          displayId,
+          ...(input.kind === 'email' ? { email: value } : { phone: value }),
+          via: input.source ?? 'inbound',
+        },
+        orgId,
+      });
+    }
     return { outcome: 'created', contactId: created.id, uuid: created.uuid };
+  }
+
+  /** A name nobody has written yet is filled in; a curated one is never replaced. */
+  private async fillBlankName(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    name: string | null | undefined,
+  ): Promise<void> {
+    const text = name?.trim();
+    if (!text) return;
+    await tx.execute(
+      sql`UPDATE contacts SET name = ${text}
+           WHERE org_id = ${orgId} AND id = ${id} AND COALESCE(btrim(name), '') = ''`,
+    );
   }
 
   private async uuidOf(tx: Tx, orgId: number, id: number): Promise<string | null> {
