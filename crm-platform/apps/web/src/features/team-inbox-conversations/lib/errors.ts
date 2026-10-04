@@ -19,6 +19,7 @@ export const ERROR_KINDS = [
   'validation',
   'tooLarge',
   'unsupported',
+  'templateNotSendable',
   'network',
   'generic',
 ] as const;
@@ -34,6 +35,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   CONVERSATION_NOTE_NOT_FOUND: 'notFound',
   INBOX_NOTE_NOT_DELETABLE: 'forbidden',
   INBOX_TEMPLATES_UNAVAILABLE: 'unsupported',
+  INBOX_TEMPLATE_NOT_SENDABLE: 'templateNotSendable',
   MESSAGE_NOT_FOUND: 'notFound',
   MESSAGE_NOT_RETRYABLE: 'notRetryable',
   MESSAGE_MEDIA_NOT_FOUND: 'mediaNotFound',

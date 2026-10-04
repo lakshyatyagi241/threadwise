@@ -22,6 +22,7 @@ import {
   inboxConversationDetailSchema,
   inboxCountsSchema,
   inboxMediaUploadSchema,
+  inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
   messageResponseSchema,
@@ -60,6 +61,13 @@ export const inboxApi = {
       schema: messageResponseSchema,
       idempotencyKey: input.clientMessageId,
     }),
+  /** The approved templates the conversation's WhatsApp number can send (the picker of the composer). */
+  templates: (conversationId: string, q: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/conversations/${conversationId}/templates`, {
+      query: q ? { q } : {},
+      schema: inboxTemplateListResponseSchema,
+      signal,
+    }),
   retry: (messageId: string) =>
     apiFetch(`/inbox/messages/${messageId}/retry`, {
       method: 'POST',
@@ -72,7 +80,10 @@ export const inboxApi = {
       schema: markConversationReadResponseSchema,
     }),
   /** Answers the row as the list shows it after the change. */
-  assign: (conversationId: string, input: Pick<AssignConversationInput, 'rowVersion' | 'userId' | 'teamId'>) =>
+  assign: (
+    conversationId: string,
+    input: Pick<AssignConversationInput, 'rowVersion' | 'userId' | 'teamId'>,
+  ) =>
     apiFetch(`/inbox/conversations/${conversationId}/assign`, {
       method: 'POST',
       body: input,

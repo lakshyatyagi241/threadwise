@@ -129,7 +129,8 @@
       "unsupported": "This channel cannot send that kind of message or file.",
       "network": "The server could not be reached. Check your connection and try again.",
       "generic": "Something went wrong. Try again.",
-      "genericWithId": "Something went wrong. Try again. Reference: {id}"
+      "genericWithId": "Something went wrong. Try again. Reference: {id}",
+      "templateNotSendable": "That template cannot be sent into this conversation. Pick another one."
     },
     "bubble": {
       "kind": {
@@ -191,7 +192,8 @@
       },
       "windowBanner": {
         "title": "The 24-hour reply window has closed.",
-        "message": "This channel only allows an approved template message more than 24 hours after the customer's last message. You can still add internal notes. A new message from the customer reopens the window."
+        "message": "This channel only allows an approved template message more than 24 hours after the customer's last message. You can still add internal notes. A new message from the customer reopens the window.",
+        "sendTemplate": "Send a template"
       },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
@@ -218,7 +220,8 @@
       "replyDisabledPlaceholder": "Replies are turned off for this conversation",
       "send": "Send",
       "addNote": "Add note",
-      "hint": "Enter sends. Shift+Enter adds a new line."
+      "hint": "Enter sends. Shift+Enter adds a new line.",
+      "template": "Send a template"
     },
     "panel": {
       "tabsLabel": "Notes and timeline",
@@ -394,6 +397,38 @@
       "removeMessage": "{name} will be removed. A channel that still has conversations cannot be removed; disconnect it instead.",
       "removeConfirm": "Remove channel",
       "cancel": "Cancel"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Send a template",
+      "close": "Close",
+      "cancel": "Cancel",
+      "back": "Back to templates",
+      "search": "Search by name or text",
+      "searchLabel": "Search templates",
+      "loading": "Loading templates",
+      "loadError": "The templates could not be loaded.",
+      "retry": "Try again",
+      "empty": "There are no approved templates for this WhatsApp number yet. Create one in Templates and wait for Meta to approve it.",
+      "noResults": "No template matches your search.",
+      "windowHint": "A template works even when the 24-hour reply window has closed.",
+      "variables": "Fill in the variables",
+      "preview": "What the customer will read",
+      "send": "Send template",
+      "sending": "Sending",
+      "sent": "Template sent",
+      "problem": {
+        "required": "{label} is required.",
+        "format": "{label} cannot contain a line break, a tab or four spaces in a row."
+      },
+      "reason": {
+        "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
+        "media_header": "Has an image, video or document header, which cannot be sent from the inbox yet.",
+        "header_variable": "Has a variable in the header, which cannot be filled in from the inbox yet.",
+        "dynamic_button": "Has a button link with a variable, which cannot be filled in from the inbox yet.",
+        "authentication": "One-time-password templates are sent by the system, not from the inbox.",
+        "named_variables": "Uses named variables, which the inbox does not support yet."
+      }
     }
   }
 }

@@ -203,8 +203,13 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
   });
 
   it('a source that fails half way leaves nothing behind', async () => {
+    // One chunk, then the failure. `read()` runs again for every chunk the consumer wants, so pushing on each call raced the 1 MB limit
+    // against the timer on a fast machine and failed with "file is larger" instead of the reset.
+    let sent = false;
     const source = new Readable({
       read() {
+        if (sent) return;
+        sent = true;
         this.push(pngBytes(4000));
         setTimeout(() => this.destroy(new Error('connection reset')), 5);
       },
