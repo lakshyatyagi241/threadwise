@@ -19,6 +19,7 @@ import { EmbedFlag } from '@/features/admin-console-shell/connect-device/embed-f
 import { InboxBell } from '@/features/admin-console-shell/inbox-bell/inbox-bell';
 import { QuickAccessDrawer } from '@/features/admin-console-shell/quick-access/quick-access-drawer';
 import { FlashHost } from '@/features/admin-console-shell/flash/flash-host';
+import { WorkspaceBrandStyle } from '@/features/admin-console-shell/branding/workspace-brand';
 import { GuidedTour } from '@/features/admin-console-shell/tour/guided-tour';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
@@ -142,9 +143,10 @@ export function AppShell({
       mode,
       bar: shell?.bar ?? [],
       walletLabel: wallet?.label,
+      brandLogoUrl: shell?.brand?.logoUrl ?? null,
       profile: profile ? { ...profile, walletLabel: wallet?.label } : undefined,
     }),
-    [nav, settings, mode, shell?.bar, wallet?.label, profile],
+    [nav, settings, mode, shell?.bar, shell?.brand?.logoUrl, wallet?.label, profile],
   );
 
   const page = (
@@ -161,6 +163,7 @@ export function AppShell({
   );
   const extras = shell ? (
     <>
+      <WorkspaceBrandStyle brand={shell.brand} />
       <CommandPalette nav={nav} tiles={settings} />
       <QuickAccessDrawer />
       <ConnectDeviceSheet />

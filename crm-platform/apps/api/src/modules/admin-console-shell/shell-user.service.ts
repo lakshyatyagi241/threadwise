@@ -15,6 +15,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { SettingsService } from '../platform-settings-branding-storage';
 import { NavLayoutService } from './nav-layout.service';
+import { WorkspaceSettingsService } from './workspace-settings.service';
 
 /**
  * What the customer shell asks for on every page: the navigation mode and rail colours (WD-ASHELL-011, 012), the top bar's
@@ -27,6 +28,7 @@ export class ShellUserService {
     private readonly db: DatabaseService,
     private readonly platform: SettingsService,
     private readonly layout: NavLayoutService,
+    private readonly workspace: WorkspaceSettingsService,
   ) {}
 
   private actor(): { orgId: number; userId: number } {
@@ -51,10 +53,11 @@ export class ShellUserService {
   }
 
   async config(): Promise<ShellConfigResponse> {
-    const [branding, nav, mine] = await Promise.all([
+    const [branding, nav, mine, brand] = await Promise.all([
       this.platform.values('branding'),
       this.layout.get(),
       this.myRow(),
+      this.workspace.brand(),
     ]);
     return {
       mode: parseShellMode(branding.dashboardLayout),
@@ -66,6 +69,7 @@ export class ShellUserService {
       bar: nav.bar,
       more: nav.more,
       tour: { run: !mine.has_seen_intro },
+      brand,
     };
   }
 

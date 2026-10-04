@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { NAV_LAYOUT_KEYS } from './nav-layout';
+import { workspaceBrandSchema } from './workspace-settings';
 
 /**
  * What the customer shell reads on load (WD-ASHELL-011, 012, 015): which navigation mode every customer gets, and the
@@ -33,6 +34,8 @@ export const shellConfigResponseSchema = z.object({
   more: z.array(z.enum(NAV_LAYOUT_KEYS)),
   /** The guided tour runs once for a person who has not seen it (WD-ASHELL-023). */
   tour: z.object({ run: z.boolean() }),
+  /** The workspace's own colours and logo, or null when the owner set none (WD-ASHELL-025). */
+  brand: workspaceBrandSchema.nullable(),
 });
 export type ShellConfigResponse = z.infer<typeof shellConfigResponseSchema>;
 

@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { cn } from '@crm/ui';
 import { ApiTab } from './api-tab';
 import { AppearanceTab } from './appearance-tab';
+import { BrandingTab } from './branding-tab';
 import { DataTab } from './data-tab';
 import { GeneralTab } from './general-tab';
 import { TAB_GROUPS, TAB_LINKS, parseTab, type SettingsTab } from './logic';
@@ -15,6 +16,7 @@ const NS = 'admin-console-shell.workspaceSettings';
 
 const PANES: Partial<Record<SettingsTab, () => React.JSX.Element>> = {
   general: GeneralTab,
+  branding: BrandingTab,
   notifications: NotificationsTab,
   api: ApiTab,
   data: DataTab,
@@ -23,8 +25,8 @@ const PANES: Partial<Record<SettingsTab, () => React.JSX.Element>> = {
 
 /**
  * WD-ASHELL-032: the workspace Settings page. A left rail in two groups (Workspace, System) and a card to the person's own
- * account; `?tab=` picks the pane and an unknown value reads as General. Tabs whose screen is another domain's page (Branding,
- * Team and roles, AI keys, Security) are links to it.
+ * account; `?tab=` picks the pane and an unknown value reads as General. Tabs whose screen is another domain's page (Team and roles,
+ * AI keys, Security) are links to it.
  */
 export function WorkspaceSettingsPage() {
   const t = useTranslations(NS);

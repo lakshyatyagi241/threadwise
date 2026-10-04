@@ -195,3 +195,41 @@ export const preferencesResponseSchema = z.object({ autoAiSummarize: z.boolean()
 export type PreferencesResponse = z.infer<typeof preferencesResponseSchema>;
 export const savePreferencesRequestSchema = z.object({ autoAiSummarize: z.boolean() });
 export type SavePreferencesRequest = z.infer<typeof savePreferencesRequestSchema>;
+
+// --- Branding (WD-ASHELL-036, 025) -----------------------------------------------------------------------------------
+
+export const BRAND_LOGO_MAX_BYTES = 2 * 1024 * 1024;
+export const BRAND_FAVICON_MAX_BYTES = 512 * 1024;
+export const BRAND_SLOTS = ['logo', 'favicon'] as const;
+export type BrandSlot = (typeof BRAND_SLOTS)[number];
+
+/** `#RRGGBB` only: the value ends up in a style rule, so nothing else is accepted (WaDesk rule 3). */
+export const brandColourSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a #RRGGBB colour.');
+
+/** What the shell applies for a workspace (WD-ASHELL-025). Every field is null until the owner sets it. */
+export const workspaceBrandSchema = z.object({
+  primary: brandColourSchema.nullable(),
+  accent: brandColourSchema.nullable(),
+  background: brandColourSchema.nullable(),
+  logoUrl: z.string().nullable(),
+  faviconUrl: z.string().nullable(),
+});
+export type WorkspaceBrand = z.infer<typeof workspaceBrandSchema>;
+
+export const workspaceBrandingResponseSchema = workspaceBrandSchema.extend({
+  isOwner: z.boolean(),
+  logoMaxBytes: z.number(),
+  faviconMaxBytes: z.number(),
+});
+export type WorkspaceBrandingResponse = z.infer<typeof workspaceBrandingResponseSchema>;
+
+/**
+ * The multipart text fields. A field that is absent is left alone; a blank one clears the colour (WaDesk posts blank as null
+ * and writes it, rule 2). The two image parts are read from the file fields, not from here.
+ */
+export const updateBrandingFieldsSchema = z.object({
+  primary: z.union([brandColourSchema, z.literal('')]).optional(),
+  accent: z.union([brandColourSchema, z.literal('')]).optional(),
+  background: z.union([brandColourSchema, z.literal('')]).optional(),
+});
+export type UpdateBrandingFields = z.infer<typeof updateBrandingFieldsSchema>;
