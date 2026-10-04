@@ -85,3 +85,9 @@ This run had no Postgres (docker daemon not running, no local service), so migra
 ## Round 4 (DB-backed re-verification)
 
 Postgres was up: `pnpm db:migrate` (178 applied, up to date), unit 39, API e2e 30, integration 14, web 12 all pass on the tip; `arch:check` and `db:verify-schema` run clean (see the run notes). Tier P0 done: WD-ADD-001..005, 007..010, 014, 015, 018..023, 025..034. Partial rows 011, 012, 013, 017, 024 and blocked 006 are unchanged: each needs an edit in another domain's zone (IG, PLAN, SET) or an owner decision, none in the ADD zone.
+
+## Round 5 (re-check on 6a8baff4)
+
+`db:migrate` up to date (212), unit 39, API e2e 30, web 12 all pass on this tip. Tier P0 done: WD-ADD-001..005, 007..010, 014, 015, 018..023, 025..034. P1/P2 state is unchanged: no item left can be finished inside the ADD zone.
+Each open row needs an edit in a zone this domain may not touch: 011 (uploaded code is never executed, owner decision), 012 (IG Channel Settings card), 013 (PLAN `plan-editor.tsx` and `planFeaturesSchema`), 017 (IG reading `EngineConnectionService.state()`), 024 (SET hub tile), 006 (owner decision, rule 2 and 3).
+Not ported on purpose: 016 (no compiled route cache in NestJS), 035 (docs only in WaDesk). No new live-WaDesk screen comparison was run this round.
