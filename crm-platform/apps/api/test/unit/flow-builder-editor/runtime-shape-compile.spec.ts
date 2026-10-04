@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   FLB_NODE_TYPE_LIST,
   flbDefaultNodeData,
@@ -18,9 +18,10 @@ import {
 import { interpolate } from '../../../src/modules/flow-runtime-engine/runtime/variables';
 
 /**
- * Proof that `flbToRuntimeData` is ADDITIVE against the runtime's real `compileGraph` (TW-FLB-070): for every node type of the
- * catalogue, the graph compiled after the shaper behaves exactly as the graph compiled without it for the types that already worked,
- * and the fields the executors read are populated for the ten that did not. The same data bag is also checked the other way round
+ * Proof that the `flbToRuntimeData` hook inside the runtime's real `compileGraph` is ADDITIVE (TW-FLB-070, TW-FLR-013): for every
+ * node type of the catalogue, the graph compiled WITH the hook behaves exactly as the graph compiled WITHOUT it (`rawNode`: the same
+ * module loaded again with the shaper replaced by an identity copy, which is what `compileGraph` did before the hook landed) for the
+ * types that already worked, and the fields the executors read are populated for the ten that did not. The same data bag is also checked the other way round
  * (shaped AFTER compile, from the raw `props.data` the compiler hands the executors) and through the executors' own pure readers.
  */
 
@@ -35,8 +36,23 @@ const graphOf = (type: string, data: Rec): FlowGraph =>
     flowEdges: [{ id: 'e', source: 't', sourceHandle: 'out', target: 'n1' }],
   });
 
-const node = (g: FlowGraph) => compileGraph(g).nodes.find((n) => n.id === 'n1')!;
-const rawNode = (type: string, data: Rec) => node(graphOf(type, data));
+type Compile = typeof compileGraph;
+/** `compileGraph` as it was before the hook: the shaper is an identity copy of the node's data. */
+let unhooked: Compile;
+beforeAll(async () => {
+  vi.resetModules();
+  vi.doMock('@crm/contracts', async (orig) => ({
+    ...(await orig<typeof import('@crm/contracts')>()),
+    flbToRuntimeData: (n: { data?: Rec }) => ({ ...(n.data ?? {}) }),
+  }));
+  unhooked = (await import('../../../src/modules/flow-runtime-engine/graph/compile-graph'))
+    .compileGraph;
+  vi.doUnmock('@crm/contracts');
+});
+
+const node = (g: FlowGraph, compile: Compile = compileGraph) =>
+  compile(g).nodes.find((n) => n.id === 'n1')!;
+const rawNode = (type: string, data: Rec) => node(graphOf(type, data), unhooked);
 const shapedNode = (type: string, data: Rec) => node(flbRuntimeNodeData(graphOf(type, data)));
 
 /** A realistic, non-default save per type (what a person would actually configure). `undefined` = the defaults alone. */
@@ -151,7 +167,7 @@ describe('types that already worked: the compiled props do not change by one byt
   it('every other type keeps all its saved data in `props.data`, node ids, order and edges as they were', () => {
     for (const { id: type } of FLB_NODE_TYPE_LIST) {
       const g = graphOf(type, flbDefaultNodeData(type));
-      const raw = compileGraph(g);
+      const raw = unhooked(g);
       const shaped = compileGraph(flbRuntimeNodeData(g));
       expect(
         shaped.nodes.map((n) => [n.id, n.type]),
@@ -347,7 +363,9 @@ describe('the ten mismatches: what the executor reads is now populated', () => {
     };
     const actionsOf = (g: { flowNodes: Array<{ type: string; data: Rec }> }) =>
       compileGraph(g).nodes.find((n) => n.id === 'n1')!.props.actions;
-    expect(actionsOf(legacy)).toEqual([]);
+    const unhookedActions = unhooked(legacy).nodes.find((n) => n.id === 'n1')!.props.actions;
+    expect(unhookedActions).toEqual([]);
+    expect(actionsOf(legacy)).toEqual([{ type: 'copy', label: 'Code', value: 'SAVE' }]);
     expect(actionsOf(flbRuntimeNodeData(legacy))).toEqual([
       { type: 'copy', label: 'Code', value: 'SAVE' },
     ]);
