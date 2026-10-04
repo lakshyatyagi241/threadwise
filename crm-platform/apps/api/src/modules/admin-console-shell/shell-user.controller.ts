@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { saveQuickAccessRequestSchema, type SaveQuickAccessRequest } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
@@ -30,6 +30,12 @@ export class ShellUserController {
   @ApiOperation({ summary: 'The guided tour was finished or skipped; it never auto-runs again' })
   tourSeen() {
     return this.shell.tourSeen();
+  }
+
+  @Delete('notifications')
+  @ApiOperation({ summary: "The bell's Clear all: delete my notifications" })
+  clearNotifications() {
+    return this.shell.clearNotifications();
   }
 
   @Get('announcements')

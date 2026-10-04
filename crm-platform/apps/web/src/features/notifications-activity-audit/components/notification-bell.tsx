@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react';
 import type { NotificationResponse } from '@crm/contracts';
 import { Popover, Spinner, cn } from '@crm/ui';
 import { NavIcon } from '@/components/shell/nav-icons';
+import { useClearNotifications } from '@/features/admin-console-shell/header/clear-notifications';
 import { useFeed, useMarkRead, useUnreadCount } from '../api/hooks';
 import { badgeText, notificationText, safeLink, type Translator } from '../lib/copy';
 
@@ -15,7 +16,9 @@ import { badgeText, notificationText, safeLink, type Translator } from '../lib/c
  */
 export function NotificationBell() {
   const t = useTranslations('notifications');
+  const tb = useTranslations('admin-console-shell.bell');
   const [open, setOpen] = useState(false);
+  const clear = useClearNotifications();
   const unread = useUnreadCount();
   const feed = useFeed(open);
   const { markRead, markAllRead, markingAll } = useMarkRead();
@@ -50,10 +53,15 @@ export function NotificationBell() {
         open={open}
         onClose={close}
         label={t('bell.title')}
-        className="fixed end-2 start-2 top-14 mt-0 w-auto space-y-0 overflow-hidden p-0 sm:absolute sm:start-auto sm:end-0 sm:top-full sm:mt-1 sm:w-96"
+        className="fixed end-2 start-2 top-14 mt-0 w-auto space-y-0 overflow-hidden p-0 sm:absolute sm:start-auto sm:end-0 sm:top-full sm:mt-1 sm:w-[360px] rounded-2xl"
       >
         <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold">{t('bell.title')}</h2>
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              {tb('eyebrow')}
+            </p>
+            <h2 className="font-serif text-base">{t('bell.title')}</h2>
+          </div>
           <button
             type="button"
             disabled={count === 0 || markingAll}
@@ -73,6 +81,23 @@ export function NotificationBell() {
             close();
           }}
         />
+        <div className="flex items-center justify-between border-t border-border bg-muted/40 px-4 py-2.5">
+          <button
+            type="button"
+            disabled={clear.isPending}
+            onClick={() => clear.mutate()}
+            className="rounded-md px-1 text-xs font-semibold text-danger outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-60"
+          >
+            {tb('clearAll')}
+          </button>
+          <Link
+            href="/notifications"
+            onClick={close}
+            className="rounded-md px-1 text-xs font-semibold text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {tb('viewAll')}
+          </Link>
+        </div>
       </Popover>
     </div>
   );

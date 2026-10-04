@@ -11,7 +11,7 @@ import {
 let h: Harness;
 let api: Api;
 let t: Tenant;
-let member: { token: string };
+let member: { token: string; userId: number };
 let other: Tenant;
 
 const PNG = Buffer.from(
@@ -206,5 +206,40 @@ describe('API and webhooks tab (TW-ASHELL-042)', () => {
       sheetsKey: null,
       webhooks: { outbound: 0, inbound: 0 },
     });
+  });
+});
+
+describe('Bell: Clear all (TW-ASHELL-018)', () => {
+  const clear = (token: string) => api.http().delete('/v2/shell/notifications').set(bearer(token));
+  const feed = (token: string) => api.http().get('/v2/notifications').set(bearer(token));
+  const seed = async (orgId: number, userId: number, n: number) => {
+    for (let i = 0; i < n; i++) {
+      await h.owner.query(
+        `INSERT INTO inbox_notifications (org_id, user_id, type, title) VALUES ($1, $2, 'task_assigned', $3)`,
+        [orgId, userId, `n${i}`],
+      );
+    }
+  };
+
+  it('deletes only my notifications; a teammate and another workspace keep theirs; the feed is then empty', async () => {
+    await seed(t.orgId, t.adminUserId, 3);
+    await seed(t.orgId, member.userId, 2);
+    await seed(other.orgId, other.adminUserId, 1);
+    expect((await feed(t.admin)).body.meta.unread).toBe(3);
+    const res = await clear(t.admin);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body).toEqual({ cleared: 3 });
+    expect((await feed(t.admin)).body.data).toEqual([]);
+    expect((await feed(member.token)).body.data).toHaveLength(2);
+    expect((await feed(other.admin)).body.data).toHaveLength(1);
+  });
+
+  it('is audited with the count, and clearing an empty bell is a quiet zero', async () => {
+    const n = await h.owner.query(
+      `SELECT count(*) n FROM security_events WHERE subject_org_id = $1 AND event = 'notifications.cleared'`,
+      [t.orgId],
+    );
+    expect(Number(n.rows[0].n)).toBe(1);
+    expect((await clear(t.admin)).body).toEqual({ cleared: 0 });
   });
 });
