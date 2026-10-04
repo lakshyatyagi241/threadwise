@@ -21,7 +21,7 @@ import {
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
 import { humanSize } from '../lib/time';
-import { CloseIcon, FileIcon, PaperclipIcon, SendIcon } from './icons';
+import { CloseIcon, FileIcon, PaperclipIcon, SendIcon, TemplateIcon } from './icons';
 
 /** What the file picker offers; the server decides what it really accepts, by the file's bytes. */
 const ACCEPT = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv';
@@ -53,6 +53,10 @@ export interface ComposerProps {
   canReply: boolean;
   canNote: boolean;
   canAttach: boolean;
+  /** The channel sends templates and the agent may reply: the "Template" button is shown (it works with the window closed). */
+  canTemplate?: boolean;
+  /** Opens the template picker. */
+  onTemplate?: () => void;
   /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
   attachments?: AttachmentRules;
   /** Reading only: neither tab can write. */
@@ -78,7 +82,10 @@ export function Composer(props: ComposerProps) {
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
   const attachmentError = useAttachmentError();
-  const limited = props.attachments && hasWhatsappLimits(props.attachments.channelKind) ? props.attachments : null;
+  const limited =
+    props.attachments && hasWhatsappLimits(props.attachments.channelKind)
+      ? props.attachments
+      : null;
   const accept = limited ? acceptAttribute(limited.allowed) || ACCEPT : ACCEPT;
 
   // Another conversation: its own draft (the previous one was saved as it was typed).
@@ -220,6 +227,18 @@ export function Composer(props: ComposerProps) {
       )}
 
       <div className="flex items-end gap-2 p-3">
+        {!isNote && props.canTemplate && props.onTemplate && (
+          <button
+            type="button"
+            title={t('template')}
+            aria-label={t('template')}
+            data-testid="inbox-template-button"
+            onClick={props.onTemplate}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <TemplateIcon />
+          </button>
+        )}
         {!isNote && props.canAttach && (
           <>
             <input

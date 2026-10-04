@@ -13,6 +13,7 @@ export const KEYS = {
   events: (id: string) => ['inbox', 'events', id] as const,
   assignees: ['inbox', 'assignees'] as const,
   channels: ['inbox', 'channels'] as const,
+  templates: (id: string, q: string) => ['inbox', 'templates', id, q] as const,
 };
 
 export function useChannels() {
@@ -26,6 +27,17 @@ export function useChannels() {
 
 export const refreshChannels = (qc: QueryClient) =>
   qc.invalidateQueries({ queryKey: KEYS.channels });
+
+/** The templates the open conversation's number can send. Fetched only while the picker is open; a search narrows it on the server. */
+export function useConversationTemplates(conversationId: string, enabled: boolean, q: string) {
+  return useQuery({
+    queryKey: KEYS.templates(conversationId, q),
+    queryFn: ({ signal }) => inboxApi.templates(conversationId, q, signal),
+    enabled,
+    staleTime: 60_000,
+    retry: false,
+  });
+}
 
 export function useAssignees(enabled: boolean) {
   return useQuery({
@@ -140,7 +152,9 @@ export function useNowMs(everyMs = 30_000): number {
 }
 
 /** A stable callback that always runs the latest function: for handlers passed down to memoised children. */
-export function useLatestCallback<A extends unknown[], R>(fn: (...args: A) => R): (...args: A) => R {
+export function useLatestCallback<A extends unknown[], R>(
+  fn: (...args: A) => R,
+): (...args: A) => R {
   const ref = useRef(fn);
   useEffect(() => {
     ref.current = fn;

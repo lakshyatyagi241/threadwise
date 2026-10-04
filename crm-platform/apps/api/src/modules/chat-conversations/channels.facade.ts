@@ -15,6 +15,8 @@ export interface ChannelSummary {
   name: string;
   status: ChannelStatus;
   displayAddress: string | null;
+  /** Internal id of the WhatsApp connection (`wa_provider_configs`) a WhatsApp Cloud channel runs on; null for any other channel. Never on the wire. */
+  wabaConfigId: number | null;
   capabilities: ChannelCapabilities;
   settings: ChannelSettings;
 }
@@ -58,6 +60,7 @@ export class ChannelsFacade {
       name: row.name,
       status: row.status,
       displayAddress: row.displayAddress,
+      wabaConfigId: row.wabaConfigId,
       settings,
       capabilities: effectiveCapabilitiesOf(adapter, {
         orgId: 0,

@@ -1,6 +1,11 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { CONVERSATION_EVENT_TYPES, CONVERSATION_STATUSES, INBOX_TABS } from '@crm/contracts';
+import {
+  CONVERSATION_EVENT_TYPES,
+  CONVERSATION_STATUSES,
+  INBOX_TABS,
+  INBOX_TEMPLATE_BLOCK_REASONS,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { ERROR_KINDS } from './lib/errors';
 import { SEND_FAULTS } from './components/simulator-drawer';
@@ -113,6 +118,8 @@ const DYNAMIC = [
   ...(['connected', 'disconnected', 'error'] as const).map((s) => `channels.status.${s}`),
   ...(['resolved', 'closed', 'spam', 'snoozed'] as const).map((s) => `thread.status.${s}`),
   ...(['image', 'text', 'attachment'] as const).map((s) => `bubble.kind.${s}`),
+  ...INBOX_TEMPLATE_BLOCK_REASONS.map((r) => `templates.reason.${r}`),
+  ...(['required', 'format'] as const).map((p) => `templates.problem.${p}`),
   'panel.timeline.events.unknown',
 ];
 

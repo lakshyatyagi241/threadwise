@@ -35,6 +35,11 @@ export interface Thread {
   loadOlder: () => Promise<void>;
   olderLoading: boolean;
   send: (draft: SendDraft) => void;
+  /**
+   * Sends an approved template with the values for its variables. Resolves with the stored message merged into the thread and
+   * rejects with the API error, so the picker that asked can show it and stay open.
+   */
+  sendTemplate: (input: { templateId: string; variables: Record<string, string> }) => Promise<void>;
   /** Send again a request that never produced a stored message. */
   retryPending: (clientMessageId: string) => void;
   dismissPending: (clientMessageId: string) => void;
@@ -264,6 +269,22 @@ export function useThread(
     [post],
   );
 
+  const sendTemplate = useCallback(
+    async (input: { templateId: string; variables: Record<string, string> }) => {
+      const id = latest.current.conversationId;
+      if (!id) return;
+      const message = await inboxApi.send(id, {
+        kind: 'template',
+        clientMessageId: crypto.randomUUID(),
+        templateId: input.templateId,
+        variables: input.variables,
+      });
+      if (latest.current.conversationId === id) dispatch({ type: 'merge', messages: [message] });
+      latest.current.options.onSent();
+    },
+    [],
+  );
+
   const retryPending = useCallback(
     (clientMessageId: string) => {
       const p = latest.current.state.pending.find((x) => x.clientMessageId === clientMessageId);
@@ -287,12 +308,12 @@ export function useThread(
   // The reducer is reset in an effect, one render after another conversation is chosen: never show the old thread under the new one.
   return useMemo(
     () => ({
-      state:
-        state.conversationId === conversationId ? state : { ...EMPTY_THREAD, conversationId },
+      state: state.conversationId === conversationId ? state : { ...EMPTY_THREAD, conversationId },
       room,
       loadOlder,
       olderLoading,
       send,
+      sendTemplate,
       retryPending,
       dismissPending,
       retryMessage,
@@ -306,6 +327,7 @@ export function useThread(
       loadOlder,
       olderLoading,
       send,
+      sendTemplate,
       retryPending,
       dismissPending,
       retryMessage,
@@ -314,4 +336,3 @@ export function useThread(
     ],
   );
 }
-

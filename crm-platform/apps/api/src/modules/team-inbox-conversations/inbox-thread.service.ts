@@ -1,6 +1,9 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  type InboxTemplateListResponse,
+  type InboxTemplateOption,
+  type ListInboxTemplatesQuery,
   type ListMessagesQuery,
   type MessageListResponse,
   type MessageResponse,
@@ -11,12 +14,23 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
+  ChannelsFacade,
   CONVERSATIONS_FACADE,
   type ConversationsFacade,
   type OutboundContent,
 } from '../chat-conversations';
+import { TemplatesRepository } from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
+import {
+  blockReason,
+  bodySlots,
+  buttonsOf,
+  checkVariables,
+  cleanVariables,
+  isApproved,
+  renderBody,
+} from './inbox-template-rules';
 import { MediaUploadsRepository } from './media-uploads.repository';
 
 /**
@@ -34,6 +48,8 @@ export class InboxThreadService {
     private readonly repo: ConversationsRepository,
     private readonly access: InboxAccess,
     private readonly uploads: MediaUploadsRepository,
+    private readonly channels: ChannelsFacade,
+    private readonly templates: TemplatesRepository,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -54,19 +70,12 @@ export class InboxThreadService {
    */
   async send(uuid: string, input: SendMessageInput): Promise<MessageResponse> {
     const ctx = RequestContextStore.require();
-    if (input.kind === 'template') {
-      throw new AppError(
-        ERROR_CODES.INBOX_TEMPLATES_UNAVAILABLE,
-        'Template messages are not available yet',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-        [{ path: 'kind', message: 'the template library is not part of this deployment' }],
-      );
-    }
 
     let claimed: { id: number; fresh: boolean } | null = null;
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
       if (input.kind === 'text') return { kind: 'text', body: input.body };
+      if (input.kind === 'template') return this.templateContent(tx, ctx.orgId, uuid, input);
 
       const claim = await this.uploads.claim(
         tx,
@@ -114,6 +123,114 @@ export class InboxThreadService {
       }
       throw err;
     }
+  }
+
+  /**
+   * The approved templates this conversation's WhatsApp number can send, for the picker. A template of another number, one that is
+   * not approved and one with nothing to send are left out; one the inbox cannot fill in is listed with the reason.
+   */
+  async listTemplates(
+    uuid: string,
+    query: ListInboxTemplatesQuery,
+  ): Promise<InboxTemplateListResponse> {
+    const ctx = RequestContextStore.require();
+    const now = new Date();
+    return this.db.tx(async (tx) => {
+      await this.assertCanReply(tx, ctx, uuid);
+      const wabaConfigId = await this.wabaConfigOf(tx, ctx.orgId, uuid);
+      if (wabaConfigId === null) return { data: [] };
+      const rows = await this.templates.list(tx, ctx.orgId, {
+        limit: 200,
+        status: 'approved',
+        ...(query.q ? { q: query.q } : {}),
+      });
+      const data = rows
+        .filter((t) => t.providerConfigId === wabaConfigId && isApproved(t))
+        .map((t): InboxTemplateOption => {
+          const reason = blockReason(t, now);
+          return {
+            id: t.uuid,
+            name: t.templateName,
+            language: t.language,
+            category: (t.metaCategory ?? t.category).toUpperCase(),
+            header: t.header,
+            body: t.templateBody,
+            footer: t.footer,
+            buttons: buttonsOf(t.buttons).map((b) => b.text),
+            slots: bodySlots(t.templateBody, t.variableMap),
+            sendable: reason === null,
+            reason,
+          };
+        });
+      return { data };
+    });
+  }
+
+  /**
+   * Turns a picked template and the agent's values into what the conversation core sends: the template's name and language, the values
+   * by slot, and the body as the customer will read it (what the thread shows). A template is never refused by the 24 hour window.
+   */
+  private async templateContent(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    input: Extract<SendMessageInput, { kind: 'template' }>,
+  ): Promise<OutboundContent> {
+    const template = await this.templates.findByUuid(tx, orgId, input.templateId);
+    if (!template) {
+      throw new AppError(
+        ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+        'That template was not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'templateId', message: 'not found' }],
+      );
+    }
+    const wabaConfigId = await this.wabaConfigOf(tx, orgId, uuid);
+    const refuse = (message: string): never => {
+      throw new AppError(
+        ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+        message,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'templateId', message }],
+      );
+    };
+    if (wabaConfigId === null)
+      refuse('This conversation is not on a WhatsApp number that sends templates');
+    if (template.providerConfigId !== wabaConfigId) {
+      refuse('That template belongs to another WhatsApp number');
+    }
+    if (!isApproved(template)) refuse('That template is not approved');
+    const reason = blockReason(template, new Date());
+    if (reason)
+      refuse(`That template cannot be sent from the inbox yet (${reason.replace(/_/g, ' ')})`);
+
+    const slots = bodySlots(template.templateBody, template.variableMap);
+    const problems = checkVariables(slots, input.variables);
+    if (problems.length > 0) {
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'The template values are not valid',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        problems.map((p) => ({ path: `variables.${p.key}`, message: p.message })),
+      );
+    }
+    const variables = cleanVariables(slots, input.variables);
+    return {
+      kind: 'template',
+      name: template.templateName,
+      language: template.language,
+      variables,
+      body: renderBody(template.templateBody, variables),
+      templateId: template.id,
+    };
+  }
+
+  /** The WhatsApp connection the conversation's channel runs on (null for a channel that is not WhatsApp Cloud). */
+  private async wabaConfigOf(tx: Tx, orgId: number, uuid: string): Promise<number | null> {
+    const row = await this.repo.byUuid(tx, orgId, uuid);
+    if (!row) throw conversationNotFound();
+    const channel = await this.channels.findById(tx, orgId, row.channelId);
+    return channel?.wabaConfigId ?? null;
   }
 
   /** Puts a failed outbound message back in the queue. The message is named, so the conversation is found through it. */
