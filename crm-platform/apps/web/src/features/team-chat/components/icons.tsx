@@ -88,3 +88,37 @@ export const MessageIcon = (p: IconProps) => (
     <path d="M4 5h16v11H9l-5 4V5z" />
   </Svg>
 );
+
+export const GridIcon = (p: IconProps) => (
+  <Svg viewBox="0 0 16 16" strokeWidth="1.6" {...p}>
+    <rect x="2" y="2" width="5" height="5" rx="1" />
+    <rect x="9" y="2" width="5" height="5" rx="1" />
+    <rect x="2" y="9" width="5" height="5" rx="1" />
+    <rect x="9" y="9" width="5" height="5" rx="1" />
+  </Svg>
+);
+
+export const ChatBubbleIcon = (p: IconProps) => (
+  <Svg viewBox="0 0 16 16" strokeWidth="1.6" {...p}>
+    <path d="M2 4c0-1 .8-2 2-2h8c1.2 0 2 1 2 2v6c0 1-.8 2-2 2H7l-3 3v-3H4c-1.2 0-2-1-2-2z" />
+  </Svg>
+);
+
+export const ClockIcon = (p: IconProps) => (
+  <Svg viewBox="0 0 16 16" strokeWidth="1.6" {...p}>
+    <circle cx="8" cy="8" r="6" />
+    <path d="M8 5v3l2 2" />
+  </Svg>
+);
+
+export const ArrowLeftIcon = (p: IconProps) => (
+  <Svg viewBox="0 0 16 16" strokeWidth="1.6" {...p}>
+    <path d="M14 8H3M6 5L3 8l3 3" />
+  </Svg>
+);
+
+export const ChannelGlyphIcon = (p: IconProps) => (
+  <Svg viewBox="0 0 16 16" strokeWidth="1.7" {...p}>
+    <path d="M3 6h10M3 10h10M5 2v12M11 2v12" />
+  </Svg>
+);
