@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  INBOX_TEMPLATE_LIST_MAX,
   type InboxTemplateListResponse,
   type InboxTemplateOption,
   type ListInboxTemplatesQuery,
@@ -138,14 +139,19 @@ export class InboxThreadService {
     return this.db.tx(async (tx) => {
       await this.assertCanReply(tx, ctx, uuid);
       const wabaConfigId = await this.wabaConfigOf(tx, ctx.orgId, uuid);
-      if (wabaConfigId === null) return { data: [] };
+      if (wabaConfigId === null) return { data: [], hasMore: false };
+      // Narrowed to this number in SQL, so another number's templates never use up the page. `list` returns one row beyond the limit
+      // when there are more: that row is how `hasMore` is known, and it is not sent.
       const rows = await this.templates.list(tx, ctx.orgId, {
-        limit: 200,
+        limit: INBOX_TEMPLATE_LIST_MAX,
         status: 'approved',
+        providerConfigId: wabaConfigId,
         ...(query.q ? { q: query.q } : {}),
       });
+      const hasMore = rows.length > INBOX_TEMPLATE_LIST_MAX;
       const data = rows
-        .filter((t) => t.providerConfigId === wabaConfigId && isApproved(t))
+        .slice(0, INBOX_TEMPLATE_LIST_MAX)
+        .filter((t) => isApproved(t))
         .map((t): InboxTemplateOption => {
           const reason = blockReason(t, now);
           return {
@@ -162,7 +168,7 @@ export class InboxThreadService {
             reason,
           };
         });
-      return { data };
+      return { data, hasMore };
     });
   }
 

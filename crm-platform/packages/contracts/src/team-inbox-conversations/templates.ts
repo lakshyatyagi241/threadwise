@@ -54,7 +54,12 @@ export const listInboxTemplatesQuerySchema = z.object({
 });
 export type ListInboxTemplatesQuery = z.infer<typeof listInboxTemplatesQuerySchema>;
 
+/** The most templates one answer carries; a number can have over a thousand, so the picker narrows by search. */
+export const INBOX_TEMPLATE_LIST_MAX = 200;
+
 export const inboxTemplateListResponseSchema = z.object({
   data: z.array(inboxTemplateOptionSchema),
+  /** More approved templates match than were returned: the picker tells the agent to search. */
+  hasMore: z.boolean(),
 });
 export type InboxTemplateListResponse = z.infer<typeof inboxTemplateListResponseSchema>;
