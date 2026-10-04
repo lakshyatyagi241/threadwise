@@ -428,7 +428,8 @@
         "dynamic_button": "Has a button link with a variable, which cannot be filled in from the inbox yet.",
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
         "named_variables": "Uses named variables, which the inbox does not support yet."
-      }
+      },
+      "hasMore": "Showing the first {count} templates. Search by name or text to find the others."
     }
   }
 }
