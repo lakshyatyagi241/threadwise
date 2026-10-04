@@ -226,6 +226,29 @@ function Dropzone(props: {
             </div>
           </div>
         )}
+        {!shown && (
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="mx-auto size-8 text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            {props.slot === 'logo' ? (
+              <>
+                <path d="M3 16l5-5 4 4 3-3 6 6" />
+                <rect x="2.5" y="3.5" width="19" height="17" rx="2" />
+                <circle cx="8.5" cy="9" r="1.5" />
+              </>
+            ) : (
+              <>
+                <rect x="4" y="4" width="16" height="16" rx="3" />
+                <circle cx="12" cy="12" r="3" />
+              </>
+            )}
+          </svg>
+        )}
         <div className="mt-2 text-sm font-medium">
           <span className="text-primary">{t('click')}</span> {t('orDrag')}
         </div>

@@ -103,7 +103,7 @@ const sameScreen = (href: string, screen: string) =>
 
 /**
  * WaDesk's curated grid (WD-ASHELL-020): each catalogue card whose screen exists here and is not already in the top bar, in
- * WaDesk's order, then a plain card for every other reachable screen so nothing is lost. A card takes the crown of the menu
+ * WaDesk's order, then a plain card for every other menu screen so nothing is lost. A card takes the crown of the menu
  * entry or Settings tile it points at.
  */
 export function allToolCards(
@@ -123,7 +123,7 @@ export function allToolCards(
       const hit = screens.find((x) => sameScreen(x.href, want));
       if (!hit) continue;
       if (barHrefs.has(hit.href)) break;
-      claimed.add(hit.href);
+      for (const x of screens) if (c.hrefs.some((w) => sameScreen(x.href, w))) claimed.add(x.href);
       curated.push({
         id: `cat:${c.id}`,
         labelKey: `admin-console-shell.more.cards.${c.id}.title`,
@@ -139,7 +139,8 @@ export function allToolCards(
       break;
     }
   }
-  const rest = toolCards(nav, tiles, barHrefs).filter((c) => !claimed.has(c.href));
+  // Settings tiles are not repeated here: WaDesk's grid holds tools, and the Settings hub lists every tile.
+  const rest = toolCards(nav, [], barHrefs).filter((c) => !claimed.has(c.href));
   return [...curated, ...rest];
 }
 
