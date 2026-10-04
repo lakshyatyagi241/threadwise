@@ -43,5 +43,5 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Shims, owners and blocked consumers
 
 - `OpenTelegramPlanGate`: no Telegram keys in the plan catalogue (only the numeric cap).
-- `NoInboundHooks`: no flow runtime, routing or auto-reply, so nothing consumes a message.
+- `NoInboundHooks`: unused now. Flows run from the inbox's inbound hooks (`FlowInboundService` in the flow runtime worker) on every stored Telegram message, because the bot is a `telegram` channel; routing and auto-reply are still absent.
 - `StorageMediaStore`: real (workspace object storage); local disk saves nothing. `ChatInboxIngest`: real, over chat-conversations.
