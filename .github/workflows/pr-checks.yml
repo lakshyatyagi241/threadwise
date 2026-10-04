@@ -40,6 +40,12 @@ jobs:
         run: cd apps/web && node scripts/gen-registry.mjs && pnpm exec tsc --noEmit -p .
       - name: API unit tests
         run: pnpm --filter @crm/api test
+      # The release script is the forced command behind the deploy key: its flow (dump, migrate, restart, roll back) is tested against
+      # a stub `docker`, and the compose file must still parse. Seconds, no dependencies.
+      - name: Deploy scripts
+        run: |
+          bash deploy/hostinger/tests/ci-entry.test.sh
+          docker compose -f deploy/hostinger/docker-compose.yml config -q 2>/dev/null
 
   images:
     # The two production images must still build: this is where a bad Dockerfile, a missing dependency or a failing `next build` shows up.
