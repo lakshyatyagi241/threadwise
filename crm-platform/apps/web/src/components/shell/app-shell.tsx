@@ -24,13 +24,7 @@ import { SettingsBack } from '@/features/settings-hub/settings-back';
 import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
 import { CommandPalette } from './command-palette';
 import { NavDrawer, NavRail } from './nav-rail';
-import {
-  SETTINGS_NAV_ID,
-  activeNavId,
-  helpItems,
-  menuItems,
-  toSections,
-} from './nav-model';
+import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
 import { ShellDataProvider } from './shell-data';
 import { useChromeHidden } from './shell-chrome';
 import { TopBar, type WalletChipData } from './top-bar';
@@ -221,11 +215,7 @@ export function AppShell({
   return (
     <ShellDataProvider value={data}>
       <div className="flex min-h-dvh" data-user-shell="sidebar" style={railVars}>
-        <NavRail
-          sections={sections}
-          activeId={activeId}
-          footer={navFooter}
-        />
+        <NavRail sections={sections} activeId={activeId} footer={navFooter} />
         <NavDrawer
           open={drawer}
           onClose={closeDrawer}
