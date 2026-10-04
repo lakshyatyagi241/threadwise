@@ -264,6 +264,14 @@ describe('keyword rule and conversation message stores (TW-I18N-032, 033, 036, 0
       expect(await messages.load(orgA, 999_999)).toBeNull();
     });
 
+    it('finds a message id from its public uuid, in its own workspace only', async () => {
+      const uuid = (await owner.query(`SELECT uuid FROM messages WHERE id = $1`, [inbound])).rows[0]
+        .uuid as string;
+      expect(await messages.idOfUuid(orgA, uuid)).toBe(inbound);
+      expect(await messages.idOfUuid(orgB, uuid)).toBeNull();
+      expect(await messages.idOfUuid(orgA, '00000000-0000-4000-8000-000000000000')).toBeNull();
+    });
+
     it('does not see another workspace message', async () => {
       expect(await messages.load(orgB, inbound)).toBeNull();
     });

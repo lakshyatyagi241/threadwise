@@ -267,7 +267,11 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         <ToggleRow
           key={f.key}
           id={id}
-          label={label(f)}
+          label={
+            spec.id === 'storage' && f.key === 'enabled'
+              ? tp(value === true ? 'status.enabled' : 'status.disabled')
+              : label(f)
+          }
           hint={hint(f)}
           checked={value === true}
           onChange={(v) => setField(f.key, v)}
@@ -289,7 +293,11 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             disabled={draft.clear[f.key] === true}
             autoComplete="new-password"
             placeholder={
-              isSet ? '••••••••' : tg.has(`fields.${f.key}.placeholder`) ? tg(`fields.${f.key}.placeholder`) : ''
+              isSet
+                ? '••••••••'
+                : tg.has(`fields.${f.key}.placeholder`)
+                  ? tg(`fields.${f.key}.placeholder`)
+                  : ''
             }
             showLabel={t('common.secretShow')}
             hideLabel={t('common.secretHide')}
@@ -469,7 +477,13 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
           <input
             type="color"
             aria-label={label(f)}
-            value={/^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : /^#[0-9A-Fa-f]{6}$/.test(shipped) ? shipped : '#000000'}
+            value={
+              /^#[0-9A-Fa-f]{6}$/.test(hex)
+                ? hex
+                : /^#[0-9A-Fa-f]{6}$/.test(shipped)
+                  ? shipped
+                  : '#000000'
+            }
             onChange={(e) => setField(f.key, e.target.value.toUpperCase())}
             disabled={!canEdit}
             className="h-9 w-12 shrink-0 cursor-pointer rounded-md border border-border bg-background p-1"
@@ -555,9 +569,24 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
 
   const renderSection = (s: SectionSpec) => {
     const title = tp(`sections.${s.id}.title`);
-    const description = tp.has(`sections.${s.id}.description`)
+    let description = tp.has(`sections.${s.id}.description`)
       ? tp(`sections.${s.id}.description`)
       : undefined;
+    if (spec.id === 'storage' && s.id === 'provider') {
+      const on = draft.fields.enabled === true;
+      const provider = String(draft.fields.provider ?? '');
+      const hasConfig =
+        Boolean(draft.fields.bucket || draft.fields.accessKeyId || draft.fields.storageZone) ||
+        data.secrets.secret?.isSet === true;
+      const name = tg.has(`options.provider.${provider}`)
+        ? tg(`options.provider.${provider}`)
+        : provider;
+      description = on
+        ? tp('status.active', { provider: name })
+        : hasConfig
+          ? tp('status.configured')
+          : tp('status.local');
+    }
     let body: ReactNode;
     if (s.custom === 'brandAssets') body = <BrandAssets canEdit={canEdit} />;
     else if (s.custom === 'teamInboxApp') body = <TeamInboxApp canEdit={canEdit} />;
@@ -599,7 +628,12 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       body = fieldsGrid(s);
     }
     return (
-      <Section key={s.id} kicker={s.eyebrow ?? tp('title')} title={title} description={description}>
+      <Section
+        key={s.id}
+        kicker={s.eyebrow?.replace(/-/g, ' ') ?? tp('title')}
+        title={title}
+        description={description}
+      >
         {body}
       </Section>
     );

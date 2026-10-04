@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
+  type DashWidgets,
+  type AnalyticsPanels,
   type AnalyticsQuery,
   type AnalyticsResponse,
   type DashRange,
@@ -8,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { deltaPp, funnelOf, percentChange, totalsOf } from './dash-metrics';
 import {
@@ -18,7 +22,11 @@ import {
   zonedHourStart,
   zonedMidnight,
 } from './dash-window';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { DashRepository } from './dash.repository';
+import { DashWidgetsRepository } from './dash-widgets.repository';
+import { DashPanelsRepository } from './dash-panels.repository';
+import { DashExtrasRepository } from './dash-extras.repository';
 
 const HOUR_MS = 3_600_000;
 const iso = (d: Date): string => d.toISOString();
@@ -32,7 +40,48 @@ export class DashService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: DashRepository,
+    private readonly widgetsRepo: DashWidgetsRepository,
+    private readonly panelsRepo: DashPanelsRepository,
+    private readonly extrasRepo: DashExtrasRepository,
+    private readonly plans: PlanEntitlementService,
+    private readonly config: ConfigService<Env, true>,
   ) {}
+
+  /** Reference's hard-coded slot count when the plan sets no device limit. */
+  static readonly DEFAULT_SLOTS = 6;
+
+  /** The dashboard's data cards (TW-DASH-006, 011, 013..016, 019); one transaction, one payload. */
+  async widgets(range: DashRange, now: Date = new Date()): Promise<DashWidgets> {
+    const { orgId } = RequestContextStore.require();
+    const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
+    const deviceCap = await this.plans.limit(orgId, 'devices');
+    return this.db.tx(async (tx) => {
+      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+      const w = resolveDashWindow(range, tz, now);
+      const devices = await this.widgetsRepo.devices(tx, orgId);
+      return {
+        contacts: await this.widgetsRepo.contacts(tx, orgId, w.from),
+        campaigns: await this.widgetsRepo.campaigns(tx, orgId),
+        devices: {
+          ...devices,
+          slotCap: Math.max(devices.total, deviceCap > 0 ? deviceCap : DashService.DEFAULT_SLOTS),
+        },
+        templates: await this.widgetsRepo.templates(tx, orgId, w.from, w.to),
+        inbox: await this.widgetsRepo.inbox(tx, orgId),
+        pipeline: pipelineOn
+          ? await this.widgetsRepo.pipeline(
+              tx,
+              orgId,
+              new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)),
+            )
+          : null,
+        instagram: await this.extrasRepo.instagram(tx, orgId, now),
+        flows: await this.extrasRepo.flows(tx, orgId),
+        integrations: await this.extrasRepo.integrations(tx, orgId, now),
+        activity: await this.widgetsRepo.activity(tx, orgId),
+      };
+    });
+  }
 
   async summary(range: DashRange, now: Date = new Date()): Promise<DashSummaryResponse> {
     const { orgId } = RequestContextStore.require();
@@ -105,6 +154,27 @@ export class DashService {
     });
   }
 
+  /** The analytics list panels (TW-DASH-026, 028, 030) for the same window rules as the overview. */
+  async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+      const w = resolveAnalyticsWindow(q, tz, now);
+      if (!w)
+        throw AppError.validation('The range is too long', [
+          { path: 'from', message: 'at most 366 days' },
+        ]);
+      return {
+        devices: await this.panelsRepo.devices(tx, orgId),
+        templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
+        contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
+        team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
+        geo: await this.panelsRepo.geo(tx, orgId, w.from, w.to),
+        events: await this.panelsRepo.events(tx, orgId, w.from, w.to),
+      };
+    });
+  }
+
   async analytics(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -164,12 +234,27 @@ export class DashService {
     });
   }
 
-  /** The analytics window as CSV: the KPI grid, then the daily series (TW-DASH-032; Reference exported five counts). */
-  async analyticsCsv(q: AnalyticsQuery, now: Date = new Date()): Promise<string> {
+  /**
+   * The analytics window as CSV: Reference's five rows (outbound messages, campaigns, broadcasts, contacts added, the range) and, because
+   * Reference's export left them out while its docs promised them (TW-DASH-032 rule 4), the KPI grid and the daily series. The file is
+   * named like Reference's: the app name, "analytics" and the two dates, as a slug.
+   */
+  async analyticsCsv(
+    q: AnalyticsQuery,
+    now: Date = new Date(),
+  ): Promise<{ filename: string; body: string }> {
+    const { orgId } = RequestContextStore.require();
     const a = await this.analytics(q, now);
+    const made = await this.db.tx((tx) =>
+      this.panelsRepo.created(tx, orgId, new Date(a.window.from), new Date(a.window.to)),
+    );
     const rows: string[][] = [
       ['Metric', 'Value'],
       ['Range', `${a.window.fromDate} to ${a.window.toDate}`],
+      ['Outbound messages', String(a.current.sent)],
+      ['Campaigns', String(made.campaigns)],
+      ['Broadcasts', String(made.broadcasts)],
+      ['Contacts added', String(made.contacts)],
       ['Sent', String(a.current.sent)],
       ['Delivered', String(a.current.delivered)],
       ['Read', String(a.current.read)],
@@ -189,7 +274,15 @@ export class DashService {
         String(a.daily.queued[i]),
       ]),
     ];
-    return rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
+    const slug =
+      `${this.config.get('APP_NAME', { infer: true })} analytics ${a.window.fromDate} ${a.window.toDate}`
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return {
+      filename: `${slug}.csv`,
+      body: rows.map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n',
+    };
   }
 }
 

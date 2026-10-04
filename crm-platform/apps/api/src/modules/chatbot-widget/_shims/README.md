@@ -8,7 +8,6 @@ implementation. When the owning domain exports the real service, bind it to the 
 | -------------------- | ----------------------- | --------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------- |
 | `AssistantDirectory` | `SqlAssistantDirectory` | ai-agents-training (AIAG): assistants and training sources                                          | TW-WGT-003, 006, 016      | blocked on AIAG (partial) |
 | `InboxGateway`       | `SqlInboxGateway`       | team-inbox-conversations (TIB1) conversations and messages; contacts-attributes-tags (CON) contacts | TW-WGT-014, 015, 017, 018 | blocked on TIB1 (partial) |
-| `LanguageHint`       | `NoLanguageHint`        | localization-translation (I18N): real-time translation config and language detection                | TW-WGT-016                | blocked on I18N           |
 | `AiChatPort` (infra) | `HttpAiChatAdapter`     | ai-keys-usage-admin (AIADM): workspace (BYOK) and platform provider keys, token metering            | TW-WGT-016                | keys from `WGT_AI_*` env  |
 
 What the `SqlInboxGateway` stands in for, so the swap is complete:
@@ -20,6 +19,8 @@ What the `SqlInboxGateway` stands in for, so the swap is complete:
 - the engine stamped on the thread is not a shim concern any more (the thread belongs to the widget's own `webchat` channel);
 - the human-takeover read (ANY outbound line after the opening line counts, as Reference: QUIRK, so the assistant answers the first
   message only), and the oldest-200 transcript read.
+
+`LanguageHint` is not a shim any more: `LANGUAGE_HINT` is bound to the I18N `ConversationTranslationService.replyLanguage`.
 
 The plan gate is not a shim any more: `widget-plan.ts` binds the `chatbot_widgets` flag of the plan catalogue through the entitlement service.
 
