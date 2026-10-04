@@ -28,7 +28,10 @@ import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
 import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
-import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
+import {
+  NodeBridgeRuntimeWorkerModule,
+  NodeCatalogBridgeModule,
+} from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
@@ -92,6 +95,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     AiAgentsTrainingWorkerModule,
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
+    NodeCatalogBridgeModule,
     LeadsWorkerModule,
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,

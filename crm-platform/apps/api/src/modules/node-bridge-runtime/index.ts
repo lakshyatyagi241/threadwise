@@ -3,6 +3,7 @@
  * `NodeBridgeSettingsService.read()` is the one place the saved bridge address and pacing are read.
  */
 export { NodeBridgeRuntimeModule } from './node-bridge-runtime.module';
+export { NodeCatalogBridgeModule } from './node-catalog-bridge.module';
 export { NodeBridgeSettingsService } from './node-bridge-settings.service';
 export { NodeTokenGuard } from './node-token.guard';
 export {
