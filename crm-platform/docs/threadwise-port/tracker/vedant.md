@@ -178,7 +178,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (TW-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (TW-FLR-034); web search is not built |
 | TW-NODE-045 | backend-done |  | the ordering endpoints are TW-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
 | TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (TW-FLR-044 to 047); no Google account store exists yet, so they report no account |
-| TW-NODE-047 | in-progress |  | the Commerce shop node is built over FlowShopPort (TW-FLR-041); the store domains bind stock, native list and checkout link |
+| TW-NODE-047 | in-progress |  | the Commerce shop node's WhatsApp Shop stock and native list are served by the catalog (CatalogShopAdapter, TW-FLR-041); the checkout link for WooCommerce and Shopify waits for the store domains |
 | TW-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (TW-FLR-040); vishal/FLR |
 | TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-050 | backend-done |  | one flow engine serves every channel through channel profiles (TW-FLR-060 to 068): the per-channel Node engines and Laravel callbacks are not needed; vishal/FLR |
@@ -656,7 +656,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-038 | backend-done |  | Copy-to-number node through the run's channel, nothing recorded on the customer thread; actions-nodes e2e |
 | TW-FLR-039 | backend-done |  | WhatsApp-to-Instagram link node; actions-nodes e2e |
 | TW-FLR-040 | backend-done |  | Book appointment node through the appointments domain; commerce-book e2e |
-| TW-FLR-041 | backend-done |  | Commerce shop node over a store port (stock check, native product list, checkout link); the port says cannot until the store domains bind an adapter, which is Reference's own failure path; commerce-shop-form spec |
+| TW-FLR-041 | backend-done |  | Commerce shop node over FlowShopPort; CatalogShopAdapter binds the catalog behind it: WhatsApp Shop stock by retailer id and the native product list through CatalogSendService (card for one product, multi-product list for more); the single-use checkout link and WooCommerce and Shopify stock still answer cannot, because the store domains expose neither; commerce-shop-form spec, catalog-shop-adapter spec |
 | TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e |
 | TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
 | TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |

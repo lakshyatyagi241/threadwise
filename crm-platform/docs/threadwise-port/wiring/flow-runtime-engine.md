@@ -72,17 +72,17 @@ the reference source directly.
 | Retry one, bulk, retry records (`flow_retry_logs`)               | TW-FLR-056, 057, 058 |
 | Concurrency and idempotency                                      | TW-FLR-059           |
 
-| Not built (waits on another domain) | Id                | Why                                                                                                                                       |
-| ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Chatbot hand-off to an AI agent     | TW-FLR-031        | no AI agent engine exists; the executor and `AI_AGENT_HANDOFF_PORT` are built and answer unavailable                                      |
-| MySQL node driver                   | TW-FLR-034        | no `mysql2` in the repo; the executor, the read-only guard and the row cap are built against `MysqlQueryPort`                             |
-| AI voice call adapter               | TW-FLR-048        | `AiCallPort` is built; the calling domain (`vishal/CALL`) binds the real adapter                                                          |
-| Google nodes' account store         | TW-FLR-044 to 047 | `GoogleWorkspacePort` and an HTTP adapter are built; no Google account store exists, so every Google node reports no account and moves on |
-| Shop adapter                        | TW-FLR-041        | `FlowShopPort` (stock, native list, checkout link): the store domains bind it                                                             |
-| Voice and photo orders, group post  | TW-FLR-042        | behind `ORDER_MEDIA_PORT` and `ORDER_GROUP_NOTIFY_PORT`                                                                                   |
-| Telegram payment node               | TW-FLR-064        | needs the Telegram payment provider                                                                                                       |
-| Call flow (voice IVR)               | TW-FLR-069        | the calling domain's                                                                                                                      |
-| Dead session tables                 | TW-FLR-070        | dead code in Reference                                                                                                                       |
+| Not built (waits on another domain)               | Id                | Why                                                                                                                                                          |
+| ------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Chatbot hand-off to an AI agent                   | TW-FLR-031        | no AI agent engine exists; the executor and `AI_AGENT_HANDOFF_PORT` are built and answer unavailable                                                         |
+| MySQL node driver                                 | TW-FLR-034        | no `mysql2` in the repo; the executor, the read-only guard and the row cap are built against `MysqlQueryPort`                                                |
+| AI voice call adapter                             | TW-FLR-048        | `AiCallPort` is built; the calling domain (`vishal/CALL`) binds the real adapter                                                                             |
+| Google nodes' account store                       | TW-FLR-044 to 047 | `GoogleWorkspacePort` and an HTTP adapter are built; no Google account store exists, so every Google node reports no account and moves on                    |
+| Shop checkout link, WooCommerce and Shopify stock | TW-FLR-041        | `FlowShopPort`: the catalog serves WhatsApp Shop stock and the native list (`CatalogShopAdapter`); the store domains expose no checkout link or stock lookup |
+| Voice and photo orders, group post                | TW-FLR-042        | behind `ORDER_MEDIA_PORT` and `ORDER_GROUP_NOTIFY_PORT`                                                                                                      |
+| Telegram payment node                             | TW-FLR-064        | needs the Telegram payment provider                                                                                                                          |
+| Call flow (voice IVR)                             | TW-FLR-069        | the calling domain's                                                                                                                                         |
+| Dead session tables                               | TW-FLR-070        | dead code in Reference                                                                                                                                          |
 
 A node type without an executor is not dropped: the run notes it in its log and moves on (TW-FLR-016 rule 4), and `compileGraph` keeps its raw data for the executor that will read it.
 
