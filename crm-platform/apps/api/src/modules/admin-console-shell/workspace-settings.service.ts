@@ -15,6 +15,8 @@ import {
   type DeleteWorkspaceRequest,
   type NotificationPrefsResponse,
   type PreferencesResponse,
+  type ResidencyResponse,
+  type SaveResidencyRequest,
   type SaveNotificationPrefsRequest,
   type SavePreferencesRequest,
   type StoredNotificationPrefs,
@@ -320,6 +322,55 @@ export class WorkspaceSettingsService {
     return (
       (res.rows[0] as unknown as { mime: string; bytes: Buffer; etag: string } | undefined) ?? null
     );
+  }
+
+  // --- Data residency (TW-ASHELL-045) ----------------------------------------------------------------------------------
+
+  /**
+   * The mode lives in `workspace_settings.data_residency`, the column the translation router reads at send time. The
+   * translation domain only reads it, so the owner's write is here: a workspace with no settings row gets one.
+   */
+  async residency(): Promise<ResidencyResponse> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      const res = await tx.execute(
+        sql`SELECT data_residency FROM workspace_settings WHERE org_id = ${orgId}`,
+      );
+      const v = (res.rows[0] as { data_residency: string } | undefined)?.data_residency;
+      return {
+        residency: v === 'eu_only' || v === 'local' ? v : 'any',
+        isOwner: ownerMay(row),
+      };
+    });
+  }
+
+  async saveResidency(body: SaveResidencyRequest): Promise<ResidencyResponse> {
+    const { orgId, userId } = this.actor();
+    await this.db.txAs({ orgId, userId }, async (tx) => {
+      this.mustOwn(await this.org(tx, orgId, userId));
+      await tx.execute(sql`
+        INSERT INTO workspace_settings (org_id, data_residency) VALUES (${orgId}, ${body.residency})
+        ON CONFLICT (org_id) DO UPDATE SET data_residency = EXCLUDED.data_residency
+      `);
+      await this.audit.record(tx, {
+        event: 'workspace.data_residency_changed',
+        status: 'info',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { residency: body.residency },
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: 'organizations',
+        aggregateId: orgId,
+        eventType: 'org.data_residency.changed',
+        payload: { residency: body.residency },
+      });
+    });
+    return this.residency();
   }
 
   // --- Notifications (TW-ASHELL-038) -----------------------------------------------------------------------------------

@@ -7,6 +7,7 @@ import { Alert, Button, Card, ConfirmDialog, Field, Input, PasswordInput, Spinne
 import { ApiError } from '@/lib/api/errors';
 import { useDeleteWorkspace, useExportCounts, useWorkspaceSettings } from './api';
 import { canSubmitDelete } from './logic';
+import { ResidencyCard } from './residency-card';
 
 const NS = 'admin-console-shell.workspaceSettings.data';
 
@@ -52,6 +53,7 @@ export function DataTab() {
           })}
         </div>
       </Card>
+      <ResidencyCard />
       <DeleteCard />
     </div>
   );

@@ -20,6 +20,7 @@ import {
   BRAND_LOGO_MAX_BYTES,
   BRAND_SLOTS,
   deleteWorkspaceRequestSchema,
+  saveResidencyRequestSchema,
   exportTypeSchema,
   saveNotificationPrefsRequestSchema,
   savePreferencesRequestSchema,
@@ -29,6 +30,7 @@ import {
   type SaveNotificationPrefsRequest,
   type SavePreferencesRequest,
   type BrandSlot,
+  type SaveResidencyRequest,
   type UpdateBrandingFields,
   type UpdateWorkspaceSettingsRequest,
 } from '@crm/contracts';
@@ -101,6 +103,18 @@ export class WorkspaceSettingsController {
       type: 'text/csv; charset=utf-8',
       disposition: `attachment; filename="${type}.csv"`,
     });
+  }
+
+  @Get('data-residency')
+  @ApiOperation({ summary: 'Which translation providers may receive message text' })
+  residency() {
+    return this.settings.residency();
+  }
+
+  @Put('data-residency')
+  @ApiOperation({ summary: 'Set no restriction, EU only or on-premise only (owner only)' })
+  saveResidency(@Body(zodPipe(saveResidencyRequestSchema)) body: SaveResidencyRequest) {
+    return this.settings.saveResidency(body);
   }
 
   @Get('branding')
