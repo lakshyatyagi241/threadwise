@@ -166,6 +166,8 @@ const UNIT_SECONDS: Record<string, number> = {
 function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: string }> {
   let raw: unknown[];
   if (Array.isArray(d.actions)) raw = d.actions;
+  else if (Array.isArray(d.ctaActions))
+    raw = d.ctaActions; // already runtime-named (a flow saved before the editor)
   else {
     // The legacy single-kind shape (`kind` + `url` / `phone` / `code`) becomes one action.
     let kind = s(d.kind, 'url').toLowerCase();
@@ -191,10 +193,10 @@ function productItemsOf(d: Bag): Array<Record<string, unknown>> {
   return picked
     .filter(isRecord)
     .map((p) => ({
-      retailer_id: s(p.retailer_id),
+      retailer_id: s(coalesce(p.retailer_id, p.retailerId)),
       name: s(p.name),
       image: s(p.image),
-      price_minor: toInt(p.price_minor),
+      price_minor: toInt(coalesce(p.price_minor, p.priceMinor)),
       currency: s(p.currency),
       url: s(p.url),
     }))
@@ -243,7 +245,7 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   notify_number: (d, o) => {
-    const kind = s(d.kind, 'text').toLowerCase();
+    const kind = s(coalesce(d.kind, d.mediaKind), 'text').toLowerCase();
     const url = absoluteUrl(s(coalesce(d.url, d.mediaUrl)), o.baseUrl);
     return {
       copyNumber: s(d.copyNumber).replace(/[^0-9{}\w]/g, ''),
@@ -311,7 +313,7 @@ const SHAPERS: Record<string, Shaper> = {
   template: (d) => {
     const id = strictInt(d.tplId);
     return {
-      templateName: s(d.tpl),
+      templateName: s(coalesce(d.tpl, d.templateName)),
       preview: s(d.preview),
       ...(id > 0 ? { templateId: id } : {}),
     };
@@ -463,8 +465,8 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   location: (d) => ({
-    latitude: toFloat(d.lat),
-    longitude: toFloat(d.lng),
+    latitude: toFloat(coalesce(d.lat, d.latitude)),
+    longitude: toFloat(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
   }),
@@ -472,7 +474,7 @@ const SHAPERS: Record<string, Shaper> = {
   poll: (d) => ({
     question: s(d.question, 'Pick one'),
     options: list(d.options),
-    allowMultiple: toBool(d.multi),
+    allowMultiple: toBool(coalesce(d.multi, d.allowMultiple)),
   }),
 
   chatbot: (d) => {
