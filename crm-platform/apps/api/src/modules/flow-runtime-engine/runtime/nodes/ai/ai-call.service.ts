@@ -6,6 +6,7 @@ import {
   type FlowAiPort,
 } from '../../../../../infra/providers/flow-runtime-engine/flow-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../../../../ai-keys-usage-admin';
+import { type FlowRef } from '../flow-refs';
 import { extractionSuffix, providerOfModel } from './ai-rules';
 
 export interface AiCallInput {
@@ -15,8 +16,8 @@ export interface AiCallInput {
   userPrompt: string;
   maxTokens: number;
   temperature: number;
-  /** An AI Training assistant whose knowledge base is added to the system prompt. */
-  assistantId?: number;
+  /** An AI Training assistant whose knowledge base is added to the system prompt: its row id (an old flow) or its uuid (the editor). */
+  assistantId?: number | FlowRef;
   /** Structured-extraction mode: one JSON object, with these keys. */
   json?: boolean;
   fields?: readonly string[];
@@ -36,6 +37,11 @@ export type AiCallOutcome =
       provider: string;
       message: string;
     };
+
+function assistantRefOf(v: number | FlowRef | undefined): FlowRef | null {
+  if (typeof v === 'number') return v > 0 ? { kind: 'id', id: v } : null;
+  return v ?? null;
+}
 
 /** The knowledge base is cut to this many characters, as the website chatbot does. */
 const KNOWLEDGE_BUDGET = 12_000;
@@ -95,8 +101,9 @@ export class AiCallService {
 
       let system = input.systemPrompt;
       if (input.json) system += extractionSuffix(input.fields ?? []);
-      if (input.assistantId && input.assistantId > 0) {
-        const kb = await this.knowledge(input.orgId, input.assistantId).catch((err: unknown) => {
+      const assistant = assistantRefOf(input.assistantId);
+      if (assistant) {
+        const kb = await this.knowledge(input.orgId, assistant).catch((err: unknown) => {
           this.logger.warn({ err: String(err) }, '[FLR] knowledge base lookup failed');
           return '';
         });
@@ -141,12 +148,16 @@ export class AiCallService {
   }
 
   /** The assistant's ready training sources (its own and the workspace-wide ones), as one text block. Empty for another tenant's assistant. */
-  private async knowledge(orgId: number, assistantId: number): Promise<string> {
+  private async knowledge(orgId: number, ref: FlowRef): Promise<string> {
     const rows = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      // The workspace's own assistant by row id or uuid; another tenant's (or no) assistant has no row here, so no knowledge.
       const own = await tx.execute(
-        sql`SELECT 1 FROM ai_chat_assistants WHERE org_id = ${orgId} AND id = ${assistantId}`,
+        ref.kind === 'id'
+          ? sql`SELECT id FROM ai_chat_assistants WHERE org_id = ${orgId} AND id = ${ref.id}`
+          : sql`SELECT id FROM ai_chat_assistants WHERE org_id = ${orgId} AND uuid = ${ref.uuid}::uuid`,
       );
       if (own.rows.length === 0) return [] as SourceRow[];
+      const assistantId = Number((own.rows[0] as { id: number | string }).id);
       const res = await tx.execute(sql`
         SELECT label, kind, content, question, answer FROM ai_training_sources
         WHERE org_id = ${orgId} AND status = 'ready' AND (assistant_id = ${assistantId} OR assistant_id IS NULL)

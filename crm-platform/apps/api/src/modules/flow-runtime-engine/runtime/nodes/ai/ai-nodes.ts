@@ -11,6 +11,7 @@ import type {
   NodeExecutor,
   NodeResult,
 } from '../../types';
+import { firstFlowRef, type FlowRef } from '../flow-refs';
 import { AiCallService } from './ai-call.service';
 import {
   appendTurn,
@@ -34,7 +35,8 @@ interface AiConfig {
   extract: boolean;
   fields: string[];
   maxTokens: number;
-  assistantId: number;
+  /** The attached AI Training assistant: a row id (`assistant_id`, an old flow) or a uuid (`assistant`, the editor); 0 = none. */
+  assistantId: number | FlowRef;
   conversational: boolean;
   exitKeyword: string;
   silent: boolean;
@@ -73,7 +75,7 @@ function aiConfig(props: Record<string, unknown>): AiConfig {
         : extract && !(d.conversational === true || d.chat_mode === true)
           ? 4000
           : 350,
-    assistantId: Math.trunc(Number(d.assistant_id)) || 0,
+    assistantId: firstFlowRef(d.assistant_id, d.assistantId, d.assistant) ?? 0,
     conversational: d.conversational === true || d.chat_mode === true,
     exitKeyword: text(d.exit_keyword).trim(),
     silent: d.silent === true || d.noReply === true,
