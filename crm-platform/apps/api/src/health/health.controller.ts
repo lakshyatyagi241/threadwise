@@ -14,7 +14,12 @@ import type { Response } from 'express';
 import { Public } from '../common/decorators';
 import { DatabaseService } from '../infra/db/database.service';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
-import { SkipThrottle } from '../modules/platform-infrastructure';
+import {
+  SkipThrottle,
+  WorkerStatusService,
+  type OutboxCheck,
+  type WorkersCheck,
+} from '../modules/platform-infrastructure';
 
 interface DependencyCheck {
   status: 'up' | 'down';
@@ -46,6 +51,7 @@ export class HealthController {
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly workerStatus: WorkerStatusService,
   ) {}
 
   @Get('health')
@@ -67,13 +73,17 @@ export class HealthController {
       this.checkReplica(),
       this.checkRedis(),
     ]);
+    const { workers, outbox } = await this.checkWorkers();
 
+    // Only the primary and Redis decide readiness. The worker and outbox checks are for monitoring: an API with no workers
+    // (a deploy in progress, a crashed worker) still serves requests, and pulling it from rotation would turn a background
+    // problem into an outage. The deploy health gate and the container healthcheck read the status code only.
     const ready = primary.status === 'up' && redis.status === 'up';
     res.status(ready ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE);
 
     return {
       status: ready ? 'ok' : 'degraded',
-      checks: { primary, replica, redis },
+      checks: { primary, replica, redis, workers, outbox },
     };
   }
 
@@ -98,6 +108,18 @@ export class HealthController {
       return { status: 'up', latencyMs: Date.now() - startedAt };
     } catch (err) {
       return { status: 'down', error: err instanceof Error ? err.message : 'unknown' };
+    }
+  }
+
+  /** Written by the worker process, read from Redis. If Redis cannot be read the `redis` check already says so. */
+  private async checkWorkers(): Promise<{
+    workers: WorkersCheck | { status: 'unknown' };
+    outbox: OutboxCheck;
+  }> {
+    try {
+      return await this.workerStatus.read();
+    } catch {
+      return { workers: { status: 'unknown' }, outbox: { status: 'unknown' } };
     }
   }
 
