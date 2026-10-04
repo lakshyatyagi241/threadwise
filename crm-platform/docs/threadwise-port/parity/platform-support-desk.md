@@ -66,8 +66,11 @@ Intended differences, each on purpose:
 ## Blocked
 
 TW-SUPP-045 (impersonate): the launcher modal, reason validation (8 to 500 characters) and the target check are built and tested;
-starting the session (minting the workspace owner's access, banner, audit start and stop) needs the workspaces and auth domains and
-answers 501 until they provide it. A shim inside this zone is not possible without editing auth session code.
+starting the session answers 501. Re-checked on the newest team tip (round 3): no impersonation or support-access session exists. `TokenClaims`
+(auth `token.service.ts`) has no impersonation claim, `SessionService.create` is exported but nothing writes `impersonation_sessions`, and the web shell has no
+banner. Exact missing piece: an auth or WSP `ImpersonationService.start(operatorId, workspaceUuid, reason)` that mints the owner's workspace session carrying an
+`imp` claim, inserts `impersonation_sessions`, audits start and stop, plus a stop endpoint and shell banner. Once exported from the auth or WSP barrel,
+`PlatformInboxService.impersonate` calls it (one line) and the launcher modal already posts to it. A shim in this zone would need to edit auth token code, so it stays blocked.
 
 ## Not verified
 
