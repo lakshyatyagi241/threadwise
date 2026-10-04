@@ -42,6 +42,9 @@ export interface Pipeline {
   stop(): Promise<void>;
 }
 
+/** What the helpers below need: the flow runtime's pipeline has no socket url and reuses them. */
+export type PipelineCore = Pick<Pipeline, 'h' | 'api'>;
+
 export async function startPipeline(): Promise<Pipeline> {
   process.env.CHANNEL_SIMULATOR_ENABLED = 'true';
   const h = await startHarness({
@@ -145,7 +148,7 @@ export interface SimChannel {
 
 /** A simulator channel with quick receipts (0 / 150 / 400 ms instead of 0 / 1 / 3 s). */
 export async function simChannel(
-  p: Pipeline,
+  p: PipelineCore,
   t: Tenant,
   settings: Record<string, unknown> = {},
 ): Promise<SimChannel> {
@@ -163,7 +166,7 @@ export async function simChannel(
 }
 
 export async function simInbound(
-  p: Pipeline,
+  p: PipelineCore,
   t: Tenant,
   ch: SimChannel,
   body: Record<string, unknown>,
@@ -178,7 +181,7 @@ export async function simInbound(
 
 /** The one conversation row of (channel, peer), once the pipeline has made it. */
 export async function conversationOf(
-  p: Pipeline,
+  p: PipelineCore,
   t: Tenant,
   ch: SimChannel,
   peer: string,
@@ -192,12 +195,12 @@ export async function conversationOf(
   });
 }
 
-export const messagesOf = async (p: Pipeline, conversationId: number | string) =>
+export const messagesOf = async (p: PipelineCore, conversationId: number | string) =>
   (
     await p.h.owner.query(`SELECT * FROM messages WHERE conversation_id = $1 ORDER BY seq`, [
       conversationId,
     ])
   ).rows as Array<Record<string, unknown>>;
 
-export const scalar = async (p: Pipeline, sql: string, params: unknown[] = []) =>
+export const scalar = async (p: PipelineCore, sql: string, params: unknown[] = []) =>
   Number((await p.h.owner.query(sql, params)).rows[0]?.n ?? 0);

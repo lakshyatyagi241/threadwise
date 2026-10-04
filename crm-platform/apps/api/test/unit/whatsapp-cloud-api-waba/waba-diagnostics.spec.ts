@@ -115,7 +115,7 @@ describe('one-click subscribe (WD-WABA-003)', () => {
     expect(r).toMatchObject({ ok: true, subscribedNow: true });
   });
   it("falls back to this platform's own callback, and reports Meta's refusal with the reachability hint", async () => {
-    const set = vi.fn(async () => {
+    const set = vi.fn(async (_a: unknown, _i: unknown) => {
       throw fail(400, 'Callback verification failed');
     });
     const s = build({

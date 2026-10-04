@@ -1,5 +1,6 @@
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
+import { cleanVar } from './clean-var';
 
 /** What the editor saves (WD-FLR-013): nodes with a lower-case `type` and a `data` bag, edges with a source handle. */
 export interface BuilderNode {
@@ -93,20 +94,7 @@ const int = (v: unknown, fallback: number): number => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-/**
- * A variable-name field as the author typed it: one surrounding `{{ }}`, a leading `@`, braces and spaces are dropped, so an Ask
- * never stores under a literal key `{{name}}` (WD-FLR-013 rule 7).
- */
-export function cleanVar(v: unknown, fallback: string): string {
-  let s = str(v).trim();
-  if (s === '') return fallback;
-  s = s
-    .replace(/^\{\{\s*/, '')
-    .replace(/\s*\}\}$/, '')
-    .replace(/^@/, '')
-    .replace(/[{}\s]/g, '');
-  return s === '' ? fallback : s;
-}
+export { cleanVar };
 
 function replyType(kind: string): 'Text' | 'Image' | 'Video' | 'Audio' | 'Document' {
   switch (kind.toLowerCase()) {

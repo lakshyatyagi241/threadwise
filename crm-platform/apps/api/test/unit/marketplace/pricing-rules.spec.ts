@@ -45,6 +45,8 @@ const paid: AppPricingRow = {
   includedPlanFeature: null,
   includedMinPlan: null,
   priceChangedAt: null,
+  grantsPlanFeatures: [],
+  grandfatherExisting: false,
 };
 const sub = (over: Partial<SubscriptionRow> = {}): SubscriptionRow => ({
   orgId: 1,
