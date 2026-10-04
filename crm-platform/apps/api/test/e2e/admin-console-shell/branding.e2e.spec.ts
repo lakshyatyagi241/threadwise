@@ -126,3 +126,38 @@ describe('Branding tab', () => {
     expect((await config(other.admin)).body.brand).toBeNull();
   });
 });
+
+describe('Data residency (WD-ASHELL-045)', () => {
+  const res = (token: string) =>
+    api.http().get('/v2/shell/workspace/data-residency').set(bearer(token));
+  const put = (token: string, body: Record<string, unknown>) =>
+    api.http().put('/v2/shell/workspace/data-residency').set(bearer(token)).send(body);
+
+  it('starts at no restriction and tells a member they cannot change it', async () => {
+    expect((await res(t.admin)).body).toEqual({ residency: 'any', isOwner: true });
+    expect((await res(member.token)).body).toEqual({ residency: 'any', isOwner: false });
+  });
+
+  it('the owner picks EU only; the translation domain reads the same column; the change is audited', async () => {
+    const saved = await put(t.admin, { residency: 'eu_only' });
+    expect(saved.status, JSON.stringify(saved.body)).toBe(200);
+    expect(saved.body.residency).toBe('eu_only');
+    const i18n = await api.http().get('/v2/workspace/translation-settings').set(bearer(t.admin));
+    expect(i18n.body.residency).toBe('eu_only');
+    const n = await h.owner.query(
+      `SELECT count(*) n FROM security_events WHERE subject_org_id = $1 AND event = 'workspace.data_residency_changed'`,
+      [t.orgId],
+    );
+    expect(Number(n.rows[0].n)).toBe(1);
+  });
+
+  it('an invalid mode is a 422 and a member gets 403; nothing changes', async () => {
+    expect((await put(t.admin, { residency: 'mars' })).status).toBe(422);
+    expect((await put(member.token, { residency: 'local' })).status).toBe(403);
+    expect((await res(t.admin)).body.residency).toBe('eu_only');
+  });
+
+  it('is per workspace', async () => {
+    expect((await res(other.admin)).body.residency).toBe('any');
+  });
+});

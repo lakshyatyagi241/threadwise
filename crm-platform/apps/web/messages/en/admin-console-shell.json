@@ -341,6 +341,29 @@
         },
         "colourInvalid": "Use a #RRGGBB colour, for example #075E54.",
         "save": "Save branding"
+      },
+      "residency": {
+        "loadFailed": "The data residency setting could not be loaded.",
+        "title": "Restrict cross-border data transfer",
+        "body": "Set a stricter routing mode for this workspace. Auto-reply translation will only route through providers compatible with the selected mode; the rest are silently skipped at runtime.",
+        "ownerOnly": "Only the workspace owner can change this setting.",
+        "saved": "Data residency updated. Translation routing will respect the new setting on the next inbound.",
+        "saveFailed": "The data residency setting could not be saved.",
+        "save": "Save residency setting",
+        "modes": {
+          "any": {
+            "name": "No restriction",
+            "text": "Use whichever active provider the fallback chain picks. Best uptime, no compliance restrictions."
+          },
+          "eu_only": {
+            "name": "EU-only routing",
+            "text": "Only DeepL (Germany) and self-hosted LibreTranslate are allowed. Compatible with GDPR Article 44 cross-border transfer rules."
+          },
+          "local": {
+            "name": "On-premise only",
+            "text": "Only the self-hosted LibreTranslate driver is allowed. Customer message text never leaves your own server. Requires LibreTranslate to be configured."
+          }
+        }
       }
     },
     "topNav": {

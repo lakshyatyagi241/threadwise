@@ -3,8 +3,10 @@ import {
   exportCountsResponseSchema,
   notificationPrefsResponseSchema,
   preferencesResponseSchema,
+  residencyResponseSchema,
   workspaceBrandingResponseSchema,
   workspaceSettingsResponseSchema,
+  type DataResidency,
   type DeleteWorkspaceRequest,
   type SaveNotificationPrefsRequest,
   type UpdateWorkspaceSettingsRequest,
@@ -146,5 +148,27 @@ export function useSaveBranding() {
       // The shell reads the brand from the server on each navigation; reload so the header and colours show at once.
       if (typeof window !== 'undefined') window.location.reload();
     },
+  });
+}
+
+const RESIDENCY = ['shell', 'workspace', 'data-residency'] as const;
+
+export const useResidency = () =>
+  useQuery({
+    queryKey: RESIDENCY,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/data-residency', { schema: residencyResponseSchema, signal }),
+  });
+
+export function useSaveResidency() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (residency: DataResidency) =>
+      apiFetch('/shell/workspace/data-residency', {
+        method: 'PUT',
+        body: { residency },
+        schema: residencyResponseSchema,
+      }),
+    onSuccess: (data) => qc.setQueryData(RESIDENCY, data),
   });
 }

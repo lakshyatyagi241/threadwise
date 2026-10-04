@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { dataResidencySchema } from '../localization-translation/providers';
 
 /**
  * The customer Settings page (WD-ASHELL-032..044): workspace profile, the notification matrix, data export and
@@ -233,3 +234,16 @@ export const updateBrandingFieldsSchema = z.object({
   background: z.union([brandColourSchema, z.literal('')]).optional(),
 });
 export type UpdateBrandingFields = z.infer<typeof updateBrandingFieldsSchema>;
+
+// --- Data residency (WD-ASHELL-045) ----------------------------------------------------------------------------------
+
+/** Which translation providers may receive customer message text: any, EU only, or on-premise only. */
+export const residencyResponseSchema = z.object({
+  residency: dataResidencySchema,
+  isOwner: z.boolean(),
+});
+export type ResidencyResponse = z.infer<typeof residencyResponseSchema>;
+
+export const saveResidencyRequestSchema = z.object({ residency: dataResidencySchema });
+export type SaveResidencyRequest = z.infer<typeof saveResidencyRequestSchema>;
+export const DATA_RESIDENCY_MODES = dataResidencySchema.options;
