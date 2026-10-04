@@ -102,3 +102,11 @@ API unit 46, API e2e for extras 7, widgets 10, panels 8, health 11, admin-dash 1
 - dash.e2e "24h window is the rolling day" failed once in this run (5 outbound rows inside the window); it is time-of-day sensitive in its seed and was not touched by round 3. Not re-run in isolation.
 - Compared by eye against our own screenshot only; the live WaDesk pages were not re-opened in round 3 (conformance of round 2 stands). Admin screens (overview, analytics, health) were not re-screenshotted (no operator account could be created: the operator:create CLI failed).
 - Charts with real traffic; a browser smoke spec; the bridge probe against a real bridge.
+
+## Round 4 (completion pass)
+
+- WD-DASH-017 verified: `/flows/builder` exists on main and reads `?ai=1` and `?ai_prompt=` (opens the AI generate dialog pre-filled), so the Generate flow and Examples links work; the earlier "links 404" note no longer applies. Flow rows show the trigger with underscores as spaces ("Order placed").
+- `/dashboard` cosmetic parity: "Live · synced Ns ago" chip in the kicker (a real counter from the last successful summary fetch, not WaDesk's frozen "4s"; supersedes the WD-DASH-001 "dropped" deviation), 24h/7d/30d/QTD tabs and the UTC offset chip on the throughput card (the tabs drive the page range, as the dropdown does), 0..2 axes drawn when the window has no data, table header kept in the empty templates state, "n device slots available / Add WABA / Connect device" strip shown whenever slots are free (also with no devices), integrations counter "n / 12" (WaDesk's conceptual total; we count the ten tables we have), device slots never below 6 (WaDesk's fixed cap; the plan device limit still applies when higher), and a ring beside the read rate.
+- extras.e2e seed updated to the flows constraints the FLB domain added (trigger kinds, non-empty names).
+- Not re-compared this round: admin overview, analytics, health and chart widgets were compared in round 2/3 screenshots only. The admin overview differs from WaDesk by the "Add workspace" button (blocked, WSP) and an extra MRR column (kept).
+- Verification: API e2e dashboards-analytics-charts 82 tests (dash, health, admin-dash, widgets, panels, quick-access, extras), API unit 46, web feature tests 32, all green on a freshly migrated crm_dash.
