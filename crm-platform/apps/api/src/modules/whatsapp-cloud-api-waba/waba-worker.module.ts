@@ -1,7 +1,9 @@
 import { Injectable, Logger, Module } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
+import { CatalogProductsModule } from '../catalog-products';
 import { WabaClickSyncService } from './waba-click-sync.service';
 import { PinnacleCreditLineProcessor } from './pinnacle-credit-line.processor';
+import { WabaOrderAckConsumer } from './waba-order-ack.consumer';
 import { WabaIngestProcessor } from './waba-ingest.processor';
 import { WabaModule } from './waba.module';
 
@@ -27,7 +29,12 @@ export class WabaClickSyncScheduler {
 
 /** The WhatsApp webhook consumer. Imported ONLY by WorkersModule: the HTTP app answers Meta, the worker does the work. */
 @Module({
-  imports: [WabaModule],
-  providers: [WabaIngestProcessor, WabaClickSyncScheduler, PinnacleCreditLineProcessor],
+  imports: [WabaModule, CatalogProductsModule],
+  providers: [
+    WabaIngestProcessor,
+    WabaClickSyncScheduler,
+    PinnacleCreditLineProcessor,
+    WabaOrderAckConsumer,
+  ],
 })
 export class WabaWorkerModule {}

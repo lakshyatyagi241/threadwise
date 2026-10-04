@@ -6,7 +6,7 @@ import {
   type OutboxSubscriber,
 } from '../../../kernel/outbox/outbox-subscribers';
 import { DatabaseService } from '../../../infra/db/database.service';
-import { FlowTriggerService } from './trigger.service';
+import { FlowTriggerService, type OrderPlaced } from './trigger.service';
 
 export const FLOW_TRIGGER_EVENTS = [
   'contact.created',
@@ -15,6 +15,9 @@ export const FLOW_TRIGGER_EVENTS = [
   'contact.opt_in',
   'deal.stage_changed',
   'order.placed',
+  // The two order events that exist today (the store's checkout and a WhatsApp catalog cart); both become `order.placed` below.
+  'store.order_placed',
+  'whatsapp.order.received',
 ] as const;
 
 type Rows = { rows: Array<{ id: number | string }> };
@@ -29,6 +32,8 @@ type Rows = { rows: Array<{ id: number | string }> };
  * - `contact.opt_in`: only a person coming back (`optedIn: true`).
  * - `deal.stage_changed`: only a move into a stage; a deal created in a stage does not fire (WD-FLR-006 rule 3).
  * - `order.placed`: the commerce domain's event; see `OrderPlaced` for its payload.
+ * - `store.order_placed` (the storefront checkout) and `whatsapp.order.received` (a catalog cart on WhatsApp): the order is read back
+ *   by its uuid and handled as `order.placed`; a repeat of either is the same order (the enrolment reason is `order:<uuid>`).
  */
 @Injectable()
 export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit {
@@ -85,6 +90,13 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
         }
         return;
       }
+      case 'store.order_placed':
+      case 'whatsapp.order.received': {
+        const order = await this.orderOf(orgId, str(p.orderId));
+        if (!order) return;
+        await this.triggers.onOrderPlaced(orgId, order);
+        return;
+      }
       case 'order.placed': {
         await this.triggers.onOrderPlaced(orgId, {
           orderId: String(p.orderId ?? event.aggregateId),
@@ -103,6 +115,33 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
         return;
       }
     }
+  }
+
+  /** The order behind an event, as the trigger wants it; null when it is gone or has no phone to find a contact by. */
+  private async orderOf(orgId: number, uuid: string | null): Promise<OrderPlaced | null> {
+    if (!uuid) return null;
+    return this.db.txAs({ orgId }, async (tx) => {
+      const res = (await tx.execute(
+        sql`SELECT id, uuid, customer_phone, customer_name, customer_email, total_minor, currency_code, status, payment_link
+              FROM wa_orders WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+      )) as unknown as { rows: Array<Record<string, unknown>> };
+      const r = res.rows[0];
+      if (!r || !r.customer_phone) return null;
+      return {
+        orderId: String(r.uuid),
+        contactId: null,
+        phone: String(r.customer_phone),
+        name: (r.customer_name as string | null) ?? null,
+        email: (r.customer_email as string | null) ?? null,
+        orderNumber: String(r.id),
+        totalMinor: Number(r.total_minor),
+        currency: (r.currency_code as string | null) ?? null,
+        status: (r.status as string | null) ?? null,
+        invoiceUrl: null,
+        orderUrl: null,
+        paymentLink: (r.payment_link as string | null) ?? null,
+      };
+    });
   }
 
   /** A uuid on the wire to the id inside the tenant; null when it is not there (deleted since). */
