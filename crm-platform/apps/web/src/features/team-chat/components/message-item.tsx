@@ -104,7 +104,7 @@ export function MessageItem({
   }
 
   const action =
-    'rounded px-1 text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary';
+    'rounded px-1 text-[10px] text-muted-foreground hover:text-primary focus-visible:ring-2 focus-visible:ring-primary';
 
   return (
     <li
@@ -113,27 +113,29 @@ export function MessageItem({
       className={cn('flex gap-2.5', mine && 'flex-row-reverse')}
     >
       <Avatar id={m.authorId ?? m.id} name={m.authorName} />
-      <div className={cn('flex min-w-0 max-w-[85%] flex-col gap-0.5', mine && 'items-end')}>
-        <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
-          <span className="font-medium text-foreground">{m.authorName}</span>
-          <time dateTime={m.createdAt}>{formatStamp(m.createdAt, now, locale)}</time>
+      <div className={cn('flex min-w-0 max-w-[70%] flex-col gap-0.5', mine && 'items-end')}>
+        <div className="flex items-baseline gap-2 text-[10px] text-muted-foreground">
+          <span className="text-xs font-semibold text-foreground">{m.authorName}</span>
+          <time dateTime={m.createdAt} className="font-mono">
+            {formatStamp(m.createdAt, now, locale)}
+          </time>
           {m.editedAt && <span>{t('edited')}</span>}
           {m.pinnedAt && <span aria-label={t('pinned')}>📌</span>}
         </div>
 
         <div
           className={cn(
-            'min-w-0 rounded-2xl border px-3 py-2 text-sm',
-            mine ? 'border-success/30 bg-success/10' : 'border-border bg-background',
+            'min-w-0 rounded-md border px-3 py-2 text-[13px] leading-snug',
+            mine ? 'border-transparent bg-success/20' : 'border-border bg-background',
           )}
         >
           {m.replyTo && (
             <a
               href={`#msg-${m.replyTo.id}`}
-              className="mb-1.5 block rounded-md border-s-2 border-primary bg-muted px-2 py-1 text-xs text-muted-foreground"
+              className="mb-1 block truncate border-s-2 border-primary ps-2 text-[10.5px] text-muted-foreground"
             >
-              <span className="font-medium text-foreground">{m.replyTo.authorName}</span>
-              <span className="block truncate">{m.replyTo.snippet}</span>
+              <span className="font-semibold text-primary">{m.replyTo.authorName}</span> ·{' '}
+              {m.replyTo.snippet}
             </a>
           )}
 
@@ -346,14 +348,14 @@ export function PendingItem({
   return (
     <li data-testid="tchat-pending" className="flex flex-row-reverse gap-2.5">
       <Avatar id={authorId} name={authorName} />
-      <div className="flex min-w-0 max-w-[85%] flex-col items-end gap-0.5">
+      <div className="flex min-w-0 max-w-[70%] flex-col items-end gap-0.5">
         <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
           <span className="font-medium text-foreground">{authorName}</span>
           <time dateTime={createdAt}>{formatStamp(createdAt, now, locale)}</time>
         </div>
         <div
           className={cn(
-            'min-w-0 rounded-2xl border border-success/30 bg-success/10 px-3 py-2 text-sm',
+            'min-w-0 rounded-md border border-transparent bg-success/20 px-3 py-2 text-[13px] leading-snug',
             status === 'sending' ? 'opacity-70' : 'opacity-60',
           )}
         >

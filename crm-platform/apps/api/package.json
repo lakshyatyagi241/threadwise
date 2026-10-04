@@ -22,6 +22,7 @@
     "clean": "rm -rf dist coverage",
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",
+    "seed:team-chat-demo": "tsx src/modules/team-chat/cli/seed-demo-members.ts",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js"
   },
