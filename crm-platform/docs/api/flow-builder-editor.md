@@ -106,9 +106,9 @@ security event.
 - `FlowReaderService` (`index.ts` barrel) is the editor's own read seam: `getRunnableFlow` returns the graph already shaped with
   `flbRuntimeNodeData`, `listEnrollable` returns the live flows for a trigger.
 - `flbToRuntimeData` (contracts `runtime-shape.ts`) is WaDesk's FlowNormalizer field mapping as a pure, additive, idempotent function.
-  Hooking it into the runtime compiler (`flow-runtime-engine/graph/compile-graph.ts`) is one line owned by the FLR domain; until then
-  ten node types (ai, chatbot, subflow, webhook, code, mysql, poll, location, legacy cta, ai_call) reach the executors with the
-  builder's names. See `docs/wadesk-port/parity/flow-builder-editor.md` section "Open runtime items".
+  `compileGraph` (`flow-runtime-engine/graph/compile-graph.ts`) calls it for every node, so ten node types (ai, chatbot, subflow, webhook,
+  code, mysql, poll, location, legacy cta, ai_call) reach the executors with the runtime's names, and the template and AI assistant uuids the
+  editor saves are resolved by org inside FLR (`FlowRefResolver`). See `docs/wadesk-port/parity/flow-builder-editor.md` section "Open runtime items".
 - Not here: `api/flow-node/*` callbacks, `api/flows/{id}` (Node token), enrolment, subscribers, analytics, retry. They are FLR (or the
   Node bridge, which does not exist in this architecture: the engine runs in-process).
 
