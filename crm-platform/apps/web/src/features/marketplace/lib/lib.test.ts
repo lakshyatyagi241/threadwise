@@ -76,6 +76,31 @@ import {
   type SetupField,
 } from './setup-form';
 import { initialsOf, isHttpsLink, paragraphs } from './text';
+import {
+  PATH_FULL,
+  PATH_SECRET,
+  PATH_TAIL,
+  pathInstallation,
+  portalConnection,
+  pullInstallation,
+} from '../portal-fixtures';
+import {
+  SYNC_IMMEDIATE_SECONDS,
+  accountManagerMessage,
+  fullAddress,
+  intervalParts,
+  isPathAuth,
+  isPolled,
+  listText,
+  maskedAddress,
+  maturityView,
+  pullErrorHint,
+  revealExtras,
+  senderFormats,
+  senderMethods,
+  syncNote,
+  waitingForFirstLead,
+} from './portals';
 
 const problem = (
   status: number,
@@ -989,5 +1014,220 @@ describe('text helpers', () => {
     expect(mktRoutes.install('x')).toBe('/marketplace/app/x/install');
     expect(mktRoutes.manage(ID(1))).toBe(`/marketplace/installed/${ID(1)}`);
     expect(mktRoutes.browse('mini_app')).toBe('/marketplace/apps');
+  });
+});
+
+// --- lead portals ----------------------------------------------------------------------------------------------------------------
+
+describe('maturity badge and notice', () => {
+  it('draws nothing for a stable listing, or one that says nothing', () => {
+    for (const source of [{}, { maturity: 'stable' as const }, { listing: {} }]) {
+      expect(maturityView(source)).toMatchObject({ maturity: 'stable', badge: null, notice: null });
+    }
+  });
+
+  it('badges a beta as a warning and a listing that needs the portal as neutral information', () => {
+    expect(maturityView({ maturity: 'beta' })).toMatchObject({
+      badge: 'beta',
+      badgeTone: 'warning',
+      alertTone: 'warning',
+    });
+    expect(maturityView({ maturity: 'needs_portal_setup' })).toMatchObject({
+      badge: 'needsPortalSetup',
+      badgeTone: 'neutral',
+      alertTone: 'info',
+    });
+  });
+
+  it('reads maturity and notice from the app first and from its listing second, and trims the notice', () => {
+    expect(maturityView({ listing: { maturity: 'beta', notice: '  Check it.  ' } })).toMatchObject({
+      badge: 'beta',
+      notice: 'Check it.',
+    });
+    expect(
+      maturityView({ maturity: 'beta', notice: 'From the app', listing: { notice: 'Listing' } })
+        .notice,
+    ).toBe('From the app');
+    expect(maturityView({ notice: null, listing: { notice: 'Listing' } }).notice).toBe('Listing');
+    expect(maturityView({ maturity: 'beta', notice: '   ' }).notice).toBeNull();
+  });
+});
+
+describe('private address (secret in the path)', () => {
+  it('builds the full address from the address and the secret, with exactly one slash between', () => {
+    expect(fullAddress('https://api.example.test/hooks/abc', 'S3cret')).toBe(
+      'https://api.example.test/hooks/abc/S3cret',
+    );
+    expect(fullAddress('https://api.example.test/hooks/abc/', 'S3cret')).toBe(
+      'https://api.example.test/hooks/abc/S3cret',
+    );
+    expect(fullAddress('https://api.example.test/hooks/abc', '/S3cret')).toBe(
+      'https://api.example.test/hooks/abc/S3cret',
+    );
+    expect(PATH_FULL.endsWith(`/${PATH_SECRET}`)).toBe(true);
+  });
+
+  it('masks the address down to the tail the server keeps, and never builds more than that', () => {
+    const url = 'https://api.example.test/hooks/abc';
+    expect(maskedAddress(url, `ends in ${PATH_TAIL}`)).toBe(`${url}/...${PATH_TAIL}`);
+    expect(maskedAddress(`${url}/`, 'ends in ab12')).toBe(`${url}/...ab12`);
+    expect(maskedAddress(url, null)).toBe(`${url}/...`);
+    expect(maskedAddress(url, 'something else')).toBe(`${url}/...`);
+    expect(maskedAddress(url, `ends in ${PATH_TAIL}`)).not.toContain(PATH_SECRET);
+  });
+
+  it('knows a path connection from the others', () => {
+    expect(isPathAuth(pathInstallation().connection!.inbound)).toBe(true);
+    expect(isPathAuth(pullInstallation().connection!.inbound)).toBe(false);
+    expect(isPathAuth(null)).toBe(false);
+  });
+
+  it('lists the methods and formats a sender may use, and falls back to the one method and JSON', () => {
+    const inbound = pathInstallation().connection!.inbound!;
+    expect(senderMethods(inbound)).toEqual(['GET', 'POST']);
+    expect(senderFormats(inbound)).toEqual(['query', 'form', 'json']);
+    expect(senderMethods({ method: 'GET' })).toEqual(['GET']);
+    expect(senderMethods({ method: 'POST', methods: [] })).toEqual(['POST']);
+    expect(senderFormats({})).toEqual(['json']);
+  });
+
+  it('carries the sender details and the portal name into the reveal, from one place', () => {
+    const inbound = pathInstallation().connection!.inbound!;
+    expect(revealExtras(inbound, 'JustDial')).toEqual({
+      methods: ['GET', 'POST'],
+      formats: ['query', 'form', 'json'],
+      portalName: 'JustDial',
+    });
+    expect(revealExtras(null, 'JustDial')).toEqual({ portalName: 'JustDial' });
+  });
+
+  it('keeps a path secret out of sight once the reveal is dismissed', () => {
+    const payload: RevealPayload = {
+      secret: PATH_SECRET,
+      url: 'https://api.example.test/hooks/abc',
+      tokenHeader: null,
+      signatureHeader: null,
+      auth: 'path',
+      ...revealExtras(pathInstallation().connection!.inbound, 'JustDial'),
+    };
+    const shown = startReveal(payload);
+    expect(visiblePayload(shown)?.auth).toBe('path');
+    expect(visiblePayload(dismiss(setSaved(shown, true)))).toBeNull();
+    expect(visiblePayload(dismiss(shown))).not.toBeNull();
+  });
+});
+
+describe('message to the portal account manager', () => {
+  const text = (key: 'subjectLine' | 'body', v: Record<string, string>) =>
+    `${key}|${v.portal}|${v.address}|${v.methods}|${v.formats}`;
+
+  it('lists methods with "or" and formats with "and", in the reader language', () => {
+    expect(listText(['GET', 'POST'], 'en', 'disjunction')).toBe('GET or POST');
+    expect(listText(['JSON', 'XML', 'form fields'], 'en', 'conjunction')).toBe(
+      'JSON, XML, and form fields',
+    );
+    expect(listText(['GET'], 'en', 'disjunction')).toBe('GET');
+    expect(listText([], 'en', 'disjunction')).toBe('');
+    expect(listText(['GET', 'POST'], 'ar', 'disjunction')).toContain('GET');
+    expect(listText(['GET', 'POST'], 'ar', 'disjunction')).not.toBe('GET or POST');
+  });
+
+  it('builds a subject, a blank line and a body from the portal, the address, the methods and the formats', () => {
+    const message = accountManagerMessage(
+      {
+        portal: 'JustDial',
+        address: PATH_FULL,
+        methods: ['GET', 'POST'],
+        formats: ['query', 'json'],
+      },
+      text,
+      'en',
+      (f) => ({ json: 'JSON', form: 'form', xml: 'XML', query: 'query string' })[f],
+    );
+    const [subject, body] = message.split('\n\n');
+    expect(subject).toBe(`subjectLine|JustDial|${PATH_FULL}|GET or POST|query string and JSON`);
+    expect(body).toBe(`body|JustDial|${PATH_FULL}|GET or POST|query string and JSON`);
+  });
+});
+
+describe('sync now', () => {
+  const NOW = Date.parse('2026-10-04T10:00:00.000Z');
+  const at = (seconds: number, minIntervalSeconds = 300) => ({
+    status: 'scheduled' as const,
+    runAt: new Date(NOW + seconds * 1000).toISOString(),
+    minIntervalSeconds,
+  });
+
+  it('says a sync that runs within a few seconds runs right away', () => {
+    expect(syncNote(at(0), NOW)).toMatchObject({ immediate: true, waitSeconds: 0 });
+    expect(syncNote(at(SYNC_IMMEDIATE_SECONDS), NOW).immediate).toBe(true);
+    expect(syncNote(at(-30), NOW)).toMatchObject({ immediate: true, waitSeconds: 0 });
+  });
+
+  it('says a sync further away has to wait, for how long, and for which interval the portal asks', () => {
+    const note = syncNote(at(SYNC_IMMEDIATE_SECONDS + 1), NOW);
+    expect(note.immediate).toBe(false);
+    expect(note.waitSeconds).toBe(SYNC_IMMEDIATE_SECONDS + 1);
+    expect(note.runAt.toISOString()).toBe('2026-10-04T10:00:06.000Z');
+    expect(syncNote(at(240), NOW)).toMatchObject({
+      immediate: false,
+      waitSeconds: 240,
+      interval: { unit: 'minutes', count: 5 },
+    });
+  });
+
+  it('takes the interval from the answer, never from a number in the code', () => {
+    expect(syncNote(at(30, 600), NOW).interval).toEqual({ unit: 'minutes', count: 10 });
+    expect(syncNote(at(30, 45), NOW).interval).toEqual({ unit: 'seconds', count: 45 });
+    expect(syncNote(at(30, 7200), NOW).interval).toEqual({ unit: 'hours', count: 2 });
+  });
+
+  it('writes an interval in the largest whole unit and never as zero', () => {
+    expect(intervalParts(300)).toEqual({ unit: 'minutes', count: 5 });
+    expect(intervalParts(3600)).toEqual({ unit: 'hours', count: 1 });
+    expect(intervalParts(90)).toEqual({ unit: 'seconds', count: 90 });
+    expect(intervalParts(60)).toEqual({ unit: 'minutes', count: 1 });
+    expect(intervalParts(0)).toEqual({ unit: 'seconds', count: 1 });
+  });
+
+  it('is offered for a polled connection to someone who may manage, while the app is on', () => {
+    const all = { read: true, install: true, manage: true };
+    const opts = { hasTestPayload: true };
+    expect(manageView(pullInstallation(), all, opts).canSync).toBe(true);
+    expect(manageView(installation(), all, opts).canSync).toBe(false);
+    expect(manageView(pathInstallation(), all, opts).canSync).toBe(false);
+    expect(manageView(pullInstallation({ connection: null }), all, opts).canSync).toBe(false);
+    expect(
+      manageView(pullInstallation(), { read: true, install: true, manage: false }, opts).canSync,
+    ).toBe(false);
+    expect(manageView(pullInstallation({ status: 'disabled' }), all, opts).canSync).toBe(false);
+    expect(manageView(pullInstallation({ status: 'killed' }), all, opts).canSync).toBe(false);
+  });
+
+  it('knows a polled connection by its type', () => {
+    expect(isPolled(pullInstallation().connection)).toBe(true);
+    expect(isPolled(pathInstallation().connection)).toBe(false);
+    expect(isPolled(null)).toBe(false);
+  });
+
+  it('suggests the key and Sync now after an error on a polled connection, and only then', () => {
+    const stopped = portalConnection({ type: 'pull', status: 'error', lastError: 'Bad key' });
+    expect(pullErrorHint(stopped, true)).toBe('withSync');
+    expect(pullErrorHint(stopped, false)).toBe('withoutSync');
+    expect(pullErrorHint({ ...stopped, status: 'active' }, true)).toBeNull();
+    expect(pullErrorHint({ ...stopped, type: 'push' }, true)).toBeNull();
+    expect(pullErrorHint(null, true)).toBeNull();
+  });
+
+  it('waits for the first lead only on a push connection that has not received one', () => {
+    expect(waitingForFirstLead(portalConnection({ lastEventAt: null }))).toBe(true);
+    expect(waitingForFirstLead(portalConnection({ lastEventAt: '2026-10-02T09:00:00.000Z' }))).toBe(
+      false,
+    );
+    expect(waitingForFirstLead(portalConnection({ type: 'pull', lastEventAt: null }))).toBe(false);
+    expect(
+      waitingForFirstLead(portalConnection({ type: 'webhook_relay', lastEventAt: null })),
+    ).toBe(false);
+    expect(waitingForFirstLead(null)).toBe(false);
   });
 });

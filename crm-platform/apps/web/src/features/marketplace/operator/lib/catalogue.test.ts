@@ -3,6 +3,7 @@ import { ID, app, category } from '../test-fixtures';
 import {
   ALL_CATEGORIES,
   NO_FILTERS,
+  PRICING_FILTERS,
   categoryKey,
   categoryOptions,
   filterByCategory,
@@ -16,15 +17,23 @@ describe('listQuery: what the API filters itself', () => {
     expect(listQuery(NO_FILTERS)).toEqual({});
   });
 
-  it('sends status, kind and the trimmed search, and never the category', () => {
+  it('sends status, kind, pricing and the trimmed search, and never the category', () => {
     expect(
       listQuery({
         status: 'in_review',
         kind: 'integration',
+        pricing: 'paid',
         category: 'integration:payments',
         search: '  acme ',
       }),
-    ).toEqual({ status: 'in_review', kind: 'integration', q: 'acme' });
+    ).toEqual({ status: 'in_review', kind: 'integration', pricing: 'paid', q: 'acme' });
+  });
+
+  it('the pricing filter sends free or paid, and nothing for all', () => {
+    expect(listQuery({ ...NO_FILTERS, pricing: 'free' })).toEqual({ pricing: 'free' });
+    expect(listQuery({ ...NO_FILTERS, pricing: 'paid' })).toEqual({ pricing: 'paid' });
+    expect(listQuery({ ...NO_FILTERS, pricing: 'all' })).toEqual({});
+    expect(PRICING_FILTERS).toEqual(['all', 'free', 'paid']);
   });
 
   it('keeps the search within the API limit of 80 characters', () => {

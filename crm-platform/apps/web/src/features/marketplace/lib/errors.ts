@@ -1,6 +1,7 @@
 import { ERROR_CODES } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { parseConsentProblems, type ConsentDiff } from './consent';
+import { safeCheckoutPath } from './pricing';
 import { safeInternalPath } from './routes';
 
 /**
@@ -34,6 +35,11 @@ export const MKT_ERROR_KINDS = [
   'credentialMissing',
   'noConnection',
   'leadPipeline',
+  'subscriptionRequired',
+  'notForSale',
+  'trialUnavailable',
+  'subscriptionNotFound',
+  'subscriptionState',
   'unexpected',
 ] as const;
 export type MktErrorKind = (typeof MKT_ERROR_KINDS)[number];
@@ -63,6 +69,8 @@ export interface MktError {
   fields: Record<string, string>;
   /** The plan limit a `PLAN_LIMIT_REACHED` named, when it did. */
   limit: { used: number | null; cap: number | null } | null;
+  /** `MKT_SUBSCRIPTION_REQUIRED`: where to pay (the add-on checkout page; any other address is dropped). Null for every other kind. */
+  checkoutPath: string | null;
 }
 
 const pick = (err: ApiError, path: string): string | undefined =>
@@ -132,6 +140,16 @@ function kindOf(err: ApiError): MktErrorKind {
       return 'noConnection';
     case ERROR_CODES.MKT_LEAD_PIPELINE_UNAVAILABLE:
       return 'leadPipeline';
+    case ERROR_CODES.MKT_SUBSCRIPTION_REQUIRED:
+      return 'subscriptionRequired';
+    case ERROR_CODES.MKT_NOT_FOR_SALE:
+      return 'notForSale';
+    case ERROR_CODES.MKT_TRIAL_UNAVAILABLE:
+      return 'trialUnavailable';
+    case ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND:
+      return 'subscriptionNotFound';
+    case ERROR_CODES.MKT_SUBSCRIPTION_STATE:
+      return 'subscriptionState';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (err.status === 404 || err.status === 501) return 'unavailable';
@@ -147,6 +165,7 @@ export function mktError(error: unknown): MktError {
       consent: null,
       fields: {},
       limit: null,
+      checkoutPath: null,
     };
   }
   const kind = kindOf(error);
@@ -171,6 +190,8 @@ export function mktError(error: unknown): MktError {
       kind === 'planLimitInstalled' || kind === 'planLimitLeadSources' || kind === 'planLimit'
         ? { used: toNumber(pick(error, 'used')), cap: toNumber(pick(error, 'limitValue')) }
         : null,
+    checkoutPath:
+      kind === 'subscriptionRequired' ? safeCheckoutPath(pick(error, 'checkoutPath')) : null,
   };
 }
 

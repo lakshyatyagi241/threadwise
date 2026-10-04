@@ -13,6 +13,7 @@ import { CATALOGUE_PATH } from '../lib/paths';
 import { MARKET_PERMISSIONS, type MarketAccess } from '../lib/permissions';
 import { AppActions, type Notice } from './app-actions';
 import { ListingEdit } from './listing-edit';
+import { PricingPanel } from './pricing-panel';
 import {
   AppStatusBadge,
   ConnectorLabel,
@@ -159,6 +160,8 @@ function Detail({
       </dl>
 
       <Operate app={app} access={access} onNotice={setNotice} />
+
+      <PricingPanel app={app} access={access} />
 
       <Tabs
         value={tab}

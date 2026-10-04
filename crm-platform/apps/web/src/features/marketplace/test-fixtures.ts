@@ -2,8 +2,10 @@ import {
   marketScopeSummaries,
   type MarketAppCard,
   type MarketAppDetail,
+  type MarketCardPricing,
   type MarketInstallation,
   type MarketRequest,
+  type MarketSubscription,
 } from '@crm/contracts';
 
 /** Shared fixtures of this feature's tests: one card, one app page, one installation, one request, with overrides. Never imported by app code. */
@@ -17,6 +19,58 @@ export const HOOK_URL = `https://api.example.test/v2/public/marketplace/hooks/${
 
 export const scopes = (...ids: string[]) => marketScopeSummaries(ids);
 
+/** A free app's pricing; pass fields to change it. */
+export function pricing(over: Partial<MarketCardPricing> = {}): MarketCardPricing {
+  return {
+    model: 'free',
+    amount: null,
+    currency: null,
+    trialDays: 0,
+    trialAvailable: false,
+    access: 'free',
+    includedBy: null,
+    checkoutPath: null,
+    ...over,
+  };
+}
+
+export const PACK_PATH = '/billing/checkout/mkt_0123456789abcdef0123';
+
+/** A paid app the workspace has no subscription to: $9 a month, with a 14-day trial on offer. */
+export function paidPricing(over: Partial<MarketCardPricing> = {}): MarketCardPricing {
+  return pricing({
+    model: 'paid_monthly',
+    amount: '9.00',
+    currency: 'USD',
+    trialDays: 14,
+    trialAvailable: true,
+    access: 'subscription_required',
+    checkoutPath: PACK_PATH,
+    ...over,
+  });
+}
+
+/** An active, paid subscription (paid until 31 October 2026); pass fields to make it a trial, a comp, canceling or ended. */
+export function subscription(over: Partial<MarketSubscription> = {}): MarketSubscription {
+  return {
+    id: ID(90),
+    status: 'active',
+    source: 'purchase',
+    amount: '9.00',
+    currency: 'USD',
+    startedAt: '2026-09-30T00:00:00.000Z',
+    currentPeriodEnd: '2026-10-31T00:00:00.000Z',
+    trialEndsAt: null,
+    canceledAt: null,
+    lapsedAt: null,
+    renewals: 0,
+    nextAmount: null,
+    nextCurrency: null,
+    actions: { canCancel: true, canResume: false, canRenew: false },
+    ...over,
+  };
+}
+
 export function card(over: Partial<MarketAppCard> = {}): MarketAppCard {
   return {
     id: ID(1),
@@ -29,7 +83,7 @@ export function card(over: Partial<MarketAppCard> = {}): MarketAppCard {
     firstParty: true,
     featured: true,
     version: '1.0.0',
-    pricing: { model: 'free' },
+    pricing: pricing(),
     connectorType: 'webhook_relay',
     installCount: 3,
     publishedAt: '2026-10-01T00:00:00.000Z',
@@ -93,6 +147,7 @@ export function detail(over: Partial<MarketAppDetail> = {}): MarketAppDetail {
       setupInstructions: [{ title: 'Copy the key', body: 'Open the portal.\n\nCopy the key.' }],
       hasTestPayload: true,
     },
+    subscription: null,
     ...over,
   };
 }
@@ -144,6 +199,9 @@ export function installation(over: Partial<MarketInstallation> = {}): MarketInst
       counters: { received: 12, accepted: 10, duplicates: 1, failed: 1 },
     },
     killReason: null,
+    pauseReason: null,
+    pricing: pricing(),
+    subscription: null,
     installedBy: { id: ID(7), name: 'Asha Rao' },
     installedAt: '2026-10-01T12:00:00.000Z',
     rowVersion: 4,

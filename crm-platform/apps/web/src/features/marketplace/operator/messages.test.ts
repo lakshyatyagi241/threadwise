@@ -1,20 +1,41 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { createTranslator } from 'next-intl';
 import {
   CONNECTOR_TYPES,
   MARKET_APP_KINDS,
   MARKET_APP_STATUSES,
+  MARKET_PRICING_MODELS,
   MARKET_REQUEST_STATUSES,
   MARKET_SCOPE_RISKS,
+  MARKET_SUBSCRIPTION_SOURCES,
+  MARKET_SUBSCRIPTION_STATUSES,
   MARKET_VERSION_STATUSES,
 } from '@crm/contracts';
 import { OPERATOR_NAV } from '../../auth-registration-security/platform/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../operator-nav';
-import { KIND_FILTERS, STATUS_FILTERS } from './lib/catalogue';
+import { KIND_FILTERS, PRICING_FILTERS, STATUS_FILTERS } from './lib/catalogue';
 import { MARKET_ERROR_KEYS } from './lib/errors';
+import { PRICING_PROBLEM_CODES } from './lib/pricing';
 import { STARTER_TEMPLATES } from './lib/starters';
+import {
+  SUBSCRIPTION_SOURCE_FILTERS,
+  SUBSCRIPTION_STATUS_FILTERS,
+  type PeriodKind,
+} from './lib/subscriptions';
 import { USAGE_SORTS, type UsageReason } from './lib/usage';
+
+/** Every kind `periodInfo` can answer; the renewal column asks for `subscriptions.period.<kind>`. */
+const PERIOD_KINDS: PeriodKind[] = [
+  'paidUntil',
+  'trialEnds',
+  'endsOn',
+  'compUntil',
+  'compOpen',
+  'endedOn',
+  'none',
+];
 
 /**
  * next-intl prints the key path when a message is missing, so every key a component asks for must exist, in English and in
@@ -96,6 +117,36 @@ describe('marketplace operator messages', () => {
     for (const [k, v] of Object.entries(ar)) expect(v, k).not.toMatch(/\{\{/);
   });
 
+  it('every message formats in its language, for every plural count a screen can pass (a broken ICU string throws only when shown)', () => {
+    const counts = [0, 1, 2, 3, 5, 11, 25, 100];
+    for (const [locale, flat] of [
+      ['en', en],
+      ['ar', ar],
+    ] as const) {
+      const problems: string[] = [];
+      const t = createTranslator({
+        locale,
+        messages: load(locale) as never,
+        namespace: ROOT as never,
+        onError: (e) => problems.push(e.message),
+      });
+      for (const [key, message] of Object.entries(flat)) {
+        const rel = key.slice(ROOT.length + 1);
+        const names = placeholders(message);
+        for (const count of names.includes('count') ? counts : [0]) {
+          const values = Object.fromEntries(names.map((n) => [n, n === 'count' ? count : 'x']));
+          const out = (t as unknown as (k: string, v: Record<string, unknown>) => string)(
+            rel,
+            values,
+          );
+          if (typeof out !== 'string' || out.trim() === '')
+            problems.push(`${locale} ${key}: empty`);
+        }
+      }
+      expect(problems, locale).toEqual([]);
+    }
+  });
+
   it('Arabic is written in Arabic: no message is a copy of its English text', () => {
     // A bare dash is the same in both; any message with letters in it must differ.
     const same = Object.keys(en).filter((k) => en[k] === ar[k] && /[A-Za-z]/.test(en[k]!));
@@ -129,6 +180,8 @@ describe('marketplace operator messages', () => {
       ...MARKET_REQUEST_STATUSES.map((v) => `${ROOT}.enums.requestStatus.${v}`),
       ...CONNECTOR_TYPES.map((v) => `${ROOT}.enums.connector.${v}`),
       ...MARKET_SCOPE_RISKS.map((v) => `${ROOT}.enums.risk.${v}`),
+      ...MARKET_SUBSCRIPTION_STATUSES.map((v) => `${ROOT}.enums.subscriptionStatus.${v}`),
+      ...MARKET_SUBSCRIPTION_SOURCES.map((v) => `${ROOT}.enums.subscriptionSource.${v}`),
       ...MARKET_APP_KINDS.map((v) => `${ROOT}.categories.form.kinds.${v}`),
       ...MARKET_ERROR_KEYS.map((k) => `${ROOT}.errors.${k}`),
     ]);
@@ -137,7 +190,16 @@ describe('marketplace operator messages', () => {
   it('has the filter values the catalogue builds by name', () => {
     expect(KIND_FILTERS).toEqual(['all', ...MARKET_APP_KINDS]);
     expect(STATUS_FILTERS).toEqual(['all', ...MARKET_APP_STATUSES]);
-    bothHave([`${ROOT}.list.filters.allKinds`, `${ROOT}.list.filters.allStatuses`]);
+    expect(PRICING_FILTERS).toEqual(['all', 'free', 'paid']);
+    bothHave([
+      `${ROOT}.list.filters.allKinds`,
+      `${ROOT}.list.filters.allStatuses`,
+      `${ROOT}.list.filters.allPricing`,
+      `${ROOT}.list.filters.free`,
+      `${ROOT}.list.filters.paid`,
+    ]);
+    expect(SUBSCRIPTION_STATUS_FILTERS).toEqual(['all', ...MARKET_SUBSCRIPTION_STATUSES]);
+    expect(SUBSCRIPTION_SOURCE_FILTERS).toEqual(['all', ...MARKET_SUBSCRIPTION_SOURCES]);
   });
 
   it('has the keys the code builds from its own result codes', () => {
@@ -193,6 +255,33 @@ describe('marketplace operator messages', () => {
         // components/usage-page
         ...USAGE_SORTS.map((s) => `usage.sort.${s}`),
         ...reasons.map((r) => `usage.reasons.${r}`),
+        // lib/pricing PricingProblemCode, and the developer's proposal models of the manifest
+        ...PRICING_PROBLEM_CODES.map((c) => `pricing.problems.${c}`),
+        ...MARKET_PRICING_MODELS.map((m) => `pricing.proposal.models.${m}`),
+        // components/pricing-panel: the two confirmations
+        ...['title', 'body', 'next', 'paid', 'action'].map(
+          (k) => `pricing.confirm.priceChange.${k}`,
+        ),
+        ...['title', 'body', 'free', 'paid', 'action'].map((k) => `pricing.confirm.toFree.${k}`),
+        // components/subscriptions-page: the summary columns and what the renewal column says (lib/subscriptions PeriodKind)
+        ...[
+          'app',
+          'price',
+          'active',
+          'trialing',
+          'comped',
+          'canceling',
+          'ended',
+          'total',
+          'mrr',
+        ].map((c) => `subscriptions.summary.cols.${c}`),
+        ...PERIOD_KINDS.map((k) => `subscriptions.period.${k}`),
+        // components/subscription-dialogs
+        ...['periodEnd', 'now'].flatMap((w) => [
+          `cancelDialog.${w}.label`,
+          `cancelDialog.done.${w}`,
+        ]),
+        ...['periodEnd', 'now'].map((w) => `cancelDialog.${w}.detail`),
       ].map((k) => `${ROOT}.${k}`),
     );
   });

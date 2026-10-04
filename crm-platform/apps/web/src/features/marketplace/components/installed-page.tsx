@@ -3,23 +3,27 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import {
   MARKET_APP_KINDS,
   MARKET_INSTALL_STATUSES,
   type MarketAppKind,
   type MarketInstallStatus,
   type MarketInstallation,
+  type MarketSubscription,
+  type MarketWorkspaceSubscription,
 } from '@crm/contracts';
 import { Alert, Badge, EmptyState, Select, cn } from '@crm/ui';
 import { fetchInstallations, mktKeys } from '../api';
 import { installationChips } from '../lib/install-state';
 import { usageView, type UsageView } from '../lib/manage';
+import { subscriptionView } from '../lib/pricing';
 import { mktRoutes, PLANS_PATH } from '../lib/routes';
 import { MarketplaceHeader } from './marketplace-header';
 import {
   AppLogo,
   ChipView,
+  ErrorLine,
   ErrorPanel,
   LINK_BUTTON,
   LINK_BUTTON_PRIMARY,
@@ -27,6 +31,7 @@ import {
   LoadingBlock,
   PAGE,
 } from './ui';
+import { useSubscriptions } from './use-subscription-actions';
 
 /** Everything the workspace has installed, with its state, and how much of the plan's installed-apps cap is used. */
 export function InstalledPage() {
@@ -118,9 +123,99 @@ export function InstalledPage() {
               ))}
             </ul>
           )}
+
+          <SubscriptionsPanel />
         </>
       )}
     </div>
+  );
+}
+
+/**
+ * The workspace's own subscriptions, including the ones whose app is not installed (a paid period that runs on after an uninstall):
+ * state, the date it is paid until, and where to manage it. It is drawn only when there is something to list.
+ */
+export function SubscriptionsPanel() {
+  const t = useTranslations('marketplace.installed.subscriptions');
+  const q = useSubscriptions();
+  if (q.isPending) return null;
+  if (q.isError) return <ErrorLine error={q.error} />;
+  if (q.data.data.length === 0) return null;
+  return (
+    <section aria-labelledby="mkt-subscriptions" data-testid="subscriptions" className="space-y-3">
+      <div>
+        <h2 id="mkt-subscriptions" className="text-base font-semibold">
+          {t('title')}
+        </h2>
+        <p className="text-sm text-muted-foreground">{t('intro')}</p>
+      </div>
+      <ul className="grid gap-3 md:grid-cols-2" aria-label={t('listLabel')}>
+        {q.data.data.map((s) => (
+          <li key={s.id}>
+            <SubscriptionRow subscription={s} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function SubscriptionRow({ subscription: s }: { subscription: MarketWorkspaceSubscription }) {
+  const t = useTranslations('marketplace.installed.subscriptions');
+  const ts = useTranslations('marketplace.subscription');
+  const locale = useLocale();
+  const view = subscriptionView(s, locale);
+  const href = s.installationId ? mktRoutes.manage(s.installationId) : mktRoutes.app(s.app.slug);
+  return (
+    <article
+      data-testid={`subscription-${s.app.slug}`}
+      className="flex h-full min-w-0 flex-col gap-2 rounded-md border border-border bg-background p-4"
+    >
+      <div className="flex items-start gap-3">
+        <AppLogo name={s.app.name} logo={s.app.logo} />
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-base font-semibold">
+            <Link href={href} className="hover:underline focus-visible:underline">
+              {s.app.name}
+            </Link>
+          </h3>
+          <SubscriptionDate subscription={s} className="text-xs text-muted-foreground" />
+        </div>
+        <Badge tone={view.tone}>{ts(`status.${view.status}`)}</Badge>
+      </div>
+      {view.lastPayment && (
+        <p className="text-xs text-muted-foreground">
+          {ts('lastPayment', { price: view.lastPayment })}
+        </p>
+      )}
+      <div className="mt-auto flex justify-end pt-1">
+        <Link href={href} className={LINK_BUTTON_SM}>
+          {s.installationId ? t('manage') : t('viewApp')}
+          <span className="sr-only"> — {s.app.name}</span>
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+/** "Paid until Oct 31, 2026", "Free trial ends ...", "Ended ...": the sentence of a subscription's date. Nothing when it has none. */
+function SubscriptionDate({
+  subscription,
+  className,
+}: {
+  subscription: MarketSubscription;
+  className?: string;
+}) {
+  const t = useTranslations('marketplace.subscription');
+  const f = useFormatter();
+  const locale = useLocale();
+  const { date } = subscriptionView(subscription, locale);
+  if (date.kind === 'none') return null;
+  const text = date.iso ? f.dateTime(new Date(date.iso), { dateStyle: 'medium' }) : '';
+  return (
+    <p className={className} data-testid="subscription-date">
+      {t(`date.${date.kind}`, { date: text })}
+    </p>
   );
 }
 
@@ -212,6 +307,9 @@ function InstallationRow({ installation: i }: { installation: MarketInstallation
           <ChipView key={c.key} chip={c} />
         ))}
       </div>
+      {i.status !== 'killed' && i.subscription && (
+        <SubscriptionDate subscription={i.subscription} className="text-sm text-muted-foreground" />
+      )}
       {i.status === 'killed' && i.killReason && (
         <p className="text-sm text-danger">{t('killReason', { reason: i.killReason })}</p>
       )}

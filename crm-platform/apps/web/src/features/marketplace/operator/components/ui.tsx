@@ -121,11 +121,25 @@ export function Failure({ error, onRetry }: { error: unknown; onRetry?: () => vo
 }
 
 /** Says why a mutation failed, next to the control that ran it: the sentence, the request id and every `path: message` the API named. */
-export function ErrorLine({ error }: { error: unknown }) {
+export function ErrorLine({
+  error,
+  shownAtFields,
+}: {
+  error: unknown;
+  /** Form fields that already show their own refusal beside the control: their problems are not listed again here. */
+  shownAtFields?: readonly string[];
+}) {
   const t = useTranslations(`${NS}.common`);
   const text = useErrorText();
   if (!error) return null;
-  const { text: message, requestId, problems } = text(error);
+  const { text: message, requestId, problems: all } = text(error);
+  const problems = all.filter(
+    (p) =>
+      !(
+        p.target === 'field' &&
+        shownAtFields?.some((f) => p.path === f || p.path.startsWith(`${f}.`))
+      ),
+  );
   return (
     <Alert tone="danger" className="space-y-1 text-sm">
       <p>{message}</p>

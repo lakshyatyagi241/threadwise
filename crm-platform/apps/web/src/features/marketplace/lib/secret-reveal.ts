@@ -15,7 +15,13 @@ export interface RevealPayload {
   url: string | null;
   tokenHeader: string | null;
   signatureHeader: string | null;
-  auth: 'token' | 'hmac' | 'either' | null;
+  /** `path`: the secret is the last part of `url`, so the address and the secret are one thing (shown as one full address). */
+  auth: 'token' | 'hmac' | 'either' | 'path' | null;
+  /** `path` only: how the sender calls the address (from the connection view), for the sender details and the message to the portal. */
+  methods?: ('POST' | 'GET')[];
+  formats?: ('json' | 'form' | 'xml' | 'query')[];
+  /** The portal's name, for the message to its account manager. */
+  portalName?: string;
 }
 
 export type RevealState =

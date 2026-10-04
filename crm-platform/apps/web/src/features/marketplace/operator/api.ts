@@ -1,6 +1,7 @@
 import type { z } from 'zod';
 import {
   createMarketAppSchema,
+  marketGrandfatherResultSchema,
   marketKillResultSchema,
   marketOperatorAppDetailSchema,
   marketOperatorAppListSchema,
@@ -9,13 +10,22 @@ import {
   marketOperatorCategorySchema,
   marketOperatorRequestListSchema,
   marketOperatorRequestSchema,
+  marketOperatorSubscriptionListSchema,
+  marketOperatorSubscriptionSchema,
   marketPublishResultSchema,
+  marketSubscriptionSummarySchema,
   marketUsageSchema,
+  type CancelOperatorSubscriptionRequest,
+  type CompSubscriptionRequest,
   type CreateMarketCategoryInput,
+  type GrandfatherSubscriptionsRequest,
   type MarketAppKind,
   type MarketAppStatus,
   type MarketRequestStatus,
+  type MarketSubscriptionSource,
+  type MarketSubscriptionStatus,
   type SaveMarketVersionInput,
+  type SetMarketPricingRequest,
   type UpdateMarketAppInput,
   type UpdateMarketCategoryInput,
   type UpdateMarketRequestInput,
@@ -31,6 +41,7 @@ const ROOT = '/marketplace';
 export interface AppListFilters {
   status?: MarketAppStatus;
   kind?: MarketAppKind;
+  pricing?: 'free' | 'paid';
   q?: string;
 }
 export interface RequestListFilters {
@@ -38,20 +49,52 @@ export interface RequestListFilters {
   kind?: MarketAppKind;
   q?: string;
 }
+export interface SubscriptionListFilters {
+  /** An app's slug or uuid. */
+  app?: string;
+  status?: MarketSubscriptionStatus;
+  source?: MarketSubscriptionSource;
+  /** Part of the workspace's name. */
+  q?: string;
+}
 
 export const marketKeys = {
   all: ['operator', 'marketplace'] as const,
   apps: (f: AppListFilters) =>
-    ['operator', 'marketplace', 'apps', f.status ?? '', f.kind ?? '', f.q ?? ''] as const,
+    [
+      'operator',
+      'marketplace',
+      'apps',
+      f.status ?? '',
+      f.kind ?? '',
+      f.q ?? '',
+      f.pricing ?? '',
+    ] as const,
   appsAll: ['operator', 'marketplace', 'apps'] as const,
   app: (ref: string, versionId?: string) =>
     ['operator', 'marketplace', 'app', ref, versionId ?? 'latest'] as const,
   appAll: (ref: string) => ['operator', 'marketplace', 'app', ref] as const,
+  /** Every cached listing page, whether it was opened by slug or by uuid. */
+  appDetailsAll: ['operator', 'marketplace', 'app'] as const,
   categories: ['operator', 'marketplace', 'categories'] as const,
   requests: (f: RequestListFilters) =>
     ['operator', 'marketplace', 'requests', f.status ?? '', f.kind ?? '', f.q ?? ''] as const,
   requestsAll: ['operator', 'marketplace', 'requests'] as const,
   usage: ['operator', 'marketplace', 'usage'] as const,
+  subscriptions: (f: SubscriptionListFilters) =>
+    [
+      'operator',
+      'marketplace',
+      'subscriptions',
+      f.app ?? '',
+      f.status ?? '',
+      f.source ?? '',
+      f.q ?? '',
+    ] as const,
+  subscriptionsAll: ['operator', 'marketplace', 'subscriptions'] as const,
+  subscriptionSummary: ['operator', 'marketplace', 'subscription-summary'] as const,
+  /** The comp dialog's workspace picker: a name search over the operator's workspace list. */
+  workspaces: (search: string) => ['operator', 'marketplace', 'workspaces', search] as const,
 };
 
 const seg = encodeURIComponent;
@@ -60,7 +103,14 @@ const seg = encodeURIComponent;
 
 export const fetchApps = (f: AppListFilters & { cursor?: string }, signal?: AbortSignal) =>
   operatorFetch(`${ROOT}/apps`, {
-    query: { status: f.status, kind: f.kind, q: f.q, limit: 50, cursor: f.cursor },
+    query: {
+      status: f.status,
+      kind: f.kind,
+      pricing: f.pricing,
+      q: f.q,
+      limit: 50,
+      cursor: f.cursor,
+    },
     schema: marketOperatorAppListSchema,
     signal,
   });
@@ -188,3 +238,52 @@ export const updateRequest = (id: string, body: UpdateMarketRequestInput) =>
 
 export const fetchUsage = (signal?: AbortSignal) =>
   operatorFetch(`${ROOT}/usage`, { schema: marketUsageSchema, signal });
+
+// --- pricing and subscriptions (platform.market.pricing) --------------------------------------------------------------------------------
+
+/** The app's new pricing, saved with the `rowVersion` the operator read; the answer is the listing as it is now. */
+export const setPricing = (ref: string, body: SetMarketPricingRequest) =>
+  operatorFetch(`${ROOT}/apps/${seg(ref)}/pricing`, {
+    method: 'PUT',
+    body,
+    schema: marketOperatorAppSchema,
+  });
+
+export const fetchSubscriptions = (
+  f: SubscriptionListFilters & { cursor?: string },
+  signal?: AbortSignal,
+) =>
+  operatorFetch(`${ROOT}/subscriptions`, {
+    query: { app: f.app, status: f.status, source: f.source, q: f.q, limit: 50, cursor: f.cursor },
+    schema: marketOperatorSubscriptionListSchema,
+    signal,
+  });
+
+export const fetchSubscriptionSummary = (signal?: AbortSignal) =>
+  operatorFetch(`${ROOT}/subscriptions/summary`, {
+    schema: marketSubscriptionSummarySchema,
+    signal,
+  });
+
+/** Gives a workspace a paid app free. `ref` is the app's slug or uuid. */
+export const compSubscription = (ref: string, body: CompSubscriptionRequest) =>
+  operatorFetch(`${ROOT}/apps/${seg(ref)}/subscriptions/comp`, {
+    method: 'POST',
+    body,
+    schema: marketOperatorSubscriptionSchema,
+  });
+
+/** "Comp existing users": a dry run (the default) says who would be comped; `dryRun: false` does it. */
+export const grandfatherSubscriptions = (ref: string, body: GrandfatherSubscriptionsRequest) =>
+  operatorFetch(`${ROOT}/apps/${seg(ref)}/subscriptions/grandfather`, {
+    method: 'POST',
+    body,
+    schema: marketGrandfatherResultSchema,
+  });
+
+export const cancelSubscription = (id: string, body: CancelOperatorSubscriptionRequest) =>
+  operatorFetch(`${ROOT}/subscriptions/${seg(id)}/cancel`, {
+    method: 'POST',
+    body,
+    schema: marketOperatorSubscriptionSchema,
+  });

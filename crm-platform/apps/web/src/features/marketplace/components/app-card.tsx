@@ -6,11 +6,14 @@ import type { MarketAppCard } from '@crm/contracts';
 import { Badge, cn } from '@crm/ui';
 import { cardCta, effectiveLock, installChips, type CtaKind } from '../lib/install-state';
 import { mktRoutes } from '../lib/routes';
+import { MaturityLine } from './maturity';
+import { PriceText } from './pricing-parts';
 import { AppLogo, ChipView, LINK_BUTTON, LINK_BUTTON_PRIMARY, LockNotice } from './ui';
 import { useMarketAccess } from './use-access';
 
 const CTA_STYLE: Record<CtaKind, string> = {
   install: LINK_BUTTON_PRIMARY,
+  subscribe: LINK_BUTTON_PRIMARY,
   review: LINK_BUTTON_PRIMARY,
   manage: LINK_BUTTON,
   killed: LINK_BUTTON,
@@ -49,8 +52,11 @@ export function AppCard({ card, className }: { card: MarketAppCard; className?: 
         {card.firstParty && <Badge tone="neutral">{t('firstParty')}</Badge>}
       </div>
       <p className="line-clamp-2 text-sm text-muted-foreground">{card.tagline}</p>
+      <MaturityLine source={card} />
       <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-        <li title={card.pricing.note}>{t(`pricing.${card.pricing.model}`)}</li>
+        <li>
+          <PriceText pricing={card.pricing} />
+        </li>
         {card.installCount > 0 && <li>{t('installs', { count: card.installCount })}</li>}
         <li>{t('version', { version: card.version })}</li>
       </ul>

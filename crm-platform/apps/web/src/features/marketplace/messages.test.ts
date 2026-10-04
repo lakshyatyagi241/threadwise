@@ -10,9 +10,10 @@ import {
   MARKET_EVENT_STATUSES,
   MARKET_HEALTH_STATES,
   MARKET_INSTALL_STATUSES,
-  MARKET_PRICING_MODELS,
   MARKET_REQUEST_STATUSES,
   MARKET_SCOPE_RISKS,
+  MARKET_SUBSCRIBE_OUTCOMES,
+  MARKET_SUBSCRIPTION_STATUSES,
 } from '@crm/contracts';
 import { MKT_ERROR_EXTRA_KEYS, MKT_ERROR_KINDS } from './lib/errors';
 import {
@@ -23,6 +24,14 @@ import {
   lockView,
   NEEDS_CONSENT_CHIP,
 } from './lib/install-state';
+import {
+  INCLUDED_NOTE_KEYS,
+  PAUSE_KINDS,
+  PRICE_LINE_KEYS,
+  RENEW_KINDS,
+  SUBSCRIPTION_CHIP_KEYS,
+  SUBSCRIPTION_DATE_KINDS,
+} from './lib/pricing';
 import { nav } from './nav';
 
 /**
@@ -146,7 +155,8 @@ describe('marketplace messages', () => {
         `scopes.overall.${r}.message`,
       ]),
       // pricing, connectors, connection and event states
-      ...MARKET_PRICING_MODELS.map((m) => `card.pricing.${m}`),
+      ...PRICE_LINE_KEYS.map((k) => `card.pricing.${k}`),
+      'card.pricing.trial',
       ...CONNECTOR_TYPES.flatMap((c) => [
         `detail.setup.intro.${c}`,
         `detail.facts.connectors.${c}`,
@@ -179,6 +189,16 @@ describe('marketplace messages', () => {
         `requests.form.result.${o}.title`,
         `requests.form.result.${o}.message`,
       ]),
+      // paid apps: the subscription chips, the states and dates of a subscription, what its buttons say, what the answers toast
+      ...SUBSCRIPTION_CHIP_KEYS.map((k) => `chips.${k}`),
+      ...MARKET_SUBSCRIPTION_STATUSES.map((s) => `subscription.status.${s}`),
+      ...SUBSCRIPTION_DATE_KINDS.map((k) => `subscription.date.${k}`),
+      ...[...RENEW_KINDS, 'resume', 'cancel'].map((k) => `subscription.actions.${k}`),
+      ...MARKET_SUBSCRIBE_OUTCOMES.filter((o) => o !== 'checkout').map(
+        (o) => `subscribe.toast.${o}`,
+      ),
+      ...INCLUDED_NOTE_KEYS.map((k) => `pricing.included.${k}`),
+      ...PAUSE_KINDS.map((k) => `manage.subscriptionEnded.message.${k}`),
       // install steps
       ...['permissions', 'setup', 'done'].map((s) => `install.steps.${s}`),
       // page titles
