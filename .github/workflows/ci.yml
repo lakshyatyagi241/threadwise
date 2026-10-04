@@ -47,8 +47,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build
 
+      # @crm/api's type-aware ESLint runs out of the default Node heap on a runner (exit 134, "Aborted (core dumped)" after ~4 min;
+      # it passes on a laptop with more headroom). A runner has about 7 GB.
       - name: Lint
         run: pnpm lint
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       # A PR that breaks module boundaries fails here rather than in review six months later.
       - name: Architecture boundaries
