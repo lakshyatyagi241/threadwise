@@ -36,6 +36,13 @@ const item = (over: Partial<PlatformAiKeyItem> = {}): PlatformAiKeyItem => ({
   sortOrder: 1,
   maxTokens: 4096,
   supportsMaxTokens: true,
+  keyHint: 'Find at platform.openai.com/api-keys',
+  textExtra: {
+    key: 'organization',
+    label: 'Organization ID',
+    hint: 'Optional. e.g. org-xxxxxxxxxxxx',
+    value: '',
+  },
   extraModels: [],
   modelChoices: ['gpt-5.4-mini', 'gpt-4o'],
   rowVersion: 3,
@@ -52,6 +59,16 @@ describe('provider card (WD-AIADM-001, 002, 003, 005)', () => {
     expect(out).toContain('(saved — leave blank to keep)');
     expect(out).toMatch(/type="password"[^>]*value=""|value=""[^>]*type="password"/);
     expect(out).toContain('Disable');
+  });
+
+  it('matches the WaDesk card: provider line, key hint, Organization ID, ceiling hint', () => {
+    const out = html(<KeyCard item={item()} />);
+    expect(out).toContain('provider: openai · default model: my-custom-model');
+    expect(out).toContain('Find at platform.openai.com/api-keys');
+    expect(out).toContain('Organization ID');
+    expect(out).toContain('Optional. e.g. org-xxxxxxxxxxxx');
+    expect(out).toContain('e.g. 4096');
+    expect(out).toContain('Leave blank for the model default.');
   });
 
   it('keeps a stored model outside the catalogue selectable, tagged custom', () => {

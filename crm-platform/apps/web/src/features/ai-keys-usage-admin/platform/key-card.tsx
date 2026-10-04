@@ -126,7 +126,7 @@ export function KeyCard({ item }: { item: PlatformAiKeyItem }) {
             )}
           </div>
           <p className="font-mono text-xs text-muted-foreground" dir="ltr">
-            {t('card.slug')}: {item.provider}
+            {t('card.slug', { provider: item.provider, model: item.defaultModel ?? '—' })}
           </p>
         </div>
         <Button
@@ -141,10 +141,10 @@ export function KeyCard({ item }: { item: PlatformAiKeyItem }) {
 
       <form onSubmit={submit} className="space-y-4" noValidate>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label={t('card.apiKey')} htmlFor={`${id}-key`} hint={t('card.apiKeyHint')}>
+          <Field label={`${t('card.apiKey')} *`} htmlFor={`${id}-key`} hint={item.keyHint}>
             <PasswordInput
               id={`${id}-key`}
-              autoComplete="off"
+              autoComplete="new-password"
               value={draft.apiKey}
               maxLength={1024}
               placeholder={
@@ -153,25 +153,22 @@ export function KeyCard({ item }: { item: PlatformAiKeyItem }) {
               onChange={(e) => set({ apiKey: e.target.value })}
             />
           </Field>
-          <Field label={t('card.defaultModel')} htmlFor={`${id}-model`} error={err('defaultModel')}>
-            <Select
-              id={`${id}-model`}
-              value={draft.defaultModel}
-              onChange={(e) => set({ defaultModel: e.target.value })}
+          {item.textExtra && (
+            <Field
+              label={item.textExtra.label}
+              htmlFor={`${id}-text`}
+              hint={item.textExtra.hint}
+              error={err('textExtra')}
             >
-              <option value="">{t('card.pickModel')}</option>
-              {custom && (
-                <option value={draft.defaultModel}>
-                  {t('card.customModel', { model: draft.defaultModel })}
-                </option>
-              )}
-              {choices.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </Select>
-          </Field>
+              <Input
+                id={`${id}-text`}
+                dir="ltr"
+                value={draft.textExtra}
+                invalid={invalid === 'textExtra'}
+                onChange={(e) => set({ textExtra: e.target.value })}
+              />
+            </Field>
+          )}
           {item.supportsMaxTokens && (
             <Field
               label={t('card.maxTokens')}
@@ -182,13 +179,35 @@ export function KeyCard({ item }: { item: PlatformAiKeyItem }) {
               <Input
                 id={`${id}-max`}
                 inputMode="numeric"
-                placeholder="4096"
+                placeholder={t('card.maxTokensPlaceholder')}
                 value={draft.maxTokens}
                 invalid={invalid === 'maxTokens'}
                 onChange={(e) => set({ maxTokens: e.target.value })}
               />
             </Field>
           )}
+        </div>
+
+        <div className="grid gap-4 border-t pt-4 md:grid-cols-2">
+          <Field label={t('card.defaultModel')} htmlFor={`${id}-model`} error={err('defaultModel')}>
+            <Select
+              id={`${id}-model`}
+              value={draft.defaultModel}
+              onChange={(e) => set({ defaultModel: e.target.value })}
+            >
+              <option value="">{t('card.pickModel')}</option>
+              {choices.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+              {custom && (
+                <option value={draft.defaultModel}>
+                  {t('card.customModel', { model: draft.defaultModel })}
+                </option>
+              )}
+            </Select>
+          </Field>
           <Field label={t('card.sortOrder')} htmlFor={`${id}-order`} error={err('sortOrder')}>
             <Input
               id={`${id}-order`}

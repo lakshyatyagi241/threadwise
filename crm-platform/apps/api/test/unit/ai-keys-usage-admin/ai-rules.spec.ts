@@ -30,6 +30,7 @@ describe('extras (WD-AIADM-002, 009)', () => {
     expect(parseExtras('{"max_tokens":4096,"models":["a","b"]}')).toEqual({
       maxTokens: 4096,
       models: ['a', 'b'],
+      text: {},
     });
   });
 
@@ -41,12 +42,20 @@ describe('extras (WD-AIADM-002, 009)', () => {
 
   it('never throws on a value that is not the expected shape', () => {
     for (const raw of [null, undefined, '', '[]', 'nope', '{"models":"x"}', '42']) {
-      expect(parseExtras(raw)).toEqual({ maxTokens: null, models: [] });
+      expect(parseExtras(raw)).toEqual({ maxTokens: null, models: [], text: {} });
     }
   });
 
+  it('stores the card text field (Organization ID) under its key, and blank clears it', () => {
+    const stored = { maxTokens: null, models: [], text: {} };
+    const set = mergeExtras(stored, { textExtra: 'org-1' }, true, 'organization');
+    expect(JSON.parse(set.json)).toEqual({ organization: 'org-1' });
+    expect(mergeExtras(set.next, { textExtra: '' }, true, 'organization').json).toBe('{}');
+    expect(mergeExtras(stored, { textExtra: 'x' }, true, null).json).toBe('{}');
+  });
+
   it('keeps what a request leaves out and writes the ceiling only where the card has the field', () => {
-    const stored = { maxTokens: 1000, models: ['m1'] };
+    const stored = { maxTokens: 1000, models: ['m1'], text: {} };
     expect(mergeExtras(stored, {}, true).next).toEqual(stored);
     expect(mergeExtras(stored, { maxTokens: 2000 }, true).next.maxTokens).toBe(2000);
     expect(mergeExtras(stored, { maxTokens: 2000 }, false).next.maxTokens).toBe(1000);
@@ -58,8 +67,12 @@ describe('extras (WD-AIADM-002, 009)', () => {
   });
 
   it('stores an empty object when nothing is set, and round-trips what it stores', () => {
-    expect(mergeExtras({ maxTokens: null, models: [] }, {}, true).json).toBe('{}');
-    const { json, next } = mergeExtras({ maxTokens: null, models: [] }, { maxTokens: 5 }, true);
+    expect(mergeExtras({ maxTokens: null, models: [], text: {} }, {}, true).json).toBe('{}');
+    const { json, next } = mergeExtras(
+      { maxTokens: null, models: [], text: {} },
+      { maxTokens: 5 },
+      true,
+    );
     expect(parseExtras(json)).toEqual(next);
   });
 });

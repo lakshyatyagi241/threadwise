@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
-import { aiProviderSlugSchema } from './catalog';
+import { AI_TEXT_EXTRA_KEYS, aiProviderSlugSchema } from './catalog';
 
 /**
  * The platform's own AI keys (WD-AIADM-001..004, 009), edited by operators. The secret is write-only:
@@ -23,6 +23,17 @@ export const platformAiKeyItemSchema = z.object({
   /** Ceiling on output tokens per request; null = none. Only on providers that carry the field. */
   maxTokens: z.number().int().nullable(),
   supportsMaxTokens: z.boolean(),
+  /** Hint under the key field, in WaDesk's words. */
+  keyHint: z.string(),
+  /** The optional text field some cards carry (Organization ID, Project ID, Default voice ID); null on the rest. */
+  textExtra: z
+    .object({
+      key: z.enum(AI_TEXT_EXTRA_KEYS),
+      label: z.string(),
+      hint: z.string(),
+      value: z.string(),
+    })
+    .nullable(),
   /** Extra model ids offered next to the default in the pickers. */
   extraModels: z.array(z.string()),
   modelChoices: z.array(z.string()),
@@ -57,6 +68,8 @@ export const updatePlatformAiKeySchema = z
     /** Positive whole number, or null to clear the ceiling. */
     maxTokens: z.number().int().min(1).max(10_000_000).nullable().optional(),
     extraModels: z.array(modelId).max(40).optional(),
+    /** The card's optional text field; blank clears it. Ignored on providers without one. */
+    textExtra: z.string().trim().max(200).optional(),
   })
   .refine((v) => !(v.removeKey && v.apiKey?.trim()), {
     message: 'Send either a new key or removeKey, not both.',
