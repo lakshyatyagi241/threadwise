@@ -1,3 +1,4 @@
+import { FlowRefResolver, parseFlowRef } from '../flow-refs';
 import type { AiCallPort } from '../../../../../infra/providers/flow-runtime-engine/ai-call.port';
 import type { MysqlQueryPort } from '../../../../../infra/providers/flow-runtime-engine/mysql-query.port';
 import type { SafeFetch } from '../../../../../infra/providers/node-bridge-runtime/safe-fetch';
@@ -104,14 +105,23 @@ export async function runMysql(
  * AI voice call node (TW-FLR-048): asks the calling domain to ring the flow's contact with an AI assistant, then leaves at once
  * (fire and advance: the call is placed asynchronously). A missing number or a refused call is a note, never a failed step.
  */
-export async function runAiCall(ctx: NodeContext, calls: AiCallPort): Promise<NodeResult> {
+export async function runAiCall(
+  ctx: NodeContext,
+  calls: AiCallPort,
+  refs: FlowRefResolver,
+): Promise<NodeResult> {
   const to = ctx.run.peerKey.replace(/\D+/g, '');
   if (to.length < 8) {
     ctx.note(`ai call skipped: no usable number (${to})`);
     return ADVANCE;
   }
-  const assistantId = Number(dataOf(ctx).assistantId) || null;
   try {
+    // The editor saves the assistant's uuid, an old flow its row id; the port takes the row id (null = the first live assistant).
+    const ref = parseFlowRef(dataOf(ctx).assistantId);
+    const assistantId = (await refs.assistantId(ctx.run.orgId, ref)) || null;
+    if (ref && assistantId === null) {
+      ctx.note('the chosen assistant is not in this workspace: the first live assistant is used');
+    }
     const r = await calls.place({
       orgId: ctx.run.orgId,
       to,
