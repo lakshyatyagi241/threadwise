@@ -54,11 +54,17 @@ describe('ConversationRow', () => {
   });
 
   it('says who spoke last and marks an unassigned conversation', () => {
-    const out = row({ lastOutboundAt: '2026-10-02T11:00:00.000Z', lastInboundAt: '2026-10-02T10:00:00.000Z' });
+    const out = row({
+      lastOutboundAt: '2026-10-02T11:00:00.000Z',
+      lastInboundAt: '2026-10-02T10:00:00.000Z',
+    });
     expect(out).toContain('You:');
     expect(out).toContain('Unassigned');
     expect(
-      lastWasOutbound({ lastInboundAt: '2026-10-02T11:00:00.000Z', lastOutboundAt: '2026-10-02T10:00:00.000Z' }),
+      lastWasOutbound({
+        lastInboundAt: '2026-10-02T11:00:00.000Z',
+        lastOutboundAt: '2026-10-02T10:00:00.000Z',
+      }),
     ).toBe(false);
   });
 
@@ -107,7 +113,10 @@ describe('MessageBubble', () => {
 
   it('shows the failure reason with a Retry button for a failed message', () => {
     const out = bubble(
-      outbound(2, { status: 'failed', failure: { code: 'SIM_REJECTED', reason: 'Rejected by the provider' } }),
+      outbound(2, {
+        status: 'failed',
+        failure: { code: 'SIM_REJECTED', reason: 'Rejected by the provider' },
+      }),
     );
     expect(out).toContain('Rejected by the provider');
     expect(out).toContain('data-testid="inbox-retry"');
@@ -129,7 +138,9 @@ describe('MessageBubble', () => {
     expect(doc).toContain('2.0 KB');
     expect(media('audio', 'audio/ogg', 'v.ogg')).toContain('<audio');
     const place = html(
-      <LocationCard location={{ latitude: 19.076, longitude: 72.8777, name: 'Office', address: 'Mumbai' }} />,
+      <LocationCard
+        location={{ latitude: 19.076, longitude: 72.8777, name: 'Office', address: 'Mumbai' }}
+      />,
     );
     expect(place).toContain('Office');
     expect(place).toContain('19.07600, 72.87770');
@@ -246,6 +257,26 @@ describe('Composer', () => {
   it('cannot reply without the right to', () => {
     expect(composer({ canReply: false })).toMatch(DISABLED_TEXTAREA);
   });
+
+  it('offers a template even when the window is closed, but never on a note', () => {
+    const open = composer({ canTemplate: true, onTemplate: noop });
+    expect(open).toContain('data-testid="inbox-template-button"');
+    expect(open).toContain('Send a template');
+    const closed = composer({ replyDisabled: true, canTemplate: true, onTemplate: noop });
+    expect(closed).toMatch(DISABLED_TEXTAREA);
+    expect(closed).toContain('data-testid="inbox-template-button"');
+    expect(composer({ mode: 'note', canTemplate: true, onTemplate: noop })).not.toContain(
+      'inbox-template-button',
+    );
+  });
+
+  it('hides the template button when the channel cannot send one or there is no handler', () => {
+    expect(composer()).not.toContain('inbox-template-button');
+    expect(composer({ canTemplate: false, onTemplate: noop })).not.toContain(
+      'inbox-template-button',
+    );
+    expect(composer({ canTemplate: true })).not.toContain('inbox-template-button');
+  });
 });
 
 describe('ConversationList states', () => {
@@ -285,9 +316,7 @@ describe('ConversationList states', () => {
   });
 
   it('says there are no conversations yet once a channel exists', () => {
-    const out = render(
-      props({ channels: [{ id: id(900) } as never] }),
-    );
+    const out = render(props({ channels: [{ id: id(900) } as never] }));
     expect(out).toContain('No conversations yet');
   });
 
