@@ -10,7 +10,7 @@
 # extra path segment — it is not a mistake.)
 # ---------------------------------------------------------------------------
 
-FROM node:22-alpine AS base
+FROM node:26-alpine AS base
 # git: `pnpm deploy` re-resolves baileys' git-hosted dependency (libsignal-node), and alpine ships without git.
 RUN apk add --no-cache git && corepack enable pnpm
 WORKDIR /app
@@ -43,7 +43,7 @@ RUN pnpm --filter @crm/api --prod deploy /out \
  && cp -r packages/db/migrations /out/migrations
 
 # --- runtime ---------------------------------------------------------------
-FROM node:22-alpine AS runtime
+FROM node:26-alpine AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 
