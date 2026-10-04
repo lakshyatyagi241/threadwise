@@ -6,8 +6,18 @@
 
 name: desk
 
+# Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. The three
+# app containers are recreated on every release, so setting this on them costs nothing; postgres, redis and minio are left
+# alone so that adding it never restarts the database.
+x-app-logging: &app-logging
+  driver: json-file
+  options:
+    max-size: 20m
+    max-file: '5'
+
 x-api-env: &api-env
   NODE_ENV: production
+  TZ: UTC
   PORT: '3000'
   NODE_OPTIONS: --max-old-space-size=640
   DB_POOL_MAX: '10'
@@ -125,6 +135,90 @@ services:
     volumes:
       - miniodata:/data
 
+  # Nightly pg_dump with a verified archive, kept on the host in ./backups (14 days, never fewer than the newest 3), plus a dump on
+  # demand that the release takes before it migrates. The script is written out here rather than shipped as a file because the
+  # deploy only copies an allow-listed set of names. Restore: docs/runbooks/backup-restore.md. This is a copy on the SAME host:
+  # it protects against a bad migration and a dropped table, not against losing the machine (see "Not set up" in the README).
+  backup:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    mem_limit: 192m
+    logging: *app-logging
+    entrypoint: ['bash', '-c']
+    command:
+      - |
+        cat > /usr/local/bin/desk-backup <<'SCRIPT'
+        #!/usr/bin/env bash
+        # desk-backup [loop | once <label>]
+        set -u
+        umask 077
+        DIR=/backups
+        KEEP=$${BACKUP_KEEP_DAYS:-14}
+        HOUR=$${BACKUP_HOUR_UTC:-2}
+        log() { echo "$$(date -u +%FT%TZ) backup: $$*"; }
+
+        # One dump, verified (the archive must list back) and only then given its final name. 0 means a good dump.
+        dump() {
+          local label=$$1 ts f
+          ts=$$(date -u +%Y%m%dT%H%M%SZ)
+          f="$$DIR/desk-$$label-$$ts.dump"
+          if pg_dump -Fc -f "$$f.part" && [ -s "$$f.part" ] && pg_restore --list "$$f.part" > /dev/null; then
+            mv "$$f.part" "$$f"
+            touch "$$DIR/.last-ok"
+            log "ok $$(basename "$$f") $$(du -h "$$f" | cut -f1)"
+            prune
+            return 0
+          fi
+          rm -f "$$f.part"
+          log "FAILED ($$label)"
+          return 1
+        }
+
+        # Older than KEEP days goes, but the newest three always stay: if dumps stop for a month, the last good ones must not age out.
+        prune() {
+          ls -1t "$$DIR"/desk-*.dump 2> /dev/null | tail -n +4 | while read -r old; do
+            [ -n "$$(find "$$old" -mtime +"$$KEEP")" ] && rm -f "$$old" && log "pruned $$(basename "$$old")"
+          done
+          return 0
+        }
+
+        case "$${1:-loop}" in
+          once) dump "$${2:-manual}" ;;
+          loop)
+            [ -e "$$DIR/.last-ok" ] || dump initial || true
+            while true; do
+              now=$$(date -u +%s)
+              next=$$(date -u -d "today $$(printf '%02d' "$$HOUR"):00:00" +%s)
+              [ "$$next" -le "$$now" ] && next=$$((next + 86400))
+              sleep $$((next - now))
+              dump daily || true
+            done
+            ;;
+          *) echo "usage: desk-backup [loop | once <label>]" >&2; exit 2 ;;
+        esac
+        SCRIPT
+        chmod +x /usr/local/bin/desk-backup
+        exec desk-backup loop
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      TZ: UTC
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+      BACKUP_HOUR_UTC: ${BACKUP_HOUR_UTC:-2}
+    volumes:
+      - ./backups:/backups
+    # Healthy while the last good dump is under 26 hours old (a missed night is noticed the next day).
+    healthcheck:
+      test: ['CMD-SHELL', 'find /backups/.last-ok -mmin -1560 2>/dev/null | grep -q .']
+      interval: 5m
+      timeout: 10s
+      retries: 1
+      start_period: 3m
+    depends_on:
+      postgres: { condition: service_healthy }
+
   # One-shot: applies every migration as the database owner, with the migrate CLI that ships inside the API image.
   migrate:
     image: desk-api:${IMAGE_TAG:-local}
@@ -147,6 +241,10 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     mem_limit: 1g
+    # Docker kills a container 10 s after SIGTERM by default. The API closes HTTP and websocket connections on SIGTERM; give
+    # slow requests time to finish instead of cutting them off on every release.
+    stop_grace_period: 30s
+    logging: *app-logging
     networks: [default, dokploy-network]
     labels:
       traefik.enable: 'true'
@@ -171,6 +269,10 @@ services:
     command: ['node', 'dist/src/worker.js']
     restart: unless-stopped
     mem_limit: 1g
+    # On SIGTERM the worker stops taking jobs and waits for the running ones (BullMQ) and the current outbox batch. Killed at
+    # the default 10 s, a long job is abandoned and its outbox rows stay in 'processing'.
+    stop_grace_period: 60s
+    logging: *app-logging
     # The image's HEALTHCHECK probes the API's HTTP port; the worker serves none.
     healthcheck:
       disable: true
@@ -192,6 +294,8 @@ services:
       dockerfile: apps/web/Dockerfile
     restart: unless-stopped
     mem_limit: 768m
+    stop_grace_period: 20s
+    logging: *app-logging
     networks: [default, dokploy-network]
     labels:
       traefik.enable: 'true'
@@ -208,6 +312,7 @@ services:
       traefik.http.middlewares.desk-https.redirectscheme.scheme: https
     environment:
       NODE_ENV: production
+      TZ: UTC
       NODE_OPTIONS: --max-old-space-size=512
       API_URL: http://api:3000
       REALTIME_URL: https://${DOMAIN}/realtime
