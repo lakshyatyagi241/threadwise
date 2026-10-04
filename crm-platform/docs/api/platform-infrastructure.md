@@ -81,3 +81,85 @@ process every 30 seconds. A throttle that turned a cache outage into an API outa
 
 Auth's `RateLimitService`, the storefront's `PublicRateLimiter` and the API-key guard keep their own counters and are
 unchanged. Their owners can move to `@Throttle` in their own PRs; nothing here forces it.
+
+## Redis locks and once-only gates (WD-INFRA-025)
+
+`RedisLockService` (exported from `modules/platform-infrastructure`) is the one place for mutual exclusion and "do this once"
+gates on Redis. WaDesk did this with `Cache::lock` / `Cache::add` on its database cache at about 200 call sites; this repo
+already has several hand-written versions (device lease, sender lease, dispatcher lock, webhook dedupe) that disagree on
+release safety and on what to do when Redis is down.
+
+```ts
+// run exclusive work; the lease is extended while it runs and always released
+const out = await this.locks.withLock(
+  `sched:sweep:${orgId}`,
+  { ttlMs: 30_000, onUnavailable: 'skip' },
+  async ({ signal }) => sweep(orgId, signal),
+);
+if (!out.acquired) return; // somebody else is sweeping
+
+// a dedupe window / "at most every N" gate
+if (!(await this.locks.once(`waba:in:${waMessageId}`, 3_600_000, 'proceed'))) return;
+```
+
+| Call                                   | Returns                                              | Use                                                                                                        |
+| -------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `acquire(key, {ttlMs, onUnavailable})` | `Lease` or `null`                                    | you manage the lifetime (`lease.renew()` / `lease.release()`)                                              |
+| `withLock(key, opts, fn)`              | `{acquired:false}` or `{acquired:true, value, lost}` | the normal case; `opts.wait` blocks until free, `fn` gets an `AbortSignal` that fires if the lease is lost |
+| `once(key, ttlMs, onUnavailable)`      | `boolean`                                            | first caller in the window gets `true`; nothing to release                                                 |
+
+- **Token-checked.** Release and renew are one Lua script that compares the stored token, so a holder whose lock expired can
+  never free or extend the next holder's. (A plain `GET` then `DEL`, as one existing lease does, can.)
+- **`onUnavailable` is required, with no default.** `skip` means "if Redis is down, act as if someone else holds it": use it for
+  anything where two runs do harm. `proceed` means run unprotected: use it where refusing would lose something, such as
+  dropping an inbound webhook because the dedupe store is down.
+- **Heartbeat.** `withLock` renews every third of the TTL (set `renewEveryMs: 0` to turn it off), so the TTL only needs to cover a
+  dead holder. If the lease is lost the signal aborts and the result has `lost: true`; if Redis is unreachable it counts as lost
+  only after a full TTL of silence.
+- **Not a fencing token.** A holder paused longer than the TTL can wake up believing it still holds the lock. Money and stock
+  also need a database constraint or row lock. This keeps duplicate work rare; it does not make it impossible.
+- **Keys** are yours: `<code>:<purpose>:<ids>`. Do not reuse a key that holds a counter or cached value.
+
+Existing hand-rolled versions are unchanged. Their owners can move over in their own PRs; for fixed-window counters (the
+segment, lead, public-link, appointment and marketplace throttles) use `RateLimiter` or `@Throttle` instead.
+
+## Request body limits (WD-INFRA-020)
+
+JSON and form bodies are buffered in memory before authentication or routing, so the cap is set where the body is read, in
+`installBodyLimits(app)` from `main.ts`. Over the cap the answer is `413`, problem+json, `code: PAYLOAD_TOO_LARGE`, and the rest
+of the body is not read. A route cannot raise its own cap: pick a class.
+
+| Class              | Paths (a `/v<n>` prefix is ignored)                                                                                                                                                                                      | Limit                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `whatsapp-webhook` | `public/webhooks/whatsapp`                                                                                                                                                                                               | 4 MiB (`INFRA_BODY_LIMIT_WHATSAPP_WEBHOOK_KB`) |
+| `lead-hook`        | `public/lead-hooks`                                                                                                                                                                                                      | `LEAD_HOOK_MAX_BODY_BYTES` (1 MiB)             |
+| `marketplace-hook` | `public/marketplace`                                                                                                                                                                                                     | `MARKET_HOOK_MAX_BYTES` (256 KiB)              |
+| `webhook`          | `public/webhooks/*`, `webhooks/channels`, `store-public/webhooks`, `facebook`, `instaflow`, `telegram/inbound`, `shopify/webhook`, `shopify/compliance`, `woocommerce/webhook`, `campaigns/node`, `google/form-response` | 1 MiB (`INFRA_BODY_LIMIT_WEBHOOK_KB`)          |
+| everything else    |                                                                                                                                                                                                                          | 100 KiB (`INFRA_BODY_LIMIT_KB`)                |
+
+- **Nothing changes for existing routes except the callbacks above.** 100 KiB is what Express enforced before; it is now stated and
+  configurable. Before this, the 1 MiB and 256 KiB caps that the lead-hook and marketplace domains declare could never be
+  reached for JSON, and a large WhatsApp delivery (Meta documents deliveries of several MiB; sized here with headroom, check
+  against current Meta docs) would have been refused with 413 before its signature was even checked.
+- The raw bytes are kept on every class (`req.rawBody`) for HMAC checks.
+- Multipart uploads are not governed here; each upload route sets its own multer `fileSize`.
+- New callback or a different cap: add a class to `bodyLimitClasses` in `modules/platform-infrastructure/body-limits/`. Keep the
+  limit as small as the largest honest sender needs: these routes accept bytes from anyone until the signature is checked.
+
+| Variable                               | Default | Meaning                             |
+| -------------------------------------- | ------- | ----------------------------------- |
+| `INFRA_BODY_LIMIT_KB`                  | `100`   | default JSON/form limit, 1 to 10240 |
+| `INFRA_BODY_LIMIT_WEBHOOK_KB`          | `1024`  | `webhook` class                     |
+| `INFRA_BODY_LIMIT_WHATSAPP_WEBHOOK_KB` | `4096`  | `whatsapp-webhook` class            |
+
+## CORS (WD-INFRA-014)
+
+The API sends credentials-enabled CORS headers for the origins in `CORS_ORIGINS` (comma list). With **no list**:
+
+- development and test: any origin is allowed, so a local web app on any port works unconfigured;
+- **production: no origin is allowed.** No CORS headers are sent, so browsers on other origins are refused; same-origin and
+  server-to-server calls are unaffected, and a warning is logged at boot. Before, an unset variable in production reflected every
+  origin together with credentials.
+
+The production deploy already sets `CORS_ORIGINS` (`deploy/hostinger/docker-compose.yml`), so it is unaffected. The socket.io
+gateway has its own `cors: { origin: true, credentials: true }` in `realtime/realtime.gateway.ts` and is not covered here (see the PR).
