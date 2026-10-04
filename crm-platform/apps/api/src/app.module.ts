@@ -40,6 +40,7 @@ import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
 import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
+import { FlowBuilderEditorModule } from './modules/flow-builder-editor';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -159,6 +160,7 @@ import { HealthModule } from './health/health.module';
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
+    FlowBuilderEditorModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
