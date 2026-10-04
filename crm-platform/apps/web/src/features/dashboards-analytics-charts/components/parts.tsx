@@ -40,12 +40,14 @@ export function Trend({
 /** Wraps a chart or list in a titled card. */
 export function Panel({
   title,
+  titleBadge,
   subtitle,
   action,
   children,
   className,
 }: {
   title: string;
+  titleBadge?: React.ReactNode;
   subtitle?: string;
   action?: React.ReactNode;
   children: React.ReactNode;
@@ -55,7 +57,10 @@ export function Panel({
     <Card className={cn('space-y-3', className)}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold">{title}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold">{title}</h2>
+            {titleBadge}
+          </div>
           {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
         </div>
         {action}

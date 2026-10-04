@@ -313,10 +313,19 @@ export function DevicesCard({ data }: { data: DashWidgets['devices'] }) {
           ))}
         </ul>
       )}
-      {free > 0 && data.rows.length > 0 && (
-        <p className="rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
-          {t('free', { n: free })}
-        </p>
+      {free > 0 && (
+        <div className="mt-2 flex items-center justify-between rounded-xl border border-border bg-[repeating-linear-gradient(135deg,color-mix(in_srgb,var(--brand)_6%,transparent)_0_6px,transparent_6px_12px)] p-2.5">
+          <div>
+            <div className="text-xs font-medium">{t('free', { n: free })}</div>
+            <div className="font-mono text-[11px] text-muted-foreground">{t('freeHint')}</div>
+          </div>
+          <Link
+            href="/channels/whatsapp"
+            className="rounded-full border border-border bg-card px-3 py-1.5 text-[11px] font-medium hover:bg-muted"
+          >
+            {t('connectDeviceShort')}
+          </Link>
+        </div>
       )}
     </Panel>
   );
@@ -348,67 +357,69 @@ export function TemplatesCard({ data }: { data: DashWidgets['templates'] }) {
         </span>
       }
     >
-      {data.rows.length === 0 ? (
-        <p className="py-4 text-center text-sm text-muted-foreground">
-          {t('empty')}{' '}
-          <Link href="/templates/new" className="font-medium text-primary hover:underline">
-            {t('create')}
-          </Link>
-        </p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs text-muted-foreground">
-                {cols.map((c) => (
-                  <th key={c} scope="col" className="py-2 pe-3 text-start font-medium">
-                    {t(`col.${c}`)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.rows.map((r) => (
-                <tr key={r.uuid} className="border-b border-border/60 last:border-0">
-                  <td className="py-2 pe-3">
-                    <span className="block font-medium">{r.name}</span>
-                    <span className="block text-xs text-muted-foreground">
-                      {r.language ? r.language.toUpperCase() : '-'}
-                    </span>
-                  </td>
-                  <td className="py-2 pe-3 text-muted-foreground">
-                    {[r.category, r.type].filter(Boolean).join(' - ') || '-'}
-                  </td>
-                  <td className="py-2 pe-3 tabular-nums">{r.sent > 0 ? compact(r.sent) : '-'}</td>
-                  <td className="py-2 pe-3 tabular-nums">
-                    {r.sent > 0 ? compact(r.delivered) : '-'}
-                  </td>
-                  <td className="py-2 pe-3 tabular-nums">{r.sent > 0 ? compact(r.read) : '-'}</td>
-                  <td className="py-2 pe-3 tabular-nums">
-                    {r.readRatePct !== null ? `${r.readRatePct}%` : '-'}
-                  </td>
-                  <td className="w-28 py-2 pe-3">
-                    {r.sent > 0 ? <Bar pct={r.performance} /> : '-'}
-                  </td>
-                  <td className="py-2">
-                    <Badge
-                      tone={
-                        ['approved', 'public', 'active'].includes(r.status)
-                          ? 'success'
-                          : ['rejected', 'disabled'].includes(r.status)
-                            ? 'danger'
-                            : 'warning'
-                      }
-                    >
-                      {t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status}
-                    </Badge>
-                  </td>
-                </tr>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-border text-xs text-muted-foreground">
+              {cols.map((c) => (
+                <th key={c} scope="col" className="py-2 pe-3 text-start font-medium">
+                  {t(`col.${c}`)}
+                </th>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            </tr>
+          </thead>
+          <tbody>
+            {data.rows.length === 0 && (
+              <tr>
+                <td
+                  colSpan={cols.length}
+                  className="py-6 text-center text-sm text-muted-foreground"
+                >
+                  {t('empty')}{' '}
+                  <Link href="/templates/new" className="font-medium text-primary hover:underline">
+                    {t('create')}
+                  </Link>
+                </td>
+              </tr>
+            )}
+            {data.rows.map((r) => (
+              <tr key={r.uuid} className="border-b border-border/60 last:border-0">
+                <td className="py-2 pe-3">
+                  <span className="block font-medium">{r.name}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {r.language ? r.language.toUpperCase() : '-'}
+                  </span>
+                </td>
+                <td className="py-2 pe-3 text-muted-foreground">
+                  {[r.category, r.type].filter(Boolean).join(' - ') || '-'}
+                </td>
+                <td className="py-2 pe-3 tabular-nums">{r.sent > 0 ? compact(r.sent) : '-'}</td>
+                <td className="py-2 pe-3 tabular-nums">
+                  {r.sent > 0 ? compact(r.delivered) : '-'}
+                </td>
+                <td className="py-2 pe-3 tabular-nums">{r.sent > 0 ? compact(r.read) : '-'}</td>
+                <td className="py-2 pe-3 tabular-nums">
+                  {r.readRatePct !== null ? `${r.readRatePct}%` : '-'}
+                </td>
+                <td className="w-28 py-2 pe-3">{r.sent > 0 ? <Bar pct={r.performance} /> : '-'}</td>
+                <td className="py-2">
+                  <Badge
+                    tone={
+                      ['approved', 'public', 'active'].includes(r.status)
+                        ? 'success'
+                        : ['rejected', 'disabled'].includes(r.status)
+                          ? 'danger'
+                          : 'warning'
+                    }
+                  >
+                    {t.has(`status.${r.status}`) ? t(`status.${r.status}`) : r.status}
+                  </Badge>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Panel>
   );
 }

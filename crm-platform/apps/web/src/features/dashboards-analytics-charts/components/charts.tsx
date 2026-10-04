@@ -27,17 +27,20 @@ export function BarChart({
   series,
   label,
   stacked = false,
+  emptyAxes = false,
 }: {
   labels: string[];
   series: Series[];
   /** The accessible name of the chart. */
   label: string;
   stacked?: boolean;
+  /** Draw the 0..2 axes with no bars when there is no data (Reference's throughput card) instead of the empty text. */
+  emptyAxes?: boolean;
 }) {
   const t = useTranslations('dashboards-analytics-charts.chart');
   const totals = labels.map((_, i) => series.reduce((a, s) => a + (s.values[i] ?? 0), 0));
   const rawMax = stacked ? Math.max(...totals, 0) : Math.max(...series.flatMap((s) => s.values), 0);
-  const top = niceMax(rawMax);
+  const top = rawMax === 0 && emptyAxes ? 2 : niceMax(rawMax);
   const plotW = W - PAD.l - PAD.r;
   const plotH = H - PAD.t - PAD.b;
   const slot = plotW / Math.max(labels.length, 1);
@@ -46,7 +49,7 @@ export function BarChart({
   const every = Math.max(1, Math.ceil(labels.length / 8));
   const y = (v: number) => PAD.t + plotH - barLength(v, top, plotH);
 
-  if (rawMax === 0)
+  if (rawMax === 0 && !emptyAxes)
     return <p className="py-10 text-center text-sm text-muted-foreground">{t('empty')}</p>;
 
   return (
