@@ -2,13 +2,19 @@ import 'reflect-metadata';
 import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedisIoAdapter } from './realtime/redis-io.adapter';
 import { AppModule } from './app.module';
+import {
+  corsIsClosedInProduction,
+  corsOriginFor,
+  installBodyLimits,
+} from './modules/platform-infrastructure';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     // Needed for webhook and public-API signature verification: the HMAC is
     // computed over the bytes as sent, and re-serialising parsed JSON changes
@@ -30,12 +36,19 @@ async function bootstrap(): Promise<void> {
         : trust,
   );
 
+  // Body-size limits per route class (TW-INFRA-020): before anything reads a body.
+  installBodyLimits(app);
+
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
   app.enableShutdownHooks();
 
   const origins = config.get('CORS_ORIGINS', { infer: true });
+  const nodeEnv = config.get('NODE_ENV', { infer: true });
+  if (corsIsClosedInProduction(origins, nodeEnv)) {
+    logger.warn('CORS_ORIGINS is empty in production: browsers on other origins are refused');
+  }
   app.enableCors({
-    origin: origins.length > 0 ? origins : true,
+    origin: corsOriginFor(origins, nodeEnv),
     credentials: true,
     // The throttle's headers (TW-INFRA-010): a browser client reads them only if they are exposed.
     exposedHeaders: [
