@@ -8,6 +8,9 @@
       }
     },
     "shell": {
+      "railCaption": "Console",
+      "wallet": "Wallet",
+      "topUp": "Top up →",
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
       "toggleGroup": "Show or hide {group}",
@@ -315,7 +318,34 @@
     "topNav": {
       "more": "More",
       "search": "Search",
-      "premium": "Premium feature: upgrade your plan to unlock"
+      "premium": "Premium feature: upgrade your plan to unlock",
+      "labels": {
+        "dashboard": "Dashboard",
+        "team-inbox": "Unified Inbox",
+        "wa-campaigns": "Campaigns",
+        "flows": "Flows",
+        "templates": "Templates",
+        "devices": "Channels",
+        "metaads": "Meta Ads",
+        "broadcasts": "Broadcasts",
+        "contacts": "Contacts",
+        "deals": "Deals",
+        "chat": "Live Chat",
+        "analytics": "Analytics",
+        "auto-reply": "Auto-reply",
+        "scheduled": "Scheduled",
+        "message-history": "History",
+        "ai-assistants": "AI Assistants",
+        "ai-training": "AI Training",
+        "wa-links": "WA Links",
+        "chatbot-widgets": "Chat Widget",
+        "webhooks": "Webhooks",
+        "integrations": "Integrations",
+        "warmer": "Warmer",
+        "call-logs": "Call Logs",
+        "support": "Support",
+        "more": "More"
+      }
     },
     "palette": {
       "title": "Search pages",
@@ -355,11 +385,13 @@
       }
     },
     "profileMenu": {
-      "chip": "{plan} plan - {role}",
+      "chip": "{plan} plan · {role}",
       "wallet": "Wallet",
       "orders": "Order history",
-      "plans": "Pricing and plans",
-      "tour": "Take the tour"
+      "plans": "Pricing & plans",
+      "tour": "Take the tour",
+      "profile": "Profile",
+      "help": "Help & support"
     },
     "quickAccess": {
       "title": "Quick access",
@@ -641,6 +673,10 @@
       "title": "Connect a number",
       "close": "Close",
       "connected": "Number connected"
+    },
+    "flash": {
+      "dismiss": "Dismiss",
+      "roleDenied": "Your role ({role}) doesn't have access to that page"
     }
   }
 }

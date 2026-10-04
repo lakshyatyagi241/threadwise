@@ -281,6 +281,43 @@ const PATHS: Record<string, ReactNode> = {
       <circle cx="11.2" cy="11.2" r="1.7" />
     </>
   ),
+  user: (
+    <>
+      <circle cx="8" cy="5.5" r="2.5" />
+      <path d="M3 13.5a5 5 0 0 1 10 0" />
+    </>
+  ),
+  wallet: (
+    <>
+      <rect x="2" y="4" width="12" height="9" rx="1.5" />
+      <path d="M2 6.5h12M10.5 9.5h1.5" />
+    </>
+  ),
+  cart: (
+    <>
+      <path d="M2 3h1.8l1.4 7h6.6l1.2-5H4.4" />
+      <circle cx="6" cy="12.5" r="1" />
+      <circle cx="11" cy="12.5" r="1" />
+    </>
+  ),
+  tag: (
+    <>
+      <path d="M2.5 8.2V3.5h4.7l6.3 6.3-4.7 4.7z" />
+      <circle cx="5.5" cy="6" r="0.8" />
+    </>
+  ),
+  logout: <path d="M6.5 2.5h-3v11h3M10 5l3 3-3 3M13 8H6.5" />,
+  moon: <path d="M8 1.5a6.5 6.5 0 1 0 6.5 6.5 5.2 5.2 0 0 1-6.5-6.5z" />,
+  sun: (
+    <>
+      <circle cx="8" cy="8" r="3" />
+      <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.1 3.1l1.4 1.4M11.5 11.5l1.4 1.4M3.1 12.9l1.4-1.4M11.5 4.5l1.4-1.4" />
+    </>
+  ),
+  'chevron-right': <path d="M5.5 3.5L10 8l-4.5 4.5" />,
+  play: <path d="M4.5 3l8 5-8 5z" />,
+  'chevron-down': <path d="M3.5 6l4.5 4.5L12.5 6" />,
+  check: <path d="M3 8.5l3 3 7-7" />,
   gear: (
     <>
       <circle cx="8" cy="8" r="2" />

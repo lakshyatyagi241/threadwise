@@ -102,6 +102,7 @@ describe('admin-console-shell messages', () => {
         `${ROOT}.tour.steps.${s.id}.body`,
       ]),
       ...NAV_LAYOUT_KEYS.map((k) => `${ROOT}.menuOrder.items.${k}`),
+      ...NAV_LAYOUT_KEYS.map((k) => `${ROOT}.topNav.labels.${k}`),
       ...NOTIFICATION_EVENT_KEYS.map((k) => `${ROOT}.workspaceSettings.notifications.events.${k}`),
       ...NOTIFICATION_CATEGORY_KEYS.map(
         (k) => `${ROOT}.workspaceSettings.notifications.categories.${k}`,
