@@ -40,6 +40,8 @@ export interface TopNavProps {
   workspace?: ReactNode;
   wallet?: WalletChipData;
   bell?: ReactNode;
+  /** The gear for the settings behind the current screen (`PageSettingsShortcut`). */
+  pageSettings?: ReactNode;
   settingsHref?: string;
   helpItems?: readonly ResolvedNavItem[];
 }
@@ -58,6 +60,7 @@ export function TopNav({
   workspace,
   wallet,
   bell,
+  pageSettings,
   settingsHref,
   helpItems,
 }: TopNavProps) {
@@ -139,6 +142,7 @@ export function TopNav({
               <span className="tabular-nums">{wallet.label}</span>
             </Link>
           )}
+          {pageSettings}
           {bell}
           <UserMenu user={user} theme={theme} settingsHref={settingsHref} helpItems={helpItems} />
         </div>

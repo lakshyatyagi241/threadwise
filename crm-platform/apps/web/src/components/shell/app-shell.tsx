@@ -18,6 +18,7 @@ import { ConnectDeviceSheet } from '@/features/admin-console-shell/connect-devic
 import { EmbedFlag } from '@/features/admin-console-shell/connect-device/embed-flag';
 import { InboxBell } from '@/features/admin-console-shell/inbox-bell/inbox-bell';
 import { QuickAccessDrawer } from '@/features/admin-console-shell/quick-access/quick-access-drawer';
+import { FlashHost } from '@/features/admin-console-shell/flash/flash-host';
 import { GuidedTour } from '@/features/admin-console-shell/tour/guided-tour';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
@@ -169,6 +170,7 @@ export function AppShell({
         </Suspense>
         <SettingsBack />
         {children}
+        <FlashHost />
       </SettingsTilesProvider>
     </main>
   );
@@ -217,6 +219,7 @@ export function AppShell({
             workspace={navFooter}
             wallet={wallet}
             bell={liveBell}
+            pageSettings={<PageSettingsShortcut tiles={settings} />}
             settingsHref={settingsLink?.href}
             helpItems={help}
           />
@@ -258,6 +261,7 @@ export function AppShell({
               jumpIndex={jumpIndex}
               wallet={wallet}
               bell={liveBell}
+              pageSettings={<PageSettingsShortcut tiles={settings} />}
               settingsHref={settingsLink?.href}
               helpItems={help}
             />
