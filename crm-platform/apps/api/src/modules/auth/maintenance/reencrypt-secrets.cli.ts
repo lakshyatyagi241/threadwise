@@ -11,6 +11,12 @@ loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
 
 /**
+ * WARNING: this moves only the AUTH domain's secrets (platform settings, MFA). About thirty other places in the database
+ * (channel and gateway credentials, OAuth tokens, sales-document and appointment data, ...) are NOT touched, so following the
+ * steps below and then dropping the old key would make them unreadable. To rotate the key use
+ * crypto-rotation/rotate-keys.cli.ts in platform-infrastructure, which finds every sealed value itself
+ * (docs/runbooks/key-rotation.md). Kept because the AUTH tests and its targets are still useful on their own.
+ *
  * Moves every stored secret onto the current encryption key (TW-AUTH-047).
  *
  *   1. put the old key in CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS and the new one
