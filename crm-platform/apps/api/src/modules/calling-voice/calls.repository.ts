@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type {
   CallDirection,
   CallHandlerType,
@@ -110,9 +111,21 @@ export interface PermissionRow {
   expiresAt: Date | null;
 }
 
+/** The ledger steps after which the set of ringing calls is different. */
+const RINGING_STEPS = new Set([
+  'connect',
+  'accept_sent',
+  'accept_failed',
+  'reject_sent',
+  'terminate',
+  'terminate_sent',
+]);
+
 /** SQL for calls, their events, the permission ledger and the numbers' calling switch. Every method runs in the caller's transaction. */
 @Injectable()
 export class CallsRepository {
+  constructor(private readonly outbox: OutboxService) {}
+
   // --- numbers ---------------------------------------------------------------------------------------------------------------
 
   async numbers(tx: Tx, orgId: number): Promise<NumberRow[]> {
@@ -386,5 +399,15 @@ export class CallsRepository {
     await tx.execute(sql`
       INSERT INTO wa_call_events (org_id, wa_call_id, event_type, payload)
       VALUES (${orgId}, ${callId}, ${type}, ${json(payload)})`);
+    // The steps that change who sees a ringing call: a worker turns this into a push, so no screen has to poll fast (WD-CALL-012).
+    if (RINGING_STEPS.has(type)) {
+      await this.outbox.emit(tx, {
+        aggregateModule: 'wa_calls',
+        aggregateId: callId,
+        eventType: 'call.changed',
+        payload: { step: type },
+        orgId,
+      });
+    }
   }
 }

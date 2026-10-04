@@ -76,6 +76,8 @@ export const REALTIME_EVENT = {
   notificationCreated: 'notification.created',
   /** The person's unread rows were marked read (here or on another tab or device): every open tab converges. Room `user`. */
   notificationRead: 'notification.read',
+  /** A WhatsApp call rang, was answered, declined or ended: the incoming-call toast refetches (a signal, never the caller's details). */
+  callChanged: 'call.changed',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -155,6 +157,7 @@ export const realtimeEventSchemas = {
     /** The rows that were marked read, or `all`. */
     notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
   }),
+  [REALTIME_EVENT.callChanged]: z.object({ callId: uuidSchema }),
 } as const;
 
 export type RealtimeEventType = keyof typeof realtimeEventSchemas;

@@ -772,10 +772,10 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-CALL-006 | backend-done |  | ledger from permission_update, eligibility from the conversation's own number, lapsed grant reads expired |
 | WD-CALL-007 | frontend-done |  | CallButton with the modal flow, mounted in the inbox thread header (InboxProviders and thread-pane); component tests pass; not tried with a real number |
 | WD-CALL-008 | backend-done |  | permission first, calling must be on, refused dial is failed not ringing; e2e |
-| WD-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; no real microphone or Meta test |
+| WD-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; the provider asks the server for the operator's ICE list (CALLING_ICE_SERVERS, TURN included; calling.e2e) and falls back to public STUN; no real microphone or Meta test |
 | WD-CALL-010 | backend-done |  | progress poll returns the SDP answer only for an active call; e2e |
 | WD-CALL-011 | backend-done |  | connect: inbound ringing row matched to contact and thread, outbound answered; idempotent; AI answer and voicemail timer not built |
-| WD-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast, mounted by InboxProviders; poll only, no push |
+| WD-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast, mounted by InboxProviders; a call.changed push (outbox event, worker, workspace room) with the poll as fallback; calling.e2e covers the event and its push |
 | WD-CALL-013 | backend-done |  | atomic claim, pre_accept, 900 ms, accept, rollback to ringing on refusal; two simultaneous accepts e2e |
 | WD-CALL-014 | wontfix |  | dead code in WaDesk; pre_accept is a step of accept (inventory port note) |
 | WD-CALL-015 | backend-done |  | decline only a ringing call |
