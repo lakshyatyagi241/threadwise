@@ -23,7 +23,11 @@ import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
-import { PlatformInfrastructureModule, ThrottleGuard } from './modules/platform-infrastructure';
+import {
+  LOG_REDACT_PATHS,
+  PlatformInfrastructureModule,
+  ThrottleGuard,
+} from './modules/platform-infrastructure';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
@@ -123,15 +127,9 @@ import { HealthModule } from './health/health.module';
               return { ...out, url: maskSecretUrl(out.url) };
             },
           },
+          // Every credential and signature header the API reads (TW-INFRA-028), not just the three that are always there.
           redact: {
-            paths: [
-              'req.headers.authorization',
-              'req.headers.cookie',
-              'req.headers["x-api-key"]',
-              'req.body.password',
-              'req.body.credentials',
-              'res.headers["set-cookie"]',
-            ],
+            paths: LOG_REDACT_PATHS,
             remove: true,
           },
           autoLogging: {

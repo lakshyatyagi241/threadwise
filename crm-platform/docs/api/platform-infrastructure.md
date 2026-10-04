@@ -185,3 +185,90 @@ node dist/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.cli.js
 Exit 0: a real run moved everything it found, or a dry run found nothing to move. Exit 2: something is unreadable or changed
 under it (a dry run also exits 2 when it would move something). The deploy compose now passes
 `CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS` to the API and the worker; before, a rotation was impossible there.
+
+## Observability (TW-INFRA-015, 018, 028)
+
+### Readiness: `GET /ready`
+
+Unchanged contract: **200 only when the primary database and Redis answer, 503 otherwise.** The deploy gate and the container
+healthcheck read only the status code. Two informational checks are added to the body; they never change the status, because
+an API with no workers (a deploy in progress, a crashed worker) still serves requests and pulling it from rotation would turn
+a background problem into an outage.
+
+```json
+{
+  "status": "ok",
+  "checks": {
+    "primary": { "status": "up", "latencyMs": 3 },
+    "replica": { "status": "up", "latencyMs": 2 },
+    "redis": { "status": "up", "latencyMs": 1 },
+    "workers": { "status": "up", "count": 1 },
+    "outbox": { "status": "ok", "ready": 0, "lagSeconds": 0, "sampleAgeSeconds": 4 }
+  }
+}
+```
+
+| Check            | Values                       | Meaning                                                                                                                                  |
+| ---------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `workers.status` | `up` / `down` / `unknown`    | `down`: no worker beat in the last three intervals. `unknown`: Redis could not be read.                                                  |
+| `outbox.status`  | `ok` / `lagging` / `unknown` | `lagging`: the oldest due event has waited at least `INFRA_OUTBOX_LAG_WARN_SECONDS`. `unknown`: no fresh sample (no worker is sampling). |
+| `outbox.ready`   | number, capped at 10 000     | events due now and not yet picked up                                                                                                     |
+
+How it works: each worker process beats every `INFRA_WORKER_HEARTBEAT_SECONDS` (10) into a Redis sorted set and, in the same
+beat, samples the outbox (two reads on the partial index `idx_outbox_pending`, cheap even under a large backlog). The API only
+reads Redis. It does not query `event_outbox` itself, because that table spans tenants and privileged mode must not be reachable
+from a request handler. Alert on `workers.status != up` and `outbox.status == lagging` for more than a few minutes.
+
+### Worker container healthcheck
+
+The worker serves no HTTP, so the image's `HEALTHCHECK` (it probes the API port) does not apply and the live compose file turns
+it off. This script answers "has the worker in this container beaten recently?" and loads only a Redis connection:
+
+```yaml
+worker:
+  healthcheck:
+    test: ['CMD', 'node', 'dist/src/modules/platform-infrastructure/observability/worker-probe.js']
+    interval: 30s
+    timeout: 5s
+    start_period: 40s
+```
+
+Not switched on in `deploy/hostinger/docker-compose.yml` by this change (a bad healthcheck there restarts a production worker
+in a loop): enable it deliberately, with the K-5 compose work. A clean shutdown removes the worker from the set at once.
+
+### Error reporting (Sentry)
+
+Set `SENTRY_DSN` in the **process environment** (compose or orchestrator; a `.env` file is read too late) to turn it on; unset
+means nothing is initialised. Every 5xx from the exception filter is reported, with the release (`GIT_SHA`), `service`
+(`api`/`worker`), the request id and the masked path as tags; 4xx are not. Tracing is off unless `SENTRY_TRACES_SAMPLE_RATE` is
+set (it is read from the environment directly; the default of 0.1 in `env.schema.ts` is not used).
+
+What never leaves the process, verified by an end-to-end test against a real Sentry client: request headers that carry a
+credential or signature, cookies, the request body, query strings, and secrets in the address path (Telegram bot token, Shopify
+and WooCommerce webhook secrets, lead-hook token, marketplace hook secret). Two leaks were found and fixed while writing that
+test: Sentry sends a performance transaction per request even with tracing unset unless the rate is set to 0, and it names the
+failing request after the route, secret included.
+
+### Process crashes
+
+`uncaughtException` and `unhandledRejection` in the API and the worker write one structured line to stderr (level 60, with the
+stack), report to Sentry, wait up to 2 s for it to send, and exit 1 so the orchestrator restarts a clean process.
+
+### Logging
+
+- **Redaction.** The HTTP logger's redact list is generated from `SECRET_HEADERS` (`observability/log-redaction.ts`): every
+  credential, shared-secret and signature header the API reads. A unit test scans the source for headers whose names say
+  secret, token, signature, hmac, api-key, authorization or cookie and fails if one is missing, so a new webhook header cannot
+  slip through.
+- **Secrets in paths** are masked by `maskSecretUrl` for log lines and error reports; it now also covers the Telegram bot token,
+  Shopify and WooCommerce webhook secrets, and the lead-hook token, not only the marketplace hook.
+- **Worker logs.** The worker started Nest with `bufferLogs: true` and never flushed, and `createApplicationContext` does not
+  flush on its own, so every `Logger` call in the worker (outbox failures, dead-lettered events, processor warnings) was neither
+  printed nor released. `worker.ts` now calls `app.flushLogs()`. Measured on a real boot: 0 lines before, 98 after.
+
+| Variable                         | Default | Meaning                                                         |
+| -------------------------------- | ------- | --------------------------------------------------------------- |
+| `INFRA_WORKER_HEARTBEAT_SECONDS` | `10`    | beat and outbox sample interval, 2 to 60; alive for three beats |
+| `INFRA_OUTBOX_LAG_WARN_SECONDS`  | `60`    | `outbox.status` becomes `lagging` from this wait, 1 to 86 400   |
+| `SENTRY_DSN`                     | unset   | enables error reporting                                         |
+| `SENTRY_TRACES_SAMPLE_RATE`      | unset   | tracing rate 0 to 1; unset or 0 means none                      |
