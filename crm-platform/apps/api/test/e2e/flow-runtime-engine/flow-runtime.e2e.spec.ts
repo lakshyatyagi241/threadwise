@@ -611,6 +611,57 @@ describe('domain events start flows', () => {
     expect((await sentTo(p, t, ch, '919811100051')).length).toBe(2);
   });
 
+  it('a store checkout and a WhatsApp catalog cart both start the order flow, once per order', async () => {
+    const t = await p.api.signup('flrorder3');
+    const ch = await openChannel(p, t);
+    const f = await addFlow(p, t, {
+      graph: graph(
+        [node('a', 'message', { text: 'Order {{order_number}} for {{total}} received' })],
+        [],
+      ),
+      trigger: { kind: 'order_placed', value: 0 },
+    });
+    await p.api.seedContacts(t, [{ name: 'Buyer', phone: '+919811100061' }]);
+    const orderRow = async (source: string) =>
+      (
+        await p.h.owner.query(
+          `INSERT INTO wa_orders (org_id, source, customer_phone, customer_name, items_json, total_minor, currency_code)
+           VALUES ($1, $2, '919811100061', 'Buyer', '[]', 4999, 'INR') RETURNING id, uuid`,
+          [t.orgId, source],
+        )
+      ).rows[0] as { id: string; uuid: string };
+    const consumer = await eventsConsumer(p);
+    const fire = (
+      eventType: string,
+      o: { id: string; uuid: string },
+      payload: Record<string, unknown>,
+    ) =>
+      system(t.orgId, () =>
+        consumer.handle({
+          id: `${eventType}-${o.id}`,
+          orgId: t.orgId,
+          aggregateModule: 'wa_orders',
+          aggregateId: o.id,
+          eventType,
+          payload: { orderId: o.uuid, ...payload },
+        }),
+      );
+    const store = await orderRow('storefront');
+    await fire('store.order_placed', store, { customerPhone: '919811100061', totalMinor: 4999 });
+    await untilSent(p, t, ch, '919811100061', 1);
+    await untilRun(p, t, f.id, 'first done', (r) => r.status === 'completed');
+    await fire('store.order_placed', store, {}); // at-least-once: the same order again
+    const cart = await orderRow('waba');
+    await fire('whatsapp.order.received', cart, { phone: '919811100061' });
+    expect(await untilSent(p, t, ch, '919811100061', 2)).toEqual([
+      `Order ${store.id} for 49.99 INR received`,
+      `Order ${cart.id} for 49.99 INR received`,
+    ]);
+    await new Promise((r) => setTimeout(r, 800));
+    expect((await sentTo(p, t, ch, '919811100061')).length).toBe(2);
+    expect((await runsOf(p, t, f.id)).length).toBe(2);
+  });
+
   it('an order for a phone nobody saved starts nothing', async () => {
     const t = await p.api.signup('flrorder2');
     await simChannel(p as never, t);

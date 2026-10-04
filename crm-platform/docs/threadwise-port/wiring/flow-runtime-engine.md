@@ -98,3 +98,9 @@ Screen `/flow-runtime/analytics` (tabs Overview, Execution history, Error logs, 
 | Retry records             | `GET /v2/flow-runtime/retries`                | `FlowRuntimeService.listRetries` | `flow_retry_logs`, `flow_subscribers`, `users`     | built |
 | Retry one                 | `POST /v2/flow-runtime/subscribers/:id/retry` | `FlowRuntimeService.retry`       | `flow_subscribers`, `flow_retry_logs`              | built |
 | Retry named runs (max 50) | `POST /v2/flow-runtime/retry`                 | `FlowRuntimeService.retryMany`   | same                                               | built |
+
+## Order events (TW-FLR-006)
+
+The order trigger starts on three events, all read back by the order's uuid from `wa_orders` and handled as `order.placed`, so a repeat is the same enrolment (`order:<uuid>`):
+`order.placed` (the commerce contract), `store.order_placed` (the storefront checkout) and `whatsapp.order.received` (a catalog cart on WhatsApp, TW-WABA-042).
+Before this, the storefront emitted `store.order_placed` and nothing turned it into a flow trigger. Evidence: `flow-runtime.e2e.spec.ts` (store checkout and catalog cart, once per order).
