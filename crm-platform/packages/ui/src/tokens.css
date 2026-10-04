@@ -28,6 +28,7 @@
   --nav-active: #e3f2ee;
   --nav-active-foreground: #0b3d33;
   --nav-ring: #0f766e;
+  --nav-accent: #25d366;
   --nav-badge: #f59e0b;
   --nav-badge-foreground: #1c1303;
 }
@@ -58,6 +59,7 @@
   --nav-active: #1b2a47;
   --nav-active-foreground: #ffffff;
   --nav-ring: #5eead4;
+  --nav-accent: #25d366;
   --nav-badge: #fbbf24;
   --nav-badge-foreground: #1c1303;
 }
@@ -88,6 +90,7 @@
   --color-nav-active: var(--nav-active);
   --color-nav-active-foreground: var(--nav-active-foreground);
   --color-nav-ring: var(--nav-ring);
+  --color-nav-accent: var(--nav-accent);
   --color-nav-badge: var(--nav-badge);
   --color-nav-badge-foreground: var(--nav-badge-foreground);
   --radius-md: var(--radius);
