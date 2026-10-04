@@ -21,19 +21,24 @@ Intended / architecture-forced (beyond the lists below): `rowVersion` optimistic
 names (Reference encrypted both and kept a file mirror), no managed `keyword_replies` row (the runtime reads `flows` directly, TW-FLR-004), publish publishes the saved row,
 500 node / 2000 edge caps, writes need the `automation` plan feature, problem+json errors, media served from `/v2/flow-media`, saved `vars` are kept.
 
-## Open runtime items (owned by flow-runtime-engine, not changed here)
+## Runtime items (flow-runtime-engine is Vedant's; the first two were fixed there with the user's authorisation)
 
-- **Field mapping hook.** The editor saves Reference's builder field names (so exports and imports interoperate). `flbToRuntimeData` (contracts `runtime-shape.ts`, 98 + 83 + 92
-  tests, additive and idempotent, proven against the real `compileGraph`) is Reference's FlowNormalizer mapping, and `FlowReaderService.getRunnableFlow` already returns the
-  graph shaped with it. FLR's `compileGraph` does not call it yet; the one-line hook is
-  `props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: n.data }))` in `flow-runtime-engine/graph/compile-graph.ts`. Until it lands ten node types reach
-  the executors with the builder's names and misbehave at run time: ai (reply variable, assistant, extraction fields), chatbot (agent), subflow (target), webhook / code /
-  mysql (save variable), poll (multiple answers), location (coordinates sent as 0,0), a legacy single-kind CTA. After the hook, delete the `FLR hook status` block in
-  `apps/api/test/unit/flow-builder-editor/editor-field-seam.spec.ts`.
+- **Field mapping hook: FIXED.** `compileGraph` now calls `flbToRuntimeData` (`props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: obj(n.data) }))` in
+  `flow-runtime-engine/graph/compile-graph.ts`, change authorised by the user and made on the FLR side), so a graph exactly as the editor saves it reaches the executors with
+  the runtime's names: ai (reply variable, assistant, extraction fields), chatbot (agent), subflow (target), webhook / code / mysql (save variable), poll (multiple
+  answers), location (coordinates, no longer 0,0), a legacy single-kind CTA. To keep flows that already use the runtime names compiling to the same output, the shaper now also
+  reads the runtime-named key when the builder one is absent (`latitude` / `longitude`, `allowMultiple`, `ctaActions`, `templateName`, notify `mediaKind`, camelCase shop product
+  fields); the old `FLR hook status` block of `editor-field-seam.spec.ts` is inverted into "compileGraph itself applies the shaper". Proof: `runtime-shape-compile.spec.ts`
+  compares the real `compileGraph` with the same module loaded without the shaper (props byte-equal for the types that already worked), `compile-flb-hook.spec.ts` compiles all
+  58 types, and `test/e2e/flow-runtime-engine/editor-flows.e2e.spec.ts` creates the flows through `POST /v2/flows` and runs them (ai variable, extraction fields, webhook variable,
+  poll with several answers, location coordinates, sub-flow).
+- **UUID ids against numeric reads: FIXED.** `FlowRefResolver` (`flow-runtime-engine/runtime/nodes/flow-refs.ts`) turns the uuid of a template (`wa_templates`) or an AI assistant
+  (`ai_chat_assistants`) into the row id inside a tenant transaction scoped by `org_id`; an integer id (an old flow) is used as it was, and a uuid of another workspace resolves
+  to nothing (unit test for the SQL scope, e2e that a foreign assistant adds no knowledge and a foreign template sends nothing). Used by the Template node (`tplId`), the AI node's
+  knowledge base (`assistant`, `assistant_id`, `assistantId`) and the AI call node (`assistantId`, resolved before the port, which still takes a row id). Chatbot `agentId` and the
+  Sub-flow target already accepted a uuid. Google Docs `templateId` is a Google file id, not a row of ours, so it is untouched.
 - **Executors for 23 channel-specific types** are missing from FLR's `TYPE_MAP`: `cf_*` (8), `ig_*` (9), `fb_*` (5), `tg_payment`. The editor saves them; the run notes them and moves on
   (TW-FLR-016 rule 4). `compile-seam.spec.ts` pins the list.
-- **UUID ids against numeric reads.** The editor stores uuids for templates, AI assistants and `ai_call` assistants; the executors read numeric ids (`templateId`,
-  `assistant_id`, `assistantId`), so lookup falls back to name or is empty. Needs a uuid-to-id resolution scoped by org in FLR.
 - **Two additive lines in FLR's barrel and module** export `GoogleFormWebhookService`, which the editor needs to mint the Google Form Apps Script token (TW-FLB-059).
 
 ## Blocked on other domains
