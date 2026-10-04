@@ -62,17 +62,17 @@
         "keySavedLast4": "Key saved, ends in {last4}",
         "noKey": "No key",
         "unreadable": "Saved key cannot be read, paste it again",
-        "slug": "Provider id",
+        "slug": "provider: {provider} · default model: {model}",
         "apiKey": "API key",
         "apiKeyHint": "Leave blank to keep the saved key.",
-        "apiKeyPlaceholder": "Paste key here",
+        "apiKeyPlaceholder": "paste key here",
         "apiKeySavedPlaceholder": "•••••••••• (saved — leave blank to keep)",
         "defaultModel": "Default model",
         "pickModel": "— Pick a default model —",
         "customModel": "{model} (custom)",
         "sortOrder": "Sort order",
         "maxTokens": "Max tokens per request",
-        "maxTokensHint": "Optional ceiling on a reply's length for every workspace. Blank means no ceiling.",
+        "maxTokensHint": "Optional ceiling — a single AI request can never burn more than this many output tokens. Leave blank for the model default.",
         "extraModels": "Extra models",
         "extraModelsHint": "Optional. Model ids to offer next to the default, separated by commas.",
         "save": "Save {name}",
@@ -83,7 +83,8 @@
         "removeTitle": "Remove the {name} key?",
         "removeBody": "Workspaces will stop using {name} until you add a key again. The provider is turned off.",
         "removeConfirm": "Remove key",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "maxTokensPlaceholder": "e.g. 4096"
       },
       "toasts": {
         "saved": "{name} saved.",
@@ -93,8 +94,9 @@
         "removed": "{name} key removed."
       },
       "help": {
-        "title": "How these keys are used",
-        "body": "A workspace's own key wins only when its plan allows it. Otherwise the matching active provider here is used. Turning a provider off means workspaces without their own key cannot use it."
+        "eyebrow": "How these keys are used",
+        "title": "Fallback chain",
+        "body": "When a workspace runs an AI feature, AiKeyResolver tries the workspace's own key first (only available on plans with BYOK enabled). If none is set, it falls back to the matching Active row here. Disabling a provider above means workspaces on non-BYOK plans simply can't use it."
       }
     },
     "dashboard": {
