@@ -122,3 +122,44 @@ if (!(await this.locks.once(`waba:in:${waMessageId}`, 3_600_000, 'proceed'))) re
 
 Existing hand-rolled versions are unchanged. Their owners can move over in their own PRs; for fixed-window counters (the
 segment, lead, public-link, appointment and marketplace throttles) use `RateLimiter` or `@Throttle` instead.
+
+## Request body limits (WD-INFRA-020)
+
+JSON and form bodies are buffered in memory before authentication or routing, so the cap is set where the body is read, in
+`installBodyLimits(app)` from `main.ts`. Over the cap the answer is `413`, problem+json, `code: PAYLOAD_TOO_LARGE`, and the rest
+of the body is not read. A route cannot raise its own cap: pick a class.
+
+| Class              | Paths (a `/v<n>` prefix is ignored)                                                                                                                                                                                      | Limit                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `whatsapp-webhook` | `public/webhooks/whatsapp`                                                                                                                                                                                               | 4 MiB (`INFRA_BODY_LIMIT_WHATSAPP_WEBHOOK_KB`) |
+| `lead-hook`        | `public/lead-hooks`                                                                                                                                                                                                      | `LEAD_HOOK_MAX_BODY_BYTES` (1 MiB)             |
+| `marketplace-hook` | `public/marketplace`                                                                                                                                                                                                     | `MARKET_HOOK_MAX_BYTES` (256 KiB)              |
+| `webhook`          | `public/webhooks/*`, `webhooks/channels`, `store-public/webhooks`, `facebook`, `instaflow`, `telegram/inbound`, `shopify/webhook`, `shopify/compliance`, `woocommerce/webhook`, `campaigns/node`, `google/form-response` | 1 MiB (`INFRA_BODY_LIMIT_WEBHOOK_KB`)          |
+| everything else    |                                                                                                                                                                                                                          | 100 KiB (`INFRA_BODY_LIMIT_KB`)                |
+
+- **Nothing changes for existing routes except the callbacks above.** 100 KiB is what Express enforced before; it is now stated and
+  configurable. Before this, the 1 MiB and 256 KiB caps that the lead-hook and marketplace domains declare could never be
+  reached for JSON, and a large WhatsApp delivery (Meta documents deliveries of several MiB; sized here with headroom, check
+  against current Meta docs) would have been refused with 413 before its signature was even checked.
+- The raw bytes are kept on every class (`req.rawBody`) for HMAC checks.
+- Multipart uploads are not governed here; each upload route sets its own multer `fileSize`.
+- New callback or a different cap: add a class to `bodyLimitClasses` in `modules/platform-infrastructure/body-limits/`. Keep the
+  limit as small as the largest honest sender needs: these routes accept bytes from anyone until the signature is checked.
+
+| Variable                               | Default | Meaning                             |
+| -------------------------------------- | ------- | ----------------------------------- |
+| `INFRA_BODY_LIMIT_KB`                  | `100`   | default JSON/form limit, 1 to 10240 |
+| `INFRA_BODY_LIMIT_WEBHOOK_KB`          | `1024`  | `webhook` class                     |
+| `INFRA_BODY_LIMIT_WHATSAPP_WEBHOOK_KB` | `4096`  | `whatsapp-webhook` class            |
+
+## CORS (WD-INFRA-014)
+
+The API sends credentials-enabled CORS headers for the origins in `CORS_ORIGINS` (comma list). With **no list**:
+
+- development and test: any origin is allowed, so a local web app on any port works unconfigured;
+- **production: no origin is allowed.** No CORS headers are sent, so browsers on other origins are refused; same-origin and
+  server-to-server calls are unaffected, and a warning is logged at boot. Before, an unset variable in production reflected every
+  origin together with credentials.
+
+The production deploy already sets `CORS_ORIGINS` (`deploy/hostinger/docker-compose.yml`), so it is unaffected. The socket.io
+gateway has its own `cors: { origin: true, credentials: true }` in `realtime/realtime.gateway.ts` and is not covered here (see the PR).
