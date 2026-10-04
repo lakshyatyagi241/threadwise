@@ -176,7 +176,13 @@ const packOf = async (slug: string) =>
     [slug],
   );
 const appRow = (slug: string) =>
-  one<{ id: string; uuid: string; row_version: number; price_changed_at: string | null }>(
+  one<{
+    id: string;
+    uuid: string;
+    status: string;
+    row_version: number;
+    price_changed_at: string | null;
+  }>(
     `SELECT * FROM marketplace_apps WHERE slug = $1`,
     [slug],
   );

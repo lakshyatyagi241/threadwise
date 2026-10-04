@@ -1,4 +1,4 @@
-import { cleanVar } from './compile-graph';
+import { cleanVar } from './clean-var';
 
 /**
  * How the commerce node group's builder nodes become executor props (TW-FLR-026, 040, 041, 043). Kept beside `compileGraph` but in
