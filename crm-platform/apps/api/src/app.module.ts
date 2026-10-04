@@ -23,6 +23,7 @@ import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
+import { PlatformInfrastructureModule, ThrottleGuard } from './modules/platform-infrastructure';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
@@ -151,6 +152,7 @@ import { HealthModule } from './health/health.module';
     // Platform
     KernelModule,
     AuthModule,
+    PlatformInfrastructureModule,
     PlansModule,
     PlatformSettingsModule,
     LocalizationTranslationModule,
@@ -216,6 +218,8 @@ import { HealthModule } from './health/health.module';
     CryptoService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // The request throttle (TW-INFRA-010): once the caller is known, before any guard that reads the database.
+    { provide: APP_GUARD, useExisting: ThrottleGuard },
     // After authentication, before permissions: a gated account (suspended,
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.
