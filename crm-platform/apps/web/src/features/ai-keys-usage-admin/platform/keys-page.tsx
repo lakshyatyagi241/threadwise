@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { platformAiKeysResponseSchema, type PlatformAiKeyItem } from '@crm/contracts';
+import { platformAiKeysResponseSchema } from '@crm/contracts';
 import { Alert, Card, StatTile } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
@@ -13,7 +13,7 @@ import { KEYS_QUERY_KEY } from './queries';
 
 const NS = 'ai-keys-usage-admin.keys';
 
-/** The platform's provider keys: a status strip and one card per vendor, language models first, voice last. */
+/** The platform's provider keys: a status strip and one card per vendor, in Reference's order. */
 export function KeysPage() {
   const t = useTranslations(NS);
   const { operator } = useOperator();
@@ -62,21 +62,16 @@ export function KeysPage() {
             />
           </div>
 
-          {(['llm', 'voice'] as const).map((group) => {
-            const items: PlatformAiKeyItem[] = q.data.data.filter((k) => k.group === group);
-            return items.length === 0 ? null : (
-              <section key={group} className="space-y-3" aria-label={t(`groups.${group}`)}>
-                <h2 className="text-lg font-semibold">{t(`groups.${group}`)}</h2>
-                <div className="space-y-3">
-                  {items.map((item) => (
-                    <KeyCard key={`${item.id}:${item.rowVersion}`} item={item} />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+          <div className="space-y-3">
+            {q.data.data.map((item) => (
+              <KeyCard key={`${item.id}:${item.rowVersion}`} item={item} />
+            ))}
+          </div>
 
           <Card className="space-y-1">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {t('help.eyebrow')}
+            </p>
             <h2 className="font-semibold">{t('help.title')}</h2>
             <p className="text-sm text-muted-foreground">{t('help.body')}</p>
           </Card>
