@@ -18,6 +18,7 @@ import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
+import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -74,6 +75,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...WAP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
   ...CAT_OPERATOR_NAV,
+  // Marketplace catalogue (MKT): listings, versions and review, categories, requests, usage
+  ...MARKET_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',

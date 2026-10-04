@@ -17,6 +17,8 @@ import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
+import { MKT_ERROR_CODES } from '../marketplace/errors';
+import { LEAD_ERROR_CODES } from '../leads/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -32,6 +34,8 @@ export const ERROR_CODES = {
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
   ...FLR_ERROR_CODES,
+  ...MKT_ERROR_CODES,
+  ...LEAD_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -478,6 +482,12 @@ export const ERROR_CODES = {
   APPT_BOOKING_UNAVAILABLE: 'APPT_BOOKING_UNAVAILABLE',
   /** A booking type with pending or confirmed bookings still to come is not deleted. */
   BOOKING_TYPE_HAS_UPCOMING: 'BOOKING_TYPE_HAS_UPCOMING',
+  /** The platform operator has not set up a Google OAuth client (or turned it off): a workspace cannot connect Google Calendar. */
+  APPT_CALENDAR_NOT_CONFIGURED: 'APPT_CALENDAR_NOT_CONFIGURED',
+  /** No Google Calendar is connected (or it needs reconnecting): there is nothing to list, pick or write to. */
+  APPT_CALENDAR_NOT_CONNECTED: 'APPT_CALENDAR_NOT_CONNECTED',
+  /** Google did not answer or refused the request (details are logged, not returned). */
+  APPT_CALENDAR_PROVIDER_FAILED: 'APPT_CALENDAR_PROVIDER_FAILED',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */

@@ -11,7 +11,13 @@ import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
  * (`taskTitle`, `actorName`, ...); `title` and `body` are the server's English wording, the fallback for a type
  * the client does not know yet.
  */
-export const NOTIFICATION_TYPES = ['task_assigned', 'task_due', 'task_completed'] as const;
+export const NOTIFICATION_TYPES = [
+  'task_assigned',
+  'task_due',
+  'task_completed',
+  /** A lead arrived through a lead source (written by the lead pipeline's consumer). */
+  'new_lead',
+] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
 export const notificationResponseSchema = z.object({

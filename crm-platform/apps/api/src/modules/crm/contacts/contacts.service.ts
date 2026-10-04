@@ -57,6 +57,12 @@ export interface ResolveContactInput {
    * somebody wrote is never replaced).
    */
   quiet?: boolean;
+  /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
+  lifecycleStage?: string;
+  /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
+  ownerId?: number | null;
+  /** Extra keys of the `contact.created` payload (a lead's source and campaign), next to `via`. Never overrides the keys the event owns. */
+  eventPayload?: Record<string, unknown>;
 }
 
 export type ResolvedContact =
@@ -375,7 +381,8 @@ export class ContactsService {
     }
 
     // The workspace's default stage, unless it is a lost stage (those demand a reason, and nobody is here to give one).
-    let stage = await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage');
+    let stage =
+      input.lifecycleStage ?? (await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage'));
     const flags = stage ? await this.repo.stageFlags(tx, orgId, stage) : null;
     if (flags?.isLost) stage = undefined;
     const stageValues =
@@ -406,6 +413,7 @@ export class ContactsService {
       lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
       status: statusPlan.status ?? undefined,
       source: input.source ?? null,
+      ownerId: input.ownerId ?? null,
       data: {},
       displayId,
       createdBy: null,
@@ -418,6 +426,7 @@ export class ContactsService {
         aggregateId: created.id,
         eventType: 'contact.created',
         payload: {
+          ...input.eventPayload,
           uuid: created.uuid,
           displayId,
           ...(input.kind === 'email' ? { email: value } : { phone: value }),

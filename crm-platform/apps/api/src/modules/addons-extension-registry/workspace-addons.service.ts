@@ -36,7 +36,8 @@ interface CardRow {
  * What a workspace sees of the add-on catalogue (TW-ADD-033): the packs on sale, what each grants, what the
  * workspace already owns, and whether it may buy at all. Visibility is decided here, on the server: a workspace
  * without an active paid plan gets `eligible: false` and an empty catalogue, so the answer does not depend on the
- * screen hiding a button. The purchase itself belongs to checkout.
+ * screen hiding a button. The purchase itself belongs to checkout. The add-ons that sell a Marketplace app are not here (the Marketplace
+ * shows them on the app's own page), so neither the catalogue nor the owned list carries them.
  */
 @Injectable()
 export class WorkspaceAddonsService {
@@ -80,6 +81,7 @@ export class WorkspaceAddonsService {
         SELECT a.uuid, p.uuid AS pack_uuid, p.name, a.starts_at, a.ends_at, a.package_id::int AS package_id
         FROM workspace_addons a JOIN plans p ON p.id = a.package_id
         WHERE a.org_id = ${orgId} AND a.status = 'active' AND (a.ends_at IS NULL OR a.ends_at > now())
+          AND p.marketplace_app_id IS NULL
         ORDER BY a.created_at DESC, a.id DESC
       `);
       const ownedRows = ownedRes.rows as unknown as Array<{
@@ -97,7 +99,7 @@ export class WorkspaceAddonsService {
       const catRes = await tx.execute(sql`
         SELECT id::int AS id, uuid, slug, name, subtitle, amount::text AS amount, offer_amount::text AS offer_amount,
                currency, is_free, is_lifetime, billing_unit, billing_duration, features, limits
-        FROM plans WHERE kind = 'addon' AND is_active ORDER BY sort_order ASC, amount ASC, slug ASC
+        FROM plans WHERE kind = 'addon' AND is_active AND marketplace_app_id IS NULL ORDER BY sort_order ASC, amount ASC, slug ASC
       `);
       const catalog: AddonCard[] = (catRes.rows as unknown as CardRow[]).map((r) => {
         const grants = readGrants(r.features, r.limits);

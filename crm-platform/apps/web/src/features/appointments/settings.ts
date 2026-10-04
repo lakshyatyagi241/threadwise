@@ -20,4 +20,15 @@ export const settings = [
     order: 11,
     gates: { permission: 'record.booking-types.read' },
   }),
+  // The Google Calendar card of the same screen, listed under Integrations so it can be found by its name. Connecting is editing
+  // booking configuration, so the tile needs the update key.
+  settingsTile({
+    id: 'google-calendar',
+    shortcutFrom: ['/appointments'],
+    section: 'integrations',
+    href: '/appointments/settings',
+    icon: 'calendar',
+    order: 12,
+    gates: { permission: 'record.booking-types.update' },
+  }),
 ];

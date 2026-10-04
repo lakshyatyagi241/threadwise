@@ -57,6 +57,8 @@ interface EntitlementRow {
   plan_is_free: boolean | null;
   plan_is_custom_quote: boolean | null;
   plan_amount: string | null;
+  /** Plan feature keys granted by the Marketplace apps the workspace has subscribed to (`{ key: true }`). */
+  app_grants: Record<string, unknown> | null;
 }
 
 /**
@@ -126,7 +128,13 @@ export class PlanEntitlementService {
                p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features,
                (p.id IS NOT NULL) AS plan_found,
                p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote,
-               p.amount::text AS plan_amount
+               p.amount::text AS plan_amount,
+               (SELECT coalesce(jsonb_object_agg(f.key, true), '{}'::jsonb)
+                  FROM workspace_addons wa
+                  JOIN plans ap ON ap.id = wa.package_id AND ap.marketplace_app_id IS NOT NULL
+                  CROSS JOIN LATERAL jsonb_each(ap.features) AS f(key, value)
+                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())
+                   AND f.value = 'true'::jsonb) AS app_grants
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -167,6 +175,12 @@ export class PlanEntitlementService {
         planFeatures = free.features;
       }
     }
+    // A Marketplace app a workspace has subscribed to may grant plan features (a first-party app that owns one, e.g. a paid booking app).
+    // They are merged HERE, into the one resolver every gate asks (RequirePlanFeature, the in-context guards, the entitlements the web
+    // reads), so a gate needs no change to honour a subscription. The workspace's own override still wins over it (resolveFeature), and
+    // it applies after a lapsed plan fell back to the free plan: it is the workspace's own purchase, not part of the plan.
+    if (row.app_grants && Object.keys(row.app_grants).length > 0)
+      planFeatures = { ...planFeatures, ...row.app_grants };
     return {
       orgId,
       planSlug: row.plan_slug,

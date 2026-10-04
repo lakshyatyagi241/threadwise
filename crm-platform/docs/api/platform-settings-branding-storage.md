@@ -5,7 +5,9 @@ MFA for super admins). Every operator role may read; only `super_admin` may writ
 `application/problem+json` with a stable `code`.
 
 A settings **group** is one typed document edited as a page. Groups: `general`, `branding`, `site`, `mail`, `seo`, `privacy`,
-`analytics`, `customCode`, `pwa`, `storage`, `realtime`. Field lists are the zod schemas in
+`analytics`, `customCode`, `pwa`, `storage`, `realtime`, and `googleCalendar` (the Google OAuth client every workspace connects its
+calendar through: `enabled`, `clientId`, `redirectUri`, secret `clientSecret`; the group's `extra.redirectUri` is the address to register at Google;
+see [appointments-booking.md](appointments-booking.md#google-calendar-tw-appt-012-028-029-d-08)). Field lists are the zod schemas in
 `packages/contracts/src/platform-settings-branding-storage/groups.ts`.
 
 ## GET /groups

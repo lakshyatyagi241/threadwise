@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
+  GOOGLE_CALENDAR_CALLBACK_PATH,
   SET_GROUPS,
   SET_GROUP_SCHEMAS,
   SET_SECRET_FIELDS,
@@ -15,6 +16,7 @@ import {
   type SetTestableGroup,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
+import { googleCalendarEnv } from '../../config/domains/appointments-booking.env';
 import type { Env } from '../../config/env.schema';
 import type { Tx } from '@crm/db';
 import { AuthAuditService, PlatformSettingsService } from '../auth';
@@ -121,15 +123,25 @@ export class SettingsService {
       secrets[f] = { isSet: await this.store.hasSecret(secretKey(group, f)) };
     }
     const test = await this.store.get<{ ok: boolean; at: string }>(testKey(group));
-    const extra =
-      group === 'tiPwa'
-        ? {
-            vapidPublic: (await this.store.get<string>(VAPID_PUBLIC_KEY)) ?? '',
-            pushReady:
-              (await this.store.get<string>(VAPID_PUBLIC_KEY)) !== undefined &&
-              (await this.store.hasSecret(VAPID_PRIVATE_KEY)),
-          }
-        : undefined;
+    let extra: Record<string, unknown> | undefined;
+    if (group === 'tiPwa') {
+      extra = {
+        vapidPublic: (await this.store.get<string>(VAPID_PUBLIC_KEY)) ?? '',
+        pushReady:
+          (await this.store.get<string>(VAPID_PUBLIC_KEY)) !== undefined &&
+          (await this.store.hasSecret(VAPID_PRIVATE_KEY)),
+      };
+    } else if (group === 'googleCalendar') {
+      // The address to register on the Google OAuth client: what is saved, else the environment's, else the API's own callback.
+      const saved = (await this.values('googleCalendar')).redirectUri;
+      const appUrl = this.config.get('APP_URL', { infer: true }).replace(/\/$/, '');
+      extra = {
+        redirectUri:
+          saved ||
+          googleCalendarEnv().GOOGLE_CALENDAR_REDIRECT_URI ||
+          `${appUrl}${GOOGLE_CALENDAR_CALLBACK_PATH}`,
+      };
+    }
     return {
       group,
       values: (await this.values(group)) as Record<string, unknown>,

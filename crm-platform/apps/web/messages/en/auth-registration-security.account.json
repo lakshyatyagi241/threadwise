@@ -527,7 +527,9 @@
             "inbox_kanban": "Inbox Kanban",
             "team_performance": "Team performance",
             "scheduled_messages": "Scheduled messages",
-            "whatsapp_warmer": "WhatsApp warmer"
+            "whatsapp_warmer": "WhatsApp warmer",
+            "marketplace": "Marketplace",
+            "lead_sources": "Lead sources"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -327,6 +327,8 @@ import { TagsService } from './tags/tags.service';
     FieldsService,
     StatusOptionsService,
     TagsService,
+    // The lead pipeline tags the contacts it creates (modules/leads).
+    TagsRepository,
     ContactViewsService,
     SegmentsService,
     SegmentsRepository,

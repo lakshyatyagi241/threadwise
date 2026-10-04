@@ -1,11 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
+import { stdSerializers } from 'pino';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'node:crypto';
 import { AppConfigModule } from './config/config.module';
 import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
+import { maskSecretUrl } from './common/logging/mask-secret-url';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
@@ -66,6 +68,8 @@ import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/cha
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
+import { LeadsModule } from './modules/leads';
+import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
@@ -109,6 +113,13 @@ import { HealthModule } from './health/health.module';
                   actorId: ctx.actorId ?? undefined,
                 }
               : {};
+          },
+          serializers: {
+            // A push portal's address carries its secret as the last path segment: never in a log line.
+            req: (req: Parameters<typeof stdSerializers.req>[0]) => {
+              const out = stdSerializers.req(req);
+              return { ...out, url: maskSecretUrl(out.url) };
+            },
           },
           redact: {
             paths: [
@@ -194,6 +205,8 @@ import { HealthModule } from './health/health.module';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
+    LeadsModule,
+    MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

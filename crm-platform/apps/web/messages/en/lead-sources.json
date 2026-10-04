@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Dismiss",
+      "loading": "Loading",
+      "retry": "Try again",
+      "copied": "Copied",
+      "copyFailed": "Could not copy: select the text and copy it by hand",
+      "requestId": "Reference: {id}"
+    },
+    "states": {
+      "noAccessTitle": "You do not have access to Social leads",
+      "noAccessBody": "Your role does not include the permission this screen needs ({permission}). Ask a workspace admin to add it to your role.",
+      "lockedTitle": "Social leads is not part of your plan",
+      "lockedBody": "Your current plan does not include lead sources, so you cannot view or create them. Upgrade to bring ad and landing-page leads into your contacts.",
+      "upgrade": "Upgrade plan",
+      "manageNeeded": "You can look but not change anything here: changing sources needs the permission {permission}."
+    },
+    "errors": {
+      "conflict": "Someone else changed this source while you were editing it. Reload to see their version; your unsaved edits would be lost.",
+      "noAccess": "Your role does not allow this action.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "planLocked": "Your plan does not include Social leads. Upgrade to use it.",
+      "planLimit": "Your plan's limit on lead sources is reached. Upgrade your plan or delete a source you no longer use.",
+      "nameTaken": "Another source already has this name. Choose a different one.",
+      "mappingInvalid": "The mapping points at contact properties that cannot be filled from a lead.",
+      "defaultsInvalid": "Something in the rules is not part of this workspace (a user, pipeline, stage or lifecycle stage).",
+      "notRetryable": "Only leads that need review or failed can be retried. This one is already done or being processed.",
+      "payloadPurged": "The stored lead was deleted after its retention period, so there is nothing to retry.",
+      "sourcePaused": "This source is paused. Resume it to send a test lead or retry a lead.",
+      "notFound": "We could not find it. It may have been deleted.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "rateLimitedWait": "Too many requests. Try again in {seconds} seconds.",
+      "validation": "Some of what you entered is not valid. Check the highlighted fields.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "The server answered in a way this page does not understand. Reload the page; if it keeps happening, contact support.",
+      "network": "We could not reach the server. Check your connection and try again.",
+      "unexpected": "Something went wrong on our side. Try again in a moment.",
+      "request": "The request was not accepted. Check what you entered and try again.",
+      "details": {
+        "unknown_property": "This contact property does not exist or is switched off.",
+        "not_mappable": "This property is calculated or points at another record, so a lead cannot fill it.",
+        "unknown_pipeline": "This pipeline is not in your workspace.",
+        "unknown_stage": "This deal stage is not in your workspace.",
+        "stage_not_in_pipeline": "This stage belongs to a different pipeline.",
+        "pipeline_required": "Choose the pipeline this stage belongs to.",
+        "unknown_or_lost_stage": "This lifecycle stage does not exist or is a lost stage.",
+        "unknown_or_inactive_user": "One of the selected people is not an active member of this workspace."
+      }
+    },
+    "problems": {
+      "nameRequired": "Give the source a name.",
+      "nameLength": "Use at most {max} characters.",
+      "platformLength": "Use at most {max} characters.",
+      "secretLength": "A shared secret is {min} to {max} characters.",
+      "pathLength": "A path is at most {max} characters.",
+      "pathCharacters": "A path cannot contain control characters.",
+      "retentionRange": "Enter a whole number of days from 1 to {max}.",
+      "countryCode": "Enter a dial code of 1 to 4 digits, such as 91 or 44.",
+      "textLength": "Use at most {max} characters.",
+      "ownerFixed": "Choose exactly one person.",
+      "ownerRoundRobin": "Choose at least two people to take turns.",
+      "ownerTooMany": "Choose at most {max} people.",
+      "notifyTooMany": "Choose at most {max} people.",
+      "dealTitleLength": "The deal title is at most {max} characters.",
+      "propertyRequired": "Choose the contact property to fill.",
+      "propertyKey": "A property key starts with a letter and uses lowercase letters, digits and underscores.",
+      "propertyDuplicate": "This property is mapped twice.",
+      "pathRequired": "Say where in the payload the value is.",
+      "customFieldsTooMany": "Map at most {max} custom properties.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta lead forms",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Marketplace connection"
+    },
+    "sourceStatus": {
+      "active": "Active",
+      "paused": "Paused"
+    },
+    "eventStatus": {
+      "received": "Received",
+      "created": "Contact created",
+      "updated": "Contact updated",
+      "duplicate": "Duplicate",
+      "needs_review": "Needs review",
+      "failed": "Failed"
+    },
+    "reasons": {
+      "no_contact_point": "No email or phone",
+      "invalid_phone": "Phone could not be read",
+      "plan_limit_reached": "Contact limit reached",
+      "source_paused": "Source was paused",
+      "internal_error": "Processing error",
+      "identity_conflict": "Email or phone belongs to another contact"
+    },
+    "guidance": {
+      "noContactPoint": "The lead had neither a usable email nor a phone number. Fix the mapping or the default country code, then retry.",
+      "invalidPhone": "A phone number was sent but could not be read as one, and there was no email. Check the phone mapping and the default country code, then retry.",
+      "planLimit": "Your plan's contact limit is reached, so this lead could not become a contact. Upgrade your plan, then retry.",
+      "sourcePaused": "The source was paused. Resume it, then retry.",
+      "internalError": "Something went wrong while processing this lead. Retry it; if it fails again, share the reference from the error with support.",
+      "identityConflict": "The lead joined an existing contact, but its email or phone already belongs to another contact, so that detail was not moved.",
+      "generic": "This lead needs a look. Check the reason and the error, fix the mapping or the defaults if needed, then retry.",
+      "upgrade": "Upgrade plan"
+    },
+    "eventFilters": {
+      "all": "All leads",
+      "attention": "Needs attention",
+      "needs_review": "Needs review",
+      "failed": "Failed",
+      "created": "Contact created",
+      "updated": "Contact updated",
+      "duplicate": "Duplicate",
+      "received": "Being processed"
+    },
+    "testFilters": {
+      "all": "Real and test leads",
+      "only": "Test leads only",
+      "hide": "Hide test leads"
+    },
+    "page": {
+      "title": "Social leads",
+      "description": "Bring leads from your ads and landing pages into your contacts, with the owner, tag and deal you choose.",
+      "newSource": "New source",
+      "loading": "Loading lead sources",
+      "tabs": {
+        "ads": "Ads",
+        "webhook": "Webhook",
+        "attention": "{count, plural, one {# lead needs attention} other {# leads need attention}}"
+      }
+    },
+    "ads": {
+      "intro": "Choose where your leads come from. Every source ends in the same place: a contact with its source recorded, an owner, an optional deal and a notification.",
+      "available": "Available",
+      "comingSoon": "Coming soon",
+      "untilThen": "Until then, send these leads through the Webhook with Zapier or Make.",
+      "sourceCount": "{count, plural, =0 {No sources yet} one {# source} other {# sources}}",
+      "setUpWebhook": "Set up a webhook",
+      "openSources": "Open sources",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Post leads from any tool that can send a web request: Zapier, Make, a landing-page builder or your own form. It also carries LinkedIn, TikTok and Google Ads leads."
+        },
+        "meta": {
+          "name": "Meta lead forms",
+          "body": "Facebook and Instagram lead ads, straight from your Page."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn lead gen forms."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok lead generation forms."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Google Ads lead form extensions."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "No sources yet",
+      "empty": "Create a webhook source to get a URL you can paste into Zapier, Make or your form tool. Leads sent to it become contacts.",
+      "emptyNoManage": "No lead source has been created yet. Ask someone who can manage lead sources to create one.",
+      "create": "New source",
+      "caption": "Lead sources",
+      "col": {
+        "name": "Name",
+        "kind": "Type",
+        "status": "Status",
+        "token": "URL",
+        "lastEvent": "Last lead",
+        "attention": "Needs attention"
+      },
+      "connector": "Through the Marketplace",
+      "endsIn": "Ends in {hint}",
+      "noEvents": "No leads yet",
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+    },
+    "wizard": {
+      "title": "New lead source",
+      "description": "Set up a webhook that turns incoming leads into contacts.",
+      "back": "Back to Social leads",
+      "stepsLabel": "Steps to create a lead source",
+      "steps": {
+        "basics": "Basics",
+        "rules": "What happens to a lead",
+        "connect": "Connect your sender",
+        "mapping": "Map the fields"
+      },
+      "stepTitle": {
+        "basics": "Name your source",
+        "rules": "What happens to a lead",
+        "connect": "Connect your sender",
+        "mapping": "Map the fields"
+      },
+      "stepHelp": {
+        "basics": "Say what this source is called and how long the raw lead data is kept.",
+        "rules": "Choose the owner, tag, deal and notification for every lead that arrives.",
+        "connect": "Your source exists. Copy the URL and token now: they are shown only once.",
+        "mapping": "Tell us where each value sits in the data your tool sends. The preview shows the result as you type."
+      },
+      "previous": "Back",
+      "next": "Next",
+      "cancel": "Cancel",
+      "create": "Create source",
+      "created": "Source {name} created",
+      "mappingSaved": "Mapping saved",
+      "planLimit": "Your plan's limit on lead sources is reached, so no new source can be created.",
+      "planLocked": "Your plan does not include Social leads.",
+      "upgrade": "Upgrade plan",
+      "skipMapping": "Skip for now",
+      "finish": "Save and finish",
+      "revealGone": "The URL and token are no longer shown. If you did not keep them, open the source and rotate the token to get a new URL.",
+      "toMapping": "Continue to mapping"
+    },
+    "form": {
+      "name": "Source name",
+      "nameHint": "For example Zapier: Facebook lead ads. Names are unique.",
+      "platform": "Platform label",
+      "platformHint": "What your contacts show as their source, for example Facebook or IndiaMART. Up to {max} characters.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Shared secret",
+        "isSet": "A shared secret is set. Senders must send it in the X-Webhook-Secret header.",
+        "notSet": "No shared secret. Anyone with the URL can send leads.",
+        "willRemove": "The shared secret will be removed when you save.",
+        "willReplace": "The shared secret will be replaced when you save.",
+        "willSet": "A shared secret will be set when you save.",
+        "newValue": "New shared secret",
+        "hint": "Optional. {min} to {max} characters. It is never shown again after you save.",
+        "show": "Show the secret",
+        "hide": "Hide the secret",
+        "replace": "Replace",
+        "remove": "Remove",
+        "keep": "Keep the current secret"
+      },
+      "externalIdPath": "Lead id path",
+      "externalIdPathHint": "Where the sender's own id for a lead sits in the data, such as lead.id. It stops the same lead being added twice. Optional.",
+      "retention": "Keep raw lead data for (days)",
+      "retentionHint": "After this the stored data is deleted; the contact stays. 1 to {max} days.",
+      "sections": {
+        "contact": "The contact",
+        "owner": "Owner",
+        "deal": "Deal",
+        "notify": "Notifications"
+      },
+      "membersFailed": "We could not load your team, so people cannot be chosen right now. Reload the page to try again.",
+      "countryCode": "Default country code",
+      "countryCodeHint": "Added to phone numbers sent without one, for example 91. Without it, a number must come with its own country code.",
+      "lifecycleStage": "Starting lifecycle stage",
+      "lifecycleStageHint": "The stage a new contact from this source starts in.",
+      "lifecycleDefault": "Workspace default",
+      "tag": "Tag",
+      "tagHint": "Put on every contact this source brings. Leave empty for no tag.",
+      "ownerMode": "Who owns the contact",
+      "ownerModeHint": "Only applies to a contact that has no owner yet.",
+      "ownerModes": {
+        "unassigned": "Nobody (unassigned)",
+        "fixed": "One person",
+        "round_robin": "Take turns between people"
+      },
+      "ownerFixed": "Owner",
+      "ownerChoose": "Choose a person",
+      "unknownMember": "A person who is no longer available",
+      "ownerRoundRobin": "People who take turns",
+      "ownerRoundRobinHint": "Pick at least two. Leads go to each in turn; people who are no longer active are skipped.",
+      "pickMembers": "Choose people",
+      "noMembers": "No one left to choose",
+      "removeMember": "Remove {name}",
+      "dealEnabled": "Create a deal for each new contact",
+      "dealEnabledHint": "Off until you turn it on. A contact that already has an open deal does not get another.",
+      "pipelinesFailed": "We could not load your pipelines. Pipeline and stage cannot be chosen right now.",
+      "pipeline": "Pipeline",
+      "pipelineDefault": "Workspace default pipeline",
+      "dealStage": "Stage",
+      "dealStageNeedsPipeline": "Choose a pipeline first to pick a stage.",
+      "dealStageFirst": "First stage of the pipeline",
+      "dealTitle": "Deal title",
+      "dealTitleHint": "These are filled from the lead: {tokens}.",
+      "notifyOwner": "Tell the contact's owner",
+      "notifyOwnerHint": "An in-app notification when a new lead comes in. Test leads never notify.",
+      "notifyUsers": "Also tell",
+      "notifyUsersHint": "For example your sales manager. Up to 20 people."
+    },
+    "mapping": {
+      "contact": "Contact fields",
+      "contactHelp": "Type a key (phone_number) or a path (lead.contact.phone, answers[0].value). Leave a box empty to look under the common names.",
+      "fields": {
+        "name": "Full name",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "defaults": {
+        "name": "Looks for full_name, name, contact_name",
+        "firstName": "Looks for first_name, firstname",
+        "lastName": "Looks for last_name, lastname",
+        "email": "Looks for email, email_address, mail",
+        "phone": "Looks for phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Custom properties",
+      "customHelp": "Fill your own contact properties from the data your tool sends.",
+      "propertiesFailed": "We could not load your contact properties, so type the property key instead.",
+      "property": "Contact property",
+      "propertyChoose": "Choose a property",
+      "path": "Path in the payload",
+      "removeRow": "Remove custom property {number}",
+      "remove": "Remove",
+      "addRow": "Add a custom property",
+      "attribution": "Attribution",
+      "attributionHelp": "Where the campaign details sit. Anything left empty is looked for under its own name.",
+      "attributionFields": {
+        "platform": "Platform",
+        "campaign": "Campaign",
+        "adset": "Ad set",
+        "ad": "Ad",
+        "form": "Form"
+      },
+      "attributionDefaults": {
+        "platform": "Looks for platform, utm_source",
+        "campaign": "Looks for campaign, utm_campaign",
+        "adset": "Looks for adset, adgroup",
+        "ad": "Looks for ad",
+        "form": "Looks for form"
+      }
+    },
+    "preview": {
+      "title": "Live preview",
+      "updating": "Updating",
+      "help": "What the mapping above makes of a lead. Nothing is saved or created by the preview.",
+      "paste": "Paste a sample lead (JSON)",
+      "pasteHint": "An object, up to 64 KB.",
+      "pasteProblems": {
+        "empty": "Paste the JSON your tool sends.",
+        "invalidJson": "That is not valid JSON. Check for a missing quote, comma or bracket.",
+        "notObject": "A lead must be a JSON object: a set of keys and values between curly brackets.",
+        "tooLarge": "That is larger than 64 KB."
+      },
+      "useLast": "Use the last lead we received",
+      "pickStored": "Or choose a stored lead",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Reading a lead we stored is recorded in the audit log. A pasted sample is not.",
+      "fixDraft": "Fix the highlighted mapping fields to see a preview.",
+      "choose": "Paste a sample or use the last lead we received to see the result.",
+      "loading": "Reading the lead",
+      "none": "No lead received yet: paste a sample.",
+      "usable": "This lead would be processed",
+      "notUsable": "This lead would need review",
+      "basedOnEvent": "From a stored lead",
+      "basedOnPayload": "From your sample",
+      "externalId": "id {id}",
+      "reasonsLabel": "Why",
+      "reasons": {
+        "no_payload": "There is no lead to read yet.",
+        "no_contact_point": "No email and no phone were found.",
+        "invalid_phone": "A phone was found but cannot be read as a number, and there is no email.",
+        "phone_unreadable": "The phone cannot be read as a number; the email will be used.",
+        "email_invalid": "The email is not a valid address and is ignored."
+      },
+      "contact": {
+        "name": "Name",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "empty": "Nothing found",
+      "phoneUnreadable": "Could not be read as a number",
+      "attribution": {
+        "platform": "Platform",
+        "campaign": "Campaign",
+        "adset": "Ad set",
+        "ad": "Ad",
+        "form": "Form"
+      },
+      "paths": "Fields in this lead",
+      "pathsPick": "Click one to fill: {field}",
+      "pathsFocusFirst": "Click a mapping box first, then click a field to fill it.",
+      "pathsMore": "{count, plural, one {# more field} other {# more fields}}"
+    },
+    "reveal": {
+      "titleCreated": "Copy your URL and token now",
+      "titleRotated": "Your new URL and token",
+      "bodyCreated": "This is the only time they are shown. We keep only a fingerprint, so we cannot show them again.",
+      "bodyRotated": "The old URL stopped working at once. This new one is shown only this time.",
+      "url": "Webhook URL",
+      "copyUrl": "Copy URL",
+      "noOrigin": "Put your API address in front of this path to get the full URL.",
+      "token": "Token",
+      "copyToken": "Copy token",
+      "secretHint": "This source also needs a shared secret: the sender must send it in the {header} header.",
+      "sample": "Try it from a terminal",
+      "sampleHelp": "In Zapier or Make, use a Webhooks action that posts JSON to the URL. This command sends one sample lead.",
+      "copied": "I have copied the URL and token somewhere safe",
+      "done": "I have copied it, continue",
+      "doneHint": "Tick the box first. After this the token cannot be shown again."
+    },
+    "test": {
+      "title": "Send a test lead",
+      "help": "Sends a sample lead through the real pipeline, marked as a test. It creates a real contact you can delete, and nobody is notified.",
+      "paused": "This source is paused. Resume it to send a test lead.",
+      "useSample": "Use the sample lead instead",
+      "useOwn": "Post my own payload",
+      "payload": "Payload (JSON)",
+      "payloadHint": "An object, up to 64 KB.",
+      "payloadProblems": {
+        "empty": "Paste the JSON to send, or use the sample lead.",
+        "invalidJson": "That is not valid JSON. Check for a missing quote, comma or bracket.",
+        "notObject": "A lead must be a JSON object: a set of keys and values between curly brackets.",
+        "tooLarge": "That is larger than 64 KB."
+      },
+      "send": "Send test lead",
+      "needsManage": "Sending a test lead needs the permission leads.sources.manage.",
+      "result": "Result",
+      "flag": "Test",
+      "openContact": "Open the contact"
+    },
+    "watch": {
+      "waiting": "Waiting for the first lead. Paste the URL into your tool and send one.",
+      "received": "First lead received:",
+      "error": "We could not check for leads just now."
+    },
+    "detail": {
+      "loading": "Loading the source",
+      "backToList": "Back to sources",
+      "pageTitle": "Lead source",
+      "needsAttention": "{count, plural, one {# lead needs attention} other {# leads need attention}}",
+      "lastEvent": "Last lead",
+      "noEvents": "none yet",
+      "pause": "Pause",
+      "resume": "Resume",
+      "rotate": "Rotate token",
+      "delete": "Delete",
+      "conflict": "Someone else changed this source. Reload to see their version; your unsaved edits will be lost.",
+      "reload": "Reload",
+      "connection": "Connection",
+      "connector": "Connected through the Marketplace. It has no URL or token of its own; leads arrive through the installed app.",
+      "connectorLink": "Open installed apps",
+      "endsIn": "The URL token ends in {hint}",
+      "noHint": "No token on record.",
+      "urlOnce": "The full URL was shown once when the source was created. To get a new one, rotate the token.",
+      "secretYes": "A shared secret is set: senders must send it in the X-Webhook-Secret header.",
+      "secretNo": "No shared secret is set.",
+      "pausedNote": "This source is paused: its URL answers 404, so senders see an error until you resume it.",
+      "settings": "Settings",
+      "settingsHelp": "Changes apply to leads that arrive after you save. Retrying an old lead uses the current settings.",
+      "basics": "Basics",
+      "rules": "What happens to a lead",
+      "mapping": "Field mapping",
+      "unsaved": "You have unsaved changes",
+      "discard": "Discard changes",
+      "save": "Save changes",
+      "saved": "Changes saved",
+      "pausedToast": "Source paused",
+      "resumedToast": "Source resumed",
+      "deletedToast": "Source {name} deleted",
+      "confirm": {
+        "cancel": "Cancel",
+        "pause": {
+          "title": "Pause this source?",
+          "body": "While it is paused, its URL answers 404 and leads sent to it are not received. Resume it any time.",
+          "action": "Pause source"
+        },
+        "rotate": {
+          "title": "Rotate the token?",
+          "body": "The current URL stops working at once, so update your tool with the new one. The new URL is shown only once.",
+          "action": "Rotate token"
+        },
+        "delete": {
+          "title": "Delete {name}?",
+          "body": "Its URL stops working and the leads it stored are deleted with it. Contacts it already created stay. This cannot be undone.",
+          "action": "Delete source"
+        }
+      }
+    },
+    "events": {
+      "title": "Leads received",
+      "help": "Every lead that reached this source and what became of it. Newest first.",
+      "filterStatus": "Show",
+      "filterTests": "Tests",
+      "attentionTitle": "{count, plural, one {# lead needs attention} other {# leads need attention}}",
+      "attentionGroup": "{count, plural, one {# lead:} other {# leads:}}",
+      "showAttention": "Show only these leads",
+      "loading": "Loading leads",
+      "emptyTitle": "No leads yet",
+      "empty": "Send a test lead or paste the URL into your tool.",
+      "emptyFilteredTitle": "No leads match",
+      "emptyFiltered": "No leads match these filters.",
+      "clearFilters": "Clear filters",
+      "col": {
+        "status": "Status",
+        "lead": "Lead",
+        "result": "What happened",
+        "links": "Became",
+        "received": "Received",
+        "actions": "Actions"
+      },
+      "loadMore": "Load more",
+      "test": "Test",
+      "attempts": "{count, plural, one {# attempt} other {# attempts}}",
+      "deliveredAgain": "{count, plural, one {Delivered again once} other {Delivered again # times}}",
+      "contact": "Contact",
+      "deal": "Deal",
+      "retry": "Retry",
+      "open": "Open",
+      "retriedToast": "Retried: now {status}"
+    },
+    "event": {
+      "title": "Lead details",
+      "close": "Close",
+      "retry": "Retry this lead",
+      "auditNote": "Opening the payload is recorded in the audit log.",
+      "externalId": "Lead id",
+      "test": "Test",
+      "received": "Received",
+      "processed": "Processed",
+      "notProcessed": "not yet",
+      "attempts": "Attempts",
+      "duplicates": "Repeat deliveries",
+      "deliveredAgain": "{count, plural, one {Delivered again once} other {Delivered again # times}}",
+      "reason": "Reason",
+      "contact": "Contact",
+      "openContact": "Open the contact",
+      "deal": "Deal",
+      "openDeal": "Open the deal",
+      "error": "Error",
+      "retried": "Retried. The lead is now",
+      "payload": "Stored payload",
+      "loadingPayload": "Opening the payload",
+      "purged": "The raw payload was purged after {days} days. The lead and its contact stay."
+    },
+    "attribution": {
+      "title": "Lead attribution",
+      "first": "First touch",
+      "latest": "Latest touch",
+      "firstAndLatest": "First and latest touch",
+      "total": "{count} touches in total",
+      "platform": "Platform",
+      "source": "Source",
+      "fields": {
+        "campaign": "Campaign",
+        "adset": "Ad set",
+        "ad": "Ad",
+        "form": "Form"
+      },
+      "capturedAt": "Captured",
+      "openSource": "Open the lead source"
+    }
+  }
+}

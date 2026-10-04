@@ -4,6 +4,9 @@ import {
   appointmentResponseSchema,
   bookingTypeListResponseSchema,
   bookingTypeResponseSchema,
+  calendarConnectStartResponseSchema,
+  calendarListResponseSchema,
+  calendarStatusResponseSchema,
   previewSlotsResponseSchema,
   publicBookResponseSchema,
   publicBookingPageSchema,
@@ -20,6 +23,8 @@ import type {
   BookingSettingsInput,
   BookingType,
   BookingTypeInput,
+  CalendarConnection,
+  CalendarOption,
   PreviewDraft,
   PublicBookInput,
   PublicDirectory,
@@ -33,6 +38,8 @@ import {
   listParams,
   slotQuery,
   toAppointment,
+  toCalendar,
+  toCalendarOptions,
   toBookingType,
   toBookBody,
   toPreviewBody,
@@ -73,6 +80,8 @@ const counts = appointmentCountsResponseSchema.transform((c): AppointmentCounts 
   past: c.past,
   needsReview: c.needsReview,
 }));
+const calendarOne = calendarStatusResponseSchema.transform(toCalendar);
+const calendarOptions = calendarListResponseSchema.transform(toCalendarOptions);
 const typeOne = bookingTypeResponseSchema.transform(toBookingType);
 const typeList = bookingTypeListResponseSchema.transform((l) => l.data.map(toBookingType));
 
@@ -177,6 +186,37 @@ export const realAppointmentsApi = {
       body: toPreviewBody(draft, days),
       schema: previewSlotsResponseSchema.transform((r) => toSlotList(r)),
       signal,
+    });
+  },
+
+  // the workspace's Google Calendar (the platform operator supplies the OAuth client; the admin connects the account)
+  calendar(signal?: AbortSignal): Promise<CalendarConnection> {
+    return call('/appointments/calendar', { schema: calendarOne, signal });
+  },
+  /** Google's consent address, to send the browser to. Google then comes back to `returnTo` with `?calendar=<outcome>`. */
+  async startCalendarConnect(returnTo: string): Promise<string> {
+    const r = await call('/appointments/calendar/google/start', {
+      method: 'POST',
+      body: { returnTo },
+      schema: calendarConnectStartResponseSchema,
+    });
+    return r.url;
+  },
+  calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
+    return call('/appointments/calendar/google/calendars', { schema: calendarOptions, signal });
+  },
+  selectCalendar(calendarId: string): Promise<CalendarConnection> {
+    return call('/appointments/calendar/google/calendar', {
+      method: 'PUT',
+      body: { calendarId },
+      schema: calendarOne,
+    });
+  },
+  disconnectCalendar(): Promise<CalendarConnection> {
+    return call('/appointments/calendar/google/disconnect', {
+      method: 'POST',
+      body: {},
+      schema: calendarOne,
     });
   },
 
