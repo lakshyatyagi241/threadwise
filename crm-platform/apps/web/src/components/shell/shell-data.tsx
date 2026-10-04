@@ -14,6 +14,8 @@ export interface ShellData {
   bar: readonly NavLayoutKey[];
   /** The wallet balance chip text, when the wallet domain provides one. */
   walletLabel?: string;
+  /** The workspace's own header logo (TW-ASHELL-025); null shows the platform mark. */
+  brandLogoUrl?: string | null;
   /** Plan and role for the account menu's chip. */
   profile?: ProfileMenuData;
 }

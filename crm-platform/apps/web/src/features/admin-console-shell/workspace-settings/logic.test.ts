@@ -16,6 +16,9 @@ import {
   toMatrix,
   toRequest,
   toggleFlag,
+  DEFAULT_BRAND,
+  colourChanged,
+  normaliseColour,
 } from './logic';
 
 const prefs = (): NotificationPrefsResponse => ({
@@ -50,7 +53,7 @@ describe('Settings tab shell (TW-ASHELL-032)', () => {
     expect(SETTINGS_TABS).toHaveLength(9);
     expect(TAB_GROUPS.flatMap((g) => g.tabs).sort()).toEqual([...SETTINGS_TABS].sort());
     expect(TAB_GROUPS[0]?.tabs).toEqual(['general', 'branding', 'team', 'notifications', 'aikeys']);
-    expect(Object.keys(TAB_LINKS).sort()).toEqual(['aikeys', 'branding', 'security', 'team']);
+    expect(Object.keys(TAB_LINKS).sort()).toEqual(['aikeys', 'security', 'team']);
   });
 });
 
@@ -105,5 +108,20 @@ describe('workspace settings messages', () => {
     expect(Object.keys(ws.notifications.categories).sort()).toEqual(
       [...NOTIFICATION_CATEGORY_KEYS].sort(),
     );
+  });
+});
+
+describe('branding form logic (TW-ASHELL-036)', () => {
+  it('reads only well-formed #RRGGBB colours, in lower case', () => {
+    expect(normaliseColour(' #5B3D8A ')).toBe('#5b3d8a');
+    expect(normaliseColour('red')).toBeNull();
+    expect(normaliseColour('#12345')).toBeNull();
+    expect(normaliseColour('#12345g')).toBeNull();
+  });
+
+  it('sends a colour only when the owner edited it', () => {
+    expect(colourChanged('#075E54', '#075e54')).toBe(false);
+    expect(colourChanged('#111111', '#075e54')).toBe(true);
+    expect(DEFAULT_BRAND.primary).toBe('#075E54');
   });
 });

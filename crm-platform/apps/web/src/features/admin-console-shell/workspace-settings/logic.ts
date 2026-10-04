@@ -35,7 +35,6 @@ export const TAB_GROUPS: ReadonlyArray<{
  * (Reference swapped panes client-side; each of these now has its own route, as the inventory's port notes ask).
  */
 export const TAB_LINKS: Partial<Record<SettingsTab, string>> = {
-  branding: '/account/branding',
   team: '/settings/team',
   aikeys: '/ai-keys',
   security: '/account/security',
@@ -105,3 +104,20 @@ export function toRequest(matrix: Matrix, slackWebhook: string): SaveNotificatio
 /** The delete button stays off until a name is typed and a password entered. The server decides whether they are right. */
 export const canSubmitDelete = (name: string, password: string): boolean =>
   name.trim().length > 0 && password.length > 0;
+
+/** The Branding form's starting colours when the owner set none (Reference's own defaults). */
+export const DEFAULT_BRAND = {
+  primary: '#075E54',
+  accent: '#25D366',
+  background: '#FBFAF6',
+} as const;
+
+/** A well-formed `#RRGGBB` in lower case, or null. */
+export function normaliseColour(raw: string): string | null {
+  const v = raw.trim();
+  return /^#[0-9a-fA-F]{6}$/.test(v) ? v.toLowerCase() : null;
+}
+
+/** Only a colour the owner actually edited is sent, so saving a logo alone never repaints the app with the defaults. */
+export const colourChanged = (now: string, was: string): boolean =>
+  now.trim().toLowerCase() !== was.trim().toLowerCase();

@@ -10,7 +10,8 @@
     "topNav": {
       "more": "المزيد",
       "search": "بحث",
-      "premium": "ميزة مميزة: قم بترقية خطتك لفتحها"
+      "premium": "ميزة مميزة: قم بترقية خطتك لفتحها",
+      "workspaceLogo": "شعار مساحة العمل"
     },
     "profileMenu": {
       "chip": "خطة {plan} - {role}",

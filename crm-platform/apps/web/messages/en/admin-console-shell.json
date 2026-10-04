@@ -313,6 +313,34 @@
         },
         "save": "Save",
         "saved": "Appearance updated."
+      },
+      "branding": {
+        "ownerOnly": "Only the workspace owner can change branding.",
+        "loadFailed": "Branding could not be loaded.",
+        "saved": "Branding updated.",
+        "saveFailed": "Branding could not be saved.",
+        "logoTitle": "Logo & favicon",
+        "logoBody": "Used in the header, invoices, emails, and the customer-facing portal.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · max 2 MB · recommended 240×80",
+        "faviconHint": "32×32 PNG · max 512 KB",
+        "click": "Click to upload",
+        "orDrag": "or drag & drop",
+        "currentTag": "Current",
+        "current": {
+          "logo": "Current logo",
+          "favicon": "Current favicon"
+        },
+        "coloursTitle": "Brand colors",
+        "coloursBody": "Applied to dashboard chrome, buttons, and accent strokes. Save to see them on every page.",
+        "colours": {
+          "primary": "Primary",
+          "accent": "Accent",
+          "background": "Background"
+        },
+        "colourInvalid": "Use a #RRGGBB colour, for example #075E54.",
+        "save": "Save branding"
       }
     },
     "topNav": {
@@ -345,7 +373,8 @@
         "call-logs": "Call Logs",
         "support": "Support",
         "more": "More"
-      }
+      },
+      "workspaceLogo": "Workspace logo"
     },
     "palette": {
       "title": "Search pages",
