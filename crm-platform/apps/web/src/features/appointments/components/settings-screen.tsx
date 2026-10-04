@@ -50,12 +50,16 @@ export function SettingsScreen() {
           ) : query.isPending ? (
             <SettingsSkeleton label={t('loading')} />
           ) : isUnavailable(query.error) ? (
-            <Alert tone="info" className="space-y-3">
-              <p>{t('notAvailable')}</p>
-              <LinkButton href="/appointments/types" variant="brand">
-                {t('openTypes')}
-              </LinkButton>
-            </Alert>
+            <>
+              <Alert tone="info" className="space-y-3">
+                <p>{t('notAvailable')}</p>
+                <LinkButton href="/appointments/types" variant="brand">
+                  {t('openTypes')}
+                </LinkButton>
+              </Alert>
+              {/* The workspace has no booking defaults to edit, but its Google Calendar link is real and lives here. */}
+              <CalendarCard />
+            </>
           ) : (
             <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
           )}
@@ -242,7 +246,7 @@ function SettingsEditor({
         <Alert tone="danger">{t('issues', { count: problemCount })}</Alert>
       )}
 
-      <CalendarCard calendar={base.calendar} />
+      <CalendarCard />
       <TimeZoneCard {...ctx} />
       <SettingsCard id="hours" title={t('hours.title')} description={t('hours.description')}>
         <WeeklyHoursEditor

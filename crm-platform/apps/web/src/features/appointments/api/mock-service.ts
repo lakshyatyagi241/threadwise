@@ -7,6 +7,9 @@ import {
   bookingSettingsSchema,
   bookingTypeListSchema,
   bookingTypeSchema,
+  calendarOptionSchema,
+  calendarStartSchema,
+  calendarStatusSchema,
   publicBookedSchema,
   publicDirectorySchema,
   publicManageSchema,
@@ -18,6 +21,8 @@ import {
   type BookingSettingsInput,
   type BookingType,
   type BookingTypeInput,
+  type CalendarConnection,
+  type CalendarOption,
   type PreviewDraft,
   type PublicBookInput,
   type PublicDirectory,
@@ -147,6 +152,39 @@ export const mockAppointmentsApi = {
       body: { draft, days },
       schema: slotListSchema,
       signal,
+    });
+  },
+
+  // the Google Calendar link (the stand-in connects at once instead of going to Google)
+  calendar(signal?: AbortSignal): Promise<CalendarConnection> {
+    return call('/appointments/calendar', { schema: calendarStatusSchema, signal });
+  },
+  async startCalendarConnect(returnTo: string): Promise<string> {
+    const r = await call('/appointments/calendar/google/start', {
+      method: 'POST',
+      body: { returnTo },
+      schema: calendarStartSchema,
+    });
+    return r.url;
+  },
+  calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
+    return call('/appointments/calendar/google/calendars', {
+      schema: z.array(calendarOptionSchema),
+      signal,
+    });
+  },
+  selectCalendar(calendarId: string): Promise<CalendarConnection> {
+    return call('/appointments/calendar/google/calendar', {
+      method: 'PUT',
+      body: { calendarId },
+      schema: calendarStatusSchema,
+    });
+  },
+  disconnectCalendar(): Promise<CalendarConnection> {
+    return call('/appointments/calendar/google/disconnect', {
+      method: 'POST',
+      body: {},
+      schema: calendarStatusSchema,
     });
   },
 

@@ -20,12 +20,14 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AddonEntitlementService } from '../addons-extension-registry';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { CouponService, type CouponResolution } from './coupon.service';
 import { FulfilmentService } from './fulfilment.service';
 import { acceptsCurrency, availableCurrencies } from './gateway-rules';
 import { GatewayService, type GatewayRow } from './gateway.service';
+import { assertMarketplacePack } from './marketplace-pack';
 import { recordOrderEvent } from './order-events';
 import {
   billingPeriodFor,
@@ -108,6 +110,7 @@ export class CheckoutService {
     private readonly outbox: OutboxService,
     private readonly coupons: CouponService,
     private readonly subscriptions: SubscriptionLifecycleService,
+    private readonly entitlements: AddonEntitlementService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -163,6 +166,15 @@ export class CheckoutService {
       );
     }
     if (plan.kind === 'addon') {
+      // The add-on that sells a Marketplace app follows the Marketplace's rules instead (the app is on offer and paid, not already included
+      // in the plan, not paid far ahead), and needs no paid plan: it is a subscription of its own, not a boost on top of one.
+      const orgId = RequestContextStore.require().orgId;
+      if (
+        await assertMarketplacePack(tx, orgId, plan.slug, (key) =>
+          this.entitlements.featureEnabled(orgId, key),
+        )
+      )
+        return;
       // An add-on sits on top of an active paid plan (WD-ADD-033). WaDesk enforced this only in the view; a direct POST bypassed it.
       const base = await tx.execute(sql`
         SELECT p.is_free, p.is_custom_quote, s.plan_ends_at

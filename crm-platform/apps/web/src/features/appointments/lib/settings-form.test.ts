@@ -37,6 +37,7 @@ const settings = (over: Partial<BookingSettings> = {}): BookingSettings => ({
   calendar: {
     provider: 'google',
     status: 'unavailable',
+    account: null,
     calendarId: null,
     calendarName: null,
     connectedAt: null,

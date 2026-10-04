@@ -70,7 +70,11 @@ export class AppointmentCalendarConsumer implements OutboxSubscriber, OnModuleIn
     });
     if (!work) return;
     const { row, type, integration } = work;
-    const calendarId = integration?.calendarId ?? row.calendarId ?? null;
+    // An event that exists lives in the calendar it was written to, even when the type has been pointed at another one since: update and
+    // delete go there. A first write goes where the type says.
+    const calendarId = row.calendarEventId
+      ? (row.calendarId ?? integration?.calendarId ?? null)
+      : (integration?.calendarId ?? row.calendarId ?? null);
 
     if (row.status === 'cancelled' || row.status === 'declined') {
       if (row.calendarEventId)

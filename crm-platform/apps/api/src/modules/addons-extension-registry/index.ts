@@ -4,12 +4,18 @@
  *   ModuleRegistryService / ModuleGateGuard / RequiresModule   is an installable module on, and what it contributes
  *   AddonEntitlementService                                    plan gates that must count a workspace's add-ons
  *   AddonFulfilmentService                                     checkout: a paid order becomes the workspace's add-on
+ *   AddonFulfilmentHooks                                       a domain that must hear, in the same transaction, about an add-on purchase
  *   EngineConnectionService                                    the Instagram / email engine connections (IG, MAIL)
  */
 export { AddonsExtensionRegistryModule } from './addons-extension-registry.module';
 export { ModuleRegistryService } from './module-registry.service';
 export { ModuleGateGuard, RequiresModule } from './module-gate';
 export { AddonEntitlementService } from './addon-entitlement.service';
+export {
+  AddonFulfilmentHooks,
+  type AddonFulfilmentListener,
+  type FulfilledAddon,
+} from './addon-fulfilment-hooks';
 export {
   AddonFulfilmentService,
   type FulfilInput,

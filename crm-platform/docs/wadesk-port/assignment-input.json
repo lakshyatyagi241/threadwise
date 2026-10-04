@@ -589,6 +589,24 @@
       "wave": 3,
       "inventory": "pending",
       "routeBase": "email"
+    },
+    {
+      "id": "leads",
+      "code": "lead",
+      "cluster": "platform",
+      "days": 15,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "lead-sources"
+    },
+    {
+      "id": "marketplace",
+      "code": "mkt",
+      "cluster": "platform",
+      "days": 25,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "marketplace"
     }
   ],
   "foundation": [

@@ -2,6 +2,9 @@
  * Pure readers for the two coexistence webhooks that mirror the WhatsApp Business app into the workspace: the one-time chat
  * history push (WD-WABA-046) and the address-book sync (WD-WABA-045). No database, no network.
  */
+import type { HistoryItem } from './waba-inbound.port';
+
+export type { HistoryItem };
 
 type Raw = Record<string, unknown>;
 
@@ -38,16 +41,6 @@ export function echoText(e: EchoPayload): string {
 }
 
 const digits = (v: unknown): string => String(v ?? '').replace(/\D+/g, '');
-
-export interface HistoryItem {
-  providerMessageId: string;
-  /** The customer's number as digits. */
-  customer: string;
-  /** Written by the business (from one of the workspace's own numbers), not by the customer. */
-  outgoing: boolean;
-  text: string;
-  at: Date;
-}
 
 /**
  * `value.history[].threads[].messages[]` as a flat list, oldest chunk first, capped. The customer is the thread id, else the party

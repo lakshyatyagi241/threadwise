@@ -26,6 +26,13 @@
         "title": "اكتملت مهمة",
         "body": "أكمل {actor} المهمة: {task}",
         "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "عميل محتمل جديد",
+        "titleReturning": "عاد عميل محتمل",
+        "body": "{name} وصل من {platform}",
+        "bodyReturning": "{name} أرسل عميلاً محتملاً آخر من {platform}",
+        "bodyNoActor": "{name} وصل"
       }
     }
   }

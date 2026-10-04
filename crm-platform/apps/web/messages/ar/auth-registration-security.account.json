@@ -527,7 +527,9 @@
             "inbox_kanban": "لوحة كانبان",
             "team_performance": "أداء الفريق",
             "scheduled_messages": "الرسائل المجدولة",
-            "whatsapp_warmer": "إحماء واتساب"
+            "whatsapp_warmer": "إحماء واتساب",
+            "marketplace": "السوق",
+            "lead_sources": "مصادر العملاء المحتملين"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",
