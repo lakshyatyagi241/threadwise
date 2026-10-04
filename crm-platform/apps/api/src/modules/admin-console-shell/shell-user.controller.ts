@@ -4,6 +4,7 @@ import { saveQuickAccessRequestSchema, type SaveQuickAccessRequest } from '@crm/
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AllowWhileGated } from '../auth';
+import { OverviewStatsService } from './overview-stats.service';
 import { ShellUserService } from './shell-user.service';
 
 /**
@@ -15,7 +16,10 @@ import { ShellUserService } from './shell-user.service';
 @AllowWhileGated()
 @Controller({ path: 'shell', version: '2' })
 export class ShellUserController {
-  constructor(private readonly shell: ShellUserService) {}
+  constructor(
+    private readonly shell: ShellUserService,
+    private readonly stats: OverviewStatsService,
+  ) {}
 
   @Get('config')
   @ApiOperation({
@@ -30,6 +34,14 @@ export class ShellUserController {
   @ApiOperation({ summary: 'The guided tour was finished or skipped; it never auto-runs again' })
   tourSeen() {
     return this.shell.tourSeen();
+  }
+
+  @Get('overview-stats')
+  @ApiOperation({
+    summary: 'The More hub: live counters for the strip, the tool cards and the plan card',
+  })
+  overviewStats() {
+    return this.stats.get();
   }
 
   @Delete('notifications')

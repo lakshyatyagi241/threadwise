@@ -243,3 +243,114 @@ describe('Bell: Clear all (TW-ASHELL-018)', () => {
     expect((await clear(t.admin)).body).toEqual({ cleared: 0 });
   });
 });
+
+describe('More hub counters (TW-ASHELL-020)', () => {
+  const stats = (token: string) => api.http().get('/v2/shell/overview-stats').set(bearer(token));
+  const q = (text: string, params: unknown[]) => h.owner.query(text, params);
+  let t: Tenant; // shadows the file's tenant: these counts need a workspace nothing else has touched
+  let other: Tenant;
+  beforeAll(async () => {
+    t = await api.signup('shstat');
+    other = await api.signup('shstat2');
+  });
+
+  it('reads zero for an empty workspace, with health "none" and nothing queued', async () => {
+    const res = await stats(other.admin);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body).toMatchObject({
+      activeRules: 0,
+      scheduledQueued: 0,
+      nextScheduledAt: null,
+      devicesActive: 0,
+      devicesTotal: 0,
+      unreadNotifications: 0,
+      contacts: 0,
+      deliveredPct: null,
+      autoReplyMatchPct: null,
+    });
+    expect(res.body.seats).toBeGreaterThanOrEqual(1);
+    // Only these three are null by design (nothing sent, nothing looked up, nothing queued); any other null means a query failed.
+    const failed = Object.entries(res.body)
+      .filter(([, v]) => v === null)
+      .map(([k]) => k)
+      .filter((k) => !['nextScheduledAt', 'deliveredPct', 'autoReplyMatchPct'].includes(k));
+    expect(failed).toEqual([]);
+  });
+
+  it('Active rules adds live keyword replies, published and active flows and active webhooks (2 + 1 + 1 = 4)', async () => {
+    for (const k of ['a', 'b']) {
+      await q(
+        `INSERT INTO keyword_replies (org_id, keyword, reply_type, status) VALUES ($1, $2, 'text', true)`,
+        [t.orgId, k],
+      );
+    }
+    await q(
+      `INSERT INTO keyword_replies (org_id, keyword, reply_type, status) VALUES ($1, 'off', 'text', false)`,
+      [t.orgId],
+    );
+    await q(
+      `INSERT INTO flows (org_id, flow_name, is_published, is_active) VALUES ($1, 'live', true, true)`,
+      [t.orgId],
+    );
+    await q(
+      `INSERT INTO flows (org_id, flow_name, is_published, is_active) VALUES ($1, 'draft', false, true)`,
+      [t.orgId],
+    );
+    await q(
+      `INSERT INTO webhooks (org_id, webhook_url, status) VALUES ($1, 'https://x.test/w', true)`,
+      [t.orgId],
+    );
+    const res = await stats(t.admin);
+    expect(res.body.activeRules).toBe(4);
+    expect(res.body.activeRulesNew).toBe(4);
+    expect(res.body.autoReplyRules).toBe(2);
+  });
+
+  it('counts devices live and total, queued sends with the next run, and my unread notifications', async () => {
+    await q(
+      `INSERT INTO devices (org_id, device_name, phone_number, active) VALUES ($1, 'd1', '9100000001', true), ($1, 'd2', '9100000002', false)`,
+      [t.orgId],
+    );
+    await q(
+      `INSERT INTO scheduled_messages (org_id, schedule_name, send_date, send_time, scheduled_time, timezone, recipient_type, status, next_run_at)
+       VALUES ($1, 's1', current_date, '10:00', now() + interval '1 day', 'UTC', 'numbers', 'scheduled', now() + interval '1 day'),
+              ($1, 's2', current_date, '10:00', now() - interval '1 day', 'UTC', 'numbers', 'completed', NULL)`,
+      [t.orgId],
+    );
+    await q(
+      `INSERT INTO inbox_notifications (org_id, user_id, type, title) VALUES ($1, $2, 'task_assigned', 'x')`,
+      [t.orgId, t.adminUserId],
+    );
+    const res = await stats(t.admin);
+    expect(res.body).toMatchObject({
+      devicesActive: 1,
+      devicesTotal: 2,
+      scheduledQueued: 1,
+      unreadNotifications: 1,
+    });
+    expect(new Date(res.body.nextScheduledAt).getTime()).toBeGreaterThan(Date.now());
+  });
+
+  it('counts contacts, groups and tags, and lists the latest audited activity of this workspace only', async () => {
+    await q(`INSERT INTO contacts (org_id) VALUES ($1), ($1)`, [t.orgId]);
+    await q(`INSERT INTO contact_groups (org_id, name) VALUES ($1, 'g')`, [t.orgId]);
+    for (let i = 0; i < 6; i++) {
+      await q(
+        `INSERT INTO audit_log (org_id, module, record_id, action) VALUES ($1, 'contacts', $2, 'insert')`,
+        [t.orgId, i + 1],
+      );
+    }
+    await q(
+      `INSERT INTO audit_log (org_id, module, record_id, action) VALUES ($1, 'deals', 1, 'update')`,
+      [other.orgId],
+    );
+    const res = await stats(t.admin);
+    expect(res.body).toMatchObject({ contacts: 2, groups: 1 });
+    expect(res.body.recentActivity).toHaveLength(5);
+    expect(res.body.recentActivity.every((a: { module: string }) => a.module !== 'deals')).toBe(
+      true,
+    );
+    expect(res.body.activity24h).toBeGreaterThanOrEqual(6);
+    expect((await stats(other.admin)).body.contacts).toBe(0);
+  });
+});

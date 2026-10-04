@@ -4,3 +4,4 @@ export * from './operator-notifications';
 export * from './quick-access';
 export * from './shell-config';
 export * from './workspace-settings';
+export * from './overview-stats';

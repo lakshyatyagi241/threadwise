@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { NavLayoutService } from './nav-layout.service';
+import { OverviewStatsService } from './overview-stats.service';
 import { OperatorNotificationsController } from './operator-notifications.controller';
 import { OperatorNotificationsService } from './operator-notifications.service';
 import { PlatformShellController, ShellController } from './shell.controller';
@@ -32,6 +33,7 @@ import { WorkspaceSettingsService } from './workspace-settings.service';
     CryptoService,
     NavLayoutService,
     ShellUserService,
+    OverviewStatsService,
     OperatorNotificationsService,
     WorkspaceSettingsService,
     WorkspaceExportService,
