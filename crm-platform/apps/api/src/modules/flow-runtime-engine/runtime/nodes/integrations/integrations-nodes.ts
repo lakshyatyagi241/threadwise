@@ -19,6 +19,7 @@ import type {
   NodeExecutor,
   NodeResult,
 } from '../../types';
+import { FlowRefResolver } from '../flow-refs';
 import { runAiCall, runCode, runMysql } from './data-nodes';
 import {
   GOOGLE_FORM_HANDLER,
@@ -53,6 +54,7 @@ export class IntegrationNodes implements NodeExecutor {
     @Inject(MYSQL_QUERY) private readonly mysql: MysqlQueryPort,
     @Inject(GOOGLE_WORKSPACE) private readonly google: GoogleWorkspacePort,
     @Inject(AI_CALL) private readonly calls: AiCallPort,
+    private readonly refs: FlowRefResolver,
   ) {}
 
   async execute(ctx: NodeContext): Promise<NodeResult> {
@@ -72,7 +74,7 @@ export class IntegrationNodes implements NodeExecutor {
       case 'GoogleForm':
         return runForm(ctx, this.google);
       case 'AiCall':
-        return runAiCall(ctx, this.calls);
+        return runAiCall(ctx, this.calls, this.refs);
       default:
         return { kind: 'advance', port: 1 };
     }

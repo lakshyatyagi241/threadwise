@@ -14,6 +14,7 @@ import {
   templateValues,
 } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-rules';
 import { TemplateNode } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-node';
+import { FlowRefResolver } from '../../../src/modules/flow-runtime-engine/runtime/nodes/flow-refs';
 import type { FlowTemplate } from '../../../src/modules/message-templates';
 import type {
   NodeContext,
@@ -190,7 +191,7 @@ describe('the Template node', () => {
       now: () => new Date(),
     }) as unknown as NodeContext;
   const nodeWith = (found: FlowTemplate | null) =>
-    new TemplateNode({ findForFlow: async () => found } as never);
+    new TemplateNode({ findForFlow: async () => found } as never, new FlowRefResolver({} as never));
 
   it('sends an approved template and moves on', async () => {
     const sent: OutboundMessage[] = [];
