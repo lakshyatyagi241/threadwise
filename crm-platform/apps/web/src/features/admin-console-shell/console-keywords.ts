@@ -55,6 +55,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'wap-assignments': 'workspace assignments whatsapp provider mapping customers',
   'wap-switch': 'switch provider number migrate whatsapp number change',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
+  'webhook-forwarding':
+    'webhook forwarding fanout relay forward meta whatsapp events targets url failures retry',
 
   'market-catalogue': 'marketplace apps catalogue listings integrations publish review',
   'market-categories': 'categories marketplace tags groups',
