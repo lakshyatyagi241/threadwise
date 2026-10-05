@@ -62,6 +62,19 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
 
     // Typed text, never a tap: a tap is an answer to a menu, not a keyword.
     const typed = reply && reply.kind !== 'tap' ? reply.text.trim() : '';
+    // What the customer typed is not logged, only its shape: enough to tell whether a trigger could have fired.
+    this.logger.log(
+      {
+        orgId: e.orgId,
+        channelId: e.channelId,
+        channelKind: e.channelKind,
+        messageKind: e.message.kind,
+        typedLength: typed.length,
+        liveRunId: live?.id ?? null,
+        liveStatus: live?.status ?? null,
+      },
+      '[FLR] inbound message received',
+    );
 
     if (typed !== '') {
       if (live && live.status === 'waiting' && live.triggerText && lc(typed) === live.triggerText) {
@@ -69,6 +82,14 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
         if (restarted) return { consumed: true };
       }
       const flow = await this.triggers.keywordFlow(e.orgId, e.channelId, e.channelKind, typed);
+      this.logger.log(
+        flow
+          ? { orgId: e.orgId, flowId: flow.id, keywords: flow.keywords }
+          : { orgId: e.orgId, channelId: e.channelId, channelKind: e.channelKind },
+        flow
+          ? '[FLR] keyword trigger matched a published flow'
+          : '[FLR] no published flow matches this keyword on this channel',
+      );
       if (flow) {
         const catchAll = /^(\*|\.\*|\.\+|any)$/.test(flow.keywords.trim());
         // The default route fires only when nothing else is going on: it never interrupts a run the customer is answering.
@@ -121,6 +142,17 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
         requirePublished: true,
         withSubscriber: false,
       });
+      this.logger.log(
+        {
+          orgId: e.orgId,
+          flowId,
+          source,
+          outcome: out.outcome,
+          ...(out.outcome === 'started' ? { runId: out.runId } : {}),
+          ...(out.outcome === 'failed' ? { code: out.code, reason: out.reason } : {}),
+        },
+        '[FLR] flow start requested by a trigger',
+      );
       return out.outcome === 'started';
     } catch (err) {
       this.logger.warn(

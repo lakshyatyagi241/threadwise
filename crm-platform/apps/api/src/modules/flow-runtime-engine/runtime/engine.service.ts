@@ -114,6 +114,7 @@ export class FlowEngine {
       return saved;
     });
     if (committed === 'lost') return 'lost';
+    this.logStep(state, outcome, 'step');
     if (committed.next) {
       await this.publisher.schedule(orgId, runId, committed.next.seq, committed.next.delayMs);
     }
@@ -194,11 +195,39 @@ export class FlowEngine {
       const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail);
       return committed;
     });
-    if (result === 'not_waiting' || result === 'ignored') return result;
+    if (result === 'not_waiting' || result === 'ignored') {
+      this.logger.log({ orgId, runId, result }, '[FLR] a reply did not move the run');
+      return result;
+    }
     if (result === 'lost') return 'ignored';
+    this.logger.log(
+      { orgId, runId, next: result.next?.seq ?? null },
+      '[FLR] a reply moved the run',
+    );
     if (result.next)
       await this.publisher.schedule(orgId, runId, result.next.seq, result.next.delayMs);
     return 'routed';
+  }
+
+  /** One line per node that ran: which flow, which node, what it decided. No message text or variable values. */
+  private logStep(state: RunState, outcome: StepOutcome, event: 'step'): void {
+    const t = outcome.transition;
+    this.logger.log(
+      {
+        orgId: state.orgId,
+        runId: state.id,
+        flowId: state.flowId,
+        nodeId: outcome.nodeId,
+        nodeType: outcome.nodeType,
+        event,
+        transition: t.t,
+        ...(t.t === 'goto' ? { next: t.nodeId } : {}),
+        ...(t.t === 'wait' ? { waitingOn: t.wait.nodeId } : {}),
+        ...(t.t === 'end' ? { status: t.status, reason: t.reason } : {}),
+        ...(t.t === 'halt' ? { reason: t.reason } : {}),
+      },
+      `[FLR] node ${outcome.nodeType} ran`,
+    );
   }
 
   // --- giving up -------------------------------------------------------------------------------------------------------------
