@@ -10,7 +10,7 @@ import { compileGraph } from '../../../src/modules/flow-runtime-engine/graph/com
 
 /**
  * The FLB hook inside `compileGraph` (WD-FLB-070 + WD-FLR-013): a graph exactly as the editor saves it (WaDesk's builder field names)
- * goes through the REAL compiler, with no reader shaping in front of it, and the executors get the names they read. All 58 node types
+ * goes through the REAL compiler, with no reader shaping in front of it, and the executors get the names they read. All 60 node types
  * of the catalogue are compiled; the ten that used to misbehave are asserted by the name each executor reads.
  */
 
@@ -35,9 +35,9 @@ const readOf = (type: string, save: Rec = {}): Rec => {
   return { ...n.props, ...((n.props.data ?? {}) as Rec) };
 };
 
-describe('compileGraph with the FLB hook: all 58 catalogue types', () => {
-  it('covers 58 types', () => {
-    expect(FLB_NODE_TYPE_LIST).toHaveLength(58);
+describe('compileGraph with the FLB hook: all 60 catalogue types', () => {
+  it('covers 60 types', () => {
+    expect(FLB_NODE_TYPE_LIST).toHaveLength(60);
   });
 
   it.each(FLB_NODE_TYPE_LIST.map((d) => d.id))(
