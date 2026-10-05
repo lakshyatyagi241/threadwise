@@ -377,7 +377,7 @@ const SHAPERS: Record<string, Shaper> = {
       .filter((v) => v !== ''),
   }),
 
-  // Not Reference nodes (TW-FLB-094, 095): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
+  // Not Reference nodes (TW-FLB-081, 082): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
   ask_file: (d) => ({
     question: s(d.prompt),
     variable: flbCleanVarName(d.var, 'file'),

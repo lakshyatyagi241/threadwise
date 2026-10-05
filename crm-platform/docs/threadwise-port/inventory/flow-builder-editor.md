@@ -111,6 +111,8 @@ Connections: FLR (execution, `node/services/flowService.js`, channel runners, `/
 | TW-FLB-078 | Flow-connected devices                                              | dead-code   | P2       | S      | TW-FLB-029 |
 | TW-FLB-079 | Instagram flow import and Instaflow sync                            | implemented | P2       | M      | TW-FLB-064 |
 | TW-FLB-080 | Flow showcase seeder (dev fixture)                                  | implemented | P2       | S      | TW-FLB-016 |
+| TW-FLB-081 | Ask for file / image node (addition beyond Reference)                  | implemented | P2       | M      | TW-FLB-016 |
+| TW-FLB-082 | Ask for location node (addition beyond Reference)                      | implemented | P2       | M      | TW-FLB-016 |
 
 ## Features
 
@@ -2787,6 +2789,69 @@ Related routes owned by other domains and consumed here: `GET team-inbox/api/ig-
   - Given a showcase flow is opened in the builder, then it renders without validation errors on the Trigger-to-End chain except for the unset sender.
 - **Source refs:** `database/seeders/FlowShowcaseSeeder.php`, `app/Models/Flow.php` (saved hook).
 - **Port notes:** keep it as a dev-only fixture under `packages/db/seeds` (never loaded in production), generated from the shared node-type catalogue so it stays in step with `@crm/contracts`, and use it as the fixture for the builder round-trip test (save then reload then compile). Add the missing nodes and one flow per channel.
+
+### TW-FLB-081 — Ask for file / image node (addition beyond Reference)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** M (3-5 dev-days) — to rebuild on the target stack, backend + frontend + tests
+- **Depends on:** TW-FLB-016
+- **Summary:** NOT a Reference feature: an addition the project owner asked for, because another product's flow palette has it. Sends a question, then waits for the customer to reply with a file (an image, a document, a video or an audio file), saves the stored file's link and details in variables and continues. Designed to behave like the Ask question node (TW-FLB-036) and the Google Form / WhatsApp Form nodes (a node that decodes its own answer), not to copy a Reference behaviour.
+- **Actors & access:** workspace admin building a flow. Palette group "Listen", next to Ask question, mode `chat` (WhatsApp) only, label "Ask for file / image"; `flb.flows.update` like every node.
+- **UX & screens:** canvas card titled "Img/File" (peach chip with a paperclip, the id at the right as the step number) with an editable prompt box (placeholder "Untitled", a toolbar of text format, emoji and insert variable under it, "/" still opens the variable picker), a row "Allow Extensions" with a pencil that opens a panel titled "Img/File" (groups Images, Audio, Video, Documents, each with a Select All box and one box per extension; Cancel and Save, Save disabled until the selection changes; Escape, Cancel or a click outside drops the draft) and a checkbox "Save the response as property" with a (?) tip ("Store the customer's upload in a contact property") and, when ticked, a picker of the workspace's contact properties. Inspector form with the same fields plus: **Save file to variable** `var` (default `file`), **Retries** `retries` (0 to 10, default 2), **Wrong type / no file message** `wrongReply`, **Skip word** `skipKeyword`, **When retries are used up** `onFail` (`continue` default / `end`) and **Wait limit (minutes)** `timeoutMinutes` (0 = the run's idle limit). One output port "file received". Test runner: sample file buttons (photo, png, pdf, voice note, an .exe) and a file chooser; typed text is a wrong reply. English and Arabic copy under `flb.builder.askMedia`.
+- **Endpoints:** none of its own: saved, validated, exported and imported with the rest of the graph (`/v2/flows`).
+- **Data:** node `data` `{prompt, extensions[], var, retries, wrongReply, skipKeyword, onFail, timeoutMinutes, saveProperty, propertyKey}`. `flbToRuntimeData` adds `question`, `variable`, cleaned `extensions`, `maxRetries`, `wrongReplyText`, `onGiveUp`, `savePropertyKey` (empty unless `saveProperty`). Variables written: `{{var}}` and `{{var}}_url` (the stored file, `chatmedia:<key>`, which a later Send media node can send back), `_kind` (image, video, audio, document, sticker), `_name`, `_mime`, `_caption`, `_status` (`received`, `skipped` or `failed`), and the node id.
+- **Rules & edge cases:**
+  1. Allowed extensions (Images jpg, jpeg, png; Audio mp3, wav, ogg; Video mp4, webm; Documents pdf, docx, xlsx, csv, doc, xls, ppt, pptx, txt), each in its correct group. `ogg` is not in the other product's list: a WhatsApp voice note is `audio/ogg`, so "all Audio" would refuse voice notes without it. The list is saved on the node; an unknown extension is dropped.
+  2. A file passes when the extension of its file name is allowed, or its MIME type is one an allowed extension stands for (a WhatsApp photo has no file name). Nothing selected accepts any file.
+  3. Anything else (plain text, a location, a refused file) is a wrong reply: the wrong-reply message is sent and the run keeps waiting, up to `retries` times; then the run leaves with `_status = failed` and empty values (`onFail = continue`) or ends (`end`). `retries = 0` gives up on the first wrong reply without a message.
+  4. The skip word (compared case-insensitively, trimmed) leaves with `_status = skipped` and empty values.
+  5. A file whose link is not stored yet (the download is still queued) is accepted with an empty link and a run-log note.
+  6. "Save the response as property" writes the file link to the chosen contact property (an active property of the workspace; an unknown key, a run without a contact or a failure is only noted in the run log and never stops the flow). It emits no `contact.updated` event, so a flow cannot start flows of its own.
+  7. The wait is the run's idle limit, or `timeoutMinutes`; when it runs out the run ends `idle_timeout`, like Ask question.
+  8. The prompt is sent as text. A prompt that renders empty is replaced by a visible fallback.
+- **Async & events:** parks a `Custom` wait (`handler = AskFile`) like WaForm and Google Form; the customer's next message resumes it through the inbound hook. The hook event now carries the file's kind, MIME type and name.
+- **External systems:** none (the file is the inbox's own stored copy of the customer's media).
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given an Ask for file node, when the customer sends a photo, then the run continues by its one port and `{{file}}`, `{{file_kind}}`, `{{file_mime}}`, `{{file_caption}}` and `{{file_status}}` hold the link, `image`, `image/jpeg`, the caption and `received`.
+  - Given only `png` is allowed, when the customer sends a PDF, then the wrong-reply message is sent and the run still waits; when they then send a PNG (by file name or by MIME type), the run continues.
+  - Given no extension is selected, when the customer sends a voice note, then it is accepted.
+  - Given the customer replies with text, then the wrong-reply message is sent; after `retries` wrong replies the run continues with `{{file_status}}` = `failed` (or ends when `onFail` is `end`).
+  - Given a skip word, when the customer sends it, then the run continues with `{{file_status}}` = `skipped`.
+  - Given the saved link is used as the URL of a later Send media node, then the customer's own file is sent back.
+  - Given "Save the response as property" and a property are chosen, then the contact's property holds the file link after the file arrives.
+  - Given the node on an Instagram flow, then pre-save validation flags it ("does not work on Instagram"); on a WhatsApp flow it passes; it survives export and import.
+  - Given the "Allow Extensions" panel, then Save is disabled until the selection changes and Cancel drops the draft.
+- **Source refs:** none in Reference (the node exists in another product's palette only). Built on `Question` (TW-FLR-022) and `WaForm` (TW-FLR-043) for the park and resume.
+- **Port notes:** keep in step with `packages/contracts/src/flow-builder-editor/ask-media.ts` (groups and the accept check, shared by the panel and the runtime). The extension check trusts the MIME type WhatsApp reports; it is not a content scan. Real WhatsApp media were not used in tests (the simulator channel's fixture file stands in for the provider download).
+
+### TW-FLB-082 — Ask for location node (addition beyond Reference)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** M (3-5 dev-days) — to rebuild on the target stack, backend + frontend + tests
+- **Depends on:** TW-FLB-016
+- **Summary:** NOT a Reference feature: an addition the project owner asked for. Sends a prompt (with WhatsApp's interactive "Send location" button where the channel has it, plain text with a hint elsewhere), then waits for the customer to share a WhatsApp location and saves its latitude, longitude, place name, address and a Google Maps link.
+- **Actors & access:** workspace admin building a flow. Palette group "Listen", mode `chat` only, label "Ask for location".
+- **UX & screens:** canvas card titled "Share Location" (pale-green chip with a navigation arrow, distinct from the amber pin of the Location send node; the id at the right as the step number): an editable prompt box with the same toolbar as Img/File, and two full-width dark-green buttons "Share Your Location" (paper plane) and "Use Current Location" (crosshair). The buttons are a picture of what the customer is shown and do nothing on the canvas. Inspector form: **Question**, **Send WhatsApp's "Send location" button** `interactive` (default on), **Save location to variable** `var` (default `location`), **Retries**, **Wrong reply message**, **Skip word**, **When retries are used up**, **Wait limit (minutes)**. One output port "location received". Test runner: "Place with name" and "Bare pin" buttons share a sample location; typed text or a file is a wrong reply.
+- **Endpoints:** none of its own.
+- **Data:** node `data` `{prompt, var, interactive, retries, wrongReply, skipKeyword, onFail, timeoutMinutes}`; shaped like TW-FLB-081 (`question`, `variable`, `interactive`, wait settings). Variables written: `{{var}}` and `{{var}}_link` (`https://www.google.com/maps?q=<lat>,<lng>`), `_latitude`, `_longitude`, `_name`, `_address` (empty when the customer's app sent none), `_status`, and the node id.
+- **Rules & edge cases:**
+  1. On the WhatsApp Cloud API (and the simulator channel) the prompt is an interactive `location_request_message` with a `send_location` action (body cut to 1024). On the other WhatsApp engine and any other channel it is plain text followed by a hint ("Tap the attachment (+) button, choose Location, then send your current location."). With `interactive` off it is the plain prompt only, so an author can write the instruction in their own language.
+  2. Only a shared WhatsApp location answers. Text, a file or a tap is a wrong reply, with the same retry, skip and give-up rules as TW-FLB-081 (rules 3, 4, 7).
+  3. The Google Maps link is the one the inbound router already builds for a shared location.
+- **Async & events:** parks a `Custom` wait (`handler = AskLocation`). The inbound hook decodes the location into its numbers and name (`InboundReply.data`).
+- **External systems:** none.
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given an Ask for location node on a WhatsApp Cloud API channel, then the customer is sent an interactive location request carrying the prompt.
+  - Given the customer shares a place, then the run continues by its one port and `{{place}}`, `{{place_latitude}}`, `{{place_longitude}}`, `{{place_name}}`, `{{place_address}}`, `{{place_link}}` and `{{place_status}}` are set.
+  - Given the customer types an address or sends a photo, then the wrong-reply message is sent; after `retries` the run continues with `{{place_status}}` = `failed`.
+  - Given `interactive` off, then the prompt goes out as plain text and no interactive message is sent.
+  - Given the node on a non-WhatsApp flow, then pre-save validation flags it.
+- **Source refs:** none in Reference. Built on `Question` (TW-FLR-022) and `WaForm` (TW-FLR-043); the outbound `location_request` envelope is new (`channel.port.ts`, `meta-outbound.ts`, `channel-render.ts`).
+- **Port notes:** the request message is built to Meta's documented shape and unit-tested, but was never sent to Meta (no real WhatsApp here). The Cloud API only delivers it inside the 24-hour window, like every interactive message.
 
 ## Data model
 

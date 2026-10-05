@@ -1,5 +1,5 @@
 /**
- * The "Ask for file / image" (`ask_file`) and "Ask for location" (`ask_location`) nodes (TW-FLB-094, 095). NOT Reference features: an
+ * The "Ask for file / image" (`ask_file`) and "Ask for location" (`ask_location`) nodes (TW-FLB-081, 082). NOT Reference features: an
  * addition the project owner asked for, modelled on how the Ask node parks a run and resumes it. This file holds what the editor
  * (the Allow Extensions panel, the node card) and the runtime (the reply check) must agree on, as pure data and functions.
  */

@@ -13,7 +13,7 @@ import {
 } from './support';
 
 /**
- * "Ask for file / image" and "Ask for location" (TW-FLB-094, 095: an addition beyond Reference) end to end: flows saved through the
+ * "Ask for file / image" and "Ask for location" (TW-FLB-081, 082: an addition beyond Reference) end to end: flows saved through the
  * editor's own API (`POST /v2/flows`, then publish), driven by what a customer does on the simulator channel (a text, a photo, a
  * document, a shared location), through the real engine: inbox ingest (the file is stored), reply router, run store, step queue and
  * sender. Real WhatsApp cannot run here: the simulator channel stands in for the Cloud API (its profile carries the interactive

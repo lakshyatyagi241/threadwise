@@ -633,7 +633,7 @@ describe('simulator: webhook', () => {
   });
 });
 
-describe('Ask for file / image and Ask for location in the test runner (TW-FLB-094, 095)', () => {
+describe('Ask for file / image and Ask for location in the test runner (TW-FLB-081, 082)', () => {
   const flow = (type: 'ask_file' | 'ask_location', data: Record<string, unknown>) =>
     harness(
       [

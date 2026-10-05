@@ -184,7 +184,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
           .filter((s) => s !== ''),
         footerText: str(data.footerText),
       };
-    // Not Reference nodes (TW-FLB-094, 095). `flbToRuntimeData` has already normalised the wait settings.
+    // Not Reference nodes (TW-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
     case 'ask_file':
     case 'ask_location':
       return {

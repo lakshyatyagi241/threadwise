@@ -552,7 +552,7 @@ describe('flbToRuntimeData: the contract', () => {
         'buttons',
         'list',
         'ask',
-        // not Reference: the Ask for file / location additions (TW-FLB-094, 095)
+        // not Reference: the Ask for file / location additions (TW-FLB-081, 082)
         'ask_file',
         'ask_location',
         'condition',

@@ -114,7 +114,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('buttons', 'Quick replies', 'Send', 'Tap-to-pick reply buttons', SOCIAL_AND_CHAT),
   def('list', 'List message', 'Send', 'Interactive list picker'),
   def('ask', 'Ask question', 'Listen', 'Save user reply to a var', SOCIAL_AND_CHAT),
-  // Not Reference nodes: an addition the project owner asked for (TW-FLB-094, 095). WhatsApp only: they wait for a media / location message.
+  // Not Reference nodes: an addition the project owner asked for (TW-FLB-081, 082). WhatsApp only: they wait for a media / location message.
   def('ask_file', 'Ask for file / image', 'Listen', 'Wait for a photo, document, video or audio'),
   def('ask_location', 'Ask for location', 'Listen', 'Wait for the customer to share a location'),
   def('condition', 'Condition', 'Logic', 'If / else branch', ALL),

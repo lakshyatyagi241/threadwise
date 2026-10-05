@@ -109,6 +109,11 @@ security event.
   `compileGraph` (`flow-runtime-engine/graph/compile-graph.ts`) calls it for every node, so ten node types (ai, chatbot, subflow, webhook,
   code, mysql, poll, location, legacy cta, ai_call) reach the executors with the runtime's names, and the template and AI assistant uuids the
   editor saves are resolved by org inside FLR (`FlowRefResolver`). See `docs/threadwise-port/parity/flow-builder-editor.md` section "Open runtime items".
+- Two WhatsApp-only nodes are an addition beyond Reference (TW-FLB-081, 082): `ask_file` (data `{prompt, extensions[], var, retries, wrongReply, skipKeyword, onFail, timeoutMinutes, saveProperty, propertyKey}`) and
+  `ask_location` (data `{prompt, var, interactive, retries, wrongReply, skipKeyword, onFail, timeoutMinutes}`). They are saved, validated, exported and imported like any
+  other node (one output port `out`), `flbToRuntimeData` shapes them (`question`, `variable`, `extensions`, `maxRetries`, `wrongReplyText`, `onGiveUp`, `savePropertyKey`),
+  and FLR runs them as `AskFile` / `AskLocation` (a `Custom` wait). Variables they write: `{{var}}`, `{{var}}_url|_kind|_name|_mime|_caption|_status` (file) and
+  `{{var}}`, `{{var}}_link|_latitude|_longitude|_name|_address|_status` (location). The allowed-extension groups and the accept check are in contracts `ask-media.ts`.
 - Not here: `api/flow-node/*` callbacks, `api/flows/{id}` (Node token), enrolment, subscribers, analytics, retry. They are FLR (or the
   Node bridge, which does not exist in this architecture: the engine runs in-process).
 

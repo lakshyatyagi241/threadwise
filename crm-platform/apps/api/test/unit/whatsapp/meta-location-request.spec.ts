@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { outboundEnvelopeSchema } from '../../../src/infra/providers/chat-conversations/channel.port';
 import { buildMessageBody } from '../../../src/infra/providers/whatsapp/meta-outbound';
 
-/** The WhatsApp "send location" request the Ask for location node sends on the Cloud API (TW-FLB-095). */
+/** The WhatsApp "send location" request the Ask for location node sends on the Cloud API (TW-FLB-082). */
 describe('location request message', () => {
   const envelope = outboundEnvelopeSchema.parse({
     to: '919800000001',
