@@ -18,7 +18,7 @@ import type {
 
 /**
  * "Ask for file / image" (`AskFile`) and "Ask for location" (`AskLocation`): not WaDesk nodes, an addition the project owner asked
- * for (WD-FLB-094, 095). Both work the way a Google Form or WhatsApp Form node does: the node sends its prompt and parks the run as a
+ * for (WD-FLB-081, 082). Both work the way a Google Form or WhatsApp Form node does: the node sends its prompt and parks the run as a
  * `Custom` wait; the customer's next message reaches `onReply`, which decides:
  *
  *  - the right kind of message (a file that passes the allow-list; a shared location): its parts go into the variables and the run

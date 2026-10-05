@@ -53,7 +53,7 @@ export const NODE_LOOK: Record<string, NodeLook> = {
     '#A1431F',
     'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM6 6.5a2 2 0 0 1 4 0c0 1.5-2 1.5-2 3M8 12.5h.01',
   ),
-  // Not WaDesk nodes (WD-FLB-094, 095). Ask for file: the peach chip of the input nodes with a paperclip; Ask for location:
+  // Not WaDesk nodes (WD-FLB-081, 082). Ask for file: the peach chip of the input nodes with a paperclip; Ask for location:
   // a pale-green chip with a navigation arrow (the Location send node keeps its amber pin).
   ask_file: l(
     '#FFE4D6',

@@ -184,7 +184,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
           .filter((s) => s !== ''),
         footerText: str(data.footerText),
       };
-    // Not WaDesk nodes (WD-FLB-094, 095). `flbToRuntimeData` has already normalised the wait settings.
+    // Not WaDesk nodes (WD-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
     case 'ask_file':
     case 'ask_location':
       return {

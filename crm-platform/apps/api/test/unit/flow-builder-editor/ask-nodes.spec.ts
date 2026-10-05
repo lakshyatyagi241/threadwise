@@ -20,7 +20,7 @@ import {
 } from '@crm/contracts';
 import { parseImportPayload } from '../../../src/modules/flow-builder-editor/flow-rules';
 
-/** WD-FLB-094, 095: Ask for file / image and Ask for location (an addition beyond WaDesk) at the contracts level. */
+/** WD-FLB-081, 082: Ask for file / image and Ask for location (an addition beyond WaDesk) at the contracts level. */
 
 const TYPES = ['ask_file', 'ask_location'] as const;
 

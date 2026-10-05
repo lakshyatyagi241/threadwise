@@ -8,7 +8,7 @@ import { Check, controlClass, Field, NumberInput, SelectInput, TextArea, TextInp
 import type { FormProps } from '../types';
 
 /**
- * The inspector forms of the Ask for file / image and Ask for location nodes (WD-FLB-094, 095: an addition beyond WaDesk).
+ * The inspector forms of the Ask for file / image and Ask for location nodes (WD-FLB-081, 082: an addition beyond WaDesk).
  * The retry, wrong-reply, skip, give-up and wait-limit fields are the same on both and live in `WaitSettings`.
  */
 

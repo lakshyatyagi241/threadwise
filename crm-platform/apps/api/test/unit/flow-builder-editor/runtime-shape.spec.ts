@@ -552,7 +552,7 @@ describe('flbToRuntimeData: the contract', () => {
         'buttons',
         'list',
         'ask',
-        // not WaDesk: the Ask for file / location additions (WD-FLB-094, 095)
+        // not WaDesk: the Ask for file / location additions (WD-FLB-081, 082)
         'ask_file',
         'ask_location',
         'condition',
