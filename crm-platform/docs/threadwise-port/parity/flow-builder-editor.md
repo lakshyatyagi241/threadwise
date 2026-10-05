@@ -86,6 +86,22 @@ round trip including malformed files and both exporters' file formats.
 - Web app serves a page shell for an anonymous visitor and redirects on the client (no content served); the Next.js dev indicator is the one Tab stop without a ring.
 - Literal backslash-n in two Reference placeholders is not reproduced.
 
+## Intended additions (not Reference features)
+
+- **Ask for file / image (`ask_file`, TW-FLB-081) and Ask for location (`ask_location`, TW-FLB-082)** exist in another product's flow palette and not in Reference, so there is no
+  Reference behaviour to compare: the project owner asked for them, they sit in the WhatsApp palette, group Listen, and were designed to behave like Ask question and the form
+  nodes (park, resume, variables). The palette therefore lists 37 WhatsApp nodes (Reference's 35 plus these two) and the catalogue 60 types. They were checked against
+  our own running editor, not against Reference: contract and runtime unit tests, the API e2e `flow-runtime-engine/ask-media.e2e.spec.ts` (real Postgres and Redis, simulator
+  channel as the WhatsApp stand-in), web unit tests, and screenshots of the palette, both cards, the Allow Extensions panel, both inspector forms and the test runner.
+  Not verified: real WhatsApp (the interactive location request is built to Meta's documented shape and unit-tested, never sent to Meta; real media downloads).
+- **Double-click a node opens the inspector.** Added at the project owner's request (Reference opens it from the action bar's Edit button, which stays). A double-click on the card itself selects the node and opens its inspector; controls inside the card (prompt boxes, buttons, connection dots) keep their own double-click. Checked in the running editor (double-click on a Send message node opened its inspector) and by unit tests of the target rule (`builder/node-open.test.ts`).
+- **Geta console publishing (TW-FLB-083)** is not a Reference feature either: the project owner asked that Publish also push the bot live on the Geta console (a configuration update, then
+  publish-bot). There is no Reference behaviour to compare. It was checked against our own running editor and against a local stub of the console, never the real console: unit tests (the HTTP
+  adapter against the stub, exact headers, `appid` shape, bodies, retries, order, UTF-8, no secret in errors or output), contracts, API e2e with real Postgres and Redis through the real outbox drain
+  and consumer (publish to live, failure and retry from the failed step, no-credentials state, secrets masked in every response and absent from the database, outbox and audit rows, cross-workspace
+  isolation), schema and RLS integration tests, web unit tests, and screenshots of the settings form and the Going live, Live, Failed with Retry and not-configured states.
+  Not verified: the real Geta console (base URL, tokens and chatbot record shapes are as given by the owner; whether `modified_time` in that format is what Geta expects is unknown).
+
 ## Open
 
 - **Chatbot node, "Create new AI agent"** (blocked): Reference opens an inline create-agent dialog; ours shows the button disabled with a "Refresh list" link

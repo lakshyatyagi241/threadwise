@@ -2,15 +2,47 @@ import { describe, expect, it, vi } from 'vitest';
 import { PermissionsController } from '../../../src/modules/admin/permissions/permissions.controller';
 
 const rows = [
-  { key: 'record.contacts.read', label: 'View contacts', category: 'crm', supportsScope: true, planFeature: null, appSlug: null },
-  { key: 'record.appointments.read', label: 'View appointments', category: 'crm', supportsScope: true, planFeature: 'appointment_booking', appSlug: null },
-  { key: 'app.google-sheets.use', label: 'Use the Google Sheets add-on', category: 'marketplace', supportsScope: false, planFeature: null, appSlug: 'google-sheets' },
+  {
+    key: 'record.contacts.read',
+    label: 'View contacts',
+    category: 'crm',
+    supportsScope: true,
+    planFeature: null,
+    appSlug: null,
+  },
+  {
+    key: 'record.appointments.read',
+    label: 'View appointments',
+    category: 'crm',
+    supportsScope: true,
+    planFeature: 'appointment_booking',
+    appSlug: null,
+  },
+  {
+    key: 'app.google-sheets.use',
+    label: 'Use the Google Sheets add-on',
+    category: 'marketplace',
+    supportsScope: false,
+    planFeature: null,
+    appSlug: 'google-sheets',
+  },
 ];
 
 function controller(featureOn: boolean, installed: string[] = []) {
-  const db = { txAs: undefined as unknown, tx: vi.fn(async (fn: (tx: unknown) => unknown) => fn({ select: () => ({ from: async () => rows }) })) };
+  const db = {
+    txAs: undefined as unknown,
+    tx: vi.fn(async (fn: (tx: unknown) => unknown) =>
+      fn({ select: () => ({ from: async () => rows }) }),
+    ),
+  };
   const txAs = vi.fn(async (_c: unknown, fn: (tx: unknown) => unknown) =>
-    fn({ select: () => ({ from: () => ({ innerJoin: () => ({ where: async () => installed.map((slug) => ({ slug })) }) }) }) }),
+    fn({
+      select: () => ({
+        from: () => ({
+          innerJoin: () => ({ where: async () => installed.map((slug) => ({ slug })) }),
+        }),
+      }),
+    }),
   );
   const entitlements = { featureEnabled: vi.fn(async () => featureOn) };
   return {

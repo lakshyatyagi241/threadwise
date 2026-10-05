@@ -31,6 +31,7 @@ import {
  *   free_trial_expired  a free plan and the trial ended: the hard gate (TW-PLAN-015) applies
  *   free                a free plan with no trial
  *   paid_active         a paid plan inside its period (or one that never expires)
+ *   paid_grace          the period ended but autopay is still live: entitlements stay for billing.grace_days
  *   paid_lapsed         a paid plan whose period ended: the free plan's entitlements apply
  *   custom_quote        a sales-managed plan (period handled by the operator)
  */
@@ -40,6 +41,7 @@ export const PLAN_STATES = [
   'free_trial_expired',
   'free',
   'paid_active',
+  'paid_grace',
   'paid_lapsed',
   'custom_quote',
 ] as const;
@@ -54,6 +56,8 @@ export const planValiditySchema = z.object({
   daysLeft: z.number().int().nullable(),
   /** In the last 7 days of a paid period (TW-PLAN-013 renewal bar). */
   renewalWindow: z.boolean(),
+  /** In `paid_grace`: when access ends unless the next charge succeeds; otherwise null. */
+  graceEndsAt: z.string().datetime().nullable(),
 });
 export type PlanValidity = z.infer<typeof planValiditySchema>;
 

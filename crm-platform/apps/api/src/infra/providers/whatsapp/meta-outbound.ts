@@ -92,6 +92,12 @@ function interactiveBody(i: Extract<OutboundEnvelope, { kind: 'interactive' }>['
         ...head,
         action: { name: 'cta_url', parameters: { display_text: i.text, url: i.url } },
       };
+    case 'location_request':
+      return {
+        type: 'location_request_message',
+        ...head,
+        action: { name: 'send_location' },
+      };
     case 'flow':
       return {
         type: 'flow',

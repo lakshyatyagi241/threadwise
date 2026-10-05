@@ -19,6 +19,7 @@ cat > "$BIN/docker" <<'E'
 echo "$*" >> "$STUB_LOG"
 case "$*" in
   "image inspect"*) exit 0 ;;
+  *"up -d offsite"*) [ "${STUB_OFFSITE_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"up -d backup"*) [ "${STUB_BACKUP_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"ps --status running --services"*) [ "${STUB_BACKUP_RUNNING:-1}" = 1 ] && echo backup; echo api; exit 0 ;;
   *"exec -T backup test -x"*) [ "${STUB_BACKUP_SCRIPT:-1}" = 1 ]; exit $? ;;
@@ -44,7 +45,7 @@ check() { # check "name" cmd...
   local name=$1; shift
   if "$@"; then pass=$((pass + 1)); echo "  ok   $name"; else fail=$((fail + 1)); echo "  FAIL $name"; fi
 }
-unset_stubs() { unset STUB_BACKUP_UP_FAIL STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_READY STUB_WORKER_HEALTH; }
+unset_stubs() { unset STUB_BACKUP_UP_FAIL STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_READY STUB_WORKER_HEALTH STUB_OFFSITE_UP_FAIL; }
 before() { [ -n "$(line_of "$1")" ] && [ -n "$(line_of "$2")" ] && [ "$(line_of "$1")" -lt "$(line_of "$2")" ]; }
 
 echo "release: normal"
@@ -80,6 +81,13 @@ echo "release: backup service fails to start"
 unset_stubs; new_dir aaaaaaa; STUB_BACKUP_UP_FAIL=1 release bbbbbbb
 check "does not block the release" test "$(code)" = 0
 check "warns" grep -q "backup service did not start" "$WORK/out.txt"
+
+echo "release: the off-host copier"
+unset_stubs; new_dir aaaaaaa; release bbbbbbb
+check "is started with the release" grep -q "up -d offsite" "$STUB_LOG"
+unset_stubs; new_dir aaaaaaa; STUB_OFFSITE_UP_FAIL=1 release bbbbbbb
+check "failing to start it does not block the release" test "$(code)" = 0
+check "but says so" grep -q "offsite copier did not start" "$WORK/out.txt"
 
 echo "release: migration fails"
 unset_stubs; new_dir aaaaaaa; STUB_MIGRATE_FAIL=1 release bbbbbbb

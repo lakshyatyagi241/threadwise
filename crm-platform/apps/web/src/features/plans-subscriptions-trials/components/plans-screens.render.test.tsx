@@ -25,6 +25,7 @@ const usage = (over: Partial<BillingUsagePanelResponse> = {}): BillingUsagePanel
     planEndsAt: null,
     daysLeft: null,
     renewalWindow: false,
+    graceEndsAt: null,
   },
   meters: PLAN_LIMIT_KEYS.map((key) => ({
     key,

@@ -1,9 +1,25 @@
 'use client';
 
 import type { FlowEdge, FlowNode, FlbTemplateButtonRef } from '@crm/contracts';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import { flowsApi } from '../../api/flows';
-import { createSimulator, type LogEntry, type Simulator } from './simulator';
+import { createSimulator, type LogEntry, type SimFile, type Simulator } from './simulator';
+
+/** Files the operator can "send" to an Ask for file / image node: nothing is uploaded, the runtime only reads the name and type. */
+export const SAMPLE_FILES: ReadonlyArray<{ id: string; file: SimFile }> = [
+  { id: 'photo', file: { name: '', mime: 'image/jpeg', caption: 'photo' } },
+  { id: 'png', file: { name: 'screenshot.png', mime: 'image/png' } },
+  { id: 'pdf', file: { name: 'invoice.pdf', mime: 'application/pdf' } },
+  { id: 'voice', file: { name: '', mime: 'audio/ogg' } },
+  { id: 'exe', file: { name: 'setup.exe', mime: 'application/x-msdownload' } },
+];
+export const SAMPLE_LOCATION = {
+  latitude: 12.9716,
+  longitude: 77.5946,
+  name: 'Test place',
+  address: '1 MG Road, Bengaluru',
+};
 
 export interface TestPanelProps {
   open: boolean;
@@ -82,6 +98,10 @@ export function TestPanel({
 }: TestPanelProps): ReactElement | null {
   const [log, setLog] = useState<LogEntry[]>([]);
   const [awaiting, setAwaiting] = useState(false);
+  /** What the run waits for from the operator: the node type of a media / location question, else plain text. */
+  const [waitType, setWaitType] = useState<string | null>(null);
+  const t = useTranslations('flb.builder.askMedia.test');
+  const fileInput = useRef<HTMLInputElement>(null);
   const [val, setVal] = useState('');
   const simRef = useRef<Simulator | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
@@ -102,7 +122,10 @@ export function TestPanel({
       callWebhook: (req) => flowsApi.testWebhook(req),
       onLog: (e) => setLog((prev) => prev.concat(e)),
       onReset: () => setLog([]),
-      onAwaiting: setAwaiting,
+      onAwaiting: (a) => {
+        setAwaiting(a);
+        setWaitType(a ? (simRef.current?.current()?.type ?? null) : null);
+      },
     });
     simRef.current = sim;
     setVal('');
@@ -187,6 +210,76 @@ export function TestPanel({
           <LogBubble key={i} entry={entry} />
         ))}
       </div>
+      {awaiting && waitType === 'ask_file' ? (
+        <div
+          data-testid="test-file-actions"
+          className="flex flex-wrap items-center gap-1.5 border-t border-border px-3 pt-2.5 text-[11px]"
+        >
+          <span className="font-semibold text-muted-foreground">{t('sendFile')}</span>
+          {SAMPLE_FILES.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              data-sample-file={s.id}
+              onClick={() => simRef.current?.sendFile(s.file)}
+              className="rounded-full border border-border bg-background px-2.5 py-1 hover:border-brand hover:text-brand"
+            >
+              {t(`file.${s.id}`)}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => fileInput.current?.click()}
+            className="rounded-full border border-border bg-background px-2.5 py-1 hover:border-brand hover:text-brand"
+          >
+            {t('chooseFile')}
+          </button>
+          <input
+            ref={fileInput}
+            type="file"
+            data-testid="test-file-input"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f)
+                simRef.current?.sendFile({
+                  name: f.name,
+                  mime: f.type || 'application/octet-stream',
+                });
+              e.target.value = '';
+            }}
+          />
+        </div>
+      ) : null}
+      {awaiting && waitType === 'ask_location' ? (
+        <div
+          data-testid="test-location-actions"
+          className="flex flex-wrap items-center gap-1.5 border-t border-border px-3 pt-2.5 text-[11px]"
+        >
+          <span className="font-semibold text-muted-foreground">{t('sendLocation')}</span>
+          <button
+            type="button"
+            data-sample-location="pin"
+            onClick={() => simRef.current?.sendLocation(SAMPLE_LOCATION)}
+            className="rounded-full border border-border bg-background px-2.5 py-1 hover:border-brand hover:text-brand"
+          >
+            {t('location.pin')}
+          </button>
+          <button
+            type="button"
+            data-sample-location="bare"
+            onClick={() =>
+              simRef.current?.sendLocation({
+                latitude: SAMPLE_LOCATION.latitude,
+                longitude: SAMPLE_LOCATION.longitude,
+              })
+            }
+            className="rounded-full border border-border bg-background px-2.5 py-1 hover:border-brand hover:text-brand"
+          >
+            {t('location.bare')}
+          </button>
+        </div>
+      ) : null}
       <div className="flex items-center gap-2 border-t border-border p-3">
         <input
           value={val}

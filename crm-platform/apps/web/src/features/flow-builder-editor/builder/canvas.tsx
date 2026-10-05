@@ -17,6 +17,8 @@ import {
   clampZoom,
   moveNode,
   zoomAround,
+  connectionFocus,
+  edgeFocus,
   type CanvasState,
 } from '../lib/graph-ops';
 import { Icon, NodeCard } from './node-card';
@@ -41,6 +43,10 @@ interface Props {
   onConnect: (from: { nodeId: string; handleId: string }, targetId: string) => void;
   onDropNode: (type: string, x: number, y: number) => void;
   onDeleteEdge: (id: string) => void;
+  /** A control on a card (the Ask for file / location prompt, extensions, property) changed the node's data. */
+  onPatchNode?: (nodeId: string, patch: Record<string, unknown>) => void;
+  /** A double-click on a node card: select it and open the inspector. */
+  onOpenNode?: (nodeId: string) => void;
   wrapperRef: RefObject<HTMLDivElement | null>;
   children?: ReactNode;
 }
@@ -71,6 +77,8 @@ export function Canvas({
   onConnect,
   onDropNode,
   onDeleteEdge,
+  onPatchNode,
+  onOpenNode,
   wrapperRef,
   children,
 }: Props) {
@@ -101,6 +109,20 @@ export function Canvas({
   useLayoutEffect(() => {
     live.current = { state, pan, zoom };
   });
+  // A stable callback for the memoised cards: the latest `onPatchNode` is read when a control on a card fires.
+  const patchRef = useRef(onPatchNode);
+  useLayoutEffect(() => {
+    patchRef.current = onPatchNode;
+  });
+  const openRef = useRef(onOpenNode);
+  useLayoutEffect(() => {
+    openRef.current = onOpenNode;
+  });
+  const openNode = useCallback((nodeId: string) => openRef.current?.(nodeId), []);
+  const patchNode = useCallback(
+    (nodeId: string, patch: Record<string, unknown>) => patchRef.current?.(nodeId, patch),
+    [],
+  );
 
   const measurePorts = useCallback(() => {
     const wrap = wrapperRef.current;
@@ -158,6 +180,23 @@ export function Canvas({
       })
       .filter((e): e is { id: string; kind: 'no' | null | undefined; d: string } => e !== null);
   }, [nodes, edges, portOffsets]);
+
+  // Selecting a node lights up what it is wired to and fades the rest, so a long flow can be read one node at a time.
+  // A clicked wire does the same for the two nodes it joins.
+  const focus = useMemo(
+    () => edgeFocus(edges, edgePopup?.id ?? null) ?? connectionFocus(edges, selectedId),
+    [edges, selectedId, edgePopup],
+  );
+  // Active wires are drawn last so they sit on top of the faded ones.
+  const drawnEdges = useMemo(
+    () =>
+      focus
+        ? [...edgePaths].sort(
+            (a, b) => Number(focus.edgeIds.has(a.id)) - Number(focus.edgeIds.has(b.id)),
+          )
+        : edgePaths,
+    [edgePaths, focus],
+  );
 
   const toWorld = useCallback(
     (clientX: number, clientY: number): Pt => {
@@ -382,7 +421,7 @@ export function Canvas({
           }}
         >
           <g style={{ pointerEvents: 'auto' }}>
-            {edgePaths.map((e) => (
+            {drawnEdges.map((e) => (
               <g key={e.id} data-edge-id={e.id}>
                 <path
                   d={e.d}
@@ -392,12 +431,21 @@ export function Canvas({
                   onClick={(ev) => {
                     ev.stopPropagation();
                     const w = toWorld(ev.clientX, ev.clientY);
+                    onSelect(null);
                     setEdgePopup({ id: e.id, x: w.x, y: w.y });
                   }}
                 />
                 <path
                   d={e.d}
-                  className={`edge-path ${e.kind === 'no' ? 'no ' : ''}${hoveredEdge === e.id ? 'hover' : ''}`}
+                  className={`edge-path ${e.kind === 'no' ? 'no ' : ''}${hoveredEdge === e.id ? 'hover ' : ''}${
+                    !focus
+                      ? ''
+                      : focus.edgeIds.has(e.id)
+                        ? focus.outEdgeIds.has(e.id)
+                          ? 'edge-active edge-out'
+                          : 'edge-active edge-in'
+                        : 'edge-dim'
+                  }`}
                   style={{ pointerEvents: 'none' }}
                 />
               </g>
@@ -427,11 +475,25 @@ export function Canvas({
             selected={selectedId === node.id}
             invalid={invalidIds.has(node.id)}
             dragging={draggingId === node.id}
+            focus={
+              !focus || (node.id === selectedId && !edgePopup)
+                ? null
+                : focus.downstream.has(node.id)
+                  ? 'downstream'
+                  : focus.upstream.has(node.id)
+                    ? 'upstream'
+                    : 'dim'
+            }
             hoveredPort={hoveredPort}
             onPointerDown={onNodePointerDown}
-            onSelect={onSelect}
+            onSelect={(id) => {
+              setEdgePopup(null);
+              onSelect(id);
+            }}
             onPortPointerDown={onPortPointerDown}
             onPortHover={setHoveredPort}
+            onPatch={patchNode}
+            onOpen={openNode}
           />
         ))}
 

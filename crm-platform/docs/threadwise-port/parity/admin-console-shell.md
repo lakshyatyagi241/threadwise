@@ -99,11 +99,11 @@ prototype pages (dead code).
 
 ## Intended differences added in round 2
 
-| #   | Area                  | Reference                                              | Here                                                          | Why                                                                            |
-| --- | --------------------- | --------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| 5   | Settings tabs         | Nine panes swapped client-side on one page          | Rail of nine; four tabs link to the page that owns them       | Each already has its own route in another domain (inventory port notes agree)   |
-| 6   | Themes                | Paper, bright, doodle, dark; two stores that differ | Light and dark; one cookie shared by header and Settings      | The design system ships two themes; removes Reference's disagreement (046 quirk)   |
-| 7   | Connect-device sheet  | Accepted a message from any window                  | Accepts only this origin and only the sheet's own frame       | Security hardening; behaviour for the real page is unchanged                    |
-| 8   | New-message pill      | Polled with a fixed interval                        | Backs off after a 429 or error up to 5 minutes, pauses hidden | Keeps load down on a throttled API; the normal interval is the same 15 seconds  |
+| #   | Area                 | Reference                                              | Here                                                          | Why                                                                            |
+| --- | -------------------- | --------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 5   | Settings tabs        | Nine panes swapped client-side on one page          | Rail of nine; four tabs link to the page that owns them       | Each already has its own route in another domain (inventory port notes agree)  |
+| 6   | Themes               | Paper, bright, doodle, dark; two stores that differ | Light and dark; one cookie shared by header and Settings      | The design system ships two themes; removes Reference's disagreement (046 quirk)  |
+| 7   | Connect-device sheet | Accepted a message from any window                  | Accepts only this origin and only the sheet's own frame       | Security hardening; behaviour for the real page is unchanged                   |
+| 8   | New-message pill     | Polled with a fixed interval                        | Backs off after a 429 or error up to 5 minutes, pauses hidden | Keeps load down on a throttled API; the normal interval is the same 15 seconds |
 
 Live visual twin comparison was not repeated in round 2 (Reference was shared and slow); layout was matched from the Blade views and recorded above.

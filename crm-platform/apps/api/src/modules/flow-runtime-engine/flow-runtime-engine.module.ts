@@ -19,6 +19,7 @@ import { FlowTriggerService } from './triggers/trigger.service';
 import { FLOW_NODE_EXECUTORS } from './runtime/node-executors';
 import { ActionNodes } from './runtime/nodes/actions/actions-nodes';
 import { ActionNodesModule } from './runtime/nodes/actions/actions-nodes.module';
+import { AskMediaNodes } from './runtime/nodes/actions/ask-media-nodes';
 import { AiNodes } from './runtime/nodes/ai/ai-nodes';
 import { AiNodesModule } from './runtime/nodes/ai/ai-nodes.module';
 import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
@@ -74,7 +75,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     {
       provide: FLOW_NODE_EXECUTORS,
       useFactory: (...groups: unknown[]) => groups,
-      inject: [ActionNodes, AiNodes, CommerceNodes, IntegrationNodes],
+      inject: [ActionNodes, AskMediaNodes, AiNodes, CommerceNodes, IntegrationNodes],
     },
   ],
   exports: [
