@@ -1,4 +1,6 @@
 import {
+  flbAskFileAccepts,
+  flbCleanAskFileExtensions,
   flbListOption,
   type FlowEdge,
   type FlowNode,
@@ -20,6 +22,32 @@ export type LogEntry = { kind: 'system' | 'user' | 'bot'; text: string; media?: 
 export const STEP_DELAY_MS = 220;
 /** Pause between the operator's first message and the first step, ms. */
 export const START_DELAY_MS = 200;
+
+/** A file the operator "sends" in the test run: nothing is uploaded, only what the runtime checks (name, MIME type). */
+export interface SimFile {
+  name: string;
+  mime: string;
+  caption?: string;
+}
+export interface SimLocation {
+  latitude: number;
+  longitude: number;
+  name?: string;
+  address?: string;
+}
+
+/** Same default as the runtime (`maxRetries`): two more tries after a wrong reply. */
+const askRetries = (d: Record<string, unknown>): number => {
+  const n = Math.trunc(Number(d.retries ?? 2));
+  return Math.min(10, Math.max(0, Number.isFinite(n) ? n : 2));
+};
+const MEDIA_KIND_OF_MIME = (mime: string): string => {
+  const m = mime.toLowerCase();
+  if (m.startsWith('image/')) return 'image';
+  if (m.startsWith('video/')) return 'video';
+  if (m.startsWith('audio/')) return 'audio';
+  return 'document';
+};
 
 export interface SimulatorOptions {
   nodes: FlowNode[];
@@ -45,6 +73,10 @@ export interface Simulator {
   start: () => void;
   /** The operator's message. */
   send: (text: string) => void;
+  /** The operator answers an Ask for file / image node with a (fake) file: only its name, type and caption matter. */
+  sendFile: (file: SimFile) => void;
+  /** The operator answers an Ask for location node with a (fake) shared location. */
+  sendLocation: (loc: SimLocation) => void;
   /** The node the run is parked on or executing; null before the first message and after the end. */
   current: () => FlowNode | null;
   /** Variables of the current run (a copy). */
@@ -97,6 +129,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   let current: FlowNode | null = null;
   let pendingStart: FlowNode | null = null;
   let expectedKeywords: string[] = [];
+  /** Wrong replies given to the Ask for file / location node the run is parked on. */
+  let askAttempts = 0;
 
   const log = (kind: LogEntry['kind'], text: string, media?: LogMedia) =>
     opts.onLog(media ? { kind, text, media } : { kind, text });
@@ -212,6 +246,26 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       }
       case 'ask':
         bot(interp(d.prompt, v));
+        opts.onAwaiting(true);
+        return;
+      case 'ask_file':
+        askAttempts = 0;
+        bot(interp(d.prompt, v));
+        sys(
+          `(waiting for a file: ${
+            flbCleanAskFileExtensions(d.extensions).join(', ') || 'any type'
+          } — use the attach button)`,
+        );
+        opts.onAwaiting(true);
+        return;
+      case 'ask_location':
+        askAttempts = 0;
+        bot(interp(d.prompt, v));
+        sys(
+          d.interactive === false
+            ? '(waiting for a shared location)'
+            : '(a "Send location" button is shown — use the location button)',
+        );
         opts.onAwaiting(true);
         return;
       case 'condition': {
@@ -462,6 +516,103 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     opts.onAwaiting(true);
   };
 
+  /** An answer to an Ask for file / location node: saved like the runtime saves it, or a wrong reply (retry, skip, give up). */
+  const answerAsk = (
+    node: FlowNode,
+    reply:
+      | { kind: 'text'; text: string }
+      | { kind: 'file'; file: SimFile }
+      | { kind: 'location'; loc: SimLocation },
+  ): void => {
+    const d = rec(node.data);
+    const isFile = node.type === 'ask_file';
+    const name = str(d.var).replace(/[{}\s@]/g, '') || (isFile ? 'file' : 'location');
+    const clear = isFile
+      ? ['', 'url', 'kind', 'name', 'mime', 'caption']
+      : ['', 'latitude', 'longitude', 'name', 'address', 'link'];
+    const setEmpty = (status: string) => {
+      for (const s of clear) vars[s ? `${name}_${s}` : name] = '';
+      vars[`${name}_status`] = status;
+    };
+    const finish = () => {
+      opts.onAwaiting(false);
+      route(node, 'out', `Nothing connected after ${node.type} — stop.`);
+    };
+    const skip = str(d.skipKeyword).trim().toLowerCase();
+    if (reply.kind === 'text' && skip !== '' && reply.text.trim().toLowerCase() === skip) {
+      setEmpty('skipped');
+      sys('Skipped by the customer.');
+      return finish();
+    }
+    if (isFile && reply.kind === 'file') {
+      const f = reply.file;
+      if (flbAskFileAccepts(flbCleanAskFileExtensions(d.extensions), f)) {
+        const url = `chatmedia:test-${f.name || 'file'}`;
+        vars[name] = url;
+        vars[`${name}_url`] = url;
+        vars[`${name}_kind`] = MEDIA_KIND_OF_MIME(f.mime);
+        vars[`${name}_name`] = f.name;
+        vars[`${name}_mime`] = f.mime;
+        vars[`${name}_caption`] = f.caption ?? '';
+        vars[`${name}_status`] = 'received';
+        sys(`File saved to {{${name}}}.`);
+        return finish();
+      }
+    }
+    if (!isFile && reply.kind === 'location') {
+      const l = reply.loc;
+      const link = `https://www.google.com/maps?q=${l.latitude},${l.longitude}`;
+      vars[name] = link;
+      vars[`${name}_link`] = link;
+      vars[`${name}_latitude`] = String(l.latitude);
+      vars[`${name}_longitude`] = String(l.longitude);
+      vars[`${name}_name`] = l.name ?? '';
+      vars[`${name}_address`] = l.address ?? '';
+      vars[`${name}_status`] = 'received';
+      sys(`Location saved to {{${name}}} (maps link).`);
+      return finish();
+    }
+    // Not what was asked for.
+    askAttempts += 1;
+    if (askAttempts <= askRetries(d)) {
+      bot(
+        interp(
+          d.wrongReply ||
+            (isFile
+              ? 'That is not a file we can accept. Please send it as an attachment.'
+              : 'Please share your location with the attachment (+) menu, then Location.'),
+          vars,
+        ),
+      );
+      return;
+    }
+    if (d.onFail === 'end') {
+      sys('Retries used up — the flow ends here.');
+      stop();
+      return;
+    }
+    setEmpty('failed');
+    sys('Retries used up — moving on without an answer.');
+    finish();
+  };
+
+  const sendFile = (file: SimFile): void => {
+    const node = current;
+    if (!node || node.type !== 'ask_file') return;
+    log('user', `📎 ${file.name} (${file.mime})${file.caption ? `\n${file.caption}` : ''}`);
+    answerAsk(node, { kind: 'file', file });
+  };
+
+  const sendLocation = (loc: SimLocation): void => {
+    const node = current;
+    if (!node || node.type !== 'ask_location') return;
+    log(
+      'user',
+      `📍 ${loc.name ? `${loc.name} · ` : ''}${loc.latitude}, ${loc.longitude}${loc.address ? `\n${loc.address}` : ''}`,
+    );
+    answerAsk(node, { kind: 'location', loc });
+  };
+
   const send = (value: string): void => {
     // First message: open the conversation. An off-keyword opener still runs, with a soft note.
     if (!current && pendingStart) {
@@ -482,7 +633,9 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     if (!node) return;
     log('user', value);
     const d = rec(node.data);
-    if (node.type === 'ask') {
+    if (node.type === 'ask_file' || node.type === 'ask_location') {
+      answerAsk(node, { kind: 'text', text: value });
+    } else if (node.type === 'ask') {
       vars[str(d.var) || 'answer'] = value;
       opts.onAwaiting(false);
       const expected = arr(d.options);
@@ -548,6 +701,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   return {
     start,
     send,
+    sendFile,
+    sendLocation,
     current: () => current,
     vars: () => ({ ...vars }),
     stop: () => {

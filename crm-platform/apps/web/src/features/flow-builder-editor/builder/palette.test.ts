@@ -5,9 +5,9 @@ const ids = (mode: Parameters<typeof filterPalette>[0], q = '') =>
   filterPalette(mode, q).flatMap(([, items]) => items.map((d) => d.id));
 
 describe('palette (WD-FLB-016)', () => {
-  it('a WhatsApp flow lists 35 nodes in WaDesk group order, Template / List / Sequence / MySQL / Google included', () => {
+  it('a WhatsApp flow lists the 35 WaDesk nodes plus Ask for file / location, in WaDesk group order, Template / List / Sequence / MySQL / Google included', () => {
     const groups = filterPalette('chat', '');
-    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(35);
+    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(37);
     expect(groups.map(([g]) => g)).toEqual([
       'Start',
       'Send',
@@ -99,6 +99,6 @@ describe('palette (WD-FLB-016)', () => {
   it('QUIRK: the query is not trimmed, a padded query matches nothing', () => {
     expect(ids('chat', 'sheet')).toEqual(['google_sheets']);
     expect(ids('chat', '  sheet  ')).toEqual([]);
-    expect(ids('chat', ' ').length).toBe(35); // every description holds a space
+    expect(ids('chat', ' ').length).toBe(37); // every description holds a space
   });
 });
