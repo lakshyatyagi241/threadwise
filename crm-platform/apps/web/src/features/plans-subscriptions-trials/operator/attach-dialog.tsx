@@ -1,20 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import {
   PLAN_FEATURE_KEYS,
-  PLAN_LIMIT_KEYS,
   type PlanAdminItem,
   type PlanOverrides,
   type WorkspacePlan,
 } from '@crm/contracts';
-import { Alert, Button, Input, Modal, Select } from '@crm/ui';
+import { Alert, Badge, Button, Input, Modal, Select } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { attachWorkspacePlan } from '../api';
+import {
+  addonLists,
+  limitGroups,
+  limitRowState,
+  planValueView,
+  unlimitedToggle,
+} from './override-rows';
 
 const NS = 'plans-subscriptions-trials';
+/** Group names, per-limit labels and hints are the plan editor's (written once, en and ar). */
+const EDITOR = 'auth-registration-security.platform.plans.editor';
 type FlagChoice = 'default' | 'on' | 'off';
 
 /** "2026-10-02T12:00:00.000Z" -> the value a datetime-local input takes. */
@@ -58,8 +67,11 @@ export function AttachDialog({
   onSaved: (saved: WorkspacePlan) => void;
 }) {
   const t = useTranslations(`${NS}.operator.dialog`);
-  const tl = useTranslations(`${NS}.limits`);
-  const tf = useTranslations(`${NS}.features`);
+  const locale = useLocale();
+  const tg = useTranslations(`${EDITOR}.limitGroups`);
+  const tl = useTranslations(`${EDITOR}.limitKeys`);
+  const th = useTranslations(`${EDITOR}.limitHints`);
+  const tf = useTranslations(`${EDITOR}.featureKeys`);
   const [planSlug, setPlanSlug] = useState('');
   const [endsAt, setEndsAt] = useState('');
   const [neverEnds, setNeverEnds] = useState(false);
@@ -224,33 +236,85 @@ export function AttachDialog({
             <span className="text-muted-foreground">{t('retentionHint')}</span>
           </label>
 
-          <fieldset className="space-y-2">
+          <AddonsSection addons={workspace.addons} locale={locale} />
+
+          <fieldset className="space-y-4">
             <legend className="font-medium">{t('limits')}</legend>
             <p className="text-muted-foreground">{t('limitsHint')}</p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {PLAN_LIMIT_KEYS.map((key) => (
-                <label key={key} className="space-y-1">
-                  <span>{tl(key)}</span>
-                  <Input
-                    inputMode="numeric"
-                    value={limits[key] ?? ''}
-                    placeholder={t('planLimit', {
-                      value: String(workspace.planLimits[key] || '∞'),
-                    })}
-                    onChange={(e) => setLimits((s) => ({ ...s, [key]: e.target.value }))}
-                    data-testid={`limit-${key}`}
-                  />
-                </label>
-              ))}
-            </div>
+            {limitGroups().map(({ group, keys }) => (
+              <div key={group} className="space-y-2" data-testid={`limit-group-${group}`}>
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {tg(group)}
+                </h4>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {keys.map((key) => {
+                    const raw = limits[key] ?? '';
+                    const state = limitRowState(key, raw);
+                    const plan = planValueView(key, workspace.planLimits[key]);
+                    const planText =
+                      plan.kind === 'unlimited'
+                        ? t('unlimited')
+                        : plan.kind === 'platformDefault'
+                          ? t('platformDefault')
+                          : String(plan.value);
+                    return (
+                      <div
+                        key={key}
+                        className="min-w-0 space-y-1.5 rounded-lg border border-border p-3"
+                        data-testid={`limit-row-${key}`}
+                      >
+                        <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+                          <label htmlFor={`limit-${key}`} className="font-medium">
+                            {tl(key)}
+                          </label>
+                          <span className="text-xs text-muted-foreground">
+                            {t('planLimit', { value: planText })}
+                          </span>
+                        </div>
+                        <Input
+                          id={`limit-${key}`}
+                          inputMode="numeric"
+                          value={raw}
+                          placeholder={planText}
+                          onChange={(e) => setLimits((s) => ({ ...s, [key]: e.target.value }))}
+                          data-testid={`limit-${key}`}
+                        />
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <label className="flex items-center gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={state.unlimited}
+                              onChange={(e) =>
+                                setLimits((s) => ({ ...s, [key]: unlimitedToggle(e.target.checked) }))
+                              }
+                              data-testid={`unlimited-${key}`}
+                            />
+                            {t('unlimited')}
+                          </label>
+                          {state.platformDefault && (
+                            <Badge tone="neutral">{t('platformDefault')}</Badge>
+                          )}
+                        </div>
+                        <p className="break-words text-xs text-muted-foreground">{th(key)}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </fieldset>
 
           <fieldset className="space-y-2">
             <legend className="font-medium">{t('features')}</legend>
             <div className="grid gap-3 sm:grid-cols-2">
               {PLAN_FEATURE_KEYS.map((key) => (
-                <label key={key} className="space-y-1">
-                  <span>{tf(key)}</span>
+                <label key={key} className="min-w-0 space-y-1">
+                  <span className="flex flex-wrap items-baseline justify-between gap-x-2">
+                    <span>{tf(key)}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {t('planLimit', { value: workspace.planFeatures[key] ? t('on') : t('off') })}
+                    </span>
+                  </span>
                   <Select
                     value={flags[key] ?? 'default'}
                     onChange={(e) =>
@@ -270,5 +334,71 @@ export function AttachDialog({
         </div>
       )}
     </Modal>
+  );
+}
+
+/** The workspace's Marketplace add-ons: what its plan makes visible (owned or not) and what it owns that the plan no longer shows. */
+function AddonsSection({ addons, locale }: { addons: WorkspacePlan['addons']; locale: string }) {
+  const ta = useTranslations(`${NS}.operator.dialog.addons`);
+  const { visible, former } = addonLists(addons);
+  const date = (iso: string | null) =>
+    iso ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso)) : null;
+  return (
+    <section className="space-y-3" data-testid="workspace-addons">
+      <div>
+        <h3 className="font-medium">{ta('title')}</h3>
+        <p className="text-muted-foreground">{ta('hint')}</p>
+      </div>
+      {visible.length === 0 ? (
+        <p className="text-muted-foreground">{ta('none')}</p>
+      ) : (
+        <ul className="divide-y divide-border rounded-lg border border-border">
+          {visible.map((a) => (
+            <li
+              key={a.id}
+              className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2"
+              data-testid={`addon-visible-${a.app.slug}`}
+            >
+              <Link
+                href={`/admin/marketplace/${encodeURIComponent(a.app.slug)}`}
+                className="min-w-0 break-words font-medium text-primary hover:underline"
+              >
+                {a.app.name}
+              </Link>
+              <Badge tone={a.owned ? 'success' : 'neutral'}>
+                {a.owned ? ta('owned') : ta('notOwned')}
+              </Badge>
+            </li>
+          ))}
+        </ul>
+      )}
+      {former.length > 0 && (
+        <div className="space-y-2" data-testid="workspace-addons-former">
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {ta('formerTitle')}
+          </h4>
+          <p className="text-xs text-muted-foreground">{ta('formerHint')}</p>
+          <ul className="divide-y divide-border rounded-lg border border-border">
+            {former.map((o) => (
+              <li
+                key={o.id}
+                className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2"
+                data-testid={`addon-former-${o.app.slug}`}
+              >
+                <Link
+                  href={`/admin/marketplace/${encodeURIComponent(o.app.slug)}`}
+                  className="min-w-0 break-words font-medium text-primary hover:underline"
+                >
+                  {o.app.name}
+                </Link>
+                <span className="text-xs text-muted-foreground">
+                  {o.endsAt ? ta('endsOn', { date: date(o.endsAt) ?? '' }) : ta('noEnd')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
   );
 }

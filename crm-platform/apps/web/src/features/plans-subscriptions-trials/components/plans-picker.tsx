@@ -14,6 +14,7 @@ import { CancelRenewal } from './cancel-renewal';
 import { CompareTable } from './compare-table';
 import { FaqList } from './faq-list';
 import { PeriodSwitch } from './period-switch';
+import { PlanAddons } from './plan-addons';
 import { PlanCard } from './plan-card';
 import { ValidityBanner } from './validity-banner';
 
@@ -97,6 +98,8 @@ export function PlansPicker() {
               ))}
             </div>
           )}
+
+          <PlanAddons addons={q.data.visibleAddons} />
 
           <AddonsSection canManage={q.data.canManage} />
 

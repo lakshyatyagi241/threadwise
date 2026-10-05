@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { MarketCardPricing } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
-import { acquireFor, priceLine, pricingView } from '../lib/pricing';
+import { acquireFor, priceChip, priceLine, pricingView } from '../lib/pricing';
 import { ErrorLine, Section } from './ui';
 import { useSubscribe } from './use-subscription-actions';
 
@@ -21,12 +21,19 @@ export function PriceText({
   const t = useTranslations('marketplace.card.pricing');
   const locale = useLocale();
   const line = priceLine(pricing, locale);
+  const chip = priceChip(pricing, locale);
   return (
     <span
       data-testid="price-line"
       data-access={pricing.access}
-      className={cn('inline-flex flex-wrap items-center gap-x-2 gap-y-1', className)}
+      data-availability={pricing.availability}
+      className={cn('inline-flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1', className)}
     >
+      {chip && (
+        <Badge tone="neutral" data-testid="addon-chip">
+          {t('addOn')}
+        </Badge>
+      )}
       <span>
         {line.key === 'monthly' ? t('monthly', { price: line.price ?? '' }) : t(line.key)}
       </span>
@@ -36,6 +43,24 @@ export function PriceText({
         </Badge>
       )}
     </span>
+  );
+}
+
+/**
+ * An add-on the plan lists and the workspace has not bought: Install is shown disabled, with the reason, so it is clear why it cannot
+ * be used yet. Subscribe stands beside it (the caller draws it). `label` is the Install button's own wording.
+ */
+export function NeedsPurchaseInstall({ id, label }: { id: string; label: string }) {
+  const t = useTranslations('marketplace.pricing');
+  return (
+    <div data-testid="needs-purchase" className="min-w-0 space-y-1.5">
+      <Button type="button" variant="secondary" disabled aria-describedby={id}>
+        {label}
+      </Button>
+      <p id={id} className="text-xs text-muted-foreground">
+        {t('needsPurchase')}
+      </p>
+    </div>
   );
 }
 

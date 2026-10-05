@@ -3,10 +3,20 @@ import { createPlanRequestSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   buildPlanRequest,
+  clearAddons,
+  countFeaturesOn,
+  countLimitsSet,
   isPlanDraftDirty,
+  limitIsUnlimited,
   newPlanDraft,
   planFieldForPath,
   planToDraft,
+  problemsFromServer,
+  selectAddons,
+  setLimitUnlimited,
+  toggleAddon,
+  toggleFeatures,
+  unknownAddonId,
   withToggle,
   type PlanDraft,
 } from './plan-draft';
@@ -58,6 +68,19 @@ const stored: PlanAdminItem = {
     api_rate_limit_per_minute: 0,
     installed_apps: 0,
     lead_sources: 0,
+    broadcast_recipients: 0,
+    segments: 0,
+    custom_fields: 0,
+    team_chat_channels: 0,
+    sla_policies: 0,
+    booking_types: 0,
+    chatbot_widgets: 0,
+    catalog_products: 0,
+    invoices_monthly: 0,
+    recurring_invoices: 0,
+    api_keys: 0,
+    webhooks: 0,
+    ai_token_limit_monthly: 0,
   },
   features: {
     automation: true,
@@ -80,7 +103,15 @@ const stored: PlanAdminItem = {
     whatsapp_warmer: true,
     marketplace: true,
     lead_sources: true,
+    team_chat: true,
+    public_api: true,
+    outbound_webhooks: true,
+    storefront_builder: true,
+    invoicing: true,
+    forms_and_links: true,
+    extra_channels: true,
   },
+  visibleAddons: [],
   inUse: 2,
   isRegistrationDefault: false,
   createdAt: '2026-10-01T00:00:00.000Z',
@@ -275,5 +306,161 @@ describe('isPlanDraftDirty', () => {
     const d = planToDraft(stored);
     expect(isPlanDraftDirty(d, planToDraft(stored))).toBe(false);
     expect(isPlanDraftDirty(d, { ...d, name: 'Growth 2' })).toBe(true);
+  });
+});
+
+const A = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d21';
+const B = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d22';
+const C = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d23';
+
+describe('limits: unlimited <-> 0', () => {
+  it('blank and 0 are unlimited, a positive number is a cap', () => {
+    expect(limitIsUnlimited('')).toBe(true);
+    expect(limitIsUnlimited('  ')).toBe(true);
+    expect(limitIsUnlimited('0')).toBe(true);
+    expect(limitIsUnlimited('00')).toBe(true);
+    expect(limitIsUnlimited('5')).toBe(false);
+    expect(limitIsUnlimited('10')).toBe(false);
+  });
+
+  it('ticking Unlimited blanks the cap and the request stores 0', () => {
+    const d = setLimitUnlimited(
+      filled({ limits: { ...newPlanDraft().limits, users: '5' } }),
+      'users',
+      true,
+    );
+    expect(d.limits.users).toBe('');
+    expect(buildPlanRequest(d).body?.limits?.users).toBe(0);
+  });
+
+  it('unticking gives a real cap to edit (never a blank that would read as unlimited again)', () => {
+    const d = setLimitUnlimited(filled(), 'users', false);
+    expect(limitIsUnlimited(d.limits.users)).toBe(false);
+    expect(buildPlanRequest(d).body?.limits?.users).toBe(1);
+    expect(
+      setLimitUnlimited(filled(), 'api_rate_limit_per_minute', false).limits
+        .api_rate_limit_per_minute,
+    ).toBe('60');
+  });
+
+  it('a stored 0 opens as unlimited and a stored cap does not', () => {
+    const d = planToDraft(stored);
+    expect(limitIsUnlimited(d.limits.users)).toBe(true);
+    expect(limitIsUnlimited(d.limits.monthly_messages)).toBe(false);
+  });
+
+  it('counts only capped limits, optionally within a subset', () => {
+    const d = filled({
+      limits: { ...newPlanDraft().limits, users: '3', contacts: '100', tags: '0' },
+    });
+    expect(countLimitsSet(d.limits)).toBe(2);
+    expect(countLimitsSet(d.limits, ['users', 'tags'])).toBe(1);
+    expect(countLimitsSet(newPlanDraft().limits)).toBe(0);
+  });
+});
+
+describe('features: counts and group toggles', () => {
+  it('counts the features that are on', () => {
+    expect(countFeaturesOn(newPlanDraft().features)).toBe(PLAN_FEATURE_KEYS.length);
+    const off = toggleFeatures(newPlanDraft().features, PLAN_FEATURE_KEYS, false);
+    expect(countFeaturesOn(off)).toBe(0);
+  });
+
+  it('switches only the given (visible) rows and leaves the rest', () => {
+    const off = toggleFeatures(newPlanDraft().features, ['automation', 'calling'], false);
+    expect(off.automation).toBe(false);
+    expect(off.calling).toBe(false);
+    expect(off.analytics).toBe(true);
+    expect(countFeaturesOn(off, ['automation', 'calling', 'analytics'])).toBe(1);
+    const on = toggleFeatures(off, ['automation'], true);
+    expect(on.automation).toBe(true);
+    expect(on.calling).toBe(false);
+  });
+});
+
+describe('add-on selection', () => {
+  it('toggles one id without duplicating it', () => {
+    expect(toggleAddon([], A, true)).toEqual([A]);
+    expect(toggleAddon([A], A, true)).toEqual([A]);
+    expect(toggleAddon([A, B], A, false)).toEqual([B]);
+  });
+
+  it('select all adds the visible ids and keeps the others; clear removes only the visible ones', () => {
+    expect(selectAddons([C], [A, B, C])).toEqual([C, A, B]);
+    expect(clearAddons([A, B, C], [A, C])).toEqual([B]);
+    expect(clearAddons([A], [])).toEqual([A]);
+  });
+});
+
+describe('buildPlanRequest and visibleAddons', () => {
+  it('sends the selection once per id', () => {
+    expect(buildPlanRequest(filled({ visibleAddons: [A, B, A] })).body?.visibleAddons).toEqual([
+      A,
+      B,
+    ]);
+  });
+
+  it('sends an empty list when the admin cleared everything (it replaces the stored one)', () => {
+    expect(buildPlanRequest(filled({ visibleAddons: [] })).body?.visibleAddons).toEqual([]);
+  });
+
+  it('omits the field when the options never loaded and the tab was untouched, so the stored selection is kept', () => {
+    const body = buildPlanRequest(filled({ visibleAddons: [A] }), { includeAddons: false }).body;
+    expect(body).toBeDefined();
+    expect('visibleAddons' in body!).toBe(false);
+  });
+
+  it('the body still passes the API schema', () => {
+    const body = buildPlanRequest(filled({ visibleAddons: [A] })).body;
+    expect(createPlanRequestSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('opens a stored plan with its add-ons, and a new plan with none', () => {
+    expect(planToDraft({ ...stored, visibleAddons: [A, B] }).visibleAddons).toEqual([A, B]);
+    expect(newPlanDraft().visibleAddons).toEqual([]);
+  });
+
+  it('ticking an add-on off and on again is not a change', () => {
+    const base = planToDraft({ ...stored, visibleAddons: [A, B] });
+    const moved = {
+      ...base,
+      visibleAddons: toggleAddon(toggleAddon(base.visibleAddons, A, false), A, true),
+    };
+    expect(isPlanDraftDirty(base, moved)).toBe(false);
+    expect(isPlanDraftDirty(base, { ...base, visibleAddons: [A] })).toBe(true);
+  });
+});
+
+describe('server errors', () => {
+  it('maps visibleAddons to its own field', () => {
+    expect(planFieldForPath('visibleAddons')).toBe('visibleAddons');
+  });
+
+  it('reads the unknown add-on id from the API message', () => {
+    expect(unknownAddonId(`unknown_addon:${A}`)).toBe(A);
+    expect(unknownAddonId('List each add-on once.')).toBeNull();
+    expect(unknownAddonId('unknown_addon:')).toBeNull();
+  });
+
+  it('folds every unknown add-on into one visibleAddons problem and keeps other fields', () => {
+    const problems = problemsFromServer([
+      { path: 'visibleAddons', message: `unknown_addon:${A}` },
+      { path: 'visibleAddons', message: `unknown_addon:${B}` },
+      { path: 'visibleAddons', message: `unknown_addon:${A}` },
+      { path: 'name', message: 'Name is taken.' },
+      { path: 'limits.users', message: 'Too big.' },
+      { path: 'nonsense', message: 'ignored' },
+    ]);
+    expect(problems.visibleAddons).toEqual({ code: 'server', ids: [A, B] });
+    expect(problems.name).toEqual({ code: 'server', message: 'Name is taken.' });
+    expect(problems['limits.users']).toEqual({ code: 'server', message: 'Too big.' });
+    expect(Object.keys(problems)).toHaveLength(3);
+  });
+
+  it('shows another visibleAddons message (a duplicate, say) as the API said it', () => {
+    expect(
+      problemsFromServer([{ path: 'visibleAddons', message: 'List each add-on once.' }])
+        .visibleAddons,
+    ).toEqual({ code: 'server', message: 'List each add-on once.' });
   });
 });

@@ -536,7 +536,14 @@
             "scheduled_messages": "الرسائل المجدولة",
             "whatsapp_warmer": "إحماء واتساب",
             "marketplace": "السوق",
-            "lead_sources": "مصادر العملاء المحتملين"
+            "lead_sources": "مصادر العملاء المحتملين",
+            "team_chat": "دردشة الفريق",
+            "public_api": "واجهة API العامة",
+            "outbound_webhooks": "ويب هوك الصادر",
+            "storefront_builder": "منشئ المتجر",
+            "invoicing": "الفوترة",
+            "forms_and_links": "النماذج والروابط",
+            "extra_channels": "تيليجرام وفيسبوك وإنستغرام"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

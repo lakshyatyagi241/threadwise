@@ -15,7 +15,7 @@ import {
   type PlanSettings,
   billingPlansResponseSchema,
   billingStatusSchema,
-  billingUsageResponseSchema,
+  billingUsagePanelResponseSchema,
   changePlanResponseSchema,
   workspacePlanListResponseSchema,
   workspacePlanSchema,
@@ -40,7 +40,7 @@ export const fetchBillingStatus = (signal?: AbortSignal) =>
   apiFetch('/billing/status', { schema: billingStatusSchema, signal });
 
 export const fetchBillingUsage = (signal?: AbortSignal) =>
-  apiFetch('/billing/usage', { schema: billingUsageResponseSchema, signal });
+  apiFetch('/billing/usage', { schema: billingUsagePanelResponseSchema, signal });
 
 /** Switch to a free plan or a cheaper/equal plan (a dearer one is a checkout). `apiFetch` adds the Idempotency-Key. */
 export const changePlan = (planSlug: string) =>

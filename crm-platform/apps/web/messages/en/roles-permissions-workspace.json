@@ -224,6 +224,9 @@
       "deny": "Deny",
       "effectLabel": "Allow or deny: {label}",
       "scopeLabel": "Record scope: {label}",
+      "needsPlan": "Needs {feature} plan",
+      "needsApp": "Needs app {app} installed",
+      "lockedHint": "This permission is not available to this workspace yet. It unlocks when the plan feature is on or the app is installed.",
       "scope": {
         "all": "All records",
         "team": "Team records",
