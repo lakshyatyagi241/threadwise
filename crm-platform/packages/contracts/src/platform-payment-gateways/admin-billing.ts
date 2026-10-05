@@ -446,6 +446,8 @@ export const billingSettingsSchema = z.object({
   yearlyToggleEnabled: z.boolean(),
   yearlyDiscountPct: z.number().int().min(0).max(100),
   recurringEnabled: z.boolean(),
+  /** Days a paid plan or add-on stays active after its period ends while autopay is still retrying (0 = no grace). */
+  graceDays: z.number().int().min(0).max(30).default(7),
   /** One country per line in the form; a de-duplicated list here. */
   countries: z.array(z.string().trim().min(1).max(100)).max(300),
   companyName: z.string().trim().max(160),

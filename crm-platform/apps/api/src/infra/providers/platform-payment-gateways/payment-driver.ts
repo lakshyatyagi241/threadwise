@@ -185,12 +185,29 @@ export const defaultHttp: HttpFetch = async (url, init) => {
   return { status: res.status, json, text };
 };
 
+/** What identifies a provider plan: the same account, price and cadence is the same plan, so it is created once and reused. */
+export interface ProviderPlanKey {
+  /** Opaque, stable per provider account (a hash of the key id), so a test key and a live key never share a plan. */
+  account: string;
+  currency: string;
+  amountMinor: bigint;
+  unit: 'day' | 'week' | 'month' | 'year';
+  count: number;
+}
+
+/** Optional store a driver may use to avoid creating a new provider plan on every checkout. A miss or a failure is never fatal. */
+export interface ProviderPlanCache {
+  find(key: ProviderPlanKey): Promise<string | null>;
+  save(key: ProviderPlanKey, providerPlanId: string): Promise<void>;
+}
+
 export interface DriverContext {
   credentials: Record<string, string>;
   mode: 'sandbox' | 'live';
   http: HttpFetch;
   /** The URL a provider posts notifications to (Square signs it into its notification signature). */
   webhookUrl?: string;
+  planCache?: ProviderPlanCache;
 }
 
 export const basicAuth = (user: string, pass: string): string =>

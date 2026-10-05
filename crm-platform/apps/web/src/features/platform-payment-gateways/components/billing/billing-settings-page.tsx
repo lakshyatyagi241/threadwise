@@ -41,6 +41,7 @@ interface Draft {
   yearlyToggleEnabled: boolean;
   yearlyDiscountPct: string;
   recurringEnabled: boolean;
+  graceDays: string;
   countries: string;
   companyName: string;
   companyAddress: string;
@@ -59,6 +60,7 @@ const draftOf = (s: BillingSettingsResponse): Draft => ({
   yearlyToggleEnabled: s.yearlyToggleEnabled,
   yearlyDiscountPct: String(s.yearlyDiscountPct),
   recurringEnabled: s.recurringEnabled,
+  graceDays: String(s.graceDays),
   countries: s.countries.join('\n'),
   companyName: s.companyName,
   companyAddress: s.companyAddress,
@@ -79,6 +81,7 @@ export function toSettings(d: Draft) {
     yearlyToggleEnabled: d.yearlyToggleEnabled,
     yearlyDiscountPct: d.yearlyDiscountPct.trim() === '' ? Number.NaN : Number(d.yearlyDiscountPct),
     recurringEnabled: d.recurringEnabled,
+    graceDays: d.graceDays.trim() === '' ? Number.NaN : Number(d.graceDays),
     countries: d.countries
       .split(/\r?\n/)
       .map((c) => c.trim())
@@ -486,6 +489,27 @@ function SettingsForm({ initial }: { initial: BillingSettingsResponse }) {
               </li>
             ))}
           </ul>
+          <Field
+            label={t('recurring.graceDays')}
+            htmlFor="bs-grace-days"
+            error={err('graceDays')}
+            className="mt-3 max-w-[200px]"
+          >
+            <Input
+              id="bs-grace-days"
+              type="number"
+              min={0}
+              max={30}
+              value={d.graceDays}
+              onChange={(e) => set('graceDays', e.target.value)}
+              disabled={off}
+              invalid={!!err('graceDays')}
+              className="font-mono"
+            />
+          </Field>
+          <p className="mt-1 max-w-[640px] text-[11px] text-muted-foreground">
+            {t('recurring.graceHint')}
+          </p>
           <p className="mt-2 max-w-[640px] text-[11px] text-muted-foreground">
             {t('recurring.note')}
           </p>

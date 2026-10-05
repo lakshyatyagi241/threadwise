@@ -302,6 +302,21 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
                   </div>
                 </div>
                 <div>
+                  <label htmlFor="addon-mode" className={LABEL}>
+                    {t('fields.billingMode')}
+                  </label>
+                  <Select
+                    id="addon-mode"
+                    className="h-auto py-2.5 text-[13px]"
+                    value={draft.billingMode}
+                    onChange={(e) => set('billingMode', e.target.value as 'one_time' | 'recurring')}
+                    disabled={draft.isLifetime}
+                  >
+                    <option value="one_time">{t('modes.one_time')}</option>
+                    <option value="recurring">{t('modes.recurring')}</option>
+                  </Select>
+                </div>
+                <div>
                   <label htmlFor="addon-sort" className={LABEL}>
                     {t('fields.sortOrder')}
                   </label>

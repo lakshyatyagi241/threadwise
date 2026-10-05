@@ -11,6 +11,7 @@ const v = (over: Partial<PlanValidity>): PlanValidity => ({
   planEndsAt: null,
   daysLeft: null,
   renewalWindow: false,
+  graceEndsAt: null,
   ...over,
 });
 
@@ -22,6 +23,11 @@ describe('top bar (TW-PLAN-013)', () => {
     expect(barFor(v({ state: 'paid_active' }))).toBeNull();
     expect(barFor(v({ state: 'paid_lapsed' }))).toBeNull();
     expect(barFor(v({ state: 'free' }))).toBeNull();
+  });
+
+  it('shows the grace notice while autopay retries, and the banner warns instead of reading expired', () => {
+    expect(barFor(v({ state: 'paid_grace', daysLeft: 3 }))).toBe('grace');
+    expect(bannerFor(v({ state: 'paid_grace' }))).toEqual({ tone: 'warning', key: 'grace' });
   });
 });
 

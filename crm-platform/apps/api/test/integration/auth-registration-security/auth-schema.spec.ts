@@ -6,6 +6,7 @@ import { createDbClient, runMigrations, withPrivileged, withTenant, type DbClien
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { TenantDirectory } from '../../../src/modules/auth/platform/tenant-directory';
 import { PlanCatalogService } from '../../../src/modules/plans-subscriptions-trials/plan-catalog.service';
+import { PlanStore } from '../../../src/modules/plans-subscriptions-trials/plan-store';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials/plan-entitlement.service';
 
 /**
@@ -111,7 +112,10 @@ describe('auth schema, RLS and gateways', () => {
         fn: Parameters<DatabaseService['txAs']>[1],
       ) => withTenant(dbClient.db, tenant, fn),
     } as unknown as DatabaseService;
-    directory = new TenantDirectory(db, new PlanEntitlementService(db, new PlanCatalogService(db)));
+    directory = new TenantDirectory(
+      db,
+      new PlanEntitlementService(db, new PlanCatalogService(db), new PlanStore(db)),
+    );
   }, 180_000);
 
   afterAll(async () => {

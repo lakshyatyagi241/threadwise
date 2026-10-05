@@ -45,9 +45,11 @@ export function TrialBar() {
           ? t('trial', { days: q.data.daysLeft ?? 1 })
           : kind === 'trialEnded'
             ? t('trialEnded')
-            : q.data.subscription
-              ? t('autoRenew', { days: q.data.daysLeft ?? 1, date })
-              : t('renew', { days: q.data.daysLeft ?? 1, date })}
+            : kind === 'grace'
+              ? t('grace', { days: q.data.daysLeft ?? 1 })
+              : q.data.subscription
+                ? t('autoRenew', { days: q.data.daysLeft ?? 1, date })
+                : t('renew', { days: q.data.daysLeft ?? 1, date })}
       </span>
       <span className="flex gap-2">
         {kind === 'trial' && (
@@ -59,7 +61,11 @@ export function TrialBar() {
           </Link>
         )}
         <Link href={PLANS_PATH} className={`${btn} bg-background text-foreground hover:opacity-90`}>
-          {kind === 'renew' ? (q.data.subscription ? t('managePlan') : t('renewNow')) : t('buy')}
+          {kind === 'renew' || kind === 'grace'
+            ? q.data.subscription
+              ? t('managePlan')
+              : t('renewNow')
+            : t('buy')}
         </Link>
         {kind === 'renew' && q.data.subscription && (
           <CancelRenewal

@@ -82,6 +82,48 @@ Two ledgers means they can disagree. A reconciliation report —
 sum(`usage_charges.amount`) where posted vs sum of posting amounts, per org per
 period — is required before this is trusted, not after.
 
+## Subscriptions, grace and recurring add-ons (platform billing)
+
+How a workspace pays the platform (plans, add-ons, wallet top-ups) through Razorpay and the other gateways. Decided in the billing
+hardening change (`lakshya/paygw/billing-hardening`); the code lives in `modules/platform-payment-gateways`, `plans-subscriptions-trials` and
+`addons-extension-registry`.
+
+**Decisions**
+
+- **A subscription and a payment are different things.** A wallet top-up and a one-off plan or add-on purchase are payments: an order that
+  one confirmed payment settles. A subscription is a provider mandate that charges on its own. A subscription charge is settled only by its
+  subscription event (`subscription.charged`, which carries the payment). A `payment.captured` that carries an `invoice_id` is the same charge seen
+  as a payment, and is ignored as a one-off payment, so it can never settle or double-apply to an unrelated order.
+- **Grace is derived, not stored.** `paid_grace` is computed on read: the plan period has ended, a live autopay subscription (`active` or `past_due`)
+  exists for the plan, and now is before `plan_ends_at + billing.grace_days` (platform setting, default 7, 0 to 30). Entitlements stay those of the paid
+  plan inside the grace; after it the plan lapses to free as before. No column, no sweeper: a renewal or a final failure is visible on the next read.
+- **A recurring add-on is a subscription of its own, not a plan change.** `plans.billing_mode` is `one_time` or `recurring` (recurring only for a
+  priced, non-lifetime add-on). A recurring pack is bought through the same checkout as a Razorpay subscription; its `subscriptions` row has
+  `kind = 'addon'` and `workspace_addon_id`. Each charge moves that purchase's `workspace_addons.ends_at` to the provider period end, never earlier, and the
+  workspace plan window is never touched. Cancel stops the renewal and keeps the paid term. The add-on gets the same grace, evaluated in the entitlement
+  query for purchases with a live subscription.
+- **A provider plan is made once.** `gateway_plan_cache` remembers the provider plan per gateway account (a hash of the key id, so test and live
+  never share), currency, minor-unit amount and interval. A cached plan the provider no longer has is replaced once. The cache is platform data
+  (no tenant, privileged access only).
+
+**Consequences**
+
+- Good: no new background job; a missed webhook is repaired by the existing reconciler; the plan and add-on paths share one lifecycle service.
+- Cost: every entitlement read for a workspace with autopay also reads the grace setting (cached 30 seconds per process) and checks for a live
+  subscription; a changed grace value takes up to 30 seconds to apply. The admin workspace list still shows a workspace in grace as lapsed.
+- Cost: because the add-on subscription shares the table, anything that reads "the workspace subscription" must filter on `kind`.
+- A renewal never shortens a paid term: if the provider's period end is earlier than the pack's own term, the longer one stays.
+
+**Alternatives that lost**
+
+- A stored `grace_ends_at` set by the failure webhook and cleared by a sweeper: a second source of truth that goes stale when a webhook is missed,
+  and a new scheduled job to keep it right.
+- A separate `addon_subscriptions` table: duplicates the lifecycle (activate, renew, cancel, reconcile, audit, outbox) for no behavioural difference.
+- A new provider plan on every checkout (Reference's way): leaves an orphan plan in the provider account for every attempt.
+
+**Revisit when** grace needs a per-plan or per-workspace length, add-ons need prorating or a mid-term quantity change (that wants a real provider
+subscription update, not a new row), or the entitlement hot path shows the grace and subscription lookup in a profile.
+
 ## Compliance gate
 
 Exam fees mean holding money that belongs to an institute. Under the RBI
