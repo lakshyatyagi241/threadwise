@@ -6,6 +6,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { WorkspaceGatewayResolver } from '../../checkout-orders-merchant-payments';
 import { ORDERS_GATEWAY, type OrdersGateway } from '../_shims/tokens';
 import { ShopsRepository } from '../shops/shops.repository';
 import { StorefrontPaymentService } from './storefront-payment.service';
@@ -24,7 +25,7 @@ const obj = (v: unknown): Json =>
  * The Razorpay webhook that turns an order `paid` (TW-STORE-018), hardened per decision D-04.
  *
  * Order of events, and why: parse the body; find the shop from the event's notes; verify the signature with THAT shop's
- * webhook secret BEFORE reading or touching any order (Reference resolved the shop from unauthenticated payload notes and only
+ * gateway webhook secret (`WorkspaceGatewayResolver`) BEFORE reading or touching any order (Reference resolved the shop from unauthenticated payload notes and only
  * then checked, and never tied the order to the shop); then apply the event only when the order belongs to the verifying
  * shop, the amount and currency equal the order total, and the order is not cancelled. A replay finds the order already paid
  * and changes nothing. A shop without a webhook secret fails closed.
@@ -41,6 +42,7 @@ export class PaymentWebhookService {
     private readonly payments: StorefrontPaymentService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly gateways: WorkspaceGatewayResolver,
     @Inject(ORDERS_GATEWAY) private readonly orders: OrdersGateway,
   ) {}
 
@@ -76,8 +78,13 @@ export class PaymentWebhookService {
       const shop = await this.shops.findById(tx, orgId, Number(hit.storefront_id));
       if (!shop) throw reject(HttpStatus.NOT_FOUND, 'storefront_unknown');
 
-      // The signature first: nothing below runs for a request the shop's own secret did not sign.
-      if (!raw || !this.payments.verifyWebhook(shop, raw, signature)) {
+      // The signature first: nothing below runs for a request the shop's gateway secret did not sign. The secret is the one of the
+      // Razorpay gateway this shop resolves to (its own override, the workspace default, or the keys saved on the shop).
+      const gateway = await this.gateways.resolve(orgId, shop.id, { slug: 'razorpay', tx });
+      if (
+        !raw ||
+        !this.payments.verifyWebhookWith(gateway?.credentials.webhook_secret ?? '', raw, signature)
+      ) {
         this.logger.warn(`[STOREFRONT-PAY] webhook signature mismatch (shop ${shop.id})`);
         throw reject(HttpStatus.BAD_REQUEST, 'bad_signature');
       }

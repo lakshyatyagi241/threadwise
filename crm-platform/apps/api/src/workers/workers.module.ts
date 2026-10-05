@@ -8,6 +8,7 @@ import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CallingVoiceWorkerModule } from '../modules/calling-voice';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
+import { StoreOrdersSalesWorkerModule } from '../modules/store-orders-sales';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
@@ -67,6 +68,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
+    StoreOrdersSalesWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
     CampaignsWorkerModule,
