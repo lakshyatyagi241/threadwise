@@ -110,7 +110,13 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
     blocks: [
       {
         caption: 'whatsapp',
-        items: ['wap-providers', 'wap-assignments', 'wap-switch', 'node-bridge'],
+        items: [
+          'wap-providers',
+          'wap-assignments',
+          'wap-switch',
+          'node-bridge',
+          'webhook-forwarding',
+        ],
       },
     ],
   },
