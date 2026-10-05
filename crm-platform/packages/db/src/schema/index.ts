@@ -68,6 +68,7 @@ export * from './team-chat';
 export * from './team-inbox-conversations';
 export * from './team-inbox-routing-sla';
 export * from './wallet-message-billing';
+export * from './webhook-fanout';
 export * from './whatsapp-cloud-api-waba';
 export * from './whatsapp-devices-baileys';
 export * from './workspaces-teams-tenancy';

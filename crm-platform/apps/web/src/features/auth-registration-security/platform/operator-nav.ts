@@ -114,6 +114,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
   },
+  // Webhook forwarding (WFWD, not a Reference feature): messages/en/webhook-fanout.json
+  {
+    id: 'webhook-forwarding',
+    href: '/admin/webhook-forwarding',
+    labelKey: 'webhook-fanout.nav.forwarding',
+    groupKey: 'webhook-fanout.nav.group',
+  },
   {
     id: 'cms-frontend',
     href: '/admin/frontend',

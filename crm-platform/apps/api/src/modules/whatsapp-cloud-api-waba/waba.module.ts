@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { WebhookFanoutModule } from '../webhook-fanout';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { WabaConnectService } from './waba-connect.service';
@@ -18,7 +19,7 @@ import { WabaWebhookService } from './waba-webhook.service';
  * acknowledged and logged.
  */
 @Module({
-  imports: [BroadcastsModule],
+  imports: [BroadcastsModule, WebhookFanoutModule],
   controllers: [WabaConnectionsController, WabaWebhookController],
   providers: [
     CryptoService,
