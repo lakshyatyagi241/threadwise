@@ -18,6 +18,7 @@ import {
   PageHeader,
   TableSkeleton,
   Th,
+  ToneBadge,
   useErrorLine,
   useShopParam,
   useStoreCan,
@@ -27,8 +28,9 @@ const LINK =
   'font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
 
 /**
- * `/store/customers`: the shop's saved customers (WaDesk /store/customers; this screen replaces the older Saved customers page).
- * A merchant pre-sets a buyer's name, company and delivery address by phone; here each row also shows what the buyer bought.
+ * `/store/customers`: the shop's customers (WaDesk /store/customers lists saved customers only; this screen replaces the older Saved
+ * customers page). A merchant pre-sets a buyer's name, company and delivery address by phone; here the list also includes every buyer
+ * found in the orders, marked "No saved address" until a profile with an address exists, and each row shows what the buyer bought.
  */
 export function CustomersScreen() {
   const t = useTranslations('checkout-orders-merchant-payments.customers');
@@ -165,6 +167,16 @@ export function CustomersScreen() {
                         <div dir="ltr" className="text-start text-muted-foreground">
                           {displayPhone(c.phone)}
                         </div>
+                        {!c.hasSavedAddress && (
+                          <ToneBadge
+                            tone="neutral"
+                            className="mt-1"
+                            data-testid="no-saved-address"
+                            title={t('noSavedAddressHint')}
+                          >
+                            {t('noSavedAddress')}
+                          </ToneBadge>
+                        )}
                       </td>
                       <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                         {c.orderCount > 0 ? (
@@ -228,15 +240,17 @@ export function CustomersScreen() {
                               >
                                 {tc('edit')}
                               </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="text-danger"
-                                aria-label={t('deleteLabel', { name: label })}
-                                onClick={() => setPendingDelete(c)}
-                              >
-                                {tc('delete')}
-                              </Button>
+                              {c.hasProfile && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-danger"
+                                  aria-label={t('deleteLabel', { name: label })}
+                                  onClick={() => setPendingDelete(c)}
+                                >
+                                  {tc('delete')}
+                                </Button>
+                              )}
                             </>
                           )}
                         </div>
@@ -260,7 +274,8 @@ export function CustomersScreen() {
           customer={editor.customer}
           onClose={() => setEditor(null)}
           onSaved={(saved) => {
-            if (viewing?.id === saved.id) setViewing(saved);
+            // an order-only buyer gets their profile (and a new id) when edited: keep the open drawer on them
+            if (viewing?.id === saved.id || viewing?.phone === saved.phone) setViewing(saved);
           }}
         />
       )}

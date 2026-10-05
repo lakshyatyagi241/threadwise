@@ -54,17 +54,24 @@ export function toSaveInput(f: CustomerForm): SaveStoreCustomerInput {
   };
 }
 
-/** Editing one customer: the phone stays, the rest is replaced; `rowVersion` guards against a parallel edit. */
+/**
+ * Editing one customer: the phone stays, the rest is replaced; `rowVersion` guards against a parallel edit. A buyer known from orders
+ * only has no profile yet (row version 0): there is nothing to guard, and saving creates the profile.
+ */
 export function toUpdateInput(f: CustomerForm, rowVersion: number): UpdateStoreCustomerInput {
   return {
     name: orNull(f.name),
     company: orNull(f.company),
     address: orNull(f.address),
-    rowVersion,
+    ...(rowVersion > 0 ? { rowVersion } : {}),
   };
 }
 
-/** The customer's order list, filtered by the digits of the phone (orders are matched to customers by those digits). */
+/**
+ * The customer's order list, searched by the national tail of the phone: an order keeps the number as the buyer typed it (a bare local
+ * number or one with the country code) while the customer's phone is normalised, and the orders search matches digits anywhere in it,
+ * so the last 10 digits find every form of the same number.
+ */
 export function ordersHref(phone: string): string {
-  return `/store/orders?q=${encodeURIComponent(digits(phone))}`;
+  return `/store/orders?q=${encodeURIComponent(digits(phone).slice(-10))}`;
 }

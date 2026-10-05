@@ -25,7 +25,11 @@ export function useStoreShops(shopParam: string | undefined) {
   return useQuery({
     queryKey: ['store', 'overview', shopParam ?? ''],
     queryFn: ({ signal }) =>
-      apiFetch('/store/overview', { query: { shopId: shopParam }, schema: storeOverviewSchema, signal }),
+      apiFetch('/store/overview', {
+        query: { shopId: shopParam },
+        schema: storeOverviewSchema,
+        signal,
+      }),
     retry: false,
     staleTime: 15_000,
   });
@@ -145,13 +149,19 @@ export function ToneBadge({
   tone,
   children,
   className,
+  title,
+  'data-testid': testId,
 }: {
   tone: Tone;
   children: ReactNode;
   className?: string;
+  title?: string;
+  'data-testid'?: string;
 }) {
   return (
     <span
+      title={title}
+      data-testid={testId}
       className={cn(
         'inline-flex items-center whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium',
         TONE_CLASS[tone],

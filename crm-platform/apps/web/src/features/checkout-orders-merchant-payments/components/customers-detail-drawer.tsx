@@ -18,7 +18,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-/** One saved customer: profile, lifetime totals per currency, the CRM contact and the latest orders. */
+/** One customer (saved, or known from orders only): profile, lifetime totals per currency, the CRM contact and the latest orders. */
 export function CustomerDetailDrawer({
   customer,
   shopId,
@@ -54,9 +54,11 @@ export function CustomerDetailDrawer({
             <Button variant="secondary" onClick={() => onEdit(c)}>
               {tc('edit')}
             </Button>
-            <Button variant="danger" onClick={() => onDelete(c)}>
-              {tc('delete')}
-            </Button>
+            {c.hasProfile && (
+              <Button variant="danger" onClick={() => onDelete(c)}>
+                {tc('delete')}
+              </Button>
+            )}
           </>
         ) : undefined
       }
@@ -72,7 +74,11 @@ export function CustomerDetailDrawer({
               <Row label={t('name')}>{c.name || <Muted />}</Row>
               <Row label={t('company')}>{c.company || <Muted />}</Row>
               <Row label={t('address')}>
-                {c.address ? <span className="whitespace-pre-line">{c.address}</span> : <Muted />}
+                {c.address ? (
+                  <span className="whitespace-pre-line">{c.address}</span>
+                ) : (
+                  <span className="text-muted-foreground">{t('noSavedAddress')}</span>
+                )}
               </Row>
               <Row label={t('crmContact')}>
                 {c.contactId ? (

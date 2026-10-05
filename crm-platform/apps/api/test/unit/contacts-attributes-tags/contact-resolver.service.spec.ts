@@ -92,7 +92,7 @@ describe('ContactResolverService.findOrCreateByPhone', () => {
     expect(contacts.resolveOrCreateByIdentity).toHaveBeenCalledWith(
       expect.anything(),
       1,
-      expect.objectContaining({ kind: 'phone', value: '919876543210', source: 'store' }),
+      expect.objectContaining({ kind: 'phone', value: '+919876543210', source: 'store' }),
     );
     expect(tags.attach).toHaveBeenCalledWith(expect.anything(), 1, [5], [3], null);
     expect(tags.insertIfAbsent).not.toHaveBeenCalled();
@@ -231,5 +231,112 @@ describe('blankFills / clean', () => {
     expect(clean('  x ')).toBe('x');
     expect(clean('   ')).toBeNull();
     expect(clean(undefined)).toBeNull();
+  });
+});
+
+/** The platform's default country decides how a bare local number (a buyer who typed 10 digits) is read. */
+function buildWithCountry(defaultCountryCode: string | null | 'throws') {
+  const base = build({ resolved: { outcome: 'created', contactId: 8, uuid: 'c-8' } });
+  const settings = {
+    values: vi.fn(async () => {
+      if (defaultCountryCode === 'throws') throw new Error('settings down');
+      return { defaultCountryCode };
+    }),
+  };
+  const svc = new ContactResolverService(
+    base.contacts as never,
+    base.repo as never,
+    base.tags as never,
+    base.entitlements as never,
+    base.audit as never,
+    base.outbox as never,
+    settings as never,
+  );
+  return { ...base, svc, settings };
+}
+
+describe('ContactResolverService: bare local numbers and the default country', () => {
+  const resolvedWith = (c: ReturnType<typeof buildWithCountry>) =>
+    c.contacts.resolveOrCreateByIdentity.mock.calls[0]?.[2] as { value: string } | undefined;
+
+  it('reads a bare 10-digit number in the default country (7999834066 is an Indian number under +91)', async () => {
+    const c = buildWithCountry('+91');
+    const r = await c.svc.findOrCreateByPhone(fakeTx(), 1, {
+      phone: '7999834066',
+      source: 'store',
+    });
+    expect(r.outcome).toBe('created');
+    expect(resolvedWith(c)?.value).toBe('+917999834066');
+  });
+
+  it('uses whatever the platform default is, and never touches a number that carries its own country', async () => {
+    const uk = buildWithCountry('+44');
+    await uk.svc.findOrCreateByPhone(fakeTx(), 1, { phone: '07700 900123', source: 'store' });
+    expect(resolvedWith(uk)?.value).toBe('+447700900123');
+    for (const phone of ['+91 79998 34066', '917999834066', '00917999834066']) {
+      const c = buildWithCountry('+44');
+      await c.svc.findOrCreateByPhone(fakeTx(), 1, { phone, source: 'store' });
+      expect(resolvedWith(c)?.value, phone).toBe('+917999834066');
+    }
+  });
+
+  it('with no default country (unset or unreadable) a bare local number is reported unusable, never guessed', async () => {
+    for (const country of [null, '', 'throws'] as const) {
+      const c = buildWithCountry(country);
+      const tx = fakeTx();
+      expect(
+        await c.svc.findOrCreateByPhone(tx, 1, { phone: '7999834066', source: 'store' }),
+      ).toEqual({
+        outcome: 'skipped',
+        reason: 'unusable_phone',
+      });
+      expect(c.contacts.resolveOrCreateByIdentity).not.toHaveBeenCalled();
+      expect(tx.execute).not.toHaveBeenCalled();
+    }
+    // a number that announces its country needs no default
+    const c = buildWithCountry(null);
+    await c.svc.findOrCreateByPhone(fakeTx(), 1, { phone: '+917999834066', source: 'store' });
+    expect(resolvedWith(c)?.value).toBe('+917999834066');
+  });
+
+  it('keeps the buyer profile in step only when asked, with the canonical digits, also when the plan is out of contacts', async () => {
+    const off = buildWithCountry('+91');
+    const txOff = fakeTx();
+    await off.svc.findOrCreateByPhone(txOff, 1, { phone: '7999834066', source: 'store' });
+    expect(JSON.stringify(txOff.execute.mock.calls)).not.toContain('wa_customer_profiles');
+
+    const on = buildWithCountry('+91');
+    const txOn = fakeTx();
+    await on.svc.findOrCreateByPhone(txOn, 1, {
+      phone: '7999834066',
+      name: 'Asha',
+      address: '12 Main St',
+      source: 'store',
+      saveProfile: true,
+    });
+    const sqlText = JSON.stringify(txOn.execute.mock.calls);
+    expect(sqlText).toContain('INSERT INTO wa_customer_profiles');
+    expect(sqlText).toContain('917999834066');
+    // existing values win: the upsert only coalesces onto empty ones
+    expect(sqlText).toContain('ON CONFLICT');
+
+    const capped = build({ resolved: { outcome: 'quota_reached' } });
+    const cappedSvc = new ContactResolverService(
+      capped.contacts as never,
+      capped.repo as never,
+      capped.tags as never,
+      capped.entitlements as never,
+      capped.audit as never,
+      capped.outbox as never,
+      { values: async () => ({ defaultCountryCode: '+91' }) } as never,
+    );
+    const txCap = fakeTx();
+    const link = await cappedSvc.findOrCreateByPhone(txCap, 1, {
+      phone: '7999834066',
+      source: 'store',
+      saveProfile: true,
+    });
+    expect(link).toEqual({ outcome: 'skipped', reason: 'plan_limit_reached' });
+    expect(JSON.stringify(txCap.execute.mock.calls)).toContain('INSERT INTO wa_customer_profiles');
   });
 });

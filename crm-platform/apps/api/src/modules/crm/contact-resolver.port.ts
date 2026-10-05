@@ -11,7 +11,7 @@ import type { Tx } from '@crm/db';
 export const CONTACT_RESOLVER = Symbol('CONTACT_RESOLVER');
 
 export interface ContactResolveInput {
-  /** The buyer's number as the channel wrote it (digits with a country code, or E.164 with a "+"). */
+  /** The buyer's number as the channel wrote it (digits with a country code, or E.164 with a "+"; a bare local number is read in the platform's default country). */
   phone: string | null | undefined;
   /** Kept only where the contact has none yet; a name somebody wrote is never replaced. */
   name?: string | null;
@@ -21,6 +21,12 @@ export interface ContactResolveInput {
   source: string;
   /** Label attached to the contact (created in the workspace when missing and the plan's tag cap allows). Null: none. */
   tag?: string | null;
+  /**
+   * Also keep the buyer's saved customer profile (`wa_customer_profiles`: name, phone, delivery address) in step, in the same
+   * transaction: created when missing, and only EMPTY fields of an existing profile are filled, so what a customer or the merchant
+   * edited is never overwritten. Done even when the contact link is skipped (a plan out of contacts still has a buyer). Off by default.
+   */
+  saveProfile?: boolean;
 }
 
 export type ContactSkipReason =
@@ -42,4 +48,10 @@ export interface ContactResolverPort {
    * caller records as "no contact" (an order is never refused because of its contact).
    */
   findOrCreateByPhone(tx: Tx, orgId: number, input: ContactResolveInput): Promise<ContactLink>;
+
+  /**
+   * The country code ("+91") a bare local number is read in (the platform's default country), or null when it cannot be read. The
+   * customers list uses it to group the same buyer's orders typed in different forms.
+   */
+  defaultCountryCode(): Promise<string | null>;
 }

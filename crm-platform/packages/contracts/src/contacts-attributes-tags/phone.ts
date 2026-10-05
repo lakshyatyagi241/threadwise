@@ -60,6 +60,41 @@ export function canonicalizePhone(input: PhoneInput): CanonicalPhone | null {
   return { e164: `+${digits}`, digits };
 }
 
+/** A number written without a country code is at most this long (WaDesk's own threshold for "looks local"). */
+export const LOCAL_PHONE_MAX_DIGITS = 10;
+
+/**
+ * A number as a person typed it (a checkout form, a lead form), as E.164, with the workspace's default country applied to a number that
+ * does not announce its own. Built on `canonicalizePhone`, with the three things a typed number needs on top:
+ *  - a `+` or `00` prefix is international: taken as written;
+ *  - otherwise a local-looking number (10 digits or fewer, after a leading trunk `0` is dropped) gets the default country code. A number
+ *    that carries its country code but no `+` ("919876543210", 12 digits) is not local and is left alone;
+ *  - with no default country code, a number that does not announce its country (a bare 10 digits) cannot be read: `null`, never a guess.
+ */
+export function canonicalizeLocalPhone(
+  raw: string | null | undefined,
+  defaultCountryCode?: string | null,
+): CanonicalPhone | null {
+  const text = (raw ?? '').trim();
+  if (text === '') return null;
+  const digitsOnly = text.replace(/\D/g, '');
+  if (digitsOnly === '') return null;
+
+  if (text.startsWith('+') || text.startsWith('00')) return canonicalizePhone({ number: text });
+
+  const cc = countryCodeDigits(defaultCountryCode);
+  // "07700 900123" / "09876543210": the leading 0 is a national trunk prefix, not part of the number.
+  const national = cc ? digitsOnly.replace(/^0+/, '') : digitsOnly;
+  if (cc && national.length > 0 && national.length <= LOCAL_PHONE_MAX_DIGITS) {
+    // Prefixed here, not through `defaultCountryCode`: that option skips a number that already starts with the code's digits, and a
+    // local number may (an Indian mobile starting 91...), which would leave it one country short.
+    return canonicalizePhone({ number: `+${cc}${national}` });
+  }
+  // No default country code and nothing that announces one: 10 digits or fewer is ambiguous.
+  if (!cc && digitsOnly.length <= LOCAL_PHONE_MAX_DIGITS) return null;
+  return canonicalizePhone({ number: `+${digitsOnly}` });
+}
+
 /** Same rule for code that only has the stored pieces of a contact. */
 export function phoneKey(
   phone: string | null | undefined,

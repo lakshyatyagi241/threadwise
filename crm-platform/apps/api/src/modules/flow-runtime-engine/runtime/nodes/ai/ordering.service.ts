@@ -449,6 +449,7 @@ export class OrderingFlowService {
           address: (p.ship_address as string | null) || null,
           source: 'whatsapp_order',
           tag: 'Store customer',
+          saveProfile: true,
         });
         const order = (
           await tx.execute(sql`

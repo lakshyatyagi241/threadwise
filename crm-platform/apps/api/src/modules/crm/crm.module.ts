@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AttributesController } from './attributes/attributes.controller';
 import { AttributesRepository } from './attributes/attributes.repository';
 import { AttributesService } from './attributes/attributes.service';
@@ -166,7 +167,7 @@ import { TagsService } from './tags/tags.service';
  */
 @Module({
   // PlansCoreModule: the contact and tag caps (WD-CON-026) are plan entitlements.
-  imports: [PlansCoreModule, CheckoutOrdersMerchantPaymentsModule],
+  imports: [PlansCoreModule, CheckoutOrdersMerchantPaymentsModule, PlatformSettingsModule],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`

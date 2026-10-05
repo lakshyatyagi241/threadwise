@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Post,
   Put,
   Query,
@@ -14,6 +13,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   listStoreCustomersQuerySchema,
+  storeCustomerIdSchema,
   saveStoreCustomerSchema,
   updateStoreCustomerSchema,
   type ListStoreCustomersQuery,
@@ -24,7 +24,7 @@ import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decor
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { StoreCustomersService } from './store-customers.service';
 
-/** The saved customers of the store (WaDesk /store/customers). */
+/** The customers of the store: saved profiles and every buyer found in the orders (WaDesk /store/customers lists saved profiles only). */
 @ApiTags('store-customers')
 @ActorKinds('user')
 @Controller({ path: 'store/customers', version: '2' })
@@ -35,7 +35,7 @@ export class StoreCustomersController {
   @RequirePermission('store.customers.read')
   @ApiOperation({
     summary:
-      'Saved customers by name then phone, with order count and lifetime total; search name, phone, company',
+      'Every buyer (saved customers and order-only buyers) by last activity, with order count and lifetime total; search name, phone, company',
   })
   async list(@Query(zodPipe(listStoreCustomersQuerySchema)) query: ListStoreCustomersQuery) {
     return this.customers.list(query);
@@ -43,8 +43,11 @@ export class StoreCustomersController {
 
   @Get(':id')
   @RequirePermission('store.customers.read')
-  @ApiOperation({ summary: 'One customer with totals, recent orders and the linked contact' })
-  async get(@Param('id', ParseUUIDPipe) id: string) {
+  @ApiOperation({
+    summary:
+      'One customer (profile uuid or phone:<digits>) with totals, recent orders and the linked contact',
+  })
+  async get(@Param('id', zodPipe(storeCustomerIdSchema)) id: string) {
     return this.customers.get(id);
   }
 
@@ -63,9 +66,12 @@ export class StoreCustomersController {
   @Put(':id')
   @Idempotent()
   @RequirePermission('store.customers.manage')
-  @ApiOperation({ summary: 'Edit name, company and address (the phone is the key and stays)' })
+  @ApiOperation({
+    summary:
+      'Edit name, company and address (the phone is the key and stays); an order-only buyer gets their profile created',
+  })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', zodPipe(storeCustomerIdSchema)) id: string,
     @Body(zodPipe(updateStoreCustomerSchema)) body: UpdateStoreCustomerInput,
   ) {
     return this.customers.update(id, body);
@@ -76,7 +82,7 @@ export class StoreCustomersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('store.customers.manage')
   @ApiOperation({ summary: 'Remove a saved customer (their orders are kept)' })
-  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+  async remove(@Param('id', zodPipe(storeCustomerIdSchema)) id: string): Promise<void> {
     await this.customers.remove(id);
   }
 }

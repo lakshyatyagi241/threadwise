@@ -87,6 +87,7 @@ export class SqlStoreMirror implements StoreMirror {
       email: o.email,
       source: kind,
       tag: 'Store customer',
+      saveProfile: true,
     });
     const contactId = link.outcome === 'skipped' ? null : link.contactId;
     if (existing) {
