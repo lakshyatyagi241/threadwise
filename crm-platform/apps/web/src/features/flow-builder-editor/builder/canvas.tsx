@@ -45,6 +45,8 @@ interface Props {
   onDeleteEdge: (id: string) => void;
   /** A control on a card (the Ask for file / location prompt, extensions, property) changed the node's data. */
   onPatchNode?: (nodeId: string, patch: Record<string, unknown>) => void;
+  /** A double-click on a node card: select it and open the inspector. */
+  onOpenNode?: (nodeId: string) => void;
   wrapperRef: RefObject<HTMLDivElement | null>;
   children?: ReactNode;
 }
@@ -76,6 +78,7 @@ export function Canvas({
   onDropNode,
   onDeleteEdge,
   onPatchNode,
+  onOpenNode,
   wrapperRef,
   children,
 }: Props) {
@@ -111,6 +114,11 @@ export function Canvas({
   useLayoutEffect(() => {
     patchRef.current = onPatchNode;
   });
+  const openRef = useRef(onOpenNode);
+  useLayoutEffect(() => {
+    openRef.current = onOpenNode;
+  });
+  const openNode = useCallback((nodeId: string) => openRef.current?.(nodeId), []);
   const patchNode = useCallback(
     (nodeId: string, patch: Record<string, unknown>) => patchRef.current?.(nodeId, patch),
     [],
@@ -485,6 +493,7 @@ export function Canvas({
             onPortPointerDown={onPortPointerDown}
             onPortHover={setHoveredPort}
             onPatch={patchNode}
+            onOpen={openNode}
           />
         ))}
 
