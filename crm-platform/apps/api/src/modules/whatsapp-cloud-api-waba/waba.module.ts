@@ -1,6 +1,7 @@
 import { forwardRef, Global, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { WebhookFanoutModule } from '../webhook-fanout';
 import { CrmModule } from '../crm';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
@@ -59,6 +60,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     PlatformSettingsModule,
     WhatsAppProviderRegistryModule,
     CrmModule,
+    WebhookFanoutModule,
   ],
   controllers: [
     WabaConnectionsController,

@@ -27,6 +27,7 @@ import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
+import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
@@ -65,6 +66,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     PlansWorkerModule,
     PaygwWorkerModule,
     WabaWorkerModule,
+    WebhookFanoutWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
