@@ -54,6 +54,7 @@ interface PlanRow extends PlanPricingFacts {
   offerAmount: string | null;
   currency: string;
   billingDuration: number;
+  billingMode: 'one_time' | 'recurring';
   isActive: boolean;
 }
 
@@ -86,6 +87,8 @@ interface PlanTerm {
   isCustomQuote: boolean;
   /** The plan's list amount, major units. */
   listAmount: string;
+  /** An add-on sold as a subscription: it always renews by autopay where the gateway can (no checkbox). */
+  recurringAddon: boolean;
 }
 
 const unavailable = (message: string, code: ErrorCode = ERROR_CODES.PAYGW_GATEWAY_UNAVAILABLE) =>
@@ -125,7 +128,7 @@ export class CheckoutService {
   private async loadPlan(tx: Tx, slug: string): Promise<PlanRow> {
     const res = await tx.execute(sql`
       SELECT slug, name, subtitle, kind, amount::text AS amount, offer_amount::text AS offer_amount, currency, billing_unit,
-             billing_duration, is_free, is_lifetime, is_custom_quote, is_active
+             billing_duration, billing_mode, is_free, is_lifetime, is_custom_quote, is_active
       FROM plans WHERE slug = ${slug}`);
     const r = res.rows[0] as Record<string, unknown> | undefined;
     if (!r || !r.is_active) throw AppError.notFound('Plan', slug);
@@ -139,6 +142,7 @@ export class CheckoutService {
       currency: r.currency as string,
       billingUnit: r.billing_unit as PlanRow['billingUnit'],
       billingDuration: Number(r.billing_duration),
+      billingMode: r.billing_mode === 'recurring' ? 'recurring' : 'one_time',
       isFree: r.is_free as boolean,
       isLifetime: r.is_lifetime as boolean,
       isCustomQuote: r.is_custom_quote as boolean,
@@ -311,6 +315,7 @@ export class CheckoutService {
         isLifetime: plan.isLifetime,
         isCustomQuote: plan.isCustomQuote,
         listAmount: chargeable,
+        recurringAddon: plan.kind === 'addon' && plan.billingMode === 'recurring',
       },
       subtotalMinor: subtotal,
     };
@@ -397,7 +402,7 @@ export class CheckoutService {
         description: g.description ?? '',
         mode: g.mode,
         autoRenew:
-          p.kind === 'plan' &&
+          (p.kind === 'plan' || p.term?.recurringAddon === true) &&
           p.term !== null &&
           shouldRecur({
             platformEnabled: s.recurringEnabled,
@@ -547,7 +552,7 @@ export class CheckoutService {
     const t = priced.term;
     const recurring =
       t !== null &&
-      priced.kind === 'plan' &&
+      (priced.kind === 'plan' || t.recurringAddon) &&
       shouldRecur({
         platformEnabled: s.recurringEnabled,
         driverSupports: driver.supportsRecurring?.() === true && !!driver.createSubscription,
@@ -555,7 +560,8 @@ export class CheckoutService {
         isLifetime: t.isLifetime,
         isCustomQuote: t.isCustomQuote,
         planAmount: t.listAmount,
-        autoRenew,
+        // A recurring add-on is a subscription by definition: there is no "buy one cycle" tick for it.
+        autoRenew: t.recurringAddon ? true : autoRenew,
         period: priced.period,
       });
 

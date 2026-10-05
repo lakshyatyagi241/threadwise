@@ -35,6 +35,8 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   buttons: 'InteractiveButtons',
   list: 'List',
   ask: 'Question',
+  ask_file: 'AskFile',
+  ask_location: 'AskLocation',
   condition: 'Condition',
   delay: 'TimeDelay',
   webhook: 'Webhook',
@@ -181,6 +183,24 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
           .map((v) => (typeof v === 'string' ? v.trim() : ''))
           .filter((s) => s !== ''),
         footerText: str(data.footerText),
+      };
+    // Not WaDesk nodes (WD-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
+    case 'ask_file':
+    case 'ask_location':
+      return {
+        question: str(data.question ?? data.prompt),
+        variable: cleanVar(data.variable ?? data.var, type === 'ask_file' ? 'file' : 'location'),
+        ...(type === 'ask_file'
+          ? {
+              extensions: arr(data.extensions).map((e) => str(e)),
+              savePropertyKey: str(data.savePropertyKey),
+            }
+          : { interactive: data.interactive !== false }),
+        maxRetries: int(data.maxRetries, 2),
+        wrongReplyText: str(data.wrongReplyText ?? data.wrongReply),
+        skipKeyword: str(data.skipKeyword),
+        onGiveUp: str(data.onGiveUp ?? data.onFail, 'continue'),
+        timeoutMinutes: int(data.timeoutMinutes, 0),
       };
     case 'condition': {
       const raw = data.conditions;

@@ -596,6 +596,9 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLB-078 | wontfix |  | dead code in WaDesk: table kept, no screen or writer |
 | WD-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | WD-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
+| WD-FLB-081 | done |  | addition beyond WaDesk (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |
+| WD-FLB-082 | done |  | addition beyond WaDesk (owner request): Ask for location with the WhatsApp send-location request. Same coverage; the request payload is unit-tested, never sent to Meta |
+| WD-FLB-083 | done |  | addition beyond WaDesk (owner request): Geta console publishing. Port + HTTP/fixture adapters, sealed per-workspace credentials, outbox event + worker consumer, sync state with retry, editor status and settings screen, en+ar; unit (stub server) + API e2e + RLS integration + web unit. The real console was never called |
 
 ## flow-runtime-engine (flr)
 

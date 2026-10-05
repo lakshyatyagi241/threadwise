@@ -158,6 +158,13 @@ export class InboundIngestService {
               meta: result.message.meta,
               location: m.location ?? null,
               mediaKey: result.message.mediaKey,
+              media: m.media
+                ? {
+                    kind: m.media.mediaKind,
+                    mime: m.media.mime,
+                    ...(m.media.name ? { name: m.media.name } : {}),
+                  }
+                : null,
             },
           });
         }

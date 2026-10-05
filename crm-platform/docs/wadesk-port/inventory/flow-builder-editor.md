@@ -111,6 +111,9 @@ Connections: FLR (execution, `node/services/flowService.js`, channel runners, `/
 | WD-FLB-078 | Flow-connected devices                                              | dead-code   | P2       | S      | WD-FLB-029 |
 | WD-FLB-079 | Instagram flow import and Instaflow sync                            | implemented | P2       | M      | WD-FLB-064 |
 | WD-FLB-080 | Flow showcase seeder (dev fixture)                                  | implemented | P2       | S      | WD-FLB-016 |
+| WD-FLB-081 | Ask for file / image node (addition beyond WaDesk)                  | implemented | P2       | M      | WD-FLB-016 |
+| WD-FLB-082 | Ask for location node (addition beyond WaDesk)                      | implemented | P2       | M      | WD-FLB-016 |
+| WD-FLB-083 | Geta console publishing (addition beyond WaDesk)                    | implemented | P2       | L      | WD-FLB-022 |
 
 ## Features
 
@@ -2787,6 +2790,102 @@ Related routes owned by other domains and consumed here: `GET team-inbox/api/ig-
   - Given a showcase flow is opened in the builder, then it renders without validation errors on the Trigger-to-End chain except for the unset sender.
 - **Source refs:** `database/seeders/FlowShowcaseSeeder.php`, `app/Models/Flow.php` (saved hook).
 - **Port notes:** keep it as a dev-only fixture under `packages/db/seeds` (never loaded in production), generated from the shared node-type catalogue so it stays in step with `@crm/contracts`, and use it as the fixture for the builder round-trip test (save then reload then compile). Add the missing nodes and one flow per channel.
+
+### WD-FLB-081 — Ask for file / image node (addition beyond WaDesk)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** M (3-5 dev-days) — to rebuild on the target stack, backend + frontend + tests
+- **Depends on:** WD-FLB-016
+- **Summary:** NOT a WaDesk feature: an addition the project owner asked for, because another product's flow palette has it. Sends a question, then waits for the customer to reply with a file (an image, a document, a video or an audio file), saves the stored file's link and details in variables and continues. Designed to behave like the Ask question node (WD-FLB-036) and the Google Form / WhatsApp Form nodes (a node that decodes its own answer), not to copy a WaDesk behaviour.
+- **Actors & access:** workspace admin building a flow. Palette group "Listen", next to Ask question, mode `chat` (WhatsApp) only, label "Ask for file / image"; `flb.flows.update` like every node.
+- **UX & screens:** canvas card titled "Img/File" (peach chip with a paperclip, the id at the right as the step number) with an editable prompt box (placeholder "Untitled", a toolbar of text format, emoji and insert variable under it, "/" still opens the variable picker), a row "Allow Extensions" with a pencil that opens a panel titled "Img/File" (groups Images, Audio, Video, Documents, each with a Select All box and one box per extension; Cancel and Save, Save disabled until the selection changes; Escape, Cancel or a click outside drops the draft) and a checkbox "Save the response as property" with a (?) tip ("Store the customer's upload in a contact property") and, when ticked, a picker of the workspace's contact properties. Inspector form with the same fields plus: **Save file to variable** `var` (default `file`), **Retries** `retries` (0 to 10, default 2), **Wrong type / no file message** `wrongReply`, **Skip word** `skipKeyword`, **When retries are used up** `onFail` (`continue` default / `end`) and **Wait limit (minutes)** `timeoutMinutes` (0 = the run's idle limit). One output port "file received". Test runner: sample file buttons (photo, png, pdf, voice note, an .exe) and a file chooser; typed text is a wrong reply. English and Arabic copy under `flb.builder.askMedia`.
+- **Endpoints:** none of its own: saved, validated, exported and imported with the rest of the graph (`/v2/flows`).
+- **Data:** node `data` `{prompt, extensions[], var, retries, wrongReply, skipKeyword, onFail, timeoutMinutes, saveProperty, propertyKey}`. `flbToRuntimeData` adds `question`, `variable`, cleaned `extensions`, `maxRetries`, `wrongReplyText`, `onGiveUp`, `savePropertyKey` (empty unless `saveProperty`). Variables written: `{{var}}` and `{{var}}_url` (the stored file, `chatmedia:<key>`, which a later Send media node can send back), `_kind` (image, video, audio, document, sticker), `_name`, `_mime`, `_caption`, `_status` (`received`, `skipped` or `failed`), and the node id.
+- **Rules & edge cases:**
+  1. Allowed extensions (Images jpg, jpeg, png; Audio mp3, wav, ogg; Video mp4, webm; Documents pdf, docx, xlsx, csv, doc, xls, ppt, pptx, txt), each in its correct group. `ogg` is not in the other product's list: a WhatsApp voice note is `audio/ogg`, so "all Audio" would refuse voice notes without it. The list is saved on the node; an unknown extension is dropped.
+  2. A file passes when the extension of its file name is allowed, or its MIME type is one an allowed extension stands for (a WhatsApp photo has no file name). Nothing selected accepts any file.
+  3. Anything else (plain text, a location, a refused file) is a wrong reply: the wrong-reply message is sent and the run keeps waiting, up to `retries` times; then the run leaves with `_status = failed` and empty values (`onFail = continue`) or ends (`end`). `retries = 0` gives up on the first wrong reply without a message.
+  4. The skip word (compared case-insensitively, trimmed) leaves with `_status = skipped` and empty values.
+  5. A file whose link is not stored yet (the download is still queued) is accepted with an empty link and a run-log note.
+  6. "Save the response as property" writes the file link to the chosen contact property (an active property of the workspace; an unknown key, a run without a contact or a failure is only noted in the run log and never stops the flow). It emits no `contact.updated` event, so a flow cannot start flows of its own.
+  7. The wait is the run's idle limit, or `timeoutMinutes`; when it runs out the run ends `idle_timeout`, like Ask question.
+  8. The prompt is sent as text. A prompt that renders empty is replaced by a visible fallback.
+- **Async & events:** parks a `Custom` wait (`handler = AskFile`) like WaForm and Google Form; the customer's next message resumes it through the inbound hook. The hook event now carries the file's kind, MIME type and name.
+- **External systems:** none (the file is the inbox's own stored copy of the customer's media).
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given an Ask for file node, when the customer sends a photo, then the run continues by its one port and `{{file}}`, `{{file_kind}}`, `{{file_mime}}`, `{{file_caption}}` and `{{file_status}}` hold the link, `image`, `image/jpeg`, the caption and `received`.
+  - Given only `png` is allowed, when the customer sends a PDF, then the wrong-reply message is sent and the run still waits; when they then send a PNG (by file name or by MIME type), the run continues.
+  - Given no extension is selected, when the customer sends a voice note, then it is accepted.
+  - Given the customer replies with text, then the wrong-reply message is sent; after `retries` wrong replies the run continues with `{{file_status}}` = `failed` (or ends when `onFail` is `end`).
+  - Given a skip word, when the customer sends it, then the run continues with `{{file_status}}` = `skipped`.
+  - Given the saved link is used as the URL of a later Send media node, then the customer's own file is sent back.
+  - Given "Save the response as property" and a property are chosen, then the contact's property holds the file link after the file arrives.
+  - Given the node on an Instagram flow, then pre-save validation flags it ("does not work on Instagram"); on a WhatsApp flow it passes; it survives export and import.
+  - Given the "Allow Extensions" panel, then Save is disabled until the selection changes and Cancel drops the draft.
+- **Source refs:** none in WaDesk (the node exists in another product's palette only). Built on `Question` (WD-FLR-022) and `WaForm` (WD-FLR-043) for the park and resume.
+- **Port notes:** keep in step with `packages/contracts/src/flow-builder-editor/ask-media.ts` (groups and the accept check, shared by the panel and the runtime). The extension check trusts the MIME type WhatsApp reports; it is not a content scan. Real WhatsApp media were not used in tests (the simulator channel's fixture file stands in for the provider download).
+
+### WD-FLB-082 — Ask for location node (addition beyond WaDesk)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** M (3-5 dev-days) — to rebuild on the target stack, backend + frontend + tests
+- **Depends on:** WD-FLB-016
+- **Summary:** NOT a WaDesk feature: an addition the project owner asked for. Sends a prompt (with WhatsApp's interactive "Send location" button where the channel has it, plain text with a hint elsewhere), then waits for the customer to share a WhatsApp location and saves its latitude, longitude, place name, address and a Google Maps link.
+- **Actors & access:** workspace admin building a flow. Palette group "Listen", mode `chat` only, label "Ask for location".
+- **UX & screens:** canvas card titled "Share Location" (pale-green chip with a navigation arrow, distinct from the amber pin of the Location send node; the id at the right as the step number): an editable prompt box with the same toolbar as Img/File, and two full-width dark-green buttons "Share Your Location" (paper plane) and "Use Current Location" (crosshair). The buttons are a picture of what the customer is shown and do nothing on the canvas. Inspector form: **Question**, **Send WhatsApp's "Send location" button** `interactive` (default on), **Save location to variable** `var` (default `location`), **Retries**, **Wrong reply message**, **Skip word**, **When retries are used up**, **Wait limit (minutes)**. One output port "location received". Test runner: "Place with name" and "Bare pin" buttons share a sample location; typed text or a file is a wrong reply.
+- **Endpoints:** none of its own.
+- **Data:** node `data` `{prompt, var, interactive, retries, wrongReply, skipKeyword, onFail, timeoutMinutes}`; shaped like WD-FLB-081 (`question`, `variable`, `interactive`, wait settings). Variables written: `{{var}}` and `{{var}}_link` (`https://www.google.com/maps?q=<lat>,<lng>`), `_latitude`, `_longitude`, `_name`, `_address` (empty when the customer's app sent none), `_status`, and the node id.
+- **Rules & edge cases:**
+  1. On the WhatsApp Cloud API (and the simulator channel) the prompt is an interactive `location_request_message` with a `send_location` action (body cut to 1024). On the other WhatsApp engine and any other channel it is plain text followed by a hint ("Tap the attachment (+) button, choose Location, then send your current location."). With `interactive` off it is the plain prompt only, so an author can write the instruction in their own language.
+  2. Only a shared WhatsApp location answers. Text, a file or a tap is a wrong reply, with the same retry, skip and give-up rules as WD-FLB-081 (rules 3, 4, 7).
+  3. The Google Maps link is the one the inbound router already builds for a shared location.
+- **Async & events:** parks a `Custom` wait (`handler = AskLocation`). The inbound hook decodes the location into its numbers and name (`InboundReply.data`).
+- **External systems:** none.
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given an Ask for location node on a WhatsApp Cloud API channel, then the customer is sent an interactive location request carrying the prompt.
+  - Given the customer shares a place, then the run continues by its one port and `{{place}}`, `{{place_latitude}}`, `{{place_longitude}}`, `{{place_name}}`, `{{place_address}}`, `{{place_link}}` and `{{place_status}}` are set.
+  - Given the customer types an address or sends a photo, then the wrong-reply message is sent; after `retries` the run continues with `{{place_status}}` = `failed`.
+  - Given `interactive` off, then the prompt goes out as plain text and no interactive message is sent.
+  - Given the node on a non-WhatsApp flow, then pre-save validation flags it.
+- **Source refs:** none in WaDesk. Built on `Question` (WD-FLR-022) and `WaForm` (WD-FLR-043); the outbound `location_request` envelope is new (`channel.port.ts`, `meta-outbound.ts`, `channel-render.ts`).
+- **Port notes:** the request message is built to Meta's documented shape and unit-tested, but was never sent to Meta (no real WhatsApp here). The Cloud API only delivers it inside the 24-hour window, like every interactive message.
+
+### WD-FLB-083 — Geta console publishing (addition beyond WaDesk)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** L (1-2 dev-weeks) — to rebuild on the target stack, backend + worker + frontend + tests
+- **Depends on:** WD-FLB-022
+- **Summary:** NOT a WaDesk feature: an addition the project owner asked for. After the local publish succeeds, the workspace's bot is also pushed live on the external Geta console in two calls, in order: a chatbot configuration update (`PUT /api/v1/chatbot/{id}/configuration/update/`), then publish-bot (`POST /api/v1/console/publish-bot`). The flow is live there only when both answered 2xx. The local publish never fails because the console does.
+- **Actors & access:** workspace admin. Publishing and retry ride `flb.flows.publish` (and the `automation` plan feature); the credentials screen and the per-flow record need the new key `flb.geta.manage`; reading the state needs `flb.flows.read`.
+- **UX & screens:** the editor shows the remote state beside the Published badge: "Going live…", then "Live", or "Failed at configuration update" / "Failed at publish" with the sanitised reason and a Retry button, or, in a workspace with no credentials, the one-off notice "Published here; set up Geta publishing in settings to push it live." with a link. Settings tile "Geta publishing" (Integrations) opens `/flows/geta-publishing`: base URL, optional console origin, authorization token, geta-host token (write-only, shown as Saved), the chatbot record (JSON, shown as id / name / bot id), Save, per-secret Remove, Clear all. English and Arabic copy under `flb.geta`.
+- **Endpoints:** `GET|PUT|DELETE /v2/flows/geta-publish/settings`, `GET /v2/flows/:id/publish-sync`, `POST /v2/flows/:id/publish-sync/retry`, `PUT /v2/flows/:id/publish-sync/chatbot`; `getaSync` on the flow detail, publish and unpublish answers.
+- **Data:** `flb_geta_publish_settings` (one row per workspace: `base_url`, `origin`, sealed `authorization_enc`, `geta_host_enc`, `chatbot_record_enc`) and `flb_geta_publish_syncs` (one row per flow: `publish_version`, `state` pending / live / failed (`idle` for a row that only holds a per-flow record), `step`, `failed_step`, `last_error`, `attempted_at`, `bot_id`, `configuration_updated_version`, sealed `chatbot_override_enc`). Both with forced RLS and composite keys.
+- **Rules & edge cases:**
+  1. Order is fixed: configuration update, then publish-bot; publish-bot is not called when the update fails. Retry resumes at the step that failed; an update that already succeeded for this publish version is not repeated. Both calls are safe to repeat.
+  2. The Geta chatbot record is the user's, sent untouched except `modified_time`, which is refreshed to now (UTC, `05 Oct, 2026 4:37:00 PM`) when the record has that field. `chatbot_status` and `bot_enabled` are never changed. The `appid` header is `{"botid":"<bot_id>"}`; the bot id is the record's `bot_id`.
+  3. Headers: `accept`, `content-type: application/json;charset=UTF-8`, `authorization` (as stored, no `Bearer `), `geta-host`, optional `origin` and `referer`. publish-bot has body `{}`; the update body is `{"chatbot": {...}}` in UTF-8.
+  4. A network error, timeout, 429 or 5xx is tried again with backoff; any other 4xx is final. Redirects are not followed.
+  5. Secrets are encrypted at rest, masked in every response (flags and a summary only), never logged, never in errors, outbox payloads or audit deltas.
+  6. Idempotent per publish version; an older version's event, a redelivery or a replay after live does nothing. A later publish supersedes a push in progress.
+  7. No credentials: no call, no event; the state is `not_configured`. Credentials removed before the worker runs: `failed` with a clear reason.
+  8. A flow may carry its own chatbot record that replaces the workspace one for that flow.
+- **Async & events:** outbox `flow.geta_publish_requested` `{uuid, publishVersion, retry}`; consumer in the worker (`GetaPublishConsumer`), port `BotPublishPort`.
+- **External systems:** the Geta console (`GETA_PUBLISH_MODE=live`); `fixture` mode is the in-memory stand-in (default outside production).
+- **Settings:** `GETA_PUBLISH_MODE`, `GETA_PUBLISH_TIMEOUT_MS`, `GETA_PUBLISH_MAX_ATTEMPTS`, `GETA_PUBLISH_BACKOFF_MS`, `GETA_PUBLISH_ALLOW_PRIVATE_HOSTS` in `.env.example`; the credentials are per workspace (settings screen), never environment.
+- **Acceptance criteria:**
+  - Given credentials are saved, when the user publishes a flow, then the answer is immediate with `getaSync.state = pending`, and after the worker runs the state is `live` and the console received the update then publish-bot with the exact headers and bodies.
+  - Given the configuration update fails, then publish-bot is not called, the state is `failed` with `failedStep = configuration_update` and a sanitised reason, the flow stays published, and Retry then ends `live`.
+  - Given publish-bot fails after a good update, then `failedStep = publish_bot` and Retry calls only publish-bot.
+  - Given no credentials, then publishing succeeds, no call is made and the editor says to set up Geta publishing.
+  - Given any response of the API, the outbox, the audit trail or an error, then no token, header value or chatbot record content appears.
+  - Given two workspaces, then each publish uses its own credentials and neither can read or retry the other's state.
+- **Source refs:** none in WaDesk. Built on the outbox (`flow.geta_publish_requested`), `CryptoService`, `guardedRequest` and the provider-port pattern.
+- **Port notes:** the real Geta console was never called while building this (it would publish a real bot); behaviour is verified against a local stub of the console (exact headers, `appid` shape, bodies, retries, order) and the fixture adapter. Unpublishing a flow does not unpublish it on Geta (no call was specified).
 
 ## Data model
 

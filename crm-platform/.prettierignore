@@ -21,3 +21,7 @@ apps/web/src/features/_registry/help.generated.ts
 
 # generated schema inputs (WaDesk snapshot, model facts, reviewer findings)
 docs/wadesk-port/schema/source/*.json
+
+# In-app help articles: read by apps/web/scripts/gen-registry.mjs, whose frontmatter parser takes one `key: value` per line.
+# Prettier wraps a long keyword list over several lines, which the parser cannot read.
+apps/web/src/features/*/help/*.md
