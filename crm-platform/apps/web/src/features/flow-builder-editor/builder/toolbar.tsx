@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { Icon } from './node-card';
 
 export type BuilderStatus = string;
@@ -15,6 +16,8 @@ interface Props {
   onPublish: () => void;
   onTest: () => void;
   onAIGen: () => void;
+  /** The Geta console state of a published flow, shown beside the Published badge (renders nothing when there is none). */
+  remoteStatus?: ReactNode;
 }
 
 /** The top bar: back arrow, editable name, Generate with AI, Test, the status pill, Save and Publish (WD-FLB-015). */
@@ -28,6 +31,7 @@ export function Toolbar({
   onPublish,
   onTest,
   onAIGen,
+  remoteStatus,
 }: Props) {
   const isPublished = status === 'Published';
   const isUnsaved = status.includes('unsaved');
@@ -99,6 +103,7 @@ export function Toolbar({
         <span className="h-1.5 w-1.5 rounded-full" style={{ background: dot }} />
         {label}
       </span>
+      {remoteStatus}
       <button
         type="button"
         onClick={onSave}
