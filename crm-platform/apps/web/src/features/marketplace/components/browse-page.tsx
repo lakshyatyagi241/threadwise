@@ -160,7 +160,7 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
         <div>
           {categories.isPending ? (
             <LoadingBlock />

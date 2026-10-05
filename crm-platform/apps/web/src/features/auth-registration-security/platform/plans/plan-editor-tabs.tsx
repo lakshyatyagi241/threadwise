@@ -91,6 +91,9 @@ export function PlanEditorTabs({
   const tabs: PlanTab[] = ['details', 'features', 'limits', 'addons'];
   return (
     <Tabs
+      // On a phone all four tabs must be visible at once: the strip wraps to two rows instead of
+      // hiding Limits and Add-ons behind a sideways scroll.
+      className="[&>[role=tablist]]:flex-wrap [&>[role=tablist]]:overflow-visible"
       value={active}
       onValueChange={(id) => onChange(id as PlanTab)}
       items={tabs.map((tab) => ({
