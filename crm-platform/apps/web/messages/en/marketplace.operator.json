@@ -46,7 +46,8 @@
           "push": "Push (the portal posts to us)",
           "pull": "Pull (we poll the portal)",
           "email_parse": "Email parsing",
-          "webhook_relay": "Webhook relay"
+          "webhook_relay": "Webhook relay",
+          "client": "Client (installed by members)"
         },
         "risk": {
           "low": "Low risk",
