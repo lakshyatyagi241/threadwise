@@ -3,6 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { MarketAppKind } from '@crm/contracts';
 import { decodeKeyset, encodeKeyset, likePattern, type AppRef } from './marketplace-rules';
+import { shownToWorkspace, type PlanVisibility } from './plan-visibility';
 import {
   APP_PRICING_COLUMNS_TEXT,
   SUBSCRIPTION_COLUMNS_TEXT,
@@ -136,10 +137,16 @@ const CARD_COLUMNS = sql.raw(`
  */
 @Injectable()
 export class BrowseRepository {
-  async categories(tx: Tx, kind?: MarketAppKind): Promise<CategoryCountRow[]> {
+  async categories(
+    tx: Tx,
+    orgId: number,
+    vis: PlanVisibility,
+    kind?: MarketAppKind,
+  ): Promise<CategoryCountRow[]> {
+    // The count is of what the workspace can see, so a category never advertises apps its plan hides.
     const res = await tx.execute(sql`
       SELECT c.id, c.uuid, c.kind, c.slug, c.name, c.description, c.icon, c.sort_order,
-             count(a.id) FILTER (WHERE a.status = 'published')::int AS app_count
+             count(a.id) FILTER (WHERE a.status = 'published' AND ${shownToWorkspace(orgId, vis)})::int AS app_count
       FROM marketplace_categories c
       LEFT JOIN marketplace_apps a ON a.category_id = c.id
       WHERE c.is_active ${kind ? sql`AND c.kind = ${kind}` : sql``}
@@ -172,9 +179,10 @@ export class BrowseRepository {
       limit: number;
       cursor?: string;
     },
+    vis: PlanVisibility,
   ): Promise<{ rows: CardRow[]; badCursor: boolean }> {
     const def = SORTS[q.sort];
-    const where: SQL[] = [];
+    const where: SQL[] = [shownToWorkspace(orgId, vis)];
     // Published listings only; the Installed filter also shows what the workspace installed that is no longer published.
     if (q.installed === true) where.push(sql`i.id IS NOT NULL`);
     else where.push(sql`a.status = 'published'`);
@@ -227,13 +235,14 @@ export class BrowseRepository {
     kind: MarketAppKind,
     sort: AppSort,
     limit: number,
+    vis: PlanVisibility,
     featured = false,
   ): Promise<CardRow[]> {
-    const { rows } = await this.list(tx, orgId, { kind, sort, limit, featured });
+    const { rows } = await this.list(tx, orgId, { kind, sort, limit, featured }, vis);
     return rows.slice(0, limit);
   }
 
-  async detail(tx: Tx, orgId: number, r: AppRef): Promise<DetailRow | null> {
+  async detail(tx: Tx, orgId: number, r: AppRef, vis: PlanVisibility): Promise<DetailRow | null> {
     const res = await tx.execute(sql`
       SELECT ${CARD_COLUMNS}, coalesce(iv.recipe, cv.recipe) AS recipe,
         (SELECT coalesce(jsonb_agg(jsonb_build_object('version', h.version, 'notes', h.changelog,
@@ -248,7 +257,7 @@ export class BrowseRepository {
       LEFT JOIN workspace_app_installations i ON i.app_id = a.id AND i.org_id = ${orgId}
       LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id AND s.org_id = ${orgId}
       LEFT JOIN marketplace_app_versions iv ON iv.id = i.installed_version_id
-      WHERE ${ref(r)} AND coalesce(iv.version, cv.version) IS NOT NULL`);
+      WHERE ${ref(r)} AND ${shownToWorkspace(orgId, vis)} AND coalesce(iv.version, cv.version) IS NOT NULL`);
     const row = (res.rows as Raw[])[0];
     if (!row) return null;
     return {
@@ -263,6 +272,7 @@ export class BrowseRepository {
     tx: Tx,
     r: AppRef,
     orgId: number,
+    vis: PlanVisibility,
   ): Promise<{
     appId: number;
     appUuid: string;
@@ -283,7 +293,7 @@ export class BrowseRepository {
              ${sql.raw(APP_PRICING_COLUMNS_TEXT)}, ${sql.raw(SUBSCRIPTION_COLUMNS_TEXT)}
       FROM marketplace_apps a JOIN marketplace_app_versions v ON v.id = a.current_version_id
       LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id AND s.org_id = ${orgId}
-      WHERE ${ref(r)} AND a.status = 'published' AND v.status = 'published'`);
+      WHERE ${ref(r)} AND ${shownToWorkspace(orgId, vis)} AND a.status = 'published' AND v.status = 'published'`);
     const row = (res.rows as Raw[])[0];
     if (!row) return null;
     return {
@@ -303,9 +313,14 @@ export class BrowseRepository {
     };
   }
 
-  /** Whether the app exists for this workspace at all (published, or installed), whatever its state: to tell 404 from 409. */
-  async exists(tx: Tx, r: AppRef): Promise<boolean> {
-    const res = await tx.execute(sql`SELECT 1 FROM marketplace_apps a WHERE ${ref(r)}`);
+  /**
+   * Whether the app exists for this workspace at all (published, or installed, and not hidden by its plan), whatever its state: to tell
+   * 404 from 409. An app the plan hides is a 404, like a draft.
+   */
+  async exists(tx: Tx, r: AppRef, orgId: number, vis: PlanVisibility): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM marketplace_apps a WHERE ${ref(r)} AND ${shownToWorkspace(orgId, vis)}`,
+    );
     return (res.rows as Raw[]).length > 0;
   }
 

@@ -38,6 +38,7 @@ import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { CreditNotesService } from './credit-notes.service';
 import { renderInvoicePdf } from './invoice-render';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /** Credit notes: a document that reduces an issued invoice (full or partial), applied to its balance or refunded. */
 @ApiTags('credit-notes')
@@ -60,6 +61,8 @@ export class CreditNotesController {
     return this.notes.list(query, scope);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @Idempotent()
   @RequirePermission('record.credit-notes.create')
@@ -104,6 +107,7 @@ export class CreditNotesController {
       .send(renderInvoicePdf(doc));
   }
 
+  @RequirePlanFeature('invoicing')
   @Patch(':id')
   @RequirePermission('record.credit-notes.create')
   @ApiOperation({ summary: 'Edit a draft credit note (rowVersion required)' })
@@ -115,6 +119,7 @@ export class CreditNotesController {
     return this.notes.update(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/issue')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -131,6 +136,7 @@ export class CreditNotesController {
     return this.notes.issue(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/void')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.credit-notes.void')
@@ -145,6 +151,7 @@ export class CreditNotesController {
     return this.notes.void(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.credit-notes.delete')

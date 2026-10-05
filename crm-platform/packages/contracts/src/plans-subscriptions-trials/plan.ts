@@ -189,6 +189,16 @@ const planFieldsShape = {
   dataRetentionDays: z.number().int().min(0).max(3650).default(0),
   limits: planLimitsSchema.default({}),
   features: planFeaturesSchema.default({}),
+  /**
+   * The Marketplace add-ons this plan makes VISIBLE to its workspaces: ids (uuid) of add-on packs, as listed by
+   * `GET platform/plans/addon-options`. Visible is not usable: a workspace uses a paid app only once it has bought it. On an update the
+   * list replaces the stored one; omit it to keep it.
+   */
+  visibleAddons: z
+    .array(uuidSchema)
+    .max(500)
+    .refine((ids) => new Set(ids).size === ids.length, 'List each add-on once.')
+    .default([]),
 };
 
 function applyRules<T extends z.ZodTypeAny>(schema: T) {
@@ -248,6 +258,8 @@ export const planAdminItemSchema = z.object({
   dataRetentionDays: z.number().int(),
   limits: planLimitsSchema,
   features: planFeaturesSchema,
+  /** Ids (uuid) of the Marketplace add-on packs this plan makes visible (see `planAddonOptionSchema`). */
+  visibleAddons: z.array(uuidSchema),
   /** Organizations whose plan is this one (the delete guard, TW-PLAN-005). */
   inUse: z.number().int().nonnegative(),
   /** True when the registration policy names this plan as the signup default. */
@@ -271,6 +283,49 @@ export const planAdminListResponseSchema = z.object({
   registrationDefaultSlug: z.string().nullable(),
 });
 export type PlanAdminListResponse = z.infer<typeof planAdminListResponseSchema>;
+
+/** A Marketplace add-on pack a plan may enable (the plan form's selector). `id` is what `visibleAddons` holds. */
+export const planAddonOptionSchema = z.object({
+  id: uuidSchema,
+  /** The pack's plan slug (`mkt_...`), what the add-on checkout path uses. */
+  packSlug: z.string(),
+  name: z.string(),
+  /** The pack's own switch: an inactive pack cannot be bought. */
+  isActive: z.boolean(),
+  amount: z.string(),
+  currency: z.string(),
+  billingUnit: planBillingUnitSchema,
+  billingDuration: z.number().int(),
+  app: z.object({
+    id: uuidSchema,
+    slug: z.string(),
+    name: z.string(),
+    /** The listing's state: only `published` apps are listed to workspaces. */
+    status: z.string(),
+  }),
+});
+export type PlanAddonOption = z.infer<typeof planAddonOptionSchema>;
+
+export const planAddonOptionsResponseSchema = z.object({ data: z.array(planAddonOptionSchema) });
+export type PlanAddonOptionsResponse = z.infer<typeof planAddonOptionsResponseSchema>;
+
+/** One Marketplace add-on a workspace's plan makes visible, with whether the workspace already owns (bought or was granted) it. */
+export const visibleAddonSchema = z.object({
+  /** The add-on pack's id (uuid). */
+  id: uuidSchema,
+  /** The pack's slug (`mkt_...`): the add-on checkout path is `/billing/checkout/<packSlug>`. */
+  packSlug: z.string(),
+  /** The Marketplace listing: where "View in Marketplace" goes. */
+  app: z.object({ id: uuidSchema, slug: z.string(), name: z.string() }),
+  price: z.object({
+    amount: z.string(),
+    currency: z.string(),
+    period: z.object({ unit: planBillingUnitSchema, count: z.number().int().min(1) }),
+  }),
+  /** The workspace holds an active purchase, trial or comp of it. */
+  owned: z.boolean(),
+});
+export type VisibleAddon = z.infer<typeof visibleAddonSchema>;
 
 export const deletePlanResponseSchema = z.object({ ok: z.literal(true) });
 

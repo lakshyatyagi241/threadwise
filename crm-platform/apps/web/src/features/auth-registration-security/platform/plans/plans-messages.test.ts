@@ -38,6 +38,19 @@ const ar = flatten(load('ar'));
 /** The keys the plan screens build at run time from the catalogue registry, so a new registry key cannot ship unlabeled. */
 const dynamic: string[] = [
   ...PLAN_LIMIT_KEYS.map((k) => `${NS}.editor.limitKeys.${k}`),
+  ...PLAN_LIMIT_KEYS.map((k) => `${NS}.editor.limitHints.${k}`),
+  ...PLAN_FEATURE_KEYS.map((k) => `${NS}.editor.featureHints.${k}`),
+  ...(['perMonth', 'perBroadcast', 'perMinute', 'perPlanPeriod', 'total'] as const).map(
+    (u) => `${NS}.editor.limitUnits.${u}`,
+  ),
+  ...(['details', 'features', 'limits', 'addons'] as const).flatMap((tab) => [
+    `${NS}.editor.tabs.${tab}`,
+    ...(tab === 'details' ? [] : [`${NS}.editor.tabSummary.${tab}`]),
+  ]),
+  `${NS}.editor.tabSummary.error`,
+  `${NS}.editor.problems.unknownAddon`,
+  ...['features', 'limits', 'addons', 'entitlements'].map((c) => `${NS}.table.${c}`),
+  ...['ratio', 'features', 'limits', 'addons'].map((c) => `${NS}.counts.${c}`),
   ...PLAN_LIMIT_GROUPS.map((g) => `${NS}.editor.limitGroups.${g}`),
   ...PLAN_FEATURE_KEYS.map((k) => `${NS}.editor.featureKeys.${k}`),
   ...PLAN_FEATURE_GROUPS.map((g) => `${NS}.editor.featureGroups.${g}`),

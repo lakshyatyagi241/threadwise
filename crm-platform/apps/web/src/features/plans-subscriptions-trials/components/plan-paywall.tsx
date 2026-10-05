@@ -5,12 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import {
-  PLAN_FEATURE_LABELS,
-  isPlanFeatureKey,
-  type BillingPlan,
-  type PlanFeatureKey,
-} from '@crm/contracts';
+import { isPlanFeatureKey, type BillingPlan, type PlanFeatureKey } from '@crm/contracts';
 import { fetchBillingPlans } from '../api';
 import { PLANS_PATH, SALES_PATH, formatMoney } from '../lib/format';
 
@@ -56,6 +51,7 @@ export function PlanPaywall({
 
 function Sheet({ feature }: { feature: PlanFeatureKey }) {
   const t = useTranslations('plans-subscriptions-trials.paywall');
+  const tf = useTranslations('plans-subscriptions-trials.features');
   const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const q = useQuery({
@@ -85,7 +81,7 @@ function Sheet({ feature }: { feature: PlanFeatureKey }) {
             {t('premium')}
           </p>
           <h2 id="paywall-title" className="text-xl font-semibold">
-            {t('title', { feature: PLAN_FEATURE_LABELS[feature] })}
+            {t('title', { feature: tf(feature) })}
           </h2>
           <p className="text-sm text-muted-foreground">{t('lead')}</p>
         </div>

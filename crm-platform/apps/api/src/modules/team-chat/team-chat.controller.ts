@@ -46,6 +46,7 @@ import { ChannelsService } from './channels.service';
 import { InvitationsService } from './invitations.service';
 import { MessagesService, type UploadedAttachment } from './messages.service';
 import { PresenceService } from './presence.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 const upload = FileInterceptor('attachment', {
   limits: { fileSize: TCHAT_ATTACHMENT_MAX_BYTES, files: 1 },
@@ -60,6 +61,8 @@ const upload = FileInterceptor('attachment', {
  */
 @ApiTags('team-chat')
 @ActorKinds('user')
+// Team chat is entirely the plan feature: every route (reads included) needs it.
+@RequirePlanFeature('team_chat')
 @Controller({ path: 'team-chat', version: '2' })
 export class TeamChatController {
   constructor(

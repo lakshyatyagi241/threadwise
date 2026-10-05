@@ -9,6 +9,9 @@ const root = JSON.parse(
   readFileSync(join(WEB, 'messages/en/plans-subscriptions-trials.json'), 'utf8'),
 ) as Tree;
 const tree = root['plans-subscriptions-trials'] as Tree;
+const arTree = (
+  JSON.parse(readFileSync(join(WEB, 'messages/ar/plans-subscriptions-trials.json'), 'utf8')) as Tree
+)['plans-subscriptions-trials'] as Tree;
 
 const at = (path: string): unknown =>
   path.split('.').reduce<unknown>((n, k) => (n as Tree | undefined)?.[k], tree);
@@ -19,6 +22,51 @@ function sources(dir: string): string[] {
     return statSync(p).isDirectory() ? sources(p) : /\.tsx$/.test(name) ? [p] : [];
   });
 }
+
+const leaves = (n: Tree | string, p: string): string[] =>
+  typeof n === 'string'
+    ? [p]
+    : Object.entries(n).flatMap(([k, c]) => leaves(c, p ? `${p}.${k}` : k));
+const arAt = (path: string): unknown =>
+  path.split('.').reduce<unknown>((n, k) => (n as Tree | undefined)?.[k], arTree);
+
+describe('plans messages (ar)', () => {
+  it('translates every limit, feature, group, hint and add-on string the plan and usage screens add', () => {
+    for (const k of PLAN_LIMIT_KEYS) {
+      expect(arAt(`limits.${k}`), `limits.${k}`).toBeTypeOf('string');
+      expect(arAt(`limitHints.${k}`), `limitHints.${k}`).toBeTypeOf('string');
+    }
+    for (const k of PLAN_FEATURE_KEYS)
+      expect(arAt(`features.${k}`), `features.${k}`).toBeTypeOf('string');
+    const missing = ['limitGroups', 'featureGroups', 'limitHints', 'planAddons']
+      .flatMap((s) => leaves(at(s) as Tree, s))
+      .filter((k) => typeof arAt(k) !== 'string');
+    expect(missing).toEqual([]);
+  });
+
+  it('keeps the new usage, compare and pricing strings in both languages', () => {
+    for (const k of [
+      'common.platformDefault',
+      'usage.unlimited',
+      'usage.platformDefault',
+      'usage.noUsageTracked',
+      'usage.noLimits',
+      'usage.showUnlimited',
+      'usage.hideUnlimited',
+      'usage.groupCount',
+      'usage.groupHidden',
+      'plans.compare.addonsGroup',
+      'plans.compare.onlyDifferences',
+      'plans.compare.currentPlan',
+      'plans.compare.noDifferences',
+      'public.showAllLimits',
+      'public.hideAllLimits',
+    ]) {
+      expect(at(k), `en ${k}`).toBeTypeOf('string');
+      expect(arAt(k), `ar ${k}`).toBeTypeOf('string');
+    }
+  });
+});
 
 describe('plans messages', () => {
   it('names every limit, feature and state the screens look up by key', () => {

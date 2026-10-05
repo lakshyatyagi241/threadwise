@@ -4,10 +4,13 @@ import { insightsQuerySchema, type InsightsQuery } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { InsightsService } from './insights.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Facebook Page insights (TW-FB-019). */
 @ApiTags('facebook')
 @ActorKinds('user')
+// Facebook management is entirely the extra-channels feature; the public webhook controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'facebook/insights', version: '2' })
 export class InsightsController {
   constructor(private readonly insights: InsightsService) {}

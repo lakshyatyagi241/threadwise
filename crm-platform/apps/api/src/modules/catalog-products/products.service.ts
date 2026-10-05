@@ -24,6 +24,7 @@ import {
 } from '../../infra/providers/catalog-products/catalog-provider.port';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { PlanUsageService } from '../plans-subscriptions-trials';
 import {
   CONVERSATION_MIRROR,
   SENDER_DIRECTORY,
@@ -160,6 +161,7 @@ export class ProductsService {
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(BAILEYS_CATALOG_BRIDGE) private readonly bridge: BaileysCatalogBridge,
     @Inject(CONVERSATION_MIRROR) private readonly mirror: ConversationMirror,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   // --- reads ---------------------------------------------------------------------------------------------------------------
@@ -235,6 +237,8 @@ export class ProductsService {
 
   async create(input: CreateProductInput): Promise<ProductResponse> {
     const ctx = RequestContextStore.require();
+    // The plan's `catalog_products` cap (a live count, so deleting a product frees a slot). Products pulled in by a catalog sync are not user creates and are not capped.
+    await this.planUsage.assertCanAdd(ctx.orgId, 'catalog_products');
     const { id, pushNeeded } = await this.db.tx(async (tx) => {
       const base = slugify(input.name) || 'product';
       const slug = nextFreeSlug(base, await this.repo.slugsLike(tx, ctx.orgId, base));

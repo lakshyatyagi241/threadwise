@@ -67,6 +67,7 @@ import {
   type InvoiceInsert,
   type InvoiceRow,
 } from './invoices.repository';
+import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { SalesOrdersRepository } from './sales-orders.repository';
 import { TaxRatesRepository, type TaxRateRow } from './tax-rates.repository';
 
@@ -176,6 +177,7 @@ export class InvoicesService {
     private readonly dealsRepo: DealsRepository,
     private readonly deals: DealsService,
     private readonly orders: SalesOrdersRepository,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   // --- reads -------------------------------------------------------------------------------------------------------------------
@@ -332,6 +334,9 @@ export class InvoicesService {
     actorUserId: number | null,
     spec: DraftSpec,
   ): Promise<InvoiceRow> {
+    // The plan's `invoices_monthly` allowance. Every new invoice row passes here: manual create, duplicate, order/quote conversion and the
+    // recurring runner (which records a refusal as a failed run instead of throwing).
+    await this.planUsage.assertCanAdd(orgId, 'invoices_monthly');
     const profile = await this.settings.load(tx, orgId);
     const priced = priceInvoice({
       currency: spec.currency,

@@ -345,6 +345,7 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     const ev = await (
       await this.access.evaluator(orgId)
     )({
+      appId: Number(r.app_id),
       slug: r.slug as string,
       uuid: r.app_uuid as string,
       pricing,
@@ -389,6 +390,7 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     const ev = await (
       await this.access.evaluator(orgId)
     )({
+      appId,
       slug: a.slug as string,
       uuid: a.app_uuid as string,
       pricing,

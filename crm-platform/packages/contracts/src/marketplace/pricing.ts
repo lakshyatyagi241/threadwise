@@ -58,6 +58,20 @@ export const MARKET_ACCESS_STATES = [
 export const marketAccessSchema = z.enum(MARKET_ACCESS_STATES);
 export type MarketAccessState = z.infer<typeof marketAccessSchema>;
 
+/**
+ * Whether a paid app is on offer to a workspace, which the plan decides together with what the workspace owns. A plan makes a paid
+ * Marketplace add-on VISIBLE; the workspace USES it only once it has bought it.
+ *  open         not plan-gated: a free app, or one the plan includes (no purchase needed)
+ *  visible      the workspace's plan enables the add-on and the workspace has not bought it: shown with its price, can subscribe, cannot use
+ *  purchased    the workspace holds it (an active add-on purchase, trial or comp, an override, or an installation it already has): usable
+ *  not_visible  neither enabled by the plan nor held: the app does not exist for the workspace (browse omits it, its page is a 404,
+ *               install and subscribe refuse it). Never sent on a card, since a card is only built for what the workspace may see.
+ * The access states above are unchanged: `visible` is `subscription_required` (or `not_for_sale`), `purchased` is `entitled`.
+ */
+export const MARKET_AVAILABILITY_STATES = ['open', 'visible', 'purchased', 'not_visible'] as const;
+export const marketAvailabilitySchema = z.enum(MARKET_AVAILABILITY_STATES);
+export type MarketAvailability = z.infer<typeof marketAvailabilitySchema>;
+
 /** Why a paid app costs a workspace nothing: its plan has the feature the operator named, or is at or above the plan the operator named. */
 export const marketIncludedBySchema = z.enum(['plan_feature', 'min_plan']);
 export type MarketIncludedBy = z.infer<typeof marketIncludedBySchema>;
@@ -275,6 +289,8 @@ export const marketCardPricingSchema = z.object({
   /** The workspace may start the free trial now (the app offers one and the workspace has never had a subscription to it). */
   trialAvailable: z.boolean(),
   access: marketAccessSchema,
+  /** Why the workspace sees the app: see `MARKET_AVAILABILITY_STATES`. Always sent by the API. */
+  availability: marketAvailabilitySchema.optional(),
   /** Set when `access` is `included`: which rule gave it. */
   includedBy: marketIncludedBySchema.nullable(),
   /** The checkout page of the add-on, for a paid app the workspace can subscribe to or renew. */
@@ -317,6 +333,24 @@ export function accessFor(f: {
   if (f.includedBy) return 'included';
   if (f.entitled) return 'entitled';
   return f.purchasable || f.hasActiveSubscription ? 'subscription_required' : 'not_for_sale';
+}
+
+/**
+ * What the plan and the workspace's holdings say about a paid app's availability. `planVisible`: the workspace's plan enables the add-on
+ * (true for a platform-owned workspace and for one with no plan row). `held`: the workspace bought it, or has an installation, a
+ * subscription row or an override for it, so a plan that stops showing it never takes away what the workspace already has.
+ */
+export function availabilityFor(f: {
+  model: MarketAppPricingModel;
+  includedBy: MarketIncludedBy | null;
+  entitled: boolean;
+  planVisible: boolean;
+  held: boolean;
+}): MarketAvailability {
+  if (f.model === 'free' || f.includedBy) return 'open';
+  if (f.entitled) return 'purchased';
+  if (f.planVisible || f.held) return 'visible';
+  return 'not_visible';
 }
 
 /** A trial is offered once per workspace and app, to a workspace that has nothing yet, while the app is on sale. */

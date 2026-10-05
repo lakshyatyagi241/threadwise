@@ -140,6 +140,7 @@
         "subscribed": "Subscribed",
         "notForSale": "Not for sale",
         "paid": "Paid app",
+        "addOn": "Add-on",
         "trial": "{days}-day free trial"
       },
       "installs": "{count, plural, one {# install} other {# installs}}",
@@ -167,7 +168,12 @@
         "mini_app": "Search mini apps",
         "integration": "Search integrations"
       },
-      "installedOnly": "Installed only",
+      "availability": {
+        "label": "Show",
+        "all": "All",
+        "addons": "Available add-ons",
+        "installed": "Installed"
+      },
       "sortLabel": "Sort by",
       "sort": {
         "featured": "Featured",
@@ -187,9 +193,13 @@
           "title": "Nothing matches your search",
           "message": "Try a shorter name, or clear the filters. If it is not listed, you can ask for it below."
         },
+        "addons": {
+          "title": "No add-ons to buy here",
+          "message": "Add-ons your plan lists but you have not bought show up here. Pick All to see everything."
+        },
         "installed": {
           "title": "Nothing installed here yet",
-          "message": "Apps you install show up here. Turn off the Installed filter to browse everything."
+          "message": "Apps you install show up here. Choose All to browse everything."
         },
         "category": {
           "title": "Nothing in this category yet",
@@ -788,6 +798,7 @@
         "minPlan": "Your plan, or a higher plan, includes this app, so there is nothing to pay.",
         "plan": "Your plan includes this app, so there is nothing to pay."
       },
+      "needsPurchase": "Included in your plan's catalogue, buy it to use it.",
       "subscribedNote": "Your workspace has a subscription to this app.",
       "trialOffer": "Try it free for {days, plural, one {# day} other {# days}}. Nothing is charged until you choose to subscribe.",
       "prepaidNote": "Billed monthly through your workspace billing. Each payment covers one month and is not charged automatically: pay again before the date shown to keep the app running.",

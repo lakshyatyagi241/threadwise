@@ -28,6 +28,7 @@ export function pricing(over: Partial<MarketCardPricing> = {}): MarketCardPricin
     trialDays: 0,
     trialAvailable: false,
     access: 'free',
+    availability: 'open',
     includedBy: null,
     checkoutPath: null,
     ...over,
@@ -38,6 +39,12 @@ export const PACK_PATH = '/billing/checkout/mkt_0123456789abcdef0123';
 
 /** A paid app the workspace has no subscription to: $9 a month, with a 14-day trial on offer. */
 export function paidPricing(over: Partial<MarketCardPricing> = {}): MarketCardPricing {
+  const availability: MarketCardPricing['availability'] =
+    over.access === 'entitled'
+      ? 'purchased'
+      : over.access === 'included' || over.access === 'free'
+        ? 'open'
+        : 'visible';
   return pricing({
     model: 'paid_monthly',
     amount: '9.00',
@@ -45,6 +52,7 @@ export function paidPricing(over: Partial<MarketCardPricing> = {}): MarketCardPr
     trialDays: 14,
     trialAvailable: true,
     access: 'subscription_required',
+    availability,
     checkoutPath: PACK_PATH,
     ...over,
   });

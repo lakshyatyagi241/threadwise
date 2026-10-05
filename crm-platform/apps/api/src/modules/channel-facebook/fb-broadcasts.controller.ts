@@ -14,10 +14,13 @@ import { createFbBroadcastSchema, type CreateFbBroadcastInput } from '@crm/contr
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { FbBroadcastsService } from './fb-broadcasts.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Messenger broadcasts: compose, list, start, pause, retry, delete (TW-FB-012 to 014). */
 @ApiTags('facebook')
 @ActorKinds('user')
+// Facebook management is entirely the extra-channels feature; the public webhook controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'facebook/broadcasts', version: '2' })
 export class FbBroadcastsController {
   constructor(private readonly broadcasts: FbBroadcastsService) {}

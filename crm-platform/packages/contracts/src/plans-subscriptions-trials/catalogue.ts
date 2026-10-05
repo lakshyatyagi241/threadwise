@@ -10,7 +10,14 @@
  * unlimited too).
  */
 
-export const PLAN_LIMIT_GROUPS = ['messaging', 'workspace', 'content'] as const;
+export const PLAN_LIMIT_GROUPS = [
+  'messaging',
+  'workspace',
+  'content',
+  'sales',
+  'integrations',
+  'ai',
+] as const;
 export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 
 /** Reference column in brackets: monthly_messages_limit, broadcast_limit, device_limit, user_seat_limit... */
@@ -41,6 +48,33 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'installed_apps', group: 'workspace' },
   // Lead sources (webhook doors into the lead pipeline) a workspace has at once (spec email-channel-and-social-leads, L-12). 0 = unlimited.
   { key: 'lead_sources', group: 'workspace' },
+  // Audience size of ONE broadcast (contacts it would be sent to); a bigger audience is refused when the broadcast is created or edited. 0 = unlimited.
+  { key: 'broadcast_recipients', group: 'messaging' },
+  // Saved contact segments the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'segments', group: 'workspace' },
+  // Custom (non-system) fields across every module of the workspace; deleted ones free the place. 0 = unlimited.
+  { key: 'custom_fields', group: 'workspace' },
+  // Team chat channels (public and private) the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'team_chat_channels', group: 'workspace' },
+  // Inbox SLA policies the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'sla_policies', group: 'workspace' },
+  // Booking types (the public booking pages' event types) the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'booking_types', group: 'workspace' },
+  // Website chatbot widgets the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'chatbot_widgets', group: 'content' },
+  // Products in the WhatsApp catalog / storefront; deleted ones free the place. 0 = unlimited.
+  { key: 'catalog_products', group: 'content' },
+  // Invoices created per calendar month (every status, a deleted or voided one still counts for the month it was created in). 0 = unlimited.
+  { key: 'invoices_monthly', group: 'sales' },
+  // Recurring invoice schedules the workspace holds, every status; deleted ones free the place. 0 = unlimited.
+  { key: 'recurring_invoices', group: 'sales' },
+  // Active API keys of the workspace; a revoked key frees the place. 0 = unlimited.
+  { key: 'api_keys', group: 'integrations' },
+  // Outbound webhook endpoints the workspace holds (inbox webhooks and API webhooks together); deleted ones free the place. 0 = unlimited.
+  { key: 'webhooks', group: 'integrations' },
+  // Monthly AI token allowance of the workspace's assistants (counted by the AI token meter, ai-keys-usage-admin). Enforced there; the key name is
+  // fixed because workspace overrides and the meter already read it. 0 = unlimited.
+  { key: 'ai_token_limit_monthly', group: 'ai' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -87,6 +121,15 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'marketplace', group: 'integrations', default: true },
   // Lead sources: webhook and connector doors that turn ad and portal leads into contacts and deals (L-12). Default true: no plan row held it before.
   { key: 'lead_sources', group: 'integrations', default: true },
+  // Areas that had no plan gate before. All default true: no plan row held them, so every one that predates them keeps the area.
+  { key: 'team_chat', group: 'advanced', default: true },
+  { key: 'public_api', group: 'integrations', default: true },
+  { key: 'outbound_webhooks', group: 'integrations', default: true },
+  { key: 'storefront_builder', group: 'advanced', default: true },
+  { key: 'invoicing', group: 'advanced', default: true },
+  { key: 'forms_and_links', group: 'messaging', default: true },
+  // Telegram, Facebook, Instagram and the other non-WhatsApp channels.
+  { key: 'extra_channels', group: 'messaging', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -113,6 +156,13 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   whatsapp_warmer: 'WhatsApp warmer',
   marketplace: 'Marketplace',
   lead_sources: 'Lead sources',
+  team_chat: 'Team chat',
+  public_api: 'Public API',
+  outbound_webhooks: 'Outbound webhooks',
+  storefront_builder: 'Storefront builder',
+  invoicing: 'Invoicing',
+  forms_and_links: 'Forms and links',
+  extra_channels: 'Telegram, Facebook and Instagram channels',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -142,6 +192,13 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'whatsapp_warmer',
   'marketplace',
   'lead_sources',
+  'team_chat',
+  'public_api',
+  'outbound_webhooks',
+  'storefront_builder',
+  'invoicing',
+  'forms_and_links',
+  'extra_channels',
 ];
 export const PLAN_CHIP_MAX = 3;
 

@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Modal, Spinner, Switch } from '@crm/ui';
 import { adminPriceView, capLabel } from '../lib/plan-display';
+import { planCounts } from '../lib/plan-editor-view';
 import { planErrorKind, type PlanErrorKind } from '../lib/plan-errors';
 import { useCanEdit } from '../operator-context';
 import { operatorFetch } from '../operator-fetch';
@@ -143,6 +144,38 @@ function PlansCatalogue({ data }: { data: PlanAdminListResponse }) {
     return cap.unlimited ? t('messages.unlimited') : t('messages.limited', { count: cap.count });
   };
 
+  /** Compact chips: features on, limits capped, add-ons visible. The visible text is short; the screen-reader and title text is spelled out. */
+  const renderCounts = (plan: PlanAdminItem) => {
+    const c = planCounts(plan);
+    const featuresText = t('counts.features', { count: c.featuresOn, total: c.featuresTotal });
+    const limitsText = t('counts.limits', { count: c.limitsSet, total: c.limitsTotal });
+    const addonsText = t('counts.addons', { count: c.addons });
+    const chip = 'whitespace-nowrap font-mono';
+    return (
+      <div className="flex flex-wrap gap-1.5" data-testid="plan-counts">
+        <Badge className={chip} title={featuresText}>
+          <span className="me-1 font-sans text-muted-foreground">{t('table.features')}</span>
+          <span aria-hidden="true">
+            {t('counts.ratio', { count: c.featuresOn, total: c.featuresTotal })}
+          </span>
+          <span className="sr-only">{featuresText}</span>
+        </Badge>
+        <Badge className={chip} title={limitsText}>
+          <span className="me-1 font-sans text-muted-foreground">{t('table.limits')}</span>
+          <span aria-hidden="true">
+            {t('counts.ratio', { count: c.limitsSet, total: c.limitsTotal })}
+          </span>
+          <span className="sr-only">{limitsText}</span>
+        </Badge>
+        <Badge className={chip} title={addonsText}>
+          <span className="me-1 font-sans text-muted-foreground">{t('table.addons')}</span>
+          <span aria-hidden="true">{when(c.addons)}</span>
+          <span className="sr-only">{addonsText}</span>
+        </Badge>
+      </div>
+    );
+  };
+
   const renderStatus = (plan: PlanAdminItem) => (
     <div className="flex items-center gap-2">
       <Switch
@@ -221,7 +254,9 @@ function PlansCatalogue({ data }: { data: PlanAdminListResponse }) {
               <caption className="sr-only">{t('table.label')}</caption>
               <thead>
                 <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
-                  {(['plan', 'price', 'messages', 'workspaces', 'status'] as const).map((col) => (
+                  {(
+                    ['plan', 'price', 'messages', 'entitlements', 'workspaces', 'status'] as const
+                  ).map((col) => (
                     <th key={col} scope="col" className="px-4 py-3 text-start font-medium">
                       {t(`table.${col}`)}
                     </th>
@@ -243,6 +278,7 @@ function PlansCatalogue({ data }: { data: PlanAdminListResponse }) {
                     <td className="px-4 py-3">{renderName(plan)}</td>
                     <td className="px-4 py-3">{renderPrice(plan)}</td>
                     <td className="px-4 py-3">{renderMessages(plan)}</td>
+                    <td className="px-4 py-3">{renderCounts(plan)}</td>
                     <td className="px-4 py-3 font-mono" data-testid="plan-in-use">
                       {when(plan.inUse)}
                     </td>
@@ -276,6 +312,7 @@ function PlansCatalogue({ data }: { data: PlanAdminListResponse }) {
                       <dd className="font-mono">{when(plan.inUse)}</dd>
                     </div>
                   </dl>
+                  {renderCounts(plan)}
                   {canEdit && renderActions(plan, 'start')}
                 </Card>
               </li>
