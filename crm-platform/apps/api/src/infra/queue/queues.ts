@@ -30,6 +30,8 @@ export const QUEUES = {
   BCAST_DISPATCH: 'bcast-dispatch',
   /** WhatsApp Cloud API / Interakt webhook payloads (messages, receipts, template and account events). Acked first, processed here. */
   WABA_INGEST: 'waba-ingest',
+  /** One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest. */
+  WEBHOOK_FORWARD: 'webhook-forward',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
 } as const;
