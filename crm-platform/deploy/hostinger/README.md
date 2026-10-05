@@ -47,4 +47,4 @@ Keep `.env` safe: losing `CREDENTIALS_ENCRYPTION_KEY` makes stored channel crede
 
 Outgoing mail (set `SMTP_*` in `.env`, then `docker compose up -d api worker`): until then sign-up verification and password
 reset emails do not send. Meta/WhatsApp webhooks (`https://desk.wabo.ai/v2/public/webhooks/whatsapp`, real
-`WHATSAPP_APP_SECRET`), Clerk (`CLERK_SECRET_KEY` is a placeholder), off-host copies of the backups (they sit on this machine) and monitoring.
+`WHATSAPP_APP_SECRET`), Clerk (`CLERK_SECRET_KEY` is a placeholder), the off-host backup settings (`OFFSITE_*`, see the backup runbook; until they are set the copies stay on this machine) and monitoring.

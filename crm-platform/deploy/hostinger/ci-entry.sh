@@ -47,6 +47,8 @@ case "$action" in
     docker compose --env-file .env up -d postgres redis minio
     # The backup service runs its own nightly schedule; failing to start it must not block a release.
     docker compose --env-file .env up -d backup || echo "warning: the backup service did not start" >&2
+    # The off-host copier runs in the API image, so it is recreated on the new tag; like the backup, it must not block a release.
+    docker compose --env-file .env up -d offsite || echo "warning: the offsite copier did not start" >&2
     # Migrations only go forward, so a dump taken now is the way back from a bad one. The service writes its script out at
     # start-up: give it a few seconds, and only on the very first release after it was added can it be missing, in which case
     # say so and go on. Once the script exists, a dump that fails stops the release before anything has changed.
