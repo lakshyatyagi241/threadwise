@@ -53,6 +53,14 @@ export const NODE_LOOK: Record<string, NodeLook> = {
     '#A1431F',
     'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM6 6.5a2 2 0 0 1 4 0c0 1.5-2 1.5-2 3M8 12.5h.01',
   ),
+  // Not Reference nodes (TW-FLB-094, 095). Ask for file: the peach chip of the input nodes with a paperclip; Ask for location:
+  // a pale-green chip with a navigation arrow (the Location send node keeps its amber pin).
+  ask_file: l(
+    '#FFE4D6',
+    '#A1431F',
+    'M13 7.5l-5 5a3.2 3.2 0 0 1-4.5-4.5l5.5-5.5a2.1 2.1 0 0 1 3 3L6.5 10.5a1 1 0 0 1-1.5-1.5L10 4',
+  ),
+  ask_location: l(MINT, DEEP, 'M14 2L2 7.5l5 1.5 1.5 5z'),
   condition: l('#F3E9FF', PLUM, 'M8 2v3M5 8l3-3 3 3M8 5v9'),
   delay: l('#FFF4E0', '#7B5A14', 'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM8 5v3l2 2'),
   webhook: l('#E8F5E9', DEEP, 'M3 8h3l1.5-4 2 8 1.5-4h2'),

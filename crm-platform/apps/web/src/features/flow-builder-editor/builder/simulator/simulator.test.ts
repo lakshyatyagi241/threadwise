@@ -632,3 +632,108 @@ describe('simulator: webhook', () => {
     expect(h.awaiting()).toBe(true);
   });
 });
+
+describe('Ask for file / image and Ask for location in the test runner (TW-FLB-094, 095)', () => {
+  const flow = (type: 'ask_file' | 'ask_location', data: Record<string, unknown>) =>
+    harness(
+      [
+        node('t', 'trigger', { keywords: 'hi' }, { isStart: true }),
+        node('a', type, data),
+        node('m', 'message', { text: 'file={{file}} loc={{location}} st={{file_status}}' }),
+      ],
+      [edge('t', 'out', 'a'), edge('a', 'out', 'm')],
+    );
+
+  const open = async (h: ReturnType<typeof flow>) => {
+    h.sim.start();
+    h.sim.send('hi');
+    await h.settle();
+  };
+
+  it('ask_file: asks, waits, saves a sample file to the variables and moves on by its one port', async () => {
+    const h = flow('ask_file', { prompt: 'Send the ID', var: 'file', extensions: [] });
+    await open(h);
+    expect(h.texts()).toContain('Send the ID');
+    expect(h.awaiting()).toBe(true);
+    h.sim.sendFile({ name: 'id.pdf', mime: 'application/pdf', caption: 'mine' });
+    await h.settle();
+    expect(h.sim.vars()).toMatchObject({
+      file: 'chatmedia:test-id.pdf',
+      file_kind: 'document',
+      file_name: 'id.pdf',
+      file_mime: 'application/pdf',
+      file_caption: 'mine',
+      file_status: 'received',
+    });
+    expect(h.texts()).toContain('file=chatmedia:test-id.pdf loc={{location}} st=received');
+  });
+
+  it('ask_file: a file outside the allow-list is a wrong reply, a typed text too, then it gives up and continues', async () => {
+    const h = flow('ask_file', {
+      prompt: 'Send',
+      extensions: ['png'],
+      retries: 1,
+      wrongReply: 'PNG only',
+    });
+    await open(h);
+    h.sim.sendFile({ name: 'a.pdf', mime: 'application/pdf' });
+    await h.settle();
+    expect(h.texts()).toContain('PNG only');
+    expect(h.awaiting()).toBe(true);
+    h.sim.send('here you go');
+    await h.settle();
+    expect(h.sim.vars()).toMatchObject({ file: '', file_status: 'failed' });
+    expect(h.texts()).toContain('file= loc={{location}} st=failed');
+  });
+
+  it('ask_file: a png photo with no name passes on its mime type', async () => {
+    const h = flow('ask_file', { prompt: 'Send', extensions: ['png'] });
+    await open(h);
+    h.sim.sendFile({ name: '', mime: 'image/png' });
+    await h.settle();
+    expect(h.sim.vars().file_status).toBe('received');
+  });
+
+  it('ask_file: the skip word moves on; onFail "end" stops the run', async () => {
+    const a = flow('ask_file', { prompt: 'Send', skipKeyword: 'skip' });
+    await open(a);
+    a.sim.send('Skip');
+    await a.settle();
+    expect(a.sim.vars()).toMatchObject({ file: '', file_status: 'skipped' });
+
+    const b = flow('ask_file', { prompt: 'Send', retries: 0, onFail: 'end' });
+    await open(b);
+    b.sim.send('no');
+    await b.settle();
+    expect(b.texts().some((t) => t.includes('flow ends here'))).toBe(true);
+    expect(b.texts().some((x) => x.includes('st='))).toBe(false);
+  });
+
+  it('ask_location: saves the maps link, latitude, longitude, name and address', async () => {
+    const h = flow('ask_location', { prompt: 'Where?', var: 'location' });
+    await open(h);
+    expect(h.texts()).toContain('Where?');
+    h.sim.sendLocation({ latitude: 12.9, longitude: 77.5, name: 'Cafe', address: '1 Main St' });
+    await h.settle();
+    expect(h.sim.vars()).toMatchObject({
+      location: 'https://www.google.com/maps?q=12.9,77.5',
+      location_latitude: '12.9',
+      location_longitude: '77.5',
+      location_name: 'Cafe',
+      location_address: '1 Main St',
+      location_status: 'received',
+    });
+  });
+
+  it('ask_location: text and files are wrong replies; a file sent to the location node does nothing', async () => {
+    const h = flow('ask_location', { prompt: 'Where?', retries: 2, wrongReply: 'Use the + menu' });
+    await open(h);
+    h.sim.send('Bangalore');
+    await h.settle();
+    expect(h.texts()).toContain('Use the + menu');
+    h.sim.sendFile({ name: 'x.png', mime: 'image/png' });
+    await h.settle();
+    expect(h.awaiting()).toBe(true);
+    expect(h.texts().filter((t) => t === 'Use the + menu')).toHaveLength(1);
+  });
+});

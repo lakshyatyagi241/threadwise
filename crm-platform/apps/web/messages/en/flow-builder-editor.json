@@ -255,6 +255,102 @@
         "fileType": "The flow file field must be a file of type: application/json, text/plain, text/json.",
         "saved": "Template saved."
       }
+    },
+    "builder": {
+      "askMedia": {
+        "title": "Img/File",
+        "step": "Step {id}",
+        "file": {
+          "cardTitle": "Img/File",
+          "promptPlaceholder": "Untitled",
+          "promptLabel": "Question",
+          "allowExtensions": "Allow Extensions",
+          "editExtensions": "Edit allowed extensions",
+          "anyFile": "Any file",
+          "saveAsProperty": "Save the response as property",
+          "saveAsPropertyHelp": "Store the customer's upload in a contact property",
+          "helpLabel": "What does this do?",
+          "propertyLabel": "Contact property",
+          "propertyChoose": "Choose a property...",
+          "propertyHint": "The link to the received file is written to this property of the contact.",
+          "variableLabel": "Save file to variable",
+          "variableHint": "The link to the received file is stored here (for example {file}) and can be used later in a Send media node. Also saved: {kind}, {name}, {mime}, {caption} and {status}.",
+          "retriesLabel": "Retries",
+          "retriesHint": "How many times the customer may try again after a wrong reply (plain text, or a file type that is not allowed). 0 gives up on the first wrong reply.",
+          "wrongReplyLabel": "Wrong type / no file message",
+          "wrongReplyHint": "Sent when the customer replies with text or a file that is not allowed, while retries are left.",
+          "skipLabel": "Skip word (optional)",
+          "skipHint": "When the customer sends exactly this word, the flow moves on with an empty answer. Leave empty for no skip.",
+          "onFailLabel": "When retries are used up",
+          "onFailContinue": "Continue the flow without a file",
+          "onFailEnd": "End the flow",
+          "timeoutLabel": "Wait limit (minutes)",
+          "timeoutHint": "0 uses the flow's usual idle limit. When the wait runs out the flow ends, like the Ask question node.",
+          "outputHint": "One output: it fires once a file is received (or when the retries are used up and you chose to continue)."
+        },
+        "extensions": {
+          "panelTitle": "Img/File",
+          "selectAll": "Select All",
+          "cancel": "Cancel",
+          "save": "Save",
+          "empty": "Select nothing to accept any file.",
+          "group": {
+            "images": "Images",
+            "audio": "Audio",
+            "video": "Video",
+            "documents": "Documents"
+          }
+        },
+        "toolbar": {
+          "label": "Prompt formatting",
+          "bold": "Bold",
+          "italic": "Italic",
+          "format": "Text format",
+          "emoji": "Emoji",
+          "variable": "Insert variable",
+          "variableSearch": "Search variables...",
+          "variableEmpty": "No variables match."
+        },
+        "location": {
+          "cardTitle": "Share Location",
+          "share": "Share Your Location",
+          "current": "Use Current Location",
+          "promptLabel": "Question",
+          "promptPlaceholder": "Untitled",
+          "interactiveLabel": "Send WhatsApp's \"Send location\" button",
+          "interactiveHint": "On the WhatsApp Cloud API the prompt carries a button that opens the location picker. Other channels, or when this is off, get plain text: write the instruction in the question.",
+          "variableLabel": "Save location to variable",
+          "variableHint": "The Google Maps link is stored here (for example {loc}). Also saved: {latitude}, {longitude}, {name}, {address}, {link} and {status}.",
+          "retriesLabel": "Retries",
+          "retriesHint": "How many times the customer may try again after a wrong reply (anything but a shared location). 0 gives up on the first wrong reply.",
+          "wrongReplyLabel": "Wrong reply message",
+          "wrongReplyHint": "Sent when the customer replies with text or a file while retries are left.",
+          "skipLabel": "Skip word (optional)",
+          "skipHint": "When the customer sends exactly this word, the flow moves on with an empty answer. Leave empty for no skip.",
+          "onFailLabel": "When retries are used up",
+          "onFailContinue": "Continue the flow without a location",
+          "onFailEnd": "End the flow",
+          "timeoutLabel": "Wait limit (minutes)",
+          "timeoutHint": "0 uses the flow's usual idle limit. When the wait runs out the flow ends, like the Ask question node.",
+          "outputHint": "One output: it fires once a location is received (or when the retries are used up and you chose to continue)."
+        },
+        "test": {
+          "sendFile": "Send a file:",
+          "chooseFile": "Choose a file...",
+          "sendLocation": "Share a location:",
+          "file": {
+            "photo": "Photo (jpg)",
+            "png": "screenshot.png",
+            "pdf": "invoice.pdf",
+            "voice": "Voice note",
+            "exe": "setup.exe"
+          },
+          "location": {
+            "pin": "Place with name",
+            "bare": "Bare pin"
+          }
+        }
+      }
     }
   }
 }

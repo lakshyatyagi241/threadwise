@@ -1,6 +1,7 @@
 'use client';
 
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   FLB_NODE_TYPES,
   flbIsMultiPort,
@@ -11,7 +12,14 @@ import {
 } from '@crm/contracts';
 import { lookOf } from '../lib/node-ui';
 import { NODE_W } from '../lib/graph-ops';
+import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
 import { NodePreview } from './node-preview';
+
+/** The two Ask for file / location cards carry their own title (as the other product draws them) and an editable body. */
+const ASK_CARD_TITLE_KEY: Record<string, string> = {
+  ask_file: 'file.cardTitle',
+  ask_location: 'location.cardTitle',
+};
 
 export const Icon = ({ d, className = 'h-4 w-4' }: { d: string; className?: string }) => (
   <svg
@@ -39,6 +47,8 @@ interface Props {
   onSelect: (id: string) => void;
   onPortPointerDown: (e: React.PointerEvent, nodeId: string, handleId: string) => void;
   onPortHover: (key: string | null) => void;
+  /** Writes keys of a node's data from a control on the card itself (the Ask for file / location cards). */
+  onPatch?: (nodeId: string, patch: Record<string, unknown>) => void;
 }
 
 /**
@@ -57,10 +67,13 @@ export const NodeCard = memo(function NodeCard({
   onSelect,
   onPortPointerDown,
   onPortHover,
+  onPatch,
 }: Props) {
+  const tAsk = useTranslations('flb.builder.askMedia');
   const def = FLB_NODE_TYPES[node.type];
   const look = lookOf(node.type);
-  const label = def?.label ?? node.type;
+  const askTitle = ASK_CARD_TITLE_KEY[node.type];
+  const label = askTitle ? tAsk(askTitle) : (def?.label ?? node.type);
   const group = def?.group ?? 'Node';
   const rows = flbPortsFor(node, portCtx);
   const isTrigger = node.type === 'trigger';
@@ -114,11 +127,23 @@ export const NodeCard = memo(function NodeCard({
         </span>
         <div className="min-w-0 flex-1">
           <div className="truncate text-[13px] font-semibold leading-tight">{label}</div>
-          <div className="truncate font-mono text-[9.5px] text-muted-foreground">{node.id}</div>
+          {askTitle ? null : (
+            <div className="truncate font-mono text-[9.5px] text-muted-foreground">{node.id}</div>
+          )}
         </div>
-        <span className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider text-muted-foreground">
-          {group}
-        </span>
+        {askTitle ? (
+          <span
+            data-testid="ask-step-number"
+            title={tAsk('step', { id: node.id })}
+            className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[9.5px] tracking-wider text-muted-foreground"
+          >
+            {node.id}
+          </span>
+        ) : (
+          <span className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider text-muted-foreground">
+            {group}
+          </span>
+        )}
       </div>
 
       {node.type === 'end' ? (
@@ -127,7 +152,13 @@ export const NodeCard = memo(function NodeCard({
         </div>
       ) : null}
 
-      <NodePreview node={node} ctx={ctx} />
+      {node.type === 'ask_file' ? (
+        <AskFileCardBody node={node} onPatch={onPatch} />
+      ) : node.type === 'ask_location' ? (
+        <AskLocationCardBody node={node} onPatch={onPatch} />
+      ) : (
+        <NodePreview node={node} ctx={ctx} />
+      )}
 
       {multi ? (
         <div className="border-t border-[var(--flb-rule)] px-2 pt-1 pb-2">
