@@ -32,15 +32,43 @@ describe('planned screens', () => {
       PLANNED_NAV.filter((i) => i.group === g)
         .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
         .map((i) => i.id);
-    expect(ids('audience')).toEqual(['lead-finder', 'pipelines', 'companies', 'email-templates']);
+    expect(ids('audience')).toEqual(['lead-finder', 'email-templates']);
     expect(ids('sales')).toEqual(['crm-dashboard']);
   });
 
   it('cover the WaDesk groups the real screens do not', () => {
     const groups = new Set<string>(PLANNED_NAV.map((i) => i.group));
-    for (const g of ['inbox', 'campaigns', 'automation', 'channels', 'sales', 'store', 'developer', 'help']) {
+    for (const g of ['inbox', 'campaigns', 'automation', 'sales', 'store', 'help']) {
       expect(groups.has(g), g).toBe(true);
     }
+  });
+
+  it('hold no configuration screen: those are Settings tiles', () => {
+    const ids = new Set(PLANNED_NAV.map((i) => i.id));
+    for (const gone of [
+      'channels',
+      'telegram',
+      'sms',
+      'line',
+      'viber',
+      'wechat',
+      'email',
+      'wa-links',
+      'integrations',
+      'rest-api',
+      'webhooks',
+      'activity-log',
+      'team-members',
+      'auto-reply',
+      'chat-widget',
+    ]) {
+      expect(ids.has(gone), gone).toBe(false);
+    }
+    expect(
+      PLANNED_NAV.some(
+        (i) => (i.group as string) === 'channels' || (i.group as string) === 'developer',
+      ),
+    ).toBe(false);
   });
 
   it('have a label in English and Arabic, and every group has a heading', () => {
@@ -48,7 +76,9 @@ describe('planned screens', () => {
       const nav = shell(locale).nav as Tree;
       for (const i of PLANNED_NAV) {
         expect(i.labelKey.startsWith('shell.nav.'), i.id).toBe(true);
-        expect(typeof nav[i.labelKey.slice('shell.nav.'.length)], `${locale} ${i.id}`).toBe('string');
+        expect(typeof nav[i.labelKey.slice('shell.nav.'.length)], `${locale} ${i.id}`).toBe(
+          'string',
+        );
       }
       const groups = shell(locale).groups as Tree;
       for (const g of NAV_GROUPS) expect(typeof groups[g], `${locale} group ${g}`).toBe('string');

@@ -5,7 +5,18 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import { parseMajor, type SalesOrderResponse, type SalesOrderSummary } from '@crm/contracts';
-import { Alert, Button, Checkbox, Field, Input, Modal, Select, Spinner, Textarea, cn } from '@crm/ui';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Field,
+  Input,
+  Modal,
+  Select,
+  Spinner,
+  Textarea,
+  cn,
+} from '@crm/ui';
 import { errorCode } from '../lib/errors';
 import {
   buildFulfilPayload,
@@ -39,7 +50,9 @@ const TERMS = ['0', '7', '14', '15', '30', '45', '60'] as const;
 
 /** Opens one of the order dialogs; `node` goes once at the end of the screen. `onDone` runs after a successful action. */
 export function useSalesOrderDialogs(onDone?: (kind: SalesOrderDialogKind) => void) {
-  const [state, setState] = useState<{ kind: SalesOrderDialogKind; order: DialogOrder } | null>(null);
+  const [state, setState] = useState<{ kind: SalesOrderDialogKind; order: DialogOrder } | null>(
+    null,
+  );
   const close = () => setState(null);
   const done = () => {
     const kind = state?.kind;
@@ -59,7 +72,10 @@ export function useSalesOrderDialogs(onDone?: (kind: SalesOrderDialogKind) => vo
       <DeleteDialog order={state.order} onClose={close} onDone={done} />
     )
   ) : null;
-  return { open: (kind: SalesOrderDialogKind, order: DialogOrder) => setState({ kind, order }), node };
+  return {
+    open: (kind: SalesOrderDialogKind, order: DialogOrder) => setState({ kind, order }),
+    node,
+  };
 }
 
 /** The shell every dialog uses: the title, the order number as the kicker, the body and the two buttons. */
@@ -127,7 +143,15 @@ function Shell({
 
 // --- confirm ---------------------------------------------------------------------------------------------------------------------
 
-function ConfirmOrderDialog({ order, onClose, onDone }: { order: DialogOrder; onClose: () => void; onDone: () => void }) {
+function ConfirmOrderDialog({
+  order,
+  onClose,
+  onDone,
+}: {
+  order: DialogOrder;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const t = useTranslations('invoicing.salesOrders.confirmDialog');
   const actions = useSalesOrderActions();
   const [busy, setBusy] = useState(false);
@@ -141,7 +165,14 @@ function ConfirmOrderDialog({ order, onClose, onDone }: { order: DialogOrder; on
     else setError(r.error);
   }
   return (
-    <Shell order={order} title={t('title')} busy={busy} onClose={onClose} onSubmit={() => void submit()} confirmLabel={t('confirm')}>
+    <Shell
+      order={order}
+      title={t('title')}
+      busy={busy}
+      onClose={onClose}
+      onSubmit={() => void submit()}
+      confirmLabel={t('confirm')}
+    >
       <p className="text-sm text-muted-foreground">{t('message')}</p>
       {error !== null && <ErrorLine error={error} />}
     </Shell>
@@ -150,7 +181,15 @@ function ConfirmOrderDialog({ order, onClose, onDone }: { order: DialogOrder; on
 
 // --- cancel ----------------------------------------------------------------------------------------------------------------------
 
-function CancelDialog({ order, onClose, onDone }: { order: DialogOrder; onClose: () => void; onDone: () => void }) {
+function CancelDialog({
+  order,
+  onClose,
+  onDone,
+}: {
+  order: DialogOrder;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const t = useTranslations('invoicing.salesOrders.cancelDialog');
   const actions = useSalesOrderActions();
   const [reason, setReason] = useState('');
@@ -160,7 +199,8 @@ function CancelDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
   async function submit() {
     const text = reason.trim();
     if (!text) return setProblem(t('reasonRequired'));
-    if (text.length > CANCEL_REASON_MAX) return setProblem(t('reasonTooLong', { max: CANCEL_REASON_MAX }));
+    if (text.length > CANCEL_REASON_MAX)
+      return setProblem(t('reasonTooLong', { max: CANCEL_REASON_MAX }));
     setProblem(undefined);
     setBusy(true);
     setError(null);
@@ -196,7 +236,11 @@ function CancelDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
       {hasInvoices && (
         <Alert tone="info">
           <p>{t('hasInvoices')}</p>
-          <Link href={salesOrderHref(order.id)} className="mt-1 inline-block font-medium underline underline-offset-2" onClick={onClose}>
+          <Link
+            href={salesOrderHref(order.id)}
+            className="mt-1 inline-block font-medium underline underline-offset-2"
+            onClick={onClose}
+          >
             {t('seeInvoices')}
           </Link>
         </Alert>
@@ -207,7 +251,15 @@ function CancelDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
 
 // --- delete ----------------------------------------------------------------------------------------------------------------------
 
-function DeleteDialog({ order, onClose, onDone }: { order: DialogOrder; onClose: () => void; onDone: () => void }) {
+function DeleteDialog({
+  order,
+  onClose,
+  onDone,
+}: {
+  order: DialogOrder;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const t = useTranslations('invoicing.salesOrders.deleteDialog');
   const actions = useSalesOrderActions();
   const [busy, setBusy] = useState(false);
@@ -221,7 +273,15 @@ function DeleteDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
     else setError(r.error);
   }
   return (
-    <Shell order={order} title={t('title')} busy={busy} onClose={onClose} onSubmit={() => void submit()} confirmLabel={t('delete')} confirmVariant="danger">
+    <Shell
+      order={order}
+      title={t('title')}
+      busy={busy}
+      onClose={onClose}
+      onSubmit={() => void submit()}
+      confirmLabel={t('delete')}
+      confirmVariant="danger"
+    >
       <p className="text-sm text-muted-foreground">{t('message')}</p>
       {error !== null && <ErrorLine error={error} />}
     </Shell>
@@ -247,7 +307,9 @@ function QtyLines({
   disabled?: boolean;
 }) {
   const t = useTranslations('invoicing.salesOrders.dialog');
-  const open = lines.filter((l) => (kind === 'invoice' ? lineFacts(l).toInvoice : lineFacts(l).toFulfil) > 0n);
+  const open = lines.filter(
+    (l) => (kind === 'invoice' ? lineFacts(l).toInvoice : lineFacts(l).toFulfil) > 0n,
+  );
   return (
     <ul className="thin-scrollbar max-h-64 divide-y divide-border overflow-y-auto rounded-md border border-border">
       {open.map((l) => {
@@ -257,10 +319,17 @@ function QtyLines({
         return (
           <li key={l.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5">
             <div className="min-w-0 flex-1 basis-40">
-              <label htmlFor={id} className="block truncate text-sm font-medium" dir="auto" title={l.description}>
+              <label
+                htmlFor={id}
+                className="block truncate text-sm font-medium"
+                dir="auto"
+                title={l.description}
+              >
                 {l.description}
               </label>
-              <span className="text-xs text-muted-foreground">{t('left', { qty: qtyText(left) })}</span>
+              <span className="text-xs text-muted-foreground">
+                {t('left', { qty: qtyText(left) })}
+              </span>
             </div>
             <Input
               id={id}
@@ -275,7 +344,9 @@ function QtyLines({
             />
             {problem && (
               <p id={`${id}-err`} role="alert" className="basis-full text-xs text-danger">
-                {problem === 'qtyExceeds' ? t('qtyExceeds', { max: qtyText(left) }) : t('qtyInvalid')}
+                {problem === 'qtyExceeds'
+                  ? t('qtyExceeds', { max: qtyText(left) })
+                  : t('qtyInvalid')}
               </p>
             )}
           </li>
@@ -285,7 +356,15 @@ function QtyLines({
   );
 }
 
-function ModeChoice({ mode, onChange, disabled }: { mode: 'all' | 'lines'; onChange: (m: 'all' | 'lines') => void; disabled?: boolean }) {
+function ModeChoice({
+  mode,
+  onChange,
+  disabled,
+}: {
+  mode: 'all' | 'lines';
+  onChange: (m: 'all' | 'lines') => void;
+  disabled?: boolean;
+}) {
   const t = useTranslations('invoicing.salesOrders.dialog');
   return (
     <div role="radiogroup" aria-label={t('how')} className="grid gap-2 sm:grid-cols-2">
@@ -326,7 +405,9 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
   const today = useToday();
   const actions = useSalesOrderActions();
   const lines = hasLines(order) ? order.lines : null;
-  const shippingMinor = hasLines(order) ? (parseMajor(order.amounts.shipping, order.currency) ?? 0n) : 0n;
+  const shippingMinor = hasLines(order)
+    ? (parseMajor(order.amounts.shipping, order.currency) ?? 0n)
+    : 0n;
   const shippingPending = hasLines(order) ? shippingMinor > 0n && !order.shippingInvoiced : false;
   const [form, setForm] = useState<InvoiceForm>(() => emptyInvoiceForm(shippingPending));
   const [shown, setShown] = useState<LineQtyProblems>({ lines: {}, form: [] });
@@ -340,7 +421,9 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
     if (hasInvoiceProblems(p)) return;
     setBusy(true);
     setError(null);
-    const body = lines ? buildInvoicePayload(form, lines, { shippingPending }) : { all: true as const, issue: form.issue, includeShipping: true };
+    const body = lines
+      ? buildInvoicePayload(form, lines, { shippingPending })
+      : { all: true as const, issue: form.issue, includeShipping: true };
     const r = await actions.invoice(order.id, body, { quiet: true });
     setBusy(false);
     if (r.ok) {
@@ -351,7 +434,15 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
 
   const err = (k: string) => (shown.form.includes(k as never) ? t(`problems.${k}`) : undefined);
   return (
-    <Shell order={order} size="md" title={t('title')} busy={busy} onClose={onClose} onSubmit={() => void submit()} confirmLabel={form.issue ? t('invoiceAndIssue') : t('createDraft')}>
+    <Shell
+      order={order}
+      size="md"
+      title={t('title')}
+      busy={busy}
+      onClose={onClose}
+      onSubmit={() => void submit()}
+      confirmLabel={form.issue ? t('invoiceAndIssue') : t('createDraft')}
+    >
       <p className="text-sm text-muted-foreground">{t('intro')}</p>
       {lines && <ModeChoice mode={form.mode} onChange={(mode) => set({ mode })} disabled={busy} />}
       {lines && form.mode === 'lines' && (
@@ -370,14 +461,44 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
         </p>
       )}
       <div className="grid gap-3 sm:grid-cols-3">
-        <Field label={t('issueDate')} htmlFor="so-inv-issue" error={err('issueDateInvalid')} hint={t('issueDateHint', { today })}>
-          <Input id="so-inv-issue" type="date" dir="ltr" disabled={busy} value={form.issueDate} invalid={!!err('issueDateInvalid')} onChange={(e) => set({ issueDate: e.target.value })} />
+        <Field
+          label={t('issueDate')}
+          htmlFor="so-inv-issue"
+          error={err('issueDateInvalid')}
+          hint={t('issueDateHint', { today })}
+        >
+          <Input
+            id="so-inv-issue"
+            type="date"
+            dir="ltr"
+            disabled={busy}
+            value={form.issueDate}
+            invalid={!!err('issueDateInvalid')}
+            onChange={(e) => set({ issueDate: e.target.value })}
+          />
         </Field>
-        <Field label={t('dueDate')} htmlFor="so-inv-due" error={err('dueDateInvalid') ?? err('dueBeforeIssue')}>
-          <Input id="so-inv-due" type="date" dir="ltr" disabled={busy} value={form.dueDate} invalid={!!(err('dueDateInvalid') ?? err('dueBeforeIssue'))} onChange={(e) => set({ dueDate: e.target.value })} />
+        <Field
+          label={t('dueDate')}
+          htmlFor="so-inv-due"
+          error={err('dueDateInvalid') ?? err('dueBeforeIssue')}
+        >
+          <Input
+            id="so-inv-due"
+            type="date"
+            dir="ltr"
+            disabled={busy}
+            value={form.dueDate}
+            invalid={!!(err('dueDateInvalid') ?? err('dueBeforeIssue'))}
+            onChange={(e) => set({ dueDate: e.target.value })}
+          />
         </Field>
         <Field label={t('terms')} htmlFor="so-inv-terms">
-          <Select id="so-inv-terms" disabled={busy || form.dueDate !== ''} value={form.termsDays} onChange={(e) => set({ termsDays: e.target.value })}>
+          <Select
+            id="so-inv-terms"
+            disabled={busy || form.dueDate !== ''}
+            value={form.termsDays}
+            onChange={(e) => set({ termsDays: e.target.value })}
+          >
             <option value="">{t('termsDefault')}</option>
             {TERMS.map((d) => (
               <option key={d} value={d}>
@@ -388,8 +509,16 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
         </Field>
       </div>
       <div className="space-y-2">
-        <Checkbox id="so-inv-issue-now" checked={form.issue} disabled={busy} onChange={(e) => set({ issue: e.target.checked })} label={t('issueNow')} />
-        <p className="ps-6 text-xs text-muted-foreground">{form.issue ? t('issueNowHint') : t('draftHint')}</p>
+        <Checkbox
+          id="so-inv-issue-now"
+          checked={form.issue}
+          disabled={busy}
+          onChange={(e) => set({ issue: e.target.checked })}
+          label={t('issueNow')}
+        />
+        <p className="ps-6 text-xs text-muted-foreground">
+          {form.issue ? t('issueNowHint') : t('draftHint')}
+        </p>
         {shippingPending && hasLines(order) && (
           <Checkbox
             id="so-inv-ship"
@@ -398,14 +527,21 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
             onChange={(e) => set({ includeShipping: e.target.checked })}
             label={
               <span>
-                {t('includeShipping')} <Money minor={Number(shippingMinor)} currency={order.currency} className="font-medium" />
+                {t('includeShipping')}{' '}
+                <Money
+                  minor={Number(shippingMinor)}
+                  currency={order.currency}
+                  className="font-medium"
+                />
               </span>
             }
           />
         )}
       </div>
       {error !== null && <ErrorLine error={error} />}
-      {errorCode(error) === 'SO_NOTHING_TO_INVOICE' && <Alert tone="info">{td('nothingHint')}</Alert>}
+      {errorCode(error) === 'SO_NOTHING_TO_INVOICE' && (
+        <Alert tone="info">{td('nothingHint')}</Alert>
+      )}
     </Shell>
   );
 }
@@ -413,7 +549,15 @@ function InvoiceDialog({ order, onClose }: { order: DialogOrder; onClose: () => 
 // --- fulfil ----------------------------------------------------------------------------------------------------------------------
 
 /** "Record delivery": everything left, or quantities per line (never above what was ordered), with an optional note. */
-function FulfilDialog({ order, onClose, onDone }: { order: DialogOrder; onClose: () => void; onDone: () => void }) {
+function FulfilDialog({
+  order,
+  onClose,
+  onDone,
+}: {
+  order: DialogOrder;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const t = useTranslations('invoicing.salesOrders.fulfilDialog');
   const actions = useSalesOrderActions();
   const lines = hasLines(order) ? order.lines : null;
@@ -429,14 +573,24 @@ function FulfilDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
     if (p.form.length > 0 || Object.keys(p.lines).length > 0) return;
     setBusy(true);
     setError(null);
-    const body = lines ? buildFulfilPayload(form, lines) : { all: true as const, ...(form.note.trim() ? { note: form.note.trim() } : {}) };
+    const body = lines
+      ? buildFulfilPayload(form, lines)
+      : { all: true as const, ...(form.note.trim() ? { note: form.note.trim() } : {}) };
     const r = await actions.fulfil(order.id, body, { quiet: true });
     setBusy(false);
     if (r.ok) onDone();
     else setError(r.error);
   }
   return (
-    <Shell order={order} size="md" title={t('title')} busy={busy} onClose={onClose} onSubmit={() => void submit()} confirmLabel={t('record')}>
+    <Shell
+      order={order}
+      size="md"
+      title={t('title')}
+      busy={busy}
+      onClose={onClose}
+      onSubmit={() => void submit()}
+      confirmLabel={t('record')}
+    >
       <p className="text-sm text-muted-foreground">{t('intro')}</p>
       {lines && <ModeChoice mode={form.mode} onChange={(mode) => set({ mode })} disabled={busy} />}
       {lines && form.mode === 'lines' && (
@@ -454,8 +608,25 @@ function FulfilDialog({ order, onClose, onDone }: { order: DialogOrder; onClose:
           {t('problems.nothing')}
         </p>
       )}
-      <Field label={t('note')} htmlFor="so-fulfil-note" hint={t('noteHint')} error={shown.form.includes('noteTooLong') ? t('problems.noteTooLong', { max: FULFIL_NOTE_MAX }) : undefined}>
-        <Textarea id="so-fulfil-note" rows={2} dir="auto" disabled={busy} maxLength={FULFIL_NOTE_MAX + 50} value={form.note} onChange={(e) => set({ note: e.target.value })} />
+      <Field
+        label={t('note')}
+        htmlFor="so-fulfil-note"
+        hint={t('noteHint')}
+        error={
+          shown.form.includes('noteTooLong')
+            ? t('problems.noteTooLong', { max: FULFIL_NOTE_MAX })
+            : undefined
+        }
+      >
+        <Textarea
+          id="so-fulfil-note"
+          rows={2}
+          dir="auto"
+          disabled={busy}
+          maxLength={FULFIL_NOTE_MAX + 50}
+          value={form.note}
+          onChange={(e) => set({ note: e.target.value })}
+        />
       </Field>
       {error !== null && <ErrorLine error={error} />}
     </Shell>

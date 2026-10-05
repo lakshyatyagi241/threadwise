@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl';
 import { Alert, Button, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { blockedAddress, isIpBlocked } from '../lib/ip-blocked';
+import { IpBlockedView } from './ip-blocked-view';
 
 /** A region that is still loading. Sized by the caller so the page does not jump when data arrives. */
 export function LoadingBlock({ className }: { className?: string }) {
@@ -19,6 +21,8 @@ export function LoadingBlock({ className }: { className?: string }) {
 export function ErrorBlock({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations('auth-registration-security.platform.common');
   const api = error instanceof ApiError ? error : null;
+  // A blocked address is not a failure to retry: say whose address it is and how to get it allowed.
+  if (isIpBlocked(error)) return <IpBlockedView ip={blockedAddress(error)} />;
   const message =
     api?.status === 403
       ? t('errors.forbidden')

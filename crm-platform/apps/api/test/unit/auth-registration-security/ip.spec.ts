@@ -44,6 +44,21 @@ describe('ip helpers', () => {
     expect(ipAllowed('1.2.3.4', ['nope', '1.2.3.0/24'])).toBe(true);
   });
 
+  it('treats a malformed prefix as unparsable instead of a /0 that allows everyone', () => {
+    for (const bad of [
+      '10.0.0.5/',
+      '10.0.0.5/-1',
+      '10.0.0.5/8/8',
+      '10.0.0.5/ 8',
+      '10.0.0.5/8.5',
+      '/24',
+    ]) {
+      expect(ipMatches('198.51.100.7', bad), bad).toBe(false);
+      expect(isValidAllowlistEntry(bad), bad).toBe(false);
+    }
+    expect(ipAllowed('198.51.100.7', ['10.0.0.5/'])).toBe(false);
+  });
+
   it('validates allowlist entries at save time', () => {
     expect(isValidAllowlistEntry('203.0.113.0/24')).toBe(true);
     expect(isValidAllowlistEntry('2001:db8::/32')).toBe(true);

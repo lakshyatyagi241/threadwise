@@ -32,8 +32,32 @@ export const QUEUES = {
   WABA_INGEST: 'waba-ingest',
   /** One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest. */
   WEBHOOK_FORWARD: 'webhook-forward',
+  /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (WD-TG-013). */
+  TG_BROADCAST: 'tg-broadcast',
+  /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (WD-FB-010). */
+  FB_BACKFILL: 'fb-backfill',
+  /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (WD-FB-013). */
+  FB_BROADCAST: 'fb-broadcast',
+  /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (WD-IG-009). */
+  IG_PULL: 'ig-pull',
+  /** One job per connected store: imports its products, orders and customers into the mirror (WD-ECOM-011). */
+  ECOM_IMPORT: 'ecom-import',
+  /** One job per verified store webhook: the event message, the order-status automation and the mirror upkeep (WD-ECOM-008, 010, 027). */
+  ECOM_WEBHOOK: 'ecom-webhook',
+  /** One job per run of a scheduled message (WD-NODE-030, 031): sends its pending recipients with the pacing rules. Own queue so a long run cannot hold a broadcast. */
+  SCHED_RUN: 'sched-run',
   /** Segment actions over more members than fit in a request (add a segment's contacts to a group, in chunks). Own queue: a huge segment must not delay an import. */
   SEGMENT_ACTIONS: 'segment-actions',
+  /** Copies a customer's WhatsApp file from the provider into the media store: downloads can be large and slow, and a provider outage must not hold message ingest. */
+  MEDIA_FETCH: 'media-fetch',
+  /** One job per step of a flow run (WD-FLR-015, 016): the node to run next, a Delay waking, a halted run trying again. Own queue so a long flow cannot hold a send. */
+  FLOW_RUN: 'flow-run',
+  /** Re-reads WhatsApp templates stuck PENDING on Meta (WD-TPL-027). Own queue: a Meta outage must not hold anything else. */
+  TPL_SWEEP: 'tpl-sweep',
+  /** One job per due pull connection of the Marketplace (M-05): fetches the portal's new leads and hands them to the lead pipeline. Own queue: a slow portal must not hold a lead from another door. */
+  MKT_PULL: 'mkt-pull',
+  /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
+  MKT_INBOUND: 'mkt-inbound',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

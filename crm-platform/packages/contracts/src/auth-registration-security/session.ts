@@ -75,13 +75,33 @@ export const industrySchema = z.enum([
 export const teamSizeSchema = z.enum(['1', '2-5', '6-20', '21-100', '100+']);
 
 export const onboardingWorkspaceRequestSchema = z.object({
-  name: z.string().trim().min(2).max(120),
+  /** Required, at most 120 characters (WaDesk has no minimum above one). */
+  name: z.string().trim().min(1).max(120),
   industry: industrySchema.optional(),
   sizeRange: teamSizeSchema.optional(),
   /** IANA id, validated server-side with Intl. */
   timezone: z.string().min(1).max(64),
-  currency: z.string().length(3).optional(),
-  /** Required only when the account has no phone yet (social sign-up). */
+  /** ISO 3166-1 alpha-2, validated server-side. The currency default follows it (India: INR, elsewhere: USD). */
+  country: z
+    .string()
+    .trim()
+    .length(2)
+    .transform((v) => v.toUpperCase())
+    .optional(),
+  /**
+   * The currency the workspace is billed in: one the platform can bill in. Left out, the country's default applies. Settable here
+   * only until the wallet has any activity; after that an operator changes it (with a reason).
+   */
+  currency: z
+    .string()
+    .trim()
+    .length(3)
+    .transform((v) => v.toUpperCase())
+    .optional(),
+  /**
+   * Required whenever the account has no mobile number yet (`needsPhone`), whichever way it signed up;
+   * never replaces one that is already saved.
+   */
   phone: z
     .string()
     .regex(/^\+[1-9]\d{6,14}$/)
@@ -100,11 +120,33 @@ export const onboardingResponseSchema = z.object({
     industry: industrySchema.nullable(),
     sizeRange: teamSizeSchema.nullable(),
     timezone: z.string().nullable(),
+    country: z.string().nullable(),
     currency: z.string().nullable(),
   }),
+  /** The currencies this workspace can be billed in, and the platform's own (the fallback when a default is not available). */
+  currencies: z.object({
+    available: z.array(z.string()),
+    platform: z.string(),
+  }),
   suggestedName: z.string(),
+  /** True whenever the account has no mobile number yet (any sign-up path); `phone` is then required. */
   needsPhone: z.boolean(),
   plans: z.array(onboardingPlanSchema),
   defaultTimezone: z.string(),
+  /**
+   * What the plan step needs for the credits explainer and the top-up link. CPN (wallet, credit
+   * packages, currencies) owns the real values; until it lands these are the platform defaults and
+   * `platform_settings` key `onboarding.billing` ({ creditsPerMessage, defaultCurrency, topUpUrl })
+   * overrides them. Price conversion between the plan currency and `displayCurrency` is CPN's job:
+   * the plan cards keep their own currency until then.
+   */
+  billing: z.object({
+    /** Credits one outbound message costs once the plan's messages run out. */
+    creditsPerMessage: z.number().int().min(1),
+    /** The currency prices should be shown in: the workspace's, else the platform default. */
+    displayCurrency: z.string().length(3),
+    /** Where "Top up message credits" goes. */
+    topUpUrl: z.string().max(512),
+  }),
 });
 export type OnboardingResponse = z.infer<typeof onboardingResponseSchema>;

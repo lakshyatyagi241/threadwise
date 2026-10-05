@@ -40,7 +40,9 @@ type Totals = LinkedInvoicesResponse['totals'];
 function TotalsStrip({ totals }: { totals: Totals }) {
   const t = useTranslations('invoicing.linked');
   const locale = useLocale();
-  const currencies = [...new Set([...totals.invoiced, ...totals.outstanding].map((x) => x.currency))];
+  const currencies = [
+    ...new Set([...totals.invoiced, ...totals.outstanding].map((x) => x.currency)),
+  ];
   if (currencies.length === 0) return null;
   const pick = (rows: Totals['invoiced'], c: string) => {
     const r = rows.find((x) => x.currency === c);
@@ -88,7 +90,13 @@ function TotalsStrip({ totals }: { totals: Totals }) {
   );
 }
 
-function Panel({ kind, id, compact, className, canCreate }: LinkedInvoicesProps & { canCreate: boolean }) {
+function Panel({
+  kind,
+  id,
+  compact,
+  className,
+  canCreate,
+}: LinkedInvoicesProps & { canCreate: boolean }) {
   const t = useTranslations('invoicing.linked');
   const locale = useLocale();
   const linked = useQuery({
@@ -108,20 +116,38 @@ function Panel({ kind, id, compact, className, canCreate }: LinkedInvoicesProps 
   return (
     <section
       aria-labelledby={heading}
-      className={cn(compact ? 'space-y-3' : 'space-y-3 rounded-md border border-border bg-background p-4 sm:p-5', className)}
+      className={cn(
+        compact
+          ? 'space-y-3'
+          : 'space-y-3 rounded-md border border-border bg-background p-4 sm:p-5',
+        className,
+      )}
     >
       <div className="flex items-center justify-between gap-2">
-        <h2 id={heading} className={cn(compact ? 'text-sm font-semibold' : 'text-[11px] font-medium uppercase tracking-wider text-muted-foreground')}>
+        <h2
+          id={heading}
+          className={cn(
+            compact
+              ? 'text-sm font-semibold'
+              : 'text-[11px] font-medium uppercase tracking-wider text-muted-foreground',
+          )}
+        >
           {t('title')}
         </h2>
         <div className="flex items-center gap-3 text-sm">
           {canCreate && (
-            <Link href={newHref} className="inline-flex items-center gap-1 font-medium text-primary hover:underline">
+            <Link
+              href={newHref}
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+            >
               <PlusIcon className="size-3.5" /> {t('new')}
             </Link>
           )}
           {kind === 'contact' && rows.length > 0 && (
-            <Link href={allHref} className="text-muted-foreground hover:text-foreground hover:underline">
+            <Link
+              href={allHref}
+              className="text-muted-foreground hover:text-foreground hover:underline"
+            >
               {t('viewAll')}
             </Link>
           )}
@@ -141,7 +167,10 @@ function Panel({ kind, id, compact, className, canCreate }: LinkedInvoicesProps 
           <ul className="divide-y divide-border">
             {rows.map((inv) => {
               const owes = rowBalanceMinor(inv) ?? 0;
-              const open = inv.status === 'issued' || inv.status === 'partially_paid' || inv.status === 'overdue';
+              const open =
+                inv.status === 'issued' ||
+                inv.status === 'partially_paid' ||
+                inv.status === 'overdue';
               return (
                 <li key={inv.id}>
                   <Link
@@ -152,11 +181,17 @@ function Panel({ kind, id, compact, className, canCreate }: LinkedInvoicesProps 
                       <span className="block truncate text-sm font-medium" dir="ltr">
                         {inv.number ?? t('draft')}
                       </span>
-                      <span className="block text-xs text-muted-foreground">{formatDay(inv.issueDate, locale) || '-'}</span>
+                      <span className="block text-xs text-muted-foreground">
+                        {formatDay(inv.issueDate, locale) || '-'}
+                      </span>
                     </span>
                     <StatusChip status={inv.status} />
                     <span className="text-end">
-                      <Money minor={invoiceMinor(inv).total} currency={inv.currency} className="block text-sm font-medium" />
+                      <Money
+                        minor={invoiceMinor(inv).total}
+                        currency={inv.currency}
+                        className="block text-sm font-medium"
+                      />
                       {open && owes > 0 && (
                         <span className="block text-xs text-muted-foreground">
                           {t('owes')} <Money minor={owes} currency={inv.currency} />
@@ -168,7 +203,9 @@ function Panel({ kind, id, compact, className, canCreate }: LinkedInvoicesProps 
               );
             })}
           </ul>
-          {linked.data?.hasMore && <p className="text-xs text-muted-foreground">{t('latest', { count: rows.length })}</p>}
+          {linked.data?.hasMore && (
+            <p className="text-xs text-muted-foreground">{t('latest', { count: rows.length })}</p>
+          )}
         </>
       )}
     </section>

@@ -132,6 +132,15 @@ export interface HealthFacts {
   /** True when the live read from Meta failed (token rejected or Meta unreachable). */
   liveReadFailed: boolean;
   liveReadError: string | null;
+  /** The WABA node, when it could be read. */
+  accountReviewStatus?: string | null;
+  businessVerificationStatus?: string | null;
+  /** Scopes the token holds; null = could not be inspected. */
+  tokenScopes?: string[] | null;
+  /** Apps subscribed to the WABA's webhooks; null = could not be read. */
+  subscribedApps?: number | null;
+  /** Meta's error code when the template list could not be read. */
+  templatesErrorCode?: number | null;
 }
 
 const DAY_MS = 86_400_000;
@@ -224,6 +233,64 @@ export function deriveHealth(
       solution: 'Verify it in WhatsApp Manager.',
     });
   }
+  const review = (f.accountReviewStatus ?? '').toUpperCase();
+  if (review && review !== 'APPROVED') {
+    add({
+      key: 'account_review',
+      severity: review === 'PENDING' ? 'warning' : 'error',
+      title: `Account review: ${review}`,
+      solution:
+        'Check the account review status in Meta Business Suite and answer anything Meta asks.',
+    });
+  }
+  const verification = (f.businessVerificationStatus ?? '').toLowerCase();
+  if (verification && verification !== 'verified') {
+    add({
+      key: 'business_unverified',
+      severity: 'warning',
+      title: `Business verification: ${verification.replace(/_/g, ' ')}`,
+      solution:
+        'Verify the business in Meta Business Suite; an unverified business has a lower messaging limit.',
+    });
+  }
+  if (f.tokenScopes) {
+    const has = (s: string) => f.tokenScopes!.includes(s);
+    if (!has('whatsapp_business_messaging'))
+      add({
+        key: 'scope_messaging',
+        severity: 'error',
+        title: 'The token cannot send messages (whatsapp_business_messaging is missing)',
+        solution: 'Generate a new System User token with both WhatsApp scopes.',
+      });
+    else if (!has('whatsapp_business_management'))
+      add({
+        key: 'scope_management',
+        severity: 'warning',
+        title: 'The token cannot manage templates (whatsapp_business_management is missing)',
+        solution:
+          'Sending works, but template sync and creation are blocked. Generate a new token with both scopes.',
+      });
+  }
+  if (f.subscribedApps === 0) {
+    add({
+      key: 'no_subscribed_app',
+      severity: 'error',
+      title: "No app is subscribed to this number's webhooks",
+      solution:
+        'Use Fix inbound; inbound messages and delivery statuses will not arrive until an app is subscribed.',
+    });
+  }
+  if (f.templatesErrorCode === 3 || f.templatesErrorCode === 200 || f.templatesErrorCode === 10) {
+    add({
+      key: 'templates_unreadable',
+      severity: 'warning',
+      title: 'Templates cannot be read for this account',
+      solution:
+        f.templatesErrorCode === 10
+          ? 'The WABA may have been removed or un-shared from the connected business. Reconnect it.'
+          : 'The app lacks whatsapp_business_management (Advanced Access needs Meta App Review).',
+    });
+  }
   if (f.status === 'connected' && f.inboundWired === false) {
     add({
       key: 'inbound_not_wired',
@@ -294,5 +361,15 @@ export const HANDLED_FIELDS = new Set([
   'phone_number_name_update',
   'account_update',
   'account_review_update',
+  'business_username_update',
+  'smb_message_echoes',
+  'history',
+  'smb_app_state_sync',
+  'group_lifecycle_update',
+  'group_participants_update',
+  'group_settings_update',
+  'group_status_update',
   'flows',
+  // Calls: connect, terminate and permission_update (WD-CALL-002); one callback URL serves every field.
+  'calls',
 ]);

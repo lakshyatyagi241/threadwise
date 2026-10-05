@@ -44,6 +44,7 @@ export function SettingsCard({
   description,
   tone = 'default',
   className,
+  aside,
   children,
 }: {
   kicker?: string;
@@ -51,30 +52,38 @@ export function SettingsCard({
   description?: string;
   tone?: 'default' | 'danger';
   className?: string;
+  /** A control that sits beside the heading from the small breakpoint up (the guardrail mode select). */
+  aside?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <Card
       className={cn('space-y-4', tone === 'danger' && 'border-danger/40 bg-danger/5', className)}
     >
-      <header className="space-y-1">
-        {kicker && (
-          <p
+      <div className={cn(aside ? 'flex flex-wrap items-start justify-between gap-4' : undefined)}>
+        <header className="min-w-0 max-w-2xl space-y-1">
+          {kicker && (
+            <p
+              className={cn(
+                'font-mono text-[11px] uppercase tracking-[0.16em]',
+                tone === 'danger' ? 'text-danger' : 'text-muted-foreground',
+              )}
+            >
+              {kicker}
+            </p>
+          )}
+          <h2
             className={cn(
-              'font-mono text-[11px] uppercase tracking-[0.16em]',
-              tone === 'danger' ? 'text-danger' : 'text-muted-foreground',
+              'text-lg font-semibold leading-tight',
+              tone === 'danger' && 'text-danger',
             )}
           >
-            {kicker}
-          </p>
-        )}
-        <h2
-          className={cn('text-lg font-semibold leading-tight', tone === 'danger' && 'text-danger')}
-        >
-          {title}
-        </h2>
-        {description && <p className="text-sm text-muted-foreground">{description}</p>}
-      </header>
+            {title}
+          </h2>
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        </header>
+        {aside && <div className="w-full shrink-0 sm:w-52">{aside}</div>}
+      </div>
       {children}
     </Card>
   );
@@ -83,26 +92,31 @@ export function SettingsCard({
 export function ToggleControl({
   name,
   emphasis = false,
+  compact = false,
 }: {
   name: BooleanKey;
   emphasis?: boolean;
+  /** A short tile for a row of switches: the short label when the messages have one, and no hint. */
+  compact?: boolean;
 }) {
   const t = useTranslations(`${SECURITY_NS}.controls`);
   const { draft, setField, readOnly, errors } = usePolicyForm();
   const id = fieldId(name);
   const error = errors[name];
+  const short = compact && t.has(`${name}.short`) ? t(`${name}.short`) : null;
   return (
     <div
       className={cn(
-        'flex items-start justify-between gap-3 rounded-md border p-3',
+        'flex justify-between gap-3 rounded-md border p-3',
+        compact ? 'items-center' : 'items-start',
         emphasis ? 'border-primary/50 bg-primary/5' : 'border-border',
       )}
     >
       <div className="min-w-0 space-y-1">
         <label htmlFor={id} className="block cursor-pointer text-sm font-medium">
-          <ControlLabel name={name}>{t(`${name}.label`)}</ControlLabel>
+          {short ?? <ControlLabel name={name}>{t(`${name}.label`)}</ControlLabel>}
         </label>
-        {t.has(`${name}.hint`) && (
+        {!compact && t.has(`${name}.hint`) && (
           <p className="text-xs text-muted-foreground">{t(`${name}.hint`)}</p>
         )}
         {error && (
@@ -127,7 +141,7 @@ export function NumberControl({ name }: { name: NumericKey }) {
   const tc = useTranslations(`${SECURITY_NS}.common`);
   const { base, draft, setField, readOnly, errors } = usePolicyForm();
   const spec = NUMERIC_FIELDS[name];
-  const allowZero = 'allowZero' in spec && spec.allowZero === true;
+  const allowZero = spec.allowZero === true;
   const range = allowZero
     ? tc('rangeWithZero', { min: spec.min, max: spec.max })
     : tc('range', { min: spec.min, max: spec.max });
@@ -201,51 +215,58 @@ export function MfaMethodsControl() {
   );
 }
 
-export function GuardrailModeControl() {
+const GUARDRAIL_MODES = ['off', 'monitor', 'enforce'] as const;
+
+/** The mode picker. It sits beside the card's heading; what each mode does is spelled out below it. */
+export function GuardrailModeSelect() {
   const t = useTranslations(`${SECURITY_NS}.controls.waGuardrailsMode`);
   const { draft, setField, readOnly, errors } = usePolicyForm();
-  const modes = ['off', 'monitor', 'enforce'] as const;
   return (
-    <div className="space-y-3">
-      <Field
-        label={<ControlLabel name="waGuardrailsMode">{t('label')}</ControlLabel>}
-        htmlFor={fieldId('waGuardrailsMode')}
-        error={errors.waGuardrailsMode}
-        className="max-w-xs"
+    <Field
+      label={<ControlLabel name="waGuardrailsMode">{t('label')}</ControlLabel>}
+      htmlFor={fieldId('waGuardrailsMode')}
+      error={errors.waGuardrailsMode}
+    >
+      <Select
+        id={fieldId('waGuardrailsMode')}
+        value={draft.waGuardrailsMode}
+        onChange={(e) =>
+          setField('waGuardrailsMode', e.target.value as SecurityPolicy['waGuardrailsMode'])
+        }
+        disabled={readOnly}
+        invalid={Boolean(errors.waGuardrailsMode)}
       >
-        <Select
-          id={fieldId('waGuardrailsMode')}
-          value={draft.waGuardrailsMode}
-          onChange={(e) =>
-            setField('waGuardrailsMode', e.target.value as SecurityPolicy['waGuardrailsMode'])
-          }
-          disabled={readOnly}
-          invalid={Boolean(errors.waGuardrailsMode)}
-        >
-          {modes.map((m) => (
-            <option key={m} value={m}>
-              {t(`options.${m}`)}
-            </option>
-          ))}
-        </Select>
-      </Field>
-      <ul className="space-y-1.5 text-sm">
-        {modes.map((m) => (
-          <li
-            key={m}
-            className={cn(
-              'rounded-md border px-3 py-2',
-              draft.waGuardrailsMode === m
-                ? 'border-primary/50 bg-primary/5'
-                : 'border-border text-muted-foreground',
-            )}
-          >
-            <span className="font-medium text-foreground">{t(`options.${m}`)}</span>
-            <span className="block text-xs">{t(`explain.${m}`)}</span>
-          </li>
+        {GUARDRAIL_MODES.map((m) => (
+          <option key={m} value={m}>
+            {t(`options.${m}`)}
+          </option>
         ))}
-      </ul>
-    </div>
+      </Select>
+    </Field>
+  );
+}
+
+/** The three modes in words, the chosen one highlighted. */
+export function GuardrailModeExplanation() {
+  const t = useTranslations(`${SECURITY_NS}.controls.waGuardrailsMode`);
+  const { draft } = usePolicyForm();
+  return (
+    <ul className="grid gap-2 text-sm md:grid-cols-3">
+      {GUARDRAIL_MODES.map((m) => (
+        <li
+          key={m}
+          className={cn(
+            'rounded-md border px-3 py-2',
+            draft.waGuardrailsMode === m
+              ? 'border-primary/50 bg-primary/5'
+              : 'border-border text-muted-foreground',
+          )}
+        >
+          <span className="font-medium text-foreground">{t(`options.${m}`)}</span>
+          <span className="block text-xs">{t(`explain.${m}`)}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 

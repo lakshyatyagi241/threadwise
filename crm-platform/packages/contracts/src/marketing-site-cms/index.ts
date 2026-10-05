@@ -4,3 +4,5 @@ export * from './legal';
 export * from './blog';
 export * from './contact';
 export * from './pricing';
+export * from './announcement';
+export * from './guidebook';

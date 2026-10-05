@@ -244,7 +244,7 @@ Any other move is `409 APPT_INVALID_TRANSITION` with `from` and `to`. The four f
 | ---------------------------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /appointments`                                                                | `record.appointments.read`   | cursor-paged (limit 1-200, default 50). `scope` `upcoming` (default: not started, pending or confirmed, soonest first), `past`, `all`; `status` list, `bookingTypeId`, `contactId`, `hostId`, `mine`, `from`/`to` (the start), `needsReview`, `q` (title, invitee name, email, phone), `order` |
 | `GET /appointments/counts`                                                         | `record.appointments.read`   | per status, `upcoming`, `past`, `needsReview`, `mine.upcoming`: the tab badges. Same filters as the list except `status` and `scope`                                                                                                                                                           |
-| `GET /appointments/calendar`                                                       | `record.appointments.read`   | `{ provider, connected, account }` from the calendar port (`none` / not connected until an adapter is registered)                                                                                                                                                                              |
+| `GET /appointments/calendar`                                                       | `record.appointments.read`   | `{ provider, connected, account, status, calendarId, calendarName, connectedAt }`: `status` is `unavailable` (the platform has no Google client), `disconnected`, `connected` or `needs_reconnect`. See Google Calendar                                                                        |
 | `POST /appointments`                                                               | `record.appointments.create` | _idempotent_; 201. `bookingTypeId`, `startsAt`, `contactId` or `invitee`, `notes`, `answers`, `hostId`, `ignoreAvailability`, `notify`                                                                                                                                                         |
 | `GET /appointments/:id`                                                            | `record.appointments.read`   | includes `manageUrl`                                                                                                                                                                                                                                                                           |
 | `GET /appointments/:id/ics`                                                        | `record.appointments.read`   | `text/calendar` attachment                                                                                                                                                                                                                                                                     |
@@ -342,17 +342,115 @@ Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `ti
   Idempotency key `<outbox event id>:<channel>`.
 - **Calendar consumer** (`booked | confirmed | rescheduled | cancelled | declined`): writes or updates the event for a confirmed booking
   and stores `calendar.eventId` and `meetUrl`; deletes it on cancel or decline. A failure throws (the drain retries); the port is idempotent
-  on the stored event id. Nothing happens when no calendar is connected.
+  on the stored event id (and, before there is one, on the appointment: see Google Calendar). Nothing happens when no calendar is
+  connected or the grant needs reconnecting.
+
+## Google Calendar (WD-APPT-012, 028, 029; D-08)
+
+One Google account per workspace, connected by an admin through Google's consent screen. The **platform operator** supplies the Google
+OAuth client once for everyone (console, _Admin, Settings, Google Calendar_: client id, client secret, optional redirect URI override,
+and a switch); a workspace never sees them. Setting that client up in Google Cloud: `docs/runbooks/google-calendar-setup.md`.
+
+**What is asked of Google:** `openid`, `email`, `calendar.events` (write events, Meet), `calendar.freebusy` and
+`calendar.calendarlist.readonly`. WaDesk asked for Calendar, Sheets, Docs, Drive and Forms in one consent; only calendar access is asked
+here. The consent URL carries `access_type=offline` and `prompt=consent`, so Google issues a refresh token on every consent. A consent with
+a calendar scope unticked is withdrawn again and stores nothing (`?calendar=missing_scope`).
+
+### Where the client comes from
+
+The console group `googleCalendar` (`GET|PATCH /platform/settings/groups/googleCalendar`): `enabled` (default on), `clientId`,
+`redirectUri` (optional override) and the write-only secret `clientSecret` (sealed, never returned; `secrets.clientSecret.isSet` says
+whether one is stored; the response also carries `extra.redirectUri`, the address to register on the Google client). A field left empty
+falls back to the environment (`GOOGLE_CALENDAR_CLIENT_ID`, `GOOGLE_CALENDAR_CLIENT_SECRET`, `GOOGLE_CALENDAR_REDIRECT_URI`); the default
+redirect URI is `<APP_URL>/v2/public/appointments/calendar/google/callback`. Without a client (or switched off) every workspace sees
+`status: unavailable`.
+
+Environment for the adapter (all optional, defaults are Google's own addresses; they exist so tests can aim at a local stand-in):
+`GOOGLE_OAUTH_AUTH_URL`, `GOOGLE_OAUTH_TOKEN_URL`, `GOOGLE_OAUTH_REVOKE_URL`, `GOOGLE_USERINFO_URL`, `GOOGLE_CALENDAR_API_URL`,
+`GOOGLE_HTTP_TIMEOUT_MS` (8000), `GOOGLE_BUSY_CACHE_SECONDS` (30), `GOOGLE_BUSY_BACKOFF_SECONDS` (20).
+
+### Routes
+
+| Route                                               | Capability                    | Notes                                                                                                                                                                                                                                        |
+| --------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar`                        | `record.appointments.read`    | the status (above)                                                                                                                                                                                                                           |
+| `POST /appointments/calendar/google/start`          | `record.booking-types.update` | `{ returnTo? }` (a path inside the app); 200 `{ url, expiresInSeconds }`: Google's consent URL, with a signed state good for 10 minutes and bound to the workspace and the admin. `422 APPT_CALENDAR_NOT_CONFIGURED` when there is no client |
+| `GET /public/appointments/calendar/google/callback` | none (the signed `state`)     | Google's redirect. Verifies the state, exchanges the code, stores the grant sealed, answers **302** to `<WEB_APP_URL><returnTo>?calendar=<outcome>`. Outcomes: `connected`, `denied`, `failed`, `expired`, `not_configured`, `missing_scope` |
+| `GET /appointments/calendar/google/calendars`       | `record.booking-types.update` | the calendars the account can write to (`minAccessRole=writer`), the primary one first. `409 APPT_CALENDAR_NOT_CONNECTED`, `502 APPT_CALENDAR_PROVIDER_FAILED`                                                                               |
+| `PUT /appointments/calendar/google/calendar`        | `record.booking-types.update` | `{ calendarId }`, one of the listed ids (else `422`, path `calendarId`); returns the status. Events already written stay where they are                                                                                                      |
+| `POST /appointments/calendar/google/disconnect`     | `record.booking-types.update` | revokes at Google (an unreachable Google does not block it), deletes the tokens; idempotent; returns the status                                                                                                                              |
+
+All staff routes also need the plan's appointment booking (`422 PLAN_FEATURE_LOCKED`). Connect, choose, needs-reconnect and disconnect
+are each audited (module `appointment_calendar`) and emit `appointment_calendar.connected | calendar_selected | needs_reconnect |
+disconnected` in the same transaction as the write. WaDesk also checked the plan feature `integration_google_calendar` on the callback;
+the plan registry here has no such key, so the `appointment_booking` flag is the only plan gate (recorded in `parity/product-extensions.md`).
+
+### Storage
+
+`appointment_calendar_connections` (migration `20261019110000`): one row per workspace (forced RLS, composite FK to the admin who connected).
+The refresh token and the cached access token are sealed with the credentials key (`CryptoService`, so key rotation applies);
+`account_email`, `account_sub`, `scopes`, `calendar_id` (`primary` until chosen), `calendar_name`, `status` (`active` |
+`needs_reconnect`) and `status_reason`. A reconnect with the **same** Google account keeps the chosen calendar; another account starts on
+its own primary calendar.
+
+### Events
+
+- The Google event id is the appointment uuid without its dashes (Google lets the client pick an id). The first write is an insert with
+  that id; if the answer was lost and the outbox retries, Google answers 409 and the adapter updates that same event instead, so a retry
+  never doubles an event. When the appointment already stores an event id the write is a patch of it; an event somebody deleted in Google
+  is written again under the same id; a cancelled one (Google keeps it as `cancelled`) is restored by the patch.
+- Written: summary (the booking type's name), description, location, start and end in the booking's zone, default reminders, the customer
+  as attendee (Google emails the invitation when there is an address), and private properties `crmManaged=1` and `crmAppointment=<uuid>`.
+- A virtual type (or `createMeet`) asks for a Google Meet room with the appointment uuid as the request id (a repeat is ignored by Google);
+  the link comes back as `meetUrl`. If Google has not filled the link in yet the adapter looks once more, then goes on without one.
+- Cancel and decline delete the event; a 404 or 410 counts as deleted, so a redelivered delete succeeds. The event is deleted with
+  `sendUpdates=all` (the attendee is told it is cancelled).
+- Update and delete go to the calendar the event was written to (stored on the appointment), even if the type has been pointed at another
+  calendar since.
+- A failure throws, so the drain retries with backoff; a request Google refuses as bad (a 400) will not succeed on retry and ends in the
+  outbox's dead letters. While the connection is not usable (never connected, `needs_reconnect`, the client removed) the consumer does
+  nothing and does not throw: **events for bookings made in that time are not written later; a reconnect does not back-fill.**
+
+### Busy time
+
+`freeBusy` feeds the slot engine (it blocks every seat, buffers included), on the staff, public and flow paths alike. Answers are cached
+`GOOGLE_BUSY_CACHE_SECONDS` per workspace, calendar and window, and the cache for a workspace is dropped when this process writes or
+deletes an event of that workspace. A Google outage (any failure, a calendar Google cannot find, a timeout) means **no busy data**: the
+slots are offered as if there were no calendar, a warning is logged, and bookings are not blocked. After a failure the next calls for
+that workspace answer "no busy data" at once for `GOOGLE_BUSY_BACKOFF_SECONDS`, so a dead Google costs one timeout, not one per request.
+A booking type that names a calendar id reads that calendar; otherwise the workspace's chosen one.
+
+A group type (capacity above one) is read with `ignoreOwnEvents`: busy blocks that are exactly one of this platform's own events are
+removed (the events carry `crmManaged`), so the first booking's event does not close the slot for the other seats. For a one-to-one type
+nothing is removed, which keeps WaDesk's behaviour that a booking of one service blocks the same time for another service through the
+calendar.
+
+### Tokens and refusals
+
+An access token is refreshed when it is within a minute of expiring and the sealed copy is kept, so the API and the worker do not each
+refresh on every call (Google does not rotate refresh tokens, so two processes refreshing at once do no harm; within one process
+concurrent refreshes are coalesced). A 401 from the Calendar API refreshes once and repeats the call. **`invalid_grant`** (the grant was
+revoked, expired, the password changed, or the app is still in Testing and its 7 days ran out) marks the connection `needs_reconnect` once,
+audited, with an outbox event; the settings card then asks for a new consent, and nothing is written to or read from Google until then.
+`invalid_client` (the platform's secret is wrong) is not the workspace's fault and does not touch its connection.
+
+### Not verified against real Google
+
+Everything above is exercised against a local stand-in written from Google's documentation (`test/e2e/appointments-booking/fake-google.ts`).
+No Google Cloud OAuth client existed when this was built, so nothing has run against Google itself: the consent screen, the refresh-token
+behaviour of an app in Testing or Production, Google's real error bodies, Meet creation timing and the `privateExtendedProperty` filter of
+`events.list` are taken from the documentation and need a first real run (runbook, "Check it works").
 
 ## Ports (what other domains plug in)
 
-| Port (token)                                     | File                                                                      | Stub adapter                         | Who binds the real one                                  |
-| ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------- |
-| `CalendarSyncPort` (`APPOINTMENT_CALENDAR`)      | `apps/api/src/infra/providers/appointments-booking/calendar-sync.port.ts` | `NoCalendarSync` (not connected)     | the integrations domain (Google OAuth, Meet, free/busy) |
-| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | the channel domains (WhatsApp, email)                   |
+| Port (token)                                     | File                                                                      | Stub adapter                         | Who binds the real one                                    |
+| ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `CalendarSyncPort` (`APPOINTMENT_CALENDAR`)      | `apps/api/src/infra/providers/appointments-booking/calendar-sync.port.ts` | `NoCalendarSync` (not connected)     | bound here: `GoogleCalendarAdapter` (see Google Calendar) |
+| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | the channel domains (WhatsApp, email)                     |
 
 Override the token in a module (`{ provide: APPOINTMENT_MESSENGER, useClass: ... }`); the stubs are what a deployment has until then.
-Google OAuth endpoints, the calendar picker and the Sheets append are not built here (`blocked`: integrations).
+The calendar port is served by `GoogleCalendarAdapter` (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
+append is not built (`blocked`: it is the Sheets half of WD-APPT-012 and 029, and its scope is not requested).
 
 **For the flow-runtime domain** (the "Book appointment" node, WD-APPT-034) call `BookingOffersService` (exported from the barrel, no HTTP):
 `offer(orgId)` (active types + the gate: `feature_off` / `plan_limit`), `days(orgId, typeId, offset)` and `times(orgId, typeId, date, offset)`

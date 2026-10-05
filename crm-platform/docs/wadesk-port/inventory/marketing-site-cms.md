@@ -58,7 +58,7 @@ Port summary: platform-level tables with no tenant RLS, a small `cms` NestJS mod
 | WD-CMS-024 | Publish drafts                                                       | implemented | P0       | S      | WD-CMS-008                                           |
 | WD-CMS-025 | Discard drafts                                                       | implemented | P1       | S      | WD-CMS-008                                           |
 | WD-CMS-026 | Reset to shipped defaults (field, page, theme, site)                 | implemented | P1       | S      | WD-CMS-008                                           |
-| WD-CMS-027 | Editor image upload                                                  | partial     | P2       | S      | WD-CMS-018                                           |
+| WD-CMS-027 | Editor image upload                                                  | implemented | P2       | S      | WD-CMS-018                                           |
 | WD-CMS-028 | Homepage kill-switch                                                 | implemented | P1       | S      | WD-CMS-001                                           |
 | WD-CMS-029 | Admin blog post list                                                 | implemented | P1       | S      | WD-CMS-030                                           |
 | WD-CMS-030 | Create and edit blog post                                            | implemented | P0       | L      | WD-CMS-029                                           |

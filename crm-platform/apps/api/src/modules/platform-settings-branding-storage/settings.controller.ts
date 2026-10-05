@@ -120,7 +120,9 @@ export class SettingsController {
   @Post('assets/:slot')
   @OperatorRoles('super_admin')
   // 2 MB is the largest slot (the 512 px app icon); each slot enforces its own, smaller limit too.
-  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 2.1 * 1024 * 1024, files: 1 } }))
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: Math.ceil(2.1 * 1024 * 1024), files: 1 } }),
+  )
   @ApiOperation({
     summary: 'Upload the favicon, a theme logo or an app icon (type checked from the bytes)',
   })
@@ -140,7 +142,8 @@ export class SettingsController {
   @OperatorRoles('super_admin')
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Generate the Team Inbox app Web Push key pair once (idempotent; the private key is never returned)',
+    summary:
+      'Generate the Team Inbox app Web Push key pair once (idempotent; the private key is never returned)',
   })
   generateKeys() {
     return this.vapid.generate(this.operatorId());

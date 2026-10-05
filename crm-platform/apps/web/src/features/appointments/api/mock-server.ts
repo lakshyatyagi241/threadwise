@@ -349,7 +349,8 @@ function seed(): State {
       },
       calendar: {
         provider: 'google',
-        status: 'unavailable',
+        status: 'disconnected',
+        account: null,
         calendarId: null,
         calendarName: null,
         connectedAt: null,
@@ -622,6 +623,51 @@ function route(
       throw notFound();
     }
     throw notFound();
+  }
+
+  // ---- staff: Google Calendar ------------------------------------------------------------------------------------
+  if (a === 'appointments' && b === 'calendar') {
+    const cal = s.settings.calendar;
+    if (c === undefined) return cal;
+    if (c === 'google' && d === 'start') {
+      // The stand-in has no Google: it connects at once and "returns" to the page the admin came from.
+      s.settings.calendar = {
+        ...cal,
+        status: 'connected',
+        account: 'you@example.com',
+        calendarId: 'primary',
+        calendarName: null,
+        connectedAt: new Date().toISOString(),
+      };
+      const returnTo = typeof body.returnTo === 'string' ? body.returnTo : '/appointments/settings';
+      return { url: `${returnTo}?calendar=connected`, expiresInSeconds: 600 };
+    }
+    if (c === 'google' && d === 'calendars') {
+      return [
+        { id: 'primary', name: 'you@example.com', primary: true, timezone: 'UTC' },
+        { id: 'team@example.com', name: 'Team calendar', primary: false, timezone: 'UTC' },
+      ];
+    }
+    if (c === 'google' && d === 'calendar' && method === 'PUT') {
+      const id = String(body.calendarId ?? 'primary');
+      s.settings.calendar = {
+        ...cal,
+        calendarId: id,
+        calendarName: id === 'primary' ? null : 'Team calendar',
+      };
+      return s.settings.calendar;
+    }
+    if (c === 'google' && d === 'disconnect') {
+      s.settings.calendar = {
+        ...cal,
+        status: 'disconnected',
+        account: null,
+        calendarId: null,
+        calendarName: null,
+        connectedAt: null,
+      };
+      return s.settings.calendar;
+    }
   }
 
   // ---- staff: settings --------------------------------------------------------------------------------------------

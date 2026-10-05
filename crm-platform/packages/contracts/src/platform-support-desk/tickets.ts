@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { pageInfoSchema } from '../common/pagination';
+import { ticketSlaSchema } from './sla-shape';
 
 /**
  * Platform support desk (SUPP): the customer ticket form and the operator helpdesk.
@@ -157,6 +158,8 @@ export const operatorTicketDetailSchema = z.object({
   lastReplyAt: z.string().nullable(),
   resolvedAt: z.string().nullable(),
   messages: z.array(operatorThreadMessageSchema),
+  /** The SLA clocks of the platform default policy; both null when no policy applies. */
+  sla: ticketSlaSchema,
 });
 export type OperatorTicketDetail = z.infer<typeof operatorTicketDetailSchema>;
 

@@ -325,6 +325,51 @@ export const tiPwaSettingsSchema = z.object({
   icon512: assetUrl(500),
 });
 
+// --- WD-WABA-001: the one Meta app (and Interakt partner) every workspace's WhatsApp numbers are onboarded through -------
+export const WABA_PROVIDERS = ['interakt', 'meta'] as const;
+const metaId = (max: number) => z.union([z.literal(''), z.string().trim().regex(/^\d+$/).max(max)]).default('');
+export const whatsappSettingsSchema = z.object({
+  /** Meta app id (also sent to the browser for the Facebook SDK). */
+  appId: metaId(64),
+  /** Embedded Signup configuration id. Empty: workspaces paste a token manually. */
+  configId: metaId(64),
+  coexistence: flag(false),
+  /** `vNN.N`; empty keeps the server default. */
+  graphVersion: z
+    .union([z.literal(''), z.string().trim().regex(/^v\d{1,2}\.\d{1,2}$/, 'must look like v25.0')])
+    .default(''),
+  /** Which route a newly connected number uses. */
+  defaultProvider: z.enum(WABA_PROVIDERS).default('interakt'),
+  /** Interakt's Embedded Signup solution id. */
+  solutionId: metaId(64),
+  /** Platform system user (assigned to each WABA) and the business used to find a WABA. */
+  systemUserId: metaId(64),
+  businessId: metaId(64),
+  /** Require a valid body signature on every webhook POST, Interakt-forwarded ones included. */
+  requireSignature: flag(false),
+});
+
+// --- WD-CAMP: how a campaign retries and when it ends on its own (WaDesk's campaign_* system settings) -----------------------
+export const campaignsSettingsSchema = z.object({
+  /** Tries per recipient before it is marked failed. */
+  retryAttempts: clamped(0, 10, 3),
+  /** Seconds between tries (it grows with each one). */
+  retryBackoffSec: clamped(10, 3600, 60),
+  /** A campaign nobody finished is ended after `defaultExpiryHours`. */
+  autoExpiryEnabled: flag(true),
+  defaultExpiryHours: clamped(1, 720, 24),
+});
+
+// --- WD-APPT-028: the one Google OAuth client every workspace connects its Calendar through (WaDesk: google_calendar_* system settings) --
+export const googleCalendarSettingsSchema = z.object({
+  /** The master switch (WaDesk's `google_calendar_enabled`). Off: no workspace can connect, and nothing is written to or read from a calendar. */
+  enabled: flag(true),
+  /** The OAuth 2.0 client id from Google Cloud (Web application). Empty: the `GOOGLE_CALENDAR_CLIENT_ID` environment value applies. */
+  clientId: text(200),
+  /** The redirect URI registered on that client. Empty: `<APP_URL>/v2/public/appointments/calendar/google/callback`. */
+  redirectUri: url(300),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -338,6 +383,9 @@ export const SET_GROUP_SCHEMAS = {
   storage: storageSettingsSchema,
   realtime: realtimeSettingsSchema,
   tiPwa: tiPwaSettingsSchema,
+  whatsapp: whatsappSettingsSchema,
+  campaigns: campaignsSettingsSchema,
+  googleCalendar: googleCalendarSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -357,6 +405,11 @@ export const SET_SECRET_FIELDS = {
   storage: ['secret', 'storagePassword'],
   realtime: ['appSecret'],
   tiPwa: [],
+  /** appSecret signs/verifies Meta calls; verifyToken is the webhook handshake token (blank: derived). */
+  whatsapp: ['appSecret', 'verifyToken', 'partnerAuthKey', 'systemUserToken'],
+  campaigns: [],
+  /** The OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
+  googleCalendar: ['clientSecret'],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */

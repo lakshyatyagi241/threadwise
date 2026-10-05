@@ -185,6 +185,20 @@ export const isLocaleAvailable = (code: string, registry: readonly LocaleRow[]) 
 /** Never empty: the saved default, else `en`. */
 export const defaultLocale = (saved: string | null | undefined) => (saved ?? '').trim() || 'en';
 
+// --- WD-SET-017: active theme -----------------------------------------------------------------
+
+const THEMES = ['paper', 'bright', 'dark', 'doodle'] as const;
+export type ActiveTheme = (typeof THEMES)[number];
+/** Cookie value if it is a known theme, else the saved preference (never doodle), else paper. */
+export function activeTheme(
+  cookie: string | null | undefined,
+  preference?: string | null,
+): ActiveTheme {
+  if ((THEMES as readonly string[]).includes(cookie ?? '')) return cookie as ActiveTheme;
+  if (['paper', 'bright', 'dark'].includes(preference ?? '')) return preference as ActiveTheme;
+  return 'paper';
+}
+
 // --- WD-SET-028: sitemap and robots -----------------------------------------------------------
 
 const ESC: Record<string, string> = {

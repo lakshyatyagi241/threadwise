@@ -10,7 +10,7 @@ export interface OrderRow {
   uuid: string;
   orderNumber: string;
   userId: number | null;
-  kind: 'plan' | 'addon' | 'wallet_topup';
+  kind: 'plan' | 'addon' | 'wallet_topup' | 'manual';
   planSlug: string | null;
   billingPeriod: 'monthly' | 'yearly';
   currency: string;
@@ -20,6 +20,7 @@ export interface OrderRow {
   taxAmount: string;
   totalAmount: string;
   couponCode: string | null;
+  couponId: number | null;
   gatewayId: number | null;
   gatewaySlug: string | null;
   status: 'pending' | 'awaiting_approval' | 'paid' | 'failed' | 'cancelled' | 'refunded';
@@ -27,9 +28,13 @@ export interface OrderRow {
   gatewayPaymentId: string | null;
   failureReason: string | null;
   walletTopupMinor: number | null;
+  /** The wallet a top-up credits; null on an older order (the platform currency). */
+  walletUnit: string | null;
   returnToken: string;
+  autoRenew: boolean;
   customerName: string | null;
   customerEmail: string | null;
+  description: string | null;
   createdAt: Date;
   createdAtIso: string;
   paidAt: Date | null;
@@ -39,9 +44,9 @@ export interface OrderRow {
 const COLS = sql.raw(`
   o.id, o.org_id, o.uuid, o.order_number, o.user_id, o.kind, o.plan_slug, o.billing_period, o.currency,
   o.amount::text AS amount, o.discount_amount::text AS discount_amount, o.tax_rate::text AS tax_rate,
-  o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.gateway_id,
-  o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor,
-  o.return_token, o.customer_name, o.customer_email, o.created_at, o.paid_at, o.row_version,
+  o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.coupon_id, o.gateway_id,
+  o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor, o.wallet_unit,
+  o.return_token, o.customer_name, o.customer_email, o.description, o.created_at, o.paid_at, o.row_version, o.auto_renew,
   to_char(o.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
 type Raw = Record<string, unknown>;
@@ -64,6 +69,7 @@ function toRow(r: Raw): OrderRow {
     taxAmount: r.tax_amount as string,
     totalAmount: r.total_amount as string,
     couponCode: (r.coupon_code as string | null) ?? null,
+    couponId: num(r.coupon_id),
     gatewayId: num(r.gateway_id),
     gatewaySlug: (r.gateway_slug as string | null) ?? null,
     status: r.status as OrderRow['status'],
@@ -71,9 +77,12 @@ function toRow(r: Raw): OrderRow {
     gatewayPaymentId: (r.gateway_payment_id as string | null) ?? null,
     failureReason: (r.failure_reason as string | null) ?? null,
     walletTopupMinor: num(r.wallet_topup_minor),
+    walletUnit: (r.wallet_unit as string | null) ?? null,
     returnToken: r.return_token as string,
+    autoRenew: r.auto_renew === true,
     customerName: (r.customer_name as string | null) ?? null,
     customerEmail: (r.customer_email as string | null) ?? null,
+    description: (r.description as string | null) ?? null,
     createdAt: new Date(r.created_at as string),
     createdAtIso: r.created_at_iso as string,
     paidAt: r.paid_at ? new Date(r.paid_at as string) : null,
@@ -88,6 +97,7 @@ export interface NewOrder {
   kind: OrderRow['kind'];
   planSlug: string | null;
   billingPeriod: 'monthly' | 'yearly';
+  autoRenew: boolean;
   gatewayId: number;
   gatewaySlug: string;
   currency: string;
@@ -105,7 +115,10 @@ export interface NewOrder {
   billingCountry: string | null;
   billingTaxId: string | null;
   walletTopupMinor: number | null;
+  walletUnit: string | null;
   idempotencyKey: string | null;
+  couponId: number | null;
+  couponCode: string | null;
 }
 
 /** All SQL for `orders`. Every method runs inside the transaction its caller opened (tenant `tx()` or the store's). */
@@ -115,11 +128,11 @@ export class OrdersRepository {
     const res = await tx.execute(sql`
       INSERT INTO orders AS o (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_id, gateway_slug,
         currency, amount, discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, billing_company,
-        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, idempotency_key, status)
-      VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, false, ${o.gatewayId},
+        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, wallet_unit, idempotency_key, coupon_id, coupon_code, status)
+      VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, ${o.autoRenew}, ${o.gatewayId},
         ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount},
         ${o.customerName}, ${o.customerEmail}, ${o.billingCompany}, ${o.billingAddress}, ${o.billingCity}, ${o.billingPostal},
-        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.idempotencyKey}, 'pending')
+        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.walletUnit}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, 'pending')
       RETURNING ${COLS}`);
     return toRow((res.rows as Raw[])[0]!);
   }
@@ -128,6 +141,13 @@ export class OrdersRepository {
     const res = await tx.execute(
       sql`SELECT ${COLS} FROM orders o WHERE o.org_id = ${orgId} AND o.idempotency_key = ${key}`,
     );
+    const r = (res.rows as Raw[])[0];
+    return r ? toRow(r) : null;
+  }
+
+  /** The operator console's lookup: by the order's public uuid, across tenants (privileged transaction only). */
+  async byUuid(tx: Tx, uuid: string): Promise<OrderRow | null> {
+    const res = await tx.execute(sql`SELECT ${COLS} FROM orders o WHERE o.uuid = ${uuid}`);
     const r = (res.rows as Raw[])[0];
     return r ? toRow(r) : null;
   }

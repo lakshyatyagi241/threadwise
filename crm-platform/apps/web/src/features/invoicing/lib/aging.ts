@@ -21,7 +21,8 @@ export function minorBig(major: string | null | undefined, currency: string): bi
 }
 
 /** The same, as a number (every amount the API sends is far below 2^53 minor units). */
-export const minorNum = (major: string | null | undefined, currency: string): number => Number(minorBig(major, currency));
+export const minorNum = (major: string | null | undefined, currency: string): number =>
+  Number(minorBig(major, currency));
 
 /** Share of `part` in `total` in tenths of a percent (417 = 41.7%), rounded half up; 0 when there is no total. */
 export function shareTenths(part: bigint, total: bigint): number {
@@ -84,7 +85,11 @@ export function bucketRange(bucket: BucketKey, asOf: string): { dueFrom?: string
 export const OPEN_STATUSES = 'issued,partially_paid,overdue';
 
 /** The invoice list that holds a bucket's invoices (optionally of one currency or contact). */
-export function bucketHref(bucket: BucketKey, asOf: string, narrow: { currency?: string; contact?: string } = {}): string {
+export function bucketHref(
+  bucket: BucketKey,
+  asOf: string,
+  narrow: { currency?: string; contact?: string } = {},
+): string {
   const p = new URLSearchParams({ status: OPEN_STATUSES });
   const r = bucketRange(bucket, asOf);
   if (r.dueFrom) p.set('dueFrom', r.dueFrom);

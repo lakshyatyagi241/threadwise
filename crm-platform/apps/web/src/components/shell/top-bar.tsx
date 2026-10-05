@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { ReactNode, RefObject } from 'react';
 import { cn } from '@crm/ui';
+import type { ResolvedNavItem } from '@/features/_registry/types';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
 import { UserMenu, type ShellUser } from './user-menu';
 
@@ -95,10 +96,17 @@ export interface TopBarProps {
   notificationCount?: number;
   /** A live bell (badge and panel) owned by the notifications domain; replaces the link or the disabled placeholder. */
   bell?: ReactNode;
+  /** The "?" that opens the guide of the current screen (see `PageHelpTip`); renders nothing on a screen with no guide. */
+  pageHelp?: ReactNode;
+  /** The gear that offers the settings behind the current screen (see `PageSettingsShortcut`); absent or empty on other screens. */
+  pageSettings?: ReactNode;
+  /** The Settings area; the user menu links to it (the gear that used to sit here is the menu's Settings entry now). */
   settingsHref?: string;
+  /** Support and Guidebook, shown in the user menu's Help block. */
+  helpItems?: readonly ResolvedNavItem[];
 }
 
-/** Brand on the start side, an optional announcement in the middle, balance, bell, settings and the user menu at the end. */
+/** Brand on the start side, an optional announcement in the middle, balance, bell and the user menu at the end. */
 export function TopBar({
   user,
   theme,
@@ -110,7 +118,10 @@ export function TopBar({
   notificationsHref,
   notificationCount,
   bell,
+  pageHelp,
+  pageSettings,
   settingsHref,
+  helpItems,
 }: TopBarProps) {
   const t = useTranslations();
   return (
@@ -153,6 +164,8 @@ export function TopBar({
               <span className="tabular-nums">{wallet.label}</span>
             </span>
           ))}
+        {pageHelp}
+        {pageSettings}
         {bell ?? (
           <IconLink
             href={notificationsHref}
@@ -161,10 +174,7 @@ export function TopBar({
             badge={notificationCount}
           />
         )}
-        {settingsHref && (
-          <IconLink href={settingsHref} label={t('shell.settings')} icon="settings" />
-        )}
-        <UserMenu user={user} theme={theme} />
+        <UserMenu user={user} theme={theme} settingsHref={settingsHref} helpItems={helpItems} />
       </div>
     </header>
   );

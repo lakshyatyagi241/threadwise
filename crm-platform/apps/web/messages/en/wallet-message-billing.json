@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Wallet and statement",
+      "description": "Your message balance, top-ups and the full statement.",
+      "keywords": "wallet balance top up add money credits statement billing"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "cancel": "Cancel",
+      "back": "Back",
+      "close": "Close",
+      "dismiss": "Dismiss",
+      "on": "On",
+      "off": "Off",
+      "previous": "Previous",
+      "next": "Next",
+      "pagination": "Pagination",
+      "pageN": "Page {page}",
+      "deniedTitle": "You do not have access to this",
+      "deniedBody": "Ask a workspace admin for the \"{permission}\" permission."
+    },
+    "errors": {
+      "noteRequired": "A reason of at least 5 characters is required.",
+      "amountInvalid": "That amount is not accepted. Use a positive amount with at most 2 decimals.",
+      "insufficient": "The balance is too low for this.",
+      "notFound": "This workspace has no wallet.",
+      "rateInvalid": "A rate could not be saved. Check the country, category and amounts.",
+      "importFailed": "The rate card could not be read or has no usable row.",
+      "syncFailed": "Meta's price list could not be read and no bundled card is available.",
+      "conflict": "Someone else changed this. Reload and try again.",
+      "forbidden": "Only super admins can do this.",
+      "validation": "Check the highlighted fields.",
+      "network": "The server could not be reached. Check your connection and try again.",
+      "generic": "Something went wrong. Try again.",
+      "currencyUnsupported": "That currency cannot be used yet: import Meta's rate card for it first (Message pricing, Meta rate cards)."
+    },
+    "types": {
+      "topup": "Top-up",
+      "earn": "Earning",
+      "refund": "Refund",
+      "spend": "Message charge",
+      "admin_adjust": "Adjustment"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Utility",
+      "authentication": "Authentication",
+      "service": "Service"
+    },
+    "modes": {
+      "wallet": "Pay per message",
+      "plan": "Plan"
+    },
+    "chip": {
+      "balance": "Balance",
+      "low": "Your balance is low"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "subtitle": "Your message balance, what you spent and earned in the last 30 days, and how to add money.",
+      "fullStatement": "Full statement",
+      "lowBalanceTitle": "Your balance is running low",
+      "lowBalanceBody": "It is at or under {threshold}. Add money to keep your campaigns and replies sending.",
+      "kpi": {
+        "balance": "Balance",
+        "available": "Available now",
+        "approx": "about {count, plural, one {# message} other {# messages}}",
+        "spent": "Spent",
+        "earned": "Earned",
+        "last30": "Last 30 days"
+      },
+      "add": {
+        "title": "Add money",
+        "amount": "Amount",
+        "hint": "Whole amounts only, at least 1.",
+        "invalid": "Enter a whole amount of 1 or more.",
+        "submit": "Add money",
+        "quick": "Quick amounts"
+      },
+      "how": {
+        "title": "How billing works",
+        "wallet": {
+          "body": "Every delivered message is charged to your wallet at the price for its country and category. Failed messages are not charged.",
+          "funded": "When the balance is empty, bulk sends are paused until you add money."
+        },
+        "plan": {
+          "allowance": "Your plan includes {limit} messages every month.",
+          "used": "{used} used this month.",
+          "ends": "Your plan ends on {date}.",
+          "extra": "Messages beyond the monthly allowance are charged to your wallet.",
+          "ended": "Your plan has ended, so sending is paused until it is renewed."
+        },
+        "generic": "Your messages are covered by your plan. Your wallet pays for anything the plan does not include."
+      },
+      "activity": {
+        "title": "Recent activity",
+        "fullStatement": "Open the full statement",
+        "emptyTitle": "No activity yet",
+        "emptyBody": "Top-ups, message charges and refunds appear here."
+      }
+    },
+    "activity": {
+      "description": "Description",
+      "type": "Type",
+      "date": "Date",
+      "amount": "Amount",
+      "balance": "Balance",
+      "noDescription": "Wallet movement",
+      "reason": "Reason"
+    },
+    "pricingPanel": {
+      "title": "Message pricing",
+      "badge": "Per message",
+      "free": "Free",
+      "noCharge": "No charge",
+      "perMessage": "per message",
+      "footer": "Charged when a message is delivered. The price depends on the recipient's country and the message category."
+    },
+    "statement": {
+      "title": "Wallet statement",
+      "subtitle": "Every movement on your wallet. The totals cover everything that matches the filters, not only this page.",
+      "back": "Back to wallet",
+      "breadcrumbLabel": "Breadcrumb",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbStatement": "Statement",
+      "export": "Export CSV",
+      "exporting": "Exporting",
+      "exported": "Saved {fileName}",
+      "emptyTitle": "No transactions",
+      "emptyFiltered": "Nothing matches these filters. Change or reset them.",
+      "emptyNone": "Movements on your wallet will be listed here.",
+      "filters": {
+        "type": "Type",
+        "from": "From",
+        "to": "To",
+        "rangeInverted": "The end date is before the start date.",
+        "search": "Search",
+        "searchPlaceholder": "Description or reason",
+        "apply": "Apply",
+        "reset": "Reset"
+      },
+      "typeFilter": {
+        "all": "All",
+        "topup": "Top-ups",
+        "earn": "Earnings",
+        "spend": "Message charges",
+        "refund": "Refunds",
+        "admin_adjust": "Adjustments"
+      },
+      "summary": {
+        "balance": "Current balance",
+        "in": "Money in",
+        "out": "Money out",
+        "net": "Net movement",
+        "count": "{count, plural, one {# transaction} other {# transactions}}"
+      },
+      "columns": {
+        "label": "Wallet statement",
+        "date": "Date",
+        "description": "Description",
+        "type": "Type",
+        "in": "Money in",
+        "out": "Money out",
+        "balance": "Balance",
+        "none": "None"
+      },
+      "context": {
+        "reason": "Reason",
+        "to": "To",
+        "template": "Template"
+      },
+      "channels": {
+        "campaign": "Campaign",
+        "broadcast": "Broadcast",
+        "flow": "Flow",
+        "scheduled": "Scheduled",
+        "auto_reply": "Auto reply",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Admin",
+      "wallet": "Wallet",
+      "workspacesLabel": "Workspace wallets",
+      "breadcrumb": "Breadcrumb",
+      "readOnly": "You are signed in as {role}. Only super admins can change wallet settings, prices or balances.",
+      "nav": {
+        "overview": "Wallet",
+        "pricing": "Message pricing",
+        "workspaces": "Workspace wallets",
+        "logs": "Wallet logs",
+        "margins": "Margins",
+        "packages": "Credit packages"
+      },
+      "overview": {
+        "title": "Wallet overview",
+        "subtitle": "The money held in workspace wallets and the last 30 days of movement.",
+        "linkWorkspaces": "Workspace wallets",
+        "linkPricing": "Message pricing",
+        "linkLogs": "Wallet logs",
+        "float": "Wallet float",
+        "floatHint": "Held across all workspaces",
+        "holding": "Workspaces with a balance",
+        "low": "Low balance",
+        "last30": "Last 30 days",
+        "toppedUp": "Topped up",
+        "charged": "Charged",
+        "refunded": "Refunded",
+        "adjustedIn": "Added by hand",
+        "adjustedOut": "Deducted by hand",
+        "chargedMessages": "Charged messages",
+        "freeMessages": "Free messages",
+        "reconcile": {
+          "title": "Check balances against ledgers",
+          "body": "Recomputes every wallet from its ledger and lists any balance that does not match.",
+          "button": "Check balances against ledgers",
+          "running": "Checking",
+          "ok": "All {count, plural, one {# wallet matches} other {# wallets match}} their ledger.",
+          "mismatches": "{count} of {checked} wallets do not match their ledger.",
+          "workspace": "Workspace",
+          "balance": "Balance",
+          "ledger": "Ledger",
+          "difference": "Difference"
+        },
+        "otherCurrencies": "Wallets in other currencies",
+        "otherCurrenciesNote": "Workspaces billed in another currency hold money in that currency. The figures above are {currency} only; each other currency is counted on its own line.",
+        "other": {
+          "currency": "Currency",
+          "float": "Money held",
+          "holding": "Workspaces with a balance",
+          "toppedUp": "Topped up, 30 days",
+          "charged": "Charged, 30 days"
+        }
+      },
+      "pricing": {
+        "title": "Message pricing",
+        "crumb": "Message pricing",
+        "subtitle": "What a message costs your customers, how new wallets are protected, and the per-country rate card.",
+        "kpi": {
+          "signup": "Referral reward",
+          "cost": "Cost per message",
+          "costHint": "Flat price when per-country pricing is off",
+          "spending": "Real spending",
+          "spendingHint": "Messages that {amount} buys at the flat price",
+          "lowBalance": "Low-balance alert"
+        },
+        "economics": {
+          "title": "Economics",
+          "liveKeys": "Takes effect immediately",
+          "flatPrice": "Flat price per message",
+          "flatPriceHint": "At least 0.01. Use the rate grid for free messages.",
+          "referralSignup": "Referral reward",
+          "referralSignupHint": "Paid to a referrer on the referee's first paid order.",
+          "lowBalance": "Low-balance alert at",
+          "lowBalanceHint": "Workspaces at or under this balance are warned.",
+          "coverage": "Launch coverage",
+          "coverageHint": "A bulk send is refused unless the wallet covers this share of its estimated cost. 0 refuses only an empty wallet.",
+          "rewardSentence": "A reward of {reward} pays for {count, plural, one {# message} other {# messages}} at the flat price.",
+          "save": "Save economics",
+          "saving": "Saving",
+          "saved": "Economics saved.",
+          "problems": {
+            "invalid": "Enter an amount with at most 2 decimals.",
+            "flatZero": "The flat price cannot be 0.",
+            "percent": "Enter a whole number from 0 to 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Per-country pricing",
+            "on": "On: each message is charged by the recipient's country and category from the rate card.",
+            "off": "Off: every message is charged the flat price.",
+            "save": "Save",
+            "confirmTitle": "Change per-country pricing?",
+            "confirmOn": "Messages will be charged by country and category from the next send.",
+            "confirmOff": "Messages will be charged the flat price from the next send.",
+            "confirm": "Yes, change it",
+            "savedOn": "Per-country pricing is on.",
+            "savedOff": "Per-country pricing is off."
+          },
+          "payPerMessage": {
+            "label": "Charge per message",
+            "on": "On: workspaces without a plan allowance pay for each delivered message from their wallet.",
+            "off": "Off: messages are not charged to wallets.",
+            "save": "Save",
+            "confirmTitle": "Change charging per message?",
+            "confirmOn": "Delivered messages will be charged to wallets from now on.",
+            "confirmOff": "Wallets will no longer be charged for messages. This affects every workspace.",
+            "confirm": "Yes, change it",
+            "savedOn": "Charging per message is on.",
+            "savedOff": "Charging per message is off."
+          }
+        },
+        "grid": {
+          "title": "Rate card",
+          "modeOn": "Per-country pricing is on: these prices are used.",
+          "modeOff": "Per-country pricing is off: these prices are saved but the flat price is charged.",
+          "empty": "No rates yet. Add a row, import a rate card or re-seed the starter card.",
+          "country": "Country",
+          "category": "Category",
+          "charge": "You charge",
+          "metaCost": "Meta charges you",
+          "margin": "Margin",
+          "marginUnknown": "Unknown",
+          "actions": "Actions",
+          "anyCountry": "Any country",
+          "anyCategory": "Any category",
+          "serviceFree": "Service (free)",
+          "addRow": "Add row",
+          "remove": "Remove",
+          "cancel": "Cancel",
+          "removeTitle": "Remove this rate?",
+          "removeBody": "The rate for {country} is deleted. Messages fall back to the next matching rate.",
+          "removed": "Rate removed.",
+          "save": "Save rates",
+          "saving": "Saving",
+          "saved": "{count, plural, one {# rate saved.} other {# rates saved.}}",
+          "savedSome": "{saved} saved, {skipped} skipped. See the reason on each skipped row.",
+          "unsaved": "{count, plural, one {# unsaved row} other {# unsaved rows}}",
+          "tooMany": "Too many changed rows for one save. Save in smaller batches.",
+          "problems": {
+            "price": "Enter a price with at most 2 decimals.",
+            "metaCost": "Enter a cost with at most 6 decimals.",
+            "country": "Use a 2-letter country code, or leave it blank for any country.",
+            "empty": "Enter a price or a Meta cost.",
+            "duplicate": "This country and category already has a row."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Sync Meta costs",
+            "title": "Sync Meta costs",
+            "loading": "Reading Meta's price list",
+            "source": "Source",
+            "version": "Version",
+            "noVersion": "None",
+            "currency": "Currency",
+            "added": "Rows to add",
+            "updated": "Rows to update",
+            "untouched": "Your prices are not changed. Only the cost Meta charges you is updated.",
+            "bundledNote": "No live Meta price list is connected, so the bundled rate card is used.",
+            "apply": "Apply",
+            "applying": "Applying",
+            "done": "Meta costs synced: {added} added, {updated} updated."
+          },
+          "import": {
+            "button": "Import rate card",
+            "title": "Import rate card",
+            "intro": "Upload a CSV rate card. You see what would change before anything is saved.",
+            "file": "CSV file",
+            "limit": "Up to 4 MB.",
+            "reading": "Reading the file",
+            "shape": "Layout",
+            "shapes": {
+              "wide": "One column per category",
+              "long": "One row per category"
+            },
+            "added": "To add",
+            "updated": "To update",
+            "skipped": "Skipped",
+            "currencyNote": "Prices are read in {currency}.",
+            "problems": "Rows that will be skipped",
+            "line": "Line {line}:",
+            "fileProblems": {
+              "notCsv": "Choose a .csv file.",
+              "tooBig": "The file is larger than 4 MB.",
+              "unreadable": "The file could not be read."
+            },
+            "apply": "Apply import",
+            "applying": "Importing",
+            "done": "Rate card imported: {added} added, {updated} updated, {skipped} skipped."
+          },
+          "seed": {
+            "button": "Re-seed starter rate card",
+            "title": "Re-seed the starter rate card?",
+            "warning": "This writes the bundled starter prices over existing rows for the same country and category. Prices you set by hand for those rows are replaced.",
+            "confirm": "Re-seed",
+            "done": "{count, plural, one {# rate} other {# rates}} written from the starter card."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Cross-border sends",
+            "body": "The price follows the recipient's country, not the workspace's. Add a row for every country you send to."
+          },
+          "how": {
+            "title": "How a price is found",
+            "body": "The wallet looks up the recipient's country and the message category in this card. A blank category or country matches anything."
+          },
+          "order": {
+            "title": "Which row wins",
+            "body": "An exact country and category match is used first, then the country with any category, then any country, then the flat price."
+          }
+        },
+        "mode": {
+          "title": "How customers are priced",
+          "current": "Current: {mode}",
+          "intro": "Choose what a message costs your customers. This applies to every workspace and is saved on its own.",
+          "fixed": {
+            "label": "Fixed prices",
+            "body": "You type a price for each country and category in the rate card below. Margins are saved but not used."
+          },
+          "margin": {
+            "label": "Meta cost + margin",
+            "body": "The customer pays Meta's cost plus your margin, set per country and category. Where Meta's cost is not known, the typed fixed price is charged."
+          },
+          "save": "Save pricing mode",
+          "manage": "Set margins",
+          "confirmTitle": "Change how customers are priced?",
+          "confirmFixed": "Every workspace will be charged the fixed prices from the rate card from the next message. Margins stay saved but stop applying.",
+          "confirmMargin": "Every workspace will be charged Meta's cost plus the margin that applies to it (workspace override, then its plan, then the platform default) from the next message. Where Meta's cost is unknown, the fixed price is still charged.",
+          "confirm": "Yes, change it",
+          "savedFixed": "Customers are now priced with fixed prices.",
+          "savedMargin": "Customers are now priced with Meta cost plus margin."
+        },
+        "metaCards": {
+          "title": "Meta rate cards",
+          "intro": "Meta publishes one price list for each currency, and changes it only on 1 January, 1 April, 1 July and 1 October. A workspace billed in INR is priced from Meta's INR list and charged to its INR wallet, never from the USD list converted. Import each file as Meta publishes it. Typed prices and the flat price are kept in the platform currency and converted at the exchange rate on file for a workspace billed in another currency.",
+          "none": "No Meta rate card is stored yet. Import the file Meta publishes for your currency.",
+          "view": "View",
+          "hide": "Hide",
+          "usedPricing": "Pricing, margins and the reseller P&L, and workspaces billed in the platform currency",
+          "usedWorkspaces": "Prices workspaces billed in {currency}",
+          "columns": {
+            "currency": "Currency",
+            "effective": "Effective",
+            "checked": "Last imported",
+            "markets": "Markets",
+            "usedFor": "Used for",
+            "status": "Status",
+            "actions": "Actions"
+          },
+          "freshness": {
+            "current": "Up to date",
+            "upcoming": "Check soon",
+            "due": "Check now"
+          },
+          "reminder": {
+            "link": "Open Meta’s pricing page",
+            "current": "Up to date. Meta may next change its prices on {date}.",
+            "dueTitle": "A new quarter began on {date}: Meta may have changed its prices.",
+            "dueBody": "Download the new rate files (one per currency in use) and import them here. Until then, costs and margins use the older card.",
+            "upcomingTitle": "Meta may change its prices on {date} ({days, plural, one {# day} other {# days}} away).",
+            "upcomingBody": "Have the new files ready to import that day.",
+            "missingTitle": "No Meta rate card for {currencies}.",
+            "missingBody": "Workspaces set to that currency have no Meta price list to show. Import the file Meta publishes for it."
+          },
+          "table": {
+            "heading": "Meta’s {currency} card",
+            "note": "List price per delivered message, as Meta publishes it. Countries Meta does not name are priced as Other.",
+            "market": "Market",
+            "everyOther": "Every country not named",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentication",
+              "authentication_international": "Auth. international",
+              "service": "Service"
+            }
+          },
+          "import": {
+            "button": "Import Meta rate card",
+            "title": "Import Meta rate card",
+            "intro": "Choose the file Meta publishes for one currency (an Excel workbook, even where the link says CSV). The currency and effective date are read from the file. You see what would change before anything is saved.",
+            "file": "Meta rate file (.xlsx or .csv)",
+            "hint": "One currency per file. A new file replaces that currency’s card as a whole. At most 2 MB.",
+            "reading": "Reading the file…",
+            "applying": "Importing",
+            "apply": "Import card",
+            "done": "The {currency} card was imported.",
+            "fileProblems": {
+              "wrongType": "Choose the .xlsx file Meta publishes, or a CSV saved from it.",
+              "tooBig": "The file is larger than 2 MB, which is not a Meta rate card.",
+              "unreadable": "The file could not be read."
+            },
+            "summary": {
+              "currency": "Currency",
+              "effective": "Effective",
+              "added": "New rows",
+              "changed": "Changed",
+              "unchanged": "Unchanged",
+              "removed": "Dropped"
+            },
+            "replaces": "Replaces the card effective {date}.",
+            "appliesToPricing": "This is the {currency} card, your platform currency. Importing it also refreshes the Meta cost behind pricing, margins and the reseller P&L ({added} new, {updated} updated). Customer prices are not changed.",
+            "storedOnly": "This is not the platform currency. It is stored and shown, and it prices every workspace billed in {currency}. The Meta cost in the rate grid below stays in the platform currency.",
+            "biggest": "Largest changes",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentication",
+              "authentication_international": "Auth. international",
+              "service": "Service"
+            },
+            "problems": "Rows that were skipped"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Workspace wallets",
+        "crumb": "Workspace wallets",
+        "subtitle": "Every workspace with its balance. Open one to see its entries or adjust it.",
+        "search": "Search",
+        "searchPlaceholder": "Workspace name or slug",
+        "lowOnly": "Low balance only",
+        "apply": "Apply",
+        "totalWorkspaces": "Workspaces",
+        "totalFloat": "Total held",
+        "totalLow": "Low balance",
+        "emptyTitle": "No workspaces found",
+        "emptyBody": "Change the search or clear the low-balance filter.",
+        "loadMore": "Load more",
+        "loadingMore": "Loading more",
+        "columns": {
+          "label": "Workspace wallets",
+          "workspace": "Workspace",
+          "mode": "Billing",
+          "balance": "Balance",
+          "low": "Low",
+          "activity": "Last activity",
+          "never": "Never"
+        },
+        "totalFloatIn": "Money held ({currency})"
+      },
+      "detail": {
+        "crumb": "Workspace",
+        "adjust": "Adjust balance",
+        "balance": "Balance",
+        "lowBalance": "Low balance",
+        "threshold": "Alert at {amount}",
+        "recent": "Recent entries",
+        "emptyTitle": "No entries yet",
+        "emptyBody": "Movements on this wallet will be listed here.",
+        "columns": {
+          "label": "Recent wallet entries",
+          "date": "Date",
+          "type": "Type",
+          "amount": "Amount",
+          "balanceAfter": "Balance after",
+          "who": "Made by",
+          "reason": "Reason",
+          "customer": "Customer",
+          "operator": "Operator",
+          "system": "System"
+        },
+        "result": {
+          "appliedAdd": "{applied} added. The balance is now {balance}.",
+          "appliedDeduct": "{applied} deducted. The balance is now {balance}.",
+          "partial": "Only {applied} of {requested} was applied because the balance cannot go below 0. The balance is now {balance}.",
+          "replayed": "(This request was already applied.)"
+        },
+        "pricing": {
+          "title": "Pricing for this workspace",
+          "subtitle": "Margin overrides beat the workspace's plan and the platform default, for this workspace only.",
+          "plan": "Plan",
+          "planLoading": "Loading plan",
+          "planUnknown": "Could not be read",
+          "noPlan": "No plan",
+          "overrides": "Margin overrides",
+          "overridesHint": "Only the rows listed here are overridden. Everything else follows the plan and the platform default.",
+          "empty": "No overrides. This workspace follows its plan and the platform default.",
+          "reason": {
+            "label": "Reason (kept in the audit log)",
+            "hint": "Required for any change or removal, 5 to 500 characters.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Say why in at least 5 characters.",
+              "long": "Keep the reason to 500 characters or fewer."
+            }
+          },
+          "save": "Save overrides",
+          "saving": "Saving",
+          "saveHint": "Fix the highlighted rows and give a reason to save.",
+          "saved": "{saved} saved, {removed} removed.",
+          "savedSome": "{saved} saved, {skipped} skipped. See the reason on each skipped row.",
+          "preview": {
+            "title": "Price preview",
+            "hint": "See how one message to this workspace would be priced and which layer set it.",
+            "country": "Country",
+            "category": "Category",
+            "run": "Preview price",
+            "running": "Working out the price",
+            "result": {
+              "label": "Price preview result",
+              "metaCost": "Meta cost",
+              "unknownCost": "Not known",
+              "margin": "Margin",
+              "noMargin": "None",
+              "layer": "Set by",
+              "noLayer": "No margin matched",
+              "layers": {
+                "workspace": "Workspace override",
+                "plan": "Plan margin",
+                "platform": "Platform default"
+              },
+              "price": "Customer price",
+              "basis": "Basis",
+              "bases": {
+                "margin": "Meta cost + margin",
+                "fixed": "Fixed price"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Billing currency",
+          "intro": "Messages are priced from Meta's rate card for this currency and charged to the workspace's wallet in it. Top-ups are entered and credited in it too.",
+          "billedIn": "Billed in",
+          "change": "Change currency",
+          "otherWallets": "Other wallets this workspace holds",
+          "notUsed": "Not used for billing; the money stays here.",
+          "dialog": {
+            "title": "Change billing currency",
+            "currency": "Bill in",
+            "effect": "From now on messages are priced from Meta's {to} card and charged to the {to} wallet. Nothing is converted: the {from} wallet keeps its balance.",
+            "left": "{amount} stays in the {from} wallet and is not used until the workspace is switched back.",
+            "reason": "Reason",
+            "reasonHint": "Shown in the audit trail and the workspace's wallet log. At least 5 characters.",
+            "confirm": "Bill in {currency}",
+            "saving": "Saving",
+            "done": "Now billed in {to} (was {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Adjust balance",
+        "current": "Current balance",
+        "direction": "Action",
+        "add": "Add money",
+        "deduct": "Deduct",
+        "amount": "Amount",
+        "amountHint": "Up to 2 decimals.",
+        "reason": "Reason",
+        "reasonHint": "Required, 5 to 500 characters. The workspace sees this reason on its statement.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "This is more than the balance of {balance}. Only what is there is deducted; the balance stops at 0.",
+        "review": "Review",
+        "confirmAdd": "Add money",
+        "confirmDeduct": "Deduct",
+        "posting": "Posting",
+        "summaryAdd": "Add {amount} to {workspace}.",
+        "summaryDeduct": "Deduct {amount} from {workspace}.",
+        "newBalance": "New balance: {balance}",
+        "summaryReason": "Reason: {reason}",
+        "visibleNote": "The reason is shown to the workspace and kept in the audit log.",
+        "problems": {
+          "amount": {
+            "required": "Enter an amount.",
+            "invalid": "Enter a positive amount with at most 2 decimals.",
+            "zero": "The amount must be greater than 0.",
+            "tooLarge": "That is above the limit for a single adjustment."
+          },
+          "note": {
+            "short": "Say why in at least {min} characters.",
+            "long": "Keep the reason under {max} characters."
+          }
+        }
+      },
+      "logs": {
+        "title": "Wallet logs",
+        "crumb": "Wallet logs",
+        "subtitle": "What happened to wallets and what operators changed.",
+        "scope": "Scope",
+        "scopes": {
+          "all": "All",
+          "workspace": "Workspace events",
+          "platform": "Platform changes"
+        },
+        "event": "Event",
+        "anyEvent": "Any event",
+        "severity": "Severity",
+        "anySeverity": "Any severity",
+        "severities": {
+          "info": "Info",
+          "warning": "Warning",
+          "error": "Error"
+        },
+        "workspaceId": "Workspace id",
+        "workspaceIdInvalid": "Enter a workspace id (a UUID).",
+        "search": "Search",
+        "from": "From",
+        "to": "To",
+        "apply": "Apply",
+        "reset": "Reset",
+        "emptyTitle": "No log entries",
+        "emptyBody": "Nothing matches these filters.",
+        "loadMore": "Load more",
+        "loadingMore": "Loading more",
+        "platform": "Platform",
+        "showDetails": "Show details",
+        "hideDetails": "Hide details",
+        "requestId": "Request id",
+        "columns": {
+          "time": "Time",
+          "severity": "Severity",
+          "event": "Event",
+          "workspace": "Workspace",
+          "actor": "Actor",
+          "message": "Message"
+        },
+        "actors": {
+          "operator": "Operator",
+          "customer": "Customer",
+          "system": "System"
+        }
+      },
+      "margins": {
+        "title": "Margins",
+        "crumb": "Margins",
+        "subtitle": "What customers pay on top of Meta's cost, per country and message category.",
+        "retry": "Try again",
+        "ratesFailed": "Meta's costs could not be loaded, so prices for new rows cannot be shown.",
+        "mode": {
+          "current": "Customers are priced by",
+          "inactive": "Pricing mode is Fixed prices, so these margins are not in effect yet. They are saved and will apply when you switch to Meta cost + margin.",
+          "switchLink": "Go to the pricing mode switch"
+        },
+        "scope": {
+          "label": "Margins for",
+          "hint": "The platform default applies to every plan. A plan's own margin beats it.",
+          "platform": "Platform default (applies to every plan)"
+        },
+        "grid": {
+          "country": "Country",
+          "searchCountry": "Search countries",
+          "category": "Category",
+          "margin": "Margin %",
+          "metaCost": "Meta cost",
+          "price": "Customer price",
+          "note": "Reason",
+          "setBy": "Set by",
+          "actions": "Actions",
+          "anyCountry": "Any country",
+          "anyCategory": "Any category",
+          "unknownCost": "Meta's cost is not known here, so the typed fixed price applies.",
+          "priceInvalid": "Enter a margin from -100 to 1000 with at most 2 decimals.",
+          "removedPending": "Will be removed when you save.",
+          "addRow": "Add row",
+          "remove": "Remove",
+          "undo": "Undo",
+          "cancel": "Cancel",
+          "empty": "No margins yet. Add a row to set one.",
+          "removeTitle": "Remove this margin?",
+          "removeBody": "The margin for {country} is deleted. Prices fall back to the next matching margin.",
+          "removed": "Margin removed.",
+          "save": "Save margins",
+          "saving": "Saving",
+          "saved": "{count, plural, one {# margin saved.} other {# margins saved.}}",
+          "savedSome": "{saved} saved, {skipped} skipped. See the reason on each skipped row.",
+          "unsaved": "{count, plural, one {# unsaved row} other {# unsaved rows}}",
+          "tooMany": "Too many changed rows for one save. Save in smaller batches.",
+          "problems": {
+            "margin": "Enter a percentage from -100 to 1000 with at most 2 decimals. -100 means free.",
+            "duplicate": "This country and category already has a row."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Which margin wins",
+            "body": "A workspace override beats its plan's margin, which beats the platform default. A layer is read in full before the next one."
+          },
+          "specific": {
+            "title": "Most specific first",
+            "body": "Inside a layer, country and category is used first, then the country with any category, then the category in any country, then the default row."
+          },
+          "unknown": {
+            "title": "When Meta's cost is unknown",
+            "body": "The price is Meta's cost plus the margin, rounded to the nearest 0.01 and at least 0.01 unless the margin is -100% (free). Where Meta's cost is unknown, the typed fixed price applies instead."
+          }
+        }
+      },
+      "packages": {
+        "title": "Credit packages",
+        "crumb": "Credit packages",
+        "subtitle": "Optional offers: pay this much, get this much wallet credit. A credit above the price is a top-up bonus.",
+        "new": "New package",
+        "edit": "Edit",
+        "enable": "Enable",
+        "disable": "Disable",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "enabled": "{name} is enabled.",
+        "disabled": "{name} is disabled.",
+        "deleted": "Package deleted.",
+        "deleteTitle": "Delete package?",
+        "deleteBody": "Delete this package? Existing purchases keep their ledger rows.",
+        "bonus": "+{percent}% bonus",
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "featured": "Featured"
+        },
+        "empty": {
+          "title": "No credit packages yet",
+          "body": "No packages have been created.",
+          "bodyWrite": "Create the first package to offer a wallet top-up with a bonus."
+        },
+        "columns": {
+          "label": "Credit packages",
+          "name": "Name",
+          "slug": "Slug",
+          "price": "Price",
+          "credit": "Wallet credit",
+          "badge": "Badge",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "form": {
+          "newTitle": "New credit package",
+          "editTitle": "Edit credit package",
+          "newCrumb": "New package",
+          "editCrumb": "Edit package",
+          "notFound": "This package no longer exists.",
+          "back": "Back to credit packages",
+          "sections": {
+            "identity": "Identity",
+            "pricing": "Pricing",
+            "display": "Display"
+          },
+          "name": "Name",
+          "slug": "Slug (optional)",
+          "slugHint": "Letters, numbers, dashes and underscores. Leave blank to make it from the name.",
+          "description": "Description",
+          "price": "Price",
+          "priceHint": "What the customer pays.",
+          "currency": "Currency",
+          "walletCredit": "Wallet credit",
+          "walletCreditHint": "What lands in the wallet.",
+          "bonusLine": "A bonus of {percent}%: the customer pays {price} and gets {credit}.",
+          "badge": "Badge",
+          "badgeHint": "A short label such as Best value.",
+          "sortOrder": "Sort order",
+          "sortOrderHint": "Lowest first.",
+          "active": "Active",
+          "featured": "Featured",
+          "create": "Create package",
+          "save": "Save changes",
+          "saving": "Saving",
+          "created": "{name} created.",
+          "saved": "{name} saved.",
+          "stale": {
+            "title": "This package was changed by someone else",
+            "body": "Your edits were not saved, so nothing was overwritten. Reload the latest version, then make your change again.",
+            "reload": "Reload the latest version"
+          },
+          "problems": {
+            "name": "Enter a name of up to 96 characters.",
+            "slug": "Use letters, numbers, dashes and underscores only.",
+            "description": "Keep the description to 500 characters or fewer.",
+            "price": "Enter an amount with at most 2 decimals.",
+            "currency": "Choose one of the listed currencies.",
+            "walletCredit": "Enter an amount greater than 0 with at most 2 decimals.",
+            "badge": "Keep the badge to 32 characters or fewer.",
+            "sortOrder": "Enter a whole number from 0 to 9999."
+          }
+        }
+      }
+    }
+  }
+}

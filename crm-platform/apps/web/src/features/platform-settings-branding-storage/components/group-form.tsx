@@ -43,12 +43,14 @@ import { allFields, type FieldSpec, type GroupSpec, type SectionSpec } from '../
 import { buildPatch, fieldForPath, patchSize, toDraft, type Draft } from '../lib/draft';
 import { groupKey, hubKey } from '../lib/query-keys';
 import { downloadSitemap } from '../lib/sitemap-download';
-import { AppearancePreview, ResetColours } from './appearance-preview';
+import { AppearancePreview, PALETTE_DEFAULTS, ResetColours } from './appearance-preview';
 import { BrandAssets } from './brand-assets';
 import { ConnectionTest } from './connection-test';
+import { GoogleCallback } from './google-callback';
 import { Counter, GuideCard, SetHeader, TipCard } from './page-parts';
 import { SeoPreview } from './seo-preview';
 import { TeamInboxApp } from './team-inbox-app';
+import { WabaCallback } from './waba-callback';
 
 const NS = 'platform-settings-branding-storage';
 
@@ -265,7 +267,11 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         <ToggleRow
           key={f.key}
           id={id}
-          label={label(f)}
+          label={
+            spec.id === 'storage' && f.key === 'enabled'
+              ? tp(value === true ? 'status.enabled' : 'status.disabled')
+              : label(f)
+          }
           hint={hint(f)}
           checked={value === true}
           onChange={(v) => setField(f.key, v)}
@@ -286,7 +292,13 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             readOnly={!canEdit}
             disabled={draft.clear[f.key] === true}
             autoComplete="new-password"
-            placeholder={isSet ? '••••••••' : ''}
+            placeholder={
+              isSet
+                ? '••••••••'
+                : tg.has(`fields.${f.key}.placeholder`)
+                  ? tg(`fields.${f.key}.placeholder`)
+                  : ''
+            }
             showLabel={t('common.secretShow')}
             hideLabel={t('common.secretHide')}
           />
@@ -443,12 +455,35 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       );
     } else if (f.kind === 'color') {
       const hex = String(value ?? '');
+      // A blank colour shows the shipped one in the swatch and the placeholder (WaDesk shows its default the same way).
+      const shipped = f.key.startsWith('colors.')
+        ? (PALETTE_DEFAULTS[f.key.slice(7)] ?? '')
+        : f.key === 'sidebarColor'
+          ? '#06100E'
+          : f.key === 'sidebarTextColor'
+            ? '#FFFFFF'
+            : f.key === 'sidebarAccentColor'
+              ? '#A7E8C0'
+              : '';
+      // WaDesk labels the two derived sidebar colours instead of showing a hex.
+      const hint =
+        f.key === 'sidebarTextColor'
+          ? 'Auto (contrast)'
+          : f.key === 'sidebarAccentColor'
+            ? 'Default green'
+            : shipped || '#RRGGBB';
       input = (
         <div className="flex items-center gap-2">
           <input
             type="color"
             aria-label={label(f)}
-            value={/^#[0-9A-Fa-f]{6}$/.test(hex) ? hex : '#000000'}
+            value={
+              /^#[0-9A-Fa-f]{6}$/.test(hex)
+                ? hex
+                : /^#[0-9A-Fa-f]{6}$/.test(shipped)
+                  ? shipped
+                  : '#000000'
+            }
             onChange={(e) => setField(f.key, e.target.value.toUpperCase())}
             disabled={!canEdit}
             className="h-9 w-12 shrink-0 cursor-pointer rounded-md border border-border bg-background p-1"
@@ -459,7 +494,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             onChange={(e) => setField(f.key, e.target.value)}
             readOnly={!canEdit}
             invalid={Boolean(err)}
-            placeholder="#RRGGBB"
+            placeholder={hint}
             spellCheck={false}
             className="font-mono"
           />
@@ -512,14 +547,63 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
     );
   };
 
+  const fieldsGrid = (s: SectionSpec) => {
+    const toggles = s.fields.filter((f) => f.kind === 'toggle');
+    return (
+      <div className="grid gap-4 sm:grid-cols-2">
+        {s.fields
+          .filter((f) => !f.hidden)
+          .map((f) => (
+            <div
+              key={f.key}
+              className={cn(
+                !(f.half || (f.kind === 'toggle' && toggles.length > 1)) && 'sm:col-span-2',
+              )}
+            >
+              {control(f)}
+            </div>
+          ))}
+      </div>
+    );
+  };
+
   const renderSection = (s: SectionSpec) => {
     const title = tp(`sections.${s.id}.title`);
-    const description = tp.has(`sections.${s.id}.description`)
+    let description = tp.has(`sections.${s.id}.description`)
       ? tp(`sections.${s.id}.description`)
       : undefined;
+    if (spec.id === 'storage' && s.id === 'provider') {
+      const on = draft.fields.enabled === true;
+      const provider = String(draft.fields.provider ?? '');
+      const hasConfig =
+        Boolean(draft.fields.bucket || draft.fields.accessKeyId || draft.fields.storageZone) ||
+        data.secrets.secret?.isSet === true;
+      const name = tg.has(`options.provider.${provider}`)
+        ? tg(`options.provider.${provider}`)
+        : provider;
+      description = on
+        ? tp('status.active', { provider: name })
+        : hasConfig
+          ? tp('status.configured')
+          : tp('status.local');
+    }
     let body: ReactNode;
     if (s.custom === 'brandAssets') body = <BrandAssets canEdit={canEdit} />;
     else if (s.custom === 'teamInboxApp') body = <TeamInboxApp canEdit={canEdit} />;
+    else if (s.custom === 'wabaCallback')
+      body = (
+        <div className="space-y-4">
+          <WabaCallback />
+          {fieldsGrid(s)}
+        </div>
+      );
+    else if (s.custom === 'googleCallback')
+      body = (
+        <div className="space-y-4">
+          <GoogleCallback uri={String(data.extra?.redirectUri ?? '')} />
+          {fieldsGrid(s)}
+        </div>
+      );
     else if (s.custom === 'signupLink') {
       body = (
         <div className="space-y-3 text-sm text-muted-foreground">
@@ -541,26 +625,15 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
         />
       );
     } else {
-      const toggles = s.fields.filter((f) => f.kind === 'toggle');
-      body = (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {s.fields
-            .filter((f) => !f.hidden)
-            .map((f) => (
-              <div
-                key={f.key}
-                className={cn(
-                  !(f.half || (f.kind === 'toggle' && toggles.length > 1)) && 'sm:col-span-2',
-                )}
-              >
-                {control(f)}
-              </div>
-            ))}
-        </div>
-      );
+      body = fieldsGrid(s);
     }
     return (
-      <Section key={s.id} kicker={s.eyebrow ?? tp('title')} title={title} description={description}>
+      <Section
+        key={s.id}
+        kicker={s.eyebrow?.replace(/-/g, ' ') ?? tp('title')}
+        title={title}
+        description={description}
+      >
         {body}
       </Section>
     );
@@ -585,7 +658,7 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
             >
               {t('common.back')}
             </Link>
-            {spec.test && canEdit && (
+            {spec.test && spec.test !== 'mail' && canEdit && (
               <Button
                 type="button"
                 variant="secondary"

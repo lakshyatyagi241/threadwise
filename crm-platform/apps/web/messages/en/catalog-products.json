@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Catalog",
+      "products": "Products",
+      "reviews": "Reviews"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "requestId": "Request id"
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "Someone else changed this while you were editing. Reload to see the latest version.",
+      "validation": "Some fields are not valid. Check the highlighted fields and try again.",
+      "unavailable": "This part of the catalog is not available on this server yet.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "That item could not be found. It may have been deleted.",
+      "planLocked": "Your plan does not include the WhatsApp catalog. Upgrade to unlock it.",
+      "planLimit": "Your plan's message limit has been reached.",
+      "wallet": "Your wallet balance is too low to send. Add funds and try again.",
+      "sendBlocked": "Sending is blocked right now: {detail}",
+      "notConnected": "No catalog is connected. Connect one on the Setup tab first.",
+      "metaRejected": "Meta rejected the request: {detail}",
+      "noWaba": "No connected WhatsApp Business (WABA) number found. Connect a WABA number first, or link a catalog manually.",
+      "wabaToken": "Your WABA number is connected but its token could not be read. Reconnect the number, or link a catalog manually.",
+      "noCatalogLinked": "No product catalog is linked to your WhatsApp account yet. Create one in Meta Commerce Manager, then try again, or link manually.",
+      "noRecipients": "Pick at least one contact, group or paste a number.",
+      "tooManyRecipients": "Maximum 500 recipients per send. Split them into smaller batches.",
+      "noProducts": "Pick at least one product first.",
+      "noSender": "No connected device. Pair one under Channels first.",
+      "sendFailed": "The message could not be sent: {detail}",
+      "collectionProducts": "None of the selected products belong to this workspace.",
+      "providerFailed": "WhatsApp or Meta could not complete the request: {detail}",
+      "unexpected": "Something went wrong. Try again in a moment."
+    },
+    "paywall": {
+      "kicker": "Premium feature",
+      "title": "WhatsApp storefront is not on your plan",
+      "message": "Pick a plan that includes it. Upgrade and unlock this feature instantly.",
+      "back": "Go back",
+      "compare": "Compare all plans"
+    },
+    "status": {
+      "unsynced": "unsynced",
+      "pending": "pending",
+      "synced": "synced",
+      "failed": "failed"
+    },
+    "pager": {
+      "showing": "Showing {from} to {to} of {total} results",
+      "label": "Pages",
+      "prev": "Previous page",
+      "next": "Next page",
+      "goTo": "Go to page {page}"
+    },
+    "shell": {
+      "back": "Back to integrations",
+      "breadcrumb": "Integrations / WhatsApp Catalog",
+      "titleLead": "Push products into",
+      "titleAccent": "WhatsApp chats",
+      "connected": "{provider} · connected",
+      "notConnected": "Not connected",
+      "tabs": "Catalog sections",
+      "tab": {
+        "setup": "Setup",
+        "send": "Send",
+        "collections": "Collections",
+        "activity": "Activity"
+      }
+    },
+    "connect": {
+      "provider": "Provider",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (direct)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "Catalog ID",
+      "catalogName": "Catalog name",
+      "label": "(label)",
+      "catalogNamePlaceholder": "e.g. Main Catalog",
+      "wabaId": "WABA ID",
+      "phoneNumberId": "Phone number ID",
+      "accessToken": "Access token / API key",
+      "accessTokenHint": "Stored encrypted at rest. Verified against Meta on save.",
+      "accessTokenPlaceholder": "EAAxx... or D360-API-KEY...",
+      "showToken": "Show token",
+      "hideToken": "Hide token",
+      "submit": "Connect & verify",
+      "connected": "Catalog connected.",
+      "problem": {
+        "required": "This field is required.",
+        "tooShort": "The access token must be at least 20 characters.",
+        "tooLong": "This value is too long."
+      }
+    },
+    "setup": {
+      "loading": "Loading catalog",
+      "loadError": "The catalog could not be loaded",
+      "cancel": "Cancel",
+      "manage": "Manage →",
+      "view": "View →",
+      "advanced": {
+        "kicker": "Optional · advanced",
+        "titleManual": "Or link a catalog manually",
+        "titleAlso": "Also link a Meta Commerce Catalog",
+        "intro": "Unlocks the official catalog button on your WhatsApp Business profile, the cart and the \"order placed\" webhook. Only needed if you are on a verified WABA. The Unofficial API works fine without it."
+      },
+      "noSender": {
+        "title": "Connect a device first",
+        "message": "Catalog sending needs at least one WhatsApp device on this account: either an Unofficial API QR pair (free) or a Meta-verified WABA number. It only takes 30 seconds.",
+        "connect": "Connect a device"
+      },
+      "ready": {
+        "kicker": "✓ Ready to send",
+        "officialTitle": "Official WhatsApp catalog mode",
+        "unofficialTitle": "Unofficial API carousel mode",
+        "officialBody": "You have {count, plural, one {# number} other {# numbers}} connected. Catalog sends go out through your connected {engine} number. For interactive product messages, link a Meta Commerce Catalog below.",
+        "unofficialBody": "You have {count, plural, one {# device} other {# devices}} connected. Catalog sends work right now via native WhatsApp carousels through the Unofficial API, with no Meta setup and no waiting for approval.",
+        "head": "Head to the <b>Send tab</b> to push products to any customer's number.",
+        "openSend": "Open Send tab"
+      },
+      "senders": {
+        "title": "Connected devices",
+        "noNumber": "No number",
+        "connected": "connected"
+      },
+      "tiles": {
+        "products": "Products",
+        "shops": "Shops",
+        "recentSends": "Recent sends",
+        "total": "Total",
+        "synced": "Synced",
+        "pending": "Pending",
+        "failed": "Failed"
+      },
+      "autodetect": {
+        "title": "Link your Meta Commerce Catalog",
+        "intro": "Your WhatsApp number is already connected, so we can pull the catalog straight from Meta, with no Catalog ID, WABA ID or access token to paste. Unlocks the official catalog button, cart, and the \"order placed\" webhook.",
+        "button": "Fetch from my WhatsApp account",
+        "linked": "Catalog linked from your WhatsApp account."
+      },
+      "header": {
+        "connected": "Connected · {provider}",
+        "defaultName": "Meta Commerce Catalog",
+        "sendProducts": "Send products →",
+        "disconnect": "Disconnect"
+      },
+      "disconnectTitle": "Disconnect the catalog?",
+      "disconnectConfirm": "Products stay on Meta; we just stop syncing.",
+      "disconnected": "Catalog disconnected.",
+      "table": {
+        "title": "Products",
+        "hint": "Most recently updated · click <b>Refresh status</b> to poll Meta.",
+        "manage": "Manage products →",
+        "product": "Product",
+        "sku": "SKU",
+        "price": "Price",
+        "availability": "Availability",
+        "metaStatus": "Meta status",
+        "actions": "Actions",
+        "empty": "No products yet.",
+        "addOne": "Add one →",
+        "sync": {
+          "idle": "Sync",
+          "busy": "…",
+          "queued": "Queued ✓",
+          "skipped": "Not queued",
+          "failed": "Failed"
+        }
+      }
+    },
+    "sync": {
+      "title": "Sync products to Meta",
+      "intro": "Pushes up to 1000 per request, loops until done. {count} waiting.",
+      "syncButton": "Sync to Meta",
+      "syncing": "Syncing…",
+      "pollButton": "Refresh status",
+      "polling": "Polling…",
+      "importButton": "Import from Meta",
+      "importing": "Importing…",
+      "importHint": "Pull products created directly in Meta Commerce Manager into the catalog.",
+      "progress": "Sync progress",
+      "starting": "Starting…",
+      "pushed": "Pushed {pushed} · pending {pending} · synced {synced} · failed {failed}",
+      "stalled": "Nothing more could be pushed in this run. Check the products marked failed.",
+      "done": "done · {count} queued",
+      "polled": "Polled · synced+{synced} · failed+{failed}",
+      "importStarting": "Import from Meta · starting…",
+      "imported": "Imported {imported} · updated {updated} · skipped {skipped} of {total}"
+    },
+    "commerce": {
+      "title": "Commerce settings",
+      "visible": "Show catalog in business profile",
+      "visibleHint": "Adds the \"Catalog\" button to your WhatsApp Business profile.",
+      "cart": "Enable cart",
+      "cartHint": "Buyers can add multiple products before sending the order.",
+      "save": "Save",
+      "saved": "Commerce settings updated."
+    },
+    "automation": {
+      "title": "Automation",
+      "ack": "Auto-reply when a customer sends a cart",
+      "ackHint": "The buyer instantly gets an order-received message (items + total) instead of silence, the #1 catalog conversion fix.",
+      "payUrl": "Payment link base (optional)",
+      "payUrlHint": "We append the order id; leave blank to just confirm receipt.",
+      "concierge": "Catalog concierge: auto-answer product questions",
+      "conciergeHint": "When a customer types e.g. \"red shoes under 2000\", reply automatically with a matching Multi-Product Message. Off by default.",
+      "header": "Reply header",
+      "headerPlaceholder": "Here's what I found",
+      "max": "Max products",
+      "replyOnEmpty": "Reply even when nothing matches",
+      "replyOnEmptyHint": "Otherwise the concierge stays silent on no match (recommended).",
+      "emptyText": "No-match reply",
+      "emptyTextPlaceholder": "Sorry, I couldn't find a match. Try another keyword or budget.",
+      "save": "Save automation",
+      "saved": "Automation settings saved.",
+      "problem": {
+        "badUrl": "Enter a full link starting with https://",
+        "tooLong": "This text is too long.",
+        "range": "Enter a whole number from 1 to 30."
+      }
+    },
+    "health": {
+      "title": "Catalog health",
+      "needAttention": "{count, plural, one {# product needs attention before it can sell.} other {# products need attention before they can sell.}}",
+      "allGood": "Every product is catalog-ready. Nice.",
+      "noImage": "no image",
+      "noPrice": "no price",
+      "syncError": "sync error",
+      "showFix": "Show products to fix",
+      "fix": "Fix →"
+    },
+    "send": {
+      "loading": "Loading the send form",
+      "loadError": "The send form could not be loaded",
+      "maxProducts": "Maximum {max} products per carousel.",
+      "noSender": {
+        "title": "Connect a device first",
+        "message": "You need a connected WhatsApp device to send catalog messages.",
+        "connect": "Connect a device"
+      },
+      "feedback": {
+        "failed": "Nothing was sent.",
+        "sent": "{count, plural, one {Sent to # recipient} other {Sent to # recipients}}",
+        "someFailed": "{count} failed"
+      },
+      "recipients": {
+        "title": "Recipients",
+        "count": "{count, plural, one {# recipient} other {# recipients}}",
+        "source": "Where recipients come from",
+        "modes": {
+          "groups": {
+            "title": "Contact groups",
+            "hint": "Use saved segments."
+          },
+          "contacts": {
+            "title": "Individual contacts",
+            "hint": "Pick specific people."
+          },
+          "manual": {
+            "title": "Manual numbers",
+            "hint": "Paste, one per line."
+          }
+        },
+        "noGroups": "No contact groups yet. Create one from the <link>Contacts</link> page first.",
+        "groupContacts": "{count, plural, one {# contact} other {# contacts}}",
+        "noContacts": "No contacts yet. Add them in the <link>Contacts</link> page.",
+        "searchContacts": "Search contacts…",
+        "noMatch": "No contact matches.",
+        "paste": "Paste phone numbers",
+        "pastePlaceholder": "One number per line, include the country code",
+        "pasteHint": "One per line, comma, or semicolon. Country code required (with or without +).",
+        "overCap": "Maximum {max} recipients per send. Split them into smaller batches."
+      },
+      "format": {
+        "title": "Format & sender",
+        "spm": {
+          "title": "Single product",
+          "hint": "One product card"
+        },
+        "mpm": {
+          "title": "Product list (carousel)",
+          "hint": "Up to 30 products"
+        },
+        "link": {
+          "title": "Catalog link",
+          "hint": "Plain text · works anytime"
+        },
+        "sendFrom": "Send from",
+        "fromShop": "From shop",
+        "brandingContext": "(branding context)",
+        "shopFallback": "Shop {slug}"
+      },
+      "products": {
+        "title": "Products",
+        "selected": "({count} selected)",
+        "selectedOf": "({count} selected / {max})",
+        "search": "Search products…",
+        "showingFrom": "Showing products from <b>{shop}</b>. Change the <b>From shop</b> picker above to see another shop's catalog.",
+        "loading": "Loading products…",
+        "loadError": "Products could not be loaded",
+        "other": "Other",
+        "noMatch": "No product matches your search.",
+        "emptyShop": "No active products in this shop.",
+        "empty": "No active products yet.",
+        "addOne": "Add one →"
+      },
+      "message": {
+        "title": "Message & send",
+        "text": "Message text",
+        "optional": "(optional)",
+        "placeholder": "e.g. Here are some products you might like, tap any to learn more.",
+        "header": "Header",
+        "headerPlaceholder": "e.g. Check these out",
+        "footer": "Footer",
+        "footerPlaceholder": "e.g. Reply STOP to opt out",
+        "counter": "{used} / {max}",
+        "viewRecent": "View recent sends →",
+        "sendProduct": "Send product →",
+        "sendCarousel": "Send carousel →",
+        "sendLink": "Send catalog link →",
+        "sending": "Sending…",
+        "noPermission": "You can view this form but not send catalog messages."
+      },
+      "rail": {
+        "label": "Send summary",
+        "summary": "Summary",
+        "recipients": "Recipients",
+        "products": "Products",
+        "format": "Format",
+        "formats": {
+          "spm": "Single product",
+          "mpm": "Multi-product list",
+          "link": "Catalog link"
+        },
+        "catalog": "Catalog",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, one {# product} other {# products}}",
+        "unofficial": "Unofficial API (carousel)",
+        "linkMeta": "Link Meta →",
+        "recent": "Recent sends",
+        "windowTitle": "24-hour window",
+        "windowBody": "SPM & list mode require the buyer to have messaged you in the last 24h. <b>Catalog link</b> mode works anytime."
+      }
+    },
+    "collections": {
+      "loading": "Loading collections",
+      "loadError": "Collections could not be loaded",
+      "title": "Collections",
+      "intro": "Save a group of products once, then send it as a Multi-Product Message in one click, with no re-picking each time.",
+      "new": "New collection",
+      "create": "Create collection",
+      "created": "Collection created.",
+      "updated": "Collection updated.",
+      "deleted": "Collection deleted.",
+      "empty": "No collections yet. Create your first one above.",
+      "productCount": "{count, plural, =0 {no products} one {# product} other {# products}}",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "saveChanges": "Save changes",
+      "deleteTitle": "Delete this collection?",
+      "deleteBody": "\"{name}\" will be deleted. Products are not affected.",
+      "send": {
+        "button": "Send",
+        "noLive": "This collection has no live products to send.",
+        "needNumber": "Enter a recipient number first.",
+        "sending": "Sending…",
+        "sent": "{count, plural, one {Sent to # recipient} other {Sent to # recipients}}",
+        "someFailed": "{count} failed",
+        "failed": "Nothing was sent.",
+        "number": "Recipient number",
+        "numberPlaceholder": "Number with country code",
+        "header": "Header (optional)",
+        "headerPlaceholder": "Check these out",
+        "from": "Send from",
+        "auto": "Auto (active)",
+        "go": "Send as MPM"
+      },
+      "picker": {
+        "filter": "Filter products…",
+        "empty": "No active products yet.",
+        "addOne": "Add one →",
+        "noMatch": "No product matches.",
+        "max": "A collection holds at most {max} products."
+      },
+      "form": {
+        "name": "Name",
+        "namePlaceholder": "e.g. Summer Sale",
+        "description": "Description (optional)",
+        "products": "Products",
+        "upTo": "up to {max}",
+        "reload": "Reload",
+        "problem": {
+          "nameRequired": "Enter a name.",
+          "nameTooLong": "The name is too long.",
+          "descriptionTooLong": "The description is too long.",
+          "noProducts": "Pick at least one product."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Loading activity",
+      "loadError": "Activity could not be loaded",
+      "title": "Catalog send activity",
+      "subtitle": "Every catalog message your workspace has sent (SPM · MPM · link).",
+      "sendAnother": "Send another →",
+      "emptyTitle": "No sends yet",
+      "emptyBody": "Send your first catalog from the <link>Send tab</link>.",
+      "failed": "Failed",
+      "col": {
+        "when": "When",
+        "to": "To",
+        "mode": "Mode",
+        "body": "Body"
+      }
+    },
+    "products": {
+      "kicker": "Store / Products",
+      "title": "Catalog",
+      "add": "Add product",
+      "search": "Search by name or SKU...",
+      "loading": "Loading products",
+      "loadError": "Products could not be loaded",
+      "col": {
+        "image": "Image",
+        "name": "Name",
+        "sku": "SKU",
+        "price": "Price",
+        "stock": "Stock",
+        "actions": "Actions"
+      },
+      "noMatchTitle": "No products match",
+      "noMatchBody": "Nothing matches \"{q}\" by name or SKU.",
+      "clearSearch": "Clear search",
+      "emptyTitle": "No products yet",
+      "emptyBody": "Click \"Add product\" to create your first one.",
+      "inStock": "In stock",
+      "out": "Out",
+      "share": "Share",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "deleted": "Product removed.",
+      "deleteTitle": "Delete this product?",
+      "deleteBody": "\"{name}\" will be deleted. It stays on Meta until you remove it there."
+    },
+    "share": {
+      "eyebrow": "Share product",
+      "product": "Product",
+      "close": "Close",
+      "loading": "Loading links",
+      "storefrontLink": "Storefront link",
+      "noStorefront": "(set up your storefront slug first)",
+      "waLink": "WhatsApp deep link",
+      "noPhone": "(connect a phone number first)",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "sendToCustomer": "Send to a customer",
+      "phonePlaceholder": "WhatsApp number, e.g. +1 555…",
+      "send": "Send",
+      "sending": "Sending…",
+      "sent": "Sent.",
+      "invalidPhone": "Enter a valid WhatsApp number with country code."
+    },
+    "form": {
+      "breadcrumb": "Breadcrumb",
+      "products": "Products",
+      "crumbNew": "New",
+      "crumbEdit": "Edit",
+      "addTitle": "Add a product",
+      "editFallback": "Edit product",
+      "loading": "Loading product",
+      "loadError": "The product could not be loaded",
+      "noPermissionTitle": "You cannot do this",
+      "noPermission": "Your role does not allow creating or editing products.",
+      "reload": "Reload",
+      "fixFields": "Some fields are not valid. Check the highlighted fields.",
+      "basics": "Basics",
+      "name": "Name",
+      "namePlaceholder": "e.g. Spring Cotton Tee",
+      "sku": "SKU",
+      "optional": "(optional)",
+      "shortDescription": "Short description",
+      "shortDescriptionPlaceholder": "Shown in catalog cards + WhatsApp share links.",
+      "fullDescription": "Full description",
+      "fullDescriptionNote": "(product page body)",
+      "fullDescriptionPlaceholder": "Sizing, fabric, care instructions: anything that helps the buyer decide. HTML allowed.",
+      "media": "Media",
+      "primaryImage": "Primary image · paste a URL",
+      "imageUrl": "Image URL",
+      "imageUrlHint": "Paste any direct image URL.",
+      "photoTipsTitle": "Tips for great product photos",
+      "photoTips": "Use square (1:1) images at 1024×1024 px or larger. Plain backgrounds convert better than busy ones.",
+      "gallery": "Gallery",
+      "galleryHint": "Add more images to the product detail page. Buyers see these as thumbnails.",
+      "addGalleryUrl": "Add image URL",
+      "galleryRow": "Gallery image {n} URL",
+      "removeGallery": "Remove gallery image {n}",
+      "galleryEmpty": "No gallery images yet. Click \"Add image URL\" above to add one.",
+      "pricing": "Pricing",
+      "price": "Price",
+      "comparePrice": "Compare-at price",
+      "was": "(was)",
+      "comparePriceHint": "Original price · shows as strikethrough.",
+      "currency": "Currency",
+      "profit": "Profit indicator",
+      "profitHint": "Auto · price vs compare-at.",
+      "profitOff": "-{percent}% off",
+      "profitLower": "Compare < price",
+      "profitSame": "0% · same",
+      "inventory": "Inventory & shipping",
+      "stockQty": "Stock qty",
+      "stockPlaceholder": "Blank = unlimited",
+      "weight": "Weight",
+      "weightHint": "Used for shipping cost calculations.",
+      "weightPlaceholder": "e.g. 250",
+      "available": "Available for sale",
+      "availableHint": "Uncheck to mark sold-out while keeping the product visible.",
+      "sortOrder": "Sort order",
+      "sortOrderHint": "Lower numbers appear first.",
+      "visibility": "Visibility",
+      "status": {
+        "active": "Active: live on storefront",
+        "draft": "Draft: hidden, editable",
+        "archived": "Archived: hidden, kept in records"
+      },
+      "organization": "Organization",
+      "category": "Category",
+      "categoryPlaceholder": "e.g. Apparel, Snacks",
+      "tags": "Tags",
+      "tagsNote": "(comma-separated)",
+      "tagsPlaceholder": "cotton, summer, bestseller",
+      "preview": "Storefront preview",
+      "noImage": "No image yet",
+      "productName": "Product name",
+      "cancel": "Cancel",
+      "saveChanges": "Save changes",
+      "createProduct": "Create product",
+      "created": "Product created.",
+      "updated": "Product updated.",
+      "problem": {
+        "required": "This field is required.",
+        "tooLong": "This text is too long.",
+        "notNumber": "Enter a number, like 499 or 499.50.",
+        "tooBig": "The amount is too large.",
+        "notWhole": "Enter a whole number.",
+        "badUrl": "Enter a full link starting with https://",
+        "outOfRange": "This number is out of range.",
+        "tooMany": "Too many images."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, one {# star out of 5} other {# stars out of 5}}",
+      "kicker": "Store / Reviews",
+      "title": "Product reviews",
+      "subtitle": "Approve customer reviews to show them on the storefront product page.",
+      "tabs": "Review status",
+      "tab": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "loading": "Loading reviews",
+      "loadError": "Reviews could not be loaded",
+      "empty": {
+        "pending": "No pending reviews.",
+        "approved": "No approved reviews.",
+        "rejected": "No rejected reviews."
+      },
+      "anonymous": "Anonymous",
+      "on": "on",
+      "unknownProduct": "a deleted product",
+      "approve": "Approve",
+      "reject": "Reject",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "approved": "Review approved.",
+      "rejected": "Review rejected.",
+      "deleted": "Review deleted.",
+      "deleteTitle": "Delete this review?",
+      "deleteBody": "The review is removed for good."
+    },
+    "senderPicker": {
+      "none": "No connected senders.",
+      "connectOne": "Connect one →",
+      "select": "— Select a sender —",
+      "connectNew": "Connect new device",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "Unofficial API"
+      }
+    },
+    "admin": {
+      "nav": "Catalog",
+      "pageTitle": "Catalog settings",
+      "loading": "Loading the catalog settings",
+      "retry": "Try again",
+      "eyebrow": "Admin · Project settings",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Catalog",
+      "intro": "Platform-level controls for the WABA Catalog feature. Each merchant connects their own Meta Commerce Account catalog from the workspace-side <link>/catalog</link> page. This screen sets the defaults every workspace inherits.",
+      "allSettings": "All settings",
+      "openCatalog": "Open user catalog",
+      "reset": "Reset draft",
+      "save": "Save changes",
+      "saved": "Catalog settings saved.",
+      "superOnly": "Only a super admin can change these settings. You can see the saved values.",
+      "fix": "Please fix the highlighted fields:",
+      "problems": {
+        "graphVersion": "Use a Graph API version such as v23.0.",
+        "currency": "Use a 3-letter currency code."
+      },
+      "errors": {
+        "conflict": "Someone else saved these settings first. The latest values are shown; make your change again.",
+        "forbidden": "You do not have permission to change these settings.",
+        "validation": "Some fields are not valid. Check the highlighted fields and try again.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong. Try again in a moment."
+      },
+      "usage": {
+        "connected": "Workspaces connected",
+        "connectedHint": "with a Meta Catalog ID saved",
+        "products": "Products synced",
+        "productsHint": "across all workspace catalogs",
+        "sends": "Catalog messages sent",
+        "sendsHint": "SPM + MPM + catalog CTA"
+      },
+      "gate": {
+        "kicker": "Feature gate",
+        "title": "Catalog availability",
+        "enabled": "Enabled",
+        "body": "When enabled, workspace owners can connect their Meta Commerce catalog at <link>/catalog</link> and send Single Product, Multi-Product, and Catalog-CTA messages from the chat and flow builder. Switch off to hide the menu entry across all workspaces (existing connections stay intact but become read-only).",
+        "commerce": "Allow Commerce checkout",
+        "commerceHint": "Lets merchants accept in-WhatsApp payment via a connected Commerce Account. Requires Meta-approved Commerce Account + supported region."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph API version",
+        "intro": "Every catalog operation (send, sync, push) goes through this Graph API version. Meta ships a new version every ~3 months and supports the previous one for ~2 years.",
+        "version": "Graph API version",
+        "versionHint": "Format: v'{'major'}'.'{'minor'}', for example v23.0. Leave it blank to use the default.",
+        "currency": "Default currency",
+        "currencyHint": "ISO-4217 code (3 letters). Used as the default for new catalogs; each Meta Commerce catalog still locks to a single currency."
+      },
+      "app": {
+        "kicker": "Optional · Meta App",
+        "title": "Platform-wide Meta app",
+        "intro": "Only needed if you plan to ship an \"Install with Meta\" OAuth experience. The default flow has each merchant paste their own system-user token on the catalog page, so no app credentials are required.",
+        "id": "Meta App ID",
+        "idHint": "From developers.facebook.com → your app → Settings → Basic.",
+        "secret": "Meta App Secret",
+        "secretPlaceholder": "App secret",
+        "secretSaved": "•••••••••••• (saved, leave blank to keep)",
+        "secretHint": "Encrypted at rest. Used to verify Webhook payload signatures (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Merchant walkthrough",
+        "title": "How a workspace connects its catalog",
+        "intro": "Shown to merchants on the catalog page. Reproduced here so you can sanity-check the flow.",
+        "waba": {
+          "title": "Have an active WABA + Phone Number ID",
+          "body": "The merchant needs a verified WhatsApp Business Account in Meta Business Suite with at least one approved phone number. Without this, no catalog message can send."
+        },
+        "catalog": {
+          "title": "Create a catalog in Meta Commerce Manager",
+          "body": "At business.facebook.com/commerce → Create catalog → pick e-commerce. Add products manually, via CSV, or pull from Shopify/Woo. Catalog must be Public and locked to one currency."
+        },
+        "link": {
+          "title": "Connect the catalog to the WABA",
+          "body": "In Business Suite → WhatsApp Manager → Catalog tab → \"Choose a catalog\" → pick the one created in Step 2. This is what enables Cloud API product messages."
+        },
+        "token": {
+          "title": "Generate a System User token",
+          "body": "Business Settings → System Users → Add → Admin. Generate a token with whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Pick \"Never\" for expiry to avoid quarterly re-auth."
+        },
+        "paste": {
+          "title": "Paste credentials on the catalog page",
+          "body": "WABA ID, Catalog ID, Phone Number ID, and the System User token go on the workspace-side catalog page. It then runs a test GET /{CATALOG_ID}?fields=name,product_count to verify the token has catalog_management on that catalog."
+        }
+      },
+      "side": {
+        "archKicker": "Architecture",
+        "archTitle": "Per-merchant vs platform",
+        "here": "Here (admin, one-time)",
+        "hereBody": "Feature toggle, Graph API version, default currency, optional Meta App credentials.",
+        "merchant": "On the catalog page (per merchant)",
+        "merchantBody": "WABA ID, Catalog ID, Phone Number ID, System User token. Meta requires the catalog be owned by the merchant's Commerce Account, so there is no shared catalog.",
+        "payloadsKicker": "Cloud API payloads",
+        "payloadsTitle": "Three message types we send",
+        "payload": {
+          "spm": {
+            "title": "SPM · Single Product",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Multi-Product",
+            "code": "interactive.type = \"product_list\" · max 10 sections, 30 items"
+          },
+          "cta": {
+            "title": "Catalog CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Official docs",
+        "docsTitle": "Reference",
+        "docs": {
+          "sell": "Sell products and services →",
+          "messages": "Cloud API messages reference →",
+          "batch": "Catalog Batch API (push products) →",
+          "changelog": "Graph API changelog →",
+          "policies": "Commerce policies →"
+        },
+        "constraintsTitle": "Constraints",
+        "constraints": {
+          "public": "Catalog must be Public",
+          "currency": "One currency per catalog",
+          "images": "Images ≥ 500×500 px (JPG / PNG)",
+          "goods": "No alcohol / adult / regulated goods",
+          "verification": "Business Verification required for production"
+        }
+      }
+    }
+  }
+}

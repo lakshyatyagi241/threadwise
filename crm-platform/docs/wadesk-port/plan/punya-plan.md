@@ -24,23 +24,16 @@ Done: 009, 010, 011 (partly), 012, 013 (stub), 014, 015, 016, 017, 025, 026, 027
 
 ## CAMP (campaigns, WaDesk wa-campaigns)
 
-Inventory is `pending`: first write the inventory from the reference (routes, tables, wiring), then follow the same order as BCAST:
-create flow, sender, read API, actions, tracking, receipts, events, web, parity.
+Inventory written 2026-10-02: `docs/wadesk-port/inventory/campaigns.md` (WD-CAMP-001 to 028). Parity: `docs/wadesk-port/parity/campaigns.md`.
 
-Reference surface (scoped 2026-10-02, nothing written yet):
-
-- Routes: `routes/web.php` prefix `wa-campaigns` (index, create, store, edit, update, destroy, show, export, sample-csv, bulk-delete,
-  cancel, resume, send-now, resend, AI model list and AI generate) and `routes/api.php` Node callbacks (`nodeCampaignStatus`,
-  `nodeContactStatus`, `nodeStatusByMessageId`, `nodeTrackResponse`, `nodeUnsubscribe`, `nodeCampaignDrain`).
-- Code: `app/Http/Controllers/WaCampaignsController.php` (5,881 lines), models `WpCampaign` and `WpCampaignContact`,
-  `app/Services/CampaignScheduleSweeper.php`; webhook events `campaign_created`, `campaign_status_updated`,
-  `campaign_contact_status_updated`, `campaign_contact_replied`, `contact_opt_in`.
-- Screens: `resources/views/user/wa-campaigns/{index,create,edit,detail,_cards}.blade.php` and their scripts
-  `user-wa-campaigns-{index,create,edit,detail}.js`. (`user/campaigns` and `meta-ads` are the separate Meta Ads product, not CAMP.)
-- Shared with BCAST and reusable as is: the template picker and overrides panel, the sender and audience pickers, the link
-  tracker, pacing, the receipt state machine, the webhook and bell mappers.
-- Order: read the controller in slices (store and validation, audiences and CSV, A/B and AI, send and sweeper, callbacks, detail),
-  writing one inventory entry per behavior, then the same build order as BCAST. This is a multi-session job; do it one slice per commit.
+| Step | What                                                                                | Features                    |
+| ---- | ----------------------------------------------------------------------------------- | --------------------------- |
+| C1   | Inventory, create, edit, list, detail, builder, recipients (DONE)                   | 001-010, 019                |
+| C2   | Cancel, resume, send now, resend, delete, export; the sender and the sweeper (DONE) | 011-018, 020, 023           |
+| C3   | Node callbacks, provider receipts, replies, opt-outs (DONE)                         | 021, 022                    |
+| C4   | Web: list, builder (create and edit), detail (DONE)                                 | 001, 002, 003, 010, 016-020 |
+| C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs (DONE)      | 019, 024                    |
+| C6   | Flow campaigns (DONE by the flow runtime); build with AI, Meta click sync (BLOCKED) | 025, 026, 027               |
 
 ## Channels and ECOM
 
@@ -54,3 +47,56 @@ Order: telegram, facebook, instagram, then shopify-woocommerce.
 - Anything that depends on another domain goes behind an interface in `_shims/`, listed in the parity file.
 - One branch, always pushed, one PR with Lakshya as reviewer.
 - No sub-agent swarms.
+
+## TG (channel-telegram)
+
+Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-telegram.md` (WD-TG-001 to 019). Build order, one commit and push per step:
+
+| Step | What                                                                                    | Features           |
+| ---- | --------------------------------------------------------------------------------------- | ------------------ |
+| T1   | Bots: connect by token, manage, plan gates, hub API (DONE)                              | 002, 007, 019, 001 |
+| T2   | Inbound webhook, inbox ingest (shim), taps, payments (DONE)                             | 003, 004, 005, 006 |
+| T3   | Sender: reply through the bot, template keyboard (DONE)                                 | 008, 009           |
+| T4   | Audience and broadcasts API with a BullMQ sender (DONE)                                 | 010, 011-014       |
+| T5   | Web: hub, broadcast list and compose (DONE)                                             | 001, 011, 012      |
+| T6   | MTProto account and @BotFather (BLOCKED: Node bridge)                                   | 015-017            |
+| T7   | Flow hand-off (DONE by the flow runtime); the two Node callbacks (BLOCKED: Node bridge) | 018                |
+
+## FB (channel-facebook)
+
+Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-facebook.md` (WD-FB-001 to 023). Parity: `docs/wadesk-port/parity/channel-facebook.md`. Build order, one commit and push per step:
+
+| Step | What                                                                                                                                 | Features           |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| F1   | Pages: connect (login, popup, token), manage, webhook in, inbox ingest, backfill, reply, health sweep (DONE)                         | 001-006, 007-011   |
+| F2   | Messenger broadcasts: audience, compose, BullMQ sender, start, pause, retry, delete (DONE)                                           | 012, 013, 014      |
+| F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers (DONE)                                                         | 015                |
+| F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights (DONE; post files upload through the marketing-media route) | 016, 017, 018, 019 |
+| F5   | Web: hub, broadcasts, setup, posts, composer, my posts, insights (DONE; not yet compared with the running WaDesk)                    | 001, 012-019       |
+| F6   | AI composer tools, flow hand-off and node callbacks, social calendar (BLOCKED: AI provider, flow runtime, owner)                     | 020, 021, 023      |
+
+## IG (channel-instagram)
+
+Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-instagram.md` (WD-IG-001 to 020). The channel is the Instaflow bridge; the native add-on is not in the reference (020, blocked). Build order, one commit and push per step:
+
+| Step | What                                                                          | Features                  |
+| ---- | ----------------------------------------------------------------------------- | ------------------------- |
+| I1   | Permissions, bridge port and client, accounts: available, link, unlink (DONE) | 016, 003, 004, 005, 006   |
+| I2   | Inbound push, ingest (shim), pull job (DONE)                                  | 007, 008, 009             |
+| I3   | Reply sender, flows list and run (DONE)                                       | 010, 011 (no caller), 012 |
+| I4   | Composer recipients and reply-only broadcast (DONE)                           | 013, 014                  |
+| I5   | Web: hub, add dialog, reply-only compose (DONE)                               | 001, 002, 013, 014, 015   |
+| I6   | Auto-reply hook, flow import and push, templates (BLOCKED: others)            | 017, 018, 019, 020        |
+
+## ECOM (shopify-woocommerce)
+
+Inventory written 2026-10-03: `docs/wadesk-port/inventory/shopify-woocommerce.md` (WD-ECOM-001 to 038). The data model is in `20261001101800_ecom_wadesk_schema.sql`; `wa_products` and `wa_orders` already carry the store ids. Build order, one commit and push per step:
+
+| Step | What                                                                                                                                                                                                                                                                                                                 | Features                                    |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| E1   | Permissions, platform settings, Shopify OAuth, WooCommerce connect and test, webhook register and teardown (DONE)                                                                                                                                                                                                    | 001, 002, 003, 005, 006, 007, 025, 026, 013 |
+| E2   | Import into the mirror (both), keep it in step, sync now (DONE)                                                                                                                                                                                                                                                      | 011, 012, 013                               |
+| E3   | Webhook receivers (both), automations config, event message, logs (E3 DONE: receivers, event message, logs, mirror upkeep, automations API)                                                                                                                                                                          | 008, 009, 010, 027, 028, 029, 033           |
+| E4   | Offers, win-back, COD and prepaid, delivered, stock, cart recovery, GDPR, uninstall, concierge, inbound service (E4a delivered, uninstall, GDPR DONE; E4b COD, prepaid, risk DONE; E4c back in stock DONE; E4d cart recovery DONE; E4e offer and win-back DONE; E4f concierge and inbound entry point DONE; E4 DONE) | 014 to 022, 030, 031, 034                   |
+| E5   | Web: Shopify and WooCommerce store screens (E5a dashboard API DONE; E5b screens DONE except Invoices tab and plugin card, see E6)                                                                                                                                                                                    | 004, 023, 024                               |
+| E6   | Plugin download, invoices, flow links and resume, embedded session (BLOCKED: decisions and other domains)                                                                                                                                                                                                            | 032, 035, 036, 037, 038                     |

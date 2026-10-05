@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,11 +11,12 @@ import {
   operatorTicketListResponseSchema,
   type OperatorTicketListResponse,
 } from '@crm/contracts';
-import { Badge, Button, Card, Input, Select, StatTile } from '@crm/ui';
+import { Button, Card, Input, Select, StatTile } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
-import { INBOX_KEY, PRIORITY_TONE, STATUS_TONE, formatWhen } from '../lib/display';
+import { INBOX_KEY, PRIORITY_PILL, STATUS_PILL } from '../lib/display';
+import { shortDate } from '../lib/format';
 import { TicketPanel } from './ticket-panel';
 
 const NS = 'platform-support-desk';
@@ -66,7 +68,16 @@ export function InboxPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        eyebrow={t('eyebrow')}
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          <Link href="/admin/support/team-inbox">
+            <Button variant="secondary">{t('kanbanView')}</Button>
+          </Link>
+        }
+      />
 
       {kpis && (
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -84,7 +95,7 @@ export function InboxPage() {
           value={filters.status}
           onChange={(e) => setFilters({ ...filters, status: e.target.value })}
         >
-          <option value="">{`${t('filters.status')}: ${t('filters.all')}`}</option>
+          <option value="">{t('filters.allStatus')}</option>
           {SUPP_TICKET_STATUSES.map((s) => (
             <option key={s} value={s}>
               {ts(s)}
@@ -97,8 +108,8 @@ export function InboxPage() {
           value={filters.priority}
           onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
         >
-          <option value="">{`${t('filters.priority')}: ${t('filters.all')}`}</option>
-          {SUPP_TICKET_PRIORITIES.map((p) => (
+          <option value="">{t('filters.allPriority')}</option>
+          {[...SUPP_TICKET_PRIORITIES].reverse().map((p) => (
             <option key={p} value={p}>
               {tp(p)}
             </option>
@@ -110,7 +121,7 @@ export function InboxPage() {
           value={filters.agent}
           onChange={(e) => setFilters({ ...filters, agent: e.target.value })}
         >
-          <option value="">{`${t('filters.agent')}: ${t('filters.all')}`}</option>
+          <option value="">{t('filters.allAgents')}</option>
           <option value="me">{t('filters.me')}</option>
           <option value="unassigned">{t('filters.unassigned')}</option>
         </Select>
@@ -140,7 +151,7 @@ export function InboxPage() {
       {q.data && (
         <Card className="overflow-x-auto p-0">
           <table className="w-full text-sm">
-            <thead className="border-b text-start text-xs uppercase tracking-wide text-muted-foreground">
+            <thead className="border-b bg-muted/40 text-start text-xs text-muted-foreground">
               <tr>
                 <th className="p-3 text-start">{t('table.when')}</th>
                 <th className="p-3 text-start">{t('table.ticket')}</th>
@@ -168,22 +179,36 @@ export function InboxPage() {
                   data-testid="ticket-row"
                 >
                   <td className="whitespace-nowrap p-3 text-muted-foreground">
-                    {formatWhen(r.createdAt, locale)}
+                    {shortDate(r.createdAt, locale).day}
+                    <br />
+                    <span className="text-xs">{shortDate(r.createdAt, locale).time}</span>
                   </td>
                   <td className="p-3">
                     <p className="font-medium">{r.subject || t('table.noSubject')}</p>
-                    <p className="text-xs text-muted-foreground">
-                      #{r.ticketNumber} - {r.customerName || r.customerEmail}
+                    <p className="font-mono text-[10.5px] text-muted-foreground">
+                      #{r.ticketNumber} · {r.customerName || r.customerEmail}
                     </p>
                   </td>
                   <td className="p-3">
-                    <Badge tone={PRIORITY_TONE[r.priority]}>{tp(r.priority)}</Badge>
+                    <span
+                      className={`rounded-full px-2 py-0.5 font-mono text-[10px] uppercase ${PRIORITY_PILL[r.priority]}`}
+                    >
+                      {tp(r.priority)}
+                    </span>
                   </td>
                   <td className="p-3">
-                    <Badge tone={STATUS_TONE[r.status]}>{ts(r.status)}</Badge>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[11px] lowercase ${STATUS_PILL[r.status]}`}
+                    >
+                      {ts(r.status)}
+                    </span>
                   </td>
-                  <td className="p-3">{r.assignee?.name ?? t('table.unassigned')}</td>
-                  <td className="p-3 text-primary">{t('table.open')}</td>
+                  <td className="p-3">
+                    {r.assignee?.name ?? (
+                      <em className="text-muted-foreground">{t('table.unassigned')}</em>
+                    )}
+                  </td>
+                  <td className="p-3 text-xs text-primary">{t('table.open')} &rarr;</td>
                 </tr>
               ))}
             </tbody>

@@ -1,6 +1,12 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { planAdminListResponseSchema, platformRoleListResponseSchema } from '@crm/contracts';
+import {
+  announcementListResponseSchema,
+  couponListResponseSchema,
+  guidebookAdminListResponseSchema,
+  planAdminListResponseSchema,
+  platformRoleListResponseSchema,
+} from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
 import { apiBase } from '@/lib/auth/server';
 
@@ -47,6 +53,44 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     }
   } catch {
     // network failure: the badges stay blank
+  }
+
+  // Coupons: the badge counts ACTIVE coupons only, whatever their expiry (WD-CPN-001 rule 3).
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/coupons`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = couponListResponseSchema.safeParse(await res.json());
+      if (parsed.success) counts.coupons = parsed.data.summary.active;
+    }
+  } catch {
+    // network failure: the coupons badge stays blank
+  }
+
+  // Marketing: announcements switched on (whatever their window) and published guidebook articles, as WaDesk's badges.
+  try {
+    const [a, g] = await Promise.all([
+      fetch(`${apiBase()}/v2/platform/cms/announcements?limit=1`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      }),
+      fetch(`${apiBase()}/v2/platform/cms/guidebook?limit=1`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      }),
+    ]);
+    if (a.ok) {
+      const parsed = announcementListResponseSchema.safeParse(await a.json());
+      if (parsed.success) counts.announcements = parsed.data.summary.switchedOn;
+    }
+    if (g.ok) {
+      const parsed = guidebookAdminListResponseSchema.safeParse(await g.json());
+      if (parsed.success) counts.guidebook = parsed.data.summary.published;
+    }
+  } catch {
+    // network failure: the marketing badges stay blank
   }
 
   return counts;

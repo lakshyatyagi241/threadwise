@@ -7,15 +7,20 @@ import type { SecurityOverviewResponse } from '@crm/contracts';
 import { Badge, Card, cn } from '@crm/ui';
 import { enforcementTone } from '../lib/enforcement';
 import {
+  coverageText,
   coverageTone,
   formatPercent,
   formatRelativeTime,
+  kpiAccents,
   mfaCoveragePercent,
   scoreState,
   severityTone,
   webhookState,
+  type KpiAccent,
+  type KpiTone,
   type MeterTone,
 } from '../lib/kpi';
+import { riskRowTone, seeAllRisksHref, shapeRisk, type RiskOwner } from '../lib/risks';
 import type { DangerKind } from '../lib/danger';
 import { useOperator } from '../operator-context';
 import { SECURITY_NS } from './policy-form';
@@ -33,48 +38,40 @@ const TONE_BAR: Record<MeterTone, string> = {
   danger: 'bg-danger',
 };
 
+const BORDER: Record<KpiTone, string> = {
+  success: 'border-success/50',
+  warning: 'border-warning/40',
+  danger: 'border-danger/40',
+};
+const TEXT: Record<KpiTone, string> = {
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
+};
+
 function Kpi({
   label,
   value,
   note,
-  tone,
-  highlight,
+  accent,
 }: {
   label: string;
   value: string;
   note: string;
-  tone?: 'success' | 'warning' | 'danger';
-  highlight?: boolean;
+  accent: KpiAccent;
 }) {
   return (
-    <Card
-      className={cn(
-        'space-y-2 p-4',
-        highlight && 'border-success/50',
-        tone === 'danger' && 'border-danger/40',
-      )}
-    >
+    <Card className={cn('space-y-2 p-4', accent.border && BORDER[accent.border])}>
       <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
       <dd
         className={cn(
           'text-3xl font-semibold leading-none tracking-tight',
-          tone === 'danger' && 'text-danger',
+          accent.value && TEXT[accent.value],
         )}
       >
         {value}
       </dd>
-      <dd
-        className={cn(
-          'text-xs',
-          tone === 'success'
-            ? 'text-success'
-            : tone === 'warning'
-              ? 'text-warning'
-              : tone === 'danger'
-                ? 'text-danger'
-                : 'text-muted-foreground',
-        )}
-      >
+      <dd className={cn('text-xs', accent.note ? TEXT[accent.note] : 'text-muted-foreground')}>
         {note}
       </dd>
     </Card>
@@ -87,47 +84,78 @@ export function KpiStrip({ kpis }: { kpis: SecurityOverviewResponse['kpis'] }) {
   const locale = useLocale();
   const state = scoreState(kpis.score);
   const hooks = webhookState(kpis.webhookFailurePct);
+  const accent = kpiAccents(kpis);
   return (
     <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       <Kpi
         label={t('score.label')}
         value={String(kpis.score)}
         note={t(`score.${state}`)}
-        tone={state === 'strong' ? 'success' : 'warning'}
-        highlight
+        accent={accent.score}
       />
       <Kpi
         label={t('openRisks.label')}
         value={String(kpis.openRisks)}
         note={t('openRisks.note', { count: kpis.highPriorityRisks })}
-        tone={kpis.openRisks > 0 ? 'danger' : undefined}
+        accent={accent.openRisks}
       />
-      <Kpi label={t('blocked.label')} value={String(kpis.blockedAttempts24h)} note={t('last24h')} />
+      <Kpi
+        label={t('blocked.label')}
+        value={String(kpis.blockedAttempts24h)}
+        note={t('last24h')}
+        accent={accent.blocked}
+      />
       <Kpi
         label={t('warnings.label')}
         value={String(kpis.warnings24h)}
         note={t('last24h')}
-        tone={kpis.warnings24h > 0 ? 'warning' : undefined}
+        accent={accent.warnings}
       />
       <Kpi
         label={t('mfa.label')}
         value={`${mfaCoveragePercent(kpis.operatorMfa.enrolled, kpis.operatorMfa.total)}%`}
         note={t('mfa.note', { enrolled: kpis.operatorMfa.enrolled, total: kpis.operatorMfa.total })}
+        accent={accent.mfa}
       />
       <Kpi
         label={t('webhooks.label')}
         value={`${formatPercent(kpis.webhookFailurePct, locale)}%`}
         note={t(`webhooks.${hooks}`)}
-        tone={hooks === 'review' ? 'warning' : 'success'}
+        accent={accent.webhooks}
       />
     </dl>
   );
 }
 
-function RiskQueue({ risks }: { risks: SecurityOverviewResponse['risks'] }) {
+const ROW_TINT = { danger: 'bg-danger/5', warning: 'bg-warning/5' } as const;
+
+function OwnerText({ owner }: { owner: RiskOwner }) {
+  const t = useTranslations(`${SECURITY_NS}.risks.owner`);
+  switch (owner.kind) {
+    case 'name':
+      return owner.name;
+    case 'system':
+      return t('system');
+    case 'type':
+      return t(`types.${owner.type}`);
+  }
+}
+
+/** The priority queue: severity, signal, workspace, owner and an Inspect link per row, as a table that scrolls sideways on a phone. */
+function RiskQueue({
+  risks,
+  appName,
+}: {
+  risks: SecurityOverviewResponse['risks'];
+  appName: string;
+}) {
   const t = useTranslations(`${SECURITY_NS}.risks`);
+  const shellBrand = useTranslations('auth-registration-security.platform.shell')('brand');
+  const brand = appName.trim() || shellBrand;
   const locale = useLocale();
   const [now] = useState(() => Date.now());
+  const rows = risks.map(shapeRisk);
+  const th = 'px-3 py-2.5 text-start font-medium';
   return (
     <Card className="overflow-hidden p-0">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
@@ -138,58 +166,98 @@ function RiskQueue({ risks }: { risks: SecurityOverviewResponse['risks'] }) {
           <h2 className="text-lg font-semibold leading-tight">{t('title')}</h2>
         </div>
         <Link
-          href="/admin/security/events?status=failure"
+          href={seeAllRisksHref()}
           className="rounded-full border border-border px-3 py-1.5 text-xs font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           {t('seeAll')}
         </Link>
       </header>
-      {risks.length === 0 ? (
-        <p className="px-4 py-10 text-center text-sm text-muted-foreground">{t('empty')}</p>
-      ) : (
-        <ul className="divide-y divide-border" aria-label={t('title')}>
-          {risks.map((r, i) => (
-            <li
-              key={`${r.signal}-${r.at}-${i}`}
-              className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1 px-4 py-3"
-            >
-              <Badge tone={severityTone(r.severity)} className="mt-0.5">
-                <span className="sr-only">{t('columns.severity')}: </span>
-                {t(`severity.${r.severity}`)}
-              </Badge>
-              <div className="min-w-0 space-y-1">
-                <p className="break-all text-sm font-medium" dir="ltr">
-                  {r.signal}
-                </p>
-                <p
-                  className="truncate font-mono text-xs text-muted-foreground"
-                  title={r.detail}
-                  dir="ltr"
-                >
-                  {r.detail}
-                </p>
-                <p className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground">
-                  <span>
-                    {t('columns.workspace')}:{' '}
-                    <span className="text-foreground">{r.workspace ?? t('platform')}</span>
-                  </span>
-                  <span>
-                    {t('columns.owner')}: <span className="text-foreground">{r.actor}</span>
-                  </span>
-                  <time dateTime={r.at}>{formatRelativeTime(r.at, now, locale)}</time>
-                </p>
-              </div>
-              <Link
-                href={`/admin/security/events?event=${encodeURIComponent(r.signal)}`}
-                className="whitespace-nowrap rounded-full border border-border px-3 py-1 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {t('inspect')}
-                <span className="sr-only"> {r.signal}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="relative overflow-x-auto">
+        <table className="w-full min-w-[34rem] text-sm">
+          <caption className="sr-only">{t('title')}</caption>
+          <thead className="border-b border-border bg-muted/50 text-xs text-muted-foreground">
+            <tr>
+              <th scope="col" className={cn(th, 'w-28 ps-4')}>
+                {t('columns.severity')}
+              </th>
+              <th scope="col" className={th}>
+                {t('columns.signal')}
+              </th>
+              <th scope="col" className={cn(th, 'w-40')}>
+                {t('columns.workspace')}
+              </th>
+              <th scope="col" className={cn(th, 'w-36')}>
+                {t('columns.owner')}
+              </th>
+              <th scope="col" className={cn(th, 'w-24 pe-4 text-end')}>
+                {t('columns.action')}
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="px-4 py-10 text-center text-sm text-muted-foreground">
+                  {t('empty')}
+                </td>
+              </tr>
+            ) : (
+              rows.map((r, i) => {
+                const tone = riskRowTone(r.severity);
+                return (
+                  <tr key={`${r.signal}-${r.at}-${i}`} className={cn(tone && ROW_TINT[tone])}>
+                    <td className="py-3 ps-4 pe-3 align-top">
+                      <Badge tone={severityTone(r.severity)} className="font-mono text-[11px]">
+                        {t(`severity.${r.severity}`)}
+                      </Badge>
+                    </td>
+                    <td className="max-w-0 px-3 py-3 align-top">
+                      <div className="break-words font-semibold" dir="ltr">
+                        {r.signal}
+                      </div>
+                      {r.detail && (
+                        <div
+                          className="truncate font-mono text-xs text-muted-foreground"
+                          title={r.detail}
+                          dir="ltr"
+                        >
+                          {r.detail}
+                        </div>
+                      )}
+                      <time dateTime={r.at} className="text-xs text-muted-foreground">
+                        {formatRelativeTime(r.at, now, locale)}
+                      </time>
+                    </td>
+                    <td className="px-3 py-3 align-top font-semibold">
+                      {r.workspace.kind === 'name' ? (
+                        r.workspace.name
+                      ) : r.workspace.kind === 'platform' ? (
+                        t('platformOf', { app: brand })
+                      ) : (
+                        <span aria-label={t('noWorkspace')} className="text-muted-foreground">
+                          —
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3 align-top text-muted-foreground">
+                      <OwnerText owner={r.owner} />
+                    </td>
+                    <td className="py-3 ps-3 pe-4 text-end align-top">
+                      <Link
+                        href={r.inspectHref}
+                        className="whitespace-nowrap rounded-full border border-border px-3 py-1 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                      >
+                        {t('inspect')}
+                        <span className="sr-only"> {r.signal}</span>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }
@@ -213,7 +281,7 @@ function CoverageCard({ coverage }: { coverage: SecurityOverviewResponse['covera
               <div className="mb-1 flex items-center justify-between gap-2">
                 <span id={`coverage-${c.key}`}>{t(`buckets.${c.key}`)}</span>
                 <span className={cn('font-mono text-xs', TONE_TEXT[tone])}>
-                  {formatPercent(c.percent, locale)}%
+                  {coverageText(c, locale)}
                 </span>
               </div>
               <div
@@ -326,7 +394,7 @@ function EnforcementTable({ matrix }: { matrix: SecurityOverviewResponse['enforc
         </summary>
         <div className="border-t border-border px-4 py-3">
           <p className="mb-3 text-sm text-muted-foreground">{t('description')}</p>
-          <div className="overflow-x-auto">
+          <div className="relative overflow-x-auto">
             <table className="w-full min-w-[32rem] text-sm">
               <thead className="text-xs text-muted-foreground">
                 <tr>
@@ -375,7 +443,7 @@ export function SummaryPanel({
   return (
     <div className="space-y-5">
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_21rem]">
-        <RiskQueue risks={overview.risks} />
+        <RiskQueue risks={overview.risks} appName={overview.appName} />
         <aside className="space-y-5">
           <CoverageCard coverage={overview.coverage} />
           <QuickActions halted={overview.emergencyHalt} onAction={onAction} />

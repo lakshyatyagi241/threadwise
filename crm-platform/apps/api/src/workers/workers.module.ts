@@ -2,8 +2,18 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
+import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
+import { CallingVoiceWorkerModule } from '../modules/calling-voice';
+import { CatalogProductsWorkerModule } from '../modules/catalog-products';
+import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
+import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
+import { CampaignsWorkerModule } from '../modules/campaigns';
+import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
+import { ChannelInstagramWorkerModule } from '../modules/channel-instagram';
+import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
+import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -11,9 +21,19 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
+import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
+import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
+import { MessageTemplatesWorkerModule } from '../modules/message-templates';
+import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
+import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
+import { LeadsWorkerModule } from '../modules/leads';
+import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
+import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -36,14 +56,34 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactImportWorkerModule,
     TasksWorkerModule,
     BspBillingEngineWorkerModule,
+    WalletMessageBillingWorkerModule,
     SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
+    PlansWorkerModule,
+    PaygwWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
+    CallingVoiceWorkerModule,
+    CatalogProductsWorkerModule,
+    StorefrontBuilderWorkerModule,
+    MessageTemplatesWorkerModule,
+    ChatConversationsWorkerModule,
+    CampaignsWorkerModule,
+    ChannelTelegramWorkerModule,
+    ChannelFacebookWorkerModule,
+    ChannelInstagramWorkerModule,
+    ShopifyWoocommerceWorkerModule,
+    ScheduledQueueWarmerWorkerModule,
+    FlowBuilderEditorWorkerModule,
+    FlowRuntimeEngineWorkerModule,
+    NodeBridgeRuntimeWorkerModule,
+    LeadsWorkerModule,
+    MarketplaceWorkerModule,
+    PlatformSupportDeskWorkerModule,
   ],
   providers: [
     OutboxDrainService,

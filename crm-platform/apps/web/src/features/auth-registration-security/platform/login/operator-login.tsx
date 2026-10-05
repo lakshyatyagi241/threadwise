@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { Alert, Button, Card, Field, Input, PasswordInput, Spinner } from '@crm/ui';
 import { ApiError, toApiError } from '@/lib/api/errors';
+import { lockedMinutes } from '../../shared/error-utils';
 import { fieldMessage, retryAfterSeconds } from '../lib/api-errors';
 import { formatMmSs } from '../lib/kpi';
 import { OPERATOR_ACCOUNT_PATH, OPERATOR_HOME } from '../operator-nav';
@@ -38,7 +39,7 @@ type Step =
   { kind: 'credentials' } | { kind: 'mfa'; challengeToken: string; expiresInSeconds: number };
 type Problem =
   | { kind: 'invalid' }
-  | { kind: 'locked' }
+  | { kind: 'locked'; minutes: number | null }
   | { kind: 'ipBlocked'; ip: string }
   | { kind: 'captcha' }
   | { kind: 'challengeExpired' }
@@ -63,17 +64,26 @@ async function post(path: string, body: unknown): Promise<unknown> {
   } catch {
     json = undefined;
   }
-  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  if (!res.ok)
+    throw toApiError(
+      res.status,
+      json,
+      res.headers.get('x-request-id'),
+      res.headers.get('retry-after'),
+    );
   return json;
 }
 
 /** Sign-in for platform operators: credentials, optional captcha, then the MFA step. */
 export function OperatorLogin({
   expired,
+  idleMinutes = null,
   next,
   captcha,
 }: {
   expired: boolean;
+  /** The session ended for inactivity (WD-AUTH-033): the limit in minutes, shown in the notice. */
+  idleMinutes?: number | null;
   next?: string;
   captcha: CaptchaConfig | null;
 }) {
@@ -89,7 +99,9 @@ export function OperatorLogin({
     captcha?: string;
   }>({});
   const [useRecovery, setUseRecovery] = useState(false);
-  const [notice, setNotice] = useState<'expired' | null>(expired ? 'expired' : null);
+  const [notice, setNotice] = useState<'expired' | 'idle' | null>(
+    expired ? 'expired' : idleMinutes ? 'idle' : null,
+  );
   const {
     status: captchaStatus,
     solved: captchaSolved,
@@ -119,7 +131,7 @@ export function OperatorLogin({
       case ERROR_CODES.AUTH_ACCOUNT_LOCKED: {
         const wait = retryAfterSeconds(e);
         if (wait) lock.start(wait);
-        return { kind: 'locked' };
+        return { kind: 'locked', minutes: lockedMinutes(e) };
       }
       case ERROR_CODES.AUTH_IP_BLOCKED:
         return { kind: 'ipBlocked', ip: fieldMessage(e, 'ip') ?? '' };
@@ -195,7 +207,7 @@ export function OperatorLogin({
 
   async function submitCode(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (pending || step.kind !== 'mfa') return;
+    if (pending || locked || step.kind !== 'mfa') return;
     const value = String(new FormData(e.currentTarget).get('code') ?? '').trim();
     const valid = useRecovery ? RECOVERY_CODE.test(value) : /^\d{6}$/.test(value);
     if (!valid) {
@@ -228,7 +240,7 @@ export function OperatorLogin({
       case 'invalid':
         return step.kind === 'mfa' ? t('problems.invalidCode') : t('problems.invalid');
       case 'locked':
-        return t('problems.locked');
+        return p.minutes ? t('problems.lockedWait', { minutes: p.minutes }) : t('problems.locked');
       case 'ipBlocked':
         return p.ip ? t('problems.ipBlocked', { ip: p.ip }) : t('problems.ipBlockedUnknown');
       case 'captcha':
@@ -264,6 +276,9 @@ export function OperatorLogin({
 
       {notice === 'expired' && step.kind === 'credentials' && (
         <Alert tone="info">{t('notices.expired')}</Alert>
+      )}
+      {notice === 'idle' && step.kind === 'credentials' && idleMinutes && (
+        <Alert tone="info">{t('notices.idle', { minutes: idleMinutes })}</Alert>
       )}
 
       {problem && (
@@ -403,9 +418,13 @@ export function OperatorLogin({
               ? t('mfa.windowClosed')
               : t('mfa.windowLeft', { time: formatMmSs(challengeLeft) })}
           </p>
-          <Button type="submit" className="w-full" disabled={pending || challengeOver}>
+          <Button type="submit" className="w-full" disabled={pending || challengeOver || locked}>
             {pending && <Spinner label={t('mfa.verifying')} />}
-            {pending ? t('mfa.verifying') : t('mfa.verify')}
+            {pending
+              ? t('mfa.verifying')
+              : locked
+                ? t('problems.tryAgainIn', { time: formatMmSs(lock.remaining) })
+                : t('mfa.verify')}
           </Button>
           <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
             <button

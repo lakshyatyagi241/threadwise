@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import type { PaygwBilling, PaygwPeriod, PaygwQuote } from '@crm/contracts';
-import { Alert, Button, Card, Field, Input, Select, Spinner } from '@crm/ui';
+import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import {
   checkoutKey,
@@ -15,8 +15,11 @@ import {
   placeWalletOrder,
 } from '../api';
 import { formatMoney } from '../lib/money';
-import { nextStep } from '../lib/next-action';
+import { nextStep, type NextStep } from '../lib/next-action';
+import { openCashfree, openPaddle, postForm } from '../lib/provider-widgets';
 import { openRazorpay } from '../lib/razorpay';
+import { BraintreeWidget, HyperpayWidget } from './card-widgets';
+import { OfflineInstructions } from './offline-instructions';
 
 const NS = 'platform-payment-gateways.checkout';
 
@@ -49,8 +52,21 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   );
   const [billing, setBilling] = useState(EMPTY);
   const [gatewayId, setGatewayId] = useState<string | null>(null);
+  // A coupon is typed, then applied: the server prices it (preview), and it is judged again when the order is placed.
+  const [couponInput, setCouponInput] = useState('');
+  const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [problem, setProblem] = useState<string | null>(null);
   const [launching, setLaunching] = useState(false);
+  const [autoRenew, setAutoRenew] = useState(false);
+  const [cardWidget, setCardWidget] = useState<{
+    kind: 'hyperpay' | 'braintree';
+    params: Record<string, string | number | boolean>;
+  } | null>(null);
+  const [offline, setOffline] = useState<{
+    step: Extract<NextStep, { kind: 'instructions' }>;
+    orderNumber: string;
+    orderId: string;
+  } | null>(null);
   const amount = params.get('amount') ?? '';
   // One key per distinct submission: a retry of the same form replays the order instead of creating a second one.
   const attempt = useRef<{ sig: string; key: string } | null>(null);
@@ -61,10 +77,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
       target.kind === 'plan' ? target.planSlug : amount,
       currency,
       period,
+      coupon,
     ),
     queryFn: ({ signal }) =>
       target.kind === 'plan'
-        ? fetchPlanQuote(target.planSlug, { currency, period }, signal)
+        ? fetchPlanQuote(target.planSlug, { currency, period, coupon }, signal)
         : fetchWalletQuote({ currency, amount }, signal),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
@@ -86,9 +103,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         PAYGW_DOWNGRADE_NOT_ALLOWED: 'downgrade',
         PAYGW_AMOUNT_TOO_LOW: 'amountTooLow',
         PAYGW_COUPON_UNAVAILABLE: 'couponUnavailable',
+        PAYGW_COUPON_REJECTED: 'couponRejected',
         FORBIDDEN: 'forbidden',
         NOT_FOUND: 'notFound',
       };
+      // A refused coupon says why (expired, used up, wrong plan...): that sentence is the useful part.
+      if (e.code === 'PAYGW_COUPON_REJECTED' && e.message) return e.message;
       const key = known[e.code];
       if (key) return te(key);
     }
@@ -98,6 +118,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
   const pay = useMutation({
     mutationFn: async () => {
       if (!selected || !q) throw new Error('no gateway');
+      const couponToSend = q.coupon?.ok ? q.coupon.code : undefined;
       const payload = Object.fromEntries(
         Object.entries(billing).filter(([, v]) => v.trim() !== ''),
       ) as PaygwBilling;
@@ -108,6 +129,8 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         q.billingPeriod,
         amount,
         payload,
+        couponToSend,
+        selected.autoRenew && autoRenew,
       ]);
       if (attempt.current?.sig !== sig) attempt.current = { sig, key: crypto.randomUUID() };
       const key = attempt.current.key;
@@ -118,6 +141,8 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               gatewayId: selected.id,
               currency: q.currency,
               period: q.billingPeriod,
+              coupon: couponToSend,
+              autoRenew: selected.autoRenew && autoRenew ? true : undefined,
               billing: payload,
             },
             key,
@@ -133,6 +158,21 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
       if (step.kind === 'navigate') {
         setLaunching(true);
         window.location.assign(step.url);
+      } else if (step.kind === 'instructions') {
+        setOffline({ step, orderNumber: res.orderNumber, orderId: res.orderId });
+      } else if (step.kind === 'form_post') {
+        setLaunching(true);
+        postForm(step.url, step.fields);
+      } else if (step.kind === 'hyperpay' || step.kind === 'braintree') {
+        setCardWidget({ kind: step.kind, params: step.params });
+      } else if (step.kind === 'paddle' || step.kind === 'cashfree') {
+        setLaunching(true);
+        try {
+          await (step.kind === 'paddle' ? openPaddle(step.params) : openCashfree(step.params));
+        } catch {
+          setLaunching(false);
+          setProblem(te('widgetBlocked'));
+        }
       } else if (step.kind === 'razorpay') {
         setLaunching(true);
         try {
@@ -155,6 +195,22 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
 
   if (quote.isError && !q) {
     return <Alert tone="danger">{explain(quote.error)}</Alert>;
+  }
+  if (cardWidget) {
+    return cardWidget.kind === 'hyperpay' ? (
+      <HyperpayWidget params={cardWidget.params} />
+    ) : (
+      <BraintreeWidget params={cardWidget.params} />
+    );
+  }
+  if (offline) {
+    return (
+      <OfflineInstructions
+        step={offline.step}
+        orderNumber={offline.orderNumber}
+        orderId={offline.orderId}
+      />
+    );
   }
   if (!q) {
     return (
@@ -242,12 +298,19 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               />
             </Field>
             <Field label={t('country')} htmlFor="co-country">
-              <Input
+              <Select
                 id="co-country"
                 autoComplete="country-name"
                 value={billing.country}
                 onChange={set('country')}
-              />
+              >
+                <option value="">{t('countryPlaceholder')}</option>
+                {q.countries.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </Select>
             </Field>
           </div>
         </Card>
@@ -288,6 +351,57 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           </Card>
         )}
 
+        {target.kind === 'plan' && (
+          <Card className="space-y-2 p-4">
+            <Field label={t('coupon')} htmlFor="co-coupon">
+              <div className="flex gap-2">
+                <Input
+                  id="co-coupon"
+                  autoComplete="off"
+                  maxLength={64}
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    // Enter applies the coupon; it must not place the order.
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      setCoupon(couponInput.trim() || undefined);
+                    }
+                  }}
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => setCoupon(couponInput.trim() || undefined)}
+                  disabled={quote.isFetching}
+                >
+                  {t('couponApply')}
+                </Button>
+                {coupon && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setCoupon(undefined);
+                      setCouponInput('');
+                    }}
+                  >
+                    {t('couponRemove')}
+                  </Button>
+                )}
+              </div>
+            </Field>
+            {q.coupon && (
+              <p
+                role="status"
+                className={`text-xs ${q.coupon.ok ? 'text-success' : 'text-danger'}`}
+              >
+                {q.coupon.ok
+                  ? t('couponApplied', { code: q.coupon.code, amount: money(q.coupon.discount) })
+                  : q.coupon.message}
+              </p>
+            )}
+          </Card>
+        )}
+
         <Card className="space-y-3 p-4">
           <h2 className="font-medium">{t('paymentMethod')}</h2>
           {q.gateways.length === 0 ? (
@@ -318,6 +432,19 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               ))}
             </fieldset>
           )}
+          {selected?.autoRenew && q.kind === 'addon' && (
+            <p className="text-sm text-muted-foreground" data-testid="addon-renews">
+              {t('addonRenews')}
+            </p>
+          )}
+          {selected?.autoRenew && q.kind !== 'addon' && (
+            <Checkbox
+              id="co-autorenew"
+              checked={autoRenew}
+              onChange={(e) => setAutoRenew(e.target.checked)}
+              label={t('autoRenew')}
+            />
+          )}
         </Card>
 
         <Button type="submit" className="w-full" disabled={!selected || pay.isPending || launching}>
@@ -346,6 +473,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             <dt>{t('subtotal')}</dt>
             <dd className="tabular-nums">{money(q.subtotal)}</dd>
           </div>
+          {Number(q.discount) > 0 && (
+            <div className="flex justify-between text-success">
+              <dt>{t('couponDiscount', { code: q.coupon?.code ?? '' })}</dt>
+              <dd className="tabular-nums">-{money(q.discount)}</dd>
+            </div>
+          )}
           {Number(q.tax) > 0 && (
             <div className="flex justify-between">
               <dt>{t('tax', { label: q.taxLabel, rate: q.taxRate })}</dt>
@@ -359,6 +492,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             </dd>
           </div>
         </dl>
+        {q.refund.enabled && q.refund.days > 0 && (
+          <p className="rounded-md bg-success/10 p-2 text-xs text-success">
+            {t('refundGuarantee', { days: q.refund.days })}
+          </p>
+        )}
         {quote.isFetching && <p className="text-xs text-muted-foreground">{t('updating')}</p>}
       </aside>
     </div>

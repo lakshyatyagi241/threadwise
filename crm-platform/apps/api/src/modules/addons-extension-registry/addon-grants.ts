@@ -92,6 +92,17 @@ export function cardState(g: AddonGrants, ownedCount: number): 'buy' | 'active' 
   return isStackable(g) ? 'buy_again' : 'active';
 }
 
+/**
+ * Where a purchase's term starts counting from. A normal add-on is a stackable boost: every purchase is a term of its own from `now`.
+ * The add-on that sells a Marketplace app is one subscription, not a boost: a second payment extends what is already paid for, so
+ * paying early never loses days (the plan domain's rule for a plan renewal). `currentEnd` is the latest end among the workspace's active
+ * rows of that add-on, or null when it has none, or one with no end.
+ */
+export function termBase(now: Date, isMarketplaceApp: boolean, currentEnd: Date | null): Date {
+  if (!isMarketplaceApp || currentEnd === null) return now;
+  return currentEnd.getTime() > now.getTime() ? currentEnd : now;
+}
+
 export type BillingUnit = 'days' | 'weeks' | 'months' | 'years';
 
 /**
@@ -118,3 +129,20 @@ export function addonEndsAt(
   }
   return d;
 }
+
+/**
+ * SQL for "this purchase still counts" on `workspace_addons a`: active and not past its end, or past its end by less than the
+ * grace days while an autopay subscription for that very purchase is still live (the charge is being retried). Evaluated at read
+ * time, so a renewal or a final failure shows on the next call. The grace days come from the caller because `platform_settings`
+ * is not readable from a tenant transaction.
+ */
+export const addonLiveSql = (graceDays: number): string => {
+  const days = Math.max(0, Math.min(30, Math.trunc(graceDays)));
+  return `a.status = 'active' AND (
+  a.ends_at IS NULL OR a.ends_at > now()
+  OR EXISTS (
+    SELECT 1 FROM subscriptions sb
+    WHERE sb.org_id = a.org_id AND sb.workspace_addon_id = a.id AND sb.kind = 'addon'
+      AND sb.status IN ('active', 'past_due')
+      AND a.ends_at > now() - make_interval(days => ${days})))`;
+};

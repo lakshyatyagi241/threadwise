@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
-import { minLengthFrom, policyViolations } from './policy-rules';
+import { minLengthFrom, policyViolations, requirementsOf } from './policy-rules';
 
 const policyError = (fieldErrors: Array<{ path: string; message: string }>) =>
   new ApiError(422, 'AUTH_PASSWORD_POLICY', 'x', 'req', fieldErrors);
@@ -76,5 +76,24 @@ describe('policyViolations', () => {
   it('can read another field name', () => {
     const e = policyError([{ path: 'password.symbol', message: 'Include at least one symbol.' }]);
     expect(policyViolations(e, 'password').map((v) => v.rule)).toEqual(['symbol']);
+  });
+});
+
+describe('requirementsOf', () => {
+  it('lists only what the live policy asks for, in a fixed order', () => {
+    expect(
+      requirementsOf({ requireMixedCase: true, requireNumber: true, requireSymbol: false }),
+    ).toEqual(['mixedCase', 'number']);
+    expect(
+      requirementsOf({ requireMixedCase: false, requireNumber: false, requireSymbol: true }),
+    ).toEqual(['symbol']);
+    expect(
+      requirementsOf({ requireMixedCase: true, requireNumber: true, requireSymbol: true }),
+    ).toEqual(['mixedCase', 'number', 'symbol']);
+  });
+  it('is empty for a length-only policy', () => {
+    expect(
+      requirementsOf({ requireMixedCase: false, requireNumber: false, requireSymbol: false }),
+    ).toEqual([]);
   });
 });

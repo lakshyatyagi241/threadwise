@@ -1,4 +1,5 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
+import { currencyExponent } from '@crm/contracts';
 
 /**
  * The port every gateway driver implements (WD-PAYGW-008, 048). It knows nothing about plans, workspaces or wallets: a
@@ -19,6 +20,14 @@ export interface DriverOrder {
   customerEmail?: string | null;
   /** The provider's own id for this payment, set after `initiate` (needed to confirm it). */
   gatewayOrderId?: string | null;
+  /** Item name for providers that name the plan they create (recurring only). */
+  planName?: string;
+  /** Renewal cadence for `createSubscription` (WD-PAYGW-012). */
+  recurring?: { interval: 'day' | 'week' | 'month' | 'year'; count: number };
+  /** The order is an auto-renew checkout (the driver then sets up the subscription when the buyer returns). */
+  isRecurring?: boolean;
+  /** A support reference (never an internal id) some providers want in their metadata, e.g. the workspace slug. */
+  workspaceRef?: string;
 }
 
 export interface DriverUrls {
@@ -32,14 +41,30 @@ export type PaymentStatus = 'pending' | 'paid' | 'failed';
 
 /** A widget the browser runs with these parameters. No server-rendered HTML ever reaches the buyer. */
 export interface ClientAction {
-  provider: 'razorpay';
+  provider: 'razorpay' | 'paddle' | 'cashfree' | 'hyperpay' | 'braintree';
   params: Record<string, string | number | boolean>;
+}
+
+/** WaDesk returned an auto-submitting HTML form for some gateways; here the browser builds the POST from plain fields. */
+export interface FormPost {
+  url: string;
+  fields: Record<string, string>;
+}
+
+/** Offline gateways: nothing is charged, the buyer is shown what to do and then uploads proof (WD-PAYGW-013). */
+export interface ManualInstructions {
+  kind: 'bank_transfer' | 'offline';
+  /** Label + value rows, only the ones the operator filled in. */
+  rows: Array<{ label: string; value: string }>;
+  notes: string | null;
 }
 
 export interface PaymentResult {
   status: PaymentStatus;
   redirectUrl?: string;
   clientAction?: ClientAction;
+  formPost?: FormPost;
+  instructions?: ManualInstructions;
   gatewayOrderId?: string;
   gatewayPaymentId?: string;
   payload?: Record<string, unknown>;
@@ -91,6 +116,48 @@ export interface PaymentDriver {
   verifyWebhook(rawBody: Buffer, headers: Record<string, string | undefined>): Promise<boolean>;
   /** The payment a verified notification announces, or null when it is some other event. */
   parseWebhook(body: unknown): WebhookPayment | null;
+  /**
+   * Stop a recurring subscription from renewing (WD-PLAN-012). The period already paid for keeps running. Optional: a driver without a
+   * recurring product leaves it out and the caller records that the remote cancel was not possible. Never throws for a provider
+   * failure: returns `{ ok: false, reason }`.
+   */
+  cancelSubscription?(ref: SubscriptionRef): Promise<CancelResult>;
+  /** Recurring (WD-PAYGW-012/029/030). A driver that leaves these out is always charged one-time. */
+  supportsRecurring?(): boolean;
+  createSubscription?(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult>;
+  /** The subscription event a verified notification announces, or null. Matches orders by OUR order number only. */
+  parseSubscriptionWebhook?(body: unknown): SubscriptionEvent | null;
+  /** Poll the provider for the state of one subscription (the reconciler); null = cannot tell. */
+  fetchSubscription?(ref: SubscriptionRef): Promise<SubscriptionState | null>;
+}
+
+export interface SubscriptionEvent {
+  type: 'created' | 'renewed' | 'canceled' | 'payment_failed';
+  subscriptionId: string | null;
+  gatewayPlanId?: string | null;
+  paymentId?: string | null;
+  /** Unix seconds, ISO string or null: when the paid period ends according to the provider. */
+  periodEnd?: string | number | null;
+  /** Our order number when the provider echoed it (first charge); renewals carry only the subscription id. */
+  orderNumber?: string | null;
+}
+
+export interface SubscriptionState {
+  status: 'active' | 'past_due' | 'canceled' | 'expired';
+  periodEnd?: string | number | null;
+}
+
+/** What a gateway needs to find one subscription (the ids it handed us when the subscription was created). */
+export interface SubscriptionRef {
+  gatewaySubscriptionId: string;
+  gatewayCustomerId: string | null;
+  gatewayPlanId: string | null;
+}
+
+export interface CancelResult {
+  ok: boolean;
+  /** Machine-ish reason on failure, stored on the subscription so a failed remote cancel is visible. */
+  reason?: string;
 }
 
 /** One HTTP call, injectable so drivers are tested against fixtures and never touch the network in tests. */
@@ -118,17 +185,113 @@ export const defaultHttp: HttpFetch = async (url, init) => {
   return { status: res.status, json, text };
 };
 
+/** What identifies a provider plan: the same account, price and cadence is the same plan, so it is created once and reused. */
+export interface ProviderPlanKey {
+  /** Opaque, stable per provider account (a hash of the key id), so a test key and a live key never share a plan. */
+  account: string;
+  currency: string;
+  amountMinor: bigint;
+  unit: 'day' | 'week' | 'month' | 'year';
+  count: number;
+}
+
+/** Optional store a driver may use to avoid creating a new provider plan on every checkout. A miss or a failure is never fatal. */
+export interface ProviderPlanCache {
+  find(key: ProviderPlanKey): Promise<string | null>;
+  save(key: ProviderPlanKey, providerPlanId: string): Promise<void>;
+}
+
 export interface DriverContext {
   credentials: Record<string, string>;
   mode: 'sandbox' | 'live';
   http: HttpFetch;
+  /** The URL a provider posts notifications to (Square signs it into its notification signature). */
+  webhookUrl?: string;
+  planCache?: ProviderPlanCache;
 }
 
 export const basicAuth = (user: string, pass: string): string =>
   `Basic ${Buffer.from(`${user}:${pass}`).toString('base64')}`;
 
-export const hmacHex = (algo: 'sha256', secret: string, data: string | Buffer): string =>
-  createHmac(algo, secret).update(data).digest('hex');
+export const hmacHex = (
+  algo: 'sha256' | 'sha512' | 'sha1' | 'md5',
+  secret: string,
+  data: string | Buffer,
+): string => createHmac(algo, secret).update(data).digest('hex');
+
+export const hmacB64 = (
+  algo: 'sha256' | 'sha512' | 'sha1',
+  secret: string,
+  data: string | Buffer,
+): string => createHmac(algo, secret).update(data).digest('base64');
+
+export const hashHex = (algo: 'sha256' | 'sha512' | 'sha1' | 'md5', data: string): string =>
+  createHash(algo).update(data).digest('hex');
+
+export const bearer = (token: string): string => `Bearer ${token}`;
+
+/** application/x-www-form-urlencoded body from a flat record; undefined values are dropped. */
+export const urlForm = (
+  rec: Record<string, string | number | boolean | undefined | null>,
+): string =>
+  new URLSearchParams(
+    Object.entries(rec)
+      .filter(([, v]) => v !== undefined && v !== null)
+      .map(([k, v]) => [k, String(v)] as [string, string]),
+  ).toString();
+
+export const JSON_HEADERS = { 'Content-Type': 'application/json', Accept: 'application/json' };
+
+/** Runs a driver step and turns a thrown error into `failed('<slug>_exception: ...')`: a driver never throws for a provider failure. */
+export async function guard(
+  slug: string,
+  fn: () => Promise<PaymentResult>,
+): Promise<PaymentResult> {
+  try {
+    return await fn();
+  } catch (e) {
+    return failed(`${slug}_exception: ${brief(e)}`);
+  }
+}
+
+/** Case-insensitive header read (Node lower-cases, tests may not). */
+export const header = (h: Record<string, string | undefined>, name: string): string | undefined =>
+  h[name] ?? h[name.toLowerCase()];
+
+/** Provider date (unix seconds or any date string) as ISO, or null. */
+export function toIso(v: unknown): string | null {
+  if (v === null || v === undefined || v === '') return null;
+  const d =
+    typeof v === 'number' || /^\d{9,11}$/.test(String(v))
+      ? new Date(Number(v) * 1000)
+      : new Date(String(v));
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+/** A provider's decimal amount (major units) as exact minor units; null when it is not a number. */
+export function minorOf(amountMajor: unknown, currency: string): bigint | null {
+  const n = typeof amountMajor === 'number' ? amountMajor : Number(amountMajor);
+  if (!Number.isFinite(n)) return null;
+  return BigInt(Math.round(n * 10 ** currencyExponent(currency)));
+}
+
+/** What the provider says it collected must equal the order. Currency is optional where the API omits it. */
+export function moneyMatches(o: DriverOrder, amountMajor: unknown, currency?: unknown): boolean {
+  if (currency !== undefined && currency !== null && String(currency).toUpperCase() !== o.currency)
+    return false;
+  return minorOf(amountMajor, o.currency) === o.amountMinor;
+}
+
+/** Same check for providers that report minor units. */
+export function minorMatches(o: DriverOrder, amountMinor: unknown, currency?: unknown): boolean {
+  if (currency !== undefined && currency !== null && String(currency).toUpperCase() !== o.currency)
+    return false;
+  try {
+    return BigInt(String(amountMinor)) === o.amountMinor;
+  } catch {
+    return false;
+  }
+}
 
 /** Constant-time string equality that does not throw on different lengths. */
 export function safeEqual(a: string, b: string): boolean {
@@ -147,3 +310,24 @@ export const isOk = (r: HttpResponse): boolean => r.status >= 200 && r.status < 
 /** Never let a vendor error body (which may echo secrets or PII) into a stored reason longer than needed. */
 export const brief = (e: unknown): string =>
   (e instanceof Error ? e.message : String(e)).slice(0, 200);
+
+/** A form-encoded notification body as a flat record (last value wins). */
+export function parseForm(raw: Buffer | string): Record<string, string> {
+  return Object.fromEntries(new URLSearchParams(raw.toString('utf8')).entries());
+}
+
+/** Appends query parameters to a URL that may already have a query string. */
+export function withQuery(url: string, params: Record<string, string>): string {
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}${new URLSearchParams(params).toString()}`;
+}
+
+/** A notification body as a flat record: JSON object, else form-encoded, else empty (callers then reject it). */
+export function notificationFields(raw: Buffer | string): Record<string, unknown> {
+  const text = raw.toString('utf8');
+  try {
+    return asRecord(JSON.parse(text));
+  } catch {
+    return /^[^=&\s]+=/.test(text) ? parseForm(text) : {};
+  }
+}

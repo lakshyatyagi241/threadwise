@@ -51,6 +51,8 @@ const addonFieldsShape = {
     .regex(/^[A-Z]{3}$/, 'Use a three-letter currency code.'),
   billingUnit: planBillingUnitSchema.default('months'),
   billingDuration: z.number().int().min(1).max(120).default(1),
+  /** `recurring` renews by autopay; a lifetime or free pack can only be one-time (checked in the request refinement). */
+  billingMode: z.enum(['one_time', 'recurring']).default('one_time'),
   isLifetime: z.boolean().default(false),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().min(0).max(100_000).default(0),
@@ -61,17 +63,28 @@ const addonFieldsShape = {
 export interface AddonRuleInput {
   amount: string;
   offerAmount: string | null;
+  billingMode?: 'one_time' | 'recurring';
+  isLifetime?: boolean;
 }
 
 /** The cross-field rule: an offer is a discount, strictly below the price; a free pack has none (WD-ADD-028 rule 1). */
 export function checkAddonRules(
   p: AddonRuleInput,
-): Array<{ path: 'offerAmount'; message: string }> {
-  if (p.offerAmount === null) return [];
-  if (moneyCents(p.amount) === 0 || moneyCents(p.offerAmount) >= moneyCents(p.amount)) {
-    return [{ path: 'offerAmount', message: 'The offer price must be lower than the price.' }];
+): Array<{ path: 'offerAmount' | 'billingMode'; message: string }> {
+  const out: Array<{ path: 'offerAmount' | 'billingMode'; message: string }> = [];
+  if (
+    p.offerAmount !== null &&
+    (moneyCents(p.amount) === 0 || moneyCents(p.offerAmount) >= moneyCents(p.amount))
+  ) {
+    out.push({ path: 'offerAmount', message: 'The offer price must be lower than the price.' });
   }
-  return [];
+  if (p.billingMode === 'recurring' && (p.isLifetime || moneyCents(p.amount) === 0)) {
+    out.push({
+      path: 'billingMode',
+      message: 'A free or lifetime add-on cannot renew automatically.',
+    });
+  }
+  return out;
 }
 
 export const createAddonRequestSchema = z.object(addonFieldsShape).superRefine((value, ctx) => {
@@ -107,6 +120,7 @@ export const addonPackSchema = z.object({
   currency: z.string(),
   billingUnit: planBillingUnitSchema,
   billingDuration: z.number().int(),
+  billingMode: z.enum(['one_time', 'recurring']),
   isFree: z.boolean(),
   isLifetime: z.boolean(),
   isActive: z.boolean(),
@@ -153,6 +167,7 @@ export const addonCardSchema = z.object({
   isLifetime: z.boolean(),
   billingUnit: planBillingUnitSchema,
   billingDuration: z.number().int(),
+  billingMode: z.enum(['one_time', 'recurring']),
   /** At most five. */
   grantBullets: z.array(addonBulletSchema).max(5),
   ownedCount: z.number().int().nonnegative(),
@@ -168,6 +183,8 @@ export const ownedAddonSchema = z.object({
   startsAt: z.string().datetime().nullable(),
   /** null = lifetime. */
   endsAt: z.string().datetime().nullable(),
+  /** An autopay subscription is live for this purchase: it renews on its own until cancelled. */
+  renews: z.boolean(),
 });
 export type OwnedAddon = z.infer<typeof ownedAddonSchema>;
 

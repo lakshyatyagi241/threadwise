@@ -16,4 +16,8 @@ export const PAYGW_ERROR_CODES = {
   PAYGW_COUPON_UNAVAILABLE: 'PAYGW_COUPON_UNAVAILABLE',
   PAYGW_WEBHOOK_SECRET_MISSING: 'PAYGW_WEBHOOK_SECRET_MISSING',
   PAYGW_SIGNATURE_MISMATCH: 'PAYGW_SIGNATURE_MISMATCH',
+  /** The coupon code was refused (unknown, expired, used up, wrong plan or currency...). The message says which. */
+  PAYGW_COUPON_REJECTED: 'PAYGW_COUPON_REJECTED',
+  /** An admin action the order's current status does not allow (cancel a paid order, void a paid invoice...). */
+  PAYGW_ORDER_STATE: 'PAYGW_ORDER_STATE',
 } as const;

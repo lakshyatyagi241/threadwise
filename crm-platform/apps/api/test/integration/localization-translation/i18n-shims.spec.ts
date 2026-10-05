@@ -210,20 +210,40 @@ describe('keyword rule and conversation message stores (WD-I18N-032, 033, 036, 0
     let template: number;
 
     beforeAll(async () => {
-      conv = Number(
+      // A thread now belongs to a channel (`channel_id`, `peer_key` are required) and a message to a thread (`seq`).
+      const channel = Number(
         (
           await owner.query(
-            `INSERT INTO conversations (org_id, title) VALUES ($1, 'c') RETURNING id`,
+            `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
             [orgA],
           )
         ).rows[0].id,
       );
+      conv = Number(
+        (
+          await owner.query(
+            `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, '15550001', 'c') RETURNING id`,
+            [orgA, channel],
+          )
+        ).rows[0].id,
+      );
+      let seq = 0;
       const msg = async (direction: string, body: string, meta: string | null = null) =>
         Number(
           (
             await owner.query(
-              `INSERT INTO inbox_messages (org_id, conversation_id, direction, body, meta) VALUES ($1, $2, $3, $4, $5::jsonb) RETURNING id`,
-              [orgA, conv, direction, body, meta],
+              `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, body, meta)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::jsonb, '{}'::jsonb)) RETURNING id`,
+              [
+                orgA,
+                conv,
+                ++seq,
+                direction,
+                direction === 'in' ? 'customer' : 'agent',
+                direction === 'in' ? 'received' : 'sent',
+                body,
+                meta,
+              ],
             )
           ).rows[0].id,
         );
@@ -244,6 +264,14 @@ describe('keyword rule and conversation message stores (WD-I18N-032, 033, 036, 0
       expect(await messages.load(orgA, 999_999)).toBeNull();
     });
 
+    it('finds a message id from its public uuid, in its own workspace only', async () => {
+      const uuid = (await owner.query(`SELECT uuid FROM messages WHERE id = $1`, [inbound])).rows[0]
+        .uuid as string;
+      expect(await messages.idOfUuid(orgA, uuid)).toBe(inbound);
+      expect(await messages.idOfUuid(orgB, uuid)).toBeNull();
+      expect(await messages.idOfUuid(orgA, '00000000-0000-4000-8000-000000000000')).toBeNull();
+    });
+
     it('does not see another workspace message', async () => {
       expect(await messages.load(orgB, inbound)).toBeNull();
     });
@@ -258,7 +286,7 @@ describe('keyword rule and conversation message stores (WD-I18N-032, 033, 036, 0
       });
       const row = (
         await owner.query(
-          `SELECT detected_language, translated_body, is_translated, body FROM inbox_messages WHERE id = $1`,
+          `SELECT detected_language, translated_body, is_translated, body FROM messages WHERE id = $1`,
           [inbound],
         )
       ).rows[0];
@@ -297,7 +325,7 @@ describe('keyword rule and conversation message stores (WD-I18N-032, 033, 036, 0
       });
       const row = (
         await owner.query(
-          `SELECT translated_body, detected_language, is_translated, body FROM inbox_messages WHERE id = $1`,
+          `SELECT translated_body, detected_language, is_translated, body FROM messages WHERE id = $1`,
           [outbound],
         )
       ).rows[0];

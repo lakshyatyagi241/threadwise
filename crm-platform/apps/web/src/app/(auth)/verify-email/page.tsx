@@ -5,6 +5,7 @@ import {
   firstParam,
   guestHeader,
   guestMetadata,
+  guestPanel,
   loadRegistrationConfig,
 } from '@/features/auth-registration-security/guest/server';
 
@@ -23,7 +24,12 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
   const config = await loadRegistrationConfig();
   const usable = Boolean(org) && token.length >= 16 && token.length <= 128;
   return (
-    <GuestFrame page="forgot" variant={3} config={config} header={await guestHeader('verifyEmail')}>
+    <GuestFrame
+      page="forgot"
+      config={config}
+      fixedPanel={await guestPanel('verifyEmail')}
+      header={await guestHeader('verifyEmail')}
+    >
       <LinkLanding kind="verifyEmail" org={org} token={token} usable={usable} />
     </GuestFrame>
   );

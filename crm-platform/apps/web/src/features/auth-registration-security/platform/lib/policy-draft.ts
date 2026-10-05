@@ -1,4 +1,10 @@
-import type { SecurityPolicy, SecurityPolicyPatch } from '@crm/contracts';
+import {
+  KEYWORD_LIST_MAX_CHARS,
+  keywordListLength,
+  securityPolicySchema,
+  type SecurityPolicy,
+  type SecurityPolicyPatch,
+} from '@crm/contracts';
 import { isValidAllowlistEntry } from './cidr';
 import { formatList, parseList, sameList } from './list-text';
 
@@ -16,10 +22,11 @@ export interface NumericSpec {
   allowZero?: boolean;
 }
 
-export const NUMERIC_FIELDS = {
-  sessionTimeoutMinutes: { min: 5, max: 1440, allowZero: true },
-  maxConcurrentSessions: { min: 1, max: 50, allowZero: true },
-  lockoutAfterFailures: { min: 1, max: 50, allowZero: true },
+/** The numeric controls and their allowed range, as the Security Center form states it. */
+const RANGES = {
+  sessionTimeoutMinutes: { min: 5, max: 1440 },
+  maxConcurrentSessions: { min: 1, max: 50 },
+  lockoutAfterFailures: { min: 1, max: 50 },
   lockoutWindowMinutes: { min: 1, max: 1440 },
   passwordMinLength: { min: 6, max: 128 },
   passwordMaxAgeDays: { min: 0, max: 3650 },
@@ -30,8 +37,24 @@ export const NUMERIC_FIELDS = {
   webhookReplayWindowSec: { min: 10, max: 3600 },
   deviceLogoutOnInactiveDays: { min: 0, max: 3650 },
   auditLogRetentionDays: { min: 0, max: 3650 },
-} as const satisfies Record<string, NumericSpec>;
-export type NumericKey = keyof typeof NUMERIC_FIELDS;
+} as const satisfies Record<string, { min: number; max: number }>;
+export type NumericKey = keyof typeof RANGES;
+
+/**
+ * Whether the API takes 0 for a control whose range starts higher (0 = off / unlimited). Asked of the
+ * contract itself, so the form can never offer a value the API refuses or hide one it accepts.
+ */
+const contractAcceptsZero = (key: NumericKey): boolean =>
+  securityPolicySchema.shape[key].safeParse(0).success;
+
+export const NUMERIC_FIELDS: Record<NumericKey, NumericSpec> = Object.fromEntries(
+  (Object.keys(RANGES) as NumericKey[]).map((key) => [
+    key,
+    RANGES[key].min > 0
+      ? { ...RANGES[key], allowZero: contractAcceptsZero(key) }
+      : { ...RANGES[key] },
+  ]),
+) as Record<NumericKey, NumericSpec>;
 export const NUMERIC_KEYS = Object.keys(NUMERIC_FIELDS) as NumericKey[];
 
 export const BOOLEAN_KEYS = [
@@ -57,11 +80,11 @@ export type BooleanKey = (typeof BOOLEAN_KEYS)[number];
 export const MFA_METHODS = ['totp', 'email', 'telegram'] as const;
 export type MfaMethod = (typeof MFA_METHODS)[number];
 
+/** The allowlist keeps per-entry limits; the keyword list is capped on its total length instead (see `KEYWORD_LIST_MAX_CHARS`). */
 export const LIST_LIMITS = {
-  abuseBlockKeywordList: { maxItems: 200, maxLength: 100 },
   ipAllowlistCidrs: { maxItems: 200, maxLength: 64 },
 } as const;
-export type ListKey = keyof typeof LIST_LIMITS;
+export type ListKey = keyof typeof LIST_LIMITS | 'abuseBlockKeywordList';
 
 export type PolicyDraft = { [K in BooleanKey]: boolean } & { [K in NumericKey]: string } & {
   allowedMfaMethods: MfaMethod[];
@@ -89,6 +112,8 @@ export type FieldProblem =
   | { code: 'range'; min: number; max: number; allowZero: boolean }
   | { code: 'tooMany'; max: number }
   | { code: 'tooLong'; max: number }
+  /** Characters over all the items together (the keyword list). */
+  | { code: 'totalTooLong'; max: number }
   | { code: 'invalidEntry'; entry: string };
 export type PolicyProblems = Partial<Record<keyof SecurityPolicy, FieldProblem>>;
 
@@ -139,15 +164,20 @@ export function buildPolicyPatch(
     if (!sameList(next, prev)) patch.allowedMfaMethods = next;
   }
 
-  for (const key of Object.keys(LIST_LIMITS) as ListKey[]) {
+  for (const key of ['abuseBlockKeywordList', 'ipAllowlistCidrs'] as const) {
     const items = parseList(draft[key]);
-    const limit = LIST_LIMITS[key];
-    if (items.length > limit.maxItems) problems[key] = { code: 'tooMany', max: limit.maxItems };
-    else if (items.some((i) => i.length > limit.maxLength))
-      problems[key] = { code: 'tooLong', max: limit.maxLength };
-    else if (key === 'ipAllowlistCidrs') {
-      const bad = items.find((i) => !isValidAllowlistEntry(i));
-      if (bad) problems[key] = { code: 'invalidEntry', entry: bad };
+    if (key === 'abuseBlockKeywordList') {
+      if (keywordListLength(items) > KEYWORD_LIST_MAX_CHARS)
+        problems[key] = { code: 'totalTooLong', max: KEYWORD_LIST_MAX_CHARS };
+    } else {
+      const limit = LIST_LIMITS[key];
+      if (items.length > limit.maxItems) problems[key] = { code: 'tooMany', max: limit.maxItems };
+      else if (items.some((i) => i.length > limit.maxLength))
+        problems[key] = { code: 'tooLong', max: limit.maxLength };
+      else {
+        const bad = items.find((i) => !isValidAllowlistEntry(i));
+        if (bad) problems[key] = { code: 'invalidEntry', entry: bad };
+      }
     }
     if (!problems[key] && !sameList(items, base[key])) patch[key] = items;
   }

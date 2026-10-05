@@ -68,6 +68,8 @@ export const wabaReadinessSchema = z.object({
   /** Interakt's `extras.setup.solutionID`; null on the direct-Meta route. */
   solutionId: z.string().nullable(),
   graphVersion: z.string(),
+  /** Whether the "connect my existing Business App number" button is offered. */
+  coexistence: z.boolean(),
   defaultProvider: wabaProviderSchema,
   /** Environment names still unset, so an admin sees exactly what blocks Embedded Signup. */
   missing: z.array(z.string()),
@@ -75,6 +77,17 @@ export const wabaReadinessSchema = z.object({
   webhookUrl: z.string().nullable(),
 });
 export type WabaReadiness = z.infer<typeof wabaReadinessSchema>;
+
+/** `GET /v2/platform/waba/callback` (super admin): what to paste into the Meta app's WhatsApp > Configuration. */
+export const wabaPlatformCallbackSchema = z.object({
+  webhookUrl: z.string().nullable(),
+  verifyToken: z.string(),
+  /** The webhook fields to subscribe. */
+  fields: z.array(z.string()),
+  /** WABA numbers connected across every workspace (WaDesk: "Connected WABAs"). */
+  connectedWabas: z.number().int().nonnegative(),
+});
+export type WabaPlatformCallback = z.infer<typeof wabaPlatformCallbackSchema>;
 
 // --- connecting ------------------------------------------------------------------------------------------------------
 
@@ -149,6 +162,78 @@ export const updateConnectionInputSchema = z.object({
   rowVersion: z.number().int().optional(),
 });
 export type UpdateConnectionInput = z.infer<typeof updateConnectionInputSchema>;
+
+// --- health ----------------------------------------------------------------------------------------------------------
+
+export const wabaHealthSeveritySchema = z.enum(['ok', 'warning', 'error']);
+export type WabaHealthSeverity = z.infer<typeof wabaHealthSeveritySchema>;
+
+export const wabaHealthIssueSchema = z.object({
+  /** Stable key the screen translates from; branch on this, never on `title`. */
+  key: z.string(),
+  severity: z.enum(['warning', 'error']),
+  title: z.string(),
+  solution: z.string(),
+});
+export type WabaHealthIssue = z.infer<typeof wabaHealthIssueSchema>;
+
+/** `GET /v2/waba/numbers/:id/health`: the number as Meta reports it right now, plus what is wrong with it (WD-WABA-021, 022). */
+export const wabaHealthSchema = z.object({
+  connection: wabaConnectionSchema,
+  overall: wabaHealthSeveritySchema,
+  issues: z.array(wabaHealthIssueSchema),
+  /** The token with its middle masked; never the token. Null when none is stored. */
+  tokenHint: z.string().nullable(),
+  checkedAt: z.string().datetime(),
+  /** What the other Meta reads found. Each part is independent: one failing read leaves the rest and adds to `errors`. */
+  details: z.object({
+    waba: z
+      .object({
+        name: z.string().nullable(),
+        currency: z.string().nullable(),
+        timezoneId: z.string().nullable(),
+        accountReviewStatus: z.string().nullable(),
+        businessVerificationStatus: z.string().nullable(),
+        ownerBusinessName: z.string().nullable(),
+        ownershipType: z.string().nullable(),
+      })
+      .nullable(),
+    token: z.object({
+      /** null = Meta could not be asked (no app credentials on the platform). */
+      valid: z.boolean().nullable(),
+      scopes: z.array(z.string()),
+      expiresAt: z.string().datetime().nullable(),
+      appId: z.string().nullable(),
+    }),
+    webhook: z.object({ subscribedApps: z.array(z.string()) }).nullable(),
+    templates: z
+      .object({
+        /** Counted over the first 100 only (WaDesk counts the first 200): a tally, not an inventory. */
+        sampled: z.number().int(),
+        byStatus: z.record(z.number().int()),
+      })
+      .nullable(),
+    phone: z.object({
+      accountMode: z.string().nullable(),
+      isOfficialBusinessAccount: z.boolean().nullable(),
+      isPinEnabled: z.boolean().nullable(),
+    }),
+    /** This month's free service conversations (WD-WABA-023). Null when Meta's analytics did not answer: the card is then not shown. */
+    conversations: z
+      .object({
+        freeUsed: z.number().int(),
+        freeTotal: z.number().int(),
+        freeLeft: z.number().int(),
+        paid: z.number().int(),
+        total: z.number().int(),
+        cost: z.number(),
+      })
+      .nullable()
+      .optional(),
+    errors: z.array(z.string()),
+  }),
+});
+export type WabaHealth = z.infer<typeof wabaHealthSchema>;
 
 // --- business profile ------------------------------------------------------------------------------------------------
 

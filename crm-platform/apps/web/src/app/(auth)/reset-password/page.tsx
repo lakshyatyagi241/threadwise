@@ -8,6 +8,8 @@ import {
   firstParam,
   guestHeader,
   guestMetadata,
+  guestPanel,
+  loadPasswordPolicy,
   loadRegistrationConfig,
 } from '@/features/auth-registration-security/guest/server';
 
@@ -17,17 +19,27 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 /**
  * Reset password (WD-AUTH-014): opened from the emailed link `?org=&token=`. An email-link landing page, so a
- * signed-in visitor is not redirected away. Fixed design (not variant-aware), as in WaDesk.
+ * signed-in visitor is not redirected away. Fixed split design with a panel of its own, whatever design the
+ * administrator picked for the sign-in pages, as in WaDesk.
  */
 export default async function ResetPasswordPage({ searchParams }: { searchParams: SearchParams }) {
   const sp = await searchParams;
   const org = cleanSlug(firstParam(sp.org));
   const token = firstParam(sp.token).trim();
-  const config = await loadRegistrationConfig();
+  const [config, policy] = await Promise.all([loadRegistrationConfig(), loadPasswordPolicy()]);
   const usable = Boolean(org) && token.length >= 16 && token.length <= 128;
   return (
-    <GuestFrame page="forgot" variant={3} config={config} header={await guestHeader('reset')}>
-      {usable ? <ResetForm org={org} token={token} /> : <InvalidResetLink org={org} />}
+    <GuestFrame
+      page="forgot"
+      config={config}
+      fixedPanel={await guestPanel('reset')}
+      header={await guestHeader('reset')}
+    >
+      {usable ? (
+        <ResetForm org={org} token={token} passwordPolicy={policy} />
+      ) : (
+        <InvalidResetLink org={org} />
+      )}
     </GuestFrame>
   );
 }

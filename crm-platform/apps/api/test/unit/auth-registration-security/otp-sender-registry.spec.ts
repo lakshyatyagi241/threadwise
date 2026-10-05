@@ -48,7 +48,7 @@ describe('OTP sender registry', () => {
     );
     expect(sender).toMatchObject({
       kind: 'waba',
-      graphBaseUrl: 'https://graph.facebook.com/v21.0',
+      graphBaseUrl: 'https://graph.facebook.com/v23.0',
       hasSecret: true,
     });
     expect(JSON.stringify(sender)).not.toContain('EAAG-the-token');

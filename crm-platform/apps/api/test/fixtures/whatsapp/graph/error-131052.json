@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "Media download error",
+    "type": "OAuthException",
+    "code": 131052,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

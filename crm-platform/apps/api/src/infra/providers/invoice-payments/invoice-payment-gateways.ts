@@ -61,10 +61,7 @@ export class HmacGenericGateway implements InvoicePaymentGateway {
     if (!t || !/^\d{1,12}$/.test(t) || sigs.length === 0) return false;
     if (Math.abs(now.getTime() / 1000 - Number(t)) > WEBHOOK_TOLERANCE_SECONDS) return false;
 
-    const expected = createHmac('sha256', secret)
-      .update(`${t}.`)
-      .update(rawBody)
-      .digest();
+    const expected = createHmac('sha256', secret).update(`${t}.`).update(rawBody).digest();
     return sigs.some((sig) => {
       if (!/^[0-9a-f]{64}$/i.test(sig)) return false;
       return timingSafeEqual(expected, Buffer.from(sig, 'hex'));

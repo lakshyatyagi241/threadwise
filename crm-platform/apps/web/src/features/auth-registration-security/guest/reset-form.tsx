@@ -1,7 +1,10 @@
 'use client';
 
-import { neutralAckSchema, resetPasswordRequestSchema } from '@crm/contracts';
-import { Button, PasswordInput, Spinner } from '@crm/ui';
+import {
+  neutralAckSchema,
+  resetPasswordRequestSchema,
+  type PasswordPolicyHint,
+} from '@crm/contracts';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -12,6 +15,8 @@ import { dropKey, focusFirstInvalid } from './focus';
 import { FormError } from './form-error';
 import { FormField } from './form-field';
 import { PolicyErrors } from './policy-errors';
+import { longEnough, policyHintParts } from './policy-hint';
+import { Alert, ArrowIcon, Button, LINK, PRIMARY_LINK, PasswordInput, Spinner } from './ui';
 
 const FIELD_ORDER = ['password', 'confirmPassword'] as const;
 
@@ -20,23 +25,20 @@ export function InvalidResetLink({ org }: { org: string }) {
   const t = useTranslations('auth-registration-security.guest.reset');
   return (
     <div className="space-y-4">
-      <div
-        role="alert"
-        className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
-      >
-        <p className="font-medium">{t('invalidTitle')}</p>
+      <Alert tone="danger" className="space-y-0.5">
+        <p className="font-semibold">{t('invalidTitle')}</p>
         <p>{t('invalidBody')}</p>
-      </div>
-      <div className="flex flex-col items-center gap-2 text-sm">
+      </Alert>
+      <div className="flex flex-col items-center gap-3 text-[12.5px]">
         <Link
           href={org ? `/forgot-password?org=${encodeURIComponent(org)}` : '/forgot-password'}
-          className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 font-medium text-primary-foreground hover:opacity-90"
+          className={PRIMARY_LINK}
         >
           {t('requestNew')}
         </Link>
         <Link
           href={org ? `/login?org=${encodeURIComponent(org)}` : '/login'}
-          className="text-muted-foreground underline-offset-2 hover:underline"
+          className="text-(--auth-ink-500) hover:text-foreground"
         >
           {t('back')}
         </Link>
@@ -46,11 +48,26 @@ export function InvalidResetLink({ org }: { org: string }) {
 }
 
 /** Reset password (WD-AUTH-014): consumes the emailed token; success goes to sign-in, never straight into the app. */
-export function ResetForm({ org, token }: { org: string; token: string }) {
+export function ResetForm({
+  org,
+  token,
+  passwordPolicy,
+}: {
+  org: string;
+  token: string;
+  /** The live password rules for the hint; null when they could not be read. */
+  passwordPolicy: PasswordPolicyHint | null;
+}) {
   const t = useTranslations('auth-registration-security.guest.reset');
   const tl = useTranslations('auth-registration-security.guest.login');
   const tv = useTranslations('auth-registration-security.guest.validation');
+  const tp = useTranslations('auth-registration-security.guest.policy');
   const router = useRouter();
+  const policy = policyHintParts(passwordPolicy);
+  const passwordHint = [
+    tp('minLength', { min: policy.min }),
+    ...policy.extras.map((e) => tp(e)),
+  ].join(' ');
   const form = useRef<HTMLFormElement>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<MappedError | null>(null);
@@ -75,7 +92,10 @@ export function ResetForm({ org, token }: { org: string; token: string }) {
         setInvalid(true);
         return;
       }
-      messages.password = tv('newPassword');
+      messages.password = tv('newPassword', { min: policy.min });
+      failed.push('password');
+    } else if (!longEnough(password, policy)) {
+      messages.password = tv('newPassword', { min: policy.min });
       failed.push('password');
     }
     if (password !== confirm) {
@@ -111,7 +131,7 @@ export function ResetForm({ org, token }: { org: string; token: string }) {
   }
 
   return (
-    <div className="space-y-5">
+    <div>
       <form
         method="post"
         ref={form}
@@ -125,13 +145,14 @@ export function ResetForm({ org, token }: { org: string; token: string }) {
         className="space-y-4"
       >
         <FormError error={error} skipFieldMessage={error?.key === 'passwordPolicy'} />
-        <FormField label={t('password')} hint={t('passwordHint')} error={fieldErrors.password}>
+        <FormField label={t('password')} hint={passwordHint} error={fieldErrors.password}>
           {(p) => (
             <PasswordInput
               {...p}
               name="password"
               autoComplete="new-password"
               autoFocus
+              placeholder="********"
               showLabel={tl('showPassword')}
               hideLabel={tl('hidePassword')}
             />
@@ -143,24 +164,23 @@ export function ResetForm({ org, token }: { org: string; token: string }) {
               {...p}
               name="confirmPassword"
               autoComplete="new-password"
+              placeholder="********"
               showLabel={tl('showPassword')}
               hideLabel={tl('hidePassword')}
             />
           )}
         </FormField>
-        <Button type="submit" className="h-11 w-full" disabled={pending}>
-          {pending && <Spinner label={t('submitting')} />}
+        <Button type="submit" className="mt-2 w-full" disabled={pending}>
+          {pending ? <Spinner label={t('submitting')} /> : null}
           {pending ? t('submitting') : t('submit')}
+          {!pending && <ArrowIcon />}
         </Button>
+        <p className="mt-2 text-center text-[12.5px]">
+          <Link href={`/login?org=${encodeURIComponent(org)}`} className={LINK}>
+            {t('back')}
+          </Link>
+        </p>
       </form>
-      <p className="text-center text-sm">
-        <Link
-          href={`/login?org=${encodeURIComponent(org)}`}
-          className="text-muted-foreground underline-offset-2 hover:underline"
-        >
-          {t('back')}
-        </Link>
-      </p>
     </div>
   );
 }

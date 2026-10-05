@@ -193,6 +193,7 @@ describe('readiness', () => {
       configId: 'cfg-1',
       solutionId: 'solution-1',
       graphVersion: 'v25.0',
+      coexistence: false,
       defaultProvider: 'interakt',
       missing: [],
       webhookUrl: CALLBACK,

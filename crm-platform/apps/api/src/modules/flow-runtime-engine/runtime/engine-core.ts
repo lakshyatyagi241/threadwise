@@ -1,0 +1,289 @@
+import { FLOW_MAX_NODE_VISITS, type FlowRunEndReason, type FlowRunStatus } from '@crm/contracts';
+import { edgeFrom, nodeById } from '../graph/runtime-graph';
+import { CORE_EXECUTORS } from './nodes';
+import { routeReply } from './reply-router';
+import type {
+  InboundReply,
+  NodeContext,
+  NodeExecutor,
+  NodeResult,
+  OutboundMessage,
+  RunState,
+  SendOutcome,
+} from './types';
+import { interpolate } from './variables';
+
+/** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
+export type Transition =
+  /** Run `nodeId` next, after `delayMs` (the humanising pause on a plain move; 0 on a routed choice). */
+  | {
+      t: 'goto';
+      nodeId: string;
+      delayMs: number;
+      /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
+      subflowId?: number;
+    }
+  /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
+  | { t: 'subflow'; flowId: number | string }
+  | { t: 'wait'; wait: NonNullable<RunState['wait']> }
+  | { t: 'sleep'; seconds: number }
+  | {
+      t: 'end';
+      status: Extract<FlowRunStatus, 'completed' | 'failed'>;
+      reason: FlowRunEndReason;
+      failureCode?: string;
+      failureReason?: string;
+    }
+  | { t: 'halt'; reason: string }
+  /** The reply was not an answer: nothing changes. */
+  | { t: 'none' };
+
+export interface StepOutcome {
+  transition: Transition;
+  /** The node that ran, for the run log. */
+  nodeId: string | null;
+  nodeType: string | null;
+  notes: string[];
+}
+
+export interface StepDeps {
+  /** One send; `index` numbers the sends of this step so each has its own stable id. */
+  send(run: RunState, message: OutboundMessage, index: number): Promise<SendOutcome>;
+  /** Pause between nodes on channels that look more human with one (the unofficial WhatsApp engine). */
+  paceMs(run: RunState): number;
+  now(): Date;
+  /** Executors by node type; the core set is always there. */
+  executors?: readonly NodeExecutor[];
+}
+
+const registry = (extra: readonly NodeExecutor[] = []): Map<string, NodeExecutor> => {
+  const m = new Map<string, NodeExecutor>();
+  for (const e of [...CORE_EXECUTORS, ...extra]) for (const t of e.types) m.set(t, e);
+  return m;
+};
+
+/** Leave `from` by `port`. No edge, or an edge to a node that is gone, is a dead end (WD-FLR-016 rule 6). */
+export function advanceFrom(
+  run: RunState,
+  fromNodeId: string,
+  port: number,
+  branch: boolean,
+  paceMs: number,
+): Transition {
+  const edge = edgeFrom(run.graph, fromNodeId, port);
+  if (!edge || !nodeById(run.graph, edge.to)) return parkOrEnd(run);
+  return { t: 'goto', nodeId: edge.to, delayMs: branch ? 0 : paceMs };
+}
+
+/**
+ * A branch ran out of nodes without an End node. A flow ends only at an End node or when nothing tappable remains: when the
+ * customer was shown a menu, it is re-armed as a persistent wait so its buttons keep working; a purely linear flow ends.
+ */
+export function parkOrEnd(run: RunState): Transition {
+  const menu = run.menus.latest;
+  if (menu && menu.answerItems.length > 0) {
+    return {
+      t: 'wait',
+      wait: {
+        nodeId: menu.nodeId,
+        variable: menu.variable || 'choice',
+        kind: 'Question',
+        answerItems: menu.answerItems,
+        persistent: true,
+      },
+    };
+  }
+  return { t: 'end', status: 'completed', reason: 'dead_end' };
+}
+
+function transitionOf(run: RunState, nodeId: string, r: NodeResult, deps: StepDeps): Transition {
+  switch (r.kind) {
+    case 'advance':
+      return advanceFrom(run, nodeId, r.port, r.branch === true, deps.paceMs(run));
+    case 'wait':
+      return { t: 'wait', wait: r.wait };
+    case 'sleep':
+      return { t: 'sleep', seconds: r.seconds };
+    case 'park':
+      return parkOrEnd(run);
+    case 'end':
+      return { t: 'end', status: 'completed', reason: r.reason };
+    case 'subflow':
+      return { t: 'subflow', flowId: r.flowId };
+    case 'halt':
+      return { t: 'halt', reason: r.reason };
+    case 'fail':
+      return {
+        t: 'end',
+        status: 'failed',
+        reason: 'send_failed',
+        failureCode: r.code,
+        failureReason: r.reason,
+      };
+  }
+}
+
+/**
+ * Runs the run's current node once (WD-FLR-016). The loop guard counts every execution of a node, including a re-run after a
+ * reply: past 20 the run stops without a word to the customer. A node type nobody built an executor for is noted and passed.
+ * Mutates `run` (variables, visits, menus, last message); the caller persists it when the transition is applied.
+ */
+export async function executeCurrent(run: RunState, deps: StepDeps): Promise<StepOutcome> {
+  const notes: string[] = [];
+  const node = run.currentNodeId ? nodeById(run.graph, run.currentNodeId) : null;
+  if (!node) {
+    return { transition: parkOrEnd(run), nodeId: run.currentNodeId, nodeType: null, notes };
+  }
+
+  run.visits[node.id] = (run.visits[node.id] ?? 0) + 1;
+  if (run.visits[node.id]! > FLOW_MAX_NODE_VISITS) {
+    return {
+      transition: {
+        t: 'end',
+        status: 'failed',
+        reason: 'loop_guard',
+        failureCode: 'FLR_LOOP_GUARD',
+        failureReason: `Node ${node.id} ran more than ${FLOW_MAX_NODE_VISITS} times: its branch loops back without an exit`,
+      },
+      nodeId: node.id,
+      nodeType: node.type,
+      notes,
+    };
+  }
+
+  const executor = registry(deps.executors).get(node.type);
+  if (!executor) {
+    notes.push(`no executor for ${node.type}: moved on`);
+    return {
+      transition: advanceFrom(run, node.id, 1, false, deps.paceMs(run)),
+      nodeId: node.id,
+      nodeType: node.type,
+      notes,
+    };
+  }
+
+  let sends = 0;
+  const ctx: NodeContext = {
+    run,
+    node,
+    stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
+    send: (message) => deps.send(run, message, sends++),
+    render: (t) => interpolate(t, run.vars),
+    note: (text) => notes.push(text),
+    now: deps.now,
+  };
+  const result = await executor.execute(ctx);
+  return {
+    transition: transitionOf(run, node.id, result, deps),
+    nodeId: node.id,
+    nodeType: node.type,
+    notes,
+  };
+}
+
+/**
+ * Applies an answer to a `Custom` wait (a node that decodes its own reply: a booked slot, a form, a payment). The parked node's
+ * executor decides; sends in this step number from 1000 so they never share a client reference with the sends of the step that asked.
+ */
+export async function applyCustomReply(
+  run: RunState,
+  reply: InboundReply,
+  deps: StepDeps,
+): Promise<StepOutcome> {
+  const wait = run.wait;
+  const node = wait ? nodeById(run.graph, wait.nodeId) : null;
+  const base = { nodeId: wait?.nodeId ?? null, nodeType: node?.type ?? null };
+  const executor = wait?.handler ? registry(deps.executors).get(wait.handler) : undefined;
+  if (!wait || !node || !executor?.onReply) {
+    return { ...base, transition: { t: 'none' }, notes: ['no handler for this wait'] };
+  }
+  const notes: string[] = [];
+  let sends = 1000;
+  const ctx: NodeContext = {
+    run,
+    node,
+    stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}:reply`,
+    send: (message) => deps.send(run, message, sends++),
+    render: (t) => interpolate(t, run.vars),
+    note: (text) => notes.push(text),
+    now: deps.now,
+  };
+  const d = await executor.onReply(ctx, reply);
+  switch (d.action) {
+    case 'ignore':
+      return { ...base, transition: { t: 'none' }, notes: ['not an answer: still waiting'] };
+    case 'stay':
+      Object.assign(run.vars, d.setVars ?? {});
+      return {
+        ...base,
+        transition: { t: 'wait', wait: { ...wait, data: d.data ?? wait.data } },
+        notes: [...notes, 'not complete yet: still waiting'],
+      };
+    case 'route':
+      Object.assign(run.vars, d.setVars ?? {});
+      run.currentNodeId = node.id;
+      return { ...base, transition: advanceFrom(run, node.id, d.port, true, 0), notes };
+    case 'end':
+      return {
+        ...base,
+        transition: { t: 'end', status: 'completed', reason: d.reason },
+        notes,
+      };
+    case 'fail':
+      return {
+        ...base,
+        transition: {
+          t: 'end',
+          status: 'failed',
+          reason: 'send_failed',
+          failureCode: d.code,
+          failureReason: d.reason,
+        },
+        notes,
+      };
+  }
+}
+
+/** A sleeping run woke: leave the Delay node by its exit. */
+export function wakeFromSleep(run: RunState): StepOutcome {
+  const id = run.currentNodeId;
+  const node = id ? nodeById(run.graph, id) : null;
+  return {
+    transition: id ? advanceFrom(run, id, 1, true, 0) : parkOrEnd(run),
+    nodeId: id,
+    nodeType: node?.type ?? null,
+    notes: ['woke from delay'],
+  };
+}
+
+/**
+ * Applies a customer's reply to a parked run (WD-FLR-018): stores the answer in the variables and decides where the run goes.
+ * Mutates `run.vars`; the caller persists the transition.
+ */
+export function applyReply(run: RunState, reply: InboundReply): StepOutcome {
+  const decision = routeReply(run, reply);
+  const wait = run.wait;
+  const base = { nodeId: wait?.nodeId ?? null, nodeType: null, notes: [] as string[] };
+  switch (decision.action) {
+    case 'ignore':
+      return { ...base, transition: { t: 'none' }, notes: ['not an answer: still waiting'] };
+    case 'stay':
+      Object.assign(run.vars, decision.setVars);
+      return {
+        ...base,
+        transition: { t: 'wait', wait: decision.wait },
+        notes: ['no option matched: still waiting'],
+      };
+    case 'route':
+      Object.assign(run.vars, decision.setVars);
+      run.currentNodeId = decision.fromNodeId;
+      return {
+        ...base,
+        nodeId: decision.fromNodeId,
+        transition: advanceFrom(run, decision.fromNodeId, decision.port, true, 0),
+      };
+    case 'dead_end':
+      Object.assign(run.vars, decision.setVars);
+      return { ...base, transition: parkOrEnd(run), notes: ['the branch picked has no next node'] };
+  }
+}

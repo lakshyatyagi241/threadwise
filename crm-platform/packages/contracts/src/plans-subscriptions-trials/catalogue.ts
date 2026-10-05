@@ -17,6 +17,10 @@ export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 export const PLAN_LIMIT_DEFS = [
   { key: 'monthly_messages', group: 'messaging' },
   { key: 'broadcasts', group: 'messaging' },
+  // Scheduled messages the workspace holds, every status counted, deleted ones freed (WD-SCHED-019). 0 = unlimited.
+  { key: 'scheduled_messages', group: 'messaging' },
+  // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, WD-PLAN-018). 0 = unlimited.
+  { key: 'total_campaigns', group: 'messaging' },
   { key: 'devices', group: 'workspace' },
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },
@@ -24,9 +28,19 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'pipelines', group: 'workspace' },
   // Appointments booked per calendar month of the booking's start (WD-APPT-035). 0 = unlimited.
   { key: 'appointments', group: 'workspace' },
+  // Quick replies and routing rules of the team inbox (WD-TIB1 saved replies, WD-TIB2 routing). 0 = unlimited.
+  { key: 'saved_replies', group: 'workspace' },
+  { key: 'routing_rules', group: 'workspace' },
   { key: 'templates', group: 'content' },
   { key: 'flows', group: 'content' },
   { key: 'autoreplies', group: 'content' },
+  // Customer REST API requests per minute per key (WD-PLAN-022). NOT like the other caps: 0 means "use the platform default", not unlimited;
+  // a workspace override of -1 means unlimited.
+  { key: 'api_rate_limit_per_minute', group: 'workspace' },
+  // Marketplace apps and integrations a workspace has installed at once (spec marketplace-mini-apps-and-integrations, M-09). 0 = unlimited; counts what is installed now, an uninstall frees a place.
+  { key: 'installed_apps', group: 'workspace' },
+  // Lead sources (webhook doors into the lead pipeline) a workspace has at once (spec email-channel-and-social-leads, L-12). 0 = unlimited.
+  { key: 'lead_sources', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -50,11 +64,56 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'remove_branding', group: 'advanced', default: false },
   // The deals + tasks + pipelines area (WD-DEAL-001). Default true: every plan row that predates the key keeps the area it had.
   { key: 'sales_pipeline', group: 'advanced', default: true },
-  // Booking types, appointments and the public booking pages (WD-APPT-001). Default true: WaDesk's column default.
-  { key: 'appointment_booking', group: 'advanced', default: true },
+  // Booking types, appointments and the public booking pages (WD-APPT-001). Default FALSE since the owner decided (2026-10-04) that
+  // Appointments is the first paid first-party Marketplace app (listing `appointments`): the app owns this key, so no plan row that
+  // predates it grants it. WaDesk's column default was true; workspaces that already used booking are comped (migration
+  // `20261023090200_mkt_appointments_app.sql` and the operator's grandfather action).
+  { key: 'appointment_booking', group: 'advanced', default: false },
+  // The website chatbot widget builder (WD-WGT-027). Default false: WaDesk's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
+  { key: 'chatbot_widgets', group: 'messaging', default: false },
+  // The WhatsApp catalog area (WD-CAT-001). Default false: WaDesk's `access_wa_storefront` column default.
+  { key: 'wa_storefront', group: 'messaging', default: false },
+  // Team inbox gates (plan-inbox-chat.md decision 11), with WaDesk's column defaults: SLA policies off, the other three on.
+  { key: 'inbox_sla', group: 'messaging', default: false },
+  { key: 'inbox_routing', group: 'messaging', default: true },
+  // WhatsApp calling from the inbox (WD-CALL-003). Default true: no plan row held it here before, so every one that predates it keeps calling.
+  { key: 'waba_calling', group: 'messaging', default: true },
+  { key: 'inbox_kanban', group: 'messaging', default: true },
+  { key: 'team_performance', group: 'advanced', default: true },
+  // Scheduled messages and the number warmer (WD-SCHED-019, 041). Default true: neither was gated here before, so every plan row that predates them keeps the area.
+  { key: 'scheduled_messages', group: 'messaging', default: true },
+  { key: 'whatsapp_warmer', group: 'messaging', default: true },
+  // The Marketplace of mini apps and integrations (M-09). Default true: no plan row held it before, so every one that predates it keeps the area.
+  { key: 'marketplace', group: 'integrations', default: true },
+  // Lead sources: webhook and connector doors that turn ad and portal leads into contacts and deals (L-12). Default true: no plan row held it before.
+  { key: 'lead_sources', group: 'integrations', default: true },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
+
+/** The words a lock message and the paywall sheet use for a feature (WD-PLAN-019 rule 5). */
+export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
+  automation: 'Automation',
+  ai_assistants: 'AI assistants',
+  calling: 'WhatsApp calling',
+  woocommerce: 'WooCommerce',
+  shopify: 'Shopify',
+  analytics: 'Analytics',
+  remove_branding: 'White-label branding',
+  sales_pipeline: 'Sales pipeline',
+  appointment_booking: 'Appointment booking',
+  chatbot_widgets: 'Chatbot widgets',
+  wa_storefront: 'WhatsApp catalog',
+  inbox_sla: 'SLA policies',
+  inbox_routing: 'Routing rules',
+  waba_calling: 'WhatsApp calling',
+  inbox_kanban: 'Kanban view',
+  team_performance: 'Team performance',
+  scheduled_messages: 'Scheduled messages',
+  whatsapp_warmer: 'WhatsApp warmer',
+  marketplace: 'Marketplace',
+  lead_sources: 'Lead sources',
+};
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
 /**
@@ -72,6 +131,17 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'remove_branding',
   'sales_pipeline',
   'appointment_booking',
+  'chatbot_widgets',
+  'wa_storefront',
+  'inbox_sla',
+  'inbox_routing',
+  'waba_calling',
+  'inbox_kanban',
+  'team_performance',
+  'scheduled_messages',
+  'whatsapp_warmer',
+  'marketplace',
+  'lead_sources',
 ];
 export const PLAN_CHIP_MAX = 3;
 

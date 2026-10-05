@@ -58,7 +58,8 @@ export function fieldErrors(error: unknown): Record<string, string> {
 }
 
 /** The API's stable error code (`INV_HAS_PAYMENTS`, `PAY_OVERPAYMENT` ...), when the failure was an API answer. */
-export const errorCode = (error: unknown): string | undefined => (error instanceof ApiError ? error.code : undefined);
+export const errorCode = (error: unknown): string | undefined =>
+  error instanceof ApiError ? error.code : undefined;
 
 export const requestIdOf = (error: unknown): string | undefined =>
   error instanceof ApiError ? error.requestId : undefined;

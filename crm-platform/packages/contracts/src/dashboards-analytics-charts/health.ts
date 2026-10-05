@@ -42,11 +42,41 @@ export const healthQueueRowSchema = z.object({
 });
 export type HealthQueueRow = z.infer<typeof healthQueueRowSchema>;
 
+/** WD-DASH-049: last-24-hour counters across every workspace. */
+export const healthActivitySchema = z.object({
+  messages: z.number().int().nonnegative(),
+  aiCalls: z.number().int().nonnegative(),
+  conversations: z.number().int().nonnegative(),
+  webhooks: z.number().int().nonnegative(),
+});
+export type HealthActivity = z.infer<typeof healthActivitySchema>;
+
+/** One day of the 14-day message-volume line (UTC day, `YYYY-MM-DD`). */
+export const healthThroughputPointSchema = z.object({
+  date: z.string(),
+  count: z.number().int().nonnegative(),
+});
+
+/** WD-DASH-050: one WhatsApp engine's numbers across every workspace (unofficial devices, WABA, Twilio). */
+export const healthEngineSchema = z.object({
+  key: z.enum(['baileys', 'waba', 'twilio']),
+  label: z.string(),
+  connected: z.number().int().nonnegative(),
+  total: z.number().int().nonnegative(),
+  /** idle with no numbers, up with a connected one, else down. Never affects the overall banner. */
+  state: z.enum(['up', 'down', 'idle']),
+  breakdown: z.array(z.object({ status: z.string(), count: z.number().int().nonnegative() })),
+});
+export type HealthEngine = z.infer<typeof healthEngineSchema>;
+
 export const healthResponseSchema = z.object({
   overall: z.enum(['up', 'warn', 'down']),
   checks: z.array(healthCheckSchema),
   queues: z.array(healthQueueRowSchema),
+  engines: z.array(healthEngineSchema),
   vitals: healthVitalsSchema,
+  activity: healthActivitySchema,
+  throughput: z.array(healthThroughputPointSchema),
   /** ISO-8601. */
   ts: z.string(),
 });

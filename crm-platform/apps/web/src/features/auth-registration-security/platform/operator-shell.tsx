@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import type { OperatorRole, OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Badge, Spinner, cn } from '@crm/ui';
-import { setLocale, setTheme } from '@/components/shell/actions';
-import { LOCALES } from '@/i18n/locales';
+import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
+import { setTheme } from '@/components/shell/actions';
 import { OperatorProvider } from './operator-context';
 import {
   OPERATOR_ACCOUNT_PATH,
@@ -16,8 +16,9 @@ import {
   activeNavId,
   groupNav,
 } from './operator-nav';
+import { ipBlockStore } from './lib/ip-blocked';
 import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './ui/icons';
-import { languageName } from './ui/language';
+import { IpBlockedView, useIpBlock } from './ui/ip-blocked-view';
 import { ToastProvider } from './ui/toast';
 import { useDocumentTheme } from './ui/use-browser';
 
@@ -43,7 +44,6 @@ export function OperatorShell({
   const t = useTranslations(`${NS}.shell`);
   const tn = useTranslations(`${NS}.nav`);
   const tAll = useTranslations();
-  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   // The drawer is open for the page it was opened on, so navigating closes it without an effect.
@@ -57,17 +57,23 @@ export function OperatorShell({
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
+  // Set by operatorFetch when the API refuses the console's address (operator IP allowlist).
+  const ipBlock = useIpBlock();
   const { operator } = session;
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
   const blocked = gated && !onAccountPage;
   const activeId = activeNavId(pathname, OPERATOR_NAV);
   const groups = useMemo(() => groupNav(OPERATOR_NAV), []);
-  const languages = useMemo(() => LOCALES.map((code) => [code, languageName(code)] as const), []);
 
   useEffect(() => {
     if (blocked) router.replace(OPERATOR_ACCOUNT_PATH);
   }, [blocked, router]);
+
+  // Another screen is another chance: its own calls decide whether the address is still refused.
+  useEffect(() => {
+    ipBlockStore.clear();
+  }, [pathname]);
 
   // Escape closes the drawer and hands focus back to its button.
   useEffect(() => {
@@ -243,23 +249,7 @@ export function OperatorShell({
               <span className="min-w-0 truncate text-sm font-medium">{t('title')}</span>
 
               <div className="ms-auto flex items-center gap-1.5 sm:gap-2">
-                <select
-                  aria-label={t('language')}
-                  value={locale}
-                  onChange={(e) =>
-                    start(async () => {
-                      await setLocale(e.target.value);
-                      router.refresh();
-                    })
-                  }
-                  className="h-8 w-20 rounded-md border border-border bg-background px-1.5 text-sm focus-visible:ring-2 focus-visible:ring-primary sm:w-auto sm:max-w-32 sm:px-2"
-                >
-                  {languages.map(([code, name]) => (
-                    <option key={code} value={code}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                <LocaleSwitcher />
                 <button
                   type="button"
                   onClick={toggleTheme}
@@ -311,6 +301,8 @@ export function OperatorShell({
                   <Spinner label={t('redirecting')} />
                   {t('redirecting')}
                 </div>
+              ) : ipBlock ? (
+                <IpBlockedView ip={ipBlock.ip} />
               ) : (
                 children
               )}

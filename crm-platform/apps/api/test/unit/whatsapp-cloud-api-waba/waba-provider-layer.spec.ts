@@ -443,7 +443,10 @@ describe('platform readiness', () => {
 });
 
 describe('MetaCloudProvider sends', () => {
-  const guard = { beforeSend: async () => undefined };
+  const guard = {
+    beforeSend: async () => undefined,
+    withFooter: async (i: { body: string }) => i.body,
+  };
   const provider = (replies: Parameters<typeof fakeFetch>[0]) => {
     const f = make(replies);
     return { ...f, provider: new MetaCloudProvider(f.http, guard) };

@@ -3,6 +3,9 @@ import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-a
 import {
   authOf,
   type BusinessProfile,
+  type AppSubscriptionState,
+  type QrCodeInfo,
+  type SubscriptionDetail,
   type PhoneInfo,
   type PlatformReadiness,
   type SubscribeResult,
@@ -10,9 +13,10 @@ import {
   type TokenInspection,
   type WabaAdminPort,
   type WabaConnection,
+  type WabaDetails,
 } from './waba-admin.port';
 import { WabaApiError } from './waba-errors';
-import { WabaHttp, type WabaAuth } from './waba-http';
+import { WabaHttp, type WabaAuth, type WabaRequest } from './waba-http';
 
 /** Every field the connect screens and the health page read, in one request (union of WaDesk's and Geta's lists). */
 export const PHONE_FIELDS = [
@@ -109,6 +113,7 @@ export class WabaAdminClient implements WabaAdminPort {
       configId: e.META_EMBEDDED_CONFIG_ID ?? null,
       solutionId: e.INTERAKT_SOLUTION_ID ?? null,
       graphVersion: e.META_API_VERSION,
+      coexistence: e.WABA_COEXISTENCE,
       defaultProvider: e.WABA_DEFAULT_PROVIDER,
       missing,
     };
@@ -266,6 +271,7 @@ export class WabaAdminClient implements WabaAdminPort {
     conn: WabaConnection,
     callback: { url: string; verifyToken: string },
   ): Promise<SubscribeResult> {
+    if (conn.registry) return this.subscribeViaRegistry(conn, callback);
     const token = conn.accessToken;
     if (!token) return { ok: false, overrideApplied: false, error: noToken() };
     return conn.provider === 'interakt'
@@ -311,6 +317,54 @@ export class WabaAdminClient implements WabaAdminPort {
       }
     }
     return { ok: true, overrideApplied: false };
+  }
+
+  /**
+   * A number on a provider of the registry (`conn.registry`): the same Graph-shaped calls, through the provider's own address and
+   * credential. Like the built-in Interakt route the WABA is subscribed first and the per-number callback override is then offered
+   * (`verify_token` first, dropped on a refusal); a provider whose webhook is configured once on the Meta app (`meta_app_level`) is
+   * only subscribed. Nothing here was exercised against a live provider.
+   */
+  private async subscribeViaRegistry(
+    conn: WabaConnection,
+    callback: { url: string; verifyToken: string },
+  ): Promise<SubscribeResult> {
+    const route = conn.registry!;
+    try {
+      await this.http.call(route, { method: 'POST', path: `/${conn.wabaId}/subscribed_apps` });
+    } catch (e) {
+      return { ok: false, overrideApplied: false, error: asApiError(e) };
+    }
+    if (route.webhookMode !== 'number_level_override') return { ok: true, overrideApplied: false };
+    for (const body of [
+      {
+        webhook_configuration: {
+          override_callback_uri: callback.url,
+          verify_token: callback.verifyToken,
+        },
+      },
+      { webhook_configuration: { override_callback_uri: callback.url } },
+    ]) {
+      try {
+        await this.http.call(route, { method: 'POST', path: `/${conn.phoneNumberId}`, json: body });
+        return { ok: true, overrideApplied: true };
+      } catch (e) {
+        const err = asApiError(e);
+        if (err.missingBusinessManagement) return { ok: false, overrideApplied: false, error: err };
+        this.logger.warn(
+          { providerKey: route.providerKey, status: err.status, code: err.code },
+          'registry provider callback override refused',
+        );
+      }
+    }
+    return { ok: true, overrideApplied: false };
+  }
+
+  /** The account node of a connection: through its registry provider, else Graph with the business token. */
+  private viaRoute<T>(conn: WabaConnection, req: WabaRequest): Promise<T> {
+    if (conn.registry) return this.http.call<T>(conn.registry, req);
+    if (!conn.accessToken) return Promise.reject(noToken());
+    return this.http.graph<T>(conn.accessToken, req);
   }
 
   /** WaDesk WD-WABA-011: atomic subscribe + override, plain subscribe fallback, then retry the override. */
@@ -408,9 +462,8 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 
   async registerPhone(conn: WabaConnection, pin: string): Promise<void> {
-    const token = conn.accessToken;
-    if (!token) throw noToken();
-    await this.http.graph(token, {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
       method: 'POST',
       path: `/${conn.phoneNumberId}/register`,
       json: { messaging_product: 'whatsapp', pin },
@@ -418,21 +471,21 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 
   async unsubscribe(conn: WabaConnection): Promise<void> {
-    if (!conn.accessToken) throw noToken();
-    await this.http.graph(conn.accessToken, {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
       method: 'DELETE',
       path: `/${conn.wabaId}/subscribed_apps`,
     });
   }
 
   async verifyInboundWired(conn: WabaConnection, expectedUrl: string): Promise<boolean | null> {
-    if (!conn.accessToken) return null;
+    if (!conn.registry && !conn.accessToken) return null;
     try {
-      const res = await this.http.graph<{
+      const res = await this.viaRoute<{
         data?: Array<{
           whatsapp_business_api_data?: { id?: string; override_callback_uri?: string };
         }>;
-      }>(conn.accessToken, { method: 'GET', path: `/${conn.wabaId}/subscribed_apps` });
+      }>(conn, { method: 'GET', path: `/${conn.wabaId}/subscribed_apps` });
       const want = expectedUrl.replace(/\/+$/, '');
       for (const entry of res.data ?? []) {
         const d = entry.whatsapp_business_api_data;
@@ -442,7 +495,8 @@ export class WabaAdminClient implements WabaAdminPort {
           d?.id &&
           this.env.META_APP_ID &&
           d.id === this.env.META_APP_ID &&
-          conn.provider === 'meta'
+          conn.provider === 'meta' &&
+          !conn.registry
         )
           return true;
       }
@@ -454,6 +508,233 @@ export class WabaAdminClient implements WabaAdminPort {
       );
       return null;
     }
+  }
+
+  async getWabaDetails(conn: WabaConnection): Promise<WabaDetails> {
+    const auth = authOf(conn);
+    const rich =
+      'name,currency,timezone_id,account_review_status,business_verification_status,ownership_type,owner_business_info{id,name}';
+    const safe = 'name,currency,timezone_id,account_review_status';
+    const read = async (fields: string) =>
+      this.http.call<{
+        name?: string;
+        currency?: string;
+        timezone_id?: string;
+        account_review_status?: string;
+        business_verification_status?: string;
+        ownership_type?: string;
+        owner_business_info?: { name?: string };
+      }>(auth, { method: 'GET', path: `/${conn.wabaId}`, query: { fields }, timeoutMs: 12_000 });
+    let r;
+    try {
+      r = await read(rich);
+    } catch (e) {
+      // One unreadable field fails the whole request: retry with the subset that always reads.
+      if (asApiError(e).status === 0) throw e;
+      r = await read(safe);
+    }
+    return {
+      name: r.name ?? null,
+      currency: r.currency ?? null,
+      timezoneId: r.timezone_id ?? null,
+      accountReviewStatus: r.account_review_status ?? null,
+      businessVerificationStatus: r.business_verification_status ?? null,
+      ownerBusinessName: r.owner_business_info?.name ?? null,
+      ownershipType: r.ownership_type ?? null,
+    };
+  }
+
+  async getSubscribedApps(conn: WabaConnection): Promise<string[]> {
+    const res = await this.http.call<{
+      data?: Array<{ whatsapp_business_api_data?: { id?: string; name?: string; link?: string } }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/subscribed_apps`,
+      timeoutMs: 12_000,
+    });
+    return (res.data ?? []).map(
+      (d) => d.whatsapp_business_api_data?.name ?? d.whatsapp_business_api_data?.id ?? 'app',
+    );
+  }
+
+  // --- the Meta app's own subscription and the per-WABA diagnostic (WD-WABA-002, 003, 015) -------------------------------
+
+  async getAppSubscription(app: { id: string; secret: string }): Promise<AppSubscriptionState> {
+    const res = await this.http.graph<{
+      data?: Array<{
+        object?: string;
+        callback_url?: string;
+        fields?: Array<string | { name?: string }>;
+      }>;
+    }>(`${app.id}|${app.secret}`, {
+      method: 'GET',
+      path: `/${app.id}/subscriptions`,
+      timeoutMs: 15_000,
+    });
+    const waba = (res.data ?? []).find((s) => s.object === 'whatsapp_business_account');
+    return {
+      hasWabaObject: Boolean(waba),
+      fields: (waba?.fields ?? [])
+        .map((f) => (typeof f === 'string' ? f : (f.name ?? '')))
+        .filter(Boolean),
+      callbackUrl: waba?.callback_url ?? null,
+    };
+  }
+
+  async setAppSubscription(
+    app: { id: string; secret: string },
+    input: { callbackUrl: string; verifyToken: string; fields: string[] },
+  ): Promise<void> {
+    const form = new FormData();
+    form.set('object', 'whatsapp_business_account');
+    form.set('callback_url', input.callbackUrl);
+    form.set('fields', input.fields.join(','));
+    form.set('verify_token', input.verifyToken);
+    await this.http.graph(`${app.id}|${app.secret}`, {
+      method: 'POST',
+      path: `/${app.id}/subscriptions`,
+      form,
+      timeoutMs: 20_000,
+    });
+  }
+
+  async getSubscriptionDetails(conn: WabaConnection): Promise<SubscriptionDetail[]> {
+    const res = await this.http.call<{
+      data?: Array<{
+        name?: string;
+        whatsapp_business_api_data?: { id?: string; name?: string; override_callback_uri?: string };
+      }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/subscribed_apps`,
+      timeoutMs: 12_000,
+    });
+    return (res.data ?? []).map((d) => ({
+      name: d.whatsapp_business_api_data?.name ?? d.name ?? null,
+      callbackUrl: d.whatsapp_business_api_data?.override_callback_uri ?? null,
+    }));
+  }
+
+  // --- analytics, username, QR codes (WD-WABA-023, 025, 027) -------------------------------------------------------
+
+  async getTemplateClicks(
+    conn: WabaConnection,
+    templateIds: string[],
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<number> {
+    const res = await this.http.call<{
+      data?: Array<{
+        data_points?: Array<{ template_id?: string; clicked?: Array<{ count?: number }> }>;
+      }>;
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}/template_analytics`,
+      query: {
+        start: String(startSeconds),
+        end: String(endSeconds),
+        granularity: 'DAILY',
+        metric_types: JSON.stringify(['CLICKED']),
+        template_ids: JSON.stringify(templateIds.map(Number)),
+      },
+      timeoutMs: 20_000,
+    });
+    return sumClicks(res, templateIds);
+  }
+
+  async enableTemplateInsights(conn: WabaConnection): Promise<void> {
+    const form = new FormData();
+    form.set('is_enabled_for_insights', 'true');
+    await this.http.call(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.wabaId}`,
+      form,
+      timeoutMs: 15_000,
+    });
+  }
+
+  async getConversationAnalytics(
+    conn: WabaConnection,
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<Array<{ conversation_type?: string; conversation?: number; cost?: number }>> {
+    const fields = `conversation_analytics.start(${startSeconds}).end(${endSeconds}).granularity(MONTHLY).dimensions(["CONVERSATION_TYPE"])`;
+    const res = await this.http.call<{
+      conversation_analytics?: {
+        data?: Array<{
+          data_points?: Array<{ conversation_type?: string; conversation?: number; cost?: number }>;
+        }>;
+      };
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.wabaId}`,
+      query: { fields },
+      timeoutMs: 12_000,
+    });
+    return (res.conversation_analytics?.data ?? []).flatMap((d) => d.data_points ?? []);
+  }
+
+  async getReservedUsername(conn: WabaConnection): Promise<string | null> {
+    const res = await this.http.call<{ username?: string | { username?: string } }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}`,
+      query: { fields: 'username' },
+      timeoutMs: 12_000,
+    });
+    const u = typeof res.username === 'string' ? res.username : res.username?.username;
+    return u ? u.toLowerCase() : null;
+  }
+
+  async claimUsername(conn: WabaConnection, username: string): Promise<'reserved' | 'approved'> {
+    const form = new FormData();
+    form.set('username', username);
+    const res = await this.http.call<{ status?: string; username_status?: string }>(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/username`,
+      form,
+      timeoutMs: 20_000,
+    });
+    const s = String(res.status ?? res.username_status ?? 'reserved').toLowerCase();
+    return s === 'approved' ? 'approved' : 'reserved';
+  }
+
+  async releaseUsername(conn: WabaConnection): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'DELETE',
+      path: `/${conn.phoneNumberId}/username`,
+      timeoutMs: 20_000,
+    });
+  }
+
+  async listQrCodes(conn: WabaConnection): Promise<QrCodeInfo[]> {
+    const res = await this.http.call<{ data?: QrCodeRaw[] }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}/message_qrdls`,
+      query: { fields: 'code,prefilled_message,deep_link_url,qr_image_url' },
+      timeoutMs: 20_000,
+    });
+    return (res.data ?? []).map(toQr);
+  }
+
+  async createQrCode(conn: WabaConnection, prefilledMessage: string): Promise<QrCodeInfo> {
+    const form = new FormData();
+    form.set('prefilled_message', prefilledMessage);
+    form.set('generate_qr_image', 'PNG');
+    const res = await this.http.call<QrCodeRaw>(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/message_qrdls`,
+      form,
+      timeoutMs: 20_000,
+    });
+    return toQr({ ...res, prefilled_message: res.prefilled_message ?? prefilledMessage });
+  }
+
+  async deleteQrCode(conn: WabaConnection, code: string): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'DELETE',
+      path: `/${conn.phoneNumberId}/message_qrdls/${encodeURIComponent(code)}`,
+      timeoutMs: 20_000,
+    });
   }
 
   // --- business profile --------------------------------------------------------------------------------------------
@@ -506,6 +787,20 @@ export class WabaAdminClient implements WabaAdminPort {
   }
 }
 
+interface QrCodeRaw {
+  code?: string;
+  prefilled_message?: string;
+  deep_link_url?: string;
+  qr_image_url?: string;
+}
+
+const toQr = (r: QrCodeRaw): QrCodeInfo => ({
+  code: r.code ?? '',
+  prefilledMessage: r.prefilled_message ?? '',
+  deepLinkUrl: r.deep_link_url ?? (r.code ? `https://wa.me/message/${r.code}` : null),
+  qrImageUrl: r.qr_image_url ?? null,
+});
+
 function asApiError(e: unknown): WabaApiError {
   return e instanceof WabaApiError ? e : WabaApiError.network(e);
 }
@@ -535,3 +830,23 @@ const notConfigured = (what: string) =>
     false,
     null,
   );
+
+/** Every button `count` of every day bucket, for the requested templates only (a response may carry others). */
+export function sumClicks(
+  res: {
+    data?: Array<{
+      data_points?: Array<{ template_id?: string | number; clicked?: Array<{ count?: number }> }>;
+    }>;
+  },
+  templateIds: string[],
+): number {
+  const wanted = new Set(templateIds.map(String));
+  let total = 0;
+  for (const bucket of res.data ?? []) {
+    for (const point of bucket.data_points ?? []) {
+      if (point.template_id !== undefined && !wanted.has(String(point.template_id))) continue;
+      for (const c of point.clicked ?? []) total += Number(c.count ?? 0);
+    }
+  }
+  return total;
+}

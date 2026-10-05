@@ -4,6 +4,9 @@ import type {
   OtpSenderKind,
   OtpSenderPatch,
   OtpSenderView,
+  OtpTemplateOption,
+  OtpTemplateOptionsResponse,
+  OtpTemplateOutcome,
   OtpTemplateState,
   RegistrationSettings,
 } from '@crm/contracts';
@@ -15,7 +18,7 @@ import type {
  */
 
 export const SENDER_KINDS: readonly OtpSenderKind[] = ['waba', 'twilio', 'device', 'dev'];
-export const DEFAULT_GRAPH_BASE_URL = 'https://graph.facebook.com/v21.0';
+export const DEFAULT_GRAPH_BASE_URL = 'https://graph.facebook.com/v23.0';
 export const DEFAULT_TWILIO_API_BASE_URL = 'https://api.twilio.com';
 export const LABEL_MAX = 60;
 
@@ -24,6 +27,24 @@ export const addableKinds = (devAllowed: boolean): OtpSenderKind[] =>
   SENDER_KINDS.filter((k) => k !== 'dev' || devAllowed);
 
 export const senderRef = (s: Pick<OtpSenderView, 'kind' | 'id'>): string => `${s.kind}:${s.id}`;
+
+/**
+ * Whether a sender can deliver a code right now. An API that predates the `connected` field sent
+ * only complete senders, so a missing flag counts as connected.
+ */
+export const isConnected = (s: Pick<OtpSenderView, 'connected'>): boolean => s.connected !== false;
+
+/**
+ * What the sender picker offers (WaDesk's picker lists only connected channels): the senders that can
+ * deliver a code, plus the current choice when it is saved but unfinished, so the select never shows
+ * a value it cannot name. "Manage senders" still lists every sender, finished or not.
+ */
+export function pickerSenders(
+  senders: readonly OtpSenderView[],
+  selected: string,
+): OtpSenderView[] {
+  return senders.filter((s) => isConnected(s) || senderRef(s) === selected);
+}
 
 export interface SenderDraft {
   kind: OtpSenderKind;
@@ -273,6 +294,56 @@ export const canRefreshTemplate = (t: OtpTemplateState | null): boolean =>
 /** The template was made for another expiry than the form now asks for. */
 export const templateIsStale = (t: OtpTemplateState | null, ttlMinutes: number | null): boolean =>
   t !== null && ttlMinutes !== null && t.codeExpirationMinutes !== ttlMinutes;
+
+// --- the template picker ------------------------------------------------------------------------------
+
+/**
+ * The rows of the "WABA auth template" picker for the sender the form has selected. The API lists the
+ * templates of the SAVED sender, so a form that has moved on to another sender shows no rows until it
+ * is saved. `selectedId` is the saved template (the only one sign-up sends), or '' when none exists.
+ */
+export function templatePicker(
+  options: OtpTemplateOptionsResponse | undefined,
+  senderValue: string,
+): { rows: OtpTemplateOption[]; selectedId: string } {
+  if (!options || !senderValue || options.sender !== senderValue)
+    return { rows: [], selectedId: '' };
+  const selected = options.templates.find((t) => t.selected);
+  return { rows: options.templates, selectedId: selected?.id ?? '' };
+}
+
+/**
+ * Which sentence tells the operator what a "Create & submit" did. Meta can approve an authentication
+ * template the moment it is submitted, or reject it, so the template's own status decides the wording
+ * for a submission; the outcome alone only says "sent".
+ */
+export type OutcomeKey = OtpTemplateOutcome | 'approvedNow' | 'rejectedNow';
+
+export function outcomeKey(
+  outcome: OtpTemplateOutcome,
+  status: OtpTemplateState['status'] | undefined,
+): OutcomeKey {
+  if (outcome === 'submitted' || outcome === 'resubmitted') {
+    if (status === 'approved') return 'approvedNow';
+    if (status === 'rejected') return 'rejectedNow';
+  }
+  return outcome;
+}
+
+/** The look of the message after a template action: waiting for Meta is information, a refusal is a problem. */
+export function outcomeTone(key: OutcomeKey): 'success' | 'info' | 'danger' {
+  switch (key) {
+    case 'rejectedNow':
+      return 'danger';
+    case 'submitted':
+    case 'resubmitted':
+    case 'already_pending':
+    case 'refreshed':
+      return 'info';
+    default:
+      return 'success';
+  }
+}
 
 /** The activation reasons that mean "nothing is wrong, the operator just has not finished". */
 export const REASON_TONE: Record<OtpActivationReason, 'success' | 'neutral' | 'warning'> = {

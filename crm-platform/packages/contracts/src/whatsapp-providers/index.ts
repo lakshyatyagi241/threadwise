@@ -1,0 +1,11 @@
+/**
+ * whatsapp-providers: the platform-level registry of WhatsApp providers (which BSP the SaaS sends through), the workspace
+ * assignment, the per-workspace number switch and the tenant-safe provider info. An owner-requested extension of the WABA module
+ * (docs/wadesk-port/parity/product-extensions.md); operator API in docs/api/whatsapp-providers.md.
+ */
+export * from './enums';
+export * from './errors';
+export * from './header-templates';
+export * from './base-url';
+export * from './providers';
+export * from './assignments';

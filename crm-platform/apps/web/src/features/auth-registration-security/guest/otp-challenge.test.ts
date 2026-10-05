@@ -48,6 +48,21 @@ describe('otp challenge storage', () => {
     });
   });
 
+  it('prefers the mask built from the typed number over the server text', () => {
+    const response = {
+      status: 'otp_required' as const,
+      challengeId: 'abc',
+      // A server that guessed a two-digit prefix for a +1 number.
+      maskedPhone: '+14 •••• ••71',
+      expiresInSeconds: 300,
+      resendCooldownSeconds: 60,
+      codeLength: 6,
+    };
+    expect(toStoredChallenge(response, 0, '+1 •••• ••71').maskedPhone).toBe('+1 •••• ••71');
+    expect(toStoredChallenge(response, 0).maskedPhone).toBe('+14 •••• ••71');
+    expect(toStoredChallenge(response, 0, '').maskedPhone).toBe('+14 •••• ••71');
+  });
+
   it('round-trips and clears', () => {
     const c = { challengeId: 'x', maskedPhone: 'm', codeLength: 6, expiresAt: 1, resendAt: 2 };
     saveChallenge(c, store);

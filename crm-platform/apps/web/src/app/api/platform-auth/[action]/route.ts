@@ -1,12 +1,9 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import {
-  OP_ACCESS_COOKIE,
-  OP_REFRESH_COOKIE,
-  clearSessionCookies,
-  setSessionCookies,
-} from '@/lib/auth/cookies';
-import { isSameOrigin, problem } from '@/lib/auth/proxy';
+import { OP_REFRESH_COOKIE, clearSessionCookies, setSessionCookies } from '@/lib/auth/cookies';
+import { clientIpFrom } from '@/lib/auth/client-ip';
+import { logoutOperator } from '@/lib/auth/logout';
+import { isSameOrigin, problem, redirectTo } from '@/lib/auth/proxy';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
 
 /** Platform-operator sign-in (a separate identity pool and cookie set). */
@@ -25,7 +22,7 @@ function headersFor(req: Request, token?: string): Headers {
     const v = req.headers.get(name);
     if (v) h.set(name, v);
   }
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  const ip = clientIpFrom(req.headers);
   if (ip) h.set('x-forwarded-for', ip);
   if (token) h.set('authorization', `Bearer ${token}`);
   return h;
@@ -36,16 +33,9 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   const store = await cookies();
 
   if (action === 'logout') {
-    const at = store.get(OP_ACCESS_COOKIE)?.value;
-    if (at) {
-      await fetch(`${apiBase()}/v2/platform/auth/logout`, {
-        method: 'POST',
-        headers: headersFor(req, at),
-        body: '{}',
-        cache: 'no-store',
-      }).catch(() => undefined);
-    }
-    clearSessionCookies(store, 'operator');
+    // Always completes (no origin check), like the staff sign-out. The refresh token goes along, so the session
+    // ends at the API even when the access cookie has already lapsed.
+    await logoutOperator(req);
     return new NextResponse(null, { status: 204 });
   }
 
@@ -67,6 +57,9 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
       status: upstream.status,
       headers: {
         'content-type': upstream.headers.get('content-type') ?? 'application/problem+json',
+        ...(upstream.headers.get('retry-after')
+          ? { 'retry-after': upstream.headers.get('retry-after')! }
+          : {}),
       },
     });
   }
@@ -89,8 +82,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ action: string 
   const tokens = rt ? await refreshTokens(rt, 'operator') : null;
   if (!tokens) {
     clearSessionCookies(store, 'operator');
-    return NextResponse.redirect(new URL('/admin/login?expired=1', url));
+    return redirectTo('/admin/login?expired=1');
   }
   setSessionCookies(store, tokens, { kind: 'operator' });
-  return NextResponse.redirect(new URL(safeNext(url.searchParams.get('next')), url));
+  return redirectTo(safeNext(url.searchParams.get('next')));
 }

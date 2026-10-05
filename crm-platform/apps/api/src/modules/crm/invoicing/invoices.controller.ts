@@ -87,7 +87,8 @@ export class InvoicesController {
   @RequirePermission('record.invoices.read')
   @ApiOperation({
     summary: 'Counts per status for the tabs, and the open balance per currency',
-    description: 'Takes every list filter except status. The statuses partition the invoices, so the counts add up to `all`.',
+    description:
+      'Takes every list filter except status. The statuses partition the invoices, so the counts add up to `all`.',
   })
   async counts(
     @Query(zodPipe(invoiceCountsQuerySchema)) query: InvoiceCountsQuery,
@@ -110,7 +111,9 @@ export class InvoicesController {
 
   @Get(':id')
   @RequirePermission('record.invoices.read')
-  @ApiOperation({ summary: 'Get one invoice by uuid, with lines, tax summary and the public link (once issued)' })
+  @ApiOperation({
+    summary: 'Get one invoice by uuid, with lines, tax summary and the public link (once issued)',
+  })
   async get(
     @Param('id', ParseUUIDPipe) id: string,
     @GrantedScope('record.invoices.read') scope: RecordScope,
@@ -136,7 +139,9 @@ export class InvoicesController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.invoices.delete')
-  @ApiOperation({ summary: 'Delete a draft (an issued invoice is voided instead: 409 INV_NOT_DELETABLE)' })
+  @ApiOperation({
+    summary: 'Delete a draft (an issued invoice is voided instead: 409 INV_NOT_DELETABLE)',
+  })
   async remove(
     @Param('id', ParseUUIDPipe) id: string,
     @GrantedScope('record.invoices.delete') scope: RecordScope,
@@ -183,7 +188,8 @@ export class InvoicesController {
   @RequirePermission('record.invoices.void')
   @ApiOperation({
     summary: 'Void an issued invoice (it keeps its number)',
-    description: '409 INV_HAS_PAYMENTS while it carries a net payment: refund first. Pending online payment attempts expire.',
+    description:
+      '409 INV_HAS_PAYMENTS while it carries a net payment: refund first. Pending online payment attempts expire.',
   })
   async voidInvoice(
     @Param('id', ParseUUIDPipe) id: string,
@@ -197,7 +203,9 @@ export class InvoicesController {
   @HttpCode(HttpStatus.CREATED)
   @Idempotent()
   @RequirePermission('record.invoices.create')
-  @ApiOperation({ summary: 'A new draft with the same buyer and lines (no number, dates or quote link)' })
+  @ApiOperation({
+    summary: 'A new draft with the same buyer and lines (no number, dates or quote link)',
+  })
   async duplicate(
     @Param('id', ParseUUIDPipe) id: string,
     @GrantedScope('record.invoices.read') scope: RecordScope,
@@ -208,7 +216,9 @@ export class InvoicesController {
   @Post(':id/public-link/regenerate')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.invoices.update')
-  @ApiOperation({ summary: 'Give the invoice a new public link; the old one stops working at once' })
+  @ApiOperation({
+    summary: 'Give the invoice a new public link; the old one stops working at once',
+  })
   async regenerateLink(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(publicLinkSchema)) body: PublicLinkInput,
@@ -230,7 +240,10 @@ export class InvoicesController {
 
   @Get(':id/events')
   @RequirePermission('record.invoices.read')
-  @ApiOperation({ summary: "The invoice's timeline: created, issued, sent, viewed, payments, overdue, voided (newest first)" })
+  @ApiOperation({
+    summary:
+      "The invoice's timeline: created, issued, sent, viewed, payments, overdue, voided (newest first)",
+  })
   async events(
     @Param('id', ParseUUIDPipe) id: string,
     @Query(zodPipe(invoiceEventsQuerySchema)) query: InvoiceEventsQuery,
@@ -268,7 +281,8 @@ export class InvoicesController {
   @Get(':id/pdf')
   @RequirePermission('record.invoices.read')
   @ApiOperation({
-    summary: 'The invoice as a PDF (rendered from the stored document; an issued invoice always renders the same)',
+    summary:
+      'The invoice as a PDF (rendered from the stored document; an issued invoice always renders the same)',
   })
   async download(
     @Param('id', ParseUUIDPipe) id: string,

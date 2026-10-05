@@ -34,3 +34,10 @@ WD-TCHAT-028 and 031 are dead code in WaDesk and are not ported.
 ## Not verified
 
 Visual and behavioural parity with the live reference, Playwright twin run, mobile layout on a device, 3 s poll under real load, Redis presence in a multi-node deployment.
+
+## Round 2 verification (fresh database crm_tchat, 178 migrations applied)
+
+tier P0 done: WD-TCHAT-001, 002, 003, 004, 008, 009, 014.
+tier P1 done: WD-TCHAT-005, 010, 011, 012, 013, 015, 016, 024, 025, 026, 027, 030.
+tier P2 done: WD-TCHAT-006, 007, 017, 018, 019, 020, 021, 022, 023, 029. Not ported on purpose: 028 and 031 (dead code in WaDesk), 032 (dev seeder).
+Re-run green: team-chat e2e 77, schema integration 21, unit 21, web 9; arch:check and db:verify-schema have no errors. Side-by-side screen conformance against the live reference is still not done.

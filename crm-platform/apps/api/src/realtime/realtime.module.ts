@@ -1,15 +1,32 @@
 import { Module } from '@nestjs/common';
+import {
+  CONVERSATION_RECORD_LOADER,
+  DbConversationRecordLoader,
+} from './audience/conversation-record.loader';
+import { RealtimeAuthService } from './realtime-auth.service';
+import { RealtimeEmitterModule } from './realtime-emitter.module';
 import { RealtimeGateway } from './realtime.gateway';
+import { RoomAccessService } from './room-access.service';
+import { RealtimeTicketController } from './ticket/realtime-ticket.controller';
+import { RealtimeTicketService } from './ticket/realtime-ticket.service';
 
 /**
- * WebSocket transport.
+ * WebSocket transport (HTTP app only).
  *
- * The gateway is the only place allowed to touch socket.io. Domain services
- * emit by calling it, so swapping the transport (SSE, a hosted pub/sub) is one
- * file rather than a search-and-replace across modules.
+ * The gateway is the only place allowed to host sockets. Everything that PUBLISHES goes through `RealtimeEmitter` (from
+ * `RealtimeEmitterModule`, which the worker imports too), so swapping the transport is one file rather than a search across
+ * modules, and a job that cannot host a socket can still announce an event.
  */
 @Module({
-  providers: [RealtimeGateway],
-  exports: [RealtimeGateway],
+  imports: [RealtimeEmitterModule],
+  controllers: [RealtimeTicketController],
+  providers: [
+    RealtimeGateway,
+    RealtimeAuthService,
+    RealtimeTicketService,
+    RoomAccessService,
+    { provide: CONVERSATION_RECORD_LOADER, useClass: DbConversationRecordLoader },
+  ],
+  exports: [RealtimeGateway, RealtimeTicketService],
 })
 export class RealtimeModule {}

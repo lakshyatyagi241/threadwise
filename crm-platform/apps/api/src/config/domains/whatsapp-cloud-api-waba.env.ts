@@ -64,6 +64,17 @@ export const wabaEnvSchema = z.object({
   /** The platform's own business id; fallback to find a WABA when `debug_token` does not list one. */
   META_BUSINESS_ID: optionalString(64),
 
+  /** Offer "connect my existing Business App number" (coexistence) in Embedded Signup. */
+  WABA_COEXISTENCE: z.preprocess(
+    blankToUndefined,
+    z
+      .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
+      .transform((v) => v === true || v === 'true' || v === '1')
+      .default(false),
+  ),
+  /** Webhook handshake token. Normally saved in the platform settings; this is the env fallback. */
+  WABA_VERIFY_TOKEN: optionalString(96),
+
   // --- Inbound -----------------------------------------------------------------------------------------------------
   /**
    * Public origin Meta/Interakt can reach, without a trailing slash. The per-phone callback override points at
@@ -75,6 +86,18 @@ export const wabaEnvSchema = z.object({
    * verifies `X-Hub-Signature-256` when an app secret exists. Set true to also require it from Interakt-forwarded events.
    */
   WABA_REQUIRE_INTERAKT_SIGNATURE: z.preprocess(
+    blankToUndefined,
+    z
+      .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
+      .transform((v) => v === true || v === 'true' || v === '1')
+      .default(false),
+  ),
+  /**
+   * Development only: let a provider of the WhatsApp provider registry live on a loopback or private address over plain http (a stand-in
+   * server on the developer's machine). Ignored when NODE_ENV is `production`: the registry's addresses are typed by an operator and
+   * every call to them carries a credential, so production only ever reaches public https hosts.
+   */
+  WABA_PROVIDER_ALLOW_PRIVATE_HOSTS: z.preprocess(
     blankToUndefined,
     z
       .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])

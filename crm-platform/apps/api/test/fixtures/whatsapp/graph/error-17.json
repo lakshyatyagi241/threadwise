@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "User request limit reached",
+    "type": "OAuthException",
+    "code": 17,
+    "fbtrace_id": "AbCdEfGhIj12345"
+  }
+}

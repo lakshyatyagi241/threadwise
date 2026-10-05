@@ -1,7 +1,14 @@
 import { isDay } from './dates';
 import { minorToInput, parseMajor } from './money';
 
-export type PaymentProblem = 'amountInvalid' | 'amountZero' | 'dateInvalid' | 'dateFuture' | 'tooMuch' | 'referenceTooLong' | 'noteTooLong';
+export type PaymentProblem =
+  | 'amountInvalid'
+  | 'amountZero'
+  | 'dateInvalid'
+  | 'dateFuture'
+  | 'tooMuch'
+  | 'referenceTooLong'
+  | 'noteTooLong';
 
 export const REFERENCE_MAX = 191;
 export const NOTE_MAX = 2000;

@@ -1,3 +1,4 @@
+import { ERROR_CODES } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 
 /** Seconds to wait, from a rate-limit or lockout refusal (`fieldErrors` entry `retryAfterSeconds`). */
@@ -7,6 +8,21 @@ export function retryAfterSeconds(error: unknown): number | null {
   if (!hit) return null;
   const n = Number(hit.message);
   return Number.isFinite(n) && n > 0 ? Math.ceil(n) : null;
+}
+
+/** The API refused because too many wrong codes or passwords were tried (429 `AUTH_ACCOUNT_LOCKED`). */
+export function isAccountLocked(error: unknown): boolean {
+  return error instanceof ApiError && error.code === ERROR_CODES.AUTH_ACCOUNT_LOCKED;
+}
+
+/**
+ * Whole minutes until a locked person may try again, from the `retryAfterSeconds` the API sends with the refusal
+ * (at least one), or null when the refusal carried no wait. Lockouts are quarter-hour scale, so seconds would
+ * only read as noise.
+ */
+export function lockedMinutes(error: unknown): number | null {
+  const wait = retryAfterSeconds(error);
+  return wait === null ? null : Math.max(1, Math.ceil(wait / 60));
 }
 
 /** Every message the server attached to one of the given input paths. */

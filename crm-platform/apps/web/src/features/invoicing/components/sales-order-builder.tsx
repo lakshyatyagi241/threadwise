@@ -33,12 +33,32 @@ import { majorToMinor, minorOf } from '../lib/wire';
 import { ContactPicker } from './contact-picker';
 import { BackIcon } from './icons';
 import { InvoiceLinesEditor } from './line-items-editor';
-import { ErrorLine, Money, UserText, useDefaultCurrency, useErrorText, useInvoicingCan } from './parts';
+import {
+  ErrorLine,
+  Money,
+  UserText,
+  useDefaultCurrency,
+  useErrorText,
+  useInvoicingCan,
+} from './parts';
 import { QuotePicker } from './sales-order-quote-picker';
 import { OrderStatusChip, salesOrderHref, newSalesOrderHref } from './sales-order-parts';
 import { TotalsCard } from './totals-card';
 
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'INR', 'JPY', 'KWD', 'CAD', 'AUD', 'SGD', 'CHF'];
+const CURRENCIES = [
+  'USD',
+  'EUR',
+  'GBP',
+  'AED',
+  'SAR',
+  'INR',
+  'JPY',
+  'KWD',
+  'CAD',
+  'AUD',
+  'SGD',
+  'CHF',
+];
 
 /**
  * `/sales-orders/new` and `/sales-orders/[id]/edit`. New: start from an accepted proposal or estimate (`?quote=`, or pick one)
@@ -59,7 +79,12 @@ export function SalesOrderBuilder({ orderId }: { orderId?: string }) {
   if (failed) {
     return (
       <div className="space-y-3">
-        <ErrorLine error={failed} onRetry={() => void Promise.all([rates.refetch(), settings.refetch(), existing.refetch()])} />
+        <ErrorLine
+          error={failed}
+          onRetry={() =>
+            void Promise.all([rates.refetch(), settings.refetch(), existing.refetch()])
+          }
+        />
       </div>
     );
   }
@@ -74,13 +99,23 @@ export function SalesOrderBuilder({ orderId }: { orderId?: string }) {
     return (
       <Alert tone="warning" className="space-y-2">
         <p>{t('frozen')}</p>
-        <Link href={salesOrderHref(existing.data.id)} className="font-medium underline underline-offset-2">
+        <Link
+          href={salesOrderHref(existing.data.id)}
+          className="font-medium underline underline-offset-2"
+        >
           {t('openOrder')}
         </Link>
       </Alert>
     );
   }
-  return <BuilderForm key={existing.data?.id ?? `new-${quoteKey}`} order={existing.data} rates={rates.data} settings={settings.data} />;
+  return (
+    <BuilderForm
+      key={existing.data?.id ?? `new-${quoteKey}`}
+      order={existing.data}
+      rates={rates.data}
+      settings={settings.data}
+    />
+  );
 }
 
 function BuilderForm({
@@ -116,7 +151,8 @@ function BuilderForm({
   const [error, setError] = useState<unknown>(null);
   const [conflict, setConflict] = useState(false);
   const [busy, setBusy] = useState(false);
-  const set = <K extends keyof OrderDraft>(k: K, v: OrderDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof OrderDraft>(k: K, v: OrderDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   const dirty = !isSameOrderDraft(draft, initial);
 
   // The offer fixes the currency and fills the buyer once it has loaded.
@@ -174,7 +210,11 @@ function BuilderForm({
   const requireHsn = hsnRequired(settings.sellerCountry);
 
   async function save() {
-    const p = validateOrderDraft(draft, { requireHsn, creating: !order, linesTouched: linesChanged(draft, initial) });
+    const p = validateOrderDraft(draft, {
+      requireHsn,
+      creating: !order,
+      linesTouched: linesChanged(draft, initial),
+    });
     setProblems(p);
     setServerLines({});
     setError(null);
@@ -185,7 +225,11 @@ function BuilderForm({
     setBusy(true);
     try {
       const out = order
-        ? await invoicingApi.updateSalesOrder(order.id, order.rowVersion, buildUpdateInput(draft, initial, rates))
+        ? await invoicingApi.updateSalesOrder(
+            order.id,
+            order.rowVersion,
+            buildUpdateInput(draft, initial, rates),
+          )
         : await invoicingApi.createSalesOrder(buildCreateInput(draft, rates));
       await invalidateInvoicing(qc);
       toast(order ? t('saved') : t('created', { number: out.number }));
@@ -209,9 +253,13 @@ function BuilderForm({
     }
   }
 
-  const fieldErr = (k: keyof OrderProblems['fields']) => (problems.fields[k] ? t(`problems.${problems.fields[k]}`) : (serverLines[SERVER_FIELD[k]] ?? undefined));
+  const fieldErr = (k: keyof OrderProblems['fields']) =>
+    problems.fields[k]
+      ? t(`problems.${problems.fields[k]}`)
+      : (serverLines[SERVER_FIELD[k]] ?? undefined);
   const lineErrors: Record<string, string> = { ...serverLines };
-  for (const [path, problem] of Object.entries(problems.lines)) lineErrors[path] = t(`lineProblems.${problem}`);
+  for (const [path, problem] of Object.entries(problems.lines))
+    lineErrors[path] = t(`lineProblems.${problem}`);
   if (problems.list) lineErrors.lines = t(`problems.${problems.list}`);
 
   return (
@@ -225,15 +273,27 @@ function BuilderForm({
           >
             <BackIcon />
           </Link>
-          <h1 className="truncate text-xl font-bold tracking-tight">{order ? t('editTitle', { number: order.number }) : t('newTitle')}</h1>
+          <h1 className="truncate text-xl font-bold tracking-tight">
+            {order ? t('editTitle', { number: order.number }) : t('newTitle')}
+          </h1>
           {order && <OrderStatusChip status={order.status} />}
           {dirty && <span className="shrink-0 text-xs text-muted-foreground">{t('unsaved')}</span>}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="secondary" className="min-h-10" onClick={() => router.push(order ? salesOrderHref(order.id) : '/sales-orders')} disabled={busy}>
+          <Button
+            variant="secondary"
+            className="min-h-10"
+            onClick={() => router.push(order ? salesOrderHref(order.id) : '/sales-orders')}
+            disabled={busy}
+          >
             {t('cancel')}
           </Button>
-          <Button variant="brand" className="min-h-10" onClick={() => void save()} disabled={busy || (linesFromQuote && !quote.data && quote.isPending)}>
+          <Button
+            variant="brand"
+            className="min-h-10"
+            onClick={() => void save()}
+            disabled={busy || (linesFromQuote && !quote.data && quote.isPending)}
+          >
             {busy && <Spinner />}
             {order ? t('saveChanges') : t('createDraft')}
           </Button>
@@ -252,15 +312,32 @@ function BuilderForm({
 
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
         <div className="min-w-0 space-y-4">
-          {!order && <SourceCard quoteId={draft.quoteId} quote={quote.data} quoteLoading={!!quoteParam && quote.isPending} quoteFailed={quote.error} />}
+          {!order && (
+            <SourceCard
+              quoteId={draft.quoteId}
+              quote={quote.data}
+              quoteLoading={!!quoteParam && quote.isPending}
+              quoteFailed={quote.error}
+            />
+          )}
 
           <Card title={t('buyer')}>
-            <Field label={t('contact')} htmlFor="so-contact" hint={t('contactHint')} className="sm:col-span-2" error={fieldErr('buyer')}>
+            <Field
+              label={t('contact')}
+              htmlFor="so-contact"
+              hint={t('contactHint')}
+              className="sm:col-span-2"
+              error={fieldErr('buyer')}
+            >
               <ContactPicker
                 id="so-contact"
                 invalid={!!problems.fields.buyer}
                 disabled={busy}
-                value={draft.contactId ? { id: draft.contactId, label: draft.contactLabel || draft.buyerName } : null}
+                value={
+                  draft.contactId
+                    ? { id: draft.contactId, label: draft.contactLabel || draft.buyerName }
+                    : null
+                }
                 onChange={(c) =>
                   setDraft((d) => ({
                     ...d,
@@ -273,19 +350,49 @@ function BuilderForm({
                 }
               />
             </Field>
-            <Field label={t('buyerName')} htmlFor="so-name" hint={fromQuote ? t('fromQuoteHint') : undefined}>
-              <Input id="so-name" dir="auto" disabled={busy} value={draft.buyerName} onChange={(e) => set('buyerName', e.target.value)} />
+            <Field
+              label={t('buyerName')}
+              htmlFor="so-name"
+              hint={fromQuote ? t('fromQuoteHint') : undefined}
+            >
+              <Input
+                id="so-name"
+                dir="auto"
+                disabled={busy}
+                value={draft.buyerName}
+                onChange={(e) => set('buyerName', e.target.value)}
+              />
             </Field>
             <Field label={t('buyerEmail')} htmlFor="so-email" error={fieldErr('email')}>
-              <Input id="so-email" type="email" dir="ltr" disabled={busy} value={draft.buyerEmail} invalid={!!problems.fields.email} onChange={(e) => set('buyerEmail', e.target.value)} />
+              <Input
+                id="so-email"
+                type="email"
+                dir="ltr"
+                disabled={busy}
+                value={draft.buyerEmail}
+                invalid={!!problems.fields.email}
+                onChange={(e) => set('buyerEmail', e.target.value)}
+              />
             </Field>
             <Field label={t('buyerPhone')} htmlFor="so-phone">
-              <Input id="so-phone" type="tel" dir="ltr" disabled={busy} value={draft.buyerPhone} onChange={(e) => set('buyerPhone', e.target.value)} />
+              <Input
+                id="so-phone"
+                type="tel"
+                dir="ltr"
+                disabled={busy}
+                value={draft.buyerPhone}
+                onChange={(e) => set('buyerPhone', e.target.value)}
+              />
             </Field>
           </Card>
 
           <Card title={t('details')}>
-            <Field label={t('currency')} htmlFor="so-currency" hint={order || fromQuote ? t('currencyLocked') : t('currencyHint')} error={fieldErr('currency')}>
+            <Field
+              label={t('currency')}
+              htmlFor="so-currency"
+              hint={order || fromQuote ? t('currencyLocked') : t('currencyHint')}
+              error={fieldErr('currency')}
+            >
               <Input
                 id="so-currency"
                 dir="ltr"
@@ -302,11 +409,38 @@ function BuilderForm({
                 ))}
               </datalist>
             </Field>
-            <Field label={t('expectedDate')} htmlFor="so-expected" hint={t('expectedHint')} error={fieldErr('expectedDate')}>
-              <Input id="so-expected" type="date" dir="ltr" disabled={busy} value={draft.expectedDate} invalid={!!problems.fields.expectedDate} onChange={(e) => set('expectedDate', e.target.value)} />
+            <Field
+              label={t('expectedDate')}
+              htmlFor="so-expected"
+              hint={t('expectedHint')}
+              error={fieldErr('expectedDate')}
+            >
+              <Input
+                id="so-expected"
+                type="date"
+                dir="ltr"
+                disabled={busy}
+                value={draft.expectedDate}
+                invalid={!!problems.fields.expectedDate}
+                onChange={(e) => set('expectedDate', e.target.value)}
+              />
             </Field>
-            <Field label={t('reference')} htmlFor="so-ref" hint={t('referenceHint')} error={fieldErr('reference')} className="sm:col-span-2">
-              <Input id="so-ref" dir="auto" maxLength={191} disabled={busy} value={draft.reference} invalid={!!problems.fields.reference} onChange={(e) => set('reference', e.target.value)} />
+            <Field
+              label={t('reference')}
+              htmlFor="so-ref"
+              hint={t('referenceHint')}
+              error={fieldErr('reference')}
+              className="sm:col-span-2"
+            >
+              <Input
+                id="so-ref"
+                dir="auto"
+                maxLength={191}
+                disabled={busy}
+                value={draft.reference}
+                invalid={!!problems.fields.reference}
+                onChange={(e) => set('reference', e.target.value)}
+              />
             </Field>
           </Card>
 
@@ -330,15 +464,55 @@ function BuilderForm({
           )}
 
           <Card title={t('shippingNotes')}>
-            <Field label={t('shipping', { currency: draft.currency })} htmlFor="so-shipping" hint={t('shippingHint')} error={fieldErr('shipping')}>
-              <Input id="so-shipping" inputMode="decimal" dir="ltr" disabled={busy} value={draft.shipping} placeholder="0" invalid={!!problems.fields.shipping} onChange={(e) => set('shipping', e.target.value)} />
+            <Field
+              label={t('shipping', { currency: draft.currency })}
+              htmlFor="so-shipping"
+              hint={t('shippingHint')}
+              error={fieldErr('shipping')}
+            >
+              <Input
+                id="so-shipping"
+                inputMode="decimal"
+                dir="ltr"
+                disabled={busy}
+                value={draft.shipping}
+                placeholder="0"
+                invalid={!!problems.fields.shipping}
+                onChange={(e) => set('shipping', e.target.value)}
+              />
             </Field>
             <div className="hidden sm:block" />
-            <Field label={t('notes')} htmlFor="so-notes" hint={t('notesHint')} className="sm:col-span-2">
-              <Textarea id="so-notes" rows={3} dir="auto" disabled={busy} maxLength={5000} value={draft.notes} onChange={(e) => set('notes', e.target.value)} />
+            <Field
+              label={t('notes')}
+              htmlFor="so-notes"
+              hint={t('notesHint')}
+              className="sm:col-span-2"
+            >
+              <Textarea
+                id="so-notes"
+                rows={3}
+                dir="auto"
+                disabled={busy}
+                maxLength={5000}
+                value={draft.notes}
+                onChange={(e) => set('notes', e.target.value)}
+              />
             </Field>
-            <Field label={t('terms')} htmlFor="so-terms" hint={t('termsHint')} className="sm:col-span-2">
-              <Textarea id="so-terms" rows={3} dir="auto" disabled={busy} maxLength={10000} value={draft.terms} onChange={(e) => set('terms', e.target.value)} />
+            <Field
+              label={t('terms')}
+              htmlFor="so-terms"
+              hint={t('termsHint')}
+              className="sm:col-span-2"
+            >
+              <Textarea
+                id="so-terms"
+                rows={3}
+                dir="auto"
+                disabled={busy}
+                maxLength={10000}
+                value={draft.terms}
+                onChange={(e) => set('terms', e.target.value)}
+              />
             </Field>
           </Card>
         </div>
@@ -361,12 +535,29 @@ function BuilderForm({
 }
 
 /** Server field name behind each form field, for messages the server sent. */
-const SERVER_FIELD = { buyer: 'buyerName', email: 'buyerEmail', currency: 'currency', expectedDate: 'expectedDate', shipping: 'shipping', reference: 'reference' } as const;
+const SERVER_FIELD = {
+  buyer: 'buyerName',
+  email: 'buyerEmail',
+  currency: 'currency',
+  expectedDate: 'expectedDate',
+  shipping: 'shipping',
+  reference: 'reference',
+} as const;
 
-function Card({ title, children, single }: { title: string; children: React.ReactNode; single?: boolean }) {
+function Card({
+  title,
+  children,
+  single,
+}: {
+  title: string;
+  children: React.ReactNode;
+  single?: boolean;
+}) {
   return (
     <section className="rounded-xl border border-border bg-background p-4">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</h2>
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {title}
+      </h2>
       <div className={cn(single ? 'space-y-3' : 'grid gap-3 sm:grid-cols-2')}>{children}</div>
     </section>
   );
@@ -397,14 +588,18 @@ function SourceCard({
   };
   return (
     <section className="space-y-3 rounded-xl border border-border bg-background p-4">
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('startFrom')}</h2>
+      <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('startFrom')}
+      </h2>
       <div role="radiogroup" aria-label={t('startFrom')} className="grid gap-2 sm:grid-cols-2">
         {(['scratch', 'quote'] as const).map((m) => (
           <label
             key={m}
             className={cn(
               'flex min-h-10 cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
-              mode === m ? 'border-primary bg-primary/5 font-medium' : 'border-border hover:bg-muted',
+              mode === m
+                ? 'border-primary bg-primary/5 font-medium'
+                : 'border-border hover:bg-muted',
             )}
           >
             <input
@@ -435,9 +630,15 @@ function SourceCard({
                 <span dir="ltr" className="font-medium">
                   {quote.number}
                 </span>{' '}
-                <UserText className="text-muted-foreground">{[quote.title, quote.buyerName].filter(Boolean).join(' - ')}</UserText>
+                <UserText className="text-muted-foreground">
+                  {[quote.title, quote.buyerName].filter(Boolean).join(' - ')}
+                </UserText>
               </span>
-              <Money minor={minorOf(quote.totals.totalMinor)} currency={quote.currency} className="font-medium" />
+              <Money
+                minor={minorOf(quote.totals.totalMinor)}
+                currency={quote.currency}
+                className="font-medium"
+              />
             </div>
           )}
           <QuotePicker selectedId={quoteId} onPick={(row) => go(row.id)} />
@@ -447,15 +648,35 @@ function SourceCard({
   );
 }
 
-function QuoteTotals({ quote, order }: { quote: QuoteRow | undefined; order: SalesOrderResponse | undefined }) {
+function QuoteTotals({
+  quote,
+  order,
+}: {
+  quote: QuoteRow | undefined;
+  order: SalesOrderResponse | undefined;
+}) {
   const t = useTranslations('invoicing.salesOrders.builder');
   const currency = order?.currency ?? quote?.currency;
   const total = order ? order.amounts.total : quote?.totals.total;
   if (!currency || total === undefined) return null;
-  const major = order ? order.amounts : quote ? { subtotal: quote.totals.subtotal, discount: quote.totals.discount, tax: quote.totals.tax, total: quote.totals.total } : null;
+  const major = order
+    ? order.amounts
+    : quote
+      ? {
+          subtotal: quote.totals.subtotal,
+          discount: quote.totals.discount,
+          tax: quote.totals.tax,
+          total: quote.totals.total,
+        }
+      : null;
   if (!major) return null;
   const row = (label: string, value: string, strong?: boolean) => (
-    <div className={cn('flex items-baseline justify-between gap-3', strong && 'border-t border-border pt-2 text-lg font-bold')}>
+    <div
+      className={cn(
+        'flex items-baseline justify-between gap-3',
+        strong && 'border-t border-border pt-2 text-lg font-bold',
+      )}
+    >
       <dt className={strong ? undefined : 'text-muted-foreground'}>{label}</dt>
       <dd>
         <Money minor={moneyMinor(value, currency)} currency={currency} />
@@ -463,8 +684,13 @@ function QuoteTotals({ quote, order }: { quote: QuoteRow | undefined; order: Sal
     </div>
   );
   return (
-    <section aria-label={t('quoteTotals')} className="rounded-lg border border-border bg-background p-4 text-sm">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('quoteTotals')}</h2>
+    <section
+      aria-label={t('quoteTotals')}
+      className="rounded-lg border border-border bg-background p-4 text-sm"
+    >
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('quoteTotals')}
+      </h2>
       <dl className="space-y-1.5">
         {row(t('subtotal'), major.subtotal)}
         {moneyMinor(major.discount, currency) > 0 && row(t('discount'), major.discount)}
@@ -487,19 +713,32 @@ function SaveError({ error, quote }: { error: unknown; quote: QuoteRow | null })
   const existing = useOrderOfQuote(taken && quote ? { id: quote.id, number: quote.number } : null);
   return (
     <Alert tone="danger" className="space-y-1">
-      <p>{Object.keys(fieldErrors(error)).length > 0 && errorKind(error) === 'validation' ? t('serverRejected') : errorText(error)}</p>
+      <p>
+        {Object.keys(fieldErrors(error)).length > 0 && errorKind(error) === 'validation'
+          ? t('serverRejected')
+          : errorText(error)}
+      </p>
       {taken && existing.data && (
-        <Link href={salesOrderHref(existing.data.id)} className="inline-block font-medium underline underline-offset-2">
+        <Link
+          href={salesOrderHref(existing.data.id)}
+          className="inline-block font-medium underline underline-offset-2"
+        >
           {t('openExisting', { number: existing.data.number })}
         </Link>
       )}
       {taken && (
-        <Link href="/sales-orders" className="ms-3 inline-block font-medium underline underline-offset-2">
+        <Link
+          href="/sales-orders"
+          className="ms-3 inline-block font-medium underline underline-offset-2"
+        >
           {t('viewOrders')}
         </Link>
       )}
       {code === 'SO_QUOTE_NOT_ACCEPTED' && (
-        <Link href={newSalesOrderHref()} className="inline-block font-medium underline underline-offset-2">
+        <Link
+          href={newSalesOrderHref()}
+          className="inline-block font-medium underline underline-offset-2"
+        >
           {t('pickAnother')}
         </Link>
       )}

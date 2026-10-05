@@ -12,7 +12,7 @@ import {
 } from '@crm/contracts';
 import { Alert, Button, Spinner, cn } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { rootPath } from '../lib/api-errors';
+import { isRoleRefusal, rootPath } from '../lib/api-errors';
 import { endsCallersSession, type DangerKind } from '../lib/danger';
 import {
   FIELD_TAB,
@@ -35,6 +35,7 @@ import { DangerDialog } from './danger-dialog';
 import { DangerPanel, HaltBanner } from './danger-panel';
 import { AbusePanel, ApiPanel, DevicesPanel, LoginPanel, WhatsappPanel } from './policy-panels';
 import { PolicyFormProvider, SECURITY_NS, fieldId } from './policy-form';
+import { SecuritySearch } from './security-search';
 import { KpiStrip, SummaryPanel } from './summary-panel';
 import { useSecurityTab } from './use-security-tab';
 
@@ -109,6 +110,8 @@ function SecurityCenterView({ overview }: { overview: SecurityOverviewResponse }
         return tp('tooMany', { max: p.max });
       case 'tooLong':
         return tp('tooLong', { max: p.max });
+      case 'totalTooLong':
+        return tp('totalTooLong', { max: p.max });
       case 'invalidEntry':
         return tp('invalidEntry', { entry: p.entry });
     }
@@ -162,7 +165,7 @@ function SecurityCenterView({ overview }: { overview: SecurityOverviewResponse }
         setSaveError(null);
         setBanner({ count: Math.max(1, err.fieldErrors.length), items });
         reveal(Object.keys(next).filter(isPolicyKey));
-      } else if (err instanceof ApiError && err.status === 403) {
+      } else if (isRoleRefusal(err)) {
         setSaveError({ message: t('errors.forbidden'), requestId: err.requestId });
       } else if (err instanceof ApiError && err.code === 'UNAUTHENTICATED') {
         /* operatorFetch is already sending the person to sign in */
@@ -245,6 +248,10 @@ function SecurityCenterView({ overview }: { overview: SecurityOverviewResponse }
         errors,
       }}
     >
+      {/* Outside the form: pressing Enter in the search box must never save the policy. */}
+      <div className="mb-5">
+        <SecuritySearch />
+      </div>
       <form onSubmit={onSubmit} noValidate className="space-y-5">
         <PageHeader
           eyebrow={t('kicker')}

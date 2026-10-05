@@ -52,7 +52,7 @@
         "afternoon": "Good afternoon, {name}.",
         "evening": "Good evening, {name}."
       },
-      "subline": "{range}: {sent, plural, one {# message sent} other {# messages sent}}, {rate}% delivered.",
+      "subline": "{date} - {range} showing {sent} outbound, {rate}% deliverability across {devices, plural, one {# connected device} other {# connected devices}}.",
       "kpis": "Key numbers",
       "kpi": {
         "sent": "Messages sent · {range}",
@@ -61,7 +61,12 @@
         "deliverability": "Deliverability",
         "deliveredOf": "{delivered} of {sent} messages",
         "replies": "Replies",
-        "replyRate": "{rate}% reply rate"
+        "replyRate": "{rate}% reply rate",
+        "readMini": {
+          "sent": "Sent",
+          "delivered": "Deliv",
+          "read": "Read"
+        }
       },
       "throughput": {
         "title": "Message throughput",
@@ -81,11 +86,201 @@
       },
       "sparkline": {
         "title": "Last 20 hours",
-        "subtitle": "Messages sent per hour, oldest first"
+        "subtitle": "Messages sent per hour, oldest first",
+        "inCard": "Last 20 hours"
       },
       "funnel": {
         "title": "Engagement funnel",
         "viewAll": "View analytics"
+      },
+      "kicker": "Operator dashboard",
+      "calm": "Workspace is calm.",
+      "running": "{n, plural, one {# broadcast is running.} other {# broadcasts are running.}}",
+      "export": "Export",
+      "newCampaign": "New campaign",
+      "contacts": {
+        "title": "Active contacts",
+        "subscribed": "Subscribed",
+        "optedIn": "Opted-in",
+        "blocked": "Blocked"
+      },
+      "wallet": {
+        "title": "Wallet balance",
+        "payPerMessage": "pay per message",
+        "topUp": "Top up",
+        "earn": "Earn via affiliate"
+      },
+      "autopilot": {
+        "kicker": "Get more done",
+        "title": "Put replies on autopilot",
+        "body": "Build a flow or launch a campaign to reach more customers automatically.",
+        "flow": "Build a flow",
+        "campaign": "New campaign"
+      },
+      "pipeline": {
+        "kicker": "Sales pipeline",
+        "open": "Open pipeline",
+        "deals": "Open deals",
+        "won": "Won this month",
+        "winRate": "Win rate",
+        "board": "Open board"
+      },
+      "inbox": {
+        "title": "Live inbox",
+        "unread": "{n} unread",
+        "oldest": "oldest {when}",
+        "open": "Open inbox",
+        "recent": "Recent conversations",
+        "empty": "No conversations yet."
+      },
+      "campaigns": {
+        "title": "Active campaigns",
+        "summary": "{running} running - {scheduled} scheduled - {paused} paused",
+        "viewAll": "View all {n}",
+        "untitled": "Untitled broadcast",
+        "delivered": "{done} / {total} delivered",
+        "emptyTitle": "No active broadcasts",
+        "emptyBody": "Spin one up to start sending to a contact group.",
+        "new": "New broadcast",
+        "status": {
+          "processing": "Sending",
+          "sending": "Sending",
+          "running": "Sending",
+          "active": "Sending",
+          "scheduled": "Scheduled",
+          "pending": "Scheduled",
+          "queued": "Scheduled",
+          "paused": "Paused",
+          "cancelled": "Paused",
+          "failed": "Failed",
+          "completed": "Completed",
+          "completed_with_errors": "Completed",
+          "done": "Completed",
+          "sent": "Completed"
+        }
+      },
+      "devices": {
+        "title": "Connected devices",
+        "summary": "{total} of {cap} slots used - {online} online",
+        "connect": "Connect",
+        "emptyTitle": "No devices connected",
+        "emptyBody": "Pair a WhatsApp number to start sending.",
+        "connectDevice": "Connect a device",
+        "unzoned": "unzoned",
+        "per24h": "{n}/24h",
+        "deliv": "deliv",
+        "free": "{n, plural, one {# device slot available} other {# device slots available}}"
+      },
+      "templates": {
+        "title": "Top performing templates",
+        "subtitle": "By send volume - selected range",
+        "count": "{n, plural, one {# template} other {# templates}}",
+        "new": "New template",
+        "empty": "No templates yet.",
+        "create": "Create your first",
+        "col": {
+          "template": "Template",
+          "type": "Type",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "read": "Read",
+          "readRate": "Read rate",
+          "performance": "Performance",
+          "status": "Status"
+        },
+        "status": {
+          "approved": "Approved",
+          "public": "Approved",
+          "active": "Approved",
+          "pending": "In review",
+          "submitted": "In review",
+          "in_review": "In review",
+          "rejected": "Rejected",
+          "disabled": "Rejected"
+        }
+      },
+      "activity": {
+        "title": "Activity log",
+        "subtitle": "Workspace events",
+        "empty": "No recent activity logged for this workspace.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# account} other {# accounts}}",
+        "connected": "Connected",
+        "openInbox": "Open inbox →",
+        "tile": {
+          "needReply": "Need reply",
+          "openChats": "Open chats",
+          "dmsIn": "DMs in · 7d",
+          "dmsOut": "DMs sent · 7d",
+          "followers": "Followers",
+          "replyRate": "Reply rate"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI Powered",
+        "headline": "Build a flow from a sentence.",
+        "body": "Describe a customer journey and Copilot drafts nodes, branches, and template suggestions.",
+        "try": "try:",
+        "generate": "Generate flow ✦",
+        "examples": "Examples",
+        "stat": {
+          "flows": "flows",
+          "active": "active",
+          "subscribers": "subscribers"
+        }
+      },
+      "flows": {
+        "title": "Automation flows",
+        "summary": "{active} active · {subscribers} subscribers",
+        "open": "Open",
+        "empty": "No flows yet.",
+        "build": "Build your first flow",
+        "meta": "{trigger} trigger · {steps} steps · {subs} subscribers",
+        "statusActive": "Active",
+        "statusPaused": "Paused",
+        "subs": "subs"
+      },
+      "quickActions": {
+        "title": "Quick actions",
+        "broadcast": {
+          "label": "New broadcast",
+          "hint": "to a contact group"
+        },
+        "flow": {
+          "label": "Build flow",
+          "hint": "drag & drop"
+        },
+        "template": {
+          "label": "New template",
+          "hint": "submit to Meta"
+        },
+        "autoReply": {
+          "label": "Auto-reply",
+          "hint": "keyword rule"
+        }
+      },
+      "integrations": {
+        "title": "Integrations",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} events / 7d",
+        "connected": {
+          "woocommerce": "Connected",
+          "shopify": "Connected",
+          "google_sheets": "API key issued",
+          "meta_catalog": "Catalog linked"
+        },
+        "notConnected": "not connected",
+        "connect": "Connect",
+        "connectedLabel": "Connected"
       }
     },
     "analytics": {
@@ -141,6 +336,53 @@
         "subtitle": "Message volume by weekday and hour, {zone}. Darker means busier.",
         "empty": "No message volume in this window.",
         "footer": "Computed from {total} messages, time zone {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "By device",
+          "subtitle": "Sends in the last 24 hours",
+          "online": "{online}/{total} online",
+          "empty": "No connected devices yet.",
+          "msg": "{n} msg"
+        },
+        "templates": {
+          "title": "Templates",
+          "subtitle": "Top performers by sends",
+          "empty": "No template sends in this window."
+        },
+        "contacts": {
+          "title": "Top contacts",
+          "subtitle": "Most engaged conversations",
+          "empty": "No conversations in this window.",
+          "msgs": "{n} msgs"
+        },
+        "team": {
+          "title": "Team performance",
+          "subtitle": "Agents in this window",
+          "count": "{n, plural, one {# agent} other {# agents}}",
+          "col": {
+            "agent": "Agent",
+            "convos": "Convos",
+            "resolved": "Resolved",
+            "first": "Avg 1st resp.",
+            "resolution": "Avg resolution",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "By country",
+          "subtitle": "Reach",
+          "markets": "{n, plural, one {# market} other {# markets}}",
+          "unspecified": "Unspecified",
+          "empty": "No conversations with a known country in this window."
+        },
+        "events": {
+          "title": "Event stream",
+          "subtitle": "Newest messages in this window",
+          "sent": "Sent → {peer}",
+          "received": "Received from {peer}",
+          "empty": "No recent activity in this window."
+        }
       }
     },
     "health": {
@@ -158,6 +400,18 @@
         "refreshing": "Checking..."
       },
       "core": "Core services",
+      "activity": {
+        "messages": "Messages · 24h",
+        "aiCalls": "AI calls · 24h",
+        "conversations": "Conversations · 24h",
+        "webhooks": "Webhooks · 24h"
+      },
+      "throughput": {
+        "title": "Message throughput · 14 days",
+        "peak": "peak {n}/day",
+        "empty": "No message activity in the last 14 days.",
+        "aria": "Messages per day, last 14 days"
+      },
       "state": {
         "up": "Operational",
         "warn": "Degraded",
@@ -206,7 +460,239 @@
         "diskUsed": "Disk used {pct}%",
         "noDisk": "Not available"
       },
-      "error": "The health checks could not be loaded. Try again in a moment."
+      "error": "The health checks could not be loaded. Try again in a moment.",
+      "engines": {
+        "title": "WhatsApp engines & connected numbers",
+        "empty": "No engines configured yet.",
+        "caption": "connected of total numbers"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analytics"
+      },
+      "window": {
+        "label": "Time window",
+        "24h": "Last 24 hours",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "1y": "Last year"
+      },
+      "error": "The platform numbers could not be loaded.",
+      "retry": "Try again",
+      "vsPrevious": "vs previous period",
+      "overview": {
+        "title": "Admin dashboard.",
+        "kicker": "Admin / Overview",
+        "subtitle": "Platform health, revenue, usage, and workspace activity in one place.",
+        "addWorkspace": "Add workspace",
+        "kpi": {
+          "income": "Total income",
+          "profit": "Profit",
+          "profitHint": "Estimate at a 32% margin, not an accounting figure",
+          "views": "Total views",
+          "viewsHint": "Messages sent by every workspace",
+          "conversion": "Conversion rate"
+        },
+        "revenue": {
+          "title": "Revenue over time",
+          "total": "Total revenue",
+          "target": "Total target",
+          "targetHint": "The target is a growth benchmark of 10% over the previous period, not a stored goal.",
+          "revenue": "Revenue",
+          "aria": "Revenue per period against the target"
+        },
+        "countries": {
+          "title": "Session by country",
+          "subtitle": "Top sessions by region",
+          "empty": "No country data yet - users haven't shared their region."
+        },
+        "regions": {
+          "title": "Sales by region",
+          "subtitle": "Platform revenue share",
+          "aria": "New users per region"
+        },
+        "platform": {
+          "title": "Sales by platform",
+          "subtitle": "E-commerce integrations",
+          "empty": "No paid orders in this window.",
+          "aria": "Paid revenue by payment gateway"
+        },
+        "users": {
+          "title": "Registered users",
+          "subtitle": "Overview of user seats",
+          "total": "Total users",
+          "premium": "Premium plan",
+          "basic": "Basic plan",
+          "aria": "{pct}% of users are on a paid plan"
+        },
+        "workspaces": {
+          "title": "Workspace activity",
+          "subtitle": "Recent high-value admin events",
+          "viewAll": "View all",
+          "empty": "No workspaces yet.",
+          "col": {
+            "workspace": "Workspace",
+            "owner": "Owner",
+            "plan": "Plan",
+            "messages": "Messages",
+            "health": "Health",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Good",
+            "active": "Active",
+            "low": "Low",
+            "idle": "Idle"
+          }
+        },
+        "alerts": {
+          "title": "Admin alerts",
+          "subtitle": "Priority queue",
+          "open": "{n} open",
+          "empty": "All systems healthy - no alerts."
+        },
+        "titleLead": "Admin",
+        "titleAccent": "dashboard"
+      },
+      "analytics": {
+        "title": "Admin analytics.",
+        "kicker": "Admin - Platform",
+        "subtitle": "A complete control-room view of revenue, workspace growth, WhatsApp usage, campaign delivery, device health, and support pressure.",
+        "days": {
+          "7": "Last 7 days",
+          "30": "Last 30 days",
+          "90": "Last 90 days",
+          "365": "This year",
+          "custom": "Last {n} days"
+        },
+        "daysLabel": "Days",
+        "export": "Export",
+        "tabs": {
+          "overview": "Overview",
+          "revenue": "Revenue",
+          "usage": "Usage",
+          "workspaces": "Workspaces",
+          "campaigns": "Campaigns",
+          "support": "Support"
+        },
+        "kpi": {
+          "revenue": "Revenue",
+          "revenueSub": "{n, plural, one {# new workspace} other {# new workspaces}}",
+          "workspaces": "Workspaces",
+          "workspacesSub": "{n, plural, one {# total user} other {# total users}}",
+          "messages": "Messages",
+          "messagesSub": "{n} / day avg",
+          "devices": "Devices online",
+          "newUsers": "New users",
+          "newUsersSub": "{n} total",
+          "tickets": "Open tickets",
+          "watch": "watch",
+          "clear": "clear"
+        },
+        "pulse": {
+          "title": "Platform pulse",
+          "subtitle": "Live saturation of the control room",
+          "workspaces": "Workspaces",
+          "devices": "Devices connected",
+          "tickets": "Open tickets",
+          "signups": "New signups",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Growth command center",
+          "subtitle": "User signups, last {days} days",
+          "aria": "Signups per day",
+          "series": "Signups"
+        },
+        "plans": {
+          "title": "Plan distribution",
+          "subtitle": "Workspaces by plan",
+          "empty": "No data yet - plan distribution shows once at least one workspace has been assigned a plan.",
+          "aria": "Workspaces by plan"
+        },
+        "acquisition": {
+          "title": "Acquisition",
+          "subtitle": "Users to workspace",
+          "users": "Total users",
+          "newUsers": "New users",
+          "workspaces": "Workspaces created",
+          "newWorkspaces": "New workspaces",
+          "devices": "Devices connected"
+        },
+        "devices": {
+          "title": "Top devices - 24h",
+          "subtitle": "Send volume",
+          "empty": "No sends yet",
+          "devices": "Devices",
+          "online": "Online",
+          "sends": "24h sends",
+          "aria": "Sends in the last 24 hours per device"
+        },
+        "leaderboard": {
+          "title": "Top workspaces by paid revenue",
+          "subtitle": "Last {days} days",
+          "workspace": "Workspace",
+          "orders": "Orders",
+          "revenue": "Paid revenue",
+          "open": "Open",
+          "empty": "No paid orders in this window."
+        },
+        "cohort": {
+          "title": "Signup cohorts",
+          "subtitle": "Recent {days} days",
+          "aria": "Daily signups"
+        },
+        "composition": {
+          "title": "Revenue composition",
+          "subtitle": "Top contributors",
+          "empty": "No paid revenue yet."
+        },
+        "support": {
+          "title": "Support load",
+          "subtitle": "Tickets state",
+          "empty": "No tickets yet.",
+          "open": "Open",
+          "resolved": "Resolved",
+          "inbox": "Open inbox"
+        },
+        "queue": {
+          "title": "Admin attention",
+          "subtitle": "Action queue",
+          "tickets": "{n, plural, one {# open ticket} other {# open tickets}}",
+          "ticketsHint": "Triage in support before SLA breach",
+          "offline": "{n, plural, one {# device offline} other {# devices offline}}",
+          "offlineHint": "Fewer than half of the devices are online",
+          "users": "{n, plural, one {# new user} other {# new users}}",
+          "usersHint": "Review the latest signups",
+          "clear": "All clear"
+        },
+        "titleLead": "Admin",
+        "titleAccent": "analytics"
+      }
+    },
+    "quickAccess": {
+      "title": "Quick access",
+      "kicker": "Shortcuts",
+      "edit": "Edit shortcuts",
+      "empty": "Add quick-access shortcuts",
+      "open": "Open {label}",
+      "modalTitle": "Quick access",
+      "modalEyebrow": "Pin up to 10 shortcuts",
+      "pages": "App pages (max 10)",
+      "custom": "Custom links",
+      "labelPlaceholder": "Label",
+      "urlPlaceholder": "https://... or /path",
+      "addCustom": "+ Add a custom link",
+      "removeCustom": "Remove this link",
+      "counter": "{n} / 10 pinned",
+      "cancel": "Cancel",
+      "save": "Save shortcuts",
+      "saving": "Saving...",
+      "limit": "You can pin up to 10 shortcuts.",
+      "saved": "Quick access updated.",
+      "failed": "Could not save your shortcuts."
     }
   }
 }

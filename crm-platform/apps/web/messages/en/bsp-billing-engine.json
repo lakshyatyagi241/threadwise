@@ -33,6 +33,7 @@
       "title": "Meta credit and keys",
       "subtitle": "Connect your Meta business, then share your credit line with customers so Meta bills you and you bill them.",
       "linkIncome": "Message income",
+      "linkPricing": "Message pricing",
       "optionalTitle": "Optional, only for real reselling",
       "optionalBody": "You need Solution Partner status and an approved credit line with Meta. Everything else (wallets, prices, plans) works without it.",
       "readOnly": "You can look at this page, but only super admins can change it.",
@@ -139,6 +140,7 @@
       "title": "Reseller P&L",
       "eyebrow": "This month",
       "intro": "Revenue is what customers were charged for delivered messages, Meta cost is what the same messages cost you, margin is the difference. Refunded and free messages are not counted.",
+      "linkRates": "Rates & margin",
       "linkConnect": "Connect Meta",
       "revenue": "Revenue (charged)",
       "metaCost": "Meta cost",
@@ -149,7 +151,7 @@
       "free": "Free messages",
       "unpriced": "No Meta cost set",
       "unpricedBanner": "{count, plural, one {# billed message has} other {# billed messages have}} no Meta cost for their country and category, so the margin counts them as pure revenue.",
-      "perWorkspace": "Per workspace",
+      "perWorkspace": "Per workspace (this month)",
       "columns": {
         "workspace": "Workspace",
         "messages": "Msgs",
@@ -160,7 +162,8 @@
       },
       "empty": "No billed messages this month yet.",
       "more": "Only the top workspaces by revenue are listed.",
-      "loadFailed": "The P&L could not be loaded."
+      "loadFailed": "The P&L could not be loaded.",
+      "currency": "Report currency"
     },
     "customer": {
       "title": "How are messages billed?",
