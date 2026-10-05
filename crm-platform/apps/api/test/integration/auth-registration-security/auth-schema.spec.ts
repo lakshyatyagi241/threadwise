@@ -112,7 +112,10 @@ describe('auth schema, RLS and gateways', () => {
         fn: Parameters<DatabaseService['txAs']>[1],
       ) => withTenant(dbClient.db, tenant, fn),
     } as unknown as DatabaseService;
-    directory = new TenantDirectory(db, new PlanEntitlementService(db, new PlanCatalogService(db), new PlanStore(db)));
+    directory = new TenantDirectory(
+      db,
+      new PlanEntitlementService(db, new PlanCatalogService(db), new PlanStore(db)),
+    );
   }, 180_000);
 
   afterAll(async () => {

@@ -10,12 +10,12 @@ Reference 1.7.0 vs this branch. Port map: [port-map/platform-payment-gateways.md
 
 ## Status
 
-| Id                                    | Status                                                                                                                   |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| TW-PAYGW-001..005, 008, 014..016, 048 | done (catalogue, admin list/save/activate, credential schema, driver port, Stripe, Razorpay, PayPal)                     |
-| TW-PAYGW-009, 011, 026, 027, 031, 035 | done (checkout, order, return, webhook, wallet top-up, buyer history)                                                    |
-| TW-PAYGW-028                          | done: plan stacking, add-on grant (AddonFulfilmentService), wallet credit, coupon use count; referral payout waits for CPN |
-| P1 / P2 features                      | not verified in this run; see the final report of the run (only what has a passing test counts as done)                  |
+| Id                                    | Status                                                                                                                       |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| TW-PAYGW-001..005, 008, 014..016, 048 | done (catalogue, admin list/save/activate, credential schema, driver port, Stripe, Razorpay, PayPal)                         |
+| TW-PAYGW-009, 011, 026, 027, 031, 035 | done (checkout, order, return, webhook, wallet top-up, buyer history)                                                        |
+| TW-PAYGW-028                          | done: plan stacking, add-on grant (AddonFulfilmentService), wallet credit, coupon use count; referral payout waits for CPN   |
+| P1 / P2 features                      | not verified in this run; see the final report of the run (only what has a passing test counts as done)                      |
 | TW-PAYGW-010                          | done through a shim in this zone (`coupon.service.ts`, reads `coupons` through PaygwStore); swap to CPN's barrel when merged |
 
 ## Deliberate deviations
@@ -105,19 +105,19 @@ Twin spec `apps/web/e2e/platform-payment-gateways/parity/TW-PAYGW-007.twin.mjs`,
 our web app in `next dev`). Reads only; nothing was created or changed on either side. The console was driven as a read-only support operator, because a super admin must enrol
 two-factor first, so our form controls were disabled during the run.
 
-| Item | Reference | Ours | Result | Note |
-| --- | --- | --- | --- | --- |
-| Billing settings keeps every Reference field (rate, label, company identity, tax number, address, registration number, email, phone, refund window, yearly discount, auto-renew section) | present | present | same | the grace-period field is new, recorded as info only |
-| Add-on form keeps every Reference field (name, subtitle, price, offer, currency, duration, unit, sort, active, lifetime) | present | present | same | the billing-mode select is new, recorded as info only |
-| Duration units on the add-on form | days, weeks, months, years | same | same | |
-| Access without a session (settings, add-on form, add-ons list) | redirected | redirected | same | |
-| Axe checks (settings, add-on form, add-ons list) | no new violations | no new violations | same | |
-| Keyboard: skip-to-content link | none | present | intended | deliberate improvement |
-| Keyboard: share of controls reachable on the add-on form | 0.59 | 0.44 | intended | read-only operator, disabled controls are skipped by Tab |
-| First paint (LCP) | fast | slower | intended | dev-server compile; same ratio on pages this change did not touch |
-| Keyboard: focus ring on every stop (0.97 and 0.98 against 1) | 1 | 0.97 / 0.98 | open | console shell, also on untouched admin pages |
-| Responsive: one clipped text and one or two extra small tap targets per page | 0 | 1 | open | console shell, also on untouched admin pages |
-| Page structure counts (nav landmarks, buttons) | 1 nav | 2 nav, grouped rail | review, ignored | our rail is the grouped navigation of TW-ASHELL-004; side-by-side screenshots read |
+| Item                                                                                                                                                                                  | Reference                     | Ours                | Result          | Note                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------------- | --------------- | ---------------------------------------------------------------------------------- |
+| Billing settings keeps every Reference field (rate, label, company identity, tax number, address, registration number, email, phone, refund window, yearly discount, auto-renew section) | present                    | present             | same            | the grace-period field is new, recorded as info only                               |
+| Add-on form keeps every Reference field (name, subtitle, price, offer, currency, duration, unit, sort, active, lifetime)                                                                 | present                    | present             | same            | the billing-mode select is new, recorded as info only                              |
+| Duration units on the add-on form                                                                                                                                                     | days, weeks, months, years | same                | same            |                                                                                    |
+| Access without a session (settings, add-on form, add-ons list)                                                                                                                        | redirected                 | redirected          | same            |                                                                                    |
+| Axe checks (settings, add-on form, add-ons list)                                                                                                                                      | no new violations          | no new violations   | same            |                                                                                    |
+| Keyboard: skip-to-content link                                                                                                                                                        | none                       | present             | intended        | deliberate improvement                                                             |
+| Keyboard: share of controls reachable on the add-on form                                                                                                                              | 0.59                       | 0.44                | intended        | read-only operator, disabled controls are skipped by Tab                           |
+| First paint (LCP)                                                                                                                                                                     | fast                       | slower              | intended        | dev-server compile; same ratio on pages this change did not touch                  |
+| Keyboard: focus ring on every stop (0.97 and 0.98 against 1)                                                                                                                          | 1                          | 0.97 / 0.98         | open            | console shell, also on untouched admin pages                                       |
+| Responsive: one clipped text and one or two extra small tap targets per page                                                                                                          | 0                          | 1                   | open            | console shell, also on untouched admin pages                                       |
+| Page structure counts (nav landmarks, buttons)                                                                                                                                        | 1 nav                      | 2 nav, grouped rail | review, ignored | our rail is the grouped navigation of TW-ASHELL-004; side-by-side screenshots read |
 
 The open rows were reproduced on `/admin/coupons` and `/admin/currencies`, which this change does not touch, with the same signature, so they belong to the admin console shell and not to
 this work. The grace-period banner and bar, the recurring add-on checkout without the auto-renew tick and the owned add-on cancel button have no Reference counterpart; they are covered by
