@@ -189,6 +189,8 @@ export const orders = pgTable(
     planSlug: text('plan_slug'),
     returnToken: text('return_token').notNull(),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
+    /** The wallet a top-up credits, fixed when the order is placed; null = the platform currency (older orders). */
+    walletUnit: text('wallet_unit'),
     idempotencyKey: text('idempotency_key'),
     // 20261017090000_paygw_admin_billing.sql: the line printed on a manual invoice.
     description: text('description'),

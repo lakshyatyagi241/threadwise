@@ -162,7 +162,8 @@
       },
       "empty": "No billed messages this month yet.",
       "more": "Only the top workspaces by revenue are listed.",
-      "loadFailed": "The P&L could not be loaded."
+      "loadFailed": "The P&L could not be loaded.",
+      "currency": "Report currency"
     },
     "customer": {
       "title": "How are messages billed?",

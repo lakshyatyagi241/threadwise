@@ -22,17 +22,18 @@ an actual Postgres connection or an actual cross-tenant request.
 
 **Building**
 
-| Skill                                   | Use it when                                                                |
-| --------------------------------------- | -------------------------------------------------------------------------- |
-| [new-module](new-module/)               | adding a new entity/CRUD resource (`add a deals module`)                   |
-| [add-migration](add-migration/)         | any schema change — checks RLS against the live database, not the SQL text |
-| [contracts-change](contracts-change/)   | adding/changing a request or response shape in `@crm/contracts`            |
-| [rbac-permission](rbac-permission/)     | adding or gating a route behind a new permission                           |
-| [outbox-event](outbox-event/)           | a change needs to trigger a side effect                                    |
-| [worker-job](worker-job/)               | work that shouldn't block an HTTP request — queues, schedules, sweeps      |
-| [provider-adapter](provider-adapter/)   | integrating a vendor API behind a port (BSP, gateway, SMS)                 |
-| [webhook-handler](webhook-handler/)     | receiving inbound webhooks safely                                          |
-| [frontend-api-call](frontend-api-call/) | calling the API from `apps/web` or `apps/partner`                          |
+| Skill                                   | Use it when                                                                            |
+| --------------------------------------- | -------------------------------------------------------------------------------------- |
+| [new-module](new-module/)               | adding a new entity/CRUD resource (`add a deals module`)                               |
+| [add-migration](add-migration/)         | any schema change — checks RLS against the live database, not the SQL text             |
+| [contracts-change](contracts-change/)   | adding/changing a request or response shape in `@crm/contracts`                        |
+| [rbac-permission](rbac-permission/)     | adding or gating a route behind a new permission                                       |
+| [outbox-event](outbox-event/)           | a change needs to trigger a side effect                                                |
+| [worker-job](worker-job/)               | work that shouldn't block an HTTP request — queues, schedules, sweeps                  |
+| [provider-adapter](provider-adapter/)   | integrating a vendor API behind a port (BSP, gateway, SMS)                             |
+| [webhook-handler](webhook-handler/)     | receiving inbound webhooks safely                                                      |
+| [frontend-api-call](frontend-api-call/) | calling the API from `apps/web` or `apps/partner`                                      |
+| [help-docs-sync](help-docs-sync/)       | **after every screen, and after a pull**: write the Help guide, draft the missing ones |
 
 **Deciding and verifying**
 

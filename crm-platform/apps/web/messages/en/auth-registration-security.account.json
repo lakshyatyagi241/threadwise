@@ -455,7 +455,7 @@
           "timezone": "Timezone",
           "timezoneHint": "Type to search any timezone. Schedules and reports use it.",
           "currency": "Currency",
-          "currencyHint": "Optional. Used for prices and reports.",
+          "currencyHint": "What your message wallet is billed in. India defaults to INR, every other country to USD. It cannot be changed once the wallet has been used.",
           "currencyNone": "Not set",
           "currencyPlaceholder": "Search currencies",
           "currencyEmpty": "No currency matches your search.",
@@ -470,8 +470,15 @@
             "phoneRequired": "Enter your mobile number.",
             "phoneInvalid": "Enter a valid phone number for the chosen country.",
             "invalid": "This value is not valid.",
-            "forbidden": "Only a workspace administrator can set up the workspace."
-          }
+            "forbidden": "Only a workspace administrator can set up the workspace.",
+            "countryRequired": "Choose a country.",
+            "countryInvalid": "Choose a country from the list.",
+            "currencyInvalid": "This currency is not available, or the billing currency is already in use. Contact support to change it."
+          },
+          "country": "Country",
+          "countryHint": "Where your business is based.",
+          "countryPlaceholder": "Search countries",
+          "countryEmpty": "No country matches your search."
         },
         "plan": {
           "title": "Pick a plan",

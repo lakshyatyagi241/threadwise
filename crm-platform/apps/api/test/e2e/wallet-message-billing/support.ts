@@ -19,6 +19,8 @@ export const WALLET_SETTING_KEYS = [
   'wallet.economics',
   'wallet.per_country_enabled',
   'billing.pay_per_message',
+  // A suite that turns margin pricing on must not leave it on for the next one.
+  'wallet.pricing_mode',
 ];
 
 /** Typed handles on the services the engine tests drive directly. */
@@ -115,6 +117,12 @@ export async function setPlan(
       p.platformOwned ?? false,
     ],
   );
+}
+
+/** Typed prices, the mode the engine tests assume: margin pricing off, whatever an earlier run left behind. */
+export async function fixedPricing(h: BspHarness) {
+  await h.owner.query(`DELETE FROM platform_settings WHERE key = 'wallet.pricing_mode'`);
+  services(h).settings.invalidate();
 }
 
 /** Removes everything the wallet suites changed outside their own workspaces. */

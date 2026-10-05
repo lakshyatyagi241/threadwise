@@ -433,6 +433,7 @@ describe('platform console', () => {
           floatMinor: 5000000,
           workspacesWithBalance: 12,
           lowBalanceWorkspaces: 3,
+          otherCurrencies: [],
           last30d: {
             toppedUpMinor: 200000,
             chargedMinor: 150000,
@@ -507,6 +508,8 @@ describe('platform console', () => {
     const detail: PlatformWalletDetail = {
       workspace: { id: '11111111-1111-4111-8111-111111111111', name: 'Acme', slug: 'acme' },
       currency: 'USD',
+      billableCurrencies: ['INR', 'USD'],
+      wallets: [{ currency: 'USD', balanceMinor: 7500 }],
       balanceMinor: 7500,
       billingMode: 'wallet',
       lowBalanceThresholdMinor: 500,
