@@ -26,7 +26,7 @@
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js"
   },
   "dependencies": {
-    "@clerk/backend": "^3.21.1",
+    "@clerk/backend": "^3.22.0",
     "@crm/contracts": "workspace:*",
     "@crm/db": "workspace:*",
     "@crm/tax": "workspace:*",
