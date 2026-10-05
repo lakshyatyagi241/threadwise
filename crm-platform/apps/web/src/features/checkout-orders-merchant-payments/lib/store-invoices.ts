@@ -19,8 +19,9 @@ export const isStoreInvoice = (row: Pick<InvoiceSummary, 'source'>): boolean =>
   row.source === STORE_INVOICE_SOURCE;
 
 /** The store's rows of one page, in the order the list returned them. */
-export const keepStoreInvoices = <T extends Pick<InvoiceSummary, 'source'>>(rows: readonly T[]): T[] =>
-  rows.filter(isStoreInvoice);
+export const keepStoreInvoices = <T extends Pick<InvoiceSummary, 'source'>>(
+  rows: readonly T[],
+): T[] => rows.filter(isStoreInvoice);
 
 /** Pages merged into one list of store invoices; a row that appears twice (a page refetched while data moved) is kept once. */
 export function mergeStoreInvoices<T extends Pick<InvoiceSummary, 'source' | 'id'>>(
@@ -54,8 +55,11 @@ export function shouldAutoFetch(state: {
 }
 
 /** True when the automatic budget ran out while more pages exist (the screen says it has not looked through everything). */
-export const stoppedAtCap = (state: { hasMore: boolean; pagesFetched: number; cap?: number }): boolean =>
-  state.hasMore && state.pagesFetched >= (state.cap ?? AUTO_PAGE_CAP);
+export const stoppedAtCap = (state: {
+  hasMore: boolean;
+  pagesFetched: number;
+  cap?: number;
+}): boolean => state.hasMore && state.pagesFetched >= (state.cap ?? AUTO_PAGE_CAP);
 
 /** Invoice status chips in this domain's colours: paid green, overdue and void red, issued and part-paid amber, draft grey. */
 export function invoiceTone(status: InvoiceStatus | string): Tone {
@@ -94,9 +98,8 @@ export function invoiceTotal(
 }
 
 /** The name shown for the buyer: the invoice's own buyer name, else the linked contact's. */
-export const buyerLabel = (
-  row: Pick<InvoiceSummary, 'buyerName' | 'contact'>,
-): string => row.buyerName?.trim() || row.contact?.name?.trim() || '';
+export const buyerLabel = (row: Pick<InvoiceSummary, 'buyerName' | 'contact'>): string =>
+  row.buyerName?.trim() || row.contact?.name?.trim() || '';
 
 /** "Oct 02, 2026" for a calendar date (`YYYY-MM-DD`): read as the day it names, never shifted by the viewer's time zone. */
 export function formatCalendarDay(day: string | null | undefined, locale: string): string {

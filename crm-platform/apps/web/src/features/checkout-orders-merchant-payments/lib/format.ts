@@ -42,7 +42,11 @@ export function formatDay(iso: string | null | undefined, locale: string): strin
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: '2-digit' }).format(d);
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(d);
 }
 
 /** The shop switcher choice written into an address: `/store/orders?shop=<id>`. Existing query text is kept. */

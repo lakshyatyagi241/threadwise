@@ -153,7 +153,9 @@ function EmptyGroups({ searching }: { searching: boolean }) {
     return (
       <div className="rounded-md border border-dashed border-border px-6 py-10 text-center">
         <div className="text-lg font-semibold">{t('noMatch.title')}</div>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">{t('noMatch.message')}</p>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+          {t('noMatch.message')}
+        </p>
       </div>
     );
   }

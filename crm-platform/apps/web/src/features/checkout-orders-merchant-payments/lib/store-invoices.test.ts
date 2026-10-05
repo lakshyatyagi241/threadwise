@@ -13,7 +13,8 @@ import {
   stoppedAtCap,
 } from './store-invoices';
 
-const row = (id: string, source: string) => ({ id, source }) as never as { id: string; source: 'own' };
+const row = (id: string, source: string) =>
+  ({ id, source }) as never as { id: string; source: 'own' };
 
 describe('keepStoreInvoices / mergeStoreInvoices', () => {
   it('keeps only rows created from store orders (source own)', () => {

@@ -150,7 +150,11 @@ describe('message keys used in code', () => {
       // read by the menu / the Settings tile / built from a status value at run time
       if (key.startsWith(`${ROOT_KEY}.nav.`) || key.startsWith(`${ROOT_KEY}.settingsTile.`))
         return false;
-      if (/^checkout-orders-merchant-payments\.(status|paymentStatus|source|errors|coupons\.states)\./.test(key))
+      if (
+        /^checkout-orders-merchant-payments\.(status|paymentStatus|source|errors|coupons\.states)\./.test(
+          key,
+        )
+      )
         return false;
       // keys built from a template or a ternary: accept when the last segment appears in the source
       const last = key.split('.').at(-1)!;
