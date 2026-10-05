@@ -57,7 +57,9 @@ export function guardedRequest(
   }
   const headers = { ...req.headers };
   if (req.body !== undefined) {
-    headers['Content-Type'] = 'application/json';
+    // A caller that names its own content type (any casing) keeps it; the default stays plain JSON.
+    if (!Object.keys(headers).some((k) => k.toLowerCase() === 'content-type'))
+      headers['Content-Type'] = 'application/json';
     headers['Content-Length'] = String(Buffer.byteLength(req.body));
   }
   return new Promise((resolve, reject) => {

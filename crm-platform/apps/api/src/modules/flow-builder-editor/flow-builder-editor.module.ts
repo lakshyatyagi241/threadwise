@@ -16,6 +16,10 @@ import { FlowTemplatesAdminService } from './flow-templates-admin.service';
 import { FlowsController } from './flows.controller';
 import { FlowsRepository } from './flows.repository';
 import { FlowsService } from './flows.service';
+import { GetaPublishController } from './geta-publish/geta-publish.controller';
+import { GetaPublishRepository } from './geta-publish/geta-publish.repository';
+import { GetaPublishSettingsService } from './geta-publish/geta-publish-settings.service';
+import { GetaPublishSyncService } from './geta-publish/geta-publish-sync.service';
 import { PlatformFlowTemplatesController } from './platform-flow-templates.controller';
 import { TestWebhookService } from './test-webhook.service';
 
@@ -25,11 +29,18 @@ import { TestWebhookService } from './test-webhook.service';
  * runtime engine (FLR) is a separate domain: it reads flows only through FlowReaderService.
  *
  * Providers behind ports: FLOW_AI_PORT (vendor HTTP, `infra/providers/flow-builder-editor`) and FLOW_MEDIA_STORE (local disk
- * until object storage lands; see the port's note). No worker jobs live here: nothing in the editor runs in the background.
+ * until object storage lands; see the port's note). The one background job is Geta publishing (an addition beyond Reference): the HTTP
+ * side writes the sync row and an outbox event on publish, and `FlowBuilderEditorWorkerModule` (worker process only) pushes the bot
+ * through BOT_PUBLISH_PORT.
  */
 @Module({
   imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule],
-  controllers: [FlowsController, FlowMediaController, PlatformFlowTemplatesController],
+  controllers: [
+    FlowsController,
+    GetaPublishController,
+    FlowMediaController,
+    PlatformFlowTemplatesController,
+  ],
   providers: [
     CryptoService,
     FlowsRepository,
@@ -40,9 +51,12 @@ import { TestWebhookService } from './test-webhook.service';
     FlowMediaService,
     FlowTemplatesAdminService,
     TestWebhookService,
+    GetaPublishRepository,
+    GetaPublishSettingsService,
+    GetaPublishSyncService,
     { provide: FLOW_AI_PORT, useClass: HttpFlowAiAdapter },
     { provide: FLOW_MEDIA_STORE, useClass: LocalFlowMediaAdapter },
   ],
-  exports: [FlowsRepository, FlowReaderService],
+  exports: [FlowsRepository, FlowReaderService, GetaPublishRepository, GetaPublishSettingsService],
 })
 export class FlowBuilderEditorModule {}
