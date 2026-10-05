@@ -4,6 +4,21 @@
       "unit": "nav:support",
       "owner": "lakshya",
       "reason": "Its menu group is help, which is not a guide area yet. Waiting for the owner to choose: add a help area, or file it under getting-started."
+    },
+    {
+      "unit": "nav:flows",
+      "owner": "lakshya",
+      "reason": "The flow builder screens are not in this build yet; the guide is written when they ship."
+    },
+    {
+      "unit": "nav:guidebook",
+      "owner": "lakshya",
+      "reason": "The in-app guidebook comes from the site CMS; its guide waits for the owner."
+    },
+    {
+      "unit": "tile:workspace-settings",
+      "owner": "lakshya",
+      "reason": "The workspace settings screens were added on main without a guide; it is written once the tab layout settles."
     }
   ]
 }
