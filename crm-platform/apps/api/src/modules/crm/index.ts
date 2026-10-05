@@ -10,6 +10,7 @@ export {
   ContactsService,
   ContactsRepository,
   ContactQuotaService,
+  ContactResolverService,
   assertContactScope,
   toContactResponse,
 } from './contacts';
@@ -122,9 +123,26 @@ export {
   TaxRatesService,
   InvoiceSettingsService,
   InvoiceConversionService,
+  ExternalOrderBillingService,
+  allocateDiscount,
+  specsOfExternalOrder,
   toInvoiceSummary,
+} from './invoicing';
+export type {
+  ExternalInvoiceOutcome,
+  ExternalOrderInput,
+  ExternalOrderLine,
+  ExternalPaymentInput,
+  ExternalSalesOrderRef,
 } from './invoicing';
 export type { InvoiceRow } from './invoicing';
 export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';
+export { CONTACT_RESOLVER } from './contact-resolver.port';
+export type {
+  ContactLink,
+  ContactResolveInput,
+  ContactResolverPort,
+  ContactSkipReason,
+} from './contact-resolver.port';

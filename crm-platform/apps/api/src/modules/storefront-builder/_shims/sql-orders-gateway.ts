@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { CONTACT_RESOLVER, type ContactResolverPort } from '../../crm/contact-resolver.port';
 import type { PhoneHistory } from '../rules/rto';
 import type {
   DashboardOrders,
@@ -62,18 +63,32 @@ const toRecord = (r: RawOrder): OrderRecord => ({
 /** Reads and writes `wa_orders` directly until checkout-orders-merchant-payments (CHK) exports its own order service. */
 @Injectable()
 export class SqlOrdersGateway implements OrdersGateway {
+  constructor(@Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort) {}
+
   async create(tx: Tx, orgId: number, o: NewStorefrontOrder): Promise<PlacedOrder> {
+    // The buyer is a contact of the workspace (found or created by phone), in this same transaction. A cap on contacts or an unusable
+    // number leaves the link empty: the order is placed either way.
+    const link = await this.contacts.findOrCreateByPhone(tx, orgId, {
+      phone: o.customerPhone,
+      name: o.customerName,
+      email: o.customerEmail,
+      address: o.customerAddress,
+      source: 'store',
+      tag: 'Store customer',
+      saveProfile: true,
+    });
+    const contactId = link.outcome === 'skipped' ? null : link.contactId;
     const res = await tx.execute(sql`
       INSERT INTO wa_orders (
         org_id, source, customer_phone, customer_name, customer_email, customer_address, items_json,
         total_minor, shipping_minor, discount_minor, coupon_code, currency_code, payment_method,
-        rto_score, rto_band, status, storefront_id, recovery_token, notes, meta_json
+        rto_score, rto_band, status, storefront_id, recovery_token, notes, meta_json, contact_id
       ) VALUES (
         ${orgId}, 'storefront', ${o.customerPhone}, ${o.customerName}, ${o.customerEmail}, ${o.customerAddress},
         ${JSON.stringify(o.items)}::jsonb,
         ${o.totalMinor}, ${o.shippingMinor}, ${o.discountMinor}, ${o.couponCode}, ${o.currencyCode}, ${o.paymentMethod},
         ${o.rtoScore}, ${o.rtoBand}, 'new', ${o.storefrontId}, ${o.recoveryToken}, ${o.notes},
-        ${JSON.stringify({ placed_via: 'storefront_checkout' })}::jsonb
+        ${JSON.stringify({ placed_via: 'storefront_checkout' })}::jsonb, ${contactId}
       )
       RETURNING id, uuid`);
     const row = res.rows[0] as { id: number | string; uuid: string };
