@@ -41,6 +41,8 @@ interface Props {
   onConnect: (from: { nodeId: string; handleId: string }, targetId: string) => void;
   onDropNode: (type: string, x: number, y: number) => void;
   onDeleteEdge: (id: string) => void;
+  /** A control on a card (the Ask for file / location prompt, extensions, property) changed the node's data. */
+  onPatchNode?: (nodeId: string, patch: Record<string, unknown>) => void;
   wrapperRef: RefObject<HTMLDivElement | null>;
   children?: ReactNode;
 }
@@ -71,6 +73,7 @@ export function Canvas({
   onConnect,
   onDropNode,
   onDeleteEdge,
+  onPatchNode,
   wrapperRef,
   children,
 }: Props) {
@@ -101,6 +104,15 @@ export function Canvas({
   useLayoutEffect(() => {
     live.current = { state, pan, zoom };
   });
+  // A stable callback for the memoised cards: the latest `onPatchNode` is read when a control on a card fires.
+  const patchRef = useRef(onPatchNode);
+  useLayoutEffect(() => {
+    patchRef.current = onPatchNode;
+  });
+  const patchNode = useCallback(
+    (nodeId: string, patch: Record<string, unknown>) => patchRef.current?.(nodeId, patch),
+    [],
+  );
 
   const measurePorts = useCallback(() => {
     const wrap = wrapperRef.current;
@@ -432,6 +444,7 @@ export function Canvas({
             onSelect={onSelect}
             onPortPointerDown={onPortPointerDown}
             onPortHover={setHoveredPort}
+            onPatch={patchNode}
           />
         ))}
 

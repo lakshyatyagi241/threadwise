@@ -6,6 +6,8 @@ export interface ChannelProfile {
   list: boolean;
   ctaUrl: boolean;
   location: boolean;
+  /** WhatsApp's interactive "send location" request (Cloud API only). */
+  locationRequest?: boolean;
   /** Approved templates (TW-FLR-026): only the WhatsApp Cloud API and the simulator have them; the rest get the template as text. */
   templates?: boolean;
   /** Pause between nodes (ms): the unofficial engine looks less like a bot with one (TW-FLR-016 rule 3). */
@@ -17,6 +19,7 @@ const FULL: ChannelProfile = {
   list: true,
   ctaUrl: true,
   location: true,
+  locationRequest: true,
   templates: true,
   paceMs: 0,
 };
@@ -82,7 +85,8 @@ export type Rendered =
             text: string;
             url: string;
           }
-        | { type: 'flow'; body: string; flowId: string; flowToken: string; cta: string };
+        | { type: 'flow'; body: string; flowId: string; flowToken: string; cta: string }
+        | { type: 'location_request'; body: string };
     }
   | {
       kind: 'template';
@@ -147,6 +151,14 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
           .filter(Boolean)
           .join('\n'),
       };
+    case 'location_request':
+      if (profile.locationRequest) {
+        return {
+          kind: 'interactive',
+          interactive: { type: 'location_request', body: cut(m.body, 1024) },
+        };
+      }
+      return { kind: 'text', body: [m.body, m.hint].filter(Boolean).join('\n\n') };
     case 'buttons': {
       const n = m.buttons.length;
       const header = m.header ? { header: cut(m.header, 60) } : {};
@@ -306,6 +318,7 @@ export function threadTextOf(r: Rendered): string {
         return `${i.body}\n[${i.sections.flatMap((s) => s.rows.map((x) => x.title)).join(' | ')}]`;
       }
       if (i.type === 'flow') return `${i.body}\n[${i.cta}]`;
+      if (i.type === 'location_request') return `${i.body}\n[Send location]`;
       return `${i.body}\n[${i.text}: ${i.url}]`;
     }
   }

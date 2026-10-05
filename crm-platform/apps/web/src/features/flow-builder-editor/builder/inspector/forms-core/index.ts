@@ -11,6 +11,7 @@ import {
   SubflowForm,
   WebhookForm,
 } from './logic';
+import { AskFileForm, AskLocationForm } from './ask-media';
 import { AskForm, ButtonsForm, ListForm, PollForm } from './options';
 import { MediaForm, MessageForm, NotifyNumberForm, TemplateForm, WaToInstagramForm } from './send';
 import { SequenceForm } from './sequence';
@@ -28,6 +29,8 @@ export const CORE_FORMS: Record<string, FormComponent> = {
   buttons: ButtonsForm,
   list: ListForm,
   ask: AskForm,
+  ask_file: AskFileForm,
+  ask_location: AskLocationForm,
   condition: ConditionForm,
   delay: DelayForm,
   webhook: WebhookForm,
