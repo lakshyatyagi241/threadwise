@@ -22,3 +22,8 @@ Notes
 - The recovery nudge by WABA reads the number's `credentials_json` (encrypted with `CryptoService`, the same shape the
   broadcast sender reads). The Twilio engine has no adapter anywhere in the repo yet: the sweep logs it and moves on, as WaDesk
   logged "no sender".
+
+Note (merchant admin API): the admin screens' endpoints (orders, coupons, customers, groups, payments, gateways) now exist in
+`storefront-builder/admin/` and `checkout-orders-merchant-payments/` and read the same tables through their own repositories. The
+`OrdersGateway` and `CouponDirectory` shims above still serve the public checkout, the tracking page, the dashboard and the payment
+webhooks, so they stay until those callers move; see `docs/wadesk-port/wiring/checkout-orders-merchant-payments.md`.

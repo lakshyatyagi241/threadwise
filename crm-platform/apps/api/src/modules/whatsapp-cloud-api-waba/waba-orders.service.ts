@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { CONTACT_RESOLVER, type ContactResolverPort } from '../crm/contact-resolver.port';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { cartOf, type CartOrder } from './waba-order-rules';
 
@@ -23,7 +24,10 @@ interface ProductRow {
  */
 @Injectable()
 export class WabaOrdersService {
-  constructor(private readonly outbox: OutboxService) {}
+  constructor(
+    private readonly outbox: OutboxService,
+    @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
+  ) {}
 
   /** The new order's id, or null when the message holds no usable line or was already captured. */
   async capture(
@@ -45,6 +49,15 @@ export class WabaOrdersService {
     }
     const products = await this.products(tx, orgId, cart);
     const phone = from.replace(/\D+/g, '');
+    // The sender is a contact of the workspace (the inbox made one already when the message arrived: this finds it); a plan that is out
+    // of contacts leaves the link empty and the order is still captured.
+    const link = await this.contacts.findOrCreateByPhone(tx, orgId, {
+      phone,
+      name: customerName,
+      source: 'whatsapp_order',
+      tag: 'Store customer',
+    });
+    const contactId = link.outcome === 'skipped' ? null : link.contactId;
     const items = cart.lines.map((l, i) => {
       const p = products.get(l.retailerId);
       return {
@@ -59,10 +72,10 @@ export class WabaOrdersService {
     });
     const order = await tx.execute(
       sql`INSERT INTO wa_orders (org_id, source, customer_phone, customer_name, items_json, total_minor, currency_code,
-                                 status, wa_message_id, notes, meta_json)
+                                 status, wa_message_id, notes, meta_json, contact_id)
           VALUES (${orgId}, 'waba', ${phone}, ${customerName}, ${JSON.stringify(items)}::jsonb, ${cart.totalMinor},
                   ${cart.currency}, 'new', ${wamid || null}, ${cart.note},
-                  ${JSON.stringify({ catalog_id: cart.catalogId, product_text: cart.note })}::jsonb)
+                  ${JSON.stringify({ catalog_id: cart.catalogId, product_text: cart.note })}::jsonb, ${contactId})
           RETURNING id, uuid`,
     );
     const { id, uuid } = order.rows[0] as { id: number | string; uuid: string };
@@ -80,6 +93,7 @@ export class WabaOrdersService {
       eventType: 'whatsapp.order.received',
       payload: {
         orderId: uuid,
+        orderNo: Number(id),
         phone,
         connectionId: configId,
         totalMinor: cart.totalMinor,

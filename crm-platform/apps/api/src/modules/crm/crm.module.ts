@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AttributesController } from './attributes/attributes.controller';
 import { AttributesRepository } from './attributes/attributes.repository';
@@ -24,6 +25,8 @@ import { ContactImportEngine } from './contact-import/contact-import.engine';
 import { ContactImportRepository } from './contact-import/contact-import.repository';
 import { ContactImportService } from './contact-import/contact-import.service';
 import { ContactQuotaService } from './contacts/contact-quota.service';
+import { ContactResolverService } from './contacts/contact-resolver.service';
+import { CONTACT_RESOLVER } from './contact-resolver.port';
 import { ContactActivitiesController } from './contact-activities/contact-activities.controller';
 import { ContactActivitiesRepository } from './contact-activities/contact-activities.repository';
 import { ContactActivitiesService } from './contact-activities/contact-activities.service';
@@ -107,6 +110,8 @@ import { SalesOrdersController } from './invoicing/sales-orders.controller';
 import { SalesOrdersRepository } from './invoicing/sales-orders.repository';
 import { SalesOrdersService } from './invoicing/sales-orders.service';
 import { InvoiceConversionService } from './invoicing/invoice-conversion.service';
+import { ExternalOrderBillingService } from './invoicing/external-order-billing.service';
+import { InvoiceGatewaySettler } from './invoicing/invoice-gateway-settler';
 import { InvoiceGatewayWebhookController } from './invoicing/invoice-gateway-webhook.controller';
 import { InvoiceGatewayWebhookService } from './invoicing/invoice-gateway-webhook.service';
 import { InvoicePdfService } from './invoicing/invoice-pdf.service';
@@ -161,7 +166,7 @@ import { TagsService } from './tags/tags.service';
  */
 @Module({
   // PlansCoreModule: the contact and tag caps (WD-CON-026) are plan entitlements.
-  imports: [PlansCoreModule],
+  imports: [PlansCoreModule, CheckoutOrdersMerchantPaymentsModule],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
@@ -226,6 +231,8 @@ import { TagsService } from './tags/tags.service';
     ContactsService,
     ContactsRepository,
     ContactQuotaService,
+    ContactResolverService,
+    { provide: CONTACT_RESOLVER, useExisting: ContactResolverService },
     ContactGroupsService,
     ContactGroupsRepository,
     ContactBulkService,
@@ -301,6 +308,7 @@ import { TagsService } from './tags/tags.service';
     InvoicePublicService,
     InvoicePdfService,
     InvoiceGatewayWebhookService,
+    InvoiceGatewaySettler,
     PublicRateLimiter,
     // The pay-now hook's gateway port: the built-in adapters. A real gateway adapter registers here under its provider key.
     {
@@ -313,12 +321,15 @@ import { TagsService } from './tags/tags.service';
     },
     // Sales-docs' "create an invoice draft from an accepted document" port, implemented here.
     InvoiceConversionService,
+    ExternalOrderBillingService,
     { provide: SALES_DOC_INVOICE_PORT, useExisting: InvoiceConversionService },
   ],
   exports: [
     ContactsService,
     ContactsRepository,
     ContactQuotaService,
+    ContactResolverService,
+    CONTACT_RESOLVER,
     ContactGroupsService,
     ContactBulkService,
     ContactImportEngine,
@@ -348,6 +359,10 @@ import { TagsService } from './tags/tags.service';
     RecurringInvoicesService,
     PaymentsService,
     TaxRatesService,
+    // The store-order bridge (modules/store-orders-sales) bills channel orders through it and writes the contact's timeline entry.
+    ExternalOrderBillingService,
+    InvoiceSettingsService,
+    ContactActivitiesRepository,
   ],
 })
 export class CrmModule {}

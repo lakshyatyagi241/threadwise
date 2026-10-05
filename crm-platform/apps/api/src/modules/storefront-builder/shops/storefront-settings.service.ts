@@ -16,6 +16,7 @@ import {
 } from '../../../infra/providers/storefront-builder/dns-resolver.port';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { StoreKeysMirror } from '../../checkout-orders-merchant-payments';
 import { buildPaymentConfig, type StoredRazorpayConfig } from '../rules/payment-config';
 import { buildSettings } from '../rules/settings';
 import { buildShippingJson } from '../rules/shipping';
@@ -46,6 +47,7 @@ export class StorefrontSettingsService {
     private readonly crypto: CryptoService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly keysMirror: StoreKeysMirror,
     @Inject(DNS_RESOLVER_PORT) private readonly dns: DnsResolverPort,
     @Inject(STOREFRONT_ENV) private readonly env: StorefrontEnv,
   ) {}
@@ -118,6 +120,14 @@ export class StorefrontSettingsService {
       if (!updated) throw AppError.rowVersionConflict('Shop');
 
       const after = (await this.repo.findById(tx, ctx.orgId, existing.id))!;
+      // The checkout reads the shared gateway store first: the keys typed on this page are mirrored there as the shop's override.
+      await this.keysMirror.sync(
+        tx,
+        ctx.orgId,
+        existing.id,
+        after.paymentProvider,
+        after.paymentConfig,
+      );
       await this.audit.record(tx, {
         module: STORE_MODULE,
         recordId: existing.id,

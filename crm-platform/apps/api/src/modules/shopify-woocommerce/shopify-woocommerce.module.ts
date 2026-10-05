@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastsModule } from '../broadcasts';
+import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SHOPIFY, WOOCOMMERCE } from '../../infra/providers/ecom/ecom.port';
@@ -50,7 +51,7 @@ import { WoocommerceService } from './woocommerce.service';
  * binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [BroadcastsModule, NodeBridgeRuntimeModule, PlansCoreModule],
+  imports: [BroadcastsModule, NodeBridgeRuntimeModule, PlansCoreModule, CrmModule],
   controllers: [
     EcomPlatformSettingsController,
     ShopifyController,

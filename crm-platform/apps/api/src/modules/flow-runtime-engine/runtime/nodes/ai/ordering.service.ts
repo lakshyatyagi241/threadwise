@@ -18,6 +18,8 @@ import {
 } from '@crm/contracts';
 import { AppError } from '../../../../../common/errors/app-error';
 import { DatabaseService } from '../../../../../infra/db/database.service';
+import { OutboxService } from '../../../../../kernel/outbox/outbox.service';
+import { CONTACT_RESOLVER, type ContactResolverPort } from '../../../../crm/contact-resolver.port';
 import {
   ORDER_GROUP_NOTIFY_PORT,
   ORDER_MEDIA_PORT,
@@ -100,6 +102,8 @@ export class OrderingFlowService {
     private readonly translation: TranslationService,
     @Inject(ORDER_MEDIA_PORT) private readonly media: OrderMediaPort,
     @Inject(ORDER_GROUP_NOTIFY_PORT) private readonly group: OrderGroupNotifyPort,
+    private readonly outbox: OutboxService,
+    @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
   ) {}
 
   // --- parse ----------------------------------------------------------------------------------------------------------------
@@ -437,14 +441,24 @@ export class OrderingFlowService {
             order_media_transcript: p.order_media_transcript,
           }).filter(([, v]) => v !== null && v !== undefined && v !== ''),
         );
+        // The buyer is a contact of the workspace (the chat made one already: this finds it), in this transaction; a plan out of
+        // contacts leaves the link empty and the order is still placed.
+        const link = await this.contacts.findOrCreateByPhone(tx, orgId, {
+          phone: digits,
+          name: (p.ship_name as string | null) || null,
+          address: (p.ship_address as string | null) || null,
+          source: 'whatsapp_order',
+          tag: 'Store customer',
+        });
         const order = (
           await tx.execute(sql`
             INSERT INTO wa_orders (org_id, source, customer_phone, customer_name, customer_address, items_json, total_minor,
-                                   currency_code, status, meta_json)
+                                   currency_code, status, meta_json, contact_id)
             VALUES (${orgId}, 'whatsapp_ai', ${digits}, ${(p.ship_name as string | null) || null},
                     ${(p.ship_address as string | null) || null}, ${JSON.stringify(items)}::jsonb, ${total},
-                    ${currency ?? 'INR'}, 'pending', ${JSON.stringify(meta)}::jsonb)
-            RETURNING id`)
+                    ${currency ?? 'INR'}, 'pending', ${JSON.stringify(meta)}::jsonb,
+                    ${link.outcome === 'skipped' ? null : link.contactId})
+            RETURNING id, uuid`)
         ).rows[0] as Row;
         const orderId = Number(order.id);
         for (const li of items) {
@@ -457,6 +471,23 @@ export class OrderingFlowService {
         await tx.execute(
           sql`UPDATE wa_pending_orders SET status = 'confirmed', order_id = ${orderId} WHERE org_id = ${orgId} AND id = ${Number(p.id)}`,
         );
+        // The order exists now: the CRM's sales side (sales order, timeline, invoice) follows it through the outbox.
+        await this.outbox.emit(tx, {
+          orgId,
+          aggregateModule: 'wa_orders',
+          aggregateId: orderId,
+          eventType: 'store.order_placed',
+          payload: {
+            orderNo: orderId,
+            orderId: order.uuid,
+            source: 'whatsapp_ai',
+            customerPhone: digits,
+            totalMinor: total,
+            currencyCode: currency ?? 'INR',
+            paymentMethod: 'prepaid',
+            itemCount: items.length,
+          },
+        });
         return {
           ok: true as const,
           orderId,
