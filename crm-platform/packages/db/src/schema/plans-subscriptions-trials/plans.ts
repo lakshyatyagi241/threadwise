@@ -6,6 +6,7 @@ import {
   jsonb,
   numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -68,6 +69,28 @@ export const plans = pgTable(
     uniqueIndex('uq_plans_single_default')
       .on(t.isDefault)
       .where(sql`${t.isDefault}`),
+  ],
+);
+
+/**
+ * Mirror of 20261028090000_plan_visible_addons.sql: which Marketplace add-on packs a plan makes visible to its workspaces. Platform
+ * catalogue (no org_id): readable by every transaction, writable only when privileged. Visible is not usable: a workspace uses a paid
+ * app only once it has bought it.
+ */
+export const planVisibleAddons = pgTable(
+  'plan_visible_addons',
+  {
+    planId: idColumn('plan_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    addonPlanId: idColumn('addon_plan_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.planId, t.addonPlanId] }),
+    index('idx_plan_visible_addons_addon').on(t.addonPlanId),
   ],
 );
 

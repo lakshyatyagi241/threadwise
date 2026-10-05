@@ -29,3 +29,30 @@ Automated: `apps/api/test/unit/plans-subscriptions-trials/plan-lifecycle.spec.ts
 | Quota ledger (018)                     | counts per package id + end date, fails open without table                   | same period rule (quirk kept), atomic bump, check inside the creating transaction                     | same + documented; no creator yet                                              |
 | Retention wipe (023)                   | heartbeat-triggered, no audit, partial failure possible, `attributes` listed | worker cron, per-workspace transaction, audit + event, preview, field definitions kept                | intended                                                                       |
 | Plan edit clears nothing on workspaces | n/a                                                                          | operator attach: new plan clears trial, stamps period from the plan                                   | as WSP-026                                                                     |
+| Plan-gated Marketplace add-ons         | none: Reference has no plan-gated add-on visibility                             | a plan enables add-ons (`plan_visible_addons`): visible to its workspaces, usable only once bought    | intended (our addition, owner request 2026-10-05); see the section below       |
+
+## Plan-gated Marketplace add-ons (intended difference, our addition)
+
+Reference has no such thing: every add-on is on sale to every workspace. Ours (owner request, 2026-10-05): the super admin enables, per plan,
+the Marketplace apps sold as billing add-ons (`plans` rows of kind `addon` with a `marketplace_app_id`). The rule, in one place for browse,
+search, shelves, category counts, an app's page, install, subscribe and checkout (`apps/api/src/modules/marketplace/plan-visibility.ts`):
+
+- **Visible is not usable.** A plan only makes an add-on visible (table `plan_visible_addons`, never `plans.features`: a `mkt_` key in
+  `features` is read as a grant). Using it still needs the purchase, trial or comp that grants the `mkt_<slug>` key. Visible but not bought
+  is `access: subscription_required`, `availability: visible`: shown with its price, can subscribe, cannot install.
+- **Hidden means not found.** A paid app that is neither enabled by the plan nor already the workspace's is omitted from the lists and its
+  page, install and subscribe answer 404 (`MKT_APP_NOT_FOUND`), like a draft; checkout refuses it (`PAYGW_PLAN_NOT_PURCHASABLE`).
+- **A purchase is never taken back.** An app the workspace installed, subscribed to, bought, or has an override for stays visible and
+  usable when its plan stops enabling it (a downgrade, an operator edit): `availability: purchased` / `access: entitled`.
+- **Unaffected:** free apps, and paid apps with an `included_plan_feature` or `included_min_plan` rule (that rule sets what they cost the
+  workspace, not whether it may see them). Platform-owned workspaces and workspaces on a plan with no catalogue row see everything (nothing
+  is locked, as for every other entitlement); a lapsed paid plan shows what the free plan shows.
+- **Existing customers lose nothing.** Migration `20261028090000_plan_visible_addons.sql` gives every existing plan every published
+  Marketplace pack. A pack created later is visible to no plan until a plan enables it.
+- Edited in the plan form (`visibleAddons`, ids of packs from `GET /v2/platform/plans/addon-options`), audited with the other plan fields.
+  A plan save also keeps the stored `limits` and `features` keys the registry does not know (a module-contributed key survives an edit).
+
+Tests: `apps/api/test/unit/plans-subscriptions-trials/plan-visible-addons.spec.ts`,
+`apps/api/test/integration/plans-subscriptions-trials/plan-visible-addons.spec.ts` (backfill, RLS, trigger),
+`apps/api/test/e2e/marketplace/marketplace-plan-visibility.e2e.spec.ts` (hidden, visible, purchased, downgrade keeps what was bought, plan
+save, in-app and operator payloads).

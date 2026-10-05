@@ -149,3 +149,11 @@ Seams touched in shared files (additive): `infra/queue/queues.ts` (`MKT_INBOUND`
 `public-hook.ts` (`queued`, `event`), `packages/db` schema mirror, `marketplace.module.ts`, `marketplace-worker.module.ts`, `marketplace.controller.ts` (one route), `marketplace.mapper.ts`, `installations.repository.ts`
 (`resumePolling`; `recordDelivery` no longer reactivates a stopped pull connection or clears its error), `installations.service.ts` (`configure` restarts a stopped pull connection), and the existing marketplace
 e2e specs (the catalogue now has nine published lead sources, pull is publishable, a second poll must pass the portal's minimum interval).
+
+## Plan-gated add-on visibility (our addition, not in Reference)
+
+| Id           | What                                      | Where                                                                                                                                                                                                                                                           |
+| ------------ | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-MKT-027 | The rule: a plan makes a paid app visible | table `plan_visible_addons` (`20261028090000`); `PlanEntitlementService.forOrg().visibleApps`; `marketplace/plan-visibility.ts` (`shownToWorkspace`, used by `browse.repository.ts` list, shelves, categories, detail, installable, exists)                     |
+| WIRE-MKT-028 | Every use-path refuses a hidden app       | install (`installations.service.ts`: 404), subscribe (`subscriptions.service.ts`: 404 on `availability: not_visible`), checkout (`platform-payment-gateways/marketplace-pack.ts`: `PAYGW_PLAN_NOT_PURCHASABLE`); use still needs the `mkt_` entitlement         |
+| WIRE-MKT-029 | Card state and operator/in-app payloads   | `pricing.availability` (`open`, `visible`, `purchased`, `not_visible`), `visibleAddons` on `GET /v2/billing/plans` and `/usage`, `addons` on `GET /v2/platform/workspace-plans[/:id]`, `GET /v2/platform/plans/addon-options`, `visibleAddons` on the plan form |
