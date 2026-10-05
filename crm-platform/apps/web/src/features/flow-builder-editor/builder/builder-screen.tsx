@@ -9,11 +9,15 @@ import {
   flbValidateGraph,
   type FlbAiGenerateResponse,
   type FlowDetail,
+  type FlowGetaSync,
   type FlowType,
   type FlbPortContext,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { flowsApi } from '../api/flows';
+import { getaApi } from '../geta-publish/api';
+import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
+import { GetaPublishStatus } from '../geta-publish/sync-status';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
   ZOOM_DEFAULT,
@@ -164,6 +168,11 @@ function BuilderInner({
   const [rowVersion, setRowVersion] = useState(initial?.rowVersion ?? 1);
   const [status, setStatus] = useState(initial?.isPublished ? 'Published' : 'Draft');
   const category = initial?.category ?? null;
+  // Geta console publishing (an addition beyond WaDesk): the remote state of the last publish, polled while it is going live.
+  const [published, setPublished] = useState(initial?.isPublished ?? false);
+  const [geta, setGeta] = useState<FlowGetaSync | null>(initial?.getaSync ?? null);
+  const [justPublished, setJustPublished] = useState(false);
+  const [retrying, setRetrying] = useState(false);
   const vars = useMemo(
     () => (initial?.graph.vars.length ? initial.graph.vars : DEFAULT_VARS),
     [initial],
@@ -402,6 +411,44 @@ function BuilderInner({
     else setSaveOpen(true);
   };
 
+  // While the push is pending, ask the server how it went (the worker makes the calls; the publish itself already succeeded).
+  useEffect(() => {
+    if (!flowId || geta?.state !== 'pending') return;
+    let stopped = false;
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const tick = async () => {
+      if (stopped) return;
+      tries++;
+      try {
+        const next = await getaApi.status(flowId);
+        if (stopped) return;
+        setGeta(next);
+        if (next.state !== 'pending') return;
+      } catch {
+        // a failed poll is not a failed push: ask again
+      }
+      if (tries < POLL_MAX_TRIES && !stopped) timer = setTimeout(() => void tick(), POLL_EVERY_MS);
+    };
+    timer = setTimeout(() => void tick(), POLL_EVERY_MS);
+    return () => {
+      stopped = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [flowId, geta?.state]);
+
+  const onGetaRetry = async () => {
+    if (!flowId || retrying) return;
+    setRetrying(true);
+    try {
+      setGeta(await getaApi.retry(flowId));
+    } catch (e) {
+      toast(`Retry failed: ${errMessage(e)}`);
+    } finally {
+      setRetrying(false);
+    }
+  };
+
   const onPublish = async () => {
     if (!runValidation() || busy) return;
     setBusy(true);
@@ -415,6 +462,9 @@ function BuilderInner({
       const pub = await flowsApi.publish(id);
       setRowVersion(pub.rowVersion);
       setStatus('Published');
+      setPublished(true);
+      setJustPublished(true);
+      setGeta(pub.getaSync ?? null);
       toast('Published');
     } catch (e) {
       toast(`Publish failed: ${errMessage(e)}`);
@@ -495,6 +545,13 @@ function BuilderInner({
           setRunNonce((n) => n + 1);
         }}
         onAIGen={() => setAiOpen(true)}
+        remoteStatus={
+          <GetaPublishStatus
+            view={viewOf(geta, { published, justPublished })}
+            retrying={retrying}
+            onRetry={() => void onGetaRetry()}
+          />
+        }
       />
 
       <div className="relative flex min-h-0 flex-1">

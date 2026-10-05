@@ -279,6 +279,11 @@
         "label": "Saved customers",
         "description": "Pre-set a customer's name and delivery address for WhatsApp orders.",
         "keywords": "customers, address, delivery, order, store"
+      },
+      "geta-publishing": {
+        "label": "Geta publishing",
+        "description": "Push published flows live on the Geta console.",
+        "keywords": "geta, publish, bot, console, go live, chatbot"
       }
     }
   }

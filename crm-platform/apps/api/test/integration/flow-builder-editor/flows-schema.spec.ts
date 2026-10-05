@@ -331,7 +331,7 @@ describe('flows: schema, constraints and isolation', () => {
   });
 
   describe('permissions', () => {
-    it('the five flb keys are registered and the locked Admin preset of every organization holds them', async () => {
+    it('the flb keys are registered (the five flow keys and the Geta publishing key) and the locked Admin preset of every organization holds them', async () => {
       const keys = await owner.query(
         `SELECT key FROM permission_defs WHERE key LIKE 'flb.%' ORDER BY key`,
       );
@@ -341,6 +341,7 @@ describe('flows: schema, constraints and isolation', () => {
         'flb.flows.publish',
         'flb.flows.read',
         'flb.flows.update',
+        'flb.geta.manage',
       ]);
     });
   });
