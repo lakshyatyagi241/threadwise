@@ -1,3 +1,4 @@
+import { flbToRuntimeData } from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
 import { cleanVar } from './clean-var';
@@ -269,7 +270,11 @@ export function compileGraph(input: unknown): RuntimeGraph {
     const builderType = str(n.type ?? n.flowNodeType);
     typeById.set(id, builderType);
     const mapped = TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType));
-    nodes.push({ id, type: mapped, props: shapeNode(builderType, obj(n.data)) });
+    nodes.push({
+      id,
+      type: mapped,
+      props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: obj(n.data) })),
+    });
   }
 
   const edges: RuntimeEdge[] = [];

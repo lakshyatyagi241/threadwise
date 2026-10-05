@@ -585,7 +585,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-067 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-068 | done |  | owned by FLR (ordering contracts and endpoints there) |
 | TW-FLB-069 | done |  | owned by NODE/FLR: the Node bridge is replaced by the in-process engine |
-| TW-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; FLR compileGraph hook is the FLR owner's one-liner (parity doc, Open runtime items) |
+| TW-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; compileGraph calls flbToRuntimeData (branch akshay/flr/flb-runtime-hook, authorised on the FLR side), template and AI assistant uuids resolved by org; e2e editor-flows |
 | TW-FLB-071 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-072 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-073 | done |  | owned by FLR, built there (TW-FLR-052..058) |
