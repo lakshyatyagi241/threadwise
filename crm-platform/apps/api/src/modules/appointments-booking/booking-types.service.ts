@@ -21,6 +21,7 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { PlanUsageService } from '../plans-subscriptions-trials';
 import { BOOKING_TYPE_MODULE, priceInMinor, slugify } from './appointment-rules';
 import { AppointmentsRepository } from './appointments.repository';
 import {
@@ -65,6 +66,7 @@ export class BookingTypesService {
     private readonly slots: SlotsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly planUsage: PlanUsageService,
     config: ConfigService<Env, true>,
   ) {
     this.webUrl = config.get('WEB_APP_URL', { infer: true }).replace(/\/$/, '');
@@ -128,6 +130,8 @@ export class BookingTypesService {
 
   async create(input: CreateBookingTypeInput): Promise<BookingTypeResponse> {
     const ctx = RequestContextStore.require();
+    // The plan's `booking_types` cap (a live count: deleting a type frees the slot).
+    await this.planUsage.assertCanAdd(ctx.orgId, 'booking_types');
     return this.db.tx(async (tx) => {
       const hostId = await this.resolveHost(tx, ctx.orgId, input.hostId, ctx.userId);
       const slug = await this.uniqueSlug(tx, ctx.orgId, input.slug || input.name);

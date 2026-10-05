@@ -1,10 +1,11 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 import { verify } from '@node-rs/argon2';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type PlanFeatureKey } from '@crm/contracts';
 import type { Request, Response } from 'express';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -13,7 +14,12 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { SecurityPolicyService } from '../auth';
-import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  REQUIRE_PLAN_FEATURE_KEY,
+  planFeatureLabel,
+  resolveLimit,
+} from '../plans-subscriptions-trials';
 
 interface ApiKeyRow {
   org_id: number;
@@ -61,6 +67,7 @@ export class ApiKeyGuard implements CanActivate {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly securityPolicy: SecurityPolicyService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -117,11 +124,34 @@ export class ApiKeyGuard implements CanActivate {
     ctx.actorId = key.id;
     ctx.userId = null;
 
+    await this.assertPlanFeatures(context, key.org_id);
+
     // Fire and forget: last_used_at is diagnostics, not correctness, and it
     // must not add latency or a failure mode to every API call.
     void this.touchLastUsed(key.org_id, key.id);
 
     return true;
+  }
+
+  /**
+   * `@RequirePlanFeature` on a key-authenticated controller. The app-wide PlanFeatureGuard runs BEFORE this controller-level guard, when the
+   * request has no workspace yet (the route is `@Public()`), so it lets the call through; the key's workspace is only known here, so the
+   * same decorator is enforced here once the key is verified (422 PLAN_FEATURE_LOCKED, the same problem the app-wide guard raises).
+   */
+  private async assertPlanFeatures(context: ExecutionContext, orgId: number): Promise<void> {
+    const keys = this.reflector.getAllAndOverride<PlanFeatureKey[] | undefined>(
+      REQUIRE_PLAN_FEATURE_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+    for (const feature of keys ?? []) {
+      if (!(await this.entitlements.featureEnabled(orgId, feature))) {
+        await this.entitlements.assertFeature(
+          orgId,
+          feature,
+          `Your plan doesn't include ${planFeatureLabel(feature)}. Upgrade to unlock this feature.`,
+        );
+      }
+    }
   }
 
   private verifySignature(request: Request & { rawBody?: Buffer }, key: ApiKeyRow): void {

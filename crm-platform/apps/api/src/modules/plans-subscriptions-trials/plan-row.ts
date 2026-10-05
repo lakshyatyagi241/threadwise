@@ -71,21 +71,49 @@ export function toFacts(row: PlanRow): PlanFacts {
   };
 }
 
-export function fullLimits(raw: unknown): PlanLimits {
-  return Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, storedLimit(raw, k)])) as PlanLimits;
+/**
+ * The keys of a stored plan JSON that the registry does not know: contributed by a module, or left by an older release. The editing
+ * schemas accept registry keys only, so a save carries them over untouched instead of wiping them.
+ */
+function unknownKeys(raw: unknown, known: readonly string[]): Record<string, unknown> {
+  if (raw === null || typeof raw !== 'object') return {};
+  return Object.fromEntries(Object.entries(raw).filter(([k]) => !known.includes(k)));
 }
 
-export function fullFeatures(raw: unknown): PlanFeatures {
-  return Object.fromEntries(
-    PLAN_FEATURE_KEYS.map((k) => [k, storedFeature(raw, k)]),
+/** `keepUnknown`: also pass through the stored keys the registry does not know (the save path), instead of dropping them (the read path). */
+export function fullLimits(raw: unknown, opts?: { keepUnknown?: boolean }): PlanLimits {
+  const known = Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, storedLimit(raw, k)]));
+  return (
+    opts?.keepUnknown ? { ...unknownKeys(raw, PLAN_LIMIT_KEYS), ...known } : known
+  ) as PlanLimits;
+}
+
+export function fullFeatures(raw: unknown, opts?: { keepUnknown?: boolean }): PlanFeatures {
+  const known = Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, storedFeature(raw, k)]));
+  return (
+    opts?.keepUnknown ? { ...unknownKeys(raw, PLAN_FEATURE_KEYS), ...known } : known
   ) as PlanFeatures;
+}
+
+/** What to store after an edit: the validated registry keys, plus every stored key the editing schema does not know, untouched. */
+export function withStoredUnknownLimits(
+  stored: unknown,
+  edited: PlanLimits,
+): Record<string, unknown> {
+  return { ...unknownKeys(stored, PLAN_LIMIT_KEYS), ...edited };
+}
+export function withStoredUnknownFeatures(
+  stored: unknown,
+  edited: PlanFeatures,
+): Record<string, unknown> {
+  return { ...unknownKeys(stored, PLAN_FEATURE_KEYS), ...edited };
 }
 
 const iso = (v: string | Date): string => new Date(v).toISOString();
 
 export function toAdminItem(
   row: PlanRow,
-  extra: { inUse: number; isRegistrationDefault: boolean },
+  extra: { inUse: number; isRegistrationDefault: boolean; visibleAddons: string[] },
 ): PlanAdminItem {
   const facts = toFacts(row);
   return {
@@ -111,6 +139,7 @@ export function toAdminItem(
     dataRetentionDays: Number(row.data_retention_days),
     limits: fullLimits(row.limits),
     features: fullFeatures(row.features),
+    visibleAddons: extra.visibleAddons,
     inUse: extra.inUse,
     isRegistrationDefault: extra.isRegistrationDefault,
     createdAt: iso(row.created_at),

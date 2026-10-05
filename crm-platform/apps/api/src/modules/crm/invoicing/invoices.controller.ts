@@ -51,6 +51,7 @@ import { InvoicesService } from './invoices.service';
 import { PaymentsService } from './payments.service';
 import type { Response } from 'express';
 import { Res } from '@nestjs/common';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /**
  * Invoices (TW-INV-001..031). Every route needs the plan's sales pipeline (the flag the other sales features share) and the
@@ -97,6 +98,8 @@ export class InvoicesController {
     return this.invoices.counts(query, scope);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @Idempotent()
   @RequirePermission('record.invoices.create')
@@ -121,6 +124,7 @@ export class InvoicesController {
     return this.invoices.get(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Patch(':id')
   @RequirePermission('record.invoices.update')
   @ApiOperation({
@@ -136,6 +140,7 @@ export class InvoicesController {
     return this.invoices.update(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.invoices.delete')
@@ -149,6 +154,7 @@ export class InvoicesController {
     await this.invoices.remove(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/issue')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -166,6 +172,7 @@ export class InvoicesController {
     return this.invoices.issue(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/send')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -183,6 +190,7 @@ export class InvoicesController {
     return this.invoices.send(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/void')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.invoices.void')
@@ -199,6 +207,7 @@ export class InvoicesController {
     return this.invoices.void(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/duplicate')
   @HttpCode(HttpStatus.CREATED)
   @Idempotent()
@@ -213,6 +222,7 @@ export class InvoicesController {
     return this.invoices.duplicate(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/public-link/regenerate')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.invoices.update')
@@ -227,6 +237,7 @@ export class InvoicesController {
     return this.invoices.regenerateLink(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/public-link/revoke')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.invoices.update')
@@ -262,6 +273,7 @@ export class InvoicesController {
     return this.payments.forInvoice(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/payments')
   @Idempotent()
   @RequirePermission('record.payments.create')

@@ -29,6 +29,7 @@ import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { StoreOverviewService } from '../overview/store-overview.service';
 import { StorefrontSettingsService } from './storefront-settings.service';
 import { ShopsService } from './shops.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /**
  * The merchant side of the storefront (TW-STORE-001..008): the dashboard, the shop wizard and the storefront settings.
@@ -62,6 +63,8 @@ export class StoreController {
     return this.shops.wizard();
   }
 
+  // Plan feature on the admin write routes only; the public storefront (separate controller) keeps rendering and taking orders.
+  @RequirePlanFeature('storefront_builder')
   @Post('shops')
   @Idempotent()
   @RequirePermission('store.shops.manage')
@@ -74,6 +77,7 @@ export class StoreController {
     return this.shops.create(body);
   }
 
+  @RequirePlanFeature('storefront_builder')
   @Post('shops/reset')
   @Idempotent()
   @HttpCode(HttpStatus.OK)
@@ -94,6 +98,7 @@ export class StoreController {
     return this.shops.get(id);
   }
 
+  @RequirePlanFeature('storefront_builder')
   @Put('shops/:id')
   @Idempotent()
   @RequirePermission('store.shops.manage')
@@ -109,6 +114,7 @@ export class StoreController {
     return this.shops.update(id, body);
   }
 
+  @RequirePlanFeature('storefront_builder')
   @Put('shops/:id/settings')
   @Idempotent()
   @RequirePermission('store.storefront.manage')
@@ -125,6 +131,7 @@ export class StoreController {
     return this.settings.update(id, body);
   }
 
+  @RequirePlanFeature('storefront_builder')
   @Post('shops/:id/verify-domain')
   @Idempotent()
   @HttpCode(HttpStatus.OK)
@@ -138,6 +145,7 @@ export class StoreController {
     return this.settings.verifyDomain(id);
   }
 
+  @RequirePlanFeature('storefront_builder')
   @Delete('shops/:id')
   @Idempotent()
   @HttpCode(HttpStatus.NO_CONTENT)

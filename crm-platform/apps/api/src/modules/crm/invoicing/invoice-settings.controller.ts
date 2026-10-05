@@ -10,6 +10,7 @@ import { ActorKinds, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { InvoiceSettingsService } from './invoice-settings.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /**
  * The invoicing profile (seller identity, numbering, defaults, bank details) and the online-payment connection. Reading the
@@ -32,6 +33,8 @@ export class InvoiceSettingsController {
     return this.settings.get();
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Patch()
   @RequirePermission('record.invoices.settings')
   @ApiOperation({
@@ -52,6 +55,7 @@ export class InvoiceSettingsController {
     return this.settings.gateway();
   }
 
+  @RequirePlanFeature('invoicing')
   @Put('gateway')
   @RequirePermission('record.invoices.settings')
   @ApiOperation({

@@ -39,4 +39,23 @@ describe('Roles editor permission list', () => {
     const { data } = await c.list({ orgId: 7 } as never);
     expect(data.map((d) => d.key)).toEqual(['record.contacts.read', 'app.google-sheets.use']);
   });
+
+  it('with includeLocked, returns hidden keys marked with why they are locked', async () => {
+    const { controller: c } = controller(false);
+    const { data } = await c.list({ orgId: 7 } as never, '1');
+    expect(data.map((d) => d.key)).toEqual([
+      'record.contacts.read',
+      'record.appointments.read',
+      'app.google-sheets.use',
+    ]);
+    expect(data[0]).not.toHaveProperty('lock');
+    expect(data[1]!.lock).toEqual({ kind: 'plan_feature', key: 'appointment_booking' });
+    expect(data[2]!.lock).toEqual({ kind: 'app', slug: 'google-sheets' });
+  });
+
+  it('with includeLocked, an unlocked add-on key carries no lock', async () => {
+    const { controller: c } = controller(true, ['google-sheets']);
+    const { data } = await c.list({ orgId: 7 } as never, 'true');
+    expect(data.every((d) => d.lock === undefined)).toBe(true);
+  });
 });

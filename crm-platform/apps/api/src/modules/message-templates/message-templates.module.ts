@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { TemplateSyncService } from './template-sync.service';
 import { TemplatesController } from './templates.controller';
@@ -11,7 +12,7 @@ import { TemplatesService } from './templates.service';
  * comes from `WabaModule`.
  */
 @Module({
-  imports: [WabaModule],
+  imports: [WabaModule, PlansCoreModule],
   controllers: [TemplatesController],
   providers: [TemplatesRepository, TemplatesService, TemplateSyncService],
   exports: [TemplatesService, TemplateSyncService, TemplatesRepository],

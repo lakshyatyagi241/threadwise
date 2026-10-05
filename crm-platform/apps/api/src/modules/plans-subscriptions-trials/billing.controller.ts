@@ -7,7 +7,7 @@ import {
   type EntitlementsResponse,
   type BillingPlansResponse,
   type BillingStatus,
-  type BillingUsageResponse,
+  type BillingUsagePanelResponse,
   type ChangePlanRequest,
   type CancelSubscriptionResponse,
   type ChangePlanResponse,
@@ -62,7 +62,7 @@ export class BillingController {
 
   @Get('usage')
   @ApiOperation({ summary: 'Plan, caps, usage this cycle and unlocked features' })
-  usage(): Promise<BillingUsageResponse> {
+  usage(): Promise<BillingUsagePanelResponse> {
     return this.billing.usagePanel();
   }
 

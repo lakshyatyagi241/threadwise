@@ -6,7 +6,7 @@ import {
   type BillingPlan,
   type BillingPlansResponse,
   type BillingStatus,
-  type BillingUsageResponse,
+  type BillingUsagePanelResponse,
   type ChangePlanResponse,
   type EntitlementsResponse,
   type PlanFeatureKey,
@@ -33,6 +33,7 @@ import {
   type PlanFacts,
 } from './plan-rules';
 import { PlanStore } from './plan-store';
+import { visibleAddonsByPlan, visibleAddonsForApps } from './plan-visible-addons';
 import { PlanUsageService } from './plan-usage.service';
 import { SubscriptionService } from './subscription.service';
 
@@ -73,7 +74,18 @@ export class BillingService {
   async plans(canManage: boolean, unlocks?: PlanFeatureKey): Promise<BillingPlansResponse> {
     const orgId = RequestContextStore.require().orgId;
     const e = await this.mustResolve(orgId);
-    const rows = await this.db.txAs({ orgId, userId: null }, (tx) => this.catalog.listPlans(tx));
+    const { rows, perPlan, mine } = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const listed = await this.catalog.listPlans(tx);
+      return {
+        rows: listed,
+        perPlan: await visibleAddonsByPlan(
+          tx,
+          orgId,
+          listed.map((r) => Number(r.id)),
+        ),
+        mine: await visibleAddonsForApps(tx, orgId, e.visibleApps),
+      };
+    });
     const facts = rows.map((r) => ({ row: r, facts: toFacts(r) }));
     const active = facts
       .filter((p) => p.facts.isActive)
@@ -105,6 +117,7 @@ export class BillingService {
         features: fullFeatures(row.features),
         via: viaFor(card.action, f, effective),
         yearly: yearlyOffer(f, pct),
+        visibleAddons: perPlan.get(Number(row.id)) ?? [],
       };
     });
 
@@ -120,6 +133,7 @@ export class BillingService {
       }),
       canManage,
       subscription: await this.subscriptions.current(orgId),
+      visibleAddons: mine,
       yearlyToggle: {
         enabled: toggle !== false && data.some((p) => p.yearly !== null),
         discountPct: pct,
@@ -143,10 +157,15 @@ export class BillingService {
   }
 
   /** The plan and usage panel (TW-PLAN-014). */
-  async usagePanel(): Promise<BillingUsageResponse> {
-    const res = await this.usage.usage(RequestContextStore.require().orgId);
+  async usagePanel(): Promise<BillingUsagePanelResponse> {
+    const orgId = RequestContextStore.require().orgId;
+    const res = await this.usage.usage(orgId);
     if (!res) throw AppError.notFound('Workspace');
-    return res;
+    const e = await this.mustResolve(orgId);
+    const visibleAddons = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      visibleAddonsForApps(tx, orgId, e.visibleApps),
+    );
+    return { ...res, visibleAddons };
   }
 
   // --- change --------------------------------------------------------------------------------------------------------------------

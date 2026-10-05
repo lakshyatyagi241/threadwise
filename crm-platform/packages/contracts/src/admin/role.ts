@@ -18,6 +18,13 @@ export const permissionDefResponseSchema = z.object({
   planFeature: z.string().nullable().optional(),
   /** The Marketplace app whose key this is; shown only while the workspace has it installed. */
   appSlug: z.string().nullable().optional(),
+  /** Only with `?includeLocked=1`: why this key is not usable yet (its plan feature is off, or its app is not installed). */
+  lock: z
+    .discriminatedUnion('kind', [
+      z.object({ kind: z.literal('plan_feature'), key: z.string() }),
+      z.object({ kind: z.literal('app'), slug: z.string() }),
+    ])
+    .optional(),
 });
 export type PermissionDefResponse = z.infer<typeof permissionDefResponseSchema>;
 

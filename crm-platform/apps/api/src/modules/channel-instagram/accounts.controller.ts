@@ -14,10 +14,13 @@ import { linkIgAccountSchema, type LinkIgAccountInput } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AccountsService } from './accounts.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Instagram accounts: the hub, the picker, link, connect new and unlink (TW-IG-001 to 006). */
 @ApiTags('instagram')
 @ActorKinds('user')
+// Instagram management is entirely the extra-channels feature; the public inbound controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'instagram', version: '2' })
 export class AccountsController {
   constructor(private readonly accounts: AccountsService) {}

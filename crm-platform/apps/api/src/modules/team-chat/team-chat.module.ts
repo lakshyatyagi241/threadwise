@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ChannelsService } from './channels.service';
 import { InvitationsService } from './invitations.service';
 import { MessagesService } from './messages.service';
@@ -9,6 +10,8 @@ import { TeamChatRepository } from './team-chat.repository';
 
 /** Internal team chat (TCHAT). Kernel services (audit, outbox, RBAC), the database and Redis are global. */
 @Module({
+  // PlansCoreModule: the `team_chat_channels` cap.
+  imports: [PlansCoreModule],
   controllers: [TeamChatController],
   providers: [
     TeamChatRepository,
