@@ -15,10 +15,15 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
+import { contacts } from '../crm';
 import { organizations } from '../foundation';
+import { invoices } from '../invoicing/tables';
+import { salesOrders } from '../invoicing/tables-extra';
 import { waStorefronts } from '../storefront-builder/tables';
 import { workspacePaymentConfigs } from '../workspaces-teams-tenancy/tables';
 
@@ -76,6 +81,8 @@ export const waMerchantGateways = pgTable(
     credentials: text('credentials'),
     mode: text('mode').notNull().default('live'),
     active: boolean('active').notNull().default(true),
+    /** The one row a checkout or an invoice uses in its scope (the workspace, or one shop). */
+    isDefault: boolean('is_default').notNull().default(false),
     sortOrder: integer('sort_order').notNull().default(0),
     meta: jsonb('meta'),
     createdAt: createdAt(),
@@ -91,11 +98,10 @@ export const waMerchantGateways = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     unique('uq_wa_merchant_gateways_storefront_id_slug').on(t.orgId, t.storefrontId, t.slug),
-    foreignKey({
-      name: 'fk_wa_merchant_gateways_storefront_id',
-      columns: [t.orgId, t.storefrontId],
-      foreignColumns: [waStorefronts.orgId, waStorefronts.id],
-    }).onDelete('restrict'),
+    // storefront_id 0 is the whole workspace, so there is no foreign key to wa_storefronts: a trigger removes a deleted shop's rows.
+    uniqueIndex('uq_wa_merchant_gateways_default')
+      .on(t.orgId, t.storefrontId)
+      .where(sql`${t.isDefault}`),
   ],
 );
 
@@ -138,6 +144,11 @@ export const waOrders = pgTable(
     waPaymentStatus: text('wa_payment_status'),
     waPaymentTxnId: text('wa_payment_txn_id'),
     waPaymentConfigId: idColumn('wa_payment_config_id'),
+    /** The CRM contact this buyer is (find-or-create by phone); null when none could be made (contact cap, no usable phone). */
+    contactId: idColumn('contact_id'),
+    /** The sales order and the invoice made from this order (migration 20261029090000). */
+    salesOrderId: idColumn('sales_order_id'),
+    invoiceId: idColumn('invoice_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -160,6 +171,30 @@ export const waOrders = pgTable(
       columns: [t.orgId, t.waPaymentConfigId],
       foreignColumns: [workspacePaymentConfigs.orgId, workspacePaymentConfigs.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_wa_orders_contact_id',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_wa_orders_sales_order_id',
+      columns: [t.orgId, t.salesOrderId],
+      foreignColumns: [salesOrders.orgId, salesOrders.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_wa_orders_invoice_id',
+      columns: [t.orgId, t.invoiceId],
+      foreignColumns: [invoices.orgId, invoices.id],
+    }).onDelete('set null'),
+    index('idx_wa_orders_contact_id')
+      .on(t.orgId, t.contactId)
+      .where(sql`contact_id IS NOT NULL`),
+    index('idx_wa_orders_sales_order_id')
+      .on(t.orgId, t.salesOrderId)
+      .where(sql`sales_order_id IS NOT NULL`),
+    index('idx_wa_orders_invoice_id')
+      .on(t.orgId, t.invoiceId)
+      .where(sql`invoice_id IS NOT NULL`),
     index('idx_wa_orders_recovery_token').on(t.orgId, t.recoveryToken),
     index('idx_wa_orders_shopify_order_id').on(t.orgId, t.shopifyOrderId),
     index('idx_wa_orders_storefront_id').on(t.orgId, t.storefrontId),
