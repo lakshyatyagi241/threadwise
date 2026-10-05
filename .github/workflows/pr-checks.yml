@@ -37,6 +37,9 @@ jobs:
       - name: API typecheck
         run: pnpm --filter @crm/api exec tsc --noEmit -p tsconfig.json
       - name: Web typecheck
+        # The web app is large enough that tsc exceeds Node's default heap on a runner ("heap out of memory"); give it room.
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: cd apps/web && node scripts/gen-registry.mjs && pnpm exec tsc --noEmit -p .
       - name: API unit tests
         run: pnpm --filter @crm/api test
