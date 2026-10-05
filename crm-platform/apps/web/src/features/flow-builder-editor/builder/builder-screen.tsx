@@ -573,6 +573,10 @@ function BuilderInner({
           setPan={setPan}
           setZoom={setZoom}
           onSelect={setSelectedId}
+          onOpenNode={(id) => {
+            setSelectedId(id);
+            setInsOpen(true);
+          }}
           onLive={live}
           onMoved={(next) => {
             setHist((h) => pushHistory(h, next));
