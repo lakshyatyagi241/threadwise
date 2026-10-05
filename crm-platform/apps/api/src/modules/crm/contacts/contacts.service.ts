@@ -438,6 +438,41 @@ export class ContactsService {
     return { outcome: 'created', contactId: created.id, uuid: created.uuid };
   }
 
+  /**
+   * The flow "Ask for file / image" node's "save the response as property": writes one custom property value of the contact the run
+   * belongs to (the file link). Only an active contact property of this workspace can be written, so a key typed by hand that names
+   * nothing is refused (`false`). No `contact.updated` event: a flow that fills in its own contact must not start flows of its own.
+   */
+  async setPropertyFromFlow(
+    orgId: number,
+    contactId: number,
+    key: string,
+    value: string,
+  ): Promise<boolean> {
+    const clean = key.trim();
+    if (clean === '') return false;
+    return this.db.txAs({ orgId }, async (tx) => {
+      const field = await tx.execute(
+        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+      );
+      if (field.rows.length === 0) return false;
+      const row = await this.repo.findById(tx, orgId, contactId);
+      if (!row) return false;
+      const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
+        data: { ...(row.data ?? {}), [clean]: value },
+      });
+      if (done) {
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: contactId,
+          action: 'update',
+          delta: { [clean]: { old: (row.data ?? {})[clean] ?? null, new: value } },
+        });
+      }
+      return done;
+    });
+  }
+
   /** A name nobody has written yet is filled in; a curated one is never replaced. */
   private async fillBlankName(
     tx: Tx,

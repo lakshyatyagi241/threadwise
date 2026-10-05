@@ -73,6 +73,7 @@ describe('billing settings form (WD-PAYGW-007)', () => {
     yearlyToggleEnabled: true,
     yearlyDiscountPct: '20',
     recurringEnabled: false,
+    graceDays: '7',
     countries: 'India\r\nIndia\n Germany \n\n',
     companyName: 'Acme',
     companyAddress: '',

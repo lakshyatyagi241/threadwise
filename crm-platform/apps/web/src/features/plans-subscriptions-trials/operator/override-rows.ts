@@ -44,7 +44,8 @@ export function limitRowState(key: string, raw: string): LimitRowState {
 /** The text a toggled "Unlimited" checkbox writes into the box: -1, or empty (back to the plan's value). */
 export const unlimitedToggle = (on: boolean): string => (on ? '-1' : '');
 
-export type PlanValueView = { kind: 'unlimited' } | { kind: 'platformDefault' } | { kind: 'value'; value: number };
+export type PlanValueView =
+  { kind: 'unlimited' } | { kind: 'platformDefault' } | { kind: 'value'; value: number };
 
 /** The plan's own cap, for reference next to the override. */
 export function planValueView(key: string, planValue: number): PlanValueView {

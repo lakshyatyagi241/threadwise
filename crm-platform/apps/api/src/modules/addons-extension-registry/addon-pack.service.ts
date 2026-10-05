@@ -37,6 +37,7 @@ interface PackRow {
   currency: string;
   billing_unit: 'days' | 'weeks' | 'months' | 'years';
   billing_duration: number;
+  billing_mode: 'one_time' | 'recurring';
   is_free: boolean;
   is_lifetime: boolean;
   is_active: boolean;
@@ -53,7 +54,7 @@ interface PackRow {
 /** Selected with the purchase counts the delete guard and the list both need. */
 const SELECT = sql.raw(`
   SELECT p.id::int AS id, p.uuid, p.slug, p.name, p.subtitle, p.detail, p.amount::text AS amount,
-         p.offer_amount::text AS offer_amount, p.currency, p.billing_unit, p.billing_duration, p.is_free,
+         p.offer_amount::text AS offer_amount, p.currency, p.billing_unit, p.billing_duration, p.billing_mode, p.is_free,
          p.is_lifetime, p.is_active, p.sort_order, p.features, p.limits, p.row_version, p.created_at, p.updated_at,
          (SELECT count(*)::int FROM workspace_addons a WHERE a.package_id = p.id) AS purchases,
          (SELECT count(*)::int FROM workspace_addons a
@@ -74,6 +75,7 @@ export function toPack(row: PackRow): AddonPack {
     currency: row.currency,
     billingUnit: row.billing_unit,
     billingDuration: row.billing_duration,
+    billingMode: row.billing_mode,
     isFree: row.is_free,
     isLifetime: row.is_lifetime,
     isActive: row.is_active,
@@ -217,10 +219,10 @@ export class AddonPackService {
       const free = isZero(body.amount);
       const res = await tx.execute(sql`
         INSERT INTO plans (slug, kind, name, subtitle, detail, amount, offer_amount, currency, billing_unit,
-                           billing_duration, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features)
+                           billing_duration, billing_mode, is_free, is_lifetime, is_active, sort_order, cta_label, limits, features)
         VALUES (${slug}, 'addon', ${body.name}, ${body.subtitle}, ${body.detail}, ${body.amount}::numeric,
                 ${body.offerAmount}::numeric, ${body.currency}, ${body.billingUnit}, ${body.billingDuration},
-                ${free}, ${body.isLifetime}, ${body.isActive}, ${body.sortOrder}, 'Add to plan',
+                ${body.billingMode}, ${free}, ${body.isLifetime}, ${body.isActive}, ${body.sortOrder}, 'Add to plan',
                 ${JSON.stringify(grants.limits)}::jsonb, ${JSON.stringify(featuresColumn(grants))}::jsonb)
         RETURNING uuid
       `);
@@ -260,6 +262,7 @@ export class AddonPackService {
         currency: before.currency,
         billingUnit: before.billingUnit,
         billingDuration: before.billingDuration,
+        billingMode: before.billingMode,
         isLifetime: before.isLifetime,
         isActive: before.isActive,
         sortOrder: before.sortOrder,
@@ -281,7 +284,7 @@ export class AddonPackService {
           name = ${after.name}, subtitle = ${after.subtitle}, detail = ${after.detail},
           amount = ${after.amount}::numeric, offer_amount = ${after.offerAmount}::numeric,
           currency = ${after.currency}, billing_unit = ${after.billingUnit},
-          billing_duration = ${after.billingDuration}, is_free = ${isZero(after.amount)},
+          billing_duration = ${after.billingDuration}, billing_mode = ${after.billingMode}, is_free = ${isZero(after.amount)},
           is_lifetime = ${after.isLifetime}, is_active = ${after.isActive}, sort_order = ${after.sortOrder},
           limits = ${JSON.stringify(grants.limits)}::jsonb, features = ${JSON.stringify(featuresColumn(grants))}::jsonb
         WHERE id = ${stored.id} AND row_version = ${patch.rowVersion}

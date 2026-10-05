@@ -21,6 +21,12 @@ export interface InboundStoredEvent {
     location: { latitude: number; longitude: number; name?: string; address?: string } | null;
     /** The key of the stored file, when the file is already in the media store. */
     mediaKey: string | null;
+    /** What the customer's file is (WhatsApp's own kind, MIME type and file name), for a flow that checks the type it asked for. */
+    media?: {
+      kind: 'image' | 'video' | 'audio' | 'document' | 'sticker';
+      mime: string;
+      name?: string;
+    } | null;
   };
 }
 

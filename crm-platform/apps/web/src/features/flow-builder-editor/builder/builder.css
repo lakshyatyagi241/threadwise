@@ -76,7 +76,9 @@
     0 6px 16px -10px rgb(var(--flb-shadow) / 0.18);
   transition:
     box-shadow 0.14s ease,
-    border-color 0.14s ease;
+    border-color 0.14s ease,
+    opacity 0.16s ease,
+    filter 0.16s ease;
   color: var(--foreground);
 }
 .flb-root .node-card.selected {
@@ -169,6 +171,38 @@
 }
 .flb-root .edge-path.no.hover {
   stroke: #c56b4f;
+}
+/* Connection focus: with a node selected, its wires are solid and coloured (green = it leads to, purple = leads into it),
+   its neighbours get a matching ring, and everything else fades back. */
+.flb-root .edge-path.edge-active {
+  stroke-dasharray: none;
+  stroke-width: 3;
+}
+.flb-root .edge-path.edge-out {
+  stroke: var(--brand);
+}
+.flb-root .edge-path.edge-in {
+  stroke: var(--flb-plum);
+}
+.flb-root .edge-path.edge-dim {
+  opacity: 0.16;
+}
+.flb-root .node-card.node-upstream,
+.flb-root .node-card.node-downstream {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--focus-ring) 45%, transparent),
+    0 12px 26px -14px color-mix(in srgb, var(--focus-ring) 45%, transparent);
+  border-color: var(--focus-ring);
+}
+.flb-root .node-card.node-downstream {
+  --focus-ring: var(--brand);
+}
+.flb-root .node-card.node-upstream {
+  --focus-ring: var(--flb-plum);
+}
+.flb-root .node-card.node-dim {
+  opacity: 0.38;
+  filter: saturate(0.55);
 }
 .flb-root .edge-path.preview {
   stroke: var(--brand);

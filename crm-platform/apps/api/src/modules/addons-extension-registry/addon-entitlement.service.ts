@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { AddonGrants } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { readGrants } from './addon-grants';
+import { addonLiveSql, readGrants } from './addon-grants';
 import { mergeFeature, mergeLimit, type PlanFacts } from './entitlement-merge';
 import { ModuleRegistryService } from './module-registry.service';
 
@@ -27,11 +27,12 @@ export class AddonEntitlementService {
 
   /** The grants of every active, unexpired add-on the organization owns. Rows are per purchase, so packs stack. */
   async activeGrants(orgId: number): Promise<AddonGrants[]> {
+    const live = sql.raw(addonLiveSql(await this.plans.graceDays()));
     const res = await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
         SELECT p.features, p.limits
         FROM workspace_addons a JOIN plans p ON p.id = a.package_id
-        WHERE a.org_id = ${orgId} AND a.status = 'active' AND (a.ends_at IS NULL OR a.ends_at > now())
+        WHERE a.org_id = ${orgId} AND ${live}
       `),
     );
     return (res.rows as unknown as Array<{ features: unknown; limits: unknown }>).map((r) =>
