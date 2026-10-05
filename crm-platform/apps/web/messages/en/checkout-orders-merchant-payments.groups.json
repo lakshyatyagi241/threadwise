@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Store / Groups",
+      "title": "WhatsApp Groups",
+      "subtitle": "Groups your connected number belongs to. When an order is confirmed, it is posted into the customer's group and the customer is @mentioned. Give a group an ordering code so customers can order from it.",
+      "loading": "Loading groups",
+      "summary": {
+        "groups": "Groups synced",
+        "coded": "With ordering code",
+        "bot": "Bot number",
+        "noBot": "No WhatsApp number is connected.",
+        "connect": "Connect a number in Channels",
+        "copyNumber": "Copy number"
+      },
+      "search": {
+        "label": "Search groups",
+        "placeholder": "Search group name..."
+      },
+      "columns": {
+        "group": "Group",
+        "members": "Members",
+        "device": "Bot device",
+        "synced": "Synced",
+        "code": "Ordering code"
+      },
+      "row": {
+        "unnamed": "(unnamed group)",
+        "noCode": "No code",
+        "placeholder": "e.g. ACME",
+        "label": "Ordering code for {name}",
+        "copyLink": "Copy ordering link",
+        "saved": "Ordering code saved.",
+        "cleared": "Ordering code cleared.",
+        "tooLong": "Use {max} characters or fewer.",
+        "badChars": "Use letters, numbers, dots, dashes and underscores only.",
+        "taken": "Another group already uses this code."
+      },
+      "empty": {
+        "title": "No groups yet",
+        "message": "The group list is copied from your connected WhatsApp session. Groups appear here once that session has synced them; no time is promised for it yet.",
+        "action": "Open Channels"
+      },
+      "noMatch": {
+        "title": "No groups match your search",
+        "message": "Try another part of the group name, or clear the search."
+      },
+      "how": {
+        "title": "How ordering codes work",
+        "body": "Give a group a short code (for example ACME), then share its ordering link. When a customer taps it and confirms an order, the order is posted straight into that exact group and the customer is @mentioned, even if they belong to several groups."
+      }
+    }
+  }
+}
