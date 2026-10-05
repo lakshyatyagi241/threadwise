@@ -86,10 +86,21 @@ export function WorkspacesPage() {
         <>
           <div className="grid gap-4 sm:grid-cols-3">
             <StatTile label={t('totalWorkspaces')} value={num.format(first.totals.workspaces)} />
-            <StatTile
-              label={t('totalFloat')}
-              value={formatMinor(first.totals.floatMinor, first.currency, locale)}
-            />
+            {/* Money held, one tile per currency: rupees are never added to dollars. */}
+            {(first.totals.floatByCurrency.length > 0
+              ? first.totals.floatByCurrency
+              : [{ currency: first.currency, floatMinor: 0, wallets: 0 }]
+            ).map((c) => (
+              <StatTile
+                key={c.currency}
+                label={
+                  first.totals.floatByCurrency.length > 1
+                    ? t('totalFloatIn', { currency: c.currency })
+                    : t('totalFloat')
+                }
+                value={formatMinor(c.floatMinor, c.currency, locale)}
+              />
+            ))}
             <StatTile
               label={t('totalLow')}
               value={num.format(first.totals.lowBalance)}

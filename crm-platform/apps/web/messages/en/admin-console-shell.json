@@ -5,6 +5,35 @@
       "menuOrder": "Menu order",
       "groups": {
         "shell": "Interface"
+      },
+      "sections": {
+        "insights": "Insights",
+        "plans": "Plans & pricing",
+        "billing": "Billing & revenue",
+        "support": "Support & website",
+        "channels": "Channels & messaging",
+        "apps": "Apps & modules",
+        "access": "Access & security",
+        "settings": "Platform settings",
+        "system": "System & localization"
+      },
+      "captions": {
+        "orders": "Orders and invoices",
+        "payments": "Payments",
+        "messaging": "Messaging and wallets",
+        "support": "Support",
+        "website": "Website",
+        "whatsapp": "WhatsApp",
+        "marketplace": "Marketplace",
+        "modules": "Modules",
+        "roles": "Roles",
+        "security": "Security",
+        "signin": "Sign-in and sign-up",
+        "branding": "Branding and interface",
+        "integrations": "Integrations",
+        "privacy": "Privacy and tracking",
+        "infrastructure": "Infrastructure",
+        "localization": "Localization"
       }
     },
     "shell": {
@@ -641,6 +670,16 @@
       "title": "Connect a number",
       "close": "Close",
       "connected": "Number connected"
+    },
+    "search": {
+      "label": "Search the console",
+      "trigger": "Search admin…",
+      "placeholder": "Search pages and settings…",
+      "noResults": "No results for “{query}”",
+      "count": "{count, plural, one {# result} other {# results}}",
+      "hintMove": "navigate",
+      "hintOpen": "open",
+      "hintToggle": "toggle"
     }
   }
 }

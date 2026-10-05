@@ -4,8 +4,11 @@ import {
   creditPackageListSchema,
   creditPackageSchema,
   deleteRateResultSchema,
+  importMetaCardResultSchema,
   importRatesResultSchema,
   marginsResponseSchema,
+  metaCardDetailSchema,
+  metaCardsResponseSchema,
   messagePricingSchema,
   pricePreviewSchema,
   removePlanMarginResultSchema,
@@ -17,6 +20,7 @@ import {
   saveMarginsResultSchema,
   saveRatesResultSchema,
   seedRatesResultSchema,
+  setWorkspaceCurrencyResultSchema,
   statementResponseSchema,
   syncMetaResultSchema,
   walletLedgerResponseSchema,
@@ -28,6 +32,7 @@ import {
   type PricePreviewQuery,
   type SavePlanMarginsInput,
   type SaveWorkspaceMarginsInput,
+  type SetWorkspaceCurrencyInput,
   type UpdateSwitchesInput,
   type UpdateWalletSettingsInput,
   type UpsertRateInput,
@@ -48,6 +53,8 @@ export const KEYS = {
   overview: ['wallet', 'platform', 'overview'] as const,
   settings: ['wallet', 'platform', 'settings'] as const,
   rates: ['wallet', 'platform', 'rates'] as const,
+  metaCards: ['wallet', 'platform', 'meta-cards'] as const,
+  metaCard: (currency: string) => ['wallet', 'platform', 'meta-cards', currency] as const,
   workspaces: ['wallet', 'platform', 'workspaces'] as const,
   workspace: (id: string) => ['wallet', 'platform', 'workspace', id] as const,
   logs: ['wallet', 'platform', 'logs'] as const,
@@ -150,6 +157,25 @@ export const operatorApi = {
       method: 'POST',
       body: { csv, dryRun },
       schema: importRatesResultSchema,
+    }),
+  setWorkspaceCurrency: (id: string, body: SetWorkspaceCurrencyInput) =>
+    operatorFetch(`/wallet/workspaces/${encodeURIComponent(id)}/currency`, {
+      method: 'PUT',
+      body,
+      schema: setWorkspaceCurrencyResultSchema,
+    }),
+  metaCards: (signal?: AbortSignal) =>
+    operatorFetch('/wallet/meta-cards', { schema: metaCardsResponseSchema, signal }),
+  metaCard: (currency: string, signal?: AbortSignal) =>
+    operatorFetch(`/wallet/meta-cards/${encodeURIComponent(currency)}`, {
+      schema: metaCardDetailSchema,
+      signal,
+    }),
+  importMetaCard: (file: string, fileName: string, dryRun: boolean) =>
+    operatorFetch('/wallet/meta-cards/import', {
+      method: 'POST',
+      body: { file, fileName, dryRun },
+      schema: importMetaCardResultSchema,
     }),
   syncMeta: (dryRun: boolean) =>
     operatorFetch('/wallet/rates/sync-meta', {

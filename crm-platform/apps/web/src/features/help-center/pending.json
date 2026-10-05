@@ -1,0 +1,9 @@
+{
+  "pending": [
+    {
+      "unit": "nav:support",
+      "owner": "lakshya",
+      "reason": "Its menu group is help, which is not a guide area yet. Waiting for the owner to choose: add a help area, or file it under getting-started."
+    }
+  ]
+}

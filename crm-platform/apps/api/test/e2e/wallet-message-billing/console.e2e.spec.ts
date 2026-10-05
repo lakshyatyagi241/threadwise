@@ -1,4 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   ERROR_CODES,
@@ -408,18 +410,27 @@ describe('the operator console: settings, switches and the rate card (WD-WALLET-
     ).toBe(403);
   });
 
-  it('syncs Meta costs from the bundled card when no live source is set, previews first, and never touches a customer price', async () => {
+  it('syncs Meta costs from the stored official card when no live source is set, previews first, and never touches a customer price', async () => {
     const before = (
       await h.owner.query(
         `SELECT credits FROM message_rates WHERE country_code = 'US' AND category = 'marketing'`,
       )
     ).rows[0].credits;
+    const card = (
+      await h.owner.query(
+        `SELECT cost_micros::text AS m, effective_on::text AS d FROM meta_rate_cards
+         WHERE currency = 'USD' AND market = 'North America' AND category = 'marketing'`,
+      )
+    ).rows[0];
+    const existing = (await h.owner.query(`SELECT id::text AS id FROM message_rates`)).rows.map(
+      (r: { id: string }) => r.id,
+    );
     const preview = await ops('post', '/rates/sync-meta').send({ dryRun: true });
     expect(preview.status, JSON.stringify(preview.body)).toBe(200);
     expect(preview.body).toMatchObject({
       dryRun: true,
-      source: 'bundled',
-      sourceLabel: 'bundled reference',
+      source: 'card',
+      sourceLabel: `Meta rate card (USD, effective ${card.d})`,
       currency: 'USD',
     });
     const done = await ops('post', '/rates/sync-meta').send({ dryRun: false });
@@ -430,16 +441,24 @@ describe('the operator console: settings, switches and the rate card (WD-WALLET-
       )
     ).rows[0];
     expect(us.credits).toBe(before);
-    expect(us.m).toBe('25000');
-    const utilUs = (
+    expect(us.m).toBe(card.m); // the United States is priced in Meta's "North America" market
+    const thailand = (
       await h.owner.query(
-        `SELECT meta_cost_micros::text AS m FROM message_rates WHERE country_code = 'US' AND category = 'utility'`,
+        `SELECT meta_cost_micros::text AS m FROM message_rates WHERE country_code = 'TH' AND category = 'utility'`,
       )
     ).rows[0];
-    expect(utilUs.m).toBe('4000'); // sub-cent cost kept, not rounded to 0
+    const asia = (
+      await h.owner.query(
+        `SELECT cost_micros::text AS m FROM meta_rate_cards
+         WHERE currency = 'USD' AND market = 'Rest of Asia Pacific' AND category = 'utility'`,
+      )
+    ).rows[0];
+    expect(thailand.m).toBe(asia.m); // a country Meta groups takes its region's price
     await h.owner.query(
       `UPDATE message_rates SET meta_cost_micros = NULL, meta_cost_minor = NULL WHERE meta_cost_micros IS NOT NULL AND country_code <> 'QQ'`,
     );
+    // The card covers hundreds of countries; the rows this sync added go again so the grid is as it was.
+    await h.owner.query(`DELETE FROM message_rates WHERE NOT (id = ANY($1::bigint[]))`, [existing]);
   });
 
   it('re-seeds the starter card on request', async () => {
@@ -454,6 +473,189 @@ describe('the operator console: settings, switches and the rate card (WD-WALLET-
         )
       ).rows[0].credits,
     ).toBe(1200);
+  });
+});
+
+describe('Meta\u2019s published rate cards, one per currency', () => {
+  const fixture = (name: string) =>
+    readFileSync(join(__dirname, '../../unit/wallet-message-billing/fixtures', name)).toString(
+      'base64',
+    );
+  const usd = fixture('meta-usd-2026-10.xlsx');
+  const inr = fixture('meta-inr-2026-10.xlsx');
+
+  // Importing the platform currency's card writes costs for hundreds of countries; put message_rates back as it was.
+  let saved: Array<{
+    id: string;
+    micros: string | null;
+    minor: string | null;
+    currency: string | null;
+  }> = [];
+  beforeAll(async () => {
+    saved = (
+      await h.owner.query(
+        `SELECT id::text AS id, meta_cost_micros::text AS micros, meta_cost_minor::text AS minor, currency FROM message_rates`,
+      )
+    ).rows;
+  });
+  afterAll(async () => {
+    await h.owner.query(`DELETE FROM message_rates WHERE NOT (id = ANY($1::bigint[]))`, [
+      saved.map((r) => r.id),
+    ]);
+    for (const r of saved) {
+      await h.owner.query(
+        `UPDATE message_rates SET meta_cost_micros = $2, meta_cost_minor = $3, currency = $4 WHERE id = $1`,
+        [r.id, r.micros, r.minor, r.currency],
+      );
+    }
+  });
+  const metaCost = async (cur: string, market: string, cat: string) =>
+    (
+      await h.owner.query(
+        `SELECT cost_micros::text AS m FROM meta_rate_cards WHERE currency = $1 AND market = $2 AND category = $3`,
+        [cur, market, cat],
+      )
+    ).rows[0]?.m;
+
+  it('lists the cards that are stored, how old they are, and whether a quarter has begun since', async () => {
+    const r = await ops('get', '/meta-cards');
+    expect(r.status, JSON.stringify(r.body)).toBe(200);
+    const currencies = (r.body.cards as Array<{ currency: string }>).map((c) => c.currency);
+    expect(currencies).toEqual(expect.arrayContaining(['INR', 'USD']));
+    expect(r.body.platformCurrency).toBe('USD');
+    const card = r.body.cards.find((c: { currency: string }) => c.currency === 'USD');
+    expect(card).toMatchObject({
+      effectiveOn: '2026-10-01',
+      isPlatformCurrency: true,
+      markets: 47,
+    });
+    expect(['current', 'upcoming', 'due']).toContain(card.freshness.state);
+    expect(r.body.reminder.nextQuarterStart).toMatch(/^\d{4}-(01|04|07|10)-01$/);
+  });
+
+  it('shows one currency\u2019s card market by market, with the countries each market covers', async () => {
+    const r = await ops('get', '/meta-cards/inr');
+    expect(r.status, JSON.stringify(r.body)).toBe(200);
+    const india = r.body.markets.find((m: { market: string }) => m.market === 'India');
+    expect(india.countries).toEqual(['IN']);
+    expect(india.costs.marketing).toBe('0.8631');
+    const na = r.body.markets.find((m: { market: string }) => m.market === 'North America');
+    expect(na.countries).toEqual(['CA', 'US']);
+    expect((await ops('get', '/meta-cards/eur')).status).toBe(404);
+  });
+
+  // The test below edits one INR row to see a change; put Meta's figure back whatever happens.
+  afterAll(async () => {
+    await h.owner.query(
+      `UPDATE meta_rate_cards SET cost_micros = 863100 WHERE currency = 'INR' AND market = 'India' AND category = 'marketing'`,
+    );
+  });
+
+  it('previews an import without writing, then imports the INR card and leaves the pricing costs alone', async () => {
+    const before = await metaCost('INR', 'India', 'marketing');
+    await h.owner.query(
+      `UPDATE meta_rate_cards SET cost_micros = 1 WHERE currency = 'INR' AND market = 'India' AND category = 'marketing'`,
+    );
+    const costsBefore = (
+      await h.owner.query(
+        `SELECT count(*)::int AS n FROM message_rates WHERE meta_cost_micros IS NOT NULL`,
+      )
+    ).rows[0].n;
+
+    const preview = await ops('post', '/meta-cards/import').send({ file: inr, dryRun: true });
+    expect(preview.status, JSON.stringify(preview.body)).toBe(200);
+    expect(preview.body).toMatchObject({
+      dryRun: true,
+      currency: 'INR',
+      effectiveOn: '2026-10-01',
+      appliedToPricing: false,
+      pricing: null,
+      changed: 1,
+      removed: 0,
+    });
+    expect(preview.body.biggestChanges[0]).toMatchObject({
+      market: 'India',
+      category: 'marketing',
+      before: '0.000001',
+    });
+    expect(await metaCost('INR', 'India', 'marketing')).toBe('1'); // a preview writes nothing
+
+    const done = await ops('post', '/meta-cards/import').send({ file: inr, fileName: 'inr.xlsx' });
+    expect(done.status).toBe(200);
+    expect(await metaCost('INR', 'India', 'marketing')).toBe(before);
+    // INR is not the platform currency (USD): the Meta cost behind pricing, margins and the P&L is untouched.
+    expect(
+      (
+        await h.owner.query(
+          `SELECT count(*)::int AS n FROM message_rates WHERE meta_cost_micros IS NOT NULL`,
+        )
+      ).rows[0].n,
+    ).toBe(costsBefore);
+    const log = await h.owner.query(
+      `SELECT payload FROM wallet_platform_log WHERE event = 'platform.meta_card.imported' ORDER BY id DESC LIMIT 1`,
+    );
+    expect(log.rows[0].payload).toMatchObject({ currency: 'INR', fileName: 'inr.xlsx' });
+  });
+
+  it('importing the platform currency\u2019s card also refreshes the Meta costs behind pricing, never a customer price', async () => {
+    const price = (
+      await h.owner.query(
+        `SELECT credits FROM message_rates WHERE country_code = 'US' AND category = 'marketing'`,
+      )
+    ).rows[0].credits;
+    const preview = await ops('post', '/meta-cards/import').send({ file: usd, dryRun: true });
+    expect(preview.body).toMatchObject({ currency: 'USD', appliedToPricing: true });
+    expect(preview.body.pricing.added + preview.body.pricing.updated).toBeGreaterThan(100);
+
+    const done = await ops('post', '/meta-cards/import').send({ file: usd });
+    expect(done.status, JSON.stringify(done.body)).toBe(200);
+    const row = (
+      await h.owner.query(
+        `SELECT credits, meta_cost_micros::text AS m FROM message_rates WHERE country_code = 'IN' AND category = 'marketing'`,
+      )
+    ).rows[0];
+    expect(row.m).toBe(await metaCost('USD', 'India', 'marketing'));
+    expect(row.m).toBe('11800');
+    const us = (
+      await h.owner.query(
+        `SELECT credits FROM message_rates WHERE country_code = 'US' AND category = 'marketing'`,
+      )
+    ).rows[0].credits;
+    expect(us).toBe(price);
+    // the any-country default row takes Meta's "Other" market
+    const other = (
+      await h.owner.query(
+        `SELECT meta_cost_micros::text AS m FROM message_rates WHERE country_code = '' AND category = 'utility'`,
+      )
+    ).rows[0];
+    expect(other.m).toBe(await metaCost('USD', 'Other', 'utility'));
+  });
+
+  it('refuses a file that is not Meta\u2019s card with the stable code, and refuses a support operator', async () => {
+    const bad = await ops('post', '/meta-cards/import').send({
+      file: Buffer.from('this is not a rate card').toString('base64'),
+    });
+    expect(bad.status).toBe(422);
+    expect(bad.body.code).toBe(ERROR_CODES.WALLET_IMPORT_FAILED);
+    expect(
+      (await ops('post', '/meta-cards/import', h.supportToken).send({ file: usd, dryRun: true }))
+        .status,
+    ).toBe(403);
+    // reading is open to every operator role
+    expect((await ops('get', '/meta-cards', h.supportToken)).status).toBe(200);
+  });
+
+  it('asks for a card for a currency a workspace is set to when none is stored', async () => {
+    await h.owner.query(
+      `UPDATE organizations SET settings = jsonb_set(coalesce(settings, '{}'::jsonb), '{currency}', '"EUR"') WHERE id = $1`,
+      [a.orgId],
+    );
+    const r = await ops('get', '/meta-cards');
+    expect(r.body.missing).toContain('EUR');
+    expect(r.body.reminder.state).toBe('due');
+    await h.owner.query(`UPDATE organizations SET settings = settings - 'currency' WHERE id = $1`, [
+      a.orgId,
+    ]);
   });
 });
 
