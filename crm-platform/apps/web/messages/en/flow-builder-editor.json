@@ -309,7 +309,9 @@
           "emoji": "Emoji",
           "variable": "Insert variable",
           "variableSearch": "Search variables...",
-          "variableEmpty": "No variables match."
+          "variableEmpty": "No variables match.",
+          "strike": "Strikethrough",
+          "mono": "Monospace"
         },
         "location": {
           "cardTitle": "Share Location",

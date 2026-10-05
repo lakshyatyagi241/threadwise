@@ -53,7 +53,9 @@
           "emoji": "رموز تعبيرية",
           "variable": "إدراج متغير",
           "variableSearch": "ابحث عن متغير...",
-          "variableEmpty": "لا توجد متغيرات مطابقة."
+          "variableEmpty": "لا توجد متغيرات مطابقة.",
+          "strike": "يتوسطه خط",
+          "mono": "أحادي المسافة"
         },
         "location": {
           "cardTitle": "مشاركة الموقع",
