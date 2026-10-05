@@ -1,8 +1,5 @@
 import {
   connectResultSchema,
-  customerListSchema,
-  customerProfileSchema,
-  type SaveCustomerInput,
   verifyTokenResultSchema,
   wabaConnectionListSchema,
   wabaConnectionSchema,
@@ -113,13 +110,4 @@ export const wabaApi = {
       method: 'POST',
       schema: wabaConnectionSchema,
     }),
-  customers: (q: string, page: number, signal?: AbortSignal) =>
-    apiFetch(`${base}/customers`, {
-      schema: customerListSchema,
-      query: { ...(q ? { q } : {}), page },
-      signal,
-    }),
-  saveCustomer: (input: SaveCustomerInput) =>
-    apiFetch(`${base}/customers`, { method: 'PUT', body: input, schema: customerProfileSchema }),
-  removeCustomer: (id: string) => apiFetch(`${base}/customers/${id}`, { method: 'DELETE' }),
 };

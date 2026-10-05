@@ -26,20 +26,20 @@ describe('sidebar entries', () => {
       'invoices',
     ]);
   });
-  it('links Products and Reviews and disables the sibling-domain pages', () => {
-    for (const k of ['overview', 'products', 'storefront', 'reviews'])
-      expect(find(k).state).toBe('link');
-    for (const k of [
-      'orders',
-      'groups',
-      'coupons',
-      'payments',
-      'gateways',
-      'customers',
-      'invoices',
-    ]) {
-      expect(find(k).state).toBe('soon');
-    }
+  it('links every store page now that the merchant screens exist', () => {
+    for (const e of MAIN_ENTRIES) expect(e.state, e.key).toBe('link');
+  });
+  it('gates each merchant page by its own permission', () => {
+    expect(find('orders').permission).toBe('store.orders.read');
+    expect(find('coupons').permission).toBe('store.coupons.read');
+    expect(find('customers').permission).toBe('store.customers.read');
+    expect(find('groups').permission).toBe('store.groups.read');
+    expect(find('gateways').permission).toBe('store.gateways.read');
+    expect(find('payments').permission).toBe('store.payments.view');
+    const only = (keep: string) => (p: string) => p === keep;
+    expect(
+      visibleEntries(MAIN_ENTRIES, only('store.orders.read')).map((e) => e.key),
+    ).toEqual(['overview', 'orders', 'products', 'reviews']);
   });
   it('hides the storefront entry without the read permission', () => {
     expect(visibleEntries(MAIN_ENTRIES, () => false).some((e) => e.key === 'storefront')).toBe(
@@ -47,9 +47,11 @@ describe('sidebar entries', () => {
     );
     expect(visibleEntries(MAIN_ENTRIES, () => true)).toHaveLength(MAIN_ENTRIES.length);
   });
-  it('carries the selected shop on the overview and storefront links only', () => {
+  it('carries the selected shop on the overview, storefront and merchant links', () => {
     expect(entryHref(find('overview'), 'abc')).toBe('/store?shop=abc');
     expect(entryHref(find('storefront'), 'abc')).toBe('/store/storefront?shop=abc');
+    expect(entryHref(find('orders'), 'abc')).toBe('/store/orders?shop=abc');
+    expect(entryHref(find('gateways'), 'abc')).toBe('/store/gateways?shop=abc');
     expect(entryHref(find('products'), 'abc')).toBe('/store/products');
     expect(entryHref(find('overview'), null)).toBe('/store');
   });
@@ -60,6 +62,8 @@ describe('activeKey', () => {
     expect(activeKey('/store')).toBe('overview');
     expect(activeKey('/store/storefront')).toBe('storefront');
     expect(activeKey('/store/products/create')).toBe('products');
+    expect(activeKey('/store/orders/9f1c')).toBe('orders');
+    expect(activeKey('/store/gateways')).toBe('gateways');
     expect(activeKey('/store/unknown')).toBe('overview');
     expect(activeKey('/connect')).toBe('connection');
   });
