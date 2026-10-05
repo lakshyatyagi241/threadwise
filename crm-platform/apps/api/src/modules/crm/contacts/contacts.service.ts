@@ -57,6 +57,12 @@ export interface ResolveContactInput {
    * somebody wrote is never replaced).
    */
   quiet?: boolean;
+  /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
+  lifecycleStage?: string;
+  /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
+  ownerId?: number | null;
+  /** Extra keys of the `contact.created` payload (a lead's source and campaign), next to `via`. Never overrides the keys the event owns. */
+  eventPayload?: Record<string, unknown>;
 }
 
 export type ResolvedContact =
@@ -375,7 +381,8 @@ export class ContactsService {
     }
 
     // The workspace's default stage, unless it is a lost stage (those demand a reason, and nobody is here to give one).
-    let stage = await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage');
+    let stage =
+      input.lifecycleStage ?? (await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage'));
     const flags = stage ? await this.repo.stageFlags(tx, orgId, stage) : null;
     if (flags?.isLost) stage = undefined;
     const stageValues =
@@ -406,6 +413,7 @@ export class ContactsService {
       lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
       status: statusPlan.status ?? undefined,
       source: input.source ?? null,
+      ownerId: input.ownerId ?? null,
       data: {},
       displayId,
       createdBy: null,
@@ -418,6 +426,7 @@ export class ContactsService {
         aggregateId: created.id,
         eventType: 'contact.created',
         payload: {
+          ...input.eventPayload,
           uuid: created.uuid,
           displayId,
           ...(input.kind === 'email' ? { email: value } : { phone: value }),
@@ -427,6 +436,41 @@ export class ContactsService {
       });
     }
     return { outcome: 'created', contactId: created.id, uuid: created.uuid };
+  }
+
+  /**
+   * The flow "Ask for file / image" node's "save the response as property": writes one custom property value of the contact the run
+   * belongs to (the file link). Only an active contact property of this workspace can be written, so a key typed by hand that names
+   * nothing is refused (`false`). No `contact.updated` event: a flow that fills in its own contact must not start flows of its own.
+   */
+  async setPropertyFromFlow(
+    orgId: number,
+    contactId: number,
+    key: string,
+    value: string,
+  ): Promise<boolean> {
+    const clean = key.trim();
+    if (clean === '') return false;
+    return this.db.txAs({ orgId }, async (tx) => {
+      const field = await tx.execute(
+        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+      );
+      if (field.rows.length === 0) return false;
+      const row = await this.repo.findById(tx, orgId, contactId);
+      if (!row) return false;
+      const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
+        data: { ...(row.data ?? {}), [clean]: value },
+      });
+      if (done) {
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: contactId,
+          action: 'update',
+          delta: { [clean]: { old: (row.data ?? {})[clean] ?? null, new: value } },
+        });
+      }
+      return done;
+    });
   }
 
   /** A name nobody has written yet is filled in; a curated one is never replaced. */

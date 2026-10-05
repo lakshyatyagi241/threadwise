@@ -36,6 +36,8 @@ export function useAppointmentsCan() {
     update: has('record.appointments.update'),
     /** Create and edit booking types (and pause or duplicate them). */
     manageTypes: has('record.booking-types.update') || has('record.booking-types.create'),
+    /** Edit booking configuration, which includes connecting the workspace's Google Calendar. */
+    updateTypes: has('record.booking-types.update'),
     remove: has('record.booking-types.delete'),
   };
 }

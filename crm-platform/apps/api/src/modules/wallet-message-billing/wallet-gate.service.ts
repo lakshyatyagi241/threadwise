@@ -6,11 +6,12 @@ import { BillingModeService } from '../bsp-billing-engine';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { countryOfPhone } from './phone-country';
+import { BillingCurrencyService } from './billing-currency.service';
 import { RateCardService } from './rate-card.service';
 import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
-import { launchVerdict, monthStart, planIsActive, priceMessage } from './wallet-rules';
+import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
 
 export interface LaunchRequest {
   orgId: number;
@@ -44,6 +45,7 @@ export class WalletGateService {
     private readonly db: DatabaseService,
     private readonly repo: WalletRepository,
     private readonly rates: RateCardService,
+    private readonly billing: BillingCurrencyService,
     private readonly settings: WalletSettingsService,
     private readonly plans: PlanEntitlementService,
     private readonly mode: BillingModeService,
@@ -61,16 +63,32 @@ export class WalletGateService {
       const s = await this.settings.effective();
       const now = new Date();
       const facts = await this.db.txAs({ orgId: req.orgId, userId: null }, async (tx) => {
-        const wallet = await this.repo.peekWallet(tx, req.orgId);
+        // The balance and the estimate are both in the workspace's billing currency.
+        const unit = await this.billing.forOrg(tx, req.orgId);
+        const wallet = await this.repo.peekWallet(tx, req.orgId, unit);
         const used = await tx.execute(sql`
           SELECT messages FROM wallet_usage_months WHERE org_id = ${req.orgId} AND month = ${monthStart(now)}::date`);
         const payPerMessage = await this.mode.isPayPerMessage(tx, req.orgId);
-        const rows = await this.rates.rows(tx);
+        // One price per destination country, by the resolver that charges a delivered message (margins, Meta's card for this
+        // currency and fixed prices included), so the estimate is the price it will really be charged at.
+        const prices = new Map<string | null, number>();
+        const countries = new Set<string | null>([null]);
+        for (const phone of req.phones ?? []) countries.add(countryOfPhone(phone));
+        for (const country of countries) {
+          const priced = await this.rates.priceFor(
+            tx,
+            req.orgId,
+            country,
+            req.category ?? 'marketing',
+            unit,
+          );
+          prices.set(country, priced.priceMinor);
+        }
         return {
           balance: wallet?.balanceMinor ?? 0,
           usedThisMonth: Number((used.rows[0] as { messages?: number } | undefined)?.messages ?? 0),
           payPerMessage,
-          rows,
+          prices,
         };
       });
       balanceMinor = facts.balance;
@@ -83,12 +101,7 @@ export class WalletGateService {
       else if (monthlyLimit <= 0) chargeable = 0;
       else chargeable = Math.max(0, facts.usedThisMonth + req.recipients - monthlyLimit);
       const price = (phone: string | null) =>
-        priceMessage(facts.rows, {
-          country: phone ? countryOfPhone(phone) : null,
-          category: req.category ?? 'marketing',
-          perCountryEnabled: s.perCountryEnabled,
-          flatPriceMinor: s.flatPriceMinor,
-        }).priceMinor;
+        facts.prices.get(phone ? countryOfPhone(phone) : null) ?? facts.prices.get(null) ?? 0;
       if (chargeable > 0) {
         if (req.phones && req.phones.length > 0) {
           // The first `chargeable` numbers stand for the chargeable part; for a mixed audience this is an upper-bound sample.

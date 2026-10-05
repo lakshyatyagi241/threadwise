@@ -6,10 +6,11 @@ import {
   isGroup,
   type ConsoleLeaf,
 } from '@/features/admin-console-shell/console-nav';
+import { ConsoleIcon } from '@/features/admin-console-shell/console-icons';
 
 /**
- * The console landing page: one card per area the menu offers. Reference's overview is a KPI
- * dashboard (DASH owns it); until that lands this keeps `/admin` useful as a map of the console.
+ * The console landing page: one card per section the menu offers, with the same block headings the menu uses.
+ * Reference's overview is a KPI dashboard (DASH owns it); until that lands this keeps `/admin` useful as a map of the console.
  */
 export default async function AdminHome() {
   const t = await getTranslations('admin-console-shell.overview');
@@ -29,12 +30,21 @@ export default async function AdminHome() {
             aria-labelledby={`area-${area.id}`}
             className="rounded-lg border border-border p-4"
           >
-            <h2 id={`area-${area.id}`} className="text-sm font-semibold uppercase tracking-wide">
+            <h2
+              id={`area-${area.id}`}
+              className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide"
+            >
+              <ConsoleIcon name={area.icon} className="size-4 text-muted-foreground" />
               {tAll(area.labelKey)}
             </h2>
             <ul className="mt-3 space-y-1">
               {area.children.map((leaf: ConsoleLeaf) => (
                 <li key={leaf.id}>
+                  {leaf.captionKey && (
+                    <p className="px-2 pb-0.5 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {tAll(leaf.captionKey)}
+                    </p>
+                  )}
                   <Link
                     href={leaf.href}
                     className="flex items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"

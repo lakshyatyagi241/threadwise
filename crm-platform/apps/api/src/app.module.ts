@@ -1,11 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
+import { stdSerializers } from 'pino';
 import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'node:crypto';
 import { AppConfigModule } from './config/config.module';
 import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
+import { maskSecretUrl } from './common/logging/mask-secret-url';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
@@ -21,6 +23,11 @@ import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
+import {
+  LOG_REDACT_PATHS,
+  PlatformInfrastructureModule,
+  ThrottleGuard,
+} from './modules/platform-infrastructure';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
@@ -38,6 +45,7 @@ import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
 import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
+import { FlowBuilderEditorModule } from './modules/flow-builder-editor';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
@@ -66,6 +74,8 @@ import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/cha
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
+import { LeadsModule } from './modules/leads';
+import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
@@ -110,15 +120,16 @@ import { HealthModule } from './health/health.module';
                 }
               : {};
           },
+          serializers: {
+            // A push portal's address carries its secret as the last path segment: never in a log line.
+            req: (req: Parameters<typeof stdSerializers.req>[0]) => {
+              const out = stdSerializers.req(req);
+              return { ...out, url: maskSecretUrl(out.url) };
+            },
+          },
+          // Every credential and signature header the API reads (TW-INFRA-028), not just the three that are always there.
           redact: {
-            paths: [
-              'req.headers.authorization',
-              'req.headers.cookie',
-              'req.headers["x-api-key"]',
-              'req.body.password',
-              'req.body.credentials',
-              'res.headers["set-cookie"]',
-            ],
+            paths: LOG_REDACT_PATHS,
             remove: true,
           },
           autoLogging: {
@@ -139,6 +150,7 @@ import { HealthModule } from './health/health.module';
     // Platform
     KernelModule,
     AuthModule,
+    PlatformInfrastructureModule,
     PlansModule,
     PlatformSettingsModule,
     LocalizationTranslationModule,
@@ -148,6 +160,7 @@ import { HealthModule } from './health/health.module';
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
+    FlowBuilderEditorModule,
     CmsModule,
     AdminConsoleShellModule,
     PlatformPaymentGatewaysModule,
@@ -194,6 +207,8 @@ import { HealthModule } from './health/health.module';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
+    LeadsModule,
+    MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],
@@ -201,6 +216,8 @@ import { HealthModule } from './health/health.module';
     CryptoService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // The request throttle (TW-INFRA-010): once the caller is known, before any guard that reads the database.
+    { provide: APP_GUARD, useExisting: ThrottleGuard },
     // After authentication, before permissions: a gated account (suspended,
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.

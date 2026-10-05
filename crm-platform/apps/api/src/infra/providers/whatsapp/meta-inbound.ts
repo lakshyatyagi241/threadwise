@@ -30,9 +30,6 @@ const str = (v: unknown): string | undefined => (typeof v === 'string' && v !== 
 const clip = (v: unknown, max: number): string | undefined => str(v)?.slice(0, max);
 const digitsOf = (v: string): string => v.replace(/\D+/g, '');
 
-const MEDIA_TYPES = ['image', 'video', 'audio', 'document', 'sticker'] as const;
-type MediaType = (typeof MEDIA_TYPES)[number];
-const isMediaType = (t: string): t is MediaType => (MEDIA_TYPES as readonly string[]).includes(t);
 
 export const UNSUPPORTED_131051 =
   "[Unsupported message - the customer sent something the WhatsApp Business API can't display]";

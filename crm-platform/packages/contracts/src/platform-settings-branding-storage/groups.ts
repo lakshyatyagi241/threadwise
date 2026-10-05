@@ -360,6 +360,16 @@ export const campaignsSettingsSchema = z.object({
   defaultExpiryHours: clamped(1, 720, 24),
 });
 
+// --- TW-APPT-028: the one Google OAuth client every workspace connects its Calendar through (Reference: google_calendar_* system settings) --
+export const googleCalendarSettingsSchema = z.object({
+  /** The master switch (Reference's `google_calendar_enabled`). Off: no workspace can connect, and nothing is written to or read from a calendar. */
+  enabled: flag(true),
+  /** The OAuth 2.0 client id from Google Cloud (Web application). Empty: the `GOOGLE_CALENDAR_CLIENT_ID` environment value applies. */
+  clientId: text(200),
+  /** The redirect URI registered on that client. Empty: `<APP_URL>/v2/public/appointments/calendar/google/callback`. */
+  redirectUri: url(300),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -375,6 +385,7 @@ export const SET_GROUP_SCHEMAS = {
   tiPwa: tiPwaSettingsSchema,
   whatsapp: whatsappSettingsSchema,
   campaigns: campaignsSettingsSchema,
+  googleCalendar: googleCalendarSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -397,6 +408,8 @@ export const SET_SECRET_FIELDS = {
   /** appSecret signs/verifies Meta calls; verifyToken is the webhook handshake token (blank: derived). */
   whatsapp: ['appSecret', 'verifyToken', 'partnerAuthKey', 'systemUserToken'],
   campaigns: [],
+  /** The OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
+  googleCalendar: ['clientSecret'],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */

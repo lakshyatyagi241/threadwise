@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { type OnboardingResponse, type OnboardingWorkspaceRequest } from '@crm/contracts';
+import {
+  defaultBillingCurrency,
+  type OnboardingResponse,
+  type OnboardingWorkspaceRequest,
+} from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -32,8 +36,12 @@ interface OrgSettings {
   industry?: OnboardingResponse['workspace']['industry'];
   sizeRange?: OnboardingResponse['workspace']['sizeRange'];
   timezone?: string;
+  country?: string;
   currency?: string;
 }
+
+/** Platform setting the General settings page saves; its `defaultCurrency` is the currency billing falls back to. */
+const GENERAL_KEY = 'set.general';
 
 /**
  * First-run setup after sign-up (TW-AUTH-008/009).
@@ -63,7 +71,7 @@ export class OnboardingService {
 
   async get(): Promise<OnboardingResponse> {
     const { orgId, userId } = this.actor();
-    const [registration, plans, billing, res] = await Promise.all([
+    const [registration, plans, billing, res, currencies] = await Promise.all([
       this.policy.registration(),
       this.entitlements.cardsForOrg(orgId),
       this.settings.get<BillingHints>(ONBOARDING_BILLING_KEY),
@@ -76,6 +84,7 @@ export class OnboardingService {
           WHERE o.id = ${orgId}
         `),
       ),
+      this.currencyOptions(),
     ]);
     const row = res.rows[0] as unknown as {
       name: string;
@@ -90,8 +99,10 @@ export class OnboardingService {
         industry: row.settings.industry ?? null,
         sizeRange: row.settings.sizeRange ?? null,
         timezone: row.settings.timezone ?? null,
+        country: row.settings.country ?? null,
         currency: row.settings.currency ?? null,
       },
+      currencies,
       suggestedName: suggestWorkspaceName(row.email),
       // Whoever has no mobile number yet gives one here, whichever way they signed up.
       needsPhone: !row.phone_e164,
@@ -101,11 +112,42 @@ export class OnboardingService {
     };
   }
 
+  /**
+   * The currencies a workspace can be billed in: the platform's own and every one Meta's rate card is stored for (the same set the
+   * wallet bills in; `BillingCurrencyService.billable`, read here directly because the wallet module sits above auth).
+   */
+  private async currencyOptions(): Promise<OnboardingResponse['currencies']> {
+    const [general, cards] = await Promise.all([
+      this.settings.get<{ defaultCurrency?: unknown }>(GENERAL_KEY),
+      this.db.tx(async (tx) =>
+        tx.execute(sql`SELECT DISTINCT currency FROM meta_rate_cards ORDER BY currency`),
+      ),
+    ]);
+    const configured = general?.defaultCurrency;
+    const platform =
+      typeof configured === 'string' && /^[A-Za-z]{3}$/.test(configured)
+        ? configured.toUpperCase()
+        : DEFAULT_CURRENCY;
+    const stored = (cards.rows as unknown as Array<{ currency: string }>).map((r) => r.currency);
+    return { available: [...new Set([platform, ...stored])].sort(), platform };
+  }
+
   async saveWorkspace(body: OnboardingWorkspaceRequest): Promise<OnboardingResponse> {
     const { orgId, userId } = this.actor();
     if (!isValidTimezone(body.timezone)) {
       throw AppError.validation('Unknown timezone', [
         { path: 'timezone', message: 'Not an IANA timezone.' },
+      ]);
+    }
+    if (body.country !== undefined && !isValidCountry(body.country)) {
+      throw AppError.validation('Unknown country', [
+        { path: 'country', message: 'Not an ISO 3166-1 country code.' },
+      ]);
+    }
+    const options = await this.currencyOptions();
+    if (body.currency !== undefined && !options.available.includes(body.currency)) {
+      throw AppError.validation('That currency cannot be billed', [
+        { path: 'currency', message: 'Not a currency this platform bills in.' },
       ]);
     }
 
@@ -122,11 +164,31 @@ export class OnboardingService {
         ]);
       }
 
+      // Left out, the currency follows the country (India: INR, elsewhere: USD, else the platform's own). Once the wallet has
+      // moved, the currency is fixed (money is never converted); an operator changes it, with a reason.
+      const own = await tx.execute(sql`
+        SELECT upper(settings->>'currency') AS currency,
+               EXISTS (SELECT 1 FROM wallet_transactions WHERE org_id = ${orgId}) AS used
+        FROM organizations WHERE id = ${orgId}
+      `);
+      const saved = own.rows[0] as unknown as { currency: string | null; used: boolean };
+      const currency =
+        body.currency ??
+        (body.country
+          ? defaultBillingCurrency(body.country, options.available, options.platform)
+          : undefined);
+      if (currency && saved.used && saved.currency && currency !== saved.currency) {
+        throw AppError.validation('The billing currency is fixed once the wallet is in use', [
+          { path: 'currency', message: 'Ask support to change it.' },
+        ]);
+      }
+
       const patch: OrgSettings = {
         industry: body.industry,
         sizeRange: body.sizeRange,
         timezone: body.timezone,
-        currency: body.currency?.toUpperCase(),
+        country: body.country,
+        currency,
       };
       // Saving the profile again later (it is an ordinary settings form after sign-up) must not send
       // the workspace back into first-run setup: only the first step moves to the plan step.
@@ -154,7 +216,13 @@ export class OnboardingService {
         actorType: 'user',
         actorId: userId,
         recordId: userId,
-        payload: { industry: body.industry, sizeRange: body.sizeRange, timezone: body.timezone },
+        payload: {
+          industry: body.industry,
+          sizeRange: body.sizeRange,
+          timezone: body.timezone,
+          country: body.country ?? null,
+          currency: currency ?? null,
+        },
       });
       // HOOK for NOTIF: Reference drops a "Workspace created" in-app note (action: dashboard) here.
       await this.outbox.emit(tx, {
@@ -162,7 +230,12 @@ export class OnboardingService {
         aggregateModule: 'organizations',
         aggregateId: orgId,
         eventType: 'org.onboarding.workspace_configured',
-        payload: { name: body.name, timezone: body.timezone, currency: body.currency ?? null },
+        payload: {
+          name: body.name,
+          timezone: body.timezone,
+          country: body.country ?? null,
+          currency: currency ?? null,
+        },
       });
     });
     return this.get();
@@ -185,6 +258,17 @@ export class OnboardingService {
       });
     });
     return this.get();
+  }
+}
+
+/** ISO 3166-1 alpha-2: two letters the runtime knows a region name for (an unassigned code comes back as itself). */
+function isValidCountry(code: string): boolean {
+  if (!/^[A-Z]{2}$/.test(code)) return false;
+  try {
+    const name = new Intl.DisplayNames(['en'], { type: 'region' }).of(code);
+    return Boolean(name) && name !== code && name !== 'Unknown Region';
+  } catch {
+    return false;
   }
 }
 

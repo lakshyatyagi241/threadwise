@@ -9,7 +9,6 @@ export const nav: NavItem[] = [
     href: '/inbox',
     order: 0,
     icon: 'inbox',
-    fullWidth: true,
     gates: { permission: 'inbox.conversation.read' },
   },
 ];

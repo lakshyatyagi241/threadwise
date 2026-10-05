@@ -16,7 +16,8 @@
       "storage": "Cloud storage",
       "realtime": "Real-time",
       "whatsapp": "WhatsApp (WABA)",
-      "campaigns": "Campaigns"
+      "campaigns": "Campaigns",
+      "googleCalendar": "Google Calendar"
     },
     "hub": {
       "kicker": "Admin - Project settings",
@@ -535,54 +536,58 @@
         },
         "fields": {
           "cookieBannerEnabled": {
-            "label": "Cookie banner enabled"
+            "label": "Banner enabled"
           },
           "cookieBannerStyle": {
-            "label": "Cookie banner style"
+            "label": "Banner style"
           },
           "cookieMessage": {
-            "label": "Cookie message"
+            "label": "Consent message"
           },
           "respectDoNotTrack": {
-            "label": "Respect do not track"
+            "label": "Respect Do-Not-Track",
+            "hint": "Browser sends DNT=1 → reject all"
           },
           "policyUrl": {
-            "label": "Policy URL"
+            "label": "Privacy policy URL",
+            "placeholder": "https://example.com/privacy"
           },
           "termsUrl": {
-            "label": "Terms URL"
+            "label": "Terms of service URL",
+            "placeholder": "https://example.com/terms"
           },
           "cookiesPolicyUrl": {
-            "label": "Cookies policy URL"
+            "label": "Cookies policy URL (Learn more)",
+            "placeholder": "https://example.com/cookies"
           },
           "gdprCompliance": {
-            "label": "GDPR compliance",
+            "label": "GDPR compliance (EU)",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "ccpaCompliance": {
-            "label": "CCPA compliance",
+            "label": "CCPA compliance (California)",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaSkipLink": {
-            "label": "ADA skip link",
+            "label": "Skip-to-content link",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaHighContrast": {
-            "label": "ADA high contrast",
+            "label": "Offer high-contrast mode",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaLargeText": {
-            "label": "ADA large text",
+            "label": "Offer large-text mode",
             "hint": "Stored for your records. It does not change behaviour yet."
           },
           "adaReducedMotion": {
-            "label": "ADA reduced motion",
+            "label": "Respect prefers-reduced-motion",
             "hint": "Stored for your records. It does not change behaviour yet."
           }
         },
         "options": {
           "cookieBannerStyle": {
-            "bottom-bar": "Bottom sticky bar (recommended)",
+            "bottom-bar": "Bottom sticky bar — recommended",
             "top-bar": "Top sticky bar",
             "modal": "Centered modal"
           }
@@ -645,14 +650,14 @@
         },
         "fields": {
           "enabled": {
-            "label": "Enabled",
+            "label": "Inject in production",
             "hint": "Nothing below runs on the public site until this is on."
           },
           "css": {
-            "label": "CSS"
+            "label": "Custom CSS"
           },
           "js": {
-            "label": "JavaScript",
+            "label": "Custom JS",
             "hint": "Runs for every visitor. Only paste code you trust."
           }
         }
@@ -743,10 +748,10 @@
             "hint": "Prefix for the probe object. Uploads will use it once the file module lands."
           },
           "accessKeyId": {
-            "label": "Access key ID"
+            "label": "Access key ID *"
           },
           "secret": {
-            "label": "Secret access key",
+            "label": "Secret access key *",
             "hint": "Stored encrypted and never shown again.",
             "placeholder": "paste secret"
           },
@@ -755,7 +760,7 @@
             "placeholder": "us-east-1"
           },
           "bucket": {
-            "label": "Bucket"
+            "label": "Bucket *"
           },
           "endpoint": {
             "label": "Endpoint",
@@ -783,10 +788,10 @@
           "provider": {
             "s3": "Amazon S3",
             "wasabi": "Wasabi",
-            "bunny": "Bunny.net",
+            "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
             "r2": "Cloudflare R2",
-            "minio": "MinIO"
+            "minio": "MinIO / S3-compatible"
           },
           "visibility": {
             "private": "Private (signed URLs)",
@@ -925,6 +930,33 @@
             "label": "End after (hours)"
           }
         }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "The Google OAuth client every workspace connects its calendar through.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Google Calendar",
+            "hint": "Off: no workspace can connect, and nothing is written to or read from a calendar."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "From Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Empty uses GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; GOOGLE_CALENDAR_CLIENT_SECRET is the fallback."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match an Authorised redirect URI on the client exactly."
+          }
+        }
       }
     },
     "cards": {
@@ -1037,6 +1069,11 @@
         "title": "Campaigns",
         "description": "Retries and the automatic end of a campaign that was never finished.",
         "tags": "Retry / expiry"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "The Google OAuth client workspaces use to connect their calendar for bookings and busy times.",
+        "tags": "Google / OAuth / Calendar"
       }
     },
     "signup": {
@@ -1356,7 +1393,7 @@
       "privacy": {
         "title": "Privacy, GDPR & ADA",
         "eyebrow": "Admin - Compliance",
-        "description": "Cookie consent banner, policy URLs, GDPR / CCPA compliance and WCAG accessibility toggles. The same setting feeds the consent UI and gates every analytics integration.",
+        "description": "Cookie consent banner, policy URLs, GDPR/CCPA compliance, and WCAG accessibility toggles. Same setting feeds the consent UI and gates every analytics integration.",
         "sections": {
           "banner": {
             "title": "Banner & policy"
@@ -1365,7 +1402,8 @@
             "title": "GDPR & CCPA"
           },
           "accessibility": {
-            "title": "ADA / WCAG"
+            "title": "ADA / WCAG",
+            "description": "US Americans-with-Disabilities-Act + WCAG 2.1 AA-level affordances visitors can toggle."
           }
         },
         "guide": {
@@ -1410,7 +1448,7 @@
       },
       "custom": {
         "title": "Custom code",
-        "description": "Production custom styles and scripts for advanced branding and behaviour. Injected into public pages when enabled.",
+        "description": "Production custom styles and scripts for advanced branding and behavior. Injected into public pages when enabled.",
         "sections": {
           "code": {
             "title": "Custom code"
@@ -1470,7 +1508,14 @@
       "storage": {
         "title": "Cloud storage",
         "eyebrow": "Admin - Media storage",
-        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "description": "Send all client media attachments to your own bucket — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or any S3-compatible store — instead of the app server. When off, media stays on the local disk, so nothing breaks until you turn it on.",
+        "status": {
+          "active": "Active: {provider}. New uploads go to your bucket.",
+          "configured": "Configured but turned off. Media still on the local disk. Test, then enable.",
+          "local": "Local disk (no cloud provider set up yet).",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
         "sections": {
           "provider": {
             "title": "Cloud media routing"
@@ -1611,6 +1656,38 @@
             }
           }
         }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "Admin - Appointments",
+        "description": "One Google Cloud OAuth client for the whole platform. Each workspace then connects its own Google account from Appointments, Settings; a workspace never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client",
+            "description": "Without a client id and secret, workspaces see Google Calendar as not available and bookings carry on without a calendar."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project and API",
+              "body": "In Google Cloud Console create a project and enable the Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. OAuth client",
+              "body": "Create an OAuth 2.0 Client ID of type Web application and add the redirect URI shown on this page under Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Consent screen",
+              "body": "Add the calendar.events, calendar.freebusy and calendar.calendarlist.readonly scopes, then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings, Google Calendar."
+            }
+          }
+        }
       }
     },
     "cookie": {
@@ -1671,6 +1748,12 @@
       "fieldsMissingTag": "MISSING",
       "fieldsSubscribe": "Subscribe missing fields",
       "fieldsSubscribing": "Subscribing…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Register this exact address as an Authorised redirect URI on the OAuth client. It is where Google sends the browser after a workspace admin agrees.",
+      "copy": "Copy",
+      "copied": "Copied"
     }
   }
 }

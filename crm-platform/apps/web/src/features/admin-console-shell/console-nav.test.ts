@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { OperatorNavItem } from '@/features/auth-registration-security/platform/operator-nav';
+import type { ConsoleSection } from './console-layout';
 import {
   activeLeafId,
   buildConsoleNav,
+  emptySection,
   formatCount,
+  groupByHeading,
   initiallyOpenGroups,
   isGroup,
   leaves,
@@ -22,18 +25,84 @@ const items = [
   item('plans', '/admin/plans', 'g.plans'),
 ];
 
+/** A layout of its own, so these tests do not move when the real menu is reorganised. */
+const layout: ConsoleSection[] = [
+  {
+    id: 'access',
+    icon: 'shield',
+    blocks: [{ caption: 'security', items: ['security', 'security-events'] }],
+  },
+  { id: 'plans', icon: 'tag', blocks: [{ items: ['plans', 'not-built-yet'] }] },
+  { id: 'empty', icon: 'tag', blocks: [{ items: ['also-not-built'] }] },
+];
+
 describe('buildConsoleNav', () => {
-  const nav = buildConsoleNav(items);
+  const nav = buildConsoleNav(items, layout);
 
   it('starts with the console overview leaf', () => {
     expect(nav[0]).toMatchObject({ id: 'overview', href: '/admin' });
     expect(isGroup(nav[0]!)).toBe(false);
   });
 
-  it('groups items by heading in first-seen order', () => {
+  it('builds the sections of the layout, in its order, with their icon and heading key', () => {
     const groups = nav.filter(isGroup);
-    expect(groups.map((g) => g.id)).toEqual(['g.security', 'g.plans']);
+    expect(groups.map((g) => g.id)).toEqual(['access', 'plans']);
+    expect(groups[0]).toMatchObject({
+      labelKey: 'admin-console-shell.nav.sections.access',
+      icon: 'shield',
+    });
     expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
+  });
+
+  it('puts the block heading on the first page of the block only', () => {
+    const [access, plans] = nav.filter(isGroup);
+    expect(access!.children.map((c) => c.captionKey)).toEqual([
+      'admin-console-shell.nav.captions.security',
+      undefined,
+    ]);
+    expect(plans!.children[0]!.captionKey).toBeUndefined();
+  });
+
+  it('skips pages that are not in the menu data, and drops a section left with none', () => {
+    expect(leaves(nav).map((l) => l.id)).toEqual([
+      'overview',
+      'security',
+      'security-events',
+      'plans',
+    ]);
+    expect(nav.some((e) => e.id === 'empty')).toBe(false);
+  });
+
+  it('puts the caption on the first page that exists when the block starts with a missing one', () => {
+    const late: ConsoleSection[] = [
+      {
+        id: 'access',
+        icon: 'shield',
+        blocks: [{ caption: 'security', items: ['missing', 'security-events'] }],
+      },
+    ];
+    const group = buildConsoleNav(items, late).filter(isGroup)[0]!;
+    expect(group.children[0]).toMatchObject({
+      id: 'security-events',
+      captionKey: 'admin-console-shell.nav.captions.security',
+    });
+  });
+
+  it('keeps a page the layout does not place, under its own heading after the sections', () => {
+    const extra = [...items, item('new-page', '/admin/new', 'g.new')];
+    const groups = buildConsoleNav(extra, layout).filter(isGroup);
+    expect(groups.map((g) => g.id)).toEqual(['access', 'plans', 'g.new']);
+    expect(groups[2]).toMatchObject({ labelKey: 'g.new', children: [{ id: 'new-page' }] });
+    expect(groups[2]!.icon).toBeUndefined();
+  });
+
+  it('places a page once even if the layout lists it twice', () => {
+    const twice: ConsoleSection[] = [
+      { id: 'a', icon: 'tag', blocks: [{ items: ['plans'] }] },
+      { id: 'b', icon: 'tag', blocks: [{ items: ['plans', 'security'] }] },
+    ];
+    const placed = leaves(buildConsoleNav(items, twice)).map((l) => l.id);
+    expect(placed.filter((id) => id === 'plans')).toHaveLength(1);
   });
 
   it('marks only the plans leaf as carrying a count', () => {
@@ -45,8 +114,31 @@ describe('buildConsoleNav', () => {
   });
 });
 
+describe('groupByHeading', () => {
+  it('groups items by the heading they name, in first-seen order', () => {
+    const groups = groupByHeading(items);
+    expect(groups.map((g) => g.id)).toEqual(['g.security', 'g.plans']);
+    expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
+  });
+});
+
+describe('emptySection', () => {
+  it('takes the heading key and icon from the layout', () => {
+    expect(emptySection('access', layout)).toEqual({
+      id: 'access',
+      labelKey: 'admin-console-shell.nav.sections.access',
+      icon: 'shield',
+      children: [],
+    });
+  });
+
+  it('still builds a section the layout does not know', () => {
+    expect(emptySection('unknown', layout).icon).toBeUndefined();
+  });
+});
+
 describe('activeLeafId', () => {
-  const nav = buildConsoleNav(items);
+  const nav = buildConsoleNav(items, layout);
 
   it('picks the longest matching prefix, not the shorter parent', () => {
     expect(activeLeafId('/admin/security/events', nav)).toBe('security-events');
@@ -68,10 +160,10 @@ describe('activeLeafId', () => {
 });
 
 describe('initiallyOpenGroups', () => {
-  const nav = buildConsoleNav(items);
+  const nav = buildConsoleNav(items, layout);
 
   it('opens only the group that holds the active leaf', () => {
-    expect([...initiallyOpenGroups(nav, 'security-events')]).toEqual(['g.security']);
+    expect([...initiallyOpenGroups(nav, 'security-events')]).toEqual(['access']);
   });
 
   it('opens nothing for a top-level leaf or no match', () => {

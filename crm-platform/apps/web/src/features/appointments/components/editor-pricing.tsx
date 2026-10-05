@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { Alert, Checkbox, Field, Input, Select } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
-import { useBookingSettings } from '../api/hooks';
+import { useCalendarConnection, useCalendarOptions } from '../api/hooks';
 import { DEPOSIT_MODES, type DepositMode } from '../api/schemas';
 import { currencyChoices, draftPrice } from '../lib/editor';
 import { formatMoney, minorToInput } from '../lib/money';
@@ -16,7 +16,7 @@ export function PricingStep() {
   const tc = useTranslations('appointments.editor.calendar');
   const locale = useLocale();
   const session = useSession();
-  const settings = useBookingSettings();
+  const connection = useCalendarConnection();
   const { draft, set, fid, disabled } = useEditor();
 
   const currency = draft.currency.toUpperCase();
@@ -26,7 +26,10 @@ export function PricingStep() {
   );
   const price = draftPrice(draft);
   const money = (minor: number) => formatMoney(minor, currency, locale);
-  const calendarOff = settings.data?.calendar.status === 'unavailable';
+  const calendarOff = connection.data?.status === 'unavailable';
+  // With an account connected the calendar is chosen from its list; without one it stays a text box (blank = the workspace's calendar).
+  const calendars = useCalendarOptions(connection.data?.status === 'connected');
+  const listed = calendars.data ?? null;
 
   return (
     <div className="space-y-4">
@@ -130,16 +133,35 @@ export function PricingStep() {
         )}
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label={tc('calendarId')} htmlFor={fid('calendarId')}>
-            <Input
-              id={fid('calendarId')}
-              value={draft.calendarId}
-              disabled={disabled || calendarOff}
-              placeholder={tc('calendarPlaceholder')}
-              dir="ltr"
-              autoComplete="off"
-              onChange={(e) => set('calendarId', e.target.value)}
-              className="font-mono"
-            />
+            {listed ? (
+              <Select
+                id={fid('calendarId')}
+                value={draft.calendarId}
+                disabled={disabled}
+                onChange={(e) => set('calendarId', e.target.value)}
+              >
+                <option value="">{tc('calendarDefault')}</option>
+                {draft.calendarId && !listed.some((c) => c.id === draft.calendarId) && (
+                  <option value={draft.calendarId}>{draft.calendarId}</option>
+                )}
+                {listed.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Select>
+            ) : (
+              <Input
+                id={fid('calendarId')}
+                value={draft.calendarId}
+                disabled={disabled || calendarOff}
+                placeholder={tc('calendarPlaceholder')}
+                dir="ltr"
+                autoComplete="off"
+                onChange={(e) => set('calendarId', e.target.value)}
+                className="font-mono"
+              />
+            )}
           </Field>
           <Field label={tc('spreadsheetId')} htmlFor={fid('spreadsheetId')}>
             <Input

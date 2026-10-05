@@ -95,11 +95,15 @@ export type PlatformWalletRow = z.infer<typeof platformWalletRowSchema>;
 export const platformWalletListSchema = z.object({
   data: z.array(platformWalletRowSchema),
   page: pageInfoSchema,
-  /** Across every workspace, not just this page. */
+  /** Across every workspace, not just this page. `floatMinor` is the platform currency's wallets only: currencies are never added together. */
   totals: z.object({
     workspaces: z.number().int(),
     floatMinor: z.number().int(),
     lowBalance: z.number().int(),
+    /** The money held, one line per currency (the platform's included). */
+    floatByCurrency: z.array(
+      z.object({ currency: z.string(), floatMinor: z.number().int(), wallets: z.number().int() }),
+    ),
   }),
   currency: z.string(),
 });
@@ -107,7 +111,12 @@ export type PlatformWalletList = z.infer<typeof platformWalletListSchema>;
 
 export const platformWalletDetailSchema = z.object({
   workspace: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
+  /** The workspace's billing currency: the wallet shown, charged and topped up. */
   currency: z.string(),
+  /** The currencies this workspace can be switched to (the platform's and every currency with a Meta card). */
+  billableCurrencies: z.array(z.string()),
+  /** Every wallet the workspace holds, one per currency; one may hold money in a currency the workspace no longer uses. */
+  wallets: z.array(z.object({ currency: z.string(), balanceMinor: z.number().int() })),
   balanceMinor: z.number().int(),
   billingMode: z.enum(['wallet', 'plan']),
   lowBalanceThresholdMinor: z.number().int(),
@@ -143,6 +152,34 @@ export const adjustWalletSchema = z.object({
     .max(WALLET_LIMITS.noteMax),
 });
 export type AdjustWalletInput = z.infer<typeof adjustWalletSchema>;
+
+/**
+ * Switching the currency a workspace is billed in. From then on its messages are priced from Meta's card for the new currency, its
+ * wallet is the one in that currency, and top-ups credit it. The wallet in the old currency keeps its balance (money is never
+ * converted behind the customer's back), so the reason is mandatory and the result says what was left behind.
+ */
+export const setWorkspaceCurrencySchema = z.object({
+  currency: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z]{3}$/, 'Use a 3-letter currency code'),
+  note: z
+    .string()
+    .trim()
+    .min(WALLET_LIMITS.noteMin, `Say why in at least ${WALLET_LIMITS.noteMin} characters`)
+    .max(WALLET_LIMITS.noteMax),
+});
+export type SetWorkspaceCurrencyInput = z.infer<typeof setWorkspaceCurrencySchema>;
+
+export const setWorkspaceCurrencyResultSchema = z.object({
+  currency: z.string(),
+  previousCurrency: z.string(),
+  /** What the wallet in the previous currency still holds, in that currency; it does not move. */
+  leftBehindMinor: z.number().int(),
+  changed: z.boolean(),
+});
+export type SetWorkspaceCurrencyResult = z.infer<typeof setWorkspaceCurrencyResultSchema>;
 
 export const adjustWalletResultSchema = z.object({
   /** Null when nothing moved (a deduction from an empty wallet). */
@@ -221,6 +258,8 @@ export const WALLET_LOG_EVENTS = [
   'platform.rates.imported',
   'platform.rates.synced',
   'platform.rates.seeded',
+  'platform.meta_card.imported',
+  'platform.workspace_currency.changed',
   'platform.settings.saved',
   'platform.switches.changed',
 ] as const;
@@ -245,6 +284,16 @@ export const platformWalletOverviewSchema = z.object({
   floatMinor: z.number().int(),
   workspacesWithBalance: z.number().int(),
   lowBalanceWorkspaces: z.number().int(),
+  /** The wallets held in other currencies, each on its own line (never added to the platform currency's figures above). */
+  otherCurrencies: z.array(
+    z.object({
+      currency: z.string(),
+      floatMinor: z.number().int(),
+      workspacesWithBalance: z.number().int(),
+      toppedUp30dMinor: z.number().int(),
+      charged30dMinor: z.number().int(),
+    }),
+  ),
   last30d: z.object({
     toppedUpMinor: z.number().int(),
     chargedMinor: z.number().int(),

@@ -6,6 +6,20 @@ import type { ReactNode, SVGProps } from 'react';
  */
 const PATHS: Record<string, ReactNode> = {
   home: <path d="M2.5 7.2 8 2.5l5.5 4.7M4 6.5V13h3V9.5h2V13h3V6.5" />,
+  search: (
+    <>
+      <circle cx="7" cy="7" r="4.2" />
+      <path d="m10.2 10.2 3.3 3.3" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="9" width="4.5" height="4.5" rx="1" />
+    </>
+  ),
   dashboard: (
     <>
       <rect x="2" y="2" width="5" height="6" rx="1" />
@@ -176,6 +190,14 @@ const PATHS: Record<string, ReactNode> = {
       <rect x="9" y="2.5" width="5" height="5" rx="1" />
       <rect x="2" y="9" width="5" height="4.5" rx="1" />
       <rect x="9" y="9" width="5" height="4.5" rx="1" />
+    </>
+  ),
+  apps: (
+    <>
+      <rect x="2" y="2.5" width="5" height="5" rx="1" />
+      <rect x="9" y="2.5" width="5" height="5" rx="1" />
+      <rect x="2" y="9" width="5" height="4.5" rx="1" />
+      <path d="M11.5 9.5v4M9.5 11.5h4" />
     </>
   ),
   plug: (

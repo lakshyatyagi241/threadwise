@@ -1,11 +1,20 @@
 import {
   analyticsResponseSchema,
+  analyticsPanelsSchema,
+  type AnalyticsPanels,
+  dashWidgetsSchema,
+  type DashWidgets,
   dashSummaryResponseSchema,
   dashThroughputResponseSchema,
   type AnalyticsResponse,
   type DashRange,
   type DashSummaryResponse,
   type DashThroughputResponse,
+} from '@crm/contracts';
+import {
+  dashQuickAccessResponseSchema as quickAccessResponseSchema,
+  type QuickAccessItem,
+  type DashQuickAccessResponse as QuickAccessResponse,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
@@ -21,6 +30,13 @@ export const dashApi = {
     return apiFetch('/dashboard/summary', {
       query: { range },
       schema: dashSummaryResponseSchema,
+      signal,
+    });
+  },
+  widgets(range: DashRange, signal?: AbortSignal): Promise<DashWidgets> {
+    return apiFetch('/dashboard/widgets', {
+      query: { range },
+      schema: dashWidgetsSchema,
       signal,
     });
   },
@@ -40,6 +56,27 @@ export const dashApi = {
       },
       schema: analyticsResponseSchema,
       signal,
+    });
+  },
+  panels(p: AnalyticsParams, signal?: AbortSignal): Promise<AnalyticsPanels> {
+    return apiFetch('/analytics/panels', {
+      query: {
+        range: p.range,
+        from: p.range === 'custom' ? p.from : undefined,
+        to: p.range === 'custom' ? p.to : undefined,
+      },
+      schema: analyticsPanelsSchema,
+      signal,
+    });
+  },
+  quickAccess(signal?: AbortSignal): Promise<QuickAccessResponse> {
+    return apiFetch('/quick-access', { schema: quickAccessResponseSchema, signal });
+  },
+  saveQuickAccess(items: QuickAccessItem[]): Promise<QuickAccessResponse> {
+    return apiFetch('/quick-access', {
+      method: 'PUT',
+      body: { items },
+      schema: quickAccessResponseSchema,
     });
   },
   /** The CSV download address; the browser fetches it with the session cookie through the same-origin proxy. */

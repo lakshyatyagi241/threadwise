@@ -30,11 +30,18 @@ export function ConsolePage() {
         title={t('title')}
         description={t('subtitle')}
         actions={
-          <Link href="/admin/bsp">
-            <Button variant="secondary" size="sm">
-              {t('linkIncome')}
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/admin/bsp">
+              <Button variant="secondary" size="sm">
+                {t('linkIncome')}
+              </Button>
+            </Link>
+            <Link href="/admin/wallet/pricing">
+              <Button variant="secondary" size="sm">
+                {t('linkPricing')}
+              </Button>
+            </Link>
+          </div>
         }
       />
       {q.isPending ? (

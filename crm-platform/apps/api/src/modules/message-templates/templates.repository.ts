@@ -102,6 +102,8 @@ export interface ListFilter {
   status?: string;
   category?: string;
   connectionUuid?: string;
+  /** Internal id of the WhatsApp connection: for a caller that already holds it (the team inbox), instead of its uuid. */
+  providerConfigId?: number;
   q?: string;
 }
 
@@ -187,6 +189,8 @@ export class TemplatesRepository {
     if (f.category)
       where.push(sql`upper(coalesce(t.meta_category, t.category)) = ${f.category.toUpperCase()}`);
     if (f.connectionUuid) where.push(sql`c.uuid = ${f.connectionUuid}::uuid`);
+    if (f.providerConfigId !== undefined)
+      where.push(sql`t.provider_config_id = ${f.providerConfigId}`);
     if (f.q) {
       const like = `%${escapeLike(f.q)}%`;
       where.push(

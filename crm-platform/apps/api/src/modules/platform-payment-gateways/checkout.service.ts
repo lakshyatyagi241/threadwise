@@ -16,16 +16,19 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { BillingCurrencyService } from '../wallet-message-billing';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AddonEntitlementService } from '../addons-extension-registry';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { CouponService, type CouponResolution } from './coupon.service';
 import { FulfilmentService } from './fulfilment.service';
 import { acceptsCurrency, availableCurrencies } from './gateway-rules';
 import { GatewayService, type GatewayRow } from './gateway.service';
+import { assertMarketplacePack } from './marketplace-pack';
 import { recordOrderEvent } from './order-events';
 import {
   billingPeriodFor,
@@ -65,6 +68,8 @@ interface Priced {
   gateways: GatewayRow[];
   parts: Breakdown;
   walletCreditMinor: number | null;
+  /** The wallet a top-up credits (the workspace's billing currency), fixed at order time; null for a plan. */
+  walletUnit: string | null;
   planSlug: string | null;
   /** What a recurring checkout needs to know about the plan (null for wallet top-ups). */
   term: PlanTerm | null;
@@ -111,6 +116,8 @@ export class CheckoutService {
     private readonly outbox: OutboxService,
     private readonly coupons: CouponService,
     private readonly subscriptions: SubscriptionLifecycleService,
+    private readonly entitlements: AddonEntitlementService,
+    private readonly billing: BillingCurrencyService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -167,6 +174,15 @@ export class CheckoutService {
       );
     }
     if (plan.kind === 'addon') {
+      // The add-on that sells a Marketplace app follows the Marketplace's rules instead (the app is on offer and paid, not already included
+      // in the plan, not paid far ahead), and needs no paid plan: it is a subscription of its own, not a boost on top of one.
+      const orgId = RequestContextStore.require().orgId;
+      if (
+        await assertMarketplacePack(tx, orgId, plan.slug, (key) =>
+          this.entitlements.featureEnabled(orgId, key),
+        )
+      )
+        return;
       // An add-on sits on top of an active paid plan (TW-ADD-033). Reference enforced this only in the view; a direct POST bypassed it.
       const base = await tx.execute(sql`
         SELECT p.is_free, p.is_custom_quote, s.plan_ends_at
@@ -280,6 +296,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: null,
+      walletUnit: null,
       planSlug: plan.slug,
       term: {
         name: plan.name,
@@ -300,7 +317,10 @@ export class CheckoutService {
     query: PaygwWalletQuoteQuery,
     s: CheckoutSettings,
   ): Promise<Priced> {
-    const base = s.defaultCurrency;
+    // The wallet being topped up is the one in the workspace's billing currency (USD, INR, ...): the amount is entered in it, the
+    // gateway charges it by default, and exactly that amount is credited. The platform default currency is only the fallback.
+    const walletUnit = await this.billing.forOrg(tx, RequestContextStore.require().orgId);
+    const base = walletUnit;
     const baseMinor = majorToMinor(query.amount, base);
     if (
       baseMinor === null ||
@@ -327,7 +347,7 @@ export class CheckoutService {
       );
     }
     const parts = breakdown(billed, currency, 0n, s.taxEnabled ? s.taxRate : '0');
-    // The grant is the PRE-tax amount in platform-currency minor units (tax is not credited): 1 minor unit = 1 credit.
+    // The grant is the PRE-tax amount in the wallet's own minor units (tax is not credited): 1 minor unit = 1 credit.
     return {
       kind: 'wallet_topup',
       itemName: 'Wallet top-up',
@@ -339,6 +359,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: Number(back),
+      walletUnit,
       planSlug: null,
       term: null,
       subtotalMinor: billed,
@@ -720,6 +741,7 @@ export class CheckoutService {
             billingCountry: b.country ?? null,
             billingTaxId: b.taxId ?? null,
             walletTopupMinor: p.walletCreditMinor,
+            walletUnit: p.walletUnit,
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,

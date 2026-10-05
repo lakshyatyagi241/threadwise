@@ -31,6 +31,8 @@ export const DEAL_SOURCES = [
   'flow',
   'facebook',
   'ai',
+  /** A lead from a lead source (an ad form, a portal, a webhook): the lead pipeline's optional deal. */
+  'lead_ad',
 ] as const;
 export const dealSourceSchema = z.enum(DEAL_SOURCES);
 export type DealSource = z.infer<typeof dealSourceSchema>;

@@ -14,6 +14,10 @@ export const permissionDefResponseSchema = z.object({
   label: z.string(),
   category: z.string(),
   supportsScope: z.boolean(),
+  /** The plan feature (add-on) this key belongs to; absent for core keys. */
+  planFeature: z.string().nullable().optional(),
+  /** The Marketplace app whose key this is; shown only while the workspace has it installed. */
+  appSlug: z.string().nullable().optional(),
 });
 export type PermissionDefResponse = z.infer<typeof permissionDefResponseSchema>;
 

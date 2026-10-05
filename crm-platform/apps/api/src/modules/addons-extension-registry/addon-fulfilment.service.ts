@@ -4,7 +4,8 @@ import { ERROR_CODES } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { addonEndsAt, type BillingUnit } from './addon-grants';
+import { AddonFulfilmentHooks } from './addon-fulfilment-hooks';
+import { addonEndsAt, termBase, type BillingUnit } from './addon-grants';
 
 export interface FulfilInput {
   orgId: number;
@@ -30,6 +31,7 @@ interface PackRow {
   is_lifetime: boolean;
   billing_unit: BillingUnit;
   billing_duration: number;
+  marketplace_app_id: number | null;
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -46,26 +48,48 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  * the same add-on in a second order adds a second row and the grants stack. Whether the workspace is on an active
  * paid plan, and whether a feature-only pack may be bought twice, are checkout's business (Reference enforced both
  * only in the view; the catalogue endpoint reports them, nothing here refuses a paid order).
+ *
+ * The add-on that sells a Marketplace app (`plans.marketplace_app_id`) differs in two ways, both because it is a subscription and not a
+ * boost: a payment extends the term already paid for instead of starting a parallel one (`termBase`), and the registered listeners (the
+ * Marketplace's subscription ledger) are told in this same transaction.
  */
 @Injectable()
 export class AddonFulfilmentService {
-  constructor(private readonly outbox: OutboxService) {}
+  constructor(
+    private readonly outbox: OutboxService,
+    private readonly hooks: AddonFulfilmentHooks,
+  ) {}
 
   async fulfil(tx: Tx, input: FulfilInput): Promise<FulfilResult> {
     const now = input.now ?? new Date();
     // slug first, then uuid (TW-ADD-032 rule 2); an add-on only, never a plan
     const res = await tx.execute(
       UUID.test(input.pack)
-        ? sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration
+        ? sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration,
+                     marketplace_app_id::int AS marketplace_app_id
               FROM plans WHERE kind = 'addon' AND (slug = ${input.pack} OR uuid = ${input.pack}::uuid)`
-        : sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration
+        : sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration,
+                     marketplace_app_id::int AS marketplace_app_id
               FROM plans WHERE kind = 'addon' AND slug = ${input.pack}`,
     );
     const pack = res.rows[0] as unknown as PackRow | undefined;
     if (!pack) {
       throw new AppError(ERROR_CODES.NOT_FOUND, 'Add-on not found', HttpStatus.NOT_FOUND);
     }
-    const endsAt = addonEndsAt(now, {
+    const forApp = pack.marketplace_app_id !== null;
+    let currentEnd: Date | null = null;
+    if (forApp) {
+      const cur = await tx.execute(sql`
+        SELECT max(ends_at) AS ends_at, bool_or(ends_at IS NULL) AS open_ended
+        FROM workspace_addons
+        WHERE org_id = ${input.orgId} AND package_id = ${pack.id} AND status = 'active'
+          AND (ends_at IS NULL OR ends_at > ${now})`);
+      const c = cur.rows[0] as unknown as
+        { ends_at: string | null; open_ended: boolean | null } | undefined;
+      // A row with no end (a comp until revoked) has nothing to extend: the new term counts from now.
+      currentEnd = c?.ends_at && !c.open_ended ? new Date(c.ends_at) : null;
+    }
+    const endsAt = addonEndsAt(termBase(now, forApp, currentEnd), {
       isFree: pack.is_free,
       isLifetime: pack.is_lifetime,
       billingUnit: pack.billing_unit,
@@ -93,6 +117,18 @@ export class AddonFulfilmentService {
         endsAt: endsAt?.toISOString() ?? null,
       },
     });
+    if (forApp) {
+      await this.hooks.run(tx, {
+        orgId: input.orgId,
+        packId: pack.id,
+        packSlug: pack.slug,
+        marketplaceAppId: pack.marketplace_app_id,
+        workspaceAddonId: row.id,
+        orderId: input.orderId,
+        startsAt: now,
+        endsAt,
+      });
+    }
     return { created: true, workspaceAddonId: row.uuid, startsAt: now, endsAt };
   }
 }

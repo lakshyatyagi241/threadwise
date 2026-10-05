@@ -10,6 +10,7 @@ export {
   ContactsService,
   ContactsRepository,
   ContactQuotaService,
+  assertContactScope,
   toContactResponse,
 } from './contacts';
 export type { ContactRow } from './contacts';

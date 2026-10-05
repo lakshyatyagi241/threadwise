@@ -7,6 +7,7 @@ import {
 } from '@crm/contracts';
 import {
   cleanWallet,
+  fixedPricing,
   fund,
   newTenant,
   services,
@@ -43,6 +44,7 @@ const body = (over: Record<string, unknown> = {}) => ({
 beforeAll(async () => {
   startedAt = new Date();
   h = await startBspHarness();
+  await fixedPricing(h);
   t = await newTenant(h, 'ex');
 }, 120_000);
 

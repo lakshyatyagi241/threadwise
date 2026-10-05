@@ -28,8 +28,6 @@ describe('shell messages', () => {
       'openMenu',
       'closeMenu',
       'mainMenu',
-      'expandMenu',
-      'collapseMenu',
       'userMenu',
       'account',
       'balance',

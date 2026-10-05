@@ -4,23 +4,14 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { PageHelpTip } from '@/features/help-center';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
 import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
-import { useStoredValue } from '@/lib/use-stored-value';
 import { NavDrawer, NavRail } from './nav-rail';
-import {
-  SETTINGS_NAV_ID,
-  activeNavId,
-  helpItems,
-  isFullWidthScreen,
-  menuItems,
-  toSections,
-} from './nav-model';
+import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
 import { TopBar, type WalletChipData } from './top-bar';
 import type { ShellUser } from './user-menu';
-
-export const NAV_PINNED_KEY = 'shell:nav:pinned';
 
 interface Props {
   user: ShellUser;
@@ -49,7 +40,7 @@ interface Props {
 const BELL_ID = 'notifications';
 
 /**
- * The signed-in frame: a dark navigation column (a slim icon rail, a labelled panel when pinned open, a drawer on
+ * The signed-in frame: a dark navigation column (a slim icon rail with a panel per group, a drawer on
  * phones) beside a top bar and the page. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
  */
 export function AppShell({
@@ -69,13 +60,6 @@ export function AppShell({
   const pathname = usePathname();
   const [drawer, setDrawer] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
-  const [pinnedRaw, setPinned] = useStoredValue(NAV_PINNED_KEY);
-  const wide = isFullWidthScreen(nav, settings, pathname);
-  // On a full-width screen the menu is the slim rail; the expand button opens it for that visit only (the saved choice stays).
-  const [openHere, setOpenHere] = useState<string | null>(null);
-  const pinned = wide ? openHere === pathname : pinnedRaw === '1';
-  const togglePinned = () =>
-    wide ? setOpenHere(pinned ? null : pathname) : setPinned(pinned ? '0' : '1');
 
   const sections = useMemo(() => toSections(menuItems(nav)), [nav]);
   const help = useMemo(() => helpItems(nav), [nav]);
@@ -87,13 +71,7 @@ export function AppShell({
 
   return (
     <div className="flex min-h-dvh">
-      <NavRail
-        sections={sections}
-        activeId={activeId}
-        pinned={pinned}
-        onTogglePinned={togglePinned}
-        footer={navFooter}
-      />
+      <NavRail sections={sections} activeId={activeId} footer={navFooter} />
       <NavDrawer
         open={drawer}
         onClose={closeDrawer}
@@ -114,6 +92,7 @@ export function AppShell({
           notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
           notificationCount={notificationCount}
           bell={liveBell}
+          pageHelp={<PageHelpTip />}
           pageSettings={<PageSettingsShortcut tiles={settings} />}
           settingsHref={settingsLink?.href}
           helpItems={help}

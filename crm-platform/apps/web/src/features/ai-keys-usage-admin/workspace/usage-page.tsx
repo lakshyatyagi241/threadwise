@@ -158,6 +158,7 @@ export function UsagePage() {
               </table>
             )}
           </Card>
+          <p className="text-xs text-muted-foreground">{t('costNote')}</p>
         </div>
       )}
     </div>

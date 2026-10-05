@@ -122,7 +122,7 @@ describe('sending through a connected number (TW-NODE-022 to 024)', () => {
         type: 'group_text',
         groupJid: '12036300',
         body: 'hello @919800000001',
-        mentions: ['919800000001'],
+        mentions: ['919800000001'] as string[],
       },
     ] as const;
     for (const c of cmds)
@@ -459,6 +459,8 @@ describe('delivery receipts (TW-NODE-020)', () => {
     const sc = new ScheduledReceiptsService(r.db);
     expect(
       await sc.handle({
+        orgId: 1,
+        deviceId: 1,
         providerMessageId: 'wamid.UNKNOWN',
         status: 'delivered',
         occurredAt: new Date(),

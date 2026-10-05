@@ -65,5 +65,5 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Shims, owners and blocked consumers
 
 - `OpenFacebookPlanGate`: no Facebook keys in the plan catalogue.
-- `NoInboundHooks`: no flow runtime, routing, AI agent or auto-reply.
+- `NoInboundHooks`: unused. The flow runtime listens to stored inbound messages but its channel-kind map (`KINDS_OF_PROVIDER`) has no `facebook` yet, so no flow runs here until the runtime adds it; routing, AI agent and auto-reply are still absent.
 - `ChatInboxIngest`: real, over chat-conversations; `FacebookChannelAdapter` registered on init.

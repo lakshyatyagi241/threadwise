@@ -48,7 +48,7 @@ function build(s: Setup = {}) {
         execute: async (q: { queryChunks?: unknown[] }) => {
           const text = JSON.stringify(q.queryChunks ?? []);
           if (text.includes('ai_chat_assistants'))
-            return { rows: s.assistantExists === false ? [] : [{ x: 1 }] };
+            return { rows: s.assistantExists === false ? [] : [{ id: 1 }] };
           return { rows: s.sources ?? [] };
         },
       }),

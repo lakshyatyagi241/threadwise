@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { AnnouncementService } from './announcement.service';
 import { BlogService } from './blog.service';
 import { CmsStore } from './cms-store';
 import { ContactService } from './contact.service';
 import { CmsContentService } from './content.service';
+import { GuidebookService } from './guidebook.service';
 import { LegalService } from './legal.service';
 import {
   OperatorBlogController,
@@ -10,8 +12,18 @@ import {
   OperatorLegalController,
 } from './operator-pages.controller';
 import { OperatorContentController } from './operator-content.controller';
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { PricingService } from './pricing.service';
+import {
+  OperatorAnnouncementsController,
+  OperatorGuidebookController,
+} from './operator-site.controller';
 import { PublicCmsController } from './public-cms.controller';
+import { CmsUploadService } from './upload.service';
+import {
+  WorkspaceAnnouncementsController,
+  WorkspaceGuidebookController,
+} from './workspace-cms.controller';
 
 /**
  * The marketing site, its page editor, blog, legal pages and contact inbox (domain CMS). The auth module is global
@@ -19,12 +31,17 @@ import { PublicCmsController } from './public-cms.controller';
  * PLAN's own card builder. Registered in app.module.ts.
  */
 @Module({
+  imports: [PlatformSettingsModule],
   controllers: [
     PublicCmsController,
     OperatorContentController,
     OperatorLegalController,
     OperatorBlogController,
     OperatorContactController,
+    OperatorAnnouncementsController,
+    OperatorGuidebookController,
+    WorkspaceAnnouncementsController,
+    WorkspaceGuidebookController,
   ],
   providers: [
     CmsStore,
@@ -33,6 +50,9 @@ import { PublicCmsController } from './public-cms.controller';
     BlogService,
     ContactService,
     PricingService,
+    AnnouncementService,
+    GuidebookService,
+    CmsUploadService,
   ],
 })
 export class CmsModule {}

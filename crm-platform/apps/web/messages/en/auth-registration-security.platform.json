@@ -1417,7 +1417,9 @@
             "autoreplies": "Keyword auto-replies",
             "total_campaigns": "Campaigns created (never freed by deleting)",
             "api_rate_limit_per_minute": "API requests per minute (0 = platform default)",
-            "scheduled_messages": "Scheduled messages held"
+            "installed_apps": "Installed Marketplace apps and integrations",
+            "scheduled_messages": "Scheduled messages held",
+            "lead_sources": "Lead sources"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1443,7 +1445,9 @@
             "inbox_kanban": "Inbox Kanban board",
             "team_performance": "Team performance reports",
             "scheduled_messages": "Scheduled messages",
-            "whatsapp_warmer": "WhatsApp number warmer"
+            "whatsapp_warmer": "WhatsApp number warmer",
+            "marketplace": "Marketplace (mini apps and integrations)",
+            "lead_sources": "Lead sources (webhook and connector doors that create contacts)"
           },
           "problems": {
             "required": "This field is required.",

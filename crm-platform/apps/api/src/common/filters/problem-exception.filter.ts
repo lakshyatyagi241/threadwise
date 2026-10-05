@@ -10,6 +10,8 @@ import type { Request, Response } from 'express';
 import { ERROR_CODES, type Problem } from '@crm/contracts';
 import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
+import { maskSecretUrl } from '../logging/mask-secret-url';
+import { reportServerError } from '../../modules/platform-infrastructure';
 
 /**
  * Single exit point for every error. Emits RFC 9457 problem+json:
@@ -35,11 +37,15 @@ export class ProblemExceptionFilter implements ExceptionFilter {
     // problem and logging stacks for those just buries the real incidents.
     if (problem.status >= 500) {
       this.logger.error(
-        { err: exception, path: request.url, requestId },
+        { err: exception, path: maskSecretUrl(request.url), requestId },
         `Unhandled error: ${problem.detail}`,
       );
+      reportServerError(exception, { requestId, path: request.url });
     } else {
-      this.logger.debug({ path: request.url, code: problem.code, requestId }, problem.title);
+      this.logger.debug(
+        { path: maskSecretUrl(request.url), code: problem.code, requestId },
+        problem.title,
+      );
     }
 
     response.status(problem.status).type('application/problem+json').send(problem);

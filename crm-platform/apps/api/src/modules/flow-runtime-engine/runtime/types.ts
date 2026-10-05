@@ -119,6 +119,8 @@ export type OutboundMessage =
     }
   | { kind: 'cta_url'; body: string; header?: string; footer?: string; text: string; url: string }
   | { kind: 'location'; latitude: number; longitude: number; name?: string; address?: string }
+  /** Asks the customer to share a location: WhatsApp's "send location" button where the channel has it, else `body` and the `hint`. */
+  | { kind: 'location_request'; body: string; hint?: string }
   /**
    * An approved WhatsApp template (TW-FLR-026). `variables` are the Cloud API's positional or named body parameters; `text` is the
    * message as the customer reads it (header, body, footer with the values filled in), what a channel without templates is sent

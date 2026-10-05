@@ -20,6 +20,7 @@ export function notificationText(
 ): { title: string; body: string | null } {
   if (!KNOWN.has(n.type) || !t.has(`types.${n.type}.title`))
     return { title: n.title, body: n.body };
+  if (n.type === 'new_lead') return leadText(t, n.data);
   const task = text(n.data?.taskTitle);
   const actor = text(n.data?.actorName);
   const body = actor
@@ -30,6 +31,22 @@ export function notificationText(
       ? t(`types.${n.type}.bodyNoActor`, { task })
       : task;
   return { title: t(`types.${n.type}.title`), body: body || null };
+}
+
+/** A lead from a lead source: the contact's name and the platform it came from (`data.contactName`, `data.platform`); `returning` for a repeat. */
+function leadText(
+  t: Translator,
+  data: NotificationResponse['data'],
+): { title: string; body: string | null } {
+  const name = text(data?.contactName);
+  const platform = text(data?.platform);
+  const returning = data?.returning === true;
+  const body = !name
+    ? null
+    : platform
+      ? t(returning ? 'types.new_lead.bodyReturning' : 'types.new_lead.body', { name, platform })
+      : t('types.new_lead.bodyNoActor', { name });
+  return { title: t(returning ? 'types.new_lead.titleReturning' : 'types.new_lead.title'), body };
 }
 
 /**

@@ -11,6 +11,8 @@ export interface InboundInput {
   meta?: Record<string, unknown> | null;
   /** A stored link to a file the customer sent. */
   mediaUrl?: string | null;
+  /** The file's own kind, MIME type and name, when the channel says them (the Ask for file node checks them). */
+  media?: { kind: string; mime: string; name?: string } | null;
 }
 
 /**
@@ -30,7 +32,19 @@ export function decodeInbound(m: InboundInput): InboundReply | null {
   if (m.kind === 'location' && m.location) {
     const link = `https://www.google.com/maps?q=${m.location.latitude},${m.location.longitude}`;
     const name = String(m.location.name || m.location.address || '').trim();
-    return { kind: 'location', id: '', text: name ? `${name} ${link}` : link };
+    return {
+      kind: 'location',
+      id: '',
+      text: name ? `${name} ${link}` : link,
+      // What a node that asked for a location saves: the numbers, the place and a link that is only the link.
+      data: {
+        latitude: m.location.latitude,
+        longitude: m.location.longitude,
+        name: String(m.location.name ?? '').trim(),
+        address: String(m.location.address ?? '').trim(),
+        link,
+      },
+    };
   }
   if (m.kind === 'media') {
     return {
@@ -38,6 +52,16 @@ export function decodeInbound(m: InboundInput): InboundReply | null {
       id: '',
       text: String(m.body ?? '').trim(),
       ...(m.mediaUrl ? { mediaUrl: m.mediaUrl } : {}),
+      ...(m.media
+        ? {
+            data: {
+              mediaKind: m.media.kind,
+              mime: m.media.mime,
+              name: m.media.name ?? '',
+              caption: String(m.body ?? '').trim(),
+            },
+          }
+        : {}),
     };
   }
   const text = String(m.body ?? '').trim();

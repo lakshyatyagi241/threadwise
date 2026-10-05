@@ -51,6 +51,24 @@ describe('notificationText', () => {
     ).toBe('X');
   });
 
+  it('words a lead from its contact and platform, and a returning lead apart (new_lead)', () => {
+    const data = { contactName: 'Ada', platform: 'Facebook', returning: false };
+    expect(notificationText(translator('en'), n('new_lead', data))).toEqual({
+      title: 'New lead',
+      body: 'Ada came in from Facebook',
+    });
+    expect(notificationText(translator('en'), n('new_lead', { ...data, returning: true }))).toEqual(
+      { title: 'Lead came in again', body: 'Ada sent another lead from Facebook' },
+    );
+    expect(
+      notificationText(translator('en'), n('new_lead', { contactName: 'Ada', platform: '' })).body,
+    ).toBe('Ada came in');
+    const ar = notificationText(translator('ar'), n('new_lead', data));
+    expect(ar.title).toBe('عميل محتمل جديد');
+    expect(ar.body).toContain('Ada');
+    expect(notificationText(translator('en'), n('new_lead', null)).body).toBeNull();
+  });
+
   it('shows the server wording for a type it has no message for', () => {
     expect(notificationText(translator('en'), n('deal_won', { dealTitle: 'Big' }))).toEqual({
       title: 'Server title',

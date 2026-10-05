@@ -174,7 +174,7 @@ describe('add-on schema, RLS and fulfilment', () => {
 
   it('fulfils an order once: the replay writes nothing and a second order stacks', async () => {
     const outbox = { emit: async () => undefined } as never;
-    const svc = new AddonFulfilmentService(outbox);
+    const svc = new AddonFulfilmentService(outbox, { run: async () => undefined } as never);
     const [o1, o2, o3] = [await order(orgA), await order(orgA), await order(orgA)];
     const run = (orderId: number) =>
       withPrivileged(dbClient.db, (tx) =>

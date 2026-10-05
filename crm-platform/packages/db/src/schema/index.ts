@@ -74,3 +74,5 @@ export * from './workspaces-teams-tenancy';
 // <threadwise-schema:end>
 export * from './roles-permissions';
 export * from './whatsapp-providers';
+export * from './leads';
+export * from './marketplace';

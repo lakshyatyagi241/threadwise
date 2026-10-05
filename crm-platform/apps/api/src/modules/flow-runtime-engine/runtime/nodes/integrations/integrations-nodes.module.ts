@@ -15,6 +15,7 @@ import {
   MysqlDriverUnavailable,
 } from '../../../../../infra/providers/flow-runtime-engine/mysql-query.port';
 import { SafeFetch } from '../../../../../infra/providers/node-bridge-runtime/safe-fetch';
+import { FlowRefResolver } from '../flow-refs';
 import { IntegrationNodes } from './integrations-nodes';
 
 /**
@@ -27,6 +28,7 @@ import { IntegrationNodes } from './integrations-nodes';
 @Module({
   providers: [
     SafeFetch,
+    FlowRefResolver,
     IntegrationNodes,
     { provide: MYSQL_QUERY, useClass: MysqlDriverUnavailable },
     { provide: AI_CALL, useClass: AiCallUnavailable },

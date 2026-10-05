@@ -10,6 +10,7 @@ import {
   charges,
   cleanWallet,
   events,
+  fixedPricing,
   fund,
   ledgerRows,
   newTenant,
@@ -64,6 +65,7 @@ const settle = (
 beforeAll(async () => {
   startedAt = new Date();
   h = await startBspHarness();
+  await fixedPricing(h);
   // Per-country pricing on, as an operator would switch it on.
   const r = await h.api
     .http()

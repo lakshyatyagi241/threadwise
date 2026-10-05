@@ -2,8 +2,15 @@
   "platform-support-desk": {
     "nav": {
       "support": "Support",
-      "inbox": "Support inbox",
-      "group": "Support"
+      "inbox": "Inbox",
+      "group": "Support",
+      "team": "Team inbox",
+      "agents": "Agents",
+      "sla": "SLA board",
+      "customers": "Customers",
+      "playbooks": "Playbooks",
+      "reports": "Reports",
+      "platformInbox": "Platform inbox"
     },
     "status": {
       "open": "Open",
@@ -21,23 +28,32 @@
     "reason": {
       "bug": {
         "label": "Something is broken",
-        "hint": "An error, a crash or a screen that does not work"
+        "hint": "Bugs, errors, or unexpected behavior in the app."
       },
       "delivery": {
         "label": "Message delivery",
-        "hint": "Messages that are late, failed or never arrived"
+        "hint": "Messages not landing, stuck in queue, or delayed."
       },
       "template": {
         "label": "Template approval",
-        "hint": "A template that is pending or was rejected"
+        "hint": "Rejected, paused, or stuck-in-review templates."
       },
-      "billing": { "label": "Billing and plans", "hint": "Charges, invoices, upgrades and limits" },
+      "billing": {
+        "label": "Billing & plans",
+        "hint": "Invoices, upgrades, refunds, payment methods."
+      },
       "integration": {
         "label": "Integration help",
-        "hint": "Connecting a channel, webhook or another tool"
+        "hint": "API keys, webhooks, Shopify, Zapier, custom code."
       },
-      "account": { "label": "Account access", "hint": "Sign-in, two-factor codes and team access" },
-      "other": { "label": "Something else", "hint": "Anything that does not fit above" }
+      "account": {
+        "label": "Account access",
+        "hint": "Login issues, 2FA, seats, role changes."
+      },
+      "other": {
+        "label": "Something else",
+        "hint": "Feature requests, feedback, anything else."
+      }
     },
     "errors": {
       "network": "Could not reach the server. Check your connection and try again.",
@@ -57,18 +73,27 @@
       "form": {
         "name": "Your name",
         "email": "Reply email",
-        "emailHint": "Replies go to this address.",
         "subject": "Subject",
         "message": "Tell us what happened",
         "submit": "Send to support",
-        "sending": "Sending..."
+        "sending": "Sending...",
+        "subjectPlaceholder": "One-line summary of the issue",
+        "messagePlaceholder": "Steps you took, what you expected, what actually happened. Paste any error messages or message IDs if you have them.",
+        "messageHint": "Markdown supported. Be as specific as you can — it speeds things up.",
+        "attachments": "Screenshots / attachments",
+        "optional": "(optional)",
+        "drop": "Drop files or",
+        "browse": "browse",
+        "attachmentTypes": "Image · PDF · TXT · LOG / max 10 MB each",
+        "attachmentNote": "Attachments are not sent: only the ticket text reaches support."
       },
       "created": "Ticket {number} created. We will follow up shortly.",
       "history": {
         "title": "Recent tickets",
         "all": "{open} open of {total}",
         "empty": "You have not opened any tickets yet.",
-        "justSubmitted": "just submitted"
+        "justSubmitted": "just submitted",
+        "eyebrow": "Your history"
       },
       "thread": {
         "back": "Back to all tickets",
@@ -78,22 +103,33 @@
         "support": "Support team",
         "initial": "initial",
         "replyTitle": "Reply",
-        "replyPlaceholder": "Add more details or a link to a screenshot",
+        "replyPlaceholder": "Add details, share a screenshot link, or follow up…",
         "send": "Send reply",
         "sending": "Sending...",
         "reopenHint": "Replying to a resolved ticket reopens it.",
         "closed": "This ticket is closed.",
-        "openNew": "Open a new ticket"
-      }
+        "openNew": "Open a new ticket",
+        "crumb": "Support"
+      },
+      "eyebrow": "More / Support",
+      "headline": "Talk to support",
+      "live": "Live support inbox",
+      "reasonEyebrow": "What's it about",
+      "formTitle": "How can we help?",
+      "formIntro": "Drop the details below and our team will get back within a few hours during business hours.",
+      "terms": "By submitting, you agree to share account context with our support team to debug your issue.",
+      "cancel": "Cancel",
+      "back": "Back to More",
+      "fullHistory": "Full history"
     },
     "operator": {
       "title": "Support inbox",
-      "subtitle": "Every customer ticket across all workspaces, newest first.",
+      "subtitle": "Every customer ticket lands here. Click a row to open the thread, reply, assign, or change priority.",
       "kpi": {
         "open": "Open",
         "unassigned": "Unassigned",
-        "resolved24h": "Resolved in 24 hours",
-        "total": "All time"
+        "resolved24h": "Resolved 24h",
+        "total": "All-time"
       },
       "filters": {
         "status": "Status",
@@ -102,12 +138,15 @@
         "all": "All",
         "me": "Assigned to me",
         "unassigned": "Unassigned",
-        "search": "Search ticket or customer",
-        "clear": "Clear"
+        "search": "Search ticket / customer…",
+        "clear": "Clear",
+        "allStatus": "All status",
+        "allPriority": "All priority",
+        "allAgents": "All agents"
       },
       "table": {
         "when": "When",
-        "ticket": "Subject and customer",
+        "ticket": "Subject / Customer",
         "priority": "Priority",
         "status": "Status",
         "assignee": "Assignee",
@@ -120,7 +159,7 @@
       "panel": {
         "title": "Ticket #{number}",
         "close": "Close",
-        "loading": "Loading...",
+        "loading": "Loading…",
         "status": "Status",
         "priority": "Priority",
         "customer": "Customer",
@@ -130,8 +169,8 @@
         "opened": "Opened",
         "none": "none",
         "assign": "Assign to",
-        "unassign": "- unassigned -",
-        "customerInitial": "{name} - initial",
+        "unassign": "— unassigned —",
+        "customerInitial": "Customer · initial",
         "internal": "internal",
         "emailFailed": "email not sent",
         "replyPlaceholder": "Reply to the customer or add an internal note",
@@ -139,7 +178,17 @@
         "send": "Send reply",
         "addNote": "Add note",
         "sending": "Sending...",
-        "readOnly": "Your role can read tickets but not change them."
+        "readOnly": "Your role can read tickets but not change them.",
+        "slaFirst": "SLA · 1st reply:",
+        "slaResolution": "SLA · resolution:",
+        "noPolicy": "no policy",
+        "met": "met",
+        "left": "{n}m left",
+        "over": "{n}m over",
+        "runPlaybook": "Run playbook",
+        "pickPlaybook": "— pick playbook —",
+        "run": "Run",
+        "assignSave": "Save"
       },
       "toast": {
         "replied": "Reply sent to {email}.",
@@ -148,7 +197,337 @@
         "status": "Status updated.",
         "priority": "Priority set.",
         "assigned": "Assigned.",
-        "unassigned": "Unassigned."
+        "unassigned": "Unassigned.",
+        "playbook": "Playbook \"{name}\" executed."
+      },
+      "eyebrow": "Admin · Support · Inbox",
+      "kanbanView": "Kanban view"
+    },
+    "board": {
+      "eyebrow": "Admin · Support · Team",
+      "title": "Team kanban",
+      "subtitle": "Drag a ticket between columns to flip its status. \"Resolved\" sets resolved_at to now. Filter to your own tickets if you want to focus.",
+      "mine": "Mine only",
+      "all": "Show all tickets",
+      "none": "No tickets",
+      "moved": "Moved.",
+      "columns": {
+        "open": "New",
+        "in_progress": "In progress",
+        "pending": "Awaiting customer",
+        "resolved": "Resolved"
+      },
+      "moveTo": "Move to {column}",
+      "keyboardHint": "Each card has a Move to menu as well, for keyboard use."
+    },
+    "agents": {
+      "eyebrow": "Admin · Support · Agents",
+      "title": "Support agents",
+      "subtitle": "Add any platform operator as a support agent. Active agents appear in the ticket-assign dropdown.",
+      "kpi": {
+        "total": "Total agents",
+        "active": "Active",
+        "open": "Open tickets",
+        "unassigned": "Unassigned"
+      },
+      "roster": "Agent roster",
+      "name": "Name",
+      "specialty": "Specialty",
+      "openCol": "Open",
+      "resolved30": "Resolved 30d",
+      "avgFirst": "Avg 1st reply",
+      "activeCol": "Active",
+      "on": "On",
+      "off": "Off",
+      "remove": "Remove",
+      "removeConfirm": "Remove {name}?",
+      "removeTitle": "Remove agent",
+      "empty": "No agents yet. Add one on the right.",
+      "promote": "Promote operator",
+      "newAgent": "New agent",
+      "operator": "Operator *",
+      "pickOperator": "— pick an operator —",
+      "specialtyPlaceholder": "billing / integrations / general",
+      "add": "Add agent",
+      "added": "Agent added.",
+      "activated": "Activated.",
+      "disabled": "Disabled.",
+      "removed": "Agent removed.",
+      "cancel": "Cancel"
+    },
+    "sla": {
+      "eyebrow": "Admin · Support · SLA",
+      "title": "SLA board",
+      "subtitle": "Policies define how fast first response + resolution must happen. Breaches list shows tickets that already missed their window.",
+      "kpi": {
+        "policies": "Policies",
+        "breaches": "Open breaches",
+        "atRisk": "At risk now",
+        "compliance": "Compliance · 7d"
+      },
+      "policies": "Policies",
+      "name": "Name",
+      "firstReply": "1st reply",
+      "resolution": "Resolution",
+      "hours": "Hours",
+      "default": "Default",
+      "defaultBadge": "default",
+      "biz": "biz",
+      "always": "24/7",
+      "delete": "Delete",
+      "edit": "Edit",
+      "deleteTitle": "Delete policy",
+      "deleteConfirm": "Delete policy '{name}'?",
+      "noPolicies": "No SLA policies yet. Create one to set response/resolution targets.",
+      "breaches": "Recent breaches",
+      "when": "When",
+      "ticket": "Ticket",
+      "type": "Type",
+      "overBy": "Over by",
+      "severity": "Severity",
+      "noBreaches": "No breaches yet.",
+      "newPolicy": "New policy",
+      "addTarget": "Add SLA target",
+      "editPolicy": "Edit policy",
+      "nameLabel": "Name *",
+      "namePlaceholder": "Standard / Premium / Urgent",
+      "firstLabel": "1st reply (min)",
+      "resolveLabel": "Resolve (min)",
+      "bizOnly": "Business hours only",
+      "pause": "Pause on customer wait",
+      "setDefault": "Set as default",
+      "addPolicy": "Add policy",
+      "savePolicy": "Save policy",
+      "cancel": "Cancel",
+      "saved": "SLA policy saved.",
+      "updated": "Policy updated.",
+      "deleted": "Policy deleted."
+    },
+    "customers": {
+      "eyebrow": "Admin · Support · Customers",
+      "title": "Customer workspaces",
+      "subtitle": "Workspaces ranked by support load. Click through to view all their tickets.",
+      "kpi": {
+        "customers": "Customers",
+        "total": "Total tickets",
+        "open": "Open",
+        "top": "Top open"
+      },
+      "list": "Workspaces with tickets",
+      "filter": "Filter workspace…",
+      "workspace": "Workspace",
+      "openCol": "Open",
+      "totalCol": "Total",
+      "avgRes": "Avg resolution",
+      "last": "Last ticket",
+      "view": "Open",
+      "empty": "No customers have raised tickets yet.",
+      "detail": {
+        "eyebrow": "Admin · Support · Customer",
+        "subtitle": "All tickets, response stats, and quick links for this customer workspace.",
+        "all": "All customers",
+        "total": "Total tickets",
+        "open": "Open",
+        "resolved": "Resolved",
+        "avgFirst": "Avg 1st reply",
+        "avgRes": "Avg resolution",
+        "history": "Ticket history",
+        "when": "When",
+        "subject": "Subject",
+        "status": "Status",
+        "priority": "Priority",
+        "assigned": "Assigned",
+        "resolvedIn": "Resolved in",
+        "empty": "This workspace hasn't raised any tickets.",
+        "notFound": "Workspace not found."
+      }
+    },
+    "playbooks": {
+      "eyebrow": "Admin · Support · Playbooks",
+      "title": "Reply playbooks",
+      "subtitle": "Reusable sequences of actions — apply with one click from any ticket. Each playbook runs its steps in order (set status, send reply, assign agent, etc.).",
+      "kpi": {
+        "total": "Total",
+        "active": "Active",
+        "runs": "Runs (all-time)"
+      },
+      "library": "Playbook library",
+      "active": "active",
+      "paused": "paused",
+      "meta": "{steps} steps · used {uses}× · {slug}",
+      "pause": "Pause",
+      "activate": "Activate",
+      "delete": "Delete",
+      "deleteTitle": "Delete playbook",
+      "deleteConfirm": "Delete playbook '{name}'?",
+      "emptyTitle": "No playbooks yet",
+      "emptyBody": "A playbook bundles a few actions you'd normally do one-by-one — apply with one click from any ticket.",
+      "starters": "Common starters",
+      "starter1": "Refund · standard",
+      "starter1Body": "Send refund template → Mark resolved → Tag \"refund\"",
+      "starter2": "Escalate · urgent",
+      "starter2Body": "Set priority urgent → Assign on-call agent → Internal note",
+      "starter3": "Pause · awaiting customer",
+      "starter3Body": "Set status pending → Send \"we need more info\" reply",
+      "starterHint": "Build any of these on the right →",
+      "newPlaybook": "New playbook",
+      "build": "Build a macro",
+      "nameLabel": "Name *",
+      "namePlaceholder": "Refund · standard",
+      "trigger": "Trigger",
+      "triggerValue": "Value (if applicable)",
+      "triggerValuePlaceholder": "refund",
+      "triggers": {
+        "manual": "Manual",
+        "status_change": "Status change",
+        "tag_added": "Tag added"
+      },
+      "steps": "Steps",
+      "skip": "— skip —",
+      "valuePlaceholder": "value",
+      "stepsHint": "Empty rows are ignored. 3 step slots — clone the playbook to chain more.",
+      "create": "Create playbook",
+      "actions": {
+        "set_status": "Set status",
+        "set_priority": "Set priority",
+        "add_tag": "Add tag",
+        "reply": "Send reply",
+        "assign": "Assign agent",
+        "note": "Add internal note"
+      },
+      "created": "Playbook created.",
+      "activated": "Playbook activated.",
+      "pausedToast": "Playbook paused.",
+      "deleted": "Playbook deleted.",
+      "cancel": "Cancel"
+    },
+    "reports": {
+      "eyebrow": "Admin · Support · Reports",
+      "title": "Support analytics",
+      "subtitle": "Last {days} days. Response, resolution, and SLA compliance at a glance — drill down by exporting raw rows.",
+      "windows": {
+        "7": "7d",
+        "30": "30d",
+        "90": "90d",
+        "365": "1y"
+      },
+      "csv": "Download CSV",
+      "kpi": {
+        "tickets": "Tickets · {days}d",
+        "resolved": "Resolved · {days}d",
+        "avgFirst": "Avg 1st reply",
+        "avgRes": "Avg resolution",
+        "compliance": "SLA compliance"
+      },
+      "volume": "Volume · last {days} days",
+      "noVolume": "No tickets in the last {days} days.",
+      "byStatus": "By status",
+      "noStatus": "No tickets yet.",
+      "top": "Top agents · {days} days",
+      "agent": "Agent",
+      "resolvedCol": "Resolved",
+      "avgFirstCol": "Avg 1st reply",
+      "avgResCol": "Avg resolution",
+      "noTop": "No resolved tickets yet."
+    },
+    "inbox": {
+      "eyebrow": "Platform · Cross-workspace inbox",
+      "title": "Team inbox",
+      "subtitle": "Read-only view across every customer workspace. Use it to triage SLA breaches, flag spam, and (with reason) impersonate workspace owners for support cases.",
+      "auditLink": "Audit log",
+      "kpi": {
+        "workspaces": "Workspaces",
+        "workspacesHint": "total active",
+        "breach": "SLA breached",
+        "breachHint": "across platform",
+        "open": "Open conversations",
+        "openHint": "all workspaces",
+        "impersonation": "Active impersonation",
+        "none": "none",
+        "noSession": "no active session"
+      },
+      "conversations": "Conversations",
+      "tabs": {
+        "sla_breach": "SLA breach",
+        "unassigned": "Unassigned",
+        "spam": "Spam",
+        "all": "All"
+      },
+      "allWorkspaces": "All workspaces",
+      "untitled": "Untitled",
+      "sla": "SLA",
+      "spamChip": "SPAM",
+      "empty": "No conversations match this filter.",
+      "loadMore": "Load more",
+      "total": "{n} in this view",
+      "unassignedWord": "unassigned",
+      "workspaces": "Workspaces",
+      "recent": "Recent activity",
+      "openCount": "{n} open",
+      "breachCount": "{n} breach",
+      "suspended": "suspended",
+      "audit": "Platform actions",
+      "auditEmpty": "No audit events yet.",
+      "drawer": {
+        "conversation": "Conversation",
+        "impersonate": "Impersonate",
+        "markSpam": "Mark spam",
+        "spamConfirm": "Mark this conversation as spam?",
+        "spamTitle": "Mark as spam",
+        "thread": "Thread",
+        "noMessages": "No messages yet.",
+        "platformNotes": "Platform notes",
+        "noteHint": "Write a platform-only note…",
+        "severity": "Severity",
+        "addNote": "Add note",
+        "workspaceNotes": "Workspace notes",
+        "noNotes": "No internal notes.",
+        "events": "Events",
+        "noEvents": "No events.",
+        "close": "Close"
+      },
+      "severity": {
+        "info": "Info",
+        "warn": "Warn",
+        "critical": "Critical"
+      },
+      "flags": {
+        "title": "Flags and suspension",
+        "flag": "Flag",
+        "reason": "Reason (optional)",
+        "add": "Add flag",
+        "clear": "Clear",
+        "suspend": "Suspend workspace",
+        "unsuspend": "Unsuspend workspace",
+        "suspendConfirm": "Suspend this workspace? Nobody can sign in to it until the suspension is lifted.",
+        "suspendTitle": "Suspend workspace",
+        "names": {
+          "spam": "spam",
+          "abuse": "abuse",
+          "fraud": "fraud",
+          "billing_overdue": "billing overdue",
+          "tos_violation": "ToS violation",
+          "frozen": "frozen"
+        }
+      },
+      "impersonation": {
+        "title": "Start impersonation",
+        "body": "You'll be viewing the customer's workspace as if you were their owner. The session is audit-logged.",
+        "reason": "Reason (required, min 8 chars)…",
+        "cancel": "Cancel",
+        "start": "Start session",
+        "short": "Reason must be at least 8 characters.",
+        "unavailable": "Impersonation needs the workspaces module, which is not available yet."
+      },
+      "toast": {
+        "noted": "Platform note added.",
+        "spam": "Flagged as spam.",
+        "flagged": "Workspace flagged.",
+        "cleared": "Flag cleared.",
+        "suspended": "Workspace suspended.",
+        "unsuspended": "Workspace unsuspended.",
+        "failed": "That did not work. Try again.",
+        "forbidden": "You do not have permission for that."
       }
     }
   }

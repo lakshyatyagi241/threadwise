@@ -26,6 +26,13 @@
         "title": "Task completed",
         "body": "{actor} completed: {task}",
         "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "New lead",
+        "titleReturning": "Lead came in again",
+        "body": "{name} came in from {platform}",
+        "bodyReturning": "{name} sent another lead from {platform}",
+        "bodyNoActor": "{name} came in"
       }
     }
   }

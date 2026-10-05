@@ -69,6 +69,8 @@ describe('registry', () => {
       'team_performance',
       'scheduled_messages',
       'whatsapp_warmer',
+      'marketplace',
+      'lead_sources',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

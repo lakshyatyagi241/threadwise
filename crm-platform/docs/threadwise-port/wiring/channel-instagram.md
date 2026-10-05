@@ -38,5 +38,5 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Shims, owners and blocked consumers
 
 - `OpenInstagramPlanGate`: no Instagram keys in the plan catalogue.
-- `NoInstagramAutomation`: keyword auto-reply (TW-IG-017) is not available.
+- `NoInstagramAutomation`: keyword auto-reply (TW-IG-017) is not available. The flow runtime listens to stored inbound messages, but its channel-kind map has no `instagram` yet (the engine runs Instagram flows itself).
 - `ChatInstagramIngest`: real, over chat-conversations; `InstagramChannelAdapter` registered on init.

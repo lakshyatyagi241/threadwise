@@ -3,18 +3,15 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
-import type {
-  ChannelResponse,
-  ConversationNote,
-  InboxConversationDetail,
-} from '@crm/contracts';
-import { ReconnectBanner, TemplatesSoon } from '@/features/channel-whatsapp-cloud';
+import type { ChannelResponse, ConversationNote, InboxConversationDetail } from '@crm/contracts';
+import { ReconnectBanner } from '@/features/channel-whatsapp-cloud';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
+import { TemplatePicker } from './template-picker';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
 import { Avatar, ChannelTag } from './parts';
@@ -59,6 +56,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const canManageChannels = useCan('inbox.channel.manage');
   const { detail, thread } = props;
+  const [templatesOpen, setTemplatesOpen] = useState(false);
 
   if (props.notFound) {
     return (
@@ -86,6 +84,12 @@ export function ThreadPane(props: ThreadPaneProps) {
   const channelDown = props.channel !== undefined && props.channel.status !== 'connected';
   const windowClosed = win?.state === 'closed';
   const replyDisabled = windowClosed || channelDown;
+  // A template needs no open window, only a working channel that sends templates and the right to reply.
+  const canTemplate =
+    Boolean(detail?.capabilities.templates) &&
+    props.can.reply &&
+    !channelDown &&
+    props.mode === 'reply';
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
 
   return (
@@ -219,12 +223,25 @@ export function ThreadPane(props: ThreadPaneProps) {
           <div>
             <p className="font-medium">{t('windowBanner.title')}</p>
             <p className="text-xs">{t('windowBanner.message')}</p>
-            {detail?.capabilities.templates && <TemplatesSoon />}
+            {canTemplate && (
+              <Button
+                type="button"
+                variant="secondary"
+                data-testid="inbox-window-template"
+                className="mt-2"
+                onClick={() => setTemplatesOpen(true)}
+              >
+                {t('windowBanner.sendTemplate')}
+              </Button>
+            )}
           </div>
         </div>
       )}
       {!props.can.reply && props.mode === 'reply' && (
-        <p role="status" className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground">
+        <p
+          role="status"
+          className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground"
+        >
           {t('readOnly')}
         </p>
       )}
@@ -238,11 +255,21 @@ export function ThreadPane(props: ThreadPaneProps) {
         canNote={props.can.note}
         canAttach={(detail?.capabilities.media.length ?? 0) > 0}
         attachments={
-          detail ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media } : undefined
+          detail
+            ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
+            : undefined
         }
+        canTemplate={canTemplate}
+        onTemplate={() => setTemplatesOpen(true)}
         onSend={props.onSend}
         onNote={props.onNote}
         handleRef={props.composerRef}
+      />
+      <TemplatePicker
+        conversationId={props.conversationId}
+        open={templatesOpen}
+        onClose={() => setTemplatesOpen(false)}
+        onSend={thread.sendTemplate}
       />
     </section>
   );
@@ -320,7 +347,11 @@ function TypingLine({ conversationId }: { conversationId: string }) {
 
   if (typing.size === 0) return null;
   return (
-    <span role="status" data-testid="inbox-typing" className="inline-flex items-center gap-1 text-primary">
+    <span
+      role="status"
+      data-testid="inbox-typing"
+      className="inline-flex items-center gap-1 text-primary"
+    >
       <span className="inline-flex gap-0.5" aria-hidden="true">
         <span className="size-1 animate-pulse rounded-full bg-primary" />
         <span className="size-1 animate-pulse rounded-full bg-primary [animation-delay:150ms]" />

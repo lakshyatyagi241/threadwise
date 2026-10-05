@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
+import { ConversationTranslationService } from '../localization-translation';
 import { ChannelError, type ChannelRuntime } from '../../infra/providers/chat-conversations';
 import { ChannelDispatcher, type DispatchResult } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
@@ -65,6 +66,7 @@ export class MessageDispatchService {
     private readonly lifecycle: ConversationLifecycleService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly deliveries: DeliveryReporter,
+    private readonly translation: ConversationTranslationService,
   ) {}
 
   async dispatch(
@@ -74,7 +76,8 @@ export class MessageDispatchService {
   ): Promise<DispatchOutcome> {
     const prepared = await this.prepare(orgId, messageUuid, options.attempt);
     if (prepared === 'missing' || prepared === 'skipped') return prepared;
-    const { row, conv, runtime, envelope } = prepared;
+    const { row, conv, runtime } = prepared;
+    const envelope = await this.translated(orgId, row, prepared.envelope);
     const ref = { id: row.id, createdAt: row.createdAtText };
 
     let sent: DispatchResult;
@@ -93,6 +96,17 @@ export class MessageDispatchService {
     // After the commit: a receipt finds its message through the ledger row this transaction wrote.
     await this.dispatcher.scheduleReceipts(runtime, sent);
     return 'sent';
+  }
+
+  /**
+   * Real-time translation of the agent's text into the customer's language (TW-I18N-037), outside any transaction: it can call a
+   * provider. The row keeps what the agent typed; only the envelope carries the delivered text. Text only (a caption or template
+   * is sent as authored). Never throws: the original text is sent.
+   */
+  private async translated(orgId: number, row: MessageRow, envelope: unknown): Promise<unknown> {
+    if (row.kind !== 'text') return envelope;
+    const outcome = await this.translation.translateOutboundMessage(orgId, row.id, { retry: true });
+    return outcome?.isTranslated ? { ...(envelope as object), body: outcome.body } : envelope;
   }
 
   // --- stages --------------------------------------------------------------------------------------------------------------------
@@ -227,7 +241,9 @@ export class MessageDispatchService {
     if (err instanceof ChannelError && (err.needsReauth || err.providerFault)) {
       await this.channels
         .markCredentialsRefused(orgId, channelUuid, err)
-        .catch((e: Error) => this.logger.warn({ orgId, err: e.message }, 'could not mark the channel'));
+        .catch((e: Error) =>
+          this.logger.warn({ orgId, err: e.message }, 'could not mark the channel'),
+        );
     }
 
     if (classified.retryable && !options.finalAttempt) {
@@ -236,7 +252,9 @@ export class MessageDispatchService {
           attempt: options.attempt,
           code: classified.code,
           reason: classified.reason,
-          ...(err instanceof ChannelError && err.retryAfterMs ? { retryAfterMs: err.retryAfterMs } : {}),
+          ...(err instanceof ChannelError && err.retryAfterMs
+            ? { retryAfterMs: err.retryAfterMs }
+            : {}),
         }),
       );
       throw err;
@@ -254,7 +272,9 @@ export class MessageDispatchService {
       await this.messages.insertEvent(tx, orgId, ref, 'failed', {
         ...failure,
         attempt: options.attempt,
-        ...(err instanceof ChannelError && err.providerCode ? { providerCode: err.providerCode } : {}),
+        ...(err instanceof ChannelError && err.providerCode
+          ? { providerCode: err.providerCode }
+          : {}),
       });
       return this.messages.byId(tx, orgId, ref.id, ref.createdAt);
     });
