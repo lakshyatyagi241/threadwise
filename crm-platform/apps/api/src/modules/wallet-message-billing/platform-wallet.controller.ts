@@ -18,10 +18,12 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   adjustWalletSchema,
   creditPackageInputSchema,
+  importMetaCardSchema,
   importRatesSchema,
   platformWalletListQuerySchema,
   pricePreviewQuerySchema,
   savePlanMarginsSchema,
+  setWorkspaceCurrencySchema,
   saveWorkspaceMarginsSchema,
   saveRatesSchema,
   syncMetaSchema,
@@ -30,10 +32,12 @@ import {
   walletLogQuerySchema,
   type AdjustWalletInput,
   type CreditPackageInput,
+  type ImportMetaCardInput,
   type ImportRatesInput,
   type PlatformWalletListQuery,
   type PricePreviewQuery,
   type SavePlanMarginsInput,
+  type SetWorkspaceCurrencyInput,
   type SaveWorkspaceMarginsInput,
   type SaveRatesInput,
   type SyncMetaInput,
@@ -47,6 +51,7 @@ import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles, PlatformSettingsService } from '../auth';
 import { CreditPackagesService } from './credit-packages.service';
+import { MetaRateCardService } from './meta-rate-card.service';
 import { PlatformMarginsService } from './platform-margins.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletService, type Operator } from './platform-wallet.service';
@@ -71,6 +76,7 @@ export class PlatformWalletController {
   constructor(
     private readonly wallets: PlatformWalletService,
     private readonly rates: PlatformRatesService,
+    private readonly metaCards: MetaRateCardService,
     private readonly margins: PlatformMarginsService,
     private readonly packages: CreditPackagesService,
     private readonly settings: WalletSettingsService,
@@ -175,6 +181,34 @@ export class PlatformWalletController {
   })
   async syncMeta(@Body(zodPipe(syncMetaSchema)) body: SyncMetaInput) {
     return this.rates.syncMeta(body.dryRun, await this.me());
+  }
+
+  // --- Meta's published rate cards, one per currency --------------------------------------------------------------------------
+
+  @Get('meta-cards')
+  @ApiOperation({
+    summary:
+      'The Meta rate cards stored per currency, how old each is, and whether a quarter has begun since',
+  })
+  async metaCardsOverview() {
+    return this.metaCards.overview();
+  }
+
+  @Get('meta-cards/:currency')
+  @ApiOperation({ summary: 'One currency’s Meta card, market by market' })
+  async metaCardDetail(@Param('currency') currency: string) {
+    return this.metaCards.detail(currency);
+  }
+
+  @Post('meta-cards/import')
+  @HttpCode(HttpStatus.OK)
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Import the rate card Meta publishes for one currency (.xlsx or CSV). `dryRun` shows what would change. The platform currency’s card also refreshes the Meta costs behind pricing',
+  })
+  async importMetaCard(@Body(zodPipe(importMetaCardSchema)) body: ImportMetaCardInput) {
+    return this.rates.importMetaCard(body, await this.me());
   }
 
   // --- margin pricing: Meta cost + our margin ---------------------------------------------------------------------------------
@@ -318,6 +352,21 @@ export class PlatformWalletController {
     if (!key || key.length > 120)
       throw new BadRequestException('An Idempotency-Key header is required');
     return this.wallets.adjust(id, body, await this.me(), key);
+  }
+
+  @Put('workspaces/:id/currency')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Change the currency a workspace is billed in. Needs a note; the old wallet keeps its balance',
+    description:
+      'Only a currency whose Meta rate card has been imported can be chosen. Messages are then priced from that card and charged to the wallet in that currency.',
+  })
+  async setCurrency(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(setWorkspaceCurrencySchema)) body: SetWorkspaceCurrencyInput,
+  ) {
+    return this.wallets.setCurrency(id, body, await this.me());
   }
 
   // --- trail and checks --------------------------------------------------------------------------------------------------------

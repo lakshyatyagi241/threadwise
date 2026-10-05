@@ -19,7 +19,8 @@ export const KEYS = {
   settings: ['bsp', 'settings'] as const,
   candidates: ['bsp', 'candidates'] as const,
   allocations: ['bsp', 'allocations'] as const,
-  dashboard: (month: string | undefined) => ['bsp', 'dashboard', month ?? 'current'] as const,
+  dashboard: (month: string | undefined, currency?: string) =>
+    ['bsp', 'dashboard', month ?? 'current', currency ?? 'base'] as const,
   billingMode: ['bsp', 'billing-mode'] as const,
 };
 
@@ -47,8 +48,12 @@ export const operatorApi = {
       body: { rowVersion },
       schema: revokeResultSchema,
     }),
-  dashboard: (month: string | undefined, signal?: AbortSignal) =>
-    operatorFetch('/bsp/dashboard', { query: { month }, schema: bspDashboardSchema, signal }),
+  dashboard: (month: string | undefined, currency?: string, signal?: AbortSignal) =>
+    operatorFetch('/bsp/dashboard', {
+      query: { month, currency },
+      schema: bspDashboardSchema,
+      signal,
+    }),
 };
 
 /** The workspace's own calls (`/api/v2/*`). */

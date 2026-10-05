@@ -28,6 +28,8 @@ export interface OrderRow {
   gatewayPaymentId: string | null;
   failureReason: string | null;
   walletTopupMinor: number | null;
+  /** The wallet a top-up credits; null on an older order (the platform currency). */
+  walletUnit: string | null;
   returnToken: string;
   autoRenew: boolean;
   customerName: string | null;
@@ -43,7 +45,7 @@ const COLS = sql.raw(`
   o.id, o.org_id, o.uuid, o.order_number, o.user_id, o.kind, o.plan_slug, o.billing_period, o.currency,
   o.amount::text AS amount, o.discount_amount::text AS discount_amount, o.tax_rate::text AS tax_rate,
   o.tax_amount::text AS tax_amount, o.total_amount::text AS total_amount, o.coupon_code, o.coupon_id, o.gateway_id,
-  o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor,
+  o.gateway_slug, o.status, o.gateway_order_id, o.gateway_payment_id, o.failure_reason, o.wallet_topup_minor, o.wallet_unit,
   o.return_token, o.customer_name, o.customer_email, o.description, o.created_at, o.paid_at, o.row_version, o.auto_renew,
   to_char(o.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
 
@@ -75,6 +77,7 @@ function toRow(r: Raw): OrderRow {
     gatewayPaymentId: (r.gateway_payment_id as string | null) ?? null,
     failureReason: (r.failure_reason as string | null) ?? null,
     walletTopupMinor: num(r.wallet_topup_minor),
+    walletUnit: (r.wallet_unit as string | null) ?? null,
     returnToken: r.return_token as string,
     autoRenew: r.auto_renew === true,
     customerName: (r.customer_name as string | null) ?? null,
@@ -112,6 +115,7 @@ export interface NewOrder {
   billingCountry: string | null;
   billingTaxId: string | null;
   walletTopupMinor: number | null;
+  walletUnit: string | null;
   idempotencyKey: string | null;
   couponId: number | null;
   couponCode: string | null;
@@ -124,11 +128,11 @@ export class OrdersRepository {
     const res = await tx.execute(sql`
       INSERT INTO orders AS o (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_id, gateway_slug,
         currency, amount, discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, billing_company,
-        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, idempotency_key, coupon_id, coupon_code, status)
+        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, wallet_unit, idempotency_key, coupon_id, coupon_code, status)
       VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, ${o.autoRenew}, ${o.gatewayId},
         ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount},
         ${o.customerName}, ${o.customerEmail}, ${o.billingCompany}, ${o.billingAddress}, ${o.billingCity}, ${o.billingPostal},
-        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, 'pending')
+        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.walletUnit}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, 'pending')
       RETURNING ${COLS}`);
     return toRow((res.rows as Raw[])[0]!);
   }

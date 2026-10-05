@@ -13,9 +13,10 @@ and each domain has exclusive directories in every layer, so the three of you do
 
 | Person | Cluster | Domains | Features written | Domain est. days | Foundation days | Total |
 |---|---|---|---|---|---|---|
-| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 25 | 705 | 2805 | 48 | 2853 |
+| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 24 | 705 | 2735 | 48 | 2783 |
 | Vedant (`vedant`) | WhatsApp core, inbox and automation | 17 | 591 | 2802 | 55 | 2858 |
-| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 288 | 2740 | 22 | 2762 |
+| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 319 | 2740 | 22 | 2762 |
+| Shubham (`shubham`) | - | 1 | 0 | 70 | 0 | 70 |
 
 The people are interchangeable: to swap two clusters, change `owner` in `assignment-input.json` `clusters` and regenerate.
 
@@ -64,7 +65,6 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | addons-extension-registry | add | /addons | 3 | 100 | written | 35 |
 | ai-keys-usage-admin | aiadm | /ai-admin | 3 | 90 | partial | 10 |
 | bsp-billing-engine | bsp | /bsp | 3 | 64 | written | 21 |
-| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
 | dashboards-analytics-charts | dash | /dashboard | 3 | 132 | written | 54 |
 | developer-rest-api-v1 | api | /developer | 3 | 130 | pending |  |
 | integrations-hubspot-slack-trello-google-webhooks | intg | /integrations | 3 | 150 | pending |  |
@@ -119,9 +119,15 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | checkout-orders-merchant-payments | chk | /checkout | 3 | 190 | pending |  |
 | meta-ads | mads | /meta-ads | 3 | 120 | pending |  |
 | shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending | 38 |
-| storefront-builder | store | /store | 3 | 150 | pending |  |
+| storefront-builder | store | /store | 3 | 150 | pending | 31 |
 | ai-agents-training | aiag | /ai-agents | 4 | 180 | pending |  |
 | ai-copilot-lead-finder | aicrm | /ai-copilot | 4 | 130 | pending |  |
+
+## Shubham (`shubham`)
+
+| Domain | Code | Route | Wave | Est. days | Inventory | Features |
+|---|---|---|---|---|---|---|
+| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
 
 ## Handoffs between people
 

@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { ERROR_CODES, marginsResponseSchema, pricePreviewSchema } from '@crm/contracts';
+import { MetaRateCardService } from '../../../src/modules/wallet-message-billing/meta-rate-card.service';
 import {
   balanceMinor,
   charges,
@@ -244,10 +245,28 @@ describe('platform default, plan margin, workspace override', () => {
     const other = await newTenant(h, 'mg2');
     const ou = (await h.owner.query(`SELECT uuid FROM organizations WHERE id = $1`, [other.orgId]))
       .rows[0].uuid;
-    const p = pricePreviewSchema.parse(
-      (await ops('get', `/pricing/preview?workspaceId=${ou}&country=BR&category=utility`)).body,
+    const preview = async () =>
+      pricePreviewSchema.parse(
+        (await ops('get', `/pricing/preview?workspaceId=${ou}&country=BR&category=utility`)).body,
+      );
+    // With Meta's official card stored, Brazil utility has a cost, so the margin applies to it.
+    expect((await preview()).basis).toBe('margin');
+    // With no card for the currency (and no cost on the grid) the cost is unknown and the typed price stands.
+    const cards = h.app.get(MetaRateCardService, { strict: false });
+    await h.owner.query(
+      `CREATE TEMP TABLE usd_card_backup AS SELECT * FROM meta_rate_cards WHERE currency = 'USD'`,
     );
-    expect(p.basis).toBe('fixed');
+    try {
+      await h.owner.query(`DELETE FROM meta_rate_cards WHERE currency = 'USD'`);
+      cards.invalidate();
+      expect((await preview()).basis).toBe('fixed');
+    } finally {
+      await h.owner.query(
+        `INSERT INTO meta_rate_cards SELECT * FROM usd_card_backup ON CONFLICT DO NOTHING`,
+      );
+      await h.owner.query(`DROP TABLE usd_card_backup`);
+      cards.invalidate();
+    }
     const mine = marginsResponseSchema.parse((await ops('get', `/workspaces/${ou}/margins`)).body);
     expect(mine.data).toEqual([]);
   });

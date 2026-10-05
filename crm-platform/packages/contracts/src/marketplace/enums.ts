@@ -37,8 +37,18 @@ export const MARKET_HEALTH_STATES = [
 export const marketHealthSchema = z.enum(MARKET_HEALTH_STATES);
 export type MarketHealth = z.infer<typeof marketHealthSchema>;
 
-/** The five mechanisms every integration is a variation of (spec 6.3). */
-export const CONNECTOR_TYPES = ['oauth', 'push', 'pull', 'email_parse', 'webhook_relay'] as const;
+/**
+ * The five mechanisms every integration is a variation of (spec 6.3), plus `client`: software the member installs elsewhere (the Chrome
+ * extension, the Sheets add-on) that signs in with the member's own account. It issues no secret and receives nothing at install.
+ */
+export const CONNECTOR_TYPES = [
+  'oauth',
+  'push',
+  'pull',
+  'email_parse',
+  'webhook_relay',
+  'client',
+] as const;
 export const connectorTypeSchema = z.enum(CONNECTOR_TYPES);
 export type ConnectorKind = z.infer<typeof connectorTypeSchema>;
 

@@ -11,6 +11,7 @@ import { messagesPer100 } from '../../lib/settings-form';
 import { ErrorState, LoadingBlock } from '../state';
 import { Breadcrumb, ReadOnlyBanner, useCanWrite } from './admin-parts';
 import { EconomicsForm } from './economics-form';
+import { MetaCardsSection } from './meta-cards';
 import { PricingModeCard } from './pricing-mode-card';
 import { RateGrid } from './rate-grid';
 import { SwitchesCard } from './switches-card';
@@ -52,6 +53,7 @@ export function PricingPage() {
           <SwitchesCard settings={settings.data} canEdit={canEdit} />
         </>
       )}
+      <MetaCardsSection canEdit={canEdit} />
       {rates.isPending ? (
         <LoadingBlock />
       ) : rates.isError ? (

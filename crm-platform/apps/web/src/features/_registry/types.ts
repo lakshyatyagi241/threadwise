@@ -5,8 +5,9 @@
  * "Platform" and "CRM". A domain picks one for each screen.
  *
  * Configuration is not a menu group: a screen that sets something up (channels, tax rates, API keys, team...) is a tile in
- * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds only the shell's
- * own Settings entry, pinned to the bottom of the menu; `help` (Support, Guidebook) is drawn in the user menu.
+ * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds the entries pinned
+ * to the bottom of the menu: the shell's own Settings entry, with Help (the Help center) directly above it. `help` (Support,
+ * Guidebook) is drawn in the user menu.
  */
 export const NAV_GROUPS = [
   'overview',

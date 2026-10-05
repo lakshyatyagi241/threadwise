@@ -45,6 +45,8 @@ export interface DashboardRows {
     cost: string;
     wallet_balance: string;
   }>;
+  /** Every currency with charges in the window or money in a wallet. */
+  currencies: string[];
   hasMore: boolean;
   exponent: number;
 }
@@ -223,6 +225,8 @@ export class ResellerPlatformReader {
     from: Date;
     to: Date;
     currency: string;
+    /** What a charge with no currency was made in. */
+    legacyCurrency: string;
     limit: number;
   }): Promise<DashboardRows> {
     return this.store.tx(async (tx) => {
@@ -243,6 +247,7 @@ export class ResellerPlatformReader {
                count(*) FILTER (WHERE status = 'charged' AND cost_minor IS NULL)::int AS unpriced
         FROM usage_charges
         WHERE created_at >= ${opts.from.toISOString()}::timestamptz AND created_at < ${opts.to.toISOString()}::timestamptz
+          AND COALESCE(currency, ${opts.legacyCurrency}) = ${opts.currency}
       `);
       // wallets.balance is a major-unit amount in the wallet's currency (one wallet per workspace, unit = the platform
       // currency): confirmed against the WALLET engine (wallet-message-billing, TW-WALLET-001).
@@ -259,6 +264,7 @@ export class ResellerPlatformReader {
           FROM usage_charges
           WHERE status = 'charged'
             AND created_at >= ${opts.from.toISOString()}::timestamptz AND created_at < ${opts.to.toISOString()}::timestamptz
+            AND COALESCE(currency, ${opts.legacyCurrency}) = ${opts.currency}
           GROUP BY org_id
         ) g
         JOIN organizations o ON o.id = g.org_id
@@ -267,6 +273,14 @@ export class ResellerPlatformReader {
         LIMIT ${opts.limit + 1}
       `);
 
+      const used = await tx.execute(sql`
+        SELECT DISTINCT cur FROM (
+          SELECT COALESCE(currency, ${opts.legacyCurrency}) AS cur FROM usage_charges
+          WHERE created_at >= ${opts.from.toISOString()}::timestamptz AND created_at < ${opts.to.toISOString()}::timestamptz
+          UNION SELECT unit FROM wallets
+          UNION SELECT ${opts.legacyCurrency}
+          UNION SELECT ${opts.currency}
+        ) c ORDER BY cur`);
       const t = totals.rows[0] as unknown as {
         billed: number;
         free: number;
@@ -286,6 +300,7 @@ export class ResellerPlatformReader {
         },
         workspaces: rows.slice(0, opts.limit),
         hasMore: rows.length > opts.limit,
+        currencies: (used.rows as unknown as Array<{ cur: string }>).map((r) => r.cur),
         exponent,
       };
     });
