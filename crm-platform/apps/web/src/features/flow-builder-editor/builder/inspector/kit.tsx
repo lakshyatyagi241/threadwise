@@ -364,6 +364,7 @@ export function TextArea({
   mono,
   dark,
   noAttr,
+  compact,
 }: {
   value: unknown;
   onChange: (v: string) => void;
@@ -372,6 +373,8 @@ export function TextArea({
   mono?: boolean;
   dark?: boolean;
   noAttr?: boolean;
+  /** Drops the 110px minimum height (the prompt box on a canvas card). */
+  compact?: boolean;
 }) {
   const text = value === null || value === undefined ? '' : String(value);
   const picker = useAttrPicker<HTMLTextAreaElement>(text, onChange, !noAttr);
@@ -385,7 +388,8 @@ export function TextArea({
         {...(noAttr ? {} : { 'data-attr-input': 'true' })}
         className={cn(
           controlClass,
-          'min-h-[110px] resize-y leading-relaxed',
+          compact ? 'min-h-[56px] resize-none' : 'min-h-[110px] resize-y',
+          'leading-relaxed',
           mono && 'font-mono',
           dark && 'bg-[#1E2A33] text-[#7CF3C4]',
         )}

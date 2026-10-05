@@ -86,6 +86,15 @@ round trip including malformed files and both exporters' file formats.
 - Web app serves a page shell for an anonymous visitor and redirects on the client (no content served); the Next.js dev indicator is the one Tab stop without a ring.
 - Literal backslash-n in two WaDesk placeholders is not reproduced.
 
+## Intended additions (not WaDesk features)
+
+- **Ask for file / image (`ask_file`, WD-FLB-081) and Ask for location (`ask_location`, WD-FLB-082)** exist in another product's flow palette and not in WaDesk, so there is no
+  WaDesk behaviour to compare: the project owner asked for them, they sit in the WhatsApp palette, group Listen, and were designed to behave like Ask question and the form
+  nodes (park, resume, variables). The palette therefore lists 37 WhatsApp nodes (WaDesk's 35 plus these two) and the catalogue 60 types. They were checked against
+  our own running editor, not against WaDesk: contract and runtime unit tests, the API e2e `flow-runtime-engine/ask-media.e2e.spec.ts` (real Postgres and Redis, simulator
+  channel as the WhatsApp stand-in), web unit tests, and screenshots of the palette, both cards, the Allow Extensions panel, both inspector forms and the test runner.
+  Not verified: real WhatsApp (the interactive location request is built to Meta's documented shape and unit-tested, never sent to Meta; real media downloads).
+
 ## Open
 
 - **Chatbot node, "Create new AI agent"** (blocked): WaDesk opens an inline create-agent dialog; ours shows the button disabled with a "Refresh list" link

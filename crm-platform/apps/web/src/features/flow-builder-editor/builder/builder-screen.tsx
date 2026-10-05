@@ -528,6 +528,7 @@ function BuilderInner({
           }}
           onDropNode={doAdd}
           onDeleteEdge={(id) => commit(deleteEdge(state, id))}
+          onPatchNode={(id, patch) => commit(updateData(state, id, patch))}
           wrapperRef={wrapperRef}
         >
           {selectedNode ? (
