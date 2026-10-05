@@ -56,6 +56,7 @@ export class WabaOrdersService {
       name: customerName,
       source: 'whatsapp_order',
       tag: 'Store customer',
+      saveProfile: true,
     });
     const contactId = link.outcome === 'skipped' ? null : link.contactId;
     const items = cart.lines.map((l, i) => {

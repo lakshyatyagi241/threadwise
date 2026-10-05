@@ -90,7 +90,8 @@ gateway webhook, `via` = the gateway slug), `store.coupon_created|updated|delete
   `wa_orders` / `wa_coupons` through its own repositories (same tables).
 - Saved customers exist twice on purpose: `/waba/customers` (`waba.customers.*`, the WhatsApp ordering flow's address book, offset paging,
   no totals) stays as it is; `/store/customers` (`store.customers.*`) is the store screen's read model with order totals and the contact
-  link. Both read and write `wa_customer_profiles` keyed by the digits of the phone.
+  link, and lists EVERY buyer (saved profiles plus order-only buyers, see store-orders-crm.md). Both read and write `wa_customer_profiles`
+  keyed by the digits of the phone (the store screen matches on the phone with the default country applied).
 - The generic invoice connection (`hmac_generic`, Settings > Invoicing) is the FALLBACK of the invoice pay page and keeps its own webhook.
 
 ## Web screens

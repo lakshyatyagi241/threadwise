@@ -1,11 +1,12 @@
 import { randomUUID } from 'node:crypto';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { canonicalizePhone } from '@crm/contracts';
+import { canonicalizeLocalPhone, countryCodeDigits, type CanonicalPhone } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { SettingsService } from '../../platform-settings-branding-storage';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { TagsRepository } from '../tags/tags.repository';
 import type {
@@ -13,6 +14,7 @@ import type {
   ContactResolveInput,
   ContactResolverPort,
 } from '../contact-resolver.port';
+import { phoneKeySql } from '../../../common/sql/phone-key';
 import { ContactsRepository } from './contacts.repository';
 import { ContactsService } from './contacts.service';
 
@@ -57,7 +59,22 @@ export class ContactResolverService implements ContactResolverPort {
     private readonly entitlements: PlanEntitlementService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    @Optional() private readonly settings?: SettingsService,
   ) {}
+
+  /**
+   * The country code a bare local number is read in: the platform's default country (Settings > General, "+91" until changed). The
+   * same rule the leads module applies with a source's default country. Null when it cannot be read: a bare local number is then
+   * reported unusable, never guessed.
+   */
+  async defaultCountryCode(): Promise<string | null> {
+    try {
+      return (await this.settings?.values('general'))?.defaultCountryCode ?? null;
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, 'default country code unreadable');
+      return null;
+    }
+  }
 
   async findOrCreateByPhone(
     tx: Tx,
@@ -66,13 +83,12 @@ export class ContactResolverService implements ContactResolverPort {
   ): Promise<ContactLink> {
     const raw = clean(input.phone);
     if (!raw) return { outcome: 'skipped', reason: 'no_phone' };
-    if (!canonicalizePhone({ number: raw })) {
-      return { outcome: 'skipped', reason: 'unusable_phone' };
-    }
+    const phone = canonicalizeLocalPhone(raw, await this.defaultCountryCode());
+    if (!phone) return { outcome: 'skipped', reason: 'unusable_phone' };
     try {
       // A savepoint: a statement that fails inside must not abort the order's own transaction.
       return await this.inOrg(orgId, () =>
-        tx.transaction((sp) => this.resolve(sp as unknown as Tx, orgId, raw, input)),
+        tx.transaction((sp) => this.resolve(sp as unknown as Tx, orgId, phone, input)),
       );
     } catch (err) {
       this.logger.warn({ err: String(err), orgId }, 'store contact link failed: no contact link');
@@ -104,13 +120,13 @@ export class ContactResolverService implements ContactResolverPort {
   private async resolve(
     tx: Tx,
     orgId: number,
-    phone: string,
+    phone: CanonicalPhone,
     input: ContactResolveInput,
   ): Promise<ContactLink> {
     const name = clean(input.name);
     const resolved = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
       kind: 'phone',
-      value: phone,
+      value: phone.e164,
       name,
       source: input.source,
       eventPayload: { origin: 'store' },
@@ -120,6 +136,7 @@ export class ContactResolverService implements ContactResolverPort {
         { orgId },
         'contact cap reached: the order is placed without a contact link',
       );
+      if (input.saveProfile) await this.saveProfile(tx, orgId, phone, input, null);
       return { outcome: 'skipped', reason: 'plan_limit_reached' };
     }
     if (resolved.outcome === 'unusable') return { outcome: 'skipped', reason: 'unusable_phone' };
@@ -130,7 +147,53 @@ export class ContactResolverService implements ContactResolverPort {
       address: clean(input.address),
     });
     if (input.tag) await this.applyTag(tx, orgId, resolved.contactId, input.tag);
+    if (input.saveProfile) await this.saveProfile(tx, orgId, phone, input, resolved.contactId);
     return { outcome: resolved.outcome, contactId: resolved.contactId, contactUuid: resolved.uuid };
+  }
+
+  /**
+   * The buyer's saved customer profile, keyed by the digits of the canonical phone (what the WhatsApp ordering flow looks up). An
+   * existing profile of the same number (matched on its normalised digits, so a profile saved as a bare local number is found too)
+   * only has its EMPTY fields filled and its missing contact link set; nothing is written when there is nothing to fill, so a repeat
+   * changes no row. A new profile is inserted. Idempotent and race-safe (unique on org and phone).
+   */
+  private async saveProfile(
+    tx: Tx,
+    orgId: number,
+    phone: CanonicalPhone,
+    input: ContactResolveInput,
+    contactId: number | null,
+  ): Promise<void> {
+    const name = clean(input.name);
+    const address = clean(input.address);
+    const cc = countryCodeDigits(await this.defaultCountryCode());
+    const found = await tx.execute(sql`
+      SELECT id FROM wa_customer_profiles
+      WHERE org_id = ${orgId}
+        AND ${phoneKeySql(sql`phone`, cc)} = ${phone.digits}
+      ORDER BY (phone = ${phone.digits}) DESC, id
+      LIMIT 1
+      FOR UPDATE`);
+    const existing = found.rows[0] as { id: number | string } | undefined;
+    if (existing) {
+      await tx.execute(sql`
+        UPDATE wa_customer_profiles
+        SET name = coalesce(nullif(btrim(name), ''), ${name}::text),
+            address = coalesce(nullif(btrim(address), ''), ${address}::text),
+            contact_id = coalesce(contact_id, ${contactId}::bigint)
+        WHERE org_id = ${orgId} AND id = ${Number(existing.id)}
+          AND ((nullif(btrim(name), '') IS NULL AND ${name}::text IS NOT NULL)
+            OR (nullif(btrim(address), '') IS NULL AND ${address}::text IS NOT NULL)
+            OR (contact_id IS NULL AND ${contactId}::bigint IS NOT NULL))`);
+      return;
+    }
+    await tx.execute(sql`
+      INSERT INTO wa_customer_profiles (org_id, phone, name, address, contact_id)
+      VALUES (${orgId}, ${phone.digits}, ${name}, ${address}, ${contactId})
+      ON CONFLICT (org_id, phone) DO UPDATE
+        SET name = coalesce(nullif(btrim(wa_customer_profiles.name), ''), EXCLUDED.name),
+            address = coalesce(nullif(btrim(wa_customer_profiles.address), ''), EXCLUDED.address),
+            contact_id = coalesce(wa_customer_profiles.contact_id, EXCLUDED.contact_id)`);
   }
 
   private async fillBlanks(

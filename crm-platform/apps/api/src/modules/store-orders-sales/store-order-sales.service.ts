@@ -282,6 +282,7 @@ export class StoreOrderSalesService {
       address: order.customerAddress,
       source: 'store',
       tag: SOURCE_TAG,
+      saveProfile: true,
     });
     if (link.outcome === 'skipped') {
       result.contact = 'skipped';

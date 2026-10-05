@@ -19,6 +19,8 @@ const customer: StoreCustomer = {
   name: 'Asha Rao',
   company: null,
   address: '12 MG Road',
+  hasProfile: true,
+  hasSavedAddress: true,
   orderCount: 2,
   lifetimeTotals: [],
   lastOrderAt: null,
@@ -62,10 +64,25 @@ describe('request bodies', () => {
     expect(body).toEqual({ name: 'Asha Rao', company: null, address: '12 MG Road', rowVersion: 3 });
     expect(updateStoreCustomerSchema.safeParse(body).success).toBe(true);
   });
+  it('editing a buyer known from orders only sends no row version (there is no profile to guard) and still validates', () => {
+    const orderOnly: StoreCustomer = {
+      ...customer,
+      id: 'phone:919800000001',
+      hasProfile: false,
+      hasSavedAddress: false,
+      address: null,
+      rowVersion: 0,
+    };
+    const body = toUpdateInput(customerToForm(orderOnly), orderOnly.rowVersion);
+    expect(body).toEqual({ name: 'Asha Rao', company: null, address: null });
+    expect(updateStoreCustomerSchema.safeParse(body).success).toBe(true);
+  });
 });
 
 describe('ordersHref', () => {
-  it('filters the order list by the digits of the phone', () => {
-    expect(ordersHref('+91 98000-00001')).toBe('/store/orders?q=919800000001');
+  it('filters the order list by the last 10 digits, which find the number however the order wrote it', () => {
+    expect(ordersHref('+91 98000-00001')).toBe('/store/orders?q=9800000001');
+    expect(ordersHref('9800000001')).toBe('/store/orders?q=9800000001');
+    expect(ordersHref('12345')).toBe('/store/orders?q=12345');
   });
 });

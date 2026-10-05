@@ -1457,7 +1457,7 @@ describe('coupons', () => {
 // --- customers -----------------------------------------------------------------------------------------------------------------
 
 describe('customers', () => {
-  it('saves by phone, lists by name then phone with order totals, searches literally, pages, edits and removes', async () => {
+  it('saves by phone, lists by last activity with order totals, searches literally, pages, edits and removes', async () => {
     const m = await merchant('cust');
     const save = (b: object) => api.as(m.t.admin).post('/v2/store/customers').send(b);
     const a = await save({
@@ -1476,6 +1476,8 @@ describe('customers', () => {
       lifetimeTotals: [],
       lastOrderAt: null,
       contactId: null,
+      hasProfile: true,
+      hasSavedAddress: true,
     });
     const again = await save({ phone: '919876543210', name: 'Asha R.', company: '', address: '' });
     expect(again.body).toMatchObject({
@@ -1499,19 +1501,21 @@ describe('customers', () => {
 
     const list = await get(m.t, '/v2/store/customers');
     expect(list.status).toBe(200);
-    expect(list.body.data.map((c: any) => c.name)).toEqual(['Asha R.', 'Bala', 'Chitra', null]);
-    const asha = list.body.data[0];
+    // Last activity, newest first: customers nobody ordered with sort by their profile's last change (Chitra, then the unnamed one
+    // saved just before her), then the buyers by their latest order (Bala, then Asha).
+    expect(list.body.data.map((c: any) => c.name)).toEqual(['Chitra', null, 'Bala', 'Asha R.']);
+    const asha = list.body.data[3];
     expect(asha.orderCount).toBe(4);
     expect(asha.lifetimeTotals).toEqual([
       { currencyCode: 'INR', totalMinor: 75000, orders: 2 },
       { currencyCode: 'USD', totalMinor: 1000, orders: 1 },
     ]);
     expect(asha.lastOrderAt).toEqual(expect.any(String));
-    expect(list.body.data[1]).toMatchObject({
+    expect(list.body.data[2]).toMatchObject({
       orderCount: 1,
       lifetimeTotals: [{ currencyCode: 'INR', totalMinor: 7000, orders: 1 }],
     });
-    expect(list.body.data[3]).toMatchObject({ orderCount: 0, lifetimeTotals: [] });
+    expect(list.body.data[1]).toMatchObject({ orderCount: 0, lifetimeTotals: [] });
 
     const q = async (term: string) =>
       (await get(m.t, `/v2/store/customers?q=${encodeURIComponent(term)}`)).body.data.map(
@@ -1533,7 +1537,7 @@ describe('customers', () => {
       if (!res.body.page.hasMore) break;
       cursor = res.body.page.nextCursor;
     }
-    expect(seen).toEqual(['919876543210', '919811111111', '919822222222', '919800000000']);
+    expect(seen).toEqual(['919822222222', '919800000000', '919811111111', '919876543210']);
 
     const detail = await get(m.t, `/v2/store/customers/${a.body.id}`);
     expect(detail.body.recentOrders).toHaveLength(4);

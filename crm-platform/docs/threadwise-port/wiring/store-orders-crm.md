@@ -73,3 +73,41 @@ rows of the demo orders: the ledger is append-only by trigger, so reset and the 
 those guards switched off inside one transaction). `--fresh` is reset then seed, `--plan` prints the plan. Code:
 `storefront-builder/cli/` (`demo-plan.ts` pure and seeded, `demo-seeder.ts`, `seed-store-demo.ts`); it builds with swc into `dist-cli`
 (git-ignored) so a running dev server's `dist` is never touched.
+
+## Customers list = every buyer, and the backfill (2026-10-05, second pass)
+
+Decided with the owner after the first dev order (id 1) never showed in Customers: it predated the contact link, and a real buyer who
+never saved an address was invisible.
+
+**Customers list.** `GET /v2/store/customers` (`storefront-builder/admin/store-customers.*`) is the union of `wa_customer_profiles` and
+the distinct buyers of `wa_orders`, FULL JOINed on a normalised phone (`common/sql/phone-key.ts`: `phoneKeySql` in SQL, `phoneKey` in
+TypeScript, compared by `store-customers-union.e2e.spec.ts`). Rule = the one `canonicalizeLocalPhone` (contracts; the leads module's
+rule moved there, leads still calls it): `+`/`00` is international; otherwise a number of 10 digits or fewer (after a trunk `0`) gets the
+platform's default country code (Settings > General, "+91" until changed; read through `CONTACT_RESOLVER.defaultCountryCode()`), longer
+numbers are taken to carry theirs; with no default country a bare local number stays as its digits and is never linked to a contact.
+Row: `id` = profile uuid, else `phone:<digits>`; `name` = profile name, else the latest order's; `company`/`address` from the profile only;
+`hasProfile`, `hasSavedAddress` (profile with a non-blank address); `orderCount` (all statuses), `lifetimeTotals` per currency without
+cancelled orders; `lastOrderAt`; `contactId` = the profile's, else the latest linked order's. Sorted by last activity (latest order, else
+the profile's last change) with an exact-microsecond keyset cursor. `q` searches name, company, phone in any form; `storefrontId` keeps
+only buyers who ordered from that shop. Detail takes either id form; `PUT` on `phone:<digits>` creates the profile (Reference's
+save-by-phone); `DELETE` on it is a 404 (nothing saved; orders are never deleted). `POST` (save by phone) now reaches an existing
+profile of the same number in any form instead of adding a second. Cost: one aggregate over the workspace's orders per page (fine for
+tens of thousands of orders; add an index on the normalised phone before going far beyond).
+
+**Profile kept in step.** `ContactResolveInput.saveProfile` (resolver port): the four order writers above (checkout, WhatsApp catalog
+cart, AI ordering flow, Shopify/WooCommerce mirror) and `syncOrder`'s catch-up pass it, so the buyer's profile (name, canonical phone
+digits, delivery address, contact link) is created in the same transaction, also when the plan is out of contacts. An existing profile
+only has EMPTY fields filled (and a missing contact link set); nothing is written when there is nothing to fill, so what a customer or the
+merchant edited is never overwritten. The saved-customer form (`/waba/customers`) does not pass it. Demo seeder: untouched.
+
+**Phone reading fix.** The resolver used to canonicalise a bare 10-digit number as if it carried its country ("7999834066" became
++7 999...). It now reads it in the default country (+91 7999834066), and reports `unusable_phone` when there is no default country.
+
+**Backfill.** `pnpm --filter @crm/api backfill:store-orders -- [--org <slug|id>] [--dry-run]` (`store-orders-sales/cli/backfill-store-orders.ts`
+over `StoreOrderBackfillService`; swc into `dist-cli` like `seed:store-demo`; refuses `NODE_ENV=production` without `--allow-production`).
+For every `wa_orders` row with `contact_id IS NULL` (default: all workspaces): no phone or an unreadable phone is reported
+(`no_phone`, `unusable_phone`, with the phone) and left alone; otherwise `syncOrder` links the contact (`findOrCreateByPhone`, source
+"store"), creates the sales order and timeline entry, saves the missing profile and bills only when the workspace trigger is met (an unpaid
+order under the default `on_paid` gets no invoice). A plan out of contacts is `plan_limit_reached` (the order still gets its sales order
+and profile); an unexpected error is reported per order; nothing fails the batch. `--dry-run` runs the contact step in a rolled-back
+transaction and predicts the rest. Repeatable: only still-unlinked orders are candidates, so a second run changes nothing.

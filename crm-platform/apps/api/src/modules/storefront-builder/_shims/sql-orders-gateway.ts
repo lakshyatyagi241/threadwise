@@ -75,6 +75,7 @@ export class SqlOrdersGateway implements OrdersGateway {
       address: o.customerAddress,
       source: 'store',
       tag: 'Store customer',
+      saveProfile: true,
     });
     const contactId = link.outcome === 'skipped' ? null : link.contactId;
     const res = await tx.execute(sql`

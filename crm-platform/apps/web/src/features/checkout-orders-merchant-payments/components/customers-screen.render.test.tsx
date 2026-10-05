@@ -28,6 +28,8 @@ const customer = (over: Partial<StoreCustomer> = {}): StoreCustomer => ({
   name: 'Asha Rao',
   company: 'Acme Traders',
   address: '12 MG Road\nBengaluru',
+  hasProfile: true,
+  hasSavedAddress: true,
   orderCount: 3,
   lifetimeTotals: [
     { currencyCode: 'INR', totalMinor: 150000, orders: 2 },
@@ -46,10 +48,25 @@ const newcomer = customer({
   name: null,
   company: null,
   address: null,
+  hasSavedAddress: false,
   orderCount: 0,
   lifetimeTotals: [],
   lastOrderAt: null,
   contactId: null,
+});
+/** A buyer who ordered but was never saved: keyed by phone, no profile, so nothing to delete. */
+const buyer = customer({
+  id: 'phone:919800000003',
+  phone: '919800000003',
+  name: 'Walk-in Wanda',
+  company: null,
+  address: null,
+  hasProfile: false,
+  hasSavedAddress: false,
+  orderCount: 2,
+  lifetimeTotals: [{ currencyCode: 'INR', totalMinor: 90000, orders: 2 }],
+  rowVersion: 0,
+  contactId: ID(9),
 });
 
 const seed = (items: StoreCustomer[]) =>
@@ -81,7 +98,7 @@ describe('Customers screen', () => {
       expect(html).toContain('+919800000001');
       // orders link filters by the digits of the phone and keeps the shop
       expect(html).toContain(
-        'href="/store/orders?q=919800000001&amp;shop=5b4d4a3c-2b8a-4f0e-9a52-0c3f6a8e1d99"',
+        'href="/store/orders?q=9800000001&amp;shop=5b4d4a3c-2b8a-4f0e-9a52-0c3f6a8e1d99"',
       );
       // one totals line per currency
       expect(html).toMatch(/1,500\.00|١٬٥٠٠٫٠٠/);
@@ -94,8 +111,41 @@ describe('Customers screen', () => {
   it('a customer without a CRM contact or orders shows muted dashes, not links', () => {
     const html = renderAccount(screen(), { ...as(MANAGE), seed: [seed([newcomer])] });
     expect(html).not.toContain('/contacts/');
-    expect(html).not.toContain('/store/orders?q=919800000002');
+    expect(html).not.toContain('/store/orders?q=9800000002');
     expect(html).toContain('No orders yet');
+  });
+
+  for (const locale of LOCALES) {
+    it(`marks a customer without a saved address with a "No saved address" badge, and only that one, in ${locale}`, () => {
+      const html = renderAccount(screen(), {
+        locale,
+        ...as(MANAGE),
+        seed: [seed([customer(), buyer])],
+      });
+      // Asha has an address; Wanda (orders only) does not
+      expect(html.match(/data-testid="no-saved-address"/g)).toHaveLength(1);
+      expect(html).toContain(locale === 'en' ? 'No saved address' : 'لا يوجد عنوان محفوظ');
+      expect(html).toContain('Walk-in Wanda');
+      // the badge sits in Wanda's row, not Asha's
+      const wanda = html.slice(html.indexOf('Walk-in Wanda'));
+      expect(wanda).toContain('data-testid="no-saved-address"');
+      expect(html.slice(0, html.indexOf('Walk-in Wanda'))).not.toContain('no-saved-address');
+    });
+  }
+
+  it('a profile that has no address yet also shows the badge', () => {
+    const html = renderAccount(screen(), { ...as(MANAGE), seed: [seed([newcomer])] });
+    expect(html.match(/data-testid="no-saved-address"/g)).toHaveLength(1);
+  });
+
+  it('a buyer known from orders only keeps the order count, totals and CRM link, can be edited, and has nothing to delete', () => {
+    const html = renderAccount(screen(), { ...as(MANAGE), seed: [seed([buyer])] });
+    expect(html).toContain('href="/store/orders?q=9800000003&amp;shop=');
+    expect(html).toMatch(/900\.00|٩٠٠٫٠٠/);
+    expect(html).toContain(`href="/contacts/${ID(9)}"`);
+    expect(html).toContain('Edit Walk-in Wanda');
+    expect(html).toContain('View Walk-in Wanda');
+    expect(html).not.toContain('Delete Walk-in Wanda');
   });
 
   it('offers add, edit and delete to a person who can manage', () => {
@@ -125,9 +175,7 @@ describe('Customers screen', () => {
     it(`an empty list offers the first customer in ${locale}`, () => {
       const html = renderAccount(screen(), { locale, ...as(MANAGE), seed: [seed([])] });
       expect(html).not.toContain('<table');
-      expect(html).toContain(
-        locale === 'en' ? 'No saved customers yet' : 'لا يوجد عملاء محفوظون بعد',
-      );
+      expect(html).toContain(locale === 'en' ? 'No customers yet' : 'لا يوجد عملاء بعد');
       expect(html).toContain(locale === 'en' ? 'Add a customer' : 'إضافة عميل');
     });
   }
@@ -172,6 +220,19 @@ describe('Customer form', () => {
     expect(html).toMatch(/id="cust-phone"[^>]*readOnly=""/);
     expect(html).toContain('value="919800000001"');
     expect(html).toContain('value="Asha Rao"');
+    expect(html).toContain('Edit customer');
+  });
+
+  it('editing a buyer known from orders only starts from what the orders say and keeps the phone locked', () => {
+    const html = renderAccount(
+      <ToastProvider>
+        <CustomerFormModal customer={buyer} onClose={() => undefined} />
+      </ToastProvider>,
+      as(MANAGE),
+    );
+    expect(html).toMatch(/id="cust-phone"[^>]*readOnly=""/);
+    expect(html).toContain('value="919800000003"');
+    expect(html).toContain('value="Walk-in Wanda"');
     expect(html).toContain('Edit customer');
   });
 });

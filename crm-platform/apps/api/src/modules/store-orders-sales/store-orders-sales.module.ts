@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ContactStoreOrdersController } from './contact-store-orders.controller';
+import { StoreOrderBackfillService } from './store-order-backfill.service';
 import { StoreOrderRepository } from './store-order.repository';
 import { StoreOrderSalesService } from './store-order-sales.service';
 
@@ -13,7 +14,7 @@ import { StoreOrderSalesService } from './store-order-sales.service';
 @Module({
   imports: [CrmModule, PlansCoreModule],
   controllers: [ContactStoreOrdersController],
-  providers: [StoreOrderRepository, StoreOrderSalesService],
-  exports: [StoreOrderSalesService],
+  providers: [StoreOrderRepository, StoreOrderSalesService, StoreOrderBackfillService],
+  exports: [StoreOrderSalesService, StoreOrderBackfillService],
 })
 export class StoreOrdersSalesModule {}
