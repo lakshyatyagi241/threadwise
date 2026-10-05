@@ -39,6 +39,14 @@ import type { ConsoleCounts } from './console-counts';
 import { sidebarCookie, type SidebarState } from './sidebar-state';
 
 const PLATFORM = 'auth-registration-security.platform';
+/**
+ * Page content. An `sr-only` label inside a table that scrolls sideways (a column header's "Actions") is absolutely
+ * positioned at its in-flow spot, past the visible edge, and the scroller does not contain it, so the whole page grew a
+ * horizontal scrollbar on phones and tablets. Pinning every `sr-only` node to the inline start keeps it inside the
+ * viewport. Breadcrumb links get a 24px tap target.
+ */
+const MAIN_CLASS =
+  'min-w-0 flex-1 p-4 outline-none md:p-6 [&_.sr-only]:start-0 [&_nav_a]:inline-flex [&_nav_a]:min-h-6 [&_nav_a]:items-center';
 const ROLE_TONE = { super_admin: 'success', support: 'neutral', auditor: 'neutral' } as const;
 
 const Chevron = ({ open }: { open: boolean }) => (
@@ -255,7 +263,7 @@ export function ConsoleShell({
       <ToastProvider>
         <a
           href="#console-main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:shadow-lg"
+          className="fixed start-3 top-3 z-50 -translate-y-[200%] rounded-md bg-background px-3 py-2 text-sm focus:translate-y-0 focus:shadow-lg"
         >
           {t('skipToContent')}
         </a>
@@ -465,11 +473,7 @@ export function ConsoleShell({
               </Alert>
             )}
 
-            <main
-              id="console-main"
-              tabIndex={-1}
-              className="min-w-0 flex-1 p-4 outline-none md:p-6"
-            >
+            <main id="console-main" tabIndex={-1} className={MAIN_CLASS}>
               {blocked ? (
                 <div className="flex min-h-40 items-center justify-center gap-2 text-sm text-muted-foreground">
                   <Spinner label={t('redirecting')} />
