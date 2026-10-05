@@ -30,6 +30,8 @@ export const QUEUES = {
   BCAST_DISPATCH: 'bcast-dispatch',
   /** WhatsApp Cloud API / Interakt webhook payloads (messages, receipts, template and account events). Acked first, processed here. */
   WABA_INGEST: 'waba-ingest',
+  /** One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest. */
+  WEBHOOK_FORWARD: 'webhook-forward',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (WD-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (WD-FB-010). */
