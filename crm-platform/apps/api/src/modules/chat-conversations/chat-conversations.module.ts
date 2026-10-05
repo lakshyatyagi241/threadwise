@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
 import { CrmModule } from '../crm';
+import { LocalizationTranslationModule } from '../localization-translation';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { ChannelDispatcher } from './channel-dispatcher.service';
@@ -18,6 +19,7 @@ import { ConversationsService } from './conversations.service';
 import { ExternalChannelIngest } from './external-channel-ingest.service';
 import { InboundMessageHooks } from './inbound-hooks';
 import { InboundIngestService } from './inbound-ingest.service';
+import { InboundTranslationListener } from './inbound-translation.listener';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { MediaFetchService } from './media-fetch.service';
 import { MessageDispatchService } from './message-dispatch.service';
@@ -47,7 +49,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
  * door are global.
  */
 @Module({
-  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule],
+  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule, LocalizationTranslationModule],
   controllers: [
     ChannelsController,
     SimulatorController,
@@ -74,6 +76,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     MessageViewService,
     MediaFetchPublisher,
     InboundMessageHooks,
+    InboundTranslationListener,
     InboundIngestService,
     ExternalChannelIngest,
     ReceiptsService,

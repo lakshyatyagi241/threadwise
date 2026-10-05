@@ -7,6 +7,7 @@ import {
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { AnnouncementService } from './announcement.service';
 import { BlogService } from './blog.service';
 import { CmsContentService } from './content.service';
 import { ContactService } from './contact.service';
@@ -27,6 +28,7 @@ export class PublicCmsController {
     private readonly blog: BlogService,
     private readonly pricing: PricingService,
     private readonly contact: ContactService,
+    private readonly announcements: AnnouncementService,
   ) {}
 
   @Get('content')
@@ -69,6 +71,22 @@ export class PublicCmsController {
   @ApiOperation({ summary: 'What sitemap.xml lists' })
   sitemap() {
     return this.blog.sitemap();
+  }
+
+  @Get('announcements')
+  @ApiOperation({
+    summary: 'Announcements live right now (the ticker above the public navigation)',
+  })
+  liveAnnouncements() {
+    return this.announcements.live();
+  }
+
+  @Get('site-info')
+  @ApiOperation({
+    summary: 'Company name, address, mailboxes, phone and WhatsApp number for the contact page',
+  })
+  siteInfo() {
+    return this.contact.siteInfo();
   }
 
   @Post('contact')

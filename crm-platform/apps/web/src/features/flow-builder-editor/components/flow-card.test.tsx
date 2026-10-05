@@ -1,0 +1,132 @@
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it, vi } from 'vitest';
+import type { FlowFeatured, FlowSummary } from '@crm/contracts';
+import { FeaturedCard, FlowCard, triggerLabelKey, type CardActions } from './flow-card';
+
+// Messages are not loaded here: the key is the text, so the assertions read the structure.
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
+vi.mock('next/link', () => ({
+  default: ({ href, children, ...rest }: { href: string; children: React.ReactNode }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
+const flow = (over: Partial<FlowSummary> = {}): FlowSummary => ({
+  id: '11111111-1111-4111-8111-111111111111',
+  name: 'Welcome',
+  flowType: 'chat',
+  category: 'welcome',
+  state: 'live',
+  isPublished: true,
+  isActive: true,
+  triggerKind: 'keyword',
+  nodeCount: 3,
+  edgeCount: 2,
+  subscribers: { active: 0, completed: 0, failed: 0 },
+  publishedAt: null,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+  rowVersion: 1,
+  ...over,
+});
+const fn = () => undefined;
+const actions: CardActions = {
+  onToggle: fn,
+  onRename: fn,
+  onDuplicate: fn,
+  onExport: fn,
+  onDelete: fn,
+  can: { update: true, create: true, remove: true },
+};
+const card = (over: Partial<FlowSummary> = {}) =>
+  renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
+
+describe('flow card (WD-FLB-001)', () => {
+  it('a keyword flow opens the builder and links its analytics to the runtime page of that flow', () => {
+    const html = card();
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).toContain(
+      'href="/flow-runtime/analytics?flowId=11111111-1111-4111-8111-111111111111"',
+    );
+    expect(html).not.toContain('data-flow-enroll');
+  });
+
+  it('QUIRK: a manual-enroll flow shows "Enroll contacts" in place of "Open builder"', () => {
+    const html = card({ triggerKind: 'manual_enroll' });
+    expect(html).toContain('data-flow-enroll');
+    expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('openBuilder');
+    expect(html).not.toContain('href="/flows/builder/');
+  });
+
+  it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {
+    const html = card({ flowType: 'instagram' });
+    expect(html).not.toContain('/flow-runtime/analytics');
+    expect(html).toContain('>instagram<');
+  });
+
+  it('only instagram and call flows get a channel badge', () => {
+    expect(card({ flowType: 'call' })).toContain('>call<');
+    expect(card({ flowType: 'facebook' })).not.toMatch(/>(facebook|call|instagram)</);
+  });
+
+  it('QUIRK: every trigger kind but tag, group and manual reads "Keyword"', () => {
+    expect(triggerLabelKey('tag_added')).toBe('triggerTag');
+    expect(triggerLabelKey('group_join')).toBe('triggerGroup');
+    expect(triggerLabelKey('manual_enroll')).toBe('triggerManual');
+    for (const k of [
+      'keyword',
+      'contact_created',
+      'opt_in',
+      'order_placed',
+      'deal_stage_changed',
+      'away',
+      'out_of_hours',
+      'comment_to_dm',
+    ]) {
+      expect(triggerLabelKey(k)).toBe('triggerKeyword');
+    }
+  });
+
+  it('state pills use the shared uppercase mono pill', () => {
+    expect(card({ state: 'paused', isActive: false })).toContain('uppercase');
+  });
+});
+
+describe('featured card (WD-FLB-002)', () => {
+  const featured = (over: Partial<FlowFeatured> = {}): FlowFeatured => ({
+    ...flow({ category: 'cart-recovery', name: 'Cart' }),
+    steps: 6,
+    messages: 1,
+    waitMinutes: 150,
+    preview: [
+      { type: 'trigger', label: 'Trigger / keyword' },
+      { type: 'delay', label: 'Wait 30 min' },
+    ],
+    ...over,
+  });
+
+  it('shows the category as "Cart recovery", the preview labels and the "more steps" line', () => {
+    const html = renderToStaticMarkup(<FeaturedCard flow={featured()} actions={actions} />);
+    expect(html).toContain('>Cart recovery<');
+    expect(html).toContain('Trigger / keyword');
+    expect(html).toContain('Wait 30 min');
+    expect(html).toContain('~2.5 h total');
+  });
+
+  it('a flow with no category reads "Flow"', () => {
+    expect(
+      renderToStaticMarkup(<FeaturedCard flow={featured({ category: null })} actions={actions} />),
+    ).toContain('>Flow<');
+  });
+
+  it('an empty graph shows the empty-preview note', () => {
+    const html = renderToStaticMarkup(
+      <FeaturedCard flow={featured({ preview: [], steps: 0, waitMinutes: 0 })} actions={actions} />,
+    );
+    expect(html).toContain('emptyPreview');
+    expect(html).toContain('no waits');
+  });
+});

@@ -49,7 +49,7 @@ export interface FieldSpec {
 
 /** A block that is not a plain list of fields. */
 export type CustomSection =
-  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback';
+  'brandAssets' | 'signupLink' | 'seoPreview' | 'teamInboxApp' | 'wabaCallback' | 'googleCallback';
 
 export interface SectionSpec {
   id: string;
@@ -319,18 +319,23 @@ export const GROUP_SPECS: GroupSpec[] = [
         eyebrow: 'cookie-consent',
         fields: [
           f('cookieBannerEnabled', 'toggle'),
-          f('cookieBannerStyle', 'select', { options: ['bottom-bar', 'top-bar', 'modal'] }),
-          f('respectDoNotTrack', 'toggle'),
+          ...halves(
+            f('cookieBannerStyle', 'select', { options: ['bottom-bar', 'top-bar', 'modal'] }),
+            f('respectDoNotTrack', 'toggle'),
+          ),
           f('cookieMessage', 'textarea'),
-          f('policyUrl', 'url'),
-          f('termsUrl', 'url'),
+          ...halves(f('policyUrl', 'url'), f('termsUrl', 'url')),
           f('cookiesPolicyUrl', 'url'),
         ],
       },
-      { id: 'compliance', eyebrow: 'gdpr-ccpa', fields: flags('gdprCompliance', 'ccpaCompliance') },
+      {
+        id: 'compliance',
+        eyebrow: 'regional-compliance',
+        fields: flags('gdprCompliance', 'ccpaCompliance'),
+      },
       {
         id: 'accessibility',
-        eyebrow: 'ada-wcag',
+        eyebrow: 'accessibility',
         fields: flags('adaSkipLink', 'adaHighContrast', 'adaLargeText', 'adaReducedMotion'),
       },
     ],
@@ -487,6 +492,24 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'googleCalendar',
+    group: 'googleCalendar',
+    slug: 'google-calendar',
+    guide: ['project', 'redirect', 'consent', 'workspaces'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'google-oauth',
+        custom: 'googleCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          f('redirectUri', 'url', { mono: true }),
+        ],
+      },
+    ],
+  },
+  {
     id: 'whatsapp',
     group: 'whatsapp',
     slug: 'whatsapp',
@@ -572,4 +595,5 @@ export const HUB_ORDER = [
   'storage',
   'realtime',
   'campaigns',
+  'googleCalendar',
 ] as const;

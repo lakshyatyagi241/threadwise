@@ -58,12 +58,17 @@ function service(over: {
   const config = { get: (k: string) => over.env?.[k] };
   const moduleRef = { get: () => queue({ waiting: 0, delayed: 0, failed: over.failed ?? 0 }) };
   const audit = { recordStandalone: async () => undefined };
+  const store = {
+    tx: async (fn: (tx: unknown) => Promise<unknown>) =>
+      fn({ execute: async () => ({ rows: [{ n: 4 }] }) }),
+  };
   return new HealthService(
     db as never,
     redis as never,
     config as never,
     moduleRef as never,
     audit as never,
+    store as never,
   );
 }
 
@@ -87,6 +92,13 @@ describe('health probes (WD-DASH-048)', () => {
     expect(r.checks.map((c) => c.key)).toEqual(['database', 'cache', 'queue', 'bridge', 'storage']);
     expect(state(r, 'storage').state).toBe('idle');
     expect(Date.parse(r.ts)).not.toBeNaN();
+  });
+
+  it('carries the four 24-hour counters and 14 daily throughput points (WD-DASH-049)', async () => {
+    const r = await service({ env: { NODE_BRIDGE_URL: bridgeUrl } }).snapshot(true);
+    expect(r.activity).toEqual({ messages: 4, aiCalls: 4, conversations: 4, webhooks: 4 });
+    expect(r.throughput).toHaveLength(14);
+    expect(r.throughput[13]!.date).toBe(new Date().toISOString().slice(0, 10));
   });
 
   it('a throwing database is Down and the banner is Down while the other cards still render', async () => {

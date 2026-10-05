@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { BspAllocation, BspAllocationStatus } from '@crm/contracts';
-import { Alert, Badge, Button, Card, ConfirmDialog, EmptyState, Spinner } from '@crm/ui';
+import { Alert, Badge, Button, Card, ConfirmDialog, Spinner } from '@crm/ui';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { KEYS, operatorApi } from '../api';
 import { errorView } from '../lib/errors';
@@ -70,8 +70,6 @@ export function RegisterCard({ canEdit }: { canEdit: boolean }) {
             {tc('retry')}
           </Button>
         </Alert>
-      ) : rows.length === 0 ? (
-        <EmptyState title={t('empty')} />
       ) : (
         <>
           <div className="overflow-x-auto">
@@ -88,6 +86,13 @@ export function RegisterCard({ canEdit }: { canEdit: boolean }) {
                 </tr>
               </thead>
               <tbody>
+                {rows.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-2 py-8 text-center text-muted-foreground">
+                      {t('empty')}
+                    </td>
+                  </tr>
+                )}
                 {rows.map((al) => (
                   <tr key={al.id} className="border-b border-border/60 last:border-0">
                     <td className="px-2 py-2">

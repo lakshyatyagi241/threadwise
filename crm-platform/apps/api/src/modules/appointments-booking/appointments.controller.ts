@@ -39,6 +39,7 @@ import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../c
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentBookingGuard } from './booking-plan';
+import { GoogleCalendarConnectService } from './google-calendar-connect.service';
 
 /**
  * Appointments (WD-APPT-002..004, 039; EXT-APPT-02, 04, 06, 07). Every route needs the plan's appointment booking and the capability it
@@ -51,7 +52,10 @@ import { AppointmentBookingGuard } from './booking-plan';
 @UseGuards(AppointmentBookingGuard)
 @Controller({ path: 'appointments', version: '2' })
 export class AppointmentsController {
-  constructor(private readonly appts: AppointmentsService) {}
+  constructor(
+    private readonly appts: AppointmentsService,
+    private readonly google: GoogleCalendarConnectService,
+  ) {}
 
   @Get()
   @RequirePermission('record.appointments.read')
@@ -86,10 +90,10 @@ export class AppointmentsController {
   @ApiOperation({
     summary: 'Is an external calendar connected?',
     description:
-      'Served by the calendar port; `none` / not connected until an adapter is registered.',
+      "`status` is `unavailable` (the platform has no Google OAuth client), `disconnected`, `connected` or `needs_reconnect` (Google refused the stored grant). `connected`, `account` and `provider` are the calendar port's own answer and stay as they were.",
   })
-  calendar() {
-    return this.appts.calendarStatus();
+  async calendar() {
+    return this.google.status();
   }
 
   @Post()

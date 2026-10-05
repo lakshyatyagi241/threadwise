@@ -28,12 +28,12 @@ jobs:
       run:
         working-directory: crm-platform
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.local/share/pnpm/store
           key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
@@ -48,30 +48,41 @@ jobs:
     timeout-minutes: 40
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - id: tag
         run: echo "tag=$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       - name: Build API image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: crm-platform
           file: crm-platform/apps/api/Dockerfile
           tags: desk-api:${{ steps.tag.outputs.tag }}
           load: true
+          build-args: |
+            GIT_SHA=${{ steps.tag.outputs.tag }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,scope=api,mode=max
 
       - name: Build web image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: crm-platform
           file: crm-platform/apps/web/Dockerfile
           tags: desk-web:${{ steps.tag.outputs.tag }}
           load: true
+          # The DSN is public by design (it only lets events in). Source maps upload only if the SENTRY_AUTH_TOKEN secret and the
+          # SENTRY_ORG / SENTRY_PROJECT variables are set in the repository; until then they are empty and nothing is uploaded.
+          build-args: |
+            NEXT_PUBLIC_SENTRY_DSN=https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224
+            NEXT_PUBLIC_GIT_SHA=${{ steps.tag.outputs.tag }}
+            SENTRY_ORG=${{ vars.SENTRY_ORG }}
+            SENTRY_PROJECT=${{ vars.SENTRY_PROJECT }}
+          secrets: |
+            sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,scope=web,mode=max
 

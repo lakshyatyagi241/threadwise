@@ -87,7 +87,8 @@ export class FulfilmentService {
       // The ledger's own idempotency key makes a replay a no-op: the order uuid is the payment's identity.
       await this.wallet.post(tx, {
         orgId: order.orgId,
-        unit: await this.walletSettings.currency(),
+        // The wallet the order was placed for; an order from before per-currency wallets credits the platform currency's.
+        unit: order.walletUnit ?? (await this.walletSettings.currency()),
         type: 'topup',
         direction: 'in',
         amountMinor: minor,

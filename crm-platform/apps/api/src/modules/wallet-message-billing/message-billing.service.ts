@@ -6,6 +6,7 @@ import { BillingModeService } from '../bsp-billing-engine';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { BillingCurrencyService } from './billing-currency.service';
 import { RateCardService } from './rate-card.service';
 import { WalletLedgerService } from './wallet-ledger.service';
 import { WalletLogService } from './wallet-log.service';
@@ -56,6 +57,7 @@ export class MessageBillingService {
     private readonly repo: WalletRepository,
     private readonly ledger: WalletLedgerService,
     private readonly rates: RateCardService,
+    private readonly billing: BillingCurrencyService,
     private readonly settings: WalletSettingsService,
     private readonly plans: PlanEntitlementService,
     private readonly mode: BillingModeService,
@@ -102,7 +104,9 @@ export class MessageBillingService {
       const keyId = Number((claim.rows[0] as { id: string | number }).id);
 
       // 2. lock
-      const wallet = await this.repo.lockWallet(tx, input.orgId, s.currency);
+      // The workspace is billed in its own currency (USD, INR, ...): that currency's wallet is the one locked and charged.
+      const currency = await this.billing.forOrg(tx, input.orgId);
+      const wallet = await this.repo.lockWallet(tx, input.orgId, currency);
       const payPerMessage = await this.mode.isPayPerMessage(tx, input.orgId);
 
       // 3. count, price, decide
@@ -113,7 +117,7 @@ export class MessageBillingService {
         RETURNING messages`);
       const usedBefore = Number((counted.rows[0] as { messages: number }).messages) - 1;
 
-      const priced = await this.rates.price(tx, input.orgId, input.recipient, category);
+      const priced = await this.rates.price(tx, input.orgId, input.recipient, category, currency);
       const decision = decideSettlement({
         priceMinor: priced.priceMinor,
         balanceMinor: wallet.balanceMinor,
@@ -135,7 +139,7 @@ export class MessageBillingService {
         const label = ['WhatsApp message', priced.country, category].filter(Boolean).join(' · ');
         const posted = await this.ledger.post(tx, {
           orgId: input.orgId,
-          unit: s.currency,
+          unit: currency,
           type: 'spend',
           direction: 'out',
           amountMinor: decision.chargedMinor,
@@ -164,11 +168,11 @@ export class MessageBillingService {
       const row = await tx.execute(sql`
         INSERT INTO usage_charges
           (org_id, provider, wamid, to_country, category, source, credits, revenue_minor, cost_minor, cost_micros, status,
-           wallet_tx_id, meta, price_credits, shortfall_credits, billing_mode, free_reason)
+           wallet_tx_id, meta, price_credits, shortfall_credits, billing_mode, free_reason, currency)
         VALUES (${input.orgId}, ${input.provider}, ${wamid}, ${priced.country}, ${category}, ${source}, ${chargedMinor},
                 ${chargedMinor}, ${costMinor}, ${priced.metaCostMicros}, ${status}, ${txRowId},
                 ${JSON.stringify({ matched: priced.matched, basis: priced.basis, margin: priced.margin })}, ${priced.priceMinor}, ${shortfallMinor},
-                ${payPerMessage ? 'wallet' : 'plan'}, ${freeReason})
+                ${payPerMessage ? 'wallet' : 'plan'}, ${freeReason}, ${currency})
         RETURNING id, created_at::text AS created_at`);
       // Carried as TEXT: a JS Date keeps milliseconds, the partition key has microseconds, and the refund must find this exact row.
       const charge = row.rows[0] as { id: string | number; created_at: string };
@@ -214,22 +218,20 @@ export class MessageBillingService {
         );
       }
 
-      // 4. low balance: after a charge, and after a message that found the wallet empty.
+      // 4. low balance: after a charge, and after a message that found the wallet empty. The threshold is set in the platform
+      // currency, so a wallet in another currency compares against it at the exchange rate on file.
+      const threshold = await this.billing.fromPlatform(s.lowBalanceThresholdMinor, currency);
       if (
         (status === 'charged' || freeReason === 'wallet_empty') &&
-        shouldAlertLowBalance(
-          balanceAfter,
-          s.lowBalanceThresholdMinor,
-          wallet.lowBalanceAlertedAt,
-          now,
-        )
+        shouldAlertLowBalance(balanceAfter, threshold, wallet.lowBalanceAlertedAt, now)
       ) {
         await this.raiseLowBalance(
           tx,
           input.orgId,
           wallet.id,
           balanceAfter,
-          s.lowBalanceThresholdMinor,
+          threshold,
+          currency,
           now,
         );
       }
@@ -274,16 +276,19 @@ export class MessageBillingService {
       const chargeId = Number(key.charge_id);
       const chargeAt = key.charge_created_at;
       const ch = await tx.execute(sql`
-        SELECT credits, wamid FROM usage_charges
+        SELECT credits, wamid, currency FROM usage_charges
         WHERE org_id = ${orgId} AND id = ${chargeId} AND created_at = ${chargeAt}::timestamptz FOR UPDATE`);
-      const charge = ch.rows[0] as { credits: number; wamid: string } | undefined;
+      const charge = ch.rows[0] as
+        { credits: number; wamid: string; currency: string | null } | undefined;
       if (!charge) return { refunded: false, refundedMinor: 0, balanceAfterMinor: 0 };
+      // The money goes back where it came from: a charge from before per-currency billing has no currency and was in the platform's.
+      const unit = charge.currency ?? s.currency;
 
       let refundTx: number | null = null;
       if (charge.credits > 0) {
         const posted = await this.ledger.post(tx, {
           orgId,
-          unit: s.currency,
+          unit,
           type: 'refund',
           direction: 'in',
           amountMinor: charge.credits,
@@ -309,7 +314,7 @@ export class MessageBillingService {
         subjectId: chargeId,
         payload: { wamid, refundedMinor: charge.credits },
       });
-      const wallet = await this.repo.peekWallet(tx, orgId);
+      const wallet = await this.repo.peekWallet(tx, orgId, unit);
       return {
         refunded: true,
         refundedMinor: charge.credits,
@@ -324,6 +329,7 @@ export class MessageBillingService {
     walletId: number,
     balanceMinor: number,
     thresholdMinor: number,
+    currency: string,
     now: Date,
   ): Promise<void> {
     await this.repo.markAlerted(tx, orgId, walletId, now);
@@ -332,7 +338,7 @@ export class MessageBillingService {
       aggregateModule: 'wallets',
       aggregateId: walletId,
       eventType: 'wallet.low_balance',
-      payload: { balanceMinor, thresholdMinor },
+      payload: { balanceMinor, thresholdMinor, currency },
     });
     await this.log.event(tx, {
       orgId,
@@ -341,7 +347,7 @@ export class MessageBillingService {
       message: `Balance ${balanceMinor} is at or under the alert threshold ${thresholdMinor}`,
       subjectType: 'wallet',
       subjectId: walletId,
-      payload: { balanceMinor, thresholdMinor },
+      payload: { balanceMinor, thresholdMinor, currency },
     });
   }
 }

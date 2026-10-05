@@ -31,7 +31,25 @@ module.exports = {
         pathNot: [
           '^src/modules/$1/.+', // same module: fine
           '^src/modules/[^/]+/index\\.ts$', // public barrel: fine
+          // A leaf port file (`<name>.port.ts`, a token and types, no imports of its own): a consumer injects by token and imports only
+          // this, so it does not pull the provider's module (and the modules that one imports) into its own file graph, where a cycle
+          // can leave a class `undefined` while Nest reads its constructor. See modules/leads/lead-ingest.port.ts.
+          '^src/modules/[^/]+/[^/]+\\.port\\.ts$',
         ],
+      },
+    },
+    {
+      name: 'port-files-are-leaves',
+      severity: 'error',
+      comment:
+        'A `<name>.port.ts` file in a module is importable across modules only because it is a leaf: a token and types. It may import ' +
+        'other port files and type-only imports (erased at runtime), nothing else from src/, or the exception in no-cross-module-internals ' +
+        'would let a real dependency (and its import cycles) through.',
+      from: { path: '^src/modules/[^/]+/[^/]+\\.port\\.ts$' },
+      to: {
+        path: '^src/',
+        pathNot: '\\.port\\.ts$',
+        dependencyTypesNot: ['type-only'],
       },
     },
     {

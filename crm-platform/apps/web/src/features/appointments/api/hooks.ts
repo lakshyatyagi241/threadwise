@@ -21,6 +21,8 @@ export const KEYS = {
   types: ['appointments', 'types'] as const,
   type: (id: string) => ['appointments', 'type', id] as const,
   settings: ['appointments', 'settings'] as const,
+  calendar: ['appointments', 'calendar'] as const,
+  calendars: ['appointments', 'calendar', 'list'] as const,
 };
 
 /** Keeps the development stand-in (when it is on) in step with who is signed in. Call it once near the top of a screen. */
@@ -155,4 +157,25 @@ export async function invalidateAppointments(
 
 export async function invalidateBookingTypes(qc: QueryClient): Promise<void> {
   await qc.invalidateQueries({ queryKey: KEYS.types });
+}
+
+/** The workspace's Google Calendar link: whether it can be connected, is connected (which account and calendar) or needs reconnecting. */
+export function useCalendarConnection() {
+  return useQuery({
+    queryKey: KEYS.calendar,
+    queryFn: ({ signal }) => appointmentsApi.calendar(signal),
+    retry: false,
+    staleTime: 15_000,
+  });
+}
+
+/** The writable calendars of the connected account (only asked for while one is connected). */
+export function useCalendarOptions(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.calendars,
+    queryFn: ({ signal }) => appointmentsApi.calendars(signal),
+    enabled,
+    retry: false,
+    staleTime: 60_000,
+  });
 }

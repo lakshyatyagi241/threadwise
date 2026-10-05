@@ -100,6 +100,8 @@ export function toPack(row: PackRow): AddonPack {
  *     while its confirm text promised the opposite); deactivate it instead, owners keep it until it ends
  *   - the Grants summary is read from the stored grants (WaDesk read raw columns and showed "nothing set")
  *   - the long description is part of the form and a save never clears it (WaDesk's form had no field for it)
+ *   - the add-ons that sell a Marketplace app (`plans.marketplace_app_id`) are not here: the Marketplace owns their price and grant, so
+ *     they are neither listed nor addressable (a lookup of one is "not an add-on")
  */
 @Injectable()
 export class AddonPackService {
@@ -186,7 +188,7 @@ export class AddonPackService {
   async list(): Promise<AddonPackListResponse> {
     const rows = await this.platform.tx(async (tx) => {
       const res = await tx.execute(
-        sql`${SELECT} WHERE p.kind = 'addon' ORDER BY p.sort_order ASC, p.amount ASC, p.slug ASC`,
+        sql`${SELECT} WHERE p.kind = 'addon' AND p.marketplace_app_id IS NULL ORDER BY p.sort_order ASC, p.amount ASC, p.slug ASC`,
       );
       return res.rows as unknown as PackRow[];
     });
@@ -349,8 +351,8 @@ export class AddonPackService {
   private async byUuid(tx: Tx, uuid: string, lock = false): Promise<PackRow> {
     const res = await tx.execute(
       lock
-        ? sql`${SELECT} WHERE p.kind = 'addon' AND p.uuid = ${uuid}::uuid FOR UPDATE OF p`
-        : sql`${SELECT} WHERE p.kind = 'addon' AND p.uuid = ${uuid}::uuid`,
+        ? sql`${SELECT} WHERE p.kind = 'addon' AND p.marketplace_app_id IS NULL AND p.uuid = ${uuid}::uuid FOR UPDATE OF p`
+        : sql`${SELECT} WHERE p.kind = 'addon' AND p.marketplace_app_id IS NULL AND p.uuid = ${uuid}::uuid`,
     );
     const row = res.rows[0] as unknown as PackRow | undefined;
     if (!row) throw AppError.notFound('Add-on'); // a plan's id is "not an add-on" too

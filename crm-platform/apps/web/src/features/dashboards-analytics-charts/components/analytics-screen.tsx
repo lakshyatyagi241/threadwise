@@ -4,11 +4,13 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { ANALYTICS_RANGES, type AnalyticsQuery } from '@crm/contracts';
 import { Button, Input, Spinner, StatTile } from '@crm/ui';
-import { useAnalytics } from '../api/hooks';
+import { useAnalytics, useWidgets } from '../api/hooks';
+import { InstagramAnalytics } from './dashboard-extras';
 import { dashApi, type AnalyticsParams } from '../api/service';
 import { compact, shares } from '../lib/format';
 import { BarChart, Donut, Heatmap, Sparkline } from './charts';
 import { RangePicker } from './dashboard-screen';
+import { AnalyticsPanelsSection } from './analytics-panels';
 import { Funnel, LoadError, Panel, Trend } from './parts';
 
 type Range = AnalyticsQuery['range'];
@@ -22,6 +24,7 @@ export function AnalyticsScreen() {
   const [custom, setCustom] = useState({ from: '', to: '' });
   const params: AnalyticsParams = { range, ...(range === 'custom' ? custom : {}) };
   const q = useAnalytics(params);
+  const ig = useWidgets('7d').data?.instagram;
   const a = q.data;
 
   const dayLabel = (d: string) =>
@@ -138,6 +141,8 @@ export function AnalyticsScreen() {
             />
           </section>
 
+          {ig && <InstagramAnalytics data={ig} />}
+
           <div className="grid gap-4 lg:grid-cols-3">
             <Panel
               className="lg:col-span-2"
@@ -245,6 +250,7 @@ export function AnalyticsScreen() {
               </p>
             </Panel>
           </div>
+          <AnalyticsPanelsSection params={params} />
         </>
       )}
     </div>

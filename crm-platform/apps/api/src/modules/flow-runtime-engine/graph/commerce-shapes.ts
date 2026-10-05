@@ -1,4 +1,4 @@
-import { cleanVar } from './compile-graph';
+import { cleanVar } from './clean-var';
 
 /**
  * How the commerce node group's builder nodes become executor props (WD-FLR-026, 040, 041, 043). Kept beside `compileGraph` but in
@@ -50,6 +50,10 @@ export function shopProductsOf(data: Record<string, unknown>): ShopProduct[] {
     .slice(0, 30);
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuidOf = (v: unknown): string =>
+  typeof v === 'string' && UUID_RE.test(v.trim()) ? v.trim().toLowerCase() : '';
+
 export function shapeCommerceNode(
   type: string,
   data: Record<string, unknown>,
@@ -59,6 +63,10 @@ export function shapeCommerceNode(
       return {
         templateName: str(data.tpl ?? data.templateName).trim(),
         templateId: int(data.tplId ?? data.templateId, 0),
+        // The editor saves the template's uuid; the node resolves it to the row (flow-refs.ts). An integer id keeps `templateId`.
+        ...(uuidOf(data.tplId ?? data.templateId)
+          ? { templateUuid: uuidOf(data.tplId ?? data.templateId) }
+          : {}),
         preview: str(data.preview),
         keepMenuOpen: data.keepMenuOpen !== false,
       };

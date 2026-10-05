@@ -7,6 +7,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('frontend.title') };
 }
 
-export default function Page() {
-  return <FrontendEditor />;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const page = (await searchParams).page;
+  return <FrontendEditor initialPage={Array.isArray(page) ? page[0] : page} />;
 }

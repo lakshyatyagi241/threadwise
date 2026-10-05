@@ -2,13 +2,25 @@ import 'reflect-metadata';
 import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedisIoAdapter } from './realtime/redis-io.adapter';
 import { AppModule } from './app.module';
+import {
+  corsIsClosedInProduction,
+  corsOriginFor,
+  initSentry,
+  installBodyLimits,
+  installProcessHandlers,
+} from './modules/platform-infrastructure';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, {
+  // First, so a failure while the application is still being built is reported too (WD-INFRA-018).
+  installProcessHandlers('api');
+  initSentry('api');
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     // Needed for webhook and public-API signature verification: the HMAC is
     // computed over the bytes as sent, and re-serialising parsed JSON changes
@@ -30,14 +42,28 @@ async function bootstrap(): Promise<void> {
         : trust,
   );
 
+  // Body-size limits per route class (WD-INFRA-020): before anything reads a body.
+  installBodyLimits(app);
+
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
   app.enableShutdownHooks();
 
   const origins = config.get('CORS_ORIGINS', { infer: true });
+  const nodeEnv = config.get('NODE_ENV', { infer: true });
+  if (corsIsClosedInProduction(origins, nodeEnv)) {
+    logger.warn('CORS_ORIGINS is empty in production: browsers on other origins are refused');
+  }
   app.enableCors({
-    origin: origins.length > 0 ? origins : true,
+    origin: corsOriginFor(origins, nodeEnv),
     credentials: true,
-    exposedHeaders: ['x-request-id'],
+    // The throttle's headers (WD-INFRA-010): a browser client reads them only if they are exposed.
+    exposedHeaders: [
+      'x-request-id',
+      'retry-after',
+      'x-ratelimit-limit',
+      'x-ratelimit-remaining',
+      'x-ratelimit-reset',
+    ],
   });
 
   // Redis adapter for socket.io: without it, a message emitted on one pod

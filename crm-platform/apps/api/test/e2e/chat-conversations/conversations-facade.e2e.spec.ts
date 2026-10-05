@@ -324,3 +324,41 @@ describe('joining a thread over the socket still follows the same rule', () => {
     expect(await joinConversation(stranger, th.uuid)).toMatchObject({ ok: true });
   }, 60_000);
 });
+
+/** WD-I18N-038: the thread shows a stored translation only while translation is live for the workspace. */
+describe('listMessages: translation display gate (WD-I18N-038)', () => {
+  it('shows the stored reading while the switch is on, hides it (keeping the language) when off, and shows it again after', async () => {
+    const t = await p.api.signup('xl8');
+    const ch = await simChannel(p, t);
+    const th = await threadWith(t, ch, '919700000077', 1);
+    await p.h.owner.query(
+      `UPDATE messages SET is_translated = true, translated_body = 'Where is my order?', detected_language = 'es'
+       WHERE org_id = $1 AND conversation_id = $2`,
+      [t.orgId, th.id],
+    );
+    // A signed-up workspace owns its plan until one is assigned, so the plan gate is open; the workspace switch decides.
+    const setSwitch = (on: boolean) =>
+      p.h.owner.query(
+        `INSERT INTO workspace_settings (org_id, inbox_translate) VALUES ($1, $2)
+         ON CONFLICT (org_id) DO UPDATE SET inbox_translate = EXCLUDED.inbox_translate`,
+        [t.orgId, on],
+      );
+    const first = async () =>
+      (await asAdmin(t, () => facade.listMessages(th.uuid, { limit: 10 }))).data[0]!;
+
+    await setSwitch(true);
+    expect(await first()).toMatchObject({
+      isTranslated: true,
+      translatedBody: 'Where is my order?',
+      detectedLanguage: 'es',
+    });
+    await setSwitch(false);
+    expect(await first()).toMatchObject({
+      isTranslated: false,
+      translatedBody: null,
+      detectedLanguage: 'es',
+    });
+    await setSwitch(true);
+    expect((await first()).translatedBody).toBe('Where is my order?');
+  }, 60_000);
+});

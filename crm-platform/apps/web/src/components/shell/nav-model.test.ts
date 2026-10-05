@@ -11,7 +11,6 @@ import {
   activeItemId,
   activeNavId,
   helpItems,
-  isFullWidthScreen,
   matchesHref,
   menuItems,
   railSections,
@@ -100,6 +99,7 @@ describe('the real menu', () => {
       'campaigns',
       'automation',
       'store',
+      'apps',
       'help',
       'settings',
     ]);
@@ -129,26 +129,16 @@ describe('the real menu', () => {
   });
 });
 
-describe('full-width screens', () => {
-  const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
-  const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
-
-  it('slims the menu on the inbox and team chat, and nowhere else', () => {
-    expect(isFullWidthScreen(resolved, tiles, '/inbox')).toBe(true);
-    expect(isFullWidthScreen(resolved, tiles, '/team-chat')).toBe(true);
-    expect(isFullWidthScreen(resolved, tiles, '/contacts')).toBe(false);
-    expect(isFullWidthScreen(resolved, tiles, '/deals')).toBe(false);
-    expect(isFullWidthScreen(resolved, tiles, '/settings')).toBe(false);
-  });
-});
-
 describe('the menu after the Settings move', () => {
   const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
   const menuIds = new Set(resolved.map((i) => i.id));
   const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
 
-  it('has only the Settings entry in the settings group', () => {
-    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual(['settings']);
+  it('pins only Help and Settings in the settings group, Help directly above Settings', () => {
+    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual([
+      'help-center',
+      'settings',
+    ]);
   });
 
   it('no longer lists the configuration screens', () => {

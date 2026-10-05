@@ -51,4 +51,4 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Shims, owners and blocked consumers
 
 - `PlanCampaignGate`: real cap `total_campaigns`, checked on the campaigns that exist now (the delete-proof ledger is not built); no `campaign` flag in the catalogue.
-- `WalletCampaignBilling`: real. `NoFlowStarter`: flow campaigns fail per recipient (blocked on the flow runtime). `PlatformCampaignSettings`: real, the platform `campaigns` settings group (`/admin/settings/campaigns`).
+- `WalletCampaignBilling`: real. `NoFlowStarter`: a seam the flow runtime's worker module binds at start (`CampaignFlowStarterImpl`), so flow campaigns run. `PlatformCampaignSettings`: real, the platform `campaigns` settings group (`/admin/settings/campaigns`).

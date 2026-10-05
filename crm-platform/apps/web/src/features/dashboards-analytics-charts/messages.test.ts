@@ -57,4 +57,65 @@ describe('dashboard messages', () => {
     for (const g of ['morning', 'afternoon', 'evening'])
       expect(has(`${base}.dashboard.greeting.${g}`)).toBe(true);
   });
+
+  it('dashboard-cards.tsx asks only for keys that exist (its namespaces are built from BASE)', () => {
+    const src = readFileSync(join(dir, 'dashboard-cards.tsx'), 'utf8');
+    const base = 'dashboards-analytics-charts.dashboard';
+    const missing: string[] = [];
+    for (const block of src.split(/\n(?=export function |function )/)) {
+      const vars = [...block.matchAll(/const (\w+) = useTranslations\(`\$\{BASE\}\.(\w+)`\)/g)].map(
+        (m) => [m[1]!, m[2]!] as const,
+      );
+      for (const [v, ns] of vars) {
+        for (const m of block.matchAll(new RegExp(`\\b${v}\\('([^']+)'`, 'g'))) {
+          if (!has(`${base}.${ns}.${m[1]}`)) missing.push(`${ns}.${m[1]}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+    for (const st of ['processing', 'scheduled', 'paused', 'failed', 'completed'])
+      expect(has(`${base}.campaigns.status.${st}`)).toBe(true);
+    for (const st of ['approved', 'pending', 'rejected'])
+      expect(has(`${base}.templates.status.${st}`)).toBe(true);
+  });
+});
+
+describe('dashboard extras messages (WD-DASH-008, 017, 020)', () => {
+  const b = 'dashboards-analytics-charts.dashboard';
+  it('every key the Instagram, Copilot, flows, quick-action and integration cards ask for exists', () => {
+    const keys = [
+      ...['title', 'accounts', 'connected', 'openInbox'].map((k) => `instagram.${k}`),
+      ...['needReply', 'openChats', 'dmsIn', 'dmsOut', 'followers', 'replyRate'].map(
+        (k) => `instagram.tile.${k}`,
+      ),
+      ...['title', 'tag', 'headline', 'body', 'try', 'generate', 'examples'].map(
+        (k) => `copilot.${k}`,
+      ),
+      ...['flows', 'active', 'subscribers'].map((k) => `copilot.stat.${k}`),
+      ...[
+        'title',
+        'summary',
+        'open',
+        'empty',
+        'build',
+        'meta',
+        'statusActive',
+        'statusPaused',
+        'subs',
+      ].map((k) => `flows.${k}`),
+      'quickActions.title',
+      ...['broadcast', 'flow', 'template', 'autoReply'].flatMap((k) => [
+        `quickActions.${k}.label`,
+        `quickActions.${k}.hint`,
+      ]),
+      ...['title', 'events', 'notConnected', 'connect', 'connectedLabel'].map(
+        (k) => `integrations.${k}`,
+      ),
+      ...['woocommerce', 'shopify', 'google_sheets', 'meta_catalog'].flatMap((k) => [
+        `integrations.name.${k}`,
+        `integrations.connected.${k}`,
+      ]),
+    ];
+    expect(keys.filter((k) => !has(`${b}.${k}`))).toEqual([]);
+  });
 });

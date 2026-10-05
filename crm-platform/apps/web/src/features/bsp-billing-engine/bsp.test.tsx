@@ -110,6 +110,7 @@ const dash = (
   from: '2026-10-01T00:00:00.000Z',
   to: '2026-10-02T09:00:00.000Z',
   currency: 'USD',
+  currencies: ['USD'],
   totals: {
     billedMessages: 10,
     freeMessages: 1,

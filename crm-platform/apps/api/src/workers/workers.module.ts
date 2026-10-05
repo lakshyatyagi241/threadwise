@@ -22,13 +22,16 @@ import {
   TasksWorkerModule,
 } from '../modules/crm';
 import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
+import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
 import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
+import { LeadsWorkerModule } from '../modules/leads';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
+import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -74,6 +77,9 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ScheduledQueueWarmerWorkerModule,
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
+    LeadsWorkerModule,
+    MarketplaceWorkerModule,
+    PlatformSupportDeskWorkerModule,
   ],
   providers: [
     OutboxDrainService,

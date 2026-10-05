@@ -8,6 +8,7 @@
       "campaigns": "Campaigns",
       "automation": "Automation",
       "store": "Store",
+      "apps": "Marketplace",
       "help": "Support & Help",
       "settings": "Settings"
     },
@@ -27,8 +28,6 @@
     "comingSoon": "Coming soon",
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",
-    "expandMenu": "Show labels",
-    "collapseMenu": "Hide labels",
     "userMenu": "Account menu",
     "account": "Account",
     "balance": "Balance",
@@ -38,6 +37,7 @@
     },
     "notifications": "Notifications",
     "settings": "Settings",
+    "pinned": "Help and settings",
     "nav": {
       "analytics": "Analytics",
       "notifications": "Notifications",

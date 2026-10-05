@@ -23,6 +23,8 @@ const SELF_SERVICE: Readonly<Record<string, string>> = {
     'mints a one-time realtime ticket for the caller’s own session; every room is authorised again at join',
   'modules/team-chat/team-chat.controller.ts':
     'checked per action inside the service from the member’s capabilities (tchat.* keys, channel membership)',
+  'modules/admin-console-shell/workspace-settings.controller.ts':
+    'WaDesk gates the General, notification and Data & export tabs to the workspace owner, not to a permission key: the service checks ownership on every write, the CSV download and the delete (a non-owner gets 403)',
 };
 const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   'modules/admin/users/users.controller.ts#me',
@@ -34,6 +36,8 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   'modules/workspaces-teams-tenancy/teams.controller.ts#list',
   // the plan picker: viewing the plans is open to every member (WaDesk: Authenticate only); changing the plan needs plan.subscription.manage
   'modules/plans-subscriptions-trials/billing.controller.ts#plans',
+  // the in-app help articles: any signed-in member may mark one helpful (the service refuses an anonymous caller; one changeable vote per user)
+  'modules/marketing-site-cms/workspace-cms.controller.ts#vote',
 ];
 
 const root = join(__dirname, '../../../src');

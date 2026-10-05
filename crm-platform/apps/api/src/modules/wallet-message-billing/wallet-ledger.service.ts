@@ -134,6 +134,7 @@ export class WalletLedgerService {
     const row = await this.repo.insertTransaction(tx, {
       orgId: e.orgId,
       userId: e.userId ?? null,
+      unit: wallet.unit,
       type: e.type,
       direction: e.direction,
       amountMinor: applied,
@@ -177,6 +178,7 @@ export class WalletLedgerService {
           amountMinor: applied,
           balanceAfterMinor: after,
           source: e.source ?? null,
+          currency: wallet.unit,
         },
       });
     }

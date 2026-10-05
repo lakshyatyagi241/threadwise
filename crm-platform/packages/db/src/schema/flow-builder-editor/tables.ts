@@ -67,6 +67,9 @@ export const flows = pgTable(
     index('idx_flows_trigger_kind_trigger_value').on(t.orgId, t.triggerKind, t.triggerValue),
     index('idx_flows_user_id_is_active').on(t.orgId, t.userId, t.isActive),
     index('idx_flows_provider').on(t.orgId, t.provider),
+    index('idx_flows_org_state').on(t.orgId, t.isPublished, t.isActive),
+    // idx_flows_org_updated (updated_at DESC, id DESC) and idx_flows_name_trgm (gin) live in 20261020100100_flb_flows_shape.sql,
+    // which also adds the flow_type / trigger_kind / name-length CHECKs.
     index('idx_flows_live_trigger')
       .on(t.orgId, t.triggerKind, t.triggerValue)
       .where(sql`${t.isPublished} AND ${t.isActive}`),

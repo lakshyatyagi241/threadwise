@@ -5,8 +5,9 @@
  * "Platform" and "CRM". A domain picks one for each screen.
  *
  * Configuration is not a menu group: a screen that sets something up (channels, tax rates, API keys, team...) is a tile in
- * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds only the shell's
- * own Settings entry, pinned to the bottom of the menu; `help` (Support, Guidebook) is drawn in the user menu.
+ * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds the entries pinned
+ * to the bottom of the menu: the shell's own Settings entry, with Help (the Help center) directly above it. `help` (Support,
+ * Guidebook) is drawn in the user menu.
  */
 export const NAV_GROUPS = [
   'overview',
@@ -16,6 +17,7 @@ export const NAV_GROUPS = [
   'campaigns',
   'automation',
   'store',
+  'apps',
   'help',
   'settings',
 ] as const;
@@ -39,11 +41,6 @@ export interface NavItem {
   icon?: string;
   /** Small pill next to the label ("New") for screens worth pointing out. */
   badge?: 'new';
-  /**
-   * A screen that needs the whole width (a multi-pane inbox, a chat): while it is open the menu shows as the slim icon rail,
-   * whatever the person pinned, and a click on the expand button opens it for that visit only.
-   */
-  fullWidth?: boolean;
 }
 
 /** `null` = not known yet (the app-init payload does not exist): show the item and do not lock it. */

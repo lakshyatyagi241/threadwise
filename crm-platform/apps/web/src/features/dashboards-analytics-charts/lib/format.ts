@@ -1,3 +1,4 @@
+import { ApiError } from '@/lib/api/errors';
 /** Display helpers for the dashboard and analytics. Pure. */
 
 /** 1,234 -> "1.2k", 1,500,000 -> "1.5M"; below a thousand the number as written (WD-DASH-004 rule 4). */
@@ -67,3 +68,77 @@ export function shares(
     pct: total > 0 ? Math.round((r.count / total) * 1000) / 10 : 0,
   }));
 }
+
+/** An amount in a currency, grouped for the locale; a currency code the runtime does not know falls back to the code and the number. */
+export function formatMoney(
+  amount: string | number,
+  currency: string,
+  locale: string,
+  digits = 2,
+): string {
+  const n = Number(amount);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(n);
+  } catch {
+    return `${currency} ${n.toFixed(digits)}`;
+  }
+}
+
+/** A delta string from the API ("31.25") as a signed number for the trend pill; anything unparsable is 0. */
+export const deltaOf = (changePct: string): number => {
+  const n = Number(changePct);
+  return Number.isFinite(n) ? n : 0;
+};
+
+/** `<select>` value for a window the URL carried: unknown values read as the default, as the API does. */
+export function pickOption<T extends string>(
+  raw: string | undefined,
+  options: readonly T[],
+  fallback: T,
+): T {
+  return (options as readonly string[]).includes(raw ?? '') ? (raw as T) : fallback;
+}
+
+/** "3 hours", "12 minutes" style span between two instants, for the oldest-unread label and relative times. */
+export function relativeSpan(from: string | Date, now: Date, locale: string): string {
+  const mins = Math.max(0, Math.round((now.getTime() - new Date(from).getTime()) / 60_000));
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'long' });
+  const [value, unit] =
+    mins < 60
+      ? ([mins, 'minute'] as const)
+      : mins < 1440
+        ? ([Math.round(mins / 60), 'hour'] as const)
+        : ([Math.round(mins / 1440), 'day'] as const);
+  return rtf.format(-value, unit);
+}
+
+/** The dashboard export (WD-DASH-021): one row per chart bucket, quoted, with the same columns the chart draws. */
+export function throughputCsv(
+  rows: Array<{ label: string; sent: number; delivered: number; failed: number }>,
+): string {
+  const q = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
+  return [
+    ['Period', 'Sent', 'Delivered', 'Failed'].map(q).join(','),
+    ...rows.map((r) => [r.label, r.sent, r.delivered, r.failed].map(q).join(',')),
+  ].join('\n');
+}
+
+/** Minutes as WaDesk writes them: under an hour "13m", else "2h 5m"; null is "-". */
+export function minutesLabel(min: number | null): string {
+  if (min === null) return '-';
+  const m = Math.round(min);
+  return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`;
+}
+
+/** Followers read as 1.2k from a thousand up (WD-DASH-008). */
+export const followersLabel = (n: number): string =>
+  n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+
+/** WD-DASH-001: a workspace member below manager is sent to the inbox instead of seeing an error (WaDesk redirects, it does not 403). */
+export const isForbidden = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 403;

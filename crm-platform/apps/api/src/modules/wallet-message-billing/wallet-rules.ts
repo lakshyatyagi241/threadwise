@@ -49,6 +49,8 @@ export function priceMessage(
     category: string | null | undefined;
     perCountryEnabled: boolean;
     flatPriceMinor: number;
+    /** Meta's published cost for this country and category in this currency, used only when no grid row carries a cost. */
+    fallbackCostMicros?: number | null;
   },
 ): Priced {
   const c = normalizeWalletCountry(opts.country);
@@ -68,7 +70,8 @@ export function priceMessage(
     const row = rows.find((r) => r.countryCode === cc && r.category === kk);
     if (row) chain.push(row);
   }
-  const cost = chain.find((r) => r.metaCostMicros !== null)?.metaCostMicros ?? null;
+  const cost =
+    chain.find((r) => r.metaCostMicros !== null)?.metaCostMicros ?? opts.fallbackCostMicros ?? null;
   if (!opts.perCountryEnabled || chain.length === 0) {
     return {
       priceMinor: Math.max(0, opts.flatPriceMinor),
@@ -167,6 +170,7 @@ export function priceMessageWithMargin(
     perCountryEnabled: boolean;
     flatPriceMinor: number;
     pricingMode: PricingMode;
+    fallbackCostMicros?: number | null;
   },
 ): Priced {
   const fixed = priceMessage(rows, opts);
@@ -179,6 +183,60 @@ export function priceMessageWithMargin(
     matched: fixed.matched,
     basis: 'margin',
     margin,
+  };
+}
+
+// --- a workspace billed in another currency -------------------------------------------------------------------------------------
+
+/**
+ * `minor` hundredths of the currency with exchange rate `fromRate` (units per USD, the currencies table) as hundredths of the
+ * currency with `toRate`. A price that is not free never converts to free: a typed 0.01 stays at least 0.01.
+ */
+export function convertMinor(minor: number, fromRate: number, toRate: number): number {
+  if (minor <= 0) return 0;
+  if (!(fromRate > 0) || !(toRate > 0) || fromRate === toRate) return minor;
+  return Math.max(1, Math.round((minor / fromRate) * toRate));
+}
+
+/**
+ * The price of a message for a workspace billed in a currency other than the platform's. Meta's cost is that currency's own
+ * published card (`costMicros`), so a margin is applied to a real INR figure, not to dollars run through an exchange rate. A typed
+ * or flat price exists only in the platform currency, so it is converted at the rate on file (`fromRate` platform, `toRate` the
+ * workspace's currency); that is the one place an exchange rate touches a charge.
+ */
+export function priceInCurrency(
+  rows: readonly RateCardRow[],
+  layers: MarginLayers,
+  opts: {
+    country: string | null | undefined;
+    category: string | null | undefined;
+    perCountryEnabled: boolean;
+    flatPriceMinor: number;
+    pricingMode: PricingMode;
+    costMicros: number | null;
+    fromRate: number;
+    toRate: number;
+  },
+): Priced {
+  const typed = priceMessage(rows, opts);
+  if (opts.pricingMode === 'margin' && opts.costMicros !== null) {
+    const margin = resolveMargin(layers, opts.country, opts.category);
+    if (margin) {
+      return {
+        priceMinor: priceFromMargin(opts.costMicros, margin.marginBps),
+        metaCostMicros: opts.costMicros,
+        matched: typed.matched,
+        basis: 'margin',
+        margin,
+      };
+    }
+  }
+  return {
+    priceMinor: convertMinor(typed.priceMinor, opts.fromRate, opts.toRate),
+    metaCostMicros: opts.costMicros,
+    matched: typed.matched,
+    basis: 'fixed',
+    margin: null,
   };
 }
 

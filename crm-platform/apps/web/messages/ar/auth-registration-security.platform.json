@@ -1417,7 +1417,9 @@
             "autoreplies": "الردود التلقائية بالكلمات المفتاحية",
             "total_campaigns": "الحملات المنشأة (لا يحررها الحذف)",
             "api_rate_limit_per_minute": "طلبات API في الدقيقة (0 = الافتراضي للمنصة)",
-            "scheduled_messages": "الرسائل المجدولة المحفوظة"
+            "installed_apps": "تطبيقات السوق والتكاملات المثبّتة",
+            "scheduled_messages": "الرسائل المجدولة المحفوظة",
+            "lead_sources": "مصادر العملاء المحتملين"
           },
           "featureGroups": {
             "messaging": "المراسلة",
@@ -1443,7 +1445,9 @@
             "inbox_kanban": "لوحة كانبان لصندوق الوارد",
             "team_performance": "تقارير أداء الفريق",
             "scheduled_messages": "الرسائل المجدولة",
-            "whatsapp_warmer": "إحماء أرقام واتساب"
+            "whatsapp_warmer": "إحماء أرقام واتساب",
+            "marketplace": "السوق (تطبيقات وتكاملات)",
+            "lead_sources": "مصادر العملاء المحتملين (روابط ويب هوك وموصلات تنشئ جهات اتصال)"
           },
           "problems": {
             "required": "هذا الحقل مطلوب.",

@@ -18,6 +18,8 @@ import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
+import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
+import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -74,6 +76,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...WAP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
   ...CAT_OPERATOR_NAV,
+  // Marketplace catalogue (MKT): listings, versions and review, categories, requests, usage
+  ...MARKET_OPERATOR_NAV,
   {
     id: 'i18n-languages',
     href: '/admin/i18n/languages',
@@ -112,12 +116,7 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'addons-extension-registry.nav.group',
   },
   // Platform support desk (SUPP): its own message file, so the keys live outside this domain's namespace.
-  {
-    id: 'support-inbox',
-    href: '/admin/support',
-    labelKey: 'platform-support-desk.nav.inbox',
-    groupKey: 'platform-support-desk.nav.group',
-  },
+  ...SUPP_OPERATOR_NAV,
   {
     id: 'ai-keys',
     href: '/admin/api-keys',
@@ -149,10 +148,28 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     groupKey: 'marketing-site-cms.nav.group',
   },
   {
+    id: 'cms-announcements',
+    href: '/admin/announcements',
+    labelKey: 'marketing-site-cms.nav.announcements',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'cms-guidebook',
+    href: '/admin/guidebook',
+    labelKey: 'marketing-site-cms.nav.guidebook',
+    groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
     id: 'cms-contact',
     href: '/admin/contact-messages',
     labelKey: 'marketing-site-cms.nav.contact',
     groupKey: 'marketing-site-cms.nav.group',
+  },
+  {
+    id: 'platform-analytics',
+    href: '/admin/analytics',
+    labelKey: 'dashboards-analytics-charts.admin.nav.analytics',
+    groupKey: 'dashboards-analytics-charts.health.group',
   },
   {
     id: 'system-health',

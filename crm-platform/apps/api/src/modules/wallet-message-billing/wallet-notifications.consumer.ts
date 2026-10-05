@@ -49,7 +49,8 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
       );
       if (p.type !== 'admin_adjust') return;
     }
-    const currency = await this.settings.currency();
+    // The wallet's own currency travels with the event; an older event (before per-currency wallets) was in the platform's.
+    const currency = typeof p.currency === 'string' ? p.currency : await this.settings.currency();
     const balance = formatMinor(Number(p.balanceMinor ?? p.balanceAfterMinor ?? 0));
     const copy =
       event.eventType === 'wallet.low_balance'

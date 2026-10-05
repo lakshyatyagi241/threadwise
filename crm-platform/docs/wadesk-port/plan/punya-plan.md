@@ -33,7 +33,7 @@ Inventory written 2026-10-02: `docs/wadesk-port/inventory/campaigns.md` (WD-CAMP
 | C3   | Node callbacks, provider receipts, replies, opt-outs (DONE)                         | 021, 022                    |
 | C4   | Web: list, builder (create and edit), detail (DONE)                                 | 001, 002, 003, 010, 016-020 |
 | C5   | Webhook and bell mappers for `campaign.*`; segments and engagement tabs (DONE)      | 019, 024                    |
-| C6   | Flow campaigns, build with AI, Meta click sync (BLOCKED: other domains)             | 025, 026, 027               |
+| C6   | Flow campaigns (DONE by the flow runtime); build with AI, Meta click sync (BLOCKED) | 025, 026, 027               |
 
 ## Channels and ECOM
 
@@ -52,28 +52,28 @@ Order: telegram, facebook, instagram, then shopify-woocommerce.
 
 Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-telegram.md` (WD-TG-001 to 019). Build order, one commit and push per step:
 
-| Step | What                                                        | Features           |
-| ---- | ----------------------------------------------------------- | ------------------ |
-| T1   | Bots: connect by token, manage, plan gates, hub API (DONE)  | 002, 007, 019, 001 |
-| T2   | Inbound webhook, inbox ingest (shim), taps, payments (DONE) | 003, 004, 005, 006 |
-| T3   | Sender: reply through the bot, template keyboard (DONE)     | 008, 009           |
-| T4   | Audience and broadcasts API with a BullMQ sender (DONE)     | 010, 011-014       |
-| T5   | Web: hub, broadcast list and compose (DONE)                 | 001, 011, 012      |
-| T6   | MTProto account and @BotFather (BLOCKED: Node bridge)       | 015-017            |
-| T7   | Flow hand-off and the two Node callbacks (BLOCKED: shim)    | 018                |
+| Step | What                                                                                    | Features           |
+| ---- | --------------------------------------------------------------------------------------- | ------------------ |
+| T1   | Bots: connect by token, manage, plan gates, hub API (DONE)                              | 002, 007, 019, 001 |
+| T2   | Inbound webhook, inbox ingest (shim), taps, payments (DONE)                             | 003, 004, 005, 006 |
+| T3   | Sender: reply through the bot, template keyboard (DONE)                                 | 008, 009           |
+| T4   | Audience and broadcasts API with a BullMQ sender (DONE)                                 | 010, 011-014       |
+| T5   | Web: hub, broadcast list and compose (DONE)                                             | 001, 011, 012      |
+| T6   | MTProto account and @BotFather (BLOCKED: Node bridge)                                   | 015-017            |
+| T7   | Flow hand-off (DONE by the flow runtime); the two Node callbacks (BLOCKED: Node bridge) | 018                |
 
 ## FB (channel-facebook)
 
 Inventory written 2026-10-02: `docs/wadesk-port/inventory/channel-facebook.md` (WD-FB-001 to 023). Parity: `docs/wadesk-port/parity/channel-facebook.md`. Build order, one commit and push per step:
 
-| Step | What                                                                                                              | Features           |
-| ---- | ----------------------------------------------------------------------------------------------------------------- | ------------------ |
-| F1   | Pages: connect (login, popup, token), manage, webhook in, inbox ingest, backfill, reply, health sweep (DONE)      | 001-006, 007-011   |
-| F2   | Messenger broadcasts: audience, compose, BullMQ sender, start, pause, retry, delete (DONE)                        | 012, 013, 014      |
-| F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers (DONE)                                      | 015                |
-| F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights (DONE; post files upload through the marketing-media route)       | 016, 017, 018, 019 |
-| F5   | Web: hub, broadcasts, setup, posts, composer, my posts, insights (DONE; not yet compared with the running WaDesk) | 001, 012-019       |
-| F6   | AI composer tools, flow hand-off and node callbacks, social calendar (BLOCKED: AI provider, flow runtime, owner)  | 020, 021, 023      |
+| Step | What                                                                                                                                 | Features           |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| F1   | Pages: connect (login, popup, token), manage, webhook in, inbox ingest, backfill, reply, health sweep (DONE)                         | 001-006, 007-011   |
+| F2   | Messenger broadcasts: audience, compose, BullMQ sender, start, pause, retry, delete (DONE)                                           | 012, 013, 014      |
+| F3   | Messenger setup: Get Started, greeting, persistent menu, ice breakers (DONE)                                                         | 015                |
+| F4   | Posts: composer, schedule, list, publish now, delete, my posts, insights (DONE; post files upload through the marketing-media route) | 016, 017, 018, 019 |
+| F5   | Web: hub, broadcasts, setup, posts, composer, my posts, insights (DONE; not yet compared with the running WaDesk)                    | 001, 012-019       |
+| F6   | AI composer tools, flow hand-off and node callbacks, social calendar (BLOCKED: AI provider, flow runtime, owner)                     | 020, 021, 023      |
 
 ## IG (channel-instagram)
 

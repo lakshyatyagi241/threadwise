@@ -56,6 +56,8 @@ const stored: PlanAdminItem = {
     flows: 0,
     autoreplies: 0,
     api_rate_limit_per_minute: 0,
+    installed_apps: 0,
+    lead_sources: 0,
   },
   features: {
     automation: true,
@@ -76,6 +78,8 @@ const stored: PlanAdminItem = {
     team_performance: true,
     scheduled_messages: true,
     whatsapp_warmer: true,
+    marketplace: true,
+    lead_sources: true,
   },
   inUse: 2,
   isRegistrationDefault: false,

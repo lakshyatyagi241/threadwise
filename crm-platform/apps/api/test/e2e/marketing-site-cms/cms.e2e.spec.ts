@@ -159,7 +159,7 @@ describe('content store: draft, publish, discard, reset (WD-CMS-008, 019, 024..0
 
   it('refuses an invalid colour, an unsafe link, an unknown key and a layout key, and saves nothing', async () => {
     const bad = await saveDraft([
-      { key: 'theme.brand.deep', value: '#12' },
+      { key: 'theme.wa.deep', value: '#12' },
       { key: 'nav.link2_url', value: 'javascript:alert(1)' },
       { key: 'home.hero.nope', value: 'x' },
       { key: 'bad key!', value: 'x' },
@@ -178,7 +178,7 @@ describe('content store: draft, publish, discard, reset (WD-CMS-008, 019, 024..0
 
   it('accepts a valid colour and a valid link and sanitises rich text', async () => {
     const res = await saveDraft([
-      { key: 'theme.brand.deep', value: '#0A1B2C' },
+      { key: 'theme.wa.deep', value: '#0A1B2C' },
       { key: 'nav.link2_url', value: 'https://example.com/features' },
       { key: 'home.hero.headline', value: 'Hi <script>alert(1)</script><em>there</em>' },
     ]);
@@ -213,7 +213,7 @@ describe('content store: draft, publish, discard, reset (WD-CMS-008, 019, 024..0
     await saveDraft([
       { key: 'home.hero.eyebrow', value: 'H' },
       { key: 'features.hero.eyebrow', value: 'F' },
-      { key: 'theme.brand.deep', value: '#111111' },
+      { key: 'theme.wa.deep', value: '#111111' },
       { key: 'nav.cta_label', value: 'Join' },
     ]);
     expect((await ops('post', '/content/publish').send({ scope: 'home' })).body).toEqual({
@@ -231,7 +231,7 @@ describe('content store: draft, publish, discard, reset (WD-CMS-008, 019, 024..0
       'features.hero.eyebrow',
       'home.hero.eyebrow',
       'nav.cta_label',
-      'theme.brand.deep',
+      'theme.wa.deep',
     ]);
   });
 
@@ -275,7 +275,7 @@ describe('content store: draft, publish, discard, reset (WD-CMS-008, 019, 024..0
 
   it('reset by scope covers only that scope; both a key and a scope, or neither, is a 422', async () => {
     await saveDraft([
-      { key: 'theme.brand.deep', value: '#111111' },
+      { key: 'theme.wa.deep', value: '#111111' },
       { key: 'theme.ink.900', value: '#222222' },
       { key: 'home.hero.eyebrow', value: 'x' },
     ]);
@@ -332,19 +332,22 @@ describe('sections: hide and reorder (WD-CMS-009, 022, 023)', () => {
   });
 
   it('hiding a section is a draft and applies publicly after publish', async () => {
-    const res = await ops('put', '/content/layout').send({ page: 'home', hidden: ['highlights'] });
+    const res = await ops('put', '/content/layout').send({ page: 'home', hidden: ['logo-strip'] });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body).toEqual({ hidden: ['highlights'], order: [] });
+    expect(res.body).toEqual({ hidden: ['logo-strip'], order: [] });
     expect((await publicContent()).hidden).toEqual({});
     await ops('post', '/content/publish').send({});
-    expect((await publicContent()).hidden).toEqual({ home: ['highlights'] });
+    expect((await publicContent()).hidden).toEqual({ home: ['logo-strip'] });
   });
 
   it('the pinned hero cannot be hidden and a slug from another page is unknown', async () => {
     const hero = await ops('put', '/content/layout').send({ page: 'home', hidden: ['hero'] });
     expect(hero.status).toBe(422);
     expect(JSON.stringify(hero.body)).toContain('This section cannot be hidden');
-    const other = await ops('put', '/content/layout').send({ page: 'home', hidden: ['pillars'] });
+    const other = await ops('put', '/content/layout').send({
+      page: 'home',
+      hidden: ['feature-bento'],
+    });
     expect(other.status).toBe(422);
     expect(JSON.stringify(other.body)).toContain('Unknown section');
     expect((await operatorContent()).entries).toHaveLength(0);
@@ -353,7 +356,7 @@ describe('sections: hide and reorder (WD-CMS-009, 022, 023)', () => {
   it('a reorder keeps only removable slugs of the page, once each', async () => {
     const res = await ops('put', '/content/layout').send({
       page: 'home',
-      order: ['hero', 'faq', 'pillars', 'pricing-strip', 'faq'],
+      order: ['hero', 'faq', 'feature-bento', 'pricing-strip', 'faq'],
     });
     expect(res.body.order).toEqual(['faq', 'pricing-strip']);
     await ops('post', '/content/publish').send({});
@@ -1061,8 +1064,9 @@ describe('contact form and inbox (WD-CMS-005, 006, 042, 043)', () => {
   });
 
   it('the notification goes to the configured support email when there is one', async () => {
+    // SET stores the site info group as one document under `set.site`; the contact notification reads it from there.
     await h.owner.query(
-      `INSERT INTO platform_settings (key, value, is_secret) VALUES ('site.email_support', '"help@brand.test"', false)
+      `INSERT INTO platform_settings (key, value, is_secret) VALUES ('set.site', '{"emailSupport":"help@brand.test","_rv":1}', false)
        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
     );
     const settings = h.app.get(PlatformSettingsService, { strict: false });
@@ -1072,7 +1076,7 @@ describe('contact form and inbox (WD-CMS-005, 006, 042, 043)', () => {
       expect(h.mail[0]).toMatchObject({ to: 'help@brand.test', replyTo: 'a@b.co' });
       expect(h.mail[0]!.subject).toBe('[Test CRM] Contact: enquiry from A');
     } finally {
-      await h.owner.query(`DELETE FROM platform_settings WHERE key = 'site.email_support'`);
+      await h.owner.query(`DELETE FROM platform_settings WHERE key = 'set.site'`);
       settings.invalidate();
     }
   });

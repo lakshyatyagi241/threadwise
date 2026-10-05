@@ -492,6 +492,13 @@ describe('decoding a customer message', () => {
       kind: 'location',
       id: '',
       text: 'Cafe https://www.google.com/maps?q=1,2',
+      data: {
+        latitude: 1,
+        longitude: 2,
+        name: 'Cafe',
+        address: '',
+        link: 'https://www.google.com/maps?q=1,2',
+      },
     });
     expect(decodeInbound({ kind: 'media', body: 'confirm', mediaUrl: 'https://f' })).toMatchObject({
       kind: 'media',

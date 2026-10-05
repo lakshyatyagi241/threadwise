@@ -124,6 +124,10 @@ beforeAll(async () => {
   supportOperatorUuid = (
     await h.owner.query(`SELECT uuid FROM platform_operators WHERE email = 'support@platform.test'`)
   ).rows[0].uuid;
+  // Only roster agents can be assigned tickets (WD-SUPP-017/018): put the support operator on it.
+  await h.owner.query(
+    `INSERT INTO support_agent_roster (operator_id) SELECT id FROM platform_operators WHERE email = 'support@platform.test'`,
+  );
 
   await h.owner.query(
     `INSERT INTO platform_operators (email, full_name, password_hash, role)

@@ -554,13 +554,14 @@
       },
       "calendar": {
         "title": "Google Calendar (optional)",
-        "hint": "Bookings work without this. Connect only to sync free/busy, add Meet links and log to Sheets.",
-        "unavailable": "Calendar sync is not available yet. These settings are kept with the booking type for when it is.",
+        "hint": "Bookings work without this. Connect Google Calendar in Appointments, Settings to sync free/busy times and add Meet links.",
+        "unavailable": "Google Calendar is not set up for this platform yet. These settings are kept with the booking type for when it is.",
         "calendarId": "Calendar",
         "calendarPlaceholder": "primary",
         "spreadsheetId": "Sheet append (optional)",
         "spreadsheetPlaceholder": "Spreadsheet ID",
-        "createMeet": "Create a Google Meet link for each booking"
+        "createMeet": "Create a Google Meet link for each booking",
+        "calendarDefault": "The workspace calendar"
       },
       "messages": {
         "title": "Lifecycle messages",
@@ -920,17 +921,60 @@
         "status": {
           "unavailable": "Not available",
           "disconnected": "Not connected",
-          "connected": "Connected"
+          "connected": "Connected",
+          "needs_reconnect": "Needs reconnecting"
         },
-        "unavailableTitle": "Calendar sync is not available in this workspace yet",
-        "unavailableBody": "There is nothing to connect for now. Your bookings are not affected.",
-        "connectedTo": "Calendar: {name}",
+        "loading": "Checking the connection",
+        "unavailableTitle": "Google Calendar is not set up for this platform yet",
+        "unavailableBody": "Your platform administrator has to add the Google OAuth client (Admin, Settings, Google Calendar) before a workspace can connect. Your bookings are not affected.",
+        "disconnectedBody": "Not connected. Connecting opens Google, where you choose the account and agree to share calendar access.",
+        "disconnectedReadOnly": "Not connected. Ask a workspace admin to connect it.",
+        "reconnectTitle": "Google stopped accepting the connection",
+        "reconnectBody": "The access was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "reconnectBodyAccount": "The access for {account} was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "account": "Google account",
+        "calendar": "Calendar",
+        "primaryCalendar": "Your main calendar",
         "connectedAgo": "Connected {when}",
+        "errors": {
+          "notConfigured": "Google Calendar is not set up for this platform. Ask your platform administrator to add the Google OAuth client.",
+          "notConnected": "No Google Calendar is connected. Reload the page and connect again.",
+          "providerFailed": "Google did not answer. Try again in a moment."
+        },
+        "loadingCalendars": "Loading your calendars",
+        "chooseLabel": "Write bookings to",
+        "chooseHint": "Only calendars this account can edit are listed. Events already written stay where they are.",
+        "choosePlaceholder": "Choose a calendar",
+        "chooseOptionPrimary": "{name} (main calendar)",
+        "chooseSave": "Use this calendar",
+        "chooseCancel": "Cancel",
+        "saving": "Saving",
+        "connect": "Connect Google Calendar",
+        "reconnect": "Reconnect Google",
+        "redirecting": "Opening Google",
+        "choose": "Choose calendar",
+        "disconnect": "Disconnect",
+        "disconnected": "Google Calendar disconnected.",
+        "calendarSaved": "Calendar saved.",
+        "confirmOff": {
+          "title": "Disconnect Google Calendar?",
+          "message": "New bookings stop going to your calendar and its busy times are no longer read. Events already in your calendar stay there, and Google is told to withdraw this access.",
+          "confirm": "Disconnect",
+          "cancel": "Keep it"
+        },
+        "outcome": {
+          "connected": "Google Calendar connected. Confirmed bookings now go to your calendar.",
+          "denied": "Access was not granted on Google, so nothing was connected.",
+          "failed": "Connecting did not finish. Try again; if it keeps failing, ask your platform administrator to check the Google setup.",
+          "expired": "That attempt took too long. Press Connect to start again.",
+          "not_configured": "Google Calendar is not set up for this platform. Ask your platform administrator to add the Google OAuth client.",
+          "missing_scope": "Google did not give every calendar permission that is needed. Connect again and keep all the boxes ticked."
+        },
         "whatTitle": "What this does",
         "what": {
           "freeBusy": "Reads free and busy times from your calendar.",
           "nextSlots": "Offers the next free slots to customers.",
-          "writeBack": "Writes confirmed bookings back to your calendar as events."
+          "writeBack": "Writes confirmed bookings to your calendar as events, with a Meet link when the service asks for one."
         },
         "hint": "Bookings work without it. Open times come from your business hours and booking rules below."
       },

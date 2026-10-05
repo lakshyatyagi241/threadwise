@@ -4,7 +4,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import type { ResolvedWabaConnection } from '../whatsapp-cloud-api-waba/waba-connect.service';
+import type { ResolvedWabaConnection } from '../whatsapp-cloud-api-waba/waba-connections.port';
 import {
   WABA_CONNECTIONS,
   type WabaConnectionsPort,

@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   type AppointmentActionInput,
@@ -7,7 +7,6 @@ import {
   type AppointmentManageLink,
   type AppointmentPageResponse,
   type AppointmentResponse,
-  type CalendarStatusResponse,
   type CancelAppointmentInput,
   type CreateAppointmentInput,
   type ListAppointmentsQuery,
@@ -20,10 +19,6 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
-import {
-  APPOINTMENT_CALENDAR,
-  type CalendarSyncPort,
-} from '../../infra/providers/appointments-booking';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import {
   checkAnswers,
@@ -84,7 +79,6 @@ export class AppointmentsService {
     private readonly slots: SlotsService,
     private readonly contactLink: ContactLinkService,
     private readonly rbac: RbacService,
-    @Inject(APPOINTMENT_CALENDAR) private readonly calendar: CalendarSyncPort,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -177,12 +171,6 @@ export class AppointmentsService {
         stampedAt: row.updatedAt,
       }),
     };
-  }
-
-  async calendarStatus(): Promise<CalendarStatusResponse> {
-    const ctx = RequestContextStore.require();
-    const s = await this.calendar.status(ctx.orgId);
-    return { provider: this.calendar.provider, connected: s.connected, account: s.account };
   }
 
   // --- writes ----------------------------------------------------------------------------------------------------------

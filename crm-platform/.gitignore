@@ -34,9 +34,17 @@ tools/migration/out/
 next-env.d.ts
 apps/web/src/features/_registry/nav.generated.ts
 apps/web/src/features/_registry/settings.generated.ts
+apps/web/src/features/_registry/help.generated.ts
+docs/help-pending.md
 
 # TypeScript incremental build caches
 *.tsbuildinfo
 
 # Redis snapshot written when redis-server runs from the repo root
 dump.rdb
+
+# Logs of the local dev stack started by tools/dev-refresh.sh
+.dev-run/
+
+# Database dumps written by the backup service on the host (deploy/hostinger/docker-compose.yml)
+deploy/hostinger/backups/
