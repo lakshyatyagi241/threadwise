@@ -52,6 +52,8 @@ export interface PlanDraft {
   /** Blank = unlimited (stored as 0). */
   limits: Record<PlanLimitKey, string>;
   features: Record<PlanFeatureKey, boolean>;
+  /** Ids (uuid) of the Marketplace add-on packs the plan makes visible to its workspaces. */
+  visibleAddons: string[];
 }
 
 export type PlanScalarField =
@@ -67,7 +69,7 @@ export type PlanScalarField =
   | 'dataRetentionDays'
   | 'isFree'
   | 'isDefault';
-export type PlanField = PlanScalarField | `limits.${PlanLimitKey}`;
+export type PlanField = PlanScalarField | 'visibleAddons' | `limits.${PlanLimitKey}`;
 
 export type PlanProblemCode =
   'required' | 'tooLong' | 'money' | 'range' | 'whole' | 'server' | PlanRuleCode;
@@ -77,6 +79,8 @@ export interface PlanProblem {
   min?: number;
   /** The API's own sentence, for a server-side failure the form has no wording for. */
   message?: string;
+  /** For a refused add-on selection: the ids the API did not know. */
+  ids?: string[];
 }
 export type PlanProblems = Partial<Record<PlanField, PlanProblem>>;
 
@@ -102,6 +106,7 @@ export function newPlanDraft(currency = 'USD'): PlanDraft {
     dataRetentionDays: '0',
     limits: Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, ''])) as PlanDraft['limits'],
     features: Object.fromEntries(PLAN_FEATURE_KEYS.map((k) => [k, true])) as PlanDraft['features'],
+    visibleAddons: [],
   };
 }
 
@@ -129,6 +134,7 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
       PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
     ) as PlanDraft['limits'],
     features: { ...p.features },
+    visibleAddons: [...p.visibleAddons],
   };
 }
 
@@ -164,6 +170,13 @@ const wholeNumber = (raw: string): number | null =>
  */
 export function buildPlanRequest(
   draft: PlanDraft,
+  /**
+   * `includeAddons` (default true): send `visibleAddons`. The API replaces the stored list with what it
+   * receives and keeps it when the field is absent, so the editor passes false only when the add-on
+   * options never loaded AND the admin did not touch the Add-ons tab: it never saw the real list, so
+   * the stored selection must not be overwritten (a stale or unloaded view must not wipe it).
+   */
+  { includeAddons = true }: { includeAddons?: boolean } = {},
 ):
   { body: CreatePlanRequest; problems?: undefined } | { body?: undefined; problems: PlanProblems } {
   const problems: PlanProblems = {};
@@ -261,6 +274,7 @@ export function buildPlanRequest(
       dataRetentionDays: retention!,
       limits,
       features: { ...draft.features },
+      ...(includeAddons ? { visibleAddons: [...new Set(draft.visibleAddons)] } : {}),
     },
   };
 }
@@ -282,12 +296,110 @@ export function planFieldForPath(path: string): PlanField | null {
     'isDefault',
   ];
   if ((scalar as string[]).includes(path)) return path as PlanScalarField;
+  if (path === 'visibleAddons') return 'visibleAddons';
   const m = /^limits\.(\w+)$/.exec(path);
   if (m && (PLAN_LIMIT_KEYS as string[]).includes(m[1]!)) return path as PlanField;
   return null;
 }
 
+const UNKNOWN_ADDON = /^unknown_addon:(.+)$/;
+
+/** The add-on id an API message `unknown_addon:<id>` names, or null for any other message. */
+export function unknownAddonId(message: string): string | null {
+  return UNKNOWN_ADDON.exec(message)?.[1]?.trim() || null;
+}
+
+/**
+ * The API's 422 `errors[]` as form problems, first message per field. Every `unknown_addon:<id>` error
+ * is folded into ONE `visibleAddons` problem carrying all the ids (the form words it, with the count).
+ */
+export function problemsFromServer(
+  errors: ReadonlyArray<{ path: string; message: string }>,
+): PlanProblems {
+  const out: PlanProblems = {};
+  const unknown: string[] = [];
+  for (const e of errors) {
+    const field = planFieldForPath(e.path);
+    if (!field) continue;
+    const id = field === 'visibleAddons' ? unknownAddonId(e.message) : null;
+    if (id) {
+      unknown.push(id);
+      continue;
+    }
+    if (!(field in out)) out[field] = { code: 'server', message: e.message };
+  }
+  if (unknown.length > 0) out.visibleAddons = { code: 'server', ids: [...new Set(unknown)] };
+  return out;
+}
+
+/** A limit input left blank or at 0 means unlimited (0 is what is stored; for the API rate it means "platform default"). */
+export function limitIsUnlimited(raw: string): boolean {
+  const v = raw.trim();
+  return v === '' || /^0+$/.test(v);
+}
+
+/** What a limit shows right after "Unlimited" is unticked: a small real cap to edit (blank would mean unlimited again). */
+const LIMITED_START: Partial<Record<PlanLimitKey, string>> = { api_rate_limit_per_minute: '60' };
+
+export function setLimitUnlimited(
+  draft: PlanDraft,
+  key: PlanLimitKey,
+  unlimited: boolean,
+): PlanDraft {
+  return {
+    ...draft,
+    limits: { ...draft.limits, [key]: unlimited ? '' : (LIMITED_START[key] ?? '1') },
+  };
+}
+
+/** How many of the given limits (default: all) carry a cap. */
+export function countLimitsSet(
+  limits: PlanDraft['limits'],
+  keys: readonly PlanLimitKey[] = PLAN_LIMIT_KEYS,
+): number {
+  return keys.filter((k) => !limitIsUnlimited(limits[k])).length;
+}
+
+/** How many of the given features (default: all) are on. */
+export function countFeaturesOn(
+  features: PlanDraft['features'],
+  keys: readonly PlanFeatureKey[] = PLAN_FEATURE_KEYS,
+): number {
+  return keys.filter((k) => features[k]).length;
+}
+
+/** Switch the given features (a group's visible rows) on or off, leaving the rest. */
+export function toggleFeatures(
+  features: PlanDraft['features'],
+  keys: readonly PlanFeatureKey[],
+  on: boolean,
+): PlanDraft['features'] {
+  const next = { ...features };
+  for (const k of keys) next[k] = on;
+  return next;
+}
+
+/** One add-on ticked or unticked. */
+export function toggleAddon(ids: readonly string[], id: string, on: boolean): string[] {
+  const rest = ids.filter((x) => x !== id);
+  return on ? [...rest, id] : rest;
+}
+
+/** Add every id (the visible rows) to the selection, keeping what is already selected and each id once. */
+export function selectAddons(ids: readonly string[], add: readonly string[]): string[] {
+  return [...new Set([...ids, ...add])];
+}
+
+/** Drop the given ids (the visible rows) from the selection. */
+export function clearAddons(ids: readonly string[], remove: readonly string[]): string[] {
+  const drop = new Set(remove);
+  return ids.filter((x) => !drop.has(x));
+}
+
 /** Whether anything differs from the draft the form opened with (drives the "unsaved changes" guard). */
 export function isPlanDraftDirty(initial: PlanDraft, current: PlanDraft): boolean {
-  return JSON.stringify(initial) !== JSON.stringify(current);
+  // The add-on selection is a set: ticking an add-on back on must not read as a change because it moved to the end.
+  const norm = (d: PlanDraft) =>
+    JSON.stringify({ ...d, visibleAddons: [...d.visibleAddons].sort() });
+  return norm(initial) !== norm(current);
 }

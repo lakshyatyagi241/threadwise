@@ -1,0 +1,9 @@
+{
+  "roles-permissions-workspace": {
+    "matrix": {
+      "needsPlan": "يتطلب باقة {feature}",
+      "needsApp": "يتطلب تثبيت تطبيق {app}",
+      "lockedHint": "هذه الصلاحية غير متاحة لمساحة العمل هذه بعد. تُفتح عند تفعيل ميزة الباقة أو تثبيت التطبيق."
+    }
+  }
+}
