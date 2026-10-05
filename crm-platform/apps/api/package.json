@@ -23,7 +23,8 @@
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
-    "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js"
+    "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js",
+    "seed:appointments": "node dist/src/modules/marketplace/cli/seed-appointments.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.22.0",
