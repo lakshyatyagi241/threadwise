@@ -35,12 +35,7 @@ export type MarketVersionStatus =
   'draft' | 'in_review' | 'approved' | 'rejected' | 'published' | 'retired';
 export type MarketPricingModel = 'free' | 'paid_monthly';
 export type MarketConnectorType =
-  | 'oauth'
-  | 'push'
-  | 'pull'
-  | 'email_parse'
-  | 'webhook_relay'
-  | 'client';
+  'oauth' | 'push' | 'pull' | 'email_parse' | 'webhook_relay' | 'client';
 
 export const marketplaceCategories = pgTable(
   'marketplace_categories',
