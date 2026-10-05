@@ -21,6 +21,9 @@ export interface SubRow {
   gatewayPlanId: string | null;
   gatewayCustomerId: string | null;
   planSlug: string | null;
+  /** 'plan' renews the workspace plan; 'addon' renews one add-on purchase and never touches the plan window. */
+  kind: 'plan' | 'addon';
+  workspaceAddonId: number | null;
   billingCycle: 'monthly' | 'yearly';
   status: SubStatus;
   currentPeriodEnd: Date | null;
@@ -30,7 +33,7 @@ export interface SubRow {
 
 const COLS =
   sql.raw(`s.org_id, s.id, s.user_id, s.gateway, s.gateway_subscription_id, s.gateway_plan_id, s.gateway_customer_id,
-  s.plan_id, s.billing_cycle, s.status, s.current_period_end, s.renewals_count, s.meta`);
+  s.plan_id, s.kind, s.workspace_addon_id, s.billing_cycle, s.status, s.current_period_end, s.renewals_count, s.meta`);
 
 type Raw = Record<string, unknown>;
 const text = (v: unknown): string | null => (typeof v === 'string' && v !== '' ? v : null);
@@ -45,6 +48,11 @@ export function toSub(r: Raw): SubRow {
     gatewayPlanId: text(r.gateway_plan_id),
     gatewayCustomerId: text(r.gateway_customer_id),
     planSlug: text(r.plan_id),
+    kind: r.kind === 'addon' ? 'addon' : 'plan',
+    workspaceAddonId:
+      r.workspace_addon_id === null || r.workspace_addon_id === undefined
+        ? null
+        : Number(r.workspace_addon_id),
     billingCycle: r.billing_cycle === 'yearly' ? 'yearly' : 'monthly',
     status: r.status as SubStatus,
     currentPeriodEnd: r.current_period_end ? new Date(r.current_period_end as string) : null,
@@ -95,9 +103,9 @@ export class SubscriptionLifecycleService {
   ): Promise<void> {
     await this.store.tx(async (tx) => {
       await tx.execute(sql`
-        INSERT INTO subscriptions (org_id, user_id, plan_id, gateway, gateway_subscription_id, gateway_plan_id,
+        INSERT INTO subscriptions (org_id, user_id, plan_id, kind, gateway, gateway_subscription_id, gateway_plan_id,
           gateway_customer_id, billing_cycle, status, amount, currency, meta)
-        VALUES (${order.orgId}, ${order.userId}, ${order.planSlug}, ${gateway}, ${attrs.gatewaySubscriptionId ?? null},
+        VALUES (${order.orgId}, ${order.userId}, ${order.planSlug}, ${order.kind === 'addon' ? 'addon' : 'plan'}, ${gateway}, ${attrs.gatewaySubscriptionId ?? null},
           ${attrs.gatewayPlanId ?? null}, ${attrs.gatewayCustomerId ?? null}, ${order.billingPeriod}, 'pending',
           ${order.totalAmount}, ${order.currency}, ${JSON.stringify({ order_number: order.orderNumber })}::jsonb)
         ON CONFLICT (org_id, gateway, (meta ->> 'order_number'))
@@ -304,11 +312,8 @@ export class SubscriptionLifecycleService {
     const end = toDate(periodEnd);
     if (!end) return false;
     const ahead = await this.store.tx(async (tx) => {
-      const st = await tx.execute(
-        sql`SELECT plan_ends_at FROM org_plan_state WHERE org_id = ${sub.orgId}`,
-      );
-      const cur = (st.rows[0] as { plan_ends_at: string | null } | undefined)?.plan_ends_at ?? null;
-      return !cur || end.getTime() > new Date(cur).getTime();
+      const cur = await this.currentEnd(tx, sub);
+      return !cur || end.getTime() > cur.getTime();
     });
     if (!ahead) return false;
     if (sub.status === 'pending') {
@@ -326,8 +331,70 @@ export class SubscriptionLifecycleService {
 
   // ---- the workspace window --------------------------------------------------------------------------------------------
 
+  /** The end of what this subscription pays for: the workspace plan's window, or the add-on purchase's. */
+  private async currentEnd(tx: Tx, sub: SubRow): Promise<Date | null> {
+    if (sub.kind === 'addon') {
+      const id = await this.linkAddon(tx, sub);
+      if (id === null) return null;
+      const r = await tx.execute(
+        sql`SELECT ends_at FROM workspace_addons WHERE org_id = ${sub.orgId} AND id = ${id}`,
+      );
+      const v = (r.rows[0] as { ends_at: string | null } | undefined)?.ends_at ?? null;
+      return v ? new Date(v) : null;
+    }
+    const st = await tx.execute(
+      sql`SELECT plan_ends_at FROM org_plan_state WHERE org_id = ${sub.orgId}`,
+    );
+    const cur = (st.rows[0] as { plan_ends_at: string | null } | undefined)?.plan_ends_at ?? null;
+    return cur ? new Date(cur) : null;
+  }
+
+  /** The add-on purchase this subscription renews: remembered on the row, or found through the order that created it. */
+  private async linkAddon(tx: Tx, sub: SubRow): Promise<number | null> {
+    if (sub.workspaceAddonId !== null) return sub.workspaceAddonId;
+    const number = text(sub.meta.order_number);
+    if (!number) return null;
+    const r = await tx.execute(sql`
+      SELECT a.id FROM workspace_addons a JOIN orders o ON o.org_id = a.org_id AND o.id = a.order_id
+      WHERE a.org_id = ${sub.orgId} AND o.order_number = ${number} LIMIT 1`);
+    const id = (r.rows[0] as { id: number | string } | undefined)?.id;
+    if (id === undefined) return null;
+    sub.workspaceAddonId = Number(id);
+    await tx.execute(
+      sql`UPDATE subscriptions SET workspace_addon_id = ${sub.workspaceAddonId} WHERE org_id = ${sub.orgId} AND id = ${sub.id}`,
+    );
+    return sub.workspaceAddonId;
+  }
+
+  /** The add-on twin of `syncWindow`: the purchase's own `ends_at` follows the provider; the workspace plan is never touched. */
+  private async syncAddonWindow(
+    tx: Tx,
+    sub: SubRow,
+    end: Date | null,
+    extend: boolean,
+  ): Promise<void> {
+    const id = await this.linkAddon(tx, sub);
+    if (id === null || !sub.planSlug) return;
+    const cur = await this.currentEnd(tx, sub);
+    const planRes = await tx.execute(
+      sql`SELECT billing_unit, billing_duration FROM plans WHERE slug = ${sub.planSlug}`,
+    );
+    const plan = planRes.rows[0] as
+      { billing_unit: BillingUnit; billing_duration: number } | undefined;
+    if (!plan) return;
+    const next = windowAfterEvent(new Date(), cur, end, extend, {
+      unit: plan.billing_unit,
+      duration: plan.billing_duration,
+    });
+    if (!next) return;
+    await tx.execute(sql`
+      UPDATE workspace_addons SET ends_at = ${next.toISOString()}::timestamptz, status = 'active'
+      WHERE org_id = ${sub.orgId} AND id = ${id} AND status <> 'cancelled'`);
+  }
+
   /** WaDesk `syncWorkspaceWindow`: align `plan_ends_at` with the provider's date, or add one cycle on a renewal with none. */
   private async syncWindow(tx: Tx, sub: SubRow, end: Date | null, extend: boolean): Promise<void> {
+    if (sub.kind === 'addon') return this.syncAddonWindow(tx, sub, end, extend);
     if (!sub.planSlug) return;
     const st = await tx.execute(
       sql`SELECT plan_ends_at FROM org_plan_state WHERE org_id = ${sub.orgId} FOR UPDATE`,

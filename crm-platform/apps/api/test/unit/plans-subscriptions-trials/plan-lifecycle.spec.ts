@@ -317,3 +317,51 @@ describe('TrialGateGuard (WD-PLAN-015)', () => {
     ).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('grace period (paid_grace)', () => {
+  const base = { plan: paid('999.00'), trialEndsAt: null, now: NOW } as const;
+
+  it('keeps a lapsed paid plan active while autopay is live and the grace days have not run out', () => {
+    const input = { ...base, planEndsAt: at(-2), autopay: true, graceDays: 7 };
+    expect(planStateOf(input)).toBe('paid_grace');
+    const v = validityOf(input);
+    expect(v.graceEndsAt).toBe(at(5).toISOString());
+    expect(v.daysLeft).toBe(5);
+    expect(v.renewalWindow).toBe(false);
+  });
+
+  it('lapses once the grace is over', () => {
+    expect(planStateOf({ ...base, planEndsAt: at(-7), autopay: true, graceDays: 7 })).toBe(
+      'paid_lapsed',
+    );
+    expect(planStateOf({ ...base, planEndsAt: at(-30), autopay: true, graceDays: 7 })).toBe(
+      'paid_lapsed',
+    );
+  });
+
+  it('gives no grace without a live autopay subscription, with 0 grace days, or when unset', () => {
+    expect(planStateOf({ ...base, planEndsAt: at(-1), autopay: false, graceDays: 7 })).toBe(
+      'paid_lapsed',
+    );
+    expect(planStateOf({ ...base, planEndsAt: at(-1), autopay: true, graceDays: 0 })).toBe(
+      'paid_lapsed',
+    );
+    expect(planStateOf({ ...base, planEndsAt: at(-1) })).toBe('paid_lapsed');
+  });
+
+  it('is not a state of a plan inside its period, a free plan or a custom quote', () => {
+    expect(planStateOf({ ...base, planEndsAt: at(3), autopay: true, graceDays: 7 })).toBe(
+      'paid_active',
+    );
+    expect(
+      planStateOf({
+        plan: free,
+        trialEndsAt: null,
+        planEndsAt: at(-1),
+        now: NOW,
+        autopay: true,
+        graceDays: 7,
+      }),
+    ).toBe('free');
+  });
+});

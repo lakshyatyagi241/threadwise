@@ -14,6 +14,7 @@ import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanCatalogService } from './plan-catalog.service';
+import { PlanStore } from './plan-store';
 import { fallsBackToFree, planStateOf } from './plan-lifecycle';
 import { toFacts, PLAN_COLUMNS, type PlanRow } from './plan-row';
 import { planKind, trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
@@ -41,6 +42,9 @@ export interface Entitlements {
   planFeatures: Record<string, unknown>;
   /** The lifecycle state (WD-PLAN-016). A lapsed paid plan reports the free plan's limits and flags above. */
   state: PlanState;
+  /** A live autopay subscription for the stored plan, and the grace days that then apply (WD-PLAN-016, `paid_grace`). */
+  autopay?: boolean;
+  graceDays?: number;
 }
 
 interface EntitlementRow {
@@ -57,6 +61,7 @@ interface EntitlementRow {
   plan_is_free: boolean | null;
   plan_is_custom_quote: boolean | null;
   plan_amount: string | null;
+  autopay: boolean | null;
 }
 
 /**
@@ -83,6 +88,7 @@ export class PlanEntitlementService {
   constructor(
     private readonly db: DatabaseService,
     private readonly catalog: PlanCatalogService,
+    private readonly store: PlanStore,
   ) {}
 
   // --- sign-up ---------------------------------------------------------------------------------------------------------------------
@@ -126,7 +132,10 @@ export class PlanEntitlementService {
                p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features,
                (p.id IS NOT NULL) AS plan_found,
                p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote,
-               p.amount::text AS plan_amount
+               p.amount::text AS plan_amount,
+               EXISTS (SELECT 1 FROM subscriptions sb
+                       WHERE sb.org_id = o.id AND sb.kind = 'plan' AND sb.plan_id = o.plan
+                         AND sb.status IN ('active', 'past_due')) AS autopay
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -144,6 +153,7 @@ export class PlanEntitlementService {
     }
     const trialEndsAt = row.trial_ends_at ? new Date(row.trial_ends_at) : null;
     const planEndsAt = row.plan_ends_at ? new Date(row.plan_ends_at) : null;
+    const graceDays = row.autopay ? await this.graceDays() : 0;
     const state = planStateOf({
       plan: row.plan_found
         ? {
@@ -155,6 +165,8 @@ export class PlanEntitlementService {
       trialEndsAt,
       planEndsAt,
       now: new Date(),
+      autopay: row.autopay ?? false,
+      graceDays,
     });
     let planLimits = row.plan_limits ?? {};
     let planFeatures = row.plan_features ?? {};
@@ -180,7 +192,19 @@ export class PlanEntitlementService {
       planLimits,
       planFeatures,
       state,
+      autopay: row.autopay ?? false,
+      graceDays,
     };
+  }
+
+  /** `billing.grace_days`: how many days autopay keeps a lapsed paid plan active while it retries. */
+  graceDays(): Promise<number> {
+    return this.store.graceDays();
+  }
+
+  /** Drops the 30-second cache of the grace days (a test that writes the setting directly). */
+  forgetGrace(): void {
+    this.store.forgetGrace();
   }
 
   /** The first active free plan by catalogue order (WaDesk's "free package"), or null when the catalogue has none. */

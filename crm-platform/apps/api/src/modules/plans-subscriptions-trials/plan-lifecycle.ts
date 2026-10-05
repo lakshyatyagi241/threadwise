@@ -18,6 +18,18 @@ export interface LifecycleInput {
   trialEndsAt: Date | null;
   planEndsAt: Date | null;
   now: Date;
+  /** A live autopay subscription (active or retrying) for this plan: only then does the grace period apply. */
+  autopay?: boolean;
+  /** `billing.grace_days`; 0 or absent = no grace. */
+  graceDays?: number;
+}
+
+/** When access ends for a paid plan whose period has passed but whose autopay is still live; null when no grace applies. */
+export function graceEndsAtOf(
+  i: Pick<LifecycleInput, 'planEndsAt' | 'autopay' | 'graceDays'>,
+): Date | null {
+  if (!i.autopay || !i.planEndsAt || !i.graceDays || i.graceDays <= 0) return null;
+  return new Date(i.planEndsAt.getTime() + i.graceDays * DAY_MS);
 }
 
 /**
@@ -27,6 +39,7 @@ export interface LifecycleInput {
  *   free + trial_ends_at ahead / behind          -> free_trial / free_trial_expired
  *   free, no trial                               -> free
  *   paid + (no end date | end ahead)             -> paid_active
+ *   paid + end passed + live autopay + inside grace -> paid_grace (entitlements stay, `billing.grace_days`)
  *   paid + end date passed                       -> paid_lapsed
  */
 export function planStateOf(i: LifecycleInput): PlanState {
@@ -37,7 +50,10 @@ export function planStateOf(i: LifecycleInput): PlanState {
     if (!i.trialEndsAt) return 'free';
     return i.trialEndsAt.getTime() > i.now.getTime() ? 'free_trial' : 'free_trial_expired';
   }
-  if (i.planEndsAt && i.planEndsAt.getTime() <= i.now.getTime()) return 'paid_lapsed';
+  if (i.planEndsAt && i.planEndsAt.getTime() <= i.now.getTime()) {
+    const graceEnd = graceEndsAtOf(i);
+    return graceEnd && graceEnd.getTime() > i.now.getTime() ? 'paid_grace' : 'paid_lapsed';
+  }
   return 'paid_active';
 }
 
@@ -56,10 +72,11 @@ export function validityOf(i: LifecycleInput): PlanValidity {
 /** Same as `validityOf` for a state the caller already resolved (the entitlement resolver does). */
 export function validityForState(
   state: PlanState,
-  i: Pick<LifecycleInput, 'trialEndsAt' | 'planEndsAt' | 'now'>,
+  i: Pick<LifecycleInput, 'trialEndsAt' | 'planEndsAt' | 'now' | 'autopay' | 'graceDays'>,
 ): PlanValidity {
   const trialRunning = state === 'free_trial';
-  const target = trialRunning ? i.trialEndsAt : state === 'paid_active' ? i.planEndsAt : null;
+  const graceEnd = state === 'paid_grace' ? graceEndsAtOf(i) : null;
+  const target = trialRunning ? i.trialEndsAt : state === 'paid_active' ? i.planEndsAt : graceEnd;
   const left = daysUntil(target, i.now);
   return {
     state,
@@ -72,6 +89,7 @@ export function validityForState(
       left !== null &&
       left >= 1 &&
       left <= RENEWAL_WINDOW_DAYS,
+    graceEndsAt: graceEnd ? graceEnd.toISOString() : null,
   };
 }
 

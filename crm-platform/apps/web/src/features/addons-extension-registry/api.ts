@@ -4,6 +4,7 @@ import {
   extensionsPageResponseSchema,
   grantFieldsResponseSchema,
   uploadExtensionResponseSchema,
+  cancelSubscriptionResponseSchema,
   verifyPurchaseResponseSchema,
   workspaceAddonsResponseSchema,
 } from '@crm/contracts';
@@ -33,6 +34,13 @@ export const fetchExtensionsPage = (signal?: AbortSignal) =>
 
 export const fetchWorkspaceAddons = (signal?: AbortSignal) =>
   apiFetch('/addons', { schema: workspaceAddonsResponseSchema, signal });
+
+/** Stops one add-on purchase from renewing; its paid term keeps running to the end date. */
+export const cancelAddonRenewal = (id: string) =>
+  apiFetch(`/billing/subscription/addons/${id}/cancel`, {
+    method: 'POST',
+    schema: cancelSubscriptionResponseSchema,
+  });
 
 export { addonPackSchema, verifyPurchaseResponseSchema };
 

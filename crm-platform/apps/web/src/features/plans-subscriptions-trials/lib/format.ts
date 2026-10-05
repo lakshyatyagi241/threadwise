@@ -87,9 +87,18 @@ export function compareRows(plans: ReadonlyArray<Pick<BillingPlan, 'limits' | 'f
 export function bannerFor(v: PlanValidity): {
   tone: 'info' | 'success' | 'warning' | 'danger';
   key:
-    'expired' | 'activeUntil' | 'activeForever' | 'trial' | 'trialEnded' | 'free' | 'customQuote';
+    | 'expired'
+    | 'grace'
+    | 'activeUntil'
+    | 'activeForever'
+    | 'trial'
+    | 'trialEnded'
+    | 'free'
+    | 'customQuote';
 } | null {
   switch (v.state) {
+    case 'paid_grace':
+      return { tone: 'warning', key: 'grace' };
     case 'paid_lapsed':
       return { tone: 'danger', key: 'expired' };
     case 'paid_active':
@@ -115,15 +124,17 @@ export const STATE_TONE: Record<PlanState, 'neutral' | 'success' | 'warning' | '
   free_trial_expired: 'danger',
   free: 'neutral',
   paid_active: 'success',
+  paid_grace: 'warning',
   paid_lapsed: 'danger',
   custom_quote: 'neutral',
 };
 
 /** What the top-of-app bar shows, or null for none (WD-PLAN-013: trial bar and renewal bar are mutually exclusive). */
-export type BarKind = 'trial' | 'trialEnded' | 'renew' | null;
+export type BarKind = 'trial' | 'trialEnded' | 'renew' | 'grace' | null;
 export function barFor(v: Pick<PlanValidity, 'state' | 'renewalWindow'>): BarKind {
   if (v.state === 'free_trial') return 'trial';
   if (v.state === 'free_trial_expired') return 'trialEnded';
+  if (v.state === 'paid_grace') return 'grace';
   if (v.state === 'paid_active' && v.renewalWindow) return 'renew';
   return null;
 }

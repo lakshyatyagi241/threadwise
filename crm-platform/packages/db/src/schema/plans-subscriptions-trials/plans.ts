@@ -39,6 +39,8 @@ export const plans = pgTable(
     currency: text('currency').notNull().default('USD'),
     billingUnit: text('billing_unit').$type<PlanBillingUnit>().notNull().default('months'),
     billingDuration: integer('billing_duration').notNull().default(1),
+    /** Add-ons only: 'recurring' renews by autopay (a provider subscription), 'one_time' is bought once per term. */
+    billingMode: text('billing_mode').$type<'one_time' | 'recurring'>().notNull().default('one_time'),
     isFree: boolean('is_free').notNull().default(false),
     isLifetime: boolean('is_lifetime').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),
