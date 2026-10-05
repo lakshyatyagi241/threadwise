@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs/config';
 import createNextIntlPlugin from 'next-intl/plugin';
 import type { NextConfig } from 'next';
 
@@ -91,4 +92,14 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+// Source maps are uploaded only when a build has an auth token (CI sets SENTRY_AUTH_TOKEN); without one this wrapper adds nothing
+// but the instrumentation hooks, so local builds and builds without the secret still work.
+export default withSentryConfig(withNextIntl(nextConfig), {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  telemetry: false,
+  sourcemaps: { disable: !process.env.SENTRY_AUTH_TOKEN },
+  widenClientFileUpload: true,
+});
