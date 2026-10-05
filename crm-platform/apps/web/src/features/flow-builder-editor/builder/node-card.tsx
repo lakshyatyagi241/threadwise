@@ -13,6 +13,7 @@ import {
 import { lookOf } from '../lib/node-ui';
 import { NODE_W } from '../lib/graph-ops';
 import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
+import { opensNodeOnDoubleClick } from './node-open';
 import { NodePreview } from './node-preview';
 
 /** The two Ask for file / location cards carry their own title (as the other product draws them) and an editable body. */
@@ -47,6 +48,8 @@ interface Props {
   hoveredPort: string | null;
   onPointerDown: (e: React.PointerEvent, id: string) => void;
   onSelect: (id: string) => void;
+  /** Double-click on the card: select it and open the inspector. */
+  onOpen?: (id: string) => void;
   onPortPointerDown: (e: React.PointerEvent, nodeId: string, handleId: string) => void;
   onPortHover: (key: string | null) => void;
   /** Writes keys of a node's data from a control on the card itself (the Ask for file / location cards). */
@@ -68,6 +71,7 @@ export const NodeCard = memo(function NodeCard({
   hoveredPort,
   onPointerDown,
   onSelect,
+  onOpen,
   onPortPointerDown,
   onPortHover,
   onPatch,
@@ -98,6 +102,11 @@ export const NodeCard = memo(function NodeCard({
       onClick={(e) => {
         e.stopPropagation();
         onSelect(node.id);
+      }}
+      onDoubleClick={(e) => {
+        if (!onOpen || !opensNodeOnDoubleClick(e.target)) return;
+        e.stopPropagation();
+        onOpen(node.id);
       }}
     >
       {!isTrigger ? (
