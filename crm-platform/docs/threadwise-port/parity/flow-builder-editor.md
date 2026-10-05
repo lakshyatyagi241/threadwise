@@ -94,6 +94,12 @@ round trip including malformed files and both exporters' file formats.
   our own running editor, not against Reference: contract and runtime unit tests, the API e2e `flow-runtime-engine/ask-media.e2e.spec.ts` (real Postgres and Redis, simulator
   channel as the WhatsApp stand-in), web unit tests, and screenshots of the palette, both cards, the Allow Extensions panel, both inspector forms and the test runner.
   Not verified: real WhatsApp (the interactive location request is built to Meta's documented shape and unit-tested, never sent to Meta; real media downloads).
+- **Geta console publishing (TW-FLB-083)** is not a Reference feature either: the project owner asked that Publish also push the bot live on the Geta console (a configuration update, then
+  publish-bot). There is no Reference behaviour to compare. It was checked against our own running editor and against a local stub of the console, never the real console: unit tests (the HTTP
+  adapter against the stub, exact headers, `appid` shape, bodies, retries, order, UTF-8, no secret in errors or output), contracts, API e2e with real Postgres and Redis through the real outbox drain
+  and consumer (publish to live, failure and retry from the failed step, no-credentials state, secrets masked in every response and absent from the database, outbox and audit rows, cross-workspace
+  isolation), schema and RLS integration tests, web unit tests, and screenshots of the settings form and the Going live, Live, Failed with Retry and not-configured states.
+  Not verified: the real Geta console (base URL, tokens and chatbot record shapes are as given by the owner; whether `modified_time` in that format is what Geta expects is unknown).
 
 ## Open
 
