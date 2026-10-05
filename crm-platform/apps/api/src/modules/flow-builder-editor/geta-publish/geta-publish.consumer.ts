@@ -84,7 +84,7 @@ export class GetaPublishConsumer implements OutboxSubscriber, OnModuleInit {
       }
       await this.port.publishBot(credentials, { botId });
       await this.db.txAs({ orgId }, (tx) => this.repo.markLive(tx, orgId, claim.syncId, version));
-      this.logger.debug({ orgId, flowId, version }, 'flow is live on the Geta console');
+      this.logger.log({ orgId, flowId, version }, 'flow is live on the Geta console');
     } catch (err) {
       const failedStep = err instanceof BotPublishError ? err.step : step;
       const message =
