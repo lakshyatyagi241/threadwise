@@ -118,3 +118,20 @@ export function addonEndsAt(
   }
   return d;
 }
+
+/**
+ * SQL for "this purchase still counts" on `workspace_addons a`: active and not past its end, or past its end by less than the
+ * grace days while an autopay subscription for that very purchase is still live (the charge is being retried). Evaluated at read
+ * time, so a renewal or a final failure shows on the next call. The grace days come from the caller because `platform_settings`
+ * is not readable from a tenant transaction.
+ */
+export const addonLiveSql = (graceDays: number): string => {
+  const days = Math.max(0, Math.min(30, Math.trunc(graceDays)));
+  return `a.status = 'active' AND (
+  a.ends_at IS NULL OR a.ends_at > now()
+  OR EXISTS (
+    SELECT 1 FROM subscriptions sb
+    WHERE sb.org_id = a.org_id AND sb.workspace_addon_id = a.id AND sb.kind = 'addon'
+      AND sb.status IN ('active', 'past_due')
+      AND a.ends_at > now() - make_interval(days => ${days})))`;
+};

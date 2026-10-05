@@ -432,7 +432,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               ))}
             </fieldset>
           )}
-          {selected?.autoRenew && (
+          {selected?.autoRenew && q.kind === 'addon' && (
+            <p className="text-sm text-muted-foreground" data-testid="addon-renews">
+              {t('addonRenews')}
+            </p>
+          )}
+          {selected?.autoRenew && q.kind !== 'addon' && (
             <Checkbox
               id="co-autorenew"
               checked={autoRenew}

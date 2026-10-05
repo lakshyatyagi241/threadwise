@@ -24,7 +24,9 @@ export function ValidityBanner({
   const date = fmt(
     banner.key === 'trial' || banner.key === 'trialEnded'
       ? validity.trialEndsAt
-      : validity.planEndsAt,
+      : banner.key === 'grace'
+        ? validity.graceEndsAt
+        : validity.planEndsAt,
   );
   return (
     <Alert tone={banner.tone} data-testid="validity-banner" data-state={validity.state}>

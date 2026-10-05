@@ -130,6 +130,7 @@
       "refundGuarantee": "{days}-day money-back guarantee",
       "countryPlaceholder": "Choose a country",
       "autoRenew": "Renew automatically each period. You can cancel any time.",
+      "addonRenews": "This add-on renews automatically each period. You can cancel it any time and keep it until the end of the paid term.",
       "cardTitle": "Pay by card",
       "payNow": "Pay now"
     },
@@ -624,6 +625,8 @@
         "recurring": {
           "title": "Auto-renewing subscriptions",
           "hint": "When on, timed paid plans (monthly or yearly) renew automatically: the gateway charges the card each cycle and the plan validity extends on its own. Free, lifetime and custom-quote plans never recur, and any gateway without recurring support stays a one-time charge. Turn this off to bill every purchase once.",
+          "graceDays": "Grace period (days)",
+          "graceHint": "When an auto-renew charge fails, the plan or add-on stays active this many days after its period ends while the gateway retries. 0 turns the grace period off.",
           "gateways": "Gateways that support auto-renew",
           "note": "Braintree only auto-renews once you set a Plan ID in its gateway credentials. Square bills each cycle by emailing the customer an invoice (no silent card charge). Every renewal needs the gateway webhook URL set in the provider dashboard."
         },

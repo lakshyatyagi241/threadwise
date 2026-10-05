@@ -9,6 +9,7 @@ import { createDbClient, runMigrations, withPrivileged, withTenant, type DbClien
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { TenantDirectory } from '../../../src/modules/auth/platform/tenant-directory';
 import { PlanCatalogService } from '../../../src/modules/plans-subscriptions-trials/plan-catalog.service';
+import { PlanStore } from '../../../src/modules/plans-subscriptions-trials/plan-store';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials/plan-entitlement.service';
 
 /**
@@ -134,7 +135,7 @@ describe('plan schema, RLS and sign-up provisioning', () => {
       ) => withTenant(dbClient.db, tenant, fn),
     } as unknown as DatabaseService;
     catalog = new PlanCatalogService(db);
-    entitlements = new PlanEntitlementService(db, catalog);
+    entitlements = new PlanEntitlementService(db, catalog, new PlanStore(db));
     directory = new TenantDirectory(db, entitlements);
   }, 180_000);
 
