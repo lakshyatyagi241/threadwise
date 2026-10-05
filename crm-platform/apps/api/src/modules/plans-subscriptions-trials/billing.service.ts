@@ -116,6 +116,8 @@ export class BillingService {
       validity: validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now: new Date(),
       }),
       canManage,
@@ -134,6 +136,8 @@ export class BillingService {
       ...validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now: new Date(),
       }),
       planSlug: e.planSlug,
@@ -280,6 +284,8 @@ export class BillingService {
       validity: validityForState(after.state, {
         trialEndsAt: after.trialEndsAt,
         planEndsAt: after.planEndsAt,
+        autopay: after.autopay,
+        graceDays: after.graceDays,
         now: new Date(),
       }),
       overLimit: meters

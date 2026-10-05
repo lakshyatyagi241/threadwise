@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import {
   CANCELLED_BY_USER,
   asRecord,
@@ -16,6 +17,7 @@ import {
   type PaymentDriver,
   type CancelResult,
   type PaymentResult,
+  type ProviderPlanKey,
   type SubscriptionEvent,
   type SubscriptionRef,
   type SubscriptionState,
@@ -135,6 +137,9 @@ export class RazorpayDriver implements PaymentDriver {
     const evt = asRecord(body);
     if (evt.event !== 'payment.captured' && evt.event !== 'order.paid') return null;
     const payment = asRecord(asRecord(asRecord(evt.payload).payment).entity);
+    // A subscription charge also raises payment.captured, carrying an `invoice_id`. It belongs to the subscription path
+    // (`subscription.charged`) and is never a one-off payment: handing it to fulfilment could settle an unrelated order.
+    if (str(payment.invoice_id)) return null;
     const notes = asRecord(payment.notes);
     const amount = payment.amount;
     return {
@@ -161,33 +166,64 @@ export class RazorpayDriver implements PaymentDriver {
     const err = (j: unknown, status: number): string =>
       str(asRecord(asRecord(j).error).description) ?? `HTTP ${status}`;
     try {
-      const planRes = await this.ctx.http(`${API}/plans`, {
-        method: 'POST',
-        headers: this.auth,
-        body: JSON.stringify({
-          period,
-          interval: rec.count,
-          item: {
-            name: order.planName ?? order.description,
-            amount: Number(order.amountMinor),
-            currency: order.currency,
-          },
-          notes: { order_number: order.orderNumber },
-        }),
-      });
-      const planId = str(asRecord(planRes.json).id);
-      if (!isOk(planRes) || !planId)
-        return failed(`razorpay_plan: ${err(planRes.json, planRes.status)}`);
-      const subRes = await this.ctx.http(`${API}/subscriptions`, {
-        method: 'POST',
-        headers: this.auth,
-        body: JSON.stringify({
-          plan_id: planId,
-          total_count: totalCount,
-          customer_notify: 1,
-          notes: { order_number: order.orderNumber },
-        }),
-      });
+      const cacheKey = {
+        account: createHash('sha256').update(keyId).digest('hex'),
+        currency: order.currency,
+        amountMinor: order.amountMinor,
+        unit: rec.interval,
+        count: rec.count,
+      };
+      const makePlan = async (): Promise<string | { error: string }> => {
+        const planRes = await this.ctx.http(`${API}/plans`, {
+          method: 'POST',
+          headers: this.auth,
+          body: JSON.stringify({
+            period,
+            interval: rec.count,
+            item: {
+              name: order.planName ?? order.description,
+              amount: Number(order.amountMinor),
+              currency: order.currency,
+            },
+          }),
+        });
+        const id = str(asRecord(planRes.json).id);
+        if (!isOk(planRes) || !id)
+          return { error: `razorpay_plan: ${err(planRes.json, planRes.status)}` };
+        await this.rememberPlan(cacheKey, id);
+        return id;
+      };
+      const makeSub = (planId: string) =>
+        this.ctx.http(`${API}/subscriptions`, {
+          method: 'POST',
+          headers: this.auth,
+          body: JSON.stringify({
+            plan_id: planId,
+            total_count: totalCount,
+            customer_notify: 1,
+            notes: { order_number: order.orderNumber },
+          }),
+        });
+
+      const cached = await this.cachedPlan(cacheKey);
+      let planId: string;
+      let subRes;
+      if (cached) {
+        planId = cached;
+        subRes = await makeSub(planId);
+        // A reused plan the provider no longer has (deleted in its dashboard): make a fresh one once and remember it instead.
+        if (!isOk(subRes) || !str(asRecord(subRes.json).id)) {
+          const fresh = await makePlan();
+          if (typeof fresh !== 'string') return failed(fresh.error);
+          planId = fresh;
+          subRes = await makeSub(planId);
+        }
+      } else {
+        const fresh = await makePlan();
+        if (typeof fresh !== 'string') return failed(fresh.error);
+        planId = fresh;
+        subRes = await makeSub(planId);
+      }
       const subId = str(asRecord(subRes.json).id);
       if (!isOk(subRes) || !subId)
         return failed(`razorpay_subscription: ${err(subRes.json, subRes.status)}`);
@@ -207,6 +243,22 @@ export class RazorpayDriver implements PaymentDriver {
       });
     } catch (e) {
       return failed(`razorpay_subscription_exception: ${brief(e)}`);
+    }
+  }
+
+  private async cachedPlan(key: ProviderPlanKey): Promise<string | null> {
+    try {
+      return (await this.ctx.planCache?.find(key)) ?? null;
+    } catch {
+      return null; // a cache problem only costs one extra plan
+    }
+  }
+
+  private async rememberPlan(key: ProviderPlanKey, id: string): Promise<void> {
+    try {
+      await this.ctx.planCache?.save(key, id);
+    } catch {
+      /* the next checkout makes another plan; nothing is lost */
     }
   }
 

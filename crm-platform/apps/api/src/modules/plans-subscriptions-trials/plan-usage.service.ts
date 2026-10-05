@@ -193,6 +193,8 @@ export class PlanUsageService {
       validity: validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now,
       }),
       meters,

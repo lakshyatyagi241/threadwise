@@ -645,6 +645,7 @@ Connections: PLAN (packages, `Workspace::package()`, plan_ends_at, add-ons, `Wor
   - Given the buyer dismisses the modal, then the order is marked failed and the buyer lands on Orders with the failure message.
 - **Source refs:** app/Services/Payment/Drivers/RazorpayDriver.php; resources/views/checkout/razorpay-form.blade.php; resources/views/checkout/razorpay-subscription-form.blade.php.
 - **Port notes:** treat a dismissed modal as "cancelled", not "failed" (do not burn the order); support `payment.captured` webhook to finalise when the browser never returns; store the Razorpay plan id per package to avoid creating a plan per checkout.
+- **Port status (billing hardening):** the Razorpay plan id is cached per account, price and cadence (`gateway_plan_cache`), and replaced once if the provider no longer has it. `payment.captured` that carries an `invoice_id` belongs to a subscription charge and is ignored as a payment (the subscription event settles it). Recurring add-ons and the grace period are documented in `docs/api/addons-extension-registry.md` and `docs/api/plans-subscriptions-trials.md`.
 
 ### WD-PAYGW-016 — PayPal driver
 
