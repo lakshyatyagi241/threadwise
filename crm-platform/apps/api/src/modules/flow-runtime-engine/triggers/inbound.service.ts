@@ -54,6 +54,7 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
       meta: e.message.meta,
       location: e.message.location,
       mediaUrl: e.message.mediaKey ? `${CHAT_MEDIA_PREFIX}${e.message.mediaKey}` : null,
+      media: e.message.media ?? null,
     });
     const live = await this.db.txAs({ orgId: e.orgId }, (tx) =>
       this.runs.liveByPeer(tx, e.orgId, e.channelId, e.peerKey),
