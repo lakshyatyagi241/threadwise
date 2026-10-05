@@ -41,7 +41,8 @@ export default () => {
 
   return {
     feature: 'WD-PAYGW-007',
-    title: 'Billing settings and add-on pack form: shared fields, probes, new fields recorded as info',
+    title:
+      'Billing settings and add-on pack form: shared fields, probes, new fields recorded as info',
     pages: [
       {
         id: 'billing-settings',
@@ -73,7 +74,11 @@ export default () => {
           await c.goto('/admin/checkout-settings', { ready: { wadesk: 'form', ours: 'main h1' } });
           const all = await labels(c, 'main');
           for (const f of settingsFields) c.obs.flag(`field.${f}`, has(all, f));
-          c.obs.flag('section.autoRenew', all.some((l) => l.includes('auto-renew')) || (await c.page.getByText(/auto-renewing subscriptions/i).count()) > 0);
+          c.obs.flag(
+            'section.autoRenew',
+            all.some((l) => l.includes('auto-renew')) ||
+              (await c.page.getByText(/auto-renewing subscriptions/i).count()) > 0,
+          );
           c.obs.info('graceField', has(all, 'grace period'));
         },
       },
@@ -112,19 +117,22 @@ export default () => {
         scenario: /keyboard$/,
         key: 'flag.keyboard.skipLink',
         quirk: 'WaDesk console has no skip-to-content link',
-        reason: 'ours adds a skip link on every console page (better keyboard access); a deliberate improvement over WaDesk',
+        reason:
+          'ours adds a skip link on every console page (better keyboard access); a deliberate improvement over WaDesk',
       },
       {
         scenario: /^addon-form\.keyboard$/,
         key: 'abs.keyboard.reachable',
         quirk: 'twin run signs in as the read-only support operator',
-        reason: 'a super admin must enrol two-factor first, so the run uses a support operator whose form controls are disabled and skipped by Tab; the ratio counts them as present',
+        reason:
+          'a super admin must enrol two-factor first, so the run uses a support operator whose form controls are disabled and skipped by Tab; the ratio counts them as present',
       },
       {
         scenario: /\.load$/,
         key: 'perf.lcpMs',
         quirk: 'our web app runs in next dev for the twin run',
-        reason: 'the first paint includes the dev-server compile; the same ratio shows on admin pages this change did not touch, a production build is not what is measured',
+        reason:
+          'the first paint includes the dev-server compile; the same ratio shows on admin pages this change did not touch, a production build is not what is measured',
       },
     ],
     skip: [],
