@@ -163,14 +163,14 @@ describe('razorpay payment vs subscription webhooks', () => {
         payment: { entity: { id: 'pay_1', order_id: 'order_1', invoice_id: 'inv_1' } },
       },
     };
-    expect(d.parseSubscriptionWebhook(charged)).toMatchObject({
+    expect(d.parseSubscriptionWebhook!(charged)).toMatchObject({
       type: 'renewed',
       subscriptionId: 'sub_1',
       paymentId: 'pay_1',
     });
     expect(d.parseWebhook(charged)).toBeNull();
     expect(
-      d.parseSubscriptionWebhook(payment({ id: 'pay_1', order_id: 'order_1', amount: 100 })),
+      d.parseSubscriptionWebhook!(payment({ id: 'pay_1', order_id: 'order_1', amount: 100 })),
     ).toBeNull();
   });
 
@@ -179,10 +179,10 @@ describe('razorpay payment vs subscription webhooks', () => {
       event,
       payload: { subscription: { entity: { id: 'sub_1' } } },
     });
-    expect(d.parseSubscriptionWebhook(ev('subscription.pending'))?.type).toBe('payment_failed');
-    expect(d.parseSubscriptionWebhook(ev('subscription.halted'))?.type).toBe('payment_failed');
-    expect(d.parseSubscriptionWebhook(ev('subscription.cancelled'))?.type).toBe('canceled');
-    expect(d.parseSubscriptionWebhook(ev('subscription.completed'))?.type).toBe('canceled');
-    expect(d.parseSubscriptionWebhook(ev('subscription.activated'))).toBeNull();
+    expect(d.parseSubscriptionWebhook!(ev('subscription.pending'))?.type).toBe('payment_failed');
+    expect(d.parseSubscriptionWebhook!(ev('subscription.halted'))?.type).toBe('payment_failed');
+    expect(d.parseSubscriptionWebhook!(ev('subscription.cancelled'))?.type).toBe('canceled');
+    expect(d.parseSubscriptionWebhook!(ev('subscription.completed'))?.type).toBe('canceled');
+    expect(d.parseSubscriptionWebhook!(ev('subscription.activated'))).toBeNull();
   });
 });
