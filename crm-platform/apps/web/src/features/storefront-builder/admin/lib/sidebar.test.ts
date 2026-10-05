@@ -37,9 +37,12 @@ describe('sidebar entries', () => {
     expect(find('gateways').permission).toBe('store.gateways.read');
     expect(find('payments').permission).toBe('store.payments.view');
     const only = (keep: string) => (p: string) => p === keep;
-    expect(
-      visibleEntries(MAIN_ENTRIES, only('store.orders.read')).map((e) => e.key),
-    ).toEqual(['overview', 'orders', 'products', 'reviews']);
+    expect(visibleEntries(MAIN_ENTRIES, only('store.orders.read')).map((e) => e.key)).toEqual([
+      'overview',
+      'orders',
+      'products',
+      'reviews',
+    ]);
   });
   it('hides the storefront entry without the read permission', () => {
     expect(visibleEntries(MAIN_ENTRIES, () => false).some((e) => e.key === 'storefront')).toBe(

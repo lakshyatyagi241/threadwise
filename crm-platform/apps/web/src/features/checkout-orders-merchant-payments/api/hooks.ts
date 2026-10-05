@@ -61,7 +61,8 @@ export function useCursorList<T, Q extends object>(
     queryKey: [...key, query],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) => fetchPage({ ...query, cursor: pageParam }, signal),
-    getNextPageParam: (last) => (last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined),
+    getNextPageParam: (last) =>
+      last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
     enabled: opts.enabled ?? true,
     placeholderData: keepPreviousData,
     retry: false,

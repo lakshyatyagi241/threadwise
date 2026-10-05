@@ -32,8 +32,7 @@ export function useStoreInvoices(query: StoreInvoicesQuery, opts: { enabled?: bo
   const q = useInfiniteQuery({
     queryKey: [...CHK_KEYS.invoices, params],
     initialPageParam: undefined as string | undefined,
-    queryFn: ({ pageParam, signal }) =>
-      invoicingApi.list({ ...params, cursor: pageParam }, signal),
+    queryFn: ({ pageParam, signal }) => invoicingApi.list({ ...params, cursor: pageParam }, signal),
     getNextPageParam: (last) => (last.hasMore ? (last.nextCursor ?? undefined) : undefined),
     enabled,
     placeholderData: keepPreviousData,

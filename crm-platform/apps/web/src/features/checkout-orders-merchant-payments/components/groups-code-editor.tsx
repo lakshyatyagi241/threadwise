@@ -6,7 +6,12 @@ import type { StoreGroup } from '@crm/contracts';
 import { Button, Input, Spinner, useToast } from '@crm/ui';
 import { useSetGroupCode } from '../api/hooks';
 import { errorKind } from '../lib/errors';
-import { GROUP_CODE_MAX, isGroupCodeDirty, orderingLink, validateGroupCode } from '../lib/group-code';
+import {
+  GROUP_CODE_MAX,
+  isGroupCodeDirty,
+  orderingLink,
+  validateGroupCode,
+} from '../lib/group-code';
 import { useErrorLine } from './parts';
 
 /** Copy text to the clipboard; false when the browser refuses (no permission, insecure page). */
@@ -49,7 +54,14 @@ export function CopyButton({
         'inline-flex items-center gap-1 rounded text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
       }
     >
-      <svg viewBox="0 0 16 16" className="size-3" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <svg
+        viewBox="0 0 16 16"
+        className="size-3"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        aria-hidden="true"
+      >
         <path d="M5 5V3.5A1.5 1.5 0 0 1 6.5 2h6A1.5 1.5 0 0 1 14 3.5v6A1.5 1.5 0 0 1 12.5 11H11" />
         <rect x="2" y="5" width="9" height="9" rx="1.5" />
       </svg>
@@ -88,7 +100,9 @@ export function GroupCodeEditor({
   function submit(next: string) {
     const check = validateGroupCode(next);
     if (!check.ok) {
-      setProblem(check.problem === 'tooLong' ? t('row.tooLong', { max: GROUP_CODE_MAX }) : t('row.badChars'));
+      setProblem(
+        check.problem === 'tooLong' ? t('row.tooLong', { max: GROUP_CODE_MAX }) : t('row.badChars'),
+      );
       return;
     }
     setProblem(null);
