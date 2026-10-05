@@ -29,6 +29,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { BrandingService } from '../platform-settings-branding-storage';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { GetaPublishSyncService } from './geta-publish/geta-publish-sync.service';
 import { encodeFlowCursor, nameWithSuffix, parseImportPayload, stateOf } from './flow-rules';
 import { flowEventPayload, toFeatured, toFlowDetail, toFlowSummary } from './flows.mapper';
 import {
@@ -94,6 +95,7 @@ export class FlowsService {
     private readonly outbox: OutboxService,
     private readonly plans: PlanEntitlementService,
     private readonly branding: BrandingService,
+    private readonly geta: GetaPublishSyncService,
   ) {}
 
   // --- reads ---------------------------------------------------------------------------------------------------------
@@ -141,7 +143,10 @@ export class FlowsService {
 
   async get(uuid: string): Promise<FlowDetail> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => toFlowDetail(await this.require(tx, ctx.orgId, uuid)));
+    return this.db.tx(async (tx) => {
+      const row = await this.require(tx, ctx.orgId, uuid);
+      return { ...toFlowDetail(row), getaSync: await this.geta.status(tx, ctx.orgId, row) };
+    });
   }
 
   /** The export file (WD-FLB-008): the graph verbatim under WaDesk's wrapper marker, no workspace or user ids. */
@@ -401,7 +406,10 @@ export class FlowsService {
         eventType: published ? 'flow.published' : 'flow.unpublished',
         payload: flowEventPayload(after),
       });
-      return toFlowDetail(after);
+      // Geta publishing (beyond WaDesk): only a sync row and an outbox event here; the worker makes the remote calls, so a
+      // console that is down never fails or slows this publish.
+      if (published) await this.geta.onPublished(tx, ctx.orgId, after);
+      return { ...toFlowDetail(after), getaSync: await this.geta.status(tx, ctx.orgId, after) };
     });
   }
 
