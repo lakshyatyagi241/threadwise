@@ -5,6 +5,8 @@ import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { MessageBillingService } from './message-billing.service';
 import { CreditPackagesService } from './credit-packages.service';
 import { PlatformMarginsService } from './platform-margins.service';
+import { BillingCurrencyService } from './billing-currency.service';
+import { MetaRateCardService } from './meta-rate-card.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletController } from './platform-wallet.controller';
 import { PlatformWalletService } from './platform-wallet.service';
@@ -30,6 +32,8 @@ const SERVICES = [
   WalletExportService,
   PlatformWalletService,
   PlatformRatesService,
+  MetaRateCardService,
+  BillingCurrencyService,
   PlatformMarginsService,
   CreditPackagesService,
 ];
@@ -51,6 +55,7 @@ const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule
     WalletGateService,
     WalletSettingsService,
     RateCardService,
+    BillingCurrencyService,
   ],
 })
 export class WalletMessageBillingModule {}

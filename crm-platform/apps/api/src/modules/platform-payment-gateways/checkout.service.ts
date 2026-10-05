@@ -16,6 +16,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { BillingCurrencyService } from '../wallet-message-billing';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -66,6 +67,8 @@ interface Priced {
   gateways: GatewayRow[];
   parts: Breakdown;
   walletCreditMinor: number | null;
+  /** The wallet a top-up credits (the workspace's billing currency), fixed at order time; null for a plan. */
+  walletUnit: string | null;
   planSlug: string | null;
   /** What a recurring checkout needs to know about the plan (null for wallet top-ups). */
   term: PlanTerm | null;
@@ -111,6 +114,7 @@ export class CheckoutService {
     private readonly coupons: CouponService,
     private readonly subscriptions: SubscriptionLifecycleService,
     private readonly entitlements: AddonEntitlementService,
+    private readonly billing: BillingCurrencyService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -288,6 +292,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: null,
+      walletUnit: null,
       planSlug: plan.slug,
       term: {
         name: plan.name,
@@ -307,7 +312,10 @@ export class CheckoutService {
     query: PaygwWalletQuoteQuery,
     s: CheckoutSettings,
   ): Promise<Priced> {
-    const base = s.defaultCurrency;
+    // The wallet being topped up is the one in the workspace's billing currency (USD, INR, ...): the amount is entered in it, the
+    // gateway charges it by default, and exactly that amount is credited. The platform default currency is only the fallback.
+    const walletUnit = await this.billing.forOrg(tx, RequestContextStore.require().orgId);
+    const base = walletUnit;
     const baseMinor = majorToMinor(query.amount, base);
     if (
       baseMinor === null ||
@@ -334,7 +342,7 @@ export class CheckoutService {
       );
     }
     const parts = breakdown(billed, currency, 0n, s.taxEnabled ? s.taxRate : '0');
-    // The grant is the PRE-tax amount in platform-currency minor units (tax is not credited): 1 minor unit = 1 credit.
+    // The grant is the PRE-tax amount in the wallet's own minor units (tax is not credited): 1 minor unit = 1 credit.
     return {
       kind: 'wallet_topup',
       itemName: 'Wallet top-up',
@@ -346,6 +354,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: Number(back),
+      walletUnit,
       planSlug: null,
       term: null,
       subtotalMinor: billed,
@@ -726,6 +735,7 @@ export class CheckoutService {
             billingCountry: b.country ?? null,
             billingTaxId: b.taxId ?? null,
             walletTopupMinor: p.walletCreditMinor,
+            walletUnit: p.walletUnit,
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,

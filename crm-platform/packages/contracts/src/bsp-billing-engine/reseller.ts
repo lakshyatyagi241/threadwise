@@ -190,6 +190,13 @@ export const bspDashboardQuerySchema = z.object({
     .string()
     .regex(/^\d{4}-(0[1-9]|1[0-2])$/)
     .optional(),
+  /** The currency to report in. Workspaces are billed in their own currency, so a P&L is always one currency; default: the base currency. */
+  currency: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z]{3}$/)
+    .optional(),
   limit: z.coerce.number().int().min(1).max(200).default(100),
 });
 export type BspDashboardQuery = z.infer<typeof bspDashboardQuerySchema>;
@@ -225,6 +232,8 @@ export const bspDashboardSchema = z.object({
   from: z.string().datetime(),
   to: z.string().datetime(),
   currency: z.string(),
+  /** Every currency with charges that month or money held in a wallet, so the page can offer a switch. */
+  currencies: z.array(z.string()),
   totals: bspDashboardTotalsSchema,
   workspaces: z.array(bspDashboardWorkspaceSchema),
   hasMoreWorkspaces: z.boolean(),

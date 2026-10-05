@@ -235,7 +235,9 @@ export class InstallationsService {
     if (creds.problems.length > 0) throw this.credentialError(creds.problems);
 
     const installationUuid = randomUUID();
-    const connectionType = recipe?.connector.type ?? null;
+    // A client (extension, add-on) has no connection: the member signs in from the client itself, so nothing is issued or received here.
+    const rawType = recipe?.connector.type ?? null;
+    const connectionType = rawType === 'client' ? null : rawType;
     const type = connectionType ? this.registry.get(connectionType) : null;
     let inboundSecret: string | null = null;
     let connectionSecretEnc: string | null = null;

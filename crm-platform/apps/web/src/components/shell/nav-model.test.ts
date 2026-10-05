@@ -134,8 +134,11 @@ describe('the menu after the Settings move', () => {
   const menuIds = new Set(resolved.map((i) => i.id));
   const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
 
-  it('has only the Settings entry in the settings group', () => {
-    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual(['settings']);
+  it('pins only Help and Settings in the settings group, Help directly above Settings', () => {
+    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual([
+      'help-center',
+      'settings',
+    ]);
   });
 
   it('no longer lists the configuration screens', () => {
