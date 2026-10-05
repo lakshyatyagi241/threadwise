@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { FLOW_TYPES, MESSAGING_FLOW_TYPES, flbIsFlowType, type FlowType } from './node-catalogue';
 import { FLB_MAX_FLOW_EDGES, FLB_MAX_FLOW_NODES } from './graph';
+import { flowGetaSyncSchema } from './geta-publish';
 
 /**
  * Flows API shapes (TW-FLB-001..029). Identifiers are uuids; the graph is Reference's `{ flowNodes, flowEdges, vars }`.
@@ -164,6 +165,8 @@ export type FlowsOverview = z.infer<typeof flowsOverviewSchema>;
 
 export const flowDetailSchema = flowSummarySchema.extend({
   graph: flowGraphSchema,
+  /** The Geta console push of the last publish (read and publish answer it; the other writes leave it out). */
+  getaSync: flowGetaSyncSchema.optional(),
 });
 export type FlowDetail = z.infer<typeof flowDetailSchema>;
 

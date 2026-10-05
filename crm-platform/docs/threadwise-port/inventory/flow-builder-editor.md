@@ -113,6 +113,7 @@ Connections: FLR (execution, `node/services/flowService.js`, channel runners, `/
 | TW-FLB-080 | Flow showcase seeder (dev fixture)                                  | implemented | P2       | S      | TW-FLB-016 |
 | TW-FLB-081 | Ask for file / image node (addition beyond Reference)                  | implemented | P2       | M      | TW-FLB-016 |
 | TW-FLB-082 | Ask for location node (addition beyond Reference)                      | implemented | P2       | M      | TW-FLB-016 |
+| TW-FLB-083 | Geta console publishing (addition beyond Reference)                    | implemented | P2       | L      | TW-FLB-022 |
 
 ## Features
 
@@ -2852,6 +2853,39 @@ Related routes owned by other domains and consumed here: `GET team-inbox/api/ig-
   - Given the node on a non-WhatsApp flow, then pre-save validation flags it.
 - **Source refs:** none in Reference. Built on `Question` (TW-FLR-022) and `WaForm` (TW-FLR-043); the outbound `location_request` envelope is new (`channel.port.ts`, `meta-outbound.ts`, `channel-render.ts`).
 - **Port notes:** the request message is built to Meta's documented shape and unit-tested, but was never sent to Meta (no real WhatsApp here). The Cloud API only delivers it inside the 24-hour window, like every interactive message.
+
+### TW-FLB-083 — Geta console publishing (addition beyond Reference)
+
+- **Status:** implemented
+- **Priority:** P2 (nice to have)
+- **Effort:** L (1-2 dev-weeks) — to rebuild on the target stack, backend + worker + frontend + tests
+- **Depends on:** TW-FLB-022
+- **Summary:** NOT a Reference feature: an addition the project owner asked for. After the local publish succeeds, the workspace's bot is also pushed live on the external Geta console in two calls, in order: a chatbot configuration update (`PUT /api/v1/chatbot/{id}/configuration/update/`), then publish-bot (`POST /api/v1/console/publish-bot`). The flow is live there only when both answered 2xx. The local publish never fails because the console does.
+- **Actors & access:** workspace admin. Publishing and retry ride `flb.flows.publish` (and the `automation` plan feature); the credentials screen and the per-flow record need the new key `flb.geta.manage`; reading the state needs `flb.flows.read`.
+- **UX & screens:** the editor shows the remote state beside the Published badge: "Going live…", then "Live", or "Failed at configuration update" / "Failed at publish" with the sanitised reason and a Retry button, or, in a workspace with no credentials, the one-off notice "Published here; set up Geta publishing in settings to push it live." with a link. Settings tile "Geta publishing" (Integrations) opens `/flows/geta-publishing`: base URL, optional console origin, authorization token, geta-host token (write-only, shown as Saved), the chatbot record (JSON, shown as id / name / bot id), Save, per-secret Remove, Clear all. English and Arabic copy under `flb.geta`.
+- **Endpoints:** `GET|PUT|DELETE /v2/flows/geta-publish/settings`, `GET /v2/flows/:id/publish-sync`, `POST /v2/flows/:id/publish-sync/retry`, `PUT /v2/flows/:id/publish-sync/chatbot`; `getaSync` on the flow detail, publish and unpublish answers.
+- **Data:** `flb_geta_publish_settings` (one row per workspace: `base_url`, `origin`, sealed `authorization_enc`, `geta_host_enc`, `chatbot_record_enc`) and `flb_geta_publish_syncs` (one row per flow: `publish_version`, `state` pending / live / failed (`idle` for a row that only holds a per-flow record), `step`, `failed_step`, `last_error`, `attempted_at`, `bot_id`, `configuration_updated_version`, sealed `chatbot_override_enc`). Both with forced RLS and composite keys.
+- **Rules & edge cases:**
+  1. Order is fixed: configuration update, then publish-bot; publish-bot is not called when the update fails. Retry resumes at the step that failed; an update that already succeeded for this publish version is not repeated. Both calls are safe to repeat.
+  2. The Geta chatbot record is the user's, sent untouched except `modified_time`, which is refreshed to now (UTC, `05 Oct, 2026 4:37:00 PM`) when the record has that field. `chatbot_status` and `bot_enabled` are never changed. The `appid` header is `{"botid":"<bot_id>"}`; the bot id is the record's `bot_id`.
+  3. Headers: `accept`, `content-type: application/json;charset=UTF-8`, `authorization` (as stored, no `Bearer `), `geta-host`, optional `origin` and `referer`. publish-bot has body `{}`; the update body is `{"chatbot": {...}}` in UTF-8.
+  4. A network error, timeout, 429 or 5xx is tried again with backoff; any other 4xx is final. Redirects are not followed.
+  5. Secrets are encrypted at rest, masked in every response (flags and a summary only), never logged, never in errors, outbox payloads or audit deltas.
+  6. Idempotent per publish version; an older version's event, a redelivery or a replay after live does nothing. A later publish supersedes a push in progress.
+  7. No credentials: no call, no event; the state is `not_configured`. Credentials removed before the worker runs: `failed` with a clear reason.
+  8. A flow may carry its own chatbot record that replaces the workspace one for that flow.
+- **Async & events:** outbox `flow.geta_publish_requested` `{uuid, publishVersion, retry}`; consumer in the worker (`GetaPublishConsumer`), port `BotPublishPort`.
+- **External systems:** the Geta console (`GETA_PUBLISH_MODE=live`); `fixture` mode is the in-memory stand-in (default outside production).
+- **Settings:** `GETA_PUBLISH_MODE`, `GETA_PUBLISH_TIMEOUT_MS`, `GETA_PUBLISH_MAX_ATTEMPTS`, `GETA_PUBLISH_BACKOFF_MS`, `GETA_PUBLISH_ALLOW_PRIVATE_HOSTS` in `.env.example`; the credentials are per workspace (settings screen), never environment.
+- **Acceptance criteria:**
+  - Given credentials are saved, when the user publishes a flow, then the answer is immediate with `getaSync.state = pending`, and after the worker runs the state is `live` and the console received the update then publish-bot with the exact headers and bodies.
+  - Given the configuration update fails, then publish-bot is not called, the state is `failed` with `failedStep = configuration_update` and a sanitised reason, the flow stays published, and Retry then ends `live`.
+  - Given publish-bot fails after a good update, then `failedStep = publish_bot` and Retry calls only publish-bot.
+  - Given no credentials, then publishing succeeds, no call is made and the editor says to set up Geta publishing.
+  - Given any response of the API, the outbox, the audit trail or an error, then no token, header value or chatbot record content appears.
+  - Given two workspaces, then each publish uses its own credentials and neither can read or retry the other's state.
+- **Source refs:** none in Reference. Built on the outbox (`flow.geta_publish_requested`), `CryptoService`, `guardedRequest` and the provider-port pattern.
+- **Port notes:** the real Geta console was never called while building this (it would publish a real bot); behaviour is verified against a local stub of the console (exact headers, `appid` shape, bodies, retries, order) and the fixture adapter. Unpublishing a flow does not unpublish it on Geta (no call was specified).
 
 ## Data model
 
