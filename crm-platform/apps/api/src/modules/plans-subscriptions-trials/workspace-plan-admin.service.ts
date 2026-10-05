@@ -4,6 +4,7 @@ import {
   planOverridesSchema,
   type AttachPlanRequest,
   type PlanOverrides,
+  type WorkspaceAddons,
   type WorkspacePlan,
   type WorkspacePlanListQuery,
   type WorkspacePlanListResponse,
@@ -16,6 +17,7 @@ import { AuthAuditService } from '../auth';
 import { defaultPeriodEnd, planStateOf, validityForState } from './plan-lifecycle';
 import { PLAN_COLUMNS, fullFeatures, fullLimits, toFacts, type PlanRow } from './plan-row';
 import { PlanStore } from './plan-store';
+import { workspaceAddons } from './plan-visible-addons';
 import { planKind } from './plan-rules';
 
 interface OrgPlanRow {
@@ -35,6 +37,7 @@ interface OrgPlanRow {
   plan_limits: unknown;
   plan_features: unknown;
   plan_found: boolean;
+  plan_row_id: string | null;
   plan_is_free: boolean | null;
   plan_is_custom_quote: boolean | null;
   plan_amount: string | null;
@@ -43,7 +46,7 @@ interface OrgPlanRow {
 const ORG_PLAN_SELECT = sql`
   o.id, o.uuid, o.slug, o.name, o.status, o.plan,
   s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides, s.platform_owned, s.row_version,
-  p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features, (p.id IS NOT NULL) AS plan_found,
+  p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features, (p.id IS NOT NULL) AS plan_found, p.id AS plan_row_id,
   p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote, p.amount::text AS plan_amount
   FROM organizations o
   LEFT JOIN org_plan_state s ON s.org_id = o.id
@@ -70,7 +73,7 @@ export class WorkspacePlanAdminService {
   async list(query: WorkspacePlanListQuery): Promise<WorkspacePlanListResponse> {
     const after = query.cursor && CURSOR_RE.test(query.cursor) ? query.cursor : null;
     const search = query.search ? `%${query.search.replace(/[\\%_]/g, (c) => `\\${c}`)}%` : null;
-    const rows = await this.store.tx(async (tx) => {
+    const { rows, addons } = await this.store.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT ${ORG_PLAN_SELECT}
         WHERE (${after}::bigint IS NULL OR o.id < ${after}::bigint)
@@ -79,17 +82,24 @@ export class WorkspacePlanAdminService {
         ORDER BY o.id DESC
         LIMIT ${query.limit + 1}
       `);
-      return res.rows as unknown as OrgPlanRow[];
+      const found = res.rows as unknown as OrgPlanRow[];
+      const page = found.slice(0, query.limit);
+      const byOrg = new Map<string, WorkspaceAddons>();
+      for (const r of page) byOrg.set(String(r.id), await addonsOf(tx, r));
+      return { rows: found, addons: byOrg };
     });
     const page = rows.slice(0, query.limit);
     return {
-      data: page.map((r) => toWorkspacePlan(r)),
+      data: page.map((r) => toWorkspacePlan(r, addons.get(String(r.id))!)),
       nextCursor: rows.length > query.limit ? String(page[page.length - 1]!.id) : null,
     };
   }
 
   async get(uuid: string): Promise<WorkspacePlan> {
-    return this.store.tx(async (tx) => toWorkspacePlan(await this.load(tx, uuid)));
+    return this.store.tx(async (tx) => {
+      const row = await this.load(tx, uuid);
+      return toWorkspacePlan(row, await addonsOf(tx, row));
+    });
   }
 
   async attach(uuid: string, body: AttachPlanRequest): Promise<WorkspacePlan> {
@@ -163,7 +173,8 @@ export class WorkspacePlanAdminService {
         orgId,
         payload: { from: org.plan, to: target.slug, planEndsAt },
       });
-      return toWorkspacePlan(await this.load(tx, uuid));
+      const row = await this.load(tx, uuid);
+      return toWorkspacePlan(row, await addonsOf(tx, row));
     });
   }
 
@@ -193,7 +204,21 @@ function parseOverrides(raw: unknown): PlanOverrides {
   return parsed.success ? parsed.data : { limits: {}, features: {}, dataRetentionDays: null };
 }
 
-export function toWorkspacePlan(r: OrgPlanRow, now = new Date()): WorkspacePlan {
+/** What the workspace owns of the Marketplace versus what its plan makes visible (a platform-owned workspace is shown everything). */
+function addonsOf(tx: Tx, r: OrgPlanRow): Promise<WorkspaceAddons> {
+  return workspaceAddons(
+    tx,
+    Number(r.id),
+    r.plan_row_id === null ? null : Number(r.plan_row_id),
+    r.platform_owned ?? false,
+  );
+}
+
+export function toWorkspacePlan(
+  r: OrgPlanRow,
+  addons: WorkspaceAddons,
+  now = new Date(),
+): WorkspacePlan {
   const trialEndsAt = r.trial_ends_at ? new Date(r.trial_ends_at) : null;
   const planEndsAt = r.plan_ends_at ? new Date(r.plan_ends_at) : null;
   const state = planStateOf({
@@ -222,6 +247,7 @@ export function toWorkspacePlan(r: OrgPlanRow, now = new Date()): WorkspacePlan 
     overrides: parseOverrides(r.overrides),
     planLimits: fullLimits(r.plan_limits),
     planFeatures: fullFeatures(r.plan_features),
+    addons,
     rowVersion: r.row_version ?? 1,
   };
 }

@@ -22,6 +22,7 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { AddonEntitlementService } from '../addons-extension-registry';
+import { appVisibleOnPlan, PlanEntitlementService } from '../plans-subscriptions-trials';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { CouponService, type CouponResolution } from './coupon.service';
@@ -114,6 +115,7 @@ export class CheckoutService {
     private readonly coupons: CouponService,
     private readonly subscriptions: SubscriptionLifecycleService,
     private readonly entitlements: AddonEntitlementService,
+    private readonly plans: PlanEntitlementService,
     private readonly billing: BillingCurrencyService,
     private readonly config: ConfigService<Env, true>,
   ) {}
@@ -174,8 +176,15 @@ export class CheckoutService {
       // in the plan, not paid far ahead), and needs no paid plan: it is a subscription of its own, not a boost on top of one.
       const orgId = RequestContextStore.require().orgId;
       if (
-        await assertMarketplacePack(tx, orgId, plan.slug, (key) =>
-          this.entitlements.featureEnabled(orgId, key),
+        await assertMarketplacePack(
+          tx,
+          orgId,
+          plan.slug,
+          (key) => this.entitlements.featureEnabled(orgId, key),
+          async (appId) => {
+            const e = await this.plans.forOrg(orgId);
+            return e === null || appVisibleOnPlan(e, appId);
+          },
         )
       )
         return;

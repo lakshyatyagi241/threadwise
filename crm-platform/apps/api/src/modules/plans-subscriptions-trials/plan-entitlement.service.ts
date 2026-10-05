@@ -41,6 +41,18 @@ export interface Entitlements {
   planFeatures: Record<string, unknown>;
   /** The lifecycle state (WD-PLAN-016). A lapsed paid plan reports the free plan's limits and flags above. */
   state: PlanState;
+  /** Which paid Marketplace apps the plan makes VISIBLE (not usable: using one still needs a purchase). */
+  visibleApps: VisibleApps;
+}
+
+/**
+ * The Marketplace apps (by `marketplace_apps.id`) a workspace's plan lets it see as paid add-ons. `all` is true where nothing narrows the
+ * catalogue: a platform-owned workspace, and one on a plan with no catalogue row (nothing is locked, as for every other entitlement).
+ * A lapsed paid plan reports the free plan's set, like its flags.
+ */
+export interface VisibleApps {
+  all: boolean;
+  appIds: ReadonlySet<number>;
 }
 
 interface EntitlementRow {
@@ -54,6 +66,8 @@ interface EntitlementRow {
   plan_limits: Record<string, unknown> | null;
   plan_features: Record<string, unknown> | null;
   plan_found: boolean;
+  plan_id: string | null;
+  visible_app_ids: string[] | null;
   plan_is_free: boolean | null;
   plan_is_custom_quote: boolean | null;
   plan_amount: string | null;
@@ -126,7 +140,10 @@ export class PlanEntitlementService {
         SELECT o.plan AS plan_slug,
                s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides, s.platform_owned,
                p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features,
-               (p.id IS NOT NULL) AS plan_found,
+               (p.id IS NOT NULL) AS plan_found, p.id AS plan_id,
+               (SELECT array_agg(ap.marketplace_app_id) FROM plan_visible_addons pv
+                  JOIN plans ap ON ap.id = pv.addon_plan_id AND ap.marketplace_app_id IS NOT NULL
+                 WHERE pv.plan_id = p.id) AS visible_app_ids,
                p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote,
                p.amount::text AS plan_amount,
                (SELECT coalesce(jsonb_object_agg(f.key, true), '{}'::jsonb)
@@ -166,6 +183,7 @@ export class PlanEntitlementService {
     });
     let planLimits = row.plan_limits ?? {};
     let planFeatures = row.plan_features ?? {};
+    let visibleIds = (row.visible_app_ids ?? []).map(Number);
     if (fallsBackToFree(state)) {
       // A lapsed paid plan locks to the free plan: paid flags lock and the caps shrink (WD-PLAN-016). With no free plan in
       // the catalogue there is nothing to fall back to, so the stored plan keeps applying rather than locking everything.
@@ -173,6 +191,7 @@ export class PlanEntitlementService {
       if (free) {
         planLimits = free.limits;
         planFeatures = free.features;
+        visibleIds = await this.visibleAppIds(free.id);
       }
     }
     // A Marketplace app a workspace has subscribed to may grant plan features (a first-party app that owns one, e.g. a paid booking app).
@@ -194,11 +213,26 @@ export class PlanEntitlementService {
       planLimits,
       planFeatures,
       state,
+      visibleApps: {
+        all: (row.platform_owned ?? false) || !row.plan_found,
+        appIds: new Set(visibleIds),
+      },
     };
+  }
+
+  /** The Marketplace app ids a plan (by row id) makes visible. */
+  private async visibleAppIds(planId: number): Promise<number[]> {
+    const res = await this.db.primary.execute(sql`
+      SELECT ap.marketplace_app_id::text AS app_id FROM plan_visible_addons pv
+      JOIN plans ap ON ap.id = pv.addon_plan_id AND ap.marketplace_app_id IS NOT NULL
+      WHERE pv.plan_id = ${planId}
+    `);
+    return (res.rows as unknown as Array<{ app_id: string }>).map((r) => Number(r.app_id));
   }
 
   /** The first active free plan by catalogue order (WaDesk's "free package"), or null when the catalogue has none. */
   private async freePlan(): Promise<{
+    id: number;
     limits: Record<string, unknown>;
     features: Record<string, unknown>;
   } | null> {
@@ -210,7 +244,9 @@ export class PlanEntitlementService {
     const row = res.rows[0] as unknown as PlanRow | undefined;
     if (!row) return null;
     const facts = toFacts(row);
-    return planKind(facts) === 'free' ? { limits: row.limits, features: row.features } : null;
+    return planKind(facts) === 'free'
+      ? { id: Number(row.id), limits: row.limits, features: row.features }
+      : null;
   }
 
   /** Whether the organization's plan (or an override) grants the flag. */
@@ -282,4 +318,9 @@ export function resolveLimit(e: Entitlements, key: PlanLimitKey): number {
     return override > 0 ? override : 0;
   if (!e.planKnown) return 0;
   return storedLimit(e.planLimits, key);
+}
+
+/** Whether the plan makes the paid Marketplace app visible to the workspace (visible is not usable: the workspace must still buy it). */
+export function appVisibleOnPlan(e: Entitlements, appId: number): boolean {
+  return e.visibleApps.all || e.visibleApps.appIds.has(appId);
 }

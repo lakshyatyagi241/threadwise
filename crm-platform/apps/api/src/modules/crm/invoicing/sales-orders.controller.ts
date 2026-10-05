@@ -37,6 +37,7 @@ import {
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { SalesOrdersService } from './sales-orders.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /** Sales orders: accepted estimate -> order -> one or more invoices -> fulfilment. `counts` is a literal path before `:id`. */
 @ApiTags('sales-orders')
@@ -70,6 +71,8 @@ export class SalesOrdersController {
     return this.orders.counts(scope);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @Idempotent()
   @RequirePermission('record.sales-orders.create')
@@ -95,6 +98,7 @@ export class SalesOrdersController {
     return this.orders.get(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Patch(':id')
   @RequirePermission('record.sales-orders.update')
   @ApiOperation({ summary: 'Edit a draft order (rowVersion required)' })
@@ -106,6 +110,7 @@ export class SalesOrdersController {
     return this.orders.update(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/confirm')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.sales-orders.update')
@@ -119,6 +124,7 @@ export class SalesOrdersController {
     return this.orders.confirm(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/invoice')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -136,6 +142,7 @@ export class SalesOrdersController {
     return this.orders.invoice(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/fulfil')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -149,6 +156,7 @@ export class SalesOrdersController {
     return this.orders.fulfil(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/cancel')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.sales-orders.update')
@@ -163,6 +171,7 @@ export class SalesOrdersController {
     return this.orders.cancel(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.sales-orders.delete')

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { AdminBillingController } from './admin-billing.controller';
 import { AdminBillingRepository } from './admin-billing.repository';
@@ -29,7 +30,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
  * and the kernel are global providers, as in PlansModule.
  */
 @Module({
-  imports: [AddonsExtensionRegistryModule, WalletMessageBillingModule],
+  imports: [AddonsExtensionRegistryModule, PlansCoreModule, WalletMessageBillingModule],
   controllers: [
     PlatformGatewaysController,
     AdminBillingController,

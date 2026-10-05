@@ -21,6 +21,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
@@ -50,6 +51,7 @@ export class AttributesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly rbac: RbacService,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   private require(action: PropertyAction): void {
@@ -93,6 +95,8 @@ export class AttributesService {
         [{ path: 'key', message: 'reserved' }],
       );
     }
+    // The plan's `custom_fields` cap: a contact attribute is a non-system row of `fields`.
+    await this.planUsage.assertCanAdd(ctx.orgId, 'custom_fields');
     return this.db.tx(async (tx) => {
       if (await this.repo.keyTaken(tx, ctx.orgId, input.key)) {
         throw new AppError(

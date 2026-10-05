@@ -4,6 +4,7 @@ import {
   ERROR_CODES,
   createPlanRequestSchema,
   type CreatePlanPayload,
+  type PlanAddonOptionsResponse,
   type PlanAdminItem,
   type PlanAdminListResponse,
   type UpdatePlanPayload,
@@ -13,7 +14,21 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { AuthAuditService, SecurityPolicyService } from '../auth';
 import { PlanCatalogService } from './plan-catalog.service';
-import { PLAN_COLUMNS, fullFeatures, fullLimits, toAdminItem, type PlanRow } from './plan-row';
+import {
+  PLAN_COLUMNS,
+  fullFeatures,
+  fullLimits,
+  toAdminItem,
+  withStoredUnknownFeatures,
+  withStoredUnknownLimits,
+  type PlanRow,
+} from './plan-row';
+import {
+  addonOptions,
+  replaceVisibleAddons,
+  visibleAddonIds,
+  visibleAddonIdsByPlan,
+} from './plan-visible-addons';
 import { planKind, slugifyPlanName, uniquePlanSlug } from './plan-rules';
 import { PlanStore } from './plan-store';
 
@@ -38,9 +53,11 @@ interface PlanFields {
   dataRetentionDays: number;
   limits: Record<string, number>;
   features: Record<string, boolean>;
+  /** Pack uuids of the Marketplace add-ons the plan makes visible (table `plan_visible_addons`, not a column of `plans`). */
+  visibleAddons: string[];
 }
 
-const toFields = (row: PlanRow): PlanFields => ({
+const toFields = (row: PlanRow, visibleAddons: string[]): PlanFields => ({
   name: row.name,
   subtitle: row.subtitle,
   detail: row.detail,
@@ -58,8 +75,11 @@ const toFields = (row: PlanRow): PlanFields => ({
   sortOrder: row.sort_order,
   ctaLabel: row.cta_label,
   dataRetentionDays: Number(row.data_retention_days),
-  limits: fullLimits(row.limits),
-  features: fullFeatures(row.features),
+  // The keys the registry does not know stay in the merged value so the diff and the re-validation see the whole plan; the schema then
+  // strips them, and the save puts the stored ones back (withStoredUnknown*), so a module's key survives an edit of the plan.
+  limits: fullLimits(row.limits, { keepUnknown: true }),
+  features: fullFeatures(row.features, { keepUnknown: true }),
+  visibleAddons: [...visibleAddons].sort(),
 });
 
 /**
@@ -99,14 +119,16 @@ export class PlanAdminService {
 
   async list(): Promise<PlanAdminListResponse> {
     const registrationDefaultSlug = (await this.policy.registration()).defaultPlanId;
-    const { rows, counts } = await this.store.tx(async (tx) => ({
+    const { rows, counts, visible } = await this.store.tx(async (tx) => ({
       rows: await this.catalog.listPlans(tx),
       counts: await this.inUseCounts(tx),
+      visible: await visibleAddonIdsByPlan(tx),
     }));
     const data = rows.map((row) =>
       toAdminItem(row, {
         inUse: counts.get(row.slug) ?? 0,
         isRegistrationDefault: registrationDefaultSlug === row.slug,
+        visibleAddons: visible.get(Number(row.id)) ?? [],
       }),
     );
     return {
@@ -120,6 +142,11 @@ export class PlanAdminService {
       },
       registrationDefaultSlug,
     };
+  }
+
+  /** The add-on packs a plan may enable, for the plan form (every operator role reads, like the catalogue). */
+  async addonOptions(): Promise<PlanAddonOptionsResponse> {
+    return { data: await this.store.tx((tx) => addonOptions(tx)) };
   }
 
   async get(uuid: string): Promise<PlanAdminItem> {
@@ -156,6 +183,7 @@ export class PlanAdminService {
         RETURNING ${PLAN_COLUMNS}
       `);
       const row = res.rows[0] as unknown as PlanRow;
+      await replaceVisibleAddons(tx, Number(row.id), body.visibleAddons);
       await this.record(tx, 'platform.plan.created', operatorId, {
         slug,
         name: row.name,
@@ -168,6 +196,7 @@ export class PlanAdminService {
         currency: row.currency,
         isActive: row.is_active,
         isDefault: row.is_default,
+        visibleAddons: body.visibleAddons.length,
       });
       return this.item(tx, row, registrationDefaultSlug);
     });
@@ -179,7 +208,7 @@ export class PlanAdminService {
 
     return this.store.tx(async (tx) => {
       const stored = await this.byUuid(tx, uuid, true);
-      const before = toFields(stored);
+      const before = toFields(stored, await visibleAddonIds(tx, Number(stored.id)));
       const defined = Object.fromEntries(
         Object.entries(patch).filter(([, v]) => v !== undefined),
       ) as Partial<PlanFields>;
@@ -188,6 +217,7 @@ export class PlanAdminService {
         ...defined,
         limits: { ...before.limits, ...(patch.limits ?? {}) },
         features: { ...before.features, ...(patch.features ?? {}) },
+        visibleAddons: patch.visibleAddons ?? before.visibleAddons,
       };
 
       // The merged result must satisfy every rule a new plan does (the slug is not part of it).
@@ -211,14 +241,17 @@ export class PlanAdminService {
           is_lifetime = ${after.isLifetime}, is_active = ${after.isActive},
           is_default = ${after.isDefault}, is_highlighted = ${after.isHighlighted},
           is_custom_quote = ${after.isCustomQuote}, sort_order = ${after.sortOrder},
-          cta_label = ${after.ctaLabel}, data_retention_days = ${after.dataRetentionDays}, limits = ${JSON.stringify(after.limits)}::jsonb,
-          features = ${JSON.stringify(after.features)}::jsonb
+          cta_label = ${after.ctaLabel}, data_retention_days = ${after.dataRetentionDays},
+          limits = ${JSON.stringify(withStoredUnknownLimits(stored.limits, after.limits))}::jsonb,
+          features = ${JSON.stringify(withStoredUnknownFeatures(stored.features, after.features))}::jsonb
         WHERE id = ${stored.id}
         RETURNING ${PLAN_COLUMNS}
       `);
       const row = res.rows[0] as unknown as PlanRow;
+      if (patch.visibleAddons !== undefined)
+        await replaceVisibleAddons(tx, Number(stored.id), after.visibleAddons);
 
-      const changes = diffFields(before, toFields(row));
+      const changes = diffFields(before, toFields(row, after.visibleAddons));
       if (Object.keys(changes).length > 0) {
         await this.record(tx, 'platform.plan.updated', operatorId, {
           slug: row.slug,
@@ -304,7 +337,11 @@ export class PlanAdminService {
 
   private async item(tx: Tx, row: PlanRow, registrationDefaultSlug: string | null) {
     const inUse = (await this.inUseCounts(tx, row.slug)).get(row.slug) ?? 0;
-    return toAdminItem(row, { inUse, isRegistrationDefault: registrationDefaultSlug === row.slug });
+    return toAdminItem(row, {
+      inUse,
+      isRegistrationDefault: registrationDefaultSlug === row.slug,
+      visibleAddons: await visibleAddonIds(tx, Number(row.id)),
+    });
   }
 
   private async clearDefault(tx: Tx): Promise<void> {

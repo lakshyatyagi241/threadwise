@@ -12,6 +12,7 @@ import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { publicLeadSubmitSchema, type PublicLeadSubmitInput } from '@crm/contracts';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { ApiKeyGuard } from './api-key.guard';
 import { PublicApiService } from './public-api.service';
 
@@ -27,6 +28,8 @@ import { PublicApiService } from './public-api.service';
  */
 @ApiTags('public-api')
 @Public()
+// The whole controller is the customer-facing REST API, so the whole controller needs the plan feature (enforced by ApiKeyGuard once the key's workspace is known).
+@RequirePlanFeature('public_api')
 @UseGuards(ApiKeyGuard)
 @ApiHeader({ name: 'Authorization', description: 'ApiKey <prefix>.<secret>', required: true })
 @ApiHeader({

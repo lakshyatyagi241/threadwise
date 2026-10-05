@@ -6,7 +6,13 @@ import {
   type PlanFeatureKey,
   type PlanLimitKey,
 } from './catalogue';
-import { planCardSchema, planFeaturesSchema, planLimitsSchema, planSlugSchema } from './plan';
+import {
+  planCardSchema,
+  planFeaturesSchema,
+  planLimitsSchema,
+  planSlugSchema,
+  visibleAddonSchema,
+} from './plan';
 
 /**
  * Workspace billing and the operator's per-workspace plan (WD-PLAN-011..016, 018).
@@ -67,6 +73,8 @@ export const billingPlanSchema = planCardSchema.extend({
    * the card shows. null for free, lifetime, custom-quote and plans not billed once a month (a plan authored in years IS the yearly price).
    */
   yearly: z.object({ perMonth: z.string(), perYear: z.string() }).nullable(),
+  /** The Marketplace add-ons this plan makes visible (for the compare table). `owned` is about the CALLING workspace. */
+  visibleAddons: z.array(visibleAddonSchema),
 });
 export type BillingPlan = z.infer<typeof billingPlanSchema>;
 
@@ -99,6 +107,8 @@ export const billingPlansResponseSchema = z.object({
   /** Whether the caller may change the plan (`plan.subscription.manage`). */
   canManage: z.boolean(),
   subscription: billingSubscriptionSchema.nullable(),
+  /** The add-ons available on the workspace's current plan, with owned or not ("Add-ons available on your plan"). */
+  visibleAddons: z.array(visibleAddonSchema),
   /** The Monthly/Yearly switch: on when the operator setting is on AND at least one card has a yearly price. */
   yearlyToggle: z.object({ enabled: z.boolean(), discountPct: z.number().int().min(0).max(100) }),
 });
@@ -138,6 +148,12 @@ export const billingUsageResponseSchema = z.object({
   cycleResetsAt: z.string().datetime(),
 });
 export type BillingUsageResponse = z.infer<typeof billingUsageResponseSchema>;
+
+/** What `GET billing/usage` answers: the usage above plus the add-ons the workspace's current plan makes visible (owned or not). */
+export const billingUsagePanelResponseSchema = billingUsageResponseSchema.extend({
+  visibleAddons: z.array(visibleAddonSchema),
+});
+export type BillingUsagePanelResponse = z.infer<typeof billingUsagePanelResponseSchema>;
 
 // --- changing the plan ----------------------------------------------------------------------------------------------
 
@@ -185,6 +201,24 @@ export type PlanOverrides = z.infer<typeof planOverridesSchema>;
 export type PlanOverrideLimitKey = PlanLimitKey;
 export type PlanOverrideFeatureKey = PlanFeatureKey;
 
+/**
+ * The operator's view of a workspace's Marketplace add-ons. `visible`: what its plan makes visible (with `owned`). `owned`: what it
+ * holds now, with `visibleOnPlan` false for something bought and then no longer shown by the plan (it stays usable: a purchase is kept).
+ */
+export const workspaceAddonsSchema = z.object({
+  visible: z.array(visibleAddonSchema),
+  owned: z.array(
+    z.object({
+      id: uuidSchema,
+      packSlug: z.string(),
+      app: z.object({ id: uuidSchema, slug: z.string(), name: z.string() }),
+      endsAt: z.string().datetime().nullable(),
+      visibleOnPlan: z.boolean(),
+    }),
+  ),
+});
+export type WorkspaceAddons = z.infer<typeof workspaceAddonsSchema>;
+
 export const workspacePlanSchema = z.object({
   workspaceId: uuidSchema,
   slug: z.string(),
@@ -200,6 +234,8 @@ export const workspacePlanSchema = z.object({
   /** The plan's own caps, so the console can show what an override replaces. */
   planLimits: planLimitsSchema,
   planFeatures: planFeaturesSchema,
+  /** What the workspace owns of the Marketplace versus what its plan makes visible. */
+  addons: workspaceAddonsSchema,
   rowVersion: z.number().int(),
 });
 export type WorkspacePlan = z.infer<typeof workspacePlanSchema>;

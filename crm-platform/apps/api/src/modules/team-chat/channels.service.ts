@@ -13,6 +13,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { PlanUsageService } from '../plans-subscriptions-trials';
 import { channelSlug, directSlug } from './chat-rules';
 import { TeamChatAccess } from './team-chat-access.service';
 import { toChannelResponse, toMemberResponse } from './team-chat.mapper';
@@ -35,6 +36,7 @@ export class ChannelsService {
     private readonly access: TeamChatAccess,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   async list(): Promise<TchatChannelListResponse> {
@@ -53,6 +55,8 @@ export class ChannelsService {
 
   async create(input: CreateTchatChannelInput): Promise<TchatChannelResponse> {
     const { orgId, userId } = this.access.actor();
+    // The plan's `team_chat_channels` cap. Direct messages (openDirect) and the seeded #general are not user-created channels and are not guarded.
+    await this.planUsage.assertCanAdd(orgId, 'team_chat_channels');
     return this.db.tx(async (tx) => {
       const name = input.name.toLowerCase();
       const slug = channelSlug(name);

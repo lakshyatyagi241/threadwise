@@ -40,6 +40,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     planLimits: {},
     planFeatures: {},
     state: 'paid_active',
+    visibleApps: { all: false, appIds: new Set() },
     ...over,
   };
 }
@@ -70,6 +71,13 @@ describe('registry', () => {
       'whatsapp_warmer',
       'marketplace',
       'lead_sources',
+      'team_chat',
+      'public_api',
+      'outbound_webhooks',
+      'storefront_builder',
+      'invoicing',
+      'forms_and_links',
+      'extra_channels',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

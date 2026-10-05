@@ -26,6 +26,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import { UploadPolicyService } from '../auth';
+import { PlanUsageService } from '../plans-subscriptions-trials';
 import {
   localStatusFor,
   WabaConnectService,
@@ -82,6 +83,7 @@ export class TemplatesService {
     private readonly rbac: RbacService,
     private readonly waba: WabaConnectService,
     private readonly uploads: UploadPolicyService,
+    private readonly planUsage: PlanUsageService,
     @Inject(WABA_TEMPLATES) private readonly remote: WabaTemplatePort,
   ) {}
 
@@ -174,6 +176,9 @@ export class TemplatesService {
 
     const target = await this.connection({ uuid: input.connectionId });
     if (input.submit) this.requireUsable(target);
+
+    // Plan cap on templates (live count of wa_templates): refuse before anything is written, 422 PLAN_LIMIT_REACHED.
+    await this.planUsage.assertCanAdd(ctx.orgId, 'templates');
 
     const row = await this.db.tx(async (tx) => {
       if (await this.repo.nameTaken(tx, ctx.orgId, target.id, prepared.name, prepared.language))

@@ -20,7 +20,7 @@ import {
   type WalletGate,
 } from '../broadcasts';
 import { OutboundRegistry, SenderResolver, type SenderRef } from '../node-bridge-runtime';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import {
   ScheduleAudienceService,
   cleanNumber,
@@ -76,6 +76,7 @@ export class ScheduleCreateService {
   constructor(
     private readonly db: DatabaseService,
     private readonly plans: PlanEntitlementService,
+    private readonly usage: PlanUsageService,
     private readonly audience: ScheduleAudienceService,
     private readonly warmer: WarmerService,
     private readonly senderResolver: SenderResolver,
@@ -89,13 +90,7 @@ export class ScheduleCreateService {
   async create(input: CreateScheduleInput): Promise<CreateScheduleResult> {
     const { orgId, userId } = RequestContextStore.require();
     await this.plans.assertFeature(orgId, 'scheduled_messages');
-    const held = await this.db.tx(async (tx) => {
-      const res = await tx.execute(
-        sql`SELECT count(*)::int AS n FROM scheduled_messages WHERE org_id = ${orgId}`,
-      );
-      return Number((res.rows[0] as { n?: number }).n ?? 0);
-    });
-    await this.plans.assertWithinLimit(orgId, 'scheduled_messages', held);
+    await this.usage.assertCanAdd(orgId, 'scheduled_messages');
 
     // --- when ---
     if (!isKnownTimeZone(input.timezone)) throw fail('Choose a valid timezone.', 'timezone');
