@@ -1,3 +1,4 @@
+import { FlowRefResolver } from '../../../src/modules/flow-runtime-engine/runtime/nodes/flow-refs';
 import { createServer, type IncomingMessage, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -98,6 +99,7 @@ async function runNode(
     fakes.mysql ?? { query: async () => [] },
     fakes.google ?? failingGoogle(),
     fakes.calls ?? { place: async () => ({ ok: true, callId: 'c1' }) },
+    new FlowRefResolver({} as never),
   );
   const run = newRun(type, data, vars);
   const sent: OutboundMessage[] = [];
