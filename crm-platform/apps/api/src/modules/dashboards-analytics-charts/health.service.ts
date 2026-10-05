@@ -27,7 +27,8 @@ import { overallState, queueState, shortError } from './health-rules';
 /** A poll storm (several consoles at 20 s) shares one run of the probes. */
 const CACHE_MS = 3_000;
 const PROBE_TIMEOUT_MS = 5_000;
-const JOB_STATES = ['waiting', 'paused', 'delayed', 'prioritized', 'failed'] as const;
+// BullMQ 6 has no `paused` job state: the jobs of a paused queue are counted as `waiting`.
+const JOB_STATES = ['waiting', 'delayed', 'prioritized', 'failed'] as const;
 
 /**
  * System health (WD-DASH-048, 049, 050, 051). Reads only platform plumbing (Postgres, Redis, BullMQ, the bridge, storage);
@@ -239,7 +240,7 @@ export class HealthService {
           const c = await queue.getJobCounts(...JOB_STATES);
           return {
             name,
-            pending: (c.waiting ?? 0) + (c.paused ?? 0) + (c.delayed ?? 0) + (c.prioritized ?? 0),
+            pending: (c.waiting ?? 0) + (c.delayed ?? 0) + (c.prioritized ?? 0),
             failed: c.failed ?? 0,
           };
         }),
@@ -393,8 +394,7 @@ export class HealthService {
     let clearedFailed = 0;
     for (const { queue } of targets) {
       const c = await queue.getJobCounts(...JOB_STATES);
-      clearedPending +=
-        (c.waiting ?? 0) + (c.paused ?? 0) + (c.delayed ?? 0) + (c.prioritized ?? 0);
+      clearedPending += (c.waiting ?? 0) + (c.delayed ?? 0) + (c.prioritized ?? 0);
       clearedFailed += c.failed ?? 0;
       await queue.drain(true);
       await queue.clean(0, 0, 'failed');
