@@ -24,6 +24,7 @@ import {
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { SetupService } from './setup.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /**
  * Messenger setup: Get Started, greeting, persistent menu, ice breakers (WD-FB-015). Each piece is saved straight to Meta and can be
@@ -32,6 +33,8 @@ import { SetupService } from './setup.service';
  */
 @ApiTags('facebook')
 @ActorKinds('user')
+// Facebook management is entirely the extra-channels feature; the public webhook controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'facebook/setup', version: '2' })
 export class SetupController {
   constructor(private readonly setup: SetupService) {}

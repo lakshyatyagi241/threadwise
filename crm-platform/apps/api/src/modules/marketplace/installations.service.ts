@@ -146,12 +146,14 @@ export class InstallationsService {
     const ref = parseAppRef(appRef);
     if (!ref) throw this.appNotFound();
 
+    // An app the workspace's plan does not show it (and it does not already have) is not there for it: 404, like a draft.
+    const vis = await this.pricing.visibility(ctx.orgId);
     const pre = await this.db.tx(async (tx) => {
-      const target = await this.browse.installable(tx, ref, ctx.orgId);
+      const target = await this.browse.installable(tx, ref, ctx.orgId, vis);
       if (!target)
         return {
           target: null,
-          exists: await this.browse.exists(tx, ref),
+          exists: await this.browse.exists(tx, ref, ctx.orgId, vis),
           installedCount: 0,
           already: false,
         };
@@ -207,6 +209,7 @@ export class InstallationsService {
 
     // A paid app needs its subscription first (or a plan that includes it): the entitlement service says, from the workspace's add-ons.
     const priced = {
+      appId: target.appId,
       slug: target.slug,
       uuid: target.appUuid,
       pricing: target.pricing,
@@ -503,10 +506,12 @@ export class InstallationsService {
       // A pause the subscription caused is lifted by the subscription, or by an admin once the app is paid for again (never before).
       if (enabled && row.pausedBySubscription) {
         const priced = {
+          appId: row.appId,
           slug: row.app.slug,
           uuid: row.app.uuid,
           pricing: row.pricing,
           sub: row.sub,
+          installed: true,
         };
         const ev = await (await this.pricing.evaluator(ctx.orgId))(priced);
         if (ev.access === 'subscription_required' || ev.access === 'not_for_sale')
@@ -739,7 +744,14 @@ export class InstallationsService {
     const now = new Date();
     const out: MarketInstallation[] = [];
     for (const row of rows) {
-      const facts = { slug: row.app.slug, uuid: row.app.uuid, pricing: row.pricing, sub: row.sub };
+      const facts = {
+        appId: row.appId,
+        slug: row.app.slug,
+        uuid: row.app.uuid,
+        pricing: row.pricing,
+        sub: row.sub,
+        installed: true,
+      };
       out.push(
         toInstallationView(
           row,

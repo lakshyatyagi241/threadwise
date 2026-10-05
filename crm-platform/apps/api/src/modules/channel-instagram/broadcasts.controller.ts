@@ -9,10 +9,13 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { BroadcastsService } from './broadcasts.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Reply-only sends to existing Instagram threads (WD-IG-013, 014). */
 @ApiTags('instagram')
 @ActorKinds('user')
+// Instagram management is entirely the extra-channels feature; the public inbound controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'instagram', version: '2' })
 export class BroadcastsController {
   constructor(private readonly broadcasts: BroadcastsService) {}

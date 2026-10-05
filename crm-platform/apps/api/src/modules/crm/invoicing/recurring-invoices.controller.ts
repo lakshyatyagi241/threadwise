@@ -33,6 +33,7 @@ import {
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { RecurringInvoicesService } from './recurring-invoices.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /** Recurring invoices: a schedule and a template that a worker turns into one invoice per period. */
 @ApiTags('recurring-invoices')
@@ -55,6 +56,8 @@ export class RecurringInvoicesController {
     return this.recurring.list(query, scope);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @Idempotent()
   @RequirePermission('record.recurring-invoices.create')
@@ -91,6 +94,7 @@ export class RecurringInvoicesController {
     return this.recurring.runs(id, query, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Patch(':id')
   @RequirePermission('record.recurring-invoices.update')
   @ApiOperation({
@@ -104,6 +108,7 @@ export class RecurringInvoicesController {
     return this.recurring.update(id, body, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/pause')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
@@ -115,6 +120,7 @@ export class RecurringInvoicesController {
     return this.recurring.pause(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/resume')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
@@ -130,6 +136,7 @@ export class RecurringInvoicesController {
     return this.recurring.resume(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/run')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -142,6 +149,7 @@ export class RecurringInvoicesController {
     return this.recurring.runNow(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.recurring-invoices.delete')

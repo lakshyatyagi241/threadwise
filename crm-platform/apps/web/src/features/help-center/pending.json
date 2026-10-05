@@ -19,6 +19,41 @@
       "unit": "tile:workspace-settings",
       "owner": "lakshya",
       "reason": "The workspace settings screens were added on main without a guide; it is written once the tab layout settles."
+    },
+    {
+      "unit": "feature:team_chat",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. Team chat is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:public_api",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. The public API is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:outbound_webhooks",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. Outbound webhooks is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:storefront_builder",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. The storefront builder is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:invoicing",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. Invoicing is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:forms_and_links",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. Forms and links is now gated by this key; the plan guide is written once the plan editor copy for it settles."
+    },
+    {
+      "unit": "feature:extra_channels",
+      "owner": "lakshya",
+      "reason": "Plan feature added with the plan limits work. The Telegram, Facebook and Instagram channels is now gated by this key; the plan guide is written once the plan editor copy for it settles."
     }
   ]
 }

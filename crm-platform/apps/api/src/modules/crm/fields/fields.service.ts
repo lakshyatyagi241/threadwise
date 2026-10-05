@@ -25,6 +25,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
 import { FieldDependenciesRepository } from './field-dependencies.repository';
 import { FieldOptionsRepository } from './field-options.repository';
@@ -52,6 +53,7 @@ export class FieldsService {
     private readonly outbox: OutboxService,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   /** See FieldSectionsService.requireModulePermission — same rationale. */
@@ -154,6 +156,8 @@ export class FieldsService {
         [{ path: 'key', message: 'reserved' }],
       );
     }
+    // The plan's `custom_fields` cap: this endpoint only ever creates non-system fields (the meter excludes the built-in ones).
+    await this.planUsage.assertCanAdd(ctx.orgId, 'custom_fields');
     return this.db.tx(async (tx) => {
       const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
       if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);

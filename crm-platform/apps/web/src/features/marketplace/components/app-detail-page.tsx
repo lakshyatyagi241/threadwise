@@ -12,7 +12,12 @@ import { mktRoutes } from '../lib/routes';
 import { isHttpsLink, paragraphs } from '../lib/text';
 import { BackLink } from './marketplace-header';
 import { MaturityBadge, MaturityNotice } from './maturity';
-import { NotForSaleNote, PricingBlock, SubscribeActions } from './pricing-parts';
+import {
+  NeedsPurchaseInstall,
+  NotForSaleNote,
+  PricingBlock,
+  SubscribeActions,
+} from './pricing-parts';
 import { RiskCallout, ScopeList } from './scope-list';
 import { SubscriptionPanel } from './subscription-panel';
 import {
@@ -176,7 +181,14 @@ function InstallAction({ gate, app }: { gate: InstallGate; app: MarketAppDetail 
       );
     case 'subscribe':
       // A paid app with no subscription: Subscribe (and the free trial) stand where Install would; the consent step follows later.
-      return <SubscribeActions app={app} />;
+      return gate.needsPurchase ? (
+        <div className="flex min-w-0 max-w-full flex-col gap-3">
+          <SubscribeActions app={app} />
+          <NeedsPurchaseInstall id="mkt-install-needs-purchase" label={t('install')} />
+        </div>
+      ) : (
+        <SubscribeActions app={app} />
+      );
     case 'notForSale':
       return (
         <div className="max-w-sm">

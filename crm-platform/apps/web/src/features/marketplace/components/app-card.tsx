@@ -7,7 +7,7 @@ import { Badge, cn } from '@crm/ui';
 import { cardCta, effectiveLock, installChips, type CtaKind } from '../lib/install-state';
 import { mktRoutes } from '../lib/routes';
 import { MaturityLine } from './maturity';
-import { PriceText } from './pricing-parts';
+import { NeedsPurchaseInstall, PriceText } from './pricing-parts';
 import { AppLogo, ChipView, LINK_BUTTON, LINK_BUTTON_PRIMARY, LockNotice } from './ui';
 import { useMarketAccess } from './use-access';
 
@@ -32,7 +32,7 @@ export function AppCard({ card, className }: { card: MarketAppCard; className?: 
     <article
       data-testid={`app-card-${card.slug}`}
       className={cn(
-        'flex min-w-0 flex-col gap-3 rounded-md border border-border bg-background p-4',
+        'flex h-full min-w-0 flex-col gap-3 rounded-md border border-border bg-background p-4',
         className,
       )}
     >
@@ -68,11 +68,14 @@ export function AppCard({ card, className }: { card: MarketAppCard; className?: 
         </div>
       )}
       {lock && <LockNotice lock={lock} compact />}
-      <div className="mt-auto pt-1">
+      <div className="mt-auto flex min-w-0 flex-wrap items-start gap-2 pt-1">
         <Link href={cta.href} className={cn(CTA_STYLE[cta.kind], 'w-full sm:w-auto')}>
           {t(`cta.${cta.kind}`)}
           <span className="sr-only"> — {card.name}</span>
         </Link>
+        {cta.needsPurchase && (
+          <NeedsPurchaseInstall id={`mkt-needs-${card.slug}`} label={t('cta.install')} />
+        )}
       </div>
     </article>
   );

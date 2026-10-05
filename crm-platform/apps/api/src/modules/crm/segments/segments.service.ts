@@ -44,6 +44,7 @@ import {
 import { countWithTimeout, segmentContactsWhere, type CountResult } from './segment-count';
 import { canSee, currentSegmentAccess, type SegmentAccess } from './segment-filter';
 import { loadRuleContext } from './segment-rule-context';
+import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { SegmentThrottle } from './segment-throttle';
 import { segmentsUsing } from './segment-usage';
 import { toSegmentResponse, type SegmentCountView } from './segments.mapper';
@@ -83,6 +84,7 @@ export class SegmentsService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly throttle: SegmentThrottle,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   // --- reads -------------------------------------------------------------------------------
@@ -155,6 +157,8 @@ export class SegmentsService {
 
   async create(input: CreateSegmentInput): Promise<SegmentResponse> {
     const ctx = RequestContextStore.require();
+    // The plan's `segments` cap (live count; also covers "save this filter as a segment", which calls create).
+    await this.planUsage.assertCanAdd(ctx.orgId, 'segments');
     return this.db.tx(async (tx) => {
       const rules = input.rules as unknown as SegmentGroup;
       await this.assertRulesValid(tx, ctx.orgId, rules);

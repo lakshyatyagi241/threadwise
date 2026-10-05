@@ -182,10 +182,7 @@ const appRow = (slug: string) =>
     status: string;
     row_version: number;
     price_changed_at: string | null;
-  }>(
-    `SELECT * FROM marketplace_apps WHERE slug = $1`,
-    [slug],
-  );
+  }>(`SELECT * FROM marketplace_apps WHERE slug = $1`, [slug]);
 const rv = async (slug: string): Promise<number> => (await appRow(slug)).row_version;
 // A row as the owner connection returns it: columns are read by name in the assertions below.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -210,8 +207,22 @@ const detail = async (t: Tenant, slug: string): Promise<MarketAppDetail> => {
   expect(res.status, JSON.stringify(res.body)).toBe(200);
   return marketAppDetailSchema.parse(res.body);
 };
-const setPricing = async (slug: string, body: Record<string, unknown>) =>
-  ops().put(`/apps/${slug}/pricing`, { rowVersion: await rv(slug), ...body });
+/**
+ * These tests are about price and entitlement, not about which plan shows an app: a priced app is switched on for every plan, as an
+ * operator who wants everyone to see it would (the plan-gated visibility has its own suite, marketplace-plan-visibility.e2e.spec.ts).
+ */
+const setPricing = async (slug: string, body: Record<string, unknown>) => {
+  const res = await ops().put(`/apps/${slug}/pricing`, { rowVersion: await rv(slug), ...body });
+  if (res.status === 200)
+    await h.owner.query(
+      `INSERT INTO plan_visible_addons (plan_id, addon_plan_id)
+       SELECT p.id, ap.id FROM plans p, plans ap
+        WHERE p.kind = 'plan' AND ap.kind = 'addon' AND ap.marketplace_app_id = (SELECT id FROM marketplace_apps WHERE slug = $1)
+       ON CONFLICT DO NOTHING`,
+      [slug],
+    );
+  return res;
+};
 const setPaid = async (
   slug: string,
   body: Record<string, unknown> = {},

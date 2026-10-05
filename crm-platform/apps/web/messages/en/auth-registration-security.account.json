@@ -536,7 +536,14 @@
             "scheduled_messages": "Scheduled messages",
             "whatsapp_warmer": "WhatsApp warmer",
             "marketplace": "Marketplace",
-            "lead_sources": "Lead sources"
+            "lead_sources": "Lead sources",
+            "team_chat": "Team chat",
+            "public_api": "Public API",
+            "outbound_webhooks": "Outbound webhooks",
+            "storefront_builder": "Storefront builder",
+            "invoicing": "Invoicing",
+            "forms_and_links": "Forms and links",
+            "extra_channels": "Telegram, Facebook and Instagram"
           },
           "cta": {
             "continueFree": "Continue free",

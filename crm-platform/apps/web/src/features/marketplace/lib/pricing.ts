@@ -37,6 +37,47 @@ export function formatMoney(amount: string, currency: string, locale: string): s
   }
 }
 
+/** What the workspace sees a card as: usable now, offered to buy (its plan lists the add-on), or already bought. */
+export type CardAvailability = 'open' | 'visible' | 'purchased';
+
+/**
+ * The availability of a card. The API always sends `availability`; an older answer without it is read from `access`. `not_visible` is
+ * never sent (the API hides those apps), and if one ever arrived it is treated as an add-on to buy, so it can never be installed.
+ */
+export function cardAvailability(
+  p: Pick<MarketCardPricing, 'access'> & { availability?: MarketCardPricing['availability'] },
+): CardAvailability {
+  switch (p.availability) {
+    case 'open':
+    case 'purchased':
+      return p.availability;
+    case 'visible':
+    case 'not_visible':
+      return 'visible';
+    default:
+      return p.access === 'subscription_required' || p.access === 'not_for_sale'
+        ? 'visible'
+        : p.access === 'entitled'
+          ? 'purchased'
+          : 'open';
+  }
+}
+
+/** A paid app the plan lists but the workspace has not bought: price and Subscribe are shown, Install and Open never are. */
+export const needsPurchase = (
+  p: Pick<MarketCardPricing, 'access'> & { availability?: MarketCardPricing['availability'] },
+): boolean => cardAvailability(p) === 'visible' && p.access !== 'not_for_sale';
+
+/** The "Add-on" chip of a not-yet-bought paid app, with its monthly price when it has one; null for every other card. */
+export function priceChip(
+  p: Pick<MarketCardPricing, 'access' | 'amount' | 'currency'> & {
+    availability?: MarketCardPricing['availability'];
+  },
+  locale: string,
+): { key: 'addOn'; price: string | null } | null {
+  return needsPurchase(p) ? { key: 'addOn', price: priceOf(p, locale) } : null;
+}
+
 const sameMoney = (a: string, b: string): boolean => Number(a) === Number(b);
 
 // --- the price line (card, app page) ---------------------------------------------------------------------------------------------

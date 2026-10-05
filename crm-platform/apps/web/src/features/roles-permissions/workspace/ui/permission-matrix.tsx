@@ -8,6 +8,12 @@ import { SearchIcon } from '../../ui/icons';
 import { SectionBadge } from '../../ui/chrome';
 import { TriCheckbox } from '../../ui/tri-checkbox';
 import {
+  isLocked,
+  permissionBadge,
+  planFeatureFallback,
+  selectableKeys,
+} from '../lib/permission-lock';
+import {
   countDenied,
   countSelected,
   filterDefs,
@@ -40,11 +46,12 @@ export function PermissionMatrix({
   readOnly: boolean;
 }) {
   const t = useTranslations(NS);
+  const tf = useTranslations('plans-subscriptions-trials.features');
   const [query, setQuery] = useState('');
-  const allKeys = useMemo(() => defs.map((d) => d.key), [defs]);
+  const allKeys = useMemo(() => selectableKeys(defs), [defs]);
   const visible = useMemo(() => filterDefs(defs, query), [defs, query]);
   const groups = useMemo(() => groupByCategory(visible), [visible]);
-  const visibleKeys = useMemo(() => visible.map((d) => d.key), [visible]);
+  const visibleKeys = useMemo(() => selectableKeys(visible), [visible]);
   const denied = countDenied(draft);
 
   return (
@@ -105,6 +112,7 @@ export function PermissionMatrix({
         <div className="divide-y divide-border">
           {groups.map((g) => {
             const headingId = `matrix-cat-${g.category}`;
+            const open = selectableKeys(g.items);
             return (
               <div
                 key={g.category}
@@ -118,13 +126,13 @@ export function PermissionMatrix({
                       {g.category}
                     </h3>
                     <span className="font-mono text-[11px] text-muted-foreground">
-                      {countSelected(draft, g.keys)} / {g.keys.length}
+                      {countSelected(draft, open)} / {open.length}
                     </span>
                   </div>
                   <TriCheckbox
-                    state={triState(draft, g.keys)}
-                    disabled={readOnly}
-                    onChange={(on) => onChange(setMany(draft, g.keys, on))}
+                    state={triState(draft, open)}
+                    disabled={readOnly || open.length === 0}
+                    onChange={(on) => onChange(setMany(draft, open, on))}
                     label={<span className="text-xs">{t('selectAllCategory')}</span>}
                     aria-label={t('selectAllOf', { category: g.category })}
                     data-testid={`select-all-${g.category}`}
@@ -134,6 +142,8 @@ export function PermissionMatrix({
                   {g.items.map((d) => {
                     const grant = draft.get(d.key);
                     const id = `perm-${d.key}`;
+                    const badge = permissionBadge(d);
+                    const lockedRow = isLocked(d);
                     return (
                       <li
                         key={d.key}
@@ -144,19 +154,37 @@ export function PermissionMatrix({
                           htmlFor={id}
                           className={cn(
                             'flex min-w-0 flex-1 basis-60 items-start gap-2.5',
-                            readOnly ? 'cursor-default' : 'cursor-pointer',
+                            readOnly || lockedRow ? 'cursor-default' : 'cursor-pointer',
+                            lockedRow && 'opacity-70',
                           )}
                         >
                           <input
                             id={id}
                             type="checkbox"
                             checked={Boolean(grant)}
-                            disabled={readOnly}
+                            disabled={readOnly || lockedRow}
                             onChange={() => onChange(toggleKey(draft, d.key))}
                             className="mt-0.5 size-4 shrink-0 rounded border-border accent-[var(--primary)]"
                           />
                           <span className="min-w-0">
-                            <span className="block text-sm">{d.label}</span>
+                            <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                              <span>{d.label}</span>
+                              {badge && (
+                                <span
+                                  data-testid={`lock-badge-${d.key}`}
+                                  title={t('lockedHint')}
+                                  className="inline-flex max-w-full items-center rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-semibold text-warning"
+                                >
+                                  {badge.kind === 'plan_feature'
+                                    ? t('needsPlan', {
+                                        feature: tf.has(badge.key)
+                                          ? tf(badge.key)
+                                          : planFeatureFallback(badge.key),
+                                      })
+                                    : t('needsApp', { app: badge.slug })}
+                                </span>
+                              )}
+                            </span>
                             <span
                               className="block break-all font-mono text-[11px] text-muted-foreground"
                               dir="ltr"

@@ -15,7 +15,9 @@ export {
   PlanEntitlementService,
   resolveFeature,
   resolveLimit,
+  appVisibleOnPlan,
   type Entitlements,
+  type VisibleApps,
   type InitialPlan,
 } from './plan-entitlement.service';
 export {
@@ -34,4 +36,8 @@ export {
 } from './plan-rules';
 export { PlansWorkerModule } from './plans-worker.module';
 export { PlanRetentionService } from './plan-retention.service';
-export { RequirePlanFeature, planFeatureLabel } from './plan-feature.guard';
+export {
+  RequirePlanFeature,
+  REQUIRE_PLAN_FEATURE_KEY,
+  planFeatureLabel,
+} from './plan-feature.guard';

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { eq, inArray } from 'drizzle-orm';
 import { schema } from '@crm/db';
@@ -26,7 +26,12 @@ export class PermissionsController {
   @Get()
   @RequirePermission('admin.role.manage')
   @ApiOperation({ summary: 'List every permission key the platform knows about' })
-  async list(@CurrentActor() ctx: RequestContext): Promise<{ data: PermissionDefResponse[] }> {
+  async list(
+    @CurrentActor() ctx: RequestContext,
+    // `?includeLocked=1`: also return the keys the workspace does not have yet (plan feature off / app not installed), each marked
+    // with `lock`, so the Roles editor can show them disabled with the reason. Without it the list is unchanged (hidden keys omitted).
+    @Query('includeLocked') includeLocked?: string,
+  ): Promise<{ data: PermissionDefResponse[] }> {
     const rows = await this.db.tx((tx) =>
       tx
         .select({
@@ -59,11 +64,20 @@ export class PermissionsController {
       for (const f of found) installed.add(f.slug);
     }
     for (const f of features) if (await this.entitlements.featureEnabled(ctx.orgId, f)) on.add(f);
-    return {
-      data: rows.filter(
-        (r) =>
-          (!r.planFeature || on.has(r.planFeature)) && (!r.appSlug || installed.has(r.appSlug)),
-      ),
-    };
+    const open = (r: (typeof rows)[number]) =>
+      (!r.planFeature || on.has(r.planFeature)) && (!r.appSlug || installed.has(r.appSlug));
+    if (includeLocked === '1' || includeLocked === 'true') {
+      return {
+        data: rows.map((r) => {
+          if (open(r)) return r;
+          const lock: PermissionDefResponse['lock'] =
+            r.planFeature && !on.has(r.planFeature)
+              ? { kind: 'plan_feature', key: r.planFeature }
+              : { kind: 'app', slug: r.appSlug! };
+          return { ...r, lock };
+        }),
+      };
+    }
+    return { data: rows.filter(open) };
   }
 }

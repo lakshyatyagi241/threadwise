@@ -29,6 +29,7 @@ import { ActorKinds, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { TaxRatesService } from './tax-rates.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /** Tax rates: named, typed percentages an invoice line can point at (inclusive or exclusive, one default per workspace). */
 @ApiTags('tax-rates')
@@ -49,6 +50,8 @@ export class TaxRatesController {
     return this.taxRates.list(query);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @RequirePermission('record.tax-rates.create')
   @ApiOperation({
@@ -71,6 +74,7 @@ export class TaxRatesController {
     return this.taxRates.presets(query);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post('presets')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.tax-rates.create')
@@ -90,6 +94,7 @@ export class TaxRatesController {
     return this.taxRates.get(id);
   }
 
+  @RequirePlanFeature('invoicing')
   @Patch(':id')
   @RequirePermission('record.tax-rates.update')
   @ApiOperation({
@@ -104,6 +109,7 @@ export class TaxRatesController {
     return this.taxRates.update(id, body);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/default')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.tax-rates.update')
@@ -114,6 +120,7 @@ export class TaxRatesController {
     return this.taxRates.setDefault(id);
   }
 
+  @RequirePlanFeature('invoicing')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.tax-rates.delete')

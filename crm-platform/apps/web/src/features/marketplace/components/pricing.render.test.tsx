@@ -10,6 +10,7 @@ import {
   detail,
   installation,
   paidPricing,
+  pricing,
   subscription,
 } from '../test-fixtures';
 
@@ -94,9 +95,57 @@ describe('cards show the real price', () => {
       expect(html).toContain(locale === 'en' ? '$9 / month' : 'شهريًا');
       expect(html).toContain(locale === 'en' ? '14-day free trial' : 'تجربة مجانية');
       expect(html).toContain(locale === 'en' ? '>Subscribe<' : '>اشتراك<');
-      expect(html).not.toContain('>Install<');
+      expect(html).toContain('href="/marketplace/app/webhook/install"');
     });
   }
+
+  for (const locale of LOCALES) {
+    it(`an add-on on offer: Add-on chip, price, Subscribe, a disabled Install and the reason in ${locale}`, () => {
+      const html = renderMarket(<AppCard card={card({ pricing: paidPricing() })} />, { locale });
+      expect(html).toContain('data-testid="addon-chip"');
+      expect(html).toContain('data-availability="visible"');
+      expect(html).toContain(locale === 'en' ? '>Add-on<' : '>إضافة<');
+      expect(html).toContain('data-testid="needs-purchase"');
+      expect(
+        html.includes(
+          locale === 'en'
+            ? 'Included in your plan&#x27;s catalogue, buy it to use it.'
+            : 'مشمول في كتالوج باقتك، اشتره لاستخدامه.',
+        ),
+      ).toBe(true);
+      expect(disabledButtonWith(html, locale === 'en' ? 'Install' : 'تثبيت')).toBe(true);
+      expect(html).toContain('aria-describedby="mkt-needs-webhook"');
+    });
+  }
+
+  it('a purchased add-on is the ordinary card: Subscribed, no Add-on chip, Install, no reason', () => {
+    const html = renderMarket(
+      <AppCard
+        card={card({
+          pricing: paidPricing({
+            access: 'entitled',
+            availability: 'purchased',
+            trialAvailable: false,
+          }),
+        })}
+      />,
+    );
+    expect(html).toContain('>Subscribed<');
+    expect(html).not.toContain('addon-chip');
+    expect(html).not.toContain('needs-purchase');
+    expect(html).toContain('>Install<');
+  });
+
+  it('free and included cards never carry the add-on chip or the reason', () => {
+    for (const p of [
+      pricing(),
+      paidPricing({ access: 'included', availability: 'open', includedBy: 'min_plan' }),
+    ]) {
+      const html = renderMarket(<AppCard card={card({ pricing: p })} />);
+      expect(html).not.toContain('addon-chip');
+      expect(html).not.toContain('needs-purchase');
+    }
+  });
 
   it('a free app says Free and keeps Install', () => {
     const html = renderMarket(<AppCard card={card()} />);
@@ -192,6 +241,8 @@ describe('app page: a paid app with no subscription', () => {
         buttonWith(html, locale === 'en' ? 'Start 14-day free trial' : 'ابدأ تجربة مجانية'),
       ).toBe(true);
       expect(html).not.toContain('/install"');
+      expect(html).toContain('data-testid="needs-purchase"');
+      expect(disabledButtonWith(html, locale === 'en' ? 'Install' : 'تثبيت')).toBe(true);
     });
   }
 
