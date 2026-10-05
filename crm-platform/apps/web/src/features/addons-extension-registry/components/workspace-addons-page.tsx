@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { AddonCard, WorkspaceAddonsResponse } from '@crm/contracts';
 import { Card } from '@crm/ui';
 import { KEYS, fetchWorkspaceAddons } from '../api';
+import { CancelAddonRenewal } from './cancel-addon-renewal';
 import { ErrorBlock, LoadingBlock } from './ui';
 
 const NS = 'addons-extension-registry.workspace';
@@ -111,9 +112,17 @@ function Body({ data }: { data: WorkspaceAddonsResponse }) {
                       : t('lifetime')}
                   </div>
                 </div>
-                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-primary">
-                  {t('active')}
-                </span>
+                <div className="flex shrink-0 items-center gap-3">
+                  {o.renews && (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                      {t('autoRenews')}
+                    </span>
+                  )}
+                  {o.renews && <CancelAddonRenewal addonId={o.id} />}
+                  <span className="rounded-full bg-primary/10 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-primary">
+                    {t('active')}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

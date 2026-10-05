@@ -4,7 +4,7 @@ import { buildUpdate, draftFrom, isDirty } from './gateway-draft';
 import { currencyChoices, filterGateways, tabCounts } from './gateway-filter';
 import { formatMoney } from './money';
 import { nextStep, parseOutcome } from './next-action';
-import { cancelledUrl } from './razorpay';
+import { cancelledUrl, razorpayResultFields } from './razorpay';
 
 const gw = (over: Partial<PaygwGatewayItem>): PaygwGatewayItem => ({
   id: '00000000-0000-4000-8000-000000000001',
@@ -202,5 +202,62 @@ describe('what the browser does next, P1 providers (TW-PAYGW-013, 017, 022)', ()
         next: { type: 'client_action', provider: 'paddle', params },
       } as PlaceOrderResponse),
     ).toEqual({ kind: 'paddle', params });
+  });
+});
+
+describe('Razorpay subscription checkout (auto-renew)', () => {
+  const base = { orderNumber: 'WSN-2', orderId: '00000000-0000-4000-8000-00000000000a' };
+
+  it('opens the widget with the subscription id and no order or amount', () => {
+    const step = nextStep({
+      ...base,
+      next: {
+        type: 'client_action',
+        provider: 'razorpay',
+        params: {
+          keyId: 'rzp',
+          subscriptionId: 'sub_1',
+          name: 'Extra seat',
+          description: 'WSN-2',
+          callbackUrl: 'https://api.test/v2/payments/return/razorpay?o=tok',
+        },
+      },
+    } as PlaceOrderResponse);
+    expect(step).toMatchObject({
+      kind: 'razorpay',
+      returnUrl: 'https://api.test/v2/payments/return/razorpay?o=tok',
+      options: { key: 'rzp', subscription_id: 'sub_1', name: 'Extra seat' },
+    });
+    const options = (step as { options: Record<string, unknown> }).options;
+    expect(options).not.toHaveProperty('order_id');
+    expect(options).not.toHaveProperty('amount');
+  });
+
+  it('posts back the subscription id, not an empty order id, so the server verifies payment|subscription', () => {
+    expect(
+      razorpayResultFields({
+        razorpay_payment_id: 'pay_1',
+        razorpay_subscription_id: 'sub_1',
+        razorpay_signature: 'sig',
+      }),
+    ).toEqual({
+      razorpay_payment_id: 'pay_1',
+      razorpay_subscription_id: 'sub_1',
+      razorpay_signature: 'sig',
+    });
+  });
+
+  it('keeps the one-time order fields as they were', () => {
+    expect(
+      razorpayResultFields({
+        razorpay_payment_id: 'pay_2',
+        razorpay_order_id: 'order_2',
+        razorpay_signature: 'sig2',
+      }),
+    ).toEqual({
+      razorpay_payment_id: 'pay_2',
+      razorpay_signature: 'sig2',
+      razorpay_order_id: 'order_2',
+    });
   });
 });

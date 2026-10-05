@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { CPN_ERROR_CODES } from '../coupons-credits-referral-currency/errors';
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
+import { WEBHOOK_FANOUT_ERROR_CODES } from '../webhook-fanout/errors';
 import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
 import { TPL_ERROR_CODES } from '../message-templates/errors';
 import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
@@ -26,6 +27,7 @@ export const ERROR_CODES = {
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
   ...WABA_ERROR_CODES,
+  ...WEBHOOK_FANOUT_ERROR_CODES,
   ...TPL_ERROR_CODES,
   ...CHANNEL_ERROR_CODES,
   ...CONVERSATION_ERROR_CODES,

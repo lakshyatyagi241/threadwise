@@ -53,8 +53,34 @@ export class SubscriptionService {
 
   async cancel(): Promise<CancelSubscriptionResponse> {
     const ctx = RequestContextStore.require();
+    const row = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, (tx) =>
+      this.latest(tx, ctx.orgId),
+    );
+    return this.cancelRow(row, null);
+  }
+
+  /** Stop one add-on purchase from renewing (`:id` is the workspace add-on's uuid); the paid term keeps running to its `ends_at`. */
+  async cancelAddon(addonUuid: string): Promise<CancelSubscriptionResponse> {
+    const ctx = RequestContextStore.require();
+    const row = await this.db.txAs({ orgId: ctx.orgId, userId: ctx.userId }, async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.id, s.gateway, s.gateway_subscription_id, s.gateway_customer_id, s.gateway_plan_id, s.status,
+               s.current_period_end
+        FROM subscriptions s JOIN workspace_addons a ON a.org_id = s.org_id AND a.id = s.workspace_addon_id
+        WHERE s.org_id = ${ctx.orgId} AND a.uuid = ${addonUuid}::uuid AND s.kind = 'addon'
+          AND s.status IN ('active', 'past_due')
+        ORDER BY s.id DESC LIMIT 1`);
+      return (res.rows[0] as unknown as SubRow | undefined) ?? null;
+    });
+    return this.cancelRow(row, addonUuid);
+  }
+
+  private async cancelRow(
+    row: SubRow | null,
+    addonUuid: string | null,
+  ): Promise<CancelSubscriptionResponse> {
+    const ctx = RequestContextStore.require();
     const orgId = ctx.orgId;
-    const row = await this.db.txAs({ orgId, userId: ctx.userId }, (tx) => this.latest(tx, orgId));
     if (!row) {
       throw new AppError(
         ERROR_CODES.PLAN_NO_SUBSCRIPTION,
@@ -85,12 +111,14 @@ export class SubscriptionService {
       await this.outbox.emit(tx, {
         aggregateModule: 'subscriptions',
         aggregateId: Number(row.id),
-        eventType: 'plan.subscription_canceled',
+        eventType: addonUuid ? 'addon.subscription_canceled' : 'plan.subscription_canceled',
         payload: { gateway: row.gateway, remote: remote.result },
       });
-      const state = await tx.execute(
-        sql`SELECT plan_ends_at FROM org_plan_state WHERE org_id = ${orgId}`,
-      );
+      const state = addonUuid
+        ? await tx.execute(
+            sql`SELECT ends_at AS plan_ends_at FROM workspace_addons WHERE org_id = ${orgId} AND uuid = ${addonUuid}::uuid`,
+          )
+        : await tx.execute(sql`SELECT plan_ends_at FROM org_plan_state WHERE org_id = ${orgId}`);
       const end =
         (state.rows[0] as { plan_ends_at: string | null } | undefined)?.plan_ends_at ?? null;
       return {
@@ -105,7 +133,7 @@ export class SubscriptionService {
     const res = await tx.execute(sql`
       SELECT id, gateway, gateway_subscription_id, gateway_customer_id, gateway_plan_id, status, current_period_end
       FROM subscriptions
-      WHERE org_id = ${orgId} AND status IN ('active', 'past_due')
+      WHERE org_id = ${orgId} AND kind = 'plan' AND status IN ('active', 'past_due')
       ORDER BY created_at DESC, id DESC LIMIT 1`);
     return (res.rows[0] as unknown as SubRow | undefined) ?? null;
   }

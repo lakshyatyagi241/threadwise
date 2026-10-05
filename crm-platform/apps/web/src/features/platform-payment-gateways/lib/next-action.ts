@@ -36,6 +36,21 @@ export function nextStep(res: PlaceOrderResponse): NextStep {
   }
   if (n.provider !== 'razorpay') return { kind: n.provider, params: n.params };
   const p = n.params;
+  // A subscription (auto-renew) opens Razorpay with its subscription id and no amount or order: the plan already carries the price.
+  // The widget then hands back razorpay_subscription_id, which the return endpoint needs to verify `payment_id|subscription_id`.
+  if (p.subscriptionId) {
+    return {
+      kind: 'razorpay',
+      returnUrl: String(p.callbackUrl),
+      options: {
+        key: p.keyId,
+        subscription_id: p.subscriptionId,
+        name: p.name,
+        description: p.description,
+        prefill: { name: p.prefillName, email: p.prefillEmail },
+      },
+    };
+  }
   return {
     kind: 'razorpay',
     returnUrl: String(p.callbackUrl),

@@ -186,6 +186,13 @@ export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
         flowToken: z.string().trim().min(1).max(256),
         cta: z.string().min(1).max(20),
       }),
+      z.object({
+        /** WhatsApp's "send location" request: a message with one button that opens the location picker. */
+        type: z.literal('location_request'),
+        body: z.string().min(1).max(1024),
+        header: z.string().max(60).optional(),
+        footer: z.string().max(60).optional(),
+      }),
     ]),
   }),
   z.object({

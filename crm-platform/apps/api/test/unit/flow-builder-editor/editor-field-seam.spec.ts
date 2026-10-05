@@ -285,6 +285,14 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     reads: { items: [{ id: 'p0', title: 'A', description: '', section: '' }], variable: 'choice' },
   },
   ask: { save: { var: '{{x}}' }, reads: { variable: 'x', question: "What's your name?" } },
+  ask_file: {
+    save: { var: '{{doc}}', extensions: ['PDF', 'png'], retries: 4 },
+    reads: { variable: 'doc', extensions: ['png', 'pdf'], maxRetries: 4 },
+  },
+  ask_location: {
+    save: { var: 'where', interactive: false },
+    reads: { variable: 'where', interactive: false, maxRetries: 2 },
+  },
   condition: { save: {}, reads: { logicOperators: [] } },
   delay: { save: { amount: 1, unit: 'min' }, reads: { delaySeconds: 60 } },
   webhook: {
@@ -401,7 +409,7 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
 };
 
 describe('every node type of the catalogue: the field the executor reads is there', () => {
-  it('the table covers exactly the 58 catalogue types (a new node type must be added here)', () => {
+  it('the table covers exactly the 60 catalogue types (a new node type must be added here)', () => {
     expect(Object.keys(EXECUTOR_READS).sort()).toEqual(FLB_NODE_TYPE_LIST.map((d) => d.id).sort());
   });
 

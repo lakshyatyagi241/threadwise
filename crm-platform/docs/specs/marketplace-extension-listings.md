@@ -1,8 +1,8 @@
 # Design note: Chrome extension and Sheets add-on on the Marketplace, and plugin rules
 
-| | |
-| --- | --- |
-| **Status** | Draft for review. No code yet. |
+|             |                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Status**  | Draft for review. No code yet.                                                                                                                                                                                                                                                                                                                                                                                            |
 | **Related** | [marketplace-mini-apps-and-integrations.md](marketplace-mini-apps-and-integrations.md) (the Marketplace spec), [docs/api/marketplace.md](../api/marketplace.md) (permissions, scopes, endpoints), [docs/threadwise-port/wiring/marketplace.md](../threadwise-port/wiring/marketplace.md), `docs/threadwise-port/inventory/addons-extension-registry.md` and `docs/threadwise-port/inventory/integrations-*` (Reference EXT and integrations) |
 
 ---
@@ -19,6 +19,7 @@
 **How this maps to what exists:** the Marketplace already sells priced listings through checkout with monthly subscriptions, uses plan features and `installed_apps` limits, and treats billing add-ons as entitlements. So the model needs no new billing system. What is left is the decisions below.
 
 **Decisions this model settles:**
+
 1. Integrations included in a plan are set by the plan's feature list, so Plan 2 can include a chosen subset of integrations.
 2. The base plan price lives in the plans domain. Its value is set by the owner and is not part of this note.
 3. Tickets is a new first-party mini app (customer support tickets as an add-on). It is separate from the operator helpdesk, which already exists (`platform-support-desk`).
@@ -39,26 +40,26 @@
 
 ## 3. Chrome extension and Sheets add-on as integrations
 
-| Item | Decision |
-| --- | --- |
-| Listing | One **integration** listing for the Chrome extension and one for the Sheets add-on. Category: Productivity. |
-| Price | **Free.** The plan gate limits who can install them. |
-| Install level | **Workspace.** An admin installs it once and consents to its scopes. The workspace's plan limits apply. |
-| Connection | **Per member.** Each member signs in with their own account. This matches Reference: `POST api/login` on `ExtensionApiController` uses the `users` credentials, and Sheets keys are created per account on `AccountController`. Actions stay attributed to the right person and checked against that person's role. |
-| Store link | The listing links to the Chrome Web Store and the Google Workspace Marketplace. Publishing there is outside our control and needs Google's review. |
-| Connector | **New `client` connector type.** It issues nothing at install time. Install records the listing and consent, then shows the member how to connect. The five existing types all assume the install creates a credential or a webhook, which this does not, so a recipe variant would be a workaround. |
-| Reference parity | Behaviour stays as in the Reference inventory: the extension login, the token, the Sheets key routes and the Extensions admin page. The Marketplace listing is a new front door, not a replacement. |
+| Item          | Decision                                                                                                                                                                                                                                                                                                         |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Listing       | One **integration** listing for the Chrome extension and one for the Sheets add-on. Category: Productivity.                                                                                                                                                                                                      |
+| Price         | **Free.** The plan gate limits who can install them.                                                                                                                                                                                                                                                             |
+| Install level | **Workspace.** An admin installs it once and consents to its scopes. The workspace's plan limits apply.                                                                                                                                                                                                          |
+| Connection    | **Per member.** Each member signs in with their own account. This matches Reference: `POST api/login` on `ExtensionApiController` uses the `users` credentials, and Sheets keys are created per account on `AccountController`. Actions stay attributed to the right person and checked against that person's role. |
+| Store link    | The listing links to the Chrome Web Store and the Google Workspace Marketplace. Publishing there is outside our control and needs Google's review.                                                                                                                                                               |
+| Connector     | **New `client` connector type.** It issues nothing at install time. Install records the listing and consent, then shows the member how to connect. The five existing types all assume the install creates a credential or a webhook, which this does not, so a recipe variant would be a workaround.             |
+| Reference parity | Behaviour stays as in the Reference inventory: the extension login, the token, the Sheets key routes and the Extensions admin page. The Marketplace listing is a new front door, not a replacement.                                                                                                                 |
 
 ## 4. Permissions and roles (the rule for everything)
 
 Every mini app and integration is checked at three points, with the same role model at each.
 
-| Stage | Who | Permission | Notes |
-| --- | --- | --- | --- |
-| **Browse** | any workspace user | `market.apps.read` | Already built. |
-| **Install and consent** | admin or delegated user | `market.apps.install`, plus every key behind the requested scopes | Already built: the installer must hold every scope's keys, or the call fails with `MKT_SCOPE_EXCEEDS_INSTALLER`. |
-| **Manage** (configure, enable, disable, uninstall) | admin or delegated user | `market.apps.manage` | Already built. |
-| **Use** (open a plugin screen, run an action, connect a member account) | each member | the member's own role must hold the keys the app's scopes need | **To build.** Today the scope check runs at install, not each time someone uses the app. |
+| Stage                                                                   | Who                     | Permission                                                        | Notes                                                                                                            |
+| ----------------------------------------------------------------------- | ----------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Browse**                                                              | any workspace user      | `market.apps.read`                                                | Already built.                                                                                                   |
+| **Install and consent**                                                 | admin or delegated user | `market.apps.install`, plus every key behind the requested scopes | Already built: the installer must hold every scope's keys, or the call fails with `MKT_SCOPE_EXCEEDS_INSTALLER`. |
+| **Manage** (configure, enable, disable, uninstall)                      | admin or delegated user | `market.apps.manage`                                              | Already built.                                                                                                   |
+| **Use** (open a plugin screen, run an action, connect a member account) | each member             | the member's own role must hold the keys the app's scopes need    | **To build.** Today the scope check runs at install, not each time someone uses the app.                         |
 
 **Per-app key (decided):** each app gets one permission key, for example `app.sheets.use`, seeded through the `rbac-permission` skill. The admin grants it to roles like any other permission. A member can use the app only if their role holds that key and the scope keys behind it.
 
@@ -75,6 +76,7 @@ Every mini app and integration is checked at three points, with the same role mo
 **"Use-time check" means:** every time a member opens an add-on screen or runs one of its actions, the server checks that the member's role holds that add-on's permission. Install-time checks only decide who may install. They do not stop a Counsellor from using an add-on that an admin installed.
 
 **How it works (proposed):**
+
 1. **Keys are defined in code, not by workspaces.** Each add-on declares its keys in its manifest (for example `app.appointments.use`). The keys are seeded into `permission_defs` at deploy, the same way the Marketplace keys were added by migration. A workspace cannot invent a key. This is required for safety, and it is how Reference and the existing RBAC work.
 2. **Hidden until installed.** A key of an add-on that is not installed does not show in the Roles editor. Install shows it.
 3. **Default grant.** On install, the key is granted to the Admin preset (the same way the Marketplace keys are granted). Any other role gets it only when an admin grants it.
@@ -104,16 +106,17 @@ Every mini app and integration is checked at three points, with the same role mo
 
 ## 8. Decisions
 
-| # | Question | Decision |
-| --- | --- | --- |
-| 1 | Connector type | New `client` type. It issues nothing at install time, so the five existing types don't fit. |
-| 2 | Free or paid for the two integrations | Free. The plan gate does the limiting. |
-| 3 | Mini apps built by | Our team only. No third-party code, no developer portal, no sandbox for now. |
-| 4 | Use-time key granularity | One key per app. Per-action keys only where an action is dangerous. |
-| 5 | ZIP installer on the SaaS | **Wontfix** (owner sign-off given). The ZIP upload features `TW-ADD-001` to `TW-ADD-008` are not built on the SaaS. `TW-ADD-009` (in-place module discovery from `addon/`) and later ADD features are not affected. |
-| 6 | Ownership | **Shubham owns EXT** (`chrome-extension-sheets-addon`). The Marketplace listing is a new feature, so it does not change the domain owner. |
+| #   | Question                              | Decision                                                                                                                                                                                                            |
+| --- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Connector type                        | New `client` type. It issues nothing at install time, so the five existing types don't fit.                                                                                                                         |
+| 2   | Free or paid for the two integrations | Free. The plan gate does the limiting.                                                                                                                                                                              |
+| 3   | Mini apps built by                    | Our team only. No third-party code, no developer portal, no sandbox for now.                                                                                                                                        |
+| 4   | Use-time key granularity              | One key per app. Per-action keys only where an action is dangerous.                                                                                                                                                 |
+| 5   | ZIP installer on the SaaS             | **Wontfix** (owner sign-off given). The ZIP upload features `TW-ADD-001` to `TW-ADD-008` are not built on the SaaS. `TW-ADD-009` (in-place module discovery from `addon/`) and later ADD features are not affected. |
+| 6   | Ownership                             | **Shubham owns EXT** (`chrome-extension-sheets-addon`). The Marketplace listing is a new feature, so it does not change the domain owner.                                                                           |
 
 **What was changed for 5 and 6:**
+
 - `docs/threadwise-port/assignment-input.json`: added owner `shubham`, and set the EXT domain's `owner` to `shubham`. Cluster and everything else unchanged.
 - `ownership.json` and `assignments.md` regenerated with `gen_ownership.py`. The `--check` passes.
 - `docs/threadwise-port/tracker/shubham.md` created with `tracker.py init --owner shubham`. It has no rows yet, because the EXT inventory is still `pending`.

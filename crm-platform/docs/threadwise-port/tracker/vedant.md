@@ -596,6 +596,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-078 | wontfix |  | dead code in Reference: table kept, no screen or writer |
 | TW-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | TW-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
+| TW-FLB-081 | done |  | addition beyond Reference (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |
+| TW-FLB-082 | done |  | addition beyond Reference (owner request): Ask for location with the WhatsApp send-location request. Same coverage; the request payload is unit-tested, never sent to Meta |
+| TW-FLB-083 | done |  | addition beyond Reference (owner request): Geta console publishing. Port + HTTP/fixture adapters, sealed per-workspace credentials, outbox event + worker consumer, sync state with retry, editor status and settings screen, en+ar; unit (stub server) + API e2e + RLS integration + web unit. The real console was never called |
 
 ## flow-runtime-engine (flr)
 

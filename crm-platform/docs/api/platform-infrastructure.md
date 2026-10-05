@@ -238,6 +238,12 @@ in a loop): enable it deliberately, with the K-5 compose work. A clean shutdown 
 
 ### Error reporting (Sentry)
 
+**On in production** for the API, the worker and the web app, all reporting to one Sentry project (tagged `service: api | worker | web`).
+The DSN is public by design (it only lets events in), so it is the default in `deploy/hostinger/docker-compose.yml`; set
+`SENTRY_DSN=` (empty) in `/opt/desk/.env` to turn it off. The web app's browser bundle has the DSN baked in at image build time by
+the deploy workflow. Each image carries the commit it was built from as the Sentry release. Details of the web setup are
+under "Web app" below.
+
 Set `SENTRY_DSN` in the **process environment** (compose or orchestrator; a `.env` file is read too late) to turn it on; unset
 means nothing is initialised. Every 5xx from the exception filter is reported, with the release (`GIT_SHA`), `service`
 (`api`/`worker`), the request id and the masked path as tags; 4xx are not. Tracing is off unless `SENTRY_TRACES_SAMPLE_RATE` is
@@ -272,3 +278,24 @@ stack), report to Sentry, wait up to 2 s for it to send, and exit 1 so the orche
 | `INFRA_OUTBOX_LAG_WARN_SECONDS`  | `60`    | `outbox.status` becomes `lagging` from this wait, 1 to 86 400   |
 | `SENTRY_DSN`                     | unset   | enables error reporting                                         |
 | `SENTRY_TRACES_SAMPLE_RATE`      | unset   | tracing rate 0 to 1; unset or 0 means none                      |
+
+### Web app (`apps/web`, `@sentry/nextjs`)
+
+Browser, Node and edge runtimes are initialised (`src/instrumentation-client.ts`, `src/sentry.server.config.ts`,
+`src/sentry.edge.config.ts`, registered by `src/instrumentation.ts`); server-component, route-handler and proxy errors go through
+`onRequestError`; `src/app/global-error.tsx` reports React rendering errors that no nearer boundary caught. Shared settings are in
+`src/lib/sentry/options.ts`.
+
+- **Errors only.** Tracing is off unless `NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE` is set at build time, and **Session Replay is not
+  used**: this app shows customers' conversations and contact details, which a recording would capture. `sendDefaultPii` is off.
+- **Scrubbing** (`src/lib/sentry/scrub.ts`, tested): several pages are reached by an address that is the credential
+  (`/q/<token>`, `/i/<token>`, `/b/manage/<token>`, `/reset-password/<token>`). Before anything is sent the secret segment becomes
+  `[secret]`, query strings, request bodies and cookies are dropped, credential headers are redacted, and the address in
+  `x-crm-path`, `referer` and Next's `request_path` is scrubbed too. Checked end to end against a local listener with secrets in the
+  query string, the `Authorization` and `Cookie` headers and the `Referer`: none arrived.
+- **Source maps** (readable production stack traces) upload only when the build has `SENTRY_AUTH_TOKEN`. Until a token exists,
+  production stack traces are minified. To switch it on: in Sentry create an organisation auth token, then in the GitHub repository
+  add the **secret** `SENTRY_AUTH_TOKEN` and the **variables** `SENTRY_ORG` and `SENTRY_PROJECT` (the slugs); the next deploy
+  uploads. The token reaches the Docker build as a BuildKit secret, never as an argument or a layer.
+- **Not set up:** a tunnel route (it would send browser events through our server to get past ad blockers, at the cost of server
+  load and a proxy exception), release/commit association and uptime monitors.

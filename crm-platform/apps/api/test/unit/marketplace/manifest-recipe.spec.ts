@@ -258,7 +258,12 @@ describe('the client connector (extension, add-on)', () => {
     key: 'google-sheets',
     name: 'Google Sheets add-on',
     category: 'productivity',
-    connector: { type: 'client', stores: [{ label: 'Google Workspace Marketplace', url: 'https://workspace.google.com/marketplace' }] },
+    connector: {
+      type: 'client',
+      stores: [
+        { label: 'Google Workspace Marketplace', url: 'https://workspace.google.com/marketplace' },
+      ],
+    },
   };
 
   it('accepts a client recipe with no auth fields and no mapping', () => {
@@ -270,14 +275,24 @@ describe('the client connector (extension, add-on)', () => {
   });
 
   it('refuses a store address that is not https', () => {
-    const r = validateMarketRecipe({ ...base, connector: { type: 'client', stores: [{ label: 'x', url: 'http://example.com' }] } });
+    const r = validateMarketRecipe({
+      ...base,
+      connector: { type: 'client', stores: [{ label: 'x', url: 'http://example.com' }] },
+    });
     expect(r.ok).toBe(false);
   });
 
   it('is a connector an integration manifest may name', () => {
     const m = validateMarketManifest({
-      manifestVersion: 1, id: 'google-sheets', name: 'Google Sheets add-on', kind: 'integration', category: 'productivity',
-      version: '1.0.0', description: 'Send contacts from a sheet.', scopes: ['contacts.read'], connector: { type: 'client' },
+      manifestVersion: 1,
+      id: 'google-sheets',
+      name: 'Google Sheets add-on',
+      kind: 'integration',
+      category: 'productivity',
+      version: '1.0.0',
+      description: 'Send contacts from a sheet.',
+      scopes: ['contacts.read'],
+      connector: { type: 'client' },
     });
     expect(m.ok).toBe(true);
   });

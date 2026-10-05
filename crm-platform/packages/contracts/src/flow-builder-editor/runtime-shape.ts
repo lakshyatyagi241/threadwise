@@ -1,3 +1,9 @@
+import {
+  FLB_ASK_GIVE_UP_MODES,
+  FLB_ASK_MAX_RETRIES,
+  flbCleanAskFileExtensions,
+  type FlbAskGiveUp,
+} from './ask-media';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -214,6 +220,22 @@ function shapeFields(d: Bag): string[] {
 
 type Shaper = (d: Bag, o: FlbRuntimeShapeOptions) => Bag;
 
+/** The retry, wrong-reply, skip and timeout settings the Ask-for-file and Ask-for-location nodes share. */
+function askWaitSettings(d: Bag, fallbackReply: string): Bag {
+  const retries = isNil(d.retries) ? 2 : toInt(d.retries);
+  const mode = s(d.onFail, 'continue');
+  const minutes = toInt(d.timeoutMinutes);
+  return {
+    maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
+    wrongReplyText: s(d.wrongReply).trim() === '' ? fallbackReply : s(d.wrongReply),
+    skipKeyword: s(d.skipKeyword).trim(),
+    onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode)
+      ? (mode as FlbAskGiveUp)
+      : 'continue',
+    timeoutMinutes: Math.max(0, minutes),
+  };
+}
+
 const SHAPERS: Record<string, Shaper> = {
   message: (d) => ({ flowReplies: [{ flowReplyType: 'Text', data: s(d.text) }] }),
 
@@ -353,6 +375,24 @@ const SHAPERS: Record<string, Shaper> = {
     expectedAnswers: list(coalesce(d.options, d.expected, []))
       .map((v) => (typeof v === 'string' ? v.trim() : ''))
       .filter((v) => v !== ''),
+  }),
+
+  // Not Reference nodes (TW-FLB-081, 082): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
+  ask_file: (d) => ({
+    question: s(d.prompt),
+    variable: flbCleanVarName(d.var, 'file'),
+    extensions: flbCleanAskFileExtensions(d.extensions),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+    ...askWaitSettings(d, 'That is not a file we can accept. Please send it as an attachment.'),
+  }),
+  ask_location: (d) => ({
+    question: s(d.prompt),
+    variable: flbCleanVarName(d.var, 'location'),
+    interactive: isNil(d.interactive) ? true : toBool(d.interactive),
+    ...askWaitSettings(
+      d,
+      'Please share your location with the attachment (+) menu, then Location.',
+    ),
   }),
 
   condition: (d) => {

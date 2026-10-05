@@ -110,9 +110,14 @@
           "currency": "Currency",
           "billingDuration": "Duration",
           "billingUnit": "Unit",
+          "billingMode": "Billing",
           "sortOrder": "Sort order",
           "isActive": "Active",
           "isLifetime": "Lifetime (one-time)"
+        },
+        "modes": {
+          "one_time": "One-time (buy again after it ends)",
+          "recurring": "Recurring (renews by autopay)"
         },
         "units": { "days": "Days", "weeks": "Weeks", "months": "Months", "years": "Years" },
         "problems": {
@@ -246,6 +251,17 @@
       "ownedBody": "Active packs merged onto your current plan.",
       "ends": "Ends {date}",
       "lifetime": "Lifetime",
+      "autoRenews": "Auto-renews",
+      "renewal": {
+        "cancel": "Cancel renewal",
+        "confirmTitle": "Cancel renewal?",
+        "confirmBody": "This add-on stays active until the end of the term you already paid for, then it will not renew.",
+        "confirm": "Cancel renewal",
+        "keep": "Keep renewing",
+        "forbidden": "You don't have permission to change the plan.",
+        "none": "There is no active subscription to cancel.",
+        "failed": "We couldn't cancel the renewal. Please try again."
+      },
       "active": "Active",
       "cardEyebrow": "Add-on",
       "catalogTitle": "Add-ons",
