@@ -409,7 +409,7 @@ describe('ask_location', () => {
     expect(run.vars).toMatchObject({ loc: '', loc_status: 'failed', loc_latitude: '' });
   });
 
-  it('a location sent to a file question is not accepted by the location node the other way round either', async () => {
+  it('a photo sent to the location question is a wrong reply too', async () => {
     const { run, h } = await park(builder('ask_location', { prompt: 'x' }));
     const out = await answer(run, h, photo());
     expect(out.transition.t).toBe('wait');
