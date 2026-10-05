@@ -285,7 +285,10 @@ export function AttachDialog({
                               type="checkbox"
                               checked={state.unlimited}
                               onChange={(e) =>
-                                setLimits((s) => ({ ...s, [key]: unlimitedToggle(e.target.checked) }))
+                                setLimits((s) => ({
+                                  ...s,
+                                  [key]: unlimitedToggle(e.target.checked),
+                                }))
                               }
                               data-testid={`unlimited-${key}`}
                             />

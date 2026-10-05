@@ -18,10 +18,12 @@ describe('permission badge', () => {
   });
 
   it('names the plan feature or the app that locks the key', () => {
-    expect(permissionBadge(def('a', { kind: 'plan_feature', key: 'appointment_booking' }))).toEqual({
-      kind: 'plan_feature',
-      key: 'appointment_booking',
-    });
+    expect(permissionBadge(def('a', { kind: 'plan_feature', key: 'appointment_booking' }))).toEqual(
+      {
+        kind: 'plan_feature',
+        key: 'appointment_booking',
+      },
+    );
     expect(permissionBadge(def('b', { kind: 'app', slug: 'google-sheets' }))).toEqual({
       kind: 'app',
       slug: 'google-sheets',

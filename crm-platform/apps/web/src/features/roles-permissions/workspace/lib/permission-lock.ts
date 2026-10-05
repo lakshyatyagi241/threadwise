@@ -1,9 +1,11 @@
-import { PLAN_FEATURE_LABELS, type PermissionDefResponse, type PlanFeatureKey } from '@crm/contracts';
+import {
+  PLAN_FEATURE_LABELS,
+  type PermissionDefResponse,
+  type PlanFeatureKey,
+} from '@crm/contracts';
 
 /** Why a permission key cannot be used yet: its plan feature is off for the workspace, or its Marketplace app is not installed. */
-export type PermissionBadge =
-  | { kind: 'plan_feature'; key: string }
-  | { kind: 'app'; slug: string };
+export type PermissionBadge = { kind: 'plan_feature'; key: string } | { kind: 'app'; slug: string };
 
 /** The badge a permission row carries, or null for a core key and for an add-on key the workspace already has. */
 export function permissionBadge(def: Pick<PermissionDefResponse, 'lock'>): PermissionBadge | null {
