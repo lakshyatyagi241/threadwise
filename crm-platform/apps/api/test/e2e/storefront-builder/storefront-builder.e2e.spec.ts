@@ -1068,7 +1068,8 @@ describe('store overview', () => {
       reviewsPending: 0,
       payments: 0,
       gateways: 0,
-      customers: 0,
+      // checkout saves a minimal customer profile for the buyer (both orders come from one buyer)
+      customers: 1,
     });
     expect(res.body.connection).toEqual({ kind: 'device', label: '91 9812345678', live: true });
     expect(res.body.salesByDay.labels).toHaveLength(30);
