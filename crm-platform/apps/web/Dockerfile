@@ -31,8 +31,11 @@ ARG NEXT_PUBLIC_GIT_SHA=
 ARG NEXT_PUBLIC_SENTRY_ENVIRONMENT=production
 ARG SENTRY_ORG=
 ARG SENTRY_PROJECT=
+# `next build` (type check and bundle) outgrew Node's default heap ("JavaScript heap out of memory"). Set inline, not as ENV: the
+# runtime stage is built FROM this one and sets its own limit (compose NODE_OPTIONS).
 RUN --mount=type=secret,id=sentry_auth_token,required=false \
     SENTRY_AUTH_TOKEN="$(cat /run/secrets/sentry_auth_token 2>/dev/null || true)" \
+    NODE_OPTIONS=--max-old-space-size=6144 \
     pnpm --filter @crm/web build
 
 FROM build AS runtime
