@@ -78,6 +78,9 @@ exists to host it. Differences in a screen are listed in the web agent's report 
   team (only the manual strategy exists); Deal moves across pipelines with the deal and fires `deal.stage_changed`; Copy-to-number reads the 24-hour window from the target's own
   thread; ordering takes the workspace from the API key, reads an English reply as typed and translates only when unclear; analytics counts launches that failed before a run
   existed, dates are UTC, paging is by cursor, a retry that fails again is a 200 with `outcome: failed`, and "skipped" is an extra outcome.
+- Editor-saved flows: `compileGraph` applies the editor's field mapping (`flbToRuntimeData`) and the Template, AI and AI call nodes resolve the template / assistant uuid the editor
+  saves, scoped by workspace (`flow-refs.ts`); an integer id still works. Proof: `compile-flb-hook.spec.ts`, `flow-refs.spec.ts` and `editor-flows.e2e.spec.ts`. The 23
+  channel-specific types (`cf_*`, `ig_*`, `fb_*`, `tg_payment`) are still without an executor.
 - Known limits: a Deal step can create two deals if its write loses the compare-and-set and the step re-runs (no idempotency key on deals); Mirror mode copies only what Message and
   Media record; the Code node starts a worker per run and `vm` is not a hard security boundary.
 - Not built, with the reason: see the wiring map (AI agent hand-off, MySQL driver, voice call adapter, Google account store, shop adapter, voice and photo orders, Telegram

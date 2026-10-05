@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TemplatesService } from '../../../../message-templates';
+import { FlowRefResolver, parseFlowRef } from '../flow-refs';
 import type { NodeContext, NodeResult } from '../../types';
 import { sendFailed, str } from './send-failure';
 import { quickReplies, templateComponents, templateText, templateValues } from './template-rules';
@@ -15,14 +16,32 @@ const advance: NodeResult = { kind: 'advance', port: 1 };
  */
 @Injectable()
 export class TemplateNode {
-  constructor(private readonly templates: TemplatesService) {}
+  constructor(
+    private readonly templates: TemplatesService,
+    private readonly refs: FlowRefResolver,
+  ) {}
 
   async execute(ctx: NodeContext): Promise<NodeResult> {
     const p = ctx.node.props;
     const name = str(p.templateName);
-    const id = Number(p.templateId) || 0;
+    let id = Number(p.templateId) || 0;
+    // The editor saves the template's uuid: resolved inside this workspace only (another workspace's uuid is no template here).
+    const uuid = parseFlowRef(p.templateUuid);
+    if (id === 0 && uuid) {
+      try {
+        id = await this.refs.templateId(ctx.run.orgId, uuid);
+      } catch (err) {
+        ctx.note(
+          `the template id could not be resolved: ${err instanceof Error ? err.message : 'error'}`,
+        );
+      }
+    }
     if (name === '' && id === 0) {
-      ctx.note('no template chosen: moving on');
+      ctx.note(
+        uuid
+          ? 'the chosen template is not in this workspace: skipped'
+          : 'no template chosen: moving on',
+      );
       return advance;
     }
     let tpl;

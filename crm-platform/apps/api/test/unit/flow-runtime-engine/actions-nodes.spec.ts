@@ -200,7 +200,7 @@ describe('graph compile for the action nodes', () => {
       { from: 'd_1', to: 'ok' },
       { from: 'd_2', to: 'bad' },
     ]);
-    expect(g.nodes[0]!.props).toEqual({ data: { stageId: 's' } });
+    expect(g.nodes[0]!.props).toMatchObject({ data: { stageId: 's' } });
   });
 });
 

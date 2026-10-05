@@ -585,7 +585,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLB-067 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | WD-FLB-068 | done |  | owned by FLR (ordering contracts and endpoints there) |
 | WD-FLB-069 | done |  | owned by NODE/FLR: the Node bridge is replaced by the in-process engine |
-| WD-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; FLR compileGraph hook is the FLR owner's one-liner (parity doc, Open runtime items) |
+| WD-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; compileGraph calls flbToRuntimeData (branch akshay/flr/flb-runtime-hook, authorised on the FLR side), template and AI assistant uuids resolved by org; e2e editor-flows |
 | WD-FLB-071 | done |  | owned by FLR, built there (WD-FLR-052..058) |
 | WD-FLB-072 | done |  | owned by FLR, built there (WD-FLR-052..058) |
 | WD-FLB-073 | done |  | owned by FLR, built there (WD-FLR-052..058) |

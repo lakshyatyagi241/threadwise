@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppointmentsBookingModule } from '../../../../appointments-booking';
 import { MessageTemplatesModule } from '../../../../message-templates';
+import { FlowRefResolver } from '../flow-refs';
 import { BookNode } from './book-node';
 import { CommerceNodes } from './commerce-nodes';
 import { FormNode } from './form-node';
@@ -15,6 +16,7 @@ import { TemplateNode } from './template-node';
   providers: [
     CommerceNodes,
     TemplateNode,
+    FlowRefResolver,
     BookNode,
     ShopNode,
     FormNode,
