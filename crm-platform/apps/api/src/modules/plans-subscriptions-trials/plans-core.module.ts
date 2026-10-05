@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PlanCatalogService } from './plan-catalog.service';
 import { PlanEntitlementService } from './plan-entitlement.service';
+import { PlanStore } from './plan-store';
+import { PlanQuotaService } from './plan-quota.service';
+import { PlanUsageService } from './plan-usage.service';
 
 /**
  * The plan catalogue's read side and the entitlement resolver. No controllers
@@ -9,7 +12,19 @@ import { PlanEntitlementService } from './plan-entitlement.service';
  * guards lives in PlansModule, which depends on both.
  */
 @Module({
-  providers: [PlanCatalogService, PlanEntitlementService],
-  exports: [PlanCatalogService, PlanEntitlementService],
+  providers: [
+    PlanStore,
+    PlanCatalogService,
+    PlanEntitlementService,
+    PlanQuotaService,
+    PlanUsageService,
+  ],
+  exports: [
+    PlanStore,
+    PlanCatalogService,
+    PlanEntitlementService,
+    PlanQuotaService,
+    PlanUsageService,
+  ],
 })
 export class PlansCoreModule {}

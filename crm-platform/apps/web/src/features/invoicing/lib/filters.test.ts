@@ -38,7 +38,10 @@ describe('invoice filters in the address', () => {
 
   it('falls back to the defaults for junk instead of failing', () => {
     const f = parseFilters(
-      params('tab=nope&order=up&contact=12&issuedFrom=2026-13-45&dueTo=x&currency=eu&docType=quote&mine=yes&q=' + 'x'.repeat(300)),
+      params(
+        'tab=nope&order=up&contact=12&issuedFrom=2026-13-45&dueTo=x&currency=eu&docType=quote&mine=yes&q=' +
+          'x'.repeat(300),
+      ),
     );
     expect(f).toMatchObject({
       tab: 'all',
@@ -73,7 +76,9 @@ describe('invoice filters in the address', () => {
 
 describe('invoice queries', () => {
   const f = parseFilters(
-    params(`tab=partially_paid&q=%20acme%20&contact=${ID}&issuedFrom=2026-01-01&dueTo=2026-05-01&docType=proforma&mine=1&order=asc`),
+    params(
+      `tab=partially_paid&q=%20acme%20&contact=${ID}&issuedFrom=2026-01-01&dueTo=2026-05-01&docType=proforma&mine=1&order=asc`,
+    ),
   );
   it('the list carries the tab as the status and the narrowing filters under the API names', () => {
     expect(listQuery(f)).toEqual({
@@ -106,8 +111,14 @@ describe('invoice queries', () => {
 
 describe('orderedWindow', () => {
   it('swaps a window typed the wrong way round', () => {
-    expect(orderedWindow('2026-03-01', '2026-02-01')).toEqual({ from: '2026-02-01', to: '2026-03-01' });
-    expect(orderedWindow('2026-02-01', '2026-03-01')).toEqual({ from: '2026-02-01', to: '2026-03-01' });
+    expect(orderedWindow('2026-03-01', '2026-02-01')).toEqual({
+      from: '2026-02-01',
+      to: '2026-03-01',
+    });
+    expect(orderedWindow('2026-02-01', '2026-03-01')).toEqual({
+      from: '2026-02-01',
+      to: '2026-03-01',
+    });
     expect(orderedWindow('', '2026-03-01')).toEqual({ from: '', to: '2026-03-01' });
   });
 });

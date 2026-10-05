@@ -3,7 +3,15 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type ReactNode,
+} from 'react';
 import type { OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Badge, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
@@ -18,6 +26,10 @@ import {
   MoonIcon,
   SunIcon,
 } from '@/features/auth-registration-security/platform/ui/icons';
+import {
+  IpBlockedView,
+  useIpBlock,
+} from '@/features/auth-registration-security/platform/ui/ip-blocked-view';
 import { languageName } from '@/features/auth-registration-security/platform/ui/language';
 import { ToastProvider } from '@/features/auth-registration-security/platform/ui/toast';
 import { useDocumentTheme } from '@/features/auth-registration-security/platform/ui/use-browser';
@@ -29,12 +41,25 @@ import {
   formatCount,
   initiallyOpenGroups,
   isGroup,
+  type ConsoleGroup,
   type ConsoleLeaf,
 } from './console-nav';
 import type { ConsoleCounts } from './console-counts';
-import { sidebarCookie, type SidebarState } from './sidebar-state';
+import { ConsoleIcon } from './console-icons';
+import { ConsolePalette, useIsApple } from './console-palette';
+import { CONSOLE_KEYWORDS } from './console-keywords';
+import { buildSearchIndex, makeSearchEntry, type SearchEntry } from './console-search';
+import { saveSidebarState, type SidebarState } from './sidebar-state';
 
 const PLATFORM = 'auth-registration-security.platform';
+/**
+ * Page content. An `sr-only` label inside a table that scrolls sideways (a column header's "Actions") is absolutely
+ * positioned at its in-flow spot, past the visible edge, and the scroller does not contain it, so the whole page grew a
+ * horizontal scrollbar on phones and tablets. Pinning every `sr-only` node to the inline start keeps it inside the
+ * viewport. Breadcrumb links get a 24px tap target.
+ */
+const MAIN_CLASS =
+  'min-w-0 flex-1 p-4 outline-none md:p-6 [&_.sr-only]:start-0 [&_nav_a]:inline-flex [&_nav_a]:min-h-6 [&_nav_a]:items-center';
 const ROLE_TONE = { super_admin: 'success', support: 'neutral', auditor: 'neutral' } as const;
 
 const Chevron = ({ open }: { open: boolean }) => (
@@ -84,6 +109,7 @@ export function ConsoleShell({
   const t = useTranslations(`${PLATFORM}.shell`);
   const tn = useTranslations(`${PLATFORM}.nav`);
   const tc = useTranslations('admin-console-shell.shell');
+  const ts = useTranslations('admin-console-shell.search');
   const tAll = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
@@ -108,6 +134,8 @@ export function ConsoleShell({
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
   const blocked = gated && !onAccountPage;
+  // The API refused this address (operator IP allowlist, TW-AUTH-038): say so instead of showing empty screens.
+  const ipBlock = useIpBlock();
 
   // Active modules append their own entries (add-ons domain, TW-ADD-012).
   const moduleNav = useModuleNav(!gated);
@@ -124,6 +152,57 @@ export function ConsoleShell({
       path: pathname,
       ids: flippedIds.includes(id) ? flippedIds.filter((x) => x !== id) : [...flippedIds, id],
     });
+
+  // An icon-only rail has no room for pages, so choosing a section opens the rail on it. Phones always show the full drawer.
+  const chooseSection = (id: string) => {
+    if (collapsed && window.matchMedia('(min-width: 768px)').matches) {
+      setCollapsed(false);
+      saveSidebarState('expanded');
+      if (!isGroupOpen(id)) toggleGroup(id);
+      return;
+    }
+    toggleGroup(id);
+  };
+
+  // Console search (Ctrl+K): every page of the rail plus Your account. Off while the menu is disabled (two-factor enrolment pending).
+  const apple = useIsApple();
+  const searchIndex = useMemo(
+    () => [
+      ...buildSearchIndex(entries, tAll, (id) => CONSOLE_KEYWORDS[id] ?? ''),
+      makeSearchEntry(
+        'account',
+        OPERATOR_ACCOUNT_PATH,
+        tn('account'),
+        '',
+        '',
+        CONSOLE_KEYWORDS.account,
+      ),
+    ],
+    [entries, tAll, tn],
+  );
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const searchAvailable = !gated;
+  const openPalette = () => {
+    if (searchAvailable) setPaletteOpen(true);
+  };
+  const choosePage = (entry: SearchEntry) => {
+    setPaletteOpen(false);
+    if (entry.href !== pathname) router.push(entry.href);
+  };
+
+  // Ctrl+K or Command+K toggles the search. It matches the physical K key as well, so it works on non-Latin keyboard layouts.
+  useEffect(() => {
+    if (!searchAvailable) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+      if (e.key.toLowerCase() !== 'k' && e.code !== 'KeyK') return;
+      e.preventDefault();
+      if (paletteOpen) setPaletteOpen(false);
+      else openPalette();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  });
 
   const languages = useMemo(() => LOCALES.map((code) => [code, languageName(code)] as const), []);
 
@@ -156,7 +235,7 @@ export function ConsoleShell({
   const toggleCollapsed = () => {
     const next: SidebarState = collapsed ? 'expanded' : 'collapsed';
     setCollapsed(next === 'collapsed');
-    document.cookie = sidebarCookie(next);
+    saveSidebarState(next);
   };
 
   const toggleTheme = () => {
@@ -193,54 +272,136 @@ export function ConsoleShell({
   // Labels and headings vanish only on desktop and only when collapsed; the phone drawer is always full.
   const hideWhenCollapsed = 'md:group-data-[collapsed=true]/rail:hidden';
 
-  const leafLink = (leaf: ConsoleLeaf, nested: boolean) => {
+  /** A link that stands on its own in the rail (Overview, Your account): an icon, which is all the collapsed rail shows. */
+  const topLink = (opts: {
+    id: string;
+    href: string;
+    icon: string;
+    label: string;
+    active: boolean;
+    disabled?: boolean;
+  }) => {
+    const body = (
+      <>
+        <ConsoleIcon name={opts.icon} />
+        <span className={cn('min-w-0 flex-1 truncate', hideWhenCollapsed)}>{opts.label}</span>
+      </>
+    );
+    const cls = cn(
+      'flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
+      'md:group-data-[collapsed=true]/rail:justify-center',
+    );
+    return opts.disabled ? (
+      <span key={opts.id} aria-disabled="true" className={cn(cls, 'opacity-40')}>
+        {body}
+      </span>
+    ) : (
+      <Link
+        key={opts.id}
+        href={opts.href}
+        title={opts.label}
+        aria-current={opts.active ? 'page' : undefined}
+        className={cn(
+          cls,
+          'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
+          opts.active && 'bg-sidebar-active text-white',
+        )}
+      >
+        {body}
+      </Link>
+    );
+  };
+
+  /** One page inside a section: text only, with the small heading of its block above it when it opens one. */
+  const leafLink = (leaf: ConsoleLeaf) => {
     const label = leaf.label ?? tAll(leaf.labelKey);
     const badge = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
     const active = leaf.id === activeId;
     const body = (
       <>
-        <span
-          aria-hidden="true"
-          className="flex size-6 shrink-0 items-center justify-center rounded bg-white/10 text-xs font-semibold uppercase"
-        >
-          {label.slice(0, 1)}
-        </span>
-        <span className={cn('min-w-0 flex-1 truncate', hideWhenCollapsed)}>{label}</span>
+        <span className="min-w-0 flex-1 truncate">{label}</span>
         {badge && (
           <span
             data-testid={`count-${leaf.id}`}
-            className={cn(
-              'rounded-full bg-white/15 px-1.5 text-xs tabular-nums',
-              hideWhenCollapsed,
-            )}
+            className="rounded-full bg-white/15 px-1.5 text-xs tabular-nums"
           >
             {badge}
           </span>
         )}
       </>
     );
-    const cls = cn(
-      'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm',
-      nested && 'ms-2 md:group-data-[collapsed=true]/rail:ms-0',
-    );
-    return gated ? (
-      <span key={leaf.id} aria-disabled="true" className={cn(cls, 'opacity-40')}>
-        {body}
-      </span>
-    ) : (
-      <Link
-        key={leaf.id}
-        href={leaf.href}
-        title={label}
-        aria-current={active ? 'page' : undefined}
-        className={cn(
-          cls,
-          'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-          active && 'bg-sidebar-active text-white',
+    const cls = 'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm';
+    return (
+      <Fragment key={leaf.id}>
+        {leaf.captionKey && (
+          <div className="px-2 pb-0.5 pt-2.5 text-[0.6875rem] font-semibold uppercase tracking-wider opacity-60">
+            {tAll(leaf.captionKey)}
+          </div>
         )}
-      >
-        {body}
-      </Link>
+        {gated ? (
+          <span aria-disabled="true" className={cn(cls, 'opacity-40')}>
+            {body}
+          </span>
+        ) : (
+          <Link
+            href={leaf.href}
+            title={label}
+            aria-current={active ? 'page' : undefined}
+            className={cn(
+              cls,
+              'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
+              active && 'bg-sidebar-active text-white',
+            )}
+          >
+            {body}
+          </Link>
+        )}
+      </Fragment>
+    );
+  };
+
+  /** A collapsible section: icon and name on one row, its pages (with block headings) below. Icon only when the rail is collapsed. */
+  const section = (entry: ConsoleGroup) => {
+    const label = tAll(entry.labelKey);
+    const expanded = isGroupOpen(entry.id);
+    const holdsActive = entry.children.some((leaf) => leaf.id === activeId);
+    return (
+      <div key={entry.id}>
+        <button
+          type="button"
+          data-testid={`group-${entry.id}`}
+          aria-expanded={expanded}
+          aria-controls={`console-group-${entry.id}`}
+          aria-label={tc('toggleGroup', { group: label })}
+          title={label}
+          onClick={() => chooseSection(entry.id)}
+          className={cn(
+            'flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
+            'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
+            'md:group-data-[collapsed=true]/rail:justify-center',
+            holdsActive && 'text-white md:group-data-[collapsed=true]/rail:bg-sidebar-active',
+          )}
+        >
+          <ConsoleIcon name={entry.icon} />
+          <span className={cn('min-w-0 flex-1 truncate text-start', hideWhenCollapsed)}>
+            {label}
+          </span>
+          <span className={hideWhenCollapsed}>
+            <Chevron open={expanded} />
+          </span>
+        </button>
+        {/* An icon-only rail has no room for pages: they come back when the rail is expanded. */}
+        <div
+          id={`console-group-${entry.id}`}
+          className={cn(
+            'ms-4 space-y-0.5 border-s border-white/10 pb-1 ps-2',
+            !expanded && 'hidden',
+            hideWhenCollapsed,
+          )}
+        >
+          {entry.children.map(leafLink)}
+        </div>
+      </div>
     );
   };
 
@@ -249,7 +410,7 @@ export function ConsoleShell({
       <ToastProvider>
         <a
           href="#console-main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:shadow-lg"
+          className="fixed start-3 top-3 z-50 -translate-y-[200%] rounded-md bg-background px-3 py-2 text-sm focus:translate-y-0 focus:shadow-lg"
         >
           {t('skipToContent')}
         </a>
@@ -270,8 +431,8 @@ export function ConsoleShell({
             aria-label={t('navLabel')}
             className={cn(
               'group/rail z-40 flex shrink-0 flex-col bg-sidebar p-3 text-sidebar-foreground',
-              'w-64 md:sticky md:top-0 md:h-dvh md:overflow-y-auto md:data-[collapsed=true]:w-16',
-              'max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:overflow-y-auto',
+              'w-64 md:sticky md:top-0 md:h-dvh md:overflow-hidden md:data-[collapsed=true]:w-16',
+              'max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:overflow-hidden',
               open ? 'max-md:flex' : 'max-md:hidden',
             )}
           >
@@ -314,70 +475,33 @@ export function ConsoleShell({
               </button>
             </div>
 
-            <nav className="mt-2 flex-1 space-y-1">
-              {entries.map((entry) => {
-                if (!isGroup(entry)) return leafLink(entry, false);
-                const label = tAll(entry.labelKey);
-                const expanded = isGroupOpen(entry.id);
-                return (
-                  <div key={entry.id} className="pt-2">
-                    <button
-                      type="button"
-                      data-testid={`group-${entry.id}`}
-                      aria-expanded={expanded}
-                      aria-label={tc('toggleGroup', { group: label })}
-                      onClick={() => toggleGroup(entry.id)}
-                      className={cn(
-                        'flex w-full items-center justify-between gap-2 rounded-md px-2 py-1 text-xs uppercase tracking-wide opacity-70 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-primary',
-                        hideWhenCollapsed,
-                      )}
-                    >
-                      <span className="truncate">{label}</span>
-                      <Chevron open={expanded} />
-                    </button>
-                    {/* Collapsed rail shows every leaf as an icon, whatever the group state. */}
-                    <div
-                      className={cn(
-                        'space-y-0.5',
-                        !expanded && 'hidden md:group-data-[collapsed=true]/rail:block',
-                      )}
-                    >
-                      {entry.children.map((leaf) => leafLink(leaf, true))}
-                    </div>
-                  </div>
-                );
-              })}
-              <div className="pt-2">
-                <div
-                  className={cn(
-                    'px-2 pb-1 text-xs uppercase tracking-wide opacity-60',
-                    hideWhenCollapsed,
-                  )}
-                >
-                  {tn('groups.account')}
-                </div>
-                <Link
-                  href={OPERATOR_ACCOUNT_PATH}
-                  title={tn('account')}
-                  aria-current={onAccountPage ? 'page' : undefined}
-                  className={cn(
-                    'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-active',
-                    'focus-visible:ring-2 focus-visible:ring-primary',
-                    onAccountPage && 'bg-sidebar-active text-white',
-                  )}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-6 shrink-0 items-center justify-center rounded bg-white/10 text-xs font-semibold uppercase"
-                  >
-                    {tn('account').slice(0, 1)}
-                  </span>
-                  <span className={cn('truncate', hideWhenCollapsed)}>{tn('account')}</span>
-                </Link>
-              </div>
+            {/* Only the list scrolls: the brand row above and the account row below stay in view. Padding keeps the focus ring from being clipped. */}
+            <nav className="-mx-1 mt-2 min-h-0 flex-1 space-y-0.5 overflow-y-auto px-1 [scrollbar-color:rgb(255_255_255/0.25)_transparent] [scrollbar-width:thin]">
+              {entries.map((entry) =>
+                isGroup(entry)
+                  ? section(entry)
+                  : topLink({
+                      id: entry.id,
+                      href: entry.href,
+                      icon: 'dashboard',
+                      label: entry.label ?? tAll(entry.labelKey),
+                      active: entry.id === activeId,
+                      disabled: gated,
+                    }),
+              )}
             </nav>
 
-            <div className="mt-4 border-t border-white/10 pt-3 sm:hidden">
+            <div className="mt-3 border-t border-white/10 pt-2">
+              {topLink({
+                id: 'account',
+                href: OPERATOR_ACCOUNT_PATH,
+                icon: 'user',
+                label: tn('account'),
+                active: onAccountPage,
+              })}
+            </div>
+
+            <div className="mt-2 border-t border-white/10 pt-3 sm:hidden">
               {signOutButton(
                 'flex h-10 w-full text-sidebar-foreground hover:bg-sidebar-active hover:text-white',
               )}
@@ -400,7 +524,38 @@ export function ConsoleShell({
               </button>
               <span className="min-w-0 truncate text-sm font-medium">{t('title')}</span>
 
-              <div className="ms-auto flex items-center gap-1.5 sm:gap-2">
+              <div className="hidden min-w-0 flex-1 justify-center md:flex">
+                <button
+                  type="button"
+                  data-testid="console-search-trigger"
+                  onClick={openPalette}
+                  disabled={!searchAvailable}
+                  aria-haspopup="dialog"
+                  aria-keyshortcuts="Control+K Meta+K"
+                  aria-label={ts('label')}
+                  className="flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-border bg-muted/40 px-3 text-sm text-muted-foreground transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <ConsoleIcon name="search" className="size-4" />
+                  <span className="min-w-0 flex-1 truncate text-start">{ts('trigger')}</span>
+                  <kbd className="rounded border border-border px-1.5 text-xs">
+                    {apple ? '⌘K' : 'Ctrl K'}
+                  </kbd>
+                </button>
+              </div>
+
+              <div className="ms-auto flex items-center gap-1.5 sm:gap-2 md:ms-0">
+                <button
+                  type="button"
+                  data-testid="console-search-trigger-compact"
+                  onClick={openPalette}
+                  disabled={!searchAvailable}
+                  aria-haspopup="dialog"
+                  aria-label={ts('label')}
+                  title={ts('label')}
+                  className="inline-flex size-8 items-center justify-center rounded-md border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 md:hidden"
+                >
+                  <ConsoleIcon name="search" className="size-4" />
+                </button>
                 <select
                   aria-label={t('language')}
                   value={locale}
@@ -452,6 +607,14 @@ export function ConsoleShell({
               </div>
             </header>
 
+            {paletteOpen && searchAvailable && (
+              <ConsolePalette
+                index={searchIndex}
+                onSelect={choosePage}
+                onClose={() => setPaletteOpen(false)}
+              />
+            )}
+
             {gated && (
               <Alert tone="warning" className="m-3 sm:mx-6 sm:mt-4">
                 <p className="font-medium">{t('mfaRequired.title')}</p>
@@ -459,16 +622,14 @@ export function ConsoleShell({
               </Alert>
             )}
 
-            <main
-              id="console-main"
-              tabIndex={-1}
-              className="min-w-0 flex-1 p-4 outline-none md:p-6"
-            >
+            <main id="console-main" tabIndex={-1} className={MAIN_CLASS}>
               {blocked ? (
                 <div className="flex min-h-40 items-center justify-center gap-2 text-sm text-muted-foreground">
                   <Spinner label={t('redirecting')} />
                   {t('redirecting')}
                 </div>
+              ) : ipBlock ? (
+                <IpBlockedView ip={ipBlock.ip} />
               ) : (
                 children
               )}

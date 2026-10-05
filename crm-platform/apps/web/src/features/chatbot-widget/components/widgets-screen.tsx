@@ -9,14 +9,7 @@ import { Button, ConfirmDialog, EmptyState, Input, Spinner, cn, useToast } from 
 import type { WidgetListItem } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
-import {
-  deleteWidget,
-  duplicateWidget,
-  KEYS,
-  rotateWidgetToken,
-  setWidgetStatus,
-  useWidgets,
-} from '../api/widgets';
+import { deleteWidget, duplicateWidget, KEYS, rotateWidgetToken, useWidgets } from '../api/widgets';
 import {
   accentFor,
   matchesSearch,
@@ -35,8 +28,6 @@ import {
   DuplicateIcon,
   EditIcon,
   EyeIcon,
-  PauseIcon,
-  PlayIcon,
   PlusIcon,
   RotateIcon,
   SearchIcon,
@@ -66,34 +57,37 @@ export function WidgetsScreen() {
   const canUpdate = useCan('wgt.widgets.update');
   const canDelete = useCan('wgt.widgets.delete');
 
-  const [filter, setFilter] = useState<StatusFilter>('all');
+  // QUIRK: reproduced deliberately (TW-WGT-001). The status views in the rail and the tabs above the table have no click handler
+  // and no server filter: "All" is always the highlighted one.
+  const filter: StatusFilter = 'all';
   const [q, setQ] = useState('');
-  const list = useWidgets(filter === 'all' ? null : filter);
+  const list = useWidgets();
   const [pendingDelete, setPendingDelete] = useState<WidgetListItem | null>(null);
   const [pendingRotate, setPendingRotate] = useState<WidgetListItem | null>(null);
   const [manualSnippet, setManualSnippet] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  // QUIRK: reproduced deliberately (TW-WGT-001 rules 4 and 5, TW-WGT-023). A rotation only updates the copy button's token (the
+  // preview link keeps the old one until reload) and a delete only removes the row: the cards and the footer are not touched.
+  const [rotated, setRotated] = useState<Record<string, string>>({});
+  const [removed, setRemoved] = useState<ReadonlySet<string>>(new Set());
 
   // The cards and the status counts come from the unfiltered list's stats, which every page carries.
   const first = list.data?.pages[0];
   const stats = useMemo(() => (first ? statCards(first.stats) : null), [first]);
   const rows = useMemo(
-    () => (list.data?.pages.flatMap((p) => p.data) ?? []).filter((w) => matchesSearch(w, q)),
-    [list.data, q],
+    () =>
+      (list.data?.pages.flatMap((p) => p.data) ?? []).filter(
+        (w) => !removed.has(w.id) && matchesSearch(w, q),
+      ),
+    [list.data, q, removed],
   );
   const loadedCount = list.data?.pages.reduce((n, p) => n + p.data.length, 0) ?? 0;
-  const shownTotal = !stats
-    ? 0
-    : filter === 'all'
-      ? stats.total
-      : filter === 'active'
-        ? stats.active
-        : stats.paused;
+  const shownTotal = stats?.total ?? 0;
 
   const refresh = () => void qc.invalidateQueries({ queryKey: KEYS.all });
 
   const copySnippet = async (w: WidgetListItem) => {
-    const tag = snippetTag(w.embedUrl);
+    const tag = snippetTag(rotated[w.id] ?? w.embedUrl);
     try {
       await navigator.clipboard.writeText(tag);
       toast(t('copied', { tag: '</body>' }), 'success');
@@ -114,30 +108,14 @@ export function WidgetsScreen() {
     }
   };
 
-  const togglePause = async (w: WidgetListItem) => {
-    setBusy(w.id);
-    try {
-      await setWidgetStatus(w.id, {
-        status: w.status === 'active' ? 'paused' : 'active',
-        rowVersion: w.rowVersion,
-      });
-      toast(w.status === 'active' ? t('paused') : t('resumed'), 'success');
-      refresh();
-    } catch (e) {
-      toast(reason(e, t('statusFailed')), 'danger');
-    } finally {
-      setBusy(null);
-    }
-  };
-
   const confirmRotate = async () => {
     if (!pendingRotate) return;
     setBusy(pendingRotate.id);
     try {
-      await rotateWidgetToken(pendingRotate.id);
+      const out = await rotateWidgetToken(pendingRotate.id);
+      setRotated((m) => ({ ...m, [pendingRotate.id]: out.embedUrl }));
       toast(t('rotated'), 'success');
       setPendingRotate(null);
-      refresh();
     } catch (e) {
       toast(t('rotateFailed', { reason: reason(e, t('networkError')) }), 'danger');
     } finally {
@@ -150,9 +128,9 @@ export function WidgetsScreen() {
     setBusy(pendingDelete.id);
     try {
       await deleteWidget(pendingDelete.id);
+      setRemoved((r) => new Set(r).add(pendingDelete.id));
       toast(t('deleted'), 'success');
       setPendingDelete(null);
-      refresh();
     } catch (e) {
       toast(t('deleteFailed', { reason: reason(e, t('networkError')) }), 'danger');
     } finally {
@@ -165,7 +143,6 @@ export function WidgetsScreen() {
       key={key}
       type="button"
       aria-pressed={filter === key}
-      onClick={() => setFilter(key)}
       className={cn(
         'rounded-full px-3 py-1.5 text-xs font-semibold',
         filter === key
@@ -210,7 +187,6 @@ export function WidgetsScreen() {
                   key={key}
                   type="button"
                   aria-current={active ? 'true' : undefined}
-                  onClick={() => setFilter(key)}
                   className={cn(
                     'flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm',
                     active ? 'bg-brand font-semibold text-brand-foreground' : 'hover:bg-muted',
@@ -385,7 +361,6 @@ export function WidgetsScreen() {
                     onCopy={() => void copySnippet(w)}
                     onRotate={() => setPendingRotate(w)}
                     onDuplicate={() => void duplicate(w)}
-                    onPause={() => void togglePause(w)}
                     onDelete={() => setPendingDelete(w)}
                   />
                 ))
@@ -489,7 +464,6 @@ function WidgetRow({
   onCopy,
   onRotate,
   onDuplicate,
-  onPause,
   onDelete,
 }: {
   w: WidgetListItem;
@@ -500,7 +474,6 @@ function WidgetRow({
   onCopy: () => void;
   onRotate: () => void;
   onDuplicate: () => void;
-  onPause: () => void;
   onDelete: () => void;
 }) {
   const t = useTranslations('chatbotWidget.list');
@@ -603,22 +576,6 @@ function WidgetRow({
           >
             <EditIcon className="size-3.5" />
           </Link>
-        )}
-        {canUpdate && (
-          <button
-            type="button"
-            className={ICON_BTN}
-            title={w.status === 'active' ? t('action.pause') : t('action.resume')}
-            aria-label={w.status === 'active' ? t('action.pause') : t('action.resume')}
-            disabled={busy}
-            onClick={onPause}
-          >
-            {w.status === 'active' ? (
-              <PauseIcon className="size-3.5" />
-            ) : (
-              <PlayIcon className="size-3.5" />
-            )}
-          </button>
         )}
         {canUpdate && (
           <button

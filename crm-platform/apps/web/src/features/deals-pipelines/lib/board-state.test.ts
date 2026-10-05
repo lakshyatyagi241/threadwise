@@ -109,8 +109,18 @@ describe('board reducer', () => {
     expect(ids(s, 'new')).toEqual(['b']);
     expect(ids(s, 'prop')).toEqual(['a', 'c']);
     expect(s.deals.a!.stageId).toBe('prop');
-    expect(s.summary.new).toEqual({ stageId: 'new', count: 1, valueMinor: 20000, weightedMinor: 2000 });
-    expect(s.summary.prop).toEqual({ stageId: 'prop', count: 2, valueMinor: 50000, weightedMinor: 25000 });
+    expect(s.summary.new).toEqual({
+      stageId: 'new',
+      count: 1,
+      valueMinor: 20000,
+      weightedMinor: 2000,
+    });
+    expect(s.summary.prop).toEqual({
+      stageId: 'prop',
+      count: 2,
+      valueMinor: 50000,
+      weightedMinor: 25000,
+    });
   });
 
   it('drops at the requested position and clamps a position past the end', () => {
@@ -137,8 +147,17 @@ describe('board reducer', () => {
       index: 0,
       now: '2026-06-01T00:00:00.000Z',
     });
-    expect(s.deals.c).toMatchObject({ status: 'won', wonAt: '2026-06-01T00:00:00.000Z', lostAt: null });
-    expect(s.summary.won).toEqual({ stageId: 'won', count: 1, valueMinor: 40000, weightedMinor: 40000 });
+    expect(s.deals.c).toMatchObject({
+      status: 'won',
+      wonAt: '2026-06-01T00:00:00.000Z',
+      lostAt: null,
+    });
+    expect(s.summary.won).toEqual({
+      stageId: 'won',
+      count: 1,
+      valueMinor: 40000,
+      weightedMinor: 40000,
+    });
   });
 
   it('keeps the lost reason and clears it again on reopen', () => {
@@ -158,7 +177,13 @@ describe('board reducer', () => {
 
   it('moves from won straight to lost, dropping the won date', () => {
     let s = boardReducer(loaded(), { type: 'moved', dealId: 'c', toStageId: 'won', index: 0 });
-    s = boardReducer(s, { type: 'moved', dealId: 'c', toStageId: 'lost', index: 0, lostReason: 'x' });
+    s = boardReducer(s, {
+      type: 'moved',
+      dealId: 'c',
+      toStageId: 'lost',
+      index: 0,
+      lostReason: 'x',
+    });
     expect(s.deals.c).toMatchObject({ status: 'lost', wonAt: null });
     expect(s.deals.c!.lostAt).not.toBeNull();
   });
@@ -226,7 +251,7 @@ describe('board reducer', () => {
     expect(s.summary.prop!.count).toBe(9);
   });
 
-  it('lists a stage\'s cards in column order', () => {
+  it("lists a stage's cards in column order", () => {
     expect(stageDeals(loaded(), 'new').map((d) => d.id)).toEqual(['a', 'b']);
     expect(stageDeals(loaded(), 'missing')).toEqual([]);
   });
@@ -250,7 +275,11 @@ describe('placement helpers', () => {
 
   it('settles a deal for the kind of stage it lands in', () => {
     const open = deal('a', 'new', 1, { status: 'won', wonAt: 'then', lostReason: 'old' });
-    expect(settleDeal(open, stages[0], 'now')).toMatchObject({ status: 'open', wonAt: null, lostReason: null });
+    expect(settleDeal(open, stages[0], 'now')).toMatchObject({
+      status: 'open',
+      wonAt: null,
+      lostReason: null,
+    });
     expect(settleDeal(open, stages[2], 'now').wonAt).toBe('then');
   });
 });

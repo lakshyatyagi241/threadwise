@@ -51,16 +51,21 @@ export function evaluatePassword(
   const out: PasswordViolation[] = [];
   const min = Math.max(6, policy.passwordMinLength);
 
-  if (password.length < min) {
+  // Rules are Unicode-aware, as Laravel's `Password` rule is (TW-AUTH-035): length counts
+  // characters (an emoji or an accented letter is one), "mixed case" is any lower-case plus
+  // any upper-case letter of ANY script, a number is any Unicode digit, and a symbol is
+  // punctuation, a symbol or a space. ASCII-only classes would call "é" a symbol and refuse
+  // every password written in Cyrillic or Greek as unmixed.
+  if ([...password].length < min) {
     out.push({ rule: 'min_length', message: `Use at least ${min} characters.` });
   }
-  if (policy.passwordRequireUpper && !(/[a-z]/.test(password) && /[A-Z]/.test(password))) {
+  if (policy.passwordRequireUpper && !(/\p{Ll}/u.test(password) && /\p{Lu}/u.test(password))) {
     out.push({ rule: 'upper_lower', message: 'Mix upper and lower case letters.' });
   }
-  if (policy.passwordRequireNumber && !/\d/.test(password)) {
+  if (policy.passwordRequireNumber && !/\p{N}/u.test(password)) {
     out.push({ rule: 'number', message: 'Include at least one number.' });
   }
-  if (policy.passwordRequireSymbol && !/[^A-Za-z0-9]/.test(password)) {
+  if (policy.passwordRequireSymbol && !/[\p{Z}\p{S}\p{P}]/u.test(password)) {
     out.push({ rule: 'symbol', message: 'Include at least one symbol.' });
   }
 

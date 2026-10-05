@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { Fragment, useState } from 'react';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import type { PaygwOrderItem, PaygwOrderStatus } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState, Spinner } from '@crm/ui';
 import { ORDERS_KEY, fetchOrders } from '../api';
 import { formatMoney } from '../lib/money';
 import { parseOutcome } from '../lib/next-action';
+import { ProofForm } from './proof-form';
 
 const NS = 'platform-payment-gateways.orders';
 const TONE: Record<PaygwOrderStatus, 'success' | 'danger' | 'warning' | 'neutral'> = {
@@ -27,6 +29,8 @@ export function OrdersPage() {
   const params = useSearchParams();
   const outcome = parseOutcome(params.get('payment'));
   const justPaid = params.get('order');
+  const queryClient = useQueryClient();
+  const [proofFor, setProofFor] = useState<string | null>(null);
 
   const q = useInfiniteQuery({
     queryKey: ORDERS_KEY,
@@ -56,7 +60,15 @@ export function OrdersPage() {
       </header>
 
       {outcome && (
-        <Alert tone={outcome === 'success' ? 'success' : outcome === 'pending' ? 'info' : 'danger'}>
+        <Alert
+          tone={
+            outcome === 'success' || outcome === 'proof'
+              ? 'success'
+              : outcome === 'pending'
+                ? 'info'
+                : 'danger'
+          }
+        >
           {t(`outcome.${outcome}`, { order: justPaid ?? '' })}
         </Alert>
       )}
@@ -88,39 +100,76 @@ export function OrdersPage() {
                   <th className="px-3 py-2 text-start">{t('col.date')}</th>
                   <th className="px-3 py-2 text-end">{t('col.amount')}</th>
                   <th className="px-3 py-2 text-start">{t('col.status')}</th>
+                  <th className="px-3 py-2 text-end">{t('col.actions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((o) => (
-                  <tr key={o.id} className="border-t border-border" data-testid="order-row">
-                    <td className="px-3 py-2 font-mono text-xs">{o.orderNumber}</td>
-                    <td className="px-3 py-2">
-                      {o.itemName}
-                      {o.couponCode && <Badge className="ms-2">{o.couponCode}</Badge>}
-                    </td>
-                    <td className="px-3 py-2">{date(o.createdAt)}</td>
-                    <td className="px-3 py-2 text-end tabular-nums">
-                      {formatMoney(o.amount, o.currency, locale)}
-                      {Number(o.discountAmount) > 0 && (
-                        <span className="block text-xs text-muted-foreground">
-                          −{formatMoney(o.discountAmount, o.currency, locale)}
+                  <Fragment key={o.id}>
+                    <tr className="border-t border-border" data-testid="order-row">
+                      <td className="px-3 py-2 font-mono text-xs">{o.orderNumber}</td>
+                      <td className="px-3 py-2">
+                        {o.itemName}
+                        {o.couponCode && <Badge className="ms-2">{o.couponCode}</Badge>}
+                      </td>
+                      <td className="px-3 py-2">{date(o.createdAt)}</td>
+                      <td className="px-3 py-2 text-end tabular-nums">
+                        {formatMoney(o.amount, o.currency, locale)}
+                        {Number(o.discountAmount) > 0 && (
+                          <span className="block text-xs text-muted-foreground">
+                            −{formatMoney(o.discountAmount, o.currency, locale)}
+                          </span>
+                        )}
+                        {Number(o.taxAmount) > 0 && (
+                          <span className="block text-xs text-muted-foreground">
+                            +{formatMoney(o.taxAmount, o.currency, locale)}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2">
+                        <Badge tone={TONE[o.status]}>{t(`status.${o.status}`)}</Badge>
+                        {o.failureReason && o.status === 'failed' && (
+                          <span className="mt-0.5 block text-xs text-muted-foreground">
+                            {o.failureReason}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 text-end">
+                        <span className="inline-flex gap-3">
+                          {o.acceptsProof && (
+                            <button
+                              type="button"
+                              className="text-sm underline"
+                              onClick={() => setProofFor(proofFor === o.id ? null : o.id)}
+                            >
+                              {t('uploadProof')}
+                            </button>
+                          )}
+                          <Link
+                            className="text-sm underline"
+                            href={`/billing/orders/${o.id}/invoice`}
+                          >
+                            {t('invoice')}
+                          </Link>
                         </span>
-                      )}
-                      {Number(o.taxAmount) > 0 && (
-                        <span className="block text-xs text-muted-foreground">
-                          +{formatMoney(o.taxAmount, o.currency, locale)}
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-3 py-2">
-                      <Badge tone={TONE[o.status]}>{t(`status.${o.status}`)}</Badge>
-                      {o.failureReason && o.status === 'failed' && (
-                        <span className="mt-0.5 block text-xs text-muted-foreground">
-                          {o.failureReason}
-                        </span>
-                      )}
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                    {proofFor === o.id && (
+                      <tr className="border-t border-border bg-muted/30">
+                        <td colSpan={6} className="px-3 py-4">
+                          <div className="max-w-lg">
+                            <ProofForm
+                              orderId={o.id}
+                              onDone={() => {
+                                setProofFor(null);
+                                void queryClient.invalidateQueries({ queryKey: ORDERS_KEY });
+                              }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
                 ))}
               </tbody>
             </table>

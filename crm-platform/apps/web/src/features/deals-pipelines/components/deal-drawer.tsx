@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, cn, useToast } from '@crm/ui';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
+import { CompanyLink } from '@/features/companies';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useDealDetail, useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
@@ -123,7 +124,11 @@ function DrawerBody({
         <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
           {t('eyebrow', { source: sourceLabel(deal.source) })}
         </div>
-        <Field label={t('name')} htmlFor="drawer-title" error={titleError ? t('titleRequired') : undefined}>
+        <Field
+          label={t('name')}
+          htmlFor="drawer-title"
+          error={titleError ? t('titleRequired') : undefined}
+        >
           <Input
             key={deal.title}
             id="drawer-title"
@@ -154,7 +159,11 @@ function DrawerBody({
           <StatusChip status={deal.status} />
           {stage && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-              <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: stage.color }} />
+              <span
+                aria-hidden="true"
+                className="size-2 rounded-full"
+                style={{ backgroundColor: stage.color }}
+              />
               {stage.name}
             </span>
           )}
@@ -177,7 +186,11 @@ function DrawerBody({
               </Button>
             )}
             {canDelete && (
-              <Button variant="ghost" className="ms-auto text-danger" onClick={() => setConfirmDelete(true)}>
+              <Button
+                variant="ghost"
+                className="ms-auto text-danger"
+                onClick={() => setConfirmDelete(true)}
+              >
                 <TrashIcon /> {t('delete')}
               </Button>
             )}
@@ -202,7 +215,15 @@ function DrawerBody({
           />
           {!deal.contact && <p className="text-xs text-muted-foreground">{t('noContact')}</p>}
           {deal.company && (
-            <p className="text-xs text-muted-foreground">{t('company', { name: deal.company.name })}</p>
+            <p className="text-xs text-muted-foreground">
+              <CompanyLink
+                id={deal.company.id}
+                name={deal.company.name}
+                className="hover:text-foreground hover:underline"
+              >
+                {t('company', { name: deal.company.name })}
+              </CompanyLink>
+            </p>
           )}
           {deal.contact && (
             <div className="flex flex-wrap gap-2">
@@ -225,7 +246,11 @@ function DrawerBody({
             {t('details')}
           </h3>
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label={t('value')} htmlFor="drawer-value" error={valueError ? t('valueInvalid') : undefined}>
+            <Field
+              label={t('value')}
+              htmlFor="drawer-value"
+              error={valueError ? t('valueInvalid') : undefined}
+            >
               <Input
                 key={`${deal.valueMinor}:${deal.currency}`}
                 id="drawer-value"
@@ -237,7 +262,8 @@ function DrawerBody({
                   const minor = toMinor(e.target.value, deal.currency);
                   if (Number.isNaN(minor) || minor > 9_999_999_999) return setValueError(true);
                   setValueError(false);
-                  if (minor !== deal.valueMinor) void save({ value: toMajorInput(minor, deal.currency) });
+                  if (minor !== deal.valueMinor)
+                    void save({ value: toMajorInput(minor, deal.currency) });
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') e.currentTarget.blur();

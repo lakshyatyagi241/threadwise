@@ -2,60 +2,87 @@
 
 import {
   ERROR_CODES,
+  defaultBillingCurrency,
   industrySchema,
   onboardingWorkspaceRequestSchema,
   teamSizeSchema,
   type OnboardingResponse,
 } from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
+import type { CountryCode } from 'libphonenumber-js';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
-import { Button, Field, Input, Select, Spinner } from '@crm/ui';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { ApiError } from '@/lib/api/errors';
+import { FormField } from '../../guest/form-field';
+import { evaluatePhone, pickDefaultCountry } from '../../guest/phone';
+import { PhoneInput, type PhoneValue } from '../../guest/phone-input';
+import { ArrowIcon, Button, Input, Select, Spinner } from '../../guest/ui';
+import { countryOptions } from '../../platform/lib/zones-countries';
 import { Combobox } from '../../shared/combobox';
-import { currencyOptions } from '../../shared/currencies';
 import { ErrorNote } from '../../shared/error-note';
 import { focusFirstInvalid } from '../../shared/focus';
 import { redirectOnGateError } from '../../shared/gate-errors';
-import { PhoneField, type PhoneValue } from '../../shared/phone-field';
-import { TimezoneCombobox } from '../../shared/timezone-combobox';
 import { modernZoneId } from '../../shared/timezones';
 import { authApi, keys } from '../api';
+import { ZoneSelect } from './zone-select';
 
-type FieldKey = 'name' | 'industry' | 'sizeRange' | 'timezone' | 'currency' | 'phone';
+type FieldKey = 'name' | 'industry' | 'sizeRange' | 'timezone' | 'country' | 'currency' | 'phone';
 type Errors = Partial<Record<FieldKey, string>>;
 
 const INDUSTRIES = industrySchema.options;
 const SIZES = teamSizeSchema.options;
 
-/** Step 2 of 3: name the workspace, say what it is for, pick its timezone (TW-AUTH-008). */
+/**
+ * Step 2 of 3: name the workspace, say what it is for, pick its country, timezone and billing currency (TW-AUTH-008; the
+ * country and currency are ours: the currency starts at INR for India and USD elsewhere and stays the owner's to change). The
+ * mobile number is asked only when the account has none (an account made with Google or Facebook).
+ */
 export function WorkspaceStep({
   data,
+  defaultCountryIso,
   onSaved,
 }: {
   data: OnboardingResponse;
+  /** The platform's default country: the phone picker opens on it. */
+  defaultCountryIso: string | null;
   onSaved: () => void;
 }) {
   const t = useTranslations('auth-registration-security.account.onboarding.workspace');
   const locale = useLocale();
+  const tg = useTranslations('auth-registration-security.gate.onboarding');
   const router = useRouter();
   const queryClient = useQueryClient();
-  const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
-  const id = (name: string) => `${uid}-${name}`;
 
   // The organization already has the name chosen at sign-up; the suggestion fills in only when that is blank.
   const [name, setName] = useState(data.workspace.name || data.suggestedName);
   const [industry, setIndustry] = useState(data.workspace.industry ?? '');
   const [size, setSize] = useState(data.workspace.sizeRange ?? '');
   const [zone, setZone] = useState(modernZoneId(data.workspace.timezone ?? data.defaultTimezone));
-  const [currency, setCurrency] = useState(data.workspace.currency ?? '');
-  const [phone, setPhone] = useState<PhoneValue>({ e164: null, empty: true, problem: null });
+  const defaultIso = pickDefaultCountry(defaultCountryIso);
+  const countries = useMemo(() => countryOptions(locale), [locale]);
+  const [country, setCountry] = useState(data.workspace.country ?? defaultIso ?? '');
+  // The currency follows the country until the owner picks one themselves (or one was saved earlier).
+  const [currencyPick, setCurrencyPick] = useState<string | null>(data.workspace.currency);
+  const { available, platform } = data.currencies;
+  const currency = currencyPick ?? defaultBillingCurrency(country, available, platform);
+  const currencyNames = useMemo(() => {
+    try {
+      return new Intl.DisplayNames([locale], { type: 'currency' });
+    } catch {
+      return null;
+    }
+  }, [locale]);
+  const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(null);
+  const phone = useMemo<PhoneValue>(() => {
+    const raw = phoneEdit?.raw ?? '';
+    const iso = phoneEdit?.iso ?? defaultIso;
+    return { raw, iso, state: evaluatePhone(raw, iso) };
+  }, [phoneEdit, defaultIso]);
   const [errors, setErrors] = useState<Errors>({});
   const [error, setError] = useState<unknown>(null);
   const [pending, setPending] = useState(false);
-  const currencies = useMemo(() => currencyOptions(locale), [locale]);
 
   function fail(next: Errors) {
     setErrors(next);
@@ -69,16 +96,17 @@ export function WorkspaceStep({
 
     const found: Errors = {};
     if (data.needsPhone) {
-      if (phone.empty) found.phone = t('errors.phoneRequired');
-      else if (phone.problem) found.phone = t('errors.phoneInvalid');
+      if (!phone.raw.trim()) found.phone = t('errors.phoneRequired');
+      else if (!phone.state.valid) found.phone = t('errors.phoneInvalid');
     }
     const parsed = onboardingWorkspaceRequestSchema.safeParse({
       name: name.trim(),
       industry: industry || undefined,
       sizeRange: size || undefined,
       timezone: zone,
+      country: country || undefined,
       currency: currency || undefined,
-      phone: data.needsPhone ? (phone.e164 ?? undefined) : undefined,
+      phone: data.needsPhone ? (phone.state.e164 ?? undefined) : undefined,
     });
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {
@@ -89,9 +117,12 @@ export function WorkspaceStep({
             ? t('errors.nameInvalid')
             : key === 'timezone'
               ? t('errors.timezoneRequired')
-              : t('errors.invalid');
+              : key === 'country'
+                ? t('errors.countryRequired')
+                : t('errors.invalid');
       }
     }
+    if (!country) found.country = t('errors.countryRequired');
     if (Object.keys(found).length || !parsed.success) return fail(found);
 
     setPending(true);
@@ -113,7 +144,14 @@ export function WorkspaceStep({
         for (const f of err.fieldErrors) {
           const key = f.path as FieldKey;
           if (!mapped[key])
-            mapped[key] = key === 'timezone' ? t('errors.timezoneInvalid') : t('errors.invalid');
+            mapped[key] =
+              key === 'timezone'
+                ? t('errors.timezoneInvalid')
+                : key === 'country'
+                  ? t('errors.countryInvalid')
+                  : key === 'currency'
+                    ? t('errors.currencyInvalid')
+                    : t('errors.invalid');
         }
         fail(mapped);
       } else if (err instanceof ApiError && err.code === ERROR_CODES.FORBIDDEN) {
@@ -128,92 +166,126 @@ export function WorkspaceStep({
   }
 
   return (
-    <form ref={formRef} onSubmit={(e) => void submit(e)} className="space-y-4" noValidate>
-      <Field label={t('name')} htmlFor={id('name')} hint={t('nameHint')} error={errors.name}>
-        <Input
-          id={id('name')}
-          value={name}
-          maxLength={120}
-          autoComplete="organization"
-          placeholder={t('namePlaceholder')}
-          onChange={(e) => setName(e.target.value)}
-          invalid={Boolean(errors.name)}
-          required
-        />
-      </Field>
+    <form ref={formRef} onSubmit={(e) => void submit(e)} className="space-y-3" noValidate>
+      <FormField label={t('name')} hint={t('nameHint')} error={errors.name}>
+        {(p) => (
+          <Input
+            {...p}
+            value={name}
+            maxLength={120}
+            autoComplete="organization"
+            placeholder={t('namePlaceholder')}
+            onChange={(e) => setName(e.target.value)}
+            className="py-2"
+            required
+          />
+        )}
+      </FormField>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label={t('industry')} htmlFor={id('industry')} error={errors.industry}>
-          <Select
-            id={id('industry')}
-            value={industry}
-            onChange={(e) => setIndustry(e.target.value)}
-          >
-            <option value="">{t('industryPlaceholder')}</option>
-            {INDUSTRIES.map((value) => (
-              <option key={value} value={value}>
-                {t(`industries.${value}`)}
-              </option>
-            ))}
-          </Select>
-        </Field>
-        <Field label={t('size')} htmlFor={id('size')} error={errors.sizeRange}>
-          <Select id={id('size')} value={size} onChange={(e) => setSize(e.target.value)}>
-            <option value="">{t('sizePlaceholder')}</option>
-            {SIZES.map((value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-          </Select>
-        </Field>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label={t('industry')} error={errors.industry}>
+          {(p) => (
+            <Select
+              {...p}
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className="py-2"
+            >
+              <option value="">{t('industryPlaceholder')}</option>
+              {INDUSTRIES.map((value) => (
+                <option key={value} value={value}>
+                  {t(`industries.${value}`)}
+                </option>
+              ))}
+            </Select>
+          )}
+        </FormField>
+        <FormField label={t('size')} error={errors.sizeRange}>
+          {(p) => (
+            <Select {...p} value={size} onChange={(e) => setSize(e.target.value)} className="py-2">
+              <option value="">{t('sizePlaceholder')}</option>
+              {SIZES.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+          )}
+        </FormField>
       </div>
 
-      <Field
-        label={t('timezone')}
-        htmlFor={id('tz')}
-        hint={t('timezoneHint')}
-        error={errors.timezone}
-      >
-        <TimezoneCombobox
-          id={id('tz')}
-          value={zone}
-          onChange={setZone}
-          extra={[data.defaultTimezone]}
-          invalid={Boolean(errors.timezone)}
-        />
-      </Field>
+      <FormField label={t('timezone')} hint={t('timezoneHint')} error={errors.timezone}>
+        {(p) => (
+          <ZoneSelect
+            id={p.id}
+            value={zone}
+            onChange={setZone}
+            extra={[data.defaultTimezone]}
+            invalid={p.invalid}
+          />
+        )}
+      </FormField>
 
-      <Field
-        label={t('currency')}
-        htmlFor={id('currency')}
-        hint={t('currencyHint')}
-        error={errors.currency}
-      >
-        <Combobox
-          id={id('currency')}
-          options={currencies}
-          value={currency}
-          onChange={setCurrency}
-          clearLabel={t('currencyNone')}
-          placeholder={t('currencyPlaceholder')}
-          emptyLabel={t('currencyEmpty')}
-          listLabel={t('currency')}
-          invalid={Boolean(errors.currency)}
-        />
-      </Field>
+      <FormField label={t('country')} hint={t('countryHint')} error={errors.country}>
+        {(p) => (
+          <Combobox
+            id={p.id}
+            options={countries.map((c) => ({
+              value: c.code,
+              label: c.name,
+              search: c.name.toLowerCase(),
+            }))}
+            value={country}
+            onChange={setCountry}
+            placeholder={t('countryPlaceholder')}
+            emptyLabel={t('countryEmpty')}
+            invalid={p.invalid}
+          />
+        )}
+      </FormField>
+
+      <FormField label={t('currency')} hint={t('currencyHint')} error={errors.currency}>
+        {(p) => (
+          <Select
+            {...p}
+            value={currency}
+            onChange={(e) => setCurrencyPick(e.target.value)}
+            className="py-2"
+          >
+            {available.map((code) => {
+              const name = currencyNames?.of(code);
+              return (
+                <option key={code} value={code}>
+                  {name && name !== code ? `${code} - ${name}` : code}
+                </option>
+              );
+            })}
+          </Select>
+        )}
+      </FormField>
 
       {data.needsPhone && (
-        <Field label={t('phone')} htmlFor={id('phone')} hint={t('phoneHint')} error={errors.phone}>
-          <PhoneField id={id('phone')} onChange={setPhone} invalid={Boolean(errors.phone)} />
-        </Field>
+        <FormField label={t('phone')} hint={t('phoneHint')} error={errors.phone}>
+          {(p) => (
+            <PhoneInput
+              id={p.id}
+              name="phone"
+              value={phone}
+              onChange={(next) => setPhoneEdit({ raw: next.raw, iso: next.iso })}
+              invalid={p.invalid}
+              describedBy={p['aria-describedby']}
+              placeholder={tg('phonePlaceholder')}
+            />
+          )}
+        </FormField>
       )}
 
       <ErrorNote error={error} />
 
-      <Button type="submit" className="w-full" disabled={pending}>
-        {pending && <Spinner label={t('saving')} />}
+      <Button type="submit" className="mt-2 w-full py-2.5" disabled={pending}>
+        {pending ? <Spinner label={t('saving')} /> : null}
         {pending ? t('saving') : t('continue')}
+        {!pending && <ArrowIcon />}
       </Button>
     </form>
   );

@@ -1,0 +1,90 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram broadcast"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "hub": {
+      "kicker": "Channel · Instagram",
+      "title": "Instagram",
+      "titleAccent": "accounts",
+      "intro": "Link your Instagram Business or Creator account once. Its messages then arrive in your team inbox, and you reply, run flows and send to people who already messaged you from here.",
+      "teamInbox": "Team inbox",
+      "broadcasts": "Reply-only broadcast",
+      "loadError": "The linked Instagram accounts could not be loaded. Try again.",
+      "engineOff": "{engine} is not connected. An administrator has to connect it in Admin → Add-ons before an Instagram account can be linked.",
+      "connectedCount": "{count, plural, one {# account linked} other {# accounts linked}}",
+      "notConnected": "Not connected",
+      "cardTitle": "Add an Instagram account",
+      "cardBody": "Connect a Business/Creator account. Your Instagram connects once and shows up here — conversations, flows and auto-replies all work from this workspace.",
+      "add": "Add an Instagram account",
+      "linkedAccounts": "Linked accounts",
+      "linked": "Instagram account linked.",
+      "linkFailed": "Could not link that account."
+    },
+    "dialog": {
+      "close": "Close",
+      "kicker": "Instagram",
+      "title": "Add an Instagram account",
+      "note": "Your Instagram connects once through {engine} (it holds the login and the webhook). This workspace links to it and shows its inbox, flows and ads here — it's always one account, not two.",
+      "connect": "Connect Instagram",
+      "checking": "Checking…",
+      "hint": "Links instantly if you already connected it on {engine} — otherwise a quick sign-in popup opens.",
+      "pick": "Pick an account to link",
+      "link": "Link",
+      "connectDifferent": "Connect a different account",
+      "linkFailed": "Could not link that account.",
+      "startFailed": "Could not start Instagram connect."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Connected",
+      "needsReauth": "Needs re-auth",
+      "live": "live",
+      "manage": "Manage on {engine}",
+      "refresh": "Refresh profile from {engine}",
+      "unlink": "Unlink",
+      "unlinkConfirm": "Disconnect this Instagram account? Its conversations and inbox data will be removed, and Instagram will disappear from your dashboard, inbox, flows, templates and auto-replies until you connect an account again. The account itself stays on {engine} — you can re-link it later.",
+      "cancel": "Cancel",
+      "updated": "Instagram account {handle} updated.",
+      "unlinked": "Instagram account disconnected — its data has been removed.",
+      "failed": "That did not work. Try again."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Reply-only",
+      "title": "Instagram",
+      "titleAccent": "broadcast",
+      "intro": "Instagram only lets you message people who already messaged you, so pick from your existing conversations. Instagram applies its 24-hour window when each message is sent.",
+      "accounts": "Instagram accounts",
+      "loadError": "The conversations could not be loaded. Try again.",
+      "failed": "That did not work. Try again.",
+      "noAccounts": "No Instagram account is linked and connected yet.",
+      "name": "Broadcast name",
+      "namePlaceholder": "Autumn offer",
+      "account": "Instagram account",
+      "template": "Template",
+      "templateHint": "Optional. Fills the message when it is empty.",
+      "templateNone": "No template",
+      "message": "Message",
+      "messageHint": "Use {token} for the person's name. Up to {max} characters.",
+      "messagePlaceholder": "Hi {token}, …",
+      "send": "{count, plural, =0 {Send} one {Send to # conversation} other {Send to # conversations}}",
+      "sending": "Sending…",
+      "recipients": "Recipients",
+      "windowOpenCount": "{open} of {total} in the 24-hour window",
+      "search": "Search conversations",
+      "selectAll": "Select all",
+      "clear": "Clear",
+      "capNote": "One send reaches at most {max} conversations; select all picks the first {max}.",
+      "empty": "No conversations yet. People appear here after they message your account.",
+      "inWindow": "In window",
+      "outsideWindow": "Outside 24h",
+      "selected": "{count, plural, one {# selected} other {# selected}}",
+      "sent": "Instagram broadcast sent — {sent} delivered{failed, plural, =0 {} other {, # failed}}.",
+      "sentNone": "Could not send to any recipient. Check the Instagram connection."
+    }
+  }
+}

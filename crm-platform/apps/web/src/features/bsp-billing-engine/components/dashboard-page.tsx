@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, EmptyState, Spinner, StatTile } from '@crm/ui';
+import { Alert, Button, Card, EmptyState, Select, Spinner, StatTile } from '@crm/ui';
 import type { BspDashboard } from '@crm/contracts';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -17,10 +18,13 @@ export function DashboardPage() {
   const t = useTranslations('bsp-billing-engine.dashboard');
   const tc = useTranslations('bsp-billing-engine.common');
   const locale = useLocale();
+  // A P&L is one currency: workspaces billed in rupees are not added to those billed in dollars.
+  const [currency, setCurrency] = useState<string | undefined>(undefined);
   const q = useQuery({
-    queryKey: KEYS.dashboard(undefined),
-    queryFn: ({ signal }) => operatorApi.dashboard(undefined, signal),
+    queryKey: KEYS.dashboard(undefined, currency),
+    queryFn: ({ signal }) => operatorApi.dashboard(undefined, currency, signal),
     refetchOnWindowFocus: false,
+    placeholderData: (previous) => previous,
   });
 
   return (
@@ -30,11 +34,27 @@ export function DashboardPage() {
         title={t('title')}
         description={q.data ? formatRange(q.data.from, q.data.to, locale) : undefined}
         actions={
-          <Link href="/admin/bsp/credit">
-            <Button variant="secondary" size="sm">
-              {t('linkConnect')}
-            </Button>
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            {q.data && q.data.currencies.length > 1 && (
+              <Select
+                aria-label={t('currency')}
+                value={q.data.currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="h-8 w-24"
+              >
+                {q.data.currencies.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </Select>
+            )}
+            <Link href="/admin/bsp/credit">
+              <Button variant="secondary" size="sm">
+                {t('linkConnect')}
+              </Button>
+            </Link>
+          </div>
         }
       />
       {q.isPending ? (

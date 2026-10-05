@@ -16,6 +16,12 @@
   "punya": {
    "name": "Punya",
    "aliases": []
+  },
+  "shubham": {
+   "name": "Shubham",
+   "aliases": [
+    "shubbhampuranik"
+   ]
   }
  },
  "clusters": {
@@ -282,7 +288,7 @@
    "cluster": "platform",
    "wave": 1,
    "estDays": 130,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "infra",
    "zone": [
     "apps/api/src/modules/platform-infrastructure/",
@@ -553,7 +559,7 @@
   },
   "chrome-extension-sheets-addon": {
    "code": "ext",
-   "owner": "lakshya",
+   "owner": "shubham",
    "cluster": "platform",
    "wave": 3,
    "estDays": 70,
@@ -1798,6 +1804,60 @@
     "apps/web/e2e/channel-email/",
     "docs/api/channel-email.md"
    ]
+  },
+  "leads": {
+   "code": "lead",
+   "owner": "lakshya",
+   "cluster": "platform",
+   "wave": 3,
+   "estDays": 15,
+   "inventory": "pending",
+   "routeBase": "lead-sources",
+   "zone": [
+    "apps/api/src/modules/leads/",
+    "apps/api/src/infra/providers/leads/",
+    "apps/api/src/config/domains/leads.env.ts",
+    "apps/api/test/unit/leads/",
+    "apps/api/test/integration/leads/",
+    "apps/api/test/e2e/leads/",
+    "packages/contracts/src/leads/",
+    "packages/db/src/schema/leads/",
+    "packages/db/src/seeds/leads.ts",
+    "packages/db/migrations/??????????????_lead_*.sql",
+    "apps/web/src/app/(app)/(leads)/",
+    "apps/web/src/app/(admin)/(leads)/",
+    "apps/web/src/features/leads/",
+    "apps/web/messages/*/leads.json",
+    "apps/web/e2e/leads/",
+    "docs/api/leads.md"
+   ]
+  },
+  "marketplace": {
+   "code": "mkt",
+   "owner": "lakshya",
+   "cluster": "platform",
+   "wave": 3,
+   "estDays": 25,
+   "inventory": "pending",
+   "routeBase": "marketplace",
+   "zone": [
+    "apps/api/src/modules/marketplace/",
+    "apps/api/src/infra/providers/marketplace/",
+    "apps/api/src/config/domains/marketplace.env.ts",
+    "apps/api/test/unit/marketplace/",
+    "apps/api/test/integration/marketplace/",
+    "apps/api/test/e2e/marketplace/",
+    "packages/contracts/src/marketplace/",
+    "packages/db/src/schema/marketplace/",
+    "packages/db/src/seeds/marketplace.ts",
+    "packages/db/migrations/??????????????_mkt_*.sql",
+    "apps/web/src/app/(app)/(marketplace)/",
+    "apps/web/src/app/(admin)/(marketplace)/",
+    "apps/web/src/features/marketplace/",
+    "apps/web/messages/*/marketplace.json",
+    "apps/web/e2e/marketplace/",
+    "docs/api/marketplace.md"
+   ]
   }
  },
  "zoneTemplate": [
@@ -1911,6 +1971,31 @@
   {
    "path": "docs/threadwise-port/assignments.md",
    "policy": "generated; do not hand-edit",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/features/help-center/**",
+   "policy": "Help center zone: the repo owner; guides are written with the help-docs-sync skill",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/app/(app)/(help-center)/**",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/messages/*/help-center.json",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/e2e/help-center/**",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/features/*/help/**",
+   "policy": "Help guides, one folder per domain: the first content pass adds new files into every domain; afterwards each domain owner edits their own guides (help-docs-sync)",
    "reviewer": "lakshya"
   }
  ]

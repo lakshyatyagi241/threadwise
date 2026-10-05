@@ -42,7 +42,10 @@ describe('invoice math: the Reference acceptance examples, with the fixes', () =
   });
 
   it('TW-INV-006 #2: JPY has no decimals: 1500 at 10% is 150 tax, 1650 total', () => {
-    const r = computeInvoice({ currency: 'jpy', lines: [{ qty: '1', unitPrice: '1500', taxRate: '10' }] });
+    const r = computeInvoice({
+      currency: 'jpy',
+      lines: [{ qty: '1', unitPrice: '1500', taxRate: '10' }],
+    });
     expect(r.ok).toBe(true);
     if (!r.ok) return;
     expect(r.value.currency).toBe('JPY');
@@ -72,7 +75,9 @@ describe('invoice math: the Reference acceptance examples, with the fixes', () =
 
   it('refuses no lines, a zero quantity and more than 100 lines', () => {
     expect(computeInvoice({ currency: 'USD', lines: [] }).ok).toBe(false);
-    expect(computeInvoice({ currency: 'USD', lines: [{ qty: '0', unitPrice: '1' }] }).ok).toBe(false);
+    expect(computeInvoice({ currency: 'USD', lines: [{ qty: '0', unitPrice: '1' }] }).ok).toBe(
+      false,
+    );
     const many = Array.from({ length: 101 }, () => ({ qty: '1', unitPrice: '1' }));
     const r = computeInvoice({ currency: 'USD', lines: many });
     expect(r.ok).toBe(false);
@@ -81,7 +86,11 @@ describe('invoice math: the Reference acceptance examples, with the fixes', () =
 
 describe('invoice math: the one rounding rule', () => {
   it('rounds half up at the step where the amount is produced: 0.5 x 0.05 = 0.025 -> 0.03', () => {
-    const r = calculateInvoice({ discount: { kind: 'none', value: 0n }, shippingMinor: 0n, lines: [line({ qtyScaled: 5000n, unitPriceMinor: 5n })] });
+    const r = calculateInvoice({
+      discount: { kind: 'none', value: 0n },
+      shippingMinor: 0n,
+      lines: [line({ qtyScaled: 5000n, unitPriceMinor: 5n })],
+    });
     expect(r.lines[0]!.grossMinor).toBe(3n);
   });
 
@@ -97,7 +106,11 @@ describe('invoice math: the one rounding rule', () => {
     const r = calculateInvoice({
       discount: { kind: 'amount', value: 100n },
       shippingMinor: 0n,
-      lines: [line({ unitPriceMinor: 100n }), line({ unitPriceMinor: 100n }), line({ unitPriceMinor: 100n })],
+      lines: [
+        line({ unitPriceMinor: 100n }),
+        line({ unitPriceMinor: 100n }),
+        line({ unitPriceMinor: 100n }),
+      ],
     });
     expect(r.lines.map((l) => l.sharedDiscountMinor)).toEqual([34n, 33n, 33n]);
     expect(r.discountMinor).toBe(100n);
@@ -105,9 +118,17 @@ describe('invoice math: the one rounding rule', () => {
   });
 
   it('a percent discount is rounded once on the subtotal, an amount discount never exceeds it', () => {
-    const pct = calculateInvoice({ discount: { kind: 'percent', value: 1250n }, shippingMinor: 0n, lines: [line({ unitPriceMinor: 999n })] });
+    const pct = calculateInvoice({
+      discount: { kind: 'percent', value: 1250n },
+      shippingMinor: 0n,
+      lines: [line({ unitPriceMinor: 999n })],
+    });
     expect(pct.discountMinor).toBe(125n); // 12.5% of 9.99 = 1.24875 -> 1.25
-    const over = calculateInvoice({ discount: { kind: 'amount', value: 99_999n }, shippingMinor: 0n, lines: [line({ unitPriceMinor: 1000n })] });
+    const over = calculateInvoice({
+      discount: { kind: 'amount', value: 99_999n },
+      shippingMinor: 0n,
+      lines: [line({ unitPriceMinor: 1000n })],
+    });
     expect(over.discountMinor).toBe(1000n);
     expect(over.totalMinor).toBe(0n);
   });
@@ -129,12 +150,16 @@ describe('invoice math: inclusive tax', () => {
     const r = calculateInvoice({
       discount: { kind: 'none', value: 0n },
       shippingMinor: 0n,
-      lines: [line({ unitPriceMinor: 11_800n, taxRateBp: 1800, taxInclusive: true, taxName: 'GST' })],
+      lines: [
+        line({ unitPriceMinor: 11_800n, taxRateBp: 1800, taxInclusive: true, taxName: 'GST' }),
+      ],
     });
     expect(r.taxMinor).toBe(1800n);
     expect(r.taxAddedMinor).toBe(0n);
     expect(r.totalMinor).toBe(11_800n);
-    expect(r.taxGroups).toEqual([{ name: 'GST', rateBp: 1800, inclusive: true, baseMinor: 10_000n, taxMinor: 1800n }]);
+    expect(r.taxGroups).toEqual([
+      { name: 'GST', rateBp: 1800, inclusive: true, baseMinor: 10_000n, taxMinor: 1800n },
+    ]);
   });
 
   it('an inclusive and an exclusive line mix: only the exclusive tax is added to the total', () => {
@@ -180,17 +205,28 @@ describe('invoice math: it is the same rule as proposals and estimates', () => {
         return line({
           qtyScaled: BigInt(1 + rnd(500_000)),
           unitPriceMinor: BigInt(rnd(2_000_000)),
-          discount: kind === 'none' ? { kind, value: 0n } : { kind, value: BigInt(kind === 'percent' ? rnd(10_001) : rnd(50_000)) },
+          discount:
+            kind === 'none'
+              ? { kind, value: 0n }
+              : { kind, value: BigInt(kind === 'percent' ? rnd(10_001) : rnd(50_000)) },
           taxRateBp: [0, 500, 1000, 1800, 2000, 725][rnd(6)]!,
         });
       });
       const dk = (['none', 'percent', 'amount'] as const)[rnd(3)]!;
-      const discount = dk === 'none' ? { kind: dk, value: 0n } : { kind: dk, value: BigInt(dk === 'percent' ? rnd(10_001) : rnd(500_000)) };
+      const discount =
+        dk === 'none'
+          ? { kind: dk, value: 0n }
+          : { kind: dk, value: BigInt(dk === 'percent' ? rnd(10_001) : rnd(500_000)) };
       const inv = calculateInvoice({ discount, shippingMinor: 0n, lines });
       const doc = calculateSalesDoc({
         defaultTaxRateBp: 0,
         discount,
-        lines: lines.map((l) => ({ qtyScaled: l.qtyScaled, unitPriceMinor: l.unitPriceMinor, discount: l.discount, taxRateBp: l.taxRateBp })),
+        lines: lines.map((l) => ({
+          qtyScaled: l.qtyScaled,
+          unitPriceMinor: l.unitPriceMinor,
+          discount: l.discount,
+          taxRateBp: l.taxRateBp,
+        })),
       });
       expect(inv.subtotalMinor).toBe(doc.subtotalMinor);
       expect(inv.discountMinor).toBe(doc.discountMinor);
@@ -214,10 +250,14 @@ describe('invoice math: it is the same rule as proposals and estimates', () => {
           taxInclusive: rnd(2) === 1,
         }),
       );
-      const discount = rnd(2) ? { kind: 'percent' as const, value: BigInt(rnd(5000)) } : { kind: 'none' as const, value: 0n };
+      const discount = rnd(2)
+        ? { kind: 'percent' as const, value: BigInt(rnd(5000)) }
+        : { kind: 'none' as const, value: 0n };
       const shippingMinor = BigInt(rnd(5000));
       const r = calculateInvoice({ discount, shippingMinor, lines });
-      expect(r.totalMinor).toBe(r.subtotalMinor - r.discountMinor + r.taxAddedMinor + shippingMinor);
+      expect(r.totalMinor).toBe(
+        r.subtotalMinor - r.discountMinor + r.taxAddedMinor + shippingMinor,
+      );
       expect(r.lines.reduce((a, l) => a + l.totalMinor, 0n) + shippingMinor).toBe(r.totalMinor);
       expect(r.lines.reduce((a, l) => a + l.sharedDiscountMinor, 0n)).toBe(r.discountMinor);
       expect(r.taxAddedMinor <= r.taxMinor).toBe(true);

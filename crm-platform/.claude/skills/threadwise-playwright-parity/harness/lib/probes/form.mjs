@@ -320,7 +320,12 @@ export async function inspectOutcome(c, form, { mark, urlBefore, typed = {} }) {
           focus: 'none',
           liveTexts: [],
         };
-  const clientBlocked = !submitReq && formVisible ? await invalidPseudo(c, els, ids) : [];
+  // A submit that sent nothing is a client-side rejection when the browser's own validation blocked it OR the app's
+  // script validated and flagged fields (a form with novalidate and inline errors): both are "rejected with feedback".
+  // Without this an app that validates in script is reported as `no-request` (a swallowed click) on every invalid case.
+  const pseudoBlocked = !submitReq && formVisible ? await invalidPseudo(c, els, ids) : [];
+  const scriptBlocked = !submitReq && formVisible && !pseudoBlocked.length ? insp.flagged : [];
+  const clientBlocked = [...pseudoBlocked, ...scriptBlocked];
   const flagged = [...new Set([...insp.flagged, ...clientBlocked])];
 
   let outcome;

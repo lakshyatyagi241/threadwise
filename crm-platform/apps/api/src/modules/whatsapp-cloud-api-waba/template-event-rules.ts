@@ -35,16 +35,31 @@ export function normalizeQualityScore(raw: unknown, current: string | null): str
   return v;
 }
 
-/** Meta's template state to the local `status` column; every state not listed leaves the local status as it was. */
+/**
+ * Meta's template state to the local `status` column (contracts `tplStatusSchema`). The webhook, the refresh and the sync all
+ * derive the local status from `meta_status` through this one function, so they cannot disagree. Reference left the local status
+ * alone for PAUSED/DISABLED and so kept reading "Approved" for a template Meta had stopped; here the status says what is true
+ * (`paused`, `disabled`, `deleted`), and the send gate still reads `meta_status` and `paused_until`.
+ */
 export function localStatusFor(metaStatus: string): string | null {
-  switch (metaStatus) {
+  switch (metaStatus.toUpperCase()) {
     case 'APPROVED':
+    case 'REINSTATED':
       return 'approved';
     case 'REJECTED':
       return 'rejected';
     case 'PENDING':
     case 'IN_APPEAL':
+    case 'PENDING_DELETION':
       return 'pending';
+    case 'PAUSED':
+      return 'paused';
+    case 'DISABLED':
+    case 'LIMIT_EXCEEDED':
+    case 'FLAGGED':
+      return 'disabled';
+    case 'DELETED':
+      return 'deleted';
     default:
       return null;
   }

@@ -56,7 +56,8 @@ export class InvoiceSettingsController {
   @RequirePermission('record.invoices.settings')
   @ApiOperation({
     summary: 'Set the webhook signing secret, the mode, and turn the connection on or off',
-    description: 'A connection cannot be enabled without a secret (422 PAY_GATEWAY_NOT_CONFIGURED). The response carries the webhook path to give the provider.',
+    description:
+      'A connection cannot be enabled without a secret (422 PAY_GATEWAY_NOT_CONFIGURED). The response carries the webhook path to give the provider.',
   })
   async updateGateway(@Body(zodPipe(updateInvoiceGatewaySchema)) body: UpdateInvoiceGatewayInput) {
     return this.settings.updateGateway(body);

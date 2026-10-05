@@ -5,6 +5,7 @@ import {
   firstParam,
   guestHeader,
   guestMetadata,
+  guestPanel,
   loadRegistrationConfig,
 } from '@/features/auth-registration-security/guest/server';
 
@@ -26,8 +27,8 @@ export default async function ConfirmEmailChangePage({
   return (
     <GuestFrame
       page="forgot"
-      variant={3}
       config={config}
+      fixedPanel={await guestPanel('confirmEmailChange')}
       header={await guestHeader('confirmEmailChange')}
     >
       <LinkLanding kind="confirmEmailChange" org={org} token={token} usable={usable} />

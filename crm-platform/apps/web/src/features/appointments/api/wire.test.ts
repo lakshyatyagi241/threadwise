@@ -1,6 +1,8 @@
 import {
   appointmentResponseSchema,
   bookingTypeResponseSchema,
+  calendarListResponseSchema,
+  calendarStatusResponseSchema,
   createBookingTypeSchema,
   listAppointmentsQuerySchema,
   appointmentCountsQuerySchema,
@@ -22,6 +24,8 @@ import {
   listParams,
   slotQuery,
   toAppointment,
+  toCalendar,
+  toCalendarOptions,
   toBookBody,
   toBookingType,
   toPreviewBody,
@@ -488,5 +492,96 @@ describe('the visitor pages', () => {
       cancelFee: { currency: 'INR', amount: '200.00' },
     });
     expect(m.booking.manageUrl.endsWith('/b/manage/tok123')).toBe(true);
+  });
+});
+
+describe('the Google Calendar link', () => {
+  it('reads the server status as the card shows it', () => {
+    const wire = calendarStatusResponseSchema.parse({
+      provider: 'google',
+      connected: true,
+      account: 'ana@example.com',
+      status: 'connected',
+      calendarId: 'team@example.com',
+      calendarName: 'Team calendar',
+      connectedAt: NOW,
+    });
+    expect(toCalendar(wire)).toEqual({
+      provider: 'google',
+      status: 'connected',
+      account: 'ana@example.com',
+      calendarId: 'team@example.com',
+      calendarName: 'Team calendar',
+      connectedAt: NOW,
+    });
+  });
+
+  it('keeps a grant that needs reconnecting visible with its account, and an unavailable one empty', () => {
+    const refused = calendarStatusResponseSchema.parse({
+      provider: 'google',
+      connected: false,
+      account: 'ana@example.com',
+      status: 'needs_reconnect',
+      calendarId: 'primary',
+      calendarName: null,
+      connectedAt: NOW,
+    });
+    expect(toCalendar(refused)).toMatchObject({
+      status: 'needs_reconnect',
+      account: 'ana@example.com',
+    });
+    const none = calendarStatusResponseSchema.parse({
+      provider: 'google',
+      connected: false,
+      account: null,
+      status: 'unavailable',
+      calendarId: null,
+      calendarName: null,
+      connectedAt: null,
+    });
+    expect(toCalendar(none)).toMatchObject({
+      status: 'unavailable',
+      account: null,
+      connectedAt: null,
+    });
+  });
+
+  it('rejects a status this app does not know (the contract is the authority)', () => {
+    expect(
+      calendarStatusResponseSchema.safeParse({
+        provider: 'google',
+        connected: false,
+        account: null,
+        status: 'broken',
+        calendarId: null,
+        calendarName: null,
+        connectedAt: null,
+      }).success,
+    ).toBe(false);
+  });
+
+  it('lists the calendars for the picker without the access role', () => {
+    const wire = calendarListResponseSchema.parse({
+      data: [
+        {
+          id: 'ana@example.com',
+          name: 'ana@example.com',
+          primary: true,
+          timezone: 'UTC',
+          accessRole: 'owner',
+        },
+        {
+          id: 'team@example.com',
+          name: 'Team',
+          primary: false,
+          timezone: null,
+          accessRole: 'writer',
+        },
+      ],
+    });
+    expect(toCalendarOptions(wire)).toEqual([
+      { id: 'ana@example.com', name: 'ana@example.com', primary: true, timezone: 'UTC' },
+      { id: 'team@example.com', name: 'Team', primary: false, timezone: null },
+    ]);
   });
 });

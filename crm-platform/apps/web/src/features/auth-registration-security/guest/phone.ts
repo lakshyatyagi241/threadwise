@@ -14,14 +14,14 @@ export interface CountryOption {
   /** Calling code without the plus: "91". */
   dial: string;
   name: string;
-  flag: string;
+  /** Lower-cased text the picker's search box matches: name, ISO code and "+dial". */
+  search: string;
 }
 
-/** Regional-indicator emoji for an ISO 3166 alpha-2 code ("IN" -> flag). */
-export function flagEmoji(iso: string): string {
-  const upper = iso.toUpperCase();
-  if (!/^[A-Z]{2}$/.test(upper)) return '';
-  return String.fromCodePoint(...[...upper].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65));
+/** The CSS class of a country's flag image (`flag-icons`): `fi fi-in`. Empty for anything that is not an ISO code. */
+export function flagClass(iso: string): string {
+  const lower = iso.trim().toLowerCase();
+  return /^[a-z]{2}$/.test(lower) ? `fi fi-${lower}` : '';
 }
 
 function regionName(iso: string, locale: string): string {
@@ -39,33 +39,30 @@ export function listCountries(locale: string): CountryOption[] {
   const hit = cache.get(locale);
   if (hit) return hit;
   const list = getCountries()
-    .map((iso) => ({
-      iso,
-      dial: getCountryCallingCode(iso),
-      name: regionName(iso, locale),
-      flag: flagEmoji(iso),
-    }))
+    .map((iso) => {
+      const name = regionName(iso, locale);
+      const dial = getCountryCallingCode(iso);
+      return { iso, dial, name, search: `${name} ${iso} +${dial}`.toLowerCase() };
+    })
     .sort((a, b) => a.name.localeCompare(b.name, locale));
   cache.set(locale, list);
   return list;
 }
 
+/** Used when the platform has no default country: the same fallback the reference product opens on. */
+export const FALLBACK_COUNTRY: CountryCode = 'IN';
+
 /**
- * The country preselected in the picker: the admin's default when valid, otherwise the region of
- * the browser language (en-GB -> GB), otherwise `fallback`.
+ * The country preselected in the picker: the platform's default when it is a real country, otherwise
+ * `fallback`. The browser's language is deliberately not consulted: the same page must open on the same
+ * country for everyone (and render the same on the server and in the browser).
  */
 export function pickDefaultCountry(
   configured: string | null | undefined,
-  languages: readonly string[] = [],
-  fallback: CountryCode = 'US',
+  fallback: CountryCode = FALLBACK_COUNTRY,
 ): CountryCode {
-  const upper = configured?.toUpperCase();
-  if (upper && isSupportedCountry(upper)) return upper as CountryCode;
-  for (const tag of languages) {
-    const region = tag.split('-')[1]?.toUpperCase();
-    if (region && isSupportedCountry(region)) return region as CountryCode;
-  }
-  return fallback;
+  const upper = configured?.trim().toUpperCase();
+  return upper && isSupportedCountry(upper) ? (upper as CountryCode) : fallback;
 }
 
 /** Formats what the visitor has typed for the chosen country ("98765 43210"). Plus-prefixed input stays international. */
@@ -113,4 +110,19 @@ export function countryFromInternational(raw: string): CountryCode | null {
 export function nationalPart(raw: string, iso: CountryCode): string {
   const parsed = parsePhoneNumberFromString(raw.trim(), iso);
   return parsed ? parsed.formatNational() : raw;
+}
+
+/**
+ * "+91 •••• ••21": the calling code, then the rest hidden except the last two digits. The calling code comes from
+ * the number itself, so it is right for one-digit (+1), three-digit (+971) and every other length, instead of
+ * guessing a prefix length. A value that is not a readable international number is masked without a code.
+ */
+export function maskPhone(e164: string): string {
+  const text = e164.trim();
+  const parsed = text.startsWith('+') ? parsePhoneNumberFromString(text) : undefined;
+  const digits = text.replace(/\D/g, '');
+  if (!digits) return '';
+  const tail = digits.slice(-2);
+  if (!parsed || tail.length < 2) return `•••• ••${tail}`;
+  return `+${parsed.countryCallingCode} •••• ••${tail}`;
 }

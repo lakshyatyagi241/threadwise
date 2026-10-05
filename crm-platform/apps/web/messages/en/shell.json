@@ -7,11 +7,10 @@
       "sales": "Sales",
       "campaigns": "Campaigns",
       "automation": "Automation",
-      "channels": "Channels",
       "store": "Store",
-      "developer": "Developer",
+      "apps": "Marketplace",
       "help": "Support & Help",
-      "settings": "Settings & Workspace"
+      "settings": "Settings"
     },
     "locked": "Upgrade",
     "language": "Language",
@@ -29,13 +28,16 @@
     "comingSoon": "Coming soon",
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",
-    "expandMenu": "Show labels",
-    "collapseMenu": "Hide labels",
     "userMenu": "Account menu",
     "account": "Account",
     "balance": "Balance",
+    "pageSettings": {
+      "label": "Settings for this page",
+      "hint": "These settings are only shown because your role allows changing them."
+    },
     "notifications": "Notifications",
     "settings": "Settings",
+    "pinned": "Help and settings",
     "nav": {
       "analytics": "Analytics",
       "notifications": "Notifications",
@@ -43,7 +45,6 @@
       "quickChat": "Quick chat",
       "callLogs": "Call logs",
       "teamChat": "Team chat",
-      "teamMembers": "Team members",
       "leadFinder": "Lead finder",
       "campaigns": "Campaigns",
       "broadcasts": "Broadcasts",
@@ -52,26 +53,12 @@
       "history": "History",
       "flows": "Flows",
       "aiAssistants": "AI assistants",
-      "autoReply": "Auto-reply",
       "appointments": "Appointments",
-      "chatWidget": "Chat widget",
-      "channels": "Channels",
-      "telegram": "Telegram",
-      "sms": "SMS",
-      "line": "LINE",
-      "viber": "Viber",
-      "wechat": "WeChat",
-      "email": "Email",
-      "waLinks": "WhatsApp links",
       "crmDashboard": "CRM dashboard",
       "store": "Store",
       "catalog": "Catalog",
-      "integrations": "Integrations",
-      "restApi": "REST API",
-      "webhooks": "Webhooks",
       "support": "Support",
       "guidebook": "Guidebook",
-      "activityLog": "Activity log",
       "pipelines": "Pipelines",
       "tasks": "Tasks",
       "companies": "Companies",
@@ -80,6 +67,7 @@
       "estimates": "Estimates",
       "invoices": "Invoices",
       "payments": "Payments"
-    }
+    },
+    "help": "Help"
   }
 }

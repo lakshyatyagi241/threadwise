@@ -50,6 +50,18 @@ cases, reports every difference, spawns fix sub-agents for the defects and recor
 `.claude/settings.json` blocks the end of the turn until a stamp covers the current state of the feature files, so
 do not wait for it. Skip only on the user's explicit word (`stamp.py write --status skipped --user-approved "..."`).
 
+## Every feature gets a help guide (automatic)
+
+The Help center (`/help`, the question mark above Settings, the "?" tips on pages) has one guide per feature, written as markdown in
+`apps/web/src/features/<domain>/help/`. A guide is gated like its screen: it only shows on plans and roles that have the feature and
+disappears when the feature or module is off. After you build or change **any** screen, Settings tile or plan feature, invoke the
+`help-docs-sync` skill before saying it is done, in the same change as the code. A coverage test in `pnpm test` fails when a built
+screen or plan feature has neither a guide nor an owned entry in `help-center/pending.json`.
+
+After the owner pulls the team's work (the post-merge hook prints `N features have no help doc` and writes `docs/help-pending.md`, and
+a session-start note repeats it), draft the pending guides without being asked and tell the owner what you wrote.
+Design: [docs/specs/help-center.md](docs/specs/help-center.md).
+
 ## Before calling anything done
 
 ```bash

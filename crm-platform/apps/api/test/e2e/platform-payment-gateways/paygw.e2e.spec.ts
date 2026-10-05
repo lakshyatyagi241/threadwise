@@ -238,7 +238,7 @@ describe('gateway catalogue and configuration (TW-PAYGW-001..005)', () => {
     expect((await gateway('stripe')).mode).toBe('live');
   });
 
-  it('activation is refused without the required fields (audited), without a driver, and for a support operator', async () => {
+  it('activation is refused without the required fields (audited) and for a support operator', async () => {
     const blocked = await activate('razorpay');
     expect(blocked.status).toBe(422);
     expect(blocked.body.code).toBe('PAYGW_GATEWAY_NOT_CONFIGURED');
@@ -252,10 +252,10 @@ describe('gateway catalogue and configuration (TW-PAYGW-001..005)', () => {
       payload: { missingFields: ['key_id', 'key_secret'] },
     });
 
-    await configure('mollie', { api_key: 'test_x' });
-    const noDriver = await activate('mollie');
-    expect(noDriver.status).toBe(422);
-    expect(noDriver.body.code).toBe('PAYGW_GATEWAY_UNAVAILABLE');
+    // every catalogue gateway has a driver now, so an unconfigured one is refused by the required-field guard instead
+    const unconfigured = await activate('mollie');
+    expect(unconfigured.status).toBe(422);
+    expect(unconfigured.body.code).toBe('PAYGW_GATEWAY_NOT_CONFIGURED');
 
     const g = await gateway('stripe');
     const asSupport = await api()
@@ -474,7 +474,7 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     expect(audit.rows.map((r) => r.action)).toEqual(['insert']);
   });
 
-  it('refuses an inactive gateway before creating anything, an unsupported currency, and a coupon (CPN not built)', async () => {
+  it('refuses an inactive gateway before creating anything and an unknown gateway', async () => {
     const razorpay = await gateway('razorpay');
     const before = Number((await h.owner.query(`SELECT count(*)::int AS n FROM orders`)).rows[0].n);
     const inactive = await placePlan('growth', { gatewayId: razorpay.id });
@@ -483,8 +483,6 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       code: 'PAYGW_GATEWAY_UNAVAILABLE',
       detail: 'That gateway is not currently available.',
     });
-    const coupon = await placePlan('growth', { gatewayId: stripeId, coupon: 'SAVE10' });
-    expect(coupon.body.code).toBe('PAYGW_COUPON_UNAVAILABLE');
     const missing = await placePlan('growth', {
       gatewayId: '00000000-0000-4000-8000-000000000000',
     });
@@ -575,6 +573,70 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     const gain = (after.getTime() - before.getTime()) / 86_400_000;
     expect(gain).toBeGreaterThan(27);
     expect(gain).toBeLessThan(32);
+  });
+
+  it('add-ons: an add-on is bought through the same checkout on top of an active paid plan, the plan is untouched, a free workspace is refused', async () => {
+    await h.owner.query(
+      `INSERT INTO plans (slug, name, kind, amount, features, limits) VALUES ('boost', 'Boost pack', 'addon', 20, '{}'::jsonb, '{"contacts": 500}'::jsonb)`,
+    );
+    const stateBefore = (
+      await h.owner.query(
+        `SELECT o.plan, s.plan_ends_at FROM organizations o JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = $1`,
+        [buyer.orgId],
+      )
+    ).rows[0];
+    const quote = await api()
+      .get('/v2/billing/checkout/plans/boost/quote')
+      .set(bearer(buyer.token));
+    expect(quote.status, JSON.stringify(quote.body)).toBe(200);
+    expect(quote.body).toMatchObject({
+      kind: 'addon',
+      itemName: 'Boost pack',
+      billingPeriod: 'monthly',
+    });
+
+    mockProviders();
+    stripeThatPays();
+    const placed = (await placePlan('boost', { gatewayId: stripeId })).body;
+    expect(placed.orderNumber).toBeTruthy();
+    const res = await api()
+      .get(`/v2/payments/return/stripe?o=${await tokenOf(placed.orderNumber)}&session_id=cs_1`)
+      .redirects(0);
+    expect(returnUrlOf(res.headers.location).searchParams.get('payment')).toBe('success');
+
+    const o = await orderBy(placed.orderNumber);
+    expect(o).toMatchObject({ status: 'paid', kind: 'addon', plan_slug: 'boost' });
+    const owned = await h.owner.query(`SELECT status FROM workspace_addons WHERE org_id = $1`, [
+      buyer.orgId,
+    ]);
+    expect(owned.rows).toEqual([{ status: 'active' }]);
+    const stateAfter = (
+      await h.owner.query(
+        `SELECT o.plan, s.plan_ends_at FROM organizations o JOIN org_plan_state s ON s.org_id = o.id WHERE o.id = $1`,
+        [buyer.orgId],
+      )
+    ).rows[0];
+    expect(stateAfter.plan).toBe(stateBefore.plan);
+    expect(stateAfter.plan_ends_at.getTime()).toBe(stateBefore.plan_ends_at.getTime());
+    // a replay of the return does not grant it twice
+    await api()
+      .get(`/v2/payments/return/stripe?o=${await tokenOf(placed.orderNumber)}&session_id=cs_1`)
+      .redirects(0);
+    expect(
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM workspace_addons WHERE org_id = $1`, [
+          buyer.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+
+    const freeOrg = await signup('addonfree');
+    await onPlan(freeOrg.orgId, 'freebie');
+    const refused = await api()
+      .get('/v2/billing/checkout/plans/boost/quote')
+      .set(bearer(freeOrg.token));
+    expect(refused.status).toBe(422);
+    expect(refused.body.code).toBe('PAYGW_PLAN_NOT_PURCHASABLE');
   });
 
   it('return: an unpaid session stays pending, the buyer cancelling is cancelled, a wrong amount fails, an unknown token lands on not-found', async () => {
@@ -697,13 +759,13 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       hook.post(),
     ]);
     const wallet = (
-      await h.owner.query(
-        `SELECT balance::text AS balance FROM wallets WHERE org_id = $1 AND unit = 'credits'`,
-        [buyer.orgId],
-      )
+      await h.owner.query(`SELECT balance::text AS balance FROM wallets WHERE org_id = $1`, [
+        buyer.orgId,
+      ])
     ).rows;
     expect(wallet).toHaveLength(1);
-    expect(Number(wallet[0].balance)).toBe(1000);
+    // The wallet holds whole currency units: a 10.00 top-up is 10, and the ledger entry says the same.
+    expect(Number(wallet[0].balance)).toBe(10);
     const ledger = await h.owner.query(
       `SELECT amount::text AS amount, balance_after::text AS after, idempotency_key FROM wallet_transactions WHERE org_id = $1`,
       [buyer.orgId],
@@ -720,7 +782,8 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
 
   it('razorpay: INR order through the widget parameters; a good signature pays, a bad one fails', async () => {
     await h.owner.query(
-      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('US Dollar','USD','$',1), ('Indian Rupee','INR','Rs',83.5) ON CONFLICT (code) DO NOTHING`,
+      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('US Dollar','USD','$',1), ('Indian Rupee','INR','Rs',83.5)
+       ON CONFLICT (code) DO UPDATE SET exchange_rate = EXCLUDED.exchange_rate, is_active = true`,
     );
     await configure('razorpay', {
       key_id: 'rzp_test_1',
@@ -814,7 +877,7 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     expect(JSON.stringify(all.body)).not.toMatch(/return_token|returnToken|org_id|"orgId"/);
     const usd = parsed.lifetimeSpend.find((s) => s.currency === 'USD')!;
     const inr = parsed.lifetimeSpend.find((s) => s.currency === 'INR')!;
-    expect(usd.total).toBe('185.26'); // 3 plan orders x 57.82 + the 11.80 top-up
+    expect(usd.total).toBe('208.86'); // 3 plan orders x 57.82 + the 11.80 top-up + the 23.60 add-on
     expect(inr).toMatchObject({ total: '4827.97', orders: 1 });
     const wallet = parsed.data.find((o) => o.kind === 'wallet_topup')!;
     expect(wallet).toMatchObject({ itemName: 'Wallet top-up', status: 'paid', amount: '11.80' });
@@ -865,6 +928,269 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       await c.query('ROLLBACK');
     } finally {
       await c.end();
+    }
+  });
+  describe('coupons at checkout (TW-PAYGW-010, 028)', () => {
+    beforeAll(async () => {
+      // a workspace of its own: the earlier scenarios left the shared buyer on a paid plan with paid orders
+      buyer = await signup('coupons');
+    });
+
+    async function mkCoupon(code: string, over: Record<string, unknown> = {}) {
+      const c = {
+        type: 'percent',
+        amount: '20',
+        is_active: true,
+        expires_at: null,
+        starts_at: null,
+        max_uses: null,
+        per_user_limit: null,
+        min_order_amount: null,
+        max_discount_amount: null,
+        currency_code: null,
+        applicable_package_ids: null,
+        first_purchase_only: false,
+        ...over,
+      };
+      const r = await h.owner.query(
+        `INSERT INTO coupons (code, type, amount, is_active, expires_at, starts_at, max_uses, per_user_limit, min_order_amount,
+           max_discount_amount, currency_code, applicable_package_ids, first_purchase_only)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb, $13)
+         ON CONFLICT (code) DO UPDATE SET type = EXCLUDED.type, amount = EXCLUDED.amount, is_active = EXCLUDED.is_active,
+           expires_at = EXCLUDED.expires_at, starts_at = EXCLUDED.starts_at, max_uses = EXCLUDED.max_uses, uses_count = 0,
+           per_user_limit = EXCLUDED.per_user_limit, min_order_amount = EXCLUDED.min_order_amount,
+           max_discount_amount = EXCLUDED.max_discount_amount, currency_code = EXCLUDED.currency_code,
+           applicable_package_ids = EXCLUDED.applicable_package_ids, first_purchase_only = EXCLUDED.first_purchase_only
+         RETURNING id`,
+        [
+          code,
+          c.type,
+          c.amount,
+          c.is_active,
+          c.expires_at,
+          c.starts_at,
+          c.max_uses,
+          c.per_user_limit,
+          c.min_order_amount,
+          c.max_discount_amount,
+          c.currency_code,
+          c.applicable_package_ids === null ? null : JSON.stringify(c.applicable_package_ids),
+          c.first_purchase_only,
+        ],
+      );
+      return Number(r.rows[0].id);
+    }
+    const previewCoupon = (slug: string, code: string, token = buyer.token) =>
+      api()
+        .get(`/v2/billing/checkout/plans/${slug}/quote`)
+        .query({ coupon: code })
+        .set(bearer(token));
+
+    it('coupon preview (TW-PAYGW-010): a valid 20% code discounts before tax; an expired code, an unknown code, a blank code and a missing login are refused with the reason', async () => {
+      await mkCoupon('SAVE20');
+      await mkCoupon('OLD', { expires_at: new Date(Date.now() - 86_400_000).toISOString() });
+      const ok = await previewCoupon('growth', 'save20');
+      expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+      // 49.00 less 20% = 9.80 off, 39.20 net, 18% tax = 7.06, total 46.26
+      expect(ok.body).toMatchObject({
+        subtotal: '49.00',
+        discount: '9.80',
+        tax: '7.06',
+        total: '46.26',
+        coupon: { code: 'SAVE20', ok: true, message: 'Coupon applied.', discount: '9.80' },
+      });
+      const expired = await previewCoupon('growth', 'OLD');
+      expect(expired.body.coupon).toMatchObject({
+        ok: false,
+        message: 'This coupon has expired.',
+        discount: '0.00',
+      });
+      expect(expired.body).toMatchObject({ discount: '0.00', total: '57.82' });
+      const unknown = await previewCoupon('growth', 'NOPE');
+      expect(unknown.body.coupon).toMatchObject({
+        ok: false,
+        message: 'Coupon "NOPE" not recognised.',
+      });
+      const noCoupon = await api()
+        .get('/v2/billing/checkout/plans/growth/quote')
+        .set(bearer(buyer.token));
+      expect(noCoupon.body.coupon).toBeNull();
+      expect(
+        (await api().get('/v2/billing/checkout/plans/growth/quote').query({ coupon: 'SAVE20' }))
+          .status,
+      ).toBe(401);
+    });
+
+    it('coupon rules: disabled, not yet active, fully used, wrong currency, minimum, plan-limited, percent cap, fixed amount capped at the order', async () => {
+      await mkCoupon('OFF', { is_active: false });
+      await mkCoupon('SOON', { starts_at: new Date(Date.now() + 86_400_000).toISOString() });
+      await mkCoupon('USED', { max_uses: 1 });
+      await h.owner.query(`UPDATE coupons SET uses_count = 1 WHERE code = 'USED'`);
+      await mkCoupon('EURONLY', { currency_code: 'EUR' });
+      await mkCoupon('BIGCART', { min_order_amount: '100' });
+      await mkCoupon('PROONLY', { applicable_package_ids: ['pro'] });
+      await mkCoupon('LEGACYID', { applicable_package_ids: [7] });
+      await mkCoupon('CAPPED', { amount: '50', max_discount_amount: '5' });
+      await mkCoupon('FIXED500', { type: 'fixed', amount: '500' });
+      await mkCoupon('FIXED10', { type: 'fixed', amount: '10' });
+      const msg = async (slug: string, code: string) =>
+        (await previewCoupon(slug, code)).body.coupon;
+      expect(await msg('growth', 'OFF')).toMatchObject({
+        ok: false,
+        message: 'This coupon is disabled.',
+      });
+      expect(await msg('growth', 'SOON')).toMatchObject({
+        message: 'This coupon is not active yet.',
+      });
+      expect(await msg('growth', 'USED')).toMatchObject({ message: 'This coupon is fully used.' });
+      expect(await msg('growth', 'EURONLY')).toMatchObject({
+        message: 'This coupon is only valid for payments in EUR.',
+      });
+      expect(await msg('growth', 'BIGCART')).toMatchObject({
+        message: 'Order is below the coupon minimum.',
+      });
+      expect(await msg('pro', 'BIGCART')).toMatchObject({ ok: false });
+      expect(await msg('growth', 'PROONLY')).toMatchObject({
+        message: 'This coupon does not apply to this plan.',
+      });
+      expect(await msg('pro', 'PROONLY')).toMatchObject({ ok: true, discount: '19.80' });
+      expect(await msg('growth', 'LEGACYID')).toMatchObject({ ok: false });
+      expect(await msg('growth', 'CAPPED')).toMatchObject({ ok: true, discount: '5.00' });
+      expect(await msg('growth', 'FIXED500')).toMatchObject({ ok: true, discount: '49.00' });
+      expect(await previewCoupon('growth', 'FIXED500').then((r) => r.body)).toMatchObject({
+        total: '0.00',
+      });
+      expect(await msg('growth', 'FIXED10')).toMatchObject({ ok: true, discount: '10.00' });
+    });
+
+    it('placing an order with a coupon: refused when the code is bad (nothing created), otherwise the order stores the discount, Stripe is charged the discounted total, and the use is counted exactly once even when the return repeats', async () => {
+      const id = await mkCoupon('PLACE20');
+      const before = Number(
+        (await h.owner.query(`SELECT count(*)::int AS n FROM orders`)).rows[0].n,
+      );
+      const bad = await placePlan('growth', { gatewayId: stripeId, coupon: 'NOPE' });
+      expect(bad.status).toBe(422);
+      expect(bad.body).toMatchObject({
+        code: 'PAYGW_COUPON_REJECTED',
+        detail: 'Coupon "NOPE" not recognised.',
+      });
+      expect(Number((await h.owner.query(`SELECT count(*)::int AS n FROM orders`)).rows[0].n)).toBe(
+        before,
+      );
+
+      mockProviders();
+      stripeThatPays();
+      const placed = await placePlan('growth', { gatewayId: stripeId, coupon: ' place20 ' });
+      expect(placed.status, JSON.stringify(placed.body)).toBe(201);
+      const o = await orderBy(placed.body.orderNumber);
+      expect(o).toMatchObject({ coupon_code: 'PLACE20', status: 'pending' });
+      expect(Number(o.coupon_id)).toBe(id);
+      expect(Number(o.discount_amount)).toBe(9.8);
+      expect(Number(o.total_amount)).toBe(46.26);
+      const form = new URLSearchParams(calls.find((c) => c.method === 'POST')!.body);
+      expect(form.get('line_items[0][price_data][unit_amount]')).toBe('4626');
+      const used = async () =>
+        Number(
+          (await h.owner.query(`SELECT uses_count FROM coupons WHERE id = $1`, [id])).rows[0]
+            .uses_count,
+        );
+      expect(await used()).toBe(0);
+
+      const token = await tokenOf(placed.body.orderNumber);
+      await api().get(`/v2/payments/return/stripe?o=${token}&session_id=cs_1`).redirects(0);
+      expect(await used()).toBe(1);
+      await api().get(`/v2/payments/return/stripe?o=${token}&session_id=cs_1`).redirects(0);
+      expect(await used()).toBe(1);
+      const view = await h.owner.query(`SELECT 1 FROM orders WHERE id = $1 AND status = 'paid'`, [
+        o.id,
+      ]);
+      expect(view.rows).toHaveLength(1);
+    });
+
+    it("first-purchase-only and per-user limits read the buyer's paid orders; a coupon applies to add-ons too", async () => {
+      await mkCoupon('FIRSTONLY', { first_purchase_only: true });
+      await mkCoupon('ONCE', { per_user_limit: 1 });
+      expect((await previewCoupon('growth', 'FIRSTONLY')).body.coupon).toMatchObject({
+        ok: false,
+        message: 'This coupon is valid on your first purchase only.',
+      });
+      // The earlier test paid an order with PLACE20 only; ONCE has never been used by this buyer.
+      expect((await previewCoupon('growth', 'ONCE')).body.coupon).toMatchObject({ ok: true });
+      const onceId = Number(
+        (await h.owner.query(`SELECT id FROM coupons WHERE code = 'ONCE'`)).rows[0].id,
+      );
+      await h.owner.query(
+        `UPDATE orders SET coupon_id = $1 WHERE id = (SELECT id FROM orders WHERE status = 'paid' AND org_id = $2 ORDER BY id DESC LIMIT 1)`,
+        [onceId, buyer.orgId],
+      );
+      expect((await previewCoupon('growth', 'ONCE')).body.coupon).toMatchObject({
+        ok: false,
+        message: 'You have already used this coupon the maximum number of times.',
+      });
+    });
+  });
+
+  it('wallet top-up for a workspace billed in INR: entered, charged and credited in rupees, to the INR wallet', async () => {
+    await h.owner.query(
+      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('Indian Rupee','INR','Rs',83.5)
+       ON CONFLICT (code) DO UPDATE SET is_active = true`,
+    );
+    await h.owner.query(
+      `UPDATE organizations SET settings = jsonb_set(coalesce(settings, '{}'::jsonb), '{currency}', '"INR"') WHERE id = $1`,
+      [buyer.orgId],
+    );
+    try {
+      const quote = await api()
+        .get('/v2/billing/checkout/wallet/quote?amount=100')
+        .set(bearer(buyer.token));
+      // No exchange rate in the way: 100 rupees in, 100 rupees credited (tax on top).
+      expect(quote.body).toMatchObject({
+        kind: 'wallet_topup',
+        currency: 'INR',
+        subtotal: '100.00',
+        tax: '18.00',
+        total: '118.00',
+        walletCreditMinor: 10_000,
+      });
+      const walletsNow = async () =>
+        (
+          await h.owner.query(
+            `SELECT unit, balance::text AS balance FROM wallets WHERE org_id = $1 ORDER BY unit`,
+            [buyer.orgId],
+          )
+        ).rows.map((r) => [r.unit as string, Number(r.balance)] as const);
+      const others = (await walletsNow()).filter(([unit]) => unit !== 'INR');
+      mockProviders();
+      stripeThatPays();
+      const placed = (await placeWallet({ gatewayId: stripeId, amount: '100' })).body;
+      const o = await orderBy(placed.orderNumber);
+      expect(o).toMatchObject({ kind: 'wallet_topup', currency: 'INR', wallet_unit: 'INR' });
+      expect(Number(o.wallet_topup_minor)).toBe(10_000);
+
+      // Changing the workspace's currency after the order was placed must not move the money to another wallet.
+      await h.owner.query(
+        `UPDATE organizations SET settings = settings - 'currency' WHERE id = $1`,
+        [buyer.orgId],
+      );
+      const token = await tokenOf(placed.orderNumber);
+      await Promise.all([
+        api().get(`/v2/payments/return/stripe?o=${token}&session_id=cs_1`).redirects(0),
+        stripeWebhook(placed.orderNumber, 11_800, { currency: 'inr' }).post(),
+      ]);
+      const after = await walletsNow();
+      expect(after.find(([unit]) => unit === 'INR')?.[1]).toBe(100);
+      // wallets in other currencies (the earlier dollar top-up) did not move
+      expect(after.filter(([unit]) => unit !== 'INR')).toEqual(others);
+      const ledger = await h.owner.query(
+        `SELECT unit FROM wallet_transactions WHERE org_id = $1 AND idempotency_key = $2`,
+        [buyer.orgId, `order:${o.uuid}`],
+      );
+      expect(ledger.rows.map((r) => r.unit)).toEqual(['INR']);
+    } finally {
+      await h.owner.query(
+        `UPDATE organizations SET settings = settings - 'currency' WHERE id = $1`,
+        [buyer.orgId],
+      );
     }
   });
 });

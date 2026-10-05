@@ -1,5 +1,5 @@
 import type { WabaApiError } from './waba-errors';
-import type { WabaAuth, WabaProviderKind } from './waba-http';
+import type { WabaAuth, WabaProviderKind, WabaRegistryAuth } from './waba-http';
 
 /**
  * Account-level operations on a WhatsApp Business Account: everything between "the customer finished Embedded Signup" and
@@ -15,6 +15,13 @@ export interface WabaConnection {
   phoneNumberId: string;
   accessToken?: string;
   authKey?: string;
+  /** The provider registry key the number is on (`meta_json.provider_key`); absent on rows that predate the registry. */
+  providerKey?: string;
+  /**
+   * Set only when the number is on a provider of the registry that is not one of the two built-in routes: the route resolved for this
+   * number (address, version, rendered headers). `provider` is then the legacy family (`meta`) and means nothing for routing.
+   */
+  registry?: WabaRegistryAuth;
 }
 
 export interface PhoneInfo {
@@ -67,6 +74,17 @@ export interface BusinessProfile {
   vertical: string | null;
 }
 
+/** The WhatsApp Business Account node (TW-WABA-021). Every field is optional: Meta fails the whole read for one unreadable field. */
+export interface WabaDetails {
+  name: string | null;
+  currency: string | null;
+  timezoneId: string | null;
+  accountReviewStatus: string | null;
+  businessVerificationStatus: string | null;
+  ownerBusinessName: string | null;
+  ownershipType: string | null;
+}
+
 export interface PlatformReadiness {
   /** App id, secret and (for Embedded Signup) config id are set. */
   embeddedSignupReady: boolean;
@@ -75,9 +93,29 @@ export interface PlatformReadiness {
   /** Interakt `extras.setup.solutionID`, when the Interakt route is the default. */
   solutionId: string | null;
   graphVersion: string;
+  coexistence: boolean;
   defaultProvider: WabaProviderKind;
   /** Public so the browser SDK can init; the secret never leaves the server. */
   missing: string[];
+}
+
+export interface AppSubscriptionState {
+  /** Meta has a webhook subscription for the app's WhatsApp Business Account object. */
+  hasWabaObject: boolean;
+  fields: string[];
+  callbackUrl: string | null;
+}
+
+export interface SubscriptionDetail {
+  name: string | null;
+  callbackUrl: string | null;
+}
+
+export interface QrCodeInfo {
+  code: string;
+  prefilledMessage: string;
+  deepLinkUrl: string | null;
+  qrImageUrl: string | null;
 }
 
 export interface WabaAdminPort {
@@ -119,6 +157,45 @@ export interface WabaAdminPort {
   verifyInboundWired(conn: WabaConnection, expectedUrl: string): Promise<boolean | null>;
 
   getBusinessProfile(conn: WabaConnection): Promise<BusinessProfile>;
+  /** The WABA node, rich field set first and a safe subset if Meta rejects it. */
+  getWabaDetails(conn: WabaConnection): Promise<WabaDetails>;
+  /** Names of the apps subscribed to this WABA's webhooks. */
+  getSubscribedApps(conn: WabaConnection): Promise<string[]>;
+  /** The platform Meta app's own webhook subscription, read with the app access token (TW-WABA-002). */
+  getAppSubscription(app: { id: string; secret: string }): Promise<AppSubscriptionState>;
+  /** Subscribes the app's WhatsApp object to `fields` at `callbackUrl`; Meta verifies the callback during the call (TW-WABA-003). */
+  setAppSubscription(
+    app: { id: string; secret: string },
+    input: { callbackUrl: string; verifyToken: string; fields: string[] },
+  ): Promise<void>;
+  /** Which apps a WABA is subscribed to and where each delivers (TW-WABA-015). */
+  getSubscriptionDetails(conn: WabaConnection): Promise<SubscriptionDetail[]>;
+  /**
+   * Button clicks Meta counted for these templates in the window (unix seconds), summed over every day and button (TW-WABA-053).
+   * Meta sends no click webhook, so this is the only source.
+   */
+  getTemplateClicks(
+    conn: WabaConnection,
+    templateIds: string[],
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<number>;
+  /** Turns template insights on for the WABA; Meta answers an analytics call with an error until it is. */
+  enableTemplateInsights(conn: WabaConnection): Promise<void>;
+  /** Conversation analytics rows for the window (unix seconds), by conversation type; the free-allowance card (TW-WABA-023). */
+  getConversationAnalytics(
+    conn: WabaConnection,
+    startSeconds: number,
+    endSeconds: number,
+  ): Promise<Array<{ conversation_type?: string; conversation?: number; cost?: number }>>;
+  /** The handle Meta has reserved for this number, when it names one (`GET /{pnid}?fields=username`). */
+  getReservedUsername(conn: WabaConnection): Promise<string | null>;
+  /** Claims a business username; resolves with the status Meta reports (unknown values become `reserved`). */
+  claimUsername(conn: WabaConnection, username: string): Promise<'reserved' | 'approved'>;
+  releaseUsername(conn: WabaConnection): Promise<void>;
+  listQrCodes(conn: WabaConnection): Promise<QrCodeInfo[]>;
+  createQrCode(conn: WabaConnection, prefilledMessage: string): Promise<QrCodeInfo>;
+  deleteQrCode(conn: WabaConnection, code: string): Promise<void>;
   updateBusinessProfile(
     conn: WabaConnection,
     patch: Partial<BusinessProfile> & { profilePictureHandle?: string },
@@ -128,6 +205,7 @@ export interface WabaAdminPort {
 export const WABA_ADMIN = Symbol('WABA_ADMIN');
 
 export function authOf(conn: WabaConnection): WabaAuth {
+  if (conn.registry) return conn.registry;
   if (conn.provider === 'interakt') {
     if (!conn.authKey) throw new Error('Interakt connection without an auth key');
     return {

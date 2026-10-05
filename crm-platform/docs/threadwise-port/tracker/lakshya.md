@@ -65,24 +65,24 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-002 | todo |  |  |
 | TW-WSP-003 | todo |  |  |
 | TW-WSP-004 | todo |  |  |
-| TW-WSP-005 | todo |  |  |
+| TW-WSP-005 | done |  | built by AUTH-010 |
 | TW-WSP-006 | todo |  |  |
 | TW-WSP-007 | todo |  |  |
 | TW-WSP-008 | todo |  |  |
 | TW-WSP-009 | todo |  |  |
 | TW-WSP-010 | todo |  |  |
 | TW-WSP-011 | todo |  |  |
-| TW-WSP-012 | todo |  |  |
+| TW-WSP-012 | done |  | kernel tenant context |
 | TW-WSP-013 | todo |  |  |
 | TW-WSP-014 | todo |  |  |
-| TW-WSP-015 | todo |  |  |
-| TW-WSP-016 | todo |  |  |
-| TW-WSP-017 | todo |  |  |
-| TW-WSP-018 | todo |  |  |
-| TW-WSP-019 | todo |  |  |
-| TW-WSP-020 | todo |  |  |
-| TW-WSP-021 | todo |  |  |
-| TW-WSP-022 | todo |  |  |
+| TW-WSP-015 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-016 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-017 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-018 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-019 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
+| TW-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
 | TW-WSP-023 | todo |  |  |
 | TW-WSP-024 | todo |  |  |
 | TW-WSP-025 | todo |  |  |
@@ -94,7 +94,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-031 | todo |  |  |
 | TW-WSP-032 | todo |  |  |
 | TW-WSP-033 | todo |  |  |
-| TW-WSP-034 | todo |  |  |
+| TW-WSP-034 | wontfix |  | platform staff are platform_operators, outside tenant orgs |
 | TW-WSP-035 | todo |  |  |
 | TW-WSP-036 | todo |  |  |
 | TW-WSP-037 | todo |  |  |
@@ -106,8 +106,8 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-043 | todo |  |  |
 | TW-WSP-044 | todo |  |  |
 | TW-WSP-045 | todo |  |  |
-| TW-WSP-046 | todo |  |  |
-| TW-WSP-047 | todo |  |  |
+| TW-WSP-046 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
+| TW-WSP-047 | done |  | built by AUTH; members contract carries invitedAt/joinedAt |
 
 ## roles-permissions (rbac)
 
@@ -139,7 +139,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-RBAC-024 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
 | TW-RBAC-025 | blocked |  | each domain adopts its own permission keys; see wiring map |
 | TW-RBAC-026 | backend-done |  | workspace presets, grant rules, landing, key coverage test; see parity doc |
-| TW-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change; invite/remove/reset flows blocked on TW-WSP |
+| TW-RBAC-027 | backend-done |  | org.member.invite / role_assign enforced on staff-user create and role change and on the WSP members screen (invite, resend, remove, reset, role change) |
 | TW-RBAC-028 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | TW-RBAC-029 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
 | TW-RBAC-030 | blocked |  | keys registered with the Reference matrix; waiting on inbox domain (TIB1/TIB2) endpoints |
@@ -298,6 +298,73 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-I18N-038 | todo |  |  |
 | TW-I18N-039 | todo |  |  |
 
+## platform-infrastructure (infra)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-INFRA-001 | todo |  |  |
+| TW-INFRA-002 | todo |  |  |
+| TW-INFRA-003 | todo |  |  |
+| TW-INFRA-004 | todo |  |  |
+| TW-INFRA-005 | todo |  |  |
+| TW-INFRA-006 | todo |  |  |
+| TW-INFRA-007 | todo |  |  |
+| TW-INFRA-008 | todo |  |  |
+| TW-INFRA-009 | todo |  |  |
+| TW-INFRA-010 | todo |  |  |
+| TW-INFRA-011 | todo |  |  |
+| TW-INFRA-012 | todo |  |  |
+| TW-INFRA-013 | todo |  |  |
+| TW-INFRA-014 | todo |  |  |
+| TW-INFRA-015 | todo |  |  |
+| TW-INFRA-016 | todo |  |  |
+| TW-INFRA-017 | todo |  |  |
+| TW-INFRA-018 | todo |  |  |
+| TW-INFRA-019 | todo |  |  |
+| TW-INFRA-020 | todo |  |  |
+| TW-INFRA-021 | todo |  |  |
+| TW-INFRA-022 | todo |  |  |
+| TW-INFRA-023 | todo |  |  |
+| TW-INFRA-024 | todo |  |  |
+| TW-INFRA-025 | todo |  |  |
+| TW-INFRA-026 | todo |  |  |
+| TW-INFRA-027 | todo |  |  |
+| TW-INFRA-028 | todo |  |  |
+| TW-INFRA-029 | todo |  |  |
+| TW-INFRA-030 | todo |  |  |
+| TW-INFRA-031 | todo |  |  |
+| TW-INFRA-032 | todo |  |  |
+| TW-INFRA-033 | todo |  |  |
+| TW-INFRA-034 | todo |  |  |
+| TW-INFRA-035 | todo |  |  |
+| TW-INFRA-036 | todo |  |  |
+| TW-INFRA-037 | todo |  |  |
+| TW-INFRA-038 | todo |  |  |
+| TW-INFRA-039 | todo |  |  |
+| TW-INFRA-040 | todo |  |  |
+| TW-INFRA-041 | todo |  |  |
+| TW-INFRA-042 | todo |  |  |
+| TW-INFRA-043 | todo |  |  |
+| TW-INFRA-044 | todo |  |  |
+| TW-INFRA-045 | todo |  |  |
+| TW-INFRA-046 | todo |  |  |
+| TW-INFRA-047 | todo |  |  |
+| TW-INFRA-048 | todo |  |  |
+| TW-INFRA-049 | todo |  |  |
+| TW-INFRA-050 | todo |  |  |
+| TW-INFRA-051 | todo |  |  |
+| TW-INFRA-052 | todo |  |  |
+| TW-INFRA-053 | todo |  |  |
+| TW-INFRA-054 | todo |  |  |
+| TW-INFRA-055 | todo |  |  |
+| TW-INFRA-056 | todo |  |  |
+| TW-INFRA-057 | todo |  |  |
+| TW-INFRA-058 | todo |  |  |
+| TW-INFRA-059 | todo |  |  |
+| TW-INFRA-060 | todo |  |  |
+| TW-INFRA-061 | todo |  |  |
+| TW-INFRA-062 | todo |  |  |
+
 ## install-update-licensing (inst)
 
 | Feature | Status | PR | Notes |
@@ -338,70 +405,70 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 |---|---|---|---|
 | TW-PLAN-001 | in-progress |  | operator /admin/plans: KPI strip (total/active/free/paid), table + cards, in-use counts; no MRR/subscribers/analytics link |
 | TW-PLAN-002 | in-progress |  | single modal with 4 grouped sections (identity, pricing, limits, features) instead of a 4-step wizard; no live review panel |
-| TW-PLAN-003 | in-progress |  | create/update validation shared via @crm/contracts (checkPlanRules), slug rules, one default; slug immutable; audited |
-| TW-PLAN-004 | in-progress |  | PATCH /v2/platform/plans/:id/active; refuses to deactivate the signup default |
-| TW-PLAN-005 | in-progress |  | DELETE refuses any org on the plan (PLAN_IN_USE) and the signup default; single slug reference so nothing is missed |
-| TW-PLAN-006 | in-progress |  | thin slice: 9 limit keys in a contracts registry (0 = unlimited, overrides, assertWithinLimit); no usage meters/ledger, nothing enforced yet |
-| TW-PLAN-007 | in-progress |  | thin slice: 7 feature flags in a registry; only remove_branding is enforced (branding); no route middleware/paywall |
+| TW-PLAN-003 | done |  | create/update validation shared via @crm/contracts (checkPlanRules), slug rules, one default; slug immutable; audited |
+| TW-PLAN-004 | done |  | PATCH /v2/platform/plans/:id/active; refuses to deactivate the signup default |
+| TW-PLAN-005 | done |  | DELETE refuses any org on the plan (PLAN_IN_USE) and the signup default |
+| TW-PLAN-006 | done |  | 15 limit keys incl. total_campaigns and api_rate_limit_per_minute; usage meters, quota ledger, per-workspace overrides, assertCanAdd call sites; every cap editable per plan and per workspace |
+| TW-PLAN-007 | done |  | 14 feature flags; enforced in context and by the route gate @RequirePlanFeature (analytics); entitlement keys feed the paywall, lock and crown; editable per plan and per workspace |
 | TW-PLAN-008 | in-progress |  | 4-step default resolver + trial rule done and tested; registration default is a dropdown of active plans; billing_plan_scope not built |
-| TW-PLAN-009 | todo |  |  |
-| TW-PLAN-010 | todo |  |  |
-| TW-PLAN-011 | in-progress |  | partial: GET /v2/plans cards with the upgrade/downgrade/current classification (server side); /account/plans is a placeholder, no yearly toggle/FAQ/compare/checkout |
-| TW-PLAN-012 | todo |  |  |
-| TW-PLAN-013 | todo |  |  |
-| TW-PLAN-014 | todo |  |  |
-| TW-PLAN-015 | todo |  |  |
-| TW-PLAN-016 | todo |  |  |
-| TW-PLAN-017 | in-progress |  | partial: assertFeature/assertWithinLimit and the 422 PLAN_FEATURE_LOCKED / PLAN_LIMIT_REACHED problem; no quota ledger, no route guard |
-| TW-PLAN-018 | todo |  |  |
-| TW-PLAN-019 | todo |  |  |
-| TW-PLAN-020 | todo |  |  |
-| TW-PLAN-021 | todo |  |  |
-| TW-PLAN-022 | todo |  |  |
-| TW-PLAN-023 | todo |  |  |
-| TW-PLAN-024 | todo |  |  |
-| TW-PLAN-025 | todo |  |  |
-| TW-PLAN-026 | todo |  |  |
-| TW-PLAN-027 | todo |  |  |
-| TW-PLAN-028 | todo |  |  |
+| TW-PLAN-009 | done |  | operator CRUD /platform/pricing-faqs + /admin/pricing-faqs, readers: in-app, public; audited; partial update |
+| TW-PLAN-010 | done |  | /pricing site route over GET /public/cms/pricing (+limits/features) and the FAQ table; yearly switch |
+| TW-PLAN-011 | done |  | picker complete: validity banner, yearly switch, cards (server-decided action), add-ons, compare table, FAQ; admins may downgrade (intended) |
+| TW-PLAN-012 | done |  | POST /v2/billing/subscription/cancel + driver cancelSubscription (Stripe, Razorpay, PayPal); buttons on picker and top bar while a subscription exists. Rows are written by PAYGW recurring checkout (not built) |
+| TW-PLAN-013 | done |  | trial/renewal bar from GET /v2/billing/status, mounted in the app shell; renewal bar has no Cancel auto-renew (TW-PLAN-012 blocked); renew link goes to plans (Reference quirk fixed deliberately: no broken route guard) |
+| TW-PLAN-014 | done |  | GET /v2/billing/usage + /account/usage pane: 11 meters from the same counts enforcement uses, calendar-month reset, features unlocked; no wallet tiles (WALLET domain) |
+| TW-PLAN-015 | done |  | global TrialGateGuard after auth: 402 PLAN_TRIAL_EXPIRED + web redirect; API keys gated too (Reference leak closed); fails open on internal error; allow-list by path segment + @AllowWhenTrialExpired |
+| TW-PLAN-016 | done |  | planStateOf/validityOf + entitlement resolver uses state: lapsed paid plan falls back to the free plan's caps and flags; per-workspace org_plan_state; operator attach (PUT /v2/platform/workspace-plans/:id) and workspace change (POST /v2/billing/plan) are the writers beside PAYGW |
+| TW-PLAN-017 | done |  | assertFeature/assertWithinLimit, quota ledger, PlanUsageService.assertCanAdd for creators; broadcasts enforced; devices/flows/templates/auto-replies call sites wait for their domains |
+| TW-PLAN-018 | done |  | PlanQuotaService + total_campaigns limit + meter; call site belongs to the campaigns domain |
+| TW-PLAN-019 | done |  | @RequirePlanFeature + PlanFeatureGuard (app-wide, after permissions): 422 PLAN_FEATURE_LOCKED for reads and writes; typed keys; analytics routes use it |
+| TW-PLAN-020 | done |  | GET /v2/billing/entitlements + /v2/billing/plans?unlocks=<feature>; PlanPaywall sheet in the app shell lists the plans that unlock the page |
+| TW-PLAN-021 | done |  | menu entries needing a plan feature are locked/crowned from the entitlement keys (unknown locks nothing) |
+| TW-PLAN-022 | done |  | ApiKeyGuard: plan api_rate_limit_per_minute caps the key (0 = platform default, workspace override -1 = unlimited); X-RateLimit-* and Retry-After headers; e2e |
+| TW-PLAN-023 | done |  | plans.data_retention_days, org_plan_state.data_wiped_at, nightly worker sweep, operator preview/run with WIPE confirm, audit + org.data_wiped |
+| TW-PLAN-024 | done |  | GET /v2/platform/plan-analytics (30/90/365 days, package filter), super admin only, default-currency money |
+| TW-PLAN-025 | done |  | GET /v2/platform/plan-analytics/export CSV of the same numbers |
+| TW-PLAN-026 | done |  | GET /v2/platform/financial: revenue, MRR, ARR, refunds, outstanding, charts, latest orders; unknown window = 30d |
+| TW-PLAN-027 | done |  | GET /v2/platform/premium: paid vs free, ARPU, conversion, plan mix, revenue by plan |
+| TW-PLAN-028 | wontfix |  | dead feature (package_features table has no UI and nothing reads it); bullets come from the catalogue per the port note |
 
 ## wallet-message-billing (wallet)
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-WALLET-001 | todo |  |  |
-| TW-WALLET-002 | todo |  |  |
-| TW-WALLET-003 | todo |  |  |
-| TW-WALLET-004 | todo |  |  |
-| TW-WALLET-005 | todo |  |  |
-| TW-WALLET-006 | todo |  |  |
-| TW-WALLET-007 | todo |  |  |
-| TW-WALLET-008 | todo |  |  |
-| TW-WALLET-009 | todo |  |  |
-| TW-WALLET-010 | todo |  |  |
-| TW-WALLET-011 | todo |  |  |
-| TW-WALLET-012 | todo |  |  |
-| TW-WALLET-013 | todo |  |  |
-| TW-WALLET-014 | todo |  |  |
-| TW-WALLET-015 | todo |  |  |
-| TW-WALLET-016 | todo |  |  |
-| TW-WALLET-017 | todo |  |  |
-| TW-WALLET-018 | todo |  |  |
-| TW-WALLET-019 | todo |  |  |
-| TW-WALLET-020 | todo |  |  |
-| TW-WALLET-021 | todo |  |  |
-| TW-WALLET-022 | todo |  |  |
-| TW-WALLET-023 | todo |  |  |
-| TW-WALLET-024 | todo |  |  |
-| TW-WALLET-025 | todo |  |  |
-| TW-WALLET-026 | todo |  |  |
-| TW-WALLET-027 | todo |  |  |
-| TW-WALLET-028 | todo |  |  |
-| TW-WALLET-029 | todo |  |  |
-| TW-WALLET-030 | todo |  |  |
-| TW-WALLET-031 | todo |  |  |
-| TW-WALLET-032 | todo |  |  |
-| TW-WALLET-033 | todo |  |  |
+| TW-WALLET-001 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-002 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-003 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-004 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-005 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-006 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-007 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-008 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-009 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-010 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-011 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-012 | done |  | emitters wired in broadcasts, campaigns, chat; scheduled/SMS/WABA/flow/api have no producer yet |
+| TW-WALLET-013 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-014 | wontfix |  | intended: see parity file |
+| TW-WALLET-015 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-016 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-017 | wontfix |  | intended: see parity file |
+| TW-WALLET-018 | wontfix |  | intended: see parity file |
+| TW-WALLET-019 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-020 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-021 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-022 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-023 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-024 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-025 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-026 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-027 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-028 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-029 | done |  | served by /wallet/snapshot, ledger, PAYGW orders; packages catalogue |
+| TW-WALLET-030 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-031 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-032 | done |  | backend+web built, tests green; parity twin run not done (see parity file); deviations signed off |
+| TW-WALLET-033 | wontfix |  | intended: see parity file |
 
 ## notifications-activity-audit (notif)
 

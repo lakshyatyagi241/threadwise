@@ -3,13 +3,21 @@
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { NavCollapsedContext } from './nav-context';
-import { BrandMark, ChevronIcon, CloseIcon, NavIcon } from './nav-icons';
+import { BrandMark, CloseIcon, NavIcon } from './nav-icons';
 import { railSections, type NavSection } from './nav-model';
+
+/** The Settings group is pinned under the scrolling list, always in reach; everything else scrolls. */
+function splitBottom(sections: readonly NavSection[]) {
+  return {
+    main: sections.filter((s) => s.group !== 'settings'),
+    bottom: sections.filter((s) => s.group === 'settings').flatMap((s) => s.items),
+  };
+}
 
 type Translate = ReturnType<typeof useTranslations>;
 
@@ -85,7 +93,7 @@ function PanelItem({
 }
 
 /**
- * Every group with its heading, coming-soon entries included. Used by the pinned panel and the mobile drawer.
+ * Every group with its heading, coming-soon entries included. Used by the mobile drawer.
  * A section is only ever built from items that survived the menu's gates, so a group with nothing visible has no
  * heading (an empty one is skipped here as well).
  */
@@ -160,22 +168,19 @@ interface Tip {
 }
 
 /**
- * The navigation column (light in the light theme, dark in the dark theme): brand at the top, the list (a slim icon rail by default, the grouped
- * panel when pinned open) scrolling in the middle with a thin scrollbar, and a footer that stays put (the workspace
- * card, then the pin button). The pinned choice is remembered per browser by the shell.
+ * The navigation column (light in the light theme, dark in the dark theme): the brand at the top, one icon per menu group scrolling in
+ * the middle (resting on or clicking an icon opens a panel with the group's entries), Settings under the list, and a footer that stays
+ * put (the workspace card, shrunk to its avatar). There is no wide mode: the panels carry the labels. The mobile drawer still lists
+ * every group with its heading.
  */
 export function NavRail({
   sections,
   activeId,
-  pinned,
-  onTogglePinned,
   footer,
 }: {
   sections: readonly NavSection[];
   activeId: string | undefined;
-  pinned: boolean;
-  onTogglePinned: () => void;
-  /** Card under the list (the workspace switcher); it shrinks to its avatar when the rail is slim. */
+  /** Card under the list (the workspace switcher); it shrinks to its avatar. */
   footer?: ReactNode;
 }) {
   const t = useTranslations();
@@ -192,166 +197,289 @@ export function NavRail({
     });
   };
 
-  const toggleLabel = t(pinned ? 'shell.collapseMenu' : 'shell.expandMenu');
+  const { main, bottom } = splitBottom(sections);
   return (
-    <aside
-      className={cn(
-        'sticky top-0 hidden h-dvh shrink-0 flex-col border-e border-nav-border bg-nav text-nav-foreground md:flex',
-        'transition-[width] duration-200 motion-reduce:transition-none',
-        pinned ? 'w-64' : 'w-[4.5rem]',
-      )}
-    >
-      <div
-        className={cn(
-          'flex h-14 shrink-0 items-center border-b border-nav-border',
-          pinned ? 'px-4' : 'justify-center',
-        )}
-      >
-        <PanelBrand collapsed={!pinned} />
-        {pinned && (
-          <div className="ms-auto">
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  setTip(null);
-                  onTogglePinned();
-                }}
-                aria-expanded={pinned}
-                aria-label={toggleLabel}
-                title={pinned ? undefined : toggleLabel}
-                className={cn(
-                  'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
-                  'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
-                  'size-9 justify-center',
-                )}
-              >
-                <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
-              </button>
-            </>
-          </div>
-        )}
-      </div>
-      {!pinned && (
-        <div className="flex shrink-0 justify-center border-b border-nav-border py-2">
-          <>
-            <button
-              type="button"
-              onClick={() => {
-                setTip(null);
-                onTogglePinned();
-              }}
-              aria-expanded={pinned}
-              aria-label={toggleLabel}
-              title={pinned ? undefined : toggleLabel}
-              className={cn(
-                'flex items-center gap-3 rounded-xl text-sm text-nav-muted outline-none transition',
-                'hover:bg-nav-hover hover:text-nav-active-foreground focus-visible:ring-2 focus-visible:ring-nav-ring',
-                'size-9 justify-center',
-              )}
-            >
-              <ChevronIcon dir={pinned === rtl ? 'right' : 'left'} className="size-[18px]" />
-            </button>
-          </>
+    // The rail is fixed to the viewport (sticky would stop following once the page is taller than its wrapper); the wrapper only
+    // keeps its width in the layout so the page content starts beside it.
+    <div className="hidden w-[4.5rem] shrink-0 md:block">
+      <aside className="fixed inset-y-0 start-0 z-30 flex w-[4.5rem] flex-col border-e border-nav-border bg-nav text-nav-foreground">
+        <div className="flex h-14 shrink-0 items-center justify-center border-b border-nav-border">
+          <PanelBrand collapsed />
         </div>
-      )}
-      <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        {pinned ? (
-          <NavPanel sections={sections} activeId={activeId} />
-        ) : (
-          <RailIcons
-            sections={railSections(sections)}
+        <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <RailGroups
+            sections={main}
             activeId={activeId}
             show={show}
             hide={() => setTip(null)}
+            rtl={rtl}
           />
-        )}
-      </div>
-      <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
-        {footer && (
-          <NavCollapsedContext.Provider value={!pinned}>{footer}</NavCollapsedContext.Provider>
-        )}
-      </div>
-      {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
-      {tip &&
-        typeof document !== 'undefined' &&
-        createPortal(
-          <div
-            role="presentation"
-            aria-hidden="true"
-            className="pointer-events-none fixed z-[100] -translate-y-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1.5 text-xs font-medium text-background shadow-lg"
-            style={{ top: tip.top, ...(rtl ? { right: tip.edge } : { left: tip.edge }) }}
+        </div>
+        {bottom.length > 0 && (
+          <nav
+            aria-label={t('shell.pinned')}
+            className="flex shrink-0 flex-col items-center gap-1 border-t border-nav-border px-2 py-2"
           >
-            {tip.label}
-          </div>,
-          document.body,
+            {bottom.map((item) => (
+              <RailLink
+                key={item.id}
+                item={item}
+                active={item.id === activeId}
+                show={show}
+                hide={() => setTip(null)}
+              />
+            ))}
+          </nav>
         )}
-    </aside>
+        <div className="shrink-0 space-y-2 border-t border-nav-border p-3">
+          {footer && <NavCollapsedContext.Provider value>{footer}</NavCollapsedContext.Provider>}
+        </div>
+        {/* Portalled to <body>: inside the aside the page content would paint over the label. */}
+        {tip &&
+          typeof document !== 'undefined' &&
+          createPortal(
+            <div
+              role="presentation"
+              aria-hidden="true"
+              className="pointer-events-none fixed z-[100] -translate-y-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1.5 text-xs font-medium text-background shadow-lg"
+              style={{ top: tip.top, ...(rtl ? { right: tip.edge } : { left: tip.edge }) }}
+            >
+              {tip.label}
+            </div>,
+            document.body,
+          )}
+      </aside>
+    </div>
   );
 }
 
-function RailIcons({
+/** One icon of the slim rail, with its tooltip. */
+function RailLink({
+  item,
+  active,
+  show,
+  hide,
+}: {
+  item: ResolvedNavItem;
+  active: boolean;
+  show: (el: HTMLElement, label: string) => void;
+  hide: () => void;
+}) {
+  const t = useTranslations();
+  const label = t(item.labelKey);
+  return (
+    <Link
+      href={item.href}
+      aria-label={label}
+      aria-current={active ? 'page' : undefined}
+      onMouseEnter={(e) => show(e.currentTarget, label)}
+      onMouseLeave={hide}
+      onFocus={(e) => show(e.currentTarget, label)}
+      onBlur={hide}
+      className={cn(
+        'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
+        'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
+        active
+          ? 'bg-nav-active text-nav-active-foreground'
+          : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
+      )}
+    >
+      <NavIcon name={item.icon} />
+      {item.badge === 'new' && (
+        <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
+          {t('shell.new')}
+        </span>
+      )}
+      {item.locked && (
+        <span
+          aria-hidden="true"
+          className="absolute bottom-1 end-1 size-2 rounded-full bg-nav-badge ring-2 ring-nav"
+        />
+      )}
+    </Link>
+  );
+}
+
+/** The icon that stands for each menu group on the slim rail (a group not listed here uses its first entry's icon). */
+export const GROUP_ICON: Readonly<Record<string, string>> = {
+  overview: 'dashboard',
+  inbox: 'inbox',
+  audience: 'contacts',
+  sales: 'crm',
+  campaigns: 'campaign',
+  automation: 'flow',
+  store: 'store',
+  apps: 'apps',
+};
+
+/** How long the pointer must rest on a group icon before its panel opens, and how long it may be away before the panel closes. */
+const FLYOUT_OPEN_MS = 70;
+const FLYOUT_CLOSE_MS = 160;
+
+interface FlyoutAnchor {
+  top: number;
+  edge: number;
+}
+
+/**
+ * The slim rail: one icon per menu group. Resting the pointer on an icon (or clicking or pressing Enter on it) opens a panel
+ * beside the rail with the group's heading and every entry in it, coming-soon ones included, as the labelled panel shows
+ * them. A group with a single live screen and nothing planned is a plain link. Escape and a click elsewhere close the panel.
+ */
+function RailGroups({
   sections,
   activeId,
   show,
   hide,
+  rtl,
 }: {
   sections: readonly NavSection[];
   activeId: string | undefined;
   show: (el: HTMLElement, label: string) => void;
   hide: () => void;
+  rtl: boolean;
 }) {
   const t = useTranslations();
+  const uid = useId();
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [anchor, setAnchor] = useState<FlyoutAnchor | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const panel = useRef<HTMLElement | null>(null);
+
+  const live = railSections(sections);
+  const groups = live.map((s) => {
+    const full = sections.find((x) => x.group === s.group);
+    return { group: s.group, items: full?.items ?? s.items, liveCount: s.items.length };
+  });
+
+  const clear = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = undefined;
+  }, []);
+  const place = (group: string) => {
+    const btn = buttons.current.get(group);
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    const rail = btn.closest('aside')?.getBoundingClientRect() ?? r;
+    setAnchor({
+      top: Math.max(8, r.top),
+      edge: rtl ? window.innerWidth - rail.left + 6 : rail.right + 6,
+    });
+    setOpenGroup(group);
+    hide();
+  };
+  const schedule = (fn: () => void, ms: number) => {
+    clear();
+    timer.current = setTimeout(fn, ms);
+  };
+  const close = useCallback(() => {
+    clear();
+    setOpenGroup(null);
+  }, [clear]);
+
+  useEffect(() => clear, [clear]);
+  useEffect(() => {
+    if (!openGroup) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (panel.current?.contains(target)) return;
+      if (buttons.current.get(openGroup)?.contains(target)) return;
+      close();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      buttons.current.get(openGroup)?.focus();
+      close();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [openGroup, close]);
+
+  const current = groups.find((g) => g.group === openGroup);
   return (
     <nav aria-label={t('shell.mainMenu')} className="flex flex-col items-center gap-1 px-2 py-3">
-      {sections.map((section, i) => (
-        <div
-          key={section.group}
-          role="group"
-          aria-label={t(`shell.groups.${section.group}`)}
-          className={cn(
-            'flex w-full flex-col items-center gap-1',
-            i > 0 && 'mt-1 border-t border-nav-border pt-2',
-          )}
-        >
-          {section.items.map((item) => {
-            const label = t(item.labelKey);
-            const active = item.id === activeId;
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                aria-label={label}
-                aria-current={active ? 'page' : undefined}
-                onMouseEnter={(e) => show(e.currentTarget, label)}
-                onMouseLeave={hide}
-                onFocus={(e) => show(e.currentTarget, label)}
-                onBlur={hide}
-                className={cn(
-                  'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
-                  'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
-                  active
-                    ? 'bg-nav-active text-nav-active-foreground'
-                    : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
-                )}
-              >
-                <NavIcon name={item.icon} />
-                {item.badge === 'new' && (
-                  <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
-                    {t('shell.new')}
-                  </span>
-                )}
-                {item.locked && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute bottom-1 end-1 size-2 rounded-full bg-nav-badge ring-2 ring-nav"
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-      ))}
+      {groups.map((g, i) => {
+        const single = g.liveCount === 1 && g.items.length === 1;
+        const wrap = cn(
+          'flex w-full flex-col items-center gap-1',
+          i > 0 && 'mt-1 border-t border-nav-border pt-2',
+        );
+        if (single) {
+          const item = g.items[0]!;
+          return (
+            <div key={g.group} className={wrap}>
+              <RailLink item={item} active={item.id === activeId} show={show} hide={hide} />
+            </div>
+          );
+        }
+        const label = t(`shell.groups.${g.group}`);
+        const active = g.items.some((it) => it.id === activeId);
+        const open = openGroup === g.group;
+        const icon = GROUP_ICON[g.group] ?? g.items.find((it) => !it.comingSoon)?.icon;
+        return (
+          <div key={g.group} className={wrap}>
+            <button
+              type="button"
+              ref={(el) => {
+                if (el) buttons.current.set(g.group, el);
+                else buttons.current.delete(g.group);
+              }}
+              aria-label={label}
+              aria-haspopup="true"
+              aria-expanded={open}
+              aria-controls={open ? `${uid}-flyout` : undefined}
+              onClick={() => (open ? close() : place(g.group))}
+              onMouseEnter={() => schedule(() => place(g.group), FLYOUT_OPEN_MS)}
+              onMouseLeave={() => schedule(close, FLYOUT_CLOSE_MS)}
+              className={cn(
+                'relative flex size-11 items-center justify-center rounded-xl outline-none transition',
+                'focus-visible:ring-2 focus-visible:ring-nav-ring focus-visible:ring-offset-2 focus-visible:ring-offset-nav',
+                active || open
+                  ? 'bg-nav-active text-nav-active-foreground'
+                  : 'text-nav-foreground hover:bg-nav-hover hover:text-nav-active-foreground',
+              )}
+            >
+              <NavIcon name={icon} />
+            </button>
+          </div>
+        );
+      })}
+      {/* Portalled to <body>: inside the aside the page content would paint over the panel. */}
+      {current &&
+        anchor &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <nav
+            ref={panel}
+            id={`${uid}-flyout`}
+            aria-label={t(`shell.groups.${current.group}`)}
+            onMouseEnter={clear}
+            onMouseLeave={() => schedule(close, FLYOUT_CLOSE_MS)}
+            className="fixed z-[90] w-64 overflow-y-auto rounded-xl border border-nav-border bg-nav p-2 text-nav-foreground shadow-2xl"
+            style={{
+              top: anchor.top,
+              maxHeight: `calc(100dvh - ${anchor.top}px - 12px)`,
+              ...(rtl ? { right: anchor.edge } : { left: anchor.edge }),
+            }}
+          >
+            <div className="px-3 pb-1.5 pt-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-nav-muted">
+              {t(`shell.groups.${current.group}`)}
+            </div>
+            <ul className="space-y-0.5">
+              {current.items.map((item) => (
+                <li key={item.id}>
+                  <PanelItem item={item} active={item.id === activeId} t={t} onNavigate={close} />
+                </li>
+              ))}
+            </ul>
+          </nav>,
+          document.body,
+        )}
     </nav>
   );
 }
@@ -374,6 +502,7 @@ export function NavDrawer({
 }) {
   const t = useTranslations();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const { main, bottom } = splitBottom(sections);
 
   useEffect(() => {
     if (!open) return;
@@ -421,8 +550,24 @@ export function NavDrawer({
           </button>
         </div>
         <div className="thin-scrollbar nav-scrollbar min-h-0 flex-1 overflow-y-auto">
-          <NavPanel sections={sections} activeId={activeId} onNavigate={onClose} />
+          <NavPanel sections={main} activeId={activeId} onNavigate={onClose} />
         </div>
+        {bottom.length > 0 && (
+          <nav
+            aria-label={t('shell.pinned')}
+            className="shrink-0 space-y-0.5 border-t border-nav-border px-3 py-2"
+          >
+            {bottom.map((item) => (
+              <PanelItem
+                key={item.id}
+                item={item}
+                active={item.id === activeId}
+                t={t}
+                onNavigate={onClose}
+              />
+            ))}
+          </nav>
+        )}
         {footer && (
           <div className="shrink-0 border-t border-nav-border p-3">
             <NavCollapsedContext.Provider value={false}>{footer}</NavCollapsedContext.Provider>

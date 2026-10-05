@@ -1,20 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
-import { useMemo, useSyncExternalStore, useTransition } from 'react';
-import { setLocale, setTheme } from '@/components/shell/actions';
-import { LOCALES } from '@/i18n/locales';
-
-/** Native language name for the picker ("العربية", "Deutsch"); falls back to the code. */
-export function languageName(code: string): string {
-  try {
-    const name = new Intl.DisplayNames([code], { type: 'language' }).of(code);
-    return name ? name.charAt(0).toLocaleUpperCase(code) + name.slice(1) : code;
-  } catch {
-    return code;
-  }
-}
+import { useTranslations } from 'next-intl';
+import { useSyncExternalStore, useTransition } from 'react';
+import { setTheme } from '@/components/shell/actions';
+import { LocaleSwitcher } from '@/features/localization-translation/locale-switcher';
 
 /** The page's current theme lives on <html data-theme>; this follows it, including changes made elsewhere. */
 function subscribeTheme(onChange: () => void): () => void {
@@ -25,14 +14,11 @@ function subscribeTheme(onChange: () => void): () => void {
 const currentTheme = (): 'light' | 'dark' =>
   document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 
-/** Language and theme switches for pages that have no app shell (guest pages). */
-export function GuestToolbar() {
+/** Language and theme switches for pages that have no app shell (guest pages). `locales` are the complete ones. */
+export function GuestToolbar({ locales }: { locales: readonly string[] }) {
   const t = useTranslations('auth-registration-security.guest.toolbar');
-  const locale = useLocale();
-  const router = useRouter();
   const [, start] = useTransition();
   const theme = useSyncExternalStore(subscribeTheme, currentTheme, () => 'light' as const);
-  const names = useMemo(() => LOCALES.map((code) => [code, languageName(code)] as const), []);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -42,23 +28,7 @@ export function GuestToolbar() {
 
   return (
     <div className="inline-flex items-center gap-1 rounded-full border border-border bg-background/80 p-1 text-foreground backdrop-blur">
-      <select
-        aria-label={t('language')}
-        value={locale}
-        onChange={(e) =>
-          start(async () => {
-            await setLocale(e.target.value);
-            router.refresh();
-          })
-        }
-        className="h-7 max-w-32 rounded-full bg-transparent px-2 text-xs outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        {names.map(([code, name]) => (
-          <option key={code} value={code}>
-            {name}
-          </option>
-        ))}
-      </select>
+      <LocaleSwitcher only={locales} />
       <button
         type="button"
         onClick={toggleTheme}

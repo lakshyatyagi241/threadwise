@@ -9,6 +9,8 @@ import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { LinkedAppointments } from '@/features/appointments';
+import { ContactAttributionCard } from '@/features/lead-sources';
+import { CompanyLink } from '@/features/companies';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -189,6 +191,7 @@ export function ContactDetail({ id }: { id: string }) {
                 </span>
               )}
               {c.email && <span dir="ltr">{c.email}</span>}
+              {c.companyId && <CompanyLink id={c.companyId} />}
             </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               {c.lifecycleStage && (
@@ -272,6 +275,7 @@ export function ContactDetail({ id }: { id: string }) {
           <LinkedInvoices kind="contact" id={id} />
           <LinkedSalesDocs kind="contact" id={id} />
           <LinkedAppointments contactId={id} />
+          <ContactAttributionCard contactId={id} />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">

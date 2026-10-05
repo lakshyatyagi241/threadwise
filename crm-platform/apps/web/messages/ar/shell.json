@@ -7,11 +7,10 @@
       "sales": "المبيعات",
       "campaigns": "الحملات",
       "automation": "الأتمتة",
-      "channels": "القنوات",
       "store": "المتجر",
-      "developer": "المطوّرون",
+      "apps": "سوق التطبيقات",
       "help": "الدعم والمساعدة",
-      "settings": "الإعدادات ومساحة العمل"
+      "settings": "الإعدادات"
     },
     "locked": "ترقية",
     "soon": "قريبًا",
@@ -25,13 +24,16 @@
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
     "mainMenu": "القائمة الرئيسية",
-    "expandMenu": "إظهار التسميات",
-    "collapseMenu": "إخفاء التسميات",
     "userMenu": "قائمة الحساب",
     "account": "الحساب",
     "balance": "الرصيد",
+    "pageSettings": {
+      "label": "إعدادات هذه الصفحة",
+      "hint": "تظهر هذه الإعدادات لأن دورك يسمح لك بتغييرها."
+    },
     "notifications": "الإشعارات",
     "settings": "الإعدادات",
+    "pinned": "المساعدة والإعدادات",
     "admin": {
       "title": "وحدة تحكم المنصة",
       "note": "ستظهر شاشات مسؤول المنصة هنا بعد توفر دور المشرف الأعلى."
@@ -43,7 +45,6 @@
       "quickChat": "دردشة سريعة",
       "callLogs": "سجل المكالمات",
       "teamChat": "دردشة الفريق",
-      "teamMembers": "أعضاء الفريق",
       "leadFinder": "الباحث عن العملاء",
       "campaigns": "الحملات",
       "broadcasts": "البث",
@@ -52,26 +53,12 @@
       "history": "السجل",
       "flows": "التدفقات",
       "aiAssistants": "مساعدو الذكاء الاصطناعي",
-      "autoReply": "الرد التلقائي",
       "appointments": "المواعيد",
-      "chatWidget": "أداة الدردشة",
-      "channels": "القنوات",
-      "telegram": "تيليجرام",
-      "sms": "الرسائل النصية",
-      "line": "لاين",
-      "viber": "فايبر",
-      "wechat": "وي شات",
-      "email": "البريد الإلكتروني",
-      "waLinks": "روابط واتساب",
       "crmDashboard": "لوحة CRM",
       "store": "المتجر",
       "catalog": "الكتالوج",
-      "integrations": "التكاملات",
-      "restApi": "واجهة REST",
-      "webhooks": "الويب هوك",
       "support": "الدعم",
       "guidebook": "الدليل",
-      "activityLog": "سجل النشاط",
       "pipelines": "مسارات المبيعات",
       "tasks": "المهام",
       "companies": "الشركات",
@@ -80,6 +67,7 @@
       "estimates": "التقديرات",
       "invoices": "الفواتير",
       "payments": "المدفوعات"
-    }
+    },
+    "help": "المساعدة"
   }
 }

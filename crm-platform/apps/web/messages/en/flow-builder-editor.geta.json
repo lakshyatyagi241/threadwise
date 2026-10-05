@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Going live…",
+        "live": "Live",
+        "liveTitle": "Live on Geta",
+        "push": "Push live",
+        "pushHint": "Published here; send it live to Geta now",
+        "failed": "Failed",
+        "failedConfiguration": "Failed at configuration update",
+        "failedPublish": "Failed at publish",
+        "retry": "Retry",
+        "retrying": "Retrying…",
+        "reasonLabel": "Reason",
+        "failedNote": "The flow is still published here. Retry continues from the step that failed.",
+        "notConfigured": "Published here; set up Geta publishing in settings to push it live.",
+        "openSettings": "Open settings",
+        "dismiss": "Dismiss"
+      },
+      "settings": {
+        "title": "Geta publishing",
+        "intro": "When you press Publish in the flow builder, your bot is also pushed live on the Geta console. Enter the connection details once for this workspace. Secrets are stored encrypted and are never shown again.",
+        "viewOnly": "You can see the state of these settings but not change them.",
+        "loading": "Loading…",
+        "loadFailed": "Could not load the settings.",
+        "retry": "Try again",
+        "fixtureNotice": "This server is in fixture mode: publishing is simulated and nothing is sent to Geta.",
+        "ready": "Ready",
+        "incomplete": "Not complete",
+        "readyNote": "Publishing a flow will also push your bot live on Geta.",
+        "incompleteNote": "Fill in every field below to push published flows live on Geta.",
+        "baseUrl": {
+          "label": "Base URL",
+          "hint": "The Geta API address, for example https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Console origin (optional)",
+          "hint": "Sent as the origin and referer of each request. Leave empty to send neither."
+        },
+        "authorization": {
+          "label": "Authorization token",
+          "hint": "Sent exactly as you enter it, with no “Bearer ” added."
+        },
+        "getaHost": {
+          "label": "geta-host token",
+          "hint": "Sent in the geta-host header."
+        },
+        "secretKept": "Saved. Leave the box empty to keep it, or type a new value to replace it.",
+        "secretPlaceholder": "Saved (hidden)",
+        "show": "Show",
+        "hide": "Hide",
+        "remove": "Remove",
+        "record": {
+          "label": "Geta chatbot record",
+          "paste": "Paste the chatbot record (JSON)",
+          "replace": "Replace the chatbot record (JSON)",
+          "hint": "The chatbot object exactly as it should be sent to Geta, or the whole request body with a chatbot key. It needs at least id and bot_id. Only modified_time is refreshed when it is sent.",
+          "keepPlaceholder": "Leave empty to keep the saved record",
+          "id": "Chatbot id",
+          "name": "Name",
+          "botId": "Bot id",
+          "remove": "Remove the saved record"
+        },
+        "saved": "Saved",
+        "notSet": "Not set",
+        "save": "Save",
+        "saving": "Saving…",
+        "saveFailed": "Could not save.",
+        "removed": "Removed.",
+        "clear": "Clear all",
+        "cleared": "Geta publishing settings cleared.",
+        "clearConfirm": {
+          "title": "Clear Geta publishing?",
+          "message": "This removes the base URL, both tokens and the chatbot record. Published flows stay published here but will no longer be pushed to Geta.",
+          "confirm": "Clear all",
+          "cancel": "Cancel"
+        }
+      }
+    }
+  }
+}

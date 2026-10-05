@@ -11,7 +11,8 @@
 # ---------------------------------------------------------------------------
 
 FROM node:22-alpine AS base
-RUN corepack enable pnpm
+# git: `pnpm deploy` re-resolves baileys' git-hosted dependency (libsignal-node), and alpine ships without git.
+RUN apk add --no-cache git && corepack enable pnpm
 WORKDIR /app
 
 # --- dependencies ----------------------------------------------------------
@@ -44,6 +45,9 @@ RUN pnpm --filter @crm/api --prod deploy /out \
 # --- runtime ---------------------------------------------------------------
 FROM node:22-alpine AS runtime
 ENV NODE_ENV=production
+# The commit this image was built from: the release name in error reports and on the operator System page.
+ARG GIT_SHA=
+ENV GIT_SHA=$GIT_SHA
 WORKDIR /app
 
 # Non-root. A container process that does not need root must not have it.

@@ -14,6 +14,10 @@ export const permissionDefResponseSchema = z.object({
   label: z.string(),
   category: z.string(),
   supportsScope: z.boolean(),
+  /** The plan feature (add-on) this key belongs to; absent for core keys. */
+  planFeature: z.string().nullable().optional(),
+  /** The Marketplace app whose key this is; shown only while the workspace has it installed. */
+  appSlug: z.string().nullable().optional(),
 });
 export type PermissionDefResponse = z.infer<typeof permissionDefResponseSchema>;
 
@@ -30,6 +34,14 @@ export const roleResponseSchema = z.object({
   systemKey: z.string().nullable(),
   isLocked: z.boolean(),
   grants: z.array(roleGrantSchema),
+  /** Members holding the role. */
+  userCount: z.number().int(),
+  /** One of the five Reference presets (Owner, Admin, Manager, Agent, Viewer): never deleted, never renamed. */
+  isPreset: z.boolean(),
+  /** The caller may hand this role to a member (the member-role picker offers only these). */
+  grantable: z.boolean(),
+  /** The caller may change this role's permissions (not locked; the Owner and Admin presets only by an Owner). */
+  editable: z.boolean(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

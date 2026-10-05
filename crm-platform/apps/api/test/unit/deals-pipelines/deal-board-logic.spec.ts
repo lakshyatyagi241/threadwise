@@ -145,6 +145,7 @@ describe('the sales-pipeline plan flag (TW-DEAL-001, D-01)', () => {
     overrides: {},
     planLimits: {},
     planFeatures: {},
+    state: 'paid_active',
     ...over,
   });
 

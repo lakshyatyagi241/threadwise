@@ -2,6 +2,7 @@ import {
   OPERATOR_NAV,
   type OperatorNavItem,
 } from '@/features/auth-registration-security/platform/operator-nav';
+import { CONSOLE_LAYOUT, type ConsoleSection } from './console-layout';
 
 /** One link in the console rail. `badgeKey` names a count the layout may supply; no count means no badge. */
 export interface ConsoleLeaf {
@@ -12,13 +13,17 @@ export interface ConsoleLeaf {
   /** A literal label, for entries that come from data (a module's manifest) and have no message key. */
   label?: string;
   badgeKey?: string;
+  /** Full next-intl key of the small heading drawn above this link: it opens a block of related pages. */
+  captionKey?: string;
 }
 
-/** A collapsible block of leaves. */
+/** A collapsible section of leaves. */
 export interface ConsoleGroup {
   id: string;
   /** Full next-intl key of the heading. */
   labelKey: string;
+  /** Icon name for `ConsoleIcon`. A group without one (an unplaced heading) gets a dot. */
+  icon?: string;
   children: ConsoleLeaf[];
 }
 
@@ -46,32 +51,85 @@ export const CONSOLE_NAV_ITEMS: readonly OperatorNavItem[] = [...OPERATOR_NAV, .
 /** Which operator-nav items carry a live count, and under which count name. */
 const BADGE_KEYS: Readonly<Record<string, string>> = {
   plans: 'plans',
+  coupons: 'coupons',
   roles: 'roles',
   permissions: 'permissions',
+  'cms-announcements': 'announcements',
+  'cms-guidebook': 'guidebook',
 };
 
+export const sectionLabelKey = (id: string): string => `${NS}.sections.${id}`;
+export const captionLabelKey = (caption: string): string => `${NS}.captions.${caption}`;
+
+const toLeaf = (item: OperatorNavItem, captionKey?: string): ConsoleLeaf => {
+  const badgeKey = BADGE_KEYS[item.id];
+  return {
+    id: item.id,
+    href: item.href,
+    labelKey: item.labelKey,
+    ...(badgeKey ? { badgeKey } : {}),
+    ...(captionKey ? { captionKey } : {}),
+  };
+};
+
+/** Items under the heading they name themselves, in first-seen order. This is how an unplaced page is still shown. */
+export function groupByHeading(items: readonly OperatorNavItem[]): ConsoleGroup[] {
+  const groups: ConsoleGroup[] = [];
+  for (const item of items) {
+    const group = groups.find((g) => g.id === item.groupKey);
+    if (group) group.children.push(toLeaf(item));
+    else groups.push({ id: item.groupKey, labelKey: item.groupKey, children: [toLeaf(item)] });
+  }
+  return groups;
+}
+
 /**
- * The rail: the console's own Overview leaf, then one group per heading the other
- * domains contribute. Domains add pages through the operator nav data, so this file
- * never lists another domain's screens by hand.
+ * The rail: the console's own Overview leaf, then the sections of `layout` in order, each holding the
+ * pages it names (a section with no page present is left out). Domains still add pages through the
+ * operator nav data; a page the layout does not place is appended under its own heading, so it can
+ * never go missing from the menu.
  */
-export function buildConsoleNav(items: readonly OperatorNavItem[]): ConsoleEntry[] {
+export function buildConsoleNav(
+  items: readonly OperatorNavItem[],
+  layout: readonly ConsoleSection[] = CONSOLE_LAYOUT,
+): ConsoleEntry[] {
+  const byId = new Map(items.map((item) => [item.id, item]));
+  const placed = new Set<string>();
   const entries: ConsoleEntry[] = [
     { id: 'overview', href: CONSOLE_HOME, labelKey: `${NS}.overview` },
   ];
-  for (const item of items) {
-    const badgeKey = BADGE_KEYS[item.id];
-    const leaf: ConsoleLeaf = {
-      id: item.id,
-      href: item.href,
-      labelKey: item.labelKey,
-      ...(badgeKey ? { badgeKey } : {}),
-    };
-    const group = entries.find((e): e is ConsoleGroup => isGroup(e) && e.id === item.groupKey);
-    if (group) group.children.push(leaf);
-    else entries.push({ id: item.groupKey, labelKey: item.groupKey, children: [leaf] });
+  for (const section of layout) {
+    const children: ConsoleLeaf[] = [];
+    for (const block of section.blocks) {
+      let captionKey = block.caption ? captionLabelKey(block.caption) : undefined;
+      for (const id of block.items) {
+        const item = byId.get(id);
+        if (!item || placed.has(id)) continue;
+        placed.add(id);
+        children.push(toLeaf(item, captionKey));
+        captionKey = undefined;
+      }
+    }
+    if (children.length > 0) {
+      entries.push({
+        id: section.id,
+        labelKey: sectionLabelKey(section.id),
+        icon: section.icon,
+        children,
+      });
+    }
   }
+  entries.push(...groupByHeading(items.filter((item) => !placed.has(item.id))));
   return entries;
+}
+
+/** A section with no pages yet, for code that has to create one the rail lacks (module pages). */
+export function emptySection(
+  id: string,
+  layout: readonly ConsoleSection[] = CONSOLE_LAYOUT,
+): ConsoleGroup {
+  const icon = layout.find((s) => s.id === id)?.icon;
+  return { id, labelKey: sectionLabelKey(id), ...(icon ? { icon } : {}), children: [] };
 }
 
 /** Every leaf, in rail order. */

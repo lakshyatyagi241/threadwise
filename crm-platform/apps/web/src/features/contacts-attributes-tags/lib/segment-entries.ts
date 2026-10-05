@@ -39,29 +39,25 @@ export function pickerEntries({ q, counts, groups, segments, labels }: EntryInpu
     { value: '', label: labels.all, hint: num(counts.total), section: 'contacts' },
     { value: 'imported', label: labels.imported, hint: num(counts.imported), section: 'contacts' },
     { value: 'no_group', label: labels.noGroup, hint: num(counts.noGroup), section: 'contacts' },
-    ...groups.map(
-      (g): Entry => ({
-        value: g.id,
-        label: g.name,
-        hint: g.memberCount.toLocaleString(),
-        color: g.color,
-        section: 'groups',
-      }),
-    ),
-    ...segments.map(
-      (s): Entry => ({
-        value: `${SEGMENT_PREFIX}${s.id}`,
-        label: s.name,
-        hint:
-          s.memberCount === null
-            ? undefined
-            : s.countApproximate
-              ? labels.approx(s.memberCount)
-              : s.memberCount.toLocaleString(),
-        color: s.color,
-        section: 'segments',
-      }),
-    ),
+    ...groups.map((g): Entry => ({
+      value: g.id,
+      label: g.name,
+      hint: g.memberCount.toLocaleString(),
+      color: g.color,
+      section: 'groups',
+    })),
+    ...segments.map((s): Entry => ({
+      value: `${SEGMENT_PREFIX}${s.id}`,
+      label: s.name,
+      hint:
+        s.memberCount === null
+          ? undefined
+          : s.countApproximate
+            ? labels.approx(s.memberCount)
+            : s.memberCount.toLocaleString(),
+      color: s.color,
+      section: 'segments',
+    })),
   ];
   const needle = q.trim().toLocaleLowerCase();
   return needle ? all.filter((e) => e.label.toLocaleLowerCase().includes(needle)) : all;

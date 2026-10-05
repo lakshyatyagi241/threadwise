@@ -15,6 +15,7 @@ import {
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
 import { WebhookFanoutService } from '../webhook-fanout';
+import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import {
   authenticateWebhook,
@@ -50,6 +51,7 @@ export class WabaWebhookService {
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
     @InjectQueue(QUEUES.WABA_INGEST) private readonly queue: Queue<WabaIngestJob>,
     private readonly fanout: WebhookFanoutService,
+    private readonly providers: WhatsAppProviderResolver,
   ) {}
 
   /** The GET handshake: echo the challenge when the verify token is ours (constant-time compare). */
@@ -59,10 +61,17 @@ export class WabaWebhookService {
     challenge: string | undefined,
   ): string {
     const expected = verifyTokenFor(
-      this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
+      this.env.WABA_VERIFY_TOKEN ?? this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
       this.credentialsKey(),
     );
-    if (mode !== 'subscribe' || !token || !challenge || !safeEqual(token, expected)) {
+    // A provider of the registry may hold a verify token of its own (its subscription is answered with that one).
+    const accepted = [expected, ...this.providers.verifyTokens()];
+    if (
+      mode !== 'subscribe' ||
+      !token ||
+      !challenge ||
+      !accepted.some((t) => safeEqual(token, t))
+    ) {
       throw new AppError('FORBIDDEN', 'Verification failed', 403);
     }
     return challenge;
@@ -73,6 +82,8 @@ export class WabaWebhookService {
     signatureHeader: string | undefined;
     contentType?: string | undefined;
     queryKey: string | undefined;
+    /** Any request header by lower-case name (a provider of the registry may sign with a header of its own). */
+    header?: (name: string) => string | undefined;
   }): Promise<{ queued: number }> {
     if (!input.rawBody || input.rawBody.length === 0) throw AppError.validation('Empty body');
     let payload: unknown;
@@ -100,8 +111,27 @@ export class WabaWebhookService {
       expectedKey: inboundUrlKey(this.credentialsKey()),
       requireSignature: this.env.WABA_REQUIRE_INTERAKT_SIGNATURE,
     });
-    if (!auth.ok) {
-      this.logger.warn({ reason: auth.reason }, 'whatsapp webhook refused');
+    // Numbers on a provider of the registry are authenticated by that provider's own scheme (signature, shared secret header, or the
+    // URL secret for a provider that signs nothing). A number on a built-in route keeps the rule above, unchanged.
+    const { custom, hasBuiltin } = await this.providers.payloadProviders(
+      changes.map((c) => c.phoneNumberId).filter((p): p is string => Boolean(p)),
+    );
+    let ok = auth.ok;
+    let reason = auth.ok ? '' : auth.reason;
+    if (custom.length > 0) {
+      const verdict = verifyPayloadProviders(custom, {
+        header: input.header ?? (() => undefined),
+        urlKeyValid:
+          typeof input.queryKey === 'string' &&
+          safeEqual(input.queryKey, inboundUrlKey(this.credentialsKey())),
+        signatureMatches: (header, secret) =>
+          this.provider.verifyWebhookSignature(input.rawBody!, header, secret),
+      });
+      ok = verdict !== null && verdict.ok && (!hasBuiltin || auth.ok);
+      if (!ok) reason = verdict && !verdict.ok ? verdict.reason : reason;
+    }
+    if (!ok) {
+      this.logger.warn({ reason }, 'whatsapp webhook refused');
       throw AppError.unauthenticated('Invalid webhook signature');
     }
 

@@ -31,33 +31,58 @@ type Row = {
   conv?: number;
 };
 
+/** A thread needs a channel and a peer (`channel_id`, `peer_key`); each call makes a fresh one so threads stay distinct. */
 async function conversation(t: Tenant): Promise<number> {
-  const r = await h.owner.query(
-    `INSERT INTO conversations (org_id, title) VALUES ($1, 'chat') RETURNING id`,
+  const channel = await h.owner.query(
+    `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
     [t.orgId],
+  );
+  const r = await h.owner.query(
+    `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, $3, 'chat') RETURNING id`,
+    [t.orgId, channel.rows[0].id, `peer-${Math.random().toString(36).slice(2)}`],
   );
   return Number(r.rows[0].id);
 }
 
-/** Rows into `messages` (legacy streams) or `inbox_messages`. */
-async function seed(t: Tenant, table: 'messages' | 'inbox_messages', rows: Row[]) {
-  for (const r of rows) {
-    const conv = r.conv ?? (table === 'inbox_messages' ? await conversation(t) : null);
-    await h.owner.query(
-      `INSERT INTO ${table} (org_id, conversation_id, direction, status, read_at, template_id, media_type, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, now() - $8::interval)`,
-      [
-        t.orgId,
-        conv,
-        r.dir ?? 'out',
-        r.status ?? 'delivered',
-        r.read ? new Date() : null,
-        r.template ? 1 : null,
-        r.media ?? null,
-        r.ago,
-      ],
-    );
+/** The thread that carries rows with no `conv` (every message belongs to a thread now; one per tenant is enough for counting). */
+const defaultThread = new Map<number, number>();
+
+/** Rows into the one `messages` stream (Reference's `messages` and `inbox_messages` are folded), in one statement. */
+async function seed(t: Tenant, rows: Row[]) {
+  if (rows.length === 0) return;
+  if (rows.some((r) => !r.conv) && !defaultThread.has(t.orgId)) {
+    defaultThread.set(t.orgId, await conversation(t));
   }
+  const next = new Map<number, number>();
+  const cols: unknown[][] = [[], [], [], [], [], [], [], []];
+  for (const r of rows) {
+    const conv = r.conv ?? defaultThread.get(t.orgId)!;
+    if (!next.has(conv)) {
+      const m = await h.owner.query(
+        `SELECT COALESCE(max(seq), 0) AS n FROM messages WHERE org_id = $1 AND conversation_id = $2`,
+        [t.orgId, conv],
+      );
+      next.set(conv, Number(m.rows[0].n));
+    }
+    const seq = next.get(conv)! + 1;
+    next.set(conv, seq);
+    const dir = r.dir ?? 'out';
+    cols[0]!.push(conv);
+    cols[1]!.push(seq);
+    cols[2]!.push(dir);
+    cols[3]!.push(dir === 'in' ? 'customer' : 'agent');
+    cols[4]!.push(r.status ?? 'delivered');
+    cols[5]!.push(r.read ? new Date() : null);
+    cols[6]!.push(r.template ? 'template' : (r.media ?? 'text'));
+    cols[7]!.push(r.ago);
+  }
+  await h.owner.query(
+    `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, read_at, kind, created_at)
+     SELECT $1, c, q, d, k, st, rd, kd, now() - ag::interval
+     FROM unnest($2::bigint[], $3::bigint[], $4::text[], $5::text[], $6::text[], $7::timestamptz[], $8::text[], $9::text[])
+       AS x(c, q, d, k, st, rd, kd, ag)`,
+    [t.orgId, ...cols],
+  );
 }
 
 const many = (n: number, r: Row): Row[] => Array.from({ length: n }, () => r);
@@ -109,31 +134,31 @@ describe('summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018)', () => {
   beforeAll(async () => {
     t = await api.signup('dsum');
     other = await api.signup('dsum2');
-    // 10 legacy + 5 inbox outbound; of the 15: 11 delivered (incl. 'sent'), 3 read-by-timestamp, 2 failed, 2 pending
-    await seed(t, 'messages', [
+    // 10 legacy + 5 inbox outbound; of the 15: 11 delivered (incl. 'sent'), 3 read-by-timestamp, 2 failed, 2 queued
+    await seed(t, [
       ...many(5, { status: 'delivered', ago: '2 days' }),
       ...many(2, { status: 'read', ago: '2 days' }),
       { status: 'failed', ago: '2 days' },
-      { status: 'pending', ago: '2 days' },
+      { status: 'queued', ago: '2 days' },
       { status: 'sent', ago: '2 days' },
     ]);
-    await seed(t, 'inbox_messages', [
-      { status: 'delivered', ago: '1 day', read: true }, // read_at set while status stays delivered
-      { status: 'delivered', ago: '1 day', read: true },
-      { status: 'failed', ago: '1 day' },
-      { status: 'queued', ago: '1 day' },
-      { status: 'sent', ago: '1 day' },
+    await seed(t, [
+      { status: 'delivered', ago: '26 hours', read: true }, // read_at set while status stays delivered
+      { status: 'delivered', ago: '26 hours', read: true },
+      { status: 'failed', ago: '26 hours' },
+      { status: 'queued', ago: '26 hours' },
+      { status: 'sent', ago: '26 hours' },
     ]);
     // 30 inbound across two conversations (one legacy-stream row has no conversation)
     const c1 = await conversation(t);
     const c2 = await conversation(t);
-    await seed(t, 'inbox_messages', [
+    await seed(t, [
       ...many(3, { dir: 'in', status: 'received', ago: '1 day', conv: c1 }),
       ...many(2, { dir: 'in', status: 'received', ago: '1 day', conv: c2 }),
     ]);
     // another organization's traffic never shows
-    await seed(other, 'messages', many(40, { ago: '1 day' }));
-    await seed(other, 'inbox_messages', many(40, { ago: '1 day' }));
+    await seed(other, many(40, { ago: '1 day' }));
+    await seed(other, many(40, { ago: '1 day' }));
   });
 
   it('TW-DASH-002 #1/#4: sent is the sum of both streams, other workspaces excluded', async () => {
@@ -194,7 +219,7 @@ describe('summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018)', () => {
 
   it('TW-DASH-005: Read rate delta is in percentage points against the previous window', async () => {
     const p = await api.signup('dsum3');
-    await seed(p, 'messages', [
+    await seed(p, [
       ...many(8, { ago: '2 days', status: 'delivered' }),
       ...many(2, { ago: '2 days', status: 'read' }), // 20% now
       ...many(9, { ago: '10 days', status: 'delivered' }),
@@ -209,7 +234,7 @@ describe('summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018)', () => {
 
   it('TW-DASH-004: sent doubled against the previous window shows +100', async () => {
     const p = await api.signup('dsum4');
-    await seed(p, 'messages', [...many(100, { ago: '2 days' }), ...many(50, { ago: '10 days' })]);
+    await seed(p, [...many(100, { ago: '2 days' }), ...many(50, { ago: '10 days' })]);
     const res = await api.as(p.admin).get('/v2/dashboard/summary?range=7d');
     expect(res.body.current.sent).toBe(100);
     expect(res.body.sentDeltaPct).toBe(100);
@@ -231,7 +256,7 @@ describe('summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018)', () => {
 
   it('TW-DASH-004: the sparkline is hourly, oldest first', async () => {
     const p = await api.signup('dsum6');
-    await seed(p, 'messages', [
+    await seed(p, [
       ...many(3, { ago: '30 minutes' }),
       { ago: '5 hours 30 minutes' },
       { ago: '30 hours' }, // outside the 20 hours
@@ -247,11 +272,11 @@ describe('throughput chart (TW-DASH-012)', () => {
   let t: Tenant;
   beforeAll(async () => {
     t = await api.signup('dthr');
-    await seed(t, 'messages', [
+    await seed(t, [
       { status: 'failed', ago: '10 minutes' },
       { status: 'delivered', ago: '10 minutes' },
       ...many(40, { status: 'delivered', ago: '3 hours 30 minutes' }),
-      { status: 'pending', ago: '20 hours' },
+      { status: 'queued', ago: '20 hours' },
     ]);
   });
 
@@ -265,7 +290,7 @@ describe('throughput chart (TW-DASH-012)', () => {
     expect(Date.parse(res.body.starts[1]) - Date.parse(res.body.starts[0])).toBe(3_600_000);
   });
 
-  it('a failed message counts in Sent and Failed but not Delivered; pending counts only in Sent', async () => {
+  it('a failed message counts in Sent and Failed but not Delivered; queued counts only in Sent', async () => {
     const res = await api.as(t.admin).get('/v2/dashboard/throughput?range=7d');
     const sum = (a: number[]) => a.reduce((x, y) => x + y, 0);
     expect(sum(res.body.sent)).toBe(43);
@@ -304,14 +329,14 @@ describe('analytics (TW-DASH-022..025, 027, 031, 032)', () => {
   beforeAll(async () => {
     t = await api.signup('dana');
     await withAnalytics(t);
-    await seed(t, 'messages', [
+    await seed(t, [
       ...many(900, { status: 'delivered', ago: '3 days' }),
       ...many(50, { status: 'failed', ago: '3 days' }),
-      ...many(50, { status: 'pending', ago: '3 days' }),
+      ...many(50, { status: 'queued', ago: '3 days' }),
       ...many(100, { status: 'failed', ago: '40 days' }), // previous 30d window: 100 failures
       ...many(100, { status: 'delivered', ago: '40 days' }),
     ]);
-    await seed(t, 'messages', [
+    await seed(t, [
       ...many(6, { status: 'delivered', ago: '2 days 1 hour', media: undefined }),
       ...many(3, { status: 'delivered', ago: '2 days', template: true }),
       { status: 'delivered', ago: '2 days', media: 'image' },
@@ -384,9 +409,7 @@ describe('analytics (TW-DASH-022..025, 027, 031, 032)', () => {
 
   it('TW-DASH-025: the funnel carries the previous end-to-end change in points', async () => {
     const c1 = await conversation(t);
-    await seed(t, 'inbox_messages', [
-      ...many(101, { dir: 'in', status: 'received', ago: '2 days', conv: c1 }),
-    ]);
+    await seed(t, [...many(101, { dir: 'in', status: 'received', ago: '2 days', conv: c1 })]);
     const res = await api.as(t.admin).get('/v2/analytics/overview?range=30d');
     expect(res.body.funnel.stages[3].count).toBe(1);
     expect(res.body.trends.endToEndPp).toBe(0.1);
@@ -401,6 +424,16 @@ describe('analytics (TW-DASH-022..025, 027, 031, 032)', () => {
     const lines = res.text.trim().split('\r\n');
     expect(lines[0]).toBe('Metric,Value');
     expect(lines).toContain('Sent,1010');
+    // Reference's five rows: the range and the headline counts
+    expect(lines).toContain('Outbound messages,1010');
+    expect(
+      lines.some((l: string) => /^Range,\d{4}-\d{2}-\d{2} to \d{4}-\d{2}-\d{2}$/.test(l)),
+    ).toBe(true);
+    for (const metric of ['Campaigns', 'Broadcasts', 'Contacts added'])
+      expect(lines.some((l: string) => new RegExp(`^${metric},\\d+$`).test(l))).toBe(true);
+    expect(res.headers['content-disposition']).toMatch(
+      /^attachment; filename="[a-z0-9-]+-analytics-\d{4}-\d{2}-\d{2}-\d{4}-\d{2}-\d{2}\.csv"$/,
+    );
     expect(lines.some((l: string) => l.startsWith('Date,Sent,Delivered,Failed,Queued'))).toBe(true);
     expect(lines.filter((l: string) => /^\d{4}-\d{2}-\d{2},/.test(l))).toHaveLength(8);
   });
@@ -426,9 +459,9 @@ describe('the workspace zone (TW-DASH-053 / 031)', () => {
     );
     // 02:00 UTC two days ago is 07:30 in Kolkata
     await h.owner.query(
-      `INSERT INTO messages (org_id, direction, status, created_at)
-       VALUES ($1, 'out', 'delivered', date_trunc('day', now() - interval '2 days') + interval '2 hours')`,
-      [t.orgId],
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, created_at)
+       VALUES ($1, $2, 1, 'out', 'agent', 'delivered', date_trunc('day', now() - interval '2 days') + interval '2 hours')`,
+      [t.orgId, await conversation(t)],
     );
     const res = await api.as(t.admin).get('/v2/analytics/overview?range=7d');
     expect(res.body.window.timezone).toBe('Asia/Kolkata');

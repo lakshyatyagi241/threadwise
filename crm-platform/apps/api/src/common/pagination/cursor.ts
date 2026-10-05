@@ -24,9 +24,10 @@ export interface Cursor {
 }
 
 export function encodeCursor(cursor: Cursor): string {
-  return Buffer.from(`${cursor.createdAtIso ?? cursor.createdAt.toISOString()}|${cursor.id}`, 'utf8').toString(
-    'base64url',
-  );
+  return Buffer.from(
+    `${cursor.createdAtIso ?? cursor.createdAt.toISOString()}|${cursor.id}`,
+    'utf8',
+  ).toString('base64url');
 }
 
 export function decodeCursor(raw: string): Cursor {
@@ -65,7 +66,11 @@ export function buildPage<T extends { createdAt: Date; id: number; createdAtIso?
     page: {
       nextCursor:
         hasMore && last
-          ? encodeCursor({ createdAt: last.createdAt, id: last.id, createdAtIso: last.createdAtIso })
+          ? encodeCursor({
+              createdAt: last.createdAt,
+              id: last.id,
+              createdAtIso: last.createdAtIso,
+            })
           : null,
       hasMore,
       limit,

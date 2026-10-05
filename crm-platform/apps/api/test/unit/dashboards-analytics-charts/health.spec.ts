@@ -1,7 +1,7 @@
-import { QUEUES } from '../../../src/infra/queue/queues';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { QUEUES } from '../../../src/infra/queue/queues';
 import { HealthService } from '../../../src/modules/dashboards-analytics-charts/health.service';
 import {
   diskTone,
@@ -9,6 +9,9 @@ import {
   queueState,
   shortError,
 } from '../../../src/modules/dashboards-analytics-charts/health-rules';
+
+/** The probe walks every registered queue, so the expected counts follow the registry instead of a fixed number. */
+const QUEUE_COUNT = Object.keys(QUEUES).length;
 
 describe('health rules (TW-DASH-048)', () => {
   it('overall is down if any core probe is down, else degraded if any is, else up; idle is ignored', () => {
@@ -55,12 +58,17 @@ function service(over: {
   const config = { get: (k: string) => over.env?.[k] };
   const moduleRef = { get: () => queue({ waiting: 0, delayed: 0, failed: over.failed ?? 0 }) };
   const audit = { recordStandalone: async () => undefined };
+  const store = {
+    tx: async (fn: (tx: unknown) => Promise<unknown>) =>
+      fn({ execute: async () => ({ rows: [{ n: 4 }] }) }),
+  };
   return new HealthService(
     db as never,
     redis as never,
     config as never,
     moduleRef as never,
     audit as never,
+    store as never,
   );
 }
 
@@ -86,6 +94,13 @@ describe('health probes (TW-DASH-048)', () => {
     expect(Date.parse(r.ts)).not.toBeNaN();
   });
 
+  it('carries the four 24-hour counters and 14 daily throughput points (TW-DASH-049)', async () => {
+    const r = await service({ env: { NODE_BRIDGE_URL: bridgeUrl } }).snapshot(true);
+    expect(r.activity).toEqual({ messages: 4, aiCalls: 4, conversations: 4, webhooks: 4 });
+    expect(r.throughput).toHaveLength(14);
+    expect(r.throughput[13]!.date).toBe(new Date().toISOString().slice(0, 10));
+  });
+
   it('a throwing database is Down and the banner is Down while the other cards still render', async () => {
     const r = await service({
       db: async () => {
@@ -102,7 +117,7 @@ describe('health probes (TW-DASH-048)', () => {
     const r = await service({ failed: 3, env: { NODE_BRIDGE_URL: bridgeUrl } }).snapshot(true);
     const q = state(r, 'queue');
     expect(q.state).toBe('warn');
-    expect(q.detail).toMatch(new RegExp(` ${Object.keys(QUEUES).length * 3} failed$`)); // every queue x 3
+    expect(q.detail).toMatch(new RegExp(` ${QUEUE_COUNT * 3} failed$`)); // every queue x 3
     expect(r.overall).toBe('warn');
   });
 
@@ -131,9 +146,8 @@ describe('health probes (TW-DASH-048)', () => {
   it('clearing reports what it removed per the BullMQ counts and refuses an unknown queue', async () => {
     const svc = service({ failed: 2 });
     const r = await svc.clearQueues();
-    const failed = Object.keys(QUEUES).length * 2;
-    expect(r).toMatchObject({ ok: true, clearedFailed: failed, clearedPending: 0 });
-    expect(r.message).toBe(`Cleared 0 pending and ${failed} failed job(s).`);
+    expect(r).toMatchObject({ ok: true, clearedFailed: QUEUE_COUNT * 2, clearedPending: 0 });
+    expect(r.message).toBe(`Cleared 0 pending and ${QUEUE_COUNT * 2} failed job(s).`);
     await expect(svc.clearQueues('nope')).rejects.toMatchObject({ status: 422 });
   });
 });

@@ -60,7 +60,11 @@ export const creditNotes = pgTable(
     unique('uq_credit_notes_org_id_uuid').on(t.orgId, t.uuid),
     unique('uq_credit_notes_number').on(t.orgId, t.creditNumber),
     unique('uq_credit_notes_series_seq').on(t.orgId, t.series, t.seq),
-    foreignKey({ name: 'fk_credit_notes_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_credit_notes_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'fk_credit_notes_invoice',
       columns: [t.orgId, t.invoiceId],
@@ -105,7 +109,11 @@ export const creditNoteItems = pgTable(
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_credit_note_items_org_id_uuid').on(t.orgId, t.uuid),
     unique('uq_credit_note_items_sort').on(t.orgId, t.creditNoteId, t.sort),
-    foreignKey({ name: 'fk_credit_note_items_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_credit_note_items_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'fk_credit_note_items_note',
       columns: [t.orgId, t.creditNoteId],
@@ -154,7 +162,11 @@ export const recurringInvoices = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_recurring_invoices_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({ name: 'fk_recurring_invoices_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_recurring_invoices_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     index('idx_recurring_invoices_list').on(t.orgId, t.createdAt, t.id),
   ],
 );
@@ -176,7 +188,11 @@ export const recurringInvoiceRuns = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_recurring_runs_period').on(t.orgId, t.recurringId, t.periodIndex),
-    foreignKey({ name: 'fk_recurring_runs_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_recurring_runs_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'fk_recurring_runs_recurring',
       columns: [t.orgId, t.recurringId],
@@ -229,7 +245,11 @@ export const salesOrders = pgTable(
     unique('uq_sales_orders_org_id_uuid').on(t.orgId, t.uuid),
     unique('uq_sales_orders_number').on(t.orgId, t.number),
     unique('uq_sales_orders_series_seq').on(t.orgId, t.series, t.seq),
-    foreignKey({ name: 'fk_sales_orders_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_sales_orders_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'fk_sales_orders_quote',
       columns: [t.orgId, t.quoteId],
@@ -257,7 +277,9 @@ export const salesOrderItems = pgTable(
     unitPriceMinor: bigint('unit_price_minor', { mode: 'number' }).notNull().default(0),
     discountKind: text('discount_kind').notNull().default('none'),
     discountValue: bigint('discount_value', { mode: 'number' }).notNull().default(0),
-    discountInvoicedMinor: bigint('discount_invoiced_minor', { mode: 'number' }).notNull().default(0),
+    discountInvoicedMinor: bigint('discount_invoiced_minor', { mode: 'number' })
+      .notNull()
+      .default(0),
     taxRateId: idColumn('tax_rate_id'),
     taxName: text('tax_name'),
     taxType: text('tax_type'),
@@ -277,7 +299,11 @@ export const salesOrderItems = pgTable(
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_sales_order_items_org_id_uuid').on(t.orgId, t.uuid),
     unique('uq_sales_order_items_sort').on(t.orgId, t.orderId, t.sort),
-    foreignKey({ name: 'fk_sales_order_items_org', columns: [t.orgId], foreignColumns: [organizations.id] }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_sales_order_items_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'fk_sales_order_items_order',
       columns: [t.orgId, t.orderId],

@@ -76,7 +76,7 @@ export class WidgetPublicController {
    */
   private async cors(token: string, req: Request, res: Response): Promise<void> {
     const origin = req.headers.origin;
-    const result = await this.widgets.checkOrigin(token, origin, req.get('host') ?? '');
+    const result = await this.widgets.checkOrigin(token, origin);
     if (result.kind === 'skip') return;
     if (result.kind === 'not_found')
       throw new WidgetPublicError(404, { ok: false, error: 'widget_not_found' });
@@ -133,7 +133,6 @@ export class WidgetPublicController {
     @Res() res: Response,
   ): Promise<void> {
     await this.cors(token, req, res);
-    await this.widgets.enforceThrottle('config', req.ip ?? '', token);
     const out = await this.widgets.config(token, this.publicRequest(req, queryUuid));
     if (out.newVisitorUuid) {
       res.cookie(`wgt_vid_${out.widgetUuid}`, out.newVisitorUuid, {
@@ -156,7 +155,7 @@ export class WidgetPublicController {
     @Res() res: Response,
   ): Promise<void> {
     await this.cors(token, req, res);
-    await this.widgets.enforceThrottle('message', req.ip ?? '', token);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
     const inputUuid =
       queryUuid ?? (typeof body?.visitor_uuid === 'string' ? body.visitor_uuid : undefined);
     const out = await this.widgets.message(token, this.publicRequest(req, inputUuid), body);
@@ -172,7 +171,7 @@ export class WidgetPublicController {
     @Res() res: Response,
   ): Promise<void> {
     await this.cors(token, req, res);
-    await this.widgets.enforceThrottle('history', req.ip ?? '', token);
+    await this.widgets.enforceThrottle('history', req.ip ?? '');
     const n = Number.parseInt(since ?? '0', 10);
     const out = await this.widgets.history(
       token,

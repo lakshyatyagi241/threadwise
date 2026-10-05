@@ -12,7 +12,10 @@ import {
   type DriverOrder,
   type DriverUrls,
   type PaymentDriver,
+  type CancelResult,
   type PaymentResult,
+  type SubscriptionEvent,
+  type SubscriptionRef,
   type WebhookPayment,
 } from './payment-driver';
 import { majorToMinor } from '@crm/contracts';
@@ -99,6 +102,8 @@ export class PayPalDriver implements PaymentDriver {
   /** Money moves here: the return captures the approved order, and only a COMPLETED capture of the right amount is paid. */
   async confirmReturn(params: Record<string, string>, order: DriverOrder): Promise<PaymentResult> {
     if (params.cancelled) return failed(CANCELLED_BY_USER);
+    // A subscription approval returns ?subscription_id=I-... instead of ?token=.
+    if (params.subscription_id) return this.confirmSubscription(params.subscription_id, order);
     const token = params.token;
     if (!token) return failed('missing_paypal_token');
     if (order.gatewayOrderId && order.gatewayOrderId !== token)
@@ -132,6 +137,132 @@ export class PayPalDriver implements PaymentDriver {
       return paid(str(capture.id), { paypal: body });
     } catch (e) {
       return failed(`paypal_exception: ${brief(e)}`);
+    }
+  }
+
+  private async confirmSubscription(
+    subscriptionId: string,
+    order: DriverOrder,
+  ): Promise<PaymentResult> {
+    if (order.gatewayOrderId && order.gatewayOrderId !== subscriptionId)
+      return failed('paypal_order_mismatch');
+    try {
+      const res = await this.api(
+        'GET',
+        `/v1/billing/subscriptions/${encodeURIComponent(subscriptionId)}`,
+      );
+      if (!isOk(res)) return failed(`paypal_subscription_fetch: ${res.status}`);
+      const body = asRecord(res.json);
+      if (body.custom_id !== order.orderNumber) return failed('paypal_reference_mismatch');
+      if (body.status !== 'ACTIVE' && body.status !== 'APPROVED')
+        return failed(`paypal_subscription_status: ${String(body.status)}`, { paypal: body });
+      return paid(str(body.id) ?? subscriptionId, {
+        paypal: body,
+        gateway_subscription_id: subscriptionId,
+        current_period_end: str(asRecord(body.billing_info).next_billing_time),
+      });
+    } catch (e) {
+      return failed(`paypal_subscription_confirm_exception: ${brief(e)}`);
+    }
+  }
+
+  supportsRecurring(): boolean {
+    return true;
+  }
+
+  /** Product, plan, then the subscription whose approval link the buyer follows. Orphan products and plans accumulate (as in Reference). */
+  async createSubscription(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult> {
+    if (!this.ctx.credentials.client_id || !this.ctx.credentials.client_secret)
+      return failed('paypal_credentials_missing');
+    const sep = urls.returnUrl.includes('?') ? '&' : '?';
+    const rec = order.recurring ?? { interval: 'month' as const, count: 1 };
+    const msg = (j: unknown, status: number): string =>
+      str(asRecord(j).message) ?? `HTTP ${status}`;
+    try {
+      const prod = await this.api('POST', '/v1/catalogs/products', {
+        name: 'Subscription',
+        type: 'SERVICE',
+        category: 'SOFTWARE',
+      });
+      const productId = str(asRecord(prod.json).id);
+      if (!isOk(prod) || !productId)
+        return failed(`paypal_product: ${msg(prod.json, prod.status)}`);
+      const planRes = await this.api('POST', '/v1/billing/plans', {
+        product_id: productId,
+        name: order.planName ?? order.description,
+        status: 'ACTIVE',
+        billing_cycles: [
+          {
+            frequency: { interval_unit: rec.interval.toUpperCase(), interval_count: rec.count },
+            tenure_type: 'REGULAR',
+            sequence: 1,
+            total_cycles: 0,
+            pricing_scheme: {
+              fixed_price: { value: order.amountMajor, currency_code: order.currency },
+            },
+          },
+        ],
+        payment_preferences: {
+          auto_bill_outstanding: true,
+          setup_fee_failure_action: 'CONTINUE',
+          payment_failure_threshold: 1,
+        },
+      });
+      const planId = str(asRecord(planRes.json).id);
+      if (!isOk(planRes) || !planId)
+        return failed(`paypal_plan: ${msg(planRes.json, planRes.status)}`);
+      const subRes = await this.api('POST', '/v1/billing/subscriptions', {
+        plan_id: planId,
+        custom_id: order.orderNumber,
+        application_context: {
+          return_url: urls.returnUrl,
+          cancel_url: `${urls.returnUrl}${sep}cancelled=1`,
+          user_action: 'SUBSCRIBE_NOW',
+          shipping_preference: 'NO_SHIPPING',
+        },
+      });
+      const sub = asRecord(subRes.json);
+      const links = Array.isArray(sub.links) ? sub.links.map(asRecord) : [];
+      const approve = str(links.find((l) => l.rel === 'approve')?.href);
+      if (!isOk(subRes) || !approve || !str(sub.id))
+        return failed(`paypal_subscription: ${str(sub.message) ?? 'paypal_no_approve_link'}`);
+      return pending({
+        redirectUrl: approve,
+        gatewayOrderId: str(sub.id),
+        payload: { gateway_subscription_id: str(sub.id), gateway_plan_id: planId },
+      });
+    } catch (e) {
+      return failed(`paypal_subscription_exception: ${brief(e)}`);
+    }
+  }
+
+  parseSubscriptionWebhook(body: unknown): SubscriptionEvent | null {
+    const evt = asRecord(body);
+    const res = asRecord(evt.resource);
+    switch (evt.event_type) {
+      case 'PAYMENT.SALE.COMPLETED':
+        return str(res.billing_agreement_id)
+          ? {
+              type: 'renewed',
+              subscriptionId: str(res.billing_agreement_id) ?? null,
+              paymentId: str(res.id),
+            }
+          : null;
+      case 'BILLING.SUBSCRIPTION.ACTIVATED':
+        return {
+          type: 'created',
+          subscriptionId: str(res.id) ?? null,
+          periodEnd: str(asRecord(res.billing_info).next_billing_time) ?? null,
+          orderNumber: str(res.custom_id) ?? null,
+        };
+      case 'BILLING.SUBSCRIPTION.CANCELLED':
+      case 'BILLING.SUBSCRIPTION.EXPIRED':
+        return { type: 'canceled', subscriptionId: str(res.id) ?? null };
+      case 'BILLING.SUBSCRIPTION.PAYMENT.FAILED':
+      case 'BILLING.SUBSCRIPTION.SUSPENDED':
+        return { type: 'payment_failed', subscriptionId: str(res.id) ?? null };
+      default:
+        return null;
     }
   }
 
@@ -176,5 +307,21 @@ export class PayPalDriver implements PaymentDriver {
       currency,
       payload: { paypal_capture: cap },
     };
+  }
+
+  /** PayPal: cancelling a billing subscription ends renewal; the buyer keeps what they paid for. */
+  async cancelSubscription(ref: SubscriptionRef): Promise<CancelResult> {
+    if (!this.ctx.credentials.client_id || !this.ctx.credentials.client_secret)
+      return { ok: false, reason: 'paypal_credentials_missing' };
+    try {
+      const res = await this.api(
+        'POST',
+        `/v1/billing/subscriptions/${encodeURIComponent(ref.gatewaySubscriptionId)}/cancel`,
+        { reason: 'Customer cancelled auto-renew' },
+      );
+      return isOk(res) ? { ok: true } : { ok: false, reason: `paypal_http_${res.status}` };
+    } catch (e) {
+      return { ok: false, reason: `paypal_exception: ${brief(e)}` };
+    }
   }
 }

@@ -215,7 +215,11 @@ const toRow = (r: Raw): SalesOrderRow => ({
 const escapeLike = (v: string) => v.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /** An order's people are its owner and creator. */
-export function orderScopeCondition(orgId: number, scope: RecordScope, actorUserId: number | null): SQL | undefined {
+export function orderScopeCondition(
+  orgId: number,
+  scope: RecordScope,
+  actorUserId: number | null,
+): SQL | undefined {
   if (scope === 'all') return undefined;
   if (!actorUserId) return sql`false`;
   const own = sql`(o.owner_id = ${actorUserId} OR o.created_by = ${actorUserId})`;
@@ -228,25 +232,54 @@ export function orderScopeCondition(orgId: number, scope: RecordScope, actorUser
 
 @Injectable()
 export class SalesOrdersRepository {
-  async list(tx: Tx, orgId: number, query: ListSalesOrdersQuery, scope: SQL | undefined): Promise<SalesOrderRow[]> {
+  async list(
+    tx: Tx,
+    orgId: number,
+    query: ListSalesOrdersQuery,
+    scope: SQL | undefined,
+  ): Promise<SalesOrderRow[]> {
     const conds: SQL[] = [sql`o.org_id = ${orgId}`];
     if (scope) conds.push(scope);
-    if (query.status?.length) conds.push(sql`o.status IN (${sql.join(query.status.map((v) => sql`${v}`), sql`, `)})`);
+    if (query.status?.length)
+      conds.push(
+        sql`o.status IN (${sql.join(
+          query.status.map((v) => sql`${v}`),
+          sql`, `,
+        )})`,
+      );
     if (query.invoicingStatus?.length)
-      conds.push(sql`${invoicingExpr} IN (${sql.join(query.invoicingStatus.map((v) => sql`${v}`), sql`, `)})`);
+      conds.push(
+        sql`${invoicingExpr} IN (${sql.join(
+          query.invoicingStatus.map((v) => sql`${v}`),
+          sql`, `,
+        )})`,
+      );
     if (query.fulfilmentStatus?.length)
-      conds.push(sql`${fulfilmentExpr} IN (${sql.join(query.fulfilmentStatus.map((v) => sql`${v}`), sql`, `)})`);
+      conds.push(
+        sql`${fulfilmentExpr} IN (${sql.join(
+          query.fulfilmentStatus.map((v) => sql`${v}`),
+          sql`, `,
+        )})`,
+      );
     if (query.contactId)
-      conds.push(sql`o.contact_id = (SELECT y.id FROM contacts y WHERE y.org_id = ${orgId} AND y.uuid = ${query.contactId}::uuid)`);
+      conds.push(
+        sql`o.contact_id = (SELECT y.id FROM contacts y WHERE y.org_id = ${orgId} AND y.uuid = ${query.contactId}::uuid)`,
+      );
     if (query.dealId)
-      conds.push(sql`o.deal_id = (SELECT y.id FROM deals y WHERE y.org_id = ${orgId} AND y.uuid = ${query.dealId}::uuid)`);
+      conds.push(
+        sql`o.deal_id = (SELECT y.id FROM deals y WHERE y.org_id = ${orgId} AND y.uuid = ${query.dealId}::uuid)`,
+      );
     if (query.q) {
       const like = `%${escapeLike(query.q)}%`;
-      conds.push(sql`(o.number ILIKE ${like} OR o.buyer_name ILIKE ${like} OR o.reference ILIKE ${like})`);
+      conds.push(
+        sql`(o.number ILIKE ${like} OR o.buyer_name ILIKE ${like} OR o.reference ILIKE ${like})`,
+      );
     }
     if (query.cursor) {
       const cur = decodeCursor(query.cursor);
-      conds.push(sql`(o.created_at, o.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`);
+      conds.push(
+        sql`(o.created_at, o.id) < (${cur.createdAtIso ?? cur.createdAt.toISOString()}::timestamptz, ${cur.id})`,
+      );
     }
     const res = await tx.execute(sql`
       ${SELECT} WHERE ${sql.join(conds, sql` AND `)} ORDER BY o.created_at DESC, o.id DESC LIMIT ${query.limit + 1}
@@ -273,9 +306,19 @@ export class SalesOrdersRepository {
     }));
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, forUpdate = false): Promise<SalesOrderRow | undefined> {
-    if (forUpdate) await tx.execute(sql`SELECT 1 FROM sales_orders WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
-    const res = await tx.execute(sql`${SELECT} WHERE o.org_id = ${orgId} AND o.uuid = ${uuid}::uuid`);
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    forUpdate = false,
+  ): Promise<SalesOrderRow | undefined> {
+    if (forUpdate)
+      await tx.execute(
+        sql`SELECT 1 FROM sales_orders WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`,
+      );
+    const res = await tx.execute(
+      sql`${SELECT} WHERE o.org_id = ${orgId} AND o.uuid = ${uuid}::uuid`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? toRow(r) : undefined;
   }
@@ -286,7 +329,12 @@ export class SalesOrdersRepository {
     return r ? toRow(r) : undefined;
   }
 
-  async items(tx: Tx, orgId: number, orderId: number, forUpdate = false): Promise<SalesOrderItemRow[]> {
+  async items(
+    tx: Tx,
+    orgId: number,
+    orderId: number,
+    forUpdate = false,
+  ): Promise<SalesOrderItemRow[]> {
     const res = await tx.execute(sql`
       SELECT id, uuid, sort, description, sku, hsn_sac, qty::text AS qty, qty_invoiced::text AS qty_invoiced,
              qty_fulfilled::text AS qty_fulfilled, unit_price_minor::text AS unit_price_minor, discount_kind,
@@ -391,7 +439,13 @@ export class SalesOrdersRepository {
       expectedDate: string | null;
       notes: string | null;
       terms: string | null;
-      totals: { subtotalMinor: bigint; shippingMinor: bigint; taxMinor: bigint; taxAddedMinor: bigint; totalMinor: bigint };
+      totals: {
+        subtotalMinor: bigint;
+        shippingMinor: bigint;
+        taxMinor: bigint;
+        taxAddedMinor: bigint;
+        totalMinor: bigint;
+      };
       status: string;
       confirmedAt: boolean;
       cancelled: string;
@@ -418,7 +472,8 @@ export class SalesOrdersRepository {
       );
     if (p.status !== undefined) sets.push(sql`status = ${p.status}`);
     if (p.confirmedAt) sets.push(sql`confirmed_at = coalesce(confirmed_at, now())`);
-    if (p.cancelled !== undefined) sets.push(sql`cancelled_at = now(), cancel_reason = ${p.cancelled}`);
+    if (p.cancelled !== undefined)
+      sets.push(sql`cancelled_at = now(), cancel_reason = ${p.cancelled}`);
     if (p.shippingInvoiced !== undefined) sets.push(sql`shipping_invoiced = ${p.shippingInvoiced}`);
     if (sets.length === 0) sets.push(sql`updated_at = now()`);
     const res = await tx.execute(sql`
@@ -429,8 +484,15 @@ export class SalesOrdersRepository {
     return res.rows.length > 0;
   }
 
-  async replaceItems(tx: Tx, orgId: number, orderId: number, items: SalesOrderItemInsert[]): Promise<void> {
-    await tx.execute(sql`DELETE FROM sales_order_items WHERE org_id = ${orgId} AND order_id = ${orderId}`);
+  async replaceItems(
+    tx: Tx,
+    orgId: number,
+    orderId: number,
+    items: SalesOrderItemInsert[],
+  ): Promise<void> {
+    await tx.execute(
+      sql`DELETE FROM sales_order_items WHERE org_id = ${orgId} AND order_id = ${orderId}`,
+    );
     for (const i of items) {
       await tx.execute(sql`
         INSERT INTO sales_order_items (org_id, order_id, sort, description, sku, hsn_sac, qty, unit_price_minor, discount_kind, discount_value,
@@ -465,8 +527,16 @@ export class SalesOrdersRepository {
   }
 
   /** Links an order's invoice: the invoice and each of its lines name what they bill. Lines are matched by position. */
-  async linkInvoice(tx: Tx, orgId: number, invoiceId: number, orderId: number, itemByPosition: Array<number | null>): Promise<void> {
-    await tx.execute(sql`UPDATE invoices SET sales_order_id = ${orderId} WHERE org_id = ${orgId} AND id = ${invoiceId}`);
+  async linkInvoice(
+    tx: Tx,
+    orgId: number,
+    invoiceId: number,
+    orderId: number,
+    itemByPosition: Array<number | null>,
+  ): Promise<void> {
+    await tx.execute(
+      sql`UPDATE invoices SET sales_order_id = ${orderId} WHERE org_id = ${orgId} AND id = ${invoiceId}`,
+    );
     for (const [position, itemId] of itemByPosition.entries()) {
       if (itemId === null) continue;
       await tx.execute(sql`
@@ -521,8 +591,14 @@ export class SalesOrdersRepository {
   }
 
   /** Gives an invoice's billed quantities back to its order (the invoice was voided or deleted). */
-  async releaseInvoice(tx: Tx, orgId: number, invoiceId: number): Promise<{ orderId: number | null; shippingReleased: boolean }> {
-    const inv = await tx.execute(sql`SELECT sales_order_id, shipping_minor::text AS shipping FROM invoices WHERE org_id = ${orgId} AND id = ${invoiceId}`);
+  async releaseInvoice(
+    tx: Tx,
+    orgId: number,
+    invoiceId: number,
+  ): Promise<{ orderId: number | null; shippingReleased: boolean }> {
+    const inv = await tx.execute(
+      sql`SELECT sales_order_id, shipping_minor::text AS shipping FROM invoices WHERE org_id = ${orgId} AND id = ${invoiceId}`,
+    );
     const row = (inv.rows as Raw[])[0];
     const orderId = row ? n(row.sales_order_id) : null;
     if (orderId === null) return { orderId: null, shippingReleased: false };
@@ -536,12 +612,17 @@ export class SalesOrdersRepository {
       WHERE so.org_id = ${orgId} AND so.id = r.item_id
     `);
     const shipping = big(row!.shipping) > 0n;
-    if (shipping) await tx.execute(sql`UPDATE sales_orders SET shipping_invoiced = false WHERE org_id = ${orgId} AND id = ${orderId}`);
+    if (shipping)
+      await tx.execute(
+        sql`UPDATE sales_orders SET shipping_invoiced = false WHERE org_id = ${orgId} AND id = ${orderId}`,
+      );
     return { orderId, shippingReleased: shipping };
   }
 
   async orderOfInvoice(tx: Tx, orgId: number, invoiceId: number): Promise<number | null> {
-    const res = await tx.execute(sql`SELECT sales_order_id FROM invoices WHERE org_id = ${orgId} AND id = ${invoiceId}`);
+    const res = await tx.execute(
+      sql`SELECT sales_order_id FROM invoices WHERE org_id = ${orgId} AND id = ${invoiceId}`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? n(r.sales_order_id) : null;
   }
@@ -558,7 +639,9 @@ export class SalesOrdersRepository {
   }
 
   async visible(tx: Tx, orgId: number, id: number, scope: SQL | undefined): Promise<boolean> {
-    const res = await tx.execute(sql`SELECT 1 FROM sales_orders o WHERE o.org_id = ${orgId} AND o.id = ${id} ${scope ? sql`AND ${scope}` : sql``}`);
+    const res = await tx.execute(
+      sql`SELECT 1 FROM sales_orders o WHERE o.org_id = ${orgId} AND o.id = ${id} ${scope ? sql`AND ${scope}` : sql``}`,
+    );
     return res.rows.length > 0;
   }
 }

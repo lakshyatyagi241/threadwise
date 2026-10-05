@@ -120,6 +120,29 @@ describe('i18n schema, RLS and the usage ledger', () => {
       expect(rows.find((r) => r.code === 'zh-CN')).toBeTruthy();
     });
 
+    it("carries Reference's provider descriptions, and leaves one an operator changed alone", async () => {
+      const desc = async (slug: string) =>
+        (await owner.query(`SELECT description FROM translation_providers WHERE slug = $1`, [slug]))
+          .rows[0].description;
+      expect(await desc('mymemory')).toBe(
+        'Free, no key — out-of-box default. 50k req/day per IP with admin email.',
+      );
+      expect(await desc('google_cloud')).toBe(
+        'Official Google Translate API. Paid: ~$20 per 1M characters.',
+      );
+
+      await owner.query(
+        `UPDATE translation_providers SET description = 'Our own words' WHERE slug = 'deepl'`,
+      );
+      await owner.query(
+        readFileSync(resolve(MIGRATIONS, '20261006090000_i18n_provider_copy.sql'), 'utf8'),
+      );
+      expect(await desc('deepl')).toBe('Our own words');
+      await owner.query(
+        `UPDATE translation_providers SET description = 'Premium quality for European languages. Free tier 500k chars/month.' WHERE slug = 'deepl'`,
+      );
+    });
+
     it('seeds the five providers: MyMemory (default) and Google (free) on, the rest off', async () => {
       const rows = (
         await owner.query(

@@ -1,8 +1,13 @@
 /**
  * Menu groups, in the order they appear. They follow Reference's user menu (`UserNav`), regrouped for a CRM:
- * Platform (`overview`), Inbox & Chat, CRM (`audience`), Sales, Campaigns, Automation, Channels, Store, Developer,
- * Help; account and workspace settings come last. The ids `overview` and `audience` are kept so domains that already
- * declare them keep working; only their headings read "Platform" and "CRM". A domain picks one for each screen.
+ * Platform (`overview`), Inbox & Chat, CRM (`audience`), Sales, Campaigns, Automation, Store, then Help and Settings.
+ * The ids `overview` and `audience` are kept so domains that already declare them keep working; only their headings read
+ * "Platform" and "CRM". A domain picks one for each screen.
+ *
+ * Configuration is not a menu group: a screen that sets something up (channels, tax rates, API keys, team...) is a tile in
+ * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds the entries pinned
+ * to the bottom of the menu: the shell's own Settings entry, with Help (the Help center) directly above it. `help` (Support,
+ * Guidebook) is drawn in the user menu.
  */
 export const NAV_GROUPS = [
   'overview',
@@ -11,9 +16,8 @@ export const NAV_GROUPS = [
   'sales',
   'campaigns',
   'automation',
-  'channels',
   'store',
-  'developer',
+  'apps',
   'help',
   'settings',
 ] as const;

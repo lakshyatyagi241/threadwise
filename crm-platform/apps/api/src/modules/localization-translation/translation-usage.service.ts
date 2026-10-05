@@ -73,7 +73,8 @@ export class TranslationUsageService {
   async report(query: TranslationUsageQuery, now = new Date()): Promise<TranslationUsageResponse> {
     const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
     const from = query.from ? new Date(`${query.from}T00:00:00.000Z`) : monthStart;
-    const toInclusive = query.to ? new Date(`${query.to}T23:59:59.999Z`) : now;
+    // No `to` means through the end of today (UTC), not through this instant: the database clock can run ahead of ours.
+    const toInclusive = new Date(`${query.to ?? now.toISOString().slice(0, 10)}T23:59:59.999Z`);
     const toExclusive = new Date(toInclusive.getTime() + 1);
     // The chart shows the last 30 days of the range, not of today.
     const chartFrom = new Date(Math.max(from.getTime(), toInclusive.getTime() - 30 * DAY_MS));

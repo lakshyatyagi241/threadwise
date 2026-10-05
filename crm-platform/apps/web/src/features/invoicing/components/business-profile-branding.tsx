@@ -22,7 +22,12 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
     <Section id="branding" title={t('title')} description={t('description')}>
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="space-y-4">
-          <Field label={t('logo')} htmlFor={`${uid}-logo`} hint={t('logoHint')} error={err('logoUrl')}>
+          <Field
+            label={t('logo')}
+            htmlFor={`${uid}-logo`}
+            hint={t('logoHint')}
+            error={err('logoUrl')}
+          >
             <Input
               id={`${uid}-logo`}
               type="url"
@@ -39,7 +44,12 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
           </Field>
           <p className="text-xs text-muted-foreground">{t('logoUploads')}</p>
 
-          <Field label={t('color')} htmlFor={`${uid}-color`} hint={t('colorHint')} error={err('brandColor')}>
+          <Field
+            label={t('color')}
+            htmlFor={`${uid}-color`}
+            hint={t('colorHint')}
+            error={err('brandColor')}
+          >
             <div className="flex items-center gap-2">
               <input
                 type="color"
@@ -63,7 +73,12 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
                 onChange={(e) => set('brandColor', e.target.value.trim())}
               />
               {colour && !readOnly && (
-                <Button type="button" variant="ghost" size="sm" onClick={() => set('brandColor', '')}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => set('brandColor', '')}
+                >
                   {t('colorClear')}
                 </Button>
               )}
@@ -76,7 +91,11 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
             className="flex h-28 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted p-3"
             style={colourOk ? { borderBottomColor: colour, borderBottomWidth: 4 } : undefined}
           >
-            {logoOk ? <LogoPreview key={logo} url={logo} /> : <span className="text-xs text-muted-foreground">{t('noLogo')}</span>}
+            {logoOk ? (
+              <LogoPreview key={logo} url={logo} />
+            ) : (
+              <span className="text-xs text-muted-foreground">{t('noLogo')}</span>
+            )}
           </div>
           <figcaption className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <span
@@ -90,7 +109,12 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label={t('invoiceTitle')} htmlFor={`${uid}-title`} hint={t('invoiceTitleHint')} error={err('invoiceTitle')}>
+        <Field
+          label={t('invoiceTitle')}
+          htmlFor={`${uid}-title`}
+          hint={t('invoiceTitleHint')}
+          error={err('invoiceTitle')}
+        >
           <Input
             id={`${uid}-title`}
             value={form.invoiceTitle}
@@ -111,8 +135,22 @@ export function BrandingSection({ form, set, err, readOnly }: EditorCtx) {
             </button>
           )}
         </Field>
-        <Field label={t('footer')} htmlFor={`${uid}-footer`} hint={t('footerHint')} error={err('footerNote')} className="sm:col-span-2">
-          <Textarea id={`${uid}-footer`} rows={3} value={form.footerNote} disabled={readOnly} invalid={!!err('footerNote')} dir="auto" onChange={(e) => set('footerNote', e.target.value)} />
+        <Field
+          label={t('footer')}
+          htmlFor={`${uid}-footer`}
+          hint={t('footerHint')}
+          error={err('footerNote')}
+          className="sm:col-span-2"
+        >
+          <Textarea
+            id={`${uid}-footer`}
+            rows={3}
+            value={form.footerNote}
+            disabled={readOnly}
+            invalid={!!err('footerNote')}
+            dir="auto"
+            onChange={(e) => set('footerNote', e.target.value)}
+          />
         </Field>
       </div>
     </Section>
@@ -124,5 +162,13 @@ function LogoPreview({ url }: { url: string }) {
   const [broken, setBroken] = useState(false);
   if (broken) return <span className="text-xs text-warning">{t('logoBroken')}</span>;
   // A plain img: the logo is any https address the person typed, which next/image would need allow-listed host by host.
-  return <img src={url} alt={t('logoAlt')} className="max-h-full max-w-full object-contain" referrerPolicy="no-referrer" onError={() => setBroken(true)} />;
+  return (
+    <img
+      src={url}
+      alt={t('logoAlt')}
+      className="max-h-full max-w-full object-contain"
+      referrerPolicy="no-referrer"
+      onError={() => setBroken(true)}
+    />
+  );
 }

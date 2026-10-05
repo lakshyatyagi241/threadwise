@@ -5,6 +5,7 @@ import type { Queue } from 'bullmq';
 import { clearQueueResponseSchema, healthResponseSchema } from '@crm/contracts';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { QUEUES } from '../../../src/infra/queue/queues';
+import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
 import {
   OPERATOR_EMAIL,
   OPERATOR_PASSWORD,
@@ -70,6 +71,22 @@ describe('GET /v2/platform/health', () => {
     expect(body.vitals.nodeVersion).toBe(process.version);
   });
 
+  it('a running device worker is the runtime check: up, with the devices it holds (TW-NODE-004)', async () => {
+    const redis = h.app.get<import('ioredis').Redis>(REDIS_CLIENT, { strict: false });
+    await redis.set('wa:worker:spec', JSON.stringify({ at: Date.now(), devices: 2 }), 'EX', 60);
+    try {
+      const res = await api().get('/v2/platform/health?fresh=1').set(bearer(supportToken));
+      const bridge = res.body.checks.find((c: { key: string }) => c.key === 'bridge');
+      expect(bridge).toMatchObject({
+        state: 'up',
+        value: '1 worker',
+        detail: '2 devices connected',
+      });
+    } finally {
+      await redis.del('wa:worker:spec');
+    }
+  });
+
   it('a reachable bridge that answers 401 or 404 still counts as up', async () => {
     process.env.NODE_BRIDGE_URL = h.stubs.bridge.url;
     try {
@@ -133,5 +150,85 @@ describe('POST /v2/platform/health/clear-queue (TW-DASH-051)', () => {
       .set(bearer(superToken))
       .send({ queue: 'nope' });
     expect(res.status).toBe(422);
+  });
+});
+
+describe('TW-DASH-050 WhatsApp engine cards', () => {
+  const engines = async () => {
+    const res = await api().get('/v2/platform/health?fresh=1').set(bearer(supportToken));
+    return healthResponseSchema.parse(res.body).engines;
+  };
+
+  it('an empty platform lists the Unofficial engine as idle with no numbers, and no provider cards', async () => {
+    expect(await engines()).toEqual([
+      {
+        key: 'baileys',
+        label: 'Unofficial API',
+        connected: 0,
+        total: 0,
+        state: 'idle',
+        breakdown: [],
+      },
+    ]);
+  });
+
+  it('counts devices across workspaces (2 of 3 connected is up) and provider configs per engine (both failed is down)', async () => {
+    const a = await h.owner.query(
+      `INSERT INTO organizations (slug, name) VALUES ('eng-a', 'Eng A') RETURNING id`,
+    );
+    const b = await h.owner.query(
+      `INSERT INTO organizations (slug, name) VALUES ('eng-b', 'Eng B') RETURNING id`,
+    );
+    for (const [org, n, status] of [
+      [a.rows[0].id, 1, 'connected'],
+      [a.rows[0].id, 2, 'disconnected'],
+      [b.rows[0].id, 3, 'connected'],
+    ] as const) {
+      await h.owner.query(
+        `INSERT INTO devices (org_id, device_name, phone_number, status) VALUES ($1, $2, $3, $4)`,
+        [org, `d${n}`, `900000000${n}`, status],
+      );
+    }
+    for (const [org, provider, status] of [
+      [a.rows[0].id, 'twilio', 'failed'],
+      [b.rows[0].id, 'twilio', 'failed'],
+      [a.rows[0].id, 'waba', 'connected'],
+      [b.rows[0].id, 'meta_ads', 'connected'], // not a messaging engine
+    ] as const) {
+      await h.owner.query(
+        `INSERT INTO wa_provider_configs (org_id, provider, status) VALUES ($1, $2, $3)`,
+        [org, provider, status],
+      );
+    }
+    const e = await engines();
+    expect(e.map((x) => x.key)).toEqual(['baileys', 'waba', 'twilio']);
+    expect(e[0]).toMatchObject({
+      connected: 2,
+      total: 3,
+      state: 'up',
+      breakdown: [
+        { status: 'connected', count: 2 },
+        { status: 'disconnected', count: 1 },
+      ],
+    });
+    expect(e[1]).toMatchObject({
+      label: 'WhatsApp Cloud (WABA)',
+      connected: 1,
+      total: 1,
+      state: 'up',
+    });
+    expect(e[2]).toMatchObject({
+      label: 'Twilio',
+      connected: 0,
+      total: 2,
+      state: 'down',
+      breakdown: [{ status: 'failed', count: 2 }],
+    });
+  });
+
+  it('engine state never changes the overall banner', async () => {
+    const res = await api().get('/v2/platform/health?fresh=1').set(bearer(supportToken));
+    expect(res.body.engines.some((x: { state: string }) => x.state === 'down')).toBe(true);
+    expect(res.body.overall).not.toBe('down');
   });
 });

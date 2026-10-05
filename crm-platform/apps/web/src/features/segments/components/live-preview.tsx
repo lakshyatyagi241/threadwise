@@ -108,7 +108,10 @@ export function LivePreview({
     >
       <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
         <h2 className="text-base font-semibold">{t('title')}</h2>
-        <span aria-live="polite" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+        <span
+          aria-live="polite"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"
+        >
           {updating && (
             <>
               <Spinner label={t('updating')} />
@@ -135,10 +138,16 @@ export function LivePreview({
             {q.isError && <ErrorLine error={q.error} onRetry={() => void q.refetch()} />}
             <div>
               <div className="text-3xl font-semibold tabular-nums">
-                {data.countApproximate ? t('about', { count: data.count }) : data.count.toLocaleString()}
+                {data.countApproximate
+                  ? t('about', { count: data.count })
+                  : data.count.toLocaleString()}
               </div>
-              <div className="text-sm text-muted-foreground">{t('matching', { count: data.count })}</div>
-              {data.countApproximate && <p className="mt-1 text-xs text-muted-foreground">{t('approximate')}</p>}
+              <div className="text-sm text-muted-foreground">
+                {t('matching', { count: data.count })}
+              </div>
+              {data.countApproximate && (
+                <p className="mt-1 text-xs text-muted-foreground">{t('approximate')}</p>
+              )}
             </div>
             {data.invalidConditions.length > 0 && (
               <Alert tone="warning" className="flex items-start gap-2 text-xs">

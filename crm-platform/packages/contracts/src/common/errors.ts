@@ -4,16 +4,42 @@ import { z } from 'zod';
  * Machine-readable application error codes. The frontend switches on `code`,
  * never on the human-readable message — messages get reworded, codes do not.
  */
+import { CPN_ERROR_CODES } from '../coupons-credits-referral-currency/errors';
 import { PAYGW_ERROR_CODES } from '../platform-payment-gateways/errors';
 import { RBAC_ERROR_CODES } from '../roles-permissions/errors';
 import { WEBHOOK_FANOUT_ERROR_CODES } from '../webhook-fanout/errors';
 import { WABA_ERROR_CODES } from '../whatsapp-cloud-api-waba/errors';
+import { TPL_ERROR_CODES } from '../message-templates/errors';
+import { CHANNEL_ERROR_CODES } from '../chat-conversations/channel-errors';
+import { CONVERSATION_ERROR_CODES } from '../chat-conversations/conversation-errors';
+import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
+import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
+import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
+import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
+import { CALL_ERROR_CODES } from '../calling-voice/errors';
+import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
+import { MKT_ERROR_CODES } from '../marketplace/errors';
+import { LEAD_ERROR_CODES } from '../leads/errors';
+import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 
 export const ERROR_CODES = {
+  ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
   ...WABA_ERROR_CODES,
   ...WEBHOOK_FANOUT_ERROR_CODES,
+  ...TPL_ERROR_CODES,
+  ...CHANNEL_ERROR_CODES,
+  ...CONVERSATION_ERROR_CODES,
+  ...INBOX_ERROR_CODES,
+  ...WSP_ERROR_CODES,
+  ...WAP_ERROR_CODES,
+  ...WALLET_ERROR_CODES,
+  ...CALL_ERROR_CODES,
+  ...FLR_ERROR_CODES,
+  ...MKT_ERROR_CODES,
+  ...LEAD_ERROR_CODES,
+  ...FLB_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
@@ -88,6 +114,7 @@ export const ERROR_CODES = {
   AUTH_SOCIAL_STATE_INVALID: 'AUTH_SOCIAL_STATE_INVALID',
   AUTH_SOCIAL_FAILED: 'AUTH_SOCIAL_FAILED',
   AUTH_SOCIAL_NO_EMAIL: 'AUTH_SOCIAL_NO_EMAIL',
+  AUTH_SOCIAL_NO_ACCOUNT: 'AUTH_SOCIAL_NO_ACCOUNT',
   AUTH_SESSION_NOT_FOUND: 'AUTH_SESSION_NOT_FOUND',
   AUTH_CANNOT_REVOKE_CURRENT: 'AUTH_CANNOT_REVOKE_CURRENT',
   AUTH_WORKSPACE_NOT_AVAILABLE: 'AUTH_WORKSPACE_NOT_AVAILABLE',
@@ -106,6 +133,10 @@ export const ERROR_CODES = {
   PLAN_LIMIT_REACHED: 'PLAN_LIMIT_REACHED',
   PLAN_IN_USE: 'PLAN_IN_USE',
   PLAN_DEFAULT_PROTECTED: 'PLAN_DEFAULT_PROTECTED',
+  PLAN_TRIAL_EXPIRED: 'PLAN_TRIAL_EXPIRED',
+  PLAN_CHECKOUT_REQUIRED: 'PLAN_CHECKOUT_REQUIRED',
+  PLAN_CHANGE_NOT_ALLOWED: 'PLAN_CHANGE_NOT_ALLOWED',
+  PLAN_NO_SUBSCRIPTION: 'PLAN_NO_SUBSCRIPTION',
 
   // contacts, contact groups, tags and attributes (TW-CON)
   CON_GROUP_NAME_TAKEN: 'CON_GROUP_NAME_TAKEN',
@@ -144,6 +175,94 @@ export const ERROR_CODES = {
   BCAST_LINK_EXPIRED: 'BCAST_LINK_EXPIRED',
   BCAST_NOT_RESUMABLE: 'BCAST_NOT_RESUMABLE',
 
+  // Telegram channel (TW-TG)
+  /** Telegram refused the token (getMe failed). */
+  TG_TOKEN_REJECTED: 'TG_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  TG_BROADCAST_EMPTY: 'TG_BROADCAST_EMPTY',
+  /** None of the picked chats belong to the bot. */
+  TG_NO_RECIPIENTS: 'TG_NO_RECIPIENTS',
+  /** The bot is not connected or is paused. */
+  TG_BOT_UNAVAILABLE: 'TG_BOT_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  TG_NOTHING_TO_SEND: 'TG_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
+
+  // Facebook channel (TW-FB)
+  /** No Meta app is configured on this install, so a Page cannot be connected. */
+  FB_NOT_CONFIGURED: 'FB_NOT_CONFIGURED',
+  /** The OAuth state did not round-trip: a forged or stale callback (login-CSRF guard). */
+  FB_STATE_INVALID: 'FB_STATE_INVALID',
+  /** Meta refused the code. */
+  FB_CODE_REJECTED: 'FB_CODE_REJECTED',
+  /** The account manages no Page we could store. */
+  FB_NO_PAGES: 'FB_NO_PAGES',
+  /** A pasted token did not resolve to a Page. */
+  FB_TOKEN_NOT_A_PAGE: 'FB_TOKEN_NOT_A_PAGE',
+  /** Refresh: Meta did not answer for the Page (its token may need re-auth). */
+  FB_REFRESH_FAILED: 'FB_REFRESH_FAILED',
+  /** A broadcast needs a message. */
+  FB_BROADCAST_EMPTY: 'FB_BROADCAST_EMPTY',
+  /** None of the picked people are inside the 24 hour window of that Page. */
+  FB_NO_RECIPIENTS: 'FB_NO_RECIPIENTS',
+  /** The Page is not connected, or Meta revoked its token. */
+  FB_PAGE_UNAVAILABLE: 'FB_PAGE_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  FB_NOTHING_TO_SEND: 'FB_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  FB_NOTHING_TO_RETRY: 'FB_NOTHING_TO_RETRY',
+  /** Meta refused a Messenger profile change; the message carries its reason. */
+  FB_SETUP_REJECTED: 'FB_SETUP_REJECTED',
+  /** Meta's Graph version no longer accepts the field (the welcome greeting). */
+  FB_SETUP_UNSUPPORTED: 'FB_SETUP_UNSUPPORTED',
+  /** A post cannot be made as written (nothing in it, photos and a link together, a video address that is not HTTPS). */
+  FB_POST_INVALID: 'FB_POST_INVALID',
+  /** The schedule is outside Meta's window (10 minutes to 75 days ahead). */
+  FB_SCHEDULE_INVALID: 'FB_SCHEDULE_INVALID',
+
+  // Instagram channel (TW-IG)
+  /** The Instagram engine is not connected on this install. */
+  IG_NOT_CONNECTED: 'IG_NOT_CONNECTED',
+  /** The engine does not list that account to this workspace or person. */
+  IG_ACCOUNT_NOT_FOUND: 'IG_ACCOUNT_NOT_FOUND',
+  /** The engine did not give a sign-in address for a new account. */
+  IG_CONNECT_FAILED: 'IG_CONNECT_FAILED',
+  /** Run a flow: the thread is not an Instagram thread. */
+  IG_NOT_AN_INSTAGRAM_THREAD: 'IG_NOT_AN_INSTAGRAM_THREAD',
+  /** Run a flow: the thread has no engine conversation id (its key is not `ig:...`). */
+  IG_THREAD_NO_ENGINE_ID: 'IG_THREAD_NO_ENGINE_ID',
+  /** The engine refused to start the flow. */
+  IG_FLOW_RUN_FAILED: 'IG_FLOW_RUN_FAILED',
+
+  // Shopify and WooCommerce integrations (TW-ECOM)
+  /** The Shopify app is off on this install, or has no client id. */
+  ECOM_NOT_CONFIGURED: 'ECOM_NOT_CONFIGURED',
+  /** The WooCommerce integration is switched off by the platform. */
+  ECOM_DISABLED: 'ECOM_DISABLED',
+  /** The Shopify domain is not `<handle>.myshopify.com`. */
+  ECOM_SHOP_INVALID: 'ECOM_SHOP_INVALID',
+  /** The WooCommerce store address has no host. */
+  ECOM_STORE_INVALID: 'ECOM_STORE_INVALID',
+  /** The WooCommerce store did not accept the keys, or could not be reached. */
+  ECOM_STORE_UNREACHABLE: 'ECOM_STORE_UNREACHABLE',
+
+  // campaigns (TW-CAMP)
+  /** Nobody on the audience can be messaged. */
+  CAMP_NO_RECIPIENTS: 'CAMP_NO_RECIPIENTS',
+  /** Edit: only draft, scheduled or paused campaigns can change. */
+  CAMP_NOT_EDITABLE: 'CAMP_NOT_EDITABLE',
+  /** Resend: only a finished campaign can be sent again. */
+  CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
+  /** Resend: nobody matches the scope. */
+  CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
+  CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
+  /** The auto-end date is not after the send date. */
+  CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
+  /** The campaign cannot be started or resumed in its current status. */
+  CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
+
   // deals and pipelines (TW-DEAL)
   /** The stage belongs to a different pipeline than the deal (Reference ignored it, defaulted it, or 422'd by path). */
   DEAL_STAGE_MISMATCH: 'DEAL_STAGE_MISMATCH',
@@ -176,6 +295,10 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+
+  // companies (TW-CTP)
+  /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
+  COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)
@@ -363,6 +486,45 @@ export const ERROR_CODES = {
   APPT_BOOKING_UNAVAILABLE: 'APPT_BOOKING_UNAVAILABLE',
   /** A booking type with pending or confirmed bookings still to come is not deleted. */
   BOOKING_TYPE_HAS_UPCOMING: 'BOOKING_TYPE_HAS_UPCOMING',
+  /** The platform operator has not set up a Google OAuth client (or turned it off): a workspace cannot connect Google Calendar. */
+  APPT_CALENDAR_NOT_CONFIGURED: 'APPT_CALENDAR_NOT_CONFIGURED',
+  /** No Google Calendar is connected (or it needs reconnecting): there is nothing to list, pick or write to. */
+  APPT_CALENDAR_NOT_CONNECTED: 'APPT_CALENDAR_NOT_CONNECTED',
+  /** Google did not answer or refused the request (details are logged, not returned). */
+  APPT_CALENDAR_PROVIDER_FAILED: 'APPT_CALENDAR_PROVIDER_FAILED',
+
+  // catalog and products (TW-CAT)
+  /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */
+  CAT_NOT_CONNECTED: 'CAT_NOT_CONNECTED',
+  /** Meta refused the catalog id or token while connecting; the problem carries Meta's code and a hint. */
+  CAT_META_REJECTED: 'CAT_META_REJECTED',
+  CAT_NO_WABA: 'CAT_NO_WABA',
+  CAT_WABA_TOKEN_MISSING: 'CAT_WABA_TOKEN_MISSING',
+  CAT_NO_CATALOG_LINKED: 'CAT_NO_CATALOG_LINKED',
+  CAT_NO_RECIPIENTS: 'CAT_NO_RECIPIENTS',
+  CAT_TOO_MANY_RECIPIENTS: 'CAT_TOO_MANY_RECIPIENTS',
+  CAT_NO_PRODUCTS: 'CAT_NO_PRODUCTS',
+  CAT_NO_SENDER: 'CAT_NO_SENDER',
+  CAT_SEND_FAILED: 'CAT_SEND_FAILED',
+  CAT_COLLECTION_PRODUCTS_INVALID: 'CAT_COLLECTION_PRODUCTS_INVALID',
+  CAT_PROVIDER_FAILED: 'CAT_PROVIDER_FAILED',
+  /** The catalog has no phone number id: commerce settings and Meta sends need one (TW-CAT-005, 034). */
+  CAT_NO_PHONE_NUMBER: 'CAT_NO_PHONE_NUMBER',
+  /** A catalog link without a Meta catalog sends the shop link, and the workspace has no shop (TW-CAT-015). */
+  CAT_NO_SHOP: 'CAT_NO_SHOP',
+
+  // storefront builder and public shop (TW-STORE)
+  STORE_SLUG_TAKEN: 'STORE_SLUG_TAKEN',
+  STORE_NO_SHOP: 'STORE_NO_SHOP',
+  STORE_NOT_AVAILABLE: 'STORE_NOT_AVAILABLE',
+  STORE_ITEMS_UNAVAILABLE: 'STORE_ITEMS_UNAVAILABLE',
+  STORE_COUPON_INVALID: 'STORE_COUPON_INVALID',
+  STORE_DEVICE_INVALID: 'STORE_DEVICE_INVALID',
+  STORE_RESET_NOT_CONFIRMED: 'STORE_RESET_NOT_CONFIRMED',
+  STORE_DOMAIN_NOT_SET: 'STORE_DOMAIN_NOT_SET',
+  STORE_WEBHOOK_REJECTED: 'STORE_WEBHOOK_REJECTED',
+  /** A shop is saved with no connected WhatsApp number in the workspace ("Connect WhatsApp first", TW-STORE-004). */
+  STORE_NO_SENDER: 'STORE_NO_SENDER',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

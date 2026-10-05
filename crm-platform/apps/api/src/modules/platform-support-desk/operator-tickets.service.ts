@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import {
-  ERROR_CODES,
   type AssignTicketRequest,
   type OperatorReplyRequest,
   type OperatorTicketDetail,
@@ -11,23 +10,17 @@ import {
   type SetTicketPriorityRequest,
   type SetTicketStatusRequest,
   type SuppTicketPriority,
-  type SuppTicketReason,
   type SuppTicketStatus,
   type TicketAssigneesResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { HttpStatus } from '@nestjs/common';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage, decodeCursor } from '../../common/pagination/cursor';
-import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { SupportMailer } from './support-mailer.service';
+import { SlaService } from './sla.service';
 import { SupportStore } from './support-store';
-import { escapeLike, resolvedAtAfterStatus, staffReplyEffect } from './ticket-rules';
-
-const MODULE_KEY = 'support_tickets';
-// A literal list, not a bound array: drizzle expands an array parameter into a row, which `= ANY` cannot take.
-const ASSIGNABLE_ROLE_SQL = sql`'super_admin', 'support'`;
+import { ASSIGNABLE_ROLE_SQL, TicketActions } from './ticket-actions.service';
+import { escapeLike } from './ticket-rules';
 
 interface ListRow {
   id: number;
@@ -45,26 +38,6 @@ interface ListRow {
   op_email: string | null;
 }
 
-interface TicketRow {
-  org_id: number;
-  id: number;
-  uuid: string;
-  ticket_number: string;
-  subject: string;
-  message: string;
-  reason: SuppTicketReason;
-  name: string;
-  email: string;
-  status: SuppTicketStatus;
-  priority: SuppTicketPriority;
-  assigned_agent_id: number | null;
-  row_version: number;
-  created_at: Date;
-  first_response_at: Date | null;
-  last_reply_at: Date | null;
-  resolved_at: Date | null;
-}
-
 const iso = (d: Date | string | null): string | null => (d ? new Date(d).toISOString() : null);
 
 /**
@@ -79,8 +52,8 @@ const iso = (d: Date | string | null): string | null => (d ? new Date(d).toISOSt
 export class OperatorTicketsService {
   constructor(
     private readonly store: SupportStore,
-    private readonly outbox: OutboxService,
-    private readonly mailer: SupportMailer,
+    private readonly actions: TicketActions,
+    private readonly sla: SlaService,
   ) {}
 
   private operatorId(): number {
@@ -156,8 +129,9 @@ export class OperatorTicketsService {
   async assignees(): Promise<TicketAssigneesResponse> {
     return this.store.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT uuid AS id, full_name AS name, email::text AS email FROM platform_operators
-        WHERE status = 'active' AND role IN (${ASSIGNABLE_ROLE_SQL}) ORDER BY full_name
+        SELECT o.uuid AS id, o.full_name AS name, o.email::text AS email
+        FROM platform_operators o JOIN support_agent_roster r ON r.operator_id = o.id
+        WHERE o.status = 'active' AND r.is_active AND o.role IN (${ASSIGNABLE_ROLE_SQL}) ORDER BY o.full_name
       `);
       return { data: res.rows as unknown as TicketAssigneesResponse['data'] };
     });
@@ -168,7 +142,7 @@ export class OperatorTicketsService {
   }
 
   private async detailIn(tx: Tx, uuid: string): Promise<OperatorTicketDetail> {
-    const t = await this.load(tx, uuid, false);
+    const t = await this.actions.load(tx, uuid, false);
     const org = await tx.execute(
       sql`SELECT uuid, name, slug FROM organizations WHERE id = ${t.org_id}`,
     );
@@ -202,6 +176,7 @@ export class OperatorTicketsService {
       firstResponseAt: iso(t.first_response_at),
       lastReplyAt: iso(t.last_reply_at),
       resolvedAt: iso(t.resolved_at),
+      sla: await this.sla.snapshotIn(tx, t),
       messages: (
         msgs.rows as unknown as Array<{
           uuid: string;
@@ -224,111 +199,28 @@ export class OperatorTicketsService {
     };
   }
 
-  private async load(tx: Tx, uuid: string, forUpdate: boolean): Promise<TicketRow> {
-    const res = await tx.execute(sql`
-      SELECT org_id, id, uuid, ticket_number, subject, message, reason, name, email, status, priority,
-             assigned_agent_id, row_version, created_at, first_response_at, last_reply_at, resolved_at
-      FROM support_tickets WHERE uuid = ${uuid} LIMIT 1 ${forUpdate ? sql`FOR UPDATE` : sql``}
-    `);
-    const row = res.rows[0] as unknown as TicketRow | undefined;
-    if (!row) throw AppError.notFound('Ticket', uuid);
-    return row;
-  }
-
   // --- writes ---------------------------------------------------------------------------------------------------------------------
-
-  /** Audit row in the ticket's own organization, actor = the operator (AuditService is bound to the request's tenant). */
-  private async audit(
-    tx: Tx,
-    t: TicketRow,
-    action: 'insert' | 'update',
-    delta?: Record<string, { old: unknown; new: unknown }>,
-  ) {
-    const ctx = RequestContextStore.require();
-    await tx.execute(sql`
-      INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, request_id)
-      VALUES (${t.org_id}, ${ctx.actorId}, 'platform_operator', ${MODULE_KEY}, ${t.id}, ${action},
-              ${delta ? JSON.stringify(delta) : null}::jsonb, ${ctx.requestId})
-    `);
-  }
-
-  private emit(tx: Tx, t: TicketRow, eventType: string, payload: Record<string, unknown>) {
-    return this.outbox.emit(tx, {
-      orgId: t.org_id,
-      aggregateModule: MODULE_KEY,
-      aggregateId: t.id,
-      eventType,
-      payload: { ticketId: t.uuid, ticketNumber: t.ticket_number, ...payload },
-    });
-  }
-
-  /** Locks the ticket and refuses a stale `rowVersion`. */
-  private async lockAt(tx: Tx, uuid: string, rowVersion: number): Promise<TicketRow> {
-    const t = await this.load(tx, uuid, true);
-    if (t.row_version !== rowVersion) throw AppError.rowVersionConflict('Ticket');
-    return t;
-  }
 
   async setStatus(uuid: string, input: SetTicketStatusRequest): Promise<OperatorTicketDetail> {
     return this.store.tx(async (tx) => {
-      const t = await this.lockAt(tx, uuid, input.rowVersion);
-      const resolvedAt = resolvedAtAfterStatus(
-        input.status,
-        t.resolved_at ? new Date(t.resolved_at) : null,
-        new Date(),
-      );
-      await tx.execute(sql`
-        UPDATE support_tickets SET status = ${input.status}, resolved_at = ${resolvedAt}
-        WHERE org_id = ${t.org_id} AND id = ${t.id}
-      `);
-      await this.audit(tx, t, 'update', { status: { old: t.status, new: input.status } });
-      await this.emit(tx, t, 'support.ticket.status_changed', { from: t.status, to: input.status });
+      const t = await this.actions.lockAt(tx, uuid, input.rowVersion);
+      await this.actions.statusIn(tx, t, input.status);
       return this.detailIn(tx, uuid);
     });
   }
 
   async setPriority(uuid: string, input: SetTicketPriorityRequest): Promise<OperatorTicketDetail> {
     return this.store.tx(async (tx) => {
-      const t = await this.lockAt(tx, uuid, input.rowVersion);
-      await tx.execute(sql`
-        UPDATE support_tickets SET priority = ${input.priority} WHERE org_id = ${t.org_id} AND id = ${t.id}
-      `);
-      await this.audit(tx, t, 'update', { priority: { old: t.priority, new: input.priority } });
-      await this.emit(tx, t, 'support.ticket.priority_changed', {
-        from: t.priority,
-        to: input.priority,
-      });
+      const t = await this.actions.lockAt(tx, uuid, input.rowVersion);
+      await this.actions.priorityIn(tx, t, input.priority);
       return this.detailIn(tx, uuid);
     });
   }
 
   async assign(uuid: string, input: AssignTicketRequest): Promise<OperatorTicketDetail> {
     return this.store.tx(async (tx) => {
-      const t = await this.lockAt(tx, uuid, input.rowVersion);
-      let agentId: number | null = null;
-      if (input.agentId) {
-        // DEVIATION from Reference (any existing user id was accepted): only an active operator who can work tickets.
-        const res = await tx.execute(sql`
-          SELECT id FROM platform_operators
-          WHERE uuid = ${input.agentId} AND status = 'active' AND role IN (${ASSIGNABLE_ROLE_SQL})
-        `);
-        const row = res.rows[0] as unknown as { id: number } | undefined;
-        if (!row) {
-          throw new AppError(
-            ERROR_CODES.VALIDATION_FAILED,
-            'That operator cannot be assigned tickets.',
-            HttpStatus.UNPROCESSABLE_ENTITY,
-          );
-        }
-        agentId = row.id;
-      }
-      await tx.execute(sql`
-        UPDATE support_tickets SET assigned_agent_id = ${agentId} WHERE org_id = ${t.org_id} AND id = ${t.id}
-      `);
-      await this.audit(tx, t, 'update', {
-        assignedAgent: { old: t.assigned_agent_id ? 'assigned' : null, new: input.agentId },
-      });
-      await this.emit(tx, t, 'support.ticket.assigned', { agentId: input.agentId });
+      const t = await this.actions.lockAt(tx, uuid, input.rowVersion);
+      await this.actions.assignIn(tx, t, input.agentId);
       return this.detailIn(tx, uuid);
     });
   }
@@ -337,55 +229,11 @@ export class OperatorTicketsService {
   async reply(uuid: string, input: OperatorReplyRequest): Promise<OperatorTicketDetail> {
     const operatorId = this.operatorId();
     const saved = await this.store.tx(async (tx) => {
-      const t = await this.load(tx, uuid, true);
-      const effect = staffReplyEffect(
-        { status: t.status, firstResponseAt: t.first_response_at },
-        input.isInternalNote,
-      );
-      const ins = await tx.execute(sql`
-        INSERT INTO support_messages (org_id, ticket_id, author_operator_id, author_role, body, is_internal_note)
-        VALUES (${t.org_id}, ${t.id}, ${operatorId}, 'admin', ${input.body}, ${input.isInternalNote})
-        RETURNING id
-      `);
-      if (effect.touchLastReply) {
-        await tx.execute(sql`
-          UPDATE support_tickets
-          SET last_reply_at = now(),
-              first_response_at = CASE WHEN ${effect.stampFirstResponse} THEN now() ELSE first_response_at END,
-              status = ${effect.status ?? t.status}
-          WHERE org_id = ${t.org_id} AND id = ${t.id}
-        `);
-      }
-      await this.audit(tx, t, 'update', {
-        reply: { old: null, new: input.isInternalNote ? 'internal_note' : 'reply' },
-      });
-      const messageId = (ins.rows[0] as unknown as { id: number }).id;
-      await this.emit(
-        tx,
-        t,
-        input.isInternalNote ? 'support.ticket.note_added' : 'support.ticket.replied',
-        { messageId },
-      );
-      return { t, messageId, status: effect.status ?? t.status };
+      const t = await this.actions.load(tx, uuid, true);
+      const r = await this.actions.replyIn(tx, t, operatorId, input.body, input.isInternalNote);
+      return { t, ...r };
     });
-
-    if (!input.isInternalNote) {
-      const result = await this.mailer.sendReply({
-        to: saved.t.email,
-        customerName: saved.t.name,
-        ticketNumber: saved.t.ticket_number,
-        ticketUuid: saved.t.uuid,
-        subject: saved.t.subject,
-        status: saved.status,
-        body: input.body,
-      });
-      await this.store.tx((tx) =>
-        tx.execute(sql`
-          UPDATE support_messages SET email_status = ${result}
-          WHERE org_id = ${saved.t.org_id} AND id = ${saved.messageId}
-        `),
-      );
-    }
+    if (!input.isInternalNote) await this.actions.deliverReply(saved.t, saved, input.body);
     return this.store.tx((tx) => this.detailIn(tx, uuid));
   }
 }

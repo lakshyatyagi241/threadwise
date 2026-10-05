@@ -223,7 +223,12 @@ export class PaymentsRepository {
     return r ? Number(r.id) : undefined;
   }
 
-  async gatewayPaymentExists(tx: Tx, orgId: number, source: string, gatewayPaymentId: string): Promise<boolean> {
+  async gatewayPaymentExists(
+    tx: Tx,
+    orgId: number,
+    source: string,
+    gatewayPaymentId: string,
+  ): Promise<boolean> {
     const res = await tx.execute(
       sql`SELECT 1 FROM payments WHERE org_id = ${orgId} AND source = ${source} AND gateway_payment_id = ${gatewayPaymentId} LIMIT 1`,
     );
@@ -232,9 +237,7 @@ export class PaymentsRepository {
 
   /** The instant a calendar day starts at in the workspace zone (a payment dated "2026-10-03" is dated at its start). */
   async dayStart(tx: Tx, date: string, tz: string): Promise<Date> {
-    const res = await tx.execute(
-      sql`SELECT ((${date}::date)::timestamp AT TIME ZONE ${tz}) AS ts`,
-    );
+    const res = await tx.execute(sql`SELECT ((${date}::date)::timestamp AT TIME ZONE ${tz}) AS ts`);
     return new Date((res.rows[0] as { ts: string }).ts);
   }
 
@@ -266,7 +269,11 @@ export class PaymentsRepository {
       FROM payments p LEFT JOIN invoices i ON i.org_id = p.org_id AND i.id = p.invoice_id
       WHERE ${sql.join(pconds, sql` AND `)} GROUP BY p.currency ORDER BY p.currency
     `);
-    const iconds: SQL[] = [sql`i.org_id = ${orgId}`, sql`i.status = 'issued'`, sql`i.payment_status <> 'paid'`];
+    const iconds: SQL[] = [
+      sql`i.org_id = ${orgId}`,
+      sql`i.status = 'issued'`,
+      sql`i.payment_status <> 'paid'`,
+    ];
     if (invoiceScope) iconds.push(invoiceScope);
     const inv = await tx.execute(sql`
       SELECT i.currency,
@@ -278,14 +285,26 @@ export class PaymentsRepository {
     const pr = pay.rows as Raw[];
     const ir = inv.rows as Raw[];
     return {
-      collected: pr.filter((r) => big(r.collected) > 0n).map((r) => ({ currency: r.currency as string, amount: big(r.collected) })),
-      refunded: pr.filter((r) => big(r.refunded) > 0n).map((r) => ({ currency: r.currency as string, amount: big(r.refunded) })),
+      collected: pr
+        .filter((r) => big(r.collected) > 0n)
+        .map((r) => ({ currency: r.currency as string, amount: big(r.collected) })),
+      refunded: pr
+        .filter((r) => big(r.refunded) > 0n)
+        .map((r) => ({ currency: r.currency as string, amount: big(r.refunded) })),
       outstanding: ir
         .filter((r) => big(r.outstanding) > 0n)
-        .map((r) => ({ currency: r.currency as string, amount: big(r.outstanding), invoices: Number(r.invoices) })),
+        .map((r) => ({
+          currency: r.currency as string,
+          amount: big(r.outstanding),
+          invoices: Number(r.invoices),
+        })),
       overdue: ir
         .filter((r) => big(r.overdue) > 0n)
-        .map((r) => ({ currency: r.currency as string, amount: big(r.overdue), invoices: Number(r.overdue_invoices) })),
+        .map((r) => ({
+          currency: r.currency as string,
+          amount: big(r.overdue),
+          invoices: Number(r.overdue_invoices),
+        })),
     };
   }
 
@@ -300,10 +319,17 @@ export class PaymentsRepository {
     scope: SQL | undefined,
     tz: string,
   ): Promise<Array<{ currency: string; bucket: AgingBucket; amount: bigint; invoices: number }>> {
-    const conds: SQL[] = [sql`i.org_id = ${orgId}`, sql`i.status = 'issued'`, sql`i.payment_status <> 'paid'`, sql`i.total_minor > i.paid_minor + i.credited_minor`];
+    const conds: SQL[] = [
+      sql`i.org_id = ${orgId}`,
+      sql`i.status = 'issued'`,
+      sql`i.payment_status <> 'paid'`,
+      sql`i.total_minor > i.paid_minor + i.credited_minor`,
+    ];
     if (scope) conds.push(scope);
     if (opts.contactUuid)
-      conds.push(sql`i.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${opts.contactUuid}::uuid)`);
+      conds.push(
+        sql`i.contact_id = (SELECT x.id FROM contacts x WHERE x.org_id = ${orgId} AND x.uuid = ${opts.contactUuid}::uuid)`,
+      );
     if (opts.currency) conds.push(sql`i.currency = ${opts.currency}`);
     const res = await tx.execute(sql`
       SELECT currency, bucket, sum(bal)::text AS amount, count(*)::int AS invoices FROM (
@@ -341,15 +367,23 @@ export class PaymentsRepository {
       oldestDue: string | null;
     }>
   > {
-    const conds: SQL[] = [sql`i.org_id = ${orgId}`, sql`i.status = 'issued'`, sql`i.payment_status <> 'paid'`, sql`i.total_minor > i.paid_minor + i.credited_minor`];
+    const conds: SQL[] = [
+      sql`i.org_id = ${orgId}`,
+      sql`i.status = 'issued'`,
+      sql`i.payment_status <> 'paid'`,
+      sql`i.total_minor > i.paid_minor + i.credited_minor`,
+    ];
     if (scope) conds.push(scope);
     if (query.currency) conds.push(sql`i.currency = ${query.currency}`);
     if (query.q) conds.push(sql`c.name ILIKE ${`%${escapeLike(query.q)}%`}`);
-    const having = query.onlyOverdue ? sql`HAVING count(*) FILTER (WHERE i.due_date < ${todayExpr(tz)}) > 0` : sql``;
+    const having = query.onlyOverdue
+      ? sql`HAVING count(*) FILTER (WHERE i.due_date < ${todayExpr(tz)}) > 0`
+      : sql``;
     let outer = sql``;
     if (query.cursor) {
       const [cur, amt, cid] = Buffer.from(query.cursor, 'base64url').toString('utf8').split('|');
-      if (cur && amt && cid) outer = sql`WHERE (g.currency, -g.outstanding, coalesce(g.contact_id, 0)) > (${cur}, ${`-${amt}`}::bigint, ${cid}::bigint)`;
+      if (cur && amt && cid)
+        outer = sql`WHERE (g.currency, -g.outstanding, coalesce(g.contact_id, 0)) > (${cur}, ${`-${amt}`}::bigint, ${cid}::bigint)`;
     }
     const res = await tx.execute(sql`
       SELECT * FROM (

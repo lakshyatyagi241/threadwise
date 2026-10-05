@@ -4,7 +4,9 @@ import { ERROR_CODES, type LoginResponse, type WorkspaceListResponse } from '@cr
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { SecurityPolicyService } from '../platform/security-policy.service';
 import { TenantDirectory } from '../platform/tenant-directory';
+import { SessionService } from '../sessions/session.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { LoginService, type ClientMeta } from './login.service';
 
@@ -15,6 +17,13 @@ import { LoginService, type ClientMeta } from './login.service';
  * means: the same email, verified in both. The current session
  * already proves control of the verified inbox, so no password is asked; but a
  * target account with MFA still produces a step-up challenge.
+ *
+ * Reference keeps one session and moves `current_workspace_id`. Here a session belongs to one
+ * organization, so a switch opens a session in the target that keeps the "keep me signed in" choice
+ * of the one it replaces, and ends the old one: a person signed in to two workspaces at once because
+ * they switched would be surprising, and a stolen old token would stay good for its whole lifetime.
+ * (When the target asks for a second factor the old session is left alone until the person is in:
+ * abandoning the challenge must not sign them out of where they were.)
  */
 @Injectable()
 export class WorkspaceSwitchService {
@@ -23,6 +32,8 @@ export class WorkspaceSwitchService {
     private readonly tenants: TenantDirectory,
     private readonly login: LoginService,
     private readonly audit: AuthAuditService,
+    private readonly sessions: SessionService,
+    private readonly policy: SecurityPolicyService,
   ) {}
 
   private async currentIdentity(): Promise<{
@@ -54,6 +65,18 @@ export class WorkspaceSwitchService {
       orgSlug: row.slug,
       verified: Boolean(row.email_verified_at),
     };
+  }
+
+  /** Whether the session making this request was opened with "keep me signed in". */
+  private async currentRemember(orgId: number, sessionUuid: string | undefined): Promise<boolean> {
+    if (!sessionUuid) return false;
+    const res = await this.db.txAs({ orgId }, async (tx) =>
+      tx.execute(sql`
+        SELECT remember FROM auth_sessions
+        WHERE org_id = ${orgId} AND uuid = ${sessionUuid}::uuid
+      `),
+    );
+    return Boolean((res.rows[0] as { remember?: boolean } | undefined)?.remember);
   }
 
   async list(): Promise<WorkspaceListResponse> {
@@ -107,21 +130,29 @@ export class WorkspaceSwitchService {
       payload: { fromOrg: me.orgSlug, toOrg: target.slug },
     });
 
+    const ctx = RequestContextStore.require();
+    // The administrator's switch can have been turned off since the session began.
+    const remember =
+      (await this.currentRemember(me.orgId, ctx.sessionId)) &&
+      (await this.policy.policy()).rememberMeEnabled;
+
     if (user.mfa_enabled) {
       return this.login.issueMfaChallenge({
         orgId: target.id,
         userId: user.id,
-        remember: false,
+        remember,
         method: 'switch',
       });
     }
-    return this.login.completeLogin({
+    const opened = await this.login.completeLogin({
       org: target,
       user: { id: user.id, uuid: user.uuid, email: user.email, fullName: user.full_name },
-      remember: false,
+      remember,
       mfaVerified: false,
       method: 'switch',
       meta,
     });
+    if (ctx.sessionId) await this.sessions.revoke(me.orgId, ctx.sessionId, 'switch');
+    return opened;
   }
 }

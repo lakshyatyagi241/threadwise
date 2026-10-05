@@ -24,47 +24,47 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 
 ## Feature index
 
-| Id          | Feature                                                                                     | Status    | Priority | Effort | Depends on                      |
-| ----------- | ------------------------------------------------------------------------------------------- | --------- | -------- | ------ | ------------------------------- |
-| TW-PROP-001 | Plan gate, absent role gate and workspace scoping for `/proposals` and `/estimates`         | implemented | P0     | S      | plans-subscriptions-trials      |
-| TW-PROP-002 | Unified SalesDoc data model (doc_type split, statuses, minor-unit money)                    | implemented | P0     | M      | TW-PROP-001                     |
-| TW-PROP-003 | Proposals list page (columns, ordering, pagination, open-value total)                       | implemented | P0     | M      | TW-PROP-002                     |
-| TW-PROP-004 | Lazy expiry of past-due drafts and sent documents                                           | partial   | P1       | S      | TW-PROP-003                     |
-| TW-PROP-005 | Create a proposal (modal, validation, side effects)                                         | implemented | P0     | M      | TW-PROP-002, TW-PROP-006, TW-PROP-008 |
-| TW-PROP-006 | Money math: minor units, rounding, whole-document tax, zero-decimal currencies              | implemented | P0     | M      | TW-PROP-002                     |
-| TW-PROP-007 | Modal line-item editor with live totals preview                                             | implemented | P1       | S      | TW-PROP-005                     |
-| TW-PROP-008 | Sequential numbering (`PRO-0001`)                                                           | implemented | P0     | S      | TW-PROP-002                     |
-| TW-PROP-009 | Public token and share link                                                                 | implemented | P0     | S      | TW-PROP-002                     |
-| TW-PROP-010 | Staff status change (mark sent, accept, reject)                                             | implemented | P0     | S      | TW-PROP-003                     |
-| TW-PROP-011 | Send the public link over WhatsApp                                                          | partial   | P1       | M      | TW-PROP-009, whatsapp domains   |
-| TW-PROP-012 | Convert to invoice                                                                          | implemented | P0     | M      | TW-PROP-010, invoicing          |
-| TW-PROP-013 | Delete a document                                                                           | implemented | P1       | S      | TW-PROP-003                     |
-| TW-PROP-014 | Public share page (read-only quote view)                                                    | implemented | P0     | M      | TW-PROP-009                     |
-| TW-PROP-015 | Public accept                                                                               | implemented | P0     | S      | TW-PROP-014                     |
-| TW-PROP-016 | Public decline                                                                              | implemented | P0     | S      | TW-PROP-014                     |
-| TW-PROP-017 | "Quote decided" notification to owner and creator                                           | implemented | P1     | S      | TW-PROP-015, TW-NOTIF-012       |
-| TW-PROP-018 | Public route hardening: throttle, CSRF, enumeration, caching, indexing                      | partial   | P1       | S      | TW-PROP-014                     |
-| TW-PROP-019 | AI copilot tool `create_quote`                                                              | implemented | P2     | M      | TW-PROP-005, ai-agents          |
-| TW-PROP-020 | AI copilot tool `list_quotes`                                                               | implemented | P2     | S      | TW-PROP-003, ai-agents          |
-| TW-PROP-021 | AI copilot tool `send_quote`                                                                | implemented | P2     | S      | TW-PROP-011, ai-agents          |
-| TW-PROP-022 | Calendar integration (valid-until events)                                                   | implemented | P2     | S      | TW-PROP-002, calendar           |
-| TW-PROP-023 | Navigation entries, how-to panel, CRM guide hub and i18n                                    | implemented | P2     | S      | TW-PROP-003                     |
-| TW-PROP-024 | Buyer PII and notes encrypted at rest                                                       | implemented | P1     | S      | TW-PROP-002                     |
-| TW-PROP-025 | Links to company, contact, deal and project                                                 | partial   | P1       | M      | TW-PROP-002, contacts, deals    |
-| TW-PROP-026 | Empty, error, flash and confirm states                                                      | implemented | P1     | S      | TW-PROP-003                     |
-| TW-PROP-027 | Edit a document after creation                                                              | docs-only | P1       | M      | TW-PROP-005                     |
-| TW-PROP-028 | Discount (document or line)                                                                 | dead-code | P1       | M      | TW-PROP-006                     |
-| TW-PROP-029 | Duplicate / revise a sent document                                                          | docs-only | P2       | S      | TW-PROP-005                     |
-| TW-PROP-030 | PDF, email, e-signature, templates, reminders, "viewed" tracking, audit trail               | docs-only | P1       | XL     | all above                       |
-| TW-EST-001  | Estimates list page and route group (`/estimates`)                                          | implemented | P0     | S      | TW-PROP-003                     |
-| TW-EST-002  | Create an estimate                                                                          | implemented | P0     | S      | TW-PROP-005                     |
-| TW-EST-003  | Independent `EST-` number sequence                                                          | implemented | P0     | S      | TW-PROP-008                     |
-| TW-EST-004  | Estimate status actions (mark sent, accept)                                                 | implemented | P0     | S      | TW-PROP-010                     |
-| TW-EST-005  | Send an estimate over WhatsApp                                                              | partial   | P1       | S      | TW-PROP-011                     |
-| TW-EST-006  | Estimate to invoice conversion                                                              | implemented | P0     | M      | TW-PROP-012                     |
-| TW-EST-007  | Delete an estimate                                                                          | implemented | P1       | S      | TW-PROP-013                     |
-| TW-EST-008  | Public page and decision flow for an estimate                                               | implemented | P0     | S      | TW-PROP-014..016                |
-| TW-EST-009  | Estimate-specific copilot behaviour (`doc_type: estimate`, convert claim)                   | partial   | P2     | S      | TW-PROP-019..021                |
+| Id          | Feature                                                                             | Status      | Priority | Effort | Depends on                            |
+| ----------- | ----------------------------------------------------------------------------------- | ----------- | -------- | ------ | ------------------------------------- |
+| TW-PROP-001 | Plan gate, absent role gate and workspace scoping for `/proposals` and `/estimates` | implemented | P0       | S      | plans-subscriptions-trials            |
+| TW-PROP-002 | Unified SalesDoc data model (doc_type split, statuses, minor-unit money)            | implemented | P0       | M      | TW-PROP-001                           |
+| TW-PROP-003 | Proposals list page (columns, ordering, pagination, open-value total)               | implemented | P0       | M      | TW-PROP-002                           |
+| TW-PROP-004 | Lazy expiry of past-due drafts and sent documents                                   | partial     | P1       | S      | TW-PROP-003                           |
+| TW-PROP-005 | Create a proposal (modal, validation, side effects)                                 | implemented | P0       | M      | TW-PROP-002, TW-PROP-006, TW-PROP-008 |
+| TW-PROP-006 | Money math: minor units, rounding, whole-document tax, zero-decimal currencies      | implemented | P0       | M      | TW-PROP-002                           |
+| TW-PROP-007 | Modal line-item editor with live totals preview                                     | implemented | P1       | S      | TW-PROP-005                           |
+| TW-PROP-008 | Sequential numbering (`PRO-0001`)                                                   | implemented | P0       | S      | TW-PROP-002                           |
+| TW-PROP-009 | Public token and share link                                                         | implemented | P0       | S      | TW-PROP-002                           |
+| TW-PROP-010 | Staff status change (mark sent, accept, reject)                                     | implemented | P0       | S      | TW-PROP-003                           |
+| TW-PROP-011 | Send the public link over WhatsApp                                                  | partial     | P1       | M      | TW-PROP-009, whatsapp domains         |
+| TW-PROP-012 | Convert to invoice                                                                  | implemented | P0       | M      | TW-PROP-010, invoicing                |
+| TW-PROP-013 | Delete a document                                                                   | implemented | P1       | S      | TW-PROP-003                           |
+| TW-PROP-014 | Public share page (read-only quote view)                                            | implemented | P0       | M      | TW-PROP-009                           |
+| TW-PROP-015 | Public accept                                                                       | implemented | P0       | S      | TW-PROP-014                           |
+| TW-PROP-016 | Public decline                                                                      | implemented | P0       | S      | TW-PROP-014                           |
+| TW-PROP-017 | "Quote decided" notification to owner and creator                                   | implemented | P1       | S      | TW-PROP-015, TW-NOTIF-012             |
+| TW-PROP-018 | Public route hardening: throttle, CSRF, enumeration, caching, indexing              | partial     | P1       | S      | TW-PROP-014                           |
+| TW-PROP-019 | AI copilot tool `create_quote`                                                      | implemented | P2       | M      | TW-PROP-005, ai-agents                |
+| TW-PROP-020 | AI copilot tool `list_quotes`                                                       | implemented | P2       | S      | TW-PROP-003, ai-agents                |
+| TW-PROP-021 | AI copilot tool `send_quote`                                                        | implemented | P2       | S      | TW-PROP-011, ai-agents                |
+| TW-PROP-022 | Calendar integration (valid-until events)                                           | implemented | P2       | S      | TW-PROP-002, calendar                 |
+| TW-PROP-023 | Navigation entries, how-to panel, CRM guide hub and i18n                            | implemented | P2       | S      | TW-PROP-003                           |
+| TW-PROP-024 | Buyer PII and notes encrypted at rest                                               | implemented | P1       | S      | TW-PROP-002                           |
+| TW-PROP-025 | Links to company, contact, deal and project                                         | partial     | P1       | M      | TW-PROP-002, contacts, deals          |
+| TW-PROP-026 | Empty, error, flash and confirm states                                              | implemented | P1       | S      | TW-PROP-003                           |
+| TW-PROP-027 | Edit a document after creation                                                      | docs-only   | P1       | M      | TW-PROP-005                           |
+| TW-PROP-028 | Discount (document or line)                                                         | dead-code   | P1       | M      | TW-PROP-006                           |
+| TW-PROP-029 | Duplicate / revise a sent document                                                  | docs-only   | P2       | S      | TW-PROP-005                           |
+| TW-PROP-030 | PDF, email, e-signature, templates, reminders, "viewed" tracking, audit trail       | docs-only   | P1       | XL     | all above                             |
+| TW-EST-001  | Estimates list page and route group (`/estimates`)                                  | implemented | P0       | S      | TW-PROP-003                           |
+| TW-EST-002  | Create an estimate                                                                  | implemented | P0       | S      | TW-PROP-005                           |
+| TW-EST-003  | Independent `EST-` number sequence                                                  | implemented | P0       | S      | TW-PROP-008                           |
+| TW-EST-004  | Estimate status actions (mark sent, accept)                                         | implemented | P0       | S      | TW-PROP-010                           |
+| TW-EST-005  | Send an estimate over WhatsApp                                                      | partial     | P1       | S      | TW-PROP-011                           |
+| TW-EST-006  | Estimate to invoice conversion                                                      | implemented | P0       | M      | TW-PROP-012                           |
+| TW-EST-007  | Delete an estimate                                                                  | implemented | P1       | S      | TW-PROP-013                           |
+| TW-EST-008  | Public page and decision flow for an estimate                                       | implemented | P0       | S      | TW-PROP-014..016                      |
+| TW-EST-009  | Estimate-specific copilot behaviour (`doc_type: estimate`, convert claim)           | partial     | P2       | S      | TW-PROP-019..021                      |
 
 ## Features
 
@@ -79,8 +79,8 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** on a plan without the flag, a GET still renders the list (with its data) and a paywall sheet (`<x-plan-paywall>`) slides over it; the page is not blocked.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Notes |
-| --- | --- | --- | --- | --- |
+| Method + URI                                 | Route name                             | Controller@action       | Middleware                                  | Notes                         |
+| -------------------------------------------- | -------------------------------------- | ----------------------- | ------------------------------------------- | ----------------------------- |
 | all 6 `proposals*` and 6 `estimates*` routes | `user.proposals.*`, `user.estimates.*` | `SalesDocsController@*` | `web`, `auth`, `plan:access_sales_pipeline` | inside `Route::name('user.')` |
 
 - **Data:** reads `packages` feature flag through `PlanLimitGuard::hasFeature($workspace, 'access_sales_pipeline')`; scope is `sales_docs.workspace_id = users.current_workspace_id` (cast to int, 0 when none).
@@ -139,7 +139,7 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **Summary:** `/proposals` lists the workspace's proposals, 30 per page, grouped by a fixed status order, with an "Open value" total and a "+ New proposal" button.
 - **Actors & access:** TW-PROP-001.
 - **UX & screens:** `resources/views/user/salesdocs/index.blade.php` (shared with estimates), layout `x-layouts.user`, nav key `more`, JS page key `user-salesdocs-index`.
-  - Header: eyebrow "CRM"; title "Your *proposals*"; intro "Pitch scope and price. Track sent / accepted, then convert the winner straight into an invoice."
+  - Header: eyebrow "CRM"; title "Your _proposals_"; intro "Pitch scope and price. Track sent / accepted, then convert the winner straight into an invoice."
   - Right side: "Open value" (sum of `total_minor` of status `sent` and `accepted`, formatted in the workspace currency with symbol and exponent) and a "+ New proposal" button.
   - Flash bars: green `success`, red `error`, red list of validation `$errors`.
   - A how-to panel (`x-crm.how-to`) with four steps: create, send, buyer accepts, "-> Invoice".
@@ -150,9 +150,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
   - No search, no filter, no sort control, no bulk action, no export, no status tabs.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `proposals` | `user.proposals.index` | `SalesDocsController@index` | auth, plan | `page` | HTML view (vars: docs, currency, exponent, openMinor, companies, members, me, type labels) |
+| Method + URI    | Route name             | Controller@action           | Middleware | Request | Response                                                                                   |
+| --------------- | ---------------------- | --------------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------ |
+| GET `proposals` | `user.proposals.index` | `SalesDocsController@index` | auth, plan | `page`  | HTML view (vars: docs, currency, exponent, openMinor, companies, members, me, type labels) |
 
 - **Data:** reads `sales_docs` (workspace + doc_type); `companies` (id, name; 500 latest by id desc) for the modal select; workspace members (`workspace_user` joined to users, ordered by name) are loaded and passed to the view but the view never uses them (nor `me`).
 - **Rules & edge cases:**
@@ -217,11 +217,12 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** modal `#sd-modal` (max width 2xl, scrolls at 92vh), opened by `#sd-open`, closed by the X, Cancel, a click on the backdrop or Escape. Fields: Title (text, max 255, placeholder "e.g. Website redesign - Phase 1"), Buyer name (max 255), Buyer email (plain text input, max 255, no type=email), Company (select, "- none -" plus 500 newest), Valid until (date), Line items (rows of description, qty, unit price, remove x; "+ Add row"; starts with one row), Tax rate % (number 0-100 step 0.01, default 0), live Subtotal / Tax / Total readout, Notes (textarea, max 5000), Cancel and Create. **There is no buyer phone field, no owner field and no discount field** although the server accepts `buyer_phone` and `owner_id`.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
+| Method + URI     | Route name             | Controller@action           | Middleware | Request   | Response                                                                                                                             |
+| ---------------- | ---------------------- | --------------------------- | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | POST `proposals` | `user.proposals.store` | `SalesDocsController@store` | auth, plan | see below | 302 back + flash `success` "Proposal created."; validation failure 302 back with `errors` and old input flashed (modal not reopened) |
 
-  Request fields and validation (Laravel rules): `title` nullable string max 255; `buyer_name` nullable string max 255; `buyer_email` nullable string max 255 (not validated as an email); `buyer_phone` nullable string max 60; `company_id` nullable integer; `owner_id` nullable integer; `valid_until` nullable date; `tax_rate` nullable numeric 0..100; `notes` nullable string max 5000; `items` required array min 1; `items.*.description` required string max 255; `items.*.qty` required numeric min 0; `items.*.unit_price` required numeric min 0. `discount`, `contact_id`, `deal_id` are not accepted.
+Request fields and validation (Laravel rules): `title` nullable string max 255; `buyer_name` nullable string max 255; `buyer_email` nullable string max 255 (not validated as an email); `buyer_phone` nullable string max 60; `company_id` nullable integer; `owner_id` nullable integer; `valid_until` nullable date; `tax_rate` nullable numeric 0..100; `notes` nullable string max 5000; `items` required array min 1; `items.*.description` required string max 255; `items.*.qty` required numeric min 0; `items.*.unit_price` required numeric min 0. `discount`, `contact_id`, `deal_id` are not accepted.
+
 - **Data:** inserts one `sales_docs` row: `workspace_id` (current), `doc_type`, `number`, `seq`, `status=draft`, `title`, `company_id`, `owner_id` (request value, else the creator), `created_by`, buyer fields, `currency` and `currency_exponent` (workspace currency now), the four money fields, `tax_rate_bp`, `items_json`, `notes`, `valid_until`, `public_token`.
 - **Rules & edge cases:**
   1. `company_id` that is not in the current workspace is silently set to null (no error).
@@ -370,9 +371,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** list buttons "Mark sent" (shown for draft) and "Accept" (shown for draft, sent, expired). There is no UI for `rejected`.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| PATCH `proposals/{id}` (id numeric) | `user.proposals.update` | `SalesDocsController@update` | auth, plan | `status` in `sent,accepted,rejected` | 302 back + flash `success` "Proposal marked sent|accepted|rejected." or `error` "Unknown status." |
+| Method + URI                        | Route name              | Controller@action            | Middleware | Request                              | Response                                         |
+| ----------------------------------- | ----------------------- | ---------------------------- | ---------- | ------------------------------------ | ------------------------------------------------ |
+| PATCH `proposals/{id}` (id numeric) | `user.proposals.update` | `SalesDocsController@update` | auth, plan | `status` in `sent,accepted,rejected` | 302 back + flash `success` "Proposal marked sent | accepted | rejected." or `error` "Unknown status." |
 
 - **Data:** writes `status`; `sent_at = now()` when the new status is `sent` and `sent_at` is empty; `decided_at = now()` when `accepted` or `rejected`.
 - **Rules & edge cases:**
@@ -405,9 +406,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** row button "Send" with confirm "Send this on WhatsApp to the buyer?"; success flash "Proposal sent on WhatsApp to <digits>."; errors as flashes.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `proposals/{id}/send` | `user.proposals.send` | `SalesDocsController@sendWhatsApp` | auth, plan | none | 302 back + flash |
+| Method + URI               | Route name            | Controller@action                  | Middleware | Request | Response         |
+| -------------------------- | --------------------- | ---------------------------------- | ---------- | ------- | ---------------- |
+| POST `proposals/{id}/send` | `user.proposals.send` | `SalesDocsController@sendWhatsApp` | auth, plan | none    | 302 back + flash |
 
 - **Data:** reads the document; inserts one `messages` row (`user_id`, `workspace_id`, `direction=out`, `to_number` digits, `body`, `status=pending`, then `sent` or `failed`, `failure_reason` truncated to 191, `sent_at`); updates the document (`status` draft to sent, `sent_at` first time).
 - **Rules & edge cases:**
@@ -441,9 +442,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** button "-> Invoice" for status sent or accepted with no `invoice_id`; confirm "Convert to a real invoice?"; on success redirect to `user.invoices.index` with flash "Proposal converted to invoice <invoice number>." (falls back to `#<id>`).
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `proposals/{id}/convert` | `user.proposals.convert` | `SalesDocsController@convert` | auth, plan | none | 302 to invoices index + flash; or back + `error` |
+| Method + URI                  | Route name               | Controller@action             | Middleware | Request | Response                                         |
+| ----------------------------- | ------------------------ | ----------------------------- | ---------- | ------- | ------------------------------------------------ |
+| POST `proposals/{id}/convert` | `user.proposals.convert` | `SalesDocsController@convert` | auth, plan | none    | 302 to invoices index + flash; or back + `error` |
 
 - **Data:** reads the document; `InvoiceService::issue` creates `invoices` (source `manual`, doc_type `tax_invoice`, trigger `manual`, status `issued`, `issued_at` now, buyer name/email/phone, currency and exponent, subtotal/discount/shipping 0/tax/total copied, `meta_json = {from_sales_doc: id, sales_doc_number}`), one `invoice_items` row per line (description, qty, `unit_price_minor`, `line_subtotal_minor` = line total, discount 0, **tax rate 0, tax amount 0** per line), and one `invoice_tax_summaries` row (label "Tax", rate = tax_rate_bp / 100, base = subtotal, amount = tax) only when `tax_minor > 0`. The document gets `invoice_id` and `status=invoiced`.
 - **Rules & edge cases:**
@@ -478,9 +479,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** icon button (a minus glyph) with confirm "Delete?"; flash "Proposal deleted."
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| DELETE `proposals/{id}` | `user.proposals.destroy` | `SalesDocsController@destroy` | auth, plan | none | 302 back + flash success |
+| Method + URI            | Route name               | Controller@action             | Middleware | Request | Response                 |
+| ----------------------- | ------------------------ | ----------------------------- | ---------- | ------- | ------------------------ |
+| DELETE `proposals/{id}` | `user.proposals.destroy` | `SalesDocsController@destroy` | auth, plan | none    | 302 back + flash success |
 
 - **Data:** deletes the `sales_docs` row.
 - **Rules & edge cases:**
@@ -517,9 +518,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
   - Responsive: side margins shrink under 640px. No print stylesheet, no PDF button, no download.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `q/{token}` | `salesdoc.public.show` | `SalesDocsController@publicShow` | `web`, `throttle:120,1` | none | HTML; 404 for an unknown token |
+| Method + URI    | Route name             | Controller@action                | Middleware              | Request | Response                       |
+| --------------- | ---------------------- | -------------------------------- | ----------------------- | ------- | ------------------------------ |
+| GET `q/{token}` | `salesdoc.public.show` | `SalesDocsController@publicShow` | `web`, `throttle:120,1` | none    | HTML; 404 for an unknown token |
 
 - **Data:** reads the document with company (decrypts buyer name/email/phone/notes). Session flash `decided` (set by accept/decline redirect).
 - **Rules & edge cases:**
@@ -551,9 +552,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** form button on the public page; the redirect carries session flash `decided`.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `q/{token}/accept` | `salesdoc.public.accept` | `SalesDocsController@publicAccept` | `web` (CSRF applies), `throttle:120,1` | none | 302 to `q/{token}` with flash `decided=<status>`; 404 unknown token |
+| Method + URI            | Route name               | Controller@action                  | Middleware                             | Request | Response                                                            |
+| ----------------------- | ------------------------ | ---------------------------------- | -------------------------------------- | ------- | ------------------------------------------------------------------- |
+| POST `q/{token}/accept` | `salesdoc.public.accept` | `SalesDocsController@publicAccept` | `web` (CSRF applies), `throttle:120,1` | none    | 302 to `q/{token}` with flash `decided=<status>`; 404 unknown token |
 
 - **Data:** `status=accepted`, `decided_at=now()` only when the current status is `draft`, `sent` or `expired`.
 - **Rules & edge cases:**
@@ -585,9 +586,9 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **UX & screens:** Decline button with confirm "Decline this <type>?"; coral banner afterwards.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| POST `q/{token}/decline` | `salesdoc.public.decline` | `SalesDocsController@publicDecline` | `web`, `throttle:120,1` | none | 302 to `q/{token}` with flash `decided` |
+| Method + URI             | Route name                | Controller@action                   | Middleware              | Request | Response                                |
+| ------------------------ | ------------------------- | ----------------------------------- | ----------------------- | ------- | --------------------------------------- |
+| POST `q/{token}/decline` | `salesdoc.public.decline` | `SalesDocsController@publicDecline` | `web`, `throttle:120,1` | none    | 302 to `q/{token}` with flash `decided` |
 
 - **Data:** `status=rejected`, `decided_at=now()` from `draft`, `sent`, `expired`.
 - **Rules & edge cases:** all of TW-PROP-015 rules 1-7 apply symmetrically. A declined document can still be accepted by staff via the "Accept" list button? No: the button shows only for draft, sent, expired; for `rejected` there is no UI action, but `PATCH status=accepted` works. The buyer cannot undo a decline (the page says to contact the brand). No reason is collected.
@@ -962,17 +963,17 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 - **Depends on:** TW-PROP-003
 - **Summary:** The same page and behaviour as TW-PROP-003, scoped to `doc_type=estimate`. The doc type is derived from the route name (a name containing `estimates`).
 - **Actors & access:** TW-PROP-001.
-- **UX & screens:** same view. Differences: title "Your *estimates*"; intro "Quote a price before you invoice. Send, get accepted, convert to a real invoice in one click."; button "+ New estimate"; empty state "No estimates yet - create your first one."; row actions post to `user.estimates.*`; the "Open value" and ordering rules are identical.
+- **UX & screens:** same view. Differences: title "Your _estimates_"; intro "Quote a price before you invoice. Send, get accepted, convert to a real invoice in one click."; button "+ New estimate"; empty state "No estimates yet - create your first one."; row actions post to `user.estimates.*`; the "Open value" and ordering rules are identical.
 - **Endpoints:**
 
-| Method + URI | Route name | Controller@action | Middleware | Request | Response |
-| --- | --- | --- | --- | --- | --- |
-| GET `estimates` | `user.estimates.index` | `SalesDocsController@index` | auth, plan | `page` | HTML |
-| POST `estimates` | `user.estimates.store` | `@store` | auth, plan | TW-PROP-005 | 302 + "Estimate created." |
-| PATCH `estimates/{id}` | `user.estimates.update` | `@update` | auth, plan | `status` | 302 |
-| POST `estimates/{id}/convert` | `user.estimates.convert` | `@convert` | auth, plan | none | 302 to invoices |
-| POST `estimates/{id}/send` | `user.estimates.send` | `@sendWhatsApp` | auth, plan | none | 302 |
-| DELETE `estimates/{id}` | `user.estimates.destroy` | `@destroy` | auth, plan | none | 302 |
+| Method + URI                  | Route name               | Controller@action           | Middleware | Request     | Response                  |
+| ----------------------------- | ------------------------ | --------------------------- | ---------- | ----------- | ------------------------- |
+| GET `estimates`               | `user.estimates.index`   | `SalesDocsController@index` | auth, plan | `page`      | HTML                      |
+| POST `estimates`              | `user.estimates.store`   | `@store`                    | auth, plan | TW-PROP-005 | 302 + "Estimate created." |
+| PATCH `estimates/{id}`        | `user.estimates.update`  | `@update`                   | auth, plan | `status`    | 302                       |
+| POST `estimates/{id}/convert` | `user.estimates.convert` | `@convert`                  | auth, plan | none        | 302 to invoices           |
+| POST `estimates/{id}/send`    | `user.estimates.send`    | `@sendWhatsApp`             | auth, plan | none        | 302                       |
+| DELETE `estimates/{id}`       | `user.estimates.destroy` | `@destroy`                  | auth, plan | none        | 302                       |
 
 - **Data:** same table, filter `doc_type='estimate'`.
 - **Rules & edge cases:**
@@ -1170,37 +1171,37 @@ Connected domains: deals-pipelines (TW-DEAL-038/039, dormant `sales_docs.deal_id
 
 Purpose: both proposals and estimates. Read and written by TW-PROP-003..013, 015..017, 019..022, TW-EST-001..008. Row volume: tens to low thousands per workspace. No soft delete. `created_at`/`updated_at` timestamps.
 
-| Column | Type | Null | Default | Notes |
-| --- | --- | --- | --- | --- |
-| id | bigint unsigned auto | no | | PK |
-| workspace_id | bigint unsigned | no | | indexed; the tenant key |
-| doc_type | varchar(20) | no | `proposal` | `proposal` or `estimate` |
-| number | varchar(40) | yes | | `PRO-0001` / `EST-0001`, not unique |
-| seq | bigint unsigned | no | 0 | per (workspace, doc_type), `max+1`, not unique |
-| status | varchar(20) | no | `draft` | `draft, sent, accepted, rejected, expired, invoiced` (no DB enum or check) |
-| title | varchar(255) | yes | | plain text |
-| contact_id | bigint unsigned | yes | | indexed, never written |
-| company_id | bigint unsigned | yes | | indexed; written; no FK |
-| deal_id | bigint unsigned | yes | | indexed, never written |
-| buyer_name | text | yes | | encrypted cast |
-| buyer_email | text | yes | | encrypted cast; not validated as an email |
-| buyer_phone | text | yes | | encrypted cast; never captured by the UI |
-| currency | varchar(8) | no | `USD` | workspace currency at create |
-| currency_exponent | tinyint unsigned | no | 2 | 0 for the zero-decimal list |
-| subtotal_minor | bigint | no | 0 | sum of line totals |
-| discount_minor | bigint | no | 0 | always 0 |
-| tax_minor | bigint | no | 0 | |
-| total_minor | bigint | no | 0 | subtotal + tax |
-| tax_rate_bp | int unsigned | no | 0 | basis points, whole document |
-| items_json | longtext | yes | | array cast: `[{description, qty, unit_price_minor, line_total_minor}]` |
-| notes | text | yes | | encrypted cast, max 5000 on input |
-| valid_until | date | yes | | date only |
-| sent_at | timestamp | yes | | first send/mark-sent |
-| decided_at | timestamp | yes | | last accept/reject (staff or public) |
-| invoice_id | bigint unsigned | yes | | set on conversion, no FK |
-| public_token | varchar(64) | yes | | UNIQUE `sales_docs_public_token_unique` |
-| owner_id | bigint unsigned | yes | | not validated as a member |
-| created_by | bigint unsigned | yes | | |
+| Column            | Type                 | Null | Default    | Notes                                                                      |
+| ----------------- | -------------------- | ---- | ---------- | -------------------------------------------------------------------------- |
+| id                | bigint unsigned auto | no   |            | PK                                                                         |
+| workspace_id      | bigint unsigned      | no   |            | indexed; the tenant key                                                    |
+| doc_type          | varchar(20)          | no   | `proposal` | `proposal` or `estimate`                                                   |
+| number            | varchar(40)          | yes  |            | `PRO-0001` / `EST-0001`, not unique                                        |
+| seq               | bigint unsigned      | no   | 0          | per (workspace, doc_type), `max+1`, not unique                             |
+| status            | varchar(20)          | no   | `draft`    | `draft, sent, accepted, rejected, expired, invoiced` (no DB enum or check) |
+| title             | varchar(255)         | yes  |            | plain text                                                                 |
+| contact_id        | bigint unsigned      | yes  |            | indexed, never written                                                     |
+| company_id        | bigint unsigned      | yes  |            | indexed; written; no FK                                                    |
+| deal_id           | bigint unsigned      | yes  |            | indexed, never written                                                     |
+| buyer_name        | text                 | yes  |            | encrypted cast                                                             |
+| buyer_email       | text                 | yes  |            | encrypted cast; not validated as an email                                  |
+| buyer_phone       | text                 | yes  |            | encrypted cast; never captured by the UI                                   |
+| currency          | varchar(8)           | no   | `USD`      | workspace currency at create                                               |
+| currency_exponent | tinyint unsigned     | no   | 2          | 0 for the zero-decimal list                                                |
+| subtotal_minor    | bigint               | no   | 0          | sum of line totals                                                         |
+| discount_minor    | bigint               | no   | 0          | always 0                                                                   |
+| tax_minor         | bigint               | no   | 0          |                                                                            |
+| total_minor       | bigint               | no   | 0          | subtotal + tax                                                             |
+| tax_rate_bp       | int unsigned         | no   | 0          | basis points, whole document                                               |
+| items_json        | longtext             | yes  |            | array cast: `[{description, qty, unit_price_minor, line_total_minor}]`     |
+| notes             | text                 | yes  |            | encrypted cast, max 5000 on input                                          |
+| valid_until       | date                 | yes  |            | date only                                                                  |
+| sent_at           | timestamp            | yes  |            | first send/mark-sent                                                       |
+| decided_at        | timestamp            | yes  |            | last accept/reject (staff or public)                                       |
+| invoice_id        | bigint unsigned      | yes  |            | set on conversion, no FK                                                   |
+| public_token      | varchar(64)          | yes  |            | UNIQUE `sales_docs_public_token_unique`                                    |
+| owner_id          | bigint unsigned      | yes  |            | not validated as a member                                                  |
+| created_by        | bigint unsigned      | yes  |            |                                                                            |
 
 Indexes: PK; unique `public_token`; `(workspace_id, doc_type, status)`; single-column indexes on `workspace_id`, `contact_id`, `company_id`, `deal_id`. No FKs. Seeded rows exist only if the demo seeder ran (the reference DB: no workspace data, see "Open questions").
 
@@ -1250,28 +1251,28 @@ Exposes:
 
 ## Differences to decide
 
-| Id | Reference behaviour | Why it matters | Recommendation |
-| --- | --- | --- | --- |
-| D-01 | The create modal has no buyer phone field, and there is no edit route, so the Send button always fails for UI-created documents. Copilot-created ones also lack a phone. | The headline "send on WhatsApp" flow is broken out of the box. | Fix: capture phone (E.164) and contact in create/edit; derive from the linked contact. |
-| D-02 | No role or permission gate (any agent or viewer can create, send, convert, delete); nav shows the entries to `admin` tier only. | Privilege and data exposure. | Fix: permission keys `salesdocs.view/create/send/convert/delete` mapped to manager+ by default; agents read-only. |
-| D-03 | One whole-document tax rate, tax-exclusive, no discount, no per-line tax; invoice lines get zero tax. | Cannot quote mixed rates (GST slabs, VAT); docs promise a discount. | Change: per-line tax rate and per-line plus document discount; copy to invoice lines. Keep the whole-doc rate as a default. |
-| D-04 | No `viewed` status and no view tracking; docs and the assignment expect it. | Sales follow-up signal. | Add `first_viewed_at`, a `viewed` event (not a status that blocks others) and an owner notification. |
-| D-05 | Expired documents can still be accepted publicly; expiry runs only when a staff user opens the list; the public page shows a past-due `sent` as open. | Legal and trust: buyer accepts a lapsed price. | Fix: daily sweep plus read-time check; public page shows "expired" and blocks accept (409) unless the owner extends or reopens. |
-| D-06 | Numbering is `max+1` without lock or unique index, and a deleted newest number is reused. | Duplicate or reused document numbers. | Fix: locked counter and unique index; never reuse; configurable prefix and padding. |
-| D-07 | Accept and convert do not touch deals, contacts, projects or payments; `deal_id`/`contact_id` unused. | Pipeline value and 360 views miss quotes. | Add links and events: on accept optionally advance the deal; show quotes on deal/contact/company; carry links to the invoice. |
-| D-08 | Delivery is WhatsApp text only; no email, no PDF, no template message. | Many buyers need email/PDF; WABA outside 24h needs templates. | Add email send and a quote PDF; use a WABA template when outside the window. |
-| D-09 | Convert has no status guard, no transaction, ignores render/send failures, copies no links, and the invoice shows "#id" not number on repeat. | Duplicate invoices, silent failures. | Fix: require `accepted` (setting to allow `sent`), one transaction, idempotency key, surface invoice send state, copy contact/company/deal. |
-| D-10 | Client preview math (no per-line rounding, locale formatting, qty step 1) differs from server math. | Total shown vs saved can differ by one minor unit; fractional qty blocked. | Fix: one shared money function; step by qty precision. |
-| D-11 | Public accept captures nothing but `decided_at`; no signer, IP, comment, terms checkbox; decision can be repeated or contradicted by staff. | No proof of acceptance. | Add signer name/checkbox/typed signature, IP, UA, immutable event row; make a buyer decision final unless staff reopen. |
-| D-12 | Currency source differs: controller uses `workspaces.currency`, copilot uses `invoice_settings.currency`. | A chat-created estimate can be in a different currency than a form-created one. | Fix: one org currency setting (plus an optional per-document currency). |
-| D-13 | `{id}` routes ignore `doc_type` (an `/estimates/{id}` call can act on a proposal). | Cross-type edits, wrong labels. | Fix: enforce type on every id route or drop the type from the path. |
-| D-14 | `owner_id` not validated (any user id, even outside the workspace); a platform admin with no workspace writes `workspace_id = 0`. | Data integrity and leakage. | Fix: owner must be an org member; require an org context. |
-| D-15 | Staff status PATCH allows any transition, no history, accept by staff does not notify, `rejected` has no UI. | Ghost states, unauditable. | Fix: explicit state machine, history table, Reject button, notify consistently. |
-| D-16 | Public page lacks `noindex`, `no-store`, seller identity, terms; shows buyer email and phone to link holders; token is a long-lived bearer secret with no revoke. | Privacy and brand. | Fix: headers, seller block, regenerate/revoke link, optional expiry, hide phone. |
-| D-17 | Status labels, flash messages, notification text and the WhatsApp body are English only. | i18n/RTL parity. | Translate all user-visible strings; localise the public page and message body per buyer language. |
-| D-18 | List has no search, filter, bulk action, export; "Open value" counts only sent+accepted. | Usability at volume. | Add search (number, title), status chips, date range, CSV export; keep the tile and add counts by status. |
-| D-19 | The create form's error handling reloads the page, loses input and keeps the modal closed. | Poor UX. | Inline validation in the modal with preserved state. |
-| D-20 | Hard delete of any status including invoiced; no audit, outbox event or webhook for any sales-document change. | No trace, integration gaps. | Audit every write; emit `salesdoc.created/sent/accepted/rejected/expired/invoiced/deleted` outbox events and webhooks; block deleting `invoiced`. |
+| Id   | Reference behaviour                                                                                                                                                         | Why it matters                                                                  | Recommendation                                                                                                                                    |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | The create modal has no buyer phone field, and there is no edit route, so the Send button always fails for UI-created documents. Copilot-created ones also lack a phone. | The headline "send on WhatsApp" flow is broken out of the box.                  | Fix: capture phone (E.164) and contact in create/edit; derive from the linked contact.                                                            |
+| D-02 | No role or permission gate (any agent or viewer can create, send, convert, delete); nav shows the entries to `admin` tier only.                                          | Privilege and data exposure.                                                    | Fix: permission keys `salesdocs.view/create/send/convert/delete` mapped to manager+ by default; agents read-only.                                 |
+| D-03 | One whole-document tax rate, tax-exclusive, no discount, no per-line tax; invoice lines get zero tax.                                                                    | Cannot quote mixed rates (GST slabs, VAT); docs promise a discount.             | Change: per-line tax rate and per-line plus document discount; copy to invoice lines. Keep the whole-doc rate as a default.                       |
+| D-04 | No `viewed` status and no view tracking; docs and the assignment expect it.                                                                                              | Sales follow-up signal.                                                         | Add `first_viewed_at`, a `viewed` event (not a status that blocks others) and an owner notification.                                              |
+| D-05 | Expired documents can still be accepted publicly; expiry runs only when a staff user opens the list; the public page shows a past-due `sent` as open.                    | Legal and trust: buyer accepts a lapsed price.                                  | Fix: daily sweep plus read-time check; public page shows "expired" and blocks accept (409) unless the owner extends or reopens.                   |
+| D-06 | Numbering is `max+1` without lock or unique index, and a deleted newest number is reused.                                                                                | Duplicate or reused document numbers.                                           | Fix: locked counter and unique index; never reuse; configurable prefix and padding.                                                               |
+| D-07 | Accept and convert do not touch deals, contacts, projects or payments; `deal_id`/`contact_id` unused.                                                                    | Pipeline value and 360 views miss quotes.                                       | Add links and events: on accept optionally advance the deal; show quotes on deal/contact/company; carry links to the invoice.                     |
+| D-08 | Delivery is WhatsApp text only; no email, no PDF, no template message.                                                                                                   | Many buyers need email/PDF; WABA outside 24h needs templates.                   | Add email send and a quote PDF; use a WABA template when outside the window.                                                                      |
+| D-09 | Convert has no status guard, no transaction, ignores render/send failures, copies no links, and the invoice shows "#id" not number on repeat.                            | Duplicate invoices, silent failures.                                            | Fix: require `accepted` (setting to allow `sent`), one transaction, idempotency key, surface invoice send state, copy contact/company/deal.       |
+| D-10 | Client preview math (no per-line rounding, locale formatting, qty step 1) differs from server math.                                                                      | Total shown vs saved can differ by one minor unit; fractional qty blocked.      | Fix: one shared money function; step by qty precision.                                                                                            |
+| D-11 | Public accept captures nothing but `decided_at`; no signer, IP, comment, terms checkbox; decision can be repeated or contradicted by staff.                              | No proof of acceptance.                                                         | Add signer name/checkbox/typed signature, IP, UA, immutable event row; make a buyer decision final unless staff reopen.                           |
+| D-12 | Currency source differs: controller uses `workspaces.currency`, copilot uses `invoice_settings.currency`.                                                                | A chat-created estimate can be in a different currency than a form-created one. | Fix: one org currency setting (plus an optional per-document currency).                                                                           |
+| D-13 | `{id}` routes ignore `doc_type` (an `/estimates/{id}` call can act on a proposal).                                                                                       | Cross-type edits, wrong labels.                                                 | Fix: enforce type on every id route or drop the type from the path.                                                                               |
+| D-14 | `owner_id` not validated (any user id, even outside the workspace); a platform admin with no workspace writes `workspace_id = 0`.                                        | Data integrity and leakage.                                                     | Fix: owner must be an org member; require an org context.                                                                                         |
+| D-15 | Staff status PATCH allows any transition, no history, accept by staff does not notify, `rejected` has no UI.                                                             | Ghost states, unauditable.                                                      | Fix: explicit state machine, history table, Reject button, notify consistently.                                                                   |
+| D-16 | Public page lacks `noindex`, `no-store`, seller identity, terms; shows buyer email and phone to link holders; token is a long-lived bearer secret with no revoke.        | Privacy and brand.                                                              | Fix: headers, seller block, regenerate/revoke link, optional expiry, hide phone.                                                                  |
+| D-17 | Status labels, flash messages, notification text and the WhatsApp body are English only.                                                                                 | i18n/RTL parity.                                                                | Translate all user-visible strings; localise the public page and message body per buyer language.                                                 |
+| D-18 | List has no search, filter, bulk action, export; "Open value" counts only sent+accepted.                                                                                 | Usability at volume.                                                            | Add search (number, title), status chips, date range, CSV export; keep the tile and add counts by status.                                         |
+| D-19 | The create form's error handling reloads the page, loses input and keeps the modal closed.                                                                               | Poor UX.                                                                        | Inline validation in the modal with preserved state.                                                                                              |
+| D-20 | Hard delete of any status including invoiced; no audit, outbox event or webhook for any sales-document change.                                                           | No trace, integration gaps.                                                     | Audit every write; emit `salesdoc.created/sent/accepted/rejected/expired/invoiced/deleted` outbox events and webhooks; block deleting `invoiced`. |
 
 ## Coverage
 
@@ -1311,7 +1312,14 @@ Exposes:
   "config_files": [],
   "doc_pages": ["Documentation/pages/commerce/proposals-estimates.html"],
   "feature_map": {
-    "TW-PROP-001": ["GET proposals", "POST proposals", "PATCH proposals/{id}", "POST proposals/{id}/convert", "POST proposals/{id}/send", "DELETE proposals/{id}"],
+    "TW-PROP-001": [
+      "GET proposals",
+      "POST proposals",
+      "PATCH proposals/{id}",
+      "POST proposals/{id}/convert",
+      "POST proposals/{id}/send",
+      "DELETE proposals/{id}"
+    ],
     "TW-PROP-003": ["GET proposals"],
     "TW-PROP-005": ["POST proposals"],
     "TW-PROP-010": ["PATCH proposals/{id}"],
@@ -1342,53 +1350,53 @@ contracts in `packages/contracts/src/sales-docs/`, migrations `20261006100000_sa
 
 ### Decided as recommended (fixes)
 
-| Diff # | Decision | Where |
-| ------ | -------- | ----- |
-| D-01 | The buyer is captured: `buyerName`, `buyerEmail` (validated) and `buyerPhone` (E.164) on create and edit, and default to the linked contact's (a deal brings its contact and company). Sending has three channels (`email`, `whatsapp`, `link`) and a missing recipient is `422 SALESDOC_NO_RECIPIENT`, not a flash that always fires. | TW-PROP-005, 011 |
-| D-02 | Permissions are keys, not "any member": `record.sales-docs.read/create/update/send/convert/delete/settings` (one set for both kinds: it is one engine), registered in `permission_defs`, granted to Admin (all) and to the Agent / Counsellor preset (read, update, send on `own`; create). The record scope is on the PEOPLE of the document: `own` = owned by me or created by me, `team` adds teammates, `all` is everyone; out of scope is 404. The plan gate is the shared `sales_pipeline` feature through `SalesPipelineGuard` (no new plan key), and covers reads (`422 PLAN_FEATURE_LOCKED`); the buyer's public page is not plan gated. | TW-PROP-001 |
-| D-03 | Pricing has a per-line discount (percent or amount), a per-line tax rate (absent follows the document's default rate), a document discount (percent or amount) and tax added on top. The document discount is spread over the lines by largest remainder so a mixed-rate document taxes each line on what it costs. The invoice port receives the per-line tax rate and amount (Reference invoices got zero tax per line and a summary line). The currency decides the decimals (0, 2 or 3). | TW-PROP-006, 028 |
-| D-04 | `viewed` is a status: the buyer's first open of a sent document moves it to `viewed` (`first_viewed_at`, a timeline row, `salesdoc.viewed` once); later opens only count (`view_count`, `last_viewed_at`). A viewed document is decided, expired and revised like a sent one. The owner notification is a consumer of the event (notifications domain). | TW-PROP-030 |
-| D-05 | Expiry is a worker sweep (every 5 minutes, per organization time zone, `SKIP LOCKED`) with a timeline row, an audit row and `salesdoc.expired`, and the buyer's page and the accept route test the date at read time, so a lapsed document is never shown as open and **cannot be accepted** (`409 SALESDOC_EXPIRED`; staff cannot accept it either). A document is valid through the whole of its valid-until day in the workspace's zone. Drafts do not expire. `extend` (new date) and `revise` bring a lapsed document back. | TW-PROP-004 |
-| D-06 | Numbers come from `sales_doc_counters`: one row per organization and type, allocated with one `INSERT .. ON CONFLICT DO UPDATE .. RETURNING` (the row lock serialises concurrent creators, a rollback gives the number back, nothing lowers it), with `UNIQUE (org_id, doc_type, seq)` and `UNIQUE (org_id, number)`. A deleted number is never reused. The prefix (`PRO`, `EST`), the padding (4) and the first number are per-organization settings that shape only the next numbers. The allocator is tested from 12 concurrent connections. | TW-PROP-008, TW-EST-003 |
-| D-07 | `contact_id`, `company_id`, `deal_id` are real links (composite foreign keys, `ON DELETE SET NULL`), set on create and edit and filterable; `GET /contacts/:id/sales-docs` and `GET /deals/:id/sales-docs` list them. `POST /sales-docs/:id/convert/deal` creates and links a deal (title, total, currency, contact, company, owner, in the default pipeline's first stage). The invoice port receives the contact, company and deal ids so the invoice can carry the same links. **Not done:** accepting does not move the deal to a stage automatically (an organization setting for it is a follow-up). | TW-PROP-025 |
-| D-08 | Email is real: the link, total and validity are mailed through the mail port (the transaction is not held open across the send; a transport failure is `502 SALESDOC_SEND_FAILED` and the document is unchanged). WhatsApp emits `salesdoc.delivery_requested` and marks the document sent; the delivery adapter belongs to the messaging domain (**TODO**, nothing reaches the buyer until it exists). The PDF is a print-optimised, escaped HTML page (`GET /sales-docs/:id/print`, and the buyer's `/print`): the repo has no PDF library, so a server-side PDF file is a follow-up. | TW-PROP-011, 030 |
-| D-09 | Conversion to an invoice needs `accepted`, runs through `SALES_DOC_INVOICE_PORT` **inside one transaction** with the link back and the status `converted` (composite foreign key `(org_id, invoice_id)`), carries an idempotency key per document and the per-line tax, links and buyer, and fails loudly (a failure in the port rolls everything back, nothing is swallowed). Twice is `409 SALESDOC_ALREADY_CONVERTED`. The invoicing module binds the token (`InvoiceConversionService` in `modules/crm/invoicing`, which builds a DRAFT invoice linked by `quote_id`); a deployment without a binding answers `501 SALESDOC_INVOICING_UNAVAILABLE`. Allowing "convert directly from sent" as an organization setting is not built. | TW-PROP-012, TW-EST-006 |
-| D-10 | One pure money function in `@crm/contracts` (`computeSalesDoc`) serves the API and the form preview; one rounding rule (half up to the minor unit at the step an amount is produced), exact `bigint` arithmetic, quantities with up to 4 decimals, the decimals of the currency. Golden tests cover the spec's examples and 300 random documents for the invariants. | TW-PROP-006, 007 |
-| D-11 | A buyer decision needs the signer's name (2-120 characters) and a consent flag; an email, a drawn PNG signature and a comment are optional. Signer, signature, comment, IP, user agent, revision and time go into an append-only timeline row (signer, signature and comment encrypted at rest, never copied to an audit row or an outbox event); `accepted_revision` binds the decision to the revision shown. The same decision again is a replay (`replay: true`, one event); the opposite one is `409 SALESDOC_ALREADY_DECIDED`; staff revise to start again. | TW-PROP-015, 016 |
-| D-12 | One currency source: `organizations.settings.currency`, else the default pipeline's, else `USD`, and a per-document `currency` (fixed while draft unless the lines are re-sent with it). Copilot and form writers use the same service. | TW-PROP-006, 019 |
-| D-13 | One engine, no per-type paths: `kind` is a body field and a filter, every `:id` is a uuid in one table, so an id can never be applied to the other kind. | TW-EST-001 |
-| D-14 | The owner must be an active member of the workspace (`422 SALESDOC_OWNER_INVALID`; omitted = the caller, `null` = nobody); every request has an organization (RLS), so there are no `workspace_id = 0` rows. | TW-PROP-005, 001 |
-| D-15 | An explicit status machine (`nextStatus` in `sales-doc-rules.ts`, unit-tested against the whole status x action matrix) answers `409 SALESDOC_INVALID_TRANSITION`; every transition writes a timeline event; staff can record an acceptance or a decline (`POST /:id/accept`, `/decline`) in the timeline as theirs, and emit the same events as a buyer decision (`by: staff`). | TW-PROP-010 |
-| D-16 | The public link is 256 random bits (43 base64url characters), looked up by SHA-256 (the plaintext is stored only encrypted, so staff can copy the link again), with an optional expiry (workspace default `linkTtlDays`, or per link), `regenerate` and `revoke`. The page is `no-store`, `noindex`, `no-referrer`, shows the seller's name and the terms, and **hides the buyer's email and phone**. Unknown, malformed and draft tokens are 404; revoked or expired links are `410`. Throttled per IP and per link. **Not done:** the seller's logo, address and tax id on the page and the print (they live in the workspace settings domain). | TW-PROP-009, 014, 018 |
-| D-17 | The API answers stable codes and data, not prose; the web owns the wording and translations. The email body is English only (a follow-up with the localization domain). | TW-PROP-023 |
-| D-18 | The list has a cursor (microsecond keyset), search (number, title, contact and company name), filters (kind, status, owner, mine, contact, company, deal, currency, valid-until window) and `GET /sales-docs/counts` (per status, open value per currency). **Not done:** CSV export. | TW-PROP-003 |
-| D-19 | A validation failure is `422` with one detail per field path (`lines.2.unitPrice`) and `SALESDOC_AMOUNT_INVALID` for amounts, so a form keeps its input and shows errors inline. | TW-PROP-005 |
-| D-20 | Every write is audited and emits an outbox event in the same transaction (`salesdoc.created / updated / sent / delivery_requested / viewed / accepted / declined / expired / revised / extended / converted / deleted`); accepted and converted documents cannot be deleted (`409 SALESDOC_NOT_DELETABLE`); a deleted document keeps no trace in the numbering. The event payloads hold identifiers only. Webhooks are a consumer of the outbox. | TW-PROP-013 |
+| Diff # | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Where                   |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| D-01   | The buyer is captured: `buyerName`, `buyerEmail` (validated) and `buyerPhone` (E.164) on create and edit, and default to the linked contact's (a deal brings its contact and company). Sending has three channels (`email`, `whatsapp`, `link`) and a missing recipient is `422 SALESDOC_NO_RECIPIENT`, not a flash that always fires.                                                                                                                                                                                                                                                                                                                                                                                                 | TW-PROP-005, 011        |
+| D-02   | Permissions are keys, not "any member": `record.sales-docs.read/create/update/send/convert/delete/settings` (one set for both kinds: it is one engine), registered in `permission_defs`, granted to Admin (all) and to the Agent / Counsellor preset (read, update, send on `own`; create). The record scope is on the PEOPLE of the document: `own` = owned by me or created by me, `team` adds teammates, `all` is everyone; out of scope is 404. The plan gate is the shared `sales_pipeline` feature through `SalesPipelineGuard` (no new plan key), and covers reads (`422 PLAN_FEATURE_LOCKED`); the buyer's public page is not plan gated.                                                                                      | TW-PROP-001             |
+| D-03   | Pricing has a per-line discount (percent or amount), a per-line tax rate (absent follows the document's default rate), a document discount (percent or amount) and tax added on top. The document discount is spread over the lines by largest remainder so a mixed-rate document taxes each line on what it costs. The invoice port receives the per-line tax rate and amount (Reference invoices got zero tax per line and a summary line). The currency decides the decimals (0, 2 or 3).                                                                                                                                                                                                                                              | TW-PROP-006, 028        |
+| D-04   | `viewed` is a status: the buyer's first open of a sent document moves it to `viewed` (`first_viewed_at`, a timeline row, `salesdoc.viewed` once); later opens only count (`view_count`, `last_viewed_at`). A viewed document is decided, expired and revised like a sent one. The owner notification is a consumer of the event (notifications domain).                                                                                                                                                                                                                                                                                                                                                                                | TW-PROP-030             |
+| D-05   | Expiry is a worker sweep (every 5 minutes, per organization time zone, `SKIP LOCKED`) with a timeline row, an audit row and `salesdoc.expired`, and the buyer's page and the accept route test the date at read time, so a lapsed document is never shown as open and **cannot be accepted** (`409 SALESDOC_EXPIRED`; staff cannot accept it either). A document is valid through the whole of its valid-until day in the workspace's zone. Drafts do not expire. `extend` (new date) and `revise` bring a lapsed document back.                                                                                                                                                                                                       | TW-PROP-004             |
+| D-06   | Numbers come from `sales_doc_counters`: one row per organization and type, allocated with one `INSERT .. ON CONFLICT DO UPDATE .. RETURNING` (the row lock serialises concurrent creators, a rollback gives the number back, nothing lowers it), with `UNIQUE (org_id, doc_type, seq)` and `UNIQUE (org_id, number)`. A deleted number is never reused. The prefix (`PRO`, `EST`), the padding (4) and the first number are per-organization settings that shape only the next numbers. The allocator is tested from 12 concurrent connections.                                                                                                                                                                                        | TW-PROP-008, TW-EST-003 |
+| D-07   | `contact_id`, `company_id`, `deal_id` are real links (composite foreign keys, `ON DELETE SET NULL`), set on create and edit and filterable; `GET /contacts/:id/sales-docs` and `GET /deals/:id/sales-docs` list them. `POST /sales-docs/:id/convert/deal` creates and links a deal (title, total, currency, contact, company, owner, in the default pipeline's first stage). The invoice port receives the contact, company and deal ids so the invoice can carry the same links. **Not done:** accepting does not move the deal to a stage automatically (an organization setting for it is a follow-up).                                                                                                                             | TW-PROP-025             |
+| D-08   | Email is real: the link, total and validity are mailed through the mail port (the transaction is not held open across the send; a transport failure is `502 SALESDOC_SEND_FAILED` and the document is unchanged). WhatsApp emits `salesdoc.delivery_requested` and marks the document sent; the delivery adapter belongs to the messaging domain (**TODO**, nothing reaches the buyer until it exists). The PDF is a print-optimised, escaped HTML page (`GET /sales-docs/:id/print`, and the buyer's `/print`): the repo has no PDF library, so a server-side PDF file is a follow-up.                                                                                                                                                | TW-PROP-011, 030        |
+| D-09   | Conversion to an invoice needs `accepted`, runs through `SALES_DOC_INVOICE_PORT` **inside one transaction** with the link back and the status `converted` (composite foreign key `(org_id, invoice_id)`), carries an idempotency key per document and the per-line tax, links and buyer, and fails loudly (a failure in the port rolls everything back, nothing is swallowed). Twice is `409 SALESDOC_ALREADY_CONVERTED`. The invoicing module binds the token (`InvoiceConversionService` in `modules/crm/invoicing`, which builds a DRAFT invoice linked by `quote_id`); a deployment without a binding answers `501 SALESDOC_INVOICING_UNAVAILABLE`. Allowing "convert directly from sent" as an organization setting is not built. | TW-PROP-012, TW-EST-006 |
+| D-10   | One pure money function in `@crm/contracts` (`computeSalesDoc`) serves the API and the form preview; one rounding rule (half up to the minor unit at the step an amount is produced), exact `bigint` arithmetic, quantities with up to 4 decimals, the decimals of the currency. Golden tests cover the spec's examples and 300 random documents for the invariants.                                                                                                                                                                                                                                                                                                                                                                   | TW-PROP-006, 007        |
+| D-11   | A buyer decision needs the signer's name (2-120 characters) and a consent flag; an email, a drawn PNG signature and a comment are optional. Signer, signature, comment, IP, user agent, revision and time go into an append-only timeline row (signer, signature and comment encrypted at rest, never copied to an audit row or an outbox event); `accepted_revision` binds the decision to the revision shown. The same decision again is a replay (`replay: true`, one event); the opposite one is `409 SALESDOC_ALREADY_DECIDED`; staff revise to start again.                                                                                                                                                                      | TW-PROP-015, 016        |
+| D-12   | One currency source: `organizations.settings.currency`, else the default pipeline's, else `USD`, and a per-document `currency` (fixed while draft unless the lines are re-sent with it). Copilot and form writers use the same service.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | TW-PROP-006, 019        |
+| D-13   | One engine, no per-type paths: `kind` is a body field and a filter, every `:id` is a uuid in one table, so an id can never be applied to the other kind.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | TW-EST-001              |
+| D-14   | The owner must be an active member of the workspace (`422 SALESDOC_OWNER_INVALID`; omitted = the caller, `null` = nobody); every request has an organization (RLS), so there are no `workspace_id = 0` rows.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | TW-PROP-005, 001        |
+| D-15   | An explicit status machine (`nextStatus` in `sales-doc-rules.ts`, unit-tested against the whole status x action matrix) answers `409 SALESDOC_INVALID_TRANSITION`; every transition writes a timeline event; staff can record an acceptance or a decline (`POST /:id/accept`, `/decline`) in the timeline as theirs, and emit the same events as a buyer decision (`by: staff`).                                                                                                                                                                                                                                                                                                                                                       | TW-PROP-010             |
+| D-16   | The public link is 256 random bits (43 base64url characters), looked up by SHA-256 (the plaintext is stored only encrypted, so staff can copy the link again), with an optional expiry (workspace default `linkTtlDays`, or per link), `regenerate` and `revoke`. The page is `no-store`, `noindex`, `no-referrer`, shows the seller's name and the terms, and **hides the buyer's email and phone**. Unknown, malformed and draft tokens are 404; revoked or expired links are `410`. Throttled per IP and per link. **Not done:** the seller's logo, address and tax id on the page and the print (they live in the workspace settings domain).                                                                                      | TW-PROP-009, 014, 018   |
+| D-17   | The API answers stable codes and data, not prose; the web owns the wording and translations. The email body is English only (a follow-up with the localization domain).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | TW-PROP-023             |
+| D-18   | The list has a cursor (microsecond keyset), search (number, title, contact and company name), filters (kind, status, owner, mine, contact, company, deal, currency, valid-until window) and `GET /sales-docs/counts` (per status, open value per currency). **Not done:** CSV export.                                                                                                                                                                                                                                                                                                                                                                                                                                                  | TW-PROP-003             |
+| D-19   | A validation failure is `422` with one detail per field path (`lines.2.unitPrice`) and `SALESDOC_AMOUNT_INVALID` for amounts, so a form keeps its input and shows errors inline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | TW-PROP-005             |
+| D-20   | Every write is audited and emits an outbox event in the same transaction (`salesdoc.created / updated / sent / delivery_requested / viewed / accepted / declined / expired / revised / extended / converted / deleted`); accepted and converted documents cannot be deleted (`409 SALESDOC_NOT_DELETABLE`); a deleted document keeps no trace in the numbering. The event payloads hold identifiers only. Webhooks are a consumer of the outbox.                                                                                                                                                                                                                                                                                       | TW-PROP-013             |
 
 ### Decisions the spec did not list
 
-| Decision | Why |
-| -------- | --- |
-| Statuses are `draft, sent, viewed, accepted, declined, expired, converted` (Reference: `rejected`, `invoiced`, no `viewed`). Enforced by a CHECK, with CHECKs that the stamps agree (`decided_at` on a decided document, `sent_at` on an open one, `first_viewed_at` on a viewed one) and that `total = subtotal - discount + tax`. | The vocabulary of the docs and the code disagreed; the database now refuses a row that is not one of them. |
-| The lines are rows (`sales_doc_items`: qty `numeric(18,4)`, unit price, discount, tax rate, the computed amounts), not a JSON column. | Addressable lines, a CHECK per line, and the shape the invoice port wants. |
-| Revisions: `revise` keeps the current content in `sales_doc_revisions` (snapshot, total) and raises `revision`; the next edit works on the draft. Duplicate is the other path (a new document, optionally the other kind). | TW-PROP-029 "duplicate / revise", and the buyer's link keeps pointing at the same document. An accepted document is final. |
-| The timeline is `sales_doc_events`, append-only (a trigger refuses any update except the foreign key clearing the actor of a deleted user). | D-11 / D-15: proof of what happened. |
-| Buyer name, email, phone and notes are encrypted at rest (AES-GCM through `CryptoService`) as Reference's cast did, and are not searched; the search covers the number, the title and the linked contact's and company's names. | TW-PROP-024. |
-| A draft is not public: its token answers 404 until the document is sent. | A half-written price should not be reachable by a link that was copied early. |
-| `viewed` does not block anything: a sent or a viewed document is accepted, declined, expired and revised the same way. | It is a follow-up signal (D-04), not a gate. |
-| Templates of default terms and notes (`sales_doc_templates`, one default per kind, a name unique per kind) apply on create; a duplicate does not apply one. | The "templates" of TW-PROP-030. |
-| `terms` is a field of the document. | The docs promised "notes & terms"; Reference had only notes. |
-| The module settings (prefix, padding, start, default validity, link lifetime) are their own table and capability (`record.sales-docs.settings`). | Numbering is configuration, not a per-user preference. |
+| Decision                                                                                                                                                                                                                                                                                                                         | Why                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Statuses are `draft, sent, viewed, accepted, declined, expired, converted` (Reference: `rejected`, `invoiced`, no `viewed`). Enforced by a CHECK, with CHECKs that the stamps agree (`decided_at` on a decided document, `sent_at` on an open one, `first_viewed_at` on a viewed one) and that `total = subtotal - discount + tax`. | The vocabulary of the docs and the code disagreed; the database now refuses a row that is not one of them.                 |
+| The lines are rows (`sales_doc_items`: qty `numeric(18,4)`, unit price, discount, tax rate, the computed amounts), not a JSON column.                                                                                                                                                                                            | Addressable lines, a CHECK per line, and the shape the invoice port wants.                                                 |
+| Revisions: `revise` keeps the current content in `sales_doc_revisions` (snapshot, total) and raises `revision`; the next edit works on the draft. Duplicate is the other path (a new document, optionally the other kind).                                                                                                       | TW-PROP-029 "duplicate / revise", and the buyer's link keeps pointing at the same document. An accepted document is final. |
+| The timeline is `sales_doc_events`, append-only (a trigger refuses any update except the foreign key clearing the actor of a deleted user).                                                                                                                                                                                      | D-11 / D-15: proof of what happened.                                                                                       |
+| Buyer name, email, phone and notes are encrypted at rest (AES-GCM through `CryptoService`) as Reference's cast did, and are not searched; the search covers the number, the title and the linked contact's and company's names.                                                                                                     | TW-PROP-024.                                                                                                               |
+| A draft is not public: its token answers 404 until the document is sent.                                                                                                                                                                                                                                                         | A half-written price should not be reachable by a link that was copied early.                                              |
+| `viewed` does not block anything: a sent or a viewed document is accepted, declined, expired and revised the same way.                                                                                                                                                                                                           | It is a follow-up signal (D-04), not a gate.                                                                               |
+| Templates of default terms and notes (`sales_doc_templates`, one default per kind, a name unique per kind) apply on create; a duplicate does not apply one.                                                                                                                                                                      | The "templates" of TW-PROP-030.                                                                                            |
+| `terms` is a field of the document.                                                                                                                                                                                                                                                                                              | The docs promised "notes & terms"; Reference had only notes.                                                                  |
+| The module settings (prefix, padding, start, default validity, link lifetime) are their own table and capability (`record.sales-docs.settings`).                                                                                                                                                                                 | Numbering is configuration, not a per-user preference.                                                                     |
 
 ### Follow-ups (not built)
 
-* **Server-side PDF** (a worker job writing to media storage). Today: the print-optimised HTML page.
-* **WhatsApp delivery**: a subscriber of `salesdoc.delivery_requested` in the messaging domain (template message outside the 24 h window,
+- **Server-side PDF** (a worker job writing to media storage). Today: the print-optimised HTML page.
+- **WhatsApp delivery**: a subscriber of `salesdoc.delivery_requested` in the messaging domain (template message outside the 24 h window,
   delivery result back onto the timeline).
-* **Notifications** (TW-PROP-017): built for the buyer's decision (`SalesDocNotificationConsumer`: owner and creator, deep link to the
+- **Notifications** (TW-PROP-017): built for the buyer's decision (`SalesDocNotificationConsumer`: owner and creator, deep link to the
   document). Still to do: `salesdoc.viewed / expired` and the org admins by preference.
-* **AI copilot tools** (TW-PROP-019..021): call `SalesDocsService.create(input, 'ai')`; add `convert_quote` (TW-EST-009).
-* **Calendar** (TW-PROP-022): read `GET /sales-docs?validFrom&validTo` and deep-link to the document.
-* The seller block (logo, address, tax id) on the public page and the print; localization of the email and the public page.
-* An organization setting to advance a deal on accept (D-07), to allow converting from `sent` (D-09), and late acceptance (D-05).
-* Reminders before expiry; CSV export; deposits, payment links and optional line items (TW-PROP-030 items 9, 10).
+- **AI copilot tools** (TW-PROP-019..021): call `SalesDocsService.create(input, 'ai')`; add `convert_quote` (TW-EST-009).
+- **Calendar** (TW-PROP-022): read `GET /sales-docs?validFrom&validTo` and deep-link to the document.
+- The seller block (logo, address, tax id) on the public page and the print; localization of the email and the public page.
+- An organization setting to advance a deal on accept (D-07), to allow converting from `sent` (D-09), and late acceptance (D-05).
+- Reminders before expiry; CSV export; deposits, payment links and optional line items (TW-PROP-030 items 9, 10).

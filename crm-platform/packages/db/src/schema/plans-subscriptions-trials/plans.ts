@@ -39,6 +39,11 @@ export const plans = pgTable(
     currency: text('currency').notNull().default('USD'),
     billingUnit: text('billing_unit').$type<PlanBillingUnit>().notNull().default('months'),
     billingDuration: integer('billing_duration').notNull().default(1),
+    /** Add-ons only: 'recurring' renews by autopay (a provider subscription), 'one_time' is bought once per term. */
+    billingMode: text('billing_mode')
+      .$type<'one_time' | 'recurring'>()
+      .notNull()
+      .default('one_time'),
     isFree: boolean('is_free').notNull().default(false),
     isLifetime: boolean('is_lifetime').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),
@@ -51,12 +56,20 @@ export const plans = pgTable(
     limits: jsonb('limits').$type<Record<string, number>>().notNull().default({}),
     /** Boolean capability flags. */
     features: jsonb('features').$type<Record<string, boolean>>().notNull().default({}),
+    /**
+     * Set on the billing add-on that sells one Marketplace app (20261023090000_mkt_pricing.sql). References marketplace_apps in the
+     * database; not declared here because that table's schema file imports this one.
+     */
+    marketplaceAppId: idColumn('marketplace_app_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
     index('idx_plans_listing').on(t.kind, t.isActive, t.sortOrder, t.amount),
+    uniqueIndex('uq_plans_marketplace_app')
+      .on(t.marketplaceAppId)
+      .where(sql`${t.marketplaceAppId} is not null`),
     uniqueIndex('uq_plans_single_default')
       .on(t.isDefault)
       .where(sql`${t.isDefault}`),

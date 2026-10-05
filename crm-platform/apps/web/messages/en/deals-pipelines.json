@@ -16,7 +16,8 @@
       "api": "API",
       "flow": "Flow",
       "facebook": "Messenger",
-      "ai": "AI assistant"
+      "ai": "AI assistant",
+      "lead_ad": "Lead source"
     },
     "status": {
       "open": "Open",

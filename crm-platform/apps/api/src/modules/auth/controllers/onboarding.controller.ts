@@ -23,7 +23,10 @@ export class OnboardingController {
   @Post('workspace')
   @RequirePermission('admin.settings.manage')
   @ApiOperation({
-    summary: 'Step 1: name the workspace, set industry, team size, timezone and currency',
+    summary:
+      'Step 1: name the workspace, set industry, team size and timezone; a mobile number too when the account has none',
+    description:
+      'Saving again after onboarding is complete edits the profile and does not reopen first-run setup. `currency` is optional and kept for API callers; the screen does not ask for it.',
   })
   async saveWorkspace(
     @Body(zodPipe(onboardingWorkspaceRequestSchema)) body: OnboardingWorkspaceRequest,

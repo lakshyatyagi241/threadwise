@@ -1,7 +1,10 @@
+import type { ResolvedWabaConnection } from './waba-connections.port';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  isBuiltinWhatsappProviderKey,
   type ConnectEmbeddedInput,
   type ConnectManualInput,
   type ConnectResult,
@@ -12,8 +15,10 @@ import {
   type VerifyTokenResult,
   type WabaBusinessProfile,
   type WabaConnection as WabaConnectionDto,
+  type WabaHealth,
   type WabaReadiness,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -34,7 +39,14 @@ import {
   WabaApiError,
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import type { WabaProviderKind } from '../../infra/providers/whatsapp-cloud-api-waba/waba-http';
+import {
+  providerKeyOf,
+  WabaRegistryRoutes,
+  type WabaRegistryProvider,
+} from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
+import { WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { toDto } from './waba-connections.mapper';
+import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConnectionsRepository, type WabaRow } from './waba-connections.repository';
 import {
   cleanPin,
@@ -46,8 +58,6 @@ import {
   maskToken,
   verifyTokenFor,
   webhookUrl,
-  type HealthIssue,
-  type HealthSeverity,
 } from './waba-rules';
 
 /** What is stored encrypted in `credentials_json`. */
@@ -59,6 +69,33 @@ interface StoredCredentials {
   app_secret?: string;
   /** The two-step PIN that registered the number; never returned by the API. */
   register_pin?: string;
+}
+
+export type { ResolvedWabaConnection };
+
+/** The provider a number is being moved to (the operator's switch). `registry` is the provider's descriptor, secrets opened; null for a built-in route. */
+export interface ProviderMoveTarget {
+  key: string;
+  builtin: 'meta' | 'interakt' | null;
+  credentialMode: 'platform_token' | 'channel_token';
+  registry: WabaRegistryProvider | null;
+}
+
+export type ProviderMoveRequirement =
+  'number_token_needed' | 'provider_token_needed' | 'ids_missing' | 'reconnect_needed';
+
+/** What moving one number to another provider did (or, on a dry run, would do). Nothing here is a secret. */
+export interface ProviderMoveResult {
+  numberId: string;
+  label: string | null;
+  phoneNumber: string | null;
+  fromKey: string;
+  /** Dry run: `ready` | `blocked`. Applied: `switched` | `repointed` (a disconnected number) | `blocked` | `failed`. */
+  state: 'ready' | 'blocked' | 'switched' | 'repointed' | 'failed';
+  requirements: ProviderMoveRequirement[];
+  resubscribe: boolean;
+  inboundWired: boolean | null;
+  message: string | null;
 }
 
 const UNIQUE_VIOLATION = '23505';
@@ -84,6 +121,9 @@ export class WabaConnectService {
     private readonly config: ConfigService<Env, true>,
     @Inject(WABA_ENV) private readonly env: WabaEnv,
     @Inject(WABA_ADMIN) private readonly admin: WabaAdminPort,
+    private readonly healthDetails: WabaHealthDetailsService,
+    private readonly routes: WabaRegistryRoutes,
+    private readonly providers: WhatsAppProviderResolver,
   ) {}
 
   // --- reading -----------------------------------------------------------------------------------------------------
@@ -113,7 +153,9 @@ export class WabaConnectService {
         `META_APP_ID and META_APP_SECRET${ready.missing.length ? ` (still unset: ${ready.missing.join(', ')})` : ''}`,
       );
     }
-    const provider = this.routeForNewNumbers();
+    const { orgId } = RequestContextStore.require();
+    const route = await this.routeForNewNumbers(orgId);
+    const provider = route.provider;
 
     const token = await this.meta('Meta token exchange failed', () =>
       this.admin.exchangeCode(input.code),
@@ -175,10 +217,12 @@ export class WabaConnectService {
 
     const conn: WabaConnection = {
       provider,
+      providerKey: route.key,
       wabaId,
       phoneNumberId: phone.id,
       accessToken: token.accessToken,
       ...(provider === 'interakt' ? { authKey: this.env.INTERAKT_PARTNER_AUTH_KEY } : {}),
+      ...this.registryOf(route.registry, wabaId, phone.id, token.accessToken),
     };
 
     const warnings: string[] = [];
@@ -195,6 +239,7 @@ export class WabaConnectService {
 
     const saved = await this.persist({
       provider,
+      providerKey: route.key,
       via: 'embedded',
       phone,
       wabaId,
@@ -213,7 +258,7 @@ export class WabaConnectService {
       coexistence: input.coexistence === true || isCoexistence(phone.platformType),
     });
     // Embedded Signup registers a number itself; only the direct route repeats Reference's silent register.
-    if (provider === 'meta' && !isCoexistence(phone.platformType))
+    if (provider === 'meta' && !route.registry && !isCoexistence(phone.platformType))
       await this.autoRegister(saved.row, conn);
     return { connection: toDto(saved.row), warnings };
   }
@@ -251,6 +296,7 @@ export class WabaConnectService {
     const businessId = input.businessId ?? owner?.id ?? null;
     const conn: WabaConnection = {
       provider: 'meta',
+      providerKey: 'meta',
       wabaId: input.wabaId,
       phoneNumberId: input.phoneNumberId,
       accessToken: token,
@@ -260,6 +306,7 @@ export class WabaConnectService {
 
     const saved = await this.persist({
       provider: 'meta',
+      providerKey: 'meta',
       via: 'manual',
       phone,
       wabaId: input.wabaId,
@@ -581,32 +628,38 @@ export class WabaConnectService {
   // --- health and profile ------------------------------------------------------------------------------------------
 
   /** Live read of the number from Meta plus the issues that follow from it (TW-WABA-021, 022). */
-  async health(uuid: string): Promise<{
-    connection: WabaConnectionDto;
-    overall: HealthSeverity;
-    issues: HealthIssue[];
-    tokenHint: string | null;
-    checkedAt: string;
-  }> {
+  async health(uuid: string): Promise<WabaHealth> {
     let row = await this.require(uuid);
-    const meta = row.meta_json ?? {};
     const creds = this.creds(row);
     let liveReadFailed = false;
     let liveReadError: string | null = null;
     const tryConn = this.tryConn(row);
+    let phoneExtra = { accountMode: null, isOfficialBusinessAccount: null, isPinEnabled: null } as {
+      accountMode: string | null;
+      isOfficialBusinessAccount: boolean | null;
+      isPinEnabled: boolean | null;
+    };
+    let extra: Awaited<ReturnType<WabaHealthDetailsService['collect']>> | null = null;
     if (tryConn && row.status !== 'disconnected') {
       try {
         const phone = await this.admin.getPhone(authFor(tryConn), tryConn.phoneNumberId);
+        phoneExtra = {
+          accountMode: phone.accountMode,
+          isOfficialBusinessAccount: phone.isOfficialBusinessAccount,
+          isPinEnabled: phone.isPinEnabled,
+        };
         row = await this.touch(row, phoneMeta(phone), 'health', {
           lastHealthAt: new Date(),
           phoneNumber: phone.displayPhoneNumber ?? row.phone_number,
         });
+        // The other nodes only make sense when the token reached the phone; they run in parallel and never fail the page.
+        extra = await this.healthDetails.collect(tryConn, phoneExtra);
       } catch (e) {
         liveReadFailed = true;
         liveReadError = translateConnectError(asApiError(e));
       }
     }
-    const m = row.meta_json ?? meta;
+    const m = row.meta_json ?? {};
     const { overall, issues } = deriveHealth(
       {
         status: row.status,
@@ -620,6 +673,7 @@ export class WabaConnectService {
         inboundWired: typeof m.inbound_wired === 'boolean' ? m.inbound_wired : null,
         liveReadFailed,
         liveReadError,
+        ...(extra?.facts ?? {}),
       },
       new Date(),
     );
@@ -629,6 +683,14 @@ export class WabaConnectService {
       issues,
       tokenHint: maskToken(creds?.access_token),
       checkedAt: new Date().toISOString(),
+      details: extra?.details ?? {
+        waba: null,
+        token: { valid: null, scopes: [], expiresAt: null, appId: null },
+        webhook: null,
+        templates: null,
+        phone: phoneExtra,
+        errors: liveReadError ? [liveReadError] : [],
+      },
     };
   }
 
@@ -662,6 +724,221 @@ export class WabaConnectService {
     return this.admin.getBusinessProfile(conn);
   }
 
+  /**
+   * The decrypted provider connection of a stored number, for other domains that call Meta on its behalf (message templates).
+   * Reads inside the caller's transaction; the Meta call itself must happen outside it. `null` when the number does not exist
+   * in this organization; `conn` is null when it has no usable credentials.
+   */
+  async resolveConnection(
+    tx: Tx,
+    orgId: number,
+    ref: { uuid: string } | { id: number },
+  ): Promise<ResolvedWabaConnection | null> {
+    const row =
+      'uuid' in ref
+        ? await this.repo.findByUuid(tx, orgId, ref.uuid)
+        : await this.repo.findById(tx, orgId, ref.id);
+    if (!row) return null;
+    await this.providers.ensureKnown(providerKeyOf(row.meta_json));
+    const conn = this.tryConn(row);
+    return {
+      id: row.id,
+      uuid: row.uuid,
+      status: row.status,
+      label: row.display_label ?? row.phone_number,
+      phoneNumber: row.phone_number,
+      wabaId: typeof row.meta_json?.waba_id === 'string' ? row.meta_json.waba_id : null,
+      phoneNumberId:
+        typeof row.meta_json?.phone_number_id === 'string' ? row.meta_json.phone_number_id : null,
+      conn: conn && (conn.accessToken || conn.authKey || conn.registry) ? conn : null,
+    };
+  }
+
+  /**
+   * The operator's switch, one number: re-point it at another provider of the registry. The number keeps its id, its credentials and
+   * its inbox channel; only the route it is reached through changes (`meta_json.provider_key`).
+   *
+   * A connected number is first re-subscribed through the NEW route (the webhook must reach us through it), and is only re-pointed when
+   * that worked, so a failed switch changes nothing. A number whose target needs a credential it does not have is `blocked` and listed
+   * with what is missing; a disconnected number is re-pointed only (no webhook to move) and needs a reconnect. The write, its audit row
+   * and the `whatsapp.connection.connected` event the inbox listens to (so the channel stays linked) are one transaction. Runs for the
+   * workspace `orgId` on behalf of an operator, outside any tenant request.
+   */
+  async moveToProvider(
+    orgId: number,
+    uuid: string,
+    target: ProviderMoveTarget,
+    opts: { dryRun: boolean; reason?: string },
+  ): Promise<ProviderMoveResult> {
+    const row = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.repo.findByUuid(tx, orgId, uuid),
+    );
+    if (!row) throw AppError.notFound('WhatsApp number', uuid);
+    const meta = row.meta_json ?? {};
+    const fromKey = providerKeyOf(meta);
+    const creds = this.creds(row);
+    const wabaId = String(meta.waba_id ?? '');
+    const phoneNumberId = String(meta.phone_number_id ?? '');
+    const repointOnly = row.status === 'disconnected' || !creds;
+    const base = {
+      numberId: row.uuid,
+      label: row.display_label ?? row.phone_number,
+      phoneNumber: row.phone_number,
+      fromKey,
+    };
+
+    const requirements: ProviderMoveRequirement[] = [];
+    if (repointOnly) requirements.push('reconnect_needed');
+    else {
+      if (!wabaId || !phoneNumberId) requirements.push('ids_missing');
+      if (target.credentialMode === 'channel_token' && !creds?.access_token)
+        requirements.push('number_token_needed');
+      if (target.builtin === 'interakt' && !this.env.INTERAKT_PARTNER_AUTH_KEY)
+        requirements.push('provider_token_needed');
+      if (
+        target.registry &&
+        target.credentialMode === 'platform_token' &&
+        !target.registry.providerToken
+      )
+        requirements.push('provider_token_needed');
+    }
+    const blocked = requirements.filter((r) => r !== 'reconnect_needed').length > 0;
+    if (blocked) {
+      return {
+        ...base,
+        state: 'blocked',
+        requirements,
+        resubscribe: false,
+        inboundWired: null,
+        message: 'The target provider needs something this number does not have yet.',
+      };
+    }
+    if (opts.dryRun) {
+      return {
+        ...base,
+        state: 'ready',
+        requirements,
+        resubscribe: !repointOnly,
+        inboundWired: null,
+        message: repointOnly ? 'Disconnected: it is only re-pointed and needs a reconnect.' : null,
+      };
+    }
+
+    const family: WabaProviderKind = target.key === 'interakt' ? 'interakt' : 'meta';
+    let wired: boolean | null = null;
+    let nextCreds: StoredCredentials | null = null;
+    let message: string | null = null;
+    if (!repointOnly) {
+      const registry = target.registry
+        ? this.routes.authFor(target.key, {
+            wabaId,
+            phoneNumberId,
+            accessToken: creds?.access_token,
+          })
+        : undefined;
+      if (target.registry && !registry) {
+        return {
+          ...base,
+          state: 'failed',
+          requirements,
+          resubscribe: false,
+          inboundWired: null,
+          message: 'The target provider has no route for this number.',
+        };
+      }
+      const authKey =
+        target.builtin === 'interakt' ? this.env.INTERAKT_PARTNER_AUTH_KEY : undefined;
+      const conn: WabaConnection = {
+        provider: family,
+        providerKey: target.key,
+        wabaId,
+        phoneNumberId,
+        accessToken: creds?.access_token,
+        ...(authKey ? { authKey } : {}),
+        ...(registry ? { registry } : {}),
+      };
+      if (authKey) {
+        nextCreds = { ...(creds ?? {}), auth_key: authKey };
+        const registered = await this.admin.registerWithInterakt(wabaId, row.phone_number);
+        if (!registered)
+          message = 'Interakt did not confirm the account; use Fix inbound to retry.';
+      }
+      const cb = this.callback();
+      if (cb.url) {
+        const sub = await this.admin.subscribe(conn, { url: cb.url, verifyToken: cb.verifyToken });
+        if (!sub.ok) {
+          return {
+            ...base,
+            state: 'failed',
+            requirements,
+            resubscribe: false,
+            inboundWired: null,
+            message: `The webhook could not be re-subscribed through the new provider: ${sub.error ? translateConnectError(sub.error) : 'unknown error'}. Nothing was changed.`,
+          };
+        }
+        const verified = await this.admin.verifyInboundWired(conn, cb.url);
+        wired = verified ?? (sub.overrideApplied ? true : null);
+        if (!sub.overrideApplied && verified !== true) {
+          message =
+            'Subscribed, but the provider did not accept a per-number callback; the callback configured on its Meta app applies.';
+        }
+      } else {
+        message =
+          'No public webhook URL is configured (WABA_WEBHOOK_PUBLIC_URL); the webhook was not moved.';
+      }
+    }
+
+    const now = new Date();
+    const credentialsJson = nextCreds ? this.crypto.encrypt(JSON.stringify(nextCreds)) : undefined;
+    await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const next = await this.repo.update(tx, orgId, row.id, {
+        ...(credentialsJson !== undefined ? { credentialsJson } : {}),
+        metaPatch: {
+          provider: family,
+          provider_key: target.key,
+          ...(repointOnly ? {} : { inbound_wired: wired, inbound_checked_at: now.toISOString() }),
+          provider_switched_at: now.toISOString(),
+          provider_switched_from: fromKey,
+        },
+      });
+      if (!next) throw AppError.notFound('WhatsApp number', uuid);
+      const actor = RequestContextStore.peek();
+      await tx.execute(sql`
+        INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, request_id)
+        VALUES (${orgId}, ${actor?.actorId ?? null}, ${actor?.actorType ?? 'system'}, ${MODULE}, ${row.id}, 'update',
+                ${JSON.stringify({
+                  provider_key: { old: fromKey, new: target.key },
+                  ...(opts.reason ? { reason: { old: null, new: opts.reason.slice(0, 500) } } : {}),
+                })}::jsonb,
+                ${actor?.requestId ?? null})`);
+      // The inbox keeps the number's channel linked by this event; a disconnected number must not be revived by it.
+      if (!repointOnly) {
+        await this.outbox.emit(tx, {
+          aggregateModule: MODULE,
+          aggregateId: row.id,
+          eventType: 'whatsapp.connection.connected',
+          orgId,
+          payload: {
+            connectionId: row.uuid,
+            provider: family,
+            providerKey: target.key,
+            fromProviderKey: fromKey,
+            reconnect: true,
+            switched: true,
+          },
+        });
+      }
+    });
+    return {
+      ...base,
+      state: repointOnly ? 'repointed' : 'switched',
+      requirements,
+      resubscribe: !repointOnly,
+      inboundWired: wired,
+      message,
+    };
+  }
+
   // --- internals ---------------------------------------------------------------------------------------------------
 
   private callback(): { url: string | null; verifyToken: string } {
@@ -672,23 +949,41 @@ export class WabaConnectService {
         inboundUrlKey(this.config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true })),
       ),
       verifyToken: verifyTokenFor(
-        this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
+        this.env.WABA_VERIFY_TOKEN ?? this.config.get('WHATSAPP_VERIFY_TOKEN', { infer: true }),
         this.config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }),
       ),
     };
   }
 
-  /** The route a number connected through Embedded Signup uses. Interakt needs its partner key; without it, go direct. */
-  private routeForNewNumbers(): WabaProviderKind {
-    if (this.env.WABA_DEFAULT_PROVIDER === 'interakt') {
+  /**
+   * The route a number connected through Embedded Signup uses: the workspace's override, else the registry default, else the platform
+   * setting (`WABA_DEFAULT_PROVIDER`). Interakt needs its partner key; without it, say so.
+   */
+  private async routeForNewNumbers(
+    orgId: number,
+  ): Promise<{ key: string; provider: WabaProviderKind; registry: WabaRegistryProvider | null }> {
+    const route = await this.providers.forNewNumbers(orgId);
+    if (route.key === 'interakt') {
       if (!this.env.INTERAKT_PARTNER_AUTH_KEY || !this.env.INTERAKT_SOLUTION_ID) {
         throw this.notConfigured(
           'INTERAKT_PARTNER_AUTH_KEY and INTERAKT_SOLUTION_ID (or set WABA_DEFAULT_PROVIDER=meta)',
         );
       }
-      return 'interakt';
     }
-    return 'meta';
+    return { key: route.key, provider: route.provider, registry: route.registry };
+  }
+
+  /** The resolved route of a number on a registry provider, as a partial connection (empty for the two built-in routes). */
+  private registryOf(
+    provider: WabaRegistryProvider | null,
+    wabaId: string,
+    phoneNumberId: string,
+    accessToken: string | undefined,
+  ): Pick<WabaConnection, 'registry'> {
+    if (!provider) return {};
+    const registry = this.routes.authFor(provider.key, { wabaId, phoneNumberId, accessToken });
+    if (!registry) throw this.providerUnavailable();
+    return { registry };
   }
 
   /**
@@ -734,6 +1029,8 @@ export class WabaConnectService {
 
   private async persist(a: {
     provider: WabaProviderKind;
+    /** The provider registry key the number is on. */
+    providerKey: string;
     via: 'embedded' | 'manual';
     phone: PhoneInfo;
     wabaId: string;
@@ -750,6 +1047,7 @@ export class WabaConnectService {
     const now = new Date();
     const meta = {
       provider: a.provider,
+      provider_key: a.providerKey,
       waba_id: a.wabaId,
       phone_number_id: a.phone.id,
       business_id: a.businessId,
@@ -787,7 +1085,12 @@ export class WabaConnectService {
             aggregateModule: MODULE,
             aggregateId: row.id,
             eventType: 'whatsapp.connection.connected',
-            payload: { connectionId: row.uuid, provider: a.provider, reconnect: true },
+            payload: {
+              connectionId: row.uuid,
+              provider: a.provider,
+              providerKey: a.providerKey,
+              reconnect: true,
+            },
           });
           return { row, created: false };
         }
@@ -812,7 +1115,12 @@ export class WabaConnectService {
           aggregateModule: MODULE,
           aggregateId: row.id,
           eventType: 'whatsapp.connection.connected',
-          payload: { connectionId: row.uuid, provider: a.provider, reconnect: false },
+          payload: {
+            connectionId: row.uuid,
+            provider: a.provider,
+            providerKey: a.providerKey,
+            reconnect: false,
+          },
         });
         return { row, created: true };
       });
@@ -888,6 +1196,7 @@ export class WabaConnectService {
     const { orgId } = RequestContextStore.require();
     const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
     if (!row) throw AppError.notFound('WhatsApp number', uuid);
+    await this.providers.ensureKnown(providerKeyOf(row.meta_json));
     return row;
   }
 
@@ -906,19 +1215,34 @@ export class WabaConnectService {
     const wabaId = String(m.waba_id ?? '');
     const phoneNumberId = String(m.phone_number_id ?? '');
     if (!creds || !wabaId || !phoneNumberId) return null;
-    const provider: WabaProviderKind = m.provider === 'interakt' ? 'interakt' : 'meta';
+    // The provider key is authoritative; `provider` alone is what numbers connected before the registry have.
+    const providerKey = providerKeyOf(m);
+    const provider: WabaProviderKind = providerKey === 'interakt' ? 'interakt' : 'meta';
+    let registry: WabaConnection['registry'];
+    if (!isBuiltinWhatsappProviderKey(providerKey)) {
+      registry =
+        this.routes.authFor(providerKey, {
+          wabaId,
+          phoneNumberId,
+          accessToken: creds.access_token,
+        }) ?? undefined;
+      // A provider that is gone, archived or without its credential carries nothing: the number reads as having no usable credentials.
+      if (!registry) return null;
+    }
     return {
       provider,
+      providerKey,
       wabaId,
       phoneNumberId,
       accessToken: creds.access_token,
       authKey: creds.auth_key,
+      ...(registry ? { registry } : {}),
     };
   }
 
   private connOf(row: WabaRow): WabaConnection {
     const conn = this.tryConn(row);
-    if (!conn || (!conn.accessToken && !conn.authKey)) throw this.noCredentials();
+    if (!conn || (!conn.accessToken && !conn.authKey && !conn.registry)) throw this.noCredentials();
     return conn;
   }
 
@@ -965,6 +1289,14 @@ export class WabaConnectService {
     );
   }
 
+  private providerUnavailable(): AppError {
+    return new AppError(
+      ERROR_CODES.PROVIDER_UNAVAILABLE,
+      'The WhatsApp provider for this number is not available. Ask the platform admin.',
+      HttpStatus.CONFLICT,
+    );
+  }
+
   private noCredentials(): AppError {
     return new AppError(
       ERROR_CODES.WABA_NO_CREDENTIALS,
@@ -978,6 +1310,7 @@ const asApiError = (e: unknown): WabaApiError =>
   e instanceof WabaApiError ? e : WabaApiError.network(e);
 
 function authFor(conn: WabaConnection) {
+  if (conn.registry) return conn.registry;
   return conn.provider === 'interakt' && conn.authKey
     ? ({
         provider: 'interakt',

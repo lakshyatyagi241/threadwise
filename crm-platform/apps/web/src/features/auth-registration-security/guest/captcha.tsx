@@ -10,7 +10,11 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
  * invisibly and asks Google for a token with the action name when the form is submitted.
  */
 
-export type CaptchaAction = 'login' | 'register' | 'forgot';
+export type CaptchaAction = 'login' | 'register' | 'forgot' | 'contact';
+
+/** Google's terms for using reCAPTCHA ask for these two links next to the invisible badge's notice. */
+export const GOOGLE_PRIVACY_URL = 'https://policies.google.com/privacy';
+export const GOOGLE_TERMS_URL = 'https://policies.google.com/terms';
 export type CaptchaConfig = NonNullable<RegistrationConfigResponse['captcha']>;
 
 interface Grecaptcha {
@@ -33,7 +37,10 @@ interface Grecaptcha {
 const lib = (): Grecaptcha | undefined =>
   (window as unknown as { grecaptcha?: Grecaptcha }).grecaptcha;
 
-/** Reference waits about six seconds for the library and then submits anyway (the server decides). */
+/**
+ * How long a submit waits for the v3 token in total (loading the library and asking Google for the token). When
+ * the budget runs out the form is submitted anyway and the server decides, as in Reference.
+ */
 export const SCRIPT_WAIT_MS = 6000;
 const scripts = new Map<string, Promise<Grecaptcha>>();
 
@@ -76,16 +83,17 @@ function loadScript(url: string): Promise<Grecaptcha> {
   return promise;
 }
 
-function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+/** Rejects with `timeout` when `p` has not settled within `ms`. */
+export function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((resolve, reject) => {
-    const id = window.setTimeout(() => reject(new Error('timeout')), ms);
+    const id = setTimeout(() => reject(new Error('timeout')), ms);
     p.then(
       (v) => {
-        window.clearTimeout(id);
+        clearTimeout(id);
         resolve(v);
       },
       (e: unknown) => {
-        window.clearTimeout(id);
+        clearTimeout(id);
         reject(e instanceof Error ? e : new Error(String(e)));
       },
     );
@@ -152,11 +160,13 @@ export function useCaptcha(config: CaptchaConfig | null, action: CaptchaAction):
     if (!version || !siteKey) return undefined;
     if (version === 'v2') return solvedToken.current ?? undefined;
     try {
-      const g = await withTimeout(
-        loadScript(recaptchaScriptUrl({ version, siteKey }, locale)),
+      // One budget for both steps: a slow library plus a slow answer must not hold the form for twice as long.
+      return await withTimeout(
+        loadScript(recaptchaScriptUrl({ version, siteKey }, locale)).then((g) =>
+          g.execute(siteKey, { action }),
+        ),
         SCRIPT_WAIT_MS,
       );
-      return await withTimeout(g.execute(siteKey, { action }), SCRIPT_WAIT_MS);
     } catch {
       // Could not get a token: submit without one and let the server refuse it with a clear error.
       return undefined;
@@ -174,12 +184,33 @@ export function useCaptcha(config: CaptchaConfig | null, action: CaptchaAction):
 
   const widget =
     config.version === 'v2' ? (
-      <div className="flex justify-center overflow-x-auto" data-testid="recaptcha-v2">
+      <div className="overflow-x-auto" data-testid="recaptcha-v2">
         <div ref={setHost} />
       </div>
     ) : (
-      <p className="text-center text-[11px] text-muted-foreground" data-testid="recaptcha-v3">
-        {t('protected')}
+      <p className="text-[10px] leading-snug text-(--auth-ink-500)" data-testid="recaptcha-v3">
+        {t.rich('protected', {
+          privacy: (chunks) => (
+            <a
+              href={GOOGLE_PRIVACY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-(--auth-link) hover:underline"
+            >
+              {chunks}
+            </a>
+          ),
+          terms: (chunks) => (
+            <a
+              href={GOOGLE_TERMS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-(--auth-link) hover:underline"
+            >
+              {chunks}
+            </a>
+          ),
+        })}
       </p>
     );
 

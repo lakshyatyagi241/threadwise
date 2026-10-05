@@ -5,7 +5,11 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { resolveTimezone } from '../deals/deal-calendar';
-import type { InvoiceDraftResult, InvoiceDraftSource, SalesDocInvoicePort } from '../sales-docs/sales-doc-ports';
+import type {
+  InvoiceDraftResult,
+  InvoiceDraftSource,
+  SalesDocInvoicePort,
+} from '../sales-docs/sales-doc-ports';
 import type { LineSpec } from './invoice-content';
 import { priceInvoice, simpleTax } from './invoice-content';
 import { InvoiceSettingsService } from './invoice-settings.service';
@@ -36,7 +40,8 @@ export class InvoiceConversionService implements SalesDocInvoicePort {
       SELECT id, uuid, invoice_number FROM invoices
       WHERE org_id = ${source.orgId} AND quote_id = ${source.salesDocId} AND status <> 'void' ORDER BY id LIMIT 1
     `);
-    const e = existing.rows[0] as { id: number | string; uuid: string; invoice_number: string | null } | undefined;
+    const e = existing.rows[0] as
+      { id: number | string; uuid: string; invoice_number: string | null } | undefined;
     if (e) return { invoiceId: Number(e.id), invoiceUuid: e.uuid, invoiceNumber: e.invoice_number };
 
     const currency = source.currency;
@@ -46,13 +51,24 @@ export class InvoiceConversionService implements SalesDocInvoicePort {
       hsnSac: null,
       qty: l.qty,
       unitPrice: minorToMajor(l.unitPriceMinor, currency),
-      discount: l.discountMinor > 0n ? { kind: 'amount', value: minorToMajor(l.discountMinor, currency) } : null,
+      discount:
+        l.discountMinor > 0n
+          ? { kind: 'amount', value: minorToMajor(l.discountMinor, currency) }
+          : null,
       tax: l.taxRateBp > 0 ? simpleTax(null, 'Tax', null, formatPercent(l.taxRateBp), false) : null,
     }));
     const discount =
-      source.totals.discountMinor > 0n ? { kind: 'amount' as const, value: minorToMajor(source.totals.discountMinor, currency) } : null;
+      source.totals.discountMinor > 0n
+        ? { kind: 'amount' as const, value: minorToMajor(source.totals.discountMinor, currency) }
+        : null;
 
-    const priced = priceInvoice({ currency, specs, discount, shipping: null, reverseCharge: false });
+    const priced = priceInvoice({
+      currency,
+      specs,
+      discount,
+      shipping: null,
+      reverseCharge: false,
+    });
     const r = priced.totals;
     if (
       r.subtotalMinor !== source.totals.subtotalMinor ||
@@ -64,7 +80,12 @@ export class InvoiceConversionService implements SalesDocInvoicePort {
         ERROR_CODES.INV_AMOUNT_INVALID,
         'The invoice does not add up to the accepted document; nothing was converted',
         HttpStatus.UNPROCESSABLE_ENTITY,
-        [{ path: 'totals', message: `invoice ${r.totalMinor} vs document ${source.totals.totalMinor}` }],
+        [
+          {
+            path: 'totals',
+            message: `invoice ${r.totalMinor} vs document ${source.totals.totalMinor}`,
+          },
+        ],
       );
     }
 

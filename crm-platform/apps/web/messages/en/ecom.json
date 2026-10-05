@@ -1,0 +1,510 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "integrations": "Integrations",
+      "back": "Back",
+      "docs": "View docs",
+      "loadError": "This page could not be loaded. Try again.",
+      "support": "Contact support",
+      "integration": "Integration",
+      "notConnected": "Not connected",
+      "setupSteps": "Setup steps",
+      "needHelp": "Need help?",
+      "none": "none",
+      "optional": "optional",
+      "yes": "Yes"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Connect",
+        "accent": "Shopify",
+        "intro": "Connect your Shopify store so order, fulfilment, refund, and cart events automatically trigger WhatsApp messages — and the dashboard shows your order, product and customer counts.",
+        "step1": "Admin enables Shopify app",
+        "step2": "Enter your store domain",
+        "step3": "Approve scopes on Shopify",
+        "step4": "Map events → WhatsApp templates",
+        "help": "Webhooks are auto-installed after connecting — no manual steps. Stuck on credentials?",
+        "disabledTitle": "Shopify isn't enabled yet",
+        "disabledBody": "An administrator needs to add the Shopify app credentials before any workspace can connect a store. Once that's done, the form below will activate.",
+        "formStep": "Step 2",
+        "formTitle": "Store domain",
+        "urlLabel": "Shopify store URL",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Just the store handle — or paste the full URL, we'll normalise it.",
+        "webhookLabel": "Webhook URL · auto-configured after connect",
+        "cancel": "Cancel",
+        "continue": "Continue to Shopify",
+        "continuing": "Redirecting…",
+        "guideKicker": "Setup guide",
+        "guideTitle": "What happens next",
+        "guide1": "We redirect you to Shopify to authorize the requested scopes.",
+        "guide2": "Shopify sends us back a permanent access token signed with HMAC.",
+        "guide3": "Webhooks for {count} events get auto-registered against your store.",
+        "guide4": "You land back here to map each event to a WhatsApp template.",
+        "scopes": "Scopes requested",
+        "failed": "Could not start the connection to Shopify.",
+        "connected": "Shopify connected.",
+        "returnedError": "Shopify did not connect."
+      },
+      "woocommerce": {
+        "title": "Connect",
+        "accent": "WooCommerce",
+        "intro": "Pull WooCommerce orders, refunds, products, and customer events into chat threads. Confirm orders, ship updates, and recover carts on WhatsApp without leaving the CRM.",
+        "step1": "Admin enables WooCommerce",
+        "step2": "Generate API keys in WC admin",
+        "step3": "Paste store URL + keys below",
+        "step4": "Map events → WhatsApp templates",
+        "help": "Webhooks auto-install after you connect — no manual steps inside WC. Stuck on the keys?",
+        "disabledTitle": "WooCommerce isn't enabled yet",
+        "disabledBody": "An administrator must enable the WooCommerce integration before any workspace can connect a store.",
+        "formStep": "Step 2",
+        "formTitle": "Store credentials",
+        "urlLabel": "Store URL",
+        "urlHint": "HTTPS required for Basic Auth. We'll detect WP REST automatically.",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "Stored encrypted at rest. Only used to call your store's REST API.",
+        "webhookLabel": "Webhook URL · auto-configured after connect",
+        "test": "Test connection",
+        "testing": "Testing…",
+        "connect": "Connect store",
+        "connecting": "Connecting…",
+        "guideKicker": "How to generate keys",
+        "guideTitle": "In your WooCommerce admin",
+        "g1": "Open WooCommerce → Settings → Advanced → REST API.",
+        "g2": "Click Add key. Give it a description like \"CRM\".",
+        "g3": "Pick a user (admin works) and set Permissions = Read/Write.",
+        "g4": "Click Generate API key. Copy both keys — the secret is only shown once.",
+        "g5": "Paste them in the form on the left and click Test connection.",
+        "httpsTitle": "HTTPS only",
+        "httpsBody": "Basic Auth requires HTTPS. If your store is HTTP-only, install an SSL certificate first (Let's Encrypt is free).",
+        "connected": "WooCommerce connected.",
+        "failed": "Connection failed.",
+        "networkError": "Network error."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Active",
+        "error": "Error",
+        "other": "{status}"
+      },
+      "plan": "Plan:",
+      "store": "Store",
+      "related": "Related",
+      "allIntegrations": "All integrations",
+      "disconnect": "Disconnect",
+      "disconnectTitle": "Disconnect {name}?",
+      "disconnectShopify": "This deletes registered webhooks but keeps your settings.",
+      "disconnectWoo": "This removes registered webhooks.",
+      "disconnectDone": "Store disconnected.",
+      "healthy": "Webhooks healthy",
+      "noRecent": "No recent events",
+      "lastEvent": "Last event:",
+      "triggerShopify": "Trigger an action in Shopify and it'll appear here.",
+      "triggerWoo": "Trigger an order in WooCommerce and it'll appear here.",
+      "sync": "Sync now",
+      "syncing": "Syncing…",
+      "syncQueued": "Sync started. New data appears in a moment.",
+      "syncFailed": "Sync failed.",
+      "tabs": {
+        "overview": "Overview",
+        "orders": "Orders",
+        "products": "Products",
+        "offers": "Send Offer",
+        "customers": "Customers",
+        "events": "Automations",
+        "analytics": "Analytics",
+        "logs": "Activity",
+        "settings": "Settings"
+      },
+      "offersWoo": "Offers",
+      "desc": {
+        "shopify": {
+          "overview": "Live snapshot of your store, synced from Shopify.",
+          "orders": "Orders synced from Shopify.",
+          "products": "Browse your synced catalogue — send any product or push an offer over WhatsApp.",
+          "offers": "Pick products + a coupon, choose a customer segment, and broadcast the offer over WhatsApp.",
+          "customers": "Customers synced from Shopify into your contacts.",
+          "events": "Marketing automations — toggle one on, pick a template, and it fires on the matching store event.",
+          "analytics": "Revenue, order trend and message performance for this store.",
+          "logs": "Webhook delivery log for this store.",
+          "settings": "Manage the connection — re-sync, view scopes, or disconnect."
+        },
+        "woocommerce": {
+          "overview": "Live snapshot pulled from your WooCommerce REST API.",
+          "orders": "Last 10 orders fetched from the store.",
+          "products": "Most recent products in the catalog.",
+          "offers": "Broadcast a product offer or win back lapsed customers.",
+          "customers": "Customer accounts ordered by recency.",
+          "events": "Turn order, COD, cart & stock automations on or off.",
+          "analytics": "Revenue, message volume & COD impact for this store.",
+          "logs": "Webhook delivery log for this store.",
+          "settings": "Connection details — re-verify or disconnect."
+        }
+      },
+      "loading": "Loading the store…",
+      "flash": {
+        "success": "Done.",
+        "error": "Something went wrong."
+      },
+      "cancel": "Cancel"
+    },
+    "overview": {
+      "revenueRecent": "Revenue (recent)",
+      "revenueRecentHint": "across recent synced orders",
+      "ordersTotal": "Orders total",
+      "ordersMirrorHint": "synced into the CRM",
+      "products": "Products",
+      "productsHint": "synced catalog size",
+      "customers": "Customers",
+      "activeAutomations": "{count} active automations",
+      "revenue30": "Revenue · 30d",
+      "revenue30Hint": "from WC sales report",
+      "orders30": "Orders · 30d",
+      "ordersAllTime": "{count} total all-time",
+      "customersNew": "{count} new in 30d",
+      "itemsSold": "Items sold · 30d",
+      "recentOrders": "Recent orders",
+      "viewAll": "View all →",
+      "noOrders": "No orders yet. Hit Sync now.",
+      "recentActivity": "Recent webhook activity",
+      "noActivity": "No webhook events received yet."
+    },
+    "orders": {
+      "order": "Order",
+      "customer": "Customer",
+      "status": "Status",
+      "total": "Total",
+      "placed": "Placed",
+      "none": "No orders found."
+    },
+    "products": {
+      "search": "Search products…",
+      "offers": "Special offers",
+      "catalog": "Send a catalog →",
+      "newArrivals": "New arrivals",
+      "all": "All products",
+      "none": "No products yet. Connect a store or hit Sync now.",
+      "noImage": "no image",
+      "save": "SAVE {pct}%",
+      "send": "Send",
+      "offer": "Offer",
+      "noMatch": "No product matches.",
+      "wooNone": "No products found.",
+      "inStock": "In stock",
+      "outOfStock": "Out of stock"
+    },
+    "offers": {
+      "choose": "Choose products",
+      "selected": "{count} selected",
+      "noProducts": "No products synced yet.",
+      "template": "Message template",
+      "pickTemplate": "Pick a template",
+      "tokens": "Tokens you can use:",
+      "segment": "Send to segment",
+      "pickGroup": "Pick a contact group",
+      "coupon": "Coupon (optional)",
+      "noCoupon": "No coupon",
+      "couponPercent": "{amount}%",
+      "send": "Send offer",
+      "sending": "Sending…",
+      "pickTemplateFirst": "Pick a template first.",
+      "pickSegmentFirst": "Pick a segment first.",
+      "note": "Only opted-in contacts in the segment are messaged. WABA sends require an approved template; the Unofficial API renders it as text + buttons.",
+      "queued": "Queued for {total} contacts. Counts appear on the Activity tab when it finishes.",
+      "failed": "Send failed.",
+      "wooTitle": "Product offer broadcast",
+      "wooIntro": "Send an approved template to every opted-in contact in a segment. Inject a product + coupon.",
+      "wooTemplate": "Template",
+      "choose2": "choose",
+      "wooSegment": "Segment (contact group)",
+      "wooProduct": "Featured product",
+      "wooCoupon": "Coupon code",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Smart segment broadcast",
+      "winIntro": "Target customers from order history — recency (win-back), order count and total spend (VIPs). Skips opted-out contacts.",
+      "winLast": "Last order",
+      "winAny": "Any time",
+      "winDays": "> {days} days ago",
+      "winMonths": "> 6 months",
+      "winYear": "> 1 year",
+      "winMinOrders": "Min orders",
+      "winAnyOrders": "Any",
+      "winMinSpend": "Min spend ({currency})",
+      "winTemplate": "Template",
+      "winPick": "Pick",
+      "winCoupon": "Coupon",
+      "winNone": "None",
+      "winSend": "Send win-back",
+      "winConfirm": "Send this broadcast to everyone in the segment?",
+      "winQueued": "Queued for {total} lapsed customers. Counts appear on the Activity tab when it finishes.",
+      "wooWinTitle": "Smart-segment broadcast",
+      "wooWinIntro": "Target by order history — win back lapsed buyers or reward your best customers.",
+      "wooLapsed": "Lapsed > days",
+      "wooWinNote": "Days = 0 targets any time (pure segment). Spend is in store currency. Opted-out contacts are always skipped.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Send broadcast",
+      "optional": "optional",
+      "none": "none",
+      "cancel": "Cancel"
+    },
+    "customers": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "orders": "Orders",
+      "spent": "Spent",
+      "none": "No customers fetched yet.",
+      "noneWoo": "No customers yet."
+    },
+    "events": {
+      "noTemplates": "You have no approved WhatsApp templates yet. Create one in Templates to switch an automation on.",
+      "templatesLink": "Templates",
+      "sendFrom": "Send from",
+      "sendFromHint": "Which connected number sends these automations.",
+      "auto": "Auto — any connected number",
+      "fired": "{count} fired",
+      "logged": "{count} logged",
+      "template": "Template",
+      "pickTemplate": "Pick a template",
+      "noneOption": "none",
+      "sendTo": "Send to",
+      "customer": "Customer",
+      "admin": "Admin only",
+      "both": "Both",
+      "adminNumber": "Admin number",
+      "delay": "Delay",
+      "on": "On",
+      "immediate": "Immediate",
+      "min": "{n} min",
+      "hour": "{n} hr",
+      "day": "{n, plural, one {# day} other {# days}}",
+      "mapTitle": "Map template variables → order fields",
+      "param": "Param {n}",
+      "blank": "— blank —",
+      "field": {
+        "name": "Customer name",
+        "first_name": "First name",
+        "order_name": "Order # (e.g. #1001)",
+        "order_number": "Order number",
+        "total": "Total + currency",
+        "total_price": "Total (amount only)",
+        "currency": "Currency",
+        "email": "Customer email",
+        "store_name": "Store name",
+        "financial_status": "Payment status",
+        "fulfillment_status": "Fulfilment status"
+      },
+      "advanced": "Advanced · variable order",
+      "advancedHint": "Comma-separated fields mapped in order to your numbered template placeholders. Leave blank for the smart default: name, order, total.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Save automations",
+      "saving": "Saving…",
+      "saved": "✓ Saved",
+      "saveFailed": "Save failed",
+      "needTemplate": "Choose a template for every automation you turn on."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Order lifecycle",
+        "desc": "Transactional updates — fire automatically on store events."
+      },
+      "recovery": {
+        "name": "Revenue recovery",
+        "desc": "Bring back lost sales."
+      },
+      "marketing": {
+        "name": "Lifecycle marketing",
+        "desc": "Grow and retain customers."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Order confirmation",
+          "desc": "Thank the customer the moment they place an order."
+        },
+        "orders_paid": {
+          "name": "Payment received",
+          "desc": "Confirm once payment has cleared."
+        },
+        "orders_fulfilled": {
+          "name": "Shipped / Out for delivery",
+          "desc": "Send a dispatch note — use '{{'tracking_url'}}' for the live tracking link."
+        },
+        "order_delivered": {
+          "name": "Delivered",
+          "desc": "Confirm delivery (asks for a review if your template does). Fires when the courier marks it delivered."
+        },
+        "orders_cancelled": {
+          "name": "Order cancelled",
+          "desc": "Let the customer know an order was cancelled."
+        },
+        "refunds_create": {
+          "name": "Refund issued",
+          "desc": "Confirm a refund has been processed."
+        },
+        "orders_updated": {
+          "name": "Order updated",
+          "desc": "Fire on any change to an existing order."
+        },
+        "checkouts_create": {
+          "name": "Abandoned cart · step 1",
+          "desc": "Fires right after a checkout is abandoned — include '{{'checkout_url'}}' to bring them back."
+        },
+        "cart_step2": {
+          "name": "Abandoned cart · step 2",
+          "desc": "Scheduled follow-up (set the delay, e.g. 1 hour). Auto-cancels if they buy."
+        },
+        "cart_step3": {
+          "name": "Abandoned cart · step 3",
+          "desc": "Final nudge (e.g. 24 hours) — add a coupon in the template to close the sale."
+        },
+        "cod_confirm": {
+          "name": "COD order confirmation",
+          "desc": "Ask cash-on-delivery customers to confirm with a Yes/No reply — cuts fake orders & returns (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "COD → Prepaid offer",
+          "desc": "Nudge COD customers to pay online now (use '{{'order_url'}}' + a discount in the template) — fewer returns, faster cash."
+        },
+        "stock_back": {
+          "name": "Back-in-stock alert",
+          "desc": "Customers who message about a sold-out item get notified automatically when it is restocked."
+        },
+        "customers_create": {
+          "name": "Welcome new customer",
+          "desc": "Greet a first-time customer warmly."
+        },
+        "customers_update": {
+          "name": "Customer updated",
+          "desc": "Fire when a customer profile changes."
+        },
+        "products_update": {
+          "name": "Product updated",
+          "desc": "Internal trigger on price / stock change."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Order placed",
+          "desc": "Sent the moment a new order comes in."
+        },
+        "order_processing": {
+          "name": "Order confirmed",
+          "desc": "Payment received — the order is being prepared."
+        },
+        "order_completed": {
+          "name": "Order delivered",
+          "desc": "Order marked complete in WooCommerce."
+        },
+        "order_on_hold": {
+          "name": "Order on hold",
+          "desc": "Awaiting payment or stock — keep the buyer informed."
+        },
+        "order_cancelled": {
+          "name": "Order cancelled",
+          "desc": "The order was cancelled."
+        },
+        "order_refunded": {
+          "name": "Order refunded",
+          "desc": "A refund was issued."
+        },
+        "cod_confirm": {
+          "name": "COD double-confirmation",
+          "desc": "Ask cash-on-delivery buyers to confirm Yes / No before you ship — the #1 way to cut RTO."
+        },
+        "cod_prepaid": {
+          "name": "COD → Prepaid nudge",
+          "desc": "Offer COD buyers a pay-online link (template can carry '{{'order_url'}}' + an incentive)."
+        },
+        "checkout_created": {
+          "name": "Abandoned cart · step 1",
+          "desc": "First nudge when checkout starts but no order lands. Needs the companion WooCommerce plugin."
+        },
+        "cart_step2": {
+          "name": "Abandoned cart · step 2",
+          "desc": "Scheduled follow-up after the delay below."
+        },
+        "cart_step3": {
+          "name": "Abandoned cart · step 3",
+          "desc": "Final reminder — add a discount in the template."
+        },
+        "stock_back": {
+          "name": "Back in stock",
+          "desc": "Message everyone on the waitlist when a sold-out product is restocked."
+        },
+        "subscription_payment_failed": {
+          "name": "Subscription dunning",
+          "desc": "When a subscription renewal payment fails, send a one-tap \"update payment\" link. Needs the companion WooCommerce plugin."
+        },
+        "customer_created": {
+          "name": "Welcome new customer",
+          "desc": "Greet a customer the first time they register on the store."
+        },
+        "review_reward": {
+          "name": "Review-gated coupon",
+          "desc": "When a recent buyer replies with a positive rating (4–5 / \"great\"), auto-send this reward template — put a coupon in it. Pair it with an \"Order delivered\" template that asks them to rate."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "avgOrder": "Avg order",
+      "messagesSent": "Messages sent",
+      "offersSent": "Offers sent",
+      "codProtected": "COD revenue protected",
+      "codConfirmed": "{count} COD orders confirmed",
+      "rtoAvoided": "RTO avoided",
+      "codCancelled": "{count} fake/COD orders stopped",
+      "recovery": "Recovery messages",
+      "recoveryHint": "cart / offer / win-back / stock",
+      "avgValue": "Avg order value",
+      "trend": "Revenue · last 14 days",
+      "perf": "Automation performance",
+      "event": "Event",
+      "fired": "Fired",
+      "noActivity": "No automation activity yet.",
+      "revenueMirrored": "Revenue · mirrored",
+      "ordersSynced": "{count} orders synced",
+      "perOrder": "per order",
+      "offerBroadcasts": "{count} offer broadcasts",
+      "recoverySends": "Recovery sends",
+      "recoverySendsHint": "COD / cart / stock / offers",
+      "wouldBeRto": "would-be RTOs cancelled early",
+      "activeAutomations": "Active automations",
+      "firingOn": "firing on store events"
+    },
+    "logs": {
+      "processed": "Processed",
+      "sent": "Sent",
+      "skipped": "Skipped",
+      "failed": "Failed",
+      "event": "Event",
+      "recipient": "Recipient",
+      "status": "Status",
+      "when": "When",
+      "none": "No webhook events have arrived for this store yet."
+    },
+    "settings": {
+      "storeUrl": "Store URL",
+      "connectedAt": "Connected at",
+      "lastVerified": "Last verified",
+      "scopes": "Scopes granted",
+      "wooVersion": "WooCommerce version",
+      "webhookUrl": "Webhook URL",
+      "registered": "Registered webhooks",
+      "registeredCount": "{count, plural, one {# active subscription} other {# active subscriptions}}",
+      "copy": "Copy",
+      "copied": "Copied"
+    }
+  }
+}

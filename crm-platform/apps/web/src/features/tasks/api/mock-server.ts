@@ -71,11 +71,18 @@ function seed(me: string): Row[] {
     ...extra,
   });
   const out: Row[] = [
-    mk('Call Acme about renewal', 'high', -26, me, { contactId: CONTACTS[0]!.id, dealId: DEALS[0]!.id, notes: 'Ask about the extra seats and the new billing contact.' }),
+    mk('Call Acme about renewal', 'high', -26, me, {
+      contactId: CONTACTS[0]!.id,
+      dealId: DEALS[0]!.id,
+      notes: 'Ask about the extra seats and the new billing contact.',
+    }),
     mk('Send revised quote to Delta Corp', 'high', -3, me, { contactId: CONTACTS[1]!.id }),
     mk('Prepare demo deck', 'medium', 4, me),
     mk('Review onboarding checklist', 'low', 6, MEMBERS[0]!.id),
-    mk('Follow up with Hassan after trial', 'medium', 52, me, { contactId: CONTACTS[2]!.id, dealId: DEALS[1]!.id }),
+    mk('Follow up with Hassan after trial', 'medium', 52, me, {
+      contactId: CONTACTS[2]!.id,
+      dealId: DEALS[1]!.id,
+    }),
     mk('Quarterly pipeline review', 'low', 150, MEMBERS[1]!.id),
     mk('Tidy contact tags', 'low', null, null),
     mk('Draft welcome message template', 'medium', null, me),
@@ -84,11 +91,25 @@ function seed(me: string): Row[] {
   for (let i = 1; i <= 40; i++) {
     const owners = [me, MEMBERS[0]!.id, MEMBERS[1]!.id, null];
     out.push(
-      mk(`Follow-up ${i}`, (['low', 'medium', 'high'] as const)[i % 3]!, i % 7 === 0 ? null : (i % 9) * 11 - 20, owners[i % 4]!),
+      mk(
+        `Follow-up ${i}`,
+        (['low', 'medium', 'high'] as const)[i % 3]!,
+        i % 7 === 0 ? null : (i % 9) * 11 - 20,
+        owners[i % 4]!,
+      ),
     );
   }
-  for (const [i, title] of ['Update CRM notes', 'Book venue for webinar', 'Send invoice 1042'].entries()) {
-    out.push(mk(title, 'medium', -72 - i * 24, me, { doneAt: at(-60 - i * 20), contactId: i === 2 ? CONTACTS[1]!.id : null }));
+  for (const [i, title] of [
+    'Update CRM notes',
+    'Book venue for webinar',
+    'Send invoice 1042',
+  ].entries()) {
+    out.push(
+      mk(title, 'medium', -72 - i * 24, me, {
+        doneAt: at(-60 - i * 20),
+        contactId: i === 2 ? CONTACTS[1]!.id : null,
+      }),
+    );
   }
   return out;
 }
@@ -167,7 +188,12 @@ function filterRows(q: Query, forCounts: boolean, link?: { kind: string; id: str
     const due = str(q, 'due');
     if (due) {
       const b = bucketOf(r.dueAt, r.doneAt ? 'done' : 'open', new Date());
-      const want: Record<string, TaskBucket> = { overdue: 'overdue', today: 'today', upcoming: 'upcoming', none: 'no_date' };
+      const want: Record<string, TaskBucket> = {
+        overdue: 'overdue',
+        today: 'today',
+        upcoming: 'upcoming',
+        none: 'no_date',
+      };
       if (b !== want[due]) return false;
     }
     return true;
@@ -181,13 +207,20 @@ function sortRows(list: Row[], sort: string | undefined, status: string): Row[] 
   else if (how === 'completed') out.sort((a, b) => (b.doneAt ?? '').localeCompare(a.doneAt ?? ''));
   else
     out.sort((a, b) =>
-      a.dueAt && b.dueAt ? a.dueAt.localeCompare(b.dueAt) : a.dueAt ? -1 : b.dueAt ? 1 : a.title.localeCompare(b.title),
+      a.dueAt && b.dueAt
+        ? a.dueAt.localeCompare(b.dueAt)
+        : a.dueAt
+          ? -1
+          : b.dueAt
+            ? 1
+            : a.title.localeCompare(b.title),
     );
   return out;
 }
 
 function memberCheck(id: string | null | undefined): void {
-  if (id && !person(id)) throw new ApiError(422, 'TASK_ASSIGNEE_INVALID', 'Assignee is not an active member');
+  if (id && !person(id))
+    throw new ApiError(422, 'TASK_ASSIGNEE_INVALID', 'Assignee is not an active member');
 }
 
 function find(id: string): Row {
@@ -224,7 +257,10 @@ function counts(q: Query) {
     noDate: by('no_date'),
     open: open.length,
     done: filterRows(q, true).filter((r) => r.doneAt).length,
-    mine: { open: mine.length, overdue: mine.filter((r) => bucketOf(r.dueAt, 'open', now) === 'overdue').length },
+    mine: {
+      open: mine.length,
+      overdue: mine.filter((r) => bucketOf(r.dueAt, 'open', now) === 'overdue').length,
+    },
   };
 }
 
@@ -251,7 +287,8 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
   const body = (req.body ?? {}) as Record<string, unknown>;
   const out = (v: unknown): T => (req.schema ? req.schema.parse(v) : (undefined as T));
 
-  if (path === '/users') return out({ data: [{ id: mockState.me.id, fullName: mockState.me.name }, ...MEMBERS] });
+  if (path === '/users')
+    return out({ data: [{ id: mockState.me.id, fullName: mockState.me.name }, ...MEMBERS] });
 
   const linked = /^\/(contacts|deals)\/([^/]+)\/tasks$/.exec(path);
   if (linked && method === 'GET') {
@@ -267,8 +304,12 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
   if (path === '/tasks/counts') return out(counts(q));
   if (path === '/tasks' && method === 'POST') {
     const title = String(body.title ?? '').trim();
-    if (!title) throw new ApiError(422, 'VALIDATION_FAILED', 'Invalid', undefined, [{ path: 'title', message: 'required' }]);
-    const assigneeId = body.assigneeId === undefined ? mockState.me.id : (body.assigneeId as string | null);
+    if (!title)
+      throw new ApiError(422, 'VALIDATION_FAILED', 'Invalid', undefined, [
+        { path: 'title', message: 'required' },
+      ]);
+    const assigneeId =
+      body.assigneeId === undefined ? mockState.me.id : (body.assigneeId as string | null);
     memberCheck(assigneeId);
     const now = new Date().toISOString();
     const r: Row = {
@@ -294,15 +335,38 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
     const ids = (body.ids as string[]) ?? [];
     switch (bulk[1]) {
       case 'complete':
-        return out(applyBulk(ids, (r) => { if (!r.doneAt) { r.doneAt = new Date().toISOString(); touch(r); } }));
+        return out(
+          applyBulk(ids, (r) => {
+            if (!r.doneAt) {
+              r.doneAt = new Date().toISOString();
+              touch(r);
+            }
+          }),
+        );
       case 'reopen':
-        return out(applyBulk(ids, (r) => { if (r.doneAt) { r.doneAt = null; touch(r); } }));
+        return out(
+          applyBulk(ids, (r) => {
+            if (r.doneAt) {
+              r.doneAt = null;
+              touch(r);
+            }
+          }),
+        );
       case 'assign': {
         memberCheck(body.assigneeId as string | null);
-        return out(applyBulk(ids, (r) => { r.assigneeId = body.assigneeId as string | null; touch(r); }));
+        return out(
+          applyBulk(ids, (r) => {
+            r.assigneeId = body.assigneeId as string | null;
+            touch(r);
+          }),
+        );
       }
       default:
-        return out(applyBulk(ids, (r) => { rows = table().filter((x) => x !== r); }));
+        return out(
+          applyBulk(ids, (r) => {
+            rows = table().filter((x) => x !== r);
+          }),
+        );
     }
   }
 
@@ -329,7 +393,8 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
       return out(wire(r));
     }
     if (method === 'PATCH') {
-      if (body.rowVersion !== r.rowVersion) throw new ApiError(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
+      if (body.rowVersion !== r.rowVersion)
+        throw new ApiError(409, 'ROW_VERSION_CONFLICT', 'Changed by someone else');
       if ('title' in body) r.title = String(body.title);
       if ('notes' in body) r.notes = (body.notes as string | null) ?? null;
       if ('priority' in body) r.priority = body.priority as Priority;

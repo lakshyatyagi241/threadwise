@@ -1,11 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
+import { isBuiltinWhatsappProviderKey } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
+import {
+  providerKeyOf,
+  WabaRegistryRoutes,
+} from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { OutboundRegistry, type SendCommand } from '../node-bridge-runtime';
 import type { DispatchSender } from './_shims/tokens';
 
 export interface OutgoingMessage {
@@ -21,9 +27,57 @@ export interface OutgoingMessage {
   components?: unknown[];
 }
 
+/** A free-text message (a campaign's custom text, media and buttons), for the engines that can send one. */
+export interface OutgoingText {
+  /** Destination as digits. */
+  to: string;
+  text: string;
+  clientReference: string;
+  header?: string | null;
+  footer?: string | null;
+  buttons?: unknown[];
+  quickReplies?: unknown[];
+  media?: { kind: 'image' | 'video' | 'document'; url: string } | null;
+  /** The sender's number is paced and capped by the dispatcher; the transport only needs to know it is a bulk send. */
+  screen?: { bulk?: boolean; source?: string };
+}
+
+/**
+ * A template body for engines that send plain text: each `{{n}}` or `{{name}}` takes the next resolved value (positional
+ * numbers index the list, names take their order of first appearance). A missing value renders empty, never as the raw tag.
+ */
+export function renderPlainBody(templateBody: string, values: string[] | undefined): string {
+  const seen = new Map<string, number>();
+  return templateBody.replace(/\{\{\s*([^\s{}]+?)\s*\}\}/g, (_m, key: string) => {
+    const idx = /^\d+$/.test(key)
+      ? Number(key) - 1
+      : (seen.get(key) ?? seen.set(key, seen.size).get(key)!);
+    return values?.[idx] ?? '';
+  });
+}
+
+/** What a plain-text engine sends for one recipient: header, body and footer as lines, media as the file with that text as caption. */
+export function commandForText(m: OutgoingText): SendCommand {
+  const text = [m.header, m.text, m.footer].filter((x): x is string => !!x?.trim()).join('\n\n');
+  if (m.media) {
+    return {
+      type: 'media',
+      to: m.to,
+      mediaUrl: m.media.url,
+      ...(text ? { caption: text } : {}),
+    };
+  }
+  return { type: 'text', to: m.to, body: text };
+}
+
 /** A sender with its credentials loaded once for the whole run. */
 export interface OpenedSender {
   send(message: OutgoingMessage): Promise<{ providerMessageId: string | null }>;
+  /**
+   * A custom (non-template) message. Absent where the engine cannot send one: the Cloud API only allows free text inside an open
+   * 24-hour customer session, so a campaign on it must use an approved template (Reference refuses it the same way).
+   */
+  sendText?(message: OutgoingText): Promise<{ providerMessageId: string | null }>;
 }
 
 /** One adapter per engine. `open` throws when the number cannot send (no credentials). */
@@ -37,8 +91,8 @@ interface ConfigRow {
 }
 
 /**
- * WhatsApp Cloud API numbers (engine `waba`), sent through the shared Meta provider. The Baileys, Twilio and SMS engines
- * have no adapter yet: a broadcast on one of them fails at dispatch with a clear reason (see EngineSenderRegistry).
+ * WhatsApp Cloud API numbers (engine `waba`), sent through the shared Meta provider. The SMS engine has no adapter yet: a
+ * broadcast on it fails at dispatch with a clear reason (see EngineSenderRegistry).
  */
 @Injectable()
 export class WabaEngineSender implements EngineSender {
@@ -46,6 +100,7 @@ export class WabaEngineSender implements EngineSender {
     private readonly db: DatabaseService,
     private readonly crypto: CryptoService,
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
+    @Optional() private readonly routes?: WabaRegistryRoutes,
   ) {}
 
   async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
@@ -72,8 +127,22 @@ export class WabaEngineSender implements EngineSender {
     const senderId = String(creds.phone_number_id ?? meta.phone_number_id ?? '');
     const wabaId = String(meta.waba_id ?? '');
     // `provider` in meta_json says which route reaches the number; rows from the manual connect predate it and are direct.
-    const route = meta.provider === 'interakt' ? 'interakt' : 'meta';
-    const usable = route === 'interakt' ? Boolean(authKey && wabaId) : Boolean(accessToken);
+    const providerKey = providerKeyOf(meta);
+    const route = providerKey === 'interakt' ? 'interakt' : 'meta';
+    // A number on a provider of the platform's registry sends through that provider's own route (address, version, headers).
+    const registry = isBuiltinWhatsappProviderKey(providerKey)
+      ? undefined
+      : this.routes?.authFor(providerKey, { wabaId, phoneNumberId: senderId, accessToken });
+    if (!isBuiltinWhatsappProviderKey(providerKey) && !registry) {
+      throw new Error(
+        'The WhatsApp provider of this number is not available. Ask the platform admin, or reconnect the number.',
+      );
+    }
+    const usable = registry
+      ? true
+      : route === 'interakt'
+        ? Boolean(authKey && wabaId)
+        : Boolean(accessToken);
     if (!usable || !senderId) {
       throw new Error(
         'This WhatsApp Cloud API number has no access token or phone number id. Reconnect the number.',
@@ -84,6 +153,7 @@ export class WabaEngineSender implements EngineSender {
       accessToken,
       route,
       ...(route === 'interakt' ? { authKey } : {}),
+      ...(registry ? { registry } : {}),
       ...(wabaId ? { businessAccountId: wabaId } : {}),
       marketingLite: meta.is_mm_lite_onboarded === true,
     } as const;
@@ -106,13 +176,42 @@ export class WabaEngineSender implements EngineSender {
   }
 }
 
+/**
+ * The unofficial engine and Twilio (TW-NODE-037, 038): one adapter over the NODE transports, so a broadcast reaches them
+ * through the same send port a scheduled message uses. They send free text (the rendered template), never a Meta template.
+ */
+@Injectable()
+export class TransportEngineSender implements EngineSender {
+  constructor(private readonly outbound: OutboundRegistry) {}
+
+  async open(orgId: number, sender: DispatchSender): Promise<OpenedSender> {
+    const transport = this.outbound.get(sender.engine);
+    if (!transport) throw new Error(`No sender is connected for engine ${sender.engine}.`);
+    const open = await transport.open(orgId, sender);
+    return {
+      send: async () => {
+        throw new Error('This engine sends the rendered text, not a Meta template.');
+      },
+      sendText: async (m) => {
+        const out = await open.send(commandForText(m), {
+          clientReference: m.clientReference,
+          screen: m.screen ?? { bulk: true, source: 'broadcast' },
+        });
+        return { providerMessageId: out.providerMessageId ?? null };
+      },
+    };
+  }
+}
+
 /** Which adapter sends for which engine. Tests and later domains register their own. */
 @Injectable()
 export class EngineSenderRegistry {
   private readonly senders = new Map<string, EngineSender>();
 
-  constructor(waba: WabaEngineSender) {
+  constructor(waba: WabaEngineSender, other: TransportEngineSender) {
     this.senders.set('waba', waba);
+    this.senders.set('baileys', other);
+    this.senders.set('twilio', other);
   }
 
   register(engine: string, sender: EngineSender): void {

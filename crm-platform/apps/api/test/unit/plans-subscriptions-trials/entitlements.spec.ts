@@ -13,6 +13,7 @@ import {
 import { AppError } from '../../../src/common/errors/app-error';
 import type { DatabaseService } from '../../../src/infra/db/database.service';
 import { PlanCatalogService } from '../../../src/modules/plans-subscriptions-trials/plan-catalog.service';
+import { PlanStore } from '../../../src/modules/plans-subscriptions-trials/plan-store';
 import {
   PlanEntitlementService,
   resolveFeature,
@@ -39,6 +40,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     overrides: {},
     planLimits: {},
     planFeatures: {},
+    state: 'paid_active',
     ...over,
   };
 }
@@ -58,6 +60,17 @@ describe('registry', () => {
       'remove_branding',
       'sales_pipeline',
       'appointment_booking',
+      'chatbot_widgets',
+      'wa_storefront',
+      'inbox_sla',
+      'inbox_routing',
+      'waba_calling',
+      'inbox_kanban',
+      'team_performance',
+      'scheduled_messages',
+      'whatsapp_warmer',
+      'marketplace',
+      'lead_sources',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });
@@ -280,7 +293,7 @@ function fakeDb(rows: unknown[]): DatabaseService {
 
 const serviceFor = (row: EntRow | undefined) => {
   const db = fakeDb(row ? [row] : []);
-  return new PlanEntitlementService(db, new PlanCatalogService(db));
+  return new PlanEntitlementService(db, new PlanCatalogService(db), new PlanStore(db));
 };
 
 async function thrown(p: Promise<unknown>): Promise<AppError> {
@@ -506,6 +519,7 @@ const planRow = (over: Partial<PlanRow> & { slug: string }): PlanRow => ({
   is_custom_quote: false,
   sort_order: 0,
   cta_label: 'Get started',
+  data_retention_days: 0,
   limits: {},
   features: {},
   created_at: '2026-10-01T00:00:00.000Z',
@@ -517,7 +531,7 @@ describe('PlanEntitlementService.resolveInitialPlan', () => {
   const now = new Date('2026-10-01T10:00:00.000Z');
   const resolve = (rows: PlanRow[], registrationDefaultSlug: string | null, trialDays: number) => {
     const db = fakeDb([]);
-    const svc = new PlanEntitlementService(db, new PlanCatalogService(db));
+    const svc = new PlanEntitlementService(db, new PlanCatalogService(db), new PlanStore(db));
     const tx = { execute: async () => ({ rows }) };
     return svc.resolveInitialPlan(tx as never, { registrationDefaultSlug, trialDays, now });
   };

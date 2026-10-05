@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import type { BroadcastPlanGate, WalletGate, WarmerGate } from './tokens';
+import type { BroadcastPlanGate, WarmerGate } from './tokens';
 
-/** No wallet precheck until the wallet domain exposes one: every send is allowed (Reference: a no-op for plan-quota orgs). */
-@Injectable()
-export class OpenWalletGate implements WalletGate {
-  precheck(): Promise<void> {
-    return Promise.resolve();
-  }
-}
-
-/** No warmer until the scheduled-queue-warmer domain exposes one: nothing is ever held. */
+/**
+ * The warmer gate every bulk sender asks. It passes everything until the scheduled-queue-warmer domain registers the real warmer
+ * (`use`, at its module's start): that domain depends on this one for the senders and pacing, so this one cannot depend on it.
+ */
 @Injectable()
 export class OpenWarmerGate implements WarmerGate {
-  hold(): Promise<string[]> {
-    return Promise.resolve([]);
+  private delegate: WarmerGate | null = null;
+
+  /** Called once by the warmer domain; from then on every call is the warmer's. */
+  use(gate: WarmerGate): void {
+    this.delegate = gate;
   }
 
-  gap(): Promise<null> {
-    return Promise.resolve(null);
+  hold(...args: Parameters<WarmerGate['hold']>): Promise<string[]> {
+    return this.delegate ? this.delegate.hold(...args) : Promise.resolve([]);
+  }
+
+  gap(...args: Parameters<WarmerGate['gap']>): Promise<{ min: number; max: number } | null> {
+    return this.delegate ? this.delegate.gap(...args) : Promise.resolve(null);
   }
 }
 

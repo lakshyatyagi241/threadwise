@@ -29,7 +29,14 @@ import {
   reassignTargets,
   validateStage,
 } from '../lib/stage-editor';
-import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon, GearIcon, PlusIcon, TrashIcon } from './icons';
+import {
+  ArrowLeftIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  GearIcon,
+  PlusIcon,
+  TrashIcon,
+} from './icons';
 import { ErrorLine, useDealsCan, useErrorText } from './parts';
 import { StageRow } from './stage-row';
 
@@ -47,7 +54,8 @@ export function SettingsScreen() {
   const pipeline = all.find((p) => p.id === selectedId) ?? all.find((p) => p.isDefault) ?? all[0];
   const disabled = !can.editPipelines;
 
-  const refresh = () => Promise.all([invalidateDeals(qc), qc.invalidateQueries({ queryKey: KEYS.pipelines })]);
+  const refresh = () =>
+    Promise.all([invalidateDeals(qc), qc.invalidateQueries({ queryKey: KEYS.pipelines })]);
 
   /** Runs a write, then reloads the pipelines; a failure becomes a toast in our words. */
   async function run(fn: () => Promise<unknown>, ok?: string): Promise<boolean> {
@@ -66,7 +74,10 @@ export function SettingsScreen() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 sm:p-5">
         <div className="flex min-w-0 items-center gap-4">
-          <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand text-brand-foreground">
+          <span
+            aria-hidden="true"
+            className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand text-brand-foreground"
+          >
             <GearIcon className="size-6" />
           </span>
           <div className="min-w-0">
@@ -75,7 +86,10 @@ export function SettingsScreen() {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Link href="/deals" className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted">
+          <Link
+            href="/deals"
+            className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
             <ArrowLeftIcon /> {t('back')}
           </Link>
           {can.createPipelines && (
@@ -91,7 +105,9 @@ export function SettingsScreen() {
           <Spinner /> {t('loading')}
         </div>
       )}
-      {pipelines.isError && <ErrorLine error={pipelines.error} onRetry={() => void pipelines.refetch()} />}
+      {pipelines.isError && (
+        <ErrorLine error={pipelines.error} onRetry={() => void pipelines.refetch()} />
+      )}
       {pipelines.isSuccess && all.length === 0 && (
         <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
       )}
@@ -107,7 +123,9 @@ export function SettingsScreen() {
                 onClick={() => setSelectedId(p.id)}
                 className={cn(
                   'w-full rounded-lg border px-3 py-2.5 text-start transition',
-                  p.id === pipeline.id ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted',
+                  p.id === pipeline.id
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:bg-muted',
                 )}
               >
                 <span className="flex items-center gap-2 text-sm font-semibold">
@@ -144,7 +162,10 @@ export function SettingsScreen() {
         <NewPipelineModal
           onClose={() => setCreating(false)}
           onCreate={async (name, currency) => {
-            const ok = await run(() => dealsApi.createPipeline({ name, currency }), t('pipelineCreated'));
+            const ok = await run(
+              () => dealsApi.createPipeline({ name, currency }),
+              t('pipelineCreated'),
+            );
             if (ok) setCreating(false);
           }}
         />
@@ -178,12 +199,19 @@ function PipelineEditor({
   const blockedReason = pipeline.isDefault ? t('defaultProtected') : null;
 
   return (
-    <section className="space-y-4 rounded-xl border border-border bg-background p-5" aria-labelledby="pl-edit">
+    <section
+      className="space-y-4 rounded-xl border border-border bg-background p-5"
+      aria-labelledby="pl-edit"
+    >
       <h2 id="pl-edit" className="text-base font-semibold">
         {t('pipelineDetails')}
       </h2>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Field label={t('pipelineName')} htmlFor="pl-name" error={nameProblem ? t('nameRequired') : undefined}>
+        <Field
+          label={t('pipelineName')}
+          htmlFor="pl-name"
+          error={nameProblem ? t('nameRequired') : undefined}
+        >
           <Input
             id="pl-name"
             value={name}
@@ -193,7 +221,8 @@ function PipelineEditor({
             onChange={(e) => setName(e.target.value)}
             onBlur={() => {
               const v = name.trim();
-              if (v && v !== pipeline.name) void run(() => dealsApi.updatePipeline(pipeline, { name: v }), t('saved'));
+              if (v && v !== pipeline.name)
+                void run(() => dealsApi.updatePipeline(pipeline, { name: v }), t('saved'));
               else if (!v) setName(pipeline.name);
             }}
           />
@@ -203,7 +232,12 @@ function PipelineEditor({
             id="pl-currency"
             value={pipeline.currency}
             disabled={disabled}
-            onChange={(e) => void run(() => dealsApi.updatePipeline(pipeline, { currency: e.target.value }), t('saved'))}
+            onChange={(e) =>
+              void run(
+                () => dealsApi.updatePipeline(pipeline, { currency: e.target.value }),
+                t('saved'),
+              )
+            }
           >
             {currencyChoices(pipeline.currency).map((c) => (
               <option key={c} value={c}>
@@ -218,7 +252,12 @@ function PipelineEditor({
           <Button
             variant="secondary"
             disabled={disabled}
-            onClick={() => void run(() => dealsApi.updatePipeline(pipeline, { isDefault: true }), t('madeDefault'))}
+            onClick={() =>
+              void run(
+                () => dealsApi.updatePipeline(pipeline, { isDefault: true }),
+                t('madeDefault'),
+              )
+            }
           >
             {t('makeDefault')}
           </Button>
@@ -235,7 +274,9 @@ function PipelineEditor({
           </Button>
         )}
       </div>
-      {blockedReason && canDelete && <p className="text-xs text-muted-foreground">{blockedReason}</p>}
+      {blockedReason && canDelete && (
+        <p className="text-xs text-muted-foreground">{blockedReason}</p>
+      )}
       {confirm && (
         <Modal
           open
@@ -276,7 +317,11 @@ function PipelineEditor({
             </p>
             {needsTarget && (
               <Field label={t('moveDealsToPipeline')} htmlFor="move-pipeline">
-                <Select id="move-pipeline" value={target} onChange={(e) => setTarget(e.target.value)}>
+                <Select
+                  id="move-pipeline"
+                  value={target}
+                  onChange={(e) => setTarget(e.target.value)}
+                >
                   <option value="">{t('choosePipeline')}</option>
                   {others.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -293,13 +338,24 @@ function PipelineEditor({
   );
 }
 
-function StagesEditor({ pipeline, disabled, run }: { pipeline: Pipeline; disabled: boolean; run: Run }) {
+function StagesEditor({
+  pipeline,
+  disabled,
+  run,
+}: {
+  pipeline: Pipeline;
+  disabled: boolean;
+  run: Run;
+}) {
   const t = useTranslations('deals-pipelines.settings');
   const [toDelete, setToDelete] = useState<Stage | null>(null);
   const stages = pipeline.stages;
 
   return (
-    <section className="space-y-4 rounded-xl border border-border bg-background p-5" aria-labelledby="st-edit">
+    <section
+      className="space-y-4 rounded-xl border border-border bg-background p-5"
+      aria-labelledby="st-edit"
+    >
       <div>
         <h2 id="st-edit" className="text-base font-semibold">
           {t('stages')}
@@ -315,9 +371,16 @@ function StagesEditor({ pipeline, disabled, run }: { pipeline: Pipeline; disable
             index={i}
             count={stages.length}
             disabled={disabled}
-            onSave={(stage, patch) => void run(() => dealsApi.updateStage(stage, patch), t('saved'))}
+            onSave={(stage, patch) =>
+              void run(() => dealsApi.updateStage(stage, patch), t('saved'))
+            }
             onMove={(from, to) =>
-              void run(() => dealsApi.reorderStages(pipeline.id, moveStage(stages, from, to).map((x) => x.id)))
+              void run(() =>
+                dealsApi.reorderStages(
+                  pipeline.id,
+                  moveStage(stages, from, to).map((x) => x.id),
+                ),
+              )
             }
             onDelete={setToDelete}
           />
@@ -330,7 +393,10 @@ function StagesEditor({ pipeline, disabled, run }: { pipeline: Pipeline; disable
           others={reassignTargets(stages, toDelete.id)}
           onClose={() => setToDelete(null)}
           onConfirm={async (moveTo) => {
-            const ok = await run(() => dealsApi.deleteStage(toDelete.id, moveTo), t('stageDeleted'));
+            const ok = await run(
+              () => dealsApi.deleteStage(toDelete.id, moveTo),
+              t('stageDeleted'),
+            );
             if (ok) setToDelete(null);
           }}
         />
@@ -379,10 +445,21 @@ function AddStage({ pipeline, run }: { pipeline: Pipeline; run: Run }) {
     >
       <div className="flex flex-wrap items-end gap-2">
         <Field label={t('newStage')} htmlFor="new-stage" className="min-w-48 flex-1">
-          <Input id="new-stage" value={name} maxLength={120} placeholder={t('newStagePlaceholder')} onChange={(e) => setName(e.target.value)} />
+          <Input
+            id="new-stage"
+            value={name}
+            maxLength={120}
+            placeholder={t('newStagePlaceholder')}
+            onChange={(e) => setName(e.target.value)}
+          />
         </Field>
         <Field label={t('kind')} htmlFor="new-kind">
-          <Select id="new-kind" value={kind} className="w-auto min-w-28" onChange={(e) => setKind(e.target.value as StageKind)}>
+          <Select
+            id="new-kind"
+            value={kind}
+            className="w-auto min-w-28"
+            onChange={(e) => setKind(e.target.value as StageKind)}
+          >
             {(['open', 'won', 'lost'] as const).map((k) => (
               <option key={k} value={k}>
                 {t(`kinds.${k}`)}
@@ -462,7 +539,9 @@ function DeleteStageDialog({
         <p className="text-sm text-muted-foreground">{t('lastStage')}</p>
       ) : reassign ? (
         <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">{t('reassignMessage', { count: stage.dealCount })}</p>
+          <p className="text-sm text-muted-foreground">
+            {t('reassignMessage', { count: stage.dealCount })}
+          </p>
           <Field label={t('moveDealsTo')} htmlFor="reassign-to">
             <Select id="reassign-to" value={target} onChange={(e) => setTarget(e.target.value)}>
               <option value="">{t('chooseStage')}</option>
@@ -481,7 +560,13 @@ function DeleteStageDialog({
   );
 }
 
-function NewPipelineModal({ onClose, onCreate }: { onClose: () => void; onCreate: (name: string, currency: string) => Promise<void> }) {
+function NewPipelineModal({
+  onClose,
+  onCreate,
+}: {
+  onClose: () => void;
+  onCreate: (name: string, currency: string) => Promise<void>;
+}) {
   const t = useTranslations('deals-pipelines.settings');
   const [name, setName] = useState('');
   const [currency, setCurrency] = useState('USD');
@@ -519,8 +604,19 @@ function NewPipelineModal({ onClose, onCreate }: { onClose: () => void; onCreate
       }
     >
       <div className="space-y-4">
-        <Field label={t('pipelineName')} htmlFor="np-name" error={touched && invalid ? t('nameRequired') : undefined}>
-          <Input id="np-name" autoFocus value={name} maxLength={120} invalid={touched && invalid} onChange={(e) => setName(e.target.value)} />
+        <Field
+          label={t('pipelineName')}
+          htmlFor="np-name"
+          error={touched && invalid ? t('nameRequired') : undefined}
+        >
+          <Input
+            id="np-name"
+            autoFocus
+            value={name}
+            maxLength={120}
+            invalid={touched && invalid}
+            onChange={(e) => setName(e.target.value)}
+          />
         </Field>
         <Field label={t('currency')} htmlFor="np-currency">
           <Select id="np-currency" value={currency} onChange={(e) => setCurrency(e.target.value)}>
@@ -556,7 +652,10 @@ function LostReasonsCard({ disabled, run }: { disabled: boolean; run: Run }) {
   }
 
   return (
-    <section className="space-y-4 rounded-xl border border-border bg-background p-5" aria-labelledby="lr-h">
+    <section
+      className="space-y-4 rounded-xl border border-border bg-background p-5"
+      aria-labelledby="lr-h"
+    >
       <div>
         <h2 id="lr-h" className="text-base font-semibold">
           {t('lostReasons')}
@@ -582,7 +681,9 @@ function LostReasonsCard({ disabled, run }: { disabled: boolean; run: Run }) {
         </div>
       )}
 
-      {reasons.isError && <ErrorLine error={reasons.error} onRetry={() => void reasons.refetch()} />}
+      {reasons.isError && (
+        <ErrorLine error={reasons.error} onRetry={() => void reasons.refetch()} />
+      )}
       {reasons.isPending && <Spinner />}
       {reasons.data && rows.length === 0 && (
         <p className="rounded-lg border border-dashed border-border px-4 py-5 text-center text-sm text-muted-foreground">
@@ -643,7 +744,8 @@ function ReasonRow({
     ids.splice(to, 0, moved!);
     void run(() => dealsApi.reorderLostReasons(ids));
   };
-  const arrow = 'flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30';
+  const arrow =
+    'flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30';
   return (
     <li className="flex flex-wrap items-center gap-2 rounded-lg border border-border p-2">
       <div className="flex flex-col">
@@ -675,7 +777,8 @@ function ReasonRow({
         className="min-w-40 flex-1"
         onBlur={(e) => {
           const v = e.target.value.trim();
-          if (v && v !== reason.name) void run(() => dealsApi.updateLostReason(reason, { name: v }), t('saved'));
+          if (v && v !== reason.name)
+            void run(() => dealsApi.updateLostReason(reason, { name: v }), t('saved'));
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') e.currentTarget.blur();

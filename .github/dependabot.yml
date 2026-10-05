@@ -1,0 +1,41 @@
+# Weekly dependency updates, grouped so a week's minor and patch bumps arrive as one PR rather than thirty.
+# Majors are one PR each: they are the ones that need a person.
+# Keep this file at the repository root: GitHub ignores it anywhere else.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /crm-platform
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: 'chore(ci)'
+
+  # The base images of the two production images (node:22-alpine and friends).
+  - package-ecosystem: docker
+    directory: /crm-platform/apps/api
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: 'chore(deps)'
+  - package-ecosystem: docker
+    directory: /crm-platform/apps/web
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: 'chore(deps)'

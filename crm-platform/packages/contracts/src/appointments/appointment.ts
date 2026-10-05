@@ -280,11 +280,3 @@ export const appointmentManageLinkSchema = z.object({
   manageUrl: z.string(),
 });
 export type AppointmentManageLink = z.infer<typeof appointmentManageLinkSchema>;
-
-export const calendarStatusResponseSchema = z.object({
-  /** Which adapter serves the workspace (`none` = the stub). */
-  provider: z.string(),
-  connected: z.boolean(),
-  account: z.string().nullable(),
-});
-export type CalendarStatusResponse = z.infer<typeof calendarStatusResponseSchema>;

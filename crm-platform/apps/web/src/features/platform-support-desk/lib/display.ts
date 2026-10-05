@@ -33,3 +33,18 @@ export const formatWhen = (iso: string, locale: string): string =>
   );
 
 export const INBOX_KEY = ['support', 'operator', 'tickets'] as const;
+
+/** Pill tints for the ticket status and priority, shared by the inbox rows and the ticket panel. */
+export const STATUS_PILL: Record<string, string> = {
+  open: 'bg-warning/15 text-warning',
+  in_progress: 'bg-success/15 text-success',
+  pending: 'bg-danger/10 text-danger',
+  resolved: 'bg-success/10 text-success',
+  closed: 'bg-muted text-muted-foreground',
+};
+export const PRIORITY_PILL: Record<string, string> = {
+  low: 'bg-muted text-muted-foreground',
+  normal: 'bg-primary/10 text-primary',
+  high: 'bg-warning/15 text-warning',
+  urgent: 'bg-danger/10 text-danger',
+};

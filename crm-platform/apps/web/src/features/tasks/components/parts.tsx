@@ -42,7 +42,13 @@ export function useTasksCan() {
 }
 
 /** Two-letter circle for a person; the colour follows the name so it is the same everywhere. */
-export function Avatar({ name, className }: { name: string | null | undefined; className?: string }) {
+export function Avatar({
+  name,
+  className,
+}: {
+  name: string | null | undefined;
+  className?: string;
+}) {
   return (
     <span
       aria-hidden="true"
@@ -63,7 +69,13 @@ const PRIORITY_TONE: Record<TaskPriority, string> = {
   low: 'border-border bg-muted text-muted-foreground',
 };
 
-export function PriorityChip({ priority, className }: { priority: TaskPriority; className?: string }) {
+export function PriorityChip({
+  priority,
+  className,
+}: {
+  priority: TaskPriority;
+  className?: string;
+}) {
   const t = useTranslations('tasks.priority');
   return (
     <span
@@ -77,7 +89,11 @@ export function PriorityChip({ priority, className }: { priority: TaskPriority; 
         aria-hidden="true"
         className={cn(
           'size-1.5 rounded-full',
-          priority === 'high' ? 'bg-danger' : priority === 'medium' ? 'bg-warning' : 'bg-muted-foreground',
+          priority === 'high'
+            ? 'bg-danger'
+            : priority === 'medium'
+              ? 'bg-warning'
+              : 'bg-muted-foreground',
         )}
       />
       {t(priority)}
@@ -99,7 +115,8 @@ export function DueText({
 }) {
   const t = useTranslations('tasks.due');
   const locale = useLocale();
-  if (!task.dueAt) return <span className={cn('text-muted-foreground', className)}>{t('none')}</span>;
+  if (!task.dueAt)
+    return <span className={cn('text-muted-foreground', className)}>{t('none')}</span>;
   const overdue = isOverdue(task, now, zone);
   const time = formatTime(task.dueAt, locale, zone);
   const rel = relativeDay(task.dueAt, now, zone);

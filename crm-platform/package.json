@@ -12,6 +12,7 @@
     "dev": "pnpm --filter @crm/api dev",
     "dev:worker": "pnpm --filter @crm/api dev:worker",
     "dev:web": "pnpm --filter @crm/web dev",
+    "dev:refresh": "bash tools/dev-refresh.sh",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix",
@@ -44,10 +45,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
-    "prettier": "^3.4.2",
-    "turbo": "^2.3.3",
+    "prettier": "^3.9.9",
+    "turbo": "^2.11.6",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.71.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs,cjs}": [
@@ -57,5 +58,15 @@
     "*.{json,md,yml,yaml}": [
       "prettier --write"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "multer": ">=2.4.0"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-gpj5-g38j-94v9"
+      ]
+    }
   }
 }

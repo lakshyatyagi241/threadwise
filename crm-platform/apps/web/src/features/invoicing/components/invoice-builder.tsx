@@ -7,7 +7,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { InvoiceProfile, InvoiceResponse, TaxRateResponse } from '@crm/contracts';
 import { Alert, Button, Spinner, cn, useToast } from '@crm/ui';
-import { KEYS, invalidateInvoicing, useInvoice, useInvoiceSettings, useTaxRates } from '../api/hooks';
+import {
+  KEYS,
+  invalidateInvoicing,
+  useInvoice,
+  useInvoiceSettings,
+  useTaxRates,
+} from '../api/hooks';
 import { invoicingApi } from '../api/service';
 import {
   draftOf,
@@ -26,7 +32,14 @@ import {
 import { errorCode, errorKind, fieldErrors } from '../lib/errors';
 import { paperFromDraft } from '../lib/paper';
 import { hsnRequired } from '../lib/tax-info';
-import { AdjustmentsSection, BuyerSection, DetailsSection, NotesSection, TaxSection, Card } from './builder-sections';
+import {
+  AdjustmentsSection,
+  BuyerSection,
+  DetailsSection,
+  NotesSection,
+  TaxSection,
+  Card,
+} from './builder-sections';
 import { BackIcon } from './icons';
 import { InvoicePaper } from './invoice-paper';
 import { InvoiceLinesEditor } from './line-items-editor';
@@ -82,7 +95,10 @@ function StartFromDocument({ docId }: { docId: string }) {
         <Alert tone="danger">{errorText(failed)}</Alert>
         <div className="flex flex-wrap gap-3 text-sm">
           {existing && (
-            <Link href={`/invoices/${existing}`} className="font-medium text-primary underline underline-offset-2">
+            <Link
+              href={`/invoices/${existing}`}
+              className="font-medium text-primary underline underline-offset-2"
+            >
               {t('openExisting')}
             </Link>
           )}
@@ -119,7 +135,10 @@ function StartFromDuplicate({ invoiceId }: { invoiceId: string }) {
     return (
       <div className="space-y-3">
         <Alert tone="danger">{errorText(failed)}</Alert>
-        <Link href={`/invoices/${invoiceId}`} className="text-sm text-muted-foreground underline underline-offset-2">
+        <Link
+          href={`/invoices/${invoiceId}`}
+          className="text-sm text-muted-foreground underline underline-offset-2"
+        >
           {t('backToInvoice')}
         </Link>
       </div>
@@ -158,7 +177,14 @@ function BuilderLoader({ invoiceId }: { invoiceId?: string }) {
     return (
       <ErrorLine
         error={failed}
-        onRetry={() => void Promise.all([active.refetch(), all.refetch(), settings.refetch(), existing.refetch()])}
+        onRetry={() =>
+          void Promise.all([
+            active.refetch(),
+            all.refetch(),
+            settings.refetch(),
+            existing.refetch(),
+          ])
+        }
       />
     );
   }
@@ -179,7 +205,14 @@ function BuilderLoader({ invoiceId }: { invoiceId?: string }) {
       </div>
     );
   }
-  return <BuilderForm key={existing.data?.id ?? 'new'} invoice={existing.data} rates={rates} profile={settings.data} />;
+  return (
+    <BuilderForm
+      key={existing.data?.id ?? 'new'}
+      invoice={existing.data}
+      rates={rates}
+      profile={settings.data}
+    />
+  );
 }
 
 function BuilderForm({
@@ -243,7 +276,9 @@ function BuilderForm({
     if (!c || prefilled.current.contact) return;
     prefilled.current.contact = true;
     const label = c.name || [c.firstName, c.lastName].filter(Boolean).join(' ') || c.phone || '';
-    setDraftState((d) => withContact(d, { id: c.id, label, email: c.email ?? null, phone: c.phone ?? null }));
+    setDraftState((d) =>
+      withContact(d, { id: c.id, label, email: c.email ?? null, phone: c.phone ?? null }),
+    );
   }, [contact.data]);
   useEffect(() => {
     const dl = deal.data;
@@ -256,7 +291,12 @@ function BuilderForm({
       // A contact picked through `?contact=` wins over the deal's.
       ...(d.contactId || !dl.contact
         ? {}
-        : { contactId: dl.contact.id, contactLabel: dl.contact.name ?? '', buyerName: d.buyerName || (dl.contact.name ?? ''), buyerPhone: d.buyerPhone || (dl.contact.phone ?? '') }),
+        : {
+            contactId: dl.contact.id,
+            contactLabel: dl.contact.name ?? '',
+            buyerName: d.buyerName || (dl.contact.name ?? ''),
+            buyerPhone: d.buyerPhone || (dl.contact.phone ?? ''),
+          }),
     }));
   }, [deal.data]);
 
@@ -268,13 +308,23 @@ function BuilderForm({
     return () => window.removeEventListener('beforeunload', h);
   }, [dirty]);
 
-  const pricing = useMemo(() => pricingOf(draft, { rates, profile, today }), [draft, rates, profile, today]);
+  const pricing = useMemo(
+    () => pricingOf(draft, { rates, profile, today }),
+    [draft, rates, profile, today],
+  );
   const showHsn = hsnRequired(profile.sellerCountry);
-  const paper = useMemo(() => paperFromDraft(draft, pricing, { profile, rates }), [draft, pricing, profile, rates]);
+  const paper = useMemo(
+    () => paperFromDraft(draft, pricing, { profile, rates }),
+    [draft, pricing, profile, rates],
+  );
 
   // What is wrong, by path. Until a save was tried, "required" notes stay quiet; wrong values show as they are typed.
   const problems = useMemo<DraftProblems>(() => {
-    const all = validateDraft(draft, pricing, { mode: attempt ?? 'draft', requireHsn: showHsn && !orderLinked, sellerCountry: profile.sellerCountry });
+    const all = validateDraft(draft, pricing, {
+      mode: attempt ?? 'draft',
+      requireHsn: showHsn && !orderLinked,
+      sellerCountry: profile.sellerCountry,
+    });
     if (attempt) return all;
     const quiet: Problem[] = ['descriptionRequired', 'contactRequired', 'noLines', 'amountZero'];
     return Object.fromEntries(Object.entries(all).filter(([, p]) => !quiet.includes(p)));
@@ -284,25 +334,33 @@ function BuilderForm({
   const lineErrors = useMemo(() => {
     const out: Record<string, string> = {};
     for (const path of new Set([...Object.keys(problems), ...Object.keys(serverErrors)])) {
-      if (path === 'lines' || path.startsWith('lines.')) out[path] = problems[path] ? t(`problems.${problems[path]}`) : serverErrors[path]!;
+      if (path === 'lines' || path.startsWith('lines.'))
+        out[path] = problems[path] ? t(`problems.${problems[path]}`) : serverErrors[path]!;
     }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [problems, serverErrors]);
   const amounts = useMemo(() => {
     const out: Array<number | null> = draft.lines.map(() => null);
-    if (pricing.result.ok) pricing.used.forEach((di, k) => (out[di] = pricing.result.totals.lines[k]?.netMinor ?? 0));
+    if (pricing.result.ok)
+      pricing.used.forEach((di, k) => (out[di] = pricing.result.totals.lines[k]?.netMinor ?? 0));
     return out;
   }, [draft.lines, pricing]);
   const priceIssues = pricing.result.ok
     ? []
-    : [...new Set(Object.values(problems).filter((p) => p === 'amountInvalid'))].map((p) => t(`problems.${p}`));
+    : [...new Set(Object.values(problems).filter((p) => p === 'amountInvalid'))].map((p) =>
+        t(`problems.${p}`),
+      );
 
   async function persist(mode: 'draft' | 'issue'): Promise<InvoiceResponse | null> {
     setAttempt(mode);
     setFormError(null);
     setServerErrors({});
-    const p = validateDraft(draft, pricing, { mode, requireHsn: showHsn && !orderLinked, sellerCountry: profile.sellerCountry });
+    const p = validateDraft(draft, pricing, {
+      mode,
+      requireHsn: showHsn && !orderLinked,
+      sellerCountry: profile.sellerCountry,
+    });
     if (hasProblems(p)) {
       toast(t('fixProblems'), 'danger');
       return null;
@@ -313,7 +371,11 @@ function BuilderForm({
       // The lines of an invoice made from a sales order are fixed: the server refuses them (409 INV_ORDER_LINKED), so they stay out.
       const { lines: _fixed, ...withoutLines } = body;
       const out = invoice
-        ? await invoicingApi.update(invoice.id, rowVersion.current, orderLinked ? withoutLines : body)
+        ? await invoicingApi.update(
+            invoice.id,
+            rowVersion.current,
+            orderLinked ? withoutLines : body,
+          )
         : await invoicingApi.create(body);
       rowVersion.current = out.rowVersion;
       await invalidateInvoicing(qc);
@@ -324,9 +386,12 @@ function BuilderForm({
         // The draft was issued meanwhile (somewhere else): its detail is where it lives now.
         if (errorCode(e) === 'INV_NOT_DRAFT') setIssuedElsewhere(true);
         // A tax rate went inactive or expired: reload the list so the pick is a current one.
-        if (errorCode(e) === 'INV_TAX_RATE_INVALID') void qc.invalidateQueries({ queryKey: KEYS.rates });
+        if (errorCode(e) === 'INV_TAX_RATE_INVALID')
+          void qc.invalidateQueries({ queryKey: KEYS.rates });
         const server = fieldErrors(e);
-        const mapped = Object.fromEntries(Object.entries(server).map(([path, msg]) => [serverPath(path, pricing.used), msg]));
+        const mapped = Object.fromEntries(
+          Object.entries(server).map(([path, msg]) => [serverPath(path, pricing.used), msg]),
+        );
         setServerErrors(mapped);
         setFormError(errorText(e));
       }
@@ -381,18 +446,35 @@ function BuilderForm({
           >
             <BackIcon />
           </Link>
-          <h1 className="truncate text-xl font-bold tracking-tight">{invoice ? t('editTitle') : t('newTitle')}</h1>
+          <h1 className="truncate text-xl font-bold tracking-tight">
+            {invoice ? t('editTitle') : t('newTitle')}
+          </h1>
           {dirty && <span className="shrink-0 text-xs text-muted-foreground">{t('unsaved')}</span>}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="secondary" className="min-h-10" onClick={() => router.push(back)} disabled={busy}>
+          <Button
+            variant="secondary"
+            className="min-h-10"
+            onClick={() => router.push(back)}
+            disabled={busy}
+          >
             {t('cancel')}
           </Button>
-          <Button variant="secondary" className="min-h-10" onClick={() => void saveDraft()} disabled={busy || !canSave}>
+          <Button
+            variant="secondary"
+            className="min-h-10"
+            onClick={() => void saveDraft()}
+            disabled={busy || !canSave}
+          >
             {busy && <Spinner />}
             {t('saveDraft')}
           </Button>
-          <Button variant="brand" className="min-h-10" onClick={() => void saveAndIssue()} disabled={busy || !canSave || !can.issue}>
+          <Button
+            variant="brand"
+            className="min-h-10"
+            onClick={() => void saveAndIssue()}
+            disabled={busy || !canSave || !can.issue}
+          >
             {t('saveAndIssue')}
           </Button>
         </div>
@@ -410,14 +492,21 @@ function BuilderForm({
         <Alert tone="danger" className="space-y-1">
           <p>{formError}</p>
           {issuedElsewhere && invoice && (
-            <Link href={`/invoices/${invoice.id}`} className="font-medium underline underline-offset-2">
+            <Link
+              href={`/invoices/${invoice.id}`}
+              className="font-medium underline underline-offset-2"
+            >
               {t('openInvoice')}
             </Link>
           )}
         </Alert>
       )}
 
-      <div role="tablist" aria-label={t('viewLabel')} className="flex gap-1 rounded-md bg-muted p-1 lg:hidden">
+      <div
+        role="tablist"
+        aria-label={t('viewLabel')}
+        className="flex gap-1 rounded-md bg-muted p-1 lg:hidden"
+      >
         {(['edit', 'preview'] as const).map((v) => (
           <button
             key={v}
@@ -441,7 +530,9 @@ function BuilderForm({
           <DetailsSection {...common} />
           <TaxSection {...common} profile={profile} />
           <Card title={t('lineItems')} single>
-            {orderLinked && <p className="mb-3 text-sm text-muted-foreground">{t('orderLinkedNote')}</p>}
+            {orderLinked && (
+              <p className="mb-3 text-sm text-muted-foreground">{t('orderLinkedNote')}</p>
+            )}
             <InvoiceLinesEditor
               lines={draft.lines}
               onChange={(lines) => setDraft((d) => ({ ...d, lines }))}
@@ -458,7 +549,12 @@ function BuilderForm({
           <NotesSection {...common} />
         </div>
 
-        <aside className={cn('min-w-0 space-y-4 lg:sticky lg:top-4', tab === 'edit' && 'hidden lg:block')}>
+        <aside
+          className={cn(
+            'min-w-0 space-y-4 lg:sticky lg:top-4',
+            tab === 'edit' && 'hidden lg:block',
+          )}
+        >
           <TotalsCard
             totals={pricing.result.totals}
             currency={draft.currency.trim().toUpperCase() || 'USD'}
@@ -473,7 +569,9 @@ function BuilderForm({
             />
           )}
           <div>
-            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t('preview')}</h2>
+            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t('preview')}
+            </h2>
             <div className="thin-scrollbar max-h-[70vh] overflow-auto rounded-lg">
               <InvoicePaper model={paper} />
             </div>

@@ -79,7 +79,9 @@ export const emptyLine = (taxRateId: string = TAX_DEFAULT): DraftLine => ({
 
 /** A line the person has not started: it is dropped on save instead of being a problem. */
 export const isBlankLine = (l: DraftLine): boolean =>
-  l.description.trim() === '' && l.price.trim() === '' && (l.qty.trim() === '' || l.qty.trim() === '1');
+  l.description.trim() === '' &&
+  l.price.trim() === '' &&
+  (l.qty.trim() === '' || l.qty.trim() === '1');
 
 /**
  * What a person typed in an amount box ("12", "12.5", "1,234.50", "12,5") as a wire decimal ("12.50" stays "12.50"), or null when
@@ -90,7 +92,8 @@ export function decimalOf(text: string, scale = 4, maxInt = 12): string | null {
   if (s === '') return null;
   if (s.includes(',') && !s.includes('.')) {
     const parts = s.split(',');
-    s = parts.length === 2 && parts[1]!.length <= scale ? `${parts[0]}.${parts[1]}` : parts.join('');
+    s =
+      parts.length === 2 && parts[1]!.length <= scale ? `${parts[0]}.${parts[1]}` : parts.join('');
   } else s = s.replace(/,/g, '');
   const m = new RegExp(`^(\\d{1,${maxInt}})(?:\\.(\\d{1,${scale}}))?$`).exec(s);
   if (!m) return null;
@@ -98,7 +101,10 @@ export function decimalOf(text: string, scale = 4, maxInt = 12): string | null {
 }
 
 /** The rate a line is priced with: the default one for `TAX_DEFAULT` (none when the workspace has none), nothing for `TAX_NONE`. */
-export function rateOfLine(l: DraftLine, rates: readonly TaxRateResponse[]): TaxRateResponse | null {
+export function rateOfLine(
+  l: DraftLine,
+  rates: readonly TaxRateResponse[],
+): TaxRateResponse | null {
   if (l.taxRateId === TAX_NONE || l.taxRateId === TAX_SNAPSHOT) return null;
   if (l.taxRateId === TAX_DEFAULT) return rates.find((r) => r.isDefault && r.isActive) ?? null;
   return rates.find((r) => r.id === l.taxRateId) ?? null;
@@ -119,7 +125,11 @@ export function lineTaxOf(l: DraftLine, rates: readonly TaxRateResponse[]): Line
 }
 
 const lineDiscountOf = (l: DraftLine): { kind: 'percent' | 'amount'; value: string } | null => {
-  const v = decimalOf(l.discount, l.discountKind === 'percent' ? 2 : 4, l.discountKind === 'percent' ? 3 : 12);
+  const v = decimalOf(
+    l.discount,
+    l.discountKind === 'percent' ? 2 : 4,
+    l.discountKind === 'percent' ? 3 : 12,
+  );
   return v === null ? null : { kind: l.discountKind, value: v };
 };
 
@@ -147,7 +157,10 @@ export function linesToInput(
         ...(discount && Number(discount.value) > 0 ? { discount } : {}),
         ...(l.taxRateId === TAX_DEFAULT
           ? {}
-          : { taxRateId: l.taxRateId === TAX_NONE || l.taxRateId === TAX_SNAPSHOT ? null : l.taxRateId }),
+          : {
+              taxRateId:
+                l.taxRateId === TAX_NONE || l.taxRateId === TAX_SNAPSHOT ? null : l.taxRateId,
+            }),
       };
     });
 }
@@ -163,7 +176,11 @@ export type LineProblem =
   | 'taxRateRemoved';
 
 /** What is wrong with one line (a blank line has nothing wrong). `requireHsn`: the seller's country asks for an HSN/SAC. */
-export function lineProblems(l: DraftLine, currency: string, opts: { requireHsn?: boolean } = {}): Partial<Record<LineField, LineProblem>> {
+export function lineProblems(
+  l: DraftLine,
+  currency: string,
+  opts: { requireHsn?: boolean } = {},
+): Partial<Record<LineField, LineProblem>> {
   void currency;
   const p: Partial<Record<LineField, LineProblem>> = {};
   if (isBlankLine(l)) return p;
@@ -173,7 +190,8 @@ export function lineProblems(l: DraftLine, currency: string, opts: { requireHsn?
   if (l.price.trim() !== '' && decimalOf(l.price) === null) p.unitPrice = 'priceInvalid';
   if (l.discount.trim() !== '') {
     const d = lineDiscountOf(l);
-    if (d === null || (d.kind === 'percent' && Number(d.value) > 100)) p.discount = 'lineDiscountInvalid';
+    if (d === null || (d.kind === 'percent' && Number(d.value) > 100))
+      p.discount = 'lineDiscountInvalid';
   }
   const hsn = l.hsnSac.trim();
   if (hsn !== '' && !/^[0-9A-Za-z]{2,12}$/.test(hsn)) p.hsnSac = 'hsnInvalid';
@@ -302,14 +320,21 @@ export function draftOf(inv: InvoiceResponse): InvoiceDraft {
               price: l.unitPrice,
               discountKind: l.discount?.kind ?? 'percent',
               discount: l.discount?.value ?? '',
-              taxRateId: l.taxRateId ? l.taxRateId : auto ? TAX_DEFAULT : taxed ? TAX_SNAPSHOT : TAX_NONE,
+              taxRateId: l.taxRateId
+                ? l.taxRateId
+                : auto
+                  ? TAX_DEFAULT
+                  : taxed
+                    ? TAX_SNAPSHOT
+                    : TAX_NONE,
               taxSnapshot:
                 !l.taxRateId && taxed
                   ? {
                       name: l.taxName ?? '',
                       rate: l.taxRate,
                       inclusive: l.taxInclusive,
-                      components: l.taxComponents?.map((c) => ({ type: c.type, rate: c.rate })) ?? null,
+                      components:
+                        l.taxComponents?.map((c) => ({ type: c.type, rate: c.rate })) ?? null,
                     }
                   : null,
             };
@@ -349,8 +374,10 @@ export interface DraftPricing {
 export const usedIndexes = (lines: readonly DraftLine[]): number[] =>
   lines.flatMap((l, i) => (isBlankLine(l) ? [] : [i]));
 
-export const placeOfSupplyOfDraft = (d: InvoiceDraft, sellerCountry: string | null | undefined): string | null =>
-  placeOfSupplyOf(d.buyerCountry || sellerCountry, d.placeRegion);
+export const placeOfSupplyOfDraft = (
+  d: InvoiceDraft,
+  sellerCountry: string | null | undefined,
+): string | null => placeOfSupplyOf(d.buyerCountry || sellerCountry, d.placeRegion);
 
 /** Prices the draft: `computeInvoice` for the figures, `resolveTaxForLine` for the taxes of an auto invoice. */
 export function pricingOf(draft: InvoiceDraft, ctx: PricingContext): DraftPricing {
@@ -387,7 +414,11 @@ export function pricingOf(draft: InvoiceDraft, ctx: PricingContext): DraftPricin
     draft.discountKind === 'none'
       ? null
       : (() => {
-          const v = decimalOf(draft.discountText, draft.discountKind === 'percent' ? 2 : 4, draft.discountKind === 'percent' ? 3 : 12);
+          const v = decimalOf(
+            draft.discountText,
+            draft.discountKind === 'percent' ? 2 : 4,
+            draft.discountKind === 'percent' ? 3 : 12,
+          );
           return v === null || Number(v) === 0 ? null : { kind: draft.discountKind, value: v };
         })();
   const result = priceInvoice({
@@ -443,25 +474,45 @@ export interface ValidateOptions {
  * issuing needs a buyer and a positive total too, because an issued invoice is frozen and numbered. A tax id that fails its checksum is NOT a problem here
  * (the form warns; the engine's check does not prove or disprove a registration).
  */
-export function validateDraft(draft: InvoiceDraft, pricing: DraftPricing, opts: ValidateOptions): DraftProblems {
+export function validateDraft(
+  draft: InvoiceDraft,
+  pricing: DraftPricing,
+  opts: ValidateOptions,
+): DraftProblems {
   const out: DraftProblems = {};
   if (!/^[A-Za-z]{3}$/.test(draft.currency.trim())) out.currency = 'currencyInvalid';
   // Empty is allowed: a draft made from an order or a schedule has no date yet, and issuing dates it that day.
   if (draft.issueDate !== '' && !isDay(draft.issueDate)) out.issueDate = 'issueDateInvalid';
   if (draft.dueDate !== '') {
     if (!isDay(draft.dueDate)) out.dueDate = 'dueInvalid';
-    else if (isDay(draft.issueDate) && draft.dueDate < draft.issueDate) out.dueDate = 'dueBeforeIssue';
+    else if (isDay(draft.issueDate) && draft.dueDate < draft.issueDate)
+      out.dueDate = 'dueBeforeIssue';
   }
-  if (draft.buyerEmail.trim() !== '' && !EMAIL.test(draft.buyerEmail.trim())) out.buyerEmail = 'emailInvalid';
-  if (draft.buyerCountry.trim() !== '' && !/^[A-Za-z]{2}$/.test(draft.buyerCountry.trim())) out.buyerCountry = 'countryInvalid';
-  if (draft.placeRegion.trim() !== '' && !/^[A-Za-z0-9]{1,3}$/.test(draft.placeRegion.trim())) out.placeRegion = 'regionInvalid';
+  if (draft.buyerEmail.trim() !== '' && !EMAIL.test(draft.buyerEmail.trim()))
+    out.buyerEmail = 'emailInvalid';
+  if (draft.buyerCountry.trim() !== '' && !/^[A-Za-z]{2}$/.test(draft.buyerCountry.trim()))
+    out.buyerCountry = 'countryInvalid';
+  if (draft.placeRegion.trim() !== '' && !/^[A-Za-z0-9]{1,3}$/.test(draft.placeRegion.trim()))
+    out.placeRegion = 'regionInvalid';
   if (draft.discountKind !== 'none' && draft.discountText.trim() !== '') {
-    const d = decimalOf(draft.discountText, draft.discountKind === 'percent' ? 2 : 4, draft.discountKind === 'percent' ? 3 : 12);
-    if (d === null || (draft.discountKind === 'percent' && Number(d) > 100)) out.discount = 'discountInvalid';
+    const d = decimalOf(
+      draft.discountText,
+      draft.discountKind === 'percent' ? 2 : 4,
+      draft.discountKind === 'percent' ? 3 : 12,
+    );
+    if (d === null || (draft.discountKind === 'percent' && Number(d) > 100))
+      out.discount = 'discountInvalid';
   }
-  if (draft.shipping.trim() !== '' && decimalOf(draft.shipping) === null) out.shipping = 'shippingInvalid';
-  if (opts.mode === 'issue' && !draft.contactId && draft.buyerName.trim() === '') out.buyerName = 'contactRequired';
-  if (draft.taxMode === 'auto' && pricing.auto && !pricing.auto.ok && pricing.auto.reason !== 'failed') {
+  if (draft.shipping.trim() !== '' && decimalOf(draft.shipping) === null)
+    out.shipping = 'shippingInvalid';
+  if (opts.mode === 'issue' && !draft.contactId && draft.buyerName.trim() === '')
+    out.buyerName = 'contactRequired';
+  if (
+    draft.taxMode === 'auto' &&
+    pricing.auto &&
+    !pricing.auto.ok &&
+    pricing.auto.reason !== 'failed'
+  ) {
     out.taxMode = 'autoNeedsSellerCountry';
   }
 
@@ -472,7 +523,8 @@ export function validateDraft(draft: InvoiceDraft, pricing: DraftPricing, opts: 
     const lp = lineProblems(draft.lines[i]!, draft.currency, { requireHsn: opts.requireHsn });
     for (const [field, problem] of Object.entries(lp)) {
       // The removed-rate and missing-HSN notes only stop an issue: a draft may keep them while the person decides.
-      if (opts.mode === 'draft' && (problem === 'taxRateRemoved' || problem === 'hsnRequired')) continue;
+      if (opts.mode === 'draft' && (problem === 'taxRateRemoved' || problem === 'hsnRequired'))
+        continue;
       out[`lines.${i}.${field}`] = problem!;
     }
   }
@@ -488,7 +540,10 @@ export function validateDraft(draft: InvoiceDraft, pricing: DraftPricing, opts: 
  * `computeInvoice` issues (paths over the priced lines) as problems on the draft's own paths: `lines.0.unitPrice` of the first
  * priced line is the draft line it came from.
  */
-export function issuesToProblems(issues: readonly InvoiceIssue[], used: readonly number[]): DraftProblems {
+export function issuesToProblems(
+  issues: readonly InvoiceIssue[],
+  used: readonly number[],
+): DraftProblems {
   const out: DraftProblems = {};
   for (const issue of issues) {
     const m = /^lines\.(\d+)\.(\w+)$/.exec(issue.path);
@@ -496,7 +551,13 @@ export function issuesToProblems(issues: readonly InvoiceIssue[], used: readonly
       const draftIndex = used[Number(m[1])] ?? Number(m[1]);
       const field = m[2] === 'taxRate' ? 'taxRateId' : m[2]!;
       const problem: Problem =
-        field === 'qty' ? 'qtyInvalid' : field === 'unitPrice' ? 'priceInvalid' : field === 'discount' ? 'lineDiscountInvalid' : 'amountInvalid';
+        field === 'qty'
+          ? 'qtyInvalid'
+          : field === 'unitPrice'
+            ? 'priceInvalid'
+            : field === 'discount'
+              ? 'lineDiscountInvalid'
+              : 'amountInvalid';
       out[`lines.${draftIndex}.${field}`] = problem;
     } else if (issue.path === 'discount') out.discount = 'discountInvalid';
     else if (issue.path === 'shipping') out.shipping = 'shippingInvalid';
@@ -519,13 +580,21 @@ export const serverPath = (path: string, used: readonly number[]): string => {
  * The request body of a create, and (with `rowVersion`) of an update: a draft is edited whole, so every field goes, empty ones as
  * `null`. `ownerId` is left out unless the draft has one (an edit keeps the owner; a new invoice belongs to the caller).
  */
-export function draftToBody(draft: InvoiceDraft, rates: readonly TaxRateResponse[], sellerCountry?: string | null): CreateInvoiceInput {
+export function draftToBody(
+  draft: InvoiceDraft,
+  rates: readonly TaxRateResponse[],
+  sellerCountry?: string | null,
+): CreateInvoiceInput {
   const orNull = (s: string): string | null => (s.trim() === '' ? null : s.trim());
   const disc =
     draft.discountKind === 'none'
       ? null
       : (() => {
-          const v = decimalOf(draft.discountText, draft.discountKind === 'percent' ? 2 : 4, draft.discountKind === 'percent' ? 3 : 12);
+          const v = decimalOf(
+            draft.discountText,
+            draft.discountKind === 'percent' ? 2 : 4,
+            draft.discountKind === 'percent' ? 3 : 12,
+          );
           return v === null || Number(v) === 0 ? null : { kind: draft.discountKind, value: v };
         })();
   const country = orNull(draft.buyerCountry);
@@ -545,7 +614,8 @@ export function draftToBody(draft: InvoiceDraft, rates: readonly TaxRateResponse
     currency: draft.currency.trim().toUpperCase(),
     taxMode: draft.taxMode,
     supplyType: draft.supplyType,
-    placeOfSupply: auto || draft.placeRegion.trim() ? placeOfSupplyOfDraft(draft, sellerCountry) : null,
+    placeOfSupply:
+      auto || draft.placeRegion.trim() ? placeOfSupplyOfDraft(draft, sellerCountry) : null,
     reverseCharge: draft.reverseCharge,
     issueDate: orNull(draft.issueDate),
     dueDate: orNull(draft.dueDate),
@@ -561,7 +631,10 @@ export function draftToBody(draft: InvoiceDraft, rates: readonly TaxRateResponse
 
 /** Same working copy field for field, used to tell whether the person changed anything (leave-page guard). */
 export function isSameDraft(a: InvoiceDraft, b: InvoiceDraft): boolean {
-  const strip = (d: InvoiceDraft) => ({ ...d, lines: d.lines.map(({ key: _key, ...rest }) => rest) });
+  const strip = (d: InvoiceDraft) => ({
+    ...d,
+    lines: d.lines.map(({ key: _key, ...rest }) => rest),
+  });
   return JSON.stringify(strip(a)) === JSON.stringify(strip(b));
 }
 

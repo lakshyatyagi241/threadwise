@@ -36,4 +36,5 @@ export const CMS_EVENTS = {
   faqChanged: 'platform.cms.faq_changed',
   announcementChanged: 'platform.cms.announcement_changed',
   guidebookChanged: 'platform.cms.guidebook_changed',
+  imageUploaded: 'platform.cms.image_uploaded',
 } as const;

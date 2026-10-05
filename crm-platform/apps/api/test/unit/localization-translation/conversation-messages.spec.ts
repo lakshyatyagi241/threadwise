@@ -33,6 +33,7 @@ function build(
   };
   const store: ConversationMessageStore = {
     load: async () => m,
+    idOfUuid: async (_o, uuid) => (uuid === 'known' ? 1 : null),
     saveInbound: async (_o, _m, outcome) => void saved.inbound.push(outcome),
     saveOutbound: async (_o, _m, outcome) => void saved.outbound.push(outcome),
   };
@@ -53,6 +54,7 @@ function build(
   };
   const translation = {
     detectAndTranslate: async () => opts.result ?? { language: null, text: null },
+    detect: async () => opts.result?.language ?? null,
   };
   const svc = new ConversationTranslationService(
     db as never,
@@ -97,6 +99,7 @@ describe('translateInboundMessage', () => {
     const { svc } = build(message(), { result: { language: 'es', text: 'x' } });
     (svc as unknown as { messages: ConversationMessageStore }).messages = {
       load: async () => message(),
+      idOfUuid: async () => 1,
       saveInbound: async () => Promise.reject(new Error('db down')),
       saveOutbound: async () => undefined,
     };
@@ -185,5 +188,61 @@ describe('thread display gating', () => {
     expect(view.map((m) => m.isTranslated)).toEqual([false, false]);
     expect(view.map((m) => m.detectedLanguage)).toEqual(['es', 'fr']);
     expect(off.reads()).toBe(1);
+  });
+});
+
+describe('inbox hook points', () => {
+  it('translates an inbound message known only by its uuid (TW-I18N-036)', async () => {
+    const { svc, saved } = build(message(), {
+      result: { language: 'es', text: 'Where is my order?' },
+    });
+    expect((await svc.translateInboundByUuid(5, 'known'))?.isTranslated).toBe(true);
+    expect(saved.inbound).toHaveLength(1);
+    expect(await svc.translateInboundByUuid(5, 'unknown')).toBeNull();
+  });
+
+  it('translates again on a send retry instead of sending the untranslated text (TW-I18N-037)', async () => {
+    const row = message({
+      direction: 'out',
+      body: 'Your order ships',
+      customerLanguage: 'es',
+      isTranslated: true,
+    });
+    const { svc } = build(row, { result: { language: 'en', text: 'Su pedido se envía' } });
+    expect((await svc.translateOutboundMessage(5, 1))?.isTranslated).toBe(false);
+    expect((await svc.translateOutboundMessage(5, 1, { retry: true }))?.body).toBe(
+      'Su pedido se envía',
+    );
+  });
+
+  it('hides every reading when the gate cannot be read (TW-I18N-038)', async () => {
+    const { svc } = build(null);
+    (svc as unknown as { db: unknown }).db = {
+      txAs: async () => Promise.reject(new Error('down')),
+    };
+    const view = await svc.threadView(5, [
+      { translatedBody: 'x', detectedLanguage: 'es', isTranslated: true },
+    ]);
+    expect(view[0]).toMatchObject({
+      translatedBody: null,
+      isTranslated: false,
+      detectedLanguage: 'es',
+    });
+  });
+
+  it('gives the widget the visitor language only when it differs from the team language (TW-I18N-039)', async () => {
+    expect(
+      await build(null, { result: { language: 'es', text: 'x' } }).svc.replyLanguage(5, 'Hola'),
+    ).toBe('es');
+    expect(
+      await build(null, { result: { language: 'en', text: 'x' } }).svc.replyLanguage(5, 'Hi'),
+    ).toBeNull();
+    expect(
+      await build(null, {
+        enabled: false,
+        result: { language: 'es', text: 'x' },
+      }).svc.replyLanguage(5, 'Hola'),
+    ).toBeNull();
+    expect(await build(null).svc.replyLanguage(5, '  ')).toBeNull();
   });
 });

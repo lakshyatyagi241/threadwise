@@ -75,7 +75,8 @@ export function mapDeal(d: DealResponse, pipelineCurrency?: string): Deal {
     status: d.status,
     valueMinor,
     currency: d.currency,
-    boardValueMinor: pipelineCurrency === undefined || d.currency === pipelineCurrency ? valueMinor : 0,
+    boardValueMinor:
+      pipelineCurrency === undefined || d.currency === pipelineCurrency ? valueMinor : 0,
     contact: d.contact ? { id: d.contact.id, name: d.contact.name, phone: d.contact.phone } : null,
     company: d.company,
     owner: d.owner,
@@ -147,7 +148,8 @@ export function mapReport(r: DealReportsResponse, currency: string): Report {
   const note = (t: DealTotals) => {
     for (const c of t.unconverted ?? []) unconverted.add(c);
   };
-  for (const t of [r.open.value, r.open.forecast, r.won.value, r.won.thisMonth.value, r.lost.value]) note(t);
+  for (const t of [r.open.value, r.open.forecast, r.won.value, r.won.thisMonth.value, r.lost.value])
+    note(t);
   for (const s of r.byStage) note(s.value);
   const pick = (t: DealTotals) => pickTotal(t, currency);
   return {

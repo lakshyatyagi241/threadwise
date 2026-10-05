@@ -8,12 +8,16 @@ import {
   type PlanFeatureKey,
   type PlanLimitKey,
   type PlansResponse,
+  type PlanState,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlanCatalogService } from './plan-catalog.service';
-import { trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
+import { PlanStore } from './plan-store';
+import { fallsBackToFree, planStateOf } from './plan-lifecycle';
+import { toFacts, PLAN_COLUMNS, type PlanRow } from './plan-row';
+import { planKind, trialFor, type DefaultPlanStep, type TrialStamp } from './plan-rules';
 
 export interface InitialPlan extends TrialStamp {
   planSlug: string;
@@ -36,6 +40,11 @@ export interface Entitlements {
   overrides: { limits?: Record<string, unknown>; features?: Record<string, unknown> };
   planLimits: Record<string, unknown>;
   planFeatures: Record<string, unknown>;
+  /** The lifecycle state (TW-PLAN-016). A lapsed paid plan reports the free plan's limits and flags above. */
+  state: PlanState;
+  /** A live autopay subscription for the stored plan, and the grace days that then apply (TW-PLAN-016, `paid_grace`). */
+  autopay?: boolean;
+  graceDays?: number;
 }
 
 interface EntitlementRow {
@@ -49,6 +58,12 @@ interface EntitlementRow {
   plan_limits: Record<string, unknown> | null;
   plan_features: Record<string, unknown> | null;
   plan_found: boolean;
+  plan_is_free: boolean | null;
+  plan_is_custom_quote: boolean | null;
+  plan_amount: string | null;
+  autopay: boolean | null;
+  /** Plan feature keys granted by the Marketplace apps the workspace has subscribed to (`{ key: true }`). */
+  app_grants: Record<string, unknown> | null;
 }
 
 /**
@@ -75,6 +90,7 @@ export class PlanEntitlementService {
   constructor(
     private readonly db: DatabaseService,
     private readonly catalog: PlanCatalogService,
+    private readonly store: PlanStore,
   ) {}
 
   // --- sign-up ---------------------------------------------------------------------------------------------------------------------
@@ -116,7 +132,18 @@ export class PlanEntitlementService {
         SELECT o.plan AS plan_slug,
                s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides, s.platform_owned,
                p.name AS plan_name, p.limits AS plan_limits, p.features AS plan_features,
-               (p.id IS NOT NULL) AS plan_found
+               (p.id IS NOT NULL) AS plan_found,
+               p.is_free AS plan_is_free, p.is_custom_quote AS plan_is_custom_quote,
+               p.amount::text AS plan_amount,
+               EXISTS (SELECT 1 FROM subscriptions sb
+                       WHERE sb.org_id = o.id AND sb.kind = 'plan' AND sb.plan_id = o.plan
+                         AND sb.status IN ('active', 'past_due')) AS autopay,
+               (SELECT coalesce(jsonb_object_agg(f.key, true), '{}'::jsonb)
+                  FROM workspace_addons wa
+                  JOIN plans ap ON ap.id = wa.package_id AND ap.marketplace_app_id IS NOT NULL
+                  CROSS JOIN LATERAL jsonb_each(ap.features) AS f(key, value)
+                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())
+                   AND f.value = 'true'::jsonb) AS app_grants
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -132,19 +159,82 @@ export class PlanEntitlementService {
         'an organization is on a plan with no catalogue row: its entitlements are open (nothing is locked)',
       );
     }
+    const trialEndsAt = row.trial_ends_at ? new Date(row.trial_ends_at) : null;
+    const planEndsAt = row.plan_ends_at ? new Date(row.plan_ends_at) : null;
+    const graceDays = row.autopay ? await this.graceDays() : 0;
+    const state = planStateOf({
+      plan: row.plan_found
+        ? {
+            isFree: row.plan_is_free ?? false,
+            isCustomQuote: row.plan_is_custom_quote ?? false,
+            amount: row.plan_amount ?? '0.00',
+          }
+        : null,
+      trialEndsAt,
+      planEndsAt,
+      now: new Date(),
+      autopay: row.autopay ?? false,
+      graceDays,
+    });
+    let planLimits = row.plan_limits ?? {};
+    let planFeatures = row.plan_features ?? {};
+    if (fallsBackToFree(state)) {
+      // A lapsed paid plan locks to the free plan: paid flags lock and the caps shrink (TW-PLAN-016). With no free plan in
+      // the catalogue there is nothing to fall back to, so the stored plan keeps applying rather than locking everything.
+      const free = await this.freePlan();
+      if (free) {
+        planLimits = free.limits;
+        planFeatures = free.features;
+      }
+    }
+    // A Marketplace app a workspace has subscribed to may grant plan features (a first-party app that owns one, e.g. a paid booking app).
+    // They are merged HERE, into the one resolver every gate asks (RequirePlanFeature, the in-context guards, the entitlements the web
+    // reads), so a gate needs no change to honour a subscription. The workspace's own override still wins over it (resolveFeature), and
+    // it applies after a lapsed plan fell back to the free plan: it is the workspace's own purchase, not part of the plan.
+    if (row.app_grants && Object.keys(row.app_grants).length > 0)
+      planFeatures = { ...planFeatures, ...row.app_grants };
     return {
       orgId,
       planSlug: row.plan_slug,
       planKnown: row.plan_found,
       planName: row.plan_name,
-      trialEndsAt: row.trial_ends_at ? new Date(row.trial_ends_at) : null,
-      planEndsAt: row.plan_ends_at ? new Date(row.plan_ends_at) : null,
+      trialEndsAt,
+      planEndsAt,
       billingCycle: row.billing_cycle ?? 'monthly',
       platformOwned: row.platform_owned ?? false,
       overrides: row.overrides ?? {},
-      planLimits: row.plan_limits ?? {},
-      planFeatures: row.plan_features ?? {},
+      planLimits,
+      planFeatures,
+      state,
+      autopay: row.autopay ?? false,
+      graceDays,
     };
+  }
+
+  /** `billing.grace_days`: how many days autopay keeps a lapsed paid plan active while it retries. */
+  graceDays(): Promise<number> {
+    return this.store.graceDays();
+  }
+
+  /** Drops the 30-second cache of the grace days (a test that writes the setting directly). */
+  forgetGrace(): void {
+    this.store.forgetGrace();
+  }
+
+  /** The first active free plan by catalogue order (Reference's "free package"), or null when the catalogue has none. */
+  private async freePlan(): Promise<{
+    limits: Record<string, unknown>;
+    features: Record<string, unknown>;
+  } | null> {
+    const res = await this.db.primary.execute(sql`
+      SELECT ${PLAN_COLUMNS} FROM plans
+      WHERE kind = 'plan' AND is_active AND NOT is_custom_quote AND (is_free OR amount = 0)
+      ORDER BY sort_order, plans.amount, slug LIMIT 1
+    `);
+    const row = res.rows[0] as unknown as PlanRow | undefined;
+    if (!row) return null;
+    const facts = toFacts(row);
+    return planKind(facts) === 'free' ? { limits: row.limits, features: row.features } : null;
   }
 
   /** Whether the organization's plan (or an override) grants the flag. */
