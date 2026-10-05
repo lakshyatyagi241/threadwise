@@ -53,6 +53,14 @@ import {
 
 export const SALES_ORDER_MODULE = 'sales-orders';
 
+/** What the invoice an order is billed into says, when the billing is not a person's "Invoice" click. */
+export interface InvoiceRowOptions {
+  docType?: 'tax_invoice' | 'receipt' | 'proforma';
+  source?: string;
+  buyerAddress?: string | null;
+  meta?: Record<string, unknown>;
+}
+
 const major = (m: bigint, c: string) => minorToMajor(m, c);
 const bad = (
   code: string,
@@ -319,6 +327,120 @@ export class SalesOrdersService {
     });
   }
 
+  /**
+   * A CONFIRMED order made by the system from an order that was placed in a commerce channel (a store, a WhatsApp cart), inside the
+   * caller's transaction: a person did not type it, so there is no owner, no quote and no draft stage worth keeping. The lines arrive
+   * priced by the channel; the engine only totals them. Raises `sales_order.created` and `sales_order.confirmed` like any order.
+   */
+  async createExternalIn(
+    tx: Tx,
+    orgId: number,
+    v: {
+      specs: LineSpec[];
+      currency: string;
+      shipping: string | null;
+      contactId: number | null;
+      buyer: { name: string | null; email: string | null; phone: string | null };
+      reference: string;
+      notes: string | null;
+    },
+  ): Promise<SalesOrderRow> {
+    const profile = await this.settings.load(tx, orgId);
+    const tz = resolveTimezone(profile.timezone);
+    const priced = priceInvoice({
+      currency: v.currency,
+      specs: v.specs,
+      discount: null,
+      shipping: v.shipping,
+      reverseCharge: false,
+    });
+    const contact = v.contactId
+      ? await this.invoicesRepo.resolveContactById(tx, orgId, v.contactId)
+      : null;
+    const date = todayIn(tz);
+    const numbering = numberingOf(profile.row);
+    const series = seriesKey('sales_order', numbering, date);
+    const seq = await this.invoicesRepo.allocateSeq(tx, orgId, series);
+    const number = formatNumber('sales_order', numbering, date, seq);
+    const id = await this.repo.insert(tx, orgId, {
+      series,
+      seq,
+      number,
+      quoteId: null,
+      contactId: contact?.id ?? null,
+      companyId: contact?.companyId ?? null,
+      dealId: null,
+      ownerId: null,
+      createdBy: null,
+      buyerName: (v.buyer.name?.trim() || contact?.name || v.buyer.phone || 'Customer').slice(
+        0,
+        255,
+      ),
+      buyerEmail: v.buyer.email,
+      buyerPhone: v.buyer.phone,
+      currency: v.currency,
+      currencyExponent: currencyExponent(v.currency),
+      reference: v.reference,
+      expectedDate: null,
+      notes: v.notes,
+      terms: profile.row.terms,
+    });
+    await this.repo.replaceItems(tx, orgId, id, itemsOf(v.specs, priced, v.currency));
+    await this.repo.updateHeader(tx, orgId, id, null, { totals: totalsOf(priced) });
+    const created = (await this.repo.findById(tx, orgId, id))!;
+    await this.audit.record(tx, {
+      module: SALES_ORDER_MODULE,
+      recordId: id,
+      action: 'insert',
+      delta: {
+        number: { old: null, new: number },
+        total: { old: null, new: major(created.totalMinor, v.currency) },
+        reference: { old: null, new: v.reference },
+      },
+    });
+    await this.emit(tx, 'sales_order.created', created, { source: 'store' });
+    await this.repo.updateHeader(tx, orgId, id, null, { status: 'confirmed', confirmedAt: true });
+    const confirmed = (await this.repo.findById(tx, orgId, id))!;
+    await this.audit.record(tx, {
+      module: SALES_ORDER_MODULE,
+      recordId: id,
+      action: 'update',
+      delta: { status: { old: 'draft', new: 'confirmed' } },
+    });
+    await this.emit(tx, 'sales_order.confirmed', confirmed, { source: 'store' });
+    return confirmed;
+  }
+
+  /**
+   * Cancels the sales order of a channel order that was cancelled there, inside the caller's transaction. Refuses (returns false, writes
+   * nothing) when the order is already cancelled or an invoice made from it is still live: a billed order is cancelled by voiding its
+   * invoice first, as for a person.
+   */
+  async cancelExternalIn(
+    tx: Tx,
+    orgId: number,
+    salesOrderId: number,
+    reason: string,
+  ): Promise<boolean> {
+    const row = await this.repo.findById(tx, orgId, salesOrderId);
+    if (!row || row.status === 'cancelled') return false;
+    const live = (await this.repo.invoices(tx, orgId, row.id)).filter((i) => i.status !== 'void');
+    if (live.length > 0) return false;
+    await this.repo.updateHeader(tx, orgId, row.id, null, {
+      status: 'cancelled',
+      cancelled: reason,
+    });
+    const after = (await this.repo.findById(tx, orgId, row.id))!;
+    await this.audit.record(tx, {
+      module: SALES_ORDER_MODULE,
+      recordId: row.id,
+      action: 'update',
+      delta: { status: { old: row.status, new: 'cancelled' }, reason: { old: null, new: reason } },
+    });
+    await this.emit(tx, 'sales_order.cancelled', after, { reason, source: 'store' });
+    return true;
+  }
+
   async update(
     uuid: string,
     input: UpdateSalesOrderInput,
@@ -492,171 +614,190 @@ export class SalesOrdersService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.load(tx, uuid, scope, true);
-      this.assertConfirmed(row);
-      const items = await this.repo.items(tx, ctx.orgId, row.id, true);
-      const byUuid = new Map(items.map((i) => [i.uuid, i]));
-      const picks: Array<{ item: SalesOrderItemRow; qty: bigint }> = [];
-      if (input.all) {
-        for (const item of items) {
-          const left = qtyOf(item.qty) - qtyOf(item.qtyInvoiced);
-          if (left > 0n) picks.push({ item, qty: left });
-        }
-      } else {
-        for (const [k, l] of (input.lines ?? []).entries()) {
-          const item = byUuid.get(l.lineId);
-          if (!item)
-            throw bad(
-              ERROR_CODES.SO_QUANTITY_EXCEEDS,
-              'That line is not on the order',
-              HttpStatus.UNPROCESSABLE_ENTITY,
-              [{ path: `lines.${k}.lineId`, message: 'not a line of this order' }],
-            );
-          const left = qtyOf(item.qty) - qtyOf(item.qtyInvoiced);
-          const want = l.qty === undefined ? left : qtyOf(l.qty);
-          if (want <= 0n || want > left)
-            throw bad(
-              ERROR_CODES.SO_QUANTITY_EXCEEDS,
-              `At most ${formatQty(left)} of "${item.description}" is left to invoice`,
-              HttpStatus.UNPROCESSABLE_ENTITY,
-              [{ path: `lines.${k}.qty`, message: `at most ${formatQty(left)}` }],
-            );
-          const dup = picks.find((p) => p.item.id === item.id);
-          if (dup) dup.qty += want;
-          else picks.push({ item, qty: want });
-          const p = picks.find((x) => x.item.id === item.id)!;
-          if (p.qty > left)
-            throw bad(
-              ERROR_CODES.SO_QUANTITY_EXCEEDS,
-              `At most ${formatQty(left)} of "${item.description}" is left to invoice`,
-              HttpStatus.UNPROCESSABLE_ENTITY,
-              [{ path: `lines.${k}.qty`, message: `at most ${formatQty(left)}` }],
-            );
-        }
+      const { order, invoice } = await this.invoiceRowIn(tx, ctx.orgId, ctx.userId, row, input);
+      return { order, invoice };
+    });
+  }
+
+  /**
+   * The body of `invoice`, inside the caller's transaction and with the order row already locked (`FOR UPDATE`): the storefront's
+   * order bridge bills a store order through it as the system actor. `opts` only changes what the DRAFT says (its document type, source,
+   * buyer address and meta); the order's quantities, shipping and progress move exactly as for a person.
+   */
+  async invoiceRowIn(
+    tx: Tx,
+    orgId: number,
+    userId: number | null,
+    row: SalesOrderRow,
+    input: InvoiceFromOrderInput,
+    opts: InvoiceRowOptions = {},
+  ) {
+    this.assertConfirmed(row);
+    const items = await this.repo.items(tx, orgId, row.id, true);
+    const byUuid = new Map(items.map((i) => [i.uuid, i]));
+    const picks: Array<{ item: SalesOrderItemRow; qty: bigint }> = [];
+    if (input.all) {
+      for (const item of items) {
+        const left = qtyOf(item.qty) - qtyOf(item.qtyInvoiced);
+        if (left > 0n) picks.push({ item, qty: left });
       }
-      const withShipping = input.includeShipping && !row.shippingInvoiced && row.shippingMinor > 0n;
-      if (picks.length === 0 && !withShipping)
-        throw bad(
-          ERROR_CODES.SO_NOTHING_TO_INVOICE,
-          'Everything on this order is already invoiced',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-
-      const specs: LineSpec[] = picks.map(({ item, qty }) => {
-        const total = qtyOf(item.qty);
-        const left = total - qtyOf(item.qtyInvoiced);
-        let discount: LineSpec['discount'] = null;
-        if (item.discountKind === 'percent')
-          discount = { kind: 'percent', value: formatPercent(item.discountValue) };
-        else if (item.discountKind === 'amount') {
-          const remaining = item.discountMinor - item.discountInvoicedMinor;
-          const share =
-            qty === left ? remaining : divRound(item.discountMinor * qty, total, 'half_up');
-          discount =
-            share > 0n
-              ? {
-                  kind: 'amount',
-                  value: major(share > remaining ? remaining : share, row.currency),
-                }
-              : null;
-        }
-        return {
-          description: item.description,
-          sku: item.sku,
-          hsnSac: item.hsnSac,
-          qty: formatQty(qty),
-          unitPrice: major(item.unitPriceMinor, row.currency),
-          discount,
-          tax: taxSpecOfItem(item),
-        };
-      });
-      if (specs.length === 0)
-        throw bad(
-          ERROR_CODES.SO_NOTHING_TO_INVOICE,
-          'Nothing left to invoice except shipping: name the lines or include them',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-
-      const profile = await this.settings.load(tx, ctx.orgId);
-      const tz = resolveTimezone(profile.timezone);
-      const issueDate = input.issueDate ?? null;
-      let dueDate = input.dueDate ?? null;
-      if (!dueDate && input.paymentTermsDays != null)
-        dueDate = addDays(issueDate ?? todayIn(tz), input.paymentTermsDays);
-      let inv = await this.invoices.createDraftIn(tx, ctx.orgId, ctx.userId, {
-        source: 'sales_order',
-        docType: 'tax_invoice',
-        currency: row.currency,
-        buyer: {
-          name: row.buyerName,
-          email: row.buyerEmail,
-          phone: row.buyerPhone,
-          address: null,
-          taxId: null,
-          country: null,
-        },
-        contactId: row.contactId,
-        companyId: row.companyId,
-        dealId: row.dealId,
-        quoteId: null,
-        ownerId: row.ownerId,
-        taxRegime: profile.row.defaultTaxRegime,
-        placeOfSupply: null,
-        reverseCharge: false,
-        issueDate,
-        dueDate,
-        reference: row.reference ?? row.number,
-        notes: row.notes,
-        terms: row.terms ?? profile.row.terms,
-        legalNotes: null,
-        discount: null,
-        shipping: withShipping ? major(row.shippingMinor, row.currency) : null,
-        lines: specs,
-        metaJson: { salesOrder: row.number, salesOrderId: row.uuid },
-      });
-      const invLines = await this.invoicesRepo.lines(tx, ctx.orgId, inv.id);
-      await this.repo.linkInvoice(
-        tx,
-        ctx.orgId,
-        inv.id,
-        row.id,
-        picks.map((p) => p.item.id),
+    } else {
+      for (const [k, l] of (input.lines ?? []).entries()) {
+        const item = byUuid.get(l.lineId);
+        if (!item)
+          throw bad(
+            ERROR_CODES.SO_QUANTITY_EXCEEDS,
+            'That line is not on the order',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: `lines.${k}.lineId`, message: 'not a line of this order' }],
+          );
+        const left = qtyOf(item.qty) - qtyOf(item.qtyInvoiced);
+        const want = l.qty === undefined ? left : qtyOf(l.qty);
+        if (want <= 0n || want > left)
+          throw bad(
+            ERROR_CODES.SO_QUANTITY_EXCEEDS,
+            `At most ${formatQty(left)} of "${item.description}" is left to invoice`,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: `lines.${k}.qty`, message: `at most ${formatQty(left)}` }],
+          );
+        const dup = picks.find((p) => p.item.id === item.id);
+        if (dup) dup.qty += want;
+        else picks.push({ item, qty: want });
+        const p = picks.find((x) => x.item.id === item.id)!;
+        if (p.qty > left)
+          throw bad(
+            ERROR_CODES.SO_QUANTITY_EXCEEDS,
+            `At most ${formatQty(left)} of "${item.description}" is left to invoice`,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: `lines.${k}.qty`, message: `at most ${formatQty(left)}` }],
+          );
+      }
+    }
+    const withShipping = input.includeShipping && !row.shippingInvoiced && row.shippingMinor > 0n;
+    if (picks.length === 0 && !withShipping)
+      throw bad(
+        ERROR_CODES.SO_NOTHING_TO_INVOICE,
+        'Everything on this order is already invoiced',
+        HttpStatus.UNPROCESSABLE_ENTITY,
       );
-      for (const [i, p] of picks.entries()) {
-        await this.repo.addProgress(tx, ctx.orgId, p.item.id, {
-          invoiced: formatQty(p.qty),
-          discountInvoicedMinor: invLines[i]?.discountMinor ?? 0n,
-        });
+
+    const specs: LineSpec[] = picks.map(({ item, qty }) => {
+      const total = qtyOf(item.qty);
+      const left = total - qtyOf(item.qtyInvoiced);
+      let discount: LineSpec['discount'] = null;
+      if (item.discountKind === 'percent')
+        discount = { kind: 'percent', value: formatPercent(item.discountValue) };
+      else if (item.discountKind === 'amount') {
+        const remaining = item.discountMinor - item.discountInvoicedMinor;
+        const share =
+          qty === left ? remaining : divRound(item.discountMinor * qty, total, 'half_up');
+        discount =
+          share > 0n
+            ? {
+                kind: 'amount',
+                value: major(share > remaining ? remaining : share, row.currency),
+              }
+            : null;
       }
-      if (withShipping)
-        await this.repo.updateHeader(tx, ctx.orgId, row.id, null, { shippingInvoiced: true });
-      if (input.issue)
-        inv = await this.invoices.issueIn(tx, ctx.orgId, ctx.userId, inv, {
-          issueDate: input.issueDate ?? undefined,
-          dueDate: input.dueDate ?? undefined,
-          paymentTermsDays: input.paymentTermsDays ?? undefined,
-        });
-      await this.repo.syncStatus(tx, ctx.orgId, row.id);
-      const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
-      await this.audit.record(tx, {
-        module: SALES_ORDER_MODULE,
-        recordId: row.id,
-        action: 'update',
-        delta: {
-          invoiced: { old: row.qtyInvoiced, new: after.qtyInvoiced },
-          invoice: { old: null, new: inv.uuid },
-        },
-      });
-      await this.emit(tx, 'sales_order.invoiced', after, {
-        invoiceId: inv.uuid,
-        invoiceNumber: inv.number,
-      });
-      const zone = await this.invoices.zone(tx, ctx.orgId);
-      const fresh = (await this.invoicesRepo.findById(tx, ctx.orgId, inv.id, zone))!;
       return {
-        order: await this.toResponse(tx, ctx.orgId, after),
-        invoice: toInvoiceSummary(fresh),
+        description: item.description,
+        sku: item.sku,
+        hsnSac: item.hsnSac,
+        qty: formatQty(qty),
+        unitPrice: major(item.unitPriceMinor, row.currency),
+        discount,
+        tax: taxSpecOfItem(item),
       };
     });
+    if (specs.length === 0)
+      throw bad(
+        ERROR_CODES.SO_NOTHING_TO_INVOICE,
+        'Nothing left to invoice except shipping: name the lines or include them',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+
+    const profile = await this.settings.load(tx, orgId);
+    const tz = resolveTimezone(profile.timezone);
+    const issueDate = input.issueDate ?? null;
+    let dueDate = input.dueDate ?? null;
+    if (!dueDate && input.paymentTermsDays != null)
+      dueDate = addDays(issueDate ?? todayIn(tz), input.paymentTermsDays);
+    let inv = await this.invoices.createDraftIn(tx, orgId, userId, {
+      source: opts.source ?? 'sales_order',
+      docType: opts.docType ?? 'tax_invoice',
+      currency: row.currency,
+      buyer: {
+        name: row.buyerName,
+        email: row.buyerEmail,
+        phone: row.buyerPhone,
+        address: opts.buyerAddress ?? null,
+        taxId: null,
+        country: null,
+      },
+      contactId: row.contactId,
+      companyId: row.companyId,
+      dealId: row.dealId,
+      quoteId: null,
+      ownerId: row.ownerId,
+      taxRegime: profile.row.defaultTaxRegime,
+      placeOfSupply: null,
+      reverseCharge: false,
+      issueDate,
+      dueDate,
+      reference: row.reference ?? row.number,
+      notes: row.notes,
+      terms: row.terms ?? profile.row.terms,
+      legalNotes: null,
+      discount: null,
+      shipping: withShipping ? major(row.shippingMinor, row.currency) : null,
+      lines: specs,
+      metaJson: { salesOrder: row.number, salesOrderId: row.uuid, ...(opts.meta ?? {}) },
+    });
+    const invLines = await this.invoicesRepo.lines(tx, orgId, inv.id);
+    await this.repo.linkInvoice(
+      tx,
+      orgId,
+      inv.id,
+      row.id,
+      picks.map((p) => p.item.id),
+    );
+    for (const [i, p] of picks.entries()) {
+      await this.repo.addProgress(tx, orgId, p.item.id, {
+        invoiced: formatQty(p.qty),
+        discountInvoicedMinor: invLines[i]?.discountMinor ?? 0n,
+      });
+    }
+    if (withShipping)
+      await this.repo.updateHeader(tx, orgId, row.id, null, { shippingInvoiced: true });
+    if (input.issue)
+      inv = await this.invoices.issueIn(tx, orgId, userId, inv, {
+        issueDate: input.issueDate ?? undefined,
+        dueDate: input.dueDate ?? undefined,
+        paymentTermsDays: input.paymentTermsDays ?? undefined,
+      });
+    await this.repo.syncStatus(tx, orgId, row.id);
+    const after = (await this.repo.findById(tx, orgId, row.id))!;
+    await this.audit.record(tx, {
+      module: SALES_ORDER_MODULE,
+      recordId: row.id,
+      action: 'update',
+      delta: {
+        invoiced: { old: row.qtyInvoiced, new: after.qtyInvoiced },
+        invoice: { old: null, new: inv.uuid },
+      },
+    });
+    await this.emit(tx, 'sales_order.invoiced', after, {
+      invoiceId: inv.uuid,
+      invoiceNumber: inv.number,
+    });
+    const zone = await this.invoices.zone(tx, orgId);
+    const fresh = (await this.invoicesRepo.findById(tx, orgId, inv.id, zone))!;
+    return {
+      order: await this.toResponse(tx, orgId, after),
+      invoice: toInvoiceSummary(fresh),
+      /** The invoice row itself (internal id, number, status), for a caller that links it. */
+      invoiceRow: fresh,
+    };
   }
 
   /** Records a delivery: quantities fulfilled, never above what was ordered. */

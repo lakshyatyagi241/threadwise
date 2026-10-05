@@ -88,7 +88,12 @@ export class StorefrontPaymentService {
 
   /** HMAC-SHA256 of the raw body with the shop's webhook secret; a shop with no secret verifies nothing (fail closed). */
   verifyWebhook(shop: PaymentShopRef, rawBody: Buffer, signature: string | undefined): boolean {
-    return verifyRazorpaySignature(rawBody, signature, this.credentials(shop).webhookSecret);
+    return this.verifyWebhookWith(this.credentials(shop).webhookSecret, rawBody, signature);
+  }
+
+  /** The same check with the secret the caller resolved (the shared gateway of the shop). */
+  verifyWebhookWith(secret: string, rawBody: Buffer, signature: string | undefined): boolean {
+    return verifyRazorpaySignature(rawBody, signature, secret);
   }
 
   credentials(shop: Pick<PaymentShopRef, 'paymentConfig'>): RazorpayCredentialsPlain {

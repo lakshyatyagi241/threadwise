@@ -17,6 +17,6 @@ export const settings = [
     href: '/store/customers',
     icon: 'user',
     order: 40,
-    gates: { permission: 'waba.customers.read' },
+    gates: { permission: 'store.customers.read' },
   }),
 ];

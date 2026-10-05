@@ -20,13 +20,22 @@ The Store area is where you sell from your own shop page and from WhatsApp. The 
 4. To set up or change a shop, open **Connection** in the left column. It opens the shop list, where you add, edit, preview, share or delete a shop.
 5. To change how the shop looks, open **Storefront** in the left column and select **Save** after your changes. **View live** opens the public shop.
 
-> The left column lists the store sections. Items marked **Coming soon** are not built yet, and they cannot be opened.
+6. Under **Recent orders**, select **View all** or an order to open the order screens, where you can follow each order to completion.
+7. The left column lists every store section. Use it to open the store's other screens:
+   - [Orders](help:store-orders) to confirm, ship and bill orders.
+   - [Coupons](help:store-coupons) for discount codes.
+   - [Customers](help:whatsapp-saved-customers) for saved customers and what they have bought.
+   - [Groups](help:store-groups) for WhatsApp groups and their ordering codes.
+   - [Payments](help:store-payments) for money received on orders.
+   - [Checkout gateways](help:store-gateways) for the gateway that takes online payments.
+   - [Invoices](help:store-invoices) for the invoices made from store orders.
 
 ## Options and settings
 
 - The **Store** column shows the shop name, whether it is live, the public URL with **Open** and **Copy**, and the WhatsApp number it sends from.
 - When you have more than one shop, **Switch shop** changes which shop the screens show.
-- Reviews and Products open their own pages from the same column.
+- Orders, Coupons, Customers, Groups, Payments, Checkout gateways, Invoices, Reviews and Products all open their own pages from the same column.
+- **View all** and the order rows under **Recent orders** open the order screens.
 - Storefront settings cover the theme, brand, currency, shipping, the payment link and abandoned-cart recovery. The custom domain is checked with **Verify now**.
 
 ## Plan and access

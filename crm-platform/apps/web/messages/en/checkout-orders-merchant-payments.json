@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Orders",
+      "coupons": "Coupons"
+    },
+    "settingsTile": {
+      "label": "Payment gateways",
+      "description": "The one gateway your store checkout and Sales invoices use to take online payments.",
+      "keywords": "payment gateway, razorpay, stripe, checkout, pay link, online payment, card, upi"
+    },
+    "common": {
+      "noAccessTitle": "You do not have access to this page",
+      "noAccessMessage": "Ask a workspace admin to give your role the permission for it.",
+      "loading": "Loading",
+      "loadMore": "Load more",
+      "cancel": "Cancel",
+      "close": "Close",
+      "save": "Save",
+      "saving": "Saving",
+      "edit": "Edit",
+      "delete": "Delete",
+      "remove": "Remove",
+      "open": "Open",
+      "view": "View",
+      "search": "Search",
+      "clear": "Clear",
+      "all": "All",
+      "no": "No",
+      "none": "None",
+      "actions": "Actions",
+      "retry": "Try again",
+      "dismiss": "Dismiss",
+      "copy": "Copy",
+      "copied": "Copied",
+      "viewContact": "View contact",
+      "allShops": "All shops",
+      "shop": "Shop"
+    },
+    "status": {
+      "new": "New",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "paid": "Paid",
+      "processing": "Processing",
+      "completed": "Completed",
+      "shipped": "Shipped",
+      "cancelled": "Cancelled"
+    },
+    "paymentStatus": {
+      "paid": "Paid",
+      "awaiting": "Awaiting payment",
+      "cod": "Cash on delivery",
+      "unpaid": "Unpaid"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Storefront",
+      "twilio": "Twilio",
+      "manual": "Manual",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "Request ID",
+      "retry": "Try again",
+      "network": {
+        "title": "Cannot reach the server",
+        "message": "Check your connection and try again."
+      },
+      "forbidden": {
+        "title": "Not allowed",
+        "message": "Your role does not allow this."
+      },
+      "signedOut": {
+        "title": "You are signed out",
+        "message": "Sign in again to continue."
+      },
+      "conflict": {
+        "title": "Changed by someone else",
+        "message": "This record changed while you had it open. Reload it and try again."
+      },
+      "validation": {
+        "title": "Please check the form",
+        "message": "Some values are not valid. Check the highlighted fields."
+      },
+      "unavailable": {
+        "title": "Not available yet",
+        "message": "This part of the store is not available on this server yet."
+      },
+      "rateLimited": {
+        "title": "Too many requests",
+        "message": "Wait a moment and try again."
+      },
+      "notFound": {
+        "title": "Not found",
+        "message": "It was removed or never existed."
+      },
+      "planLocked": {
+        "title": "Not on your plan",
+        "message": "Your plan does not include the store. Upgrade to use it."
+      },
+      "couponCodeTaken": {
+        "title": "Code already used",
+        "message": "Another coupon already uses this code. Choose a different one."
+      },
+      "groupCodeTaken": {
+        "title": "Code already used",
+        "message": "Another group already uses this ordering code."
+      },
+      "orderNoPhone": {
+        "title": "No phone number",
+        "message": "This order has no buyer phone number, so nothing can be sent."
+      },
+      "gatewayNotConfigured": {
+        "title": "No payment gateway set up",
+        "message": "Set up a payment gateway first. Its keys are missing or it is switched off."
+      },
+      "gatewayUnavailable": {
+        "title": "Gateway not available",
+        "message": "This gateway cannot make a payment link a buyer can open."
+      },
+      "paymentLinkFailed": {
+        "title": "The gateway refused the link",
+        "message": "Check the keys and that the amount is above the gateway minimum."
+      },
+      "unexpected": {
+        "title": "Something went wrong",
+        "message": "Try again. If it keeps happening, share the request ID with support."
+      }
+    }
+  }
+}

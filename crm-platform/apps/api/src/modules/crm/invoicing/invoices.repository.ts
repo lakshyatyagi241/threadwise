@@ -587,6 +587,21 @@ export class InvoicesRepository {
     return r ? toRow(r) : undefined;
   }
 
+  /** The live (not void) invoice made from a commerce channel order (`wa_orders.id`), if one exists. */
+  async liveIdByWaOrder(tx: Tx, orgId: number, waOrderId: number): Promise<number | undefined> {
+    const res = await tx.execute(sql`
+      SELECT id FROM invoices WHERE org_id = ${orgId} AND wa_order_id = ${waOrderId} AND status <> 'void' ORDER BY id LIMIT 1`);
+    const r = res.rows[0] as { id: number | string } | undefined;
+    return r ? Number(r.id) : undefined;
+  }
+
+  /** Stamps the channel order a draft was made from (the unique index on org, order and document type keeps it to one). */
+  async setWaOrderId(tx: Tx, orgId: number, id: number, waOrderId: number): Promise<void> {
+    await tx.execute(
+      sql`UPDATE invoices SET wa_order_id = ${waOrderId} WHERE org_id = ${orgId} AND id = ${id} AND status = 'draft'`,
+    );
+  }
+
   async lines(tx: Tx, orgId: number, invoiceId: number): Promise<InvoiceLineRow[]> {
     const res = await tx.execute(sql`
       SELECT it.id, it.uuid, it.sort, it.description, it.sku, it.hsn_sac, it.qty::text AS qty,

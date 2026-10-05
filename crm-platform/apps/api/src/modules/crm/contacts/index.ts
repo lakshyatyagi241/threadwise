@@ -18,3 +18,4 @@ export {
   contactScopeCondition,
   type ResolvedContactFilter,
 } from './contact-conditions';
+export { ContactResolverService } from './contact-resolver.service';

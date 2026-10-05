@@ -122,6 +122,21 @@ export class InvoiceSettingsRepository {
     };
   }
 
+  /**
+   * What the store-order bridge reads: when a store order is invoiced automatically (`trigger_own`: on_placed, on_paid, on_fulfilled,
+   * or our `manual`) and the label of the tax it captured. Defaults (`on_paid`, no label) when the workspace never saved settings.
+   */
+  async storeOrderPolicy(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ triggerOwn: string; taxLabel: string | null }> {
+    const res = await tx.execute(
+      sql`SELECT trigger_own, tax_label FROM invoice_settings WHERE org_id = ${orgId}`,
+    );
+    const r = (res.rows as Raw[])[0];
+    return { triggerOwn: s(r?.trigger_own) ?? 'on_paid', taxLabel: s(r?.tax_label) };
+  }
+
   /** Creates the row on the first save (never on a read) and applies the patch to it, under a row lock. */
   async upsert(tx: Tx, orgId: number, patch: SettingsPatch): Promise<void> {
     await tx.execute(

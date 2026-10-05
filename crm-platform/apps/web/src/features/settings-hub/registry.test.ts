@@ -6,15 +6,16 @@ import { PLANNED_NAV } from '@/features/_registry/planned';
 import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
 import { SETTINGS } from '@/features/_registry/settings.generated';
 import { SETTINGS_SECTIONS } from '@/features/_registry/settings-types';
+import { deepMerge } from '@/i18n/messages';
 import { hasSettingsIcon } from './settings-icons';
 
 const WEB = join(__dirname, '..', '..', '..');
 type Tree = { [key: string]: string | Tree };
 const messages = (locale: string): Tree => {
   const dir = join(WEB, 'messages', locale);
-  const out: Tree = {};
+  let out: Tree = {};
   for (const f of readdirSync(dir).filter((n) => n.endsWith('.json'))) {
-    Object.assign(out, JSON.parse(readFileSync(join(dir, f), 'utf8')) as Tree);
+    out = deepMerge(out, JSON.parse(readFileSync(join(dir, f), 'utf8')) as Tree);
   }
   return out;
 };

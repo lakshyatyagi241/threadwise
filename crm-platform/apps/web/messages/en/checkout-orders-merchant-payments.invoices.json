@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Store / Invoices",
+      "title": "Invoices",
+      "subtitle": "Invoices created from store orders. Manage them in Sales.",
+      "allInvoices": "All invoices",
+      "loading": "Loading invoices",
+      "searching": "Looking for more store invoices...",
+      "search": {
+        "label": "Search invoices",
+        "placeholder": "Search by number, buyer or reference..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "All statuses"
+      },
+      "columns": {
+        "number": "Invoice",
+        "buyer": "Buyer",
+        "status": "Status",
+        "total": "Total",
+        "issued": "Issued",
+        "due": "Due",
+        "actions": "Actions"
+      },
+      "row": {
+        "draft": "Draft",
+        "openInSales": "Open in Sales",
+        "openAria": "Open invoice {number} in Sales"
+      },
+      "empty": {
+        "title": "No invoices from store orders yet",
+        "message": "Open an order and select Create invoice.",
+        "action": "Go to orders"
+      },
+      "noMatch": {
+        "title": "No store invoices match",
+        "message": "Change the search or the status to see more."
+      },
+      "capped": {
+        "title": "None found in the latest invoices",
+        "message": "The most recent invoices in Sales were checked and none came from a store order. Load more to look further back.",
+        "note": "Only the most recent invoices have been checked. Load more to look further back."
+      }
+    }
+  }
+}

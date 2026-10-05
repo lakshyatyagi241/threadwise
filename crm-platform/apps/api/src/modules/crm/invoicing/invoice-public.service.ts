@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import {
@@ -14,6 +15,7 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
+import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import {
@@ -21,8 +23,15 @@ import {
   type InvoicePaymentGateways,
 } from '../../../infra/providers/invoice-payments/invoice-payment-gateway.port';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import {
+  GatewayLinkService,
+  WorkspaceGatewayResolver,
+  supportsPaymentLinks,
+  type ResolvedGateway,
+} from '../../checkout-orders-merchant-payments';
 import { resolveTimezone } from '../deals/deal-calendar';
 import { buildPublicInvoice } from './invoice-document';
+import { invoiceReference } from './invoice-gateway-settler';
 import { renderInvoiceHtml, renderInvoicePdf } from './invoice-render';
 import { hashPublicToken, isPlausibleToken } from './invoice-rules';
 import { InvoiceSettingsRepository } from './invoice-settings.repository';
@@ -70,6 +79,16 @@ export interface ResolvedLink {
   invoiceId: number;
 }
 
+/** An attempt opened on the shared gateway, waiting for its hosted link (made outside the transaction that opened it). */
+interface SharedPayStart {
+  shared: ResolvedGateway;
+  attemptId: string;
+  amountMinor: bigint;
+  currency: string;
+  number: string;
+  base: Omit<PublicPayResponse, 'kind' | 'attemptId' | 'url'>;
+}
+
 /**
  * The buyer's side of an invoice (WD-INV-016/017, WD-PAY-015, D-15). The unguessable token is the only capability: it is resolved
  * by its SHA-256 through a database function (no privileged() on an HTTP path), then every further read and write runs as that
@@ -84,8 +103,21 @@ export class InvoicePublicService {
     private readonly paymentsRepo: PaymentsRepository,
     private readonly settingsRepo: InvoiceSettingsRepository,
     private readonly outbox: OutboxService,
+    private readonly sharedGateways: WorkspaceGatewayResolver,
+    private readonly links: GatewayLinkService,
+    private readonly config: ConfigService<Env, true>,
     @Inject(INVOICE_PAYMENT_GATEWAYS) private readonly gateways: InvoicePaymentGateways,
   ) {}
+
+  /**
+   * The workspace's shared payment gateway (Settings > Payments, the one the store checkout uses), when it can make a hosted link a
+   * buyer pays on. It is the FIRST choice for an invoice; the generic signed-webhook connection (`hmac_generic`, Settings >
+   * Invoicing) stays as the fallback for a workspace that has not configured the shared one.
+   */
+  private async sharedLinkGateway(tx: Tx, orgId: number): Promise<ResolvedGateway | null> {
+    const gateway = await this.sharedGateways.resolve(orgId, null, { tx });
+    return gateway && supportsPaymentLinks(gateway.slug) ? gateway : null;
+  }
 
   /** Token -> (org, invoice). An unplausible or unknown token is the same plain 404. */
   async resolve(token: string): Promise<ResolvedLink> {
@@ -137,15 +169,22 @@ export class InvoicePublicService {
     const row = await this.repo.findById(tx, link.orgId, link.invoiceId, tz);
     if (!row || row.storedStatus === 'draft') throw AppError.notFound('Invoice');
     this.liveOrThrow(row);
-    const [lines, taxSummary, payments, conn] = await Promise.all([
+    const [lines, taxSummary, payments, conn, shared] = await Promise.all([
       this.repo.lines(tx, link.orgId, row.id),
       this.repo.taxSummary(tx, link.orgId, row.id),
       this.paymentsRepo.forInvoice(tx, link.orgId, row.id),
       this.settingsRepo.connection(tx, link.orgId, 'hmac_generic'),
+      this.sharedLinkGateway(tx, link.orgId),
     ]);
     return {
       row,
-      doc: buildPublicInvoice({ row, lines, taxSummary, payments, online: conn?.enabled === true }),
+      doc: buildPublicInvoice({
+        row,
+        lines,
+        taxSummary,
+        payments,
+        online: conn?.enabled === true || shared !== null,
+      }),
     };
   }
 
@@ -186,9 +225,10 @@ export class InvoicePublicService {
   }
 
   /**
-   * "Pay now". With an online connection this opens a payment ATTEMPT (its uuid is the reference the provider echoes back in a
-   * signed webhook); without one the buyer gets the bank-transfer instructions. Either way the page is display-only: only a
-   * verified webhook (or a person recording the transfer) ever marks money received.
+   * "Pay now". The workspace's shared gateway is tried first: an ATTEMPT is opened (its uuid, as `INV-<uuid>`, is the reference the
+   * provider echoes back to the gateway's own webhook) and a hosted link is made on that gateway. Failing that, an online generic
+   * connection opens an attempt as before; failing that, the buyer gets the bank-transfer instructions. Whatever the path the page is
+   * display-only: only a verified webhook (or a person recording the transfer) ever marks money received.
    */
   async pay(
     token: string,
@@ -196,8 +236,8 @@ export class InvoicePublicService {
     ip: string | undefined,
   ): Promise<PublicPayResponse> {
     const link = await this.resolve(token);
-    return this.inTenant(link, ip, () =>
-      this.db.tx(async (tx) => {
+    const started = await this.inTenant(link, ip, () =>
+      this.db.tx(async (tx): Promise<PublicPayResponse | SharedPayStart> => {
         const tz = await this.invoices.zone(tx, link.orgId);
         const row = await this.repo.findById(tx, link.orgId, link.invoiceId, tz, true);
         if (!row || row.storedStatus === 'draft') throw AppError.notFound('Invoice');
@@ -238,6 +278,32 @@ export class InvoicePublicService {
           note: 'This page does not confirm payment. The invoice is marked paid only when the payment is received and verified.',
         };
 
+        // The shared gateway first. The provider call is made AFTER this transaction (it can take seconds and the invoice row is
+        // locked here); the attempt row comes first so its uuid is the reference the provider echoes back.
+        const shared = await this.sharedLinkGateway(tx, link.orgId);
+        if (shared) {
+          const ins = await tx.execute(sql`
+            INSERT INTO invoice_payment_attempts (org_id, invoice_id, connection_id, provider, amount_minor, currency, expires_at)
+            VALUES (${link.orgId}, ${row.id}, NULL, ${shared.slug}, ${amount.toString()}::bigint, ${row.currency}, now() + interval '7 days')
+            RETURNING uuid
+          `);
+          const attemptId = (ins.rows[0] as { uuid: string }).uuid;
+          await this.repo.log(tx, link.orgId, row.id, {
+            event: 'pay_attempt',
+            detail: base.amount,
+            actorKind: 'buyer',
+            meta: { attempt: attemptId, provider: shared.slug },
+          });
+          return {
+            shared,
+            attemptId,
+            amountMinor: amount,
+            currency: row.currency,
+            number: row.number ?? '',
+            base,
+          };
+        }
+
         if (conn?.enabled) {
           const gw = this.gateways.get('hmac_generic')!;
           const ins = await tx.execute(sql`
@@ -272,6 +338,50 @@ export class InvoicePublicService {
         return { kind: 'unavailable', attemptId: null, url: null, ...base };
       }),
     );
+    if (!('shared' in started)) return started;
+    return this.finishSharedPay(link, token, ip, started);
+  }
+
+  /**
+   * Makes the hosted link on the shared gateway for an attempt that is already open, outside any transaction, and records the answer.
+   * When the provider gives no link the attempt is closed as failed and the buyer still gets the bank-transfer instructions (or
+   * "unavailable" when there are none): a gateway outage is never a dead end.
+   */
+  private async finishSharedPay(
+    link: ResolvedLink,
+    token: string,
+    ip: string | undefined,
+    s: SharedPayStart,
+  ): Promise<PublicPayResponse> {
+    const minted = await this.links.mint(s.shared, {
+      reference: invoiceReference(s.attemptId),
+      amountMinor: s.amountMinor,
+      currency: s.currency,
+      description: `Invoice ${s.number}`,
+      callbackUrl: `${this.config.get('WEB_APP_URL', { infer: true })}/i/${token}`,
+      notes: { invoice_attempt: s.attemptId, workspace_id: String(link.orgId) },
+    });
+    await this.inTenant(link, ip, () =>
+      this.db.tx(async (tx) => {
+        if (minted) {
+          await tx.execute(sql`
+            UPDATE invoice_payment_attempts SET checkout_url = ${minted.url}, external_id = ${minted.id}
+            WHERE org_id = ${link.orgId} AND uuid = ${s.attemptId}::uuid AND status = 'pending'
+          `);
+        } else {
+          await tx.execute(sql`
+            UPDATE invoice_payment_attempts SET status = 'failed'
+            WHERE org_id = ${link.orgId} AND uuid = ${s.attemptId}::uuid AND status = 'pending'
+          `);
+        }
+      }),
+    );
+    if (minted) {
+      return { kind: 'redirect', attemptId: s.attemptId, url: minted.url, ...s.base };
+    }
+    return s.base.instructions || s.base.details
+      ? { kind: 'instructions', attemptId: null, url: null, ...s.base }
+      : { kind: 'unavailable', attemptId: null, url: null, ...s.base };
   }
 
   /** Staff view of the document (an authenticated PDF download). */
@@ -282,18 +392,19 @@ export class InvoicePublicService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid, tz);
       if (!row) throw AppError.notFound('Invoice', uuid);
       await this.invoices.assertScope(tx, scope, row);
-      const [lines, taxSummary, payments, conn] = await Promise.all([
+      const [lines, taxSummary, payments, conn, shared] = await Promise.all([
         this.repo.lines(tx, ctx.orgId, row.id),
         this.repo.taxSummary(tx, ctx.orgId, row.id),
         this.paymentsRepo.forInvoice(tx, ctx.orgId, row.id),
         this.settingsRepo.connection(tx, ctx.orgId, 'hmac_generic'),
+        this.sharedLinkGateway(tx, ctx.orgId),
       ]);
       return buildPublicInvoice({
         row,
         lines,
         taxSummary,
         payments,
-        online: conn?.enabled === true,
+        online: conn?.enabled === true || shared !== null,
       });
     });
   }

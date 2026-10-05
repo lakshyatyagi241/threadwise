@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type {
   CustomerList,
@@ -10,6 +10,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
+import { CONTACT_RESOLVER, type ContactResolverPort } from '../crm/contact-resolver.port';
 
 const MODULE = 'wa_customer_profiles';
 export const CUSTOMER_PAGE_SIZE = 20;
@@ -52,6 +53,7 @@ export class CustomerProfilesService {
   constructor(
     private readonly db: DatabaseService,
     private readonly audit: AuditService,
+    @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
   ) {}
 
   async list(query: ListCustomersQuery): Promise<CustomerList> {
@@ -84,11 +86,22 @@ export class CustomerProfilesService {
     const phone = customerDigits(input.phone);
     if (!phone) throw AppError.validation('Enter a valid phone number (with country code).');
     return this.db.tx(async (tx) => {
+      // The saved customer is a contact of the workspace (found or created by phone, its blanks filled from the profile); a plan out of
+      // contacts saves the profile unlinked. A profile that is already linked keeps its link.
+      const link = await this.contacts.findOrCreateByPhone(tx, orgId, {
+        phone,
+        name: input.name,
+        address: input.address,
+        source: 'store',
+        tag: 'Store customer',
+      });
+      const contactId = link.outcome === 'skipped' ? null : link.contactId;
       const res = await tx.execute(
-        sql`INSERT INTO wa_customer_profiles (org_id, phone, name, company, address)
-            VALUES (${orgId}, ${phone}, ${input.name}, ${input.company}, ${input.address})
+        sql`INSERT INTO wa_customer_profiles (org_id, phone, name, company, address, contact_id)
+            VALUES (${orgId}, ${phone}, ${input.name}, ${input.company}, ${input.address}, ${contactId})
             ON CONFLICT (org_id, phone) DO UPDATE
-              SET name = EXCLUDED.name, company = EXCLUDED.company, address = EXCLUDED.address
+              SET name = EXCLUDED.name, company = EXCLUDED.company, address = EXCLUDED.address,
+                  contact_id = coalesce(wa_customer_profiles.contact_id, EXCLUDED.contact_id)
             RETURNING id, uuid, phone, name, company, address, updated_at, (xmax = 0) AS created`,
       );
       const r = res.rows[0] as unknown as Row & { id: number | string; created: boolean };

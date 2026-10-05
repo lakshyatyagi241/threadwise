@@ -44,6 +44,7 @@ import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
+import { StoreOrdersSalesModule } from './modules/store-orders-sales';
 import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { FlowBuilderEditorModule } from './modules/flow-builder-editor';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
@@ -196,6 +197,7 @@ import { HealthModule } from './health/health.module';
     ShopifyWoocommerceModule,
     CatalogProductsModule,
     StorefrontBuilderModule,
+    StoreOrdersSalesModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,

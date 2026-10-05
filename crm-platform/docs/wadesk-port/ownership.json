@@ -1437,6 +1437,11 @@
    "routeBase": "checkout",
    "zone": [
     "apps/api/src/modules/checkout-orders-merchant-payments/",
+    "apps/api/src/modules/store-orders-sales/",
+    "apps/api/test/unit/store-orders-sales/",
+    "apps/api/test/integration/store-orders-sales/",
+    "apps/api/test/e2e/store-orders-sales/",
+    "docs/wadesk-port/wiring/store-orders-crm.md",
     "apps/api/src/infra/providers/checkout-orders-merchant-payments/",
     "apps/api/src/config/domains/checkout-orders-merchant-payments.env.ts",
     "apps/api/test/unit/checkout-orders-merchant-payments/",

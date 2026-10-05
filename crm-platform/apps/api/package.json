@@ -22,6 +22,8 @@
     "clean": "rm -rf dist coverage",
     "arch": "depcruise --config .dependency-cruiser.cjs src",
     "seed:auth": "tsx src/modules/auth/cli/seed-auth.ts",
+    "seed:store-demo": "swc src -d dist-cli --strip-leading-paths --ignore \"**/*.spec.ts\" -q && node dist-cli/modules/storefront-builder/cli/seed-store-demo.js",
+    "backfill:store-orders": "swc src -d dist-cli --strip-leading-paths --ignore \"**/*.spec.ts\" -q && node dist-cli/modules/store-orders-sales/cli/backfill-store-orders.js",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js",
     "seed:appointments": "node dist/src/modules/marketplace/cli/seed-appointments.js"
