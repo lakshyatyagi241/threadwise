@@ -226,6 +226,22 @@ export function starterRecipe(type: ConnectorKind, o: StarterOptions = {}): unkn
         ],
         testPayloads: [],
       };
+    case 'client':
+      return {
+        ...head,
+        connector: { type: 'client', stores: [] },
+        authFields: [],
+        mapping: { mode: 'auto' },
+        rateLimits: { perMinute: 60 },
+        errorMapping: [],
+        setupInstructions: [
+          {
+            title: 'Install the client',
+            body: 'Each member installs it from the store link and signs in with their own account.',
+          },
+        ],
+        testPayloads: [],
+      };
   }
 }
 

@@ -244,7 +244,8 @@
           "push": "The service sends data to your workspace using a key you enter here.",
           "pull": "We fetch data from the service using a key you enter here.",
           "email_parse": "We read alert emails sent by the service.",
-          "webhook_relay": "You get a web address and a secret to paste into the tool that sends the data."
+          "webhook_relay": "You get a web address and a secret to paste into the tool that sends the data.",
+          "client": "You install it where you work and sign in with your own account."
         },
         "required": "Required",
         "optional": "Optional",
@@ -276,7 +277,8 @@
           "push": "It sends data to you",
           "pull": "We fetch its data",
           "email_parse": "Alert emails",
-          "webhook_relay": "Web address and secret"
+          "webhook_relay": "Web address and secret",
+          "client": "Installed by each member"
         },
         "installs": "Installs",
         "developer": "Developer"
@@ -576,7 +578,8 @@
           "push": "Sends data to you",
           "pull": "We fetch its data",
           "email_parse": "Alert emails",
-          "webhook_relay": "Web address and secret"
+          "webhook_relay": "Web address and secret",
+          "client": "Installed by each member"
         },
         "status": "Connection status",
         "statuses": {

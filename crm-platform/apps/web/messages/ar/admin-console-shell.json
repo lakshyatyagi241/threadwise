@@ -18,6 +18,47 @@
       "orders": "سجل الطلبات",
       "plans": "الأسعار والخطط",
       "tour": "ابدأ الجولة"
+    },
+    "nav": {
+      "sections": {
+        "insights": "الرؤى والتحليلات",
+        "plans": "الباقات والأسعار",
+        "billing": "الفوترة والإيرادات",
+        "support": "الدعم والموقع",
+        "channels": "القنوات والمراسلة",
+        "apps": "التطبيقات والوحدات",
+        "access": "الوصول والأمان",
+        "settings": "إعدادات المنصة",
+        "system": "النظام والتوطين"
+      },
+      "captions": {
+        "orders": "الطلبات والفواتير",
+        "payments": "المدفوعات",
+        "messaging": "المراسلة والمحافظ",
+        "support": "الدعم",
+        "website": "الموقع",
+        "whatsapp": "واتساب",
+        "marketplace": "سوق التطبيقات",
+        "modules": "الوحدات",
+        "roles": "الأدوار",
+        "security": "الأمان",
+        "signin": "تسجيل الدخول والتسجيل",
+        "branding": "الهوية والواجهة",
+        "integrations": "التكاملات",
+        "privacy": "الخصوصية والتتبع",
+        "infrastructure": "البنية التحتية",
+        "localization": "التوطين"
+      }
+    },
+    "search": {
+      "label": "البحث في لوحة الإدارة",
+      "trigger": "ابحث في لوحة الإدارة…",
+      "placeholder": "ابحث في الصفحات والإعدادات…",
+      "noResults": "لا توجد نتائج لـ «{query}»",
+      "count": "{count, plural, one {نتيجة واحدة} two {نتيجتان} few {# نتائج} many {# نتيجة} other {# نتيجة}}",
+      "hintMove": "للتنقل",
+      "hintOpen": "للفتح",
+      "hintToggle": "للتبديل"
     }
   }
 }

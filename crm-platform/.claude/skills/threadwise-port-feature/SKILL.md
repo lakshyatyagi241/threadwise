@@ -53,6 +53,7 @@ Write down (PR description draft is fine) which of these the feature needs, then
 | Vendor / channel        | `threadwise-channel-port` → `provider-adapter`, `webhook-handler` | port + adapter under `infra/providers/<domain>/`                                                   |
 | Settings / plan limits  | the domain's settings module                                  | Reference plan-feature keys map to plan gating (kernel item, check `port-map`)                        |
 | Web screens             | `threadwise-frontend-port` → `frontend-api-call`                  | route group + feature folder in your zone only                                                     |
+| Help guide              | `help-docs-sync`                                              | one guide per screen or tile you add, gated like the screen; the coverage gate fails without it    |
 | Tests                   | `threadwise-e2e-tests`                                            | one test per acceptance criterion                                                                  |
 | Docs                    | `docs/api/<domain>.md`                                        | request/response samples per endpoint (replaces the frozen shared api docs)                        |
 
@@ -72,10 +73,11 @@ offset pagination. Do not touch files outside your zones; run `ownership_check.p
 ## 3. Prove it
 
 1. `threadwise-e2e-tests`: automated tests covering every Given/When/Then in the entry (add missing criteria to the entry).
-2. `threadwise-playwright-parity`: **automatic**, do not wait for the Stop hook that enforces it. Runs the feature on the running Reference and on ours in Playwright (UI, UX, functionality, the full edge-case matrix), reports every difference as same / intended / defect, spawns fix sub-agents for the defects and re-runs until clean, writes the evidence rows and a stamp.
-3. `threadwise-verify-parity`: only for what the twin run marks as not automatable (live provider sessions) and to finish the evidence file `docs/threadwise-port/parity/<domain>.md` (the twin run supplies the rows).
-4. `bash .claude/skills/pre-pr/scripts/gate.sh`, `python3 .claude/skills/threadwise-ownership-guard/scripts/ownership_check.py`,
-5. Open the PR via `pre-pr`. Description: TW ids, acceptance-criteria checklist, parity evidence link, intentional
+2. `help-docs-sync`: **automatic**. Write the Help guide for every screen, Settings tile and plan feature this feature adds (`features/<domain>/help/*.md`), or record why not in `help-center/pending.json`; the coverage test in `pnpm test` fails otherwise.
+3. `threadwise-playwright-parity`: **automatic**, do not wait for the Stop hook that enforces it. Runs the feature on the running Reference and on ours in Playwright (UI, UX, functionality, the full edge-case matrix), reports every difference as same / intended / defect, spawns fix sub-agents for the defects and re-runs until clean, writes the evidence rows and a stamp.
+4. `threadwise-verify-parity`: only for what the twin run marks as not automatable (live provider sessions) and to finish the evidence file `docs/threadwise-port/parity/<domain>.md` (the twin run supplies the rows).
+5. `bash .claude/skills/pre-pr/scripts/gate.sh`, `python3 .claude/skills/threadwise-ownership-guard/scripts/ownership_check.py`,
+6. Open the PR via `pre-pr`. Description: TW ids, acceptance-criteria checklist, parity evidence link, intentional
    deviations from Reference and why, follow-ups.
 
 ## 4. Close
@@ -89,6 +91,7 @@ turned out to be missing from the inventory, add it (next id) rather than buildi
 - [ ] RLS verified by script on every new table; no cross-tenant path
 - [ ] twin run recorded: stamp `clean` or `fixed`, no open defect, every `review` item decided, twin spec committed under `apps/web/e2e/<domain>/parity/`
 - [ ] behavior compared with Reference; differences listed and intentional
+- [ ] a Help guide exists for every screen, tile and plan feature added (or a `pending.json` entry with owner and reason)
 - [ ] inventory entry, `docs/api/<domain>.md`, tracker row updated in this PR
 - [ ] ownership check clean (only your zones, seams edited per policy)
 - [ ] no Reference code, assets or text copied

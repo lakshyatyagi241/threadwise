@@ -1,12 +1,14 @@
 import type { NavContributionsResponse } from '@crm/contracts';
-import type {
-  ConsoleEntry,
-  ConsoleGroup,
-  ConsoleLeaf,
+import {
+  emptySection,
+  type ConsoleEntry,
+  type ConsoleGroup,
+  type ConsoleLeaf,
 } from '@/features/admin-console-shell/console-nav';
+import { MODULES_SECTION } from '@/features/admin-console-shell/console-layout';
 
-/** The rail group modules add to (Reference's "System" rail). */
-export const MODULE_NAV_GROUP = 'install-update-licensing.system.nav.group';
+/** The rail section modules add to: Apps & modules, under its "Modules" heading (Reference lists them in its System rail). */
+export const MODULE_NAV_GROUP = MODULES_SECTION;
 /** Instagram shows as a card on the channel settings hub instead of in the rail (TW-ADD-012). */
 export const SKIPPED_KEYS: ReadonlySet<string> = new Set(['instagram']);
 
@@ -31,6 +33,6 @@ export function withModuleLeaves(
   const out = entries.map((e) => ('children' in e ? { ...e, children: [...e.children] } : e));
   const group = out.find((e): e is ConsoleGroup => 'children' in e && e.id === MODULE_NAV_GROUP);
   if (group) group.children.push(...leaves);
-  else out.push({ id: MODULE_NAV_GROUP, labelKey: MODULE_NAV_GROUP, children: leaves });
+  else out.push({ ...emptySection(MODULE_NAV_GROUP), children: leaves });
   return out;
 }

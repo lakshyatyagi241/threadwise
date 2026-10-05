@@ -31,17 +31,21 @@ export class ResellerReportService {
   async dashboard(query: BspDashboardQuery, now = new Date()): Promise<BspDashboard> {
     const window = monthWindow(query.month, now);
     const { baseCurrency } = await this.settings.connection();
+    const currency = query.currency ?? baseCurrency;
     const rows = await this.reader.dashboard({
       from: window.from,
       to: window.to,
-      currency: baseCurrency,
+      currency,
+      // A charge from before per-currency billing has no currency: it was made in the base currency.
+      legacyCurrency: baseCurrency,
       limit: query.limit,
     });
     return {
       month: window.month,
       from: window.from.toISOString(),
       to: window.to.toISOString(),
-      currency: baseCurrency,
+      currency,
+      currencies: rows.currencies,
       totals: {
         billedMessages: rows.totals.billed,
         freeMessages: rows.totals.free,

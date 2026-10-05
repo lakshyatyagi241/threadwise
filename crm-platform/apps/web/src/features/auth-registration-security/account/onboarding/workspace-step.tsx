@@ -2,6 +2,7 @@
 
 import {
   ERROR_CODES,
+  defaultBillingCurrency,
   industrySchema,
   onboardingWorkspaceRequestSchema,
   teamSizeSchema,
@@ -10,13 +11,15 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import type { CountryCode } from 'libphonenumber-js';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { ApiError } from '@/lib/api/errors';
 import { FormField } from '../../guest/form-field';
 import { evaluatePhone, pickDefaultCountry } from '../../guest/phone';
 import { PhoneInput, type PhoneValue } from '../../guest/phone-input';
 import { ArrowIcon, Button, Input, Select, Spinner } from '../../guest/ui';
+import { countryOptions } from '../../platform/lib/zones-countries';
+import { Combobox } from '../../shared/combobox';
 import { ErrorNote } from '../../shared/error-note';
 import { focusFirstInvalid } from '../../shared/focus';
 import { redirectOnGateError } from '../../shared/gate-errors';
@@ -24,15 +27,16 @@ import { modernZoneId } from '../../shared/timezones';
 import { authApi, keys } from '../api';
 import { ZoneSelect } from './zone-select';
 
-type FieldKey = 'name' | 'industry' | 'sizeRange' | 'timezone' | 'phone';
+type FieldKey = 'name' | 'industry' | 'sizeRange' | 'timezone' | 'country' | 'currency' | 'phone';
 type Errors = Partial<Record<FieldKey, string>>;
 
 const INDUSTRIES = industrySchema.options;
 const SIZES = teamSizeSchema.options;
 
 /**
- * Step 2 of 3: name the workspace, say what it is for, pick its timezone (TW-AUTH-008). The mobile number is asked
- * only when the account has none (an account made with Google or Facebook).
+ * Step 2 of 3: name the workspace, say what it is for, pick its country, timezone and billing currency (TW-AUTH-008; the
+ * country and currency are ours: the currency starts at INR for India and USD elsewhere and stays the owner's to change). The
+ * mobile number is asked only when the account has none (an account made with Google or Facebook).
  */
 export function WorkspaceStep({
   data,
@@ -45,6 +49,7 @@ export function WorkspaceStep({
   onSaved: () => void;
 }) {
   const t = useTranslations('auth-registration-security.account.onboarding.workspace');
+  const locale = useLocale();
   const tg = useTranslations('auth-registration-security.gate.onboarding');
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -56,6 +61,19 @@ export function WorkspaceStep({
   const [size, setSize] = useState(data.workspace.sizeRange ?? '');
   const [zone, setZone] = useState(modernZoneId(data.workspace.timezone ?? data.defaultTimezone));
   const defaultIso = pickDefaultCountry(defaultCountryIso);
+  const countries = useMemo(() => countryOptions(locale), [locale]);
+  const [country, setCountry] = useState(data.workspace.country ?? defaultIso ?? '');
+  // The currency follows the country until the owner picks one themselves (or one was saved earlier).
+  const [currencyPick, setCurrencyPick] = useState<string | null>(data.workspace.currency);
+  const { available, platform } = data.currencies;
+  const currency = currencyPick ?? defaultBillingCurrency(country, available, platform);
+  const currencyNames = useMemo(() => {
+    try {
+      return new Intl.DisplayNames([locale], { type: 'currency' });
+    } catch {
+      return null;
+    }
+  }, [locale]);
   const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(null);
   const phone = useMemo<PhoneValue>(() => {
     const raw = phoneEdit?.raw ?? '';
@@ -86,6 +104,8 @@ export function WorkspaceStep({
       industry: industry || undefined,
       sizeRange: size || undefined,
       timezone: zone,
+      country: country || undefined,
+      currency: currency || undefined,
       phone: data.needsPhone ? (phone.state.e164 ?? undefined) : undefined,
     });
     if (!parsed.success) {
@@ -97,9 +117,12 @@ export function WorkspaceStep({
             ? t('errors.nameInvalid')
             : key === 'timezone'
               ? t('errors.timezoneRequired')
-              : t('errors.invalid');
+              : key === 'country'
+                ? t('errors.countryRequired')
+                : t('errors.invalid');
       }
     }
+    if (!country) found.country = t('errors.countryRequired');
     if (Object.keys(found).length || !parsed.success) return fail(found);
 
     setPending(true);
@@ -121,7 +144,14 @@ export function WorkspaceStep({
         for (const f of err.fieldErrors) {
           const key = f.path as FieldKey;
           if (!mapped[key])
-            mapped[key] = key === 'timezone' ? t('errors.timezoneInvalid') : t('errors.invalid');
+            mapped[key] =
+              key === 'timezone'
+                ? t('errors.timezoneInvalid')
+                : key === 'country'
+                  ? t('errors.countryInvalid')
+                  : key === 'currency'
+                    ? t('errors.currencyInvalid')
+                    : t('errors.invalid');
         }
         fail(mapped);
       } else if (err instanceof ApiError && err.code === ERROR_CODES.FORBIDDEN) {
@@ -193,6 +223,44 @@ export function WorkspaceStep({
             extra={[data.defaultTimezone]}
             invalid={p.invalid}
           />
+        )}
+      </FormField>
+
+      <FormField label={t('country')} hint={t('countryHint')} error={errors.country}>
+        {(p) => (
+          <Combobox
+            id={p.id}
+            options={countries.map((c) => ({
+              value: c.code,
+              label: c.name,
+              search: c.name.toLowerCase(),
+            }))}
+            value={country}
+            onChange={setCountry}
+            placeholder={t('countryPlaceholder')}
+            emptyLabel={t('countryEmpty')}
+            invalid={p.invalid}
+          />
+        )}
+      </FormField>
+
+      <FormField label={t('currency')} hint={t('currencyHint')} error={errors.currency}>
+        {(p) => (
+          <Select
+            {...p}
+            value={currency}
+            onChange={(e) => setCurrencyPick(e.target.value)}
+            className="py-2"
+          >
+            {available.map((code) => {
+              const name = currencyNames?.of(code);
+              return (
+                <option key={code} value={code}>
+                  {name && name !== code ? `${code} - ${name}` : code}
+                </option>
+              );
+            })}
+          </Select>
         )}
       </FormField>
 

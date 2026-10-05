@@ -126,6 +126,10 @@ export const permissionDefs = pgTable('permission_defs', {
   label: text('label').notNull(),
   category: text('category').notNull(),
   supportsScope: boolean('supports_scope').notNull().default(false),
+  /** The plan feature that unlocks this key (an add-on's keys); null = a core key. Decides visibility in the Roles editor only. */
+  planFeature: text('plan_feature'),
+  /** The Marketplace app whose keys these are; the key shows in the Roles editor only while the workspace has the app installed. */
+  appSlug: text('app_slug'),
 });
 
 export const roles = pgTable(
