@@ -8,12 +8,12 @@ deliberately departs from the WaDesk template screens and must be recorded as `i
 
 ## 1. Where it lives
 
-| Screen | Interakt route | Notes |
-| --- | --- | --- |
+| Screen                     | Interakt route                                                           | Notes                                                                |
+| -------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
 | Library / Active / Deleted | `/templates/list?channel_type=whatsapp&segment=library\|active\|deleted` | Sidebar: Market -> Templates ("Messages for campaigns & chat start") |
-| New template (entry modal) | modal over the list | see 2 |
-| Builder | `/template/create` | two-step accordion |
-| Edit | `/template/<name>/edit` | see 7 |
+| New template (entry modal) | modal over the list                                                      | see 2                                                                |
+| Builder                    | `/template/create`                                                       | two-step accordion                                                   |
+| Edit                       | `/template/<name>/edit`                                                  | see 7                                                                |
 
 ## 2. Entry modal ("+ New Template")
 
@@ -39,16 +39,16 @@ The AI path was not run (NOT VERIFIED).
 
 Category pills (icons): Marketing, Utility, Authentication. Type list is a scrollable box of radio cards (icon, title, description).
 
-| Category | Type card | Description |
-| --- | --- | --- |
-| Marketing | Template with Buttons (Quick Reply, URL, Copy Code etc) | Send a message with customised buttons to engage customers |
-| Marketing | Simple template (No buttons / Carousels) | Send a message only having a header / body / footer |
-| Marketing | Template with WhatsApp Pay Checkout | Send messages through which customers can pay you |
-| Marketing | Carousel | Send a carousel of images / videos showcasing your products |
-| Marketing | Catalog | Send messages that drive sales by connecting your product catalog |
-| Utility | Template with Buttons (Quick Reply, URL, Copy Code etc) | (same text) |
-| Utility | Simple template (No buttons / Carousels) | (same text) |
-| Authentication | One-Time Passcode | Send OTPs to verify a transaction or login |
+| Category       | Type card                                               | Description                                                       |
+| -------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| Marketing      | Template with Buttons (Quick Reply, URL, Copy Code etc) | Send a message with customised buttons to engage customers        |
+| Marketing      | Simple template (No buttons / Carousels)                | Send a message only having a header / body / footer               |
+| Marketing      | Template with WhatsApp Pay Checkout                     | Send messages through which customers can pay you                 |
+| Marketing      | Carousel                                                | Send a carousel of images / videos showcasing your products       |
+| Marketing      | Catalog                                                 | Send messages that drive sales by connecting your product catalog |
+| Utility        | Template with Buttons (Quick Reply, URL, Copy Code etc) | (same text)                                                       |
+| Utility        | Simple template (No buttons / Carousels)                | (same text)                                                       |
+| Authentication | One-Time Passcode                                       | Send OTPs to verify a transaction or login                        |
 
 Each card's canned preview: Buttons (marketing) "Upskill Faster This Year..." with Explore Courses / Get Fee Details / Copy offer code;
 Buttons (utility) "Order Dispatched..." with Track Order / Download Invoice / Need Help; Simple "New Season. New You..." with footer
@@ -70,6 +70,7 @@ removable chips. Every selected language gets its own tab with a full independen
 the preview follows the active tab. The list view shows one language per row, so a multi-language submit becomes one row per language.
 
 **Header (Optional)**: radios None / Text / Image / Video / Document (no Location).
+
 - Text: input with counter `0/60` and "Add variable (i)".
 - Image / Video / Document: dashed upload tile ("Upload Image" / "Upload Video" / "Upload Document"); limits printed beside it:
   **Image 5MB, Video 16MB, Document 100MB**. Note under the tile: "This media file will be sent as a sample to WhatsApp, for approval.
@@ -78,7 +79,8 @@ the preview follows the active tab. The list view shows one language per row, so
 
 **Body**: label "The Whatsapp message in the language you have selected", textarea. No character counter was visible. Toolbar under it:
 "Add variable (i)" (tooltip: "These make the content of the message personalized for users"; inserts `{{1}}`, `{{2}}`... and the
-preview updates live), an AI button, emoji picker (searchable, "Frequently Used", "Smileys & People", category tabs), **B**, *I*.
+preview updates live), an AI button, emoji picker (searchable, "Frequently Used", "Smileys & People", category tabs), **B**, _I_.
+
 - AI button on Marketing: **Generate with AI** opens "Interakt Copilot": "0/10 of your daily prompts used", "How can I assist you
   today?", the six suggestion chips, free-text box with send. Not sent (NOT VERIFIED beyond the shell).
 - AI button on Utility: replaced by **Ensure Utility Compliance**, which opens the same Copilot with the box pre-filled "Please refine
@@ -89,9 +91,11 @@ preview updates live), an AI button, emoji picker (searchable, "Frequently Used"
 ## 6. Step 2 per type
 
 ### 6.1 Template with Buttons (Marketing and Utility, identical except the AI button)
+
 Header, Body, Footer as in section 5, then the card "Template with Buttons (Quick Reply, URL, Copy Code etc) / Create buttons that let
 customers respond to your message or take action." Banner "The total number of buttons cannot exceed 10. Learn More" with counter `n/10`.
 Four drag-reorderable checkbox rows (drag handles; the Coupon Code handle looks fixed):
+
 1. **Add Coupon Code**: a locked "Copy Code" label field plus input "Enter text for coupon code" `0/15`, remove (red minus).
 2. **Add Website URL**: dropdown **Static / Dynamic**, protocol dropdown **https:// / http://**, URL input `0/2000`
    (placeholder "Enter url, example: www.interakt.shop"), link **Add UTM Parameters**, button text `0/25`, **Add Another Website URL**, remove.
@@ -109,25 +113,30 @@ Interakt's APIs, or via the inbox or any other approach."
 The preview shows up to three buttons then "See all options" when there are more.
 
 ### 6.2 Simple template (Marketing and Utility)
+
 Header (optional), Body, Footer. No buttons card.
 
 ### 6.3 Template with WhatsApp Pay Checkout (Marketing only)
+
 Modal "WhatsApp Pay Integration" (opens on Save in step 1; its own Submit stayed disabled and was not used):
+
 - Amber note: WhatsApp Pay messages only reach recipients with +91 numbers and fail for other numbers.
 - STEP 1: "Configure Payment Gateway from your Facebook Business Manager. See how" plus a support-form link.
 - STEP 2 "Provide the following details": **Payment Configuration Name** `0/60` ("Provide the same name which you have entered in FB
   Business Manager"); **Select a Payment Gateway** (Razorpay, PayU); **Type of Goods** (Digital Goods, Physical Goods);
   **Payment Confirmation Message** toggle (on by default) with an editable text "Your payment of {{amount}} has been received."; Submit.
-Step 2 form (from the page text; layout not captured visually): "Select a button type to proceed" radios **Carousel Message / Single
-Image / Video** (Single selected); Header (Image / Video upload, same limits); Body with Add variable and Generate with AI; card
-"Template with WhatsApp Pay Checkout / Add checkout button & provide product details" with **Type of Action**, **Button Text**,
-"Would you like to send the same product to all customers?" (**Send the same product** / **Send Different Products**), **Product
-Details**, **Add Quick Reply Button**. Preview button label "Review and Pay" with a cart icon.
+  Step 2 form (from the page text; layout not captured visually): "Select a button type to proceed" radios **Carousel Message / Single
+  Image / Video** (Single selected); Header (Image / Video upload, same limits); Body with Add variable and Generate with AI; card
+  "Template with WhatsApp Pay Checkout / Add checkout button & provide product details" with **Type of Action**, **Button Text**,
+  "Would you like to send the same product to all customers?" (**Send the same product** / **Send Different Products**), **Product
+  Details**, **Add Quick Reply Button**. Preview button label "Review and Pay" with a cart icon.
 
 ### 6.4 Carousel (Marketing only)
+
 Header section shows only **None** (no header on the main message). Body (with Add variable, AI, emoji, B, I). **No footer.**
 Card "Carousel / Create buttons that let customers respond to your message or take action." Banner "The total number of carousel cards
 cannot exceed 10." with counter `1/10` (one card exists by default). Each card (drag handle, remove):
+
 - **Upload Card Header** tile (image or video; limits and dialog not captured).
 - Card body textarea `0/160` with Add variable, emoji, B, I (no AI).
 - **Add a Card Button** menu: **CTA**, **Quick Reply**, **Phone Number**. CTA = dropdown (Static / Dynamic), protocol, URL `0/2000`,
@@ -135,13 +144,16 @@ cannot exceed 10." with counter `1/10` (one card exists by default). Each card (
 - **Add another Carousel Card** below the list.
 
 ### 6.5 Catalog (Marketing only)
+
 Header section is **required** and fixed to **Text** (`0/60`, Add variable). Body (Add variable, AI, emoji, B, I). Footer optional `0/60`.
 Card "Catalog": "Customise your campaign or inbox messages by selecting up to 30 products to showcase." with radios
 **Send Specific Products** (default) / **Send Entire Catalog**. Preview button "View items".
 
 ### 6.6 One-Time Passcode (Authentication only)
+
 Step 2 header shows **Ready to Submit** (green check) as soon as it opens. Name and language as in section 5; per-language tabs exist.
 No header, body text, footer or free buttons (body is fixed: preview "{{1}} is your verification code.").
+
 - **Code delivery setup** ("Choose how customers send the code from WhatsApp to your app. Edits to this section won't require review or
   count towards edit limits."): radios
   - **Zero-tap auto-fill** (default, "recommended as the easiest option"): required checkbox of terms ("By selecting zero-tap, I understand
