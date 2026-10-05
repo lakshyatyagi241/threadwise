@@ -7,7 +7,12 @@ import { Input, Select, cn } from '@crm/ui';
 import { SearchIcon } from '../../ui/icons';
 import { SectionBadge } from '../../ui/chrome';
 import { TriCheckbox } from '../../ui/tri-checkbox';
-import { isLocked, permissionBadge, planFeatureFallback, selectableKeys } from '../lib/permission-lock';
+import {
+  isLocked,
+  permissionBadge,
+  planFeatureFallback,
+  selectableKeys,
+} from '../lib/permission-lock';
 import {
   countDenied,
   countSelected,
