@@ -39,8 +39,10 @@ function onboarding(over: Partial<OnboardingResponse> = {}): OnboardingResponse 
       industry: null,
       sizeRange: null,
       timezone: null,
+      country: null,
       currency: null,
     },
+    currencies: { available: ['INR', 'USD'], platform: 'USD' },
     suggestedName: 'Asha Rao Studio',
     needsPhone: false,
     plans: [plan()],
@@ -69,13 +71,14 @@ describe('onboarding step 2: workspace (WD-AUTH-008)', () => {
     expect(html).toContain('aria-current="step"');
   });
 
-  it('asks for name, industry, team size and timezone, and no currency', () => {
+  it('asks for name, industry, team size, timezone, country and billing currency', () => {
     const html = view(onboarding());
     expect(html).toContain('Workspace name');
     expect(html).toContain('Industry');
     expect(html).toContain('Team size');
     expect(html).toContain('Timezone');
-    expect(html).not.toContain('Currency');
+    expect(html).toContain('Country');
+    expect(html).toContain('Currency');
     // Nine industries and five team sizes.
     for (const label of ['Ecommerce', 'SaaS', 'Hospitality']) expect(html).toContain(`>${label}<`);
     for (const size of ['1', '2-5', '6-20', '21-100', '100+'])
@@ -85,9 +88,41 @@ describe('onboarding step 2: workspace (WD-AUTH-008)', () => {
   it('prefills the name from sign-up, else the suggestion made from the email', () => {
     expect(view(onboarding())).toContain('value="Acme Studio"');
     const blank = onboarding({
-      workspace: { name: '', industry: null, sizeRange: null, timezone: null, currency: null },
+      workspace: {
+        name: '',
+        industry: null,
+        sizeRange: null,
+        timezone: null,
+        country: null,
+        currency: null,
+      },
     });
     expect(view(blank)).toContain('value="Asha Rao Studio"');
+  });
+
+  it('offers only the currencies the platform can bill in', () => {
+    const html = view(onboarding());
+    expect(html).toContain('>INR - Indian Rupee</option>');
+    expect(html).toContain('>USD - US Dollar</option>');
+    expect(html).not.toContain('>EUR');
+  });
+
+  it('starts the currency at INR for India and USD for any other country', () => {
+    const india = view(
+      onboarding({ workspace: { ...onboarding().workspace, country: 'IN', currency: null } }),
+    );
+    expect(india).toMatch(/<option value="INR" selected/);
+    const uk = view(
+      onboarding({ workspace: { ...onboarding().workspace, country: 'GB', currency: null } }),
+    );
+    expect(uk).toMatch(/<option value="USD" selected/);
+  });
+
+  it('keeps a currency saved earlier, whatever the country says', () => {
+    const html = view(
+      onboarding({ workspace: { ...onboarding().workspace, country: 'IN', currency: 'USD' } }),
+    );
+    expect(html).toMatch(/<option value="USD" selected/);
   });
 
   it('shows the timezone as a bare id with a search prompt, defaulting to the platform timezone', () => {
@@ -186,7 +221,7 @@ describe('onboarding step 3: plan (WD-AUTH-009)', () => {
 });
 
 describe('workspace step form', () => {
-  it('has no currency field and a Continue button', () => {
+  it('has a Continue button and a billing currency that starts from the country', () => {
     const html = renderGuest(
       createElement(WorkspaceStep, {
         data: onboarding(),
@@ -195,8 +230,9 @@ describe('workspace step form', () => {
       }),
       { session: makeSession() },
     );
-    expect(html).not.toContain('Currency');
     expect(html).toContain('Continue');
+    // The platform default country is the UAE: not India, so USD.
+    expect(html).toMatch(/<option value="USD" selected/);
   });
 });
 

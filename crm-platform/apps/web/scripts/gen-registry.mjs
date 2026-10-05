@@ -1,8 +1,10 @@
 // Builds src/features/_registry/nav.generated.ts from every src/features/<domain>/nav.ts, and
-// settings.generated.ts from every src/features/<domain>/settings.ts (the Settings area's tiles).
+// settings.generated.ts from every src/features/<domain>/settings.ts (the Settings area's tiles), and
+// help.generated.ts from every src/features/<domain>/help/*.md (the Help center's documents).
 // The outputs are gitignored, so adding a domain never edits a shared file.
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { compileRegistry, renderGenerated } from './help-compile.mjs';
 
 const root = join(import.meta.dirname, '..', 'src', 'features');
 const features = readdirSync(root, { withFileTypes: true })
@@ -42,3 +44,20 @@ build({
   outFile: 'settings.generated.ts',
   label: 'settings',
 });
+
+/** The Help center: every `features/<domain>/help/*.md`, compiled (see help-compile.mjs). A bad file stops the build. */
+const helpFiles = features.flatMap((domain) => {
+  const dir = join(root, domain, 'help');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((file) => file.endsWith('.md'))
+    .map((file) => ({ domain, file, source: readFileSync(join(dir, file), 'utf8') }));
+});
+try {
+  const docs = compileRegistry(helpFiles);
+  writeFileSync(join(root, '_registry', 'help.generated.ts'), renderGenerated(docs));
+  console.log(`help registry: ${docs.length} doc(s)`);
+} catch (error) {
+  console.error(`help registry: ${error.message}`);
+  process.exit(1);
+}

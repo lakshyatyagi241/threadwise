@@ -217,7 +217,7 @@ export function NavRail({
         </div>
         {bottom.length > 0 && (
           <nav
-            aria-label={t('shell.settings')}
+            aria-label={t('shell.pinned')}
             className="flex shrink-0 flex-col items-center gap-1 border-t border-nav-border px-2 py-2"
           >
             {bottom.map((item) => (
@@ -554,7 +554,7 @@ export function NavDrawer({
         </div>
         {bottom.length > 0 && (
           <nav
-            aria-label={t('shell.settings')}
+            aria-label={t('shell.pinned')}
             className="shrink-0 space-y-0.5 border-t border-nav-border px-3 py-2"
           >
             {bottom.map((item) => (

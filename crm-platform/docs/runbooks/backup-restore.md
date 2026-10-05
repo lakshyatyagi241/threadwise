@@ -22,9 +22,9 @@ The `backup` service in `docker-compose.yml` writes a `pg_dump -Fc` of the whole
 - A release stops, before touching anything, if the pre-release dump fails. The one exception is the first release after the
   service was added, when it may not be running yet: that release goes ahead and says so.
 
-Not covered, on purpose and still open: **the dumps live on the same machine as the database.** They protect against a bad
-migration, a dropped table or a bad deploy, not against losing the host or its disk. Copy `/opt/desk/backups/` somewhere else
-(see "Off the host"). The database volume is not snapshotted and there is no point-in-time recovery (WAL archiving).
+The dumps in `/opt/desk/backups/` live on the same machine as the database: they protect against a bad migration, a dropped
+table or a bad deploy. The `offsite` service (below, "Off the host") copies them to R2 once it is configured. The database volume
+is not snapshotted and there is no point-in-time recovery (WAL archiving).
 
 ## Check that it is working
 
@@ -98,17 +98,71 @@ Everything written between the dump and step 2 is lost. Say so to whoever owns t
 
 This path assumes you have an off-host copy of the dumps and of `.env`. If you do not, there is nothing to restore from.
 
-## Off the host
+## Off the host (Cloudflare R2)
 
-Not automated. Until it is, run from a machine that can reach the server, ideally daily:
+The `offsite` service copies every verified dump in `/opt/desk/backups/` to an R2 bucket, so losing the host or its disk does
+not lose the data. It runs in the API image next to `backup`, every 30 minutes (`OFFSITE_SYNC_MINUTES`).
+
+- **Sealed before upload.** Each dump is encrypted on the host with `OFFSITE_BACKUP_KEY` (AES-256-GCM) and only the sealed copy
+  leaves it. A dump holds every tenant's contacts and messages; with this, someone who obtains the **bucket keys** still cannot
+  read it. That key is **not** the bucket token and **not** `CREDENTIALS_ENCRYPTION_KEY`.
+- **Checked after upload.** A dump counts as copied only when the bucket reports the same size and MD5 as what was sent. The
+  next pass retries anything that failed; the local dumps are never touched.
+- **Retention in the bucket:** every dump from the last 30 days, the first dump of each calendar month for the last 12 months,
+  and always the newest three. Only files named `desk-<label>-<timestamp>.dump.enc` are ever deleted.
+- Healthy (`docker compose ps offsite`) while a whole pass succeeded within the last two hours.
+
+### One-time setup (about ten minutes)
+
+1. **In Cloudflare:** R2, create a bucket (for example `desk-backups`; leave public access off). Create an API token with
+   **Object Read & Write**, restricted to **that bucket only**. Note the account's S3 endpoint
+   (`https://<account id>.r2.cloudflarestorage.com`), the token's access key id and secret.
+2. **Make the backup key and keep it somewhere that is not this server:** `openssl rand -base64 32`. Put a copy in your password
+   manager / secret store **before** the first upload. Lose it and every copy in the bucket is unreadable.
+3. **On the server**, add to `/opt/desk/.env` (mode 600): `OFFSITE_S3_ENDPOINT`, `OFFSITE_S3_BUCKET`, `OFFSITE_S3_ACCESS_KEY_ID`,
+   `OFFSITE_S3_SECRET_ACCESS_KEY`, `OFFSITE_BACKUP_KEY` (see `.env.example`).
+4. **Prove the settings work:**
+   `docker compose --env-file .env run --rm --no-deps offsite node dist/src/modules/platform-infrastructure/offsite-backup/offsite-backup.cli.js check`
+   It writes, reads back and deletes a small test object, and says which step failed (a wrong secret is `HTTP 403`, a wrong bucket
+   `NoSuchBucket`).
+5. **Start it:** `docker compose --env-file .env up -d offsite`. Watch `docker compose logs -f offsite` for
+   `uploaded desk-...dump (... bytes sealed)`, then `... list` (below) to see the objects.
+6. **Restore a copy once, now, while nothing is wrong** (next section). An untried backup is a hope.
+
+Until step 3 is done the service starts, prints `not configured (missing ...)` and stops. That is expected.
+
+### Look at what is in the bucket
 
 ```bash
-rsync -a --ignore-existing root@<host>:/opt/desk/backups/ /path/on/another/machine/desk-backups/
+docker compose --env-file .env exec -T offsite node dist/src/modules/platform-infrastructure/offsite-backup/offsite-backup.cli.js list
 ```
 
-and keep a copy of `/opt/desk/.env` (it holds the encryption key) in a password manager or secret store, not next to the dumps.
-Moving this into the service itself needs a destination (an object-storage bucket or a second host) and a decision about who
-holds its credentials.
+### Get a dump back from the bucket
+
+Works on any machine that has the API image (or this repo built) and the same settings, so it works on a new host too:
+
+```bash
+# on the host, or anywhere with the OFFSITE_* settings in the environment
+node dist/src/modules/platform-infrastructure/offsite-backup/offsite-backup.cli.js fetch desk-daily-20261004T020000Z.dump ./restored.dump
+```
+
+It downloads the sealed file and opens it with `OFFSITE_BACKUP_KEY`; if the key is wrong or the file was altered, it fails and
+writes nothing. Then restore `restored.dump` with `pg_restore` as in "Bring data back" above. If you changed the backup key
+since the dump was made, list the old key in `OFFSITE_BACKUP_PREVIOUS_KEYS`.
+
+### Changing the backup key
+
+Set the new key as `OFFSITE_BACKUP_KEY` and move the old one to `OFFSITE_BACKUP_PREVIOUS_KEYS` (comma-separated). New dumps are
+sealed with the new key; old copies in the bucket stay readable with the old one, so keep it until the oldest of them has aged out
+(12 months).
+
+### What this does not cover
+
+- Both the bucket keys and the backup key live in `/opt/desk/.env`, so someone who owns the **server** can read and delete the
+  copies. Protection against that needs a bucket the server cannot delete from (R2 bucket locks or a lifecycle you control) or a
+  second, separately-held copy; not set up.
+- The sealed copy hides the data, not the fact that backups exist or how big they are.
+- Copies are only as fresh as the last dump (nightly, plus one before every release), not point-in-time.
 
 ## Settings
 

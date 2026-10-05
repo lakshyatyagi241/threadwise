@@ -12,3 +12,8 @@ export const parseSidebarState = (value: string | null | undefined): SidebarStat
 /** The `document.cookie` assignment for a state. Read by the server layout, so it is not httpOnly. */
 export const sidebarCookie = (state: SidebarState): string =>
   `${CONSOLE_SIDEBAR_COOKIE}=${state}; path=/; max-age=${YEAR_SECONDS}; samesite=lax`;
+
+/** Remembers the state in the browser (client only), so the next page is rendered that way on the server. */
+export const saveSidebarState = (state: SidebarState): void => {
+  document.cookie = sidebarCookie(state);
+};
