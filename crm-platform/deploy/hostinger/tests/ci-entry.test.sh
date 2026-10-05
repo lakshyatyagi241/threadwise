@@ -25,6 +25,8 @@ case "$*" in
   *"exec -T backup desk-backup once"*) [ "${STUB_DUMP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"run --rm migrate"*) [ "${STUB_MIGRATE_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"exec -T api node -e"*) [ "${STUB_READY:-1}" = 1 ]; exit $? ;;
+  *"ps -q worker"*) echo workerid; exit 0 ;;
+  "inspect --format"*) echo "${STUB_WORKER_HEALTH:-healthy}"; exit 0 ;;
   "image ls"*) exit 0 ;;
   *) exit 0 ;;
 esac
@@ -42,7 +44,7 @@ check() { # check "name" cmd...
   local name=$1; shift
   if "$@"; then pass=$((pass + 1)); echo "  ok   $name"; else fail=$((fail + 1)); echo "  FAIL $name"; fi
 }
-unset_stubs() { unset STUB_BACKUP_UP_FAIL STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_READY; }
+unset_stubs() { unset STUB_BACKUP_UP_FAIL STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_READY STUB_WORKER_HEALTH; }
 before() { [ -n "$(line_of "$1")" ] && [ -n "$(line_of "$2")" ] && [ "$(line_of "$1")" -lt "$(line_of "$2")" ]; }
 
 echo "release: normal"
@@ -89,6 +91,19 @@ unset_stubs; new_dir aaaaaaa; STUB_READY=0 release bbbbbbb
 check "exits 1" test "$(code)" = 1
 check "rolls back to the previous tag" test "$(tag)" = aaaaaaa
 check "restarts the previous release" test "$(grep -c 'up -d api worker web' "$STUB_LOG")" = 2
+
+echo "release: the worker"
+unset_stubs; new_dir aaaaaaa; STUB_WORKER_HEALTH=unhealthy release bbbbbbb
+check "an unhealthy worker fails the release" test "$(code)" = 1
+check "and rolls back to the previous tag" test "$(tag)" = aaaaaaa
+check "it says the worker was the problem" grep -q "api or worker" "$WORK/out.txt"
+unset_stubs; new_dir aaaaaaa; STUB_WORKER_HEALTH=starting release bbbbbbb
+check "a worker that never leaves 'starting' fails it too" test "$(code)" = 1
+unset_stubs; new_dir aaaaaaa; STUB_WORKER_HEALTH=none release bbbbbbb
+check "a worker with no healthcheck (older compose) is not waited for" test "$(code)" = 0
+unset_stubs; new_dir aaaaaaa; STUB_WORKER_HEALTH=healthy release bbbbbbb
+check "a healthy worker passes" test "$(code)" = 0
+check "its health is read after the api is ready" bash -c "grep -n 'exec -T api node -e' '$STUB_LOG' | head -1 | cut -d: -f1 > '$WORK/a'; grep -n 'inspect --format' '$STUB_LOG' | head -1 | cut -d: -f1 > '$WORK/b'; test \$(cat '$WORK/a') -lt \$(cat '$WORK/b')"
 
 echo "release: input checks"
 unset_stubs; new_dir aaaaaaa; release 'abc; rm -rf /'
