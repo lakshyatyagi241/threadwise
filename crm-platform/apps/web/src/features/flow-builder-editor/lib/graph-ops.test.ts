@@ -9,6 +9,8 @@ import {
   canUndo,
   clampZoom,
   connect,
+  connectionFocus,
+  edgeFocus,
   createHistory,
   deleteEdge,
   deleteNode,
@@ -276,5 +278,48 @@ describe('geometry', () => {
     expect(r.zoom).toBe(1.5);
     expect((240 - r.pan.x) / r.zoom).toBeCloseTo((240 - 40) / 1);
     expect((140 - r.pan.y) / r.zoom).toBeCloseTo((140 - 40) / 1);
+  });
+});
+
+describe('connection focus', () => {
+  const edges = [
+    edge('e1', 'a', 'out', 'b'),
+    edge('e2', 'b', 'p0', 'c'),
+    edge('e3', 'b', 'p1', 'd'),
+    edge('e4', 'x', 'out', 'y'),
+    edge('e5', 'b', 'p2', 'b'),
+  ];
+
+  it('nothing is selected: no focus, so nothing is faded', () => {
+    expect(connectionFocus(edges, null)).toBeNull();
+  });
+
+  it('a selected node highlights its edges, the nodes leading into it and the nodes it leads to', () => {
+    const f = connectionFocus(edges, 'b')!;
+    expect([...f.edgeIds].sort()).toEqual(['e1', 'e2', 'e3', 'e5']);
+    expect([...f.upstream]).toEqual(['a']);
+    expect([...f.downstream].sort()).toEqual(['c', 'd']);
+  });
+
+  it('a self-loop is highlighted but the node is not its own neighbour', () => {
+    const f = connectionFocus(edges, 'b')!;
+    expect(f.upstream.has('b') || f.downstream.has('b')).toBe(false);
+  });
+
+  it('a node with no wires has an empty focus (everything else still fades)', () => {
+    const f = connectionFocus(edges, 'z')!;
+    expect(f.edgeIds.size + f.upstream.size + f.downstream.size).toBe(0);
+  });
+
+  it('a clicked wire highlights itself, the node it leaves and the node it enters', () => {
+    const f = edgeFocus(edges, 'e2')!;
+    expect([...f.edgeIds]).toEqual(['e2']);
+    expect([...f.upstream]).toEqual(['b']);
+    expect([...f.downstream]).toEqual(['c']);
+  });
+
+  it('a wire that no longer exists has no focus', () => {
+    expect(edgeFocus(edges, 'gone')).toBeNull();
+    expect(edgeFocus(edges, null)).toBeNull();
   });
 });

@@ -42,6 +42,8 @@ interface Props {
   selected: boolean;
   invalid: boolean;
   dragging: boolean;
+  /** While another node is selected: how this one relates to it (`dim` = not wired to it). */
+  focus?: 'upstream' | 'downstream' | 'dim' | null;
   hoveredPort: string | null;
   onPointerDown: (e: React.PointerEvent, id: string) => void;
   onSelect: (id: string) => void;
@@ -62,6 +64,7 @@ export const NodeCard = memo(function NodeCard({
   selected,
   invalid,
   dragging,
+  focus,
   hoveredPort,
   onPointerDown,
   onSelect,
@@ -84,7 +87,7 @@ export const NodeCard = memo(function NodeCard({
     <div
       data-node-id={node.id}
       data-node-type={node.type}
-      className={`node-card absolute select-none ${selected ? 'selected ' : ''}${dragging ? 'dragging ' : ''}${invalid ? 'node-invalid ' : ''}`}
+      className={`node-card absolute select-none ${selected ? 'selected ' : ''}${dragging ? 'dragging ' : ''}${invalid ? 'node-invalid ' : ''}${focus ? `node-${focus} ` : ''}`}
       style={{
         left: node.x,
         top: node.y,
