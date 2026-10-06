@@ -52,6 +52,44 @@
       "network": "Could not reach the server. Check your connection."
     },
     "loading": "Loading",
-    "retry": "Try again"
+    "retry": "Try again",
+    "unofficial": {
+      "eyebrow": "platform switch",
+      "title": "Unofficial WhatsApp (personal numbers via QR)",
+      "status": {
+        "disabled": "Disabled / Not supported",
+        "enabled": "Enabled (unsupported)"
+      },
+      "explanation": "We support the official WhatsApp Business API only. Turning this on lets workspaces connect personal numbers; it is unsupported and can get numbers banned.",
+      "state": {
+        "disabled": "Off. Workspaces cannot see or connect personal numbers: the QR connect flow, the Warmer and personal-number senders are hidden, and sends through them are refused.",
+        "enabled": "On. Every workspace can connect personal numbers by QR code. This is unsupported; those numbers can be banned by WhatsApp."
+      },
+      "enable": "Enable unofficial WhatsApp",
+      "disable": "Disable unofficial WhatsApp",
+      "cancel": "Cancel",
+      "enableDialog": {
+        "title": "Enable unofficial WhatsApp?",
+        "body": "This is not supported. Numbers connected this way can be banned by WhatsApp, and messages sent through them are not covered by any delivery promise. It applies to every workspace on the platform.",
+        "typeLabel": "Type {word} to confirm",
+        "confirm": "Enable"
+      },
+      "disableDialog": {
+        "title": "Disable unofficial WhatsApp?",
+        "body": "Workspaces will stop seeing personal numbers, the Warmer and the QR connect flow, and sends through personal numbers will be refused. Saved data is kept.",
+        "confirm": "Disable"
+      },
+      "enabledToast": "Unofficial WhatsApp is now enabled.",
+      "disabledToast": "Unofficial WhatsApp is now disabled.",
+      "dimNote": "The settings below only apply to personal numbers and are not used while unofficial WhatsApp is disabled.",
+      "errors": {
+        "forbidden": "Only a super admin can change this switch.",
+        "conflict": "Someone else changed these settings. The page was refreshed; try again.",
+        "validation": "Check the values and try again.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection."
+      }
+    }
   }
 }

@@ -9,6 +9,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { CallButton } from '@/features/calling-voice';
 import { useRealtimeEvent } from '@/lib/realtime';
 import type { Thread } from '../api/use-thread';
+import { isGroupThread } from '../lib/group-thread';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { TemplatePicker } from './template-picker';
@@ -83,12 +84,14 @@ export function ThreadPane(props: ThreadPaneProps) {
     : null;
   const channelDown = props.channel !== undefined && props.channel.status !== 'connected';
   const windowClosed = win?.state === 'closed';
+  const groupThread = isGroupThread(detail?.peerKey);
   const replyDisabled = windowClosed || channelDown;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
     props.can.reply &&
     !channelDown &&
+    !groupThread &&
     props.mode === 'reply';
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
 
@@ -213,30 +216,35 @@ export function ThreadPane(props: ThreadPaneProps) {
       {channelDown && props.channel && props.can.reply && props.mode === 'reply' && (
         <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
       )}
-      {win && windowClosed && !channelDown && props.can.reply && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-window-banner"
-          className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
-        >
-          <AlertIcon className="mt-0.5 shrink-0" />
-          <div>
-            <p className="font-medium">{t('windowBanner.title')}</p>
-            <p className="text-xs">{t('windowBanner.message')}</p>
-            {canTemplate && (
-              <Button
-                type="button"
-                variant="secondary"
-                data-testid="inbox-window-template"
-                className="mt-2"
-                onClick={() => setTemplatesOpen(true)}
-              >
-                {t('windowBanner.sendTemplate')}
-              </Button>
-            )}
+      {win &&
+        windowClosed &&
+        !channelDown &&
+        !groupThread &&
+        props.can.reply &&
+        props.mode === 'reply' && (
+          <div
+            role="status"
+            data-testid="inbox-window-banner"
+            className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
+          >
+            <AlertIcon className="mt-0.5 shrink-0" />
+            <div>
+              <p className="font-medium">{t('windowBanner.title')}</p>
+              <p className="text-xs">{t('windowBanner.message')}</p>
+              {canTemplate && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  data-testid="inbox-window-template"
+                  className="mt-2"
+                  onClick={() => setTemplatesOpen(true)}
+                >
+                  {t('windowBanner.sendTemplate')}
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -254,6 +262,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         canReply={props.can.reply}
         canNote={props.can.note}
         canAttach={(detail?.capabilities.media.length ?? 0) > 0}
+        groupSendBlocked={groupThread}
         attachments={
           detail
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }

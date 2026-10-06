@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   type DashWidgets,
@@ -9,6 +9,10 @@ import {
   type DashSummaryResponse,
   type DashThroughputResponse,
 } from '@crm/contracts';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
@@ -31,6 +35,10 @@ import { DashExtrasRepository } from './dash-extras.repository';
 const HOUR_MS = 3_600_000;
 const iso = (d: Date): string => d.toISOString();
 
+type CustomDates = { from?: string; to?: string };
+const tooLong = () =>
+  AppError.validation('The range is too long', [{ path: 'from', message: 'at most 366 days' }]);
+
 /**
  * Dashboard and analytics numbers (WD-DASH-002..005, 012, 018, 022..025, 027, 031). Read-only: no audit, no outbox.
  * Everything is one transaction on the caller's tenant connection.
@@ -45,20 +53,30 @@ export class DashService {
     private readonly extrasRepo: DashExtrasRepository,
     private readonly plans: PlanEntitlementService,
     private readonly config: ConfigService<Env, true>,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   /** WaDesk's hard-coded slot count when the plan sets no device limit. */
   static readonly DEFAULT_SLOTS = 6;
 
   /** The dashboard's data cards (WD-DASH-006, 011, 013..016, 019); one transaction, one payload. */
-  async widgets(range: DashRange, now: Date = new Date()): Promise<DashWidgets> {
+  async widgets(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashWidgets> {
     const { orgId } = RequestContextStore.require();
     const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
     const deviceCap = await this.plans.limit(orgId, 'devices');
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
-      const devices = await this.widgetsRepo.devices(tx, orgId);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
+      // Off: no devices listed, flagged so the card can hide itself (owner decision 2026-10-05). The rows stay in the database.
+      const devices = unofficialOn
+        ? await this.widgetsRepo.devices(tx, orgId)
+        : { total: 0, online: 0, rows: [], unofficialDisabled: true };
       return {
         contacts: await this.widgetsRepo.contacts(tx, orgId, w.from),
         campaigns: await this.widgetsRepo.campaigns(tx, orgId),
@@ -83,11 +101,16 @@ export class DashService {
     });
   }
 
-  async summary(range: DashRange, now: Date = new Date()): Promise<DashSummaryResponse> {
+  async summary(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashSummaryResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
       const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
       const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
       const hours = await this.repo.hourlyOut(tx, orgId, now, 20);
@@ -110,11 +133,16 @@ export class DashService {
     });
   }
 
-  async throughput(range: DashRange, now: Date = new Date()): Promise<DashThroughputResponse> {
+  async throughput(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashThroughputResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
       let starts: Date[];
       let found: Awaited<ReturnType<DashRepository['buckets']>>;
       if (w.bucket === 'hour') {
@@ -157,15 +185,15 @@ export class DashService {
   /** The analytics list panels (WD-DASH-026, 028, 030) for the same window rules as the overview. */
   async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
     const { orgId } = RequestContextStore.require();
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w)
-        throw AppError.validation('The range is too long', [
-          { path: 'from', message: 'at most 366 days' },
-        ]);
+      if (!w) throw tooLong();
       return {
-        devices: await this.panelsRepo.devices(tx, orgId),
+        devices: unofficialOn
+          ? await this.panelsRepo.devices(tx, orgId)
+          : { total: 0, online: 0, rows: [], unofficialDisabled: true },
         templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
         contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
         team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
@@ -180,10 +208,7 @@ export class DashService {
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w)
-        throw AppError.validation('The range is too long', [
-          { path: 'from', message: 'at most 366 days' },
-        ]);
+      if (!w) throw tooLong();
       const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
       const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
       const days = await this.repo.buckets(tx, orgId, w.from, w.to, {

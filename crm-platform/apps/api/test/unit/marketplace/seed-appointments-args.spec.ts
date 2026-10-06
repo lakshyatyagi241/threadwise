@@ -5,6 +5,12 @@ import {
   isLocalHost,
   parseArgs,
 } from '../../../src/modules/marketplace/cli/seed-appointments.args';
+import { usage } from '../../../src/modules/marketplace/cli/seed-app.args';
+import {
+  APPOINTMENTS_CONFIG,
+  FORMS_CONFIG,
+} from '../../../src/modules/marketplace/cli/seed-app.config';
+import { parseArgs as parseFormsArgs } from '../../../src/modules/marketplace/cli/seed-forms.args';
 
 const options = (argv: string[]) => {
   const r = parseArgs(argv);
@@ -25,6 +31,8 @@ describe('seed:appointments arguments', () => {
       dryRun: false,
       force: false,
       workspace: null,
+      allWorkspaces: false,
+      yes: false,
     });
   });
 
@@ -40,7 +48,15 @@ describe('seed:appointments arguments', () => {
         '--workspace',
         'acme',
       ]),
-    ).toEqual({ price: '1250.50', currency: 'USD', dryRun: true, force: true, workspace: 'acme' });
+    ).toEqual({
+      price: '1250.50',
+      currency: 'USD',
+      dryRun: true,
+      force: true,
+      workspace: 'acme',
+      allWorkspaces: false,
+      yes: false,
+    });
     expect(options(['--price=9']).price).toBe('9.00');
   });
 
@@ -133,5 +149,74 @@ describe('seed:appointments guards', () => {
     expect(hostsOfDatabaseUrl('postgres://u@a.local/db')).toEqual(['a.local']);
     expect(hostsOfDatabaseUrl('postgres://u@a/db?host=b,c')).toEqual(['b', 'c']);
     expect(hostsOfDatabaseUrl('garbage')).toBeNull();
+  });
+});
+
+describe('seed:forms arguments and per-app config', () => {
+  const forms = (argv: string[]) => {
+    const r = parseFormsArgs(argv);
+    if (r.kind !== 'options') throw new Error(`expected options, got ${JSON.stringify(r)}`);
+    return r.options;
+  };
+  const formsError = (argv: string[]) => {
+    const r = parseFormsArgs(argv);
+    if (r.kind !== 'error') throw new Error(`expected an error, got ${JSON.stringify(r)}`);
+    return r.message;
+  };
+
+  it('defaults to 799 INR (decision D1), a real run, nobody comped', () => {
+    expect(forms([])).toEqual({
+      price: '799.00',
+      currency: 'INR',
+      dryRun: false,
+      force: false,
+      workspace: null,
+      allWorkspaces: false,
+      yes: false,
+    });
+    expect(options([]).price).toBe('499.00');
+  });
+
+  it('the configs describe the two apps', () => {
+    expect(FORMS_CONFIG).toMatchObject({
+      slug: 'forms',
+      feature: 'form_builder',
+      grandfatherExisting: false,
+      version: '1.0.0',
+    });
+    expect(APPOINTMENTS_CONFIG).toMatchObject({
+      slug: 'appointments',
+      feature: 'appointment_booking',
+      grandfatherExisting: true,
+    });
+    expect(usage(FORMS_CONFIG)).toMatch(/seed:forms/);
+    expect(usage(FORMS_CONFIG)).toMatch(/default 799/);
+    expect(usage(APPOINTMENTS_CONFIG)).toMatch(/default 499/);
+  });
+
+  it('takes --price, --currency and --workspace like the Appointments command', () => {
+    expect(forms(['--price', '999', '--currency', 'usd', '--workspace', 'admin-ws'])).toMatchObject(
+      {
+        price: '999.00',
+        currency: 'USD',
+        workspace: 'admin-ws',
+      },
+    );
+    expect(formsError(['--price', '0'])).toMatch(/--price/);
+  });
+
+  it('--all-workspaces needs --yes for a real run, and cannot be combined with --workspace', () => {
+    expect(formsError(['--all-workspaces'])).toMatch(/--yes/);
+    expect(forms(['--all-workspaces', '--yes'])).toMatchObject({ allWorkspaces: true, yes: true });
+    // a dry run only lists, so it needs no confirmation
+    expect(forms(['--all-workspaces', '--dry-run'])).toMatchObject({
+      allWorkspaces: true,
+      dryRun: true,
+      yes: false,
+    });
+    expect(formsError(['--all-workspaces', '--yes', '--workspace', 'a'])).toMatch(
+      /cannot be combined/,
+    );
+    expect(formsError(['--yes'])).toMatch(/only confirms --all-workspaces/);
   });
 });

@@ -3,6 +3,7 @@
  * service asks PlanUsageService before it writes. The guard is mocked; what is proved is the order (guard first, nothing inserted
  * when it refuses) and the key + organization (or audience size) the service passes.
  */
+import { GATE_ON } from '../../support/unofficial-gate';
 import { HttpStatus } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { ERROR_CODES, WIDGET_BUILDER_DEFAULTS, createWidgetSchema } from '@crm/contracts';
@@ -316,6 +317,8 @@ describe('plan limits, group B: guard before insert', () => {
         none,
         as({ assertEnabled: vi.fn() }),
         as({ assertAudienceWithin }),
+        GATE_ON,
+        as({ memberIdsIn: vi.fn().mockResolvedValue([]) }),
       );
       const body = {
         name: 'Promo',

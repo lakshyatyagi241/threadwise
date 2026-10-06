@@ -4,7 +4,13 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Input, cn } from '@crm/ui';
-import type { ContactGroupResponse, ContactResponse, TagResponse } from '@crm/contracts';
+import type {
+  ContactGroupResponse,
+  ContactResponse,
+  SegmentResponse,
+  TagResponse,
+} from '@crm/contracts';
+import type { AudienceFilter } from '../api/compose';
 import { contactName, matchesSearch, toggle } from '../lib/compose-model';
 import { SearchIcon } from './icons';
 
@@ -20,25 +26,36 @@ const CHIP =
 export function AudiencePicker({
   tags,
   groups,
+  segments,
   contacts,
   contactsDenied,
+  filter,
+  onFilter,
   selectedTags,
   selectedGroups,
+  selectedSegments,
   selectedContacts,
   onTags,
   onGroups,
+  onSegments,
   onContacts,
 }: {
   tags: TagResponse[];
   groups: ContactGroupResponse[];
+  segments: SegmentResponse[];
   contacts: ContactResponse[];
   /** The caller may not read contacts: the table is replaced by a note. */
   contactsDenied: boolean;
+  /** The table's server-side filters (tag, group, consent). */
+  filter: AudienceFilter;
+  onFilter: (f: AudienceFilter) => void;
   selectedTags: string[];
   selectedGroups: string[];
+  selectedSegments: string[];
   selectedContacts: string[];
   onTags: (ids: string[]) => void;
   onGroups: (ids: string[]) => void;
+  onSegments: (ids: string[]) => void;
   onContacts: (ids: string[]) => void;
 }) {
   const t = useTranslations('broadcasts.compose');
@@ -84,39 +101,91 @@ export function AudiencePicker({
         </span>
       </div>
 
-      {tags.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-2">
-          <span className={KICKER}>{t('tags')}</span>
-          {tags.map((tg) =>
-            chip(
-              tg.id,
-              selectedTags.includes(tg.id),
-              () => onTags(toggle(selectedTags, tg.id)),
-              tg.name,
-              <>
-                <span
-                  className="size-[7px] shrink-0 rounded-full"
-                  style={{ background: tg.color ?? 'var(--brand)' }}
-                  aria-hidden="true"
-                />
-              </>,
-            ),
-          )}
-        </div>
-      )}
-      {groups.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-2">
-          <span className={KICKER}>{t('groups')}</span>
-          {groups.map((g) =>
-            chip(
-              g.id,
-              selectedGroups.includes(g.id),
-              () => onGroups(toggle(selectedGroups, g.id)),
-              g.name,
-            ),
-          )}
-        </div>
-      )}
+      <ChipRow
+        label={t('segments')}
+        empty={t('noSegments')}
+        href="/segments"
+        action={t('createOne')}
+      >
+        {segments.map((sg) =>
+          chip(
+            sg.id,
+            selectedSegments.includes(sg.id),
+            () => onSegments(toggle(selectedSegments, sg.id)),
+            sg.memberCount == null ? sg.name : `${sg.name} · ${sg.memberCount}`,
+          ),
+        )}
+      </ChipRow>
+      <ChipRow label={t('tags')} empty={t('noTags')} href="/contacts" action={t('createOne')}>
+        {tags.map((tg) =>
+          chip(
+            tg.id,
+            selectedTags.includes(tg.id),
+            () => onTags(toggle(selectedTags, tg.id)),
+            tg.name,
+            <span
+              className="size-[7px] shrink-0 rounded-full"
+              style={{ background: tg.color ?? 'var(--brand)' }}
+              aria-hidden="true"
+            />,
+          ),
+        )}
+      </ChipRow>
+      <ChipRow
+        label={t('groups')}
+        empty={t('noGroups')}
+        href="/contact-groups"
+        action={t('createOne')}
+      >
+        {groups.map((g) =>
+          chip(
+            g.id,
+            selectedGroups.includes(g.id),
+            () => onGroups(toggle(selectedGroups, g.id)),
+            g.name,
+          ),
+        )}
+      </ChipRow>
+
+      <div
+        className="mb-3 flex flex-wrap items-center gap-2"
+        role="group"
+        aria-label={t('filters')}
+      >
+        <span className={KICKER}>{t('filters')}</span>
+        <FilterSelect
+          label={t('filterTag')}
+          value={filter.tagId ?? ''}
+          onChange={(tagId) => onFilter({ ...filter, tagId: tagId || undefined })}
+          options={tags.map((x) => ({ value: x.id, label: x.name }))}
+        />
+        <FilterSelect
+          label={t('filterGroup')}
+          value={filter.groupId ?? ''}
+          onChange={(groupId) => onFilter({ ...filter, groupId: groupId || undefined })}
+          options={groups.map((x) => ({ value: x.id, label: x.name }))}
+        />
+        <FilterSelect
+          label={t('filterConsent')}
+          value={filter.consent ?? ''}
+          onChange={(consent) =>
+            onFilter({ ...filter, consent: (consent || undefined) as AudienceFilter['consent'] })
+          }
+          options={[
+            { value: 'subscribed', label: t('consentSubscribed') },
+            { value: 'optedOut', label: t('consentOptedOut') },
+          ]}
+        />
+        {(filter.tagId || filter.groupId || filter.consent) && (
+          <button
+            type="button"
+            className="text-[11.5px] font-semibold text-brand hover:underline"
+            onClick={() => onFilter({})}
+          >
+            {t('clearFilters')}
+          </button>
+        )}
+      </div>
 
       <div className="relative mb-3">
         <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -204,5 +273,65 @@ export function AudiencePicker({
         </div>
       </div>
     </div>
+  );
+}
+
+/** A labelled row of chips; with none to show it says so and links to where one is made. */
+function ChipRow({
+  label,
+  empty,
+  href,
+  action,
+  children,
+}: {
+  label: string;
+  empty: string;
+  href: string;
+  action: string;
+  children: React.ReactNode;
+}) {
+  const has = Array.isArray(children) ? children.length > 0 : Boolean(children);
+  return (
+    <div className="mb-3 flex flex-wrap items-center gap-2">
+      <span className={KICKER}>{label}</span>
+      {has ? (
+        children
+      ) : (
+        <span className="text-[11.5px] text-muted-foreground">
+          {empty}{' '}
+          <Link href={href} className="font-semibold text-brand hover:underline">
+            {action}
+          </Link>
+        </span>
+      )}
+    </div>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <select
+      aria-label={label}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="h-8 rounded-full border border-border bg-background px-3 text-[11.5px]"
+    >
+      <option value="">{label}</option>
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
+      ))}
+    </select>
   );
 }

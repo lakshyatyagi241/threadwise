@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Next",
+      "back": "Back",
+      "sending": "Sending...",
+      "optional": "optional",
+      "selectPlaceholder": "Select an option",
+      "stepOf": "Step {n} of {total}",
+      "summaryTitle": "{count, plural, one {Please fix 1 field} other {Please fix # fields}}",
+      "successTitle": "Thank you",
+      "continue": "Continue",
+      "previewNotice": "Preview: nothing is sent from here.",
+      "honeypot": "Leave this field empty",
+      "privacyPolicy": "Privacy policy",
+      "poweredBy": "Powered by {brand}",
+      "brandName": "Forms",
+      "captchaNeeded": "Please complete the check below before sending.",
+      "rateLimited": "Too many attempts. Please wait a moment and try again.",
+      "closed": "This form is not accepting answers right now.",
+      "genericError": "Something went wrong and your answers were not sent. Please try again.",
+      "notAvailableTitle": "This form is not available",
+      "notAvailableBody": "The link may be wrong, or the form has been closed.",
+      "errors": {
+        "required": "This field is required.",
+        "consent_required": "Please tick this box to continue.",
+        "invalid_email": "Enter a valid email address.",
+        "invalid_phone": "Enter a valid phone number, with the country code if you can.",
+        "invalid_number": "Enter a valid number.",
+        "invalid_date": "Enter a valid date.",
+        "too_small": "Enter a value of at least {min}.",
+        "too_large": "Enter a value of at most {max}.",
+        "too_short": "Enter at least {min} characters.",
+        "too_long": "Enter at most {max} characters.",
+        "pattern": "This does not match the expected format.",
+        "invalid_option": "Choose one of the listed options."
+      },
+      "closedTitle": "This form is closed"
+    }
+  }
+}

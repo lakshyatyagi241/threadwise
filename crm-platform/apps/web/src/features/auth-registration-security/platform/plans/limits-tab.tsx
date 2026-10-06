@@ -5,7 +5,13 @@ import { useState } from 'react';
 import { PLAN_LIMIT_DEFS, PLAN_LIMIT_GROUPS, type PlanLimitKey } from '@crm/contracts';
 import { Checkbox, Input } from '@crm/ui';
 import { countLimitsSet, limitIsUnlimited, setLimitUnlimited } from '../lib/plan-draft';
-import { LIMIT_UNITS, filterKeys, isPlatformDefaultLimit } from '../lib/plan-editor-view';
+import { useUnofficialSwitchState } from '@/features/node-bridge-runtime/use-unofficial-switch';
+import {
+  LIMIT_UNITS,
+  filterKeys,
+  isPlatformDefaultLimit,
+  limitDisabledByPlatform,
+} from '../lib/plan-editor-view';
 import { NS, fieldId, type EditorState } from './plan-editor-shared';
 
 /**
@@ -16,6 +22,8 @@ export function LimitsTab({ state }: { state: EditorState }) {
   const t = useTranslations(NS);
   const { draft, problems, err, set } = state;
   const [query, setQuery] = useState('');
+  // The devices cap only matters while the platform has the unofficial WhatsApp engine on; the operator is told when it is off.
+  const unofficialSwitch = useUnofficialSwitchState();
 
   const label = (k: PlanLimitKey) => t(`limitKeys.${k}`);
   const hint = (k: PlanLimitKey) => t(`limitHints.${k}`);
@@ -71,17 +79,27 @@ export function LimitsTab({ state }: { state: EditorState }) {
                 const unlimited = limitIsUnlimited(draft.limits[key]);
                 const error = err(`limits.${key}`);
                 const id = fieldId(`limits.${key}`);
+                const platformOff = limitDisabledByPlatform(key, unofficialSwitch);
                 return (
                   <div
                     key={key}
-                    className="min-w-0 space-y-2 rounded-md border border-border p-3"
+                    className={`min-w-0 space-y-2 rounded-md border border-border p-3${platformOff ? ' opacity-60' : ''}`}
                     data-testid={`plan-limit-${key}`}
+                    data-platform-disabled={platformOff || undefined}
                   >
                     <div className="space-y-0.5">
                       <label htmlFor={id} className="block text-sm font-medium">
                         {label(key)}
                       </label>
                       <p className="text-xs text-muted-foreground">{hint(key)}</p>
+                      {platformOff && (
+                        <p
+                          className="text-xs font-medium text-warning"
+                          data-testid={`plan-limit-${key}-platform-off`}
+                        >
+                          {t('limitsUi.unofficialOff')}
+                        </p>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <Input

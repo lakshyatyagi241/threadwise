@@ -9,6 +9,8 @@ import { CancelRenewal } from './cancel-renewal';
 import { PLANS_PATH, barFor } from '../lib/format';
 
 const NS = 'plans-subscriptions-trials.bar';
+/** "Connect a channel" goes to the official WhatsApp connect flow (Settings > Channels > WhatsApp). Personal numbers by QR are not offered. */
+export const CONNECT_PATH = '/channels/whatsapp';
 
 /**
  * The slim bar across the top of the app (WD-PLAN-013): a free-trial countdown, the "trial ended" notice, or the renewal reminder in the last
@@ -54,7 +56,7 @@ export function TrialBar() {
       <span className="flex gap-2">
         {kind === 'trial' && (
           <Link
-            href="/devices"
+            href={CONNECT_PATH}
             className={`${btn} border border-background/40 hover:bg-background/10`}
           >
             {t('connect')}

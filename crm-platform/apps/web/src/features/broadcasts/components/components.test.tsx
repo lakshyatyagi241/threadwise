@@ -53,10 +53,16 @@ const item = (over: Partial<BroadcastListItem> = {}): BroadcastListItem => ({
   ...over,
 });
 
-const table = (rows: BroadcastListItem[], canExport = true, canDeleteRows = true) =>
+const table = (
+  rows: BroadcastListItem[],
+  canExport = true,
+  canDeleteRows = true,
+  unofficial = false,
+) =>
   html(
     <BroadcastsTable
       rows={rows}
+      unofficial={unofficial}
       canExport={canExport}
       canDeleteRows={canDeleteRows}
       onExport={() => undefined}
@@ -65,6 +71,15 @@ const table = (rows: BroadcastListItem[], canExport = true, canDeleteRows = true
   );
 
 describe('broadcast table', () => {
+  it('keeps a broadcast sent through the unofficial engine, labelled by the platform switch', () => {
+    const row = [item({ provider: 'baileys' })];
+    expect(table(row, true, true, false)).toContain('Unofficial (disabled)');
+    expect(table(row, true, true, true)).toContain('Unofficial API');
+    expect(table(row, true, true, true)).not.toContain('disabled');
+    // an official engine never reads "disabled"
+    expect(table([item()], true, true, false)).not.toContain('Unofficial (disabled)');
+  });
+
   it('shows the name, engine chip, reference, template, counters and status', () => {
     const out = table([item()]);
     for (const s of [

@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Theme",
+        "custom": "Custom: you changed a colour, corner or font of the theme you started from.",
+        "classic": "Classic",
+        "ocean": "Ocean",
+        "forest": "Forest",
+        "sunset": "Sunset",
+        "berry": "Berry",
+        "slate": "Slate",
+        "noir": "Noir",
+        "paper": "Paper"
+      },
+      "colours": {
+        "title": "Colours",
+        "hint": "Use six-digit hex colours such as #2563eb. A value that is not complete is not applied.",
+        "swatch": "{name} (colour picker)",
+        "primary": "Primary (buttons and accents)",
+        "background": "Page background",
+        "surface": "Form background",
+        "text": "Text",
+        "mutedText": "Secondary text",
+        "border": "Borders",
+        "error": "Error"
+      },
+      "contrast": {
+        "title": "Some colours are hard to read. Aim for a contrast of at least 4.5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "All checked colour pairs are easy to read.",
+        "text": "Text on the form background",
+        "muted": "Secondary text on the form background",
+        "button": "Button label on the button"
+      },
+      "shape": {
+        "title": "Shape and spacing",
+        "radius": "Corners",
+        "none": "None",
+        "sm": "Small",
+        "md": "Medium",
+        "lg": "Large",
+        "pill": "Round",
+        "density": "Spacing",
+        "compact": "Compact",
+        "comfortable": "Comfortable",
+        "spacious": "Spacious",
+        "shadow": "Shadow",
+        "shadowNone": "None"
+      },
+      "type": {
+        "title": "Typography",
+        "font": "Font",
+        "fontHint": "Web fonts load only when you choose one.",
+        "sample": "The quick brown fox jumps over the lazy dog",
+        "scale": "Text size"
+      },
+      "fonts": {
+        "system": "System default",
+        "serif": "Serif",
+        "mono": "Monospace"
+      },
+      "layout": {
+        "title": "Layout and buttons",
+        "preset": "Layout",
+        "classic": "Classic card",
+        "fullWidth": "Full width",
+        "split": "Split with cover image",
+        "minimal": "Minimal",
+        "labelPosition": "Label position",
+        "labelTop": "Above the field",
+        "labelLeft": "Beside the field",
+        "buttonStyle": "Button style",
+        "filled": "Filled",
+        "outline": "Outline",
+        "buttonWidth": "Button width",
+        "widthAuto": "Fit the label",
+        "widthFull": "Full width",
+        "maxWidth": "Maximum width",
+        "maxWidthHint": "Between 320 and 960 pixels.",
+        "maxWidthInvalid": "Enter a whole number from 320 to 960.",
+        "maxWidthSlider": "Maximum width slider",
+        "mode": "Colour mode",
+        "light": "Light",
+        "dark": "Dark",
+        "auto": "Follow the visitor's device"
+      },
+      "images": {
+        "title": "Images",
+        "logo": "Logo",
+        "logoHint": "An https address. Leave empty for no logo.",
+        "cover": "Cover image",
+        "coverHint": "Shown beside the form in the split layout.",
+        "background": "Background image",
+        "backgroundHint": "An https address. Leave empty for a plain background.",
+        "invalid": "Enter an https address, or leave it empty."
+      },
+      "reset": "Reset to defaults",
+      "readOnly": "You can look at the design but not change it.",
+      "preview": {
+        "title": "Preview",
+        "device": "Preview size",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "scheme": "Preview colour mode",
+        "light": "Light",
+        "dark": "Dark",
+        "schemeHint": "The colour mode is set to Light, so there is no dark version to preview.",
+        "frameTitle": "Live preview of the form"
+      }
+    }
+  }
+}

@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import { ERROR_KINDS, errorCode, errorKind, isRetryableSend } from './errors';
+import { isGroupThread } from './group-thread';
 import { shortcutAction } from './shortcuts';
 import { eventLabel } from './timeline';
+
+describe('group threads', () => {
+  it('a thread keyed g:<id> is a group; a phone number or nothing is not', () => {
+    expect(isGroupThread('g:Y2FwaV9ncm91cDox')).toBe(true);
+    expect(isGroupThread('919876543210')).toBe(false);
+    expect(isGroupThread('')).toBe(false);
+    expect(isGroupThread(undefined)).toBe(false);
+  });
+});
 
 describe('error kinds', () => {
   it('maps the codes the inbox is told about', () => {
@@ -11,6 +21,8 @@ describe('error kinds', () => {
     expect(errorKind('CHANNEL_DISCONNECTED')).toBe('channelDisconnected');
     expect(errorKind('ROW_VERSION_CONFLICT')).toBe('conflict');
     expect(errorKind('CONVERSATION_NOT_FOUND')).toBe('notFound');
+    expect(errorKind('WABA_GROUP_SEND_UNAVAILABLE')).toBe('groupSendUnavailable');
+    expect(isRetryableSend('WABA_GROUP_SEND_UNAVAILABLE')).toBe(false);
     expect(errorKind('SOMETHING_NEW')).toBe('generic');
   });
 

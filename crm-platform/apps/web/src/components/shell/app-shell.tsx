@@ -61,9 +61,11 @@ export function AppShell({
   const [drawer, setDrawer] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
 
-  const sections = useMemo(() => toSections(menuItems(nav)), [nav]);
+  const drawn = useMemo(() => menuItems(nav, settings), [nav, settings]);
+  const sections = useMemo(() => toSections(drawn), [drawn]);
   const help = useMemo(() => helpItems(nav), [nav]);
-  const activeId = activeNavId(nav, settings, pathname);
+  // Over what is drawn: a screen the sidebar does not list lights up the entry that covers it (/store/orders lights Store).
+  const activeId = activeNavId(drawn, settings, pathname);
   const closeDrawer = useCallback(() => setDrawer(false), []);
 
   const bell = nav.find((i) => i.id === BELL_ID);

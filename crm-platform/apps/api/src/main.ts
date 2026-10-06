@@ -4,8 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import type { NextFunction, Request, Response } from 'express';
 import { RedisIoAdapter } from './realtime/redis-io.adapter';
 import { AppModule } from './app.module';
+import { FormsPreflightMiddleware } from './modules/forms-builder';
 import {
   ApiV1DocsService,
   CUSTOMER_API_CORS,
@@ -60,6 +62,11 @@ async function bootstrap(): Promise<void> {
   if (corsIsClosedInProduction(origins, nodeEnv)) {
     logger.warn('CORS_ORIGINS is empty in production: browsers on other origins are refused');
   }
+  // The Forms add-on answers the CORS preflight of its public routes from each form's own allow-list: before the API-wide policy below,
+  // which only knows the web app's origins and would refuse a customer's page.
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    void app.get(FormsPreflightMiddleware).use(req, res, next);
+  });
   const staffCors = {
     origin: corsOriginFor(origins, nodeEnv),
     credentials: true,

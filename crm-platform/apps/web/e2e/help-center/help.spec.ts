@@ -89,7 +89,7 @@ test.describe('Help center', () => {
 
   test('/help lists the guides and search filters them', async ({ page }) => {
     await open(page, '/help');
-    await expect(page.getByRole('heading', { name: 'Help center', level: 1 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Help & guides', level: 1 })).toBeVisible();
     await expect(page.locator('a[href="/help/getting-started"]')).toBeVisible();
     const status = page.getByRole('status');
     const all = await status.textContent();
@@ -105,6 +105,24 @@ test.describe('Help center', () => {
 
     await page.getByRole('searchbox', { name: 'Search help' }).fill('');
     await expect(status).toHaveText(all!);
+  });
+
+  test('the rail limits the list to one area and a guide marks its area', async ({ page }) => {
+    await open(page, '/help');
+    const rail = page.getByRole('complementary', { name: 'Categories' });
+    await rail.getByRole('link', { name: /^Getting started/ }).click();
+    await expect(page).toHaveURL(/\/help\?area=getting-started$/);
+    await expect(page.getByRole('heading', { name: 'Getting started', level: 2 })).toBeVisible();
+    await expect(page.locator('a[href="/help/getting-started"]')).toBeVisible();
+    await expect(page.locator('a[href="/help/campaigns-overview"]')).toHaveCount(0);
+
+    await page.goto('/help/campaigns-overview');
+    await expect(
+      page
+        .getByRole('complementary', { name: 'Categories' })
+        .getByRole('link', { name: /^Campaigns/ }),
+    ).toHaveAttribute('aria-current', 'page');
+    await expect(page.getByText(/\d+ min read/).first()).toBeVisible();
   });
 
   test('a guide shows "On this page" and a heading link focuses its heading', async ({ page }) => {

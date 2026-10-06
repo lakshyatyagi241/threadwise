@@ -77,6 +77,7 @@ import { TeamInboxConversationsModule } from './modules/team-inbox-conversations
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { LeadsModule } from './modules/leads';
+import { FormsBuilderModule } from './modules/forms-builder';
 import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
@@ -214,6 +215,7 @@ import { HealthModule } from './health/health.module';
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
     LeadsModule,
+    FormsBuilderModule,
     MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.

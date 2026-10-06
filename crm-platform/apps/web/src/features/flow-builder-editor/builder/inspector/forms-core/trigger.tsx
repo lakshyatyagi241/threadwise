@@ -1,6 +1,8 @@
 'use client';
 
 import { FLOW_TYPE_LABELS } from '@crm/contracts';
+import { offerSenders } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Field, Notice, SelectInput, TextInput, type Opt } from '../kit';
 import type { FormProps } from '../types';
 import {
@@ -33,6 +35,7 @@ const COMMENT_TO_DM: Opt = { v: 'comment_to_dm', l: 'Instagram: someone comments
 
 export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
   const { ctx, loading } = env;
+  const unofficial = useUnofficialWhatsapp();
   const channel = resolveTriggerChannel(d.channel, env.channels, env.mode);
   const isIg = channel === 'instagram';
   const kind = str(d.kind);
@@ -50,11 +53,12 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
     ...ctx.stages.map((s) => ({ v: s.id, l: s.name })),
   ];
 
-  const senders = ctx.senders[channel];
+  // Personal-number (unofficial) senders are not offered while the platform has that engine off; the official ones stay.
+  const senders = offerSenders(ctx.senders[channel], unofficial);
   const senderChosen = str(d.deviceId).trim() !== '';
   const senderMissing = !senderChosen && senders.length > 0;
   const senderNone = !senderChosen && senders.length === 0;
-  const hint = senderHint(channel);
+  const hint = senderHint(channel, unofficial);
 
   const showChannel = env.openedAs !== 'call' && env.channels.length >= 2;
   const channelOpts: Opt[] = env.channels
@@ -225,7 +229,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
       ) : null}
       {senderNone ? (
         <Notice tone="warn" className="-mt-2">
-          <LinkedText copy={senderNoneCopy(channel)} strong />
+          <LinkedText copy={senderNoneCopy(channel, unofficial)} strong />
         </Notice>
       ) : null}
     </>

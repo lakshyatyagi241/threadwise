@@ -577,44 +577,44 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-CPN-001 | todo |  |  |
-| WD-CPN-002 | todo |  |  |
-| WD-CPN-003 | todo |  |  |
-| WD-CPN-004 | todo |  |  |
-| WD-CPN-005 | todo |  |  |
-| WD-CPN-006 | todo |  |  |
-| WD-CPN-007 | todo |  |  |
-| WD-CPN-008 | todo |  |  |
-| WD-CPN-009 | todo |  |  |
-| WD-CPN-010 | todo |  |  |
-| WD-CPN-011 | todo |  |  |
-| WD-CPN-012 | todo |  |  |
-| WD-CPN-013 | todo |  |  |
-| WD-CPN-014 | todo |  |  |
-| WD-CPN-015 | todo |  |  |
-| WD-CPN-016 | todo |  |  |
-| WD-CPN-017 | todo |  |  |
-| WD-CPN-018 | todo |  |  |
-| WD-CPN-019 | todo |  |  |
-| WD-CPN-020 | todo |  |  |
-| WD-CPN-021 | todo |  |  |
-| WD-CPN-022 | todo |  |  |
-| WD-CPN-023 | todo |  |  |
-| WD-CPN-024 | todo |  |  |
-| WD-CPN-025 | todo |  |  |
-| WD-CPN-026 | todo |  |  |
-| WD-CPN-027 | todo |  |  |
-| WD-CPN-028 | todo |  |  |
-| WD-CPN-029 | todo |  |  |
-| WD-CPN-030 | todo |  |  |
-| WD-CPN-031 | todo |  |  |
-| WD-CPN-032 | todo |  |  |
-| WD-CPN-033 | todo |  |  |
-| WD-CPN-034 | todo |  |  |
-| WD-CPN-035 | todo |  |  |
-| WD-CPN-036 | todo |  |  |
-| WD-CPN-037 | todo |  |  |
-| WD-CPN-038 | todo |  |  |
+| WD-CPN-001 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-002 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-003 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-004 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-005 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-006 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| WD-CPN-007 | backend-done |  | CouponCheckoutService.quote tested; Apply widget lives in checkout (CHK) |
+| WD-CPN-008 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| WD-CPN-009 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-010 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-011 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-012 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-013 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-014 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-015 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-016 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-017 | wontfix |  | not ported: unauthenticated self-confirm credit grant is a WaDesk defect |
+| WD-CPN-018 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-019 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-020 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-021 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-022 | done |  | twin run: non-default delete compared; delete/switch-off of the default compared from the inventory only (WaDesk cannot restore it) |
+| WD-CPN-023 | done |  | fetch-rates control compared; live rate fetch not run (public provider call) |
+| WD-CPN-024 | done |  | twin ran ours only; WaDesk default setting not touched (shared instance) |
+| WD-CPN-025 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-026 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-027 | todo |  | resolution lives in platform-settings-branding-storage; no CPN test proves it |
+| WD-CPN-028 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-029 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-030 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-031 | verified |  | twin run 2026-10-06: web form, cookie and field paths clean; mobile refer_code belongs to MOB |
+| WD-CPN-032 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-033 | done |  | reward on a paid order not compared live (no payment in a parity run); api e2e |
+| WD-CPN-034 | done |  | wallet rules save audited; 100000 cap added; e2e |
+| WD-CPN-035 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-036 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-037 | verified |  | twin run 2026-10-06: account tab merged into /account/affiliate, clean; reward on paid order not compared live |
+| WD-CPN-038 | wontfix |  | docs-only, not ported; no commission copy shown |
 
 ## developer-rest-api-v1 (api)
 

@@ -1,0 +1,7 @@
+{
+  "dashboards-analytics-charts": {
+    "dashboard": {
+      "sublineOfficial": "{date} - {range}: {sent} رسالة صادرة، ونسبة التسليم {rate}%."
+    }
+  }
+}

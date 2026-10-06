@@ -7,22 +7,22 @@ WhatsApp number**, and the Playwright twin run against the running WaDesk (`wade
 
 ## Intended differences from WaDesk
 
-| Where | WaDesk | Here | Reason |
-| --- | --- | --- | --- |
-| Opted-out contacts | still messaged on a single-sender group, tag or queue schedule | never messaged, whichever audience names them; typed numbers of opted-out contacts too; the composer's preview says how many were left out | compliance (WD-SCHED-004 rule 6: "the port must fix") |
-| Audience copies | a person in two chosen groups could appear twice; tag audiences with two senders ended empty | one copy per person across groups, tags and broadcasts; tag audiences split like any other | WD-SCHED-004, 005 quirks |
-| Empty plain message | accepted; every recipient then failed | refused when saving (`Write the message to send.`) | WD-SCHED-003 quirk 5 |
-| Warmer reservation | made at create time and never given back | recorded on the schedule and given back (the unsent part) when it is cancelled, deleted or fails | WD-SCHED-008 quirk 4 |
-| Warmer on scheduled sends | only the day budget at create time | also active hours (a run outside them waits 30 minutes), the number's own gap and spintax at send time | the reference docs promise it and the port notes ask for it |
-| Warmer page gate | `access_whatsapp_warmer` never closed | plan flag `whatsapp_warmer` and permission `sched.warmer.manage` | WD-SCHED-041 |
-| Retry | reset every recipient to pending, re-sending to people already messaged | only failed recipients go back to pending | WD-SCHED-017 rule 4 sends duplicates |
-| Edit | no lead time, no zone check, response carried the whole row | 2-minute lead time and zone check when the time changes, version check, answers the detail | WD-SCHED-016 |
-| Run now | allowed from waiting, running, paused, failed; failure fields kept | same statuses; failure fields cleared | the schedule is armed again |
-| Delete | soft delete | hard delete (the project convention); the recipient rows go with it | conventions |
-| Typed numbers | remembered as contacts | not turned into contacts (the plan's contact quota and flows are not touched by scheduling) | contacts are the CRM's |
-| Test message | to the person's own phone | to a number typed in the composer | users have no phone number here |
-| Warmer days | the owner's timezone | UTC dates | the platform has no per-person zone yet |
-| Producers | rows with an out-of-enum type; appointment reminders only in the bridge's memory | ordinary schedules with `source` and `external_key`; a key replaces its old schedule | WD-SCHED-030 |
+| Where                     | WaDesk                                                                                       | Here                                                                                                                                       | Reason                                                      |
+| ------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Opted-out contacts        | still messaged on a single-sender group, tag or queue schedule                               | never messaged, whichever audience names them; typed numbers of opted-out contacts too; the composer's preview says how many were left out | compliance (WD-SCHED-004 rule 6: "the port must fix")       |
+| Audience copies           | a person in two chosen groups could appear twice; tag audiences with two senders ended empty | one copy per person across groups, tags and broadcasts; tag audiences split like any other                                                 | WD-SCHED-004, 005 quirks                                    |
+| Empty plain message       | accepted; every recipient then failed                                                        | refused when saving (`Write the message to send.`)                                                                                         | WD-SCHED-003 quirk 5                                        |
+| Warmer reservation        | made at create time and never given back                                                     | recorded on the schedule and given back (the unsent part) when it is cancelled, deleted or fails                                           | WD-SCHED-008 quirk 4                                        |
+| Warmer on scheduled sends | only the day budget at create time                                                           | also active hours (a run outside them waits 30 minutes), the number's own gap and spintax at send time                                     | the reference docs promise it and the port notes ask for it |
+| Warmer page gate          | `access_whatsapp_warmer` never closed                                                        | plan flag `whatsapp_warmer` and permission `sched.warmer.manage`                                                                           | WD-SCHED-041                                                |
+| Retry                     | reset every recipient to pending, re-sending to people already messaged                      | only failed recipients go back to pending                                                                                                  | WD-SCHED-017 rule 4 sends duplicates                        |
+| Edit                      | no lead time, no zone check, response carried the whole row                                  | 2-minute lead time and zone check when the time changes, version check, answers the detail                                                 | WD-SCHED-016                                                |
+| Run now                   | allowed from waiting, running, paused, failed; failure fields kept                           | same statuses; failure fields cleared                                                                                                      | the schedule is armed again                                 |
+| Delete                    | soft delete                                                                                  | hard delete (the project convention); the recipient rows go with it                                                                        | conventions                                                 |
+| Typed numbers             | remembered as contacts                                                                       | not turned into contacts (the plan's contact quota and flows are not touched by scheduling)                                                | contacts are the CRM's                                      |
+| Test message              | to the person's own phone                                                                    | to a number typed in the composer                                                                                                          | users have no phone number here                             |
+| Warmer days               | the owner's timezone                                                                         | UTC dates                                                                                                                                  | the platform has no per-person zone yet                     |
+| Producers                 | rows with an out-of-enum type; appointment reminders only in the bridge's memory             | ordinary schedules with `source` and `external_key`; a key replaces its old schedule                                                       | WD-SCHED-030                                                |
 
 ## Not built, with the reason
 
@@ -46,3 +46,7 @@ WhatsApp number**, and the Playwright twin run against the running WaDesk (`wade
 - Detail: bars and counts for the delivery funnel and status mix, no engagement curve or donut chart (no chart library here); the bridge's schedule id is not shown (it
   does not exist here); no edit screen (the reference detail has none; the PATCH endpoint exists).
 - Warmer: "Connect a number" links to `/channels/whatsapp`, not checked as the right target for unofficial-API numbers.
+
+## Intended difference: unofficial engine off by default (owner decision 2026-10-05)
+
+A scheduled message and warmer profile that names a personal-number (`baileys`) sender is refused with 422 `WA_UNOFFICIAL_DISABLED` unless a platform super admin turned the unofficial engine on; a blank sender or default engine resolves to `waba`; existing rows on that engine are kept, not sent, and resume when it is turned on. WaDesk always allowed it. Details and the full list of surfaces: [node-bridge-runtime.md](node-bridge-runtime.md#intended-difference-the-unofficial-engine-is-off-behind-a-platform-switch-owner-decision-2026-10-05).

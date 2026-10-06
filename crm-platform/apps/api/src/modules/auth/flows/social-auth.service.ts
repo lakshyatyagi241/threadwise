@@ -182,7 +182,7 @@ export class SocialAuthService {
     // found by (provider, subject), and the address matters only to link a first-time sign-in.
     if (state.mode === 'signup') {
       if (!profile.email) throw this.noEmail(provider);
-      return this.completeSignup(provider, state, profile, meta);
+      return this.completeSignup(provider, state, profile, meta, body.referralCode ?? null);
     }
     return this.completeLogin(provider, state, profile, meta);
   }
@@ -274,6 +274,7 @@ export class SocialAuthService {
     state: OAuthState,
     profile: SocialProfile,
     meta: ClientMeta,
+    referralCode: string | null,
   ): Promise<LoginResponse> {
     if (!(await this.policy.registration()).publicRegistration) {
       throw new AppError(
@@ -306,8 +307,8 @@ export class SocialAuthService {
         email,
         phoneE164: null,
         passwordHash,
-        // No referral on social sign-up (WD-AUTH-004 rule 6).
-        referralCode: null,
+        // WaDesk dropped the referral on social sign-up (WD-AUTH-004 rule 6, WD-CPN-031 rule 4); here the callback carries it.
+        referralCode,
       },
       {
         phoneVerified: false,

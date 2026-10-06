@@ -37,6 +37,8 @@ import { OperatorAuthService } from './platform/operator-auth.service';
 import { OtpSenderRegistryService } from './platform/otp-sender-registry.service';
 import { OtpTemplateService } from './platform/otp-template.service';
 import { PlatformSettingsService } from './platform/platform-settings.service';
+import { UnofficialWhatsappSwitch } from './platform/unofficial-whatsapp-switch';
+import { UNOFFICIAL_WHATSAPP_GATE } from './unofficial-whatsapp.port';
 import { RegistrationOtpService } from './platform/registration-otp.service';
 import { PlatformStore } from './platform/platform-store';
 import { SecurityCenterService } from './platform/security-center.service';
@@ -123,6 +125,8 @@ import { TokenService } from './token.service';
     PlatformStore,
     TenantDirectory,
     PlatformSettingsService,
+    UnofficialWhatsappSwitch,
+    { provide: UNOFFICIAL_WHATSAPP_GATE, useExisting: UnofficialWhatsappSwitch },
     SecurityPolicyService,
     AuthSettingsService,
     OperatorAuthService,
@@ -160,6 +164,9 @@ import { TokenService } from './token.service';
     HtmlSanitizerService,
     SecurityPolicyService,
     PlatformSettingsService,
+    // the unofficial WhatsApp engine switch, injected by token from any module (see unofficial-whatsapp.port.ts)
+    UnofficialWhatsappSwitch,
+    UNOFFICIAL_WHATSAPP_GATE,
     // the sanctioned door to platform-wide tables, for other domains' platform catalogues (I18N)
     PlatformStore,
     // the two sanctioned doors to platform-wide data, for the first-run setup (INST)
