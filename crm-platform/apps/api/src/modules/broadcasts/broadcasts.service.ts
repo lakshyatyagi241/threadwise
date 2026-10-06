@@ -1,3 +1,4 @@
+import { SegmentsService } from '../crm';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -70,6 +71,7 @@ export class BroadcastsService {
     @Inject(BROADCAST_PLAN_GATE) private readonly planGate: BroadcastPlanGate,
     private readonly planUsage: PlanUsageService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    private readonly segments: SegmentsService,
   ) {}
 
   /** `body` is validated here, after the plan checks, because Reference answered a plan refusal before a validation error. */
@@ -215,7 +217,7 @@ export class BroadcastsService {
     });
   }
 
-  /** Direct contacts, then group members, then tag members; first occurrence wins; opted-out and archived dropped. */
+  /** Direct contacts, then group, tag and segment members; first occurrence wins; opted-out and archived dropped. */
   private async resolveAudience(
     tx: Parameters<BroadcastsRepository['count']>[0],
     orgId: number,
@@ -225,6 +227,7 @@ export class BroadcastsService {
       ...(await this.repo.contactIdsByUuid(tx, orgId, input.contactIds)),
       ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds)),
       ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds)),
+      ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
     ];
     const unique = [...new Set(merged)];
     if (unique.length === 0) return [];

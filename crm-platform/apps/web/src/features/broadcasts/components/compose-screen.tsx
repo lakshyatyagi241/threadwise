@@ -20,8 +20,10 @@ import {
   useAttributeCatalog,
   useAudienceContacts,
   useAudienceGroups,
+  useAudienceSegments,
   useAudienceTags,
   useCompose,
+  type AudienceFilter,
 } from '../api/compose';
 import {
   buildBody,
@@ -58,7 +60,10 @@ export function ComposeScreen() {
   const compose = useCompose();
   // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
   const unofficial = useUnofficialWhatsapp();
-  const contacts = useAudienceContacts(canContacts);
+  const canSegments = useCan('record.segments.read');
+  const [audienceFilter, setAudienceFilter] = useState<AudienceFilter>({});
+  const contacts = useAudienceContacts(canContacts, audienceFilter);
+  const segments = useAudienceSegments(canSegments);
   const groups = useAudienceGroups(canGroups);
   const tags = useAudienceTags(canTags);
   const catalog = useAttributeCatalog();
@@ -304,13 +309,18 @@ export function ComposeScreen() {
               <AudiencePicker
                 tags={tags.data?.data ?? []}
                 groups={groups.data?.data ?? []}
+                segments={segments.data?.data ?? []}
+                filter={audienceFilter}
+                onFilter={setAudienceFilter}
                 contacts={contacts.data?.data ?? []}
                 contactsDenied={!canContacts}
                 selectedTags={form.tagIds}
                 selectedGroups={form.groupIds}
+                selectedSegments={form.segmentIds}
                 selectedContacts={form.contactIds}
                 onTags={(tagIds) => patch({ tagIds })}
                 onGroups={(groupIds) => patch({ groupIds })}
+                onSegments={(segmentIds) => patch({ segmentIds })}
                 onContacts={(contactIds) => patch({ contactIds })}
               />
 
