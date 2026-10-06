@@ -120,15 +120,15 @@ describe('affiliate screen: populated (TW-CPN-035, 037)', () => {
     expect(html).toContain('Each referred workspace that makes a first payment earns you $2.50.');
   });
 
-  it('shows the five KPI cards, with the delta coloured', () => {
+  it('shows the four KPI cards (the code is not repeated there), with the delta coloured', () => {
     for (const label of [
       'Referrals in range',
       'Earned, lifetime',
       'Referrals, last 30 days',
       'Average per referral',
-      'Your code',
     ])
       expect(html).toContain(label);
+    expect(html).not.toContain('Your code');
     expect(html).toContain('$125.00');
     expect(html).toContain('$22.50 earned in the last 30 days');
     expect(html).toContain('$2.08');
