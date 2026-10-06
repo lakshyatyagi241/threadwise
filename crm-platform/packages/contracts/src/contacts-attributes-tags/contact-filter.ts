@@ -50,6 +50,8 @@ export const contactFilterShape = {
    * A segment the caller cannot see answers like one that does not exist: no contacts.
    */
   segmentId: uuidSchema.optional(),
+  /** Ad-hoc conditions: a segment's rule tree as JSON text (the Contact Hub's "Add condition"). ANDed with every other filter. */
+  rules: z.string().max(20_000).optional(),
 } as const;
 
 export const contactFilterSchema = z
