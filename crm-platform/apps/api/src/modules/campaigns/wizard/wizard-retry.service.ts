@@ -145,6 +145,14 @@ export class WizardRetryService {
         await this.setState(orgId, id, 'recovered', null, 'sent');
         continue;
       }
+      // The provider accepted the retry and reported the failure afterwards: the attempt's outcome is what was reported.
+      await this.db.txAs({ orgId }, async (tx) => {
+        await tx.execute(sql`
+          UPDATE camp_retry_attempts a SET outcome = ${r.cap ? 'frequency_cap' : 'failed'},
+            error_code = r.error_code, error_message = r.error_message
+          FROM wp_campaign_contacts r
+          WHERE r.org_id = ${orgId} AND r.id = ${id} AND a.org_id = r.org_id AND a.recipient_id = r.id AND a.attempt_no = r.retry_count`);
+      });
       if (!r.cap) {
         await this.setState(orgId, id, 'exhausted', null, 'sent');
         continue;

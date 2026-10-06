@@ -217,6 +217,7 @@ export class WizardTestSendService {
         this.repo.insertTestSend(tx, orgId, {
           campaignId: row.id,
           templateId: template.id,
+          provider: dispatch.engine,
           to: number,
           status: wamid ? 'sent' : 'failed',
           providerMessageId: wamid,
@@ -268,10 +269,9 @@ export class WizardTestSendService {
       () =>
         this.db.txAs({ orgId }, async (tx) => {
           const res = await tx.execute(sql`
-            SELECT t.status, t.to_phone, t.campaign_id, t.provider_message_id, c.provider,
+            SELECT t.status, t.to_phone, t.campaign_id, t.provider_message_id, t.provider,
                    coalesce(nullif(lower(w.meta_category), ''), nullif(lower(w.category), ''), 'utility') AS category
             FROM camp_test_sends t
-            JOIN wpcampaigns c ON c.org_id = t.org_id AND c.id = t.campaign_id
             LEFT JOIN wa_templates w ON w.org_id = t.org_id AND w.id = t.template_id
             WHERE t.org_id = ${orgId} AND t.id = ${id} FOR UPDATE OF t`);
           const t = res.rows[0] as

@@ -351,6 +351,7 @@ export const campTestSends = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     campaignId: idColumn('campaign_id').notNull(),
     templateId: idColumn('template_id'),
+    provider: text('provider').notNull(),
     toPhone: text('to_phone').notNull(),
     status: text('status').notNull().default('sent'),
     providerMessageId: text('provider_message_id'),

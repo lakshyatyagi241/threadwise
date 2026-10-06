@@ -581,6 +581,7 @@ export class WizardRepository {
     v: {
       campaignId: number;
       templateId: number | null;
+      provider: string;
       to: string;
       status: string;
       providerMessageId: string | null;
@@ -591,9 +592,9 @@ export class WizardRepository {
     },
   ): Promise<{ id: number; uuid: string; createdAt: Date }> {
     const res = await tx.execute(sql`
-      INSERT INTO camp_test_sends (org_id, campaign_id, template_id, to_phone, status, provider_message_id, error_code,
+      INSERT INTO camp_test_sends (org_id, campaign_id, template_id, provider, to_phone, status, provider_message_id, error_code,
                                    error_message, rendered_body, created_by)
-      VALUES (${orgId}, ${v.campaignId}, ${v.templateId}, ${v.to}, ${v.status}, ${v.providerMessageId}, ${v.errorCode},
+      VALUES (${orgId}, ${v.campaignId}, ${v.templateId}, ${v.provider}, ${v.to}, ${v.status}, ${v.providerMessageId}, ${v.errorCode},
               ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, ${v.renderedBody}, ${v.createdBy})
       RETURNING id, uuid, created_at`);
     const r = res.rows[0] as Raw;

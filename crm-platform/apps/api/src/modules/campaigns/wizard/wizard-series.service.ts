@@ -11,6 +11,7 @@ import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { PacingRuntime } from '../../broadcasts';
+import { asSystem } from '../campaign-events';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsRepository } from '../campaigns.repository';
 import { blankCampaignFor } from './wizard-blank';
@@ -71,53 +72,56 @@ export class WizardSeriesService {
   /** Plans one series. True when a run was created. */
   async planOne(orgId: number, seriesId: number): Promise<boolean> {
     const now = this.runtime.now();
-    const made = await this.db.txAs({ orgId }, async (tx) => {
-      const s = await this.repo.lockSeries(tx, orgId, seriesId);
-      if (!s || s.status !== 'active' || !s.nextRunAt || s.nextRunAt.getTime() > now.getTime()) {
-        return null;
-      }
-      const rule = recurrenceRuleSchema.parse(s.rule);
-      const { next, skipped } = firstDueFrom(
-        rule,
-        s.nextIndex,
-        new Date(now.getTime() - MISFIRE_GRACE_MS),
-      );
-      if (!next) {
-        // Every remaining occurrence was stale and the rule has ended.
-        await this.repo.planSeries(tx, orgId, s.id, {
-          nextIndex: s.nextIndex + skipped,
-          nextRunAt: null,
-          created: 0,
-          skipped,
-          lastOccurrenceAt: null,
-          status: 'ended',
-        });
-        return null;
-      }
-      if (next.at.getTime() > now.getTime()) {
-        // The stale ones are stepped over; the next is still ahead.
-        await this.repo.planSeries(tx, orgId, s.id, {
-          nextIndex: next.index,
-          nextRunAt: next.at,
-          created: 0,
-          skipped,
-          lastOccurrenceAt: null,
-        });
-        return null;
-      }
+    // The worker has no request: the audit and the outbox take their tenant from the context, so the plan runs as the system for it.
+    const made = await asSystem(orgId, () =>
+      this.db.txAs({ orgId }, async (tx) => {
+        const s = await this.repo.lockSeries(tx, orgId, seriesId);
+        if (!s || s.status !== 'active' || !s.nextRunAt || s.nextRunAt.getTime() > now.getTime()) {
+          return null;
+        }
+        const rule = recurrenceRuleSchema.parse(s.rule);
+        const { next, skipped } = firstDueFrom(
+          rule,
+          s.nextIndex,
+          new Date(now.getTime() - MISFIRE_GRACE_MS),
+        );
+        if (!next) {
+          // Every remaining occurrence was stale and the rule has ended.
+          await this.repo.planSeries(tx, orgId, s.id, {
+            nextIndex: s.nextIndex + skipped,
+            nextRunAt: null,
+            created: 0,
+            skipped,
+            lastOccurrenceAt: null,
+            status: 'ended',
+          });
+          return null;
+        }
+        if (next.at.getTime() > now.getTime()) {
+          // The stale ones are stepped over; the next is still ahead.
+          await this.repo.planSeries(tx, orgId, s.id, {
+            nextIndex: next.index,
+            nextRunAt: next.at,
+            created: 0,
+            skipped,
+            lastOccurrenceAt: null,
+          });
+          return null;
+        }
 
-      const run = await this.makeRun(tx, orgId, s, rule, next.index, next.at);
-      const after = occurrenceAt(rule, next.index + 1);
-      await this.repo.planSeries(tx, orgId, s.id, {
-        nextIndex: next.index + 1,
-        nextRunAt: after ? after.at : null,
-        created: 1,
-        skipped,
-        lastOccurrenceAt: next.at,
-        ...(after ? {} : { status: 'ended' }),
-      });
-      return run;
-    });
+        const run = await this.makeRun(tx, orgId, s, rule, next.index, next.at);
+        const after = occurrenceAt(rule, next.index + 1);
+        await this.repo.planSeries(tx, orgId, s.id, {
+          nextIndex: next.index + 1,
+          nextRunAt: after ? after.at : null,
+          created: 1,
+          skipped,
+          lastOccurrenceAt: next.at,
+          ...(after ? {} : { status: 'ended' }),
+        });
+        return run;
+      }),
+    );
     // After the commit: a job must never run before the status it needs is visible.
     if (made?.enqueue) await this.jobs.enqueue(orgId, made.id, made.uuid);
     return made !== null;
