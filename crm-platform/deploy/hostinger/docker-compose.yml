@@ -294,7 +294,7 @@ services:
     labels:
       traefik.enable: 'true'
       traefik.docker.network: dokploy-network
-      traefik.http.routers.desk-api.rule: Host(`${DOMAIN}`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/docs`))
+      traefik.http.routers.desk-api.rule: Host(`${DOMAIN}`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/api/v1`) || Path(`/docs/api.json`))
       traefik.http.routers.desk-api.priority: '100'
       traefik.http.routers.desk-api.entrypoints: websecure
       traefik.http.routers.desk-api.tls.certresolver: letsencrypt
