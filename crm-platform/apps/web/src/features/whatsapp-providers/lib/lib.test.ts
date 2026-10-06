@@ -14,6 +14,7 @@ import {
   stepOfField,
   validateDraft,
   withAuthScheme,
+  withPartnerProgram,
   type ProviderDraft,
 } from './draft';
 import { WAP_ERROR_KEYS, isNoAccess, wapError } from './errors';
@@ -249,7 +250,10 @@ describe('base url', () => {
     expect(isApiVersion('v25.0')).toBe(true);
     expect(isApiVersion(' v9.1 ')).toBe(true);
     expect(isApiVersion('25.0')).toBe(false);
-    expect(isApiVersion('v1')).toBe(false);
+    // Pinnacle's partner API is versioned `v3`, with no minor.
+    expect(isApiVersion('v3')).toBe(true);
+    expect(isApiVersion('v')).toBe(false);
+    expect(isApiVersion('v1.')).toBe(false);
   });
 });
 
@@ -493,6 +497,136 @@ describe('provider draft', () => {
     expect(stepOfField('nonsense')).toBe('review');
     expect(firstStepWithProblem({ onboardingAppId: 1, baseUrl: 1 })).toBe('connection');
     expect(firstStepWithProblem({})).toBeNull();
+  });
+});
+
+describe('partner program', () => {
+  const base = (): ProviderDraft => ({
+    ...emptyDraft(),
+    key: 'pin',
+    label: 'Pin',
+    baseUrl: 'https://api.example-bsp.com',
+  });
+  const stored = () =>
+    provider({
+      credentialMode: 'channel_token',
+      onboarding: 'embedded_signup',
+      partnerProgram: 'pinnacle',
+      partnerSolutionId: '123456',
+    });
+
+  it('is off by default and sends nothing', () => {
+    const d = emptyDraft();
+    expect(d.partnerProgram).toBeNull();
+    expect(d.partnerSolutionId).toBe('');
+    const body = buildCreateRequest(base());
+    expect(body.partnerProgram).toBeUndefined();
+    expect(body.partnerSolutionId).toBeUndefined();
+    expect(validateDraft(base(), { mode: 'create' }).fields.partnerSolutionId).toBeUndefined();
+  });
+
+  it('choosing Pinnacle defaults the credential mode and onboarding', () => {
+    const d = withPartnerProgram(base(), 'pinnacle');
+    expect(d).toMatchObject({
+      partnerProgram: 'pinnacle',
+      credentialMode: 'channel_token',
+      onboarding: 'embedded_signup',
+    });
+  });
+
+  it('needs a digits solution id once a program is chosen', () => {
+    const d = withPartnerProgram(base(), 'pinnacle');
+    expect(validateDraft(d, { mode: 'create' }).fields.partnerSolutionId?.key).toBe(
+      'partnerSolutionIdRequired',
+    );
+    expect(
+      validateDraft({ ...d, partnerSolutionId: 'ab12' }, { mode: 'create' }).fields
+        .partnerSolutionId?.key,
+    ).toBe('digits');
+    expect(validateDraft({ ...d, partnerSolutionId: '123456' }, { mode: 'create' }).ok).toBe(true);
+    const wrongMode = {
+      ...d,
+      partnerSolutionId: '123456',
+      credentialMode: 'platform_token' as const,
+    };
+    expect(validateDraft(wrongMode, { mode: 'create' }).fields.credentialMode?.key).toBe(
+      'partnerCredentialMode',
+    );
+  });
+
+  it('builds a create request the contract accepts', () => {
+    const d = { ...withPartnerProgram(base(), 'pinnacle'), partnerSolutionId: ' 123456 ' };
+    const body = buildCreateRequest(d);
+    expect(body).toMatchObject({
+      partnerProgram: 'pinnacle',
+      partnerSolutionId: '123456',
+      credentialMode: 'channel_token',
+      onboarding: 'embedded_signup',
+    });
+    expect(createWhatsappProviderSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('round-trips a stored provider with no change', () => {
+    const p = stored();
+    expect(draftFromProvider(p)).toMatchObject({
+      partnerProgram: 'pinnacle',
+      partnerSolutionId: '123456',
+    });
+    expect(buildUpdateRequest(p, draftFromProvider(p))).toBeNull();
+  });
+
+  it('an update sends the pair when either changes', () => {
+    const p = stored();
+    const d = { ...draftFromProvider(p), partnerSolutionId: '654321' };
+    expect(buildUpdateRequest(p, d)).toEqual({
+      rowVersion: p.rowVersion,
+      partnerProgram: 'pinnacle',
+      partnerSolutionId: '654321',
+    });
+    const turnedOn = provider();
+    const on = withPartnerProgram(
+      { ...draftFromProvider(turnedOn), partnerSolutionId: '123456' },
+      'pinnacle',
+    );
+    expect(buildUpdateRequest(turnedOn, on)).toMatchObject({
+      partnerProgram: 'pinnacle',
+      partnerSolutionId: '123456',
+      credentialMode: 'channel_token',
+      onboarding: 'embedded_signup',
+    });
+  });
+
+  it('clearing the program sends null for both', () => {
+    const p = stored();
+    const cleared = withPartnerProgram(draftFromProvider(p), null);
+    expect(cleared.partnerSolutionId).toBe('');
+    const body = buildUpdateRequest(p, cleared);
+    expect(body).toEqual({
+      rowVersion: p.rowVersion,
+      partnerProgram: null,
+      partnerSolutionId: null,
+    });
+    expect(validateDraft(cleared, { mode: 'edit' }).fields.partnerSolutionId).toBeUndefined();
+  });
+
+  it('the solution id field belongs to the billing step, the mode to credentials', () => {
+    expect(stepOfField('partnerSolutionId')).toBe('billing');
+    expect(stepOfField('credentialMode')).toBe('credentials');
+  });
+
+  it('maps the partner error codes', () => {
+    expect(wapError(api(409, ERROR_CODES.WAP_PARTNER_NOT_CONFIGURED))).toMatchObject({
+      kind: 'general',
+      key: 'partnerNotConfigured',
+    });
+    const refused = new ApiError(502, ERROR_CODES.WAP_PARTNER_REFUSED, 'email already used');
+    expect(wapError(refused)).toMatchObject({
+      key: 'partnerRefused',
+      values: { message: 'email already used' },
+    });
+    expect(wapError(new ApiError(502, ERROR_CODES.WAP_PARTNER_REFUSED, '')).key).toBe(
+      'partnerRefusedPlain',
+    );
   });
 });
 

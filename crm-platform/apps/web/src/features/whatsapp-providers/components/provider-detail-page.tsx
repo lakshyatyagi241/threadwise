@@ -181,6 +181,17 @@ function Overview({ provider: p }: { provider: WhatsappProvider }) {
     ],
     [tf('mediaUpload'), p.capabilities.mediaUpload ? t('yes') : t('no')],
     [tf('onboarding'), te(`onboarding.${p.onboarding}.label`)],
+    ...(p.partnerProgram
+      ? ([
+          [tf('partnerProgram'), te(`partnerProgram.${p.partnerProgram}.label`)],
+          [
+            tf('partnerSolutionId'),
+            <code key="ps" dir="ltr" className="text-xs">
+              {p.partnerSolutionId}
+            </code>,
+          ],
+        ] as Array<[string, ReactNode]>)
+      : []),
     [
       t('usage'),
       `${t('numbers', { count: p.numberCount })} · ${t('workspaces', { count: p.workspaceCount })}`,
