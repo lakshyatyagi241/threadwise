@@ -22,3 +22,4 @@ export { WalletGateService, type LaunchRequest } from './wallet-gate.service';
 export { WalletSettingsService } from './wallet-settings.service';
 export { RateCardService } from './rate-card.service';
 export { BillingCurrencyService } from './billing-currency.service';
+export { WalletQueryService } from './wallet-query.service';
