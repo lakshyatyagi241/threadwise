@@ -8,7 +8,7 @@ const { auditLog } = schema;
 export interface AuditInput {
   module: string;
   recordId: number;
-  action: 'insert' | 'update' | 'delete' | 'merge' | 'login' | 'export';
+  action: 'insert' | 'update' | 'delete' | 'merge' | 'login' | 'export' | 'read';
   /** Field-level {old,new}. Omit unchanged fields — a full row snapshot is noise. */
   delta?: Record<string, { old: unknown; new: unknown }>;
 }

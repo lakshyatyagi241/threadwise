@@ -3,3 +3,4 @@ export { CompaniesService, COMPANY_MODULE } from './companies.service';
 export { CompaniesRepository } from './companies.repository';
 export { toCompanyResponse } from './companies.mapper';
 export type { CompanyRow } from './companies.repository';
+export { normaliseCompanyDomain } from './company-rules';

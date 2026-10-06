@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { LEAD_HOOK_MAX_BODY_BYTES, MARKET_HOOK_MAX_BYTES } from '@crm/contracts';
+import {
+  FORM_SUBMIT_MAX_BODY_BYTES,
+  LEAD_HOOK_MAX_BODY_BYTES,
+  MARKET_HOOK_MAX_BYTES,
+} from '@crm/contracts';
 import { readInfraEnv } from '../../../src/config/domains/platform-infrastructure.env';
 import {
   bodyLimitClasses,
@@ -23,6 +27,16 @@ describe('body limit defaults', () => {
   it("take the lead hook and marketplace caps from the domains' own contracts", () => {
     expect(bodyLimitFor('/v2/public/lead-hooks/t', env)?.bytes).toBe(LEAD_HOOK_MAX_BODY_BYTES);
     expect(bodyLimitFor('/v2/public/marketplace/hooks/x', env)?.bytes).toBe(MARKET_HOOK_MAX_BYTES);
+  });
+
+  it('hold the Forms public door to its own contract number, not the webhook class', () => {
+    expect(bodyLimitFor('/v2/public/forms/aB3dE5gH7jK9mN1pQ3sT5v/submit', env)?.bytes).toBe(
+      FORM_SUBMIT_MAX_BODY_BYTES,
+    );
+    expect(FORM_SUBMIT_MAX_BODY_BYTES).toBeLessThan(1024 * KIB);
+    // The admin routes keep the default 100 KiB; the form's embed loader has no body at all.
+    expect(bodyLimitFor('/v2/forms', env)).toBeUndefined();
+    expect(bodyLimitFor('/form-embed/aB3dE5gH7jK9mN1pQ3sT5v/embed.js', env)).toBeUndefined();
   });
 });
 

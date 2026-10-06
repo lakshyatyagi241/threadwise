@@ -81,6 +81,9 @@ const stored: PlanAdminItem = {
     api_keys: 0,
     webhooks: 0,
     ai_token_limit_monthly: 0,
+    forms: 0,
+    form_submissions_monthly: 0,
+    ai_form_generations_monthly: 0,
   },
   features: {
     automation: true,
@@ -110,6 +113,7 @@ const stored: PlanAdminItem = {
     invoicing: true,
     forms_and_links: true,
     extra_channels: true,
+    form_builder: false,
   },
   visibleAddons: [],
   inUse: 2,

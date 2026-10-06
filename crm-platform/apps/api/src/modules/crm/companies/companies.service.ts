@@ -41,6 +41,12 @@ import {
 import { encodeCompanyCursor, encodeIdCursor, foldActivity } from './company-rules';
 
 export const COMPANY_MODULE = 'companies';
+
+/** A company made from a website alone is named after it: "acme.co.uk" becomes "Acme". */
+const hostLabel = (host: string): string => {
+  const label = host.split('.')[0] ?? host;
+  return (label.charAt(0).toUpperCase() + label.slice(1)).slice(0, 191);
+};
 const DISPLAY_PREFIX = 'COM';
 
 /** The filter fields a list and the stats share, as they arrive from a query. */
@@ -321,6 +327,96 @@ export class CompaniesService {
       });
       return (await this.toResponses(tx, ctx.orgId, [row]))[0]!;
     });
+  }
+
+  /**
+   * The company of a public form's submission (docs/specs/forms-builder-app.md 9.3), inside the caller's transaction (the public pipeline
+   * writes the contact, the company and the submission together). Finds the company by website, then by name; a match has its blanks
+   * filled and nothing a person typed is overwritten; no match creates one, owned by `ownerId`. Audited and announced like a company made
+   * by hand (`company.created` / `company.updated`, `via: 'form'`). Returns null when the input names neither a website nor a company.
+   */
+  async resolveForSubmission(
+    tx: Tx,
+    orgId: number,
+    input: {
+      name: string | null;
+      host: string | null;
+      email: string | null;
+      phone: string | null;
+      industry: string | null;
+      sizeRange: string | null;
+      address: string | null;
+      notes: string | null;
+      custom: Record<string, unknown>;
+      ownerId: number | null;
+      /** Match an existing company (`false` = the form does not touch existing companies; a new one is made). */
+      match: boolean;
+    },
+  ): Promise<{ id: number; uuid: string; created: boolean } | null> {
+    const name = input.name?.trim() ? input.name.trim().slice(0, 191) : null;
+    if (!name && !input.host) return null;
+    const found = input.match
+      ? await this.repo.findByDomainOrName(tx, orgId, { host: input.host, name })
+      : undefined;
+    if (found) {
+      const changed = await this.repo.fillBlanks(tx, orgId, found.id, {
+        domain: input.host,
+        email: input.email,
+        phone: input.phone,
+        industry: input.industry,
+        sizeRange: input.sizeRange,
+        address: input.address,
+        notes: input.notes,
+        custom: input.custom,
+      });
+      if (changed.length > 0) {
+        const after = (await this.repo.findById(tx, orgId, found.id))!;
+        await this.audit.record(tx, {
+          module: COMPANY_MODULE,
+          recordId: found.id,
+          action: 'update',
+          delta: Object.fromEntries(
+            changed.map((k) => [k, { old: null, new: 'filled by a form' }]),
+          ),
+        });
+        await this.outbox.emit(tx, {
+          aggregateModule: COMPANY_MODULE,
+          aggregateId: found.id,
+          eventType: 'company.updated',
+          payload: { ...companyEventPayload(after), changed, via: 'form' },
+        });
+      }
+      return { id: found.id, uuid: found.uuid, created: false };
+    }
+    const id = await this.repo.insert(tx, orgId, {
+      name: name ?? hostLabel(input.host!),
+      domain: input.host,
+      email: input.email,
+      phone: input.phone,
+      industry: input.industry,
+      sizeRange: input.sizeRange,
+      address: input.address,
+      notes: input.notes,
+      ownerId: input.ownerId,
+      createdBy: null,
+      displayId: await this.displayIds.next(tx, orgId, COMPANY_MODULE, DISPLAY_PREFIX),
+    });
+    if (Object.keys(input.custom).length > 0)
+      await this.repo.fillBlanks(tx, orgId, id, { custom: input.custom });
+    const row = (await this.repo.findById(tx, orgId, id))!;
+    await this.audit.record(tx, {
+      module: COMPANY_MODULE,
+      recordId: row.id,
+      action: 'insert',
+      delta: { name: { old: null, new: row.name } },
+    });
+    await this.outbox.emit(tx, {
+      aggregateModule: COMPANY_MODULE,
+      aggregateId: row.id,
+      eventType: 'company.created',
+      payload: { ...companyEventPayload(row), via: 'form' },
+    });
+    return { id: row.id, uuid: row.uuid, created: true };
   }
 
   async update(

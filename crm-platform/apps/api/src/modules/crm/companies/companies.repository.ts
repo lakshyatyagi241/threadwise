@@ -2,7 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { CompanySort, RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { decodeCompanyCursor, decodeIdCursor, escapeLike } from './company-rules';
+import {
+  companyDomainSpellings,
+  decodeCompanyCursor,
+  decodeIdCursor,
+  escapeLike,
+} from './company-rules';
 
 /** One company as the SQL returns it, with the owner and the creator already joined (names and uuids, never ids on the wire). */
 export interface CompanyRow {
@@ -335,6 +340,95 @@ export class CompaniesRepository {
       RETURNING id
     `);
     return Number((res.rows[0] as { id: number | string }).id);
+  }
+
+  /**
+   * The company a public form's submission belongs to: by website first (every common spelling of the host, so the lookup uses the
+   * (org_id, lower(domain)) index), else by exact name, case-insensitive. The oldest match wins, so a duplicate nobody merged is not a
+   * coin flip.
+   */
+  async findByDomainOrName(
+    tx: Tx,
+    orgId: number,
+    q: { host?: string | null; name?: string | null },
+  ): Promise<CompanyRow | undefined> {
+    if (q.host) {
+      const spellings = sql.join(
+        companyDomainSpellings(q.host).map((h) => sql`${h}`),
+        sql`, `,
+      );
+      const res = await tx.execute(
+        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.domain) IN (${spellings}) ORDER BY c.id LIMIT 1`,
+      );
+      const r = (res.rows as Raw[])[0];
+      if (r) return toRow(r);
+    }
+    if (q.name) {
+      const res = await tx.execute(
+        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.name) = lower(${q.name}) ORDER BY c.id LIMIT 1`,
+      );
+      const r = (res.rows as Raw[])[0];
+      if (r) return toRow(r);
+    }
+    return undefined;
+  }
+
+  /**
+   * Fills what a company does not have yet and never overwrites what a person typed: a value only goes in where the column is empty.
+   * Locks the row for the read-modify-write. Returns the names of the properties that changed (empty when nothing was blank).
+   */
+  async fillBlanks(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    v: {
+      domain?: string | null;
+      email?: string | null;
+      phone?: string | null;
+      industry?: string | null;
+      sizeRange?: string | null;
+      address?: string | null;
+      notes?: string | null;
+      custom?: Record<string, unknown>;
+    },
+  ): Promise<string[]> {
+    const res = await tx.execute(sql`
+      SELECT domain, email::text AS email, phone, industry, size_range, address, notes, data
+      FROM companies WHERE org_id = ${orgId} AND id = ${id} FOR UPDATE
+    `);
+    const cur = (res.rows as Raw[])[0];
+    if (!cur) return [];
+    const blank = (x: unknown): boolean => x === null || x === undefined || String(x).trim() === '';
+    const sets: SQL[] = [];
+    const changed: string[] = [];
+    const take = (key: string, column: string, have: unknown, want: string | null | undefined) => {
+      if (want && blank(have)) {
+        sets.push(sql`${sql.raw(column)} = ${want}`);
+        changed.push(key);
+      }
+    };
+    take('website', 'domain', cur.domain, v.domain);
+    take('email', 'email', cur.email, v.email);
+    take('phone', 'phone', cur.phone, v.phone);
+    take('industry', 'industry', cur.industry, v.industry);
+    take('sizeRange', 'size_range', cur.size_range, v.sizeRange);
+    take('address', 'address', cur.address, v.address);
+    take('notes', 'notes', cur.notes, v.notes);
+    const data = { ...((cur.data as Record<string, unknown> | null) ?? {}) };
+    let dataChanged = false;
+    for (const [key, value] of Object.entries(v.custom ?? {})) {
+      if (blank(data[key]) && value !== undefined && value !== null && String(value) !== '') {
+        data[key] = value;
+        dataChanged = true;
+        changed.push(`custom.${key}`);
+      }
+    }
+    if (dataChanged) sets.push(sql`data = ${JSON.stringify(data)}::jsonb`);
+    if (sets.length === 0) return [];
+    await tx.execute(
+      sql`UPDATE companies SET ${sql.join(sets, sql`, `)} WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    return changed;
   }
 
   /** The optimistic lock is the `row_version` in the WHERE: zero rows back means somebody else wrote first. */

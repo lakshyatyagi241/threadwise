@@ -77,3 +77,4 @@ export * from './roles-permissions';
 export * from './whatsapp-providers';
 export * from './leads';
 export * from './marketplace';
+export * from './forms-builder';
