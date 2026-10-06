@@ -1,5 +1,7 @@
 # Seeding the Appointments app on a local database
 
+> Both paid first-party apps (Appointments and Forms) are covered together in [dev-seed-marketplace-apps.md](dev-seed-marketplace-apps.md); the two commands share one implementation.
+
 Appointments (booking types, appointments, public booking pages) is a **paid first-party Marketplace app**. On a fresh developer database
 you will not see it in the Marketplace and booking is locked. This is by design, not a bug:
 

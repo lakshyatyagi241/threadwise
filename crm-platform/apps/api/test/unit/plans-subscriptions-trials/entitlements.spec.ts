@@ -79,6 +79,7 @@ describe('registry', () => {
       'invoicing',
       'forms_and_links',
       'extra_channels',
+      'form_builder',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });
