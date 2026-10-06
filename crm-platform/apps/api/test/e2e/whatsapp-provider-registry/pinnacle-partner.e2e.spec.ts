@@ -28,6 +28,8 @@ Object.assign(process.env, {
   META_APP_ID: 'app-1',
   META_APP_SECRET: 'app-secret-1',
   META_EMBEDDED_CONFIG_ID: 'cfg-env',
+  INTERAKT_PARTNER_AUTH_KEY: 'interakt-partner-key',
+  INTERAKT_SOLUTION_ID: '951670443632073',
   META_SYSTEM_USER_ID: 'sys-user-1',
   META_SYSTEM_USER_TOKEN: 'sys-token-1',
   WABA_WEBHOOK_PUBLIC_URL: 'https://hooks.test',
@@ -289,6 +291,29 @@ describe('saving a provider with the pinnacle program', () => {
     });
     expect(back.status, JSON.stringify(back.body)).toBe(200);
     expect(back.body.partnerSolutionId).toBe(SOLUTION);
+  });
+});
+
+describe('what the browser launches Embedded Signup with', () => {
+  it("a workspace on the partner program gets the partner's solution id, never the Interakt one", async () => {
+    const t = await api.signup('pinr1');
+    const res0 = await sup('put', `/workspaces/${await orgUuid(t)}/assignment`).send({
+      providerId,
+    });
+    expect(res0.status, JSON.stringify(res0.body)).toBe(200);
+    const res = await api.as(t.admin).get('/v2/waba/readiness');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.solutionId).toBe(SOLUTION);
+    expect(res.body.configId).toBe(CONFIG);
+    expect(res.body.appId).toBe('app-1');
+  });
+
+  it('a workspace on plain Meta sends no solution id at all', async () => {
+    const t = await api.signup('pinr2');
+    const res = await api.as(t.admin).get('/v2/waba/readiness');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.solutionId).toBeNull();
+    expect(res.body.configId).toBe('cfg-env');
   });
 });
 
