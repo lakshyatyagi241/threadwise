@@ -2,18 +2,14 @@ import {
   attachAllResultSchema,
   bspAllocationListSchema,
   bspAllocationSchema,
-  bspBillingModeResponseSchema,
   bspDashboardSchema,
   bspSettingsResponseSchema,
   bspWabaCandidateListSchema,
   revokeResultSchema,
-  setBillingModeResponseSchema,
   type AttachCreditInput,
-  type BspBillingMode,
   type UpdateBspSettingsInput,
 } from '@crm/contracts';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
-import { apiFetch } from '@/lib/api/client';
 
 export const KEYS = {
   settings: ['bsp', 'settings'] as const,
@@ -21,7 +17,6 @@ export const KEYS = {
   allocations: ['bsp', 'allocations'] as const,
   dashboard: (month: string | undefined, currency?: string) =>
     ['bsp', 'dashboard', month ?? 'current', currency ?? 'base'] as const,
-  billingMode: ['bsp', 'billing-mode'] as const,
 };
 
 /** The operator console's calls (`/api/platform/*` becomes `/v2/platform/*`; the browser never sees a token). */
@@ -53,17 +48,5 @@ export const operatorApi = {
       query: { month, currency },
       schema: bspDashboardSchema,
       signal,
-    }),
-};
-
-/** The workspace's own calls (`/api/v2/*`). */
-export const customerApi = {
-  billingMode: (signal?: AbortSignal) =>
-    apiFetch('/bsp/billing-mode', { schema: bspBillingModeResponseSchema, signal }),
-  setBillingMode: (mode: BspBillingMode) =>
-    apiFetch('/bsp/billing-mode', {
-      method: 'PUT',
-      body: { mode },
-      schema: setBillingModeResponseSchema,
     }),
 };

@@ -175,11 +175,6 @@
         "description": "Your plan and wallet purchases, with receipts.",
         "keywords": "payments, receipts, invoices, purchases, orders"
       },
-      "bsp-billing-mode": {
-        "label": "Message billing",
-        "description": "Choose who is billed for your WhatsApp messages.",
-        "keywords": "whatsapp, conversation charges, meta billing, bsp, wallet"
-      },
       "account": {
         "label": "Account",
         "description": "Your name, email, password and language.",
