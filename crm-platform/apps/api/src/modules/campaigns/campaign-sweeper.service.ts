@@ -151,6 +151,8 @@ export class CampaignSweeper {
       const c = await this.repo.findById(tx, orgId, id);
       if (!c || ['cancelled', 'paused', 'draft', 'scheduled', 'running'].includes(c.status))
         continue;
+      // A wizard broadcast's frequency-cap failures belong to the wizard's own retry job (24 hours apart, or none): never re-run here.
+      if (c.wizard !== null) continue;
       const { retryAttempts } = await this.settings.get(tx, orgId);
       const max = Math.max(1, retryAttempts);
       const rows = await tx.execute(sql`

@@ -6,6 +6,8 @@ import { AppError } from '../../common/errors/app-error';
 import { QUEUES } from '../../infra/queue/queues';
 import { CampaignDispatchService } from './campaign-dispatch.service';
 import type { CampaignJob } from './campaign-jobs';
+import { FIXTURE_RECEIPT_JOB, FixtureReceiptConsumer } from './fixture/fixture-receipts';
+import type { FixtureReceipt } from './fixture/fixture-engine-sender';
 
 const BUSY_RETRY_MS = 15_000;
 
@@ -17,12 +19,21 @@ const BUSY_RETRY_MS = 15_000;
 export class CampaignProcessor extends WorkerHost {
   private readonly logger = new Logger(CampaignProcessor.name);
 
-  constructor(private readonly dispatch: CampaignDispatchService) {
+  constructor(
+    private readonly dispatch: CampaignDispatchService,
+    private readonly fixtureReceipts: FixtureReceiptConsumer,
+  ) {
     super();
   }
 
-  async process(job: Job<CampaignJob>, token?: string): Promise<string> {
-    const { orgId, campaignId } = job.data;
+  async process(job: Job<CampaignJob | FixtureReceipt>, token?: string): Promise<string> {
+    // The sandbox's own delivery reports (CAMP_PROVIDER_MODE=fixture) travel on this queue; they are what a webhook would have been.
+    if (job.name === FIXTURE_RECEIPT_JOB) {
+      return (await this.fixtureReceipts.deliver(job.data as FixtureReceipt))
+        ? 'applied'
+        : 'unowned';
+    }
+    const { orgId, campaignId } = job.data as CampaignJob;
     return RequestContextStore.run(
       {
         requestId: `camp-${campaignId}`,

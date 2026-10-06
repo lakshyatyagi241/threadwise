@@ -1,8 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
-import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
+import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
   EngineSenderRegistry,
   LinkTracker,
@@ -12,10 +11,8 @@ import {
   SenderLease,
   TEMPLATE_DIRECTORY,
   WARMER_GATE,
-  applyOverrides,
   assemblePhone,
   batchCooldownMs,
-  buildRecipientVars,
   nextGapMs,
   resolveBodyTokens,
   sanitizeOverrides,
@@ -44,12 +41,14 @@ import {
   type VariantContent,
 } from './campaign-body';
 import { CampaignEvents } from './campaign-events';
+import { buildTemplatePayload, wizardVariablesOf } from './campaign-payload';
 import { CampaignMirrorService } from './campaign-mirror.service';
 import {
   MEDIA_KIND,
   mediaColumnFor,
   nextRunSlot,
   advanceRecurring,
+  isEcosystemThrottle,
   retryOutcome,
   withinSendWindow,
 } from './campaign-rules';
@@ -416,13 +415,18 @@ export class CampaignDispatchService {
       });
     const transient = async (error: string) =>
       this.db.txAs({ orgId }, async (t) => {
-        const out = retryOutcome({
-          attemptsBefore: r.attempts,
-          maxAttempts,
-          backoffSec: settings.retryBackoffSec,
-          error,
-          now: this.runtime.now(),
-        });
+        // A broadcast made by the wizard leaves Meta's frequency cap (131049) to its own retry job: 24 hours apart until the end date
+        // the person chose, or not at all when they did not switch retries on. Retrying it here at 6 and 12 hours would defeat that.
+        const out =
+          c.wizard !== null && isEcosystemThrottle(error)
+            ? { attempts: maxAttempts, nextAttemptAt: null, final: true }
+            : retryOutcome({
+                attemptsBefore: r.attempts,
+                maxAttempts,
+                backoffSec: settings.retryBackoffSec,
+                error,
+                now: this.runtime.now(),
+              });
         await this.repo.markFailed(t, orgId, r.id, {
           attempts: out.attempts,
           nextAttemptAt: out.nextAttemptAt,
@@ -560,7 +564,7 @@ export class CampaignDispatchService {
     });
   }
 
-  /** The Cloud API template object for one recipient, as broadcasts builds it (variables, overrides, tracked links). */
+  /** The Cloud API template object for one recipient: the shared builder (see campaign-payload.ts), so a retry and a test send match. */
   private async components(
     o: Parameters<CampaignDispatchService['loop']>[0],
     content: VariantContent,
@@ -569,42 +573,19 @@ export class CampaignDispatchService {
     to: string,
     ctx: MergeContext,
   ): Promise<{ name: string; components: unknown[] }> {
-    const shape: TemplateShape & { headerLocation: unknown } = {
-      templateName: tpl.templateName,
-      language: tpl.language,
-      templateType: tpl.templateType,
-      templateBody: tpl.templateBody,
-      header: tpl.header,
-      attachmentType: tpl.attachmentType,
-      attachmentFile: tpl.attachmentFile,
-      parameterFormat: tpl.parameterFormat,
-      variableMap: tpl.variableMap,
-      buttons: tpl.buttons,
-      carouselData: tpl.carouselData,
-      headerLocation: tpl.headerLocation,
-    };
-    const vars = buildRecipientVars(shape, {
-      pull: (key) => resolveToken(key, ctx).value,
-      mediaUrl: (path) => this.templates.mediaUrl(path),
-    });
-    const applied = applyOverrides(
-      vars,
-      content.overrides,
-      (text) => renderMergeTags(text, ctx).rendered,
+    return buildTemplatePayload(
+      { db: this.db, templates: this.templates, tracker: this.tracker },
+      {
+        orgId: o.orgId,
+        campaign: { id: o.c.id, trackingEnabled: o.c.trackingEnabled },
+        wizardVariables: wizardVariablesOf(o.c.wizard),
+        tpl,
+        overrides: content.overrides,
+        contactId: r.contactId,
+        to,
+        ctx,
+      },
     );
-    const tracked = o.c.trackingEnabled
-      ? await this.db.txAs({ orgId: o.orgId }, (t) =>
-          this.tracker.wrapVars(
-            t,
-            o.orgId,
-            applied.vars,
-            { campaignId: o.c.id, contactId: r.contactId, templateId: tpl.id, phone: to },
-            { buttons: shape.buttons, carouselData: shape.carouselData },
-          ),
-        )
-      : applied.vars;
-    const send = buildSend(shape, tracked);
-    return { name: send.name, components: send.components };
   }
 
   // ---------------------------------------------------------------- flows
