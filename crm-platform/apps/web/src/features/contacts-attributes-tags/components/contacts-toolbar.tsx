@@ -19,6 +19,7 @@ import type { ContactFilters } from '../api/contacts';
 import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
 import type { Choice } from '../lib/option-sets';
+import { AdvancedFilter } from '@/features/segments';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
@@ -62,6 +63,10 @@ export interface ContactsToolbarProps {
   /** Present when the person may save the active filters as a segment: the button then shows. */
   onSaveAsSegment?: () => void;
   canCreateSegment: boolean;
+
+  /** Ad-hoc conditions applied now (JSON text of a rule tree), or empty. */
+  rules: string;
+  onRules: (rulesJson: string) => void;
 
   tag: string;
   onTag: (id: string) => void;
@@ -271,6 +276,8 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
             {t('oldestFirst')}
           </MenuRadioItem>
         </Menu>
+
+        <AdvancedFilter value={p.rules} onApply={p.onRules} />
 
         {p.onSaveAsSegment && (
           <Button

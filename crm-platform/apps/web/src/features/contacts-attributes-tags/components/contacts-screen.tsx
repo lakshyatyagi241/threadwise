@@ -224,6 +224,7 @@ export function ContactsScreen() {
     consent: filters.consent,
     imported: filters.imported,
     segment: filters.segment,
+    rules: filters.rules,
   };
   const target = (): BulkTarget =>
     pickerRow ? { kind: 'ids', ids: [pickerRow] } : bulkTarget(sel, snapshot);
@@ -481,10 +482,12 @@ export function ContactsScreen() {
         canCreateSegment={canCreateSegments}
         // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
         onSaveAsSegment={
-          canCreateSegments && filtered && !filters.segment
+          canCreateSegments && filtered && !filters.segment && !filters.rules
             ? () => setSaveSegmentOpen(true)
             : undefined
         }
+        rules={filters.rules}
+        onRules={(rules) => setFilters({ rules })}
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}
         tags={tags.data ?? []}

@@ -68,6 +68,8 @@ export interface ContactFilterSnapshot {
   imported: boolean;
   /** Segment id, or empty: "select all matching" inside a segment acts on its members only. */
   segment: string;
+  /** The Hub's ad-hoc conditions (JSON text), or empty / absent. */
+  rules?: string;
 }
 
 /** What a bulk action acts on: explicit ids, or the filter that defines "all matching". */
