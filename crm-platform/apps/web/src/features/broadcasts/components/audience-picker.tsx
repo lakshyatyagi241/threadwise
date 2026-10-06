@@ -17,7 +17,7 @@ import { SearchIcon } from './icons';
 const KICKER =
   'mr-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
 const CHIP =
-  'inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[11.5px] hover:bg-muted';
+  'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-[11.5px] hover:bg-muted';
 
 /**
  * "Who do you want to send it to?" (WD-BCAST-007): tag and group chips plus a searchable table of the newest contacts, all
@@ -77,13 +77,19 @@ export function AudiencePicker({
     label: string,
     extra?: React.ReactNode,
   ) => (
-    <label key={key} className={cn(CHIP, on && 'border-brand bg-muted')}>
+    <label key={key} className={cn(CHIP, 'relative', on && 'border-brand bg-muted')}>
       <input
         type="checkbox"
-        className="size-3 accent-[var(--brand)]"
+        className="peer absolute inset-0 size-full cursor-pointer opacity-0"
         checked={on}
         onChange={change}
       />
+      <span
+        aria-hidden="true"
+        className="flex size-4 shrink-0 items-center justify-center rounded border border-border bg-background text-[10px] leading-none text-white peer-checked:border-brand peer-checked:bg-brand peer-focus-visible:ring-2 peer-focus-visible:ring-brand"
+      >
+        {on ? '✓' : ''}
+      </span>
       {extra}
       <span>{label}</span>
     </label>
@@ -204,22 +210,24 @@ export function AudiencePicker({
           <table className="w-full table-fixed text-[12.5px]">
             <thead className="sticky top-0 border-b border-border bg-muted text-muted-foreground">
               <tr>
-                <th className="w-[48px] px-4 py-2.5 text-start">
-                  <input
-                    type="checkbox"
-                    aria-label={t('selectAll')}
-                    className="size-4 accent-[var(--brand)]"
-                    checked={allShown}
-                    disabled={rows.length === 0}
-                    onChange={(e) => {
-                      const shown = rows.map((r) => r.id);
-                      onContacts(
-                        e.target.checked
-                          ? [...new Set([...selectedContacts, ...shown])]
-                          : selectedContacts.filter((id) => !shown.includes(id)),
-                      );
-                    }}
-                  />
+                <th className="w-[56px] p-0 text-start">
+                  <label className="flex size-11 cursor-pointer items-center justify-center">
+                    <input
+                      type="checkbox"
+                      aria-label={t('selectAll')}
+                      className="size-6 accent-[var(--brand)]"
+                      checked={allShown}
+                      disabled={rows.length === 0}
+                      onChange={(e) => {
+                        const shown = rows.map((r) => r.id);
+                        onContacts(
+                          e.target.checked
+                            ? [...new Set([...selectedContacts, ...shown])]
+                            : selectedContacts.filter((id) => !shown.includes(id)),
+                        );
+                      }}
+                    />
+                  </label>
                 </th>
                 <th className="px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]">
                   {t('colName')}
@@ -254,14 +262,16 @@ export function AudiencePicker({
               ) : (
                 rows.map((r) => (
                   <tr key={r.id}>
-                    <td className="px-4 py-2.5">
-                      <input
-                        type="checkbox"
-                        aria-label={r.name}
-                        className="size-4 accent-[var(--brand)]"
-                        checked={selectedContacts.includes(r.id)}
-                        onChange={() => onContacts(toggle(selectedContacts, r.id))}
-                      />
+                    <td className="p-0">
+                      <label className="flex size-11 cursor-pointer items-center justify-center">
+                        <input
+                          type="checkbox"
+                          aria-label={r.name}
+                          className="size-6 accent-[var(--brand)]"
+                          checked={selectedContacts.includes(r.id)}
+                          onChange={() => onContacts(toggle(selectedContacts, r.id))}
+                        />
+                      </label>
                     </td>
                     <td className="truncate px-3 py-2.5 font-semibold">{r.name}</td>
                     <td className="px-3 py-2.5 font-mono text-[11px]">{r.phone || '—'}</td>
