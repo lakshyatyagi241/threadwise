@@ -7,7 +7,11 @@ import {
   type RequestHandler,
   type Response,
 } from 'express';
-import { LEAD_HOOK_MAX_BODY_BYTES, MARKET_HOOK_MAX_BYTES } from '@crm/contracts';
+import {
+  FORM_SUBMIT_MAX_BODY_BYTES,
+  LEAD_HOOK_MAX_BODY_BYTES,
+  MARKET_HOOK_MAX_BYTES,
+} from '@crm/contracts';
 import { readInfraEnv, type InfraEnv } from '../../../config/domains/platform-infrastructure.env';
 
 const KIB = 1024;
@@ -39,6 +43,9 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
     },
     // These two domains enforce their own contract caps; the parser must allow exactly that much, no more.
     { name: 'lead-hook', pattern: under('public/lead-hooks'), bytes: LEAD_HOOK_MAX_BODY_BYTES },
+    // The Forms add-on's public door: a submission is a few answers, so the class is bounded by its own contract number, not the
+    // webhook class (an anonymous caller must not be able to make the parser buffer a megabyte).
+    { name: 'public-form', pattern: under('public/forms'), bytes: FORM_SUBMIT_MAX_BODY_BYTES },
     {
       name: 'marketplace-hook',
       pattern: under('public/marketplace'),

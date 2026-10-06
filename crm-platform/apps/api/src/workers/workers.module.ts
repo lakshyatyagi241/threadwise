@@ -33,6 +33,7 @@ import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
+import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { OutboxDrainService } from './outbox-drain.service';
@@ -84,6 +85,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
     LeadsWorkerModule,
+    FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
   ],
