@@ -120,14 +120,14 @@ export class OperatorAuthService {
   }
 
   /**
-   * Must this operator have a second factor? Super admins always; everyone
-   * else when the security policy asks for it. Operators are the platform's
+   * Must this operator have a second factor? Super admins when the policy's
+   * `requireMfaForSuperAdmins` switch is on; everyone else when the policy asks for it. Operators are the platform's
    * "admins", and each owns their own seat, so all three switches (everyone,
    * admins, owners) reach them (TW-AUTH-032).
    */
   async mfaRequired(operator: Pick<OperatorRow, 'role'>): Promise<boolean> {
-    if (operator.role === 'super_admin') return true;
     const p = await this.policy.policy();
+    if (operator.role === 'super_admin') return p.requireMfaForSuperAdmins;
     return p.requireMfaForAll || p.requireMfaForAdmins || p.requireMfaForOwners;
   }
 
@@ -201,7 +201,11 @@ export class OperatorAuthService {
     }
     await this.rate.reset(lockKey);
 
-    if (operator.mfa_enabled) {
+    // A super admin is challenged only while the switch is on, even if they enrolled earlier.
+    if (
+      operator.mfa_enabled &&
+      (operator.role !== 'super_admin' || (await this.mfaRequired(operator)))
+    ) {
       const token = randomToken(32);
       await this.redis.setex(
         AuthKeys.mfaChallenge(token),
