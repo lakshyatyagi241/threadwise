@@ -1,2 +1,5 @@
 # Shell scripts must keep LF line endings, or bash fails on a Windows checkout with autocrlf.
 *.sh text eol=lf
+
+# SQL migrations must keep LF: the runner records a checksum of each file, and a CRLF checkout of the same SQL must not look "changed".
+*.sql text eol=lf
