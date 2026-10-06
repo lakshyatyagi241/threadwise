@@ -283,3 +283,16 @@ against real Postgres (8 files, 232 tests), web `eslint` on the feature, API `ts
 
 Scenario scripts, raw JSON results, logs and screenshots of both sides (list, add and edit modals, bulk bar, groups, import, attributes, 390 px, RTL, axe results) are in
 `_work/parity/contacts/` (outside git; the reference's screens are Reference's and are not published). Nothing in this file is Reference code or markup; the copy quoted is behaviour.
+
+## Playwright twin run: TW-CON-004 (Contact Hub conditions and groups)
+
+Spec `apps/web/e2e/contacts-attributes-tags/parity/TW-CON-004.twin.mjs`, depth full, Reference against this branch on a freshly migrated scratch database. Reference's Hub has fixed filters only (stage, consent, tag, group), so the condition scenarios run on our side and are judged against absolute expectations.
+
+| Area                                 | Result                                                                                                                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Add condition" (intended addition)  | opens the segment rule builder (AND/OR, nested groups) with one condition ready; Apply sends the tree as `rules=` (200), the list refetches, the URL and a count badge show it, Clear removes it |
+| Bulk "select all matching"           | carries the conditions in its saved filter                                                                                                                                                       |
+| A hand-edited `rules=`               | text that is not JSON reads as none; a JSON tree the server refuses answers 422 and the page stays alive                                                                                         |
+| Page probes (load, auth, perf, a11y) | same as Reference except the three below                                                                                                                                                            |
+
+Open (found by the run on the Hub page, not examined further, probably not from this change): the degraded-network probe reports a spinner that stays after failed data requests; the keyboard probe reaches 83 percent of controls (the table scrolls in a box, as on the campaign screen, which the probe cannot walk past); 32 small touch targets (the 16 px row checkboxes). Not covered: saving the conditions as a segment from the Hub, the grid view.
