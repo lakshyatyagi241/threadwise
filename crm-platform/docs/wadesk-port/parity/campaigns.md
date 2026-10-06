@@ -88,3 +88,18 @@ The builder reuses broadcasts' audience picker, send-time overrides panel, attri
 ## Intended difference: unofficial engine off by default (owner decision 2026-10-05)
 
 A campaign that names a personal-number (`baileys`) sender is refused with 422 `WA_UNOFFICIAL_DISABLED` unless a platform super admin turned the unofficial engine on; a blank sender or default engine resolves to `waba`; existing rows on that engine are kept, not sent, and resume when it is turned on. WaDesk always allowed it. Details and the full list of surfaces: [node-bridge-runtime.md](node-bridge-runtime.md#intended-difference-the-unofficial-engine-is-off-behind-a-platform-switch-owner-decision-2026-10-05).
+
+## Playwright twin run: WD-CAMP-004 (audience step: segments, tags, groups, filters)
+
+Spec `apps/web/e2e/campaigns/parity/WD-CAMP-004.twin.mjs`, depth full, against the running WaDesk and this branch on a freshly migrated scratch database. WaDesk's create screen is a stepped wizard with its own picker, so the audience scenarios run on our side only and are judged against absolute expectations.
+
+| Area                                                                  | Result                                                                                                                                                                                 |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Create-screen page probes (load, accessibility, degraded, auth, perf) | same as WaDesk                                                                                                                                                                         |
+| Segments, Tags and Groups rows and the three filters                  | present on load; empty rows say so                                                                                                                                                     |
+| Consent filter                                                        | refetches from the server (`unsubscribed=true`, 200); Clear filters restores the list                                                                                                  |
+| A segment picked as audience                                          | the chip checks, a draft saves (201); the test segment and draft are removed again                                                                                                     |
+| Keyboard reach                                                        | 64 of 76 in the probe; intended: the contact table scrolls in a fixed box so the probe stops at the first repeated position; tabbing 120 times reaches every control (checked by hand) |
+| Structure (landmarks, markup counts, nav collapse)                    | differs by design (our shell, a table instead of a wizard step); reviewed, no defect                                                                                                   |
+
+Open (minor, not from this change): 16 px checkboxes in the audience contact table count as small touch targets (33 on desktop against WaDesk's 5, mostly the 25 seeded contacts; the table is the existing shared picker). Not covered: the launch path (it sends), a broadcast-screen twin.
