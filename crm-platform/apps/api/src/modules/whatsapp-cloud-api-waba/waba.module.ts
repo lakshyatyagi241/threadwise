@@ -32,6 +32,7 @@ import {
   type WabaInboundSink,
 } from './waba-inbound-sink';
 import { WabaIngestService } from './waba-ingest.service';
+import { WabaReceiptRegistry } from './waba-receipt-registry';
 import { WabaTemplateEvents } from './waba-template-events.service';
 import { WabaGroupsService } from './waba-groups.service';
 import { WabaOrdersService } from './waba-orders.service';
@@ -81,6 +82,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaDiagnosticsService,
     WabaWebhookService,
     WabaIngestService,
+    WabaReceiptRegistry,
     WabaTemplateEvents,
     { provide: WABA_CONNECTIONS, useExisting: WabaConnectService },
     {
@@ -103,6 +105,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaConnectService,
     WabaConnectionsRepository,
     WabaIngestService,
+    WabaReceiptRegistry,
     WabaWebhookService,
     WabaClickSyncService,
     WABA_INBOUND_SINK,
