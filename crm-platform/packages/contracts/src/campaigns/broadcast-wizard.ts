@@ -60,7 +60,9 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
 // ---------------------------------------------------------------------------------------- variables
 
 /** `body.1` and `header.1` are the template's numbered placeholders, `button.0` the dynamic part of the first button's link. */
-export const wizardSlotKeySchema = z.string().regex(/^(?:(?:body|header)\.\d{1,2}|button\.\d{1,2})$/);
+export const wizardSlotKeySchema = z
+  .string()
+  .regex(/^(?:(?:body|header)\.\d{1,2}|button\.\d{1,2})$/);
 
 /** What a placeholder is filled with: a contact field or custom property (with a fallback for contacts that lack it), or fixed text. */
 export const wizardVariableSourceSchema = z.discriminatedUnion('kind', [
@@ -244,6 +246,7 @@ export const wizardCountryCountSchema = z.object({
   country: z.string().nullable(),
   count: z.number().int(),
 });
+export type WizardCountryCount = z.infer<typeof wizardCountryCountSchema>;
 
 /** What the audience comes to, by the same rules the send applies. */
 export const wizardAudienceCountSchema = z.object({
@@ -373,7 +376,11 @@ export const E164_PATTERN = /^\+[1-9]\d{7,14}$/;
  * `invalid` lists what is not E.164 and `tooMany` is true past WIZARD_TEST_MAX_RECIPIENTS. The wizard checks it while typing; the
  * API checks it again.
  */
-export function parseTestRecipients(raw: string): { valid: string[]; invalid: string[]; tooMany: boolean } {
+export function parseTestRecipients(raw: string): {
+  valid: string[];
+  invalid: string[];
+  tooMany: boolean;
+} {
   const seen = new Set<string>();
   const valid: string[] = [];
   const invalid: string[] = [];
@@ -475,7 +482,11 @@ export type ListWizardBroadcastsQuery = z.infer<typeof listWizardBroadcastsQuery
 
 export const wizardBroadcastListSchema = z.object({
   data: z.array(wizardBroadcastSchema),
-  page: z.object({ nextCursor: z.string().nullable(), hasMore: z.boolean(), limit: z.number().int() }),
+  page: z.object({
+    nextCursor: z.string().nullable(),
+    hasMore: z.boolean(),
+    limit: z.number().int(),
+  }),
 });
 export type WizardBroadcastList = z.infer<typeof wizardBroadcastListSchema>;
 
@@ -506,11 +517,13 @@ export interface WizardIssue {
     | 'retry_end_in_past';
 }
 
-const ruleOf = (s: WizardSchedule): RecurrenceRule | null => (s.mode === 'recurring' ? s.rule : null);
+const ruleOf = (s: WizardSchedule): RecurrenceRule | null =>
+  s.mode === 'recurring' ? s.rule : null;
 
 /** The moment the first run is due, or null for "now". */
 export function firstRunInstant(schedule: WizardSchedule): Date | null {
-  if (schedule.mode === 'scheduled') return zonedTimeToUtc(schedule.date, schedule.time, schedule.timezone);
+  if (schedule.mode === 'scheduled')
+    return zonedTimeToUtc(schedule.date, schedule.time, schedule.timezone);
   const rule = ruleOf(schedule);
   return rule ? zonedTimeToUtc(rule.startDate, rule.timeOfDay, rule.timezone) : null;
 }
@@ -538,11 +551,13 @@ export function wizardStepIssues(
     if (draft.templateId === null) out.push({ path: 'templateId', code: 'template_required' });
   }
   if (step === 2) {
-    if (!wizardAudienceHasSource(draft.audience)) out.push({ path: 'audience', code: 'audience_required' });
+    if (!wizardAudienceHasSource(draft.audience))
+      out.push({ path: 'audience', code: 'audience_required' });
   }
   if (step === 3) {
     for (const slot of ctx.slots ?? []) {
-      if (!draft.variables[slot]) out.push({ path: `variables.${slot}`, code: 'variable_unmapped' });
+      if (!draft.variables[slot])
+        out.push({ path: `variables.${slot}`, code: 'variable_unmapped' });
     }
   }
   if (step === 4) {
@@ -555,7 +570,10 @@ export function wizardStepIssues(
     if (s.mode === 'recurring') {
       const parsed = recurrenceRuleSchema.safeParse(s.rule);
       if (!parsed.success) out.push({ path: 'schedule.rule', code: 'recurrence_invalid' });
-      else if (zonedTimeToUtc(s.rule.startDate, s.rule.timeOfDay, s.rule.timezone).getTime() <= ctx.now.getTime()) {
+      else if (
+        zonedTimeToUtc(s.rule.startDate, s.rule.timeOfDay, s.rule.timezone).getTime() <=
+        ctx.now.getTime()
+      ) {
         out.push({ path: 'schedule.rule.startDate', code: 'schedule_in_past' });
       }
     }
@@ -570,7 +588,8 @@ export function wizardStepIssues(
           '00:00',
           zoneName,
         );
-        if (closes.getTime() <= ctx.now.getTime()) out.push({ path: 'retries.endDate', code: 'retry_end_in_past' });
+        if (closes.getTime() <= ctx.now.getTime())
+          out.push({ path: 'retries.endDate', code: 'retry_end_in_past' });
         const first = firstRunInstant(draft.schedule);
         if (first && closes.getTime() <= first.getTime()) {
           out.push({ path: 'retries.endDate', code: 'retry_end_before_send' });
@@ -593,9 +612,14 @@ export function wizardLaunchIssues(
  * When a retry window closes (the start of the day after `endDate` in its zone): the API stops retrying a message once the next
  * retry would fall at or after this instant.
  */
-export function retryWindowCloses(retries: { endDate?: string | null; timezone?: string | null }, fallbackZone: string): Date | null {
+export function retryWindowCloses(
+  retries: { endDate?: string | null; timezone?: string | null },
+  fallbackZone: string,
+): Date | null {
   if (!retries.endDate) return null;
-  const next = new Date(new Date(`${retries.endDate}T00:00:00Z`).getTime() + 86_400_000).toISOString().slice(0, 10);
+  const next = new Date(new Date(`${retries.endDate}T00:00:00Z`).getTime() + 86_400_000)
+    .toISOString()
+    .slice(0, 10);
   return zonedTimeToUtc(next, '00:00', retries.timezone ?? fallbackZone);
 }
 

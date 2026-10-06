@@ -212,6 +212,16 @@ export class CampaignsService {
     return { campaign: toCampaign(row), message: 'Campaign updated.' };
   }
 
+  /** The template gate of TW-CAMP-005 for a caller that launches a template campaign by its own route (the broadcast wizard). */
+  assertTemplateUsable(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    engine: string,
+  ): Promise<number | null> {
+    return this.template(tx, orgId, 'template', uuid, engine);
+  }
+
   // ------------------------------------------------------------------ shared
 
   /** Everything that can be decided without a database: time zone, end date, body, guardrails. */
