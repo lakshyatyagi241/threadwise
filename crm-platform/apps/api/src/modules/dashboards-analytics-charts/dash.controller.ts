@@ -24,9 +24,11 @@ export class DashboardController {
 
   @Get('summary')
   @RequirePermission('dash.dashboard.read')
-  @ApiOperation({ summary: 'KPI cards, sparkline and funnel for a range (24h, 7d, 30d, qtd)' })
+  @ApiOperation({
+    summary: 'KPI cards, sparkline and funnel for a range (24h, 7d, 30d, qtd, custom)',
+  })
   summary(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
-    return this.dash.summary(q.range);
+    return this.dash.summary(q.range, undefined, q);
   }
 
   @Get('widgets')
@@ -36,7 +38,7 @@ export class DashboardController {
       'Contacts, campaigns, devices, templates, inbox, pipeline and activity cards for a range',
   })
   widgets(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
-    return this.dash.widgets(q.range);
+    return this.dash.widgets(q.range, undefined, q);
   }
 
   @Get('throughput')
@@ -45,7 +47,7 @@ export class DashboardController {
     summary: 'Sent, delivered and failed per bucket, with peak and average per hour',
   })
   throughput(@Query(zodPipe(dashSummaryQuerySchema)) q: DashSummaryQuery) {
-    return this.dash.throughput(q.range);
+    return this.dash.throughput(q.range, undefined, q);
   }
 }
 
