@@ -2,8 +2,10 @@
  * campaigns: tables ported from WaDesk. Mirrors migrations/20261001103000_camp_wadesk_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   date,
   foreignKey,
   index,
@@ -16,6 +18,7 @@ import {
   time,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
@@ -23,6 +26,61 @@ import { contacts } from '../crm';
 import { flows } from '../flow-builder-editor/tables';
 import { organizations, users } from '../foundation';
 import { waTemplates } from '../message-templates/tables';
+
+/**
+ * A recurring broadcast: one row per series, one child `wpcampaigns` row per occurrence (`series_id`, `occurrence_no`). The worker's
+ * planner creates the child that is due and moves `next_index` / `next_run_at` along the rule.
+ */
+export const campSeries = pgTable(
+  'camp_series',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    status: text('status').notNull().default('active'),
+    rule: jsonb('rule').notNull(),
+    blueprint: jsonb('blueprint').notNull(),
+    templateId: idColumn('template_id'),
+    provider: text('provider').notNull(),
+    deviceId: idColumn('device_id'),
+    nextIndex: integer('next_index').notNull().default(0),
+    nextRunAt: timestamp('next_run_at', { withTimezone: true }),
+    occurrencesCreated: integer('occurrences_created').notNull().default(0),
+    occurrencesSkipped: integer('occurrences_skipped').notNull().default(0),
+    lastOccurrenceAt: timestamp('last_occurrence_at', { withTimezone: true }),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('camp_series_org_id_uuid_key').on(t.orgId, t.uuid),
+    check('ck_camp_series_status', sql`status IN ('active', 'paused', 'ended', 'cancelled')`),
+    foreignKey({
+      name: 'fk_camp_series_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_series_template',
+      columns: [t.orgId, t.templateId],
+      foreignColumns: [waTemplates.orgId, waTemplates.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_camp_series_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_camp_series_due')
+      .on(t.nextRunAt)
+      .where(sql`status = 'active' AND next_run_at IS NOT NULL`),
+    index('idx_camp_series_org_status').on(t.orgId, t.status, t.id.desc()),
+  ],
+);
+export type CampSeriesRow = typeof campSeries.$inferSelect;
 
 export const wpcampaigns = pgTable(
   'wpcampaigns',
@@ -84,6 +142,13 @@ export const wpcampaigns = pgTable(
     createdBy: idColumn('created_by'),
     provider: text('provider').notNull().default('baileys'),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
+    /** The broadcast wizard's `{ draft, launch? }`; null on a campaign the classic builder made. */
+    wizard: jsonb('wizard'),
+    seriesId: idColumn('series_id'),
+    occurrenceNo: integer('occurrence_no'),
+    runAt: timestamp('run_at', { withTimezone: true }),
+    retryEnabled: boolean('retry_enabled').notNull().default(false),
+    retryUntil: timestamp('retry_until', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -129,6 +194,21 @@ export const wpcampaigns = pgTable(
     index('idx_wpcampaigns_created_by').on(t.orgId, t.createdBy),
     index('idx_wpcampaigns_scheduled_message_id').on(t.orgId, t.scheduledMessageId),
     index('idx_wpcampaigns_provider').on(t.orgId, t.provider),
+    foreignKey({
+      name: 'fk_wpcampaigns_series',
+      columns: [t.orgId, t.seriesId],
+      foreignColumns: [campSeries.orgId, campSeries.id],
+    }).onDelete('set null'),
+    check('ck_wpcampaigns_wizard_series', sql`(series_id IS NULL) = (occurrence_no IS NULL)`),
+    uniqueIndex('uq_wpcampaigns_series_occurrence')
+      .on(t.orgId, t.seriesId, t.occurrenceNo)
+      .where(sql`series_id IS NOT NULL`),
+    index('idx_wpcampaigns_wizard')
+      .on(t.orgId, t.id.desc())
+      .where(sql`wizard IS NOT NULL`),
+    index('idx_wpcampaigns_retry')
+      .on(t.retryEnabled)
+      .where(sql`retry_enabled`),
   ],
 );
 
@@ -163,6 +243,13 @@ export const wpCampaignContacts = pgTable(
     isUnsubscribed: boolean('is_unsubscribed').notNull().default(false),
     unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true }),
     errorMessage: text('error_message'),
+    /** The provider's error code of the last failure (`131049`: Meta's frequency cap). */
+    errorCode: text('error_code'),
+    /** scheduled, sending, sent, recovered or exhausted: see the 20261031090000 migration. */
+    retryState: text('retry_state'),
+    retryCount: smallint('retry_count').notNull().default(0),
+    retryFirstSentAt: timestamp('retry_first_sent_at', { withTimezone: true }),
+    retryNextAt: timestamp('retry_next_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -170,6 +257,16 @@ export const wpCampaignContacts = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_wp_campaign_contacts_org_id_uuid').on(t.orgId, t.uuid),
+    check(
+      'ck_wp_campaign_contacts_retry_state',
+      sql`retry_state IS NULL OR retry_state IN ('scheduled', 'sending', 'sent', 'recovered', 'exhausted')`,
+    ),
+    index('idx_wp_campaign_contacts_retry_due')
+      .on(t.retryNextAt)
+      .where(sql`retry_state = 'scheduled'`),
+    index('idx_wp_campaign_contacts_retry_open')
+      .on(t.orgId, t.campaignId)
+      .where(sql`retry_state IN ('scheduled', 'sending', 'sent')`),
     foreignKey({
       name: 'fk_wp_campaign_contacts_org',
       columns: [t.orgId],
@@ -199,3 +296,100 @@ export const wpCampaignContacts = pgTable(
 
 export type WpCampaignContactsRow = typeof wpCampaignContacts.$inferSelect;
 export type NewWpCampaignContactsRow = typeof wpCampaignContacts.$inferInsert;
+
+/** One row per frequency-cap retry actually executed: the proof it ran once, and when. */
+export const campRetryAttempts = pgTable(
+  'camp_retry_attempts',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    campaignId: idColumn('campaign_id').notNull(),
+    recipientId: idColumn('recipient_id').notNull(),
+    attemptNo: smallint('attempt_no').notNull(),
+    scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
+    executedAt: timestamp('executed_at', { withTimezone: true }).notNull().defaultNow(),
+    outcome: text('outcome').notNull(),
+    providerMessageId: text('provider_message_id'),
+    errorCode: text('error_code'),
+    errorMessage: text('error_message'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('camp_retry_attempts_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_camp_retry_attempts_recipient_attempt').on(t.orgId, t.recipientId, t.attemptNo),
+    check('ck_camp_retry_attempts_outcome', sql`outcome IN ('sent', 'frequency_cap', 'failed')`),
+    foreignKey({
+      name: 'fk_camp_retry_attempts_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_retry_attempts_campaign',
+      columns: [t.orgId, t.campaignId],
+      foreignColumns: [wpcampaigns.orgId, wpcampaigns.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_retry_attempts_recipient',
+      columns: [t.orgId, t.recipientId],
+      foreignColumns: [wpCampaignContacts.orgId, wpCampaignContacts.id],
+    }).onDelete('cascade'),
+    index('idx_camp_retry_attempts_campaign').on(t.orgId, t.campaignId, t.executedAt),
+  ],
+);
+export type CampRetryAttemptsRow = typeof campRetryAttempts.$inferSelect;
+
+/** A test message sent from the wizard: logged, and charged by the wallet when its delivery is reported. */
+export const campTestSends = pgTable(
+  'camp_test_sends',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    campaignId: idColumn('campaign_id').notNull(),
+    templateId: idColumn('template_id'),
+    toPhone: text('to_phone').notNull(),
+    status: text('status').notNull().default('sent'),
+    providerMessageId: text('provider_message_id'),
+    errorCode: text('error_code'),
+    errorMessage: text('error_message'),
+    renderedBody: text('rendered_body'),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('camp_test_sends_org_id_uuid_key').on(t.orgId, t.uuid),
+    check('ck_camp_test_sends_status', sql`status IN ('sent', 'delivered', 'read', 'failed')`),
+    foreignKey({
+      name: 'fk_camp_test_sends_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_test_sends_campaign',
+      columns: [t.orgId, t.campaignId],
+      foreignColumns: [wpcampaigns.orgId, wpcampaigns.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_test_sends_template',
+      columns: [t.orgId, t.templateId],
+      foreignColumns: [waTemplates.orgId, waTemplates.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_camp_test_sends_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_camp_test_sends_campaign').on(t.orgId, t.campaignId, t.id.desc()),
+    index('idx_camp_test_sends_message')
+      .on(t.providerMessageId)
+      .where(sql`provider_message_id IS NOT NULL`),
+  ],
+);
+export type CampTestSendsRow = typeof campTestSends.$inferSelect;
