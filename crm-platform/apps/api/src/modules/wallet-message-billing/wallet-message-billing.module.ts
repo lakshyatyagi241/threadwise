@@ -54,6 +54,7 @@ const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule
     MessageBillingService,
     WalletGateService,
     WalletSettingsService,
+    WalletQueryService,
     RateCardService,
     BillingCurrencyService,
   ],
