@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { senderKeySchema } from '../broadcasts/broadcast';
 import { segmentRulesSchema } from '../segments/rules';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
 import {
@@ -146,6 +147,8 @@ export const wizardDraftSchema = z.object({
   /** Step 1. */
   name: z.string().trim().max(WIZARD_NAME_MAX).default(''),
   templateId: uuidSchema.nullable().default(null),
+  /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
+  senderKey: senderKeySchema.nullable().default(null),
   /** Step 2. */
   audience: wizardAudienceSchema.default({ groupIds: [], segmentIds: [], rules: null }),
   /** Step 3. Keys are the template's placeholders. */
@@ -507,6 +510,7 @@ export interface WizardIssue {
   code:
     | 'name_required'
     | 'template_required'
+    | 'sender_required'
     | 'audience_required'
     | 'variable_unmapped'
     | 'schedule_in_past'
@@ -549,6 +553,7 @@ export function wizardStepIssues(
   if (step === 1) {
     if (draft.name.trim() === '') out.push({ path: 'name', code: 'name_required' });
     if (draft.templateId === null) out.push({ path: 'templateId', code: 'template_required' });
+    if (draft.senderKey === null) out.push({ path: 'senderKey', code: 'sender_required' });
   }
   if (step === 2) {
     if (!wizardAudienceHasSource(draft.audience))
@@ -627,3 +632,21 @@ export function retryWindowCloses(
 export function retryInstant(firstSentAt: Date, k: number): Date {
   return new Date(firstSentAt.getTime() + k * WIZARD_RETRY_INTERVAL_HOURS * 3_600_000);
 }
+
+// ---------------------------------------------------------------------------------------- step 1: senders
+
+/** A connected WhatsApp number a broadcast can be sent from. */
+export const wizardSenderSchema = z.object({
+  /** `<engine>:<uuid>`. */
+  key: senderKeySchema,
+  label: z.string(),
+  /** `+<digits>`, or empty when the number is not known. */
+  phone: z.string(),
+  engine: z.string(),
+  engineLabel: z.string(),
+  /** The workspace's default engine: the one preselected. */
+  isDefault: z.boolean(),
+});
+export type WizardSender = z.infer<typeof wizardSenderSchema>;
+export const wizardSendersResponseSchema = z.object({ data: z.array(wizardSenderSchema) });
+export type WizardSendersResponse = z.infer<typeof wizardSendersResponseSchema>;

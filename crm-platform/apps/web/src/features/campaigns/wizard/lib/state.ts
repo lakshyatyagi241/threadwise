@@ -25,6 +25,7 @@ export interface WizardState {
 export type WizardAction =
   | { type: 'name'; name: string }
   | { type: 'template'; template: WizardTemplate | null }
+  | { type: 'sender'; senderKey: string | null }
   | { type: 'audience'; patch: Partial<WizardAudience> }
   | { type: 'variable'; slot: string; source: WizardVariableSource | null }
   | { type: 'variables'; variables: WizardVariables }
@@ -67,6 +68,10 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
         },
       };
     }
+    case 'sender':
+      return action.senderKey === d.senderKey
+        ? state
+        : { ...state, draft: { ...d, senderKey: action.senderKey } };
     case 'audience':
       return { ...state, draft: { ...d, audience: { ...d.audience, ...action.patch } } };
     case 'variable': {

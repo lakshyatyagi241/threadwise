@@ -23,6 +23,7 @@ import { BroadcastsPagination } from './broadcasts-pagination';
 import { BroadcastsTable } from './broadcasts-table';
 import { RefreshIcon, SearchIcon } from './icons';
 import { KpiStrip } from './kpi-strip';
+import { WizardBroadcastsPanel } from '@/features/campaigns/wizard/components/broadcasts-panel';
 import { NewBroadcast } from './new-broadcast';
 import { ListRail } from './list-rail';
 
@@ -153,6 +154,8 @@ export function BroadcastsScreen() {
 
           <KpiStrip stats={summary.data?.stats} />
 
+          <WizardBroadcastsPanel />
+
           <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-5 py-4">
               <div>
@@ -213,7 +216,7 @@ export function BroadcastsScreen() {
                         )}
                         {canCreate && (
                           <Link
-                            href="/broadcasts/create"
+                            href="/campaigns/wizard"
                             className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground"
                           >
                             {t('createBroadcast')}

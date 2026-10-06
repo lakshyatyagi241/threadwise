@@ -119,6 +119,7 @@ const DYNAMIC = [
   ...WIZARD_CONTACT_FIELDS.map((f) => `campaigns.wizard.fields.${f}`),
   ...WIZARD_TEST_STATUSES.map((s) => `campaigns.wizard.test.status.${s}`),
   ...WIZARD_SCHEDULE_MODES.map((m) => `campaigns.wizard.send.mode.${m}`),
+  ...WIZARD_SCHEDULE_MODES.map((m) => `campaigns.wizard.panel.mode.${m}`),
   ...WIZARD_SCHEDULE_MODES.map((m) => `campaigns.wizard.send.modeHint.${m}`),
   ...RECURRENCE_FREQUENCIES.flatMap((f) => [
     `campaigns.wizard.send.freq.${f}`,
@@ -138,6 +139,7 @@ const DYNAMIC = [
   ...[
     'name_required',
     'template_required',
+    'sender_required',
     'audience_required',
     'variable_unmapped',
     'schedule_in_past',

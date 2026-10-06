@@ -7,8 +7,10 @@ const ctx = { slots: ['body.1', 'body.2'], now: NOW };
 describe('stepIssues', () => {
   it('step 1 needs a name and a template', () => {
     const codes = stepIssues(1, draft(), ctx).map((i) => i.code);
-    expect(codes).toEqual(['name_required', 'template_required']);
-    expect(stepIssues(1, draft({ name: 'A', templateId: uuid(1) }), ctx)).toEqual([]);
+    expect(codes).toEqual(['name_required', 'template_required', 'sender_required']);
+    expect(
+      stepIssues(1, draft({ name: 'A', templateId: uuid(1), senderKey: `waba:${uuid(31)}` }), ctx),
+    ).toEqual([]);
   });
 
   it('step 2 needs a source, and blocks a known empty audience', () => {

@@ -124,6 +124,7 @@ describe('flow', () => {
     const ok = draft({
       name: 'A',
       templateId: uuid(1),
+      senderKey: `waba:${uuid(31)}`,
       audience: { groupIds: [uuid(11)], segmentIds: [], rules: null },
       variables: { 'body.1': { kind: 'fixed', text: 'x' } },
     });

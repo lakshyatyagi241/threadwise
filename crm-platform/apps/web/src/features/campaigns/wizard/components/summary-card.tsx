@@ -7,6 +7,7 @@ import {
   type WizardAudienceCount,
   type WizardCreditCheck,
   type WizardDraft,
+  type WizardSender,
   type WizardTemplate,
   type WizardAudienceSources,
 } from '@crm/contracts';
@@ -56,6 +57,7 @@ const WIZARD_FIELD_LABELS: ReadonlySet<string> = new Set(WIZARD_CONTACT_FIELDS);
 export function SummaryCard({
   draft,
   template,
+  sender,
   sources,
   count,
   credit,
@@ -63,6 +65,7 @@ export function SummaryCard({
 }: {
   draft: WizardDraft;
   template: WizardTemplate | null;
+  sender: WizardSender | null;
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: WizardCreditCheck | undefined;
@@ -95,6 +98,16 @@ export function SummaryCard({
               <span className="font-medium">{template.name}</span>
               <Chip>{template.language}</Chip>
               <Chip tone="brand">{tc(template.category)}</Chip>
+            </span>
+          ) : (
+            <span className="text-muted-foreground">{t('none')}</span>
+          )}
+        </Row>
+        <Row label={t('sumSender')} step={1} onEdit={onEdit}>
+          {sender ? (
+            <span>
+              {sender.label}
+              {sender.phone ? ` (${sender.phone})` : ''}
             </span>
           ) : (
             <span className="text-muted-foreground">{t('none')}</span>

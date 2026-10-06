@@ -133,6 +133,7 @@ describe('step validation (the web before Next, the API at launch)', () => {
   const ok = draft({
     name: 'Offer',
     templateId: T,
+    senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
     audience: { groupIds: [T], segmentIds: [], rules: null },
     variables: { 'body.1': { kind: 'field', field: 'first_name' } },
   });
@@ -141,6 +142,7 @@ describe('step validation (the web before Next, the API at launch)', () => {
     expect(wizardStepIssues(1, EMPTY_WIZARD_DRAFT, { now: NOW }).map((i) => i.code)).toEqual([
       'name_required',
       'template_required',
+      'sender_required',
     ]);
     expect(wizardStepIssues(1, ok, { now: NOW })).toEqual([]);
     expect(wizardStepIssues(1, draft({ name: '   ', templateId: T }), { now: NOW })[0]?.code).toBe(
@@ -236,6 +238,7 @@ describe('step validation (the web before Next, the API at launch)', () => {
     expect(issues).toEqual([
       'name_required',
       'template_required',
+      'sender_required',
       'audience_required',
       'variable_unmapped',
     ]);

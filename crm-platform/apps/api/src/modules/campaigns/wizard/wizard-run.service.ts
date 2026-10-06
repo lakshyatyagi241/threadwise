@@ -90,7 +90,20 @@ export class WizardRunService {
     tx: Tx,
     orgId: number,
     template: TemplateListRow,
+    senderKey: string | null,
   ): Promise<{ provider: string; deviceId: number | null }> {
+    // The number the person picked in step 1 wins; a draft without one (an old one) falls back to the template's own number.
+    if (senderKey) {
+      const [picked] = await this.senders.resolve(tx, orgId, [senderKey]);
+      if (!picked) {
+        throw new AppError(
+          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+          'The WhatsApp number you picked is not connected.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      return { provider: picked.engine, deviceId: picked.id };
+    }
     const def = await this.senders.defaultEngine(tx, orgId);
     const engine = engineOf(template, def);
     if (template.configUuid) {
@@ -131,7 +144,7 @@ export class WizardRunService {
     sender: { provider: string; deviceId: number | null };
     count: WizardAudienceCount;
   }> {
-    const sender = await this.sender(tx, orgId, template);
+    const sender = await this.sender(tx, orgId, template, draft.senderKey);
     const count = await this.audience.count(tx, orgId, draft.audience);
     if (count.recipients === 0) {
       throw new AppError(

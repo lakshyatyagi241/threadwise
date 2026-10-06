@@ -67,6 +67,13 @@ export class WizardController {
     return this.read.listTemplates();
   }
 
+  @Get('senders')
+  @RequirePermission('camp.campaigns.create')
+  @ApiOperation({ summary: 'Connected WhatsApp numbers a broadcast can be sent from (step 1)' })
+  senders() {
+    return this.read.listSenders();
+  }
+
   @Get('audience-sources')
   @RequirePermission('camp.campaigns.create')
   @ApiOperation({ summary: 'Contact groups and segments with their member counts (step 2)' })

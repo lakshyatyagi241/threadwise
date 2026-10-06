@@ -84,6 +84,49 @@ describe('step 1: templates', () => {
   });
 });
 
+describe('step 1: the sender', () => {
+  it('lists the connected numbers, the default engine first', async () => {
+    const w = await world(lab, 'bws-s1');
+    const res = await wiz(lab, w.t.admin).get('/senders');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.data).toMatchObject([
+      { key: `waba:${w.config}`, label: 'Main number', engine: 'waba' },
+    ]);
+  });
+
+  it("a number that is not connected, or another workspace's, is refused on the draft", async () => {
+    const a = await world(lab, 'bws-s2a');
+    const b = await world(lab, 'bws-s2b');
+    const forged = await wiz(lab, b.t.admin).post('/drafts', { senderKey: `waba:${a.config}` });
+    expect(forged.status).toBe(422);
+    expect(problem(forged).errors[0]).toMatchObject({ path: 'senderKey' });
+  });
+
+  it('the picked number is the one that sends, even when the template belongs to another number', async () => {
+    const w = await world(lab, 'bws-s3');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const second = await owner().query(
+      `INSERT INTO wa_provider_configs (org_id, provider, status, phone_number, display_label, connected_at)
+       VALUES ($1, 'waba', 'connected', '+15559998888', 'Second number', now()) RETURNING id, uuid`,
+      [w.t.orgId],
+    );
+    const ids = await people(lab, w.t, [{}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(w, g, { senderKey: `waba:${second.rows[0].uuid}` }),
+    );
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const row = (await owner().query(`SELECT device_id FROM wpcampaigns WHERE uuid = $1`, [d.id]))
+      .rows[0];
+    expect(Number(row.device_id)).toBe(Number(second.rows[0].id));
+  });
+});
+
 describe('step 2: audience sources and the count', () => {
   it('lists the groups and segments with member counts', async () => {
     const w = await world(lab, 'bwa1');
@@ -581,6 +624,7 @@ describe('step 4: launch', () => {
     expect(problem(res).code).toBe('CAMP_WIZARD_INCOMPLETE');
     expect(problem(res).errors.map((e) => [e.path, e.message])).toEqual([
       ['name', 'name_required'],
+      ['senderKey', 'sender_required'],
       ['audience', 'audience_required'],
       ['variables.body.1', 'variable_unmapped'],
     ]);
@@ -963,16 +1007,16 @@ describe('tenant isolation and permissions', () => {
 describe('the sandbox sender is real wiring, not a stub of the wizard', () => {
   it('a workspace without a connected number cannot launch (422 CAMP_TEMPLATE_NOT_ALLOWED)', async () => {
     const t = await lab.api.signup('bwn1');
-    const { template } = await addSender(owner(), t);
+    const { template, config } = await addSender(owner(), t);
+    await payPerMessage(lab, t, 1_000_000);
+    const ids = await people(lab, t, [{}]);
+    const g = await group(owner(), t, 'G', ids);
+    const w = { t, config, template };
+    const d = await makeDraft(lab, w, readyDraft(w, g));
     await owner().query(
       `UPDATE wa_provider_configs SET status = 'disconnected' WHERE org_id = $1`,
       [t.orgId],
     );
-    await payPerMessage(lab, t, 1_000_000);
-    const ids = await people(lab, t, [{}]);
-    const g = await group(owner(), t, 'G', ids);
-    const w = { t, config: '', template };
-    const d = await makeDraft(lab, w, readyDraft(w, g));
     const res = await wiz(lab, t.admin).post(`/drafts/${d.id}/launch`, {
       rowVersion: d.rowVersion,
     });
