@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { StoreDashboard } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -36,6 +40,7 @@ export class DashboardService {
     private readonly data: DashboardRepository,
     @Inject(ECOM_PLAN_GATE) private readonly plan: EcomPlanGate,
     @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   async get(kind: StoreKind, uuid: string): Promise<StoreDashboard> {
@@ -90,7 +95,9 @@ export class DashboardService {
         this.data.contactGroups(tx, orgId),
         this.data.coupons(tx, orgId),
         this.data.offerProducts(tx, orgId, kind),
-        kind === 'woocommerce' ? this.data.senders(tx, orgId) : Promise.resolve([]),
+        kind === 'woocommerce'
+          ? this.data.senders(tx, orgId, await this.unofficial.isEnabled())
+          : Promise.resolve([]),
       ]);
       return {
         products,

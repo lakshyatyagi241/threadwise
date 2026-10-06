@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, cn, useToast } from '@crm/ui';
 import type { ChannelResponse } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { offerChannels } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { refreshChannels, useChannels } from '../api/hooks';
 import { inboxApi } from '../api/service';
 import { errorCode } from '../lib/errors';
@@ -65,7 +67,8 @@ export function ChannelsList({ className }: { className?: string }) {
     }
   }
 
-  const channels = q.data?.data ?? [];
+  const unofficial = useUnofficialWhatsapp();
+  const channels = offerChannels(q.data?.data ?? [], unofficial);
 
   return (
     <div className={cn('space-y-4', className)} data-testid="inbox-channels">
@@ -124,7 +127,9 @@ export function ChannelsList({ className }: { className?: string }) {
                 )}
               </div>
               <Badge
-                tone={c.status === 'connected' ? 'success' : c.status === 'error' ? 'danger' : 'warning'}
+                tone={
+                  c.status === 'connected' ? 'success' : c.status === 'error' ? 'danger' : 'warning'
+                }
               >
                 {t(`status.${c.status}`)}
               </Badge>
@@ -146,7 +151,9 @@ export function ChannelsList({ className }: { className?: string }) {
               )}
             </ul>
             <p className="text-xs text-muted-foreground">
-              {c.lastEventAt ? t('lastEvent', { when: fullStamp(c.lastEventAt, locale) }) : t('noEvents')}
+              {c.lastEventAt
+                ? t('lastEvent', { when: fullStamp(c.lastEventAt, locale) })
+                : t('noEvents')}
             </p>
             {manage && (
               <div className="flex justify-end">

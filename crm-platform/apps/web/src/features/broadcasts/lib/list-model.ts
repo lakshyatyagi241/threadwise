@@ -1,5 +1,7 @@
 /** The pure half of the broadcast list screen (WD-BCAST-001, 002): filters in the URL, labels, tones, schedule text. */
 
+import { isUnofficialEngine } from '@/lib/unofficial-whatsapp';
+
 export const RANGES = ['all', '7d', '30d', '90d'] as const;
 export type Range = (typeof RANGES)[number];
 
@@ -70,6 +72,16 @@ const PROVIDERS: Record<string, string> = {
   twilio: 'Twilio',
 };
 export const providerLabel = (p: string | null) => PROVIDERS[(p ?? '').toLowerCase()] ?? '—';
+
+/**
+ * The engine tag of an existing broadcast. One sent through the unofficial engine keeps showing (the data is preserved) but reads
+ * `disabledLabel` ("Unofficial (disabled)") while the platform has the engine switched off.
+ */
+export const providerTag = (
+  p: string | null,
+  unofficialEnabled: boolean,
+  disabledLabel: string,
+): string => (isUnofficialEngine(p) && !unofficialEnabled ? disabledLabel : providerLabel(p));
 
 /** WaDesk showed `BR-0042` from the numeric id; ids are uuids here, so the reference is the start of the uuid. */
 export const reference = (uuid: string) => `BR-${uuid.slice(0, 8).toUpperCase()}`;

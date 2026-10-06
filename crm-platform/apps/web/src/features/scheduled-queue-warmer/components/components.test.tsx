@@ -14,6 +14,7 @@ import {
   type WarmerList,
 } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
+import { ENTITLEMENTS_KEY } from '@/lib/use-unofficial-whatsapp';
 import { initialDraft, type Draft } from '../lib/composer-model';
 
 const state = vi.hoisted(() => ({
@@ -57,14 +58,22 @@ const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'scheduled-queue-warmer.json'), 'utf8'),
 ) as Record<string, unknown>;
 
-const html = (el: ReactElement) =>
-  renderToStaticMarkup(
+/** `unofficial`: the platform has switched the unofficial WhatsApp engine on (the entitlement the workspace reads). */
+const renderWith = (el: ReactElement, unofficial: boolean) => {
+  const client = new QueryClient();
+  if (unofficial) {
+    client.setQueryData(ENTITLEMENTS_KEY, { features: ['automation', 'unofficial_whatsapp'] });
+  }
+  return renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
-      <QueryClientProvider client={new QueryClient()}>
+      <QueryClientProvider client={client}>
         <ToastProvider dismissLabel="Dismiss">{el}</ToastProvider>
       </QueryClientProvider>
     </NextIntlClientProvider>,
   );
+};
+const html = (el: ReactElement) => renderWith(el, true);
+const htmlOff = (el: ReactElement) => renderWith(el, false);
 
 const G1 = '11111111-1111-4111-8111-111111111111';
 
@@ -190,6 +199,13 @@ describe('scheduled list screen', () => {
 });
 
 describe('composer screen', () => {
+  it('while the platform has unofficial WhatsApp off, offers only the official senders', () => {
+    const out = htmlOff(<ComposerScreen />);
+    expect(out).toContain('Cloud line');
+    expect(out).not.toContain('Shop line');
+    expect(out).not.toContain('Unofficial API');
+  });
+
   it('opens on the basics step with the sender picker, the type tiles and the stepper', () => {
     const out = html(<ComposerScreen />);
     for (const s of [

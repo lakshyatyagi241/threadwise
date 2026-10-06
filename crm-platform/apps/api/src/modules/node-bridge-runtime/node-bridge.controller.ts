@@ -1,12 +1,14 @@
-import { Body, Controller, Get, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   nodeBridgeTestRequestSchema,
   updateNodeBridgeSchema,
   updateNodePacingSchema,
+  updateUnofficialWhatsappSchema,
   type NodeBridgeTestRequest,
   type UpdateNodeBridgeInput,
   type UpdateNodePacingInput,
+  type UpdateUnofficialWhatsappInput,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -55,6 +57,20 @@ export class NodeBridgeController {
   @ApiOperation({ summary: 'Save the sender pacing and batching ("Update timing")' })
   updatePacing(@Body(zodPipe(updateNodePacingSchema)) body: UpdateNodePacingInput) {
     return this.settings.updatePacing(body, this.operatorId());
+  }
+
+  @Put('unofficial')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Turn the unofficial WhatsApp engine (personal numbers over Baileys) on or off for the whole platform',
+    description:
+      'Off by default. Nothing is deleted either way: devices, broadcasts and channels stay and work again when it is turned on. Audited as platform.whatsapp_unofficial.updated.',
+  })
+  updateUnofficial(
+    @Body(zodPipe(updateUnofficialWhatsappSchema)) body: UpdateUnofficialWhatsappInput,
+  ) {
+    return this.settings.updateUnofficial(body, this.operatorId());
   }
 
   @Post('test')

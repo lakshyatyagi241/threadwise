@@ -1,3 +1,4 @@
+import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import { getQueueToken } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
@@ -80,8 +81,9 @@ beforeAll(async () => {
     cap,
     h.app.get(SenderLease),
     h.app.get(WarmerService),
+    h.app.get(UNOFFICIAL_WHATSAPP_GATE),
   );
-  dueService = new ScheduledDueService(db, queue as never);
+  dueService = new ScheduledDueService(db, queue as never, h.app.get(UNOFFICIAL_WHATSAPP_GATE));
 }, 240_000);
 
 afterAll(async () => {

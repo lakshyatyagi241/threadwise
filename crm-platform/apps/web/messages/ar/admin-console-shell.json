@@ -48,6 +48,9 @@
         "privacy": "الخصوصية والتتبع",
         "infrastructure": "البنية التحتية",
         "localization": "التوطين"
+      },
+      "badges": {
+        "notSupported": "غير مدعوم"
       }
     },
     "search": {

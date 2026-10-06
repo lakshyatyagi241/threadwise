@@ -1,8 +1,9 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   PLAN_FEATURE_KEYS,
+  UNOFFICIAL_WHATSAPP_FEATURE_KEY,
   type BillingPlan,
   type BillingPlansResponse,
   type BillingStatus,
@@ -16,6 +17,10 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanCatalogService } from './plan-catalog.service';
 import {
@@ -56,6 +61,7 @@ export class BillingService {
     private readonly outbox: OutboxService,
     private readonly settings: PlatformSettingsService,
     private readonly subscriptions: SubscriptionService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   // --- reads --------------------------------------------------------------------------------------------------------------------
@@ -68,7 +74,11 @@ export class BillingService {
   /** The feature keys the workspace's plan includes: the web app draws locks, crowns and paywalls from this (WD-PLAN-020, 021). */
   async entitlementKeys(): Promise<EntitlementsResponse> {
     const e = await this.mustResolve(RequestContextStore.require().orgId);
-    return { features: PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k)) };
+    const features: string[] = PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k));
+    // `unofficial_whatsapp` is not a plan feature: it is present for every workspace (platform-owned included) only while a
+    // platform super admin has the unofficial engine switched on, and the web hides every personal-number surface without it.
+    if (await this.unofficial.isEnabled()) features.push(UNOFFICIAL_WHATSAPP_FEATURE_KEY);
+    return { features };
   }
 
   async plans(canManage: boolean, unlocks?: PlanFeatureKey): Promise<BillingPlansResponse> {

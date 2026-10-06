@@ -11,6 +11,8 @@ import { AppGate, closedAppGate, type AppRouteGate } from './app-gate';
 
 const GATES: AppRouteGate[] = [
   { href: '/appointments', feature: 'appointment_booking', labelKey: 'shell.nav.appointments' },
+  // The Warmer exists only while the platform has the unofficial WhatsApp engine on (a platform switch, not a Marketplace app).
+  { href: '/warmer', feature: 'unofficial_whatsapp', labelKey: 'shell.nav.appointments' },
 ];
 
 /** Static renders with the real English and Arabic messages: no browser, so these prove what is and is not mounted, not how it looks. */
@@ -83,5 +85,26 @@ describe('AppGate', () => {
     const html = render('/appointments', [], '/marketplace/apps', 'ar');
     expect(html).toContain('المواعيد');
     expect(html).not.toContain('APPOINTMENTS PAGE');
+  });
+});
+
+describe('a screen of the unofficial WhatsApp engine (platform switch)', () => {
+  it('is closed while the switch is off, and says it is not supported instead of pointing to the Marketplace', () => {
+    const html = render('/warmer', ['automation', 'marketplace'], '/marketplace/apps');
+    expect(html).not.toContain('APPOINTMENTS PAGE');
+    expect(html).toContain('app-unavailable');
+    expect(html).toContain('official WhatsApp Business API');
+    expect(html).not.toContain('Marketplace');
+    expect(html).not.toContain('/marketplace');
+  });
+
+  it('opens once the entitlement carries the switch', () => {
+    expect(render('/warmer', ['unofficial_whatsapp'], null)).toContain('APPOINTMENTS PAGE');
+  });
+
+  it('says it in Arabic too', () => {
+    const html = render('/warmer', [], '/marketplace/apps', 'ar');
+    expect(html).not.toContain('APPOINTMENTS PAGE');
+    expect(html).toContain('واتساب للأعمال الرسمية');
   });
 });

@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { StoreConnection } from '@crm/contracts';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { digitsOnly } from '../rules/phone';
 import type { RecoverySender, SenderDirectory, WizardDevice } from './tokens';
 
@@ -36,10 +40,15 @@ const devicePhone = (d: DeviceRow): string =>
  */
 @Injectable()
 export class SqlSenderDirectory implements SenderDirectory {
+  /** Personal numbers are neither offered nor used while the platform's unofficial-engine switch is off (owner decision 2026-10-05). */
+  constructor(
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
+
   async wizard(tx: Tx, orgId: number): Promise<{ devices: WizardDevice[]; hasSender: boolean }> {
     const devices = await tx.execute(sql`
       SELECT id, uuid, device_name, country_code, phone_number FROM devices
-      WHERE org_id = ${orgId} AND status = 'connected' ORDER BY id`);
+      WHERE org_id = ${orgId} AND status = 'connected' AND ${await this.unofficial.isEnabled()}::boolean ORDER BY id`);
     const primary = await this.primaryConfig(tx, orgId);
     const rows = devices.rows as unknown as DeviceRow[];
     return {
@@ -56,6 +65,7 @@ export class SqlSenderDirectory implements SenderDirectory {
   }
 
   async connectedDevice(tx: Tx, orgId: number, uuid: string): Promise<{ id: number } | undefined> {
+    if (!(await this.unofficial.isEnabled())) return undefined;
     const res = await tx.execute(sql`
       SELECT id FROM devices WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid AND status = 'connected'`);
     const r = res.rows[0] as { id: number | string } | undefined;
@@ -106,7 +116,8 @@ export class SqlSenderDirectory implements SenderDirectory {
         live: true,
       };
     }
-    if (deviceId !== null) {
+    const unofficialOn = await this.unofficial.isEnabled();
+    if (deviceId !== null && unofficialOn) {
       const res = await tx.execute(sql`
         SELECT id, uuid, device_name, country_code, phone_number FROM devices
         WHERE org_id = ${orgId} AND id = ${deviceId} AND status = 'connected'`);
@@ -118,7 +129,7 @@ export class SqlSenderDirectory implements SenderDirectory {
       }
     }
     const any = await tx.execute(
-      sql`SELECT 1 FROM devices WHERE org_id = ${orgId} AND status = 'connected' LIMIT 1`,
+      sql`SELECT 1 FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND ${unofficialOn}::boolean LIMIT 1`,
     );
     if (any.rows.length > 0) return { kind: 'other_device', label: null, live: true };
     return { kind: 'none', label: null, live: false };
@@ -127,7 +138,7 @@ export class SqlSenderDirectory implements SenderDirectory {
   async waNumber(tx: Tx, orgId: number, deviceId: number | null): Promise<string | null> {
     // The SHOP's own sending number, in WaDesk's order: its bound device, the first connected official number, then whatever
     // the primary config says.
-    if (deviceId !== null) {
+    if (deviceId !== null && (await this.unofficial.isEnabled())) {
       const res = await tx.execute(sql`
         SELECT country_code, phone_number FROM devices WHERE org_id = ${orgId} AND id = ${deviceId}`);
       const d = res.rows[0] as
@@ -144,6 +155,7 @@ export class SqlSenderDirectory implements SenderDirectory {
 
   async recoverySender(tx: Tx, orgId: number): Promise<RecoverySender | null> {
     const engine = await this.engine(tx, orgId);
+    if (engine === 'baileys' && !(await this.unofficial.isEnabled())) return null;
     if (engine === 'baileys') {
       const res = await tx.execute(sql`
         SELECT id, country_code, phone_number FROM devices
@@ -189,7 +201,9 @@ export class SqlSenderDirectory implements SenderDirectory {
       sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
     );
     const d = (settings.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
-    return d && SEND_ENGINES.includes(d) ? d : 'baileys';
+    const unofficialOn = await this.unofficial.isEnabled();
+    if (d && SEND_ENGINES.includes(d) && (d !== 'baileys' || unofficialOn)) return d;
+    return unofficialOn ? 'baileys' : 'waba';
   }
 
   /** `primaryForWorkspace()->first()`: the primary config, else the newest connected one, else the newest (never meta_ads). */

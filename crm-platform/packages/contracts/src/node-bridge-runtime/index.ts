@@ -40,6 +40,11 @@ export const nodeBridgeResponseSchema = z.object({
   rowVersion: z.number().int(),
   pacing: nodePacingSchema,
   pacingRowVersion: z.number().int(),
+  /**
+   * Whether the unofficial WhatsApp engine (personal numbers over Baileys, channel `whatsapp_qr`) is on for the whole
+   * platform. Off unless a super admin turns it on (owner decision 2026-10-05).
+   */
+  unofficialEnabled: z.boolean(),
 });
 export type NodeBridgeResponse = z.infer<typeof nodeBridgeResponseSchema>;
 
@@ -55,6 +60,15 @@ export const updateNodePacingSchema = nodePacingSchema.extend({
   rowVersion: z.number().int().min(0),
 });
 export type UpdateNodePacingInput = z.infer<typeof updateNodePacingSchema>;
+
+export const updateUnofficialWhatsappSchema = z.object({ enabled: z.boolean() });
+export type UpdateUnofficialWhatsappInput = z.infer<typeof updateUnofficialWhatsappSchema>;
+
+export const unofficialWhatsappStateSchema = z.object({ unofficialEnabled: z.boolean() });
+export type UnofficialWhatsappState = z.infer<typeof unofficialWhatsappStateSchema>;
+
+/** The synthetic entitlement key `GET /v2/billing/entitlements` carries only while the unofficial engine is on. Not a plan feature. */
+export const UNOFFICIAL_WHATSAPP_FEATURE_KEY = 'unofficial_whatsapp';
 
 export const nodeBridgeTestRequestSchema = z.object({
   serverUrl: z.string().trim().max(191),

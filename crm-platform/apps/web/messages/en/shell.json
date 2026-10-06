@@ -31,7 +31,9 @@
       "body": "{app} is an optional app. Add it from the Marketplace and it will appear in your menu.",
       "bodyNoMarketplace": "{app} is an optional app that this workspace doesn't have. Ask a workspace admin to add it from the Marketplace.",
       "browse": "Browse the Marketplace",
-      "back": "Back to the dashboard"
+      "back": "Back to the dashboard",
+      "unofficialTitle": "{app} isn't available",
+      "unofficialBody": "{app} is only used with personal WhatsApp numbers paired by QR code, which this platform does not support. WhatsApp connects through the official WhatsApp Business API."
     },
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",

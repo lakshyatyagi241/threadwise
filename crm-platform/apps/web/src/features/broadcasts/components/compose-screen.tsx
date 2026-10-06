@@ -8,6 +8,12 @@ import { useTranslations } from 'next-intl';
 import { Alert, Button, Field, Input, Select, Spinner, EmptyState, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
+import {
+  isUnofficialDisabledError,
+  offerSenders,
+  submittableSenderKeys,
+} from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { KEYS } from '../api/broadcasts';
 import {
   createBroadcast,
@@ -50,6 +56,8 @@ export function ComposeScreen() {
   const canTags = useCan('record.tags.read');
 
   const compose = useCompose();
+  // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
+  const unofficial = useUnofficialWhatsapp();
   const contacts = useAudienceContacts(canContacts);
   const groups = useAudienceGroups(canGroups);
   const tags = useAudienceTags(canTags);
@@ -68,7 +76,11 @@ export function ComposeScreen() {
 
   const data = compose.data;
   // With one connected number there is nothing to pick: it is used as is.
-  const onlySender = data?.senders.length === 1 ? data.senders[0]!.key : null;
+  const senders = useMemo(
+    () => offerSenders(data?.senders ?? [], unofficial),
+    [data?.senders, unofficial],
+  );
+  const onlySender = senders.length === 1 ? senders[0]!.key : null;
   const template = data?.templates.find((x) => x.id === form.templateId);
   const minDate = useMemo(
     () => defaultSchedule(new Date(), form.timezone).sendDate,
@@ -83,7 +95,10 @@ export function ComposeScreen() {
     if (fix.length > 0) return;
     setBusy(true);
     try {
-      const body = buildBody({ ...form, senderKeys: onlySender ? [onlySender] : form.senderKeys });
+      const body = buildBody({
+        ...form,
+        senderKeys: onlySender ? [onlySender] : submittableSenderKeys(form.senderKeys, unofficial),
+      });
       const res = await createBroadcast(body);
       toast(
         res.broadcasts.length > 1
@@ -94,7 +109,13 @@ export function ComposeScreen() {
       void qc.invalidateQueries({ queryKey: KEYS.all });
       router.push('/broadcasts');
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : t('failed'));
+      setError(
+        isUnofficialDisabledError(e)
+          ? t('unofficialDisabled')
+          : e instanceof ApiError
+            ? e.message
+            : t('failed'),
+      );
       setBusy(false);
     }
   };
@@ -264,7 +285,8 @@ export function ComposeScreen() {
               )}
 
               <SenderPicker
-                senders={data.senders}
+                senders={senders}
+                unofficialEnabled={unofficial}
                 checked={form.senderKeys}
                 shares={form.shares}
                 onChecked={(key, on) =>

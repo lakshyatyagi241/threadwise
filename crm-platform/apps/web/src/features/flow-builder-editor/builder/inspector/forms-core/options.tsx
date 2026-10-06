@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@crm/ui';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import {
   Check,
   controlClass,
@@ -69,6 +70,7 @@ function Counter({ len, max }: { len: number; max: number }) {
 const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`;
 
 export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const unofficial = useUnofficialWhatsapp();
   const items = listItems(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
@@ -89,7 +91,11 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
       </Field>
       <Field
         label="Items"
-        hint="Up to 10 items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud); on the Unofficial API the list falls back to plain buttons showing the title only."
+        hint={`Up to 10 items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud).${
+          unofficial
+            ? ' On the Unofficial API the list falls back to plain buttons showing the title only.'
+            : ''
+        }`}
       >
         <datalist id={listId}>
           {sectionNames.map((s) => (
@@ -154,6 +160,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 }
 
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
   return (
     <>
@@ -187,7 +194,9 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       </Field>
       <Field
         label="Accept a file/photo upload"
-        hint="When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp (official & unofficial) and Twilio."
+        hint={`When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp${
+          unofficial ? ' (official & unofficial)' : ''
+        } and Twilio.`}
       >
         <Check checked={!!d.acceptMedia} onChange={(v) => set('acceptMedia', v)}>
           Save an uploaded image / PDF / audio as this variable (a link)

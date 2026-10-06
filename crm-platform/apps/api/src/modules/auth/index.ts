@@ -30,3 +30,8 @@ export { AccountGateService } from './security/account-gate.service';
 export { LoginService } from './flows/login.service';
 export { UserTokensService, type TokenKind } from './flows/user-tokens.service';
 export { MailService } from './mail/mail.service';
+export {
+  UnofficialWhatsappSwitch,
+  unofficialDisabled,
+  UNOFFICIAL_WHATSAPP_KEY,
+} from './platform/unofficial-whatsapp-switch';

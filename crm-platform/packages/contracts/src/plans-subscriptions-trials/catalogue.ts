@@ -28,6 +28,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'scheduled_messages', group: 'messaging' },
   // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, WD-PLAN-018). 0 = unlimited.
   { key: 'total_campaigns', group: 'messaging' },
+  // Personal WhatsApp numbers (the unofficial engine). Kept so existing plans keep their value, but it only applies while the
+  // platform switch `wa.unofficial.enabled` is on (owner decision 2026-10-05); with the switch off no device can be added or used.
   { key: 'devices', group: 'workspace' },
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },

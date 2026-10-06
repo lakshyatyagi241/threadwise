@@ -5,6 +5,7 @@ import {
   type PlanAdminItem,
   type PlanLimitKey,
 } from '@crm/contracts';
+import { isUnofficialOnlyLimit, type UnofficialSwitchState } from '@/lib/unofficial-whatsapp';
 import type { PlanField, PlanProblems } from './plan-draft';
 
 /**
@@ -157,4 +158,13 @@ export function planCounts(plan: Pick<PlanAdminItem, 'features' | 'limits' | 'vi
     limitsTotal: PLAN_LIMIT_KEYS.length,
     addons: plan.visibleAddons.length,
   };
+}
+
+/**
+ * Whether a plan limit row is greyed with the "only applies when unofficial WhatsApp is enabled" hint. Only the limits that exist for
+ * personal numbers (`devices`) and only while the switch is known to be off: an unknown state (the call failed, an older API) greys
+ * nothing, so an operator is never told something the platform did not say.
+ */
+export function limitDisabledByPlatform(key: string, state: UnofficialSwitchState): boolean {
+  return state === 'off' && isUnofficialOnlyLimit(key);
 }

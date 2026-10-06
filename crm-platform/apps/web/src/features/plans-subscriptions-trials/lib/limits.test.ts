@@ -13,7 +13,9 @@ import {
   groupLimits,
   groupedPlanLimits,
   limitPercent,
+  limitShown,
   limitTone,
+  planLimitRows,
   rowDiffers,
 } from './limits';
 
@@ -57,7 +59,7 @@ describe('limitTone (normal / warning from 80% / danger at 100%)', () => {
 describe('groupLimits', () => {
   it('lists every registry limit under its group, hiding unlimited ones until "show all"', () => {
     const m = meters({ contacts: [90, 100], devices: [1, 5] });
-    const hidden = groupLimits(m);
+    const hidden = groupLimits(m, { unofficial: true });
     // the API rate limit (platform default) stays visible in its group
     expect(hidden.map((g) => g.group)).toEqual(['workspace']);
     expect(hidden[0]!.rows.map((r) => r.key)).toEqual([
@@ -70,7 +72,7 @@ describe('groupLimits', () => {
       PLAN_LIMIT_DEFS.filter((d) => d.group === 'workspace').length - 3,
     );
 
-    const all = groupLimits(m, { showAll: true });
+    const all = groupLimits(m, { showAll: true, unofficial: true });
     expect(all.flatMap((g) => g.rows)).toHaveLength(PLAN_LIMIT_KEYS.length);
     expect(all.map((g) => g.group)).toEqual([
       'messaging',
@@ -91,8 +93,8 @@ describe('groupLimits', () => {
 
   it('counts the unlimited limits the toggle would reveal', () => {
     // the API rate limit is "platform default", not unlimited
-    expect(countUnlimited(meters())).toBe(PLAN_LIMIT_KEYS.length - 1);
-    expect(countUnlimited(meters({ contacts: [1, 10], tags: [1, 10] }))).toBe(
+    expect(countUnlimited(meters(), true)).toBe(PLAN_LIMIT_KEYS.length - 1);
+    expect(countUnlimited(meters({ contacts: [1, 10], tags: [1, 10] }), true)).toBe(
       PLAN_LIMIT_KEYS.length - 3,
     );
   });
@@ -114,7 +116,7 @@ describe('groupLimits', () => {
       .flatMap((g) => g.rows)
       .find((r) => r.key === 'tags')!;
     expect(tags).toMatchObject({ tracked: false, used: null, unlimited: false });
-    expect(countUnlimited(without)).toBe(PLAN_LIMIT_KEYS.length - 2);
+    expect(countUnlimited(without, true)).toBe(PLAN_LIMIT_KEYS.length - 2);
   });
 
   it('ignores meters for keys the registry does not know', () => {
@@ -151,7 +153,7 @@ describe('cardRows', () => {
       limits: { webhooks: 3, contacts: 0, monthly_messages: 500, devices: 2 } as never,
       features: { automation: true, calling: false, analytics: true } as never,
     });
-    const { highlights, all } = cardRows(p, 4);
+    const { highlights, all } = cardRows(p, 4, true);
     expect(highlights.map((r) => r.key)).toEqual([
       'monthly_messages',
       'devices',
@@ -166,6 +168,39 @@ describe('cardRows', () => {
       'automation',
       'analytics',
     ]);
+  });
+});
+
+describe('the devices limit while the platform has unofficial WhatsApp off', () => {
+  const p = plan({
+    limits: { webhooks: 3, contacts: 0, monthly_messages: 500, devices: 2 } as never,
+    features: { automation: true } as never,
+  });
+
+  it('is left out of cards, groups, counts and the compare table unless the switch is on', () => {
+    expect(cardRows(p).all.map((r) => r.key)).not.toContain('devices');
+    expect(cardRows(p, 7, true).all.map((r) => r.key)).toContain('devices');
+    expect(planLimitRows(p).map((r) => r.key)).not.toContain('devices');
+    expect(groupedPlanLimits(p).flatMap((g) => g.rows.map((r) => r.key))).not.toContain('devices');
+    expect(
+      groupLimits(meters({ devices: [1, 5] }), { showAll: true })
+        .flatMap((g) => g.rows)
+        .map((r) => r.key),
+    ).not.toContain('devices');
+    expect(countUnlimited(meters())).toBe(PLAN_LIMIT_KEYS.length - 2);
+    const keys = (unofficial: boolean) =>
+      compareSections([p, plan({ slug: 'z', limits: { devices: 9 } as never })], { unofficial })
+        .flatMap((s) => s.rows)
+        .map((r) => r.key);
+    expect(keys(false)).not.toContain('devices');
+    expect(keys(true)).toContain('devices');
+  });
+
+  it('keeps every other limit', () => {
+    expect(limitShown('devices', false)).toBe(false);
+    expect(limitShown('devices', undefined)).toBe(false);
+    expect(limitShown('devices', true)).toBe(true);
+    expect(limitShown('contacts', false)).toBe(true);
   });
 });
 

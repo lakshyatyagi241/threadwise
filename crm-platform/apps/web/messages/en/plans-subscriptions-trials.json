@@ -95,7 +95,7 @@
       "broadcasts": "Broadcasts that are not archived.",
       "scheduled_messages": "Scheduled messages the workspace holds, in any status. Deleting one frees its place.",
       "total_campaigns": "Campaigns created in the plan period. Deleting a campaign does not give the place back.",
-      "devices": "Connected WhatsApp numbers (QR devices). Removing one frees its place.",
+      "devices": "Connected WhatsApp numbers. Removing one frees its place.",
       "users": "Team members that are not deactivated.",
       "contacts": "Contacts in the workspace.",
       "tags": "Contact tags.",

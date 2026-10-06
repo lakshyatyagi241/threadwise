@@ -49,6 +49,7 @@ function ProvidersList({ access }: { access: WapAccess }) {
 
   const header = (
     <PageHeader
+      eyebrow={t('officialLabel')}
       title={t('title')}
       description={t('description')}
       actions={

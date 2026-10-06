@@ -301,11 +301,11 @@ export class DashboardRepository {
     }));
   }
 
-  /** The numbers a message can go out from: connected devices and connected provider accounts. */
-  async senders(tx: Tx, orgId: number): Promise<DashboardSender[]> {
+  /** The numbers a message can go out from: connected provider accounts, and devices only while the platform's unofficial-engine switch is on. */
+  async senders(tx: Tx, orgId: number, unofficialOn = true): Promise<DashboardSender[]> {
     const [devices, configs] = await Promise.all([
       tx.execute(
-        sql`SELECT uuid, coalesce(nullif(device_name, ''), nullif(phone_number, ''), 'Device') AS label FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active ORDER BY id DESC`,
+        sql`SELECT uuid, coalesce(nullif(device_name, ''), nullif(phone_number, ''), 'Device') AS label FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active AND ${unofficialOn}::boolean ORDER BY id DESC`,
       ),
       tx.execute(
         sql`SELECT uuid, provider, coalesce(nullif(display_label, ''), nullif(phone_number, ''), provider) AS label FROM wa_provider_configs WHERE org_id = ${orgId} AND status = 'connected' ORDER BY is_primary DESC, id DESC`,

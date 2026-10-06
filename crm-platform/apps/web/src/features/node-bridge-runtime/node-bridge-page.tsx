@@ -3,13 +3,15 @@
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { nodeBridgeResponseSchema } from '@crm/contracts';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { Alert, Button, Spinner, cn } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { BridgeCard } from './bridge-card';
 import { errorKind } from './lib/errors';
+import { unofficialView } from './lib/unofficial';
 import { PacingCard } from './pacing-card';
 import { NODE_BRIDGE_QUERY_KEY } from './queries';
+import { UnofficialCard } from './unofficial-card';
 
 const NS = 'node-bridge-runtime';
 
@@ -42,12 +44,26 @@ export function NodeBridgePage() {
       </Alert>
     );
   }
+  const view = unofficialView(q.data.unofficialEnabled);
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       {!canEdit && <Alert tone="info">{t('page.superOnly')}</Alert>}
-      {/* Remounted on every new version so a save or conflict leaves the forms showing what the server holds. */}
-      <BridgeCard key={`b${q.data.rowVersion}`} data={q.data} canEdit={canEdit} />
-      <PacingCard key={`p${q.data.pacingRowVersion}`} data={q.data} canEdit={canEdit} />
+      <UnofficialCard data={q.data} canEdit={canEdit} />
+      {view.dimRest && (
+        <Alert tone="warning" data-testid="unofficial-off-note">
+          {t('unofficial.dimNote')}
+        </Alert>
+      )}
+      {/* While the switch is off nothing below is used: it stays visible, dimmed, so it can be prepared before the engine is turned on. */}
+      <div
+        className={cn('space-y-6 transition-opacity', view.dimRest && 'opacity-50')}
+        data-testid="node-bridge-settings"
+        data-dimmed={view.dimRest || undefined}
+      >
+        {/* Remounted on every new version so a save or conflict leaves the forms showing what the server holds. */}
+        <BridgeCard key={`b${q.data.rowVersion}`} data={q.data} canEdit={canEdit} />
+        <PacingCard key={`p${q.data.pacingRowVersion}`} data={q.data} canEdit={canEdit} />
+      </div>
     </div>
   );
 }
