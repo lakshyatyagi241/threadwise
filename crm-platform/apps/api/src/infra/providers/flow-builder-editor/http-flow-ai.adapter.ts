@@ -4,7 +4,7 @@ import type { FlowAiPort, FlowAiRequest } from './flow-ai.port';
 const TIMEOUT_MS = 90_000;
 
 /**
- * The vendor HTTP calls behind FlowAiPort: OpenAI chat completions, Anthropic messages, Gemini generateContent. Every call
+ * The vendor HTTP calls behind FlowAiPort: OpenAI chat completions (and OpenRouter, same wire format), Anthropic messages, Gemini generateContent. Every call
  * has a timeout; a non-2xx answer is an error (never swallowed). Not exercised against the live vendors in this repo's
  * tests (no keys): the adapter is tested against a local fake server, see test/unit/flow-builder-editor/flow-ai-adapter.
  */
@@ -21,6 +21,8 @@ export class HttpFlowAiAdapter implements FlowAiPort {
         return this.anthropic(req);
       case 'gemini':
         return this.gemini(req);
+      case 'openrouter':
+        return this.openai(req, 'https://openrouter.ai/api/v1/chat/completions');
     }
   }
 
@@ -39,9 +41,12 @@ export class HttpFlowAiAdapter implements FlowAiPort {
     return res.json();
   }
 
-  private async openai(r: FlowAiRequest): Promise<string | null> {
+  private async openai(
+    r: FlowAiRequest,
+    url = 'https://api.openai.com/v1/chat/completions',
+  ): Promise<string | null> {
     const j = (await this.post(
-      'https://api.openai.com/v1/chat/completions',
+      url,
       { Authorization: `Bearer ${r.apiKey}` },
       {
         model: r.model,
