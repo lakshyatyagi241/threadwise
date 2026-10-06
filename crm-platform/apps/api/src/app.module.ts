@@ -81,6 +81,7 @@ import { FormsBuilderModule } from './modules/forms-builder';
 import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
+import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
@@ -202,6 +203,7 @@ import { HealthModule } from './health/health.module';
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
+    DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,

@@ -616,6 +616,96 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-CPN-037 | verified |  | twin run 2026-10-06: account tab merged into /account/affiliate, clean; reward on paid order not compared live |
 | WD-CPN-038 | wontfix |  | docs-only, not ported; no commission copy shown |
 
+## developer-rest-api-v1 (api)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-API-001 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-002 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-003 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-004 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-005 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-006 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-007 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-008 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-009 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-010 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-011 | done |  | consumed from AUTH/PLAN (security policy + plan limit); covered by auth.e2e.spec.ts rate-limit test |
+| WD-API-020 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-021 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-022 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-023 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-024 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-025 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-026 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-027 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-028 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-029 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-030 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-031 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-032 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| WD-API-033 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-034 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| WD-API-035 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-036 | backend-done |  | PARTIAL: body variables only; header, media header, buttons and daily cap not carried by the chat facade; answers 202 queued |
+| WD-API-037 | backend-done |  | PARTIAL: upload guard runs; file not stored or used until the chat facade carries template components |
+| WD-API-038 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-039 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-040 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-041 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-042 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-043 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-044 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-045 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-046 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-047 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-048 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-049 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-050 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-051 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-052 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-053 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-054 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-080 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-081 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-082 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-083 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-084 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-085 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-086 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-087 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-088 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-089 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-090 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-091 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-092 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-093 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-094 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-095 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-110 | backend-done |  | text and media done; PARTIAL: location pin recorded as text (chat facade has no location kind); answers sent or pending after waiting up to 3 s for the worker |
+| WD-API-111 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-112 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-113 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-114 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-115 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-116 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-117 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-118 | backend-done |  | PARTIAL: WhatsApp senders; Twilio-engine sends blocked (no Twilio channel kind) |
+| WD-API-119 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-120 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-140 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-141 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-142 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-143 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-144 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-145 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-146 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-147 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-148 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-149 | done |  | public page + /docs redirects; docs twin: no defect vs WaDesk (122 same, 8 intended); webhook events card is a coming-soon note |
+| WD-API-150 | backend-done |  | GET /docs/api.json generated from controllers, brand token substitution; e2e auth.e2e.spec.ts |
+| WD-API-151 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+
 ## addons-extension-registry (add)
 
 | Feature | Status | PR | Notes |

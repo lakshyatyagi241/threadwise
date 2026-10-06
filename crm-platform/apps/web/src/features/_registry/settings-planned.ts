@@ -39,7 +39,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
 
   // Integrations and developer (these were the menu's Developer group)
   // Integrations is now the Marketplace tile (features/marketplace/settings.ts).
-  tile('integrations', 'rest-api', '/developers', 'code', 10),
   tile('integrations', 'webhooks', '/webhooks', 'webhook', 20),
 
   // Data and security

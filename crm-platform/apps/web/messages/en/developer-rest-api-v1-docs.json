@@ -1,0 +1,98 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} API Reference",
+    "metaDescription": "The {brand} REST API reference: authentication, rate limits and every endpoint with request and response examples.",
+    "common": {
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the text and copy it by hand."
+    },
+    "topbar": {
+      "home": "{brand} home",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI spec",
+      "getKey": "Get an API key"
+    },
+    "sidebar": {
+      "label": "Reference navigation",
+      "filterLabel": "Filter endpoints",
+      "filterPlaceholder": "Filter endpoints…",
+      "startHere": "Start here",
+      "intro": "Introduction",
+      "auth": "Authentication",
+      "webhooks": "Webhooks"
+    },
+    "hero": {
+      "eyebrow": "Developer reference",
+      "title": "The {brand} <em>REST API</em>",
+      "lead": "A single REST API to send WhatsApp messages, run broadcasts and campaigns, manage contacts and templates, trigger automation flows and read your account, everything your CRM, automation platform or app needs.",
+      "baseUrl": "Base URL",
+      "copyBaseUrl": "Copy the base URL"
+    },
+    "capabilities": {
+      "title": "What you can do",
+      "send": {
+        "title": "Send messages",
+        "body": "Single sends, broadcasts, campaigns and scheduled sends"
+      },
+      "receive": {
+        "title": "Receive messages",
+        "body": "Read inbound conversations and their messages"
+      },
+      "contacts": {
+        "title": "Contacts and leads",
+        "body": "Full create, read, update and delete, groups and custom attributes"
+      },
+      "templates": { "title": "Templates", "body": "Create, update and list WhatsApp templates" },
+      "flows": {
+        "title": "Automation flows",
+        "body": "Enroll a contact into a flow through the API"
+      },
+      "status": {
+        "title": "Delivery status",
+        "body": "Per-message sent, delivered, read and failed"
+      },
+      "devices": { "title": "Devices", "body": "List connected numbers and their status" },
+      "account": { "title": "Account and usage", "body": "Plan, limits and message credits" }
+    },
+    "auth": {
+      "title": "Authentication",
+      "intro": "Every request is authenticated with a workspace <strong>API key</strong>. Create one in the dashboard under <strong>Settings, REST API</strong>. Send it as a Bearer token:",
+      "copyHeader": "Copy the header",
+      "alt": "Alternatively pass it in an <code>X-Api-Key</code> header. Keys belong to a single workspace and only their hash is stored, so copy a key when it is created: it cannot be shown again. Keys can be revoked at any time and stop working immediately."
+    },
+    "webhooks": {
+      "title": "Webhooks and real-time events",
+      "comingTitle": "Webhook delivery is coming",
+      "comingBody": "Registering a webhook and receiving events at your own URL is not available yet. No events are sent to your server today, so there is nothing to subscribe to. This card will list the events and the signature header when delivery goes live.",
+      "rateLabel": "Rate limits",
+      "rate": "Each key is held to the per-minute limit of the workspace plan; when the plan sets none, the platform default of {limit} requests per minute applies. Every answer carries <code>X-RateLimit-Limit</code> and <code>X-RateLimit-Remaining</code>, and a request over the limit is answered with HTTP 429 and a <code>Retry-After</code> header. Outbound sends also draw from your plan's message credits."
+    },
+    "reference": {
+      "title": "Endpoints",
+      "count": "{count, plural, one {# endpoint} other {# endpoints}}",
+      "noMatch": "No endpoint matches “{query}”.",
+      "clearFilter": "Clear the filter",
+      "empty": "No endpoints are published yet. Check back soon.",
+      "unavailableTitle": "The endpoint reference could not be loaded",
+      "unavailableBody": "The API specification is not reachable right now. The introduction above still applies. Try again in a moment.",
+      "retry": "Try again",
+      "general": "General",
+      "toggle": "Show or hide details of {method} {path}",
+      "parameters": "Parameters",
+      "bodyParameters": "Body parameters",
+      "name": "Name",
+      "field": "Field",
+      "description": "Description",
+      "required": "required",
+      "exampleRequest": "Example request",
+      "requestBody": "Request body",
+      "responses": "Responses",
+      "copyCurl": "Copy the request",
+      "copyJson": "Copy the JSON",
+      "noExample": "The specification gives no example for this response."
+    },
+    "footer": "{brand} REST API · v1 · generated from the live OpenAPI specification"
+  }
+}
