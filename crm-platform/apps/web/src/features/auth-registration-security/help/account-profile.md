@@ -5,7 +5,8 @@ summary: Update your photo, name, email, phone, language and theme, and find the
 area: account
 order: 10
 documents: [tile:account]
-keywords: [account, profile, avatar, photo, name, email, phone, language, theme, timezone, delete account]
+keywords:
+  [account, profile, avatar, photo, name, email, phone, language, theme, timezone, delete account]
 ---
 
 ## What it is for
@@ -31,7 +32,7 @@ The **Timezone** box belongs to the workspace, not to you, and says so with a **
 
 ## Other account pages
 
-The list on the left has two groups. **Account** holds Profile, Plan & usage and Branding. **Security** holds Password & security and **Delete account**. Deleting your account is permanent. It asks for a confirmation phrase and your password, and is refused if you are the only member or the only administrator.
+The list on the left has two groups. **Account** holds Profile, Plans, Plan and usage and Branding. **Security** holds Password & security and **Delete account**. Deleting your account is permanent. It asks for a confirmation phrase and your password, and is refused if you are the only member or the only administrator.
 
 ## Plan and access
 
