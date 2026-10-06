@@ -52,17 +52,159 @@ function useListQuery() {
   return { q: sp.get('q') ?? '', status, page };
 }
 
+/** The API's limit on the search text; a longer value cannot match anything, so it is never sent. */
+const MAX_SEARCH = 100;
+
+function useGo(q: string, status: CouponStatusFilter) {
+  const router = useRouter();
+  const pathname = usePathname();
+  return (next: { q?: string; status?: CouponStatusFilter; page?: number }) => {
+    const p = new URLSearchParams();
+    const nq = next.q ?? q;
+    const ns = next.status ?? status;
+    if (nq) p.set('q', nq);
+    if (ns !== 'all') p.set('status', ns);
+    if (next.page && next.page > 1) p.set('page', String(next.page));
+    const s = p.toString();
+    router.push(s ? `${pathname}?${s}` : pathname);
+  };
+}
+
 function CouponsScreen() {
   const { q, status, page } = useListQuery();
+  const tooLong = q.length > MAX_SEARCH;
+  const apiQ = tooLong ? undefined : q || undefined;
   const query = useQuery({
-    queryKey: KEYS.couponList({ q: q || undefined, status, page }),
-    queryFn: ({ signal }) => fetchCoupons({ q: q || undefined, status, page }, signal),
+    queryKey: KEYS.couponList({ q: apiQ, status, page: tooLong ? 1 : page }),
+    queryFn: ({ signal }) => fetchCoupons({ q: apiQ, status, page: tooLong ? 1 : page }, signal),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
+    retry: false,
   });
-  if (query.isPending) return <LoadingBlock />;
-  if (query.isError) return <ErrorBlock error={query.error} onRetry={() => void query.refetch()} />;
-  return <Catalogue data={query.data} q={q} status={status} />;
+  if (query.isPending || query.isError) {
+    return (
+      <div className="space-y-5">
+        <CouponsHead />
+        <FilterBar q={q} status={status} />
+        {query.isPending ? (
+          <LoadingBlock />
+        ) : (
+          <ErrorBlock error={query.error} onRetry={() => void query.refetch()} />
+        )}
+      </div>
+    );
+  }
+  const data: CouponListResponse = tooLong
+    ? { ...query.data, data: [], total: 0, pageCount: 0, from: 0, to: 0, page: 1 }
+    : query.data;
+  return <Catalogue data={data} q={q} status={status} />;
+}
+
+function CouponsHead() {
+  const t = useTranslations(NS);
+  const tc = useTranslations('coupons-credits-referral-currency.common');
+  const { operator } = useOperator();
+  const canEdit = operator.role === 'super_admin';
+  return (
+    <>
+      <PageHead
+        crumbs={[{ label: tc('admin'), href: '/admin' }, { label: t('crumbHere') }]}
+        eyebrow={t('eyebrow')}
+        title={
+          <>
+            {t('titleLead')} <Accent>{t('titleAccent')}</Accent>
+          </>
+        }
+        description={t('description')}
+        actions={canEdit && <PrimaryLink href={`${BASE}/new`}>{t('new')}</PrimaryLink>}
+      />
+      {!canEdit && <Alert tone="info">{tc('readOnly')}</Alert>}
+    </>
+  );
+}
+
+/** The status pills and the search box; they stay on screen whatever the list is doing. */
+function FilterBar({
+  q,
+  status,
+  counts,
+}: {
+  q: string;
+  status: CouponStatusFilter;
+  counts?: CouponListResponse['counts'];
+}) {
+  const t = useTranslations(NS);
+  const go = useGo(q, status);
+  const onSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value = new FormData(e.currentTarget).get('q');
+    go({ q: typeof value === 'string' ? value.trim() : '', page: 1 });
+  };
+  const pills: Array<{ key: CouponStatusFilter; count?: number }> = [
+    { key: 'all', count: counts?.all },
+    { key: 'active', count: counts?.active },
+    { key: 'disabled' },
+    { key: 'expired', count: counts?.expired },
+  ];
+  return (
+    <form
+      onSubmit={onSearch}
+      role="search"
+      aria-label={t('filters.label')}
+      className="flex flex-wrap items-center gap-1 rounded-2xl border border-border bg-background p-2 shadow-sm"
+    >
+      {pills.map((p) => {
+        const on = status === p.key;
+        return (
+          <button
+            key={p.key}
+            type="button"
+            aria-pressed={on}
+            onClick={() => go({ status: p.key, page: 1 })}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[13px] transition',
+              on ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-muted',
+            )}
+          >
+            {t(`filters.${p.key}`)}
+            {p.count !== undefined && (
+              <span
+                className={cn(
+                  'font-mono text-[11px]',
+                  p.key === 'expired' && !on ? 'text-warning' : 'opacity-80',
+                )}
+              >
+                {p.key === 'all' ? `(${p.count})` : p.count}
+              </span>
+            )}
+          </button>
+        );
+      })}
+      <div className="flex-1" />
+      <div className="relative">
+        <svg
+          viewBox="0 0 16 16"
+          className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          aria-hidden="true"
+        >
+          <circle cx="7" cy="7" r="5" />
+          <path d="m11 11 3 3" />
+        </svg>
+        <input
+          key={q}
+          name="q"
+          type="search"
+          defaultValue={q}
+          aria-label={t('filters.searchLabel')}
+          placeholder={t('filters.search')}
+          className="w-72 max-w-full rounded-full border border-border bg-background py-1.5 ps-9 pe-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        />
+      </div>
+    </form>
+  );
 }
 
 function Catalogue({
@@ -79,7 +221,6 @@ function Catalogue({
   const tc = useTranslations('coupons-credits-referral-currency.common');
   const locale = useLocale();
   const router = useRouter();
-  const pathname = usePathname();
   const sp = useSearchParams();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -99,16 +240,7 @@ function Catalogue({
     router.replace(BASE);
   }, [saved, toast, t, router]);
 
-  const go = (next: { q?: string; status?: CouponStatusFilter; page?: number }) => {
-    const p = new URLSearchParams();
-    const nq = next.q ?? q;
-    const ns = next.status ?? status;
-    if (nq) p.set('q', nq);
-    if (ns !== 'all') p.set('status', ns);
-    if (next.page && next.page > 1) p.set('page', String(next.page));
-    const s = p.toString();
-    router.push(s ? `${pathname}?${s}` : pathname);
-  };
+  const go = useGo(q, status);
 
   const toggle = useMutation({
     mutationFn: (c: CouponItem) =>
@@ -138,19 +270,6 @@ function Catalogue({
     },
   });
 
-  const onSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const value = new FormData(e.currentTarget).get('q');
-    go({ q: typeof value === 'string' ? value.trim() : '', page: 1 });
-  };
-
-  const pills: Array<{ key: CouponStatusFilter; count?: number }> = [
-    { key: 'all', count: data.counts.all },
-    { key: 'active', count: data.counts.active },
-    { key: 'disabled' },
-    { key: 'expired', count: data.counts.expired },
-  ];
-
   const discount = (c: CouponItem) =>
     c.type === 'percent'
       ? `${c.amount}%`
@@ -171,18 +290,7 @@ function Catalogue({
 
   return (
     <div className="space-y-5">
-      <PageHead
-        crumbs={[{ label: tc('admin'), href: '/admin' }, { label: t('crumbHere') }]}
-        eyebrow={t('eyebrow')}
-        title={
-          <>
-            {t('titleLead')} <Accent>{t('titleAccent')}</Accent>
-          </>
-        }
-        description={t('description')}
-        actions={canEdit && <PrimaryLink href={`${BASE}/new`}>{t('new')}</PrimaryLink>}
-      />
-      {!canEdit && <Alert tone="info">{tc('readOnly')}</Alert>}
+      <CouponsHead />
 
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label={t('crumbHere')}>
         <StatTile
@@ -213,63 +321,7 @@ function Catalogue({
         />
       </section>
 
-      <form
-        onSubmit={onSearch}
-        role="search"
-        aria-label={t('filters.label')}
-        className="flex flex-wrap items-center gap-1 rounded-2xl border border-border bg-background p-2 shadow-sm"
-      >
-        {pills.map((p) => {
-          const on = status === p.key;
-          return (
-            <button
-              key={p.key}
-              type="button"
-              aria-pressed={on}
-              onClick={() => go({ status: p.key, page: 1 })}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-full px-4 py-[7px] text-[13px] transition',
-                on ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-muted',
-              )}
-            >
-              {t(`filters.${p.key}`)}
-              {p.count !== undefined && (
-                <span
-                  className={cn(
-                    'font-mono text-[11px]',
-                    p.key === 'expired' && !on ? 'text-warning' : 'opacity-80',
-                  )}
-                >
-                  {p.key === 'all' ? `(${p.count})` : p.count}
-                </span>
-              )}
-            </button>
-          );
-        })}
-        <div className="flex-1" />
-        <div className="relative">
-          <svg
-            viewBox="0 0 16 16"
-            className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            aria-hidden="true"
-          >
-            <circle cx="7" cy="7" r="5" />
-            <path d="m11 11 3 3" />
-          </svg>
-          <input
-            key={q}
-            name="q"
-            type="search"
-            defaultValue={q}
-            aria-label={t('filters.searchLabel')}
-            placeholder={t('filters.search')}
-            className="w-72 max-w-full rounded-full border border-border bg-background py-1.5 ps-9 pe-3 text-xs outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          />
-        </div>
-      </form>
+      <FilterBar q={q} status={status} counts={data.counts} />
 
       <Card className="overflow-hidden rounded-2xl p-0">
         <div className="overflow-x-auto">

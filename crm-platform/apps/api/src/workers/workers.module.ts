@@ -22,6 +22,7 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { CouponsCreditsReferralCurrencyWorkerModule } from '../modules/coupons-credits-referral-currency';
 import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
 import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
@@ -67,6 +68,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     BroadcastsWorkerModule,
     PlansWorkerModule,
     PaygwWorkerModule,
+    CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
     CallingVoiceWorkerModule,
