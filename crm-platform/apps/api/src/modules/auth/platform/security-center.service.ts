@@ -27,8 +27,13 @@ import { WebhookSecretRegistry } from '../security/webhook-secret-registry';
 /** What each control actually does today. The admin screen shows this verbatim. */
 const ENFORCEMENT: SecurityOverviewResponse['enforcement'] = [
   {
-    key: 'requireMfaForAll / requireMfaForAdmins / requireMfaForOwners',
-    controls: ['requireMfaForAll', 'requireMfaForAdmins', 'requireMfaForOwners'],
+    key: 'requireMfaForAll / requireMfaForAdmins / requireMfaForOwners / requireMfaForSuperAdmins',
+    controls: [
+      'requireMfaForAll',
+      'requireMfaForAdmins',
+      'requireMfaForOwners',
+      'requireMfaForSuperAdmins',
+    ],
     consumer: 'Account gate guard (MFA_ENROLMENT_REQUIRED)',
     status: 'enforced',
   },
