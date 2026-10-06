@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, cn } from '@crm/ui';
 import { useSegmentCatalog } from '../api/lookups';
@@ -56,10 +56,9 @@ export function AdvancedFilter({
   const applied = appliedConditionCount(value);
 
   // An empty builder opens with one condition ready to fill, so the person sees field, operator and value at once.
-  useEffect(() => {
-    if (open && ready && draft.children.length === 0 && catalog.length > 0)
-      setDraft((r) => ruleReducer(r, { type: 'addCondition', groupId: r.id }, catalog));
-  }, [open, ready, draft.children.length, catalog]);
+  // (State adjusted while rendering, guarded so it settles after one pass: not an effect.)
+  if (open && ready && draft.children.length === 0 && catalog.length > 0)
+    setDraft((r) => ruleReducer(r, { type: 'addCondition', groupId: r.id }, catalog));
 
   const dispatch = (a: RuleAction) => setDraft((r) => ruleReducer(r, a, catalog));
   const kindOf = useMemo(() => kindLookup(catalog), [catalog]);
