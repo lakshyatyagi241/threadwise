@@ -1,7 +1,7 @@
-import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { MigrationRow } from '@crm/contracts';
+import { acceptedChecksums } from '@crm/db';
 
 export interface LedgerEntry {
   id: string;
@@ -11,6 +11,8 @@ export interface LedgerEntry {
 export interface MigrationFileFact {
   id: string;
   checksum: string;
+  /** Every checksum the file may have been recorded under (line endings normalised, as on disk, CRLF). Falls back to `checksum` when absent. */
+  accepted?: string[];
 }
 
 export interface MigrationReport {
@@ -21,21 +23,17 @@ export interface MigrationReport {
 }
 
 /**
- * Same checksum the runner (packages/db/src/migrator.ts) records: first 16 hex characters of the file's sha256.
- * Duplicated rather than imported because @crm/db does not export the loader and the runner is a kernel file; if
- * the runner's scheme ever changes, `modified` shows up on every row, which is the loud failure we want.
+ * Same checksums the runner (packages/db/src/migrator.ts) accepts, from the shared helper in @crm/db: the first 16 hex
+ * characters of the sha256 of the file with LF line endings, and the as-is and CRLF forms older Windows ledgers hold.
  */
 export function readMigrationFiles(dir: string): MigrationFileFact[] {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.sql'))
     .sort()
-    .map((f) => ({
-      id: f.replace(/\.sql$/, ''),
-      checksum: createHash('sha256')
-        .update(readFileSync(join(dir, f), 'utf8'))
-        .digest('hex')
-        .slice(0, 16),
-    }));
+    .map((f) => {
+      const accepted = acceptedChecksums(readFileSync(join(dir, f), 'utf8'));
+      return { id: f.replace(/\.sql$/, ''), checksum: accepted[0]!, accepted };
+    });
 }
 
 /**
@@ -66,7 +64,7 @@ export function buildMigrationReport(
     if (!a) return { id: f.id, state: 'pending', appliedAt: null };
     return {
       id: f.id,
-      state: a.checksum === f.checksum ? 'applied' : 'modified',
+      state: (f.accepted ?? [f.checksum]).includes(a.checksum) ? 'applied' : 'modified',
       appliedAt: a.appliedAt.toISOString(),
     };
   });
