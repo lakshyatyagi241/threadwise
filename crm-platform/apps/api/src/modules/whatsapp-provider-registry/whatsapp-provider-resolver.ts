@@ -61,6 +61,10 @@ export function openProvider(row: ProviderRow, crypto: CryptoService): WabaRegis
     signatureScheme: row.signature_scheme,
     signatureHeaderName: row.signature_header_name,
     capabilities: { mediaUpload: row.capabilities?.mediaUpload !== false },
+    partnerProgram: row.partner_program ?? null,
+    partnerSolutionId: row.partner_solution_id ?? null,
+    onboardingAppId: row.onboarding_app_id ?? null,
+    onboardingConfigId: row.onboarding_config_id ?? null,
     ...secrets,
   };
 }

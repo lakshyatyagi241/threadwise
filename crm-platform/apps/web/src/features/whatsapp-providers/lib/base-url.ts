@@ -56,5 +56,5 @@ export function previewUrl(baseUrl: string, apiVersion: string, path = '/me'): s
   return `${check.url}${version ? `/${version}` : ''}${tail}`;
 }
 
-const API_VERSION = /^v\d{1,2}\.\d{1,2}$/;
+const API_VERSION = /^v\d{1,2}(\.\d{1,2})?$/;
 export const isApiVersion = (v: string): boolean => API_VERSION.test(v.trim());
