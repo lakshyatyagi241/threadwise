@@ -66,3 +66,15 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/wadesk-port/waba-interak
 - Not built, with the reason: 047 Twilio inbound (the Twilio connection and its inbox
   channel kind belong to WADEV), 054 ads reuse (MADS is the consumer), the buyer
   acknowledgement and pay link of 042 (CHK listens to `whatsapp.order.received`).
+
+## Groups management: blocked (WIRE-WABA-001 to 010, backlog BL-094, spec [waba-groups-management.md](../../specs/waba-groups-management.md))
+
+- Built: only the receiving side (above). **Blocked, not ported**: the `/waba-groups` page (001), create (002), refresh (003), reset invite link (004), edit settings (005),
+  join request approve and reject (006), remove participants (007), delete (008), sending to a group from the inbox (009) and the webhook-field check for the four Groups
+  fields (010). WaDesk has no inventory entry for these (its WFL domain is not inventoried), hence `WIRE-WABA-*` ids.
+- Found while reading WaDesk: settings (005) and remove participants (007) are routes with **no control on the page**; there is **no sync-all-groups** action (the list endpoint
+  is only the eligibility probe); the join queue is fed only by the webhook; a suspended group is not blocked on send; there is no plan gate. Recorded as decisions D3, D4 and
+  D10 in the spec (any addition becomes `intended` here once approved).
+- Finding in our code, not a WaDesk difference: a reply on a group thread (`g:<id>`) is built by `metaRecipient()` (digits only) with `recipient_type: 'individual'`, so it either
+  fails or can reach an unrelated number. Phase 0 of BL-094 guards it.
+- Nothing about groups ran against real Meta (no Official Business Account is available); the Meta facts in the spec are from a summary of its docs and need re-reading.
