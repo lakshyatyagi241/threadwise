@@ -75,6 +75,12 @@ export const PLAN_LIMIT_DEFS = [
   // Monthly AI token allowance of the workspace's assistants (counted by the AI token meter, ai-keys-usage-admin). Enforced there; the key name is
   // fixed because workspace overrides and the meter already read it. 0 = unlimited.
   { key: 'ai_token_limit_monthly', group: 'ai' },
+  // The Forms add-on (docs/specs/forms-builder-app.md 12.3). Active web forms the workspace holds (archived ones free the place). 0 = unlimited.
+  { key: 'forms', group: 'content' },
+  // Web form submissions accepted per calendar month, spam excluded. Over the cap a submission is still stored (`needs_review: submissions_cap`), never dropped. 0 = unlimited.
+  { key: 'form_submissions_monthly', group: 'content' },
+  // AI form builder generations per calendar month, a repair retry included (counted from the AI builder's phase 2; registered now so plans carry it). 0 = unlimited.
+  { key: 'ai_form_generations_monthly', group: 'ai' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -130,6 +136,10 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'forms_and_links', group: 'messaging', default: true },
   // Telegram, Facebook, Instagram and the other non-WhatsApp channels.
   { key: 'extra_channels', group: 'messaging', default: true },
+  // The Forms add-on (Form Builder): hosted and embedded web forms that land in the CRM. Default FALSE: the Marketplace app `forms` owns this
+  // key (`grants_plan_features`), so no plan row grants it and a default-on feature would be refused at publish. NOT `forms_and_links`, which
+  // is Reference's WhatsApp Flows forms and stays on by default.
+  { key: 'form_builder', group: 'advanced', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -163,6 +173,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   invoicing: 'Invoicing',
   forms_and_links: 'Forms and links',
   extra_channels: 'Telegram, Facebook and Instagram channels',
+  form_builder: 'Forms',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -199,6 +210,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'invoicing',
   'forms_and_links',
   'extra_channels',
+  'form_builder',
 ];
 export const PLAN_CHIP_MAX = 3;
 

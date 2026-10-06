@@ -22,6 +22,7 @@ import { MKT_ERROR_CODES } from '../marketplace/errors';
 import { LEAD_ERROR_CODES } from '../leads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
+import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -42,6 +43,7 @@ export const ERROR_CODES = {
   ...LEAD_ERROR_CODES,
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
+  ...FORMS_ERROR_CODES,
   // generic
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
