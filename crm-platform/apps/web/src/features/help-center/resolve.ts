@@ -1,7 +1,14 @@
 import { evaluateGates } from '@/features/_registry/resolve';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { Capabilities, ResolvedNavItem } from '@/features/_registry/types';
-import { HELP_AREAS, type HelpDoc, type HelpIndexEntry, type HelpLocaleText } from './types';
+import {
+  HELP_AREAS,
+  type HelpBlock,
+  type HelpDoc,
+  type HelpIndexEntry,
+  type HelpInline,
+  type HelpLocaleText,
+} from './types';
 
 type Screen = ResolvedNavItem | ResolvedSettingsTile;
 
@@ -61,6 +68,22 @@ export function localized(doc: HelpDoc, locale: string): HelpLocaleText & { fall
   return { ...doc.text['en']!, fallback: locale !== 'en' };
 }
 
+const WORDS_PER_MINUTE = 200;
+
+const inlineWords = (runs: readonly HelpInline[]): number =>
+  runs.reduce((n, r) => n + r.v.split(/\s+/).filter(Boolean).length, 0);
+
+/** Whole minutes to read a guide: its words at 200 a minute, never less than one. */
+export function readMinutes(blocks: readonly HelpBlock[]): number {
+  let words = 0;
+  for (const b of blocks) {
+    if (b.t === 'h') words += b.text.split(/\s+/).filter(Boolean).length;
+    else if (b.t === 'p' || b.t === 'note') words += inlineWords(b.inline);
+    else for (const item of b.items) words += inlineWords(item);
+  }
+  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+}
+
 /** What the client gets of the visible docs: no bodies, in the person's language. */
 export function toIndex(
   docs: readonly HelpDoc[],
@@ -84,6 +107,7 @@ export function toIndex(
       headings: text.blocks.flatMap((b) =>
         b.t === 'h' ? [{ id: b.id, text: b.text, level: b.level }] : [],
       ),
+      readMinutes: readMinutes(text.blocks),
       fallback: text.fallback,
     };
   });

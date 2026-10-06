@@ -1,7 +1,6 @@
 {
   "help": {
     "title": "Help center",
-    "subtitle": "Guides for the features on your plan.",
     "searchLabel": "Search help",
     "searchPlaceholder": "Search guides",
     "resultsStatus": "{count, plural, =0 {No guides found} one {# guide} other {# guides}}",
@@ -24,9 +23,10 @@
       "apps": "Marketplace",
       "settings": "Settings",
       "account": "Account",
-      "getting-started": "Getting started"
+      "getting-started": "Getting started",
+      "troubleshooting": "Troubleshooting"
     },
-    "allHelp": "All help",
+    "allHelp": "Back to help",
     "onThisPage": "On this page",
     "openScreen": "Open this screen",
     "shownInEnglish": "This guide is not translated into your language yet, so it is shown in English.",
@@ -34,8 +34,21 @@
       "label": "Help: {title}",
       "readMore": "Read the guide"
     },
-    "browseLabel": "Browse by area",
-    "startHere": "Start here",
-    "guideCount": "{count, plural, =0 {No guides} one {# guide} other {# guides}}"
+    "guideCount": "{count, plural, =0 {No guides} one {# guide} other {# guides}}",
+    "crumb": "More / Help",
+    "heading": "Help",
+    "headingRest": "& guides",
+    "back": "Back",
+    "askSupport": "Can't find it? Ask support",
+    "askSupportShort": "Support",
+    "categories": "Categories",
+    "allGuides": "All guides",
+    "needHuman": "Need a human?",
+    "contactSupport": "Contact support",
+    "popular": "Popular",
+    "searchResults": "Search results",
+    "read": "Read guide",
+    "readMinutes": "{count, plural, one {# min read} other {# min read}}",
+    "moreInArea": "More in {area}"
   }
 }
