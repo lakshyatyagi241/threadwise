@@ -1398,7 +1398,8 @@
             "storefront_builder": "The online storefront builder.",
             "invoicing": "Invoices, credit notes, payments, sales orders and tax rates.",
             "forms_and_links": "Lead capture forms and shareable links.",
-            "extra_channels": "The Telegram, Facebook and Instagram channels."
+            "extra_channels": "The Telegram, Facebook and Instagram channels.",
+            "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch."
           },
           "units": {
             "days": "Days",
@@ -1536,7 +1537,10 @@
             "recurring_invoices": "Recurring invoices",
             "api_keys": "API keys",
             "webhooks": "Outbound webhooks",
-            "ai_token_limit_monthly": "AI tokens per month (platform keys)"
+            "ai_token_limit_monthly": "AI tokens per month (platform keys)",
+            "forms": "Web forms",
+            "form_submissions_monthly": "Form submissions per month",
+            "ai_form_generations_monthly": "AI form builder generations per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1571,7 +1575,8 @@
             "storefront_builder": "Storefront and website builder",
             "invoicing": "Invoicing (invoices, credit notes, recurring invoices)",
             "forms_and_links": "Forms, click-to-chat links and groups",
-            "extra_channels": "Telegram, Facebook and Instagram channels"
+            "extra_channels": "Telegram, Facebook and Instagram channels",
+            "form_builder": "Forms (web form builder)"
           },
           "problems": {
             "required": "This field is required.",
@@ -1620,7 +1625,10 @@
             "recurring_invoices": "Recurring invoice schedules, in any status.",
             "api_keys": "Active API keys. Revoking a key frees its place.",
             "webhooks": "Outbound webhook endpoints (inbox webhooks and API webhooks together).",
-            "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped."
+            "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped.",
+            "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
+            "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
+            "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited."
           }
         }
       },

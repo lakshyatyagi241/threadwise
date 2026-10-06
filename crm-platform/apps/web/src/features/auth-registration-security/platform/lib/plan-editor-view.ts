@@ -77,6 +77,9 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   api_keys: 'total',
   webhooks: 'total',
   ai_token_limit_monthly: 'perMonth',
+  forms: 'total',
+  form_submissions_monthly: 'perMonth',
+  ai_form_generations_monthly: 'perMonth',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */

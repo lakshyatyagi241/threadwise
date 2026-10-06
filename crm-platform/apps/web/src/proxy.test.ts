@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, type NextResponse } from 'next/server';
 import { describe, expect, it } from 'vitest';
 import { config, proxy } from './proxy';
 import { REQUEST_PATH_HEADER } from '@/lib/auth/next-path';
 
 const get = (url: string, headers: Record<string, string> = {}) =>
-  proxy(new NextRequest(`http://localhost:3001${url}`, { headers }));
+  proxy(new NextRequest(`http://localhost:3001${url}`, { headers })) as NextResponse;
 
 function requestHeader(res: Response, name: string): string | null {
   // NextResponse.next({ request: { headers } }) publishes the new request headers as x-middleware-request-*.
@@ -67,5 +67,27 @@ describe('proxy matcher', () => {
     for (const path of ['/api/auth/login', '/_next/static/x.js', '/favicon.ico', '/icon.svg']) {
       expect(re.test(path), path).toBe(false);
     }
+  });
+});
+
+describe('proxy: form pages are the one route other sites may frame (Forms add-on)', () => {
+  const KEY = 'AbCdEfGhIjKlMnOpQrStUv';
+  const form = (url: string) =>
+    Promise.resolve(proxy(new NextRequest(`http://localhost:3001${url}`)));
+
+  it('keeps the hosted page unframeable', async () => {
+    const res = await form(`/f/${KEY}`);
+    expect(res.headers.get('content-security-policy')).toBe("frame-ancestors 'none'");
+    expect(res.headers.get('x-frame-options')).toBe('DENY');
+  });
+
+  it('fails closed for the embedded page when the allow-list cannot be read', async () => {
+    const res = await form(`/f/${KEY}?embed=1`);
+    expect(res.headers.get('content-security-policy')).toBe("frame-ancestors 'none'");
+  });
+
+  it('leaves every other page to the blanket policy of next.config', () => {
+    expect(get('/contacts').headers.get('content-security-policy')).toBeNull();
+    expect(get('/forms').headers.get('content-security-policy')).toBeNull();
   });
 });

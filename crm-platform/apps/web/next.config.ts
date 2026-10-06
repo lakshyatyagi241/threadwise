@@ -49,8 +49,21 @@ const nextConfig: NextConfig = {
       { key: 'Pragma', value: 'no-cache' },
     ];
     return [
-      // Framing is refused everywhere except the embeddable chat widget, which customers put on their own sites.
-      { source: '/((?!widget(?:/|$)).*)', headers: security },
+      // Framing is refused everywhere except the embeddable chat widget and the Forms pages, which customers put on their own sites.
+      { source: '/((?!widget(?:/|$)|f/).*)', headers: security },
+      // A form page (/f/<key>): never indexed and never leaking its address. Its frame policy is per form (the allow-list the owner
+      // set), so `proxy.ts` sets it on every request to the page and fails closed ('none') on any doubt. No frame header is declared
+      // here on purpose: a static X-Frame-Options would still be sent next to the policy `proxy.ts` sets and would block the embed.
+      {
+        source: '/f/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+          { key: 'Cache-Control', value: 'no-store' },
+        ],
+      },
       ...NO_STORE_PAGES.map((source) => ({ source, headers: noStore })),
       // The buyer's page (/q/<token>) holds a customer's name and prices and its address is the credential: never cached,
       // never indexed, never leaked through a Referer header (TW-PROP-018, D-16).

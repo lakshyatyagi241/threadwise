@@ -543,7 +543,8 @@
             "storefront_builder": "Storefront builder",
             "invoicing": "Invoicing",
             "forms_and_links": "Forms and links",
-            "extra_channels": "Telegram, Facebook and Instagram"
+            "extra_channels": "Telegram, Facebook and Instagram",
+            "form_builder": "Forms"
           },
           "cta": {
             "continueFree": "Continue free",
