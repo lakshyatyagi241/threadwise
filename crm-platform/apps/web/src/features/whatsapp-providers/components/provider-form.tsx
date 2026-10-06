@@ -10,11 +10,13 @@ import {
   WHATSAPP_BILLING_MODES,
   WHATSAPP_CREDENTIAL_MODES,
   WHATSAPP_ONBOARDING_METHODS,
+  WHATSAPP_PARTNER_PROGRAMS,
+  type WhatsappPartnerProgram,
   WHATSAPP_SIGNATURE_SCHEMES,
   WHATSAPP_WEBHOOK_MODES,
   type WhatsappProvider,
 } from '@crm/contracts';
-import { Alert, Button, Checkbox, Field, Input, Spinner, Textarea } from '@crm/ui';
+import { Alert, Button, Checkbox, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { useUnsavedGuard } from '@/features/auth-registration-security/platform/ui/use-unsaved-guard';
 import { createProvider, updateProvider, wapKeys } from '../api';
@@ -32,6 +34,7 @@ import {
   stepOfField,
   validateDraft,
   withAuthScheme,
+  withPartnerProgram,
   type FieldProblem,
   type ProviderDraft,
   type WizardStep,
@@ -551,6 +554,11 @@ function CredentialFields({ draft, set, fieldError, provider }: SectionProps) {
         options={modeOptions}
         disabled={inUse}
       />
+      {fieldError('credentialMode', draft.partnerProgram !== null) && (
+        <p role="alert" className="text-xs text-danger">
+          {fieldError('credentialMode', draft.partnerProgram !== null)}
+        </p>
+      )}
       <SecretField
         label={t('fields.providerToken')}
         hint={
@@ -643,10 +651,13 @@ function WebhookFields({ draft, set, fieldError, provider }: SectionProps) {
   );
 }
 
-function BillingFields({ draft, set, fieldError }: SectionProps) {
+function BillingFields({ draft, set, fieldError, builtin }: SectionProps) {
   const t = useTranslations(NS);
   const appId = useId();
   const configId = useId();
+  const programId = useId();
+  const solutionId = useId();
+  const te = useTranslations('whatsapp-providers.enums');
   const billingOptions = useOptions('billingMode', WHATSAPP_BILLING_MODES);
   const onboardingOptions = useOptions('onboarding', WHATSAPP_ONBOARDING_METHODS);
   return (
@@ -714,6 +725,49 @@ function BillingFields({ draft, set, fieldError }: SectionProps) {
           </Field>
         </div>
       )}
+      {!builtin && (
+        <div className="space-y-4">
+          <Field label={t('fields.partnerProgram')} htmlFor={programId}>
+            <Select
+              id={programId}
+              value={draft.partnerProgram ?? ''}
+              onChange={(e) => {
+                const v = e.target.value as WhatsappPartnerProgram | '';
+                set(withPartnerProgram(draft, v === '' ? null : v));
+              }}
+            >
+              <option value="">{te('partnerProgram.none.label')}</option>
+              {WHATSAPP_PARTNER_PROGRAMS.map((v) => (
+                <option key={v} value={v}>
+                  {te(`partnerProgram.${v}.label`)}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          {draft.partnerProgram === 'pinnacle' && (
+            <>
+              <Alert>{t('hints.partnerPinnacle')}</Alert>
+              <Field
+                label={t('fields.partnerSolutionId')}
+                htmlFor={solutionId}
+                hint={t('hints.partnerSolutionId')}
+                error={fieldError('partnerSolutionId', draft.partnerSolutionId.trim() !== '')}
+              >
+                <Input
+                  id={solutionId}
+                  dir="ltr"
+                  inputMode="numeric"
+                  value={draft.partnerSolutionId}
+                  onChange={(e) => set({ partnerSolutionId: e.target.value })}
+                  className="font-mono text-xs"
+                  autoComplete="off"
+                  invalid={!!fieldError('partnerSolutionId', draft.partnerSolutionId.trim() !== '')}
+                />
+              </Field>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -751,6 +805,12 @@ function ReviewStep({
     [t('fields.billingMode'), te(`billingMode.${draft.billingMode}.label`)],
     [t('fields.mediaUpload'), draft.mediaUpload ? t('review.yes') : t('review.no')],
     [t('fields.onboarding'), te(`onboarding.${draft.onboarding}.label`)],
+    ...(draft.partnerProgram
+      ? ([
+          [t('fields.partnerProgram'), te(`partnerProgram.${draft.partnerProgram}.label`)],
+          [t('fields.partnerSolutionId'), <code key="ps">{draft.partnerSolutionId.trim()}</code>],
+        ] as Array<[string, ReactNode]>)
+      : []),
     [
       t('review.secrets'),
       (['providerToken', 'appSecret', 'webhookSecret', 'verifyToken'] as const)

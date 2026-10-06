@@ -24,6 +24,8 @@ export function provider(over: Partial<WhatsappProvider> = {}): WhatsappProvider
     onboarding: 'manual',
     onboardingAppId: null,
     onboardingConfigId: null,
+    partnerProgram: null,
+    partnerSolutionId: null,
     status: 'disabled',
     isDefault: false,
     builtin: null,

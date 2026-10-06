@@ -26,6 +26,8 @@ export interface ProviderRow {
   onboarding: 'manual' | 'embedded_signup';
   onboarding_app_id: string | null;
   onboarding_config_id: string | null;
+  partner_program: 'pinnacle' | null;
+  partner_solution_id: string | null;
   status: 'active' | 'disabled' | 'archived';
   is_default: boolean;
   notes: string | null;
@@ -57,6 +59,8 @@ export interface NewProviderRow {
   onboarding: string;
   onboardingAppId: string | null;
   onboardingConfigId: string | null;
+  partnerProgram: string | null;
+  partnerSolutionId: string | null;
   notes: string | null;
   operatorId: number;
 }
@@ -79,6 +83,8 @@ export type ProviderPatch = Partial<{
   onboarding: string;
   onboarding_app_id: string | null;
   onboarding_config_id: string | null;
+  partner_program: string | null;
+  partner_solution_id: string | null;
   notes: string | null;
   status: string;
   is_default: boolean;
@@ -109,6 +115,8 @@ const COLUMN_LIST = [
   'onboarding',
   'onboarding_app_id',
   'onboarding_config_id',
+  'partner_program',
+  'partner_solution_id',
   'status',
   'is_default',
   'notes',
@@ -219,13 +227,13 @@ export class ProviderStore {
       sql`INSERT INTO whatsapp_providers
             (key, label, adapter_kind, base_url, api_version, auth_scheme, header_templates, credential_mode, credentials_enc,
              credential_hints, webhook_mode, signature_scheme, signature_header_name, billing_mode, capabilities, onboarding,
-             onboarding_app_id, onboarding_config_id, notes, created_by_operator_id)
+             onboarding_app_id, onboarding_config_id, partner_program, partner_solution_id, notes, created_by_operator_id)
           VALUES
             (${v.key}, ${v.label}, ${v.adapterKind}, ${v.baseUrl}, ${v.apiVersion}, ${v.authScheme},
              ${JSON.stringify(v.headerTemplates)}::jsonb, ${v.credentialMode}, ${v.credentialsEnc},
              ${JSON.stringify(v.credentialHints)}::jsonb, ${v.webhookMode}, ${v.signatureScheme}, ${v.signatureHeaderName},
              ${v.billingMode}, ${JSON.stringify(v.capabilities)}::jsonb, ${v.onboarding}, ${v.onboardingAppId},
-             ${v.onboardingConfigId}, ${v.notes}, ${v.operatorId})
+             ${v.onboardingConfigId}, ${v.partnerProgram}, ${v.partnerSolutionId}, ${v.notes}, ${v.operatorId})
           RETURNING ${COLUMNS_NO_ALIAS}`,
     );
     return toRow(res.rows[0] as Record<string, unknown>);

@@ -67,6 +67,14 @@ export function engineBillingModeOf(mode: WhatsappBillingMode): 'meta_direct' | 
   return null;
 }
 
+/**
+ * A partner onboarding flow a provider takes after Embedded Signup. `pinnacle`: create the client's Pinnacle account (its apikey is the
+ * number's channel token), send the embedded details, then share the Meta credit line. `null`: none (the number connects as it always did).
+ */
+export const WHATSAPP_PARTNER_PROGRAMS = ['pinnacle'] as const;
+export const whatsappPartnerProgramSchema = z.enum(WHATSAPP_PARTNER_PROGRAMS);
+export type WhatsappPartnerProgram = z.infer<typeof whatsappPartnerProgramSchema>;
+
 export const WHATSAPP_ONBOARDING_METHODS = ['manual', 'embedded_signup'] as const;
 export const whatsappOnboardingMethodSchema = z.enum(WHATSAPP_ONBOARDING_METHODS);
 export type WhatsappOnboardingMethod = z.infer<typeof whatsappOnboardingMethodSchema>;
