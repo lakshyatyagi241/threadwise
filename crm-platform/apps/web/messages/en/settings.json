@@ -65,6 +65,11 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "warmer": {
+        "label": "Warmer",
+        "description": "Warm up your WhatsApp numbers so scheduled messages go out at a safe pace.",
+        "keywords": "warm up, warming, number, reputation, sending limit, queue, pace, scheduled"
+      },
       "facebook": {
         "label": "Facebook Messenger",
         "description": "Answer messages sent to your Facebook page.",
@@ -249,6 +254,16 @@
         "label": "Add-ons",
         "description": "Switch optional features on or off for your workspace.",
         "keywords": "extensions, modules, plugins, marketplace"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Connect your Shopify store to sync products and orders and message your customers.",
+        "keywords": "shop, store, ecommerce, products, orders, sync, abandoned cart"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Connect your WooCommerce store to sync products and orders and message your customers.",
+        "keywords": "woo, wordpress, shop, store, ecommerce, products, orders, sync"
       },
       "i18n-translation": {
         "label": "Translation",
