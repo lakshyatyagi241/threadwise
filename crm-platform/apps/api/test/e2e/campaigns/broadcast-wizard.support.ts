@@ -189,7 +189,7 @@ export function buildLab(h: Harness): Lab {
           errorCode: r.errorCode ?? null,
           errorMessage: r.errorMessage ?? null,
         };
-        (await receipts.handle(receipt)) || (await tests.handleReceipt(receipt));
+        if (!(await receipts.handle(receipt))) await tests.handleReceipt(receipt);
       }
       return batch.length;
     },
