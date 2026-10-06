@@ -24,6 +24,7 @@ const entry = (id: string, over: Partial<HelpIndexEntry> = {}): HelpIndexEntry =
   keywords: [],
   routes: [],
   headings: [],
+  readMinutes: 1,
   fallback: false,
   ...over,
 });

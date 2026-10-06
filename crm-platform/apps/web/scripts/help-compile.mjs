@@ -18,6 +18,7 @@ export const AREA_IDS = [
   'settings',
   'account',
   'getting-started',
+  'troubleshooting',
 ];
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
