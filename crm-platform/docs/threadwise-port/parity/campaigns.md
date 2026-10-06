@@ -84,3 +84,43 @@ The builder reuses broadcasts' audience picker, send-time overrides panel, attri
 | 18  | Card resend     | Re-queues and sends to everyone              | The same, with a confirm; the detail page also has "Resend to N failed".                         |
 | 19  | Channel chooser | `?channel=sms` and `?channel=email` builders | Not built: SMS and email campaigns are skipped on the owner's word.                              |
 | 20  | Build with AI   | A button in the composer                     | Not built (TW-CAMP-026, blocked).                                                                |
+
+## Broadcast wizard (addition)
+
+An **addition** beyond Reference 1.7.0 (TW-CAMP-029 to 035): a four-step "Create broadcast" screen for WhatsApp template broadcasts, asked for by the project
+owner. The classic builder (`/campaigns/create`) is unchanged and remains the only way to send custom text, media, flows and A/B tests.
+
+### Comparison with the live reference (http://localhost:8000, read-only)
+
+Reference's `/wa-campaigns/create` is ONE long form: name, sender, campaign type (text, template, button, flow, media, custom), message, audience
+(contacts, groups, tags, typed numbers, CSV), schedule (now, scheduled, recurring with a repeat interval and until-date), A/B, Smart Delivery and an
+end date. The wizard was compared with it on these points (the reference was read from the source and the inventory; no live WhatsApp session was
+used on either side):
+
+| #   | Behaviour                                             | Reference                                                        | Wizard                                                                                          | Verdict                  |
+| --- | ----------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------ |
+| 1   | Steps                                                 | one form                                                      | four steps with a stepper, a saved draft and resume                                             | addition                 |
+| 2   | Template gate                                         | approved only on Cloud API; OTP refused; media check          | same rules (the classic gate is called at launch), the list only offers usable templates        | same                     |
+| 3   | Audience                                              | contacts, groups, tags, numbers, CSV                          | groups, segments and an AND/OR condition builder; no tags/numbers/CSV (use the classic builder) | addition, narrower input |
+| 4   | Opted-out contacts                                    | kept on the list, stamped `unsubscribed` at run start         | removed from the count and the recipients up front, shown as "skipped"                          | intended                 |
+| 5   | Wallet                                                | precheck at launch (TW-WALLET-013)                            | the same precheck, plus a visible credit check and shortfall before Next                        | same + addition          |
+| 6   | Variables                                             | per-template map and send-time overrides                      | per-slot mapping to a field (with fallback) or fixed text, sample messages for real contacts    | addition                 |
+| 7   | Schedule                                              | now, scheduled, recurring daily/weekly/monthly + repeat_until | now, scheduled, recurring with every N, weekdays, month day, ends never/on a date/after N runs  | superset                 |
+| 8   | Recurring storage                                     | one row re-queued (past runs lost)                            | a series with one child campaign per run                                                        | intended                 |
+| 9   | Frequency cap 131049                                  | tried twice, 6 h then 12 h                                    | opt-in retries, exactly 24 h apart, until an end date, attempt log                              | intended                 |
+| 10  | Test send                                             | none in the builder                                           | test to up to ten E.164 numbers, logged, charged on delivery                                    | addition                 |
+| 11  | A/B, Smart Delivery, end date, flows, custom messages | yes                                                           | not in the wizard                                                                               | classic builder only     |
+
+### Automated evidence
+
+- `apps/api/test/unit/campaigns/recurrence.spec.ts` (23), `wizard-rules.spec.ts` (25), `wizard-contracts.spec.ts` (22), `whatsapp-fixture.spec.ts` (5).
+- `apps/api/test/e2e/campaigns/broadcast-wizard.e2e.spec.ts` (35) and `broadcast-wizard-worker.e2e.spec.ts` (28), against real Postgres and Redis: draft to launch in every mode, the series' sequence of runs (weekly, month-end clamp, ends, DST, outage, refused run, two workers), retries only on 131049 exactly 24 h apart and never twice, the test send charged once on delivery, insufficient balance, tenant isolation, permissions.
+- `apps/web/src/features/campaigns/wizard/**` unit tests and the en/ar key parity test.
+- A browser run of the real UI with screenshots (see the final report of the change).
+
+### Not verified
+
+- **Real Meta/WhatsApp was never called.** All sends in tests and the demo go through the sandbox sender (`CAMP_PROVIDER_MODE=fixture`). Meta's real behaviour for 131049 (which message, when the cap lifts, what the webhook carries) is taken from the inventory (TW-CAMP-012) and Meta's documentation, not observed.
+- Cloud API delivery reports now reach campaigns through `WabaReceiptRegistry`; this path is covered through the sandbox's reports (same receipt handler), not through a signed Meta webhook.
+- No side-by-side twin run (`threadwise-playwright-parity`) exists for the wizard: Reference has no equivalent screen to run it against.
+- Interactive web component tests (typing, clicking, the dialog) are not automated: jsdom and testing-library are not installed in this repo; the logic behind them is unit-tested and the flow was exercised in a real browser.
