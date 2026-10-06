@@ -38,7 +38,7 @@ export function AffiliateSkeleton() {
     <div role="status" aria-busy="true" className="space-y-6">
       <span className="sr-only">{t('loading')}</span>
       <Bone className="h-28" />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[0, 1, 2, 3, 4].map((i) => (
           <Bone key={i} className="h-24" />
         ))}
@@ -117,14 +117,14 @@ export function ShareHeader({
   );
 }
 
-/** The five figures of the range. Search never changes them. */
+/** The four figures of the range (the code itself is shown once, in the share card above). Search never changes them. */
 export function KpiStrip({ data, locale }: { data: ReferralListResponse; locale: string }) {
   const t = useTranslations(`${NS}.kpi`);
   const { stats, currency } = data;
   const fmt = (minor: number) => money(minor, currency, locale);
   const nf = new Intl.NumberFormat(locale);
   return (
-    <div aria-live="polite" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+    <div aria-live="polite" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <StatTile
         label={t('inRange')}
         value={nf.format(stats.signupsInRange)}
@@ -141,15 +141,6 @@ export function KpiStrip({ data, locale }: { data: ReferralListResponse; locale:
         hint={t('last30Earned', { amount: fmt(stats.credits30dMinor) })}
       />
       <StatTile label={t('average')} value={fmt(stats.avgPerSignupMinor)} />
-      <StatTile
-        label={t('yourCode')}
-        value={<span className="font-mono text-2xl tracking-wider">{data.code || '-'}</span>}
-        hint={
-          data.rewardMinor > 0
-            ? t('yourCodeReward', { amount: fmt(data.rewardMinor) })
-            : t('yourCodeNone')
-        }
-      />
     </div>
   );
 }
