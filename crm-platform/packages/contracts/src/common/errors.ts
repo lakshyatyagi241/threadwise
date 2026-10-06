@@ -341,7 +341,7 @@ export const ERROR_CODES = {
   AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
   /** No key (own or platform) is available for the provider a call asked for. */
   AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
-  // marketing site, blog, legal pages and guidebook (TW-CMS)
+  // marketing site, blog and legal pages (TW-CMS)
   CMS_SLUG_TAKEN: 'CMS_SLUG_TAKEN',
 
   // reseller billing (TW-BSP)
