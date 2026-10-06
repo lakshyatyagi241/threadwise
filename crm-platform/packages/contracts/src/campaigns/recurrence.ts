@@ -86,7 +86,8 @@ export type RecurrenceRuleInput = z.input<typeof recurrenceRuleSchema>;
 // --------------------------------------------------------------------------- calendar helpers
 
 const pad = (n: number, w = 2) => String(n).padStart(w, '0');
-const fmt = (d: Date) => `${pad(d.getUTCFullYear(), 4)}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+const fmt = (d: Date) =>
+  `${pad(d.getUTCFullYear(), 4)}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 const parse = (date: string): Date => new Date(`${date}T00:00:00Z`);
 
 /** `date` moved by `days` calendar days. */
@@ -101,7 +102,8 @@ export function weekdayOf(date: string): number {
   return parse(date).getUTCDay();
 }
 
-const daysInMonth = (year: number, month0: number) => new Date(Date.UTC(year, month0 + 1, 0)).getUTCDate();
+const daysInMonth = (year: number, month0: number) =>
+  new Date(Date.UTC(year, month0 + 1, 0)).getUTCDate();
 
 /** The offset of `zone` at `instant` (ms since the epoch), in ms. */
 function zoneOffsetMs(zone: string, instant: number): number {
@@ -116,7 +118,14 @@ function zoneOffsetMs(zone: string, instant: number): number {
     second: '2-digit',
   }).formatToParts(new Date(instant));
   const get = (t: string) => Number(parts.find((p) => p.type === t)!.value);
-  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'), get('second'));
+  const asUtc = Date.UTC(
+    get('year'),
+    get('month') - 1,
+    get('day'),
+    get('hour'),
+    get('minute'),
+    get('second'),
+  );
   return asUtc - Math.floor(instant / 1000) * 1000;
 }
 
@@ -140,7 +149,10 @@ export function zonedTimeToUtc(date: string, time: string, zone: string): Date {
   }
   // A time that happens twice (fall back): the first of the two.
   const earlier = utc - 3_600_000;
-  if (zoneOffsetMs(zone, earlier) !== zoneOffsetMs(zone, utc) && earlier + zoneOffsetMs(zone, earlier) === naive) {
+  if (
+    zoneOffsetMs(zone, earlier) !== zoneOffsetMs(zone, utc) &&
+    earlier + zoneOffsetMs(zone, earlier) === naive
+  ) {
     utc = earlier;
   }
   return new Date(utc);
@@ -238,7 +250,11 @@ export function occurrenceAt(rule: RecurrenceRule, index: number): Occurrence | 
 }
 
 /** The next `count` runs from `fromIndex`, for the wizard's preview. */
-export function upcomingOccurrences(rule: RecurrenceRule, count: number, fromIndex = 0): Occurrence[] {
+export function upcomingOccurrences(
+  rule: RecurrenceRule,
+  count: number,
+  fromIndex = 0,
+): Occurrence[] {
   const out: Occurrence[] = [];
   for (let i = fromIndex; out.length < count; i++) {
     const o = occurrenceAt(rule, i);
