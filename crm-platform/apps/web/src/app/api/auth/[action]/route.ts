@@ -106,7 +106,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   void _provider;
   // A sign-up that left the referral box empty still counts the link that brought the visitor here.
   const outgoing =
-    action === 'signup'
+    action === 'signup' || action === 'social-callback'
       ? withReferralFallback(payload, store.get(REFERRAL_COOKIE)?.value)
       : payload;
 
