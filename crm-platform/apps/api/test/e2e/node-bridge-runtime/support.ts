@@ -1,3 +1,4 @@
+import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import type { Redis } from 'ioredis';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
@@ -135,6 +136,7 @@ export async function worker(
     opts.inbound ?? r.inbound,
     opts.receipts ?? r.receipts,
     r.control,
+    h.app.get(UNOFFICIAL_WHATSAPP_GATE),
   );
   rt.staggerMs = 0;
   await rt.onApplicationBootstrap();

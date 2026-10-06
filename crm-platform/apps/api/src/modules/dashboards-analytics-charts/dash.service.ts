@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   type DashWidgets,
@@ -9,6 +9,10 @@ import {
   type DashSummaryResponse,
   type DashThroughputResponse,
 } from '@crm/contracts';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
@@ -49,6 +53,7 @@ export class DashService {
     private readonly extrasRepo: DashExtrasRepository,
     private readonly plans: PlanEntitlementService,
     private readonly config: ConfigService<Env, true>,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   /** WaDesk's hard-coded slot count when the plan sets no device limit. */
@@ -63,11 +68,15 @@ export class DashService {
     const { orgId } = RequestContextStore.require();
     const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
     const deviceCap = await this.plans.limit(orgId, 'devices');
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveDashWindow(range, tz, now, custom);
       if (!w) throw tooLong();
-      const devices = await this.widgetsRepo.devices(tx, orgId);
+      // Off: no devices listed, flagged so the card can hide itself (owner decision 2026-10-05). The rows stay in the database.
+      const devices = unofficialOn
+        ? await this.widgetsRepo.devices(tx, orgId)
+        : { total: 0, online: 0, rows: [], unofficialDisabled: true };
       return {
         contacts: await this.widgetsRepo.contacts(tx, orgId, w.from),
         campaigns: await this.widgetsRepo.campaigns(tx, orgId),
@@ -176,12 +185,15 @@ export class DashService {
   /** The analytics list panels (WD-DASH-026, 028, 030) for the same window rules as the overview. */
   async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
     const { orgId } = RequestContextStore.require();
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
       if (!w) throw tooLong();
       return {
-        devices: await this.panelsRepo.devices(tx, orgId),
+        devices: unofficialOn
+          ? await this.panelsRepo.devices(tx, orgId)
+          : { total: 0, online: 0, rows: [], unofficialDisabled: true },
         templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
         contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
         team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
