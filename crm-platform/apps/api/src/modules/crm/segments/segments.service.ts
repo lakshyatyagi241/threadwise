@@ -423,6 +423,34 @@ export class SegmentsService {
     });
   }
 
+  /**
+   * The contact ids of the segments a sender picked, inside the caller's own transaction (a campaign or broadcast
+   * builds its whole audience in one). Unlike `resolveMembers` this checks the caller may see each segment: a private
+   * segment of someone else reads as not found. Each segment is cut at `cap` ids; consent is the caller's business.
+   */
+  async memberIdsIn(
+    tx: Tx,
+    orgId: number,
+    segmentUuids: readonly string[],
+    cap = 100_000,
+  ): Promise<number[]> {
+    if (segmentUuids.length === 0) return [];
+    const access = currentSegmentAccess();
+    const ids: number[] = [];
+    for (const uuid of segmentUuids) {
+      const row = await this.requireVisible(tx, orgId, uuid, access);
+      const compiled = await this.compile(tx, orgId, row);
+      const res = await tx.execute(sql`
+        SELECT contacts.id FROM contacts
+        WHERE ${segmentContactsWhere(orgId, compiled.where)}
+        ORDER BY contacts.id LIMIT ${cap}
+      `);
+      for (const r of res.rows as Array<{ id: number | string }>) ids.push(Number(r.id));
+      await this.repo.markUsed(tx, orgId, row.id);
+    }
+    return ids;
+  }
+
   /** How many contacts are in a segment now, with the 3 second ceiling (see countWithTimeout). */
   async countMembers(
     segmentUuid: string,
