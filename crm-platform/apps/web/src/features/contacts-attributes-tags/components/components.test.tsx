@@ -17,7 +17,9 @@ import {
   STICKY_NAME_HEAD,
   STICKY_SELECT,
 } from '../lib/sticky';
-import { ContactsGrid, ContactsTable, type ListHandlers } from './contacts-list';
+import { ContactsKanban } from './contacts-kanban';
+import { ContactsTable, type ListHandlers } from './contacts-list';
+import { DEFAULT_FILTERS } from '../api/contacts';
 import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, type ContactsToolbarProps } from './contacts-toolbar';
 import { SlashTextarea } from './slash-picker';
@@ -242,14 +244,36 @@ describe('ContactsTable', () => {
   });
 });
 
-describe('ContactsGrid', () => {
-  it('renders one card per contact with the same data', () => {
-    const out = html(
-      <ContactsGrid rows={[row(), row({ id: 'other', name: 'Priya Patel' })]} {...handlers()} />,
+describe('ContactsKanban', () => {
+  const noop = () => undefined;
+  const stages = [
+    { value: 'new', label: 'New' },
+    { value: 'qualified', label: 'Qualified' },
+    { value: 'won', label: 'Won' },
+  ];
+  const board = (filters = DEFAULT_FILTERS) =>
+    html(
+      <QueryClientProvider client={new QueryClient()}>
+        <ContactsKanban
+          filters={filters}
+          stages={stages}
+          toView={() => row()}
+          onStageChange={noop}
+          stageBusyId={null}
+        />
+      </QueryClientProvider>,
     );
-    expect(out.match(/<li /g)).toHaveLength(2);
-    expect(out).toContain('Priya Patel');
-    expect(out).toContain('Order Id:');
+  it('has one column per stage', () => {
+    const out = board();
+    for (const s of ['New', 'Qualified', 'Won']) expect(out).toContain(s);
+    expect(out.match(/<section /g)).toHaveLength(3);
+    expect(out).toContain('Contacts by stage');
+  });
+  it('a stage chosen in Filters narrows the board to that column', () => {
+    const out = board({ ...DEFAULT_FILTERS, lifecycleStage: 'qualified' });
+    expect(out.match(/<section /g)).toHaveLength(1);
+    expect(out).toContain('Qualified');
+    expect(out).not.toContain('Won');
   });
 });
 
@@ -390,6 +414,8 @@ describe('ContactsToolbar', () => {
           canCreateSegment={false}
           rules=""
           onRules={noop}
+          onUpdateSelected={noop}
+          updateDisabled={false}
           tag=""
           onTag={noop}
           tags={[]}
@@ -433,6 +459,11 @@ describe('ContactsToolbar', () => {
     expect(toolbar({})).not.toContain('More Actions');
   });
 
+  it('shows Import and a labelled Columns button without opening any menu', () => {
+    const out = toolbar({ import: true });
+    for (const label of ['Import', 'Columns']) expect(out).toContain(label);
+    expect(toolbar({})).not.toContain('>Import<');
+  });
   it('shows "More Actions" as soon as one action is allowed', () => {
     expect(toolbar({ export: true })).toContain('More Actions');
     expect(toolbar({ delete: true })).toContain('More Actions');

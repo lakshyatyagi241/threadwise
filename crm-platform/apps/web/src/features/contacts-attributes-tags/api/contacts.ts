@@ -2,6 +2,7 @@
 
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useQuery,
   useQueryClient,
   type QueryClient,
@@ -238,4 +239,29 @@ export function invalidateContacts(qc: QueryClient) {
     qc.invalidateQueries({ queryKey: KEYS.contacts }),
     qc.invalidateQueries({ queryKey: KEYS.stats }),
   ]);
+}
+
+/** Contacts shown per column of the stage board before "Load more". */
+export const BOARD_PAGE = 20;
+
+/**
+ * One column of the stage board: the contacts in `stage` that match the other filters (search, tag, group, consent...),
+ * a page at a time with "load more", and the column's own total. The stage filter itself is ignored: every column is one.
+ */
+export function useStageColumn(filters: ContactFilters, stage: string) {
+  const base = listQuery({ ...filters, lifecycleStage: stage, page: 1 });
+  const query = { ...base, limit: BOARD_PAGE };
+  return useInfiniteQuery({
+    queryKey: [...KEYS.contacts, 'board', stage, query] as const,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      apiFetch('/contacts', {
+        query: { ...query, cursor: pageParam },
+        schema: contactPageSchema,
+        signal,
+      }),
+    getNextPageParam: (last) =>
+      last.page.hasMore && last.page.nextCursor ? last.page.nextCursor : undefined,
+    placeholderData: keepPreviousData,
+  });
 }
