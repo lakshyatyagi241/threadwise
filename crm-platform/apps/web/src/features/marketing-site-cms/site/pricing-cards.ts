@@ -49,8 +49,12 @@ export interface CardWords {
   number: (n: number) => string;
 }
 
-/** Reference's volume lines: devices, messages, seats, contacts, broadcasts, at most four, "0" meaning unlimited. */
-const VOLUME_KEYS = ['devices', 'monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
+/**
+ * Reference's volume lines (messages, seats, contacts, broadcasts, at most four, "0" meaning unlimited). Reference led with `devices`;
+ * that cap counts personal numbers paired by QR (the unofficial engine, off unless the platform enables it), so a public card does
+ * not claim it. Intended difference.
+ */
+const VOLUME_KEYS = ['monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
 const lcfirst = (s: string) => (s ? s.charAt(0).toLowerCase() + s.slice(1) : s);
 
 /** Whether a flag is a visible plan feature: the capability rows of Reference's card, enabled ones first, a few greyed. */

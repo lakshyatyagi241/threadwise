@@ -34,6 +34,9 @@
         "privacy": "Privacy and tracking",
         "infrastructure": "Infrastructure",
         "localization": "Localization"
+      },
+      "badges": {
+        "notSupported": "Not supported"
       }
     },
     "shell": {

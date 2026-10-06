@@ -11,7 +11,8 @@ import { formatMoney, type Period } from '../lib/format';
 import { PLATFORM_DEFAULT_KEY, groupedPlanLimits } from '../lib/limits';
 
 const NS = 'plans-subscriptions-trials';
-const VOLUME_KEYS = ['devices', 'monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
+/** No `devices` line: it counts personal numbers paired by QR (the unofficial engine, off unless the platform enables it); we do not advertise it. */
+const VOLUME_KEYS = ['monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
 
 /**
  * The public pricing page (TW-PLAN-010): a card per active plan with a Monthly/Yearly switch, volume and feature lists and the plan's call to

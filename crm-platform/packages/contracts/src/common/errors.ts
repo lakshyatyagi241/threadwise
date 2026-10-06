@@ -45,6 +45,11 @@ export const ERROR_CODES = {
   ...CHK_ERROR_CODES,
   ...FORMS_ERROR_CODES,
   // generic
+  /**
+   * An action targeted the unofficial WhatsApp engine (personal numbers over Baileys) while the platform switch is off.
+   * 422: the request is well formed but policy refuses it. Owner decision 2026-10-05.
+   */
+  WA_UNOFFICIAL_DISABLED: 'WA_UNOFFICIAL_DISABLED',
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
   UNAUTHENTICATED: 'UNAUTHENTICATED',

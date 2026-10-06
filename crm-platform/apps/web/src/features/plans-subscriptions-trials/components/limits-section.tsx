@@ -4,6 +4,7 @@ import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { PlanLimitGroup, UsageMeter } from '@crm/contracts';
 import { Card, cn } from '@crm/ui';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { countUnlimited, groupLimits, type LimitRow, type LimitTone } from '../lib/limits';
 
 const NS = 'plans-subscriptions-trials';
@@ -21,8 +22,10 @@ const BAR_TONE: Record<LimitTone, string> = {
 export function LimitsSection({ meters }: { meters: readonly UsageMeter[] }) {
   const t = useTranslations(`${NS}.usage`);
   const [showAll, setShowAll] = useState(false);
-  const groups = groupLimits(meters, { showAll });
-  const unlimited = countUnlimited(meters);
+  // The devices cap is hidden unless the platform has the unofficial WhatsApp engine on: official numbers are not capped by it.
+  const unofficial = useUnofficialWhatsapp();
+  const groups = groupLimits(meters, { showAll, unofficial });
+  const unlimited = countUnlimited(meters, unofficial);
 
   return (
     <section aria-labelledby="meters-title" className="space-y-3" data-testid="limits-section">

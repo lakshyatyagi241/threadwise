@@ -286,7 +286,8 @@
         "notConnected": "not connected",
         "connect": "Connect",
         "connectedLabel": "Connected"
-      }
+      },
+      "sublineOfficial": "{date} - {range} showing {sent} outbound, {rate}% deliverability."
     },
     "analytics": {
       "title": "Analytics",

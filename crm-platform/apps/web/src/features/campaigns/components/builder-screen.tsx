@@ -9,6 +9,12 @@ import { Alert, Button, Field, Input, Select, Spinner, Textarea, useToast } from
 import type { CampaignConfig } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
+import {
+  isUnofficialDisabledError,
+  offerSenders,
+  submittableSenderKey,
+} from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { AudiencePicker } from '@/features/broadcasts/components/audience-picker';
 import {
   useAttributeCatalog,
@@ -77,6 +83,8 @@ function Builder({
   zone: string;
 }) {
   const t = useTranslations('campaigns.builder');
+  // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
+  const unofficial = useUnofficialWhatsapp();
   const router = useRouter();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -109,13 +117,25 @@ function Builder({
     setBusy(true);
     setError(null);
     try {
-      const body = toInput(form, { draft });
+      const body = toInput(
+        {
+          ...form,
+          senderKey: submittableSenderKey(form.senderKey, data?.senders ?? [], unofficial),
+        },
+        { draft },
+      );
       const res = id ? await updateCampaign(id, body) : await createCampaign(body);
       await qc.invalidateQueries({ queryKey: KEYS.all });
       toast(res.message, 'success');
       router.push(`/campaigns/${res.campaign.id}`);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : t('failed'));
+      setError(
+        isUnofficialDisabledError(e)
+          ? t('unofficialDisabled')
+          : e instanceof ApiError
+            ? e.message
+            : t('failed'),
+      );
     } finally {
       setBusy(false);
     }
@@ -136,7 +156,11 @@ function Builder({
   };
 
   const message = (p: Problem) => t(`problems.${p}`);
-  const sender = data?.senders.find((s) => s.key === form.senderKey);
+  const senders = useMemo(
+    () => offerSenders(data?.senders ?? [], unofficial),
+    [data?.senders, unofficial],
+  );
+  const sender = senders.find((s) => s.key === form.senderKey);
   const bubble = form.customMessage.trim() || t('previewEmpty');
 
   return (
@@ -191,7 +215,7 @@ function Builder({
                   onChange={(e) => patch({ senderKey: e.target.value })}
                 >
                   <option value="">{t('setup.defaultSender')}</option>
-                  {data?.senders.map((s) => (
+                  {senders.map((s) => (
                     <option key={s.key} value={s.key}>
                       {s.label} {s.phone ? `· ${s.phone}` : ''} ({s.engineLabel})
                     </option>

@@ -8,9 +8,17 @@ import {
   type PlanLimitGroup,
   type UsageMeter,
 } from '@crm/contracts';
+import { isUnofficialOnlyLimit } from '@/lib/unofficial-whatsapp';
 
 /** The one cap where 0 does not mean unlimited: it means "use the platform default" (TW-PLAN-022). */
 export const PLATFORM_DEFAULT_KEY = 'api_rate_limit_per_minute';
+
+/**
+ * A limit that only applies while the platform has the unofficial WhatsApp engine on (`devices`: personal numbers paired by QR) is
+ * left out of every workspace-facing view unless `unofficial` says the engine is on. Public screens never know, so they pass nothing.
+ */
+export const limitShown = (key: string, unofficial: boolean | undefined): boolean =>
+  unofficial === true || !isUnofficialOnlyLimit(key);
 
 export const groupOfLimit = (key: string): PlanLimitGroup | null =>
   PLAN_LIMIT_DEFS.find((d) => d.key === key)?.group ?? null;
@@ -106,14 +114,14 @@ export function limitRow(
  */
 export function groupLimits(
   meters: readonly UsageMeter[],
-  options: { showAll?: boolean } = {},
+  options: { showAll?: boolean; unofficial?: boolean } = {},
 ): LimitGroupView[] {
   const byKey = new Map(meters.map((m) => [m.key, m]));
   const out: LimitGroupView[] = [];
   for (const group of PLAN_LIMIT_GROUPS) {
-    const all = PLAN_LIMIT_DEFS.filter((d) => d.group === group).map((d) =>
-      limitRow(d.key, group, byKey.get(d.key)),
-    );
+    const all = PLAN_LIMIT_DEFS.filter(
+      (d) => d.group === group && limitShown(d.key, options.unofficial),
+    ).map((d) => limitRow(d.key, group, byKey.get(d.key)));
     const rows = options.showAll ? all : all.filter((r) => !r.unlimited);
     if (rows.length === 0) continue;
     const capped = all.filter((r) => r.tracked && !r.unlimited && !r.platformDefault).length;
@@ -130,8 +138,8 @@ export function groupLimits(
 }
 
 /** How many unlimited limits "Show all limits" would reveal. */
-export function countUnlimited(meters: readonly UsageMeter[]): number {
-  return groupLimits(meters, { showAll: true })
+export function countUnlimited(meters: readonly UsageMeter[], unofficial = false): number {
+  return groupLimits(meters, { showAll: true, unofficial })
     .flatMap((g) => g.rows)
     .filter((r) => r.unlimited).length;
 }
@@ -150,9 +158,11 @@ export const CARD_HIGHLIGHT_LIMITS = [
 export type CardRow = { kind: 'limit'; key: string; value: number } | { kind: 'flag'; key: string };
 
 /** Every limit the plan sets, in registry order. */
-export function planLimitRows(plan: Pick<BillingPlan, 'limits'>): CardRow[] {
+export function planLimitRows(plan: Pick<BillingPlan, 'limits'>, unofficial = false): CardRow[] {
   const limits = plan.limits as Record<string, number | undefined>;
-  return PLAN_LIMIT_DEFS.filter((d) => limits[d.key] !== undefined).map((d): CardRow => ({
+  return PLAN_LIMIT_DEFS.filter(
+    (d) => limits[d.key] !== undefined && limitShown(d.key, unofficial),
+  ).map((d): CardRow => ({
     kind: 'limit',
     key: d.key,
     value: limits[d.key] as number,
@@ -175,8 +185,9 @@ export function planFlagRows(plan: Pick<BillingPlan, 'features'>): CardRow[] {
 export function cardRows(
   plan: Pick<BillingPlan, 'limits' | 'features'>,
   max = 7,
+  unofficial = false,
 ): { highlights: CardRow[]; all: CardRow[] } {
-  const limits = planLimitRows(plan);
+  const limits = planLimitRows(plan, unofficial);
   const flags = planFlagRows(plan);
   const lead = CARD_HIGHLIGHT_LIMITS.flatMap((k) => limits.filter((r) => r.key === k));
   const highlights = [...lead, ...flags].slice(0, max);
@@ -222,7 +233,7 @@ export const rowDiffers = (plans: readonly BillingPlan[], row: CompareRowDef): b
  */
 export function compareSections(
   plans: readonly BillingPlan[],
-  options: { onlyDiffering?: boolean } = {},
+  options: { onlyDiffering?: boolean; unofficial?: boolean } = {},
 ): CompareSection[] {
   const sections: CompareSection[] = [];
   const keep = (row: CompareRowDef) => !options.onlyDiffering || rowDiffers(plans, row);
@@ -231,6 +242,7 @@ export function compareSections(
     const rows = PLAN_LIMIT_DEFS.filter(
       (d) =>
         d.group === group &&
+        limitShown(d.key, options.unofficial) &&
         plans.some((p) => (p.limits as Record<string, number | undefined>)[d.key] !== undefined),
     )
       .map((d): CompareRowDef => ({ kind: 'limit', key: d.key }))
@@ -262,8 +274,9 @@ export function compareSections(
 /** A plan's limits under their group headings (registry order), for the public pricing card's "all limits" list. */
 export function groupedPlanLimits(
   plan: Pick<BillingPlan, 'limits'>,
+  unofficial = false,
 ): Array<{ group: PlanLimitGroup; rows: Array<Extract<CardRow, { kind: 'limit' }>> }> {
-  const rows = planLimitRows(plan) as Array<Extract<CardRow, { kind: 'limit' }>>;
+  const rows = planLimitRows(plan, unofficial) as Array<Extract<CardRow, { kind: 'limit' }>>;
   return PLAN_LIMIT_GROUPS.map((group) => ({
     group,
     rows: rows.filter((r) => groupOfLimit(r.key) === group),

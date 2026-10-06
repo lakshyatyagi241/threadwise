@@ -8,6 +8,6 @@ export const settings = [
     href: '/warmer',
     icon: 'whatsapp',
     order: 15,
-    gates: { permission: 'sched.warmer.manage' },
+    gates: { permission: 'sched.warmer.manage', app: 'unofficial_whatsapp' },
   }),
 ];

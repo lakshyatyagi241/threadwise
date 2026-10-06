@@ -13,6 +13,11 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { SendPolicyService } from '../auth';
 import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { splitAudience } from './audience-split';
 import { sanitizeOverrides } from './payload/template-overrides';
 import { toBroadcastResponse } from './broadcasts.mapper';
@@ -64,6 +69,7 @@ export class BroadcastsService {
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(BROADCAST_PLAN_GATE) private readonly planGate: BroadcastPlanGate,
     private readonly planUsage: PlanUsageService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   /** `body` is validated here, after the plan checks, because Reference answered a plan refusal before a validation error. */
@@ -87,6 +93,11 @@ export class BroadcastsService {
       throw AppError.validation('Request payload failed validation', [
         { path: 'timezone', message: 'unknown time zone' },
       ]);
+    }
+
+    // A sender that names the unofficial engine is a refusal, not a silently dropped key (owner decision 2026-10-05).
+    if (input.senderKeys.some((k) => k.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))) {
+      await this.unofficial.assertEnabled();
     }
 
     return this.db.tx(async (tx) => {
