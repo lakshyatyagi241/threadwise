@@ -39,7 +39,9 @@ export const updateWalletSettingsSchema = z.object({
   referralSignup: z
     .string()
     .trim()
-    .regex(/^\d{1,7}(\.\d{1,2})?$/, 'Enter an amount with at most 2 decimals'),
+    .regex(/^\d{1,7}(\.\d{1,2})?$/, 'Enter an amount with at most 2 decimals')
+    // WD-CPN-034: the reward is bounded at 100,000 (money), as WaDesk's form was; the wallet's own posting limit is far above.
+    .refine((v) => Number(v) <= 100_000, 'The reward cannot be more than 100,000'),
   lowBalanceThreshold: z
     .string()
     .trim()

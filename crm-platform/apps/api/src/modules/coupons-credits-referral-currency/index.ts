@@ -17,3 +17,4 @@ export {
   type CouponFacts,
   type Resolution,
 } from './coupon-rules';
+export { CouponsCreditsReferralCurrencyWorkerModule } from './coupons-credits-referral-currency-worker.module';

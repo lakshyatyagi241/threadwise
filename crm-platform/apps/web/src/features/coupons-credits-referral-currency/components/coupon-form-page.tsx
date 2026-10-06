@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { BillingOptionsResponse, CouponItem } from '@crm/contracts';
 import {
@@ -21,7 +21,11 @@ import { useOperator } from '@/features/auth-registration-security/platform/oper
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { KEYS, couponItemSchema, fetchCoupon, fetchOptions } from '../api';
 import {
+  COUPON_FIELD_INPUT_ID,
   buildCouponRequest,
+  createSingleFlight,
+  firstFieldInFormOrder,
+  serverFlaggedFields,
   couponToDraft,
   newCouponDraft,
   type CouponDraft,
@@ -63,16 +67,20 @@ function CouponLoader({ couponId }: { couponId?: string }) {
     queryFn: ({ signal }) => fetchOptions(signal),
     staleTime: 60_000,
     refetchOnWindowFocus: false,
+    retry: false,
   });
   const coupon = useQuery({
     queryKey: KEYS.coupon(couponId ?? 'new'),
     queryFn: ({ signal }) => fetchCoupon(couponId as string, signal),
     enabled: !!couponId,
     refetchOnWindowFocus: false,
+    retry: false,
   });
   if (options.isPending || (couponId && coupon.isPending)) return <LoadingBlock />;
   if (options.isError)
     return <ErrorBlock error={options.error} onRetry={() => void options.refetch()} />;
+  if (coupon.isError && coupon.error instanceof ApiError && coupon.error.status === 404)
+    return <CouponNotFound />;
   if (coupon.isError)
     return <ErrorBlock error={coupon.error} onRetry={() => void coupon.refetch()} />;
   // keyed by the row version: after a save the form restarts from what the server stored
@@ -83,6 +91,29 @@ function CouponLoader({ couponId }: { couponId?: string }) {
       options={options.data}
     />
   );
+}
+
+function CouponNotFound() {
+  const t = useTranslations(NS);
+  return (
+    <Alert tone="info" className="space-y-2">
+      <p className="font-semibold">{t('notFoundTitle')}</p>
+      <p>{t('notFoundBody')}</p>
+      <Link
+        href={BASE}
+        className="inline-flex h-9 items-center rounded-full border border-border px-3.5 text-xs font-medium hover:bg-muted"
+      >
+        {t('backToList')}
+      </Link>
+    </Alert>
+  );
+}
+
+/** Moves keyboard focus to the input of a field (after the page has painted the invalid state). */
+function focusField(field: CouponField | null) {
+  if (!field) return;
+  const el = document.getElementById(COUPON_FIELD_INPUT_ID[field]);
+  if (el && !(el as HTMLInputElement).disabled) el.focus();
 }
 
 function CouponForm({
@@ -109,6 +140,8 @@ function CouponForm({
   const set = <K extends keyof CouponDraft>(k: K, v: CouponDraft[K]) =>
     setDraft((d) => ({ ...d, [k]: v }));
 
+  const flight = useRef(createSingleFlight());
+
   const save = useMutation({
     mutationFn: (body: object) =>
       coupon
@@ -130,15 +163,33 @@ function CouponForm({
     },
   });
 
+  const locked = save.isPending || (save.isSuccess && !coupon);
+
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const r = buildCouponRequest(draft);
     if (!r.ok) {
       setProblems(r.problems);
+      focusField(firstFieldInFormOrder(r.problems));
       return;
     }
+    // synchronous guard: a fast double click runs this handler twice before the button re-renders as disabled
+    if (!flight.current.tryStart()) return;
     setProblems([]);
-    save.mutate(r.body);
+    save.mutate(r.body, {
+      onError: (err) => {
+        if (err instanceof ApiError && err.status === 422) {
+          focusField(
+            firstFieldInFormOrder(serverFlaggedFields(err.fieldErrors.map((f) => f.path))),
+          );
+        }
+      },
+      // a saved new coupon leaves for the list: keep the form locked while the page changes, so a late second click
+      // cannot create the code again (the edit screen stays and unlocks)
+      onSettled: (_saved, err) => {
+        if (err || coupon) flight.current.done();
+      },
+    });
   };
 
   // The plan picker lists active plans; a plan the coupon already names stays pickable even when it is inactive or gone.
@@ -188,7 +239,8 @@ function CouponForm({
         <button
           type="submit"
           form={FORM_ID}
-          disabled={save.isPending}
+          disabled={locked}
+          aria-busy={locked}
           className="inline-flex h-9 items-center gap-2 rounded-full bg-primary px-3.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
         >
           {save.isPending ? (
@@ -534,7 +586,8 @@ function CouponForm({
           {canEdit && (
             <button
               type="submit"
-              disabled={save.isPending}
+              disabled={locked}
+              aria-busy={locked}
               className="inline-flex h-9 items-center gap-2 rounded-full bg-primary px-4 text-[12.5px] font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
             >
               {save.isPending ? (

@@ -2,9 +2,11 @@
  * coupons-credits-referral-currency: tables ported from WaDesk. Mirrors migrations/20261001100500_cpn_wadesk_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
+  check,
   foreignKey,
   index,
   integer,
@@ -117,6 +119,8 @@ export const referrals = pgTable(
     uuid: uuid('uuid').notNull().unique().defaultRandom(),
     referrerUserId: idColumn('referrer_user_id').notNull(),
     referredUserId: idColumn('referred_user_id').notNull(),
+    referrerOrgId: idColumn('referrer_org_id').notNull(),
+    referredOrgId: idColumn('referred_org_id').notNull(),
     codeUsed: text('code_used').notNull(),
     creditsAwarded: integer('credits_awarded').notNull().default(0),
     awardTransactionId: idColumn('award_transaction_id'),
@@ -128,6 +132,27 @@ export const referrals = pgTable(
     unique('uq_referrals_referred_user_id').on(t.referredUserId),
     index('idx_referrals_code_used').on(t.codeUsed),
     index('idx_referrals_referrer_user_id').on(t.referrerUserId),
+    foreignKey({
+      name: 'fk_referrals_referrer_org_id',
+      columns: [t.referrerOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_referrals_referred_org_id',
+      columns: [t.referredOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('chk_referrals_not_self', sql`${t.referrerUserId} <> ${t.referredUserId}`),
+    check('chk_referrals_credits_nonneg', sql`${t.creditsAwarded} >= 0`),
+    index('idx_referrals_referrer_history').on(
+      t.referrerOrgId,
+      t.referrerUserId,
+      t.createdAt.desc(),
+      t.id.desc(),
+    ),
+    index('idx_referrals_referred_org_unpaid')
+      .on(t.referredOrgId)
+      .where(sql`${t.awardTransactionId} IS NULL`),
   ],
 );
 
@@ -148,6 +173,7 @@ export const referralCodes = pgTable(
   },
   (t) => [
     unique('uq_referral_codes_code').on(t.code),
+    unique('uq_referral_codes_owner_user').on(t.ownerOrgId, t.userId),
     foreignKey({
       name: 'fk_referral_codes_owner_org_id',
       columns: [t.ownerOrgId],
