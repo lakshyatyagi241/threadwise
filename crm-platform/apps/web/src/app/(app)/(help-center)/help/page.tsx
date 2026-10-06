@@ -9,9 +9,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-/** `/help`: the guides this person may see, grouped by area, with search. */
-export default async function HelpPage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+/** `/help`: the guides this person may see, with the category rail (`?area=`) and search. */
+export default async function HelpPage({ searchParams }: { searchParams: SearchParams }) {
   const view = await getVisibleHelp();
   if (!view) notFound();
-  return <HelpHome entries={view.entries} />;
+  const { area } = await searchParams;
+  return <HelpHome entries={view.entries} area={Array.isArray(area) ? area[0] : area} />;
 }
