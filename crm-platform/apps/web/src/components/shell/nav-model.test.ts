@@ -215,7 +215,6 @@ describe('the menu after the Settings move', () => {
       'addons-workspace',
       'i18n-translation',
       'ai-keys',
-      'bsp-billing-mode',
       'billing-orders',
       'account',
       'chat-widget',
