@@ -3,11 +3,19 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { wabaPlatformCallbackSchema, wabaWebhookStatusSchema } from '@crm/contracts';
+import {
+  WABA_GROUP_WEBHOOK_FIELDS,
+  wabaPlatformCallbackSchema,
+  wabaWebhookStatusSchema,
+  type WabaWebhookStatus,
+} from '@crm/contracts';
 import { Alert, Button, Spinner } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 
 const NS = 'platform-settings-branding-storage.wabaCallback';
+
+const isGroupField = (field: string): boolean =>
+  (WABA_GROUP_WEBHOOK_FIELDS as readonly string[]).includes(field);
 
 function CopyRow({ label, value, hint }: { label: string; value: string; hint?: string }) {
   const t = useTranslations(NS);
@@ -41,9 +49,34 @@ function CopyRow({ label, value, hint }: { label: string; value: string; hint?: 
   );
 }
 
+/** The check's result as a list: a tick or a circle per field, a "Groups" tag on the four Groups fields, MISSING on what is not subscribed. */
+export function WebhookFieldList({
+  status: r,
+}: {
+  status: Pick<WabaWebhookStatus, 'subscribed' | 'missing'>;
+}) {
+  const t = useTranslations(NS);
+  return (
+    <ul className="space-y-0.5 font-mono text-xs" data-testid="waba-webhook-field-list">
+      {[...r.subscribed.filter((f) => !r.missing.includes(f)), ...r.missing].map((f) => (
+        <li key={f}>
+          {r.missing.includes(f) ? '○' : '✓'} {f}{' '}
+          {isGroupField(f) && (
+            <span className="text-muted-foreground" data-testid="waba-group-field-tag">
+              {t('fieldsGroupTag')}
+            </span>
+          )}{' '}
+          {r.missing.includes(f) && <span className="text-warning">{t('fieldsMissingTag')}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
- * WD-WABA-002, 003: which of the four coexistence webhook fields (messages, smb_message_echoes, smb_app_state_sync, history) the
- * Meta app is subscribed to, with a one-click subscribe for the missing ones. Meta is asked only when the button is pressed.
+ * WD-WABA-002, 003: which of the four coexistence webhook fields (messages, smb_message_echoes, smb_app_state_sync, history) and
+ * the four WhatsApp Groups fields (group_lifecycle_update, group_participants_update, group_settings_update, group_status_update)
+ * the Meta app is subscribed to, with a one-click subscribe for the missing ones. Meta is asked only when the button is pressed.
  */
 function WebhookFields() {
   const t = useTranslations(NS);
@@ -85,16 +118,7 @@ function WebhookFields() {
           <p className={r.ok ? 'text-success' : 'text-warning'}>
             {r.subscribedNow ? t('fieldsSubscribed') : r.ok ? t('fieldsOk') : t('fieldsMissing')}
           </p>
-          <ul className="space-y-0.5 font-mono text-xs">
-            {[...r.subscribed.filter((f) => !r.missing.includes(f)), ...r.missing].map((f) => (
-              <li key={f}>
-                {r.missing.includes(f) ? '○' : '✓'} {f}{' '}
-                {r.missing.includes(f) && (
-                  <span className="text-warning">{t('fieldsMissingTag')}</span>
-                )}
-              </li>
-            ))}
-          </ul>
+          <WebhookFieldList status={r} />
           {!r.ok && (
             <Button disabled={subscribe.isPending} onClick={() => subscribe.mutate()}>
               {subscribe.isPending ? t('fieldsSubscribing') : t('fieldsSubscribe')}

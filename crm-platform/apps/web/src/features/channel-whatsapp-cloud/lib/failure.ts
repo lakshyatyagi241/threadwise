@@ -18,6 +18,7 @@ export const FAILURE_KINDS = [
   'sendPaused',
   'channelOff',
   'planLimit',
+  'groupSendUnavailable',
   'unknown',
 ] as const;
 export type FailureKind = (typeof FAILURE_KINDS)[number];
@@ -88,6 +89,7 @@ const BY_CODE: Record<string, FailureKind> = {
   AUTH_SEND_HALTED: 'sendPaused',
   CHANNEL_DISCONNECTED: 'channelOff',
   PLAN_LIMIT_REACHED: 'planLimit',
+  WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
 };
 
 function lookupKey(code: string): string {
