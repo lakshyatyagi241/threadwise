@@ -1284,3 +1284,90 @@ describe('password rules the web hint relies on (TW-AUTH-035)', () => {
     }
   });
 });
+
+// ===================================================================================================
+describe('sign-in when the email is in several workspaces', () => {
+  const noOrg = (email: string, password = PASSWORD) =>
+    api().post('/v2/auth/login').set('x-forwarded-for', nextIp()).send({ email, password });
+
+  it('one workspace signs straight in without asking for a workspace', async () => {
+    const a = await signup();
+    const res = await noOrg(a.email);
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.status).toBe('authenticated');
+    expect(res.body.orgSlug).toBe(a.slug);
+  });
+
+  it('several workspaces answer with the cards, then the pick opens that workspace', async () => {
+    const email = uniqueEmail('multi');
+    const one = await signup({ email, orgName: 'Multi One' });
+    const two = await signup({ email, orgName: 'Multi Two' });
+
+    const res = await noOrg(email);
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.status).toBe('workspace_required');
+    expect(res.body.tokens).toBeUndefined();
+    const slugs = (res.body.workspaces as Array<{ slug: string }>).map((w) => w.slug).sort();
+    expect(slugs).toEqual([one.slug, two.slug].sort());
+    const card = (res.body.workspaces as Array<{ slug: string; name: string; memberCount: number }>)
+      .find((w) => w.slug === two.slug)!;
+    expect(card.name).toBe('Multi Two');
+    expect(card.memberCount).toBe(1);
+
+    const pick = await api()
+      .post('/v2/auth/login/workspace')
+      .set('x-forwarded-for', nextIp())
+      .send({ selectionToken: res.body.selectionToken, orgSlug: two.slug });
+    expect(pick.status, JSON.stringify(pick.body)).toBe(201);
+    expect(pick.body.status).toBe('authenticated');
+    expect(pick.body.orgSlug).toBe(two.slug);
+    const session = await api().get('/v2/auth/session').set(bearer(pick.body.tokens.accessToken));
+    expect(session.body.org.slug).toBe(two.slug);
+  });
+
+  it('the pick is single use, and a slug that was not offered is refused without spending it', async () => {
+    const email = uniqueEmail('multi');
+    const one = await signup({ email, orgName: 'Once One' });
+    await signup({ email, orgName: 'Once Two' });
+    const other = await signup();
+
+    const res = await noOrg(email);
+    const token = res.body.selectionToken as string;
+    const wrong = await api()
+      .post('/v2/auth/login/workspace')
+      .send({ selectionToken: token, orgSlug: other.slug });
+    expect(wrong.status).toBe(401);
+
+    const ok = await api()
+      .post('/v2/auth/login/workspace')
+      .send({ selectionToken: token, orgSlug: one.slug });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(201);
+
+    const again = await api()
+      .post('/v2/auth/login/workspace')
+      .send({ selectionToken: token, orgSlug: one.slug });
+    expect(again.status).toBe(401);
+  });
+
+  it('a password that opens only one of the workspaces signs straight into it', async () => {
+    const email = uniqueEmail('multi');
+    const one = await signup({ email, orgName: 'Own One' });
+    await signup({ email, orgName: 'Own Two', password: 'An0ther#Passw0rd9' });
+
+    const res = await noOrg(email);
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.status).toBe('authenticated');
+    expect(res.body.orgSlug).toBe(one.slug);
+  });
+
+  it('a wrong password gets the usual refusal and lists nothing', async () => {
+    const email = uniqueEmail('multi');
+    await signup({ email, orgName: 'Bad One' });
+    await signup({ email, orgName: 'Bad Two' });
+
+    const res = await noOrg(email, 'Wr0ng#Passw0rd!x');
+    expect(res.status).toBe(401);
+    expect(res.body.workspaces).toBeUndefined();
+    expect(res.body.selectionToken).toBeUndefined();
+  });
+});
