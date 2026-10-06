@@ -307,6 +307,10 @@
             "label": "Require 2FA for admins",
             "hint": "Users with the Admin role in any workspace must set up an authenticator app."
           },
+          "requireMfaForSuperAdmins": {
+            "label": "Require 2FA for super admins",
+            "hint": "Platform super admins sign in with a password alone while this is off. Turning it on makes them enrol and use an authenticator app."
+          },
           "requireMfaForOwners": {
             "label": "Require 2FA for workspace owners",
             "hint": "The owner of each workspace must set up an authenticator app."

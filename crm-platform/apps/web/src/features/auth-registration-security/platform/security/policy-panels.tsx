@@ -69,6 +69,7 @@ export function LoginPanel() {
       >
         <div className="space-y-3">
           <ToggleControl name="requireMfaForAdmins" emphasis />
+          <ToggleControl name="requireMfaForSuperAdmins" emphasis />
           <ToggleControl name="requireMfaForOwners" />
           <ToggleControl name="requireMfaForAll" />
           <MfaMethodsControl />
