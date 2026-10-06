@@ -164,35 +164,6 @@
       "more": "Only the top workspaces by revenue are listed.",
       "loadFailed": "The P&L could not be loaded.",
       "currency": "Report currency"
-    },
-    "customer": {
-      "title": "How are messages billed?",
-      "subtitle": "Choose who bills you for WhatsApp messages sent through your connected numbers.",
-      "direct": {
-        "title": "I pay Meta directly",
-        "body": "Your own payment method is on Meta. You only need an active plan."
-      },
-      "reseller": {
-        "title": "Bill me through the platform",
-        "body": "Messages are charged per message from your wallet, and the platform's credit line is shared with your number."
-      },
-      "active": "Active",
-      "notAvailable": "Not available yet",
-      "choose": "Choose",
-      "switching": "Saving",
-      "savedReseller": "Billing set: messages are charged per message from your wallet.",
-      "savedDirect": "Billing set: Meta bills you directly.",
-      "attachSummary": "Credit line: {attached} attached, {failed} failed, {skipped} already set up.",
-      "numbers": "Your numbers",
-      "noNumbers": "No WhatsApp Business (Cloud API) number is connected yet.",
-      "noPhone": "No number shown",
-      "allocation": {
-        "none": "No credit line",
-        "attached": "Credit line attached ({currency})",
-        "failed": "Credit line failed",
-        "revoked": "Credit line revoked"
-      },
-      "readOnly": "You can see how messages are billed, but you cannot change it."
     }
   }
 }
