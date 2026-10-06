@@ -20,6 +20,8 @@ export const AuthKeys = {
   ipThrottle: (scope: string, ip: string) => `auth:ip:${scope}:${ip}`,
   /** MFA step-up challenge, keyed by the hash of the challenge token. */
   mfaChallenge: (token: string) => `auth:mfa:${sha256Hex(token)}`,
+  /** The workspaces a password matched in, waiting for the person to pick one. Keyed by the token hash. */
+  workspaceChoice: (token: string) => `auth:wschoice:${sha256Hex(token)}`,
   /** Attempts left on an MFA challenge. */
   mfaAttempts: (token: string) => `auth:mfa-try:${sha256Hex(token)}`,
   /**
@@ -64,6 +66,7 @@ export const AuthKeys = {
 export const Ttl = {
   accessRevocationSeconds: 15 * 60 + 60,
   mfaChallengeSeconds: 5 * 60,
+  workspaceChoiceSeconds: 5 * 60,
   mfaSetupSeconds: 10 * 60,
   mfaMaxAttempts: 5,
   socialStateSeconds: 10 * 60,

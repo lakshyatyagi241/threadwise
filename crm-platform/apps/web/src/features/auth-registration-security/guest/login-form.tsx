@@ -1,6 +1,10 @@
 'use client';
 
-import { loginRequestSchema, type RegistrationConfigResponse } from '@crm/contracts';
+import {
+  loginRequestSchema,
+  type RegistrationConfigResponse,
+  type WorkspaceChoice,
+} from '@crm/contracts';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
@@ -12,10 +16,11 @@ import { FormError } from './form-error';
 import { FormField } from './form-field';
 import { LegalLine } from './legal-links';
 import { MfaStep } from './mfa-step';
-import { bffLoginResponseSchema } from './schemas';
+import { bffPasswordLoginResponseSchema, type BffLoginResponse } from './schemas';
 import { completeSignIn } from './sign-in-complete';
 import { SocialButtons } from './social-buttons';
 import { TransientToast } from './toast';
+import { WorkspacePicker } from './workspace-picker';
 import { Alert, ArrowIcon, Button, Checkbox, Input, LINK, PasswordInput, Spinner, cn } from './ui';
 import { stripSearchParams } from './url-params';
 import { failedFields } from './zod-fields';
@@ -62,6 +67,15 @@ export function LoginForm({
   const [remember, setRemember] = useState(config.rememberMeEnabled);
   const [mfa, setMfa] = useState<{ token: string; expiresAt: number } | null>(null);
   const [mfaExpired, setMfaExpired] = useState(false);
+  // The password opened several workspaces: the cards to pick from, until the choice lapses.
+  const [choice, setChoice] = useState<{
+    token: string;
+    expiresAt: number;
+    workspaces: WorkspaceChoice[];
+  } | null>(null);
+  const [choiceExpired, setChoiceExpired] = useState(false);
+  /** The workspace picked from the cards; the code step needs it for the sign-in it continues. */
+  const [pickedSlug, setPickedSlug] = useState<string | null>(null);
   /** The form unmounts during the MFA step; the email is kept so going back does not lose it (never the password). */
   const [lastEmail, setLastEmail] = useState('');
   const captcha = useCaptcha(config.captcha, 'login');
@@ -73,8 +87,27 @@ export function LoginForm({
   const backToCredentials = useCallback((reason?: 'expired') => {
     setMfa(null);
     setMfaExpired(reason === 'expired');
+    setChoice(null);
+    setChoiceExpired(false);
+    setPickedSlug(null);
     setPending(false);
   }, []);
+
+  const choiceLapsed = useCallback((reason?: 'expired') => {
+    setChoice(null);
+    setChoiceExpired(reason === 'expired');
+    setPending(false);
+  }, []);
+
+  function afterPick(res: BffLoginResponse, slug: string) {
+    if (res.status === 'mfa_required') {
+      setPickedSlug(slug);
+      setChoice(null);
+      setMfa({ token: res.challengeToken, expiresAt: Date.now() + res.expiresInSeconds * 1000 });
+      return;
+    }
+    completeSignIn(res, next);
+  }
 
   function applyFailure(mapped: MappedError, fields?: string[]) {
     setError(mapped);
@@ -100,6 +133,7 @@ export function LoginForm({
     if (pending) return;
     setError(null);
     setMfaExpired(false);
+    setChoiceExpired(false);
     const data = new FormData(e.currentTarget);
     const raw = {
       ...(askWorkspace ? { orgSlug: String(data.get('orgSlug') ?? '').trim() } : {}),
@@ -131,8 +165,18 @@ export function LoginForm({
       const res = await postBff(
         'login',
         { ...parsed.data, ...(captchaToken ? { captchaToken } : {}) },
-        bffLoginResponseSchema,
+        bffPasswordLoginResponseSchema,
       );
+      if (res.status === 'workspace_required') {
+        setLastEmail(parsed.data.email);
+        setChoice({
+          token: res.selectionToken,
+          expiresAt: Date.now() + res.expiresInSeconds * 1000,
+          workspaces: res.workspaces,
+        });
+        setPending(false);
+        return;
+      }
       if (res.status === 'mfa_required') {
         setLastEmail(parsed.data.email);
         setMfa({ token: res.challengeToken, expiresAt: Date.now() + res.expiresInSeconds * 1000 });
@@ -153,9 +197,21 @@ export function LoginForm({
         challengeToken={mfa.token}
         expiresAt={mfa.expiresAt}
         remember={config.rememberMeEnabled && remember}
-        orgSlug={orgSlug.trim() || undefined}
+        orgSlug={pickedSlug ?? (orgSlug.trim() || undefined)}
         next={next}
         onBack={backToCredentials}
+      />
+    );
+  }
+
+  if (choice) {
+    return (
+      <WorkspacePicker
+        selectionToken={choice.token}
+        expiresAt={choice.expiresAt}
+        workspaces={choice.workspaces}
+        onPicked={afterPick}
+        onBack={(reason) => (reason === 'expired' ? choiceLapsed(reason) : backToCredentials())}
       />
     );
   }
@@ -177,6 +233,7 @@ export function LoginForm({
         )}
         {flash === 'deleted' && <Alert tone="success">{t('flashDeleted')}</Alert>}
         {mfaExpired && <Alert tone="warning">{t('mfaExpired')}</Alert>}
+        {choiceExpired && <Alert tone="warning">{t('chooseExpired')}</Alert>}
       </div>
 
       <SocialButtons

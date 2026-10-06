@@ -105,11 +105,41 @@ export const mfaRequiredSchema = z.object({
 });
 export type MfaRequired = z.infer<typeof mfaRequiredSchema>;
 
+/**
+ * The email and password matched an account in more than one workspace. Only workspaces whose password
+ * matched are listed, so this never reveals a workspace the visitor could not already open.
+ */
+export const workspaceChoiceSchema = z.object({
+  slug: orgSlugSchema,
+  name: z.string(),
+  /** Name of the person's role there, when they hold one. */
+  role: z.string().nullable(),
+  memberCount: z.number().int().nonnegative(),
+});
+export type WorkspaceChoice = z.infer<typeof workspaceChoiceSchema>;
+
+export const workspaceRequiredSchema = z.object({
+  status: z.literal('workspace_required'),
+  /** Single-use, expires in expiresInSeconds. Not a token pair. */
+  selectionToken: z.string(),
+  expiresInSeconds: z.number().int().positive(),
+  workspaces: z.array(workspaceChoiceSchema).min(2),
+});
+export type WorkspaceRequired = z.infer<typeof workspaceRequiredSchema>;
+
 export const loginResponseSchema = z.discriminatedUnion('status', [
   authenticatedSchema,
   mfaRequiredSchema,
 ]);
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
+
+/** What `POST /v2/auth/login` (and the workspace pick that follows it) can answer: a session, a second factor, or a choice. */
+export const passwordLoginResponseSchema = z.discriminatedUnion('status', [
+  authenticatedSchema,
+  mfaRequiredSchema,
+  workspaceRequiredSchema,
+]);
+export type PasswordLoginResponse = z.infer<typeof passwordLoginResponseSchema>;
 
 export const mfaLoginRequestSchema = z
   .object({
@@ -131,6 +161,13 @@ export const mfaLoginRequestSchema = z
     message: 'send either code or recoveryCode',
   });
 export type MfaLoginRequest = z.infer<typeof mfaLoginRequestSchema>;
+
+/** `POST /v2/auth/login/workspace`: the card the person picked after a `workspace_required` answer. */
+export const selectWorkspaceRequestSchema = z.object({
+  selectionToken: z.string().min(1),
+  orgSlug: orgSlugSchema,
+});
+export type SelectWorkspaceRequest = z.infer<typeof selectWorkspaceRequestSchema>;
 
 export const refreshRequestSchema = z.object({ refreshToken: z.string().min(1) });
 export type RefreshRequest = z.infer<typeof refreshRequestSchema>;

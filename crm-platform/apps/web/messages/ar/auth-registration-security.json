@@ -268,6 +268,12 @@
       "login": {
         "workspace": "مساحة العمل",
         "workspaceHint": "العنوان الذي يستخدمه فريقك، مثل acme.",
+        "chooseTitle": "اختر مساحة عمل",
+        "chooseSubtitle": "بريدك موجود في أكثر من مساحة عمل. اختر المساحة التي تريد فتحها.",
+        "chooseMembers": "{count, plural, one {# عضو} other {# أعضاء}}",
+        "chooseOpen": "فتح",
+        "chooseBack": "استخدام حساب آخر",
+        "chooseExpired": "استغرق الأمر وقتًا طويلًا. سجّل الدخول مرة أخرى.",
         "workspacePlaceholder": "your-workspace",
         "email": "البريد الإلكتروني",
         "emailPlaceholder": "you@company.com",
