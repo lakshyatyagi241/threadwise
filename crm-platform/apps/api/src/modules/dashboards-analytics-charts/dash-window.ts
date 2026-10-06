@@ -91,12 +91,24 @@ function dayWindow(fromDate: string, toDateExcl: string, tz: string): ResolvedWi
   };
 }
 
-/** Dashboard ranges (TW-DASH-003): 24h rolling; 7d, 30d from the start of that day to the end of today; quarter to date. */
+/** Dashboard ranges (TW-DASH-003): 24h rolling; 7d, 30d from the start of that day to the end of today; quarter to date; custom From/To (`null` past the cap). */
+export function resolveDashWindow(
+  range: Exclude<DashRange, 'custom'>,
+  tz: string,
+  now?: Date,
+): ResolvedWindow;
+export function resolveDashWindow(
+  range: DashRange,
+  tz: string,
+  now?: Date,
+  custom?: { from?: string; to?: string },
+): ResolvedWindow | null;
 export function resolveDashWindow(
   range: DashRange,
   tz: string,
   now: Date = new Date(),
-): ResolvedWindow {
+  custom: { from?: string; to?: string } = {},
+): ResolvedWindow | null {
   if (range === '24h') {
     const from = new Date(now.getTime() - 24 * HOUR_MS);
     return {
@@ -111,6 +123,13 @@ export function resolveDashWindow(
   }
   const today = todayIn(tz, now);
   const tomorrow = addDays(today, 1);
+  if (range === 'custom') {
+    // Same rules as analytics (missing From = 30 days ago, swapped if reversed, capped), but never past today:
+    // a future To is cut to today before the cap applies.
+    const to = custom.to && custom.to > today ? today : custom.to;
+    const from = custom.from && custom.from > today ? today : custom.from;
+    return resolveAnalyticsWindow({ range: 'custom', from, to }, tz, now);
+  }
   if (range === 'qtd') {
     const m = Number(today.slice(5, 7));
     const qStartMonth = Math.floor((m - 1) / 3) * 3 + 1;

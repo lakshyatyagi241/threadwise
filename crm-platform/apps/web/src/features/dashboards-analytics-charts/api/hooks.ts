@@ -2,20 +2,20 @@
 
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { DashRange, QuickAccessItem } from '@crm/contracts';
-import { dashApi, type AnalyticsParams } from './service';
+import { dashApi, type AnalyticsParams, type CustomDates } from './service';
 
-export const useSummary = (range: DashRange) =>
+export const useSummary = (range: DashRange, custom: CustomDates = {}) =>
   useQuery({
-    queryKey: ['dash', 'summary', range],
-    queryFn: ({ signal }) => dashApi.summary(range, signal),
+    queryKey: ['dash', 'summary', range, custom.from ?? '', custom.to ?? ''],
+    queryFn: ({ signal }) => dashApi.summary(range, custom, signal),
     placeholderData: keepPreviousData,
     retry: false,
   });
 
-export const useThroughput = (range: DashRange) =>
+export const useThroughput = (range: DashRange, custom: CustomDates = {}) =>
   useQuery({
-    queryKey: ['dash', 'throughput', range],
-    queryFn: ({ signal }) => dashApi.throughput(range, signal),
+    queryKey: ['dash', 'throughput', range, custom.from ?? '', custom.to ?? ''],
+    queryFn: ({ signal }) => dashApi.throughput(range, custom, signal),
     placeholderData: keepPreviousData,
     retry: false,
   });
@@ -28,10 +28,10 @@ export const useAnalytics = (p: AnalyticsParams) =>
     retry: false,
   });
 
-export const useWidgets = (range: DashRange) =>
+export const useWidgets = (range: DashRange, custom: CustomDates = {}) =>
   useQuery({
-    queryKey: ['dash', 'widgets', range],
-    queryFn: ({ signal }) => dashApi.widgets(range, signal),
+    queryKey: ['dash', 'widgets', range, custom.from ?? '', custom.to ?? ''],
+    queryFn: ({ signal }) => dashApi.widgets(range, custom, signal),
     placeholderData: keepPreviousData,
     retry: false,
   });
