@@ -137,6 +137,8 @@ CREATE TABLE camp_test_sends (
   -- The draft (a wpcampaigns row) the test was sent for.
   campaign_id bigint NOT NULL,
   template_id bigint,
+  -- The engine that sent it (waba, twilio, baileys): what the wallet prices and settles it as.
+  provider text NOT NULL,
   to_phone text NOT NULL,
   status text NOT NULL DEFAULT 'sent',
   provider_message_id text,
