@@ -9,6 +9,7 @@ import {
   type WhatsappCredentialKey,
   type WhatsappCredentialMode,
   type WhatsappOnboardingMethod,
+  type WhatsappPartnerProgram,
   type WhatsappProvider,
   type WhatsappSignatureScheme,
   type WhatsappWebhookMode,
@@ -67,6 +68,9 @@ export interface ProviderDraft {
   onboarding: WhatsappOnboardingMethod;
   onboardingAppId: string;
   onboardingConfigId: string;
+  /** The partner onboarding flow (null: none). Needs `partnerSolutionId`. */
+  partnerProgram: WhatsappPartnerProgram | null;
+  partnerSolutionId: string;
   notes: string;
   secrets: Record<WhatsappCredentialKey, SecretEdit>;
 }
@@ -96,6 +100,8 @@ export function emptyDraft(): ProviderDraft {
     onboarding: 'manual',
     onboardingAppId: '',
     onboardingConfigId: '',
+    partnerProgram: null,
+    partnerSolutionId: '',
     notes: '',
     secrets: noSecrets(),
   };
@@ -118,6 +124,8 @@ export function draftFromProvider(p: WhatsappProvider): ProviderDraft {
     onboarding: p.onboarding,
     onboardingAppId: p.onboardingAppId ?? '',
     onboardingConfigId: p.onboardingConfigId ?? '',
+    partnerProgram: p.partnerProgram,
+    partnerSolutionId: p.partnerSolutionId ?? '',
     notes: p.notes ?? '',
     secrets: noSecrets(),
   };
@@ -127,6 +135,24 @@ export function draftFromProvider(p: WhatsappProvider): ProviderDraft {
 export function withAuthScheme(d: ProviderDraft, authScheme: WhatsappAuthScheme): ProviderDraft {
   const needsStarter = authScheme === 'custom_headers' && d.headers.length === 0;
   return { ...d, authScheme, headers: needsStarter ? starterRows(d.credentialMode) : d.headers };
+}
+
+/**
+ * Choosing a partner program: Pinnacle gives each number its own key, so the credential mode becomes `channel_token` and the
+ * onboarding `embedded_signup` (the API refuses a partner program with any other credential mode). Choosing none drops the
+ * solution id and leaves everything else as it was.
+ */
+export function withPartnerProgram(
+  d: ProviderDraft,
+  partnerProgram: WhatsappPartnerProgram | null,
+): ProviderDraft {
+  if (partnerProgram === null) return { ...d, partnerProgram: null, partnerSolutionId: '' };
+  return {
+    ...d,
+    partnerProgram,
+    credentialMode: 'channel_token',
+    onboarding: 'embedded_signup',
+  };
 }
 
 // --- validation ------------------------------------------------------------------------------------------------------------
@@ -198,6 +224,15 @@ export function validateDraft(d: ProviderDraft, opts: ValidateOptions): DraftVal
     fields.onboardingConfigId = { key: 'digits' };
   }
 
+  if (d.partnerProgram) {
+    const solution = d.partnerSolutionId.trim();
+    if (solution === '') fields.partnerSolutionId = { key: 'partnerSolutionIdRequired' };
+    else if (!DIGITS.test(solution)) fields.partnerSolutionId = { key: 'digits' };
+    if (d.credentialMode !== 'channel_token') {
+      fields.credentialMode = { key: 'partnerCredentialMode' };
+    }
+  }
+
   for (const k of SECRET_KEYS) {
     const v = d.secrets[k].value.trim();
     if (v === '') continue;
@@ -249,6 +284,10 @@ export function buildCreateRequest(d: ProviderDraft): CreateWhatsappProviderInpu
   const configId = orNull(d.onboardingConfigId);
   if (appId) body.onboardingAppId = appId;
   if (configId) body.onboardingConfigId = configId;
+  if (d.partnerProgram) {
+    body.partnerProgram = d.partnerProgram;
+    body.partnerSolutionId = d.partnerSolutionId.trim();
+  }
   const notes = orNull(d.notes);
   if (notes) body.notes = notes;
   if (Object.keys(credentials).length > 0) body.credentials = credentials;
@@ -321,6 +360,12 @@ export function buildUpdateRequest(
     set('onboardingAppId', orNull(d.onboardingAppId));
   if (orNull(d.onboardingConfigId) !== p.onboardingConfigId) {
     set('onboardingConfigId', orNull(d.onboardingConfigId));
+  }
+  const solutionId = d.partnerProgram ? orNull(d.partnerSolutionId) : null;
+  if (d.partnerProgram !== p.partnerProgram || solutionId !== p.partnerSolutionId) {
+    // The pair travels together: a program needs its solution id, and `null` clears both.
+    set('partnerProgram', d.partnerProgram);
+    set('partnerSolutionId', solutionId);
   }
 
   const credentials = typedSecrets(d);
@@ -404,14 +449,14 @@ export type WizardStep = (typeof WIZARD_STEPS)[number];
 export const STEP_FIELDS: Readonly<Record<WizardStep, readonly string[]>> = {
   basics: ['key', 'label', 'notes'],
   connection: ['baseUrl', 'apiVersion', 'headerTemplates'],
-  credentials: ['credentials.providerToken'],
+  credentials: ['credentialMode', 'credentials.providerToken'],
   webhooks: [
     'signatureHeaderName',
     'credentials.appSecret',
     'credentials.webhookSecret',
     'credentials.verifyToken',
   ],
-  billing: ['onboardingAppId', 'onboardingConfigId'],
+  billing: ['onboardingAppId', 'onboardingConfigId', 'partnerSolutionId'],
   review: [],
 };
 

@@ -111,6 +111,57 @@ When no number and no workspace override uses it (`GET /` shows `numberCount` an
 cannot be archived: clear it first (`DELETE /default`). Archived providers no longer route; a number still on one reads as having no
 usable credentials until it is switched.
 
+## Pinnacle (a partner program)
+
+Pinnacle's messaging API is Meta-shaped (`POST <base>/v3/{phoneNumberId}/messages`, header `apikey`), but onboarding a client is a partner
+flow. A provider with `partnerProgram: "pinnacle"` runs it for every number connected through Embedded Signup:
+
+1. The platform reads the WABA's template namespace from Meta, then **creates the client's Pinnacle account** (`POST <base>/create-user-account`,
+   header `apikey: <partner key>`). Pinnacle answers with the client's **own key**: that key is the number's channel token, so every later
+   send for the number carries `apikey: <client key>` (never the Meta token).
+2. It sends Pinnacle the embedded-signup details (`POST <base>/client-embedded-detail-receiver`: WABA, phone, configuration id, the client's
+   Meta token, the solution id, the business id).
+3. It subscribes the WABA at Meta with the client's Meta token and points the callback at the platform's one webhook (a Meta call, not
+   through Pinnacle).
+4. About 200 seconds later a worker job shares the Meta credit line (`POST <base>/share-creditline-api`, `apikey: <partner key>`) and records
+   `credit_line_assigned` on the number. A refusal is recorded as `credit_line_error`; a Pinnacle outage is retried.
+
+Steps 1 and 2 run during the connect: a refusal reaches the person connecting as `WAP_PARTNER_REFUSED` with Pinnacle's own reason, and
+nothing is stored. A provider missing its partner key, solution id or signup configuration answers `WAP_PARTNER_NOT_CONFIGURED`.
+
+```json
+{
+  "key": "pinnacle",
+  "label": "Pinnacle",
+  "baseUrl": "https://partnersv1.pinbot.ai",
+  "apiVersion": "v3",
+  "authScheme": "custom_headers",
+  "headerTemplates": { "apikey": "{{channelToken}}" },
+  "billingMode": "provider_credit_line",
+  "capabilities": { "mediaUpload": false },
+  "onboarding": "embedded_signup",
+  "onboardingAppId": "<the Meta app Pinnacle onboards through>",
+  "onboardingConfigId": "<its Embedded Signup configuration id>",
+  "partnerProgram": "pinnacle",
+  "partnerSolutionId": "<Pinnacle solution id>",
+  "credentials": {
+    "providerToken": "<Pinnacle partner key>",
+    "appSecret": "<that Meta app's secret>"
+  }
+}
+```
+
+- `providerToken` is the **partner key** (used for account creation, the embedded details and the credit line). It is not the key a number
+  sends with.
+- `appSecret` must be the secret of the Meta app the WABAs are onboarded through: inbound webhooks for Pinnacle numbers are verified with it,
+  and a delivery with no secret stored is refused (fail closed).
+- `apiVersion` is `v3` here (a version with no minor is accepted).
+- Activate, make it the default or assign a workspace as in sections 1 and 2.
+- The Embedded Signup popup uses the platform's Meta app and configuration (the console WhatsApp page), so those must be the same app and
+  configuration Pinnacle expects (`onboardingAppId` / `onboardingConfigId` are the provider's record of them).
+- Not run against a live Pinnacle account: do the first connect on a test workspace and watch the number's `credit_line_assigned` and the
+  worker log for `pinnacle`.
+
 ## Gotchas
 
 - The registry is read by each process every 15 seconds. A worker may take up to 15 seconds to notice a new provider or a changed

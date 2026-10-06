@@ -29,6 +29,12 @@ export interface WabaRegistryProvider {
   signatureScheme: WhatsappSignatureScheme;
   signatureHeaderName: string | null;
   capabilities: { mediaUpload: boolean };
+  /** A partner onboarding flow after Embedded Signup, with its solution id (public). */
+  partnerProgram?: 'pinnacle' | null;
+  partnerSolutionId?: string | null;
+  /** Embedded Signup app and configuration of this provider (public); null/absent: the platform's own. */
+  onboardingAppId?: string | null;
+  onboardingConfigId?: string | null;
   providerToken?: string;
   appSecret?: string;
   webhookSecret?: string;
