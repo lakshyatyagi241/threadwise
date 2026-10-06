@@ -461,6 +461,10 @@
         "planLimit": {
           "title": "Your plan's monthly message limit has been reached.",
           "hint": "Upgrade the plan or wait for the next period, then use Retry."
+        },
+        "groupSendUnavailable": {
+          "title": "Sending to WhatsApp groups is not available yet.",
+          "hint": "Reply from the WhatsApp Business app."
         }
       },
       "media": {
