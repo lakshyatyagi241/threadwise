@@ -12,6 +12,7 @@ import {
   html,
   pending,
   ready,
+  sender,
   sources,
   template,
   uuid,
@@ -182,6 +183,7 @@ describe('step 3 as a whole', () => {
           },
         })}
         template={template()}
+        sender={sender()}
         sources={sources()}
         count={count()}
         credit={ready(credit())}

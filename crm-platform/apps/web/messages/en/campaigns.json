@@ -541,7 +541,8 @@
         "schedule_required": "Fill in the date and the time.",
         "no_recipients": "No contacts would receive this broadcast. Widen the audience.",
         "insufficient_balance": "Your wallet balance is too low for this broadcast.",
-        "checking_balance": "Checking your wallet balance..."
+        "checking_balance": "Checking your wallet balance...",
+        "sender_required": "Pick the WhatsApp number to send from."
       },
       "template": {
         "nameLabel": "Broadcast name",
@@ -566,7 +567,11 @@
         "count": "Showing {shown} of {total} templates",
         "previewTitle": "Preview",
         "previewVariables": "{count, plural, one {# variable is filled in the next steps.} other {# variables are filled in the next steps.}}",
-        "previewEmpty": "Choose a template to see how the message looks."
+        "previewEmpty": "Choose a template to see how the message looks.",
+        "senderLabel": "Send from",
+        "senderHint": "The WhatsApp number this broadcast is sent from.",
+        "pickSender": "Choose a number",
+        "noSenders": "No WhatsApp number is connected. Connect one first."
       },
       "audience": {
         "explainer": "Contacts in the selected groups or segments that also match the conditions. With no group or segment, the conditions select from all contacts.",
@@ -672,7 +677,8 @@
         "sumSkipped": "{total} skipped ({optedOut} opted out, {invalid} invalid numbers)",
         "sumFixed": "is the fixed text \"{text}\"",
         "sumField": "is filled from {field}",
-        "sumFieldFallback": "is filled from {field}, or \"{fallback}\" when empty"
+        "sumFieldFallback": "is filled from {field}, or \"{fallback}\" when empty",
+        "sumSender": "Send from"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -865,6 +871,17 @@
           "active": "Active",
           "ended": "Ended"
         }
+      },
+      "panel": {
+        "title": "Created with Create broadcast",
+        "hint": "Broadcasts made with the four-step wizard, newest first.",
+        "mode": {
+          "now": "Sent now",
+          "scheduled": "Scheduled",
+          "recurring": "Recurring"
+        },
+        "recipients": "{count, plural, one {# recipient} other {# recipients}}",
+        "next": "Next run {when}"
       }
     }
   }

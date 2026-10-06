@@ -9,6 +9,7 @@ import type {
   WizardTemplate,
   WizardVariableSource,
   WizardVariables,
+  WizardSender,
 } from '@crm/contracts';
 import type { StepIssue } from '../lib/issues';
 import type { WizardView } from '../lib/state';
@@ -20,6 +21,7 @@ import { VariablesCard, type CustomProperty } from './variables-card';
 export function StepReview({
   draft,
   template,
+  sender,
   sources,
   count,
   credit,
@@ -33,6 +35,7 @@ export function StepReview({
 }: {
   draft: WizardDraft;
   template: WizardTemplate | null;
+  sender: WizardSender | null;
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: CreditQuery;
@@ -64,6 +67,7 @@ export function StepReview({
       <SummaryCard
         draft={draft}
         template={template}
+        sender={sender}
         sources={sources}
         count={count}
         credit={credit.data}

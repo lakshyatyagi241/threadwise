@@ -5,10 +5,12 @@ import {
   wizardAudienceCountSchema,
   wizardAudienceSourcesSchema,
   wizardBroadcastDetailSchema,
+  wizardBroadcastListSchema,
   wizardControlResponseSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
   wizardLaunchResultSchema,
+  wizardSendersResponseSchema,
   wizardTemplatesResponseSchema,
   wizardTestLogSchema,
   wizardTestSendResponseSchema,
@@ -27,6 +29,7 @@ export const BASE = '/broadcast-wizard';
 export const KEYS = {
   all: ['camp', 'wizard'] as const,
   templates: ['camp', 'wizard', 'templates'] as const,
+  senders: ['camp', 'wizard', 'senders'] as const,
   sources: ['camp', 'wizard', 'sources'] as const,
   count: (audience: WizardAudience) => ['camp', 'wizard', 'count', audience] as const,
   credit: (templateId: string, audience: WizardAudience) =>
@@ -49,6 +52,15 @@ export function useWizardTemplates() {
     queryKey: KEYS.templates,
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/templates`, { schema: wizardTemplatesResponseSchema, signal }),
+    staleTime: 60_000,
+  });
+}
+
+export function useWizardSenders() {
+  return useQuery({
+    queryKey: KEYS.senders,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/senders`, { schema: wizardSendersResponseSchema, signal }),
     staleTime: 60_000,
   });
 }
@@ -175,6 +187,21 @@ export function useBroadcast(id: string) {
     queryKey: KEYS.broadcast(id),
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/broadcasts/${id}`, { schema: wizardBroadcastDetailSchema, signal }),
+    refetchInterval: STATUS_POLL_MS,
+    retry: false,
+  });
+}
+
+/** The newest broadcasts the wizard launched, for the Broadcasts list. Hidden by the caller when it is empty or refused. */
+export function useWizardBroadcasts(limit = 5) {
+  return useQuery({
+    queryKey: [...KEYS.all, 'list', limit] as const,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/broadcasts`, {
+        query: { limit },
+        schema: wizardBroadcastListSchema,
+        signal,
+      }),
     refetchInterval: STATUS_POLL_MS,
     retry: false,
   });

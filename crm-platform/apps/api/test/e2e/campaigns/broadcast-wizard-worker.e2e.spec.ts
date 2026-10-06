@@ -273,7 +273,7 @@ describe('recurring broadcasts: the planner', () => {
 
   it('each run is built from the audience as it is then: a contact added after the launch is in the next run', async () => {
     const w = await world(lab, 'bws8');
-    const s = await launchSeries(w, { startDate: '2027-08-01', contacts: 2 });
+    const s = await launchSeries(w, { startDate: '2027-08-01' }, { contacts: 2 });
     const [late] = await people(lab, w.t, [{ name: 'Late joiner' }]);
     await owner().query(
       `INSERT INTO contact_group_members (org_id, group_id, contact_id)

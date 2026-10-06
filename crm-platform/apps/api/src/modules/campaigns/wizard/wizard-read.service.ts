@@ -4,12 +4,18 @@ import {
   type WizardAudience,
   type WizardAudienceCount,
   type WizardAudienceSources,
+  type WizardSendersResponse,
   type WizardTemplate,
   type WizardTemplatesResponse,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
-import { TEMPLATE_DIRECTORY, templateRefusals, type TemplateDirectory } from '../../broadcasts';
+import {
+  BroadcastsComposeService,
+  TEMPLATE_DIRECTORY,
+  templateRefusals,
+  type TemplateDirectory,
+} from '../../broadcasts';
 import { WizardAudienceService } from './wizard-audience.service';
 import { templateSlots } from './wizard-rules';
 import { WizardRepository, type TemplateListRow } from './wizard.repository';
@@ -34,6 +40,7 @@ export class WizardReadService {
     private readonly db: DatabaseService,
     private readonly repo: WizardRepository,
     private readonly audience: WizardAudienceService,
+    private readonly compose: BroadcastsComposeService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
   ) {}
 
@@ -96,5 +103,20 @@ export class WizardReadService {
   countAudience(audience: WizardAudience): Promise<WizardAudienceCount> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx((tx) => this.audience.count(tx, orgId, audience));
+  }
+
+  /** The connected WhatsApp numbers a broadcast can be sent from (the composer's own list), default engine first. */
+  async listSenders(): Promise<WizardSendersResponse> {
+    const { senders } = await this.compose.compose();
+    return {
+      data: senders.map((x) => ({
+        key: x.key,
+        label: x.label,
+        phone: x.phone,
+        engine: x.engine,
+        engineLabel: x.engineLabel,
+        isDefault: x.isDefault,
+      })),
+    };
   }
 }

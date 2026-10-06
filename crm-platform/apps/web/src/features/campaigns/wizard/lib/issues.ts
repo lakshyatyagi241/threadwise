@@ -33,7 +33,7 @@ export interface IssueContext {
 /** The step a draft path belongs to (also how the launch's `errors[].path` finds the screen to open). */
 export function stepOfPath(path: string): WizardView {
   const head = path.split('.')[0];
-  if (head === 'name' || head === 'templateId') return 1;
+  if (head === 'name' || head === 'templateId' || head === 'senderKey') return 1;
   if (head === 'audience') return 2;
   if (head === 'variables') return 3;
   return 4;

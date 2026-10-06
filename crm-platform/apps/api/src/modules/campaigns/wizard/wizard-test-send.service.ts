@@ -134,7 +134,7 @@ export class WizardTestSendService {
           issues.map((i) => ({ path: i.path, message: i.code })),
         );
       }
-      const via = await this.runs.sender(tx, orgId, template);
+      const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
       const dispatch = await this.senders.resolveForDispatch(tx, orgId, {
         provider: via.provider,
         deviceId: via.deviceId,

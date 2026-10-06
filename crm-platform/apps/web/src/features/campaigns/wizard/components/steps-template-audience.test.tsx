@@ -7,6 +7,7 @@ import {
   html,
   pending,
   ready,
+  sender,
   sources,
   templates,
   template,
@@ -118,13 +119,26 @@ describe('step 1: name and template', () => {
       <StepTemplate
         name=""
         templateId={null}
+        senderKey={null}
+        senders={[sender()]}
         templates={tplQuery}
         issues={[]}
         onName={none}
         onTemplate={none}
+        onSender={none}
         {...over}
       />,
     );
+
+  it('has a required Send from number next to the name, and says so when none is connected', () => {
+    const one = step({ senderKey: sender().key });
+    expect(one).toContain('Send from');
+    expect(one).toContain('Acme Support (+919000000001) - Meta');
+    expect(step({ senders: [] })).toContain('No WhatsApp number is connected');
+    expect(
+      step({ issues: [{ path: 'senderKey', code: 'sender_required' }], senders: [sender()] }),
+    ).toContain('Pick the WhatsApp number to send from.');
+  });
 
   it('lists the approved templates as radio cards with language, category and sender', () => {
     const out = step();

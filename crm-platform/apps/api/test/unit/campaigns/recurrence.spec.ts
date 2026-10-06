@@ -92,13 +92,23 @@ describe('daily', () => {
 describe('weekly', () => {
   it('defaults to the weekday of the start date', () => {
     // 2026-10-05 is a Monday.
-    expect(dates(rule({ frequency: 'weekly' }), 3)).toEqual(['2026-10-05', '2026-10-12', '2026-10-19']);
+    expect(dates(rule({ frequency: 'weekly' }), 3)).toEqual([
+      '2026-10-05',
+      '2026-10-12',
+      '2026-10-19',
+    ]);
   });
 
   it('runs the picked weekdays in date order, skipping the days of the first week before the start', () => {
     // Start Wednesday 2026-10-07; Sunday(0) Wednesday(3) Friday(5): Sunday 10-04 is before the start and is not a run.
     const r = rule({ frequency: 'weekly', startDate: '2026-10-07', weekdays: [5, 0, 3] });
-    expect(dates(r, 5)).toEqual(['2026-10-07', '2026-10-09', '2026-10-11', '2026-10-14', '2026-10-16']);
+    expect(dates(r, 5)).toEqual([
+      '2026-10-07',
+      '2026-10-09',
+      '2026-10-11',
+      '2026-10-14',
+      '2026-10-16',
+    ]);
   });
 
   it('every 2 weeks runs the start week, then the week two later', () => {

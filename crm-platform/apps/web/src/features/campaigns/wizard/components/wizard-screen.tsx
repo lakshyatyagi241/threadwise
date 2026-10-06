@@ -13,6 +13,7 @@ import {
   useAudienceSources,
   useCreditCheck,
   useWizardDraft,
+  useWizardSenders,
   useWizardTemplates,
 } from '../api/wizard';
 import { countableAudience } from '../lib/audience';
@@ -123,6 +124,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   const { draft, view } = w.state;
 
   const templates = useWizardTemplates();
+  const senders = useWizardSenders();
   const sources = useAudienceSources();
   const fields = useContactFields();
   const template = templates.data?.data.find((x) => x.id === draft.templateId) ?? null;
@@ -131,6 +133,16 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
     () => (fields.data ?? []).filter(isUsableProperty).map((f) => ({ key: f.key, label: f.label })),
     [fields.data],
   );
+
+  // The number defaults to the workspace's default engine's first one; a draft whose number is gone gets the default again.
+  const sendersList = senders.data?.data;
+  const dispatch = w.dispatch;
+  useEffect(() => {
+    if (!sendersList || sendersList.length === 0) return;
+    if (draft.senderKey && sendersList.some((x) => x.key === draft.senderKey)) return;
+    const pick = sendersList.find((x) => x.isDefault) ?? sendersList[0]!;
+    dispatch({ type: 'sender', senderKey: pick.key });
+  }, [sendersList, draft.senderKey, dispatch]);
 
   const countable = countableAudience(draft.audience);
   const settled = useSettled(countable, 500);
@@ -271,10 +283,13 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
           <StepTemplate
             name={draft.name}
             templateId={draft.templateId}
+            senderKey={draft.senderKey}
+            senders={sendersList}
             templates={templates}
             issues={visible}
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
+            onSender={(senderKey) => w.dispatch({ type: 'sender', senderKey })}
           />
         )}
         {view === 2 && (
@@ -292,6 +307,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
           <StepReview
             draft={draft}
             template={template}
+            sender={sendersList?.find((x) => x.key === draft.senderKey) ?? null}
             sources={sources.data}
             count={count.data}
             credit={credit}

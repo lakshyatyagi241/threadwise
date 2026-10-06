@@ -95,7 +95,7 @@ export class WizardLaunchService {
       }
 
       // The classic gates: an approved, sendable template, and groups and segments that exist in this workspace.
-      const via = await this.runs.sender(tx, orgId, template);
+      const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
       await this.campaigns.assertTemplateUsable(tx, orgId, template.uuid, via.provider);
       await this.drafts.assertSources(tx, orgId, draft.audience);
 

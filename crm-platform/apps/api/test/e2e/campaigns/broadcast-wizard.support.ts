@@ -348,6 +348,7 @@ export function readyDraft(w: World, groupId: string, o: Record<string, unknown>
   return {
     name: 'Diwali offer',
     templateId: w.template,
+    senderKey: `waba:${w.config}`,
     audience: { groupIds: [groupId], segmentIds: [], rules: null },
     variables: { 'body.1': { kind: 'field', field: 'first_name', fallback: 'there' } },
     schedule: { mode: 'now' },

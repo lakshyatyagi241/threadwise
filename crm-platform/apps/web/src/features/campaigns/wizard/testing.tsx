@@ -9,6 +9,7 @@ import type {
   WizardCreditCheck,
   WizardDraft,
   WizardDraftResponse,
+  WizardSender,
   WizardTemplate,
 } from '@crm/contracts';
 import { EMPTY_WIZARD_DRAFT } from '@crm/contracts';
@@ -132,6 +133,16 @@ export function draftResponse(
     ...over,
   };
 }
+
+export const sender = (over: Partial<WizardSender> = {}): WizardSender => ({
+  key: `waba:${uuid(31)}`,
+  label: 'Acme Support',
+  phone: '+919000000001',
+  engine: 'waba',
+  engineLabel: 'Meta',
+  isDefault: true,
+  ...over,
+});
 
 export const sources = (): WizardAudienceSources => ({
   groups: [

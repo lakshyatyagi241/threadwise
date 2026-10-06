@@ -141,6 +141,10 @@ export class WizardDraftsService {
       if (!t) throw field('templateId', 'Template not found in this workspace.');
       templateId = t.id;
     }
+    if (draft.senderKey) {
+      const [picked] = await this.senders.resolve(tx, orgId, [draft.senderKey]);
+      if (!picked) throw field('senderKey', 'That number is not connected.');
+    }
     await this.assertSources(tx, orgId, draft.audience);
     return templateId;
   }

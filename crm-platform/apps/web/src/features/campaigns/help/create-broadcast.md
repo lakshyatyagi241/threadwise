@@ -14,7 +14,7 @@ keywords: [broadcast, wizard, template, audience, schedule, recurring, retries, 
 
 ## How to use it
 
-1. **Name and template.** Enter a broadcast name, then pick a template. Search by name or text, or filter by language and category. Only approved templates are listed. The phone preview on the right shows the message, with its variables highlighted.
+1. **Name and template.** Enter a broadcast name, choose the WhatsApp number to **Send from** (the default one is preselected), then pick a template. Search by name or text, or filter by language and category. Only approved templates are listed. The phone preview on the right shows the message, with its variables highlighted.
 2. **Audience.** Tick contact groups and segments, and add **Filter conditions** to narrow them (for example country code, tags or a custom property). A contact must be in one of the chosen groups or segments and match the conditions. With no group or segment, the conditions select from all contacts. The **Matching contacts** panel shows who matches, who is always skipped (opted out, invalid number) and who **will be messaged**.
 3. **Check and variables.** The credit check compares your wallet with the estimated cost, with a breakdown by country. If the balance is too low, **Next** is blocked and **Top up** takes you to add credit. For each variable of the template, choose **Contact field** (with a fallback for contacts that lack it) or **Fixed text**. Sample messages show the message for a few real contacts, and flag any placeholder that came out empty. The summary lists everything, with **Edit** links back to the step that owns each value.
 4. **Test and send.** Send a test first, then choose **When to send** and finish.

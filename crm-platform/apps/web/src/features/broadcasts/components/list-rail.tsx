@@ -105,7 +105,7 @@ export function ListRail({
           <div className="text-2xl leading-tight">{t('createBroadcast')}</div>
           <p className="mt-2 text-xs leading-relaxed opacity-80">{t('getStartedBody')}</p>
           <Link
-            href="/broadcasts/create"
+            href="/campaigns/wizard"
             className="mt-3 inline-flex items-center gap-2 rounded-full bg-background px-3.5 py-1.5 text-xs font-semibold text-brand"
           >
             {t('newBroadcast')}
