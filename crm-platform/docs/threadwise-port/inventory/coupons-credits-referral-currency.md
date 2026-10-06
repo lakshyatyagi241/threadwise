@@ -933,6 +933,7 @@ Two ground truths that the rest of the file relies on:
   - Given a user with an existing code, Then the code never changes.
 - **Source refs:** app/Models/User.php; database/migrations/2026_05_07_120000_create_wallet_and_referrals_tables.php; app/Http/Controllers/Api/App/ContentController.php; resources/views/components/layouts/user.blade.php.
 - **Port notes:** Store on the identity user (AUTH); unique index; generate with `crypto.randomInt`. Backfill in the migration.
+- **Port status (2026-10-06):** built. One code per user in `referral_codes` (unique per user), issued on `auth.signup_completed` and lazily on the first `/v2/me/referral` read (the lazy path is the backfill; no migration guesses codes). QUIRK fixed: none lost.
 
 ### TW-CPN-030 — Referral link capture (?ref cookie)
 
@@ -992,6 +993,7 @@ Two ground truths that the rest of the file relies on:
   - Given mobile registration with `refer_code`, Then attribution happens; with an invalid code, Then registration still returns 201.
 - **Source refs:** app/Http/Controllers/AuthPagesController.php; app/Http/Controllers/AuthController.php; app/Http/Controllers/Api/App/AuthController.php; resources/views/auth/_register_form.blade.php; app/Services/ReferralService.php.
 - **Port notes:** Pass the referral code in the sign-up command; also support social sign-up (parity gap worth fixing) by storing the code in the OAuth state.
+- **Port status (2026-10-06):** built. Social sign-up now carries the code: the web server adds the `crm_ref` cookie to the social callback and `referralCode` is accepted by `POST /auth/social/:provider/callback` (Reference QUIRK 4 not reproduced). The cookie is not cleared after a social sign-up (the API does not say whether the callback created an account).
 
 ### TW-CPN-032 — Referral attribution (one referrer per referee)
 
@@ -1021,6 +1023,7 @@ Two ground truths that the rest of the file relies on:
   - Given a code in lowercase, Then it resolves case-insensitively.
 - **Source refs:** app/Services/ReferralService.php; app/Models/Referral.php; app/Models/User.php; database/migrations/2026_05_07_120000_create_wallet_and_referrals_tables.php.
 - **Port notes:** `referrals` table keyed by tenant-less user ids (identity domain) - decide with AUTH whether referrer/referee are users or orgs; unique index on referee; handle unique violation gracefully.
+- **Port status (2026-10-06):** built. Consumer of `referral.attributed`; `referrals` gained `referrer_org_id`/`referred_org_id` (migration 20261031100000). Referee = user (org, id); idempotent via UNIQUE(referred_user_id).
 
 ### TW-CPN-033 — Referral reward on referee's first paid order
 
@@ -1052,6 +1055,7 @@ Two ground truths that the rest of the file relies on:
   - Given the wallet service throws, Then checkout still succeeds and a warning is logged.
 - **Source refs:** app/Services/ReferralService.php; app/Http/Controllers/CheckoutController.php (finalizeOrder); app/Services/WalletService.php; app/Models/Referral.php.
 - **Port notes:** Implement as a domain event handler consuming an `order.paid` outbox event (audit + outbox in same tx), locking the referral row `FOR UPDATE`; credit via the WALLET ledger. Consider a minimum order amount, subscription-only rule, and a maximum payout window as product options (parity default: none).
+- **Port status (2026-10-06):** built. Consumer of `paygw.order.paid`, row locked FOR UPDATE, credits the referrer's WORKSPACE wallet (`earn`, `referral.paid`, key `referral:<id>`), audit + `referral.rewarded`. QUIRK kept for parity: any paid order counts, including zero-total ones (decision for the owner: a minimum amount or subscription-only rule). Ledger description carries no referee name or email (hardening).
 
 ### TW-CPN-034 — Affiliate reward setting (admin wallet-rules save)
 
@@ -1080,6 +1084,7 @@ Two ground truths that the rest of the file relies on:
   - Given 100001 as reward, Then validation fails.
 - **Source refs:** app/Http/Controllers/AdminPagesController.php (settingsAffiliateUpdate, settingWalletRules); resources/views/admin/settings/wallet-rules.blade.php; app/Models/SystemSetting.php; Documentation/pages/admin-panel/system-settings.html.
 - **Port notes:** Store the reward as an integer minor amount in a typed platform setting; expose in the WALLET rules screen; audit the change.
+- **Port status (2026-10-06):** covered by the wallet rules screen: every save is logged with old and new value; the 0..100,000 bound was missing in our contract and is now enforced.
 
 ### TW-CPN-035 — Affiliate history dashboard
 
@@ -1125,6 +1130,7 @@ Two ground truths that the rest of the file relies on:
   - Given an unauthenticated visit, Then redirect to login.
 - **Source refs:** app/Http/Controllers/AffiliateHistoryController.php; resources/views/user/affiliate-history/index.blade.php; resources/views/user/affiliate-history/_rows.blade.php; resources/js/charts/user-affiliate-history-index.js; app/Models/Referral.php; app/Models/WalletTransaction.php.
 - **Port notes:** `apps/web/.../account/affiliate` + `GET /me/referrals?range=&q=&cursor=` in a `growth/referrals` module; do the search/pagination in SQL; fix the bucket default and payouts source; render money with the platform currency consistently. Charts library is a choice; the data shape above is the contract.
+- **Port status (2026-10-06):** built as ONE Affiliate screen at `/account/affiliate` (merges the account tab and this page). Fixes: a named bucket is always honoured, payouts read `referral.paid`, one unit (hundredths + currency code) everywhere, search and pagination in SQL with a cursor. Intended: UTC buckets; daily series capped at the latest 366 points; monthly buckets are calendar months.
 
 ### TW-CPN-036 — Affiliate history CSV export
 
@@ -1152,6 +1158,7 @@ Two ground truths that the rest of the file relies on:
   - Given no referrals, Then only the header row is returned.
 - **Source refs:** app/Http/Controllers/AffiliateHistoryController.php; resources/js/charts/user-affiliate-history-index.js.
 - **Port notes:** Stream from the API with the same columns; prefix a BOM or document encoding; apply the same filters as the list.
+- **Port status (2026-10-06):** built. Same columns (`id` is the uuid), UTF-8 BOM, newest first, formula-safe cells, `credits_awarded` in hundredths, max 100,000 rows.
 
 ### TW-CPN-037 — Account affiliate tab and More-page affiliate counters
 
@@ -1174,6 +1181,7 @@ Two ground truths that the rest of the file relies on:
   - Given reward setting 250 and default currency USD, Then the copy shows $2.50 for every viewer regardless of workspace currency.
 - **Source refs:** app/Http/Controllers/AccountController.php; app/Http/Controllers/UserPagesController.php; resources/views/user/account/index.blade.php; resources/views/user/more/index.blade.php; resources/js/charts/user-account-index.js.
 - **Port notes:** In the port, merge this tab and the history page into one Affiliate screen backed by the same API and unit conventions.
+- **Port status (2026-10-06):** merged into the Affiliate screen. `lifetimeCount` is a true count (Reference capped it at 50); the status shows paid or pending (Reference hard-coded active); reward shown in the platform currency.
 
 ### TW-CPN-038 — Advertised 20% recurring affiliate commission
 
@@ -1199,6 +1207,8 @@ Two ground truths that the rest of the file relies on:
 ## Data model
 
 All four owned tables are platform-global except `referrals` (keyed by user ids). None has soft deletes. Timestamps are `timestamp NULL` set by the ORM unless noted. Row volumes are small (coupons: tens; credit_packages: single digits; currencies: about 30 to 200; referrals: grows with signups, thousands to hundreds of thousands).
+
+- **Port status (2026-10-06):** PRODUCT DECISION: not ported. No UI copy promises a percentage or recurring commission; a commission feature would need its own ledger, payout rules and clawbacks (`affiliate_commissions`) and a new decision.
 
 ### coupons
 
@@ -1313,6 +1323,7 @@ Defects and surprises (verify with the parity tool before rebuilding):
 16. Referral payout race: two concurrent paid finalizations for the same referee can both read `award_transaction_id IS NULL` (no row lock) and double-credit; the unique key protects only attribution.
 17. Reference DB state: `currencies` is empty locally and `referrals` has 0 rows, `coupons` has the 2 installer coupons and `credit_packages` the 3 migration seeds; behavior for populated currencies is derived from code.
 18. Permissions: no RBAC permission keys guard any screen in this domain (only `isAdmin()`); the port must decide the platform-permission names (for example `platform.billing.manage`) rather than copying Reference's binary admin check.
+19. OBSERVED by the Playwright twin (2026-10-06, reference instance): Reference's coupon and currency text columns turn four-byte characters into `?` (an emoji is stored as `??`), its string trimming also removes a trailing zero-width joiner, its code upper-casing is ASCII only, a whole-number field refuses `007` (silent summary box), amounts and rates accept exponent notation and a leading plus sign and answer 500 when a number overflows the column (`amount` 2147483647, rate 999999999999), a rate with more than six decimals is rounded silently, a currency code takes any text up to ten characters, a partial currency update without the active flag switches the currency off, and a hyphenated or lower-case `?ref=` value fills the register box raw and then wins over the cleaned cookie, so the referral is lost (rule 2 of TW-CPN-031).
 
 ## Coverage
 
