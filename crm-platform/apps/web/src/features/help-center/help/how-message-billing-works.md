@@ -10,14 +10,14 @@ keywords: [billing, wallet, per message, allowance, charge, refund, balance, cur
 
 ## What it is for
 
-This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send can be refused. For the screens themselves, see [Wallet and statement](help:wallet-statement), [Wallet top-up](help:wallet-top-up) and [Message billing](help:message-billing-mode).
+This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send can be refused. For the screens themselves, see [Wallet and statement](help:wallet-statement) and [Wallet top-up](help:wallet-top-up).
 
 ## Two ways messages are paid for
 
 The **How billing works** card on the wallet screen says which one applies to your workspace.
 
 - **Plan.** Your plan includes a number of messages every month. Messages inside that allowance are free. Each message beyond it is charged to your wallet. A plan with no maximum has no allowance to run out, and a plan that has ended no longer has an allowance. See [Plan and usage](help:plan-and-usage).
-- **Pay per message.** Every delivered message is charged to the wallet, whatever your plan includes. This applies when you chose **Bill me through the platform** on [Message billing](help:message-billing-mode), or when your platform charges every workspace per message.
+- **Pay per message.** Every delivered message is charged to the wallet, whatever your plan includes. Messages are billed through the platform: your wallet and subscription pay for them.
 
 ## What is charged, and when
 
