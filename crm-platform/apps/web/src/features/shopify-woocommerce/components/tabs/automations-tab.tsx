@@ -8,6 +8,8 @@ import { Alert, Select, Spinner, Switch } from '@crm/ui';
 import type { AutomationsView, StoreDashboard } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
+import { offerSenders } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { KEYS, saveAutomations, useAutomations } from '../../api/ecom';
 import {
   AUTOMATION_GROUPS,
@@ -66,6 +68,12 @@ function Form({
   const a = useTranslations('ecom.auto');
   const qc = useQueryClient();
   const canManage = useCan('ecom.automations.manage');
+  // Personal-number (unofficial engine) senders are not offered while the platform has that engine off.
+  const unofficial = useUnofficialWhatsapp();
+  const wooSenders = useMemo(
+    () => offerSenders(data.woo?.senders ?? [], unofficial),
+    [data.woo?.senders, unofficial],
+  );
   const groups = AUTOMATION_GROUPS[kind];
   const topics = useMemo(() => groups.flatMap((x) => x.topics), [groups]);
   const [drafts, setDrafts] = useState(() => initial(view, topics));
@@ -75,7 +83,7 @@ function Form({
   const fired = new Map(view.automations.map((x) => [x.eventType, x.fired]));
   const shopify = kind === 'shopify';
 
-  const sender = data.woo?.senders.find((s) => s.key === senderKey);
+  const sender = wooSenders.find((s) => s.key === senderKey);
   const templates = useMemo(
     () => templatesFor(data.templates, shopify ? undefined : sender),
     [data.templates, shopify, sender],
@@ -88,7 +96,7 @@ function Form({
     setSenderKey(key);
     const next = templatesFor(
       data.templates,
-      data.woo?.senders.find((s) => s.key === key),
+      wooSenders.find((s) => s.key === key),
     );
     setDrafts((d) =>
       Object.fromEntries(
@@ -147,7 +155,7 @@ function Form({
         </Alert>
       )}
 
-      {!shopify && data.woo && data.woo.senders.length > 0 && (
+      {!shopify && data.woo && wooSenders.length > 0 && (
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-background p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-[13px] font-semibold">{t('sendFrom')}</div>
@@ -161,7 +169,7 @@ function Form({
             disabled={!canManage}
           >
             <option value="">{t('auto')}</option>
-            {data.woo.senders.map((s) => (
+            {wooSenders.map((s) => (
               <option key={s.key} value={s.key}>
                 {s.label} · {s.engine}
               </option>

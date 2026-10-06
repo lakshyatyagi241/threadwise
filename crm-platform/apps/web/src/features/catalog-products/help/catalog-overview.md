@@ -14,10 +14,10 @@ Catalog lets you push products into WhatsApp chats. It has four tabs: **Setup** 
 
 ## How to use it
 
-1. Open **Setup**. With no WhatsApp device connected you see **Connect a device first**, with a button to your channels. Catalog sending needs at least one connected device.
-2. Once a device is connected the screen says **Ready to send**. Linking a Meta Commerce catalog is optional and unlocks the official catalog button, the cart and order notifications. With a Meta number, select **Fetch from my WhatsApp account**. Otherwise open **Optional · advanced**, choose the provider, enter the catalog ID, WABA ID, phone number ID and access token, and select **Connect & verify**.
+1. Open **Setup**. With no WhatsApp number connected you see **Connect a device first**, with a button to your channels. WhatsApp connects through the official WhatsApp Business API, and catalog sending needs at least one connected number.
+2. Once a number is connected the screen says **Ready to send**. Linking a Meta Commerce catalog is optional and unlocks the official catalog button, the cart and order notifications. With a Meta number, select **Fetch from my WhatsApp account**. Otherwise open **Optional · advanced**, choose the provider, enter the catalog ID, WABA ID, phone number ID and access token, and select **Connect & verify**.
 3. After connecting, use **Sync to Meta** to push products, **Refresh status** to check the results and **Import from Meta** to pull in products made in Meta. The counters show Total, Synced, Pending and Failed.
-4. Open **Send**. Choose the recipients (**Contact groups**, **Individual contacts** or **Manual numbers**, up to 500 per send), a format (**Single product**, **Product list (carousel)** with up to 30 products, or **Catalog link**), the device to **Send from**, the products and an optional message, then select the send button.
+4. Open **Send**. Choose the recipients (**Contact groups**, **Individual contacts** or **Manual numbers**, up to 500 per send), a format (**Single product**, **Product list (carousel)** with up to 30 products, or **Catalog link**), the number to **Send from**, the products and an optional message, then select the send button.
 5. Use **Collections** to save a group of products once and send it in one click, and **Activity** to see every catalog message your workspace sent.
 
 ## Options and settings
@@ -34,6 +34,6 @@ Catalog needs the **WhatsApp catalog** plan feature and permission to view the c
 
 ## If something looks wrong
 
-- **Nothing was sent:** the screen lists the reasons. Common ones are no connected device, no recipients, a wallet balance too low to send, or more than 500 recipients.
+- **Nothing was sent:** the screen lists the reasons. Common ones are no connected number, no recipients, a wallet balance too low to send, or more than 500 recipients.
 - **A product shows failed:** read the message under its Meta status, fix the product (often the image or price) in [Products](help:store-products-overview) and sync again.
 - **A product is missing from Send:** only active products are listed.

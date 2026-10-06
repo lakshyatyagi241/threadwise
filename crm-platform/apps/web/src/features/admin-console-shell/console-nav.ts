@@ -13,6 +13,11 @@ export interface ConsoleLeaf {
   /** A literal label, for entries that come from data (a module's manifest) and have no message key. */
   label?: string;
   badgeKey?: string;
+  /**
+   * A word badge (not a count) for a page whose feature is switched off or unsupported: shown while the named flag in the layout's
+   * counts is set (greater than zero). `labelKey` is the full next-intl key of the word.
+   */
+  statusBadge?: { key: string; labelKey: string };
   /** Full next-intl key of the small heading drawn above this link: it opens a block of related pages. */
   captionKey?: string;
 }
@@ -58,16 +63,34 @@ const BADGE_KEYS: Readonly<Record<string, string>> = {
   'cms-guidebook': 'guidebook',
 };
 
+/** Operator-nav items that carry a status word while a platform flag is set. */
+const STATUS_BADGES: Readonly<Record<string, { key: string; labelKey: string }>> = {
+  // Only the official WhatsApp Business API is supported: the Node bridge (personal numbers by QR) says so while the platform switch is off.
+  'node-bridge': { key: 'unofficialOff', labelKey: `${NS}.badges.notSupported` },
+};
+
+/** The label key of the status badge a leaf shows right now, or null: the flag must be set in `counts`. */
+export function activeStatusBadge(
+  leaf: Pick<ConsoleLeaf, 'statusBadge'>,
+  counts: Readonly<Partial<Record<string, number>>>,
+): string | null {
+  const badge = leaf.statusBadge;
+  if (!badge) return null;
+  return (counts[badge.key] ?? 0) > 0 ? badge.labelKey : null;
+}
+
 export const sectionLabelKey = (id: string): string => `${NS}.sections.${id}`;
 export const captionLabelKey = (caption: string): string => `${NS}.captions.${caption}`;
 
 const toLeaf = (item: OperatorNavItem, captionKey?: string): ConsoleLeaf => {
   const badgeKey = BADGE_KEYS[item.id];
+  const statusBadge = STATUS_BADGES[item.id];
   return {
     id: item.id,
     href: item.href,
     labelKey: item.labelKey,
     ...(badgeKey ? { badgeKey } : {}),
+    ...(statusBadge ? { statusBadge } : {}),
     ...(captionKey ? { captionKey } : {}),
   };
 };

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { DASH_RANGES, dashRangeSchema, type DashRange } from '@crm/contracts';
 import { Button, Card, Input, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import type { CustomDates } from '../api/service';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
@@ -98,6 +99,7 @@ export function RangePicker({
 /** `/dashboard` (TW-DASH-001..021): the operator dashboard, cards in the order Reference shows them. */
 export function DashboardScreen() {
   const t = useTranslations('dashboards-analytics-charts.dashboard');
+  const unofficial = useUnofficialWhatsapp();
   const tr = useTranslations('dashboards-analytics-charts.range');
   const locale = useLocale();
   const session = useSession();
@@ -160,7 +162,7 @@ export function DashboardScreen() {
           </h1>
           {s && (
             <p className="text-sm text-muted-foreground">
-              {t('subline', {
+              {t(unofficial ? 'subline' : 'sublineOfficial', {
                 date: new Intl.DateTimeFormat(locale, {
                   timeZone: tz,
                   weekday: 'long',
@@ -368,12 +370,15 @@ export function DashboardScreen() {
               {w && (
                 <>
                   <div className="grid gap-4 lg:grid-cols-12">
-                    <div className="lg:col-span-7">
+                    <div className={unofficial ? 'lg:col-span-7' : 'lg:col-span-12'}>
                       <CampaignsCard data={w.campaigns} />
                     </div>
-                    <div className="lg:col-span-5">
-                      <DevicesCard data={w.devices} />
-                    </div>
+                    {/* The Devices card counts personal numbers paired by QR: it exists only while the platform has that engine on. */}
+                    {unofficial && (
+                      <div className="lg:col-span-5">
+                        <DevicesCard data={w.devices} />
+                      </div>
+                    )}
                   </div>
                   <TemplatesCard data={w.templates} />
                 </>
