@@ -753,6 +753,46 @@ describe('contacts of a segment: GET /contacts?segmentId=', () => {
     expect(names([...first.body.data, ...second.body.data])).toEqual(['L1', 'L2', 'L4']);
   });
 
+  it('GET /contacts?rules= filters by ad-hoc conditions, ANDed with a segment and other filters', async () => {
+    const q = (r: unknown) => encodeURIComponent(JSON.stringify(r));
+    const web = await api
+      .as(t.admin)
+      .get(`/v2/contacts?includeTotal=true&rules=${q(rules(cond('source', 'equals', 'web')))}`);
+    expect(web.status, JSON.stringify(web.body)).toBe(200);
+    expect(names(web.body.data)).toEqual(['L3']);
+    expect(web.body.meta).toEqual({ total: 1 });
+
+    // OR group
+    const either = await api
+      .as(t.admin)
+      .get(
+        `/v2/contacts?rules=${q({ type: 'group', combinator: 'or', children: [cond('source', 'equals', 'web'), cond('name', 'equals', 'L1')] })}`,
+      );
+    expect(names(either.body.data)).toEqual(['L1', 'L3']);
+
+    // with a segment: import AND name L2 -> L2 only
+    const both = await api
+      .as(t.admin)
+      .get(`/v2/contacts?segmentId=${segId}&rules=${q(rules(cond('name', 'equals', 'L2')))}`);
+    expect(names(both.body.data)).toEqual(['L2']);
+
+    // another workspace sees none of these
+    const other = await api.signup('seg-list-b');
+    const foreign = await api
+      .as(other.admin)
+      .get(`/v2/contacts?rules=${q(rules(cond('source', 'equals', 'web')))}`);
+    expect(foreign.body.data).toEqual([]);
+  });
+
+  it('GET /contacts?rules= answers 422 for text that is not a rule tree', async () => {
+    const bad = await api.as(t.admin).get('/v2/contacts?rules=not-json');
+    expect(bad.status).toBe(422);
+    const wrong = await api
+      .as(t.admin)
+      .get(`/v2/contacts?rules=${encodeURIComponent('{"type":"nope"}')}`);
+    expect(wrong.status).toBe(422);
+  });
+
   it('the same list through the segment route, in the same shape', async () => {
     const res = await api
       .as(t.admin)

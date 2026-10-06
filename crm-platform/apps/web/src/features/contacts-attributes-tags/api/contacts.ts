@@ -47,6 +47,8 @@ export interface ContactFilters {
   imported: boolean;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
   segment: string;
+  /** Ad-hoc conditions (a segment's rule tree as JSON text) from the Hub's "Add condition"; empty for none. */
+  rules: string;
   order: 'asc' | 'desc';
   limit: PageSize;
   /** 1-based page number; it is not part of the saved filter of a bulk action. */
@@ -61,6 +63,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   consent: '',
   imported: false,
   segment: '',
+  rules: '',
   order: 'desc',
   limit: 10,
   page: 1,
@@ -71,7 +74,7 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  >,
+  > & { rules?: string },
 ) {
   return {
     q: f.q.trim() || undefined,
@@ -82,6 +85,7 @@ export function contactFilterBody(
     unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
     imported: f.imported ? true : undefined,
     segmentId: f.segment || undefined,
+    rules: f.rules || undefined,
   };
 }
 
@@ -97,6 +101,7 @@ export function listQuery(f: ContactFilters) {
     unsubscribed: b.unsubscribed,
     imported: b.imported,
     segmentId: b.segmentId,
+    rules: b.rules,
     order: f.order,
     limit: f.limit,
     expand: 'groups,tags',
