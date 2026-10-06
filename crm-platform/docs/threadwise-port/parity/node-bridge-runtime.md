@@ -150,3 +150,34 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
 - Health: each worker writes `wa:worker:<id>` (90 s) every pass and removes it on shutdown; `NodeWorkerStatus` counts them and the devices they hold, and the console
   health card's Node check shows that ("1 worker · 2 devices connected"). With no worker reporting it falls back to the saved-address probe, as before.
 - Not changed: template-kind campaigns on the unofficial engine and Twilio (a Meta template has no plain-text body here); interactive buttons are ignored on these engines.
+
+## Intended difference: the unofficial engine is OFF behind a platform switch (owner decision 2026-10-05)
+
+Reference supports the unofficial WhatsApp engine (personal numbers over Baileys, channel kind `whatsapp_qr`, the `devices` table, the Node bridge) as a
+first-class sender. **We disable it by owner decision.** Only the official route (Meta Cloud API / WABA, directly or through a BSP of the provider
+registry) is supported now. The engine stays in the code, **default OFF**, and only a platform super admin can turn it on in the admin console.
+Status: `intended`. Runbook: [whatsapp-unofficial-switch.md](../../runbooks/whatsapp-unofficial-switch.md).
+
+- **The switch.** `platform_settings` key `wa.unofficial.enabled` (JSON boolean, a missing row is OFF), read through `UnofficialWhatsappSwitch`
+  (`modules/auth/platform/unofficial-whatsapp-switch.ts`, injected by the `UNOFFICIAL_WHATSAPP_GATE` token from `modules/auth/unofficial-whatsapp.port.ts`),
+  5 s snapshot cache of `PlatformSettingsService`.
+- **API.** `GET /v2/platform/node-bridge` now carries `unofficialEnabled`; `PUT /v2/platform/node-bridge/unofficial` `{ enabled }` (super admin only) returns
+  `{ unofficialEnabled }` and audits `platform.whatsapp_unofficial.updated` with `before` and `after`.
+- **User actions are refused** with 422 `WA_UNOFFICIAL_DISABLED`: a broadcast, campaign or scheduled message that names a `baileys:` sender, saving a warmer
+  profile for a device, choosing a device as the commerce "send from", every `DeviceControlService` action (QR, pairing code, disconnect, send, act, group), and
+  a Baileys transport open. A blank provider and the workspace `default_engine` fall back to `waba` instead of `baileys`.
+- **Background paths skip, never fail.** Existing rows are preserved and not sent: a due broadcast is not queued, a scheduled campaign is not started, a
+  scheduled message goes back to `scheduled`, a running campaign is left to the stalled-run sweep that parks it as `scheduled`. They are picked up again when
+  the switch is turned on (a one-off scheduled message that is then later than `SCHED_MAX_LATE_MINUTES` ends failed as missed, as after any outage).
+  The worker opens and leases no socket, closes the ones it holds on the next pass, keeps the saved sessions, and logs once. `GET /api/whatsapp-message-settings`
+  answers `{ success: false, disabled: true }`.
+- **Read surfaces.** The inbox channel list hides `whatsapp_qr` channels (the rows, conversations and the adapter stay; a send on one fails non-retryable with
+  `WA_UNOFFICIAL_DISABLED`); the sender pickers of broadcasts, scheduled messages, flows, WooCommerce automations, the warmer page and the store wizard list no
+  devices; the dashboard devices card and the analytics devices panel return an empty list with `unofficialDisabled: true`.
+- **Entitlements.** `GET /v2/billing/entitlements` appends the synthetic key `unofficial_whatsapp` for every workspace (platform-owned included) only while on.
+  It is not a plan feature. The plan `devices` limit stays in the catalogue and keeps its value, but only applies while the switch is on.
+- **Not enforced here.** The flow runtime sends through the channel dispatcher, so a flow on a `whatsapp_qr` channel ends its prompt as failed or skips a plain
+  message with `WA_UNOFFICIAL_DISABLED` instead of being refused when the flow is saved (flows keep their `provider` stamp). There is no devices CRUD API yet
+  (`blocked:` the devices domain): it must call `UnofficialWhatsappGate.assertEnabled()` when built.
+- **Evidence.** `test/unit/node-bridge-runtime/unofficial-switch.spec.ts`, `test/e2e/node-bridge-runtime/unofficial-switch.e2e.spec.ts`. The e2e harness starts the
+  older suites with the switch ON (they exercise the engine); the new spec starts with the production default OFF.
