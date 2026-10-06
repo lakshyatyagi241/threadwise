@@ -169,7 +169,14 @@ export class WizardTestSendService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const opened = await adapter.open(orgId, dispatch);
+    const opened = await adapter.open(orgId, dispatch).catch((err: unknown) => {
+      // A number that cannot send (no credentials) is something the person can fix, not a server fault.
+      throw new AppError(
+        ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+        err instanceof Error ? err.message : 'The WhatsApp number cannot send right now.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    });
     const tpl = await this.db.tx((tx) => this.templates.findById(tx, orgId, template.id));
     if (!tpl) throw AppError.notFound('Template');
 

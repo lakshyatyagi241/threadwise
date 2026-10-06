@@ -4,7 +4,7 @@ import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PacingRuntime } from '../broadcasts';
 import { CAMPAIGN_SETTINGS, type CampaignSettingsSource } from './_shims/tokens';
-import { CampaignEvents } from './campaign-events';
+import { CampaignEvents, asSystem } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { dateInZone, dueAtUtc, isEcosystemThrottle } from './campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
@@ -96,7 +96,8 @@ export class CampaignSweeper {
         const orgId = Number(r.org_id);
         const id = Number(r.id);
         await this.repo.setStatus(tx, orgId, id, 'running', { lastRun: true });
-        await this.events.statusChanged(tx, orgId, id, 'scheduled');
+        // The outbox takes its tenant from the context, and a sweep across tenants has none: run the event as the system for this one.
+        await asSystem(orgId, () => this.events.statusChanged(tx, orgId, id, 'scheduled'));
         started.push({ orgId, id, uuid: r.uuid });
       }
     });
