@@ -23,6 +23,10 @@ import type {
   WaSocketFactory,
 } from '../../../infra/providers/node-bridge-runtime/socket.port';
 import { WA_SOCKET_FACTORY } from '../../../infra/providers/node-bridge-runtime/socket.port';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { DeviceLease, waKeys } from './wa-redis';
 import { DeviceControlService } from './device-control.service';
 import { InboundRouter, ReceiptRouter } from './routers';
@@ -101,7 +105,38 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     private readonly inbound: InboundRouter,
     private readonly receipts: ReceiptRouter,
     private readonly control: DeviceControlService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
+
+  /** Logged once per off period, so a switched-off engine does not write a line every 20 s tick. */
+  private offLogged = false;
+
+  /**
+   * Whether this worker may hold Baileys sockets now (owner decision 2026-10-05: the unofficial engine is off unless a
+   * platform super admin turns it on). Read on every loop; PlatformSettingsService serves it from a 5 s snapshot.
+   */
+  private async engineOn(): Promise<boolean> {
+    if (await this.unofficial.isEnabled()) {
+      this.offLogged = false;
+      return true;
+    }
+    if (!this.offLogged) {
+      this.offLogged = true;
+      this.logger.log(
+        '[NODE] unofficial WhatsApp engine is off: no device sockets are opened or leased',
+      );
+    }
+    return false;
+  }
+
+  /** Closes every session this worker holds and gives the leases back; the sessions and device rows are kept. */
+  private async releaseAll(): Promise<void> {
+    for (const o of [...this.owned.values()]) {
+      o.session.softDisconnect();
+      await this.lease.release(o.orgId, o.deviceId, o.token).catch(() => undefined);
+      this.owned.delete(key(o.orgId, o.deviceId));
+    }
+  }
 
   async onApplicationBootstrap(): Promise<void> {
     // A send for a device this process owns goes straight to its socket, not through Redis.
@@ -157,6 +192,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     opts: { connect?: boolean } = {},
   ): Promise<'started' | 'already' | 'busy' | 'missing'> {
     if (this.owned.has(key(orgId, deviceId))) return 'already';
+    // Never lease or open a socket while the engine is off, whoever asks (restore, a command, a test).
+    if (!(await this.engineOn())) return 'missing';
     const dev = await this.loadDevice(orgId, deviceId);
     if (!dev) return 'missing';
     const token = await this.lease.acquire(orgId, deviceId);
@@ -193,6 +230,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
    * phone logged the device out or pairing never finished, and the device is reported Disconnected.
    */
   async restore(): Promise<{ started: number; skipped: number }> {
+    if (!(await this.engineOn())) return { started: 0, skipped: 0 };
     const rows = await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT d.org_id, d.id, count(a.id)::int AS n
@@ -245,6 +283,12 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   /** Public for tests. */
   async pass(): Promise<void> {
     this.passes++;
+    if (!(await this.engineOn())) {
+      // Switched off while running: stop every socket at once, keep the saved sessions for when it is turned back on.
+      await this.releaseAll();
+      await this.beat();
+      return;
+    }
     const alive: Array<[number, number]> = [];
     for (const o of [...this.owned.values()]) {
       // A lease that is no longer ours means another worker has the device: stop at once, never run two sockets.
@@ -480,6 +524,14 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   /** Public for tests. Returns null when this worker is not the one to answer. */
   async handle(cmd: DeviceCommand): Promise<DeviceCommandResult | null> {
     const { orgId, deviceId } = cmd;
+    if (!(await this.engineOn())) {
+      // Only the worker that owns the device answers a send; with the engine off nobody owns one, so answer once for all.
+      return {
+        ok: false,
+        status: 'error',
+        message: 'The unofficial WhatsApp engine is turned off on this platform.',
+      };
+    }
     if (cmd.type === 'send' || cmd.type === 'act' || cmd.type === 'group') {
       // Only the worker that owns the device can send through it; the others stay silent.
       if (!this.owned.has(key(orgId, deviceId))) return null;

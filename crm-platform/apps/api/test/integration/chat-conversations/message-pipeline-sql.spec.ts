@@ -11,6 +11,16 @@ import { MessagesRepository } from '../../../src/modules/chat-conversations/mess
  * security: the properties that are the database's, not the code's. The services around them are covered end to end in
  * test/e2e/chat-conversations; this is the part that cannot be faked with a mock.
  */
+/** drizzle wraps the driver error as "Failed query": the database's own wording is on `cause`. */
+async function refusedByPolicy(run: Promise<unknown>): Promise<void> {
+  const err = await run.then(
+    () => null,
+    (e: unknown) => e as { message?: string; cause?: { message?: string } },
+  );
+  expect(err, 'the write was accepted').not.toBeNull();
+  expect(`${err!.message} ${err!.cause?.message ?? ''}`).toMatch(/row-level security|violates/i);
+}
+
 describe('message pipeline SQL: sequence allocation, ledger, receipts, isolation', () => {
   let container: StartedPostgreSqlContainer;
   let owner: Client;
@@ -367,7 +377,7 @@ describe('message pipeline SQL: sequence allocation, ledger, receipts, isolation
 
     it('a write that names another workspace is refused by the policy, not silently accepted', async () => {
       const alloc = await as(orgB, (tx) => messages.allocate(tx));
-      await expect(
+      await refusedByPolicy(
         as(orgB, (tx) =>
           messages.ledgerInsert(tx, orgA, chanA, 'provider_id', 'wamid.smuggled', {
             messageId: alloc.id,
@@ -375,8 +385,8 @@ describe('message pipeline SQL: sequence allocation, ledger, receipts, isolation
             conversationId: 1,
           }),
         ),
-      ).rejects.toThrow(/row-level security|violates/i);
-      await expect(
+      );
+      await refusedByPolicy(
         as(orgB, (tx) =>
           messages.insertEvent(
             tx,
@@ -386,7 +396,7 @@ describe('message pipeline SQL: sequence allocation, ledger, receipts, isolation
             {},
           ),
         ),
-      ).rejects.toThrow(/row-level security|violates/i);
+      );
     });
 
     it('the monthly count covers one workspace only: sends of another never count against it', async () => {

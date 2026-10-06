@@ -212,7 +212,7 @@ function AIGenInner({
       const res = await flowsApi.aiGenerate({
         prompt: prompt.trim(),
         model: entry.value,
-        provider: entry.provider as 'openai' | 'anthropic' | 'gemini',
+        provider: entry.provider as 'openai' | 'anthropic' | 'gemini' | 'openrouter',
         flowType,
       });
       onGenerate(res.flow, entry.label || entry.value);

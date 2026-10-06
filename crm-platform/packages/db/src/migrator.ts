@@ -1,7 +1,7 @@
-import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { Client } from 'pg';
+import { migrationChecksum, recordedChecksumMatches } from './checksum';
 
 /**
  * Migration runner for hand-written SQL.
@@ -47,7 +47,7 @@ export function loadMigrations(dir: string = MIGRATIONS_DIR): MigrationFile[] {
         id: file.replace(/\.sql$/, ''),
         path,
         sql,
-        checksum: createHash('sha256').update(sql).digest('hex').slice(0, 16),
+        checksum: migrationChecksum(sql),
         noTransaction: /^\s*--\s*@no-transaction/m.test(sql.split('\n')[0] ?? ''),
       };
     });
@@ -98,7 +98,7 @@ export async function runMigrations(
       const already = applied.get(file.id);
 
       if (already) {
-        if (already.checksum !== file.checksum) {
+        if (!recordedChecksumMatches(already.checksum, file.sql)) {
           throw new Error(
             `Migration ${file.id} has changed since it was applied ` +
               `(recorded ${already.checksum}, file ${file.checksum}).\n` +
@@ -160,7 +160,7 @@ export async function migrationStatus(
       if (!a) return { id: f.id, state: 'pending' };
       return {
         id: f.id,
-        state: a.checksum === f.checksum ? 'applied' : 'modified',
+        state: recordedChecksumMatches(a.checksum, f.sql) ? 'applied' : 'modified',
         appliedAt: a.appliedAt,
       };
     });

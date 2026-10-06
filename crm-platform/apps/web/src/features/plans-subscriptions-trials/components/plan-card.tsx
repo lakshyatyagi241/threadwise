@@ -5,6 +5,7 @@ import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { BillingPlan } from '@crm/contracts';
 import { Badge, Button, cn } from '@crm/ui';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { checkoutPath, priceView, SALES_PATH, type Period } from '../lib/format';
 import { PLATFORM_DEFAULT_KEY, cardRows } from '../lib/limits';
 
@@ -37,7 +38,8 @@ export function PlanCard({
   const titleId = useId();
   const [expanded, setExpanded] = useState(false);
   const price = priceView(plan, locale, period);
-  const { highlights, all: rows } = cardRows(plan, VISIBLE);
+  const unofficial = useUnofficialWhatsapp();
+  const { highlights, all: rows } = cardRows(plan, VISIBLE, unofficial);
   const shown = expanded ? rows : highlights;
 
   const label =

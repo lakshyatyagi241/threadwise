@@ -27,8 +27,12 @@
         "24h": "Last 24 hours",
         "7d": "Last 7 days",
         "30d": "Last 30 days",
-        "qtd": "Quarter to date"
-      }
+        "qtd": "Quarter to date",
+        "custom": "Custom range"
+      },
+      "from": "From date",
+      "to": "To date",
+      "apply": "Apply"
     },
     "funnel": {
       "stage": {
@@ -74,7 +78,8 @@
           "24h": "Outbound, delivered and failed, hourly, last 24 hours",
           "7d": "Outbound, delivered and failed, daily, last 7 days",
           "30d": "Outbound, delivered and failed, daily, last 30 days",
-          "qtd": "Outbound, delivered and failed, daily, quarter to date"
+          "qtd": "Outbound, delivered and failed, daily, quarter to date",
+          "custom": "Outbound, delivered and failed, daily, custom range"
         },
         "peak": "Peak hour {when} · {n} messages",
         "sent": "Sent",
@@ -281,7 +286,8 @@
         "notConnected": "not connected",
         "connect": "Connect",
         "connectedLabel": "Connected"
-      }
+      },
+      "sublineOfficial": "{date} - {range} showing {sent} outbound, {rate}% deliverability."
     },
     "analytics": {
       "title": "Analytics",

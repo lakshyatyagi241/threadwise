@@ -121,8 +121,22 @@ describe('the Settings registry', () => {
 
   it('declares each tile in its own domain, never a menu entry too (a screen moved, it did not copy)', () => {
     const settingHrefs = new Set(real.map((t) => t.href));
-    for (const item of [...NAV, ...PLANNED_NAV]) {
+    // An entry with `inMenu: false` is registered (gates, paywall, Help, command palette) but not drawn in the sidebar: that is how a
+    // screen moves into Settings without losing its gates, so it is not a second copy in the menu.
+    for (const item of [...NAV, ...PLANNED_NAV].filter((i) => i.inMenu !== false)) {
       expect(settingHrefs.has(item.href), `${item.id} is both a menu entry and a tile`).toBe(false);
+    }
+  });
+
+  it('only keeps a tile and a registered entry together when the entry is not drawn in the menu', () => {
+    // The other direction: a tile that shares an address with an entry must have declared that entry `inMenu: false`.
+    const hidden = new Set(NAV.filter((i) => i.inMenu === false).map((i) => i.href));
+    const shared = real.filter((t) => NAV.some((n) => n.href === t.href));
+    for (const t of shared) {
+      expect(
+        hidden.has(t.href),
+        `${t.id} shares its address with a menu entry that is still drawn`,
+      ).toBe(true);
     }
   });
 });

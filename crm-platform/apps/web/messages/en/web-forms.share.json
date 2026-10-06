@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "You can view these settings but not change them.",
+      "clipboardBlocked": "Your browser blocked copying. Select the text and copy it by hand.",
+      "copied": "Copied",
+      "status": {
+        "archived": {
+          "title": "This form is archived",
+          "body": "The public link and any embeds are closed. Restore the form to use them again."
+        },
+        "draft": {
+          "title": "Publish the form to make this link work",
+          "body": "Nobody can open the link or the embed until the form has been published at least once."
+        },
+        "paused": {
+          "title": "This form is closed",
+          "body": "The link and embeds show a closed message and accept no answers. Resume the form to open it again."
+        },
+        "live": {
+          "title": "This form is live",
+          "body": "Visitors see version {version}. Changes you make in the builder reach them only when you publish."
+        }
+      },
+      "hosted": {
+        "title": "Public link",
+        "description": "Share this address anywhere: a message, an email, a social bio. It opens the form on its own page.",
+        "label": "Form address",
+        "copy": "Copy link",
+        "copiedToast": "Link copied.",
+        "open": "Open",
+        "newTab": "(opens in a new tab)"
+      },
+      "qr": {
+        "title": "QR code",
+        "description": "For print, posters and packaging. Scanning it opens the public link.",
+        "alt": "QR code that opens the form",
+        "tracking": "The code adds utm_source=qr to the address, so submissions that came from it show as QR in their attribution.",
+        "downloadPng": "Download PNG",
+        "downloadSvg": "Download SVG",
+        "downloadFailed": "The QR code could not be downloaded. Try again."
+      },
+      "embed": {
+        "title": "Put the form on your website",
+        "description": "Paste one of these where you want the form to appear. Embedding only works on the sites listed under Allowed websites below.",
+        "copy": "Copy code",
+        "copiedToast": "{name} copied.",
+        "script": {
+          "title": "Script embed",
+          "description": "Recommended. The form resizes itself to fit the page and can redirect after submit."
+        },
+        "iframe": {
+          "title": "Iframe embed",
+          "description": "A plain frame for builders that do not allow scripts. You set the height yourself."
+        }
+      },
+      "domains": {
+        "title": "Allowed websites",
+        "description": "Only the websites listed here may embed this form and send answers from a browser.",
+        "none": "No website is allowed yet, so the form works on its public link only and cannot be embedded.",
+        "label": "Add a website",
+        "hint": "Use the exact address, such as https://www.example.com. One wildcard level is allowed, such as https://*.example.com. Plain http works for localhost only.",
+        "count": "{count} of {max}",
+        "add": "Add",
+        "remove": "Remove {value}",
+        "empty": "No websites added.",
+        "issues": {
+          "empty": "Enter a website address first.",
+          "invalid": "That is not a valid address. Use the form https://example.com or https://*.example.com, without a path.",
+          "duplicate": "This website is already in the list.",
+          "max": "You can allow at most {max} websites."
+        }
+      },
+      "rotate": {
+        "title": "Rotate the public key",
+        "description": "Creates a new key for this form. Use it if the link or embed code has leaked or you want to retire it.",
+        "button": "Rotate key",
+        "readOnly": "You cannot change this form",
+        "confirmTitle": "Rotate the public key?",
+        "confirmMessage": "The old link, QR codes and embed code stop working at once. You will have to share the new link and replace the code on every site that embeds the form.",
+        "confirmButton": "Rotate key",
+        "cancel": "Cancel",
+        "success": "The key was rotated. Copy the new link and code.",
+        "failed": "The key could not be rotated. Nothing changed. Try again.",
+        "conflict": "Someone else changed this form. Reload the page to see the latest version, then try again."
+      }
+    },
+    "settings": {
+      "readOnly": "You can view these settings but not change them.",
+      "usersFailed": "The list of team members could not be loaded, so owners cannot be picked right now.",
+      "form": {
+        "title": "Form",
+        "description": "The name you see in the list and the basics visitors see on the form.",
+        "name": "Form name",
+        "nameHint": "Only your team sees this name.",
+        "issues": {
+          "nameRequired": "Give the form a name.",
+          "submit_empty": "The button needs a label.",
+          "submit_too_long": "Keep the button label to {max} characters or fewer."
+        },
+        "language": "Form language",
+        "languageHint": "Sets the language of the built-in texts and the reading direction (Arabic reads right to left).",
+        "languages": {
+          "en": "English",
+          "ar": "Arabic"
+        },
+        "submitLabel": "Submit button label",
+        "submitLabelHint": "1 to {max} characters."
+      },
+      "after": {
+        "title": "After submit",
+        "description": "What the visitor sees once their answers are sent.",
+        "mode": "What happens",
+        "modes": {
+          "message": "Show a message",
+          "redirect": "Go to another page"
+        },
+        "modeHints": {
+          "message": "The form is replaced by your thank-you message.",
+          "redirect": "The visitor is sent to a page of yours, such as a thank-you or booking page."
+        },
+        "message": "Thank-you message",
+        "messageHint": "Plain text. These simple tags are allowed: b, i, u, br, ul, ol, li and a. Up to {max} characters.",
+        "messageTooLong": "The message is longer than {max} characters.",
+        "redirect": "Redirect address",
+        "redirectHint": "Must start with https://. A page that is not https is never opened.",
+        "redirectIssues": {
+          "required": "Enter the address to send visitors to.",
+          "https": "Use an address that starts with https://."
+        },
+        "redirectKeepsMessage": "The thank-you message is kept in the form and is not shown while a redirect is set."
+      },
+      "consent": {
+        "title": "Consent",
+        "description": "A tick box that records what the visitor agreed to, with the exact wording, its version and the time.",
+        "enabled": "Ask for consent",
+        "enabledHint": "Shows the consent line above the submit button.",
+        "text": "Consent text",
+        "textHint": "Up to {max} characters. Visitors see exactly this wording.",
+        "textRequired": "Write the consent text, or switch consent off.",
+        "textTooLong": "The text is longer than {max} characters.",
+        "version": "Wording version {version}",
+        "versionHintPublished": "Once the form is published, changing the wording starts a new version automatically. Earlier submissions keep the version they agreed to.",
+        "versionHintDraft": "The version stays at 1 until the form is published. After that, a change to the wording starts a new version.",
+        "privacyUrl": "Privacy policy link",
+        "privacyUrlHint": "Optional. Shown next to the consent text. Must start with https://.",
+        "privacyUrlHttps": "Use an address that starts with https://.",
+        "required": "Must be ticked to submit",
+        "requiredHint": "Turn this off if consent is optional.",
+        "marketing": "Marketing opt-in",
+        "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone."
+      },
+      "crm": {
+        "title": "In the CRM",
+        "description": "What every submission does to the contact it creates or updates.",
+        "company": "Match company",
+        "companyOptions": {
+          "none": "Do not match",
+          "email_domain": "By email domain",
+          "name_or_domain": "By name or domain"
+        },
+        "companyHints": {
+          "none": "Company answers are not used to link a company.",
+          "email_domain": "Links the contact to the company that owns the domain of their email address.",
+          "name_or_domain": "Links the company by name or website domain, and creates it when none matches."
+        },
+        "lifecycle": "Lifecycle stage",
+        "lifecycleHint": "Set on the contact when the form is submitted.",
+        "lifecycleNone": "Do not set",
+        "stages": {
+          "new": "New",
+          "contacted": "Contacted",
+          "qualified": "Qualified",
+          "application_started": "Application started",
+          "application_submitted": "Application submitted",
+          "interview_scheduled": "Interview scheduled",
+          "offer_received": "Offer received",
+          "admission_confirmed": "Admission confirmed",
+          "enrolled": "Enrolled",
+          "lost": "Lost"
+        },
+        "tags": "Tags to add",
+        "tagsHint": "Added to every contact that submits this form. Up to {max} tags of 1 to 60 characters.",
+        "tagsPlaceholder": "For example: webinar",
+        "tagsCount": "{count} of {max}",
+        "tagAdd": "Add tag",
+        "tagRemove": "Remove tag {value}",
+        "tagsNone": "No tags.",
+        "tagIssues": {
+          "empty": "Enter a tag first.",
+          "too_long": "A tag can have at most 60 characters.",
+          "duplicate": "This tag is already in the list.",
+          "max": "You can add at most {max} tags."
+        },
+        "owner": "Owner of new contacts",
+        "ownerHint": "Who looks after the contact this form creates.",
+        "ownerMode": "Owner rule",
+        "ownerModes": {
+          "unassigned": "No owner",
+          "fixed": "One person",
+          "round_robin": "Take turns"
+        },
+        "ownerModeHints": {
+          "unassigned": "The contact has no owner until someone claims it.",
+          "fixed": "Every contact goes to the same person.",
+          "round_robin": "Contacts go to the chosen people in turn. People who are no longer active are skipped."
+        },
+        "ownerFixed": "Owner",
+        "ownerRoundRobin": "People who take turns",
+        "ownerRoundRobinHint": "Pick at least two people.",
+        "chooseUser": "Choose a person",
+        "unknownUser": "A person who is no longer available",
+        "pickUsers": "Pick people",
+        "noUsers": "No matching people",
+        "removeUser": "Remove {name}",
+        "ownerIssues": {
+          "fixed_one": "Pick exactly one person.",
+          "round_robin_two": "Round robin needs at least two people.",
+          "unassigned_none": "An unassigned rule cannot have people. Pick another rule or clear the list.",
+          "too_many": "You can pick at most 50 people."
+        }
+      },
+      "notify": {
+        "title": "Notifications",
+        "description": "Who is told when a submission arrives.",
+        "owner": "Tell the contact's owner",
+        "ownerHint": "The owner gets a notification for each submission.",
+        "users": "Also tell these people",
+        "usersHint": "Up to {max} team members get the notification too.",
+        "emails": "Also email these addresses",
+        "emailsHint": "Up to {max} addresses get an email for each submission. They can belong to people outside your team.",
+        "emailPlaceholder": "name@example.com",
+        "emailsCount": "{count} of {max}",
+        "emailAdd": "Add email",
+        "emailRemove": "Remove {value}",
+        "emailsNone": "No extra addresses.",
+        "emailIssues": {
+          "empty": "Enter an email address first.",
+          "invalid": "That is not a valid email address.",
+          "duplicate": "This address is already in the list.",
+          "max": "You can add at most {max} addresses."
+        }
+      },
+      "protection": {
+        "title": "Protection",
+        "description": "Keeps spam out and decides how long answers are kept.",
+        "honeypot": "Hidden trap field",
+        "honeypotHint": "Adds a field people never see. Bots fill it in and their submissions are marked as spam.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Follow the platform setting",
+          "on": "Always on",
+          "off": "Off"
+        },
+        "captchaHints": {
+          "inherit": "Uses whatever your workspace has set for public forms.",
+          "on": "Visitors must pass the check before they can submit.",
+          "off": "No check. Rely on the hidden trap field and the rate limits."
+        },
+        "retention": "Keep answers for (days)",
+        "retentionHint": "After this many days the answers are deleted. This helps with data protection rules such as GDPR. Between 30 and 3650.",
+        "range": "Enter a whole number from {min} to {max}.",
+        "keepForever": "Keep until I delete them",
+        "keepForeverHint": "Answers stay until a person deletes them. Only choose this if you have a legal reason to keep them.",
+        "advanced": "Advanced: rate limits",
+        "advancedHint": "Limits that slow down floods of submissions. The defaults suit most forms.",
+        "rate": {
+          "perIpPerMinute": "Per address, per minute",
+          "perIpPerMinuteHint": "Submissions from one internet address.",
+          "perFormPerMinute": "Per form, per minute",
+          "perFormPerMinuteHint": "Submissions to this form from anywhere.",
+          "perContactPerHour": "Per contact, per hour",
+          "perContactPerHourHint": "Submissions with the same email or phone number."
+        }
+      }
+    }
+  }
+}

@@ -5,8 +5,9 @@ import { z } from 'zod';
  * figure is a live aggregate over the message streams of the caller's workspace (TW-DASH-002).
  */
 
-/** Dashboard window (TW-DASH-003). An unknown value falls back to 7d, as Reference does. */
-export const DASH_RANGES = ['24h', '7d', '30d', 'qtd'] as const;
+/** Dashboard window (TW-DASH-003). An unknown value falls back to 7d, as Reference does; `custom` takes inclusive From/To dates. */
+export const DASH_RANGES = ['24h', '7d', '30d', 'qtd', 'custom'] as const;
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const dashRangeSchema = z.enum(DASH_RANGES);
 export type DashRange = z.infer<typeof dashRangeSchema>;
 
@@ -18,6 +19,8 @@ export const dashSummaryQuerySchema = z.object({
       const p = dashRangeSchema.safeParse(v);
       return p.success ? p.data : '7d';
     }),
+  from: isoDate.optional().catch(undefined),
+  to: isoDate.optional().catch(undefined),
 });
 export type DashSummaryQuery = z.infer<typeof dashSummaryQuerySchema>;
 
@@ -98,7 +101,6 @@ export type DashThroughputResponse = z.infer<typeof dashThroughputResponseSchema
 
 /** Analytics window (TW-DASH-022): 30d is the default and the fallback for anything unknown. */
 export const ANALYTICS_RANGES = ['7d', '30d', '90d', 'custom'] as const;
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const analyticsQuerySchema = z.object({
   range: z
     .string()

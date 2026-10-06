@@ -54,6 +54,12 @@ export interface HarnessOptions {
    * same process, against the same database and Redis. A loader, so the modules are imported after the environment is set, like AppModule.
    */
   loadModules?: () => Promise<unknown[]>;
+  /**
+   * Whether the platform's unofficial WhatsApp engine switch (`wa.unofficial.enabled`) starts ON. Production defaults to OFF; the
+   * suites written before the switch existed exercise the engine itself, so the harness turns it on unless a spec asks for the
+   * real default with `false`.
+   */
+  unofficialWhatsapp?: boolean;
 }
 
 /**
@@ -87,6 +93,13 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
     `INSERT INTO platform_operators (email, full_name, password_hash, role) VALUES ($1, 'Ops', $2, 'super_admin'), ('support@platform.test', 'Support', $2, 'support')`,
     [OPERATOR_EMAIL, await hash(OPERATOR_PASSWORD)],
   );
+
+  if (options.unofficialWhatsapp !== false) {
+    await owner.query(
+      `INSERT INTO platform_settings (key, value, is_secret) VALUES ('wa.unofficial.enabled', 'true'::jsonb, false)
+       ON CONFLICT (key) DO UPDATE SET value = 'true'::jsonb`,
+    );
+  }
 
   Object.assign(process.env, {
     NODE_ENV: 'test',

@@ -577,44 +577,44 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-CPN-001 | todo |  |  |
-| TW-CPN-002 | todo |  |  |
-| TW-CPN-003 | todo |  |  |
-| TW-CPN-004 | todo |  |  |
-| TW-CPN-005 | todo |  |  |
-| TW-CPN-006 | todo |  |  |
-| TW-CPN-007 | todo |  |  |
-| TW-CPN-008 | todo |  |  |
-| TW-CPN-009 | todo |  |  |
-| TW-CPN-010 | todo |  |  |
-| TW-CPN-011 | todo |  |  |
-| TW-CPN-012 | todo |  |  |
-| TW-CPN-013 | todo |  |  |
-| TW-CPN-014 | todo |  |  |
-| TW-CPN-015 | todo |  |  |
-| TW-CPN-016 | todo |  |  |
-| TW-CPN-017 | todo |  |  |
-| TW-CPN-018 | todo |  |  |
-| TW-CPN-019 | todo |  |  |
-| TW-CPN-020 | todo |  |  |
-| TW-CPN-021 | todo |  |  |
-| TW-CPN-022 | todo |  |  |
-| TW-CPN-023 | todo |  |  |
-| TW-CPN-024 | todo |  |  |
-| TW-CPN-025 | todo |  |  |
-| TW-CPN-026 | todo |  |  |
-| TW-CPN-027 | todo |  |  |
-| TW-CPN-028 | todo |  |  |
-| TW-CPN-029 | todo |  |  |
-| TW-CPN-030 | todo |  |  |
-| TW-CPN-031 | todo |  |  |
-| TW-CPN-032 | todo |  |  |
-| TW-CPN-033 | todo |  |  |
-| TW-CPN-034 | todo |  |  |
-| TW-CPN-035 | todo |  |  |
-| TW-CPN-036 | todo |  |  |
-| TW-CPN-037 | todo |  |  |
-| TW-CPN-038 | todo |  |  |
+| TW-CPN-001 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-002 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-003 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-004 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-005 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-006 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| TW-CPN-007 | backend-done |  | CouponCheckoutService.quote tested; Apply widget lives in checkout (CHK) |
+| TW-CPN-008 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| TW-CPN-009 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-010 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-011 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-012 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-013 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-014 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-015 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-016 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-017 | wontfix |  | not ported: unauthenticated self-confirm credit grant is a Reference defect |
+| TW-CPN-018 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-019 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-020 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-021 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-022 | done |  | twin run: non-default delete compared; delete/switch-off of the default compared from the inventory only (Reference cannot restore it) |
+| TW-CPN-023 | done |  | fetch-rates control compared; live rate fetch not run (public provider call) |
+| TW-CPN-024 | done |  | twin ran ours only; Reference default setting not touched (shared instance) |
+| TW-CPN-025 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-026 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-027 | todo |  | resolution lives in platform-settings-branding-storage; no CPN test proves it |
+| TW-CPN-028 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-029 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-030 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-031 | verified |  | twin run 2026-10-06: web form, cookie and field paths clean; mobile refer_code belongs to MOB |
+| TW-CPN-032 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-033 | done |  | reward on a paid order not compared live (no payment in a parity run); api e2e |
+| TW-CPN-034 | done |  | wallet rules save audited; 100000 cap added; e2e |
+| TW-CPN-035 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-036 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-037 | verified |  | twin run 2026-10-06: account tab merged into /account/affiliate, clean; reward on paid order not compared live |
+| TW-CPN-038 | wontfix |  | docs-only, not ported; no commission copy shown |
 
 ## developer-rest-api-v1 (api)
 

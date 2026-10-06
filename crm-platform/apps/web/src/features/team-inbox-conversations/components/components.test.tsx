@@ -17,6 +17,10 @@ const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
 ) as Record<string, unknown>;
 
+const messagesAr = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'ar', 'team-inbox-conversations.json'), 'utf8'),
+) as Record<string, unknown>;
+
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
@@ -276,6 +280,68 @@ describe('Composer', () => {
       'inbox-template-button',
     );
     expect(composer({ canTemplate: true })).not.toContain('inbox-template-button');
+  });
+});
+
+describe('Composer on a WhatsApp group thread (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+  const group = (locale: 'en' | 'ar', over: Partial<Parameters<typeof Composer>[0]> = {}) =>
+    renderToStaticMarkup(
+      <NextIntlClientProvider
+        locale={locale}
+        messages={locale === 'en' ? messages : messagesAr}
+        timeZone="UTC"
+      >
+        <Composer
+          conversationId={id(1)}
+          mode="reply"
+          onMode={noop}
+          replyDisabled={false}
+          canReply
+          canNote
+          canAttach
+          canTemplate
+          onTemplate={noop}
+          groupSendBlocked
+          onSend={noop}
+          onNote={() => Promise.resolve(true)}
+          {...over}
+        />
+      </NextIntlClientProvider>,
+    );
+
+  it('switches the reply box off, with the explanation, and offers no attach, template or send', () => {
+    const out = group('en');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toMatch(/<button[^>]*data-testid="inbox-send"[^>]*\sdisabled=""/);
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+    expect(out).toContain('data-testid="inbox-group-send-unavailable"');
+    expect(out).toContain(
+      'Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.',
+    );
+    expect(out).not.toContain('Enter sends');
+  });
+
+  it('says the same in Arabic', () => {
+    const out = group('ar');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('الإرسال إلى مجموعات واتساب غير متاح بعد');
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+  });
+
+  it('leaves internal notes working on a group thread', () => {
+    const out = group('en', { mode: 'note' });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).not.toContain('inbox-group-send-unavailable');
+  });
+
+  it('a normal thread is unchanged: the same props without the flag keep attach, template and the key hint', () => {
+    const out = group('en', { groupSendBlocked: false });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('inbox-file-input');
+    expect(out).toContain('inbox-template-button');
+    expect(out).toContain('Enter sends');
   });
 });
 

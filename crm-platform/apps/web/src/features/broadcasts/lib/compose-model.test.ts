@@ -48,6 +48,7 @@ describe('the request body', () => {
       contactIds: ['c1'],
       groupIds: [],
       tagIds: [],
+      segmentIds: [],
       senderKeys: ['waba:1'],
       senderShare: { 'waba:1': 4 },
       scheduleType: 'now',

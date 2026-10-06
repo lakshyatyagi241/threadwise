@@ -3,3 +3,4 @@ export * from './tenant';
 export * as schema from './schema';
 export { runMigrations, migrationStatus } from './migrator';
 export { verifySchema, type VerifyResult } from './verify';
+export { acceptedChecksums, migrationChecksum, recordedChecksumMatches } from './checksum';

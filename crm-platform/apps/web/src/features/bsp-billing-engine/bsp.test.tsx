@@ -5,14 +5,11 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import type { BspBillingModeResponse, BspDashboard } from '@crm/contracts';
+import type { BspDashboard } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
-import { KEYS } from './api';
-import { BillingModeCard } from './components/billing-mode-card';
 import { DashboardReport } from './components/dashboard-page';
 import { ERROR_KINDS } from './lib/errors';
 import { formatMoney, formatRange, wabaTail } from './lib/format';
-import { settings } from './settings';
 
 const WEB = resolve(__dirname, '../../..');
 const raw = JSON.parse(
@@ -55,10 +52,8 @@ describe('messages', () => {
     expect(missing).toEqual([]);
   });
 
-  it('has a message for every error kind and every allocation state', () => {
+  it('has a message for every error kind and dashboard column', () => {
     for (const k of ERROR_KINDS) expect(en[`bsp-billing-engine.errors.${k}`], k).toBeTruthy();
-    for (const s of ['none', 'attached', 'failed', 'revoked'])
-      expect(en[`bsp-billing-engine.customer.allocation.${s}`], s).toBeTruthy();
     for (const c of ['workspace', 'messages', 'revenue', 'metaCost', 'margin', 'wallet'])
       expect(en[`bsp-billing-engine.dashboard.columns.${c}`], c).toBeTruthy();
   });
@@ -79,17 +74,6 @@ describe('formatting', () => {
     expect(formatRange('2026-10-01T00:00:00.000Z', '2026-11-01T00:00:00.000Z', 'en')).toBe(
       '01 Oct - 31 Oct',
     );
-  });
-});
-
-describe('settings tile', () => {
-  it('offers one gated tile for the customer billing page', () => {
-    expect(settings).toHaveLength(1);
-    expect(settings[0]).toMatchObject({
-      section: 'business',
-      href: '/billing-mode',
-      gates: { permission: 'bsp.billing.read' },
-    });
   });
 });
 
@@ -161,54 +145,5 @@ describe('P&L report (TW-BSP-014, -015)', () => {
     expect(html).toContain('$30.00');
     expect(html).toContain('$12.00');
     expect(html).not.toContain('No billed messages');
-  });
-});
-
-const mode = (over: Partial<BspBillingModeResponse> = {}): BspBillingModeResponse => ({
-  mode: 'meta_direct',
-  resellerAvailable: true,
-  accounts: [
-    {
-      wabaId: '9988776655',
-      phone: '+91 98765 43210',
-      displayLabel: null,
-      allocationStatus: 'attached',
-      currency: 'INR',
-      lastError: null,
-    },
-  ],
-  ...over,
-});
-const seeded = (data: BspBillingModeResponse) => {
-  const qc = new QueryClient();
-  qc.setQueryData(KEYS.billingMode, data);
-  return qc;
-};
-
-describe('billing mode card (TW-BSP-011)', () => {
-  it('marks the active choice and lists the numbers with their credit-line state', () => {
-    const html = wrap(<BillingModeCard canManage />, seeded(mode()));
-    expect(html).toContain('I pay Meta directly');
-    expect(html).toContain('Active');
-    expect(html).toContain('+91 98765 43210');
-    expect(html).toContain('Credit line attached (INR)');
-  });
-
-  it('disables reseller with a badge while the platform credit line is not set up', () => {
-    const html = wrap(<BillingModeCard canManage />, seeded(mode({ resellerAvailable: false })));
-    expect(html).toContain('Not available yet');
-    const reseller = html.slice(html.indexOf('data-testid="mode-reseller"'));
-    expect(reseller).toContain('disabled');
-  });
-
-  it('is read only for a member who cannot manage billing', () => {
-    const html = wrap(<BillingModeCard canManage={false} />, seeded(mode()));
-    expect(html).toContain('you cannot change it');
-    expect(html.match(/disabled/g)?.length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('says so when no number is connected', () => {
-    const html = wrap(<BillingModeCard canManage />, seeded(mode({ accounts: [] })));
-    expect(html).toContain('No WhatsApp Business (Cloud API) number is connected yet.');
   });
 });

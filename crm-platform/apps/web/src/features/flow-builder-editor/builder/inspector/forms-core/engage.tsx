@@ -1,5 +1,6 @@
 'use client';
 
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Field, RowCard, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import {
@@ -22,17 +23,20 @@ const CTA_TYPES = [
   { v: 'copy', l: 'Copy code' },
 ];
 
-function ctaHint(type: string): string {
+function ctaHint(type: string, unofficial: boolean): string {
   if (type === 'phone' || type === 'call_now') {
     return 'Include the country code (e.g. +1…). The customer taps to dial. Note: on WhatsApp Official (Cloud API), a Call in a flow shows as a tappable number, NOT a native button — WhatsApp only allows Call buttons inside approved Templates. Only URL buttons render as native buttons in a flow.';
   }
   if (type === 'copy') {
     return 'The customer long-presses the code to copy. Good for coupons, OTPs, referral codes. Note: on WhatsApp Official (Cloud API) this shows as tappable text in a flow, not a native button (Copy buttons are Template-only).';
   }
-  return 'The customer taps the button to open this URL. On WhatsApp Official this renders as a native tap button; on the Unofficial API it appears as a tappable link.';
+  return unofficial
+    ? 'The customer taps the button to open this URL. On WhatsApp Official this renders as a native tap button; on the Unofficial API it appears as a tappable link.'
+    : 'The customer taps the button to open this URL. On WhatsApp Official this renders as a native tap button.';
 }
 
 export function CtaForm({ data: d, set, env }: FormProps) {
+  const unofficial = useUnofficialWhatsapp();
   const actions = ctaActions(d);
   const setActions = (next: CtaAction[]) => set('actions', next);
   const patch = (i: number, p: Partial<CtaAction>) => setActions(patchItem(actions, i, p));
@@ -90,7 +94,7 @@ export function CtaForm({ data: d, set, env }: FormProps) {
                 mono
               />
               <div className="text-[10.5px] leading-snug text-muted-foreground">
-                {ctaHint(type)}
+                {ctaHint(type, unofficial)}
               </div>
             </div>
           </RowCard>

@@ -1,21 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { senderDigits } from '../recipient-phone';
 import type { DispatchSender, ResolvedSender, SenderDirectory } from './tokens';
 
 const ENGINES = new Set(['baileys', 'waba', 'twilio', 'sms']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** Reads `devices` and `wa_provider_configs` directly until the device and WABA domains export their own lookup. */
+/**
+ * Reads `devices` and `wa_provider_configs` directly until the device and WABA domains export their own lookup.
+ *
+ * While the platform's unofficial-engine switch is off (owner decision 2026-10-05) no `baileys` sender exists here: a picked
+ * `baileys:` key is dropped, the default engine is `waba`, and a stored broadcast that names `baileys` has no sender.
+ */
 @Injectable()
 export class SqlSenderDirectory implements SenderDirectory {
+  constructor(
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
+
   async resolve(tx: Tx, orgId: number, keys: readonly string[]): Promise<ResolvedSender[]> {
     const out = new Map<string, ResolvedSender>();
+    const unofficialOn = await this.unofficial.isEnabled();
     for (const raw of keys) {
       const key = raw.trim();
       const [engine, uuid] = key.split(':');
       if (!engine || !uuid || !ENGINES.has(engine) || !UUID.test(uuid)) continue;
+      if (engine === 'baileys' && !unofficialOn) continue;
       if (out.has(key)) continue;
 
       const res =
@@ -39,7 +54,15 @@ export class SqlSenderDirectory implements SenderDirectory {
       sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
     );
     const engine = (res.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
-    return engine && ENGINES.has(engine) ? engine : 'baileys';
+    if (
+      engine &&
+      ENGINES.has(engine) &&
+      (engine !== 'baileys' || (await this.unofficial.isEnabled()))
+    ) {
+      return engine;
+    }
+    // No setting, or `baileys` while the engine is off: the official Cloud API.
+    return (await this.unofficial.isEnabled()) ? 'baileys' : 'waba';
   }
 
   async resolveForDispatch(
@@ -47,10 +70,16 @@ export class SqlSenderDirectory implements SenderDirectory {
     orgId: number,
     broadcast: { provider: string | null; deviceId: number | null },
   ): Promise<DispatchSender | null> {
+    const unofficialOn = await this.unofficial.isEnabled();
     const engine =
-      broadcast.provider && ENGINES.has(broadcast.provider) ? broadcast.provider : 'baileys';
+      broadcast.provider && ENGINES.has(broadcast.provider)
+        ? broadcast.provider
+        : unofficialOn
+          ? 'baileys'
+          : 'waba';
 
     if (engine === 'baileys') {
+      if (!unofficialOn) return null;
       const res = await tx.execute(sql`
         SELECT id, country_code, phone_number, coalesce(nullif(device_name, ''), phone_number) AS label
         FROM devices

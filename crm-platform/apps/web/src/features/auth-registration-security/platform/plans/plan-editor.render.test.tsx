@@ -15,6 +15,7 @@ import { PlanEditorTabs } from './plan-editor-tabs';
 import type { EditorState } from './plan-editor-shared';
 import { PlansPage } from './plans-page';
 import { PLANS_QUERY_KEY } from './plans-query';
+import { NODE_BRIDGE_QUERY_KEY } from '@/features/node-bridge-runtime/queries';
 
 const A = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d21';
 const B = '0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1d22';
@@ -64,6 +65,33 @@ describe.each(['en', 'ar'] as const)('plan editor tabs (%s)', (locale) => {
     // Every limit starts blank = unlimited, so every input is disabled.
     expect(html.match(/<input[^>]*type="number"[^>]*disabled/g)?.length).toBe(
       PLAN_LIMIT_KEYS.length,
+    );
+  });
+
+  it('greys the devices limit with a hint while the platform has unofficial WhatsApp off', () => {
+    const bridge = (unofficialEnabled?: boolean) => ({
+      serverUrl: '',
+      tokenSet: false,
+      rowVersion: 1,
+      pacing: {},
+      pacingRowVersion: 1,
+      ...(unofficialEnabled === undefined ? {} : { unofficialEnabled }),
+    });
+    const withSwitch = (data: unknown) =>
+      renderWithMessages(createElement(LimitsTab, { state: state() }), {
+        locale,
+        seed: [[NODE_BRIDGE_QUERY_KEY, data]],
+      });
+    const off = withSwitch(bridge(false));
+    expect(off).toContain('data-testid="plan-limit-devices-platform-off"');
+    expect(off).toMatch(/data-testid="plan-limit-devices"[^>]*data-platform-disabled="true"/);
+    expect(off).toContain(locale === 'en' ? 'currently disabled' : 'معطّل حاليًا');
+    // only the personal-number limit is greyed
+    expect(off.match(/data-platform-disabled/g)).toHaveLength(1);
+    // on, unknown (no answer yet) and a payload without the field: nothing is greyed
+    expect(withSwitch(bridge(true))).not.toContain('plan-limit-devices-platform-off');
+    expect(render(createElement(LimitsTab, { state: state() }), locale)).not.toContain(
+      'plan-limit-devices-platform-off',
     );
   });
 

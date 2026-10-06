@@ -53,9 +53,16 @@ export function unitsOf(
 export function coverage(input: CoverageInput): CoverageReport {
   const units = new Set(unitsOf(input.nav, input.tiles, input.planFeatureKeys));
   const covered = new Set<string>();
+  // An app's feature is the screen's feature too: a guide for the screen covers it, as it does for a plan feature.
   const gateOf = new Map<string, string | undefined>([
-    ...input.nav.map((n): [string, string | undefined] => [`nav:${n.id}`, n.gates?.planFeature]),
-    ...input.tiles.map((t): [string, string | undefined] => [`tile:${t.id}`, t.gates?.planFeature]),
+    ...input.nav.map((n): [string, string | undefined] => [
+      `nav:${n.id}`,
+      n.gates?.planFeature ?? n.gates?.app,
+    ]),
+    ...input.tiles.map((t): [string, string | undefined] => [
+      `tile:${t.id}`,
+      t.gates?.planFeature ?? t.gates?.app,
+    ]),
   ]);
   for (const doc of input.docs) {
     for (const unit of doc.documents) {

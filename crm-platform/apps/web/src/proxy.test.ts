@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, type NextResponse } from 'next/server';
 import { describe, expect, it } from 'vitest';
 import { config, proxy } from './proxy';
 import { REQUEST_PATH_HEADER } from '@/lib/auth/next-path';
 
 const get = (url: string, headers: Record<string, string> = {}) =>
-  proxy(new NextRequest(`http://localhost:3001${url}`, { headers }));
+  proxy(new NextRequest(`http://localhost:3001${url}`, { headers })) as NextResponse;
 
 function requestHeader(res: Response, name: string): string | null {
   // NextResponse.next({ request: { headers } }) publishes the new request headers as x-middleware-request-*.
@@ -20,6 +20,27 @@ describe('proxy: referral cookie (TW-AUTH-005)', () => {
     expect(cookie.toLowerCase()).toContain('samesite=lax');
     expect(cookie).toContain(`Max-Age=${60 * 60 * 24 * 30}`);
     expect(cookie).toContain('Path=/');
+  });
+
+  it('turns /pricing?ref=abcd-1234 into crm_ref=ABCD1234 (TW-CPN-030)', () => {
+    const cookie = get('/pricing?ref=abcd-1234').headers.get('set-cookie') ?? '';
+    expect(cookie).toContain('crm_ref=ABCD1234');
+    expect(cookie.toLowerCase()).toContain('httponly');
+    expect(cookie.toLowerCase()).toContain('samesite=lax');
+  });
+
+  it('replaces the stored code when a later visit carries a different one (last touch wins)', () => {
+    const res = get('/pricing?ref=second2', { cookie: 'crm_ref=FIRST1' });
+    const cookie = res.headers.get('set-cookie') ?? '';
+    expect(cookie).toContain('crm_ref=SECOND2');
+    expect(cookie).not.toContain('FIRST1');
+  });
+
+  it('keeps the stored code when a later visit carries none or an unusable one', () => {
+    expect(get('/pricing', { cookie: 'crm_ref=FIRST1' }).headers.get('set-cookie')).toBeNull();
+    expect(
+      get('/pricing?ref=***', { cookie: 'crm_ref=FIRST1' }).headers.get('set-cookie'),
+    ).toBeNull();
   });
 
   it('works on a page other than sign-up (the visitor may click around first)', () => {
@@ -67,5 +88,27 @@ describe('proxy matcher', () => {
     for (const path of ['/api/auth/login', '/_next/static/x.js', '/favicon.ico', '/icon.svg']) {
       expect(re.test(path), path).toBe(false);
     }
+  });
+});
+
+describe('proxy: form pages are the one route other sites may frame (Forms add-on)', () => {
+  const KEY = 'AbCdEfGhIjKlMnOpQrStUv';
+  const form = (url: string) =>
+    Promise.resolve(proxy(new NextRequest(`http://localhost:3001${url}`)));
+
+  it('keeps the hosted page unframeable', async () => {
+    const res = await form(`/f/${KEY}`);
+    expect(res.headers.get('content-security-policy')).toBe("frame-ancestors 'none'");
+    expect(res.headers.get('x-frame-options')).toBe('DENY');
+  });
+
+  it('fails closed for the embedded page when the allow-list cannot be read', async () => {
+    const res = await form(`/f/${KEY}?embed=1`);
+    expect(res.headers.get('content-security-policy')).toBe("frame-ancestors 'none'");
+  });
+
+  it('leaves every other page to the blanket policy of next.config', () => {
+    expect(get('/contacts').headers.get('content-security-policy')).toBeNull();
+    expect(get('/forms').headers.get('content-security-policy')).toBeNull();
   });
 });

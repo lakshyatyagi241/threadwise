@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   WARMER_DEFAULTS,
@@ -7,6 +7,11 @@ import {
   type WarmerProfileInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import type { DispatchSender, ResolvedSender, WarmerGate } from '../../broadcasts';
@@ -67,7 +72,10 @@ export class WarmerService implements WarmerGate {
   now: () => Date = () => new Date();
   random: () => number = Math.random;
 
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
 
   // --- the gate the dispatchers use ---------------------------------------------------------------
 
@@ -158,10 +166,12 @@ export class WarmerService implements WarmerGate {
   /** Every number of the workspace, with its profile, today's budget and its health. */
   async list(orgId: number): Promise<WarmerList> {
     const day = todayUtc(this.now());
+    // Personal numbers are left out while the platform switch is off (owner decision 2026-10-05); their profiles are kept.
+    const unofficialOn = await this.unofficial.isEnabled();
     const items = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const devices = await tx.execute(sql`
         SELECT id, uuid, device_name AS label, country_code, phone_number, status, warmer_config, created_at
-          FROM devices WHERE org_id = ${orgId} ORDER BY id`);
+          FROM devices WHERE org_id = ${orgId} AND ${unofficialOn}::boolean ORDER BY id`);
       const configs = await tx.execute(sql`
         SELECT id, uuid, provider, display_label AS label, phone_number, status, warmer_config, created_at
           FROM wa_provider_configs WHERE org_id = ${orgId} AND provider IN ('waba', 'twilio') ORDER BY id`);
@@ -181,6 +191,7 @@ export class WarmerService implements WarmerGate {
   async save(orgId: number, key: string, input: WarmerProfileInput): Promise<WarmerNumber> {
     const [engine, uuid] = key.split(':');
     if (!engine || !uuid || !/^[0-9a-f-]{36}$/i.test(uuid)) throw AppError.notFound('Number', key);
+    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabled();
     const table = engine === 'baileys' ? 'devices' : 'wa_provider_configs';
     const day = todayUtc(this.now());
     return this.db.txAs({ orgId, userId: null }, async (tx) => {

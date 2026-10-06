@@ -3,6 +3,10 @@ import { sql } from 'drizzle-orm';
 import type { BroadcastCompose, ComposeSender, ComposeTemplate } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { TEMPLATE_DIRECTORY, type TemplateDirectory } from './_shims/tokens';
 import { assemblePhone } from './recipient-phone';
 
@@ -76,16 +80,24 @@ export class BroadcastsComposeService {
   constructor(
     private readonly db: DatabaseService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   async compose(): Promise<BroadcastCompose> {
     const { orgId } = RequestContextStore.require();
+    // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off.
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const eng = await tx.execute(
         sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
       );
       const def = (eng.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
-      const defaultEngine = def && ENGINE_LABEL[def] ? def : 'baileys';
+      const defaultEngine =
+        def && ENGINE_LABEL[def] && (def !== 'baileys' || unofficialOn)
+          ? def
+          : unofficialOn
+            ? 'baileys'
+            : 'waba';
 
       const approved =
         defaultEngine === 'waba'
@@ -104,7 +116,7 @@ export class BroadcastsComposeService {
       const snd = await tx.execute(sql`
         SELECT * FROM (
           SELECT uuid, 'baileys' AS engine, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number
-          FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active
+          FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active AND ${unofficialOn}::boolean
           UNION ALL
           SELECT uuid, provider AS engine, coalesce(nullif(display_label, ''), phone_number) AS label, NULL, phone_number
           FROM wa_provider_configs WHERE org_id = ${orgId} AND status = 'connected' AND provider IN ('waba', 'twilio')

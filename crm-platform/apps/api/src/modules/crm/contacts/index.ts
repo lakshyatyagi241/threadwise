@@ -19,3 +19,5 @@ export {
   type ResolvedContactFilter,
 } from './contact-conditions';
 export { ContactResolverService } from './contact-resolver.service';
+export { missingRequired, requiredPropertiesError, isBlank } from './required-properties';
+export type { RequiredRule } from './required-properties';

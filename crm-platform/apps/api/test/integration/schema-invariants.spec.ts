@@ -54,22 +54,31 @@ describe('schema invariants', () => {
 
     const policies = await owner.query<{
       table: string;
+      cmd: string;
       qual: string | null;
       check: string | null;
     }>(`
-      SELECT tablename AS "table", qual, with_check AS "check" FROM pg_policies WHERE schemaname = 'public'
+      SELECT tablename AS "table", cmd, qual, with_check AS "check" FROM pg_policies WHERE schemaname = 'public'
     `);
-    const byTable = new Map<string, { qual: string | null; check: string | null }[]>();
+    const byTable = new Map<string, { cmd: string; qual: string | null; check: string | null }[]>();
     for (const p of policies.rows) byTable.set(p.table, [...(byTable.get(p.table) ?? []), p]);
     const weak = rows
       .map((r) => r.table)
       .filter((t) => {
         const ps = byTable.get(t) ?? [];
-        // at least one policy gates both what is visible and what may be written, by the tenant function
-        return !ps.some(
+        // either one policy gates both what is visible and what may be written, by the tenant function, or the
+        // tenant may only read its own rows (a SELECT policy by the tenant function) and every write is
+        // privileged-only (a workspace must not write its own entitlement rows, e.g. marketplace_subscriptions)
+        const both = ps.some(
           (p) =>
             /current_org_id\(\)/.test(p.qual ?? '') && /current_org_id\(\)/.test(p.check ?? ''),
         );
+        const readOnlyForTenant =
+          ps.some((p) => p.cmd === 'SELECT' && /current_org_id\(\)/.test(p.qual ?? '')) &&
+          ps
+            .filter((p) => p.cmd !== 'SELECT')
+            .every((p) => /app_is_privileged\(\)/.test(`${p.qual ?? ''}${p.check ?? ''}`));
+        return !(both || readOnlyForTenant);
       });
     expect(weak).toEqual([]);
   });

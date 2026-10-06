@@ -25,6 +25,8 @@ import { AudienceStep, BasicsStep, MessageStep, ReviewStep, WhenStep } from './c
 import { ErrorNotice } from './error-notice';
 import { Icon } from './icons';
 import { useErrorText, type ErrorText } from './use-error-text';
+import { offerSenders, submittableSenderKeys } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 
 const STEP_KEYS = ['basics', 'audience', 'message', 'when', 'review'] as const;
 
@@ -37,6 +39,8 @@ export function ComposerScreen() {
   const canManage = useCan('sched.schedules.manage');
   const errorText = useErrorText();
   const options = useScheduleOptions();
+  // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
+  const unofficial = useUnofficialWhatsapp();
 
   if (!canManage) {
     return (
@@ -59,7 +63,9 @@ export function ComposerScreen() {
       </div>
     );
   }
-  return <Composer opts={options.data} />;
+  return (
+    <Composer opts={{ ...options.data, senders: offerSenders(options.data.senders, unofficial) }} />
+  );
 }
 
 function Composer({ opts }: { opts: ScheduleOptions }) {
@@ -68,6 +74,7 @@ function Composer({ opts }: { opts: ScheduleOptions }) {
   const { toast } = useToast();
   const errorText = useErrorText();
   const create = useCreateSchedule();
+  const unofficial = useUnofficialWhatsapp();
 
   // The draft starts here, in the browser, where the wall clock and zone are known.
   const [draft, setDraft] = useState<Draft>(() =>
@@ -106,7 +113,9 @@ function Composer({ opts }: { opts: ScheduleOptions }) {
 
   const submit = () => {
     setNow(Date.now());
-    const bad = firstInvalidStep(draft, ctx);
+    // A number ticked while the engine was on must not be submitted once it is off.
+    const sendable: Draft = { ...draft, senders: submittableSenderKeys(draft.senders, unofficial) };
+    const bad = firstInvalidStep(sendable, ctx);
     if (bad) {
       setTried((s) => new Set(s).add(bad));
       setStep(bad);
@@ -114,7 +123,7 @@ function Composer({ opts }: { opts: ScheduleOptions }) {
     }
     setFailure(null);
     create.mutate(
-      { input: toCreateInput(draft), key },
+      { input: toCreateInput(sendable), key },
       {
         onSuccess: (r) => {
           toast(r.message, 'success');

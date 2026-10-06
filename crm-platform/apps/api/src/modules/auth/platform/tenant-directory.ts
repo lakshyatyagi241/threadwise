@@ -166,7 +166,9 @@ export class TenantDirectory {
         `);
         orgRow = res.rows[0] as unknown as { id: number; uuid: string };
       } catch (err) {
-        if ((err as { code?: string }).code === '23505') {
+        // drizzle wraps the driver error: the SQLSTATE is on `cause` there
+        const e = err as { code?: string; cause?: { code?: string } };
+        if (e.code === '23505' || e.cause?.code === '23505') {
           throw new AppError(
             ERROR_CODES.AUTH_SLUG_TAKEN,
             'That workspace address is already taken.',
