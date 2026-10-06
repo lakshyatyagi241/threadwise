@@ -348,10 +348,7 @@
         "earned": "Earned, lifetime",
         "last30": "Referrals, last 30 days",
         "last30Earned": "{amount} earned in the last 30 days",
-        "average": "Average per referral",
-        "yourCode": "Your code",
-        "yourCodeReward": "{amount} per paying referral",
-        "yourCodeNone": "No reward right now"
+        "average": "Average per referral"
       },
       "chart": {
         "title": "Referrals over time",
