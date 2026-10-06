@@ -4,7 +4,7 @@ title: Shopify
 summary: Connect your Shopify store so its orders, products and customers reach your CRM and trigger WhatsApp messages.
 area: store
 order: 40
-documents: [nav:shopify]
+documents: [nav:shopify, tile:shopify]
 keywords: [shopify, store, orders, products, customers, webhooks, automations, abandoned cart, offers, sync]
 ---
 
@@ -14,7 +14,7 @@ The Shopify screen connects your Shopify store to this workspace. Once connected
 
 ## How to use it
 
-1. Open **Shopify** in the Store area of the menu. If no store is connected, the connect page opens.
+1. Open **Settings**, then **Integrations**, and select **Shopify**. If no store is connected, the connect page opens.
 2. Enter your store handle, for example **my-store**, or paste the full store address. The **.myshopify.com** part is added for you.
 3. Select **Continue to Shopify**. Shopify asks you to approve the access the app needs. You come back here with the result.
 4. Once connected, use the tabs on the left: **Overview**, **Orders**, **Products**, **Send Offer**, **Customers**, **Automations**, **Analytics**, **Activity** and **Settings**.

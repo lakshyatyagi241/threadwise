@@ -4,7 +4,7 @@ title: WooCommerce
 summary: Connect your WooCommerce store with its REST API keys so orders, products and customers reach your CRM and trigger WhatsApp messages.
 area: store
 order: 41
-documents: [nav:woocommerce]
+documents: [nav:woocommerce, tile:woocommerce]
 keywords: [woocommerce, wordpress, store, REST API, consumer key, orders, products, customers, automations, cart recovery, sync]
 ---
 
@@ -15,7 +15,7 @@ The WooCommerce screen connects your WordPress store to this workspace. After co
 ## How to use it
 
 1. In your WooCommerce admin, go to **WooCommerce, Settings, Advanced, REST API**. Select **Add key**, give it a description such as CRM, pick a user with administrator rights and set **Permissions** to Read/Write. Select **Generate API key** and keep both keys.
-2. Open **WooCommerce** in the Store area of the menu. If no store is connected, the connect page opens.
+2. Open **Settings**, then **Integrations**, and select **WooCommerce**. If no store is connected, the connect page opens.
 3. Enter your **Store URL**, which must start with https, then paste the **Consumer Key** and **Consumer Secret**.
 4. Select **Test connection**. It checks the keys and saves nothing.
 5. Select **Connect store**. The keys are saved, and the webhooks are registered on your store.

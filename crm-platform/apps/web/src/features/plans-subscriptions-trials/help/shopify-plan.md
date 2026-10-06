@@ -15,7 +15,7 @@ The Shopify integration connects your Shopify store, so its products, orders and
 
 ## How to use it
 
-1. Open the Shopify store from the Store area of the menu.
+1. Open **Settings**, then **Integrations**, and select **Shopify**.
 2. Connect the store and approve access.
 3. Review the products and orders the store sends.
 
