@@ -386,7 +386,7 @@ export const flbTestWebhookResponseSchema = z.union([
 ]);
 export type FlbTestWebhookResponse = z.infer<typeof flbTestWebhookResponseSchema>;
 
-export const FLB_AI_PROVIDERS = ['openai', 'anthropic', 'gemini'] as const;
+export const FLB_AI_PROVIDERS = ['openai', 'anthropic', 'gemini', 'openrouter'] as const;
 export const flbAiGenerateRequestSchema = z.object({
   prompt: z.string().trim().min(1).max(2000),
   model: z.string().min(1).max(120),
