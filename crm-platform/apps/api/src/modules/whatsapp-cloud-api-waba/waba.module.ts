@@ -21,6 +21,7 @@ import {
   type WabaCallsSink,
 } from './waba-calls-sink';
 import { WabaPlatformController } from './waba-platform.controller';
+import { PinnacleOnboardingService } from './pinnacle-onboarding.service';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { WABA_CONNECTIONS } from './waba-connections.port';
@@ -78,6 +79,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
+    PinnacleOnboardingService,
     WabaExtrasService,
     WabaDiagnosticsService,
     WabaWebhookService,

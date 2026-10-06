@@ -21,4 +21,8 @@ export const WAP_ERROR_CODES = {
   WAP_PROVIDER_BUILTIN: 'WAP_PROVIDER_BUILTIN',
   /** Nothing to switch: every selected number is already on the target provider. */
   WAP_SWITCH_NOTHING_TO_DO: 'WAP_SWITCH_NOTHING_TO_DO',
+  /** The provider takes a partner onboarding flow but lacks something it needs (partner key, solution id or signup configuration). */
+  WAP_PARTNER_NOT_CONFIGURED: 'WAP_PARTNER_NOT_CONFIGURED',
+  /** The partner (Pinnacle) refused to create the client's account or take its embedded details. `message` is its own reason. */
+  WAP_PARTNER_REFUSED: 'WAP_PARTNER_REFUSED',
 } as const;

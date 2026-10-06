@@ -91,7 +91,9 @@ export class WhatsappProvidersService {
     }
     const baseUrl = await this.checkedBaseUrl(input.baseUrl);
     const authScheme = input.authScheme ?? (input.headerTemplates ? 'custom_headers' : 'bearer');
-    const credentialMode = input.credentialMode ?? 'platform_token';
+    // A partner program gives every number its own token, so it implies channel_token.
+    const credentialMode =
+      input.credentialMode ?? (input.partnerProgram ? 'channel_token' : 'platform_token');
     const headerTemplates = input.headerTemplates ?? {};
     this.assertCredentialCarried(authScheme, headerTemplates, credentialMode);
     const { secrets, hints } = mergeSecrets({}, input.credentials, undefined);
@@ -117,6 +119,8 @@ export class WhatsappProvidersService {
           onboarding: input.onboarding ?? 'manual',
           onboardingAppId: input.onboardingAppId ?? null,
           onboardingConfigId: input.onboardingConfigId ?? null,
+          partnerProgram: input.partnerProgram ?? null,
+          partnerSolutionId: input.partnerProgram ? (input.partnerSolutionId ?? null) : null,
           notes: input.notes ?? null,
           operatorId,
         });
@@ -187,6 +191,15 @@ export class WhatsappProvidersService {
     if (fields.onboardingAppId !== undefined) patch.onboarding_app_id = fields.onboardingAppId;
     if (fields.onboardingConfigId !== undefined)
       patch.onboarding_config_id = fields.onboardingConfigId;
+    if (fields.partnerProgram !== undefined) {
+      patch.partner_program = fields.partnerProgram;
+      // The program and its solution id live and die together (a CHECK holds them to it).
+      patch.partner_solution_id = fields.partnerProgram
+        ? (fields.partnerSolutionId ?? before.partner_solution_id)
+        : null;
+    } else if (fields.partnerSolutionId !== undefined && before.partner_program) {
+      patch.partner_solution_id = fields.partnerSolutionId;
+    }
     if (fields.notes !== undefined) patch.notes = fields.notes;
 
     // The merged result must still be coherent (a custom-header provider keeps a header that carries its credential).

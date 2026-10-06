@@ -46,6 +46,7 @@ import {
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { toDto } from './waba-connections.mapper';
+import { PinnacleOnboardingService } from './pinnacle-onboarding.service';
 import { WabaHealthDetailsService } from './waba-health-details.service';
 import { WabaConnectionsRepository, type WabaRow } from './waba-connections.repository';
 import {
@@ -69,6 +70,11 @@ interface StoredCredentials {
   app_secret?: string;
   /** The two-step PIN that registered the number; never returned by the API. */
   register_pin?: string;
+  /** A partner program's own key for this number (Pinnacle's client apikey): the channel token of its registry route. */
+  channel_token?: string;
+  /** The partner login created for the client, kept so it can be handed over; never returned by the API. */
+  partner_username?: string;
+  partner_password?: string;
 }
 
 export type { ResolvedWabaConnection };
@@ -124,6 +130,7 @@ export class WabaConnectService {
     private readonly healthDetails: WabaHealthDetailsService,
     private readonly routes: WabaRegistryRoutes,
     private readonly providers: WhatsAppProviderResolver,
+    private readonly pinnacleOnboarding: PinnacleOnboardingService,
   ) {}
 
   // --- reading -----------------------------------------------------------------------------------------------------
@@ -215,6 +222,19 @@ export class WabaConnectService {
       ? await this.admin.isBusinessVerified(token.accessToken, businessId)
       : false;
 
+    // A partner program (Pinnacle) opens the client's account first: its own key is what every send for this number carries.
+    const partner = PinnacleOnboardingService.applies(route.registry) ? route.registry : null;
+    const onboarded = partner
+      ? await this.pinnacleOnboarding.onboard({
+          registry: partner,
+          wabaId,
+          phoneNumberId: phone.id,
+          displayPhoneNumber: phone.displayPhoneNumber ?? null,
+          businessId,
+          accessToken: token.accessToken,
+        })
+      : null;
+
     const conn: WabaConnection = {
       provider,
       providerKey: route.key,
@@ -222,7 +242,12 @@ export class WabaConnectService {
       phoneNumberId: phone.id,
       accessToken: token.accessToken,
       ...(provider === 'interakt' ? { authKey: this.env.INTERAKT_PARTNER_AUTH_KEY } : {}),
-      ...this.registryOf(route.registry, wabaId, phone.id, token.accessToken),
+      ...this.registryOf(
+        route.registry,
+        wabaId,
+        phone.id,
+        onboarded?.channelToken ?? token.accessToken,
+      ),
     };
 
     const warnings: string[] = [];
@@ -235,7 +260,17 @@ export class WabaConnectService {
     }
     await this.admin.assignSystemUser(wabaId, token.accessToken);
 
-    const wired = await this.wire(conn, warnings, /* abortOnMissingScope */ true);
+    // The webhook subscription is a Meta call made with the client's Meta token, not through the partner.
+    const wireConn: WabaConnection = partner
+      ? {
+          provider: 'meta',
+          providerKey: 'meta',
+          wabaId,
+          phoneNumberId: phone.id,
+          accessToken: token.accessToken,
+        }
+      : conn;
+    const wired = await this.wire(wireConn, warnings, /* abortOnMissingScope */ true);
 
     const saved = await this.persist({
       provider,
@@ -249,6 +284,13 @@ export class WabaConnectService {
       credentials: {
         access_token: token.accessToken,
         ...(provider === 'interakt' ? { auth_key: this.env.INTERAKT_PARTNER_AUTH_KEY } : {}),
+        ...(onboarded
+          ? {
+              channel_token: onboarded.channelToken,
+              ...(onboarded.username ? { partner_username: onboarded.username } : {}),
+              ...(onboarded.password ? { partner_password: onboarded.password } : {}),
+            }
+          : {}),
       },
       label: phone.verifiedName,
       tokenExpiresAt: token.expiresInSeconds
@@ -260,6 +302,28 @@ export class WabaConnectService {
     // Embedded Signup registers a number itself; only the direct route repeats Reference's silent register.
     if (provider === 'meta' && !route.registry && !isCoexistence(phone.platformType))
       await this.autoRegister(saved.row, conn);
+    if (partner && onboarded) {
+      let row = saved.row;
+      if (businessId) {
+        await this.pinnacleOnboarding.scheduleCreditLine({
+          orgId,
+          rowId: row.id,
+          providerKey: route.key,
+          wabaId,
+          businessId,
+        });
+      } else {
+        warnings.push(
+          'The business that owns this WhatsApp account could not be read, so the Meta credit line was not shared with Pinnacle. Connect again once Meta shows it.',
+        );
+      }
+      row = await this.touch(
+        row,
+        { partner_program: 'pinnacle', credit_line_assigned: false },
+        'partner_onboard',
+      );
+      return { connection: toDto(row), warnings };
+    }
     return { connection: toDto(saved.row), warnings };
   }
 
@@ -1224,7 +1288,8 @@ export class WabaConnectService {
         this.routes.authFor(providerKey, {
           wabaId,
           phoneNumberId,
-          accessToken: creds.access_token,
+          // A partner program's number sends with its own key; every other registry number with its access token.
+          accessToken: creds.channel_token ?? creds.access_token,
         }) ?? undefined;
       // A provider that is gone, archived or without its credential carries nothing: the number reads as having no usable credentials.
       if (!registry) return null;
