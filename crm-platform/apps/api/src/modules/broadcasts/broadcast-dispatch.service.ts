@@ -4,6 +4,11 @@ import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
@@ -89,6 +94,7 @@ export class BroadcastDispatchService {
     private readonly merge: MergeTagService,
     private readonly tracker: LinkTracker,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
@@ -105,6 +111,15 @@ export class BroadcastDispatchService {
         WHERE org_id = ${orgId} AND id = ${broadcastId} FOR UPDATE`);
       const b = res.rows[0] as unknown as BroadcastRow | undefined;
       if (!b || !['processing', 'scheduled'].includes(b.status)) return { skip: true as const };
+
+      // The unofficial engine is off (owner decision 2026-10-05): nothing is sent and nothing is changed. The row keeps its status
+      // and recipients, and the queue link is cleared so the due sweep picks it up again once the engine is turned back on.
+      if (b.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabled())) {
+        await tx.execute(sql`
+          UPDATE broadcasts SET node_schedule_id = NULL WHERE org_id = ${orgId} AND id = ${broadcastId}`);
+        this.logger.warn({ orgId, broadcastId }, '[BCAST] not sent: the unofficial engine is off');
+        return { skip: true as const };
+      }
 
       await this.progress.setStatus(tx, orgId, broadcastId, 'processing');
 

@@ -26,6 +26,11 @@ import {
   WABA_CONNECTIONS,
   type WabaConnectionsPort,
 } from '../whatsapp-cloud-api-waba/waba-connections.port';
+import {
+  UNOFFICIAL_ENGINE_CHANNEL_KIND,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { mergeSettings, normalizeSettings } from './channel-settings';
 import { ChannelVault } from './channel-vault';
@@ -67,6 +72,7 @@ export class ChannelRegistryService {
     private readonly outbox: OutboxService,
     private readonly realtime: ChatRealtimePublisher,
     @Inject(WABA_CONNECTIONS) private readonly waba: WabaConnectionsPort,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     config: ConfigService<Env, true>,
   ) {
     this.publicBaseUrl = config.get('APP_URL', { infer: true }).replace(/\/$/, '');
@@ -77,10 +83,13 @@ export class ChannelRegistryService {
   /** The workspace's channels, oldest first. A row whose kind has no adapter here (a simulator row in production) is left out. */
   async list(): Promise<ChannelListResponse> {
     const orgId = RequestContextStore.orgId();
+    // Personal-number channels are hidden while the platform switch is off; their rows and conversations stay (owner decision 2026-10-05).
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, orgId);
       const data: ChannelResponse[] = [];
       for (const row of rows) {
+        if (!unofficialOn && row.kind === UNOFFICIAL_ENGINE_CHANNEL_KIND) continue;
         const adapter = this.adapters.find(row.kind);
         if (adapter) data.push(toChannelResponse(row, adapter, this.publicBaseUrl));
       }

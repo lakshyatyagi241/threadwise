@@ -1,8 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import type { Queue } from 'bullmq';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import type { BroadcastDispatchJob } from './broadcast-dispatch.processor';
@@ -26,6 +30,7 @@ export class BroadcastDueService {
   constructor(
     private readonly db: DatabaseService,
     @InjectQueue(QUEUES.BCAST_DISPATCH) private readonly queue: Queue<BroadcastDispatchJob>,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   @Interval(3_000)
@@ -44,10 +49,13 @@ export class BroadcastDueService {
 
   /** Public for tests. */
   async enqueueDue(): Promise<number> {
+    // Broadcasts on the unofficial engine stay untouched while it is off (owner decision 2026-10-05) and are queued once it is on.
+    const unofficialOn = await this.unofficial.isEnabled();
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT id, uuid, org_id FROM broadcasts
         WHERE status IN ('processing', 'scheduled') AND node_schedule_id IS NULL AND scheduled_at <= now()
+          AND (provider IS DISTINCT FROM 'baileys' OR ${unofficialOn}::boolean)
         ORDER BY scheduled_at, id LIMIT ${BATCH}
         FOR UPDATE SKIP LOCKED`);
       const rows = res.rows as Array<{

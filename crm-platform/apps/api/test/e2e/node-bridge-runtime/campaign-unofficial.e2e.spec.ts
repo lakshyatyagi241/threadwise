@@ -1,3 +1,4 @@
+import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import { randomUUID } from 'node:crypto';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -68,6 +69,7 @@ beforeAll(async () => {
     runtime,
     get<SenderLease>(SenderLease),
     get(SENDER_DIRECTORY),
+    get(UNOFFICIAL_WHATSAPP_GATE),
     get(TEMPLATE_DIRECTORY),
     get(WARMER_GATE),
     get(PACING_SETTINGS),
