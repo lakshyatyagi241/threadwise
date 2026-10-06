@@ -2,7 +2,7 @@
 
 Runs on a shared Dokploy host: Docker Compose project `desk` in `/opt/desk` (web, api, worker, postgres+pgvector, redis,
 minio). The host's Traefik owns 80/443 and issues the TLS certificate (resolver `letsencrypt`); this stack publishes no ports
-and routes through container labels on `dokploy-network`: `/v2`, `/socket.io`, `/health`, `/ready`, `/docs` go to the API,
+and routes through container labels on `dokploy-network`: `/v2`, `/socket.io`, `/health`, `/ready`, `/api/v1` (the customer REST API) and `/docs/api.json` (its OpenAPI document) go to the API,
 everything else to the web app. Images are built on a workstation and loaded over SSH (`ship.sh`), never on the host.
 Memory is capped per container (about 4 GB in total) because the host runs many other apps.
 
