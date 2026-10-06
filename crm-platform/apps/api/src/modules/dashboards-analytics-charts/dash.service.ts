@@ -31,6 +31,10 @@ import { DashExtrasRepository } from './dash-extras.repository';
 const HOUR_MS = 3_600_000;
 const iso = (d: Date): string => d.toISOString();
 
+type CustomDates = { from?: string; to?: string };
+const tooLong = () =>
+  AppError.validation('The range is too long', [{ path: 'from', message: 'at most 366 days' }]);
+
 /**
  * Dashboard and analytics numbers (TW-DASH-002..005, 012, 018, 022..025, 027, 031). Read-only: no audit, no outbox.
  * Everything is one transaction on the caller's tenant connection.
@@ -51,13 +55,18 @@ export class DashService {
   static readonly DEFAULT_SLOTS = 6;
 
   /** The dashboard's data cards (TW-DASH-006, 011, 013..016, 019); one transaction, one payload. */
-  async widgets(range: DashRange, now: Date = new Date()): Promise<DashWidgets> {
+  async widgets(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashWidgets> {
     const { orgId } = RequestContextStore.require();
     const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
     const deviceCap = await this.plans.limit(orgId, 'devices');
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
       const devices = await this.widgetsRepo.devices(tx, orgId);
       return {
         contacts: await this.widgetsRepo.contacts(tx, orgId, w.from),
@@ -83,11 +92,16 @@ export class DashService {
     });
   }
 
-  async summary(range: DashRange, now: Date = new Date()): Promise<DashSummaryResponse> {
+  async summary(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashSummaryResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
       const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
       const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
       const hours = await this.repo.hourlyOut(tx, orgId, now, 20);
@@ -110,11 +124,16 @@ export class DashService {
     });
   }
 
-  async throughput(range: DashRange, now: Date = new Date()): Promise<DashThroughputResponse> {
+  async throughput(
+    range: DashRange,
+    now: Date = new Date(),
+    custom: CustomDates = {},
+  ): Promise<DashThroughputResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveDashWindow(range, tz, now);
+      const w = resolveDashWindow(range, tz, now, custom);
+      if (!w) throw tooLong();
       let starts: Date[];
       let found: Awaited<ReturnType<DashRepository['buckets']>>;
       if (w.bucket === 'hour') {
@@ -160,10 +179,7 @@ export class DashService {
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w)
-        throw AppError.validation('The range is too long', [
-          { path: 'from', message: 'at most 366 days' },
-        ]);
+      if (!w) throw tooLong();
       return {
         devices: await this.panelsRepo.devices(tx, orgId),
         templates: await this.panelsRepo.templates(tx, orgId, w.from, w.to),
@@ -180,10 +196,7 @@ export class DashService {
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w)
-        throw AppError.validation('The range is too long', [
-          { path: 'from', message: 'at most 366 days' },
-        ]);
+      if (!w) throw tooLong();
       const current = totalsOf(await this.repo.counts(tx, orgId, w.from, w.to));
       const previous = totalsOf(await this.repo.counts(tx, orgId, w.prevFrom, w.prevTo));
       const days = await this.repo.buckets(tx, orgId, w.from, w.to, {
