@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { EmptyState } from '@crm/ui';
+import { UNOFFICIAL_WHATSAPP_FEATURE } from '@/lib/unofficial-whatsapp';
 import { routeGateFor } from './nav-model';
 
 /** One app-owned screen, derived from a menu entry that declares `gates.app` (see `features/_registry/types.ts`). */
@@ -49,16 +50,26 @@ export function AppGate({
   const pathname = usePathname();
   const closed = closedAppGate(pathname, gates, enabled);
   if (!closed) return <>{children}</>;
-  return <AppUnavailable labelKey={closed.labelKey} marketplaceHref={marketplaceHref} />;
+  return (
+    <AppUnavailable
+      labelKey={closed.labelKey}
+      // The unofficial WhatsApp engine is a platform switch, not a Marketplace app: there is nothing to browse for.
+      unofficial={closed.feature === UNOFFICIAL_WHATSAPP_FEATURE}
+      marketplaceHref={marketplaceHref}
+    />
+  );
 }
 
 function AppUnavailable({
   labelKey,
-  marketplaceHref,
+  unofficial,
+  marketplaceHref: marketplace,
 }: {
   labelKey: string;
+  unofficial: boolean;
   marketplaceHref: string | null;
 }) {
+  const marketplaceHref = unofficial ? null : marketplace;
   const t = useTranslations();
   const app = t(labelKey);
   const link =
@@ -66,11 +77,13 @@ function AppUnavailable({
   return (
     <div className="mx-auto max-w-2xl py-10" data-testid="app-unavailable">
       <EmptyState
-        title={t('shell.appGate.title', { app })}
+        title={t(unofficial ? 'shell.appGate.unofficialTitle' : 'shell.appGate.title', { app })}
         message={
-          marketplaceHref
-            ? t('shell.appGate.body', { app })
-            : t('shell.appGate.bodyNoMarketplace', { app })
+          unofficial
+            ? t('shell.appGate.unofficialBody', { app })
+            : marketplaceHref
+              ? t('shell.appGate.body', { app })
+              : t('shell.appGate.bodyNoMarketplace', { app })
         }
         actions={
           <>

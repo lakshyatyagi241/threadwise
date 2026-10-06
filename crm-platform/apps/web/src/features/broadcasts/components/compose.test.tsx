@@ -72,17 +72,17 @@ describe('sender picker', () => {
     expect(same).toContain('70%');
     expect(same).toContain('30%');
     expect(same).not.toContain('Meta</div>');
+    const personal = sender({
+      key: 'baileys:3',
+      engine: 'baileys',
+      engineLabel: 'Unofficial API',
+      label: 'Phone',
+    });
+    // The platform has switched the unofficial engine on: its group is offered next to the official one.
     const mixed = html(
       <SenderPicker
-        senders={[
-          ...two,
-          sender({
-            key: 'baileys:3',
-            engine: 'baileys',
-            engineLabel: 'Unofficial API',
-            label: 'Phone',
-          }),
-        ]}
+        senders={[...two, personal]}
+        unofficialEnabled
         checked={[]}
         shares={{}}
         onChecked={none}
@@ -92,6 +92,39 @@ describe('sender picker', () => {
     expect(mixed).toContain('Unofficial API');
     expect(mixed).toContain('Meta');
     expect(mixed).toContain('—');
+  });
+
+  it('switch off (the default): personal-number senders and the Unofficial API group are not offered', () => {
+    const personal = sender({
+      key: 'baileys:3',
+      engine: 'baileys',
+      engineLabel: 'Unofficial API',
+      label: 'Phone',
+    });
+    const off = html(
+      <SenderPicker
+        senders={[sender(), sender({ key: 'waba:2', label: 'Cloud 2' }), personal]}
+        checked={[]}
+        shares={{}}
+        onChecked={none}
+        onShare={none}
+      />,
+    );
+    expect(off).not.toContain('Unofficial API');
+    expect(off).not.toContain('Phone');
+    expect(off).toContain('Cloud 2');
+    // Only a personal number connected: nothing is offered, and the picker says so instead of listing it.
+    const onlyPersonal = html(
+      <SenderPicker
+        senders={[personal]}
+        checked={[]}
+        shares={{}}
+        onChecked={none}
+        onShare={none}
+      />,
+    );
+    expect(onlyPersonal).toContain('No connected devices.');
+    expect(onlyPersonal).not.toContain('Phone');
   });
 });
 

@@ -94,7 +94,8 @@
         "k3": "Help - 03",
         "t3": "How do I improve results?",
         "b3": "Keep the audience focused, choose the most relevant template, and review failed counts before sending again."
-      }
+      },
+      "unofficialDisabled": "Unofficial (disabled)"
     },
     "detail": {
       "back": "Back",
@@ -212,7 +213,8 @@
         "scheduledAt": "Scheduled at",
         "status": "Status",
         "completed": "Completed"
-      }
+      },
+      "unofficialDisabled": "Unofficial (disabled)"
     },
     "compose": {
       "back": "Back to Broadcasts",
@@ -279,7 +281,8 @@
       "now": "Now",
       "later": "Later",
       "media": "{kind} preview",
-      "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags."
+      "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
+      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is turned off on this platform. Choose an official WhatsApp Business API number."
     },
     "overrides": {
       "title": "Fill in this send",

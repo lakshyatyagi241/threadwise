@@ -8,6 +8,7 @@ import {
   filterKeys,
   firstProblemField,
   isPlatformDefaultLimit,
+  limitDisabledByPlatform,
   matchesQuery,
   planCounts,
   tabForField,
@@ -64,6 +65,21 @@ describe('tabs and problems', () => {
       firstProblemField({ visibleAddons: { code: 'server' }, name: { code: 'required' } }),
     ).toBe('name');
     expect(firstProblemField({})).toBeNull();
+  });
+});
+
+describe('limits that only matter while unofficial WhatsApp is on', () => {
+  it('greys the devices limit only when the switch is known to be off', () => {
+    expect(limitDisabledByPlatform('devices', 'off')).toBe(true);
+    expect(limitDisabledByPlatform('devices', 'on')).toBe(false);
+    // unknown (the call failed, an older API): the operator is not told something the platform did not say
+    expect(limitDisabledByPlatform('devices', 'unknown')).toBe(false);
+  });
+
+  it('never greys any other limit', () => {
+    for (const k of PLAN_LIMIT_KEYS.filter((x) => x !== 'devices')) {
+      expect(limitDisabledByPlatform(k, 'off')).toBe(false);
+    }
   });
 });
 
