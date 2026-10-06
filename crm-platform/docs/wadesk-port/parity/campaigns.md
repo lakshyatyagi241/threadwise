@@ -84,3 +84,7 @@ The builder reuses broadcasts' audience picker, send-time overrides panel, attri
 | 18  | Card resend     | Re-queues and sends to everyone              | The same, with a confirm; the detail page also has "Resend to N failed".                         |
 | 19  | Channel chooser | `?channel=sms` and `?channel=email` builders | Not built: SMS and email campaigns are skipped on the owner's word.                              |
 | 20  | Build with AI   | A button in the composer                     | Not built (WD-CAMP-026, blocked).                                                                |
+
+## Intended difference: unofficial engine off by default (owner decision 2026-10-05)
+
+A campaign that names a personal-number (`baileys`) sender is refused with 422 `WA_UNOFFICIAL_DISABLED` unless a platform super admin turned the unofficial engine on; a blank sender or default engine resolves to `waba`; existing rows on that engine are kept, not sent, and resume when it is turned on. WaDesk always allowed it. Details and the full list of surfaces: [node-bridge-runtime.md](node-bridge-runtime.md#intended-difference-the-unofficial-engine-is-off-behind-a-platform-switch-owner-decision-2026-10-05).
