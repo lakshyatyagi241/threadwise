@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { NotificationEventKey } from '../admin-console-shell/workspace-settings';
 import { uuidSchema } from '../common/ids';
 import { cursorSchema, pageInfoSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
@@ -17,8 +18,65 @@ export const NOTIFICATION_TYPES = [
   'task_completed',
   /** A lead arrived through a lead source (written by the lead pipeline's consumer). */
   'new_lead',
+  /** A conversation nobody owned yet got its first message (everyone who may see and reply is told, once). */
+  'new_chat',
+  /** A message arrived on a conversation I own. One row per chat while unread; `count` says how many. */
+  'new_message',
+  /** A conversation was assigned to me (or to a team I am in). */
+  'conversation_assigned',
+  /** Someone mentioned me in a conversation note. */
+  'mention',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
+
+/** The types that collapse into one unread row per chat. */
+export const COLLAPSING_NOTIFICATION_TYPES = [
+  'new_message',
+] as const satisfies readonly NotificationType[];
+
+/**
+ * Which of the workspace owner's notification toggles (Settings, Notifications) gates a type. Only the conversation types are gated
+ * (decision D3); a type that is absent here is delivered whatever the toggles say. `inapp=false` suppresses both the row and the live push.
+ */
+export const NOTIFICATION_TYPE_PREF_KEY: Partial<Record<NotificationType, NotificationEventKey>> = {
+  new_chat: 'new_customer_reply',
+  new_message: 'new_customer_reply',
+  conversation_assigned: 'conversation_assigned',
+  mention: 'mention_in_inbox',
+};
+
+/** What a row is about: lets a client mark rows read by subject and open the right screen. */
+export const NOTIFICATION_SUBJECT_KINDS = ['conversation'] as const;
+export const notificationSubjectKindSchema = z.enum(NOTIFICATION_SUBJECT_KINDS);
+export type NotificationSubjectKind = z.infer<typeof notificationSubjectKindSchema>;
+
+export const notificationSubjectSchema = z.object({
+  /** A NotificationSubjectKind today; a plain string so a newer server's kind does not break an older client. */
+  kind: z.string().min(1),
+  id: uuidSchema,
+});
+export type NotificationSubject = z.infer<typeof notificationSubjectSchema>;
+
+/**
+ * The `data` of the conversation types (`new_chat`, `new_message`, `conversation_assigned`, `mention`). Every field is optional for a
+ * reader: a row written by an older server lacks the newer ones. `preview` is at most 80 characters of the customer's words and is
+ * rendered as text, never HTML.
+ */
+export const conversationNotificationDataSchema = z.object({
+  conversationId: uuidSchema,
+  contactName: z.string().nullable().optional(),
+  channelKind: z.string().nullable().optional(),
+  preview: z.string().max(80).nullable().optional(),
+  /** How many messages the (collapsed) row stands for. */
+  count: z.number().int().min(1).optional(),
+  /** `conversation_assigned`: who assigned it (a name, or null for the system), and whether it went to a team. */
+  assignedByName: z.string().nullable().optional(),
+  teamAssigned: z.boolean().optional(),
+  /** `mention`: the author of the note and the note. */
+  authorName: z.string().nullable().optional(),
+  noteId: uuidSchema.optional(),
+});
+export type ConversationNotificationData = z.infer<typeof conversationNotificationDataSchema>;
 
 export const notificationResponseSchema = z.object({
   id: uuidSchema,
@@ -31,6 +89,10 @@ export const notificationResponseSchema = z.object({
   data: z.record(z.unknown()).nullable(),
   readAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),
+  /** How many events the row stands for (a collapsed chat: "3 new messages"). Absent on rows that never collapse. */
+  count: z.number().int().min(1).optional(),
+  /** What the row is about; null/absent for rows written before subjects existed. */
+  subject: notificationSubjectSchema.nullable().optional(),
 });
 export type NotificationResponse = z.infer<typeof notificationResponseSchema>;
 
@@ -54,3 +116,16 @@ export type UnreadCountResponse = z.infer<typeof unreadCountResponseSchema>;
 
 export const markAllReadResponseSchema = z.object({ updated: z.number().int().min(0) });
 export type MarkAllReadResponse = z.infer<typeof markAllReadResponseSchema>;
+
+/** `POST /v2/notifications/read-subject`: mark the caller's unread rows about one thing read (opening the conversation does this server-side too). */
+export const readSubjectRequestSchema = z.object({
+  kind: notificationSubjectKindSchema,
+  id: uuidSchema,
+});
+export type ReadSubjectRequest = z.infer<typeof readSubjectRequestSchema>;
+
+export const readSubjectResponseSchema = z.object({
+  updated: z.number().int().min(0),
+  unread: z.number().int().min(0),
+});
+export type ReadSubjectResponse = z.infer<typeof readSubjectResponseSchema>;

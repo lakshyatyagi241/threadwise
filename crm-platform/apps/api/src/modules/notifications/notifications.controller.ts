@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -9,14 +10,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { listNotificationsQuerySchema, type ListNotificationsQuery } from '@crm/contracts';
+import {
+  listNotificationsQuerySchema,
+  readSubjectRequestSchema,
+  type ListNotificationsQuery,
+  type ReadSubjectRequest,
+} from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { NotificationsService } from './notifications.service';
 
 /**
  * The signed-in user's in-app notifications (the header bell). No permission key: a person always sees their own feed,
- * and the service pins every query to them. Literal paths (`unread-count`, `read-all`) come before `:id/read`.
+ * and the service pins every query to them. Literal paths (`unread-count`, `read-all`, `read-subject`) come before `:id/read`.
  */
 @ApiTags('notifications')
 @ActorKinds('user')
@@ -48,6 +54,17 @@ export class NotificationsController {
   })
   async markAllRead() {
     return this.notifications.markAllRead();
+  }
+
+  @Post('read-subject')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Mark my unread notifications about one conversation read',
+    description:
+      'Reading a conversation does this on the server already; this is for a client that shows the thread without the read call. Returns how many changed and the new unread total.',
+  })
+  async markSubjectRead(@Body(zodPipe(readSubjectRequestSchema)) body: ReadSubjectRequest) {
+    return this.notifications.markSubjectRead(body);
   }
 
   @Post(':id/read')

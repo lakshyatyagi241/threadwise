@@ -3,6 +3,7 @@ import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversat
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { MessageTemplatesModule } from '../message-templates';
+import { NotificationsModule } from '../notifications';
 import { ConversationEventsRepository } from './conversation-events.repository';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
@@ -23,7 +24,13 @@ import { NotesRepository } from './notes.repository';
  * Kernel services (audit, outbox, RBAC), the database, realtime and the chat media store are global.
  */
 @Module({
-  imports: [ChatConversationsModule, ChatChannelProvidersModule, CrmModule, MessageTemplatesModule],
+  imports: [
+    ChatConversationsModule,
+    ChatChannelProvidersModule,
+    CrmModule,
+    MessageTemplatesModule,
+    NotificationsModule,
+  ],
   controllers: [InboxController],
   providers: [
     ConversationsRepository,

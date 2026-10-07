@@ -7,6 +7,7 @@ import {
   boolean,
   foreignKey,
   index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -34,6 +35,13 @@ export const inboxNotifications = pgTable(
     /** Idempotency key: event type + outbox event id. Unique per (org, user) when set. */
     dedupeKey: text('dedupe_key'),
     readAt: timestamp('read_at', { withTimezone: true }),
+    /** Non-null only for collapsing types (`msg:<conversation uuid>`): one UNREAD row per (user, key). */
+    collapseKey: text('collapse_key'),
+    /** How many events the row stands for ("3 new messages"). */
+    eventCount: integer('event_count').notNull().default(1),
+    /** What the row is about (`conversation`), with `subjectUuid`: lets "mark read" find rows without parsing `link`. */
+    subjectKind: text('subject_kind'),
+    subjectUuid: uuid('subject_uuid'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -61,6 +69,15 @@ export const inboxNotifications = pgTable(
     index('idx_inbox_notifications_user_unread')
       .on(t.orgId, t.userId)
       .where(sql`read_at IS NULL`),
+    uniqueIndex('uq_inbox_notifications_collapse')
+      .on(t.orgId, t.userId, t.collapseKey)
+      .where(sql`collapse_key IS NOT NULL AND read_at IS NULL`),
+    index('idx_inbox_notifications_collapse_latest')
+      .on(t.orgId, t.userId, t.collapseKey, t.id.desc())
+      .where(sql`collapse_key IS NOT NULL`),
+    index('idx_inbox_notifications_subject_unread')
+      .on(t.orgId, t.userId, t.subjectKind, t.subjectUuid)
+      .where(sql`read_at IS NULL AND subject_uuid IS NOT NULL`),
   ],
 );
 
