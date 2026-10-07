@@ -68,17 +68,19 @@ export function Stepper({
                   className={cn(
                     'grid size-8 shrink-0 place-items-center rounded-full border text-sm font-semibold',
                     active
-                      ? 'border-brand bg-brand text-brand-foreground'
+                      ? 'border-brand bg-brand text-brand-foreground shadow ring-4 ring-brand/15'
                       : n < current
-                        ? 'border-brand/40 bg-brand/10 text-brand'
+                        ? 'border-success bg-success text-white'
                         : 'border-border text-muted-foreground',
                   )}
                 >
                   {n < current ? '✓' : n}
                 </span>
-                <span className="truncate">{label(n)}</span>
-                <span className="sr-only">
-                  {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
+                <span className="min-w-0 leading-tight">
+                  <span className="block truncate">{label(n)}</span>
+                  <span className="block truncate text-[11px] font-normal text-muted-foreground">
+                    {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
+                  </span>
                 </span>
               </button>
               {n < WIZARD_STEP_COUNT && (
