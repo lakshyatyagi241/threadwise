@@ -1,7 +1,6 @@
 {
   "workspaces-teams-tenancy": {
     "nav": {
-      "teamMembers": "Team members",
       "teams": "Teams"
     },
     "common": {

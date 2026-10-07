@@ -435,6 +435,29 @@ export function SelectInput({
   );
 }
 
+/**
+ * Under every "Knowledge base (optional)" picker: where a person who has none yet goes to make one, and the button that
+ * brings it into the list. AI Training opens in a NEW tab so the flow being built (with its unsaved changes) stays open;
+ * Refresh list re-reads the workspace's assistants, so the new one is there when the person comes back.
+ */
+export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
+  return (
+    <div className="mt-1.5 flex items-center justify-between text-[10.5px]">
+      <a
+        href="/ai-training/create"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-semibold text-brand underline"
+      >
+        + Create knowledge base
+      </a>
+      <button type="button" onClick={refresh} className="text-brand underline">
+        Refresh list
+      </button>
+    </div>
+  );
+}
+
 export function Check({
   checked,
   onChange,

@@ -275,11 +275,12 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
   );
 }
 
+/** `live: false` = the screen is not built yet (auto-reply, TW-AR): the tile shows "Soon" instead of linking to a 404. */
 const QUICK_ACTIONS = [
-  { key: 'broadcast', href: '/broadcasts/create', tone: 'bg-primary' },
-  { key: 'flow', href: '/flows', tone: 'bg-foreground' },
-  { key: 'template', href: '/templates/new', tone: 'bg-warning' },
-  { key: 'autoReply', href: '/auto-reply', tone: 'bg-danger' },
+  { key: 'broadcast', href: '/broadcasts/create', tone: 'bg-primary', live: true },
+  { key: 'flow', href: '/flows', tone: 'bg-foreground', live: true },
+  { key: 'template', href: '/templates/new', tone: 'bg-warning', live: true },
+  { key: 'autoReply', href: '/auto-reply', tone: 'bg-danger', live: false },
 ] as const;
 
 /** Four shortcut buttons (TW-DASH-020). */
@@ -289,17 +290,39 @@ export function QuickActionsCard() {
     <Card className="space-y-3" data-testid="card-quick-actions">
       <h2 className="font-serif text-[22px] leading-tight">{t('title')}</h2>
       <div className="grid grid-cols-2 gap-2">
-        {QUICK_ACTIONS.map((a) => (
-          <Link
-            key={a.key}
-            href={a.href}
-            className="block rounded-xl border border-border p-3 text-start hover:bg-muted/50"
-          >
-            <span aria-hidden className={cn('mb-2 block size-7 rounded-lg', a.tone)} />
-            <div className="text-xs font-medium">{t(`${a.key}.label`)}</div>
-            <div className="text-[10px] text-muted-foreground">{t(`${a.key}.hint`)}</div>
-          </Link>
-        ))}
+        {QUICK_ACTIONS.map((a) => {
+          const body = (
+            <>
+              <span aria-hidden className={cn('mb-2 block size-7 rounded-lg', a.tone)} />
+              <div className="flex items-center justify-between gap-1">
+                <div className="text-xs font-medium">{t(`${a.key}.label`)}</div>
+                {!a.live && (
+                  <span className="rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-muted-foreground">
+                    {t('soon')}
+                  </span>
+                )}
+              </div>
+              <div className="text-[10px] text-muted-foreground">{t(`${a.key}.hint`)}</div>
+            </>
+          );
+          return a.live ? (
+            <Link
+              key={a.key}
+              href={a.href}
+              className="block rounded-xl border border-border p-3 text-start hover:bg-muted/50"
+            >
+              {body}
+            </Link>
+          ) : (
+            <div
+              key={a.key}
+              aria-disabled="true"
+              className="block rounded-xl border border-border p-3 text-start opacity-60"
+            >
+              {body}
+            </div>
+          );
+        })}
       </div>
     </Card>
   );

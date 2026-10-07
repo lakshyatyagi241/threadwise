@@ -1,6 +1,10 @@
 import {
   flbAskFileAccepts,
   flbCleanAskFileExtensions,
+  flbCondSummary,
+  flbIsCondGroup,
+  flbSanitizeConditionGroup,
+  type FlbCondGroup,
   flbListOption,
   type FlowEdge,
   type FlowNode,
@@ -274,6 +278,19 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         const conds = (Array.isArray(d.conditions) ? d.conditions : legacy).map(rec);
         const ops = arr(d.operators);
         let ok = false;
+        // The nested tree (beyond Reference) wins over the flat chain, with the same per-rule check.
+        const tree = flbSanitizeConditionGroup(d.conditionGroup);
+        if (tree) {
+          const walk = (g: FlbCondGroup): boolean => {
+            if (g.items.length === 0) return false;
+            const test = (i: FlbCondGroup['items'][number]) =>
+              flbIsCondGroup(i) ? walk(i) : checkCond(v[i.variable] ?? '', i.operator, i.value);
+            return g.op === 'or' ? g.items.some(test) : g.items.every(test);
+          };
+          ok = walk(tree);
+          sys(`if ${flbCondSummary(tree)} → ${ok ? 'YES' : 'NO'}`);
+          return advance(ok ? 'yes' : 'no');
+        }
         if (conds.length > 0) {
           const first = conds[0]!;
           ok = checkCond(v[str(first.variable)] ?? '', first.operator, first.value);

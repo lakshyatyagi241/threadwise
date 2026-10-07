@@ -229,6 +229,14 @@ describe('guardedLookup: the address checked is the address connected to', () =>
     expect(r.err?.code).toBe('EBLOCKED');
   });
 
+  it.each(['::ffff:7f00:1', '::ffff:a9fe:a9fe', '64:ff9b::7f00:1', '2002:7f00:1::1'])(
+    'refuses a name that resolves to %s (an IPv6 form of an internal IPv4 address)',
+    async (address) => {
+      const r = await run(undefined, answers('157.240.22.35', address));
+      expect(r.err?.code).toBe('EBLOCKED');
+    },
+  );
+
   it('refuses when ANY of the answers is private, so a mixed answer cannot be used to rebind', async () => {
     const r = await run(undefined, answers('157.240.22.35', '127.0.0.1'));
     expect(r.err?.code).toBe('EBLOCKED');
