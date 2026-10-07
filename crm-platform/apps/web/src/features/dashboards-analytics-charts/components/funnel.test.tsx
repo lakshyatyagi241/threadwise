@@ -20,7 +20,7 @@ const html = (el: ReactElement) =>
 const funnel = (over: Partial<DashFunnel> = {}): DashFunnel => ({
   stages: [],
   endToEnd: 0,
-  contacts: { messaged: 31, delivered: 31, replied: 4 },
+  contacts: { messaged: 31, delivered: 31, replied: 4, goalCompleted: 5 },
   activity: { inbound: 27, respondingContacts: 4, repliesPerContact: 6.8 },
   replyRate: 12.9,
   comparison: { previousReplyRate: 8.5, replyRatePp: 4.4 },
@@ -28,7 +28,7 @@ const funnel = (over: Partial<DashFunnel> = {}): DashFunnel => ({
 });
 
 describe('Funnel (contacts)', () => {
-  it('draws three stages with percent of contacts messaged, the activity line and the comparison', () => {
+  it('draws four stages with percent of contacts messaged, the activity line and the comparison', () => {
     const out = html(<Funnel funnel={funnel()} />);
     expect(out).toContain('Contacts messaged');
     expect(out).toContain('Delivered');
@@ -39,15 +39,18 @@ describe('Funnel (contacts)', () => {
     );
     expect(out).toContain('Compared with previous period');
     expect(out).toContain('+4.4pp');
-    expect(out).not.toContain('Goal completed');
-    expect((out.match(/<li /g) ?? []).length).toBe(3);
+    expect(out).toContain('Goal completed');
+    expect(out).toContain('Goal completed: 5 contacts, 16.1% of contacts messaged');
+    expect(out).toContain('Contacts whose flow finished');
+    expect(out).toContain('16.1%');
+    expect((out.match(/<li /g) ?? []).length).toBe(4);
   });
 
   it('shows a dash for replies per contact when nobody replied and hides the comparison without a previous window', () => {
     const out = html(
       <Funnel
         funnel={funnel({
-          contacts: { messaged: 5, delivered: 5, replied: 0 },
+          contacts: { messaged: 5, delivered: 5, replied: 0, goalCompleted: 0 },
           activity: { inbound: 0, respondingContacts: 0, repliesPerContact: null },
           replyRate: 0,
           comparison: null,
@@ -58,6 +61,8 @@ describe('Funnel (contacts)', () => {
       '0 inbound messages · 0 responding contacts · - replies/responding contact',
     );
     expect(out).not.toContain('Compared with previous period');
+    expect(out).toContain('Goal completed: 0 contacts, 0% of contacts messaged');
+    expect((out.match(/<li /g) ?? []).length).toBe(4);
   });
 
   it('a drop uses the warning tone and zero is neutral', () => {

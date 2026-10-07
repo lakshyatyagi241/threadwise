@@ -68,7 +68,7 @@ export class ProjectionService {
   ) {}
 
   async siteConfig(): Promise<PublicSiteConfig> {
-    const [g, b, site, seo, privacy, analytics, custom, pwa, rt, ti] = await Promise.all([
+    const [g, b, site, seo, privacy, analytics, custom, pwa, ti] = await Promise.all([
       this.settings.values('general'),
       this.settings.values('branding'),
       this.settings.values('site'),
@@ -77,7 +77,6 @@ export class ProjectionService {
       this.settings.values('analytics'),
       this.settings.values('customCode'),
       this.settings.values('pwa'),
-      this.settings.values('realtime'),
       this.settings.values('tiPwa'),
     ]);
     const logos = b.logos as Record<string, string>;
@@ -157,7 +156,6 @@ export class ProjectionService {
         privacy: legalUrl('privacy', privacy),
         cookies: legalUrl('cookies', privacy),
       },
-      realtime: { enabled: rt.enabled && rt.appKey !== '' && rt.cluster !== '' },
     };
   }
 
