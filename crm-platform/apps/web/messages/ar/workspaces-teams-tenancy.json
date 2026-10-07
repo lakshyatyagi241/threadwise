@@ -1,7 +1,6 @@
 {
   "workspaces-teams-tenancy": {
     "nav": {
-      "teamMembers": "أعضاء الفريق",
       "teams": "الفرق"
     },
     "common": {
