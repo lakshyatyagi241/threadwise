@@ -77,7 +77,7 @@ export class QrChannelAdapter implements ChannelAdapter {
 
   async send(channel: ChannelRuntime, envelope: OutboundEnvelope): Promise<SendResult> {
     // Not retryable: the queue would otherwise keep trying a send the platform has switched off (owner decision 2026-10-05).
-    if (!(await this.unofficial.isEnabled())) {
+    if (!(await this.unofficial.isEnabledFor(channel.orgId))) {
       throw new ChannelError(
         'WA_UNOFFICIAL_DISABLED',
         'The unofficial WhatsApp engine is turned off on this platform. Reply from a WhatsApp Cloud API number.',

@@ -36,7 +36,8 @@
         "localization": "Localization"
       },
       "badges": {
-        "notSupported": "Not supported"
+        "notSupported": "Not supported",
+        "noWorkspaces": "No workspaces"
       }
     },
     "shell": {

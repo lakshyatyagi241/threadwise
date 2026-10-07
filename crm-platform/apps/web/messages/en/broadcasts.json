@@ -294,7 +294,7 @@
       "later": "Later",
       "media": "{kind} preview",
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
-      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is turned off on this platform. Choose an official WhatsApp Business API number."
+      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number."
     },
     "overrides": {
       "title": "Fill in this send",

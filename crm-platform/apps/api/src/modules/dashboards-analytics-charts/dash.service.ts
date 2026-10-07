@@ -68,7 +68,7 @@ export class DashService {
     const { orgId } = RequestContextStore.require();
     const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
     const deviceCap = await this.plans.limit(orgId, 'devices');
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveDashWindow(range, tz, now, custom);
@@ -185,7 +185,7 @@ export class DashService {
   /** The analytics list panels (TW-DASH-026, 028, 030) for the same window rules as the overview. */
   async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
     const { orgId } = RequestContextStore.require();
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);

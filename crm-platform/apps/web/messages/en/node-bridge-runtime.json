@@ -60,23 +60,23 @@
         "disabled": "Disabled / Not supported",
         "enabled": "Enabled (unsupported)"
       },
-      "explanation": "We support the official WhatsApp Business API only. Turning this on lets workspaces connect personal numbers; it is unsupported and can get numbers banned.",
+      "explanation": "We support the official WhatsApp Business API only. This is the platform-wide switch for personal numbers: it is unsupported and can get numbers banned. Even when it is on, only the workspaces allowed below can use it.",
       "state": {
-        "disabled": "Off. Workspaces cannot see or connect personal numbers: the QR connect flow, the Warmer and personal-number senders are hidden, and sends through them are refused.",
-        "enabled": "On. Every workspace can connect personal numbers by QR code. This is unsupported; those numbers can be banned by WhatsApp."
+        "disabled": "Off. No workspace can see or connect personal numbers, whatever the list below says: the QR connect flow, the Warmer and personal-number senders are hidden, and sends through them are refused.",
+        "enabled": "On, for the allowed workspaces only. A workspace that is not on the list below still sees nothing of it. This is unsupported; those numbers can be banned by WhatsApp."
       },
       "enable": "Enable unofficial WhatsApp",
       "disable": "Disable unofficial WhatsApp",
       "cancel": "Cancel",
       "enableDialog": {
         "title": "Enable unofficial WhatsApp?",
-        "body": "This is not supported. Numbers connected this way can be banned by WhatsApp, and messages sent through them are not covered by any delivery promise. It applies to every workspace on the platform.",
+        "body": "This is not supported. Numbers connected this way can be banned by WhatsApp, and messages sent through them are not covered by any delivery promise. Turning the switch on gives it to no one by itself: only the workspaces on the allow-list can use it.",
         "typeLabel": "Type {word} to confirm",
         "confirm": "Enable"
       },
       "disableDialog": {
         "title": "Disable unofficial WhatsApp?",
-        "body": "Workspaces will stop seeing personal numbers, the Warmer and the QR connect flow, and sends through personal numbers will be refused. Saved data is kept.",
+        "body": "Every workspace will stop seeing personal numbers, the Warmer and the QR connect flow, and sends through personal numbers will be refused. Saved data and the allow-list are kept.",
         "confirm": "Disable"
       },
       "enabledToast": "Unofficial WhatsApp is now enabled.",
@@ -89,7 +89,76 @@
         "request": "That request could not be completed.",
         "unexpected": "Something went wrong on our side. Try again in a moment.",
         "network": "Could not reach the server. Check your connection."
-      }
+      },
+      "allowedCount": "{count, plural, =0 {No workspaces allowed} one {# workspace allowed} other {# workspaces allowed}}"
+    },
+    "workspaces": {
+      "eyebrow": "allow-list",
+      "title": "Workspaces with unofficial WhatsApp",
+      "description": "Off for everyone by default. Only the workspaces listed here can use personal-number WhatsApp, and only while the engine above is on.",
+      "count": "{count, plural, =0 {No workspaces allowed} one {# workspace allowed} other {# workspaces allowed}}",
+      "engineOff": "The engine is off, so these workspaces cannot use it yet.",
+      "engineOffAction": "Go to the switch",
+      "readOnly": "Only a super admin can add or remove workspaces. You can see the list.",
+      "search": {
+        "label": "Add a workspace",
+        "placeholder": "Search by workspace name, slug or owner email",
+        "hint": "Type at least 2 characters.",
+        "searching": "Searching",
+        "none": "No workspace matches \"{q}\".",
+        "add": "Add",
+        "alreadyAdded": "Already allowed",
+        "owner": "Owner: {email}",
+        "noPlan": "No plan",
+        "results": "Search results"
+      },
+      "table": {
+        "caption": "Workspaces allowed to use unofficial WhatsApp",
+        "workspace": "Workspace",
+        "plan": "Plan",
+        "devices": "Devices",
+        "since": "Enabled since",
+        "by": "Enabled by",
+        "note": "Note",
+        "actions": "Actions",
+        "devicesValue": "{active} active of {total}",
+        "noPlan": "No plan",
+        "system": "Unknown",
+        "noNote": "None",
+        "remove": "Remove"
+      },
+      "empty": {
+        "title": "No workspaces allowed yet",
+        "message": "Nobody can use personal-number WhatsApp, even with the engine on. Search above to add the first workspace."
+      },
+      "loadMore": "Load more",
+      "loadingMore": "Loading",
+      "addDialog": {
+        "title": "Allow {name}?",
+        "body": "{name} ({slug}) will be able to connect personal WhatsApp numbers by QR code while the engine is on. This is unsupported and numbers can be banned by WhatsApp.",
+        "noteLabel": "Note (optional)",
+        "notePlaceholder": "Why this workspace, who asked",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "The note can be at most {max} characters.",
+        "confirm": "Allow workspace"
+      },
+      "removeDialog": {
+        "title": "Remove {name}?",
+        "body": "{name} will no longer be able to use personal-number WhatsApp. Its sockets stop within 20 seconds. Saved sessions are kept, so allowing the workspace again restores them.",
+        "confirm": "Remove"
+      },
+      "cancel": "Cancel",
+      "addedToast": "{name} can now use unofficial WhatsApp.",
+      "removedToast": "{name} was removed from the list.",
+      "errors": {
+        "forbidden": "Only a super admin can change this list.",
+        "conflict": "The list changed meanwhile. It was refreshed; try again.",
+        "validation": "Check the values and try again.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection."
+      },
+      "retry": "Try again"
     }
   }
 }
