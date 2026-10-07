@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   NOTIFICATION_TYPE_PREF_KEY,
   effectiveEventFlags,
-  type NotificationType,
+  type NotificationPrefType,
   type StoredNotificationPrefs,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -13,8 +13,9 @@ import { DatabaseService } from '../../infra/db/database.service';
  * allow a type to reach the in-app bell. The same default table the settings page shows decides an unset toggle
  * (`effectiveEventFlags`), so the screen and the effect cannot disagree.
  *
- * Decision D3: only the conversation types are gated (`NOTIFICATION_TYPE_PREF_KEY`); every other type is delivered as before. A person
- * who turns the in-app toggle off stops both the row and the live push for that type.
+ * Decision D3: only the types in `NOTIFICATION_TYPE_PREF_KEY` are gated (the conversation types, and from phase 2 the device, broadcast,
+ * campaign, team chat mention and wallet alert types); every other type is delivered as before. The owner turning the in-app toggle off
+ * stops both the row and the live push for that type, unless a person chose otherwise for themselves.
  */
 @Injectable()
 export class NotificationPrefsResolver {
@@ -30,6 +31,11 @@ export class NotificationPrefsResolver {
   /** Forget what was read (tests, and a caller that just saved the toggles in this process). */
   clear(): void {
     this.cache.clear();
+  }
+
+  /** Forget one workspace (a screen that must show what is in force right now, not what was true a few seconds ago). */
+  forget(orgId: number): void {
+    this.cache.delete(orgId);
   }
 
   /** The owner's stored document for this workspace (undefined when they never saved the page). */
@@ -52,8 +58,11 @@ export class NotificationPrefsResolver {
     return row?.prefs ?? undefined;
   }
 
-  /** True when the in-app channel is on for this type (always true for a type no toggle governs). */
-  async inappAllowed(orgId: number, type: NotificationType): Promise<boolean> {
+  /**
+   * True when the OWNER's in-app toggle allows this type (always true for a type no toggle governs). A person's own preference is
+   * layered on top by `resolveNotificationChannels`: theirs wins over this one.
+   */
+  async inappAllowed(orgId: number, type: NotificationPrefType): Promise<boolean> {
     const key = NOTIFICATION_TYPE_PREF_KEY[type];
     if (!key) return true;
     return effectiveEventFlags(await this.stored(orgId), key).inapp;

@@ -14,6 +14,7 @@ import {
   type LiveApi,
   type LivePresenter,
 } from './controller';
+import { stateFromResponse, type PrefEntry } from '../prefs/model';
 import { FLUSH_MS, TOAST_PER_SUBJECT_MS, TOAST_WINDOW_MAX } from './model';
 
 const CONV_A = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
@@ -57,6 +58,7 @@ interface Harness {
   sound: boolean;
   desktopOn: boolean;
   claimResult: boolean;
+  prefs: readonly PrefEntry[] | undefined;
   seq: number;
   emit(payload: Record<string, unknown>, type?: string): void;
   created(n: number, conv: string, over?: Record<string, unknown>): void;
@@ -92,6 +94,7 @@ async function setup(): Promise<Harness> {
     sound: true,
     desktopOn: false,
     claimResult: true,
+    prefs: undefined,
     seq: 0,
     client,
   } as unknown as Harness;
@@ -122,6 +125,7 @@ async function setup(): Promise<Harness> {
     qc,
     api,
     presenter,
+    prefs: () => h.prefs,
     settings: { soundOn: () => h.sound, desktopOn: () => h.desktopOn },
     claimer: { claim: async () => h.claimResult },
     env: { isVisible: () => h.visible, location: () => h.location, now: () => Date.now() },
@@ -211,13 +215,22 @@ describe('notification.created', () => {
     expect(h.pings).toBe(0);
   });
 
-  it('does not toast or ping for types that are not chats (a task still moves the badge)', async () => {
+  it('does not toast or ping for a type whose default is quiet (task completed still moves the badge)', async () => {
     const h = await setup();
-    h.rows = [row(1, CONV_A, { type: 'task_due' })];
-    h.created(1, CONV_A, { type: 'task_due', subjectKind: null, subjectId: null });
+    h.rows = [row(1, CONV_A, { type: 'task_completed' })];
+    h.created(1, CONV_A, { type: 'task_completed', subjectKind: null, subjectId: null });
     await settle();
     expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
     expect(h.presented).toEqual([]);
+    expect(h.pings).toBe(0);
+  });
+
+  it('toasts a task due without a ping (the catalogue: toast yes, sound no)', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A, { type: 'task_due', link: '/tasks' })];
+    h.created(1, CONV_A, { type: 'task_due', subjectKind: null, subjectId: null });
+    await settle();
+    expect(h.presented).toHaveLength(1);
     expect(h.pings).toBe(0);
   });
 
@@ -465,5 +478,180 @@ describe('inbox signals and resync', () => {
     h.created(1, CONV_A);
     await settle();
     expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBeUndefined();
+  });
+});
+
+// --- phase 2: devices, sends, team chat, and the person's own choices -------------------------------------------------------
+
+const DEVICE = 'dddddddd-dddd-4ddd-8ddd-dddddddd0001';
+const CHANNEL = 'eeeeeeee-eeee-4eee-8eee-eeeeeeee0001';
+const SEND = 'ffffffff-ffff-4fff-8fff-ffffffff0001';
+
+const deviceRow = (n: number, type = 'device_disconnected'): NotificationResponse =>
+  row(n, DEVICE, {
+    type,
+    link: null,
+    data: { deviceId: DEVICE, deviceName: 'Sales' },
+    subject: { kind: 'device', id: DEVICE },
+  });
+
+describe('phase 2 types', () => {
+  it('toasts a disconnected number in the danger tone, opening the device, with no ping', async () => {
+    const h = await setup();
+    h.rows = [deviceRow(1)];
+    h.created(1, DEVICE, { type: 'device_disconnected', subjectKind: 'device' });
+    await settle();
+    expect(h.presented).toHaveLength(1);
+    expect(h.presented[0]).toMatchObject({
+      kind: 'alert',
+      alert: { type: 'device_disconnected', href: `/devices/${DEVICE}`, sound: false },
+    });
+    expect(h.pings).toBe(0);
+    expect(h.announces).toEqual([1]);
+  });
+
+  it('opens a failed broadcast at its detail page', async () => {
+    const h = await setup();
+    h.rows = [
+      row(1, SEND, {
+        type: 'broadcast_failed',
+        link: null,
+        data: { kind: 'broadcast', id: SEND, name: 'Spring', status: 'failed' },
+        subject: { kind: 'broadcast', id: SEND },
+      }),
+    ];
+    h.created(1, SEND, { type: 'broadcast_failed', subjectKind: 'broadcast' });
+    await settle();
+    expect(h.presented[0]).toMatchObject({ alert: { href: `/broadcasts/${SEND}` } });
+  });
+
+  it('toasts and pings a team chat message, opening that channel', async () => {
+    const h = await setup();
+    h.rows = [
+      row(1, CHANNEL, {
+        type: 'teamchat_message',
+        link: null,
+        data: { channelId: CHANNEL, authorName: 'Sam', direct: true },
+        subject: { kind: 'team_chat_channel', id: CHANNEL },
+      }),
+    ];
+    h.created(1, CHANNEL, { type: 'teamchat_message', subjectKind: 'team_chat_channel' });
+    await settle();
+    expect(h.presented[0]).toMatchObject({ alert: { href: `/team-chat?c=${CHANNEL}` } });
+    expect(h.pings).toBe(1);
+  });
+
+  it('shows a desktop alert for a disconnect when the tab is hidden and the person allows it', async () => {
+    const h = await setup();
+    h.visible = false;
+    h.desktopOn = true;
+    h.rows = [deviceRow(1)];
+    h.created(1, DEVICE, { type: 'device_disconnected', subjectKind: 'device' });
+    await settle();
+    expect(h.desktops).toEqual([id(1)]);
+    expect(h.presented).toEqual([]);
+  });
+});
+
+describe('the persons own choices', () => {
+  type Choice = { bell: boolean | null; toast: boolean | null; sound: boolean | null };
+  const prefs = (over: Record<string, Partial<Choice>> = {}): PrefEntry[] =>
+    stateFromResponse({
+      items: ['new_message', 'device_disconnected'].map((type) => {
+        const o: Choice = { bell: null, toast: null, sound: null, ...over[type] };
+        const base = { bell: true, toast: true, sound: type === 'new_message' };
+        return {
+          type,
+          group: type === 'new_message' ? 'conversations' : 'devices',
+          bell: o.bell ?? base.bell,
+          toast: o.toast ?? base.toast,
+          sound: o.sound ?? base.sound,
+          defaults: base,
+          overrides: o,
+          workspaceInapp: true,
+        } as never;
+      }),
+    }).entries;
+
+  it('the event flag toast:false keeps the bell right but shows no toast', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A, { toast: false });
+    await settle();
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
+    expect(h.presented).toEqual([]);
+    expect(h.pings).toBe(0);
+  });
+
+  it('the event flag sound:false toasts without the ping', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A, { toast: true, sound: false });
+    await settle();
+    expect(h.presented).toHaveLength(1);
+    expect(h.pings).toBe(0);
+  });
+
+  it('a silent event never toasts or pings, whatever its flags say', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A, { silent: true, toast: true, sound: true });
+    await settle();
+    expect(h.presented).toEqual([]);
+    expect(h.pings).toBe(0);
+  });
+
+  it('without flags (an older server) the loaded preferences decide: pop-up off', async () => {
+    const h = await setup();
+    h.prefs = prefs({ new_message: { toast: false } });
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([]);
+    expect(h.pings).toBe(0);
+  });
+
+  it('without flags: sound off toasts quietly', async () => {
+    const h = await setup();
+    h.prefs = prefs({ new_message: { sound: false } });
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toHaveLength(1);
+    expect(h.pings).toBe(0);
+  });
+
+  it('the bell off silences the pop-up and ping as well', async () => {
+    const h = await setup();
+    h.prefs = prefs({ new_message: { bell: false } });
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([]);
+    expect(h.pings).toBe(0);
+  });
+
+  it('the server flag wins over a stale local list', async () => {
+    const h = await setup();
+    h.prefs = prefs({ new_message: { toast: false } });
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A, { toast: true, sound: true });
+    await settle();
+    expect(h.presented).toHaveLength(1);
+    expect(h.pings).toBe(1);
+  });
+
+  it('a choice saved after the controller started applies to the next event', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toHaveLength(1);
+    h.prefs = prefs({ new_message: { toast: false } });
+    await vi.advanceTimersByTimeAsync(TOAST_PER_SUBJECT_MS + 10);
+    h.rows = [row(2, CONV_A)];
+    h.created(2, CONV_A);
+    await settle();
+    expect(h.presented).toHaveLength(1);
   });
 });

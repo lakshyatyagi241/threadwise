@@ -7,8 +7,13 @@ import type { NotificationResponse } from '@crm/contracts';
 import { Popover, Spinner, cn } from '@crm/ui';
 import { NavIcon } from '@/components/shell/nav-icons';
 import { useFeed, useMarkRead, useUnreadCount } from '../api/hooks';
-import { badgeText, notificationText, safeLink, type Translator } from '../lib/copy';
+import { notificationHref, typeMeta } from '../lib/catalogue';
+import { badgeText, notificationText, type Translator } from '../lib/copy';
 import { useAlertSettings, type AlertSettings } from '../live/use-alert-settings';
+import { TypeIcon } from './type-icon';
+
+/** Where a person tunes which events reach them (a pane of the account hub). */
+export const PREFERENCES_HREF = '/account/notifications';
 
 /**
  * The header bell (TW-NOTIF-006): an unread badge and a panel with the newest notifications. The badge and the list follow the
@@ -68,6 +73,7 @@ export function NotificationBell() {
             close();
           }}
           settings={settings}
+          onNavigate={close}
         />
       </Popover>
     </div>
@@ -85,6 +91,7 @@ export function BellPanel({
   onRetry,
   onOpen,
   settings,
+  onNavigate,
 }: {
   count: number;
   markingAll: boolean;
@@ -95,6 +102,8 @@ export function BellPanel({
   onRetry: () => void;
   onOpen: (n: NotificationResponse) => void;
   settings: AlertSettings;
+  /** Called when the footer link is followed, so the panel can close. */
+  onNavigate?: () => void;
 }) {
   const t = useTranslations('notifications');
   return (
@@ -112,6 +121,15 @@ export function BellPanel({
       </div>
       <FeedBody loading={loading} failed={failed} items={items} onRetry={onRetry} onOpen={onOpen} />
       <AlertSwitches settings={settings} />
+      <div className="border-t border-border px-4 py-2.5">
+        <Link
+          href={PREFERENCES_HREF}
+          onClick={onNavigate}
+          className="rounded-md px-1 py-0.5 text-xs font-medium text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {t('bell.preferences')}
+        </Link>
+      </div>
     </>
   );
 }
@@ -218,7 +236,8 @@ export function NotificationRow({
   const t = useTranslations('notifications');
   const format = useFormatter();
   const { title, body } = notificationText(t as unknown as Translator, n);
-  const href = safeLink(n.link);
+  const href = notificationHref(n);
+  const meta = typeMeta(n.type);
   const unread = n.readAt === null;
   const cls = cn(
     'flex w-full items-start gap-3 px-4 py-3 text-start outline-none transition hover:bg-muted focus-visible:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
@@ -233,6 +252,7 @@ export function NotificationRow({
           unread ? 'bg-brand' : 'bg-transparent',
         )}
       />
+      <TypeIcon icon={meta.icon} tone={meta.tone} />
       <span className="min-w-0 flex-1">
         <span
           dir="auto"

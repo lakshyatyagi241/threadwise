@@ -2,4 +2,6 @@
 export const NOTIFICATION_KEYS = {
   unread: ['notifications', 'unread'] as const,
   feed: ['notifications', 'feed'] as const,
+  /** The signed-in person's own preferences (a `PrefsState`). */
+  preferences: ['notifications', 'preferences'] as const,
 };

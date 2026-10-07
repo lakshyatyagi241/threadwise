@@ -1,12 +1,13 @@
-import { NOTIFICATION_TYPES, type NotificationResponse } from '@crm/contracts';
+import type { NotificationResponse } from '@crm/contracts';
+import { isKnownType, safeLink, typeMeta } from './catalogue';
+
+export { safeLink };
 
 /** The slice of next-intl's translator these helpers need (so they can be tested without React). */
 export interface Translator {
   (key: string, values?: Record<string, string | number>): string;
   has(key: string): boolean;
 }
-
-const KNOWN = new Set<string>(NOTIFICATION_TYPES);
 
 const text = (v: unknown): string => (typeof v === 'string' ? v : '');
 
@@ -18,10 +19,17 @@ export function notificationText(
   t: Translator,
   n: Pick<NotificationResponse, 'type' | 'title' | 'body' | 'data' | 'count'>,
 ): { title: string; body: string | null } {
-  if (!KNOWN.has(n.type) || !t.has(`types.${n.type}.title`))
+  if (
+    !isKnownType(n.type) ||
+    !(t.has(`types.${n.type}.title`) || t.has(`types.${n.type}.titleNoName`))
+  )
     return { title: n.title, body: n.body };
   if (n.type === 'new_lead') return leadText(t, n.data);
   if (isChatType(n.type)) return conversationText(t, n);
+  const group = typeMeta(n.type).group;
+  if (group === 'devices') return deviceText(t, n);
+  if (group === 'broadcasts') return sendingText(t, n);
+  if (group === 'team_chat') return teamChatText(t, n);
   const task = text(n.data?.taskTitle);
   const actor = text(n.data?.actorName);
   const body = actor
@@ -105,6 +113,85 @@ function conversationText(
   }
 }
 
+const firstText = (d: Record<string, unknown>, ...keys: string[]): string => {
+  for (const k of keys) {
+    const v = text(d[k]).trim();
+    if (v) return v;
+  }
+  return '';
+};
+const wholeCount = (v: unknown): number | null =>
+  typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : null;
+
+/** A personal WhatsApp number: connected, dropped, or logged out from the phone. Named by its label (else its number). */
+function deviceText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'data'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const name = firstText(d, 'deviceName', 'maskedNumber');
+  const base = `types.${n.type}`;
+  const hint = t.has(`${base}.body`) ? t(`${base}.body`) : null;
+  return {
+    title: name ? t(`${base}.title`, { name }) : t(`${base}.titleNoName`),
+    body: hint,
+  };
+}
+
+/**
+ * A broadcast, a campaign or a scheduled send that finished or failed. A finished one says how many went out and how many did not
+ * (each with its own plural); a failed one shows the reason when the server named one.
+ */
+function sendingText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'data'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const name = firstText(d, 'name');
+  const base = `types.${n.type}`;
+  const sent = wholeCount(d.sent ?? d.delivered);
+  const failed = wholeCount(d.failed);
+  let body: string | null = null;
+  if (n.type.endsWith('_failed')) {
+    const reason = clipPreview(firstText(d, 'reason'));
+    body = reason
+      ? t(`${base}.body`, { reason })
+      : t.has(`${base}.bodyNoReason`)
+        ? t(`${base}.bodyNoReason`)
+        : null;
+  } else if (sent !== null && failed !== null && failed > 0) {
+    body = t(`${base}.bodySentFailed`, { sent, failed });
+  } else if (sent !== null) {
+    body = t(`${base}.bodySent`, { sent });
+  }
+  return { title: name ? t(`${base}.title`, { name }) : t(`${base}.titleNoName`), body };
+}
+
+/** Team chat: a colleague mentioned me in a channel, or wrote to me directly (collapsed rows carry a count). */
+function teamChatText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'data' | 'count'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const author = firstText(d, 'authorName');
+  const channel = firstText(d, 'channelName');
+  const preview = clipPreview(d.preview);
+  const rawCount = n.count ?? d.count;
+  const count = typeof rawCount === 'number' && rawCount >= 1 ? Math.floor(rawCount) : 1;
+  const base = `types.${n.type}`;
+  let title: string;
+  if (n.type === 'teamchat_mention') {
+    title = author
+      ? channel
+        ? t(`${base}.title`, { author, channel })
+        : t(`${base}.titleNoChannel`, { author })
+      : t(`${base}.titleNoName`);
+  } else {
+    title = author ? t(`${base}.title`, { author, count }) : t(`${base}.titleNoName`, { count });
+  }
+  return { title, body: preview || null };
+}
+
 /** A lead from a lead source: the contact's name and the platform it came from (`data.contactName`, `data.platform`); `returning` for a repeat. */
 function leadText(
   t: Translator,
@@ -119,14 +206,6 @@ function leadText(
       ? t(returning ? 'types.new_lead.bodyReturning' : 'types.new_lead.body', { name, platform })
       : t('types.new_lead.bodyNoActor', { name });
   return { title: t(returning ? 'types.new_lead.titleReturning' : 'types.new_lead.title'), body };
-}
-
-/**
- * Where a notification opens: an app path the server named. Anything else (an absolute URL, a protocol-relative one) is
- * ignored, so a bad row can never send the person off-site.
- */
-export function safeLink(link: string | null): string | null {
-  return link !== null && /^\/(?!\/)/.test(link) ? link : null;
 }
 
 /** "99+" past 99, nothing at 0. */
