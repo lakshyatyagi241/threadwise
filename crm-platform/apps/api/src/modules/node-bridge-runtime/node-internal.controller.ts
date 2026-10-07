@@ -1,6 +1,10 @@
-import { Controller, Get, UseGuards, VERSION_NEUTRAL } from '@nestjs/common';
+import { Controller, Get, Inject, UseGuards, VERSION_NEUTRAL } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { Public } from '../../common/decorators';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { NodeBridgeSettingsService } from './node-bridge-settings.service';
 import { NodeTokenGuard } from './node-token.guard';
 
@@ -14,10 +18,20 @@ import { NodeTokenGuard } from './node-token.guard';
 @UseGuards(NodeTokenGuard)
 @Controller({ path: 'api', version: VERSION_NEUTRAL })
 export class NodeInternalController {
-  constructor(private readonly settings: NodeBridgeSettingsService) {}
+  constructor(
+    private readonly settings: NodeBridgeSettingsService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
 
+  /**
+   * With the unofficial engine off (owner decision 2026-10-05) the answer is inert: `success: false` and no pacing values,
+   * so a bridge that still polls has nothing to act on. It stays a 200, so the poller does not alarm or retry in a loop.
+   */
   @Get('whatsapp-message-settings')
-  messageSettings() {
+  async messageSettings() {
+    if (!(await this.unofficial.isEnabled())) {
+      return { success: false as const, disabled: true as const };
+    }
     return this.settings.messageSettings();
   }
 }

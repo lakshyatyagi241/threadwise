@@ -171,13 +171,12 @@ describe('navigation', () => {
     expect(en[settings[0]!.descriptionKey!]).toBeTruthy();
   });
 
-  it('lists the pricing, margins, packages, workspaces and logs pages in the operator Billing group', () => {
+  it('lists the pricing, margins, packages and logs pages in the operator Billing group', () => {
     const mine = OPERATOR_NAV.filter((i) => i.id.startsWith('wallet-'));
     expect(mine.map((i) => [i.href, en[i.labelKey]])).toEqual([
       ['/admin/wallet/pricing', 'Message pricing'],
       ['/admin/wallet/margins', 'Margins'],
       ['/admin/wallet/packages', 'Credit packages'],
-      ['/admin/wallet/workspaces', 'Workspace wallets'],
       ['/admin/wallet/logs', 'Wallet logs'],
     ]);
     const billing = OPERATOR_NAV.find((i) => i.id === 'bsp-income')?.groupKey;

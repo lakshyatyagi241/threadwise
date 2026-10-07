@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Forms",
+      "subtitle": "Build forms, put them on your site or share a link, and every answer lands in your CRM as a contact.",
+      "templates": "Templates",
+      "newForm": "New form",
+      "statsLabel": "Totals for the forms shown",
+      "stats": {
+        "forms": "Forms",
+        "published": "Published",
+        "submissions": "Submissions",
+        "needsReview": "Need attention"
+      },
+      "views": {
+        "label": "Show",
+        "all": "All",
+        "published": "Published",
+        "draft": "Drafts",
+        "paused": "Paused",
+        "archived": "Archived"
+      },
+      "search": "Search forms",
+      "loading": "Loading forms",
+      "loadFailed": "The forms could not be loaded.",
+      "retry": "Try again",
+      "empty": {
+        "title": "No forms yet",
+        "message": "Start from a template or a blank form, publish it, and share the link or paste the embed code on your site.",
+        "fromTemplate": "Start from a template",
+        "blank": "Blank form"
+      },
+      "noMatch": {
+        "title": "No forms match",
+        "message": "Try another search or view.",
+        "clear": "Clear filters"
+      },
+      "col": {
+        "name": "Form",
+        "status": "Status",
+        "submissions": "Submissions",
+        "views": "Views",
+        "conversion": "Conversion",
+        "last": "Last submission"
+      },
+      "unpublished": "Unpublished changes",
+      "version": "Version {n}",
+      "needsReview": "{count, plural, one {# needs attention} other {# need attention}}",
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "paused": "Paused",
+        "archived": "Archived"
+      },
+      "noRate": "-",
+      "never": "Never",
+      "actionsFor": "Actions for {name}",
+      "action": {
+        "edit": "Edit",
+        "submissions": "Submissions",
+        "copyLink": "Copy link",
+        "embed": "Embed on a site",
+        "duplicate": "Duplicate",
+        "pause": "Pause",
+        "resume": "Resume",
+        "archive": "Archive",
+        "delete": "Delete",
+        "restore": "Restore"
+      },
+      "loadMore": "Load more",
+      "copied": "Link copied",
+      "copyBlocked": "Copy is blocked in this browser. The link is {url}",
+      "paused": "Form paused. Visitors see that it is closed.",
+      "resumed": "Form resumed",
+      "archived": "Form archived",
+      "deleted": "Form deleted",
+      "cancel": "Cancel",
+      "archive": {
+        "title": "Archive this form?",
+        "message": "The public link and any embeds of \"{name}\" stop working. Its submissions are kept and you can still read them.",
+        "confirm": "Archive"
+      },
+      "delete": {
+        "title": "Delete this form?",
+        "message": "\"{name}\" is deleted for good. Contacts it created stay in your CRM.",
+        "confirm": "Delete"
+      },
+      "restored": "Form restored"
+    },
+    "newForm": {
+      "eyebrow": "Forms",
+      "title": "New form",
+      "close": "Close",
+      "cancel": "Cancel",
+      "create": "Create form",
+      "startFrom": "Start from",
+      "mode": {
+        "template": "A template",
+        "blank": "Blank"
+      },
+      "loadingTemplates": "Loading templates",
+      "templatesFailed": "The templates could not be loaded. You can still start from a blank form.",
+      "templates": "Templates",
+      "fieldCount": "{count, plural, one {# field} other {# fields}}",
+      "pickTemplate": "Choose a template to continue.",
+      "name": "Form name",
+      "nameHint": "Only your team sees this name.",
+      "nameRequired": "Enter a name for the form."
+    },
+    "templates": {
+      "breadcrumb": "Breadcrumb",
+      "back": "Back to forms",
+      "title": "Form templates",
+      "subtitle": "Start from a ready-made form and change anything you like.",
+      "blank": "Blank form",
+      "loading": "Loading templates",
+      "loadFailed": "The templates could not be loaded.",
+      "retry": "Try again",
+      "empty": "No templates are available.",
+      "category": {
+        "lead": "Lead capture",
+        "contact": "Contact",
+        "event": "Event",
+        "order": "Order",
+        "survey": "Survey"
+      },
+      "fields": "Fields in this template",
+      "more": "+{count} more",
+      "use": "Use this template"
+    }
+  }
+}

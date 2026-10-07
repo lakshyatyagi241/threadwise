@@ -1,7 +1,6 @@
 {
   "help": {
     "title": "مركز المساعدة",
-    "subtitle": "أدلة للميزات المتاحة في باقتك.",
     "searchLabel": "ابحث في المساعدة",
     "searchPlaceholder": "ابحث في الأدلة",
     "resultsStatus": "{count, plural, =0 {لا توجد أدلة} one {دليل واحد} two {دليلان} few {# أدلة} many {# دليلًا} other {# دليل}}",
@@ -24,9 +23,10 @@
       "apps": "سوق التطبيقات",
       "settings": "الإعدادات",
       "account": "الحساب",
-      "getting-started": "البدء"
+      "getting-started": "البدء",
+      "troubleshooting": "استكشاف الأخطاء وإصلاحها"
     },
-    "allHelp": "كل المساعدة",
+    "allHelp": "العودة إلى المساعدة",
     "onThisPage": "في هذه الصفحة",
     "openScreen": "افتح هذه الشاشة",
     "shownInEnglish": "لم تتم ترجمة هذا الدليل إلى لغتك بعد، لذلك يظهر بالإنجليزية.",
@@ -34,8 +34,21 @@
       "label": "مساعدة: {title}",
       "readMore": "اقرأ الدليل"
     },
-    "browseLabel": "تصفح حسب المجال",
-    "startHere": "ابدأ من هنا",
-    "guideCount": "{count, plural, =0 {لا توجد أدلة} one {دليل واحد} two {دليلان} few {# أدلة} many {# دليلًا} other {# دليل}}"
+    "guideCount": "{count, plural, =0 {لا توجد أدلة} one {دليل واحد} two {دليلان} few {# أدلة} many {# دليلًا} other {# دليل}}",
+    "crumb": "المزيد / المساعدة",
+    "heading": "المساعدة",
+    "headingRest": "والأدلة",
+    "back": "رجوع",
+    "askSupport": "لم تجد ما تبحث عنه؟ اسأل الدعم",
+    "askSupportShort": "الدعم",
+    "categories": "التصنيفات",
+    "allGuides": "كل الأدلة",
+    "needHuman": "تحتاج إلى شخص؟",
+    "contactSupport": "تواصل مع الدعم",
+    "popular": "الأكثر زيارة",
+    "searchResults": "نتائج البحث",
+    "read": "اقرأ الدليل",
+    "readMinutes": "{count, plural, one {قراءة دقيقة} two {قراءة دقيقتين} few {قراءة # دقائق} many {قراءة # دقيقة} other {قراءة # دقيقة}}",
+    "moreInArea": "المزيد في {area}"
   }
 }

@@ -5,7 +5,7 @@ import type { NavGates } from '@/features/_registry/types';
  * every file into a `HelpDoc` in `features/_registry/help.generated.ts`.
  */
 
-/** Where a doc sits on `/help`: a menu group id, or one of the three help-only areas. */
+/** Where a doc sits on `/help`: a menu group id, or one of the help-only areas (account, getting started, troubleshooting). */
 export const HELP_AREAS = [
   'overview',
   'inbox',
@@ -18,6 +18,7 @@ export const HELP_AREAS = [
   'settings',
   'account',
   'getting-started',
+  'troubleshooting',
 ] as const;
 export type HelpArea = (typeof HELP_AREAS)[number];
 
@@ -73,6 +74,8 @@ export interface HelpIndexEntry {
   keywords: string[];
   routes: string[];
   headings: HelpHeading[];
+  /** Whole minutes to read the guide at an ordinary pace (at least 1), from its words. */
+  readMinutes: number;
   /** True when the person's language has no translation of this doc and English is shown. */
   fallback: boolean;
 }

@@ -44,15 +44,40 @@ export function activeItemId(
   return best?.id;
 }
 
+/** The gate whose address covers `pathname`, the longest first: `/appointments/types` belongs to `/appointments`. */
+export function routeGateFor<T extends { href: string }>(
+  gates: readonly T[],
+  pathname: string,
+): T | null {
+  let best: T | null = null;
+  for (const gate of gates) {
+    if (!matchesHref(pathname, gate.href)) continue;
+    if (!best || gate.href.length > best.href.length) best = gate;
+  }
+  return best;
+}
+
 /** The id of the shell's own Settings entry (declared in `features/settings-hub/nav.ts`). */
 export const SETTINGS_NAV_ID = 'settings';
 
 /** Menu groups that are not drawn in the rail or the panel: the Help links live in the user menu. */
 export const USER_MENU_GROUPS: readonly NavGroup[] = ['help'];
 
-/** The entries drawn in the rail, the panel and the drawer. */
-export function menuItems(items: readonly ResolvedNavItem[]): ResolvedNavItem[] {
-  return items.filter((i) => !USER_MENU_GROUPS.includes(i.group));
+/**
+ * The entries drawn in the rail, the panel and the drawer: not the Help links, and not a screen that something else visible already
+ * links to (`inMenu: false`: its area's entry, or a Settings tile). The rule is "hidden only while reachable another way", so a role
+ * that can open Products but not the Store dashboard keeps its Products link: nobody loses a screen to a permission difference.
+ */
+export function menuItems(
+  items: readonly ResolvedNavItem[],
+  tiles: readonly ResolvedSettingsTile[] = [],
+): ResolvedNavItem[] {
+  const drawable = items.filter((i) => !USER_MENU_GROUPS.includes(i.group));
+  const listed = drawable.filter((i) => i.inMenu !== false);
+  const reachable = (i: ResolvedNavItem) =>
+    listed.some((o) => o.id !== i.id && matchesHref(i.href, o.href)) ||
+    tiles.some((t) => !t.comingSoon && matchesHref(i.href, t.href));
+  return drawable.filter((i) => i.inMenu !== false || !reachable(i));
 }
 
 /** The entries of the user menu's Help block (Support, Guidebook). */

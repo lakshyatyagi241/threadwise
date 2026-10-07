@@ -1,3 +1,4 @@
+import { GATE_ON } from '../../support/unofficial-gate';
 import { HttpStatus } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 import { ERROR_CODES, type CreateScheduleInput } from '@crm/contracts';
@@ -30,6 +31,7 @@ function build(assertCanAdd: ReturnType<typeof vi.fn>) {
     {} as never,
     {} as never,
     {} as never,
+    GATE_ON,
   );
   const run = () =>
     RequestContextStore.run(

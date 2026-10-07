@@ -391,6 +391,16 @@
       "pagination": "Pages",
       "perPage": "Members per page",
       "perPageOption": "{count, number} per page"
+    },
+    "advancedFilter": {
+      "trigger": "Add condition",
+      "triggerOn": "Conditions",
+      "title": "Filter by conditions",
+      "hint": "Match all or any of your conditions, and add groups for more complex filters. Applies to this list only.",
+      "loading": "Loading fields",
+      "counts": "{conditions} of {max} conditions",
+      "apply": "Apply",
+      "clear": "Clear conditions"
     }
   }
 }

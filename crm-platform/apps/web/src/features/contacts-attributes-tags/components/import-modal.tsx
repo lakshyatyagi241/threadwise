@@ -61,7 +61,16 @@ type Mapping = Partial<Record<ImportField, number | null>>;
  * would create, the plan's remaining quota. Set the values every imported contact gets, upload, follow a large
  * import to the end, download the rejected rows.
  */
-export function ImportModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ImportModal({
+  open,
+  onClose,
+  groupId,
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** Preselects the group every imported contact joins (the Groups screen's per-group Import). */
+  groupId?: string;
+}) {
   const t = useTranslations('contacts-attributes-tags.import');
   return (
     <Modal
@@ -72,12 +81,12 @@ export function ImportModal({ open, onClose }: { open: boolean; onClose: () => v
       title={t('title')}
       closeLabel={t('close')}
     >
-      {open && <ImportBody onClose={onClose} />}
+      {open && <ImportBody onClose={onClose} initialGroupId={groupId} />}
     </Modal>
   );
 }
 
-function ImportBody({ onClose }: { onClose: () => void }) {
+function ImportBody({ onClose, initialGroupId }: { onClose: () => void; initialGroupId?: string }) {
   const t = useTranslations('contacts-attributes-tags.import');
   const ts = useTranslations('contacts-attributes-tags.form');
   const qc = useQueryClient();
@@ -93,7 +102,7 @@ function ImportBody({ onClose }: { onClose: () => void }) {
   const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState('');
   const [source, setSource] = useState('');
-  const [groupId, setGroupId] = useState('');
+  const [groupId, setGroupId] = useState(initialGroupId ?? '');
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [jobId, setJobId] = useState<string | null>(null);
 

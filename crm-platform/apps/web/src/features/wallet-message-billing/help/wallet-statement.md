@@ -1,11 +1,11 @@
 ---
 id: wallet-statement
-title: Wallet and statement
+title: Expenses, wallet and statement
 summary: Your message balance, what was spent and earned in the last 30 days, and the full statement of every movement.
 area: settings
 order: 30
 documents: [tile:wallet-message-billing]
-keywords: [wallet, balance, statement, messages, charges, export, csv, ledger]
+keywords: [wallet, balance, statement, expenses, spending, messages, charges, costs, export, csv, ledger]
 ---
 
 ## What it is for
@@ -14,7 +14,7 @@ The wallet screen shows your message balance and how it has moved in the last 30
 
 ## How to use it
 
-1. Open **Settings**, go to **Business and billing** and select **Wallet and statement**.
+1. Open **Settings**, go to **Business and billing** and select **Expenses, wallet and statement**.
 2. Read the balance. When it is at or below your low-balance threshold, a warning appears at the top.
 3. To add money, enter a whole amount in **Add money** or pick a quick amount. This opens the [Wallet top-up](/billing/checkout/wallet) checkout.
 4. Select **Full statement** to open [the statement](/billing/wallet/statement).

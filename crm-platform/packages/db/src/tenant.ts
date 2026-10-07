@@ -5,6 +5,11 @@ export interface TenantContext {
   orgId: number;
   /** Staff user id, when the actor is staff. Recorded in audit rows. */
   userId?: number | null;
+  /**
+   * An operator acting as the user (act-as session). Stamped onto every audit_log row of the transaction by the
+   * `trg_audit_log_impersonation` trigger, so no writer has to remember it.
+   */
+  impersonation?: { operatorUuid: string; sessionUuid: string } | null;
 }
 
 /**
@@ -36,6 +41,14 @@ export async function withTenant<T>(
     await tx.execute(
       sql`select set_config('app.user_id', ${ctx.userId ? String(ctx.userId) : ''}, true)`,
     );
+    if (ctx.impersonation) {
+      await tx.execute(
+        sql`select set_config('app.impersonator_id', ${ctx.impersonation.operatorUuid}, true)`,
+      );
+      await tx.execute(
+        sql`select set_config('app.impersonation_id', ${ctx.impersonation.sessionUuid}, true)`,
+      );
+    }
     return fn(tx);
   });
 }

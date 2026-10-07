@@ -1,12 +1,14 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Readable } from 'node:stream';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import {
   BULK_FILTER_MAX,
   EXPORT_MAX_ROWS,
   ERROR_CODES,
   canonicalizePhone,
   type BulkDeleteContactsInput,
+  type ExportHistoryQuery,
+  type ExportHistoryResponse,
   type BulkGroupContactsInput,
   type BulkSelectionResult,
   type BulkTagContactsInput,
@@ -280,6 +282,31 @@ export class ContactBulkService {
   }
 
   // --- export ------------------------------------------------------------------------------
+
+  /** The last exports of contacts, newest first, from the audit trail (who, when, how many rows, by ids or by filter). */
+  async exportHistory(query: ExportHistoryQuery): Promise<ExportHistoryResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT a.at, u.full_name AS by_name, a.delta
+        FROM audit_log a
+        LEFT JOIN users u ON a.actor_type = 'user' AND u.org_id = a.org_id AND u.id = a.actor_id
+        WHERE a.org_id = ${ctx.orgId} AND a.module = 'contacts' AND a.action = 'export'
+        ORDER BY a.at DESC LIMIT ${query.limit}`);
+      const data = (res.rows as Array<{ at: string; by_name: string | null; delta: unknown }>).map(
+        (r) => {
+          const d = (r.delta ?? {}) as { rows?: { new?: unknown }; selection?: { new?: unknown } };
+          return {
+            at: new Date(r.at).toISOString(),
+            by: r.by_name,
+            rows: Number(d.rows?.new ?? 0),
+            selection: d.selection?.new === 'ids' ? ('ids' as const) : ('filter' as const),
+          };
+        },
+      );
+      return { data };
+    });
+  }
 
   /**
    * The CSV of a selection (WD-CON-021, 022), streamed in batches of 2,000 newest first.

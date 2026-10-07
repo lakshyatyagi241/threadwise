@@ -2,15 +2,16 @@
 
 ## Start here
 
-| If you want to…       | Read                                                                                             |
-| --------------------- | ------------------------------------------------------------------------------------------------ |
-| understand the system | [architecture/overview.md](architecture/overview.md)                                             |
-| run it locally        | [runbooks/local-development.md](runbooks/local-development.md)                                   |
-| add a table           | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist) |
-| add a module          | copy `apps/api/src/modules/crm/contacts/`                                                        |
-| see what is planned   | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                               |
-| take leads in         | [api/leads.md](api/leads.md): lead sources, the webhook door, the pipeline                       |
-| extend or connect     | [api/marketplace.md](api/marketplace.md): mini apps, integrations, the kill switch               |
+| If you want to…          | Read                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| understand the system    | [architecture/overview.md](architecture/overview.md)                                             |
+| run it locally           | [runbooks/local-development.md](runbooks/local-development.md)                                   |
+| add a table              | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist) |
+| add a module             | copy `apps/api/src/modules/crm/contacts/`                                                        |
+| see what is planned      | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                               |
+| take leads in            | [api/leads.md](api/leads.md): lead sources, the webhook door, the pipeline                       |
+| capture leads with forms | [api/forms-builder.md](api/forms-builder.md): the Forms add-on, hosted and embedded web forms    |
+| extend or connect        | [api/marketplace.md](api/marketplace.md): mini apps, integrations, the kill switch               |
 
 ## Architecture
 

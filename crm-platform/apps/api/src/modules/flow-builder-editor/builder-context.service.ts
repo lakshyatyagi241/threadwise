@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
@@ -10,6 +10,10 @@ import {
   type FlowType,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { Env } from '../../config/env.schema';
@@ -93,6 +97,7 @@ export class BuilderContextService {
     private readonly settings: PlatformSettingsService,
     private readonly config: ConfigService<Env, true>,
     private readonly formHooks: GoogleFormWebhookService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   async context(): Promise<FlbBuilderContext> {
@@ -436,9 +441,11 @@ export class BuilderContextService {
   }
 
   private async chatSenders(tx: Tx, orgId: number): Promise<FlowSender[]> {
+    // Personal-number senders are not offered while the platform switch is off (owner decision 2026-10-05).
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const [dev, cfg] = await Promise.all([
       tx.execute(
-        sql`SELECT id, uuid, device_name, phone_number FROM devices WHERE org_id = ${orgId} AND status = 'connected' ORDER BY id`,
+        sql`SELECT id, uuid, device_name, phone_number FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND ${unofficialOn}::boolean ORDER BY id`,
       ),
       tx.execute(
         sql`SELECT id, uuid, provider, display_label, phone_number FROM wa_provider_configs WHERE org_id = ${orgId} AND status = 'connected' ORDER BY id`,

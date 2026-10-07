@@ -13,6 +13,10 @@ import {
   type PlannedReceipt,
   type WindowInfo,
 } from '../../infra/providers/chat-conversations';
+import {
+  GROUP_SEND_UNAVAILABLE_MESSAGE,
+  isGroupPeer,
+} from '../../infra/providers/whatsapp/group-peer';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
   OUTBOUND_SEND_GUARD,
@@ -51,6 +55,9 @@ export interface DispatchResult {
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
+
+/** Channels that send to a phone number built from the thread key: a group key must never reach them. */
+const GROUP_SEND_CHANNEL_KINDS: ReadonlySet<string> = new Set(['whatsapp_cloud', 'whatsapp_qr']);
 
 const RESULT_TTL_SECONDS = 24 * 3600;
 /**
@@ -197,6 +204,15 @@ export class ChannelDispatcher {
     lastInboundAt: Date | null,
     now: Date = new Date(),
   ): WindowInfo {
+    // A WhatsApp group thread (`g:<group id>`) has no phone number to send to: refuse before anything is stored or queued, and again in
+    // the worker, so no path (an old queued message, a flow, a retry) can reach the individual-send code (WABA_GROUP_SEND_UNAVAILABLE).
+    if (GROUP_SEND_CHANNEL_KINDS.has(channel.kind) && isGroupPeer(envelope.to)) {
+      throw new AppError(
+        ERROR_CODES.WABA_GROUP_SEND_UNAVAILABLE,
+        GROUP_SEND_UNAVAILABLE_MESSAGE,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     if (channel.status !== 'connected') {
       throw new AppError(
         ERROR_CODES.CHANNEL_DISCONNECTED,
@@ -218,7 +234,8 @@ export class ChannelDispatcher {
       unsupported(`${envelope.media.mediaKind} files`);
     }
     if (envelope.kind === 'location' && !caps.media.includes('location')) unsupported('locations');
-    if (envelope.kind === 'contacts' && !caps.media.includes('contact')) unsupported('contact cards');
+    if (envelope.kind === 'contacts' && !caps.media.includes('contact'))
+      unsupported('contact cards');
 
     const window = adapter.windowInfo(channel, lastInboundAt, now);
     // A template is the one thing allowed outside the window; everything else is a free-form reply.

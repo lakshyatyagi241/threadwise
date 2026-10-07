@@ -6,6 +6,7 @@ import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { AuthAuditService } from './auth-audit.service';
 import { EmergencyHaltService } from './emergency-halt.service';
+import { OrgSuspensionService } from './org-suspension.service';
 import { AuthKeys } from '../support/redis-keys';
 
 export type ScreenReason =
@@ -137,11 +138,28 @@ export class SendPolicyService {
     private readonly halt: EmergencyHaltService,
     private readonly audit: AuthAuditService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly orgs: OrgSuspensionService,
   ) {}
+
+  /**
+   * A suspended workspace sends nothing (ADR-0019). Thrown as AUTH_SEND_HALTED on purpose: every pipeline already treats that code
+   * as "stop and try again later" (broadcasts and campaigns pause, scheduled runs and flows retry) instead of marking recipients
+   * failed, so work resumes by itself when the workspace is unsuspended.
+   */
+  private async assertOrgMaySend(orgId: number): Promise<void> {
+    if (orgId > 0 && (await this.orgs.isSuspended(orgId))) {
+      throw new AppError(
+        ERROR_CODES.AUTH_SEND_HALTED,
+        'Sending is paused because this workspace is suspended.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
+    }
+  }
 
   /** One-to-one send: halt, then content, then rate caps. */
   async screen(orgId: number, body: string, context: ScreenContext = {}): Promise<void> {
     await this.halt.assertNotHalted();
+    await this.assertOrgMaySend(orgId);
     try {
       const policy = await this.policy.policy();
       if (policy.waGuardrailsMode === 'off') return;
@@ -157,6 +175,7 @@ export class SendPolicyService {
   /** Bulk send (campaign, broadcast, scheduled): halt and content once per batch, no rate caps. */
   async screenBulk(orgId: number, body: string, context: ScreenContext = {}): Promise<void> {
     await this.halt.assertNotHalted();
+    await this.assertOrgMaySend(orgId);
     try {
       const policy = await this.policy.policy();
       if (policy.waGuardrailsMode === 'off') return;

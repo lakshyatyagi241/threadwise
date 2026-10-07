@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Submissions",
+      "backToForm": "Back to {name}",
+      "formFallback": "Form",
+      "count": "{count, plural, =0 {No submissions} one {1 submission} other {# submissions}} loaded",
+      "moreAvailable": "More are available",
+      "tabsLabel": "Submission groups",
+      "tabs": {
+        "all": "All",
+        "needs_attention": "Needs attention",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Search",
+        "searchPlaceholder": "Name, email or phone",
+        "status": "Status",
+        "allStatuses": "Any status",
+        "from": "From",
+        "to": "To",
+        "clear": "Clear filters"
+      },
+      "status": {
+        "received": "Received",
+        "created": "Contact created",
+        "updated": "Contact updated",
+        "needs_review": "Needs review",
+        "awaiting_payment": "Awaiting payment",
+        "paid": "Paid",
+        "failed": "Failed",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Why",
+        "todo": "What to do",
+        "no_contact_point": {
+          "what": "The visitor gave no usable email or phone, so no contact could be made.",
+          "todo": "Open the answers, add the missing detail to the contact by hand, or fix the form's mapping and retry."
+        },
+        "invalid_phone": {
+          "what": "The phone number could not be read as a valid number.",
+          "todo": "Open the answers, check the number, then retry once the form accepts it or add the contact by hand."
+        },
+        "plan_limit_reached": {
+          "what": "Your plan's contact limit was reached, so a new contact was not created.",
+          "todo": "Free up contacts or upgrade your plan, then retry."
+        },
+        "submissions_cap": {
+          "what": "Your plan's monthly submission limit was reached, so this was saved for review.",
+          "todo": "Upgrade your plan or wait for the next month, then retry."
+        },
+        "spam_score": {
+          "what": "The submission looked like spam and was set aside.",
+          "todo": "If it is a real person, open it and add them as a contact by hand."
+        },
+        "too_fast": {
+          "what": "It was sent faster than a person can fill the form, so it was set aside as spam.",
+          "todo": "If it is a real person, open it and add them as a contact by hand."
+        },
+        "internal_error": {
+          "what": "Something went wrong on our side while handling it. The answers are kept.",
+          "todo": "Retry it. If it fails again, contact support with the submission time."
+        },
+        "unknown": {
+          "what": "This submission is set aside for a reason this version of the app does not recognise.",
+          "todo": "Open it to see the details, then retry or handle it by hand."
+        }
+      },
+      "table": {
+        "received": "Received",
+        "visitor": "Visitor",
+        "status": "Status",
+        "contact": "Contact",
+        "company": "Company",
+        "version": "Version",
+        "open": "Open submission from {who}"
+      },
+      "anonymous": "No name given",
+      "answersRemovedShort": "Answers removed",
+      "versionShort": "v{n}",
+      "noLink": "None",
+      "unnamedContact": "Open contact",
+      "unnamedCompany": "Open company",
+      "drawer": {
+        "title": "Submission from {who}",
+        "close": "Close",
+        "loading": "Opening submission",
+        "errorTitle": "This submission could not be opened.",
+        "errorBody": "Check your connection and try again.",
+        "retryLoad": "Try again",
+        "auditNote": "Opening a submission's answers is recorded in the audit log.",
+        "answers": "Answers",
+        "noAnswers": "This submission has no answers.",
+        "emptyAnswer": "No answer",
+        "yes": "Yes",
+        "no": "No",
+        "removedTitle": "Answers were removed",
+        "removedBody": "The answers were erased or purged. Only this record remains, and the contact was kept.",
+        "summary": "Summary",
+        "receivedAt": "Received",
+        "formVersion": "Form version",
+        "spamScore": "Spam score",
+        "error": "Error",
+        "attribution": "Where it came from",
+        "noAttribution": "No source details were captured.",
+        "utm": "Campaign tags",
+        "referrer": "Referrer",
+        "pageUrl": "Page",
+        "userAgent": "Browser",
+        "consent": "Consent",
+        "consentGiven": "Consent given",
+        "consentText": "Text the visitor saw",
+        "consentVersion": "Text version",
+        "consentAt": "Given at",
+        "noConsent": "This form did not ask for consent.",
+        "links": "Records",
+        "actions": "Actions"
+      },
+      "actions": {
+        "retry": "Retry",
+        "retrying": "Retrying",
+        "delete": "Delete answers",
+        "deleting": "Deleting",
+        "export": "Export CSV",
+        "exporting": "Exporting",
+        "exportHintAttention": "Pick a single status to export from this group, or use All.",
+        "exportHintSearch": "The export ignores the search text.",
+        "notSpam": "Not spam: process it"
+      },
+      "confirmDelete": {
+        "title": "Delete these answers?",
+        "message": "This erases the answers of this submission for good. A row stays in the list as a record that it happened, and the contact is never deleted.",
+        "confirm": "Delete answers",
+        "cancel": "Cancel"
+      },
+      "toast": {
+        "retried": "Retried. The submission is now: {status}.",
+        "notRetryable": "Only submissions that need review or failed can be retried.",
+        "purged": "The answers were already removed, so there is nothing to retry.",
+        "retryFailed": "The retry did not go through. Please try again.",
+        "deleted": "The answers were deleted. The contact was kept.",
+        "deleteFailed": "The answers could not be deleted. Please try again.",
+        "exported": "The CSV was downloaded.",
+        "exportTruncated": "The export was cut at the newest {max} rows. Narrow the dates to get the rest.",
+        "exportFailed": "The export could not be made. Please try again."
+      },
+      "state": {
+        "loading": "Loading submissions",
+        "errorTitle": "Submissions could not be loaded.",
+        "errorBody": "Check your connection and try again.",
+        "retry": "Try again",
+        "lockedTitle": "Forms is not part of your plan",
+        "lockedBody": "Add the Forms app to your workspace to collect and review submissions.",
+        "upgrade": "See plans",
+        "emptyTitle": "No submissions yet",
+        "emptyBody": "Share the form's link or embed it on your site. Every submission appears here as soon as someone sends it.",
+        "emptyShare": "Share this form",
+        "emptyFilteredTitle": "No submissions match",
+        "emptyFilteredBody": "Nothing fits these filters. Clear them to see everything.",
+        "loadMore": "Load more",
+        "loadingMore": "Loading more"
+      },
+      "cap": {
+        "notice": "Some submissions were saved for review because your plan's monthly submission limit was reached.",
+        "upgrade": "Upgrade your plan"
+      }
+    }
+  }
+}

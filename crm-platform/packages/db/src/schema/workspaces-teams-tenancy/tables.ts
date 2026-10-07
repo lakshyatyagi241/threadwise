@@ -19,6 +19,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import { aiAgents } from '../ai-agents-training/tables';
+import { platformOperators } from '../auth-registration-security/core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
 import { plans } from '../plans-subscriptions-trials/plans';
@@ -29,14 +30,27 @@ export const impersonationSessions = pgTable(
   {
     id: idColumn('id').notNull().primaryKey().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().unique().defaultRandom(),
-    adminUserId: idColumn('admin_user_id').notNull(),
+    /** The platform operator inside the workspace (never a workspace user). */
+    operatorId: idColumn('operator_id')
+      .notNull()
+      .references(() => platformOperators.id, { onDelete: 'restrict' }),
+    /** The organization the session acts in (baseline name kept). */
     targetWorkspaceId: idColumn('target_workspace_id').notNull(),
-    originalWorkspaceId: idColumn('original_workspace_id'),
+    /** The workspace owner the operator acts as. */
+    targetUserId: idColumn('target_user_id').notNull(),
     reason: text('reason').notNull(),
+    readOnly: boolean('read_only').notNull().default(false),
     ip: text('ip'),
     userAgent: text('user_agent'),
     startedAt: timestamp('started_at', { withTimezone: true }).notNull().defaultNow(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
     endedAt: timestamp('ended_at', { withTimezone: true }),
+    /** operator | expiry | new_session | access_revoked */
+    endedBy: text('ended_by'),
+    /** sha256 of the one-time code; the code itself is never stored. */
+    handoffCodeHash: text('handoff_code_hash'),
+    handoffExpiresAt: timestamp('handoff_expires_at', { withTimezone: true }).notNull(),
+    handoffUsedAt: timestamp('handoff_used_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -48,11 +62,20 @@ export const impersonationSessions = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     foreignKey({
-      name: 'fk_impersonation_sessions_original_workspace_id',
-      columns: [t.originalWorkspaceId],
-      foreignColumns: [organizations.id],
-    }).onDelete('set null'),
-    index('idx_impersonation_sessions_admin_user_id_ended_at').on(t.adminUserId, t.endedAt),
+      name: 'fk_impersonation_sessions_target_user',
+      columns: [t.targetWorkspaceId, t.targetUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    uniqueIndex('uq_impersonation_sessions_one_open')
+      .on(t.operatorId)
+      .where(sql`${t.endedAt} IS NULL`),
+    uniqueIndex('uq_impersonation_sessions_handoff')
+      .on(t.handoffCodeHash)
+      .where(sql`${t.handoffCodeHash} IS NOT NULL`),
+    index('idx_impersonation_sessions_operator_started').on(t.operatorId, t.startedAt.desc()),
+    index('idx_impersonation_sessions_open_expiry')
+      .on(t.expiresAt)
+      .where(sql`${t.endedAt} IS NULL`),
     index('idx_impersonation_sessions_target_workspace_id').on(t.targetWorkspaceId),
   ],
 );

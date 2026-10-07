@@ -8,7 +8,7 @@
       },
       "sections": {
         "insights": "Insights",
-        "plans": "Plans & pricing",
+        "plans": "Workspaces & plans",
         "billing": "Billing & revenue",
         "support": "Support & website",
         "channels": "Channels & messaging",
@@ -34,6 +34,10 @@
         "privacy": "Privacy and tracking",
         "infrastructure": "Infrastructure",
         "localization": "Localization"
+      },
+      "badges": {
+        "notSupported": "Not supported",
+        "noWorkspaces": "No workspaces"
       }
     },
     "shell": {

@@ -255,18 +255,228 @@ A team of another workspace is `404`.
 Removes the team and its member places; conversations assigned to it lose the team (the foreign key sets `assignee_team_id` null) and
 the `team.deleted` event lets routing drop its references.
 
+## Operator Workspaces hub (WD-WSP-023, 025)
+
+Operator-only (`/v2/platform/*`, `OperatorGuard` + `PlatformPermissionGuard`). Read cross-tenant through the platform door, never a
+tenant transaction. Contract: `packages/contracts/src/workspaces-teams-tenancy/admin-hub.ts`.
+
+| Method | Path                                    | Key                            | Notes                                          |
+| ------ | --------------------------------------- | ------------------------------ | ---------------------------------------------- |
+| GET    | `/v2/platform/workspaces`               | `platform.workspace.view_all`  | list, filters, keyset cursor, KPIs             |
+| GET    | `/v2/platform/workspaces/:id`           | `platform.workspace.view_all`  | one workspace's dashboard                      |
+| POST   | `/v2/platform/workspaces/:id/suspend`   | `platform.workspace.suspend`   | body `{ reason? }`; returns the refreshed row  |
+| POST   | `/v2/platform/workspaces/:id/unsuspend` | `platform.workspace.unsuspend` | clears the `frozen` flag only; returns the row |
+
+`view_all` is seeded for Super Admin, Admin, Platform Support and Auditor (`20261013090000_rbac_platform_roles.sql`). Suspend and lift
+delegate to the platform inbox (frozen flag, status sync, `platform.inbox.*` audit); a remaining `fraud` or `tos_violation` flag keeps
+the workspace suspended after a lift (`suspendedBy` shows it). Reads are not audited.
+
+### GET /v2/platform/workspaces
+
+Query: `q` (name, slug, owner name or email), `status` (`all|active|suspended`), `plan` (slug), `state` (`free_trial|free|paid_active|paid_grace|paid_lapsed|custom_quote`),
+`provider` (effective provider key), `lowBalanceOnly`, `sort` (`created` newest first, `last_active` most recent first, never-active last, `name` A to Z), `limit` (1..100, default 25), `cursor`.
+The cursor carries the sort value and the id and only fits the sort it came from (another sort or a made-up cursor is 422).
+
+```json
+{
+  "data": [
+    {
+      "workspaceId": "5afcfeda-11ce-4e2f-bb97-5de36d09834e",
+      "name": "Hub Alpha",
+      "slug": "hub-alpha",
+      "status": "active",
+      "suspendedBy": [],
+      "createdAt": "2026-09-07T10:00:00.000Z",
+      "provider": {
+        "key": "meta",
+        "name": "Meta Cloud API (direct)",
+        "source": "platform_setting"
+      },
+      "numbers": 1,
+      "plan": { "slug": "hub_pro", "name": "Hub Pro", "known": true, "platformOwned": false },
+      "validity": {
+        "state": "paid_active",
+        "trialEndsAt": null,
+        "planEndsAt": "2026-10-27T10:00:00.000Z",
+        "daysLeft": 20,
+        "renewalWindow": false,
+        "graceEndsAt": null
+      },
+      "limits": {
+        "monthlyMessages": 1000,
+        "users": 25,
+        "contacts": null,
+        "devices": null,
+        "overridden": true
+      },
+      "wallet": { "currency": "USD", "balanceMinor": "15", "low": true },
+      "owner": {
+        "userId": "...",
+        "name": "Alice Owner",
+        "email": "alice@hub.test",
+        "phone": "+919876543210"
+      },
+      "mrr": "10.00",
+      "messages7d": 15,
+      "lastActiveAt": "2026-10-06T11:00:00.000Z",
+      "health": "low"
+    }
+  ],
+  "page": { "nextCursor": "eyJzb3J0Ijoi...", "hasMore": true, "limit": 25 },
+  "kpis": {
+    "total": 3,
+    "active": 3,
+    "suspended": 0,
+    "trial": 1,
+    "newThisMonth": 1,
+    "lowBalance": 2,
+    "mrr": "10.00",
+    "currency": "USD"
+  },
+  "filters": {
+    "plans": [{ "slug": "hub_pro", "name": "Hub Pro" }],
+    "providers": [{ "key": "meta", "name": "Meta Cloud API (direct)" }]
+  }
+}
+```
+
+Rules worth knowing:
+
+- Provider: the workspace's override, else the registry default, else the platform setting (`WABA_DEFAULT_PROVIDER`), the same choice a new number follows. `numbers` counts connected `waba` configs.
+- Limits: plan limits with the workspace's override applied; `0` and `-1` are unlimited (`null`); a lapsed paid plan shows the free plan's caps; platform-owned is unlimited.
+- Wallet: in the workspace's billing currency (its own currency when the platform can bill it, else the platform currency); `low` is the wallet list's rule (threshold converted to that currency).
+- Owner: `organizations.settings.ownerUserId`, else `workspace_settings.owner_user_id`, else a holder of the Admin role. `phone` is `user_profiles.phone_e164`.
+- `mrr`: the plan price per month (offer-aware) converted to the platform currency, only while the plan is paid (active or in grace) and the workspace is not platform-owned. Marketplace subscription revenue is not included.
+- `health`: `suspended`, then `new` (created under 7 days ago with no outbound message in 7 days), then `good` (500+), `active` (50+), `low`, `idle` by outbound messages in 7 days.
+- `messages7d` and `lastActiveAt` come from one grouped query each for the page's workspaces.
+
+### GET /v2/platform/workspaces/:id
+
+```json
+{
+  "row": { "...": "the row above" },
+  "members": 1,
+  "contacts": 0,
+  "openTickets": 1,
+  "messages30d": [
+    { "day": "2026-09-07", "sent": 0, "delivered": 0 },
+    "... 30 UTC days, zero-filled, oldest first"
+  ],
+  "deliveredPct": 80,
+  "adminNote": "VIP",
+  "can": {
+    "suspend": true,
+    "unsuspend": true,
+    "impersonate": true,
+    "editPlan": true,
+    "manageProvider": true,
+    "adjustWallet": true
+  }
+}
+```
+
+`can` comes from the caller's platform permissions (`platform.workspace.suspend`, `.unsuspend`, `.impersonate`, `platform.whatsapp_providers.manage`);
+`editPlan` and `adjustWallet` need the super admin operator role, as the plan and wallet endpoints do. `deliveredPct` is null when nothing was sent in 30 days.
+Unknown id is 404 `NOT_FOUND`.
+
+### POST /v2/platform/workspaces/:id/suspend and /unsuspend
+
+Body for suspend: `{ "reason": "Chargeback" }` (optional, max 500). Response 200: the refreshed hub row (for example `status: "suspended"`, `suspendedBy: ["frozen"]`, `health: "suspended"`).
+
+## Operator impersonation: "Login as owner" (WD-WSP-032, 033)
+
+An operator enters a workspace as its owner through an **act-as token**, not the owner's session (ADR-0020). Shapes:
+`startImpersonationRequestSchema`, `startImpersonationResponseSchema`, `redeemImpersonationRequestSchema`,
+`redeemImpersonationResponseSchema`, `impersonationStatusSchema`, `stopImpersonationResponseSchema` in `admin-hub.ts`.
+
+The flow: console **start** (operator token) -> one-time handoff URL -> web `/impersonate?code=` **redeem** (server to server) ->
+act-as cookie -> workspace app with the banner -> **stop** (banner) -> back to the console.
+
+### POST /v2/platform/workspaces/:id/impersonate
+
+Operator token. Needs the permission `platform.workspace.impersonate` AND the `super_admin` operator role (MFA enrolment is enforced by
+the operator guard). The Admin Team Inbox launcher (`POST /v2/platform/inbox/workspaces/:id/impersonate`, body `{ reason }`) starts the same
+session, with writes allowed. Starting ends any session this operator already had open (`ended_by: new_session`).
+
+```json
+// request
+{ "reason": "Ticket 1234 debug", "readOnly": true }
+// 201
+{
+  "sessionId": "6a9f0c52-1b6e-4a35-8f6d-3d2f7a0b9c11",
+  "workspaceId": "9d1f0b9a-6c52-4a3b-8d5e-2f6a7c1b0e22",
+  "workspaceName": "Acme Co",
+  "handoffUrl": "https://app.example.com/impersonate?code=hX3...43 characters",
+  "expiresAt": "2026-10-07T11:00:00.000Z"
+}
+```
+
+`reason` 8 to 500 characters (422 below), `readOnly` defaults to false. `expiresAt` is at most `IMPERSONATION_MAX_MINUTES` (60) after the start.
+The code in `handoffUrl` is valid 60 seconds and once; only its hash is stored. The owner is `organizations.settings.ownerUserId`, else the oldest
+active holder of the Owner preset. Errors: 401 no operator token, 403 `AUTH_OPERATOR_ROLE_REQUIRED` (not super admin) or
+`RBAC_PLATFORM_PERMISSION_REQUIRED`, 404 unknown workspace, 409 `WSP_IMPERSONATION_NO_OWNER`.
+
+### POST /v2/auth/impersonation/redeem (public)
+
+Called by the web app's `/impersonate` route, never by page code (the generic `/api/v2` proxy refuses it, because the answer carries a token).
+
+```json
+// request
+{ "code": "hX3...43 characters" }
+// 200
+{ "accessToken": "eyJ...", "expiresIn": 3541, "expiresAt": "2026-10-07T11:00:00.000Z", "workspaceSlug": "acme" }
+```
+
+The token's claims: `sub` = the owner's user id, `org` = the workspace, `typ: "user"`, `sid` = the session uuid, and
+`imp: { sid, oid (operator id), ro (read-only), exp (session end, unix seconds) }`. It is access-only: there is **no refresh token**, it lives until the
+session ends (never past 60 minutes) and nothing renews it. Unknown, used, expired or ended code: 400 `WSP_IMPERSONATION_CODE_INVALID` (one answer for all);
+more than 20 tries a minute from one address: 429 `RATE_LIMITED`.
+
+### GET /v2/auth/impersonation and POST /v2/auth/impersonation/stop
+
+Workspace token. `GET` feeds the banner: `{ "active": true, "sessionId": "...", "operatorName": "Root Operator", "reason": "Ticket 1234 debug", "readOnly": false,
+"expiresAt": "..." }`, or `{ "active": false, ... }` for every ordinary session. `POST stop` ends the session (also allowed in read-only mode), writes
+`platform.impersonation.stopped` with the duration and the number of audited changes by action, and answers `{ "returnUrl": "https://app.example.com/admin/workspaces" }`.
+After stop, the same token fails on its next request with 401 `WSP_IMPERSONATION_ENDED`. From an ordinary session `stop` changes nothing.
+
+### What an act-as session may not do
+
+Checked on every request, in this order, by `ImpersonationGuard` (list: `IMPERSONATION_FORBIDDEN` in `impersonation-rules.ts`):
+
+- **403 `WSP_IMPERSONATION_FORBIDDEN`**, read-only or not: changing the owner's password or email, 2FA setup/disable/recovery codes, the owner's sessions, account deletion,
+  workspace API keys (`/developer/keys`) and AI provider keys, switching workspace, and everything under `/v2/platform/*`.
+- **403 `WSP_IMPERSONATION_READ_ONLY`**: any request that is not GET, HEAD or OPTIONS in a read-only session (except `POST /v2/auth/impersonation/stop`).
+- **401 `WSP_IMPERSONATION_ENDED`**: the session was stopped, ran out, was replaced by a newer one of the same operator, or its operator is no longer an active super admin.
+
+The owner's own account gates (forced password change, 2FA enrolment, unverified email) are skipped for the operator. A suspended workspace can still be entered
+(as in WaDesk) so support can look; writes follow the session's own read-only flag.
+
+### Audit
+
+Both actors are recorded. `security_events`: `platform.impersonation.started / redeemed / ended / stopped` with the operator as actor and the owner in the payload,
+and every event written during an act-as request carries `payload.impersonation = { sessionId, asUserId }` with the operator as actor. `audit_log` (visible in the
+workspace's own activity log): a `started` and `stopped` row with actor `platform_operator`, and every audit row written during the session is stamped
+`delta._impersonatedBy = { old: null, new: { operatorId (uuid), sessionId } }` by a trigger.
+
+Configuration: the handoff URL is built from `WEB_APP_URL` (the public address of the web app, which serves both the console and the workspace app).
+
 ## Error codes added by this domain
 
-| Code                            | Status | When                                                          |
-| ------------------------------- | ------ | ------------------------------------------------------------- |
-| `WSP_ALREADY_MEMBER`            | 409    | invite: the address is an active or pending member            |
-| `WSP_CANNOT_ACT_ON_HIGHER_RANK` | 403    | the target outranks the caller                                |
-| `WSP_CANNOT_REMOVE_SELF`        | 422    | remove yourself                                               |
-| `WSP_CANNOT_REMOVE_OWNER`       | 422    | remove an Owner                                               |
-| `WSP_INVITE_INVALID`            | 400    | any problem with an invitation token (deliberately uniform)   |
-| `WSP_INVITE_NOT_PENDING`        | 409    | resend for a member who has already joined                    |
-| `WSP_TEAM_NAME_TAKEN`           | 409    | team name already used in the workspace                       |
-| `WSP_TEAM_MEMBER_UNKNOWN`       | 422    | a `memberIds` entry is not an active member of this workspace |
+| Code                             | Status | When                                                           |
+| -------------------------------- | ------ | -------------------------------------------------------------- |
+| `WSP_ALREADY_MEMBER`             | 409    | invite: the address is an active or pending member             |
+| `WSP_CANNOT_ACT_ON_HIGHER_RANK`  | 403    | the target outranks the caller                                 |
+| `WSP_CANNOT_REMOVE_SELF`         | 422    | remove yourself                                                |
+| `WSP_CANNOT_REMOVE_OWNER`        | 422    | remove an Owner                                                |
+| `WSP_INVITE_INVALID`             | 400    | any problem with an invitation token (deliberately uniform)    |
+| `WSP_INVITE_NOT_PENDING`         | 409    | resend for a member who has already joined                     |
+| `WSP_TEAM_NAME_TAKEN`            | 409    | team name already used in the workspace                        |
+| `WSP_TEAM_MEMBER_UNKNOWN`        | 422    | a `memberIds` entry is not an active member of this workspace  |
+| `WSP_IMPERSONATION_READ_ONLY`    | 403    | a write in a read-only impersonation session                   |
+| `WSP_IMPERSONATION_FORBIDDEN`    | 403    | an owner-only or operator route inside an impersonation        |
+| `WSP_IMPERSONATION_NO_OWNER`     | 409    | the workspace has no active owner to act as                    |
+| `WSP_IMPERSONATION_CODE_INVALID` | 400    | the handoff code is unknown, used, expired or its session over |
+| `WSP_IMPERSONATION_ENDED`        | 401    | the act-as token's session ended, expired or lost its operator |
 
 Role rules answer with the RBAC codes `RBAC_ROLE_GRANT_FORBIDDEN` (403), `RBAC_SELF_ROLE_CHANGE` (422) and `RBAC_LAST_OWNER` (422).
 Also used: `PLAN_LIMIT_REACHED` (422, seat limit), `ROW_VERSION_CONFLICT` (409), `VALIDATION_FAILED` (422), `FORBIDDEN` (403), `NOT_FOUND` (404),
