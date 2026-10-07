@@ -233,6 +233,8 @@ describe('the phone unlinks the device', () => {
     await flush();
     expect(x.factory.deleted).toBe(1);
     expect(x.statuses().at(-1)).toBe('logged_out:0');
+    // The close code is kept as the reason (spec R8): an unlink is the person removing the link.
+    expect(x.reports.at(-1)?.stateReason).toBe('unlinked_on_phone');
     expect(x.ended).toBe(1);
     await x.clock.advance(120_000);
     expect(x.factory.sockets).toHaveLength(1);
@@ -245,6 +247,8 @@ describe('the phone unlinks the device', () => {
     x.factory.last.emit({ type: 'close', code: 403 });
     await flush();
     expect(x.statuses().at(-1)).toBe('logged_out:0');
+    // A refusal can mean a restriction: it is reported as `forbidden`, never as a ban (we cannot tell).
+    expect(x.reports.at(-1)?.stateReason).toBe('forbidden');
   });
 
   it('a corrupt session (500) is wiped and the device connects again', async () => {

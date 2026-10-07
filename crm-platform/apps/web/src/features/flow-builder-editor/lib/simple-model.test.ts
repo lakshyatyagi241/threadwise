@@ -471,4 +471,25 @@ describe('the list of flows (groups)', () => {
     expect(groupsOf(gone).map((x) => x.name)).toEqual(['Hello']);
     expect(allSteps(gone).find((s) => s.id === 'b')!.links).toEqual([null, 'm2']);
   });
+
+  it('flags a list or quick replies that copies the pick to a contact property without choosing one', () => {
+    for (const type of ['buttons', 'list'] as const) {
+      let d = emptyDoc();
+      d.trigger.data.keywords = 'hi';
+      const base = newStep(type, []);
+      const step: SimpleStep = {
+        ...base,
+        data: { ...base.data, saveProperty: true, propertyKey: '' },
+      };
+      d = insertStep(d, 0, 0, step);
+      const about = (doc: typeof d) =>
+        problems(doc, { senderRequired: false })
+          .map((p) => p.message)
+          .filter((m) => m.includes('contact property'));
+      expect(about(d)).toEqual([
+        'Step 1.1: choose the contact property the picked option is copied to.',
+      ]);
+      expect(about(updateStep(d, step.id, { data: { propertyKey: 'plan' } }))).toEqual([]);
+    }
+  });
 });

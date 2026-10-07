@@ -9,7 +9,6 @@ import {
   flbCleanDateFormat,
 } from '@crm/contracts';
 import { cn } from '@crm/ui';
-import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import {
   Check,
@@ -34,6 +33,7 @@ import {
   type ListItem,
 } from './helpers';
 import { AddLink, OptionRow, V } from './parts';
+import { ChoiceVariableField, SaveToAttributeField } from './save-to-attribute';
 import { ButtonsPreview, ListPreview, PollPreview } from './previews';
 
 /** Replaces option `i` of a string-options node. */
@@ -60,6 +60,8 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
         ))}
         <AddLink onClick={addOption}>Add button</AddLink>
       </Field>
+      <ChoiceVariableField data={d} set={set} />
+      <SaveToAttributeField data={d} set={set} noun="choice" />
     </>
   );
 }
@@ -165,6 +167,8 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
           </div>
         ) : null}
       </Field>
+      <ChoiceVariableField data={d} set={set} />
+      <SaveToAttributeField data={d} set={set} noun="choice" />
     </>
   );
 }
@@ -172,7 +176,6 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
-  const feed = usePickerFeed();
   // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
   const checked =
     flbCleanAskInputType(d.validate) !== 'text' && options.length === 0 && d.acceptMedia !== true;
@@ -245,26 +248,6 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
               />
             </Field>
           ) : null}
-          <Field label="Also save on a contact property">
-            <Check checked={d.saveProperty === true} onChange={(x) => set('saveProperty', x)}>
-              Copy the answer to the contact
-            </Check>
-            {d.saveProperty === true ? (
-              <select
-                aria-label="Contact property"
-                value={typeof d.propertyKey === 'string' ? d.propertyKey : ''}
-                onChange={(e) => set('propertyKey', e.target.value)}
-                className={`${controlClass} mt-2`}
-              >
-                <option value="">Choose a property…</option>
-                {(feed.data?.custom ?? []).map((pr) => (
-                  <option key={pr.key} value={pr.key}>
-                    {pr.name}
-                  </option>
-                ))}
-              </select>
-            ) : null}
-          </Field>
         </>
       ) : null}
       <Field
@@ -280,6 +263,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       >
         <TextInput value={d.var} placeholder="answer" onChange={(v) => set('var', v)} />
       </Field>
+      <SaveToAttributeField data={d} set={set} noun="answer" />
       <Field
         label="Accept a file/photo upload"
         hint={`When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp${

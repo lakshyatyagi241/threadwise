@@ -41,6 +41,7 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
@@ -70,8 +71,10 @@ import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gatewa
 import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { WebhookFanoutModule } from './modules/webhook-fanout';
+import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
+import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
 import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
@@ -163,7 +166,9 @@ import { HealthModule } from './health/health.module';
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
+    AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
+    WhatsappDevicesBaileysModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
     FlowBuilderEditorModule,
@@ -209,6 +214,7 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,
+    OutboundWebhooksModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,

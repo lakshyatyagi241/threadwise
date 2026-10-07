@@ -50,6 +50,7 @@ export function RowActions({
     <Menu
       label={t('menu', { name: row.name })}
       align="end"
+      placement="fixed"
       triggerClassName={cn('size-8 px-0', triggerClassName)}
       triggerProps={{ 'aria-label': t('menu', { name: row.name }) }}
       trigger={<MoreIcon className="size-4" />}

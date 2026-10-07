@@ -793,6 +793,12 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         if (!a || !str(a.label).trim() || !str(a.value).trim())
           bad('give the button a name and a link.');
       }
+      if (
+        (s.type === 'buttons' || s.type === 'list') &&
+        d.saveProperty === true &&
+        !str(d.propertyKey).trim()
+      )
+        bad('choose the contact property the picked option is copied to.');
       if (s.type === 'buttons') {
         if (!str(d.prompt).trim()) bad('write the message above the buttons.');
         const o = arr(d.options).map(str);

@@ -1,4 +1,9 @@
-import { flbAskNeedsInputCheck, flbCleanAskInputType, flbToRuntimeData } from '@crm/contracts';
+import {
+  flbAskNeedsInputCheck,
+  flbCleanAskInputType,
+  flbSanitizeConditionGroup,
+  flbToRuntimeData,
+} from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
 import { cleanVar } from './clean-var';
@@ -159,6 +164,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         }),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
       };
     }
     case 'buttons': {
@@ -171,6 +177,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         })),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
@@ -224,7 +231,10 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
               value: str(data.value),
             },
           ];
+      // The optional nested tree (beyond WaDesk): when valid it wins over the flat chain at run time.
+      const conditionGroup = flbSanitizeConditionGroup(data.conditionGroup, (v) => cleanVar(v, ''));
       return {
+        ...(conditionGroup ? { conditionGroup } : {}),
         conditions,
         logicOperators: arr(data.operators).map((o) =>
           str(o).toUpperCase() === 'OR' ? 'OR' : 'AND',

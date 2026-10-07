@@ -23,6 +23,8 @@ import { LEAD_ERROR_CODES } from '../leads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
 import { FORMS_ERROR_CODES } from '../forms-builder/errors';
+import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
+import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -44,6 +46,8 @@ export const ERROR_CODES = {
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
   ...FORMS_ERROR_CODES,
+  ...WADEV_ERROR_CODES,
+  ...AIAG_ERROR_CODES,
   // generic
   /**
    * An action targeted the unofficial WhatsApp engine (personal numbers over Baileys) while the platform switch is off.

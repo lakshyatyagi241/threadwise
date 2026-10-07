@@ -30,7 +30,9 @@ import { MessageTemplatesWorkerModule } from '../modules/message-templates';
 import { NodeBridgeRuntimeWorkerModule } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
+import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
+import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
@@ -71,6 +73,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
+    OutboundWebhooksWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
@@ -84,6 +87,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ShopifyWoocommerceWorkerModule,
     ScheduledQueueWarmerWorkerModule,
     FlowBuilderEditorWorkerModule,
+    AiAgentsTrainingWorkerModule,
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
     LeadsWorkerModule,
