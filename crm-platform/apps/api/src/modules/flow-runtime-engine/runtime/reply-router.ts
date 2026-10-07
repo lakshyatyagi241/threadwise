@@ -77,7 +77,13 @@ export type ReplyDecision =
   /** Leave `fromNodeId` by `port`; the node may be an older menu than the one waiting. */
   | { action: 'route'; fromNodeId: string; port: number; setVars: Record<string, unknown> }
   /** The branch picked has nothing after it (or the target is gone): park on the last menu or end. */
-  | { action: 'dead_end'; setVars: Record<string, unknown> };
+  | {
+      action: 'dead_end';
+      setVars: Record<string, unknown>;
+      /** The node and port the answer picked, when it picked one (the property save reads them). */
+      fromNodeId?: string;
+      port?: number;
+    };
 
 const lc = (s: unknown) =>
   String(s ?? '')
@@ -163,7 +169,7 @@ function routeQuestion(
       wait: { nodeId, variable, kind: 'Question', answerItems: items, persistent: true },
     };
   }
-  return { action: 'dead_end', setVars };
+  return { action: 'dead_end', setVars, fromNodeId: nodeId, port };
 }
 
 function routeList(
@@ -207,7 +213,7 @@ function routeList(
   const edge = edgeFrom(graph, nodeId, port);
   if (edge && nodeById(graph, edge.to))
     return { action: 'route', fromNodeId: nodeId, port, setVars };
-  return { action: 'dead_end', setVars };
+  return { action: 'dead_end', setVars, fromNodeId: nodeId, port };
 }
 
 function routePoll(
@@ -326,4 +332,30 @@ export function routeReply(run: RunState, reply: InboundReply): ReplyDecision {
         wait.persistent === true,
       );
   }
+}
+
+/**
+ * "Also save to a contact attribute" on a List, Quick replies or Ask question: the contact property key and the text to write, or
+ * null when nothing is to be saved. Pure; the engine writes it. A List or Quick replies saves the picked option's TITLE (a typed
+ * number is resolved to its title); an Ask saves the answer as typed. Nothing is saved when the reply picked no option (the "no
+ * match" port, or a menu that stayed open) or the answer is blank.
+ */
+export function propertyToSave(
+  graph: RuntimeGraph,
+  decision: ReplyDecision,
+): { key: string; value: string } | null {
+  if (decision.action !== 'route' && decision.action !== 'dead_end') return null;
+  if (decision.fromNodeId === undefined || decision.port === undefined || decision.port <= 0)
+    return null;
+  const node = nodeById(graph, decision.fromNodeId);
+  if (!node) return null;
+  if (node.type !== 'List' && node.type !== 'InteractiveButtons' && node.type !== 'Question')
+    return null;
+  const key = String(node.props.savePropertyKey ?? '').trim();
+  if (key === '') return null;
+  const value =
+    node.type === 'List'
+      ? (listRows(node).find((r) => r.port === decision.port)?.title ?? '')
+      : String(decision.setVars[node.id] ?? '');
+  return value.trim() === '' ? null : { key, value: value.trim() };
 }
