@@ -289,7 +289,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
       </h2>
       <p className="sr-only">{t(`stepHint.${stepKey}`)}</p>
 
-      <div className="pb-6" key={w.epoch}>
+      <div className={view === 2 ? 'pb-2' : 'pb-6'} key={w.epoch}>
         {view === 1 && (
           <StepTemplate
             name={draft.name}

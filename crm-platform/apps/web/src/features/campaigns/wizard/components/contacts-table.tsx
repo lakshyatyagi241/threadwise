@@ -140,12 +140,10 @@ export function ContactsTable({
           )}
         </button>
         <div className="ms-auto flex items-center gap-2 text-sm">
-          {(ticked > 0 || audience.allMatching) && (
+          {(ticked > 0 || (audience.allMatching && stale)) && (
             <>
               <span aria-live="polite" className="text-muted-foreground">
-                {audience.allMatching && !stale
-                  ? t('selectedAll')
-                  : t('selectedCount', { count: ticked })}
+                {t('selectedCount', { count: ticked })}
               </span>
               <Button
                 size="sm"

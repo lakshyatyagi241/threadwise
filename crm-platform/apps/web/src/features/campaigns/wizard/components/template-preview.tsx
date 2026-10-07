@@ -50,7 +50,7 @@ export function TemplatePreview({
         className={cn(
           'mx-auto flex w-full max-w-[340px] flex-col overflow-hidden rounded-[2rem] border-[6px] border-neutral-800 bg-[#ece5dd] shadow-xl',
           compact
-            ? 'h-[clamp(300px,calc(100dvh-34rem),520px)]'
+            ? 'h-[clamp(200px,calc(100dvh-39rem),520px)]'
             : 'h-[clamp(340px,calc(100vh-390px),600px)]',
         )}
       >
