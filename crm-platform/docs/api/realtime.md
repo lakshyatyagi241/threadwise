@@ -108,7 +108,7 @@ Every push is one envelope, and the socket.io event name is `type`:
 | `inbox.assignment`          | `user` / `conv`        | `{ conversationId, assigneeUserId, assigneeTeamId }`                         | assignment (Ph 1, 3)              |
 | `inbox.typing`              | `conv:<uuid>`          | `{ conversationId, userId, typing }`                                         | gateway (Ph 3)                    |
 | `inbox.presence`            | `org` / `inbox:`       | `{ userId, state }`                                                          | gateway (Ph 3)                    |
-| `notification.created`      | `user`                 | `{ notificationId, type, unread, subjectKind, subjectId, collapsed, silent }`: a hint (ids and the true unread total, never text); refetch the feed | notification consumers (BL-096)   |
+| `notification.created`      | `user`                 | `{ notificationId, type, unread, subjectKind, subjectId, collapsed, silent, toast?, sound? }`: a hint (ids and the true unread total, never text); refetch the feed. `toast` / `sound` are the person's own choice for the type (absent from an older server = decide by type); `silent` still wins | notification consumers (BL-096)   |
 | `notification.read`         | `user`                 | `{ unread, notificationIds: uuid[] \| 'all' }`: the person's rows were marked read (here or on another tab or device)                         | notifications service, mark read  |
 | `rt.resync`                 | any                    | `{ reason }`: the server asks the client to refetch that room                | permission changes                |
 

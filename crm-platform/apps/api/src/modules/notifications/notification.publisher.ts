@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
-import { REALTIME_EVENT } from '@crm/contracts';
+import { NOTIFICATION_CATALOG, REALTIME_EVENT, type NotificationPrefType } from '@crm/contracts';
 import { notifyConfig } from '../../config/domains/notifications.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -50,6 +50,9 @@ export class NotificationPublisher {
     try {
       const silent = options.silent === true || (await this.throttled(orgId, row.userId, options));
       const unread = options.unread ?? (await this.unread(orgId, row.userId));
+      // The person's own toast and ping choice was resolved when the row was written; a hand-built row falls back to the type's default.
+      const base = NOTIFICATION_CATALOG[row.type as NotificationPrefType] as
+        (typeof NOTIFICATION_CATALOG)[NotificationPrefType] | undefined;
       await this.emitter.emitToUsers(orgId, [row.userId], REALTIME_EVENT.notificationCreated, {
         notificationId: row.uuid,
         type: row.type,
@@ -58,6 +61,8 @@ export class NotificationPublisher {
         subjectId: row.subjectUuid,
         collapsed: row.collapsed,
         silent,
+        toast: row.toast ?? base?.toast ?? true,
+        sound: row.sound ?? base?.sound ?? false,
       });
     } catch (err) {
       this.logger.warn(

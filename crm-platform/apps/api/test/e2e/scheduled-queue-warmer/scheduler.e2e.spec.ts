@@ -7,6 +7,7 @@ import { RequestContextStore } from '../../../src/common/context/request-context
 import { AppError } from '../../../src/common/errors/app-error';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { QUEUES } from '../../../src/infra/queue/queues';
+import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import {
   CapTally,
   PACING_SETTINGS,
@@ -82,8 +83,14 @@ beforeAll(async () => {
     h.app.get(SenderLease),
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
+    h.app.get(OutboxService),
   );
-  dueService = new ScheduledDueService(db, queue as never, h.app.get(UNOFFICIAL_WHATSAPP_GATE));
+  dueService = new ScheduledDueService(
+    db,
+    queue as never,
+    h.app.get(UNOFFICIAL_WHATSAPP_GATE),
+    h.app.get(OutboxService),
+  );
 }, 240_000);
 
 afterAll(async () => {
@@ -197,6 +204,16 @@ const contacts = async (id: number) =>
     )
   ).rows;
 
+/** The `scheduled.status_changed` events of one schedule, oldest first. */
+const statusEvents = async (t: Tenant, id: number | string) =>
+  (
+    await h.owner.query(
+      `SELECT payload FROM event_outbox
+        WHERE org_id = $1 AND event_type = 'scheduled.status_changed' AND aggregate_id = $2 ORDER BY id`,
+      [t.orgId, String(id)],
+    )
+  ).rows.map((r) => r.payload as Record<string, unknown>);
+
 describe('a one-off run (WD-NODE-031)', () => {
   it('sends to every recipient, records each one, and completes', async () => {
     const t = await arrange('oneoff');
@@ -214,6 +231,10 @@ describe('a one-off run (WD-NODE-031)', () => {
     expect(rows.every((r) => r.sent_at)).toBe(true);
     expect(await row(id)).toMatchObject({ status: 'completed', total_sent: 3, total_failed: 0 });
     expect((await row(id)).completed_at).not.toBeNull();
+    // The runner announces the final status (BL-096: the starter's bell), in the same transaction, once.
+    expect(await statusEvents(t, id)).toEqual([
+      expect.objectContaining({ status: 'completed', sent: 3, failed: 0, reason: null }),
+    ]);
   });
 
   it('a failing recipient is failed on its own and the schedule still completes', async () => {
@@ -237,6 +258,14 @@ describe('a one-off run (WD-NODE-031)', () => {
       total_failed: 2,
       failure_reason: 'Every recipient failed',
     });
+    expect(await statusEvents(t, id)).toEqual([
+      expect.objectContaining({
+        status: 'failed',
+        reason: 'Every recipient failed',
+        sent: 0,
+        failed: 2,
+      }),
+    ]);
   });
 
   it('fails with the WaDesk reasons when there is no sender or no recipients, and sends nothing', async () => {
@@ -249,6 +278,9 @@ describe('a one-off run (WD-NODE-031)', () => {
     const b = await schedule(t, 0);
     expect(await run(t, b)).toBe('failed');
     expect(await row(b)).toMatchObject({ status: 'failed', failure_reason: 'No recipients' });
+    expect(await statusEvents(t, b)).toEqual([
+      expect.objectContaining({ status: 'failed', reason: 'No recipients' }),
+    ]);
     expect(sent).toHaveLength(0);
   });
 
@@ -520,6 +552,12 @@ describe('the due poller (WD-NODE-030, 036)', () => {
     expect(r.missed).toBeGreaterThanOrEqual(1);
     expect(await row(id)).toMatchObject({ status: 'failed' });
     expect((await row(id)).failure_reason).toMatch(/Missed its time/);
+    expect(await statusEvents(t, id)).toEqual([
+      expect.objectContaining({
+        status: 'failed',
+        reason: expect.stringMatching(/Missed its time/),
+      }),
+    ]);
     expect(sent).toHaveLength(0);
   });
 

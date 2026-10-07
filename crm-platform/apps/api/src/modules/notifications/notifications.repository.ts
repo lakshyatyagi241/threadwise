@@ -1,8 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { and, desc, eq, inArray, isNull, lt, sql, type SQL } from 'drizzle-orm';
+import {
+  NOTIFICATION_CATALOG,
+  NOTIFICATION_TYPE_PREF_KEY,
+  effectiveEventFlags,
+  resolveNotificationChannels,
+  type NotificationChannelsEffective,
+  type NotificationPrefType,
+  type StoredNotificationPrefs,
+  type StoredUserPref,
+} from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
 
-const { inboxNotifications } = schema;
+const { inboxNotifications, notificationUserPrefs } = schema;
+
+/** A type no catalogue entry knows (another domain's newer type): delivered as before, toast on, no ping. */
+const UNLISTED: NotificationChannelsEffective = { bell: true, toast: true, sound: false };
 
 export interface NotificationRow {
   id: number;
@@ -31,6 +44,12 @@ export interface WrittenNotification {
   subjectUuid: string | null;
   /** The row replaced an earlier unread row of the same chat. */
   collapsed: boolean;
+  /**
+   * The person's effective toast and ping for this row (their own preference, else the catalogue default), resolved when the row was
+   * written. Absent on a row built by hand: the publisher then uses the catalogue default of the type.
+   */
+  toast?: boolean;
+  sound?: boolean;
 }
 
 export interface NewNotification {
@@ -45,6 +64,13 @@ export interface NewNotification {
   /** What the row is about (`conversation`) and which one: lets "mark read" find it. */
   subjectKind?: string;
   subjectUuid?: string;
+  /**
+   * The recipient's stored preference for this type, when the caller already loaded it (one query for all recipients of an event).
+   * `undefined`: the writer looks it up. `null`: the person never chose.
+   */
+  userPref?: StoredUserPref | null;
+  /** The owner's in-app toggle for this type, when the caller already read it. `undefined`: the writer reads it (only for gated types). */
+  workspaceInapp?: boolean;
 }
 
 /** The text of a collapsing row depends on how many events it stands for, so the writer asks the caller once it knows. */
@@ -158,12 +184,145 @@ export class NotificationsRepository {
     return (await this.insertReturning(tx, orgId, n)) !== null;
   }
 
-  /** Like `insertOnce`, but hands back the written row (for the live push), or null when the key was already there. */
+  /**
+   * The bell, toast and ping this person gets for this type: their own setting, else the owner's toggle, else the default
+   * (`resolveNotificationChannels`). Looks up what the caller did not already pass in; for a type no toggle governs and a caller that
+   * passed the preference, that is no query at all.
+   */
+  async channelsFor(
+    tx: Tx,
+    orgId: number,
+    n: Pick<NewNotification, 'userId' | 'type' | 'userPref' | 'workspaceInapp'>,
+  ): Promise<NotificationChannelsEffective> {
+    if (!(n.type in NOTIFICATION_CATALOG)) return UNLISTED;
+    const type = n.type as NotificationPrefType;
+    const stored =
+      n.userPref !== undefined ? n.userPref : await this.userPref(tx, orgId, n.userId, type);
+    const key = NOTIFICATION_TYPE_PREF_KEY[type];
+    let workspaceInapp = n.workspaceInapp;
+    // The owner's toggle only matters when the person has no say of their own about the bell.
+    if (workspaceInapp === undefined && key && (stored?.bell ?? null) === null) {
+      const res = await tx.execute(
+        sql`SELECT settings -> 'notificationPrefs' AS prefs FROM organizations WHERE id = ${orgId}`,
+      );
+      const prefs = (res.rows[0] as { prefs: StoredNotificationPrefs | null } | undefined)?.prefs;
+      workspaceInapp = effectiveEventFlags(prefs ?? undefined, key).inapp;
+    }
+    return resolveNotificationChannels(type, stored, workspaceInapp ?? true);
+  }
+
+  /** One person's stored preference for a type (null when they never chose). */
+  async userPref(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    type: string,
+  ): Promise<StoredUserPref | null> {
+    const rows = await tx
+      .select({
+        bell: notificationUserPrefs.bell,
+        toast: notificationUserPrefs.toast,
+        sound: notificationUserPrefs.sound,
+      })
+      .from(notificationUserPrefs)
+      .where(
+        and(
+          eq(notificationUserPrefs.orgId, orgId),
+          eq(notificationUserPrefs.userId, userId),
+          eq(notificationUserPrefs.type, type),
+        ),
+      )
+      .limit(1);
+    return rows[0] ?? null;
+  }
+
+  /** The stored preferences of several people for one type (one query); a person who never chose is absent from the map. */
+  async userPrefsFor(
+    tx: Tx,
+    orgId: number,
+    userIds: number[],
+    type: string,
+  ): Promise<Map<number, StoredUserPref>> {
+    const out = new Map<number, StoredUserPref>();
+    if (userIds.length === 0) return out;
+    const rows = await tx
+      .select({
+        userId: notificationUserPrefs.userId,
+        bell: notificationUserPrefs.bell,
+        toast: notificationUserPrefs.toast,
+        sound: notificationUserPrefs.sound,
+      })
+      .from(notificationUserPrefs)
+      .where(
+        and(
+          eq(notificationUserPrefs.orgId, orgId),
+          eq(notificationUserPrefs.type, type),
+          inArray(notificationUserPrefs.userId, userIds),
+        ),
+      );
+    for (const r of rows) {
+      out.set(Number(r.userId), { bell: r.bell, toast: r.toast, sound: r.sound });
+    }
+    return out;
+  }
+
+  /** Every type the person changed, by type. */
+  async userPrefsOf(tx: Tx, orgId: number, userId: number): Promise<Map<string, StoredUserPref>> {
+    const rows = await tx
+      .select({
+        type: notificationUserPrefs.type,
+        bell: notificationUserPrefs.bell,
+        toast: notificationUserPrefs.toast,
+        sound: notificationUserPrefs.sound,
+      })
+      .from(notificationUserPrefs)
+      .where(and(eq(notificationUserPrefs.orgId, orgId), eq(notificationUserPrefs.userId, userId)));
+    return new Map(rows.map((r) => [r.type, { bell: r.bell, toast: r.toast, sound: r.sound }]));
+  }
+
+  /**
+   * Applies a partial change to one person's preference for one type: a boolean sets the channel, `null` goes back to inheriting, an
+   * absent key stays. A row left with nothing set is deleted, so the table only holds real choices. Applying the same patch twice
+   * changes nothing (the update is skipped when no value would move, so the version does not bump).
+   */
+  async applyUserPref(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    type: string,
+    patch: { bell?: boolean | null; toast?: boolean | null; sound?: boolean | null },
+  ): Promise<void> {
+    const has = (v: unknown) => v !== undefined;
+    const val = (v: boolean | null | undefined) => (v === undefined ? null : v);
+    await tx.execute(sql`
+      INSERT INTO notification_user_prefs (org_id, user_id, type, bell, toast, sound)
+      VALUES (${orgId}, ${userId}, ${type}, ${val(patch.bell)}, ${val(patch.toast)}, ${val(patch.sound)})
+      ON CONFLICT (org_id, user_id, type) DO UPDATE SET
+        bell  = CASE WHEN ${has(patch.bell)}::boolean  THEN EXCLUDED.bell  ELSE notification_user_prefs.bell  END,
+        toast = CASE WHEN ${has(patch.toast)}::boolean THEN EXCLUDED.toast ELSE notification_user_prefs.toast END,
+        sound = CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END
+      WHERE (
+        CASE WHEN ${has(patch.bell)}::boolean  THEN EXCLUDED.bell  ELSE notification_user_prefs.bell  END,
+        CASE WHEN ${has(patch.toast)}::boolean THEN EXCLUDED.toast ELSE notification_user_prefs.toast END,
+        CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END
+      ) IS DISTINCT FROM (notification_user_prefs.bell, notification_user_prefs.toast, notification_user_prefs.sound)`);
+    await tx.execute(sql`
+      DELETE FROM notification_user_prefs
+       WHERE org_id = ${orgId} AND user_id = ${userId} AND type = ${type}
+         AND bell IS NULL AND toast IS NULL AND sound IS NULL`);
+  }
+
+  /**
+   * Like `insertOnce`, but hands back the written row (for the live push), or null when the key was already there or the person turned
+   * the bell off for this type (their own setting, else the owner's toggle).
+   */
   async insertReturning(
     tx: Tx,
     orgId: number,
     n: NewNotification,
   ): Promise<WrittenNotification | null> {
+    const channels = await this.channelsFor(tx, orgId, n);
+    if (!channels.bell) return null;
     const res = await tx
       .insert(inboxNotifications)
       .values({
@@ -191,6 +350,8 @@ export class NotificationsRepository {
       subjectKind: n.subjectKind ?? null,
       subjectUuid: n.subjectUuid ?? null,
       collapsed: false,
+      toast: channels.toast,
+      sound: channels.sound,
     };
   }
 
@@ -208,6 +369,9 @@ export class NotificationsRepository {
     orgId: number,
     n: CollapsingNotification,
   ): Promise<WrittenNotification | null> {
+    // A person who turned the bell off for this type has no row to collapse into: an existing one is left as it is.
+    const channels = await this.channelsFor(tx, orgId, n);
+    if (!channels.bell) return null;
     await tx.execute(
       sql`SELECT pg_advisory_xact_lock(hashtextextended(${`inbox_notifications:${orgId}:${n.userId}:${n.collapseKey}`}, 0))`,
     );
@@ -269,6 +433,8 @@ export class NotificationsRepository {
       subjectKind: n.subjectKind ?? null,
       subjectUuid: n.subjectUuid ?? null,
       collapsed: replaced.length > 0,
+      toast: channels.toast,
+      sound: channels.sound,
     };
   }
 
