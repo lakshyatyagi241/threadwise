@@ -50,7 +50,8 @@
         "localization": "التوطين"
       },
       "badges": {
-        "notSupported": "غير مدعوم"
+        "notSupported": "غير مدعوم",
+        "noWorkspaces": "لا مساحات عمل"
       }
     },
     "search": {
