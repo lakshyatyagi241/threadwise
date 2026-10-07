@@ -87,6 +87,35 @@ export interface SeriesRow {
   rowVersion: number;
 }
 
+export interface HistoryRow {
+  uuid: string;
+  name: string;
+  status: string;
+  isWizard: boolean;
+  kind: 'now' | 'scheduled' | 'recurring';
+  seriesUuid: string | null;
+  occurrenceNo: number | null;
+  templateName: string | null;
+  senderLabel: string | null;
+  runAt: Date | null;
+  startedAt: Date | null;
+  finishedAt: Date | null;
+  createdAt: Date;
+  sortIso: string;
+  counts: {
+    recipients: number;
+    sent: number;
+    delivered: number;
+    read: number;
+    replies: number;
+    clicks: number;
+    failed: number;
+  };
+}
+
+/** `%` and `_` in a search typed by a person are letters, not wildcards. */
+const escapeLike = (v: string) => v.replace(/[\\%_]/g, (c) => `\\${c}`);
+
 export interface RetryTotals {
   pending: number;
   nextRetryAt: Date | null;
@@ -505,21 +534,32 @@ export class WizardRepository {
   async listPage(
     tx: Tx,
     orgId: number,
-    o: { limit: number; cursor: { at: string; uuid: string } | null; status: string | null },
+    o: {
+      limit: number;
+      cursor: { at: string; uuid: string } | null;
+      status: string | null;
+      type?: 'now' | 'scheduled' | 'recurring' | null;
+      q?: string | null;
+    },
   ): Promise<Array<{ kind: 'campaign' | 'series'; uuid: string; createdAtIso: string }>> {
     const conditions = [
       ...(o.cursor
         ? [sql`(created_at, uuid) < (${o.cursor.at}::timestamptz, ${o.cursor.uuid}::uuid)`]
         : []),
       ...(o.status ? [sql`status = ${o.status}`] : []),
+      ...(o.type ? [sql`mode = ${o.type}`] : []),
+      ...(o.q ? [sql`name ILIKE ${`%${escapeLike(o.q)}%`}`] : []),
     ];
     const where = conditions.length > 0 ? sql`WHERE ${sql.join(conditions, sql` AND `)}` : sql``;
     const res = await tx.execute(sql`
       SELECT kind, uuid, to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso FROM (
-        SELECT 'campaign' AS kind, c.uuid, c.created_at, c.status FROM wpcampaigns c
+        SELECT 'campaign' AS kind, c.uuid, c.created_at, c.status, c.campaign_name AS name,
+               CASE WHEN c.schedule_type = 'now' THEN 'now' ELSE 'scheduled' END AS mode
+          FROM wpcampaigns c
           WHERE c.org_id = ${orgId} AND c.wizard IS NOT NULL AND c.series_id IS NULL
         UNION ALL
-        SELECT 'series', s.uuid, s.created_at, s.status FROM camp_series s WHERE s.org_id = ${orgId}
+        SELECT 'series', s.uuid, s.created_at, s.status, s.name, 'recurring'
+          FROM camp_series s WHERE s.org_id = ${orgId}
       ) x
       ${where}
       ORDER BY created_at DESC, uuid DESC LIMIT ${o.limit + 1}`);
@@ -530,6 +570,107 @@ export class WizardRepository {
       uuid: r.uuid,
       createdAtIso: r.created_at_iso,
     }));
+  }
+
+  /**
+   * The history pages' rows: campaigns (a wizard broadcast, a run of a series, or a classic campaign that has started), with the
+   * recipient counts, template and sender. `history` is newest first by start time; `scheduled` is the wizard's waiting one-offs,
+   * soonest first. The cursor is `<sort time iso>|<uuid>` of the last row.
+   */
+  async historyPage(
+    tx: Tx,
+    orgId: number,
+    o: {
+      scope: 'history' | 'scheduled';
+      limit: number;
+      cursor: { at: string; uuid: string } | null;
+      type: 'now' | 'scheduled' | 'recurring' | null;
+      status: string | null;
+      from: string | null;
+      to: string | null;
+      tz: string;
+      q: string | null;
+    },
+  ): Promise<{ rows: HistoryRow[]; hasMore: boolean }> {
+    const scheduled = o.scope === 'scheduled';
+    const sortAt = scheduled ? sql`c.run_at` : sql`coalesce(c.last_run_at, c.created_at)`;
+    const kind = sql`(CASE WHEN c.series_id IS NOT NULL THEN 'recurring' ELSE c.schedule_type END)`;
+    const where = [
+      sql`c.org_id = ${orgId}`,
+      scheduled
+        ? sql`c.wizard IS NOT NULL AND c.series_id IS NULL AND c.status = 'scheduled' AND c.run_at IS NOT NULL`
+        : sql`c.status NOT IN ('draft', 'scheduled')`,
+      ...(o.cursor
+        ? [
+            scheduled
+              ? sql`(${sortAt}, c.uuid) > (${o.cursor.at}::timestamptz, ${o.cursor.uuid}::uuid)`
+              : sql`(${sortAt}, c.uuid) < (${o.cursor.at}::timestamptz, ${o.cursor.uuid}::uuid)`,
+          ]
+        : []),
+      ...(o.type ? [sql`${kind} = ${o.type}`] : []),
+      ...(o.status ? [sql`c.status = ${o.status}`] : []),
+      ...(o.from ? [sql`${sortAt} >= (${o.from}::date)::timestamp AT TIME ZONE ${o.tz}`] : []),
+      ...(o.to ? [sql`${sortAt} < ((${o.to}::date + 1))::timestamp AT TIME ZONE ${o.tz}`] : []),
+      ...(o.q ? [sql`c.campaign_name ILIKE ${`%${escapeLike(o.q)}%`}`] : []),
+    ];
+    const order = scheduled ? sql`${sortAt} ASC, c.uuid ASC` : sql`${sortAt} DESC, c.uuid DESC`;
+    const res = await tx.execute(sql`
+      SELECT p.*, t.template_name, s.uuid AS series_uuid,
+             CASE WHEN coalesce(p.provider, 'baileys') = 'baileys'
+                  THEN (SELECT coalesce(nullif(d.device_name, ''), nullif(trim(coalesce(d.country_code, '') || ' ' || coalesce(d.phone_number, '')), ''))
+                        FROM devices d WHERE d.org_id = p.org_id AND d.id = p.device_id)
+                  ELSE (SELECT coalesce(nullif(w.display_label, ''), w.phone_number)
+                        FROM wa_provider_configs w WHERE w.org_id = p.org_id AND w.id = p.device_id)
+             END AS sender_label,
+             to_char(p.sort_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS sort_iso,
+             agg.*
+      FROM (
+        SELECT c.org_id, c.id, c.uuid, c.campaign_name, c.status, c.wizard IS NOT NULL AS is_wizard, c.series_id, c.occurrence_no,
+               ${kind} AS kind, c.run_at, c.last_run_at, c.completed_at, c.created_at, c.template_id, c.provider, c.device_id,
+               ${sortAt} AS sort_at
+        FROM wpcampaigns c
+        WHERE ${sql.join(where, sql` AND `)}
+        ORDER BY ${order} LIMIT ${o.limit + 1}
+      ) p
+      LEFT JOIN wa_templates t ON t.org_id = p.org_id AND t.id = p.template_id
+      LEFT JOIN camp_series s ON s.org_id = p.org_id AND s.id = p.series_id
+      LEFT JOIN LATERAL (
+        SELECT count(*)::int AS a_total,
+          count(*) FILTER (WHERE r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_sent,
+          count(*) FILTER (WHERE r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_delivered,
+          count(*) FILTER (WHERE r.status IN ('read','responded') OR r.read_at IS NOT NULL)::int AS a_read,
+          count(*) FILTER (WHERE r.status = 'responded' OR r.responded_at IS NOT NULL)::int AS a_replies,
+          count(*) FILTER (WHERE r.clicked OR r.clicked_at IS NOT NULL)::int AS a_clicks,
+          count(*) FILTER (WHERE r.status = 'failed')::int AS a_failed
+        FROM wp_campaign_contacts r WHERE r.org_id = p.org_id AND r.campaign_id = p.id
+      ) agg ON true
+      ORDER BY ${scheduled ? sql`p.sort_at ASC, p.uuid ASC` : sql`p.sort_at DESC, p.uuid DESC`}`);
+    const all = (res.rows as Raw[]).map((r): HistoryRow => ({
+      uuid: String(r.uuid),
+      name: String(r.campaign_name),
+      status: String(r.status),
+      isWizard: Boolean(r.is_wizard),
+      kind: String(r.kind) as HistoryRow['kind'],
+      seriesUuid: str(r.series_uuid),
+      occurrenceNo: num(r.occurrence_no),
+      templateName: str(r.template_name),
+      senderLabel: str(r.sender_label),
+      runAt: when(r.run_at),
+      startedAt: when(r.last_run_at),
+      finishedAt: when(r.completed_at),
+      createdAt: new Date(r.created_at as string),
+      sortIso: String(r.sort_iso),
+      counts: {
+        recipients: Number(r.a_total ?? 0),
+        sent: Number(r.a_sent ?? 0),
+        delivered: Number(r.a_delivered ?? 0),
+        read: Number(r.a_read ?? 0),
+        replies: Number(r.a_replies ?? 0),
+        clicks: Number(r.a_clicks ?? 0),
+        failed: Number(r.a_failed ?? 0),
+      },
+    }));
+    return { rows: all.slice(0, o.limit), hasMore: all.length > o.limit };
   }
 
   // ------------------------------------------------------------------------------------------ retries
