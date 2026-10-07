@@ -309,3 +309,16 @@ Spec `apps/web/e2e/contacts-attributes-tags/parity/WD-CON-019.twin.mjs`, against
 | Campaign time zone                  | the schedule's zone is a dropdown of IANA zones in both campaigns and broadcasts, not a text box                                                                                                                                                                                                                        |
 
 Not covered: dragging with a pointer (the stage list was used), the board with a very large stage, SMS and email broadcasts and expense tracking (not built).
+
+## Playwright twin run: WD-CON-020 (Import and export history)
+
+Spec `apps/web/e2e/contacts-attributes-tags/parity/WD-CON-020.twin.mjs`, against the running WaDesk and this branch on a freshly migrated scratch database. WaDesk's workspace settings have no import or export history screen, so the scenarios run on our side and are judged against absolute expectations.
+
+| Area          | Result                                                                                                                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Settings tile | "Import and export" under Data and security is live (it was a "Soon" placeholder) and opens `/import-export`                                                                                           |
+| Imports       | recent import jobs, newest first: file, when, status, created, updated, rejected; a rejected-rows download for jobs that rejected rows; polls while one is running; "Import contacts" starts a new one |
+| Exports       | recent exports from the audit trail: when, who, contacts, ticked or everything matching; a fresh export appears at once (`GET /contacts/exports`); the file itself is not kept                         |
+| Page probes   | same as WaDesk; the stuck loading spinner on failing requests was fixed by turning retries off                                                                                                         |
+
+Not covered: the Audit log and Privacy tiles stay "Soon"; an import that is still queued (no worker in the test run); paging beyond the last 50.
