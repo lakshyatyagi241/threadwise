@@ -34,6 +34,8 @@ export const QUEUES = {
   PINNACLE_CREDIT_LINE: 'pinnacle-credit-line',
   /** One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest. */
   WEBHOOK_FORWARD: 'webhook-forward',
+  /** One job per (event, workspace webhook): a signed POST to the customer's own endpoint, retried with backoff (TW-API-147). Own queue: a dead customer endpoint must not delay anything else. */
+  WEBHOOK_DELIVER: 'webhook-deliver',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */

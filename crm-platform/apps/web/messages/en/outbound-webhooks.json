@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "events": {
+      "contact_created": "Contact created",
+      "contact_updated": "Contact updated",
+      "contact_deleted": "Contact deleted",
+      "contact_tag_added": "Tag added to a contact",
+      "contact_opted_in": "Contact opted in",
+      "deal_stage_changed": "Deal moved to another stage",
+      "task_created": "Task created",
+      "task_assigned": "Task assigned",
+      "template_status_changed": "Template status changed",
+      "device_status_changed": "Device status changed",
+      "conversation_reopened": "Conversation reopened"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "Send events from this workspace to your own systems as they happen. Each delivery is a signed JSON POST, retried when your server does not answer.",
+      "back": "Integrations and developer",
+      "add": "Add webhook",
+      "list": "Webhooks",
+      "emptyTitle": "No webhooks yet",
+      "empty": "Add an endpoint to receive events such as a new contact or a deal moving stage.",
+      "noAccess": "You do not have access to webhooks.",
+      "loadFailed": "The webhooks could not be loaded.",
+      "retry": "Try again",
+      "allEvents": "All events",
+      "signed": "Signed",
+      "health": {
+        "off": "Off",
+        "failing": "Failing",
+        "healthy": "Healthy",
+        "idle": "No deliveries yet"
+      },
+      "activeFor": "Active: {name}",
+      "lastDelivery": "Last delivery {when}, answer {status}",
+      "noDeliveries": "Nothing delivered yet",
+      "noAnswer": "no answer",
+      "counts": "{ok} delivered, {failed} failed",
+      "lastError": "Last error: {error}",
+      "deliveries": "Deliveries",
+      "test": "Send test",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "deleteTitle": "Delete this webhook?",
+      "deleteMessage": "{name} stops receiving events and its delivery log is removed. This cannot be undone.",
+      "created": "Webhook added.",
+      "saved": "Webhook saved.",
+      "deleted": "Webhook deleted.",
+      "deleteFailed": "The webhook could not be deleted. Try again.",
+      "toggleFailed": "The change could not be saved. Try again.",
+      "testOk": "The test was delivered (answer {status}).",
+      "testFailed": "The test failed: {reason}",
+      "testError": "The test could not be sent. Try again."
+    },
+    "dialog": {
+      "addTitle": "Add a webhook",
+      "editTitle": "Edit webhook",
+      "close": "Close",
+      "name": "Name",
+      "nameHint": "Optional: a label for you, such as the system that receives it.",
+      "url": "Endpoint URL",
+      "urlHint": "An https address that is reachable from the internet. Private and internal addresses are refused.",
+      "urlProblem": {
+        "empty": "Enter the endpoint URL.",
+        "tooLong": "The URL is too long.",
+        "notHttps": "The URL must start with https://.",
+        "invalid": "This is not a valid URL."
+      },
+      "secret": "Signing secret",
+      "secretHint": "Optional. When set, each delivery carries a signature your server can verify. It is never shown again.",
+      "secretSetHint": "A secret is set. Leave this empty to keep it, or type a new one to replace it.",
+      "secretKeep": "Unchanged",
+      "removeSecret": "Remove the signing secret (deliveries will not be signed)",
+      "events": "Events",
+      "allEvents": "All events",
+      "pickEvents": "Pick at least one event, or choose all events.",
+      "active": "Active",
+      "cancel": "Cancel",
+      "create": "Add webhook",
+      "save": "Save changes",
+      "failed": "The webhook could not be saved. Try again."
+    },
+    "deliveries": {
+      "title": "Deliveries: {name}",
+      "close": "Close",
+      "empty": "No deliveries yet. Use Send test to make one.",
+      "failed": "The deliveries could not be loaded.",
+      "when": "When",
+      "event": "Event",
+      "result": "Answer",
+      "time": "Time",
+      "attempt": "Try",
+      "test": "Test",
+      "noAnswer": "No answer"
+    }
+  }
+}

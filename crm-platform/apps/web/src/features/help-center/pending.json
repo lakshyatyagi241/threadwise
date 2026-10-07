@@ -21,11 +21,6 @@
       "reason": "Plan feature added with the plan limits work. Team chat is now gated by this key; the plan guide is written once the plan editor copy for it settles."
     },
     {
-      "unit": "feature:outbound_webhooks",
-      "owner": "lakshya",
-      "reason": "Plan feature added with the plan limits work. Outbound webhooks is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
       "unit": "feature:storefront_builder",
       "owner": "lakshya",
       "reason": "Plan feature added with the plan limits work. The storefront builder is now gated by this key; the plan guide is written once the plan editor copy for it settles."
