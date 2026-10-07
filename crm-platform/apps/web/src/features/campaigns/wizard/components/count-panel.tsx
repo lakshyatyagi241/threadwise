@@ -24,12 +24,15 @@ export function CountPanel({
   count,
   hasSource,
   updating,
+  compact,
 }: {
   count: CountQuery;
   /** Anything selects contacts yet. */
   hasSource: boolean;
   /** A newer audience is waiting to be counted. */
   updating: boolean;
+  /** Beside other content: no sticky positioning, tighter padding. */
+  compact?: boolean;
 }) {
   const t = useTranslations('campaigns.wizard.audience');
   const data = count.data;
@@ -41,15 +44,23 @@ export function CountPanel({
     <aside
       aria-label={t('countTitle')}
       aria-busy={busy || count.isPending}
-      className="rounded-xl border border-border bg-background lg:sticky lg:top-4"
+      className={cn(
+        'shrink-0 rounded-xl border border-border bg-background',
+        !compact && 'lg:sticky lg:top-4',
+      )}
     >
-      <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
+      <header
+        className={cn(
+          'flex items-center justify-between gap-2 border-b border-border px-4',
+          compact ? 'py-2' : 'py-3',
+        )}
+      >
         <h2 className="text-base font-semibold">{t('countTitle')}</h2>
         <span aria-live="polite" className="text-xs text-muted-foreground">
           {busy ? t('updating') : ''}
         </span>
       </header>
-      <div className="space-y-3 p-4">
+      <div className={cn('space-y-3', compact ? 'p-3' : 'p-4')}>
         {!hasSource ? (
           <p className="py-6 text-center text-sm text-muted-foreground">{t('countIdle')}</p>
         ) : count.isPending ? (
@@ -76,13 +87,22 @@ export function CountPanel({
                 <dt>{t('invalidNumbers')}</dt>
                 <dd className="tabular-nums">{about(data.invalidNumber, data.approximate)}</dd>
               </div>
+              {data.newContacts > 0 && (
+                <div className="flex justify-between gap-3 text-muted-foreground">
+                  <dt>{t('newNumbers')}</dt>
+                  <dd className="tabular-nums">{nf(data.newContacts)}</dd>
+                </div>
+              )}
             </dl>
             <p className="text-xs text-muted-foreground">{t('alwaysSkipped')}</p>
             <div className="rounded-lg bg-brand/10 px-3 py-2.5">
               <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 {t('willBeMessaged')}
               </div>
-              <div className="text-3xl font-semibold tabular-nums" data-testid="recipients">
+              <div
+                className={cn('font-semibold tabular-nums', compact ? 'text-2xl' : 'text-3xl')}
+                data-testid="recipients"
+              >
                 {about(data.recipients, data.approximate)}
               </div>
             </div>

@@ -3,6 +3,8 @@ import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   WIZARD_CSV_MAX_BYTES,
+  WIZARD_CSV_TEMPLATE_HEADERS,
+  WIZARD_CSV_TEMPLATE_ROWS,
   WIZARD_CSV_TTL_DAYS,
   type WizardAudience,
   type WizardCsvReport,
@@ -18,11 +20,7 @@ import {
   decodeUpload,
   type UploadedCsv,
 } from '../../crm';
-import {
-  WIZARD_CSV_TEMPLATE_HEADERS,
-  WIZARD_CSV_TEMPLATE_ROWS,
-  parseWizardCsv,
-} from './wizard-csv-parse';
+import { parseWizardCsv } from './wizard-csv-parse';
 import { csvMatchedLines, csvNewRowsWhere } from './wizard-csv-sql';
 
 const { campWizardCsv, campWizardCsvRows } = schema;

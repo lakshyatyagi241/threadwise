@@ -48,32 +48,53 @@ function SourceList({
     () => items.filter((i) => i.name.toLowerCase().includes(q.trim().toLowerCase())),
     [items, q],
   );
+  const allShown = shown.length > 0 && shown.every((i) => chosen.includes(i.id));
   return (
-    <fieldset className="min-w-0 space-y-2">
-      <legend className="mb-1 flex w-full items-center justify-between gap-2 text-sm font-medium">
-        <span>{title}</span>
-        {chosen.length > 0 && <Chip tone="brand">{t('chosen', { count: chosen.length })}</Chip>}
-      </legend>
+    <fieldset className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 p-4">
+      <legend className="sr-only">{title}</legend>
+      <div className="flex flex-wrap items-center gap-2">
+        {items.length >= SEARCH_FROM && (
+          <Input
+            type="search"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label={t(kind === 'groups' ? 'searchGroups' : 'searchSegments')}
+            placeholder={t('searchPlaceholder')}
+            className="h-9 w-full max-w-xs"
+          />
+        )}
+        {items.length > 0 && (
+          <button
+            type="button"
+            disabled={disabled || shown.length === 0}
+            onClick={() =>
+              onChange(
+                allShown
+                  ? chosen.filter((id) => !shown.some((i) => i.id === id))
+                  : [...new Set([...chosen, ...shown.map((i) => i.id)])],
+              )
+            }
+            className="text-sm font-semibold text-brand hover:underline disabled:opacity-50"
+          >
+            {allShown ? t('unselectAllShown') : t('selectAllShown')}
+          </button>
+        )}
+        {chosen.length > 0 && (
+          <Chip tone="brand" className="ms-auto">
+            {t('chosen', { count: chosen.length })}
+          </Chip>
+        )}
+      </div>
       {items.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-border p-4 text-center text-sm text-muted-foreground">
+        <p className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
           {empty}
         </p>
       ) : (
-        <>
-          {items.length >= SEARCH_FROM && (
-            <Input
-              type="search"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              aria-label={t(kind === 'groups' ? 'searchGroups' : 'searchSegments')}
-              placeholder={t('searchPlaceholder')}
-              className="h-9"
-            />
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {shown.length === 0 && (
+            <p className="p-3 text-center text-sm text-muted-foreground">{t('noSourceMatch')}</p>
           )}
-          <div className="max-h-72 space-y-1.5 overflow-y-auto pe-1">
-            {shown.length === 0 && (
-              <p className="p-3 text-center text-sm text-muted-foreground">{t('noSourceMatch')}</p>
-            )}
+          <div className="grid gap-2 sm:grid-cols-2 2xl:grid-cols-3">
             {shown.map((i) => (
               <ChoiceCard
                 key={i.id}
@@ -100,54 +121,51 @@ function SourceList({
               </ChoiceCard>
             ))}
           </div>
-        </>
+        </div>
       )}
     </fieldset>
   );
 }
 
-/** Contact groups and saved segments as checkbox cards with their member counts. */
+/** Contact groups, or saved segments, as checkbox cards with their member counts (one mode of the audience step). */
 export function SourcePicker({
+  kind,
   sources,
-  groupIds,
-  segmentIds,
-  onGroups,
-  onSegments,
+  chosen,
+  onChange,
   disabled,
 }: {
+  kind: 'groups' | 'segments';
   sources: SourcesQuery;
-  groupIds: readonly string[];
-  segmentIds: readonly string[];
-  onGroups: (ids: string[]) => void;
-  onSegments: (ids: string[]) => void;
+  chosen: readonly string[];
+  onChange: (ids: string[]) => void;
   disabled?: boolean;
 }) {
   const t = useTranslations('campaigns.wizard.audience');
-  if (sources.isPending) return <Skeleton label={t('loadingSources')} lines={5} />;
+  if (sources.isPending) {
+    return (
+      <div className="p-4">
+        <Skeleton label={t('loadingSources')} lines={5} />
+      </div>
+    );
+  }
   if (sources.isError) {
-    return <ErrorBlock error={sources.error} onRetry={() => void sources.refetch()} />;
+    return (
+      <div className="p-4">
+        <ErrorBlock error={sources.error} onRetry={() => void sources.refetch()} />
+      </div>
+    );
   }
   const data = sources.data;
   return (
-    <div className="grid gap-5 md:grid-cols-2">
-      <SourceList
-        kind="groups"
-        title={t('groups')}
-        empty={t('noGroups')}
-        items={data?.groups ?? []}
-        chosen={groupIds}
-        onChange={onGroups}
-        disabled={disabled}
-      />
-      <SourceList
-        kind="segments"
-        title={t('segments')}
-        empty={t('noSegments')}
-        items={data?.segments ?? []}
-        chosen={segmentIds}
-        onChange={onSegments}
-        disabled={disabled}
-      />
-    </div>
+    <SourceList
+      kind={kind}
+      title={t(kind)}
+      empty={t(kind === 'groups' ? 'noGroups' : 'noSegments')}
+      items={(kind === 'groups' ? data?.groups : data?.segments) ?? []}
+      chosen={chosen}
+      onChange={onChange}
+      disabled={disabled}
+    />
   );
 }

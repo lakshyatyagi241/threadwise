@@ -1,6 +1,7 @@
 import {
   EMPTY_WIZARD_AUDIENCE,
-  segmentRulesSchema,
+  WIZARD_CSV_TEMPLATE_HEADERS,
+  WIZARD_CSV_TEMPLATE_ROWS,
   wizardAudienceHasSource,
   type SegmentGroup,
   type WizardAudience,
@@ -31,8 +32,8 @@ export function incompleteCount(root: Group, catalog: readonly FieldDef[]): numb
 /** The audience as it is sent to the count, the check and the preview; null when nothing selects anyone yet. */
 export function countableAudience(a: WizardAudience): WizardAudience | null {
   if (!wizardAudienceHasSource(a)) return null;
-  const rules = a.rules ? segmentRulesSchema.safeParse(a.rules) : null;
-  return { ...EMPTY_WIZARD_AUDIENCE, ...a, rules: rules?.success ? rules.data : null };
+  // The table's filter only decides which rows it shows (it joins the audience through "all matching"), so editing it never recounts.
+  return { ...EMPTY_WIZARD_AUDIENCE, ...a, rules: null };
 }
 
 export interface AudienceNames {
@@ -61,3 +62,34 @@ export function audienceNames(
 
 export const conditionTotal = (rules: SegmentGroup | null): number =>
   rules ? countConditions(fromWire(rules)) : 0;
+
+/** What each mode of the audience step holds, for the pills and the summary chips. */
+export interface AudienceTally {
+  contacts: number;
+  /** "All matching" is part of the selection (its size is the server's to count). */
+  allMatching: boolean;
+  groups: number;
+  segments: number;
+  csv: number;
+}
+
+/** The numbers shown on the mode pills: ticked contacts, groups, segments, valid CSV numbers. */
+export function audienceTally(a: WizardAudience): AudienceTally {
+  return {
+    contacts: a.contactIds.length,
+    allMatching: a.allMatching !== null,
+    groups: a.groupIds.length,
+    segments: a.segmentIds.length,
+    csv: a.csv ? a.csv.valid : 0,
+  };
+}
+
+/** Nothing is selected in any mode. */
+export const tallyIsEmpty = (t: AudienceTally): boolean =>
+  t.contacts === 0 && !t.allMatching && t.groups === 0 && t.segments === 0 && t.csv === 0;
+
+/** The CSV template as a file the browser saves (built from the same constants the API serves). */
+export function csvTemplateText(): string {
+  const line = (cells: readonly string[]) => `${cells.join(',')}\r\n`;
+  return line(WIZARD_CSV_TEMPLATE_HEADERS) + WIZARD_CSV_TEMPLATE_ROWS.map(line).join('');
+}

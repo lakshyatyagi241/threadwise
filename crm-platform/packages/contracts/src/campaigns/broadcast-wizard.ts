@@ -46,6 +46,12 @@ export const WIZARD_CONTACTS_MAX = 5000;
 /** The CSV of the "Broadcast via CSV" mode: the file's size and its data rows. */
 export const WIZARD_CSV_MAX_BYTES = 2 * 1024 * 1024;
 export const WIZARD_CSV_MAX_ROWS = 10_000;
+/** The CSV template the audience step offers: a phone column and optional names (served by the API and built by the web from these). */
+export const WIZARD_CSV_TEMPLATE_HEADERS = ['phone', 'first_name', 'last_name'] as const;
+export const WIZARD_CSV_TEMPLATE_ROWS: ReadonlyArray<readonly string[]> = [
+  ['+919812345678', 'Aarav', 'Sharma'],
+  ['+919898765432', 'Priya', 'Patel'],
+];
 /** A parsed upload is kept this long unless a recurring broadcast pins it. */
 export const WIZARD_CSV_TTL_DAYS = 7;
 /** Rows per page the contacts table offers. */

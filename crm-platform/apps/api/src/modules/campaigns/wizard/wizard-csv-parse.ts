@@ -122,10 +122,3 @@ export function parseWizardCsv(text: string, defaultCountryCode: string | null):
   }
   return { lines, valid, duplicate, invalid };
 }
-
-/** The file to download as the starting point: the column names the reader recognises, and two example rows. */
-export const WIZARD_CSV_TEMPLATE_HEADERS = ['phone', 'first_name', 'last_name'] as const;
-export const WIZARD_CSV_TEMPLATE_ROWS: ReadonlyArray<readonly string[]> = [
-  ['+919812345678', 'Aarav', 'Sharma'],
-  ['+919898765432', 'Priya', 'Patel'],
-];
