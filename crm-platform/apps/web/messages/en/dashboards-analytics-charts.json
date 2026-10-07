@@ -190,7 +190,7 @@
           "delivered": "Delivered",
           "read": "Read",
           "readRate": "Read rate",
-          "performance": "Performance",
+          "performance": "Delivery rate",
           "status": "Status"
         },
         "status": {
