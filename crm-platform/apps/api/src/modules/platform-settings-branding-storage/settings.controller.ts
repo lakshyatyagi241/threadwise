@@ -108,15 +108,6 @@ export class SettingsController {
     return result;
   }
 
-  @Post('realtime/test')
-  @OperatorRoles('super_admin')
-  @ApiOperation({ summary: 'Fire a throwaway event at Pusher with the saved real-time settings' })
-  async realtimeTest() {
-    const result = await this.tests.realtimeTest();
-    await this.settings.recordTest('realtime', result.ok, result.message, this.operatorId());
-    return result;
-  }
-
   @Post('assets/:slot')
   @OperatorRoles('super_admin')
   // 2 MB is the largest slot (the 512 px app icon); each slot enforces its own, smaller limit too.
