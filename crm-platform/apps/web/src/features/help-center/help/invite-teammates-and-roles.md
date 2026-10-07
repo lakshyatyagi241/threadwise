@@ -4,7 +4,7 @@ title: Invite teammates and choose their roles
 summary: Pick the right role for each person, invite them, let them join and group them into teams, step by step.
 area: getting-started
 order: 20
-documents: [tile:team-members]
+documents: [tile:workspace-team]
 keywords: [invite, teammates, team, roles, seats, owner, admin, manager, agent, viewer, onboarding]
 ---
 
