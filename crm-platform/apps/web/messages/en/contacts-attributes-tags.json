@@ -1124,6 +1124,44 @@
       "loadMore": "Load more",
       "optedOut": "Opted out",
       "moveTo": "Move {name} to stage"
+    },
+    "history": {
+      "title": "Import and export",
+      "subtitle": "Every contact import and export of this workspace: who did it, when, and how it went.",
+      "newImport": "Import contacts",
+      "when": "When",
+      "rejectsFailed": "The rejected rows could not be downloaded. Try again.",
+      "imports": {
+        "title": "Imports",
+        "hint": "Contact files uploaded, newest first. Rejected rows can be downloaded to fix and upload again.",
+        "empty": "No imports yet.",
+        "file": "File",
+        "status": "Status",
+        "created": "Created",
+        "updated": "Updated",
+        "rejected": "Rejected",
+        "actions": "Actions",
+        "downloadRejects": "Download rejects",
+        "statuses": {
+          "queued": "Queued",
+          "running": "Running",
+          "completed": "Completed",
+          "failed": "Failed"
+        }
+      },
+      "exports": {
+        "title": "Exports",
+        "hint": "Contact exports from the Hub, newest first. The downloaded file is not kept.",
+        "empty": "No exports yet.",
+        "by": "By",
+        "rows": "Contacts",
+        "selection": "Scope",
+        "unknown": "Unknown",
+        "selections": {
+          "ids": "Ticked contacts",
+          "filter": "Everything matching"
+        }
+      }
     }
   }
 }
