@@ -69,7 +69,8 @@ export function CustomFieldsSection({
   );
 }
 
-function PropertyInput({
+/** One property's typed input (text, number, date, dropdown, checkbox ...), shared by the contact form and the bulk update dialog. */
+export function PropertyInput({
   field,
   id,
   value,

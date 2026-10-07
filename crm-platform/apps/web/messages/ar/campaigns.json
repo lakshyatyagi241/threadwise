@@ -123,6 +123,12 @@
         "detailsTitle": "تفاصيل البث"
       },
       "audience": {
+        "selectionTitle": "المختارة من مركز جهات الاتصال",
+        "selectionHint": "جهات الاتصال التي حدّدتها هناك مشمولة؛ والشروط أدناه تضيّق النطاق.",
+        "selectionIds": "{count, plural, zero {لا جهات اتصال محددة} one {جهة اتصال محددة} two {جهتا اتصال محددتان} few {# جهات اتصال محددة} many {# جهة اتصال محددة} other {# جهة اتصال محددة}}",
+        "selectionFilter": "كل ما طابقته طريقة العرض في مركز جهات الاتصال",
+        "selectionExcluded": "{count, plural, zero {} one {استُبعدت واحدة} two {استُبعدت اثنتان} few {استُبعدت #} many {استُبعدت #} other {استُبعدت #}}",
+        "selectionRemove": "إزالة",
         "groups": "مجموعات جهات الاتصال",
         "segments": "الشرائح",
         "noGroups": "لا توجد مجموعات جهات اتصال بعد.",
@@ -172,6 +178,7 @@
         "chipGroups": "{count, plural, one {مجموعة واحدة} two {مجموعتان} few {# مجموعات} many {# مجموعة} other {# مجموعة}}",
         "chipSegments": "{count, plural, one {شريحة واحدة} two {شريحتان} few {# شرائح} many {# شريحة} other {# شريحة}}",
         "chipCsv": "{count} من ملف CSV",
+        "chipHub": "عرض من مركز جهات الاتصال",
         "nothingSelected": "لم يتم اختيار أي شيء بعد.",
         "unionRule": "يصل البث مرة واحدة إلى كل من تحدده في أي خيار. يتم تخطي من ألغى الاشتراك والأرقام غير الصالحة.",
         "selectAllShown": "تحديد الكل",
@@ -317,6 +324,7 @@
         "sumCost": "التكلفة التقديرية",
         "sumVariables": "المتغيرات",
         "missingSource": "(محذوف)",
+        "sumSelection": "مركز جهات الاتصال: {what}",
         "sumGroups": "المجموعات: {names}",
         "sumSegments": "الشرائح: {names}",
         "sumSkipped": "تم تخطي {total} ({optedOut} ألغوا الاشتراك، {invalid} أرقام غير صالحة)",

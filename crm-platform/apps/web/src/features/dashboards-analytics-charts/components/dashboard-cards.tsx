@@ -322,7 +322,7 @@ export function DevicesCard({ data }: { data: DashWidgets['devices'] }) {
   );
 }
 
-/** Top performing templates (WD-DASH-015); "CTR" is shown as what it measures: the read rate. */
+/** Top performing templates (WD-DASH-015); "CTR" is shown as what it measures (the read rate) and the bar as the delivery rate. */
 export function TemplatesCard({ data }: { data: DashWidgets['templates'] }) {
   const t = useTranslations(`${BASE}.templates`);
   const cols = [
@@ -387,8 +387,17 @@ export function TemplatesCard({ data }: { data: DashWidgets['templates'] }) {
                   <td className="py-2 pe-3 tabular-nums">
                     {r.readRatePct !== null ? `${r.readRatePct}%` : '-'}
                   </td>
-                  <td className="w-28 py-2 pe-3">
-                    {r.sent > 0 ? <Bar pct={r.performance} /> : '-'}
+                  <td className="w-36 py-2 pe-3">
+                    {r.sent > 0 ? (
+                      <span className="flex items-center gap-2">
+                        <span className="min-w-0 flex-1">
+                          <Bar pct={r.performance} />
+                        </span>
+                        <span className="tabular-nums">{r.performance}%</span>
+                      </span>
+                    ) : (
+                      '-'
+                    )}
                   </td>
                   <td className="py-2">
                     <Badge

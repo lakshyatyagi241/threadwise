@@ -3,13 +3,14 @@
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { WizardAudience, WizardTemplate } from '@crm/contracts';
-import { Alert } from '@crm/ui';
-import { audienceTally } from '../lib/audience';
+import { Alert, Button } from '@crm/ui';
+import { audienceTally, selectionKind } from '../lib/audience';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { AudienceModes, AudienceSummary, type AudienceMode } from './audience-modes';
 import { ContactsTable } from './contacts-table';
 import { CountPanel, type CountQuery } from './count-panel';
 import { CsvUpload } from './csv-upload';
+import { WizardCard } from './parts';
 import { SourcePicker, type SourcesQuery } from './source-picker';
 import { TemplatePreview } from './template-preview';
 
@@ -65,6 +66,21 @@ export function StepAudience({
         <AudienceModes mode={mode} tally={tally} onMode={setMode} panelId={panelId} />
         <AudienceSummary tally={tally} allTotal={audience.allMatching ? allTotal : null} />
         {issue && <Alert tone="danger">{ti(issue.code)}</Alert>}
+        {audience.selection && (
+          <WizardCard title={t('selectionTitle')} hint={t('selectionHint')} id="audience-selection">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+              <SelectionText selection={audience.selection} />
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={disabled}
+                onClick={() => onAudience({ selection: null })}
+              >
+                {t('selectionRemove')}
+              </Button>
+            </div>
+          </WizardCard>
+        )}
         <section
           id={panelId}
           role="tabpanel"
@@ -121,5 +137,24 @@ export function StepAudience({
         <TemplatePreview template={template} senderName={senderName} compact />
       </aside>
     </div>
+  );
+}
+
+/** "12 contacts ticked", or "Everything the Contact Hub view matched (2 left out)". */
+export function SelectionText({
+  selection,
+}: {
+  selection: NonNullable<WizardAudience['selection']>;
+}) {
+  const t = useTranslations('campaigns.wizard.audience');
+  const kind = selectionKind(selection);
+  return (
+    <span>
+      {kind.kind === 'ids'
+        ? t('selectionIds', { count: kind.count })
+        : kind.excluded > 0
+          ? `${t('selectionFilter')} (${t('selectionExcluded', { count: kind.excluded })})`
+          : t('selectionFilter')}
+    </span>
   );
 }

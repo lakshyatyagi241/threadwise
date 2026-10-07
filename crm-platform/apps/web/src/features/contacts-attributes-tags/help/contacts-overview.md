@@ -20,6 +20,7 @@ keywords: [customers, people, leads, import, csv, export, duplicates, tags, bulk
 4. Select a name to open the contact page, with its stage, tasks, activity and details.
 5. Change a stage from the table by selecting the stage chip. A lost stage asks for a reason.
 6. Tick rows, then open **More Actions** to export, add to or remove from a group, tag, untag or delete.
+7. To change several contacts at once, tick them and choose **Update**. Set the stage, status or owner, or use **Add property** under **Custom properties** to pick a property and give it one value for everyone selected. **Clear** empties that property on all of them; **Keep** takes it off the list so it is left alone. Anything you do not touch stays as it is.
 
 ## Options and settings
 

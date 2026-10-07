@@ -15,6 +15,7 @@ import {
   compileRules,
   contactConditions,
   loadRuleContext,
+  contactSelectionWhere,
   segmentContactsWhere,
   whereOf,
 } from '../../crm';
@@ -126,6 +127,10 @@ export class WizardAudienceService {
     if (audience.contactIds.length > 0) {
       sources.push(sql`contacts.uuid IN (${uuidList(audience.contactIds)})`);
     }
+
+    // The Contact Hub's "everything the view matched" hand-over (ticked rows arrive as contactIds).
+    if (audience.selection)
+      sources.push(await contactSelectionWhere(tx, orgId, audience.selection));
 
     if (audience.allMatching) {
       let segment: SQL | undefined;

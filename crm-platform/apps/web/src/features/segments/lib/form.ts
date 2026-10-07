@@ -5,6 +5,7 @@ import {
   type Segment,
   type SegmentVisibility,
 } from '../api/schemas';
+import { emptySelection, selectionSignature, selectionSize, type ShareSelection } from './share';
 import { kindLookup, type FieldDef } from './fields';
 import {
   MAX_CONDITIONS,
@@ -36,6 +37,8 @@ export interface SegmentForm {
   description: string;
   color: string;
   visibility: SegmentVisibility;
+  /** Who it is shared with; read only while `visibility` is `specific`. */
+  shared: ShareSelection;
   rules: Group;
 }
 
@@ -45,18 +48,23 @@ export function blankForm(): SegmentForm {
     description: '',
     color: SEGMENT_COLORS[0],
     visibility: 'private',
+    shared: emptySelection(),
     rules: emptyRoot(),
   };
 }
 
 export function formFromSegment(
-  s: Pick<Segment, 'name' | 'description' | 'color' | 'visibility' | 'rules'>,
+  s: Pick<Segment, 'name' | 'description' | 'color' | 'visibility' | 'rules' | 'sharedWith'>,
 ): SegmentForm {
   return {
     name: s.name,
     description: s.description ?? '',
     color: s.color || SEGMENT_COLORS[0],
     visibility: s.visibility,
+    shared: {
+      userIds: s.sharedWith.users.map((u) => u.id),
+      teamIds: s.sharedWith.teams.map((t) => t.id),
+    },
     rules: fromWire(s.rules),
   };
 }
@@ -73,6 +81,10 @@ export function formToInput(
     description: form.description.trim() || null,
     color: form.color,
     visibility: form.visibility,
+    // People only travel with `specific`: any other visibility clears them on the server.
+    ...(form.visibility === 'specific'
+      ? { sharedWith: { userIds: form.shared.userIds, teamIds: form.shared.teamIds } }
+      : {}),
     rules,
   };
 }
@@ -84,6 +96,7 @@ export function formSignature(form: SegmentForm): string {
     form.description.trim(),
     form.color,
     form.visibility,
+    form.visibility === 'specific' ? selectionSignature(form.shared) : '',
     signature(form.rules),
   ]);
 }
@@ -93,13 +106,17 @@ export type RulesProblem = 'empty' | 'incomplete' | 'tooMany' | 'tooDeep' | 'inv
 export interface FormProblems {
   name?: 'required' | 'tooLong';
   description?: 'tooLong';
+  /** `specific` with nobody chosen. */
+  sharedWith?: 'required';
   rules?: RulesProblem;
   /** Per condition id: what is wrong with its value. */
   conditions: Record<string, ValueProblem | 'field'>;
 }
 
 export const hasProblems = (p: FormProblems): boolean =>
-  Boolean(p.name || p.description || p.rules || Object.keys(p.conditions).length > 0);
+  Boolean(
+    p.name || p.description || p.sharedWith || p.rules || Object.keys(p.conditions).length > 0,
+  );
 
 export function validateForm(form: SegmentForm, catalog: readonly FieldDef[]): FormProblems {
   const out: FormProblems = { conditions: {} };
@@ -107,6 +124,8 @@ export function validateForm(form: SegmentForm, catalog: readonly FieldDef[]): F
   if (!name) out.name = 'required';
   else if (name.length > SEGMENT_NAME_MAX) out.name = 'tooLong';
   if (form.description.trim().length > SEGMENT_DESCRIPTION_MAX) out.description = 'tooLong';
+  if (form.visibility === 'specific' && selectionSize(form.shared) === 0)
+    out.sharedWith = 'required';
 
   const kindOf = kindLookup(catalog);
   const all = conditionsOf(form.rules);
@@ -134,6 +153,7 @@ export interface ServerProblems {
   description?: string;
   color?: string;
   visibility?: string;
+  sharedWith?: string;
   rules?: string;
   /** Per condition id. */
   conditions: Record<string, string>;
@@ -169,7 +189,13 @@ export function mapServerProblems(
   const out: ServerProblems = { conditions: {} };
   for (const e of errors) {
     const head = e.path.split(/[.[]/)[0] ?? '';
-    if (head === 'name' || head === 'description' || head === 'color' || head === 'visibility') {
+    if (
+      head === 'name' ||
+      head === 'description' ||
+      head === 'color' ||
+      head === 'visibility' ||
+      head === 'sharedWith'
+    ) {
       out[head] ??= e.message;
       continue;
     }
@@ -188,6 +214,7 @@ export const hasServerProblems = (p: ServerProblems): boolean =>
     p.description ||
     p.color ||
     p.visibility ||
+    p.sharedWith ||
     p.rules ||
     Object.keys(p.conditions).length,
   );

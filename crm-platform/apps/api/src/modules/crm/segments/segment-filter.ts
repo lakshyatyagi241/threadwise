@@ -33,9 +33,16 @@ export function currentSegmentAccess(): SegmentAccess {
   };
 }
 
+/**
+ * The one visibility predicate. Owner and edit-all always; `shared` for everyone who can read segments; `specific` for
+ * the people on its list (directly or through a team, resolved in SQL into `sharedWithMe`) who can read segments.
+ */
 export const canSee = (row: SegmentRow, a: SegmentAccess): boolean =>
   a.canRead &&
-  (a.manageAll || row.visibility === 'shared' || (a.userId !== null && row.ownerId === a.userId));
+  (a.manageAll ||
+    row.visibility === 'shared' ||
+    (a.userId !== null && row.ownerId === a.userId) ||
+    (row.visibility === 'specific' && row.sharedWithMe));
 
 const repo = new SegmentsRepository();
 

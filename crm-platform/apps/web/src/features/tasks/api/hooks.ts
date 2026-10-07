@@ -12,6 +12,7 @@ import { useSession } from '@/features/auth-registration-security/shared/session
 import { configureMock, mockEnabled } from './http';
 import { tasksApi, type TaskPageResult, type TaskSource } from './service';
 import type { Member, RecordRef } from './schemas';
+import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
 export const KEYS = {
   all: ['tasks'] as const,
@@ -61,7 +62,8 @@ export function useTaskCounts(query: Record<string, string | boolean | undefined
     queryKey: [...KEYS.counts, query],
     queryFn: ({ signal }) => tasksApi.counts(query, signal),
     placeholderData: keepPreviousData,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 15_000,
   });
 }
@@ -71,7 +73,8 @@ export function useTask(id: string | null) {
     queryKey: KEYS.task(id ?? ''),
     queryFn: ({ signal }) => tasksApi.get(id!, signal),
     enabled: id !== null,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -84,7 +87,8 @@ export function useMembers() {
   return useQuery({
     queryKey: KEYS.members,
     staleTime: 5 * 60_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     queryFn: async ({ signal }): Promise<Member[]> => {
       try {
         const rows = await tasksApi.members(signal);
@@ -102,7 +106,8 @@ export function useRecordRef(kind: 'contact' | 'deal', id: string) {
   return useQuery({
     queryKey: KEYS.ref(kind, id),
     enabled: id !== '',
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 5 * 60_000,
     queryFn: async ({ signal }): Promise<RecordRef> => {
       if (kind === 'contact') {

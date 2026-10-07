@@ -17,6 +17,7 @@ export type ErrorKind =
   | 'tooLarge'
   | 'mergeScope'
   | 'requiredProperty'
+  | 'propertyNotEditable'
   | 'lostReason'
   | 'stageFlag'
   | 'statusStage'
@@ -62,6 +63,8 @@ export function errorKind(error: unknown): ErrorKind {
       return 'mergeScope';
     case ERROR_CODES.CON_REQUIRED_PROPERTY_MISSING:
       return 'requiredProperty';
+    case ERROR_CODES.CON_PROPERTY_NOT_EDITABLE:
+      return 'propertyNotEditable';
     case ERROR_CODES.CON_LOST_REASON_REQUIRED:
       return 'lostReason';
     case ERROR_CODES.STATUS_OPTION_FLAG_INVALID:

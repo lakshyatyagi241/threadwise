@@ -571,6 +571,12 @@
         "detailsTitle": "Broadcast details"
       },
       "audience": {
+        "selectionTitle": "Chosen in the Contact Hub",
+        "selectionHint": "The contacts you picked there are included; the conditions below narrow them.",
+        "selectionIds": "{count, plural, one {# contact ticked} other {# contacts ticked}}",
+        "selectionFilter": "Everything the Contact Hub view matched",
+        "selectionExcluded": "{count, plural, one {# left out} other {# left out}}",
+        "selectionRemove": "Remove",
         "groups": "Contact groups",
         "segments": "Segments",
         "noGroups": "No contact groups yet.",
@@ -620,6 +626,7 @@
         "chipGroups": "{count, plural, one {# group} other {# groups}}",
         "chipSegments": "{count, plural, one {# segment} other {# segments}}",
         "chipCsv": "{count} from CSV",
+        "chipHub": "Contact Hub view",
         "nothingSelected": "Nothing selected yet.",
         "unionRule": "Everyone selected in any option is messaged once. Opted-out and invalid numbers are skipped.",
         "selectAllShown": "Select all",
@@ -765,6 +772,7 @@
         "sumCost": "Estimated cost",
         "sumVariables": "Variables",
         "missingSource": "(deleted)",
+        "sumSelection": "Contact Hub: {what}",
         "sumGroups": "Groups: {names}",
         "sumSegments": "Segments: {names}",
         "sumSkipped": "{total} skipped ({optedOut} opted out, {invalid} invalid numbers)",
