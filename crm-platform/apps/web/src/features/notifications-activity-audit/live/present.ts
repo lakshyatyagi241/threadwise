@@ -24,11 +24,15 @@ export function announcementText(t: Translator, alerts: readonly LiveAlert[]): s
 
 /** The desktop alert: the contact's name as the title and what kind of event it is as the body, never the message text. */
 export function desktopText(t: Translator, alert: LiveAlert): { title: string; body: string } {
-  const name =
-    typeof alert.row.data?.contactName === 'string' ? alert.row.data.contactName.trim() : '';
   const kindKey = `live.desktop.${alert.type}`;
-  const kind = isChatType(alert.type) && t.has(kindKey) ? t(kindKey) : '';
+  const kind = t.has(kindKey) ? t(kindKey) : '';
   const fallback = t('live.desktop.fallbackTitle');
+  // Only a conversation names the contact (the person already reads the chat); a device, a send or a colleague's message is named by
+  // what happened, so nothing about the content can show on a locked screen.
+  const name =
+    isChatType(alert.type) && typeof alert.row.data?.contactName === 'string'
+      ? alert.row.data.contactName.trim()
+      : '';
   return { title: name || kind || fallback, body: name ? kind : '' };
 }
 

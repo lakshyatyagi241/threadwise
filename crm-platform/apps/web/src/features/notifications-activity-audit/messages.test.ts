@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { NOTIFICATION_TYPES } from '@crm/contracts';
+import { NOTIFICATION_GROUPS, NOTIFICATION_PREF_TYPES, NOTIFICATION_TYPES } from '@crm/contracts';
 
 /**
  * The domain's strings live in messages/<locale>/notifications-activity-audit.json. These checks keep English and Arabic in
@@ -58,11 +58,51 @@ describe('notifications messages', () => {
   });
 
   it('words every notification type the API can write, in both languages', () => {
+    // The phase 1 types are worded from title / body / bodyNoActor; the phase 2 types (device, send outcomes, team chat) each have
+    // their own pieces, but every one has a title with a name and one without.
+    const PHASE_ONE = new Set([
+      'task_assigned',
+      'task_due',
+      'task_completed',
+      'new_lead',
+      'new_chat',
+      'new_message',
+      'conversation_assigned',
+      'mention',
+    ]);
     for (const type of NOTIFICATION_TYPES) {
-      for (const part of ['title', 'body', 'bodyNoActor']) {
+      const parts = PHASE_ONE.has(type)
+        ? ['title', 'body', 'bodyNoActor']
+        : ['title', 'titleNoName'];
+      for (const part of parts) {
         expect(en[`${ROOT_KEY}.types.${type}.${part}`], `en ${type}.${part}`).toBeTypeOf('string');
         expect(ar[`${ROOT_KEY}.types.${type}.${part}`], `ar ${type}.${part}`).toBeTypeOf('string');
       }
+    }
+  });
+
+  it('words every preference type, group and column of the preferences screen, in both languages', () => {
+    for (const type of NOTIFICATION_PREF_TYPES) {
+      for (const part of ['label', 'hint']) {
+        const key = `${ROOT_KEY}.prefs.types.${type}.${part}`;
+        expect(en[key], `en ${key}`).toBeTypeOf('string');
+        expect(ar[key], `ar ${key}`).toBeTypeOf('string');
+      }
+    }
+    for (const group of NOTIFICATION_GROUPS) {
+      expect(en[`${ROOT_KEY}.prefs.groups.${group}`], `group ${group}`).toBeTypeOf('string');
+    }
+    for (const channel of ['bell', 'toast', 'sound']) {
+      expect(en[`${ROOT_KEY}.prefs.columns.${channel}`]).toBeTypeOf('string');
+      expect(en[`${ROOT_KEY}.prefs.channelNames.${channel}`]).toBeTypeOf('string');
+    }
+  });
+
+  it('has a desktop wording for every type that can pop up for a hidden tab', () => {
+    for (const type of NOTIFICATION_TYPES.filter(
+      (t) => !t.startsWith('task_') && t !== 'new_lead',
+    )) {
+      expect(en[`${ROOT_KEY}.live.desktop.${type}`], `en desktop ${type}`).toBeTypeOf('string');
     }
   });
 });

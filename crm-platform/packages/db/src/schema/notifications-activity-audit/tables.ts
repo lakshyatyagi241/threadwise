@@ -78,11 +78,49 @@ export const inboxNotifications = pgTable(
     index('idx_inbox_notifications_subject_unread')
       .on(t.orgId, t.userId, t.subjectKind, t.subjectUuid)
       .where(sql`read_at IS NULL AND subject_uuid IS NOT NULL`),
+    // The retention job's batch deletes: oldest first, read and unread rows apart.
+    index('idx_inbox_notifications_prune_read')
+      .on(t.createdAt)
+      .where(sql`read_at IS NOT NULL`),
+    index('idx_inbox_notifications_prune_unread')
+      .on(t.createdAt)
+      .where(sql`read_at IS NULL`),
   ],
 );
 
 export type InboxNotificationsRow = typeof inboxNotifications.$inferSelect;
 export type NewInboxNotificationsRow = typeof inboxNotifications.$inferInsert;
+
+/** Mirrors 20261107090000_notif_user_prefs_retention.sql: what one person chose for one notification type; NULL = inherit. */
+export const notificationUserPrefs = pgTable(
+  'notification_user_prefs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id').notNull(),
+    type: text('type').notNull(),
+    bell: boolean('bell'),
+    toast: boolean('toast'),
+    sound: boolean('sound'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_notification_user_prefs_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_notification_user_prefs_user_type').on(t.orgId, t.userId, t.type),
+    foreignKey({
+      name: 'fk_notification_user_prefs_user_id',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type NotificationUserPrefsRow = typeof notificationUserPrefs.$inferSelect;
+export type NewNotificationUserPrefsRow = typeof notificationUserPrefs.$inferInsert;
 
 export const notifications = pgTable(
   'notifications',

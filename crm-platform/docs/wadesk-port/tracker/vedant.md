@@ -303,23 +303,23 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-TIB2-001 | todo |  |  |
 | WD-TIB2-002 | todo |  |  |
 | WD-TIB2-003 | todo |  |  |
-| WD-TIB2-004 | todo |  |  |
-| WD-TIB2-005 | todo |  |  |
-| WD-TIB2-006 | todo |  |  |
-| WD-TIB2-007 | todo |  |  |
-| WD-TIB2-008 | todo |  |  |
-| WD-TIB2-009 | todo |  |  |
-| WD-TIB2-010 | todo |  |  |
-| WD-TIB2-011 | todo |  |  |
-| WD-TIB2-012 | todo |  |  |
-| WD-TIB2-013 | todo |  |  |
+| WD-TIB2-004 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-005 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-006 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-007 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-008 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-009 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-010 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-011 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-012 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-013 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | WD-TIB2-014 | todo |  |  |
 | WD-TIB2-015 | todo |  |  |
 | WD-TIB2-016 | todo |  |  |
 | WD-TIB2-017 | todo |  |  |
 | WD-TIB2-018 | todo |  |  |
 | WD-TIB2-019 | todo |  |  |
-| WD-TIB2-020 | todo |  |  |
+| WD-TIB2-020 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | WD-TIB2-021 | todo |  |  |
 | WD-TIB2-022 | todo |  |  |
 | WD-TIB2-023 | todo |  |  |

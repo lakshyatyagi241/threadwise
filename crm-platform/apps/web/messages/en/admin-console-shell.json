@@ -44,22 +44,32 @@
         "team": "Roles, permissions, security and sign-in rules.",
         "settings": "Branding, mail, integrations, privacy, storage and more.",
         "system": "Updates, languages, currencies and translation."
+      },
+      "captions": {
+        "branding": "Branding and interface",
+        "integrations": "Integrations",
+        "privacy": "Privacy and tracking",
+        "infrastructure": "Infrastructure",
+        "roles": "Roles",
+        "security": "Security",
+        "signin": "Sign-in and sign-up"
       }
     },
     "shell": {
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
       "backToApp": "Back to app",
-      "backToHub": "Back to {hub}",
-      "moreTabs": "More"
+      "allAreas": "All areas",
+      "switchArea": "Switch area, now in {area}"
     },
     "overview": {
       "title": "Platform console",
-      "note": "Pick an area. Each one opens with its related pages as tabs, and Ctrl+K finds any page by name.",
+      "note": "Pick an area. Each one opens with its pages in a menu on the left, and Ctrl+K finds any page by name.",
       "open": "Open",
       "attentionTitle": "Needs attention",
       "attentionAll": "{count, plural, one {# unread notification} other {# unread notifications}}",
-      "attentionEmpty": "Nothing needs attention right now."
+      "attentionEmpty": "Nothing needs attention right now.",
+      "pages": "{count, plural, one {# page} other {# pages}}"
     },
     "menuOrder": {
       "title": "Menu order",

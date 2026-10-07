@@ -12,6 +12,7 @@ import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/serv
 import { HelpProvider } from '@/features/help-center';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
+import { InboxNavCounts } from '@/features/team-inbox-conversations';
 import { WalletAppShell } from '@/features/wallet-message-billing';
 import { LiveNotifications, NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
@@ -72,40 +73,43 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
         <LiveNotifications />
         <HelpProvider entries={help.entries}>
-          <WalletAppShell
-            user={{
-              fullName: session.user.displayName ?? session.user.fullName,
-              email: session.user.email,
-              avatarUrl: session.user.avatarUrl,
-            }}
-            nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
-            settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
-            theme={theme}
-            navFooter={<WorkspaceSwitcher />}
-            banners={
-              <>
-                {/* An operator acting as the owner (WD-WSP-033): non-dismissible, first thing under the top bar. */}
-                <ImpersonationBanner key="impersonation" />
-                <TrialBar />
-                <AccountBanners key="banners" />
-              </>
-            }
-            bell={<NotificationBell key="bell" />}
-          >
-            <AccountGate>
-              <AppGate
-                gates={appGates}
+          {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
+          <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
+            <WalletAppShell
+              user={{
+                fullName: session.user.displayName ?? session.user.fullName,
+                email: session.user.email,
+                avatarUrl: session.user.avatarUrl,
+              }}
+              nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
+              settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
+              theme={theme}
+              navFooter={<WorkspaceSwitcher />}
+              banners={
+                <>
+                  {/* An operator acting as the owner (WD-WSP-033): non-dismissible, first thing under the top bar. */}
+                  <ImpersonationBanner key="impersonation" />
+                  <TrialBar />
+                  <AccountBanners key="banners" />
+                </>
+              }
+              bell={<NotificationBell key="bell" />}
+            >
+              <AccountGate>
+                <AppGate
+                  gates={appGates}
+                  enabled={enabledFeatures ? [...enabledFeatures] : null}
+                  marketplaceHref={marketplaceHref}
+                >
+                  {children}
+                </AppGate>
+              </AccountGate>
+              <PlanPaywall
+                gates={paywallGates}
                 enabled={enabledFeatures ? [...enabledFeatures] : null}
-                marketplaceHref={marketplaceHref}
-              >
-                {children}
-              </AppGate>
-            </AccountGate>
-            <PlanPaywall
-              gates={paywallGates}
-              enabled={enabledFeatures ? [...enabledFeatures] : null}
-            />
-          </WalletAppShell>
+              />
+            </WalletAppShell>
+          </InboxNavCounts>
         </HelpProvider>
       </RealtimeProvider>
     </SessionProvider>

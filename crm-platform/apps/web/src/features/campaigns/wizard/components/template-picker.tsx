@@ -129,7 +129,7 @@ export function TemplatePicker({
           role="radiogroup"
           aria-label={t('listLabel')}
           aria-invalid={invalid || undefined}
-          className="grid gap-2"
+          className="grid grid-cols-[minmax(0,1fr)] gap-2"
         >
           {shown.map((tpl) => (
             <ChoiceCard

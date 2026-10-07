@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConversationReadState } from './conversation-read-state';
+import { NotificationPreferencesService } from './notification-preferences.service';
+import { NotificationPrefsResolver } from './notification-prefs.resolver';
 import { NotificationPublisher } from './notification.publisher';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsRepository } from './notifications.repository';
@@ -12,6 +14,8 @@ import { NotificationsService } from './notifications.service';
     NotificationsService,
     NotificationsRepository,
     NotificationPublisher,
+    NotificationPrefsResolver,
+    NotificationPreferencesService,
     ConversationReadState,
   ],
   exports: [NotificationsService, NotificationsRepository, NotificationPublisher],

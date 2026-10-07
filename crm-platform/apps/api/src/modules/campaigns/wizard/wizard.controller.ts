@@ -43,6 +43,7 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { type UploadedCsv } from '../../crm';
+import { Throttle } from '../../platform-infrastructure';
 import { WizardBroadcastsService } from './wizard-broadcasts.service';
 import { WizardContactsService } from './wizard-contacts.service';
 import { WizardCsvService } from './wizard-csv.service';
@@ -137,6 +138,7 @@ export class WizardController {
   }
 
   @Post('csv')
+  @Throttle({ limit: 6, windowSeconds: 60, by: 'actor' })
   @RequirePermission('camp.campaigns.create')
   @UseInterceptors(csvUpload)
   @ApiConsumes('multipart/form-data')

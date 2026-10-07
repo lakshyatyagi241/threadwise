@@ -7,4 +7,7 @@ export {
   AssignmentService,
   type AssignmentActor,
   type AssignmentChange,
+  type AssignmentHow,
 } from './assignment.service';
+export { RoutingEngine, type RoutingInput, type RoutingOutcome } from './routing-engine.service';
+export { TeamInboxRoutingSlaWorkerModule } from './team-inbox-routing-sla-worker.module';

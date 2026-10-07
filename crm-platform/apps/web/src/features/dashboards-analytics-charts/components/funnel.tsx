@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import type { DashFunnel } from '@crm/contracts';
 import { compact } from '../lib/format';
 import { funnelStages } from '../lib/funnel-model';
+import { FunnelBand } from '@/components/funnel-shape';
 import { Trend } from './parts';
 
 /**
@@ -17,30 +18,26 @@ export function Funnel({ funnel }: { funnel: DashFunnel }) {
   const { activity, comparison } = funnel;
   return (
     <div className="space-y-4" data-testid="engagement-funnel">
-      <ol className="space-y-2.5" aria-label={t('listLabel')}>
+      <ol className="space-y-0.5" aria-label={t('listLabel')}>
         {stages.map((s, i) => (
           <li
             key={s.key}
-            className="space-y-1"
-            aria-label={t('stageLabel', { stage: t(`stage.${s.key}`), n: s.count, pct: s.pct })}
+            className="grid grid-cols-[minmax(0,1fr)_minmax(0,11rem)] items-center gap-3"
             title={s.key === 'goalCompleted' ? t('goalCompletedHint') : undefined}
+            aria-label={t('stageLabel', { stage: t(`stage.${s.key}`), n: s.count, pct: s.pct })}
           >
-            <p className="flex items-baseline gap-1.5 text-sm" aria-hidden>
-              {i > 0 && <span className="text-muted-foreground">↓</span>}
-              <strong className="tabular-nums">{compact(s.count)}</strong>
-              <span className="min-w-0 truncate">{t(`stage.${s.key}`)}</span>
-            </p>
-            <div className="flex items-center gap-2" aria-hidden>
-              <div className="h-2 min-w-0 flex-1 rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-primary"
-                  style={{ width: `${Math.min(100, Math.max(s.count > 0 ? 2 : 0, s.pct))}%` }}
-                />
-              </div>
-              <span className="w-12 shrink-0 text-end text-xs text-muted-foreground tabular-nums">
-                {s.pct}%
+            <FunnelBand
+              topPct={s.pct}
+              bottomPct={stages[i + 1]?.pct ?? s.pct * 0.75}
+              strength={1 - i * 0.18}
+            />
+            <p className="min-w-0 text-sm leading-tight" aria-hidden>
+              <span className="flex items-baseline gap-1.5">
+                <strong className="tabular-nums">{compact(s.count)}</strong>
+                <span className="min-w-0 truncate">{t(`stage.${s.key}`)}</span>
               </span>
-            </div>
+              <span className="text-xs text-muted-foreground tabular-nums">{s.pct}%</span>
+            </p>
           </li>
         ))}
       </ol>

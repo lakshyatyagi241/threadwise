@@ -124,7 +124,7 @@ export class FlowTriggerService {
   ): Promise<number> {
     const kinds = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(
-        sql`SELECT inbox_away, business_hours, timezone FROM organizations WHERE id = ${orgId}`,
+        sql`SELECT inbox_away, business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
       )) as unknown as Rows;
       const org = res.rows[0];
       if (!org) return [] as string[];
@@ -160,14 +160,14 @@ export class FlowTriggerService {
     channelKind: string,
     text: string,
   ): Promise<KeywordFlow | null> {
-    const flows = await this.db.txAs({ orgId }, async (tx) => {
+    const all = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(sql`
-        SELECT id, trigger_keywords, trigger_channel_id, provider FROM flows
-        WHERE org_id = ${orgId} AND is_published AND is_active AND trigger_kind = 'keyword'
-          AND coalesce(trigger_keywords, '') <> '' ORDER BY id`)) as unknown as Rows;
+        SELECT id, trigger_keywords, trigger_channel_id, provider, is_published, is_active FROM flows
+        WHERE org_id = ${orgId} AND trigger_kind = 'keyword' AND coalesce(trigger_keywords, '') <> '' ORDER BY id`)) as unknown as Rows;
       return res.rows;
     });
-    const candidates: KeywordFlow[] = flows
+    const live = all.filter((f) => f.is_published && f.is_active);
+    const candidates: KeywordFlow[] = live
       .filter((f) => {
         if (f.trigger_channel_id !== null) return Number(f.trigger_channel_id) === channelId;
         return (KINDS_OF_PROVIDER[String(f.provider)] ?? []).includes(channelKind);
@@ -177,7 +177,36 @@ export class FlowTriggerService {
         keywords: String(f.trigger_keywords),
         channelId: f.trigger_channel_id === null ? null : Number(f.trigger_channel_id),
       }));
-    return matchKeywordFlow(candidates, text, channelId);
+    const hit = matchKeywordFlow(candidates, text, channelId);
+    if (!hit) {
+      // The reason each keyword flow of the workspace was passed over, so "why did nothing start" can be read from the log.
+      const reasons = all.map((f) => {
+        const base = { flowId: Number(f.id), keywords: String(f.trigger_keywords) };
+        if (!f.is_published) return { ...base, reason: 'not published' };
+        if (!f.is_active) return { ...base, reason: 'not active' };
+        if (f.trigger_channel_id !== null && Number(f.trigger_channel_id) !== channelId)
+          return {
+            ...base,
+            reason: `tied to channel ${Number(f.trigger_channel_id)}, this message came in on channel ${channelId}`,
+          };
+        if (f.trigger_channel_id === null) {
+          const kinds = KINDS_OF_PROVIDER[String(f.provider)] ?? [];
+          if (!kinds.includes(channelKind))
+            return {
+              ...base,
+              reason: `engine "${String(f.provider)}" carries ${kinds.join('/') || 'no channel'}, this channel is "${channelKind}"`,
+            };
+        }
+        return { ...base, reason: 'channel fits, the typed text does not contain a keyword' };
+      });
+      this.logger.warn(
+        { orgId, channelId, channelKind, typedLength: text.trim().length, flows: reasons },
+        reasons.length === 0
+          ? '[FLR] no flow with a keyword trigger exists in this workspace'
+          : '[FLR] no keyword flow started: every flow was passed over',
+      );
+    }
+    return hit;
   }
 
   // --- shared ----------------------------------------------------------------------------------------------------------------

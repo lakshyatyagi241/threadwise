@@ -38,6 +38,10 @@ export interface NavGates {
 }
 
 /** One entry per screen, declared in `features/<domain>/nav.ts`; the shell never lists domains by hand. */
+/** The live numbers a menu entry can show. Add a key here when a domain starts providing a new one. */
+export const NAV_COUNTER_KEYS = ['inbox-unread'] as const;
+export type NavCounterKey = (typeof NAV_COUNTER_KEYS)[number];
+
 export interface NavItem {
   id: string;
   group: NavGroup;
@@ -49,6 +53,11 @@ export interface NavItem {
   icon?: string;
   /** Small pill next to the label ("New") for screens worth pointing out. */
   badge?: 'new';
+  /**
+   * A live number on the entry (a count pill, capped at "99+", hidden at 0). The domain that owns the number provides it through
+   * `NavCountsContext` (see `components/shell/nav-badges.ts`) under this key; an entry whose number is unknown shows nothing.
+   */
+  counter?: NavCounterKey;
   /**
    * `false`: the screen stays registered (its gates, the plan paywall, Help and the command palette still see it) but the sidebar does
    * not list it, because its own area already links to it (the Store sidebar lists Orders, Coupons...) or a Settings tile does. The
