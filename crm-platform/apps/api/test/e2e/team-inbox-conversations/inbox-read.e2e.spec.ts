@@ -105,6 +105,21 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     expect(bad.body.code).toBe('VALIDATION_FAILED');
   });
 
+  it('the Resolved view lists closed threads too: to an agent they are one status', async () => {
+    const t2 = await api.signup('ibl-rc');
+    const agent2 = await api.member(t2, 'agent', AGENT);
+    const ch3 = await inbox.channel(t2.admin, { name: 'Main' });
+    const open = (await inbox.conversation(t2, ch3.id, {})).uuid;
+    const resolved = (await inbox.conversation(t2, ch3.id, { status: 'resolved' })).uuid;
+    const closed = (await inbox.conversation(t2, ch3.id, { status: 'closed' })).uuid;
+    expect(new Set(ids(await list(agent2.token, '?status=resolved')))).toEqual(
+      new Set([resolved, closed]),
+    );
+    // Neither shows in the default view, and open stays open.
+    expect(ids(await list(agent2.token))).toEqual([open]);
+    expect(ids(await list(agent2.token, '?status=open'))).toEqual([open]);
+  });
+
   it('channel filter narrows to one channel; a channel of nobody narrows to nothing, not to everything', async () => {
     expect(ids(await list(agent.token, `?channelId=${ch2.id}`))).toEqual([c.other]);
     const stranger = await list(agent.token, '?channelId=0a5c1d92-1f64-4f9b-8a0e-0e8b6f5a77f1');

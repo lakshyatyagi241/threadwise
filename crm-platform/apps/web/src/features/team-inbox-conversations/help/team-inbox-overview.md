@@ -26,7 +26,8 @@ Keyboard shortcuts work when you are not typing: `j` and `k` move through the li
 ## Options and settings
 
 - The contact panel has three tabs. **Contact** shows the customer's details and past conversations. **Notes** holds the internal notes. **Timeline** lists what happened, such as assignments, status changes and first replies.
-- Each conversation shows its status (Open, Pending, Snoozed, Resolved, Closed or Spam) and its priority.
+- Each conversation shows its status (Open, Pending, Snoozed, Resolved or Spam) and its priority. The status list above the conversations starts on **Open**, which shows the conversations still being worked on: Open and Pending. **Resolved** also lists conversations the system closed (for example when a channel was removed): to an agent they are the same.
+- **Pending** and **Snoozed** are both ways of setting a conversation aside, and they differ in one thing. **Pending** means you are waiting for the customer (or for something else) and the conversation stays in your **Open** list so it is not forgotten; it has no timer and comes back to Open when the customer writes. **Snoozed** hides the conversation until a time you pick, then it wakes by itself and returns to Open; it is not in the **Open** list while it sleeps.
 - **Channels** lists the accounts customers reach you on, with their status and reply window.
 
 ## Plan and access
