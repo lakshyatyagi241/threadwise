@@ -7,17 +7,21 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   listNotificationsQuerySchema,
   readSubjectRequestSchema,
+  updateNotificationPreferencesRequestSchema,
   type ListNotificationsQuery,
   type ReadSubjectRequest,
+  type UpdateNotificationPreferencesRequest,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { NotificationPreferencesService } from './notification-preferences.service';
 import { NotificationsService } from './notifications.service';
 
 /**
@@ -28,7 +32,10 @@ import { NotificationsService } from './notifications.service';
 @ActorKinds('user')
 @Controller({ path: 'notifications', version: '2' })
 export class NotificationsController {
-  constructor(private readonly notifications: NotificationsService) {}
+  constructor(
+    private readonly notifications: NotificationsService,
+    private readonly preferences: NotificationPreferencesService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -44,6 +51,29 @@ export class NotificationsController {
   @ApiOperation({ summary: 'How many unread notifications I have (the bell badge)' })
   async unreadCount() {
     return this.notifications.unreadCount();
+  }
+
+  @Get('preferences')
+  @ApiOperation({
+    summary: 'My notification preferences: bell, toast and sound per type',
+    description:
+      'Every type in catalogue order with the values in force (your setting, else the workspace owner toggle, else the default), the defaults, what you set yourself (null = inherit) and the owner toggle you would inherit.',
+  })
+  async getPreferences() {
+    return this.preferences.get();
+  }
+
+  @Put('preferences')
+  @ApiOperation({
+    summary: 'Change my notification preferences (partial, idempotent)',
+    description:
+      'Each item names a type and any of bell, toast, sound: true or false sets it, null goes back to inheriting, a missing key stays. Returns the full list as GET does.',
+  })
+  async updatePreferences(
+    @Body(zodPipe(updateNotificationPreferencesRequestSchema))
+    body: UpdateNotificationPreferencesRequest,
+  ) {
+    return this.preferences.update(body);
   }
 
   @Post('read-all')

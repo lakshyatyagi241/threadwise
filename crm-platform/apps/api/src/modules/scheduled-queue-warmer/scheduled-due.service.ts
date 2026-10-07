@@ -11,8 +11,10 @@ import { scheduledConfig } from '../../config/domains/scheduled-queue-warmer.env
 import { orgIdList } from '../../common/sql/org-id-list';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { dateOnly, isRecurring, runAt, weekdays, type ScheduledRow } from './scheduled-message';
 import { FIRE_NOW_WINDOW_MS, minutesLate, nextRun } from './schedule-time';
+import { emitScheduledStatus } from './scheduled-events';
 import type { ScheduledRunJob } from './scheduled-run.processor';
 
 const BATCH = 50;
@@ -42,6 +44,7 @@ export class ScheduledDueService {
     private readonly db: DatabaseService,
     @InjectQueue(QUEUES.SCHED_RUN) private readonly queue: Queue<ScheduledRunJob>,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    private readonly outbox: OutboxService,
   ) {}
 
   @Interval(3_000)
@@ -151,12 +154,14 @@ export class ScheduledDueService {
       await tx.execute(sql`
         UPDATE scheduled_messages SET status = 'completed', completed_at = now()
         WHERE org_id = ${orgId} AND id = ${id}`);
+      await emitScheduledStatus(this.outbox, tx, orgId, id, 'completed');
       return;
     }
     const reason = 'Missed its time: the system was not running when this message was due.';
     await tx.execute(sql`
       UPDATE scheduled_messages SET status = 'failed', failed_at = now(), failure_reason = ${reason}, last_error = ${reason}
       WHERE org_id = ${orgId} AND id = ${id}`);
+    await emitScheduledStatus(this.outbox, tx, orgId, id, 'failed', { reason });
   }
 
   /** A `running` row whose job is done or gone: queue it again under a new attempt number. Claims make the repeat safe. */
