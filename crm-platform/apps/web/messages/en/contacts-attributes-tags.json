@@ -474,7 +474,13 @@
       "failed": "The import failed.",
       "limitExceeded": "Over plan limit",
       "limitExceededNote": "Some new contacts were not imported because the contact limit of your plan was reached.",
-      "rejectsFailed": "The rejected rows could not be downloaded."
+      "rejectsFailed": "The rejected rows could not be downloaded.",
+      "groupRequired": "Add these contacts to",
+      "groupExisting": "An existing group",
+      "groupNew": "A new group",
+      "groupPick": "Choose a group",
+      "groupNewPlaceholder": "New group name",
+      "groupRequiredHint": "Every imported contact joins this one group. The file's own group column is ignored unless you map it above."
     },
     "detail": {
       "back": "All contacts",
