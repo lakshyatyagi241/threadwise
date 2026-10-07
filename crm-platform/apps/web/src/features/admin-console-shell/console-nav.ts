@@ -18,6 +18,8 @@ export interface ConsoleLeaf {
    * counts is set (greater than zero). `labelKey` is the full next-intl key of the word.
    */
   statusBadge?: { key: string; labelKey: string };
+  /** The same idea with several words in priority order and a tone each (the Node bridge says "Not supported", then "No workspaces"). */
+  statusBadges?: readonly StatusBadge[];
   /** Full next-intl key of the small heading drawn above this link: it opens a block of related pages. */
   captionKey?: string;
 }
@@ -63,10 +65,20 @@ const BADGE_KEYS: Readonly<Record<string, string>> = {
   'cms-guidebook': 'guidebook',
 };
 
-/** Operator-nav items that carry a status word while a platform flag is set. */
-const STATUS_BADGES: Readonly<Record<string, { key: string; labelKey: string }>> = {
-  // Only the official WhatsApp Business API is supported: the Node bridge (personal numbers by QR) says so while the platform switch is off.
-  'node-bridge': { key: 'unofficialOff', labelKey: `${NS}.badges.notSupported` },
+export interface StatusBadge {
+  key: string;
+  labelKey: string;
+  tone: 'warning' | 'neutral';
+}
+
+/** Operator-nav items that carry a status word while a platform flag is set, first match wins. */
+const STATUS_BADGES: Readonly<Record<string, readonly StatusBadge[]>> = {
+  // Only the official WhatsApp Business API is supported: the Node bridge (personal numbers by QR) says so while the platform switch is
+  // off. With the switch on but no workspace on the allow-list yet (off for everyone by default), it says nobody can use it yet.
+  'node-bridge': [
+    { key: 'unofficialOff', labelKey: `${NS}.badges.notSupported`, tone: 'warning' },
+    { key: 'unofficialNoWorkspaces', labelKey: `${NS}.badges.noWorkspaces`, tone: 'neutral' },
+  ],
 };
 
 /** The label key of the status badge a leaf shows right now, or null: the flag must be set in `counts`. */
@@ -79,18 +91,30 @@ export function activeStatusBadge(
   return (counts[badge.key] ?? 0) > 0 ? badge.labelKey : null;
 }
 
+/** The status badge a leaf shows right now, with its tone, or null. */
+export function activeStatusBadgeInfo(
+  leaf: Pick<ConsoleLeaf, 'statusBadges'>,
+  counts: Readonly<Partial<Record<string, number>>>,
+): { labelKey: string; tone: StatusBadge['tone'] } | null {
+  const hit = leaf.statusBadges?.find((b) => (counts[b.key] ?? 0) > 0);
+  return hit ? { labelKey: hit.labelKey, tone: hit.tone } : null;
+}
+
 export const sectionLabelKey = (id: string): string => `${NS}.sections.${id}`;
 export const captionLabelKey = (caption: string): string => `${NS}.captions.${caption}`;
 
 const toLeaf = (item: OperatorNavItem, captionKey?: string): ConsoleLeaf => {
   const badgeKey = BADGE_KEYS[item.id];
-  const statusBadge = STATUS_BADGES[item.id];
+  const statusBadges = STATUS_BADGES[item.id];
+  const first = statusBadges?.[0];
+  const statusBadge = first ? { key: first.key, labelKey: first.labelKey } : undefined;
   return {
     id: item.id,
     href: item.href,
     labelKey: item.labelKey,
     ...(badgeKey ? { badgeKey } : {}),
     ...(statusBadge ? { statusBadge } : {}),
+    ...(statusBadges ? { statusBadges } : {}),
     ...(captionKey ? { captionKey } : {}),
   };
 };

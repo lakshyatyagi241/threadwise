@@ -32,7 +32,7 @@ export class SenderResolver {
 
   /**
    * `provider` is the engine the row asked for; blank means the unofficial engine, as in WaDesk, while the platform switch
-   * for it is on. With the switch off blank means the Cloud API (`waba`), and a row that names `baileys` has no sender: the
+   * for it is on AND the workspace is allowed (owner decision 2026-10-06). Otherwise blank means the Cloud API (`waba`), and a row that names `baileys` has no sender: the
    * caller reports "no sender" and leaves the row untouched (owner decision 2026-10-05).
    */
   async resolve(
@@ -40,7 +40,7 @@ export class SenderResolver {
     orgId: number,
     pick: { provider: string | null; deviceId: number | null },
   ): Promise<SenderRef | null> {
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const engine =
       pick.provider && ENGINES.has(pick.provider)
         ? pick.provider
