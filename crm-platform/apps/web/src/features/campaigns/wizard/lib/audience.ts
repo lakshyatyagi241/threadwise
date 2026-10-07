@@ -59,5 +59,14 @@ export function audienceNames(
   };
 }
 
+/** What a Contact Hub selection stands for, in the two shapes the Hub sends: the ticked rows, or the view's filter minus the un-ticked rows. */
+export function selectionKind(
+  s: NonNullable<WizardAudience['selection']>,
+): { kind: 'ids'; count: number } | { kind: 'filter'; excluded: number } {
+  return s.ids !== undefined
+    ? { kind: 'ids', count: s.ids.length }
+    : { kind: 'filter', excluded: s.excludeIds?.length ?? 0 };
+}
+
 export const conditionTotal = (rules: SegmentGroup | null): number =>
   rules ? countConditions(fromWire(rules)) : 0;

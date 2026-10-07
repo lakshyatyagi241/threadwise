@@ -12,6 +12,7 @@ export {
   ContactQuotaService,
   ContactResolverService,
   assertContactScope,
+  contactSelectionWhere,
   toContactResponse,
 } from './contacts';
 export type { ContactRow } from './contacts';

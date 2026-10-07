@@ -77,7 +77,8 @@ export interface ContactsToolbarProps {
   stages: readonly Choice[];
   consent: ContactFilters['consent'];
   onConsent: (v: ContactFilters['consent']) => void;
-  order: ContactFilters['order'];
+  /** `null` while a column's sort is in force (neither "newest" nor "oldest" is then the order). */
+  order: ContactFilters['order'] | null;
   onOrder: (v: ContactFilters['order']) => void;
 
   /** Selected rows, or `null` when the selection stands for everything matching the filter. */
