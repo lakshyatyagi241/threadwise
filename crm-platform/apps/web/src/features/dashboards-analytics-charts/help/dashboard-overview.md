@@ -19,7 +19,7 @@ The Dashboard is the first page to check each day. It shows how many messages yo
 3. Read the four key numbers. **Messages sent** shows the count with a trend against the previous period of the same length, plus how many were delivered and how many failed. **Read rate**, **Deliverability** and **Replies** follow, with the reply rate under **Replies**.
 4. Read **Message throughput**. It charts sent, delivered and failed messages by hour for 24h and by day for the longer periods, and names the peak. Under it are the average per hour, the replies, the reply rate and the failed count.
 5. Check **Last 20 hours**, a small chart of messages sent per hour, oldest first.
-6. Check **Engagement funnel**, which counts outbound messages, how many were delivered, how many inbound replies came back, and how many different people replied. It ends with an end-to-end conversion figure. Select **View analytics** to open the full report.
+6. Check **Engagement funnel**, which counts the contacts you messaged, how many of them had a message delivered, and how many replied, each as a share of the contacts messaged. Below it, **Conversation activity** shows inbound messages, responding contacts and replies per responding contact, and **Compared with previous period** shows the change in reply rate in percentage points (hidden when the previous period had no messaged contacts). Select **View analytics** to open the full report.
 
 ## What the numbers mean
 

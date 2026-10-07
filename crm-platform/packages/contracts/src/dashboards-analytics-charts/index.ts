@@ -36,6 +36,12 @@ export const dashTotalsSchema = z.object({
   replies: z.number().int(),
   /** Distinct conversations with an inbound message (the "engaged" funnel stage). */
   repliers: z.number().int(),
+  /** Distinct conversations (the contact proxy) with an outbound message in the window. */
+  contactsMessaged: z.number().int(),
+  /** Distinct conversations with an outbound message in the delivered set (delivered, read, sent). */
+  contactsDelivered: z.number().int(),
+  /** Distinct conversations with an inbound message; equals `repliers`. May exceed `contactsMessaged` (replied without being messaged in this window). */
+  contactsReplied: z.number().int(),
   /** Percent, one decimal. */
   deliverability: z.number(),
   readRate: z.number(),
@@ -66,6 +72,22 @@ export const dashFunnelSchema = z.object({
   ),
   /** The last stage's share. */
   endToEnd: z.number(),
+  /** Contact-based funnel (the Engagement funnel card): contacts messaged, delivered to, and replied. Percentages are of `messaged`. */
+  contacts: z.object({
+    messaged: z.number().int(),
+    delivered: z.number().int(),
+    replied: z.number().int(),
+  }),
+  /** Conversation activity under the funnel; `repliesPerContact` is replies / responding contacts, one decimal, null when nobody replied. */
+  activity: z.object({
+    inbound: z.number().int(),
+    respondingContacts: z.number().int(),
+    repliesPerContact: z.number().nullable(),
+  }),
+  /** Contacts replied / contacts messaged, percent, one decimal, capped at 100. */
+  replyRate: z.number(),
+  /** Reply rate against the previous window; null when that window messaged no contacts. */
+  comparison: z.object({ previousReplyRate: z.number(), replyRatePp: z.number() }).nullable(),
 });
 export type DashFunnel = z.infer<typeof dashFunnelSchema>;
 
@@ -135,6 +157,8 @@ export const analyticsResponseSchema = z.object({
     repliesPct: z.number(),
     /** Percentage points. */
     replyRatePp: z.number(),
+    /** Contact-based reply rate change (contacts replied / contacts messaged) in percentage points, one decimal. */
+    replyRateContactPp: z.number(),
     endToEndPp: z.number(),
   }),
   daily: z.object({

@@ -50,7 +50,7 @@ describe('dashboard messages', () => {
       expect(has(`${base}.range.long.${r}`)).toBe(true);
       expect(has(`${base}.dashboard.throughput.subtitle.${r}`)).toBe(true);
     }
-    for (const s of ['sent', 'delivered', 'replied', 'engaged'])
+    for (const s of ['messaged', 'delivered', 'replied'])
       expect(has(`${base}.funnel.stage.${s}`)).toBe(true);
     for (const k of ['text', 'template', 'media', 'interactive', 'location'])
       expect(has(`${base}.analytics.types.${k}`)).toBe(true);
