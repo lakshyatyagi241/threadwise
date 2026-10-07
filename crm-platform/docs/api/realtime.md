@@ -108,6 +108,8 @@ Every push is one envelope, and the socket.io event name is `type`:
 | `inbox.assignment`          | `user` / `conv`        | `{ conversationId, assigneeUserId, assigneeTeamId }`                         | assignment (Ph 1, 3)              |
 | `inbox.typing`              | `conv:<uuid>`          | `{ conversationId, userId, typing }`                                         | gateway (Ph 3)                    |
 | `inbox.presence`            | `org` / `inbox:`       | `{ userId, state }`                                                          | gateway (Ph 3)                    |
+| `notification.created`      | `user`                 | `{ notificationId, type, unread, subjectKind, subjectId, collapsed, silent }`: a hint (ids and the true unread total, never text); refetch the feed | notification consumers (BL-096)   |
+| `notification.read`         | `user`                 | `{ unread, notificationIds: uuid[] \| 'all' }`: the person's rows were marked read (here or on another tab or device)                         | notifications service, mark read  |
 | `rt.resync`                 | any                    | `{ reason }`: the server asks the client to refetch that room                | permission changes                |
 
 System events outside a room's stream: `rt.ready` (once per connection: `{ v, rooms: [{ room, seq }], serverTime }`, the baseline for `org` and `user`).
@@ -185,6 +187,10 @@ const status = useRealtimeStatus();                       // idle | connecting |
 - Tests: `apps/api/test/unit/realtime/` (visibility rules, audience, ticket mint / consume / expiry / replay, sequence numbering),
   `apps/api/test/e2e/realtime/` (ticket endpoint, handshake, room authorisation matrix, delivery from a separate process spawned against the same Redis,
   cross-process counts, eviction, workspace isolation), `apps/web/src/lib/realtime/*.test.ts(x)` (client with a fake socket, server rendering).
+
+Notifications: a new bell row is announced with `notification.created` by whichever process wrote it (the worker, after its transaction) and a mark-read with
+`notification.read` (the API); rules and payloads in [notifications.md](notifications.md#live-conversation-notifications-bl-096-phase-1-the-server). Unlike the
+other message-level events these DO go through the outbox first (`message.received`), so a crash between the commit and the push cannot lose the bell row.
 
 ## Not built here
 

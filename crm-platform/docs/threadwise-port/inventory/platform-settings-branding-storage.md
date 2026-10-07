@@ -136,7 +136,7 @@ Decisions on Reference quirks (fixed deliberately unless noted):
 - 013: a malformed colour is refused (Reference stored it as empty); font scale and opacity are clamped as in Reference.
 - 024: the encryption choice is real (ssl is implicit TLS, starttls requires the upgrade, empty disables it); sendmail and API mailers fail with `not_configured`.
 - 039: one credential set for the chosen provider (Reference kept a block per provider); blank non-secret fields CAN be cleared; save and test are separate calls; the test never persists anything; audit rows are written.
-- 041: the Pusher probe uses the REST API without an SDK; test result is 200 with `ok` (Reference: 422 on failure).
+- 041: removed by owner decision 2026-10-07 (intended difference, see parity file row 4): real-time runs on our Socket.IO and nothing consumed the Pusher settings. Earlier note: the probe used the REST API without an SDK; test result was 200 with `ok` (Reference: 422 on failure).
 
 ## Features
 

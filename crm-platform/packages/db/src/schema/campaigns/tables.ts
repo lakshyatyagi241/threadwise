@@ -82,6 +82,73 @@ export const campSeries = pgTable(
 );
 export type CampSeriesRow = typeof campSeries.$inferSelect;
 
+/**
+ * The broadcast wizard's CSV audience (migrations/20261104090000_camp_wizard_csv_uploads.sql): one parsed upload, and its rows
+ * (valid, duplicate or invalid). `expires_at` NULL pins it to a recurring broadcast; otherwise the worker deletes it after a week.
+ */
+export const campWizardCsv = pgTable(
+  'camp_wizard_csv',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    fileName: text('file_name').notNull(),
+    totalRows: integer('total_rows').notNull().default(0),
+    validCount: integer('valid_count').notNull().default(0),
+    duplicateCount: integer('duplicate_count').notNull().default(0),
+    invalidCount: integer('invalid_count').notNull().default(0),
+    createdBy: idColumn('created_by'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('camp_wizard_csv_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'camp_wizard_csv_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_wizard_csv_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_camp_wizard_csv_expiry')
+      .on(t.expiresAt)
+      .where(sql`expires_at IS NOT NULL`),
+  ],
+);
+
+export const campWizardCsvRows = pgTable(
+  'camp_wizard_csv_rows',
+  {
+    orgId: orgIdColumn(),
+    uploadId: idColumn('upload_id').notNull(),
+    line: integer('line').notNull(),
+    kind: text('kind').notNull(),
+    rawValue: text('raw_value'),
+    phone: text('phone'),
+    digits: text('digits'),
+    name: text('name'),
+    reason: text('reason'),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.uploadId, t.line] }),
+    check('ck_camp_wizard_csv_rows_kind', sql`kind IN ('valid', 'duplicate', 'invalid')`),
+    foreignKey({
+      name: 'fk_camp_wizard_csv_rows_upload',
+      columns: [t.orgId, t.uploadId],
+      foreignColumns: [campWizardCsv.orgId, campWizardCsv.id],
+    }).onDelete('cascade'),
+    index('idx_camp_wizard_csv_rows_valid')
+      .on(t.orgId, t.uploadId, t.digits)
+      .where(sql`kind = 'valid'`),
+  ],
+);
+
 export const wpcampaigns = pgTable(
   'wpcampaigns',
   {

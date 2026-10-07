@@ -91,7 +91,6 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',
   'settings-storage': 'cloud storage s3 bucket files uploads minio r2 spaces',
-  'settings-realtime': 'realtime real time websocket pusher socket live',
 
   system: 'system status version update updater license install server php',
   'i18n-languages': 'languages translations locales rtl arabic default language',

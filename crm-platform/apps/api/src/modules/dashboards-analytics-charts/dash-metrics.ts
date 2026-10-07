@@ -11,6 +11,7 @@ export interface RawCounts {
   contactsMessaged: number;
   contactsDelivered: number;
   contactsReplied: number;
+  contactsGoalCompleted: number;
 }
 
 const round1 = (n: number): number => Math.round(n * 10) / 10;
@@ -87,6 +88,7 @@ export function funnelOf(t: DashTotals, previous?: DashTotals): DashFunnel {
       messaged: t.contactsMessaged,
       delivered: t.contactsDelivered,
       replied: t.contactsReplied,
+      goalCompleted: t.contactsGoalCompleted,
     },
     activity: {
       inbound: t.replies,

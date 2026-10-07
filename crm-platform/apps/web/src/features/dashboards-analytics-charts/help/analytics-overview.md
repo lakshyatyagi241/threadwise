@@ -27,7 +27,7 @@ Analytics gives you a full report on the messages your workspace has sent and re
 - **Messages over time**: sent, delivered and failed per day.
 - **Delivery rates**: the share delivered, queued and failed.
 - **Daily totals**: delivered, queued and failed per day, stacked.
-- **Engagement funnel**: contacts messaged, delivered and replied, with conversation activity and the reply-rate change against the previous period.
+- **Engagement funnel**: contacts messaged, delivered, replied and goal completed (contacts whose flow finished), with conversation activity and the reply-rate change against the previous period.
 - **Message types**: outbound messages split into text, template, media, interactive and location.
 - **Best hours**: a grid of weekday against hour. Darker cells mean more messages.
 
