@@ -148,6 +148,8 @@ export const grantFieldSchema = z.object({
   group: z.string(),
   /** 'core' or the slug of the module that contributes it. */
   source: z.string(),
+  /** A core flag that every plan grants: it cannot be sold as an add-on (the form shows it, unavailable). */
+  core: z.boolean().default(false),
 });
 export type GrantField = z.infer<typeof grantFieldSchema>;
 
