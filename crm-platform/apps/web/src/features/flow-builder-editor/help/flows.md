@@ -37,6 +37,7 @@ A flow is an automated conversation. It starts when a customer sends a word you 
 ## Options and settings
 
 - **Simple and Advanced share one flow.** A flow made in the Simple builder opens on the canvas, and a canvas flow that is a plain list of steps opens in Simple. A flow that uses canvas-only steps (a webhook, a condition and so on) shows what does not fit and offers **Open in Advanced**.
+- **Condition groups (Advanced).** A Condition step can hold groups of rules inside groups, for example `plan = pro AND (age > 18 OR city = Pune)`. Each group has an AND / OR switch (AND means every rule and sub-group must match, OR means any one), and **Add rule** / **Add group** build the tree: up to 3 levels deep and 20 rules in all. A rule with no variable, or a group with no rules, is marked in red (an empty group is always false). A Condition made before this existed keeps working exactly as it did; the first time you edit it, it opens as the equal groups. The step on the canvas shows the whole condition on one line with brackets.
 - **Builder** (top of the Flows page, for people who can edit flows) sets which builder this workspace uses: Simple, Advanced, or the platform default your administrator chose. Changing it never changes a flow.
 - **Publish** needs a trigger word (or any message), a WhatsApp number when you have one connected, and every step filled in. The list of what is missing opens above the steps.
 

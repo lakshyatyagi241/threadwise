@@ -231,6 +231,41 @@ describe('simulator: nodes', () => {
     expect(empty).toContain('N');
   });
 
+  it('condition with a nested conditionGroup wins over the flat chain', async () => {
+    const run = async (cond: Record<string, unknown>) => {
+      const h = harness(
+        [
+          node('t', 'trigger'),
+          node('c', 'condition', cond),
+          node('y', 'message', { text: 'Y' }),
+          node('n', 'message', { text: 'N' }),
+        ],
+        [edge('t', 'out', 'c'), edge('c', 'yes', 'y'), edge('c', 'no', 'n')],
+      );
+      h.sim.start();
+      h.sim.send('go');
+      await h.settle();
+      return h.texts();
+    };
+    const r = (variable: string, operator: string, value = '') => ({ variable, operator, value });
+    const log = await run({
+      conditions: [r('name', 'equals', 'nobody')],
+      conditionGroup: {
+        op: 'and',
+        items: [
+          r('name', 'exists'),
+          { op: 'or', items: [r('plan', 'equals', 'pro'), r('name', 'contains', 'any')] },
+        ],
+      },
+    });
+    expect(log).toContain('if {{name}} is set AND ({{plan}} = pro OR {{name}} ⊆ any) → YES');
+    const empty = await run({
+      conditions: [r('name', 'exists')],
+      conditionGroup: { op: 'and', items: [] },
+    });
+    expect(empty).toContain('N');
+  });
+
   it('condition operators gt/lt/not_equals/not_contains', async () => {
     const run = async (operator: string, value: string, variable = 'phone') => {
       const h = harness(
