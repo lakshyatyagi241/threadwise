@@ -26,16 +26,56 @@ export const SEGMENT_COUNT_TTL_MS = 5 * 60 * 1000;
 /** More members than this are added to a group by a background job, in chunks of this size. */
 export const SEGMENT_INLINE_ACTION_MAX = 1000;
 
-export const segmentVisibilitySchema = z.enum(['private', 'shared']);
+/** People and teams one segment can be shared with. */
+export const SEGMENT_SHARE_MAX = 200;
+
+/**
+ * `private`: the owner and people who can edit every segment. `shared`: everyone who can view segments.
+ * `specific` (a change beyond Reference, by request): only the people and teams in `sharedWith`, plus the owner and people
+ * who can edit every segment. Sharing is view-and-use only; editing and deleting stay with the owner / edit-all.
+ */
+export const segmentVisibilitySchema = z.enum(['private', 'shared', 'specific']);
 export type SegmentVisibility = z.infer<typeof segmentVisibilitySchema>;
+
+/** Who a `specific` segment is shared with, as ids. The owner never needs to be in it. */
+export const segmentSharedWithInputSchema = z
+  .object({
+    userIds: z.array(uuidSchema).max(SEGMENT_SHARE_MAX).default([]),
+    teamIds: z.array(uuidSchema).max(SEGMENT_SHARE_MAX).default([]),
+  })
+  .strict()
+  .refine((v) => v.userIds.length + v.teamIds.length <= SEGMENT_SHARE_MAX, {
+    message: `share with at most ${SEGMENT_SHARE_MAX} people and teams`,
+    path: ['userIds'],
+  });
+export type SegmentSharedWithInput = z.infer<typeof segmentSharedWithInputSchema>;
+
+/** What a picker and a badge need about a person the segment is shared with. `email` only for callers who can edit. */
+export const segmentSharedUserSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  email: z.string().nullable(),
+});
+export const segmentSharedTeamSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  memberCount: z.number().int(),
+});
+export const segmentSharedWithSchema = z.object({
+  users: z.array(segmentSharedUserSchema),
+  teams: z.array(segmentSharedTeamSchema),
+});
+export type SegmentSharedWith = z.infer<typeof segmentSharedWithSchema>;
 
 export const segmentResponseSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   description: z.string().nullable(),
   color: z.string().nullable(),
-  /** `private`: the owner and admins only. `shared`: every member who can read segments. */
+  /** `private`: the owner and admins only. `shared`: every member who can read segments. `specific`: see `sharedWith`. */
   visibility: segmentVisibilitySchema,
+  /** Who it is shared with; empty unless `visibility` is `specific`. */
+  sharedWith: segmentSharedWithSchema,
   ownerId: uuidSchema.nullable(),
   ownerName: z.string().nullable(),
   rules: segmentRulesSchema,
@@ -65,6 +105,8 @@ export const createSegmentSchema = z
     description: descriptionSchema.nullish(),
     color: hexColorSchema.nullish(),
     visibility: segmentVisibilitySchema.default('private'),
+    /** Required, and not empty, when `visibility` is `specific`. */
+    sharedWith: segmentSharedWithInputSchema.optional(),
     rules: segmentRulesSchema,
   })
   .strict();
@@ -77,6 +119,8 @@ export const updateSegmentSchema = z
     description: descriptionSchema.nullish(),
     color: hexColorSchema.nullish(),
     visibility: segmentVisibilitySchema.optional(),
+    /** Absent keeps the people as they are; sent, it replaces the whole list (needs `specific`). */
+    sharedWith: segmentSharedWithInputSchema.optional(),
     rules: segmentRulesSchema.optional(),
     rowVersion: z.number().int().positive(),
   })
@@ -158,6 +202,7 @@ export const segmentFromFiltersSchema = z
     description: descriptionSchema.nullish(),
     color: hexColorSchema.nullish(),
     visibility: segmentVisibilitySchema.default('private'),
+    sharedWith: segmentSharedWithInputSchema.optional(),
     filter: segmentFilterSchema,
   })
   .strict();

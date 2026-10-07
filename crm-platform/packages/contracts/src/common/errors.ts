@@ -177,6 +177,12 @@ export const ERROR_CODES = {
   SEG_NAME_TAKEN: 'SEG_NAME_TAKEN',
   /** The rules point at something that does not exist (a tag, group, stage, status, user or property) or use an operator the property's type does not have. */
   SEG_RULES_INVALID: 'SEG_RULES_INVALID',
+  /** `specific` visibility with nobody chosen (details: path `sharedWith`). */
+  SEG_SHARE_EMPTY: 'SEG_SHARE_EMPTY',
+  /** A chosen person is not a member of this workspace (details: one `sharedWith.userIds.<n>` per unknown id). */
+  SEG_SHARE_USER_NOT_FOUND: 'SEG_SHARE_USER_NOT_FOUND',
+  /** A chosen team does not exist in this workspace (details: one `sharedWith.teamIds.<n>` per unknown id). */
+  SEG_SHARE_TEAM_NOT_FOUND: 'SEG_SHARE_TEAM_NOT_FOUND',
 
   // broadcasts (TW-BCAST)
   BCAST_NO_RECIPIENTS: 'BCAST_NO_RECIPIENTS',

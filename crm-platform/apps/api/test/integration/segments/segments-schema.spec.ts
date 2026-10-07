@@ -192,6 +192,12 @@ describe('segments: schema, isolation and rule SQL', () => {
           pattern,
         );
       await bad('visibility', 'public', /chk_segments_visibility/);
+      // The third kind is legal, and a segment made before it existed is untouched.
+      const ok = await one(
+        `INSERT INTO segments (org_id, name, rules, visibility) VALUES ($1,'specific-ok',$2::jsonb,'specific') RETURNING id`,
+        [orgA, rules()],
+      );
+      await owner.query(`DELETE FROM segments WHERE org_id = $1 AND id = $2`, [orgA, ok]);
       await bad('color', 'green', /chk_segments_color/);
       await bad('member_count_cache', -1, /chk_segments_count/);
       await bad('rules_version', 0, /chk_segments_rules_version/);
@@ -233,6 +239,152 @@ describe('segments: schema, isolation and rule SQL', () => {
       ).rows[0];
       expect(Number(row.org_id)).toBe(orgA);
       expect(row.owner_id).toBeNull();
+      await owner.query(`DELETE FROM segments WHERE org_id = $1 AND id = $2`, [orgA, s]);
+    });
+  });
+
+  describe('segment_shares', () => {
+    let teamA: number;
+    let teamB: number;
+    let shared: number;
+    beforeAll(async () => {
+      teamA = await one(`INSERT INTO teams (org_id, name) VALUES ($1,'TA') RETURNING id`, [orgA]);
+      teamB = await one(`INSERT INTO teams (org_id, name) VALUES ($1,'TB') RETURNING id`, [orgB]);
+      shared = await one(
+        `INSERT INTO segments (org_id, name, owner_id, rules, visibility) VALUES ($1,'Shares',$2,$3::jsonb,'specific') RETURNING id`,
+        [orgA, userA, rules()],
+      );
+    });
+
+    it('RLS is enabled and forced with a tenant policy', async () => {
+      const res = await owner.query(
+        `SELECT relrowsecurity, relforcerowsecurity,
+                (SELECT count(*) FROM pg_policies p WHERE p.tablename = 'segment_shares' AND p.policyname = 'tenant_isolation')::int AS policies
+           FROM pg_class WHERE relname = 'segment_shares' AND relkind = 'r'`,
+      );
+      expect(res.rows[0]).toMatchObject({
+        relrowsecurity: true,
+        relforcerowsecurity: true,
+        policies: 1,
+      });
+    });
+
+    it('a workspace cannot read or write the shares of another', async () => {
+      await owner.query(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, userA],
+      );
+      expect(
+        (await asOrg(orgB, async () => (await app.query(`SELECT 1 FROM segment_shares`)).rows))
+          .length,
+      ).toBe(0);
+      expect(
+        (await asOrg(orgA, async () => (await app.query(`SELECT 1 FROM segment_shares`)).rows))
+          .length,
+      ).toBe(1);
+      await expect(
+        asOrg(orgB, () =>
+          app.query(`INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`, [
+            orgA,
+            shared,
+            userA,
+          ]),
+        ),
+      ).rejects.toThrow(/row-level security/);
+    });
+
+    it('one row per person and per team, each exactly one of the two', async () => {
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, userA],
+        /uq_segment_shares_user/,
+      );
+      await owner.query(
+        `INSERT INTO segment_shares (org_id, segment_id, team_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, teamA],
+      );
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, team_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, teamA],
+        /uq_segment_shares_team/,
+      );
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id, team_id) VALUES ($1,$2,$3,$4)`,
+        [orgA, shared, userA, teamA],
+        /chk_segment_shares_target/,
+      );
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id) VALUES ($1,$2)`,
+        [orgA, shared],
+        /chk_segment_shares_target/,
+      );
+    });
+
+    it('the person, the team and the segment are composite: nothing points into another workspace', async () => {
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, userB],
+        /foreign key|violates/,
+      );
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, team_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, teamB],
+        /foreign key|violates/,
+      );
+      await rejects(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`,
+        [orgA, segB, userA],
+        /foreign key|violates/,
+      );
+    });
+
+    it('deleting a person, a team or the segment removes the shares', async () => {
+      const u = await one(
+        `INSERT INTO users (org_id, email, full_name, password_hash) VALUES ($1,'share@s.test','S','x') RETURNING id`,
+        [orgA],
+      );
+      const t = await one(`INSERT INTO teams (org_id, name) VALUES ($1,'TX') RETURNING id`, [orgA]);
+      await owner.query(
+        `INSERT INTO segment_shares (org_id, segment_id, user_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, u],
+      );
+      await owner.query(
+        `INSERT INTO segment_shares (org_id, segment_id, team_id) VALUES ($1,$2,$3)`,
+        [orgA, shared, t],
+      );
+      const count = async () =>
+        Number(
+          (
+            await owner.query(
+              `SELECT count(*)::int AS n FROM segment_shares WHERE segment_id = $1`,
+              [shared],
+            )
+          ).rows[0].n,
+        );
+      expect(await count()).toBe(4);
+      await owner.query(`DELETE FROM users WHERE org_id = $1 AND id = $2`, [orgA, u]);
+      await owner.query(`DELETE FROM teams WHERE org_id = $1 AND id = $2`, [orgA, t]);
+      expect(await count()).toBe(2);
+      await owner.query(`DELETE FROM segments WHERE org_id = $1 AND id = $2`, [orgA, shared]);
+      expect(await count()).toBe(0);
+    });
+
+    it('a change of the people list alone moves row_version (through shares_rev)', async () => {
+      const s = await one(
+        `INSERT INTO segments (org_id, name, rules) VALUES ($1,'rev',$2::jsonb) RETURNING id`,
+        [orgA, rules()],
+      );
+      await owner.query(
+        `UPDATE segments SET shares_rev = shares_rev + 1 WHERE org_id = $1 AND id = $2`,
+        [orgA, s],
+      );
+      const row = (
+        await owner.query(`SELECT row_version FROM segments WHERE org_id = $1 AND id = $2`, [
+          orgA,
+          s,
+        ])
+      ).rows[0];
+      expect(row.row_version).toBe(2);
       await owner.query(`DELETE FROM segments WHERE org_id = $1 AND id = $2`, [orgA, s]);
     });
   });
