@@ -34,7 +34,9 @@ import { FixtureRegistrar } from './fixture/fixture-registrar';
 import { FixtureReceiptQueue } from './fixture/fixture-receipts';
 import { WizardAudienceService } from './wizard/wizard-audience.service';
 import { WizardBroadcastsService } from './wizard/wizard-broadcasts.service';
+import { WizardContactsService } from './wizard/wizard-contacts.service';
 import { WizardController } from './wizard/wizard.controller';
+import { WizardCsvService } from './wizard/wizard-csv.service';
 import { WizardDraftsService } from './wizard/wizard-drafts.service';
 import { WizardLaunchService } from './wizard/wizard-launch.service';
 import { WizardReadService } from './wizard/wizard-read.service';
@@ -79,6 +81,8 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignReceiptsService,
     WizardRepository,
     WizardAudienceService,
+    WizardCsvService,
+    WizardContactsService,
     WizardReadService,
     WizardDraftsService,
     WizardReviewService,
@@ -109,6 +113,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     WizardRepository,
     WizardRunService,
     WizardTestSendService,
+    WizardCsvService,
     CAMPAIGN_PLAN_GATE,
     CAMPAIGN_BILLING,
     CAMPAIGN_FLOW_STARTER,

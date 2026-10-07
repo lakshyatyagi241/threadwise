@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type {
   SessionResponse,
+  WizardAudience,
   WizardAudienceCount,
   WizardAudienceSources,
   WizardCreditCheck,
@@ -12,7 +13,7 @@ import type {
   WizardSender,
   WizardTemplate,
 } from '@crm/contracts';
-import { EMPTY_WIZARD_DRAFT } from '@crm/contracts';
+import { EMPTY_WIZARD_AUDIENCE, EMPTY_WIZARD_DRAFT } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { loadMessages } from '@/i18n/messages';
@@ -115,6 +116,12 @@ export const templates = (): WizardTemplate[] => [
   }),
 ];
 
+/** An audience with only what the test names filled in. */
+export const audience = (over: Partial<WizardAudience> = {}): WizardAudience => ({
+  ...EMPTY_WIZARD_AUDIENCE,
+  ...over,
+});
+
 export function draft(over: Partial<WizardDraft> = {}): WizardDraft {
   return { ...EMPTY_WIZARD_DRAFT, ...over };
 }
@@ -154,6 +161,7 @@ export const sources = (): WizardAudienceSources => ({
 
 export const count = (over: Partial<WizardAudienceCount> = {}): WizardAudienceCount => ({
   matching: 1000,
+  newContacts: 0,
   optedOut: 30,
   invalidNumber: 20,
   recipients: 950,

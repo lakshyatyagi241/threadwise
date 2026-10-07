@@ -1,8 +1,13 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   wizardAudienceCountSchema,
+  wizardContactsPageSchema,
+  wizardCsvReportSchema,
+  wizardAudienceHasSource,
+  wizardAudienceSchema,
   wizardBroadcastDetailSchema,
   wizardBroadcastListSchema,
+  wizardHistoryListSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
   wizardLaunchResultSchema,
@@ -26,6 +31,7 @@ import {
   world,
   type Lab,
 } from './broadcast-wizard.support';
+import { WizardCsvService } from '../../../src/modules/campaigns/wizard/wizard-csv.service';
 
 /**
  * The "Create broadcast" wizard over HTTP (an addition beyond Reference): templates, audience, the draft that is saved as the person
@@ -158,7 +164,7 @@ describe('step 2: audience sources and the count', () => {
     return wizardAudienceCountSchema.parse(res.body);
   }
 
-  it('groups and segments join; the conditions narrow them; opted-out contacts and invalid numbers are counted apart and never messaged', async () => {
+  it('groups and segments join; opted-out contacts and invalid numbers are counted apart and never messaged', async () => {
     const w = await world(lab, 'bwa2');
     const ids = await people(lab, w.t, [
       { name: 'In group A', countryCode: '+91' },
@@ -180,17 +186,18 @@ describe('step 2: audience sources and the count', () => {
       approximate: false,
     });
 
+    // The conditions alone only filter the contacts table: they are not an audience until "select all matching" freezes them.
     const india = {
       type: 'group',
       combinator: 'and',
       children: [{ type: 'condition', field: 'countryCode', operator: 'equals', value: '+91' }],
     };
-    const narrowed = await count(w.t.admin, { groupIds: [a, b], segmentIds: [], rules: india });
-    expect(narrowed).toMatchObject({ matching: 4, optedOut: 1, invalidNumber: 2, recipients: 1 });
-
-    // Rules alone select from every contact.
-    const alone = await count(w.t.admin, { groupIds: [], segmentIds: [], rules: india });
-    expect(alone.matching).toBe(5);
+    expect(await count(w.t.admin, { groupIds: [], segmentIds: [], rules: india })).toMatchObject({
+      matching: 0,
+      recipients: 0,
+    });
+    const all = await count(w.t.admin, { allMatching: { search: null, rules: india } });
+    expect(all.matching).toBe(5);
     // Nothing picked, nobody.
     expect(await count(w.t.admin, { groupIds: [], segmentIds: [], rules: null })).toMatchObject({
       matching: 0,
@@ -223,19 +230,15 @@ describe('step 2: audience sources and the count', () => {
     });
     expect(filtered).toMatchObject({ matching: 2, recipients: 1 });
 
-    // The conditions narrow a selection like any other source.
-    const india = {
-      type: 'group',
-      combinator: 'and',
-      children: [{ type: 'condition', field: 'countryCode', operator: 'equals', value: '+91' }],
-    };
-    const narrowed = await count(w.t.admin, {
+    // A selection joins the other sources as a union (a contact in both is counted once).
+    const joined = await count(w.t.admin, {
       groupIds: [],
       segmentIds: [],
-      rules: india,
-      selection: { ids },
+      rules: null,
+      contactIds: [ids[0]!, ids[3]!],
+      selection: { ids: ids.slice(0, 2) },
     });
-    expect(narrowed.matching).toBe(2);
+    expect(joined.matching).toBe(3);
 
     // Ids that are not in this workspace select nobody; a selection naming both ids and a filter is refused.
     const foreign = '3f1c2b7a-5d4e-4a90-8b21-0c9d7e6f5a43';
@@ -274,17 +277,20 @@ describe('step 2: audience sources and the count', () => {
       audience: {
         groupIds: [],
         segmentIds: [],
-        rules: {
-          type: 'group',
-          combinator: 'and',
-          children: [
-            {
-              type: 'condition',
-              field: 'groups',
-              operator: 'has_any',
-              value: ['3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11'],
-            },
-          ],
+        allMatching: {
+          search: null,
+          rules: {
+            type: 'group',
+            combinator: 'and',
+            children: [
+              {
+                type: 'condition',
+                field: 'groups',
+                operator: 'has_any',
+                value: ['3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11'],
+              },
+            ],
+          },
         },
       },
     });
@@ -307,6 +313,363 @@ describe('step 2: audience sources and the count', () => {
       },
     });
     expect(res.status).toBe(422);
+  });
+});
+
+describe('step 2: the four audience modes', () => {
+  const india = {
+    type: 'group',
+    combinator: 'and',
+    children: [{ type: 'condition', field: 'countryCode', operator: 'equals', value: '+91' }],
+  };
+
+  async function count(token: string, audience: object) {
+    const res = await wiz(lab, token).post('/audience/count', { audience });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return wizardAudienceCountSchema.parse(res.body);
+  }
+  async function contactsPage(token: string, body: object) {
+    const res = await wiz(lab, token).post('/contacts/query', body);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return wizardContactsPageSchema.parse(res.body);
+  }
+  async function upload(token: string, csv: string, name = 'numbers.csv') {
+    const res = await wiz(lab, token).upload('/csv', csv, name);
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    return wizardCsvReportSchema.parse(res.body);
+  }
+  /** Launches a ready draft with this audience; returns the phones of the written recipients. */
+  async function launch(w: Awaited<ReturnType<typeof world>>, audience: object) {
+    await payPerMessage(lab, w.t, 1_000_000);
+    const g = await group(owner(), w.t, 'Unused', []);
+    const d = await makeDraft(lab, w, readyDraft(w, g, { audience }));
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    return { res, d };
+  }
+  const recipientPhones = async (campaignUuid: string): Promise<string[]> => {
+    const { id } = await idOfCampaign(owner(), campaignUuid);
+    const r = await owner().query(
+      `SELECT c.phone FROM wp_campaign_contacts r JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
+       WHERE r.campaign_id = $1 ORDER BY c.phone`,
+      [id],
+    );
+    return r.rows.map((x) => x.phone as string);
+  };
+
+  it('any one source is a valid audience; the conditions alone are not', () => {
+    const base = wizardAudienceSchema.parse({});
+    expect(wizardAudienceHasSource(base)).toBe(false);
+    expect(wizardAudienceHasSource({ ...base, rules: india as never })).toBe(false);
+    expect(
+      wizardAudienceHasSource({ ...base, contactIds: ['3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11'] }),
+    ).toBe(true);
+    expect(wizardAudienceHasSource({ ...base, allMatching: { search: null, rules: null } })).toBe(
+      true,
+    );
+  });
+
+  it('the contacts table is searched, filtered and paged on the server, with the total', async () => {
+    const w = await world(lab, 'bwm1');
+    await people(lab, w.t, [
+      ...Array.from({ length: 30 }, (_, i) => ({
+        name: `Indian ${String(i).padStart(2, '0')}`,
+        countryCode: '+91',
+      })),
+      { name: 'British Bob', countryCode: '+44' },
+      { name: 'Opted Olga', countryCode: '+91', isUnsubscribed: true },
+      { name: 'Bad Number', phone: '123', countryCode: '+91' },
+    ]);
+    const first = await contactsPage(w.t.admin, { page: 1, perPage: 25 });
+    expect(first.total).toBe(33);
+    expect(first.data).toHaveLength(25);
+    const second = await contactsPage(w.t.admin, { page: 2, perPage: 25 });
+    expect(second.data).toHaveLength(8);
+    expect(new Set([...first.data, ...second.data].map((r) => r.id)).size).toBe(33);
+
+    // Search runs in the database: a name word, not a page of rows.
+    const search = await contactsPage(w.t.admin, { search: 'british', page: 1, perPage: 25 });
+    expect(search).toMatchObject({ total: 1, data: [{ name: 'British Bob', sendable: true }] });
+
+    // The conditions are the segments rule engine's, applied before the count and the paging.
+    const filtered = await contactsPage(w.t.admin, { rules: india, page: 1, perPage: 100 });
+    expect(filtered.total).toBe(32);
+    expect(filtered.data.some((r) => r.name === 'British Bob')).toBe(false);
+    const flags = Object.fromEntries(filtered.data.map((r) => [r.name, r]));
+    expect(flags['Opted Olga']).toMatchObject({ optedOut: true, sendable: false });
+    expect(flags['Bad Number']).toMatchObject({ optedOut: false, sendable: false });
+
+    // Another workspace sees none of it.
+    const other = await world(lab, 'bwm1b');
+    expect((await contactsPage(other.t.admin, { page: 1, perPage: 25 })).total).toBe(0);
+  });
+
+  it('contacts ticked in the table are the recipients at launch; an opted-out one is never written', async () => {
+    const w = await world(lab, 'bwm2');
+    const ids = await people(lab, w.t, [
+      { phone: '+919876500001' },
+      { phone: '+919876500002' },
+      { phone: '+919876500003', isUnsubscribed: true },
+      { phone: '+919876500004' },
+    ]);
+    const audience = { contactIds: [ids[0]!, ids[2]!, ids[3]!] };
+    const c = await count(w.t.admin, audience);
+    expect(c).toMatchObject({ matching: 3, optedOut: 1, recipients: 2, newContacts: 0 });
+    const { res, d } = await launch(w, audience);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.recipients).toBe(2);
+    expect(await recipientPhones(d.id)).toEqual(['+919876500001', '+919876500004']);
+  });
+
+  it('"select all matching" takes the search and the conditions frozen at that moment, minus the contacts un-ticked', async () => {
+    const w = await world(lab, 'bwm3');
+    const ids = await people(lab, w.t, [
+      { name: 'Anil', phone: '+919876510001', countryCode: '+91' },
+      { name: 'Anita', phone: '+919876510002', countryCode: '+91' },
+      { name: 'Anya UK', phone: '+447700900123', countryCode: '+44' },
+      { name: 'Bela', phone: '+919876510004', countryCode: '+91' },
+    ]);
+    const all = { allMatching: { search: null, rules: india } };
+    expect(await count(w.t.admin, all)).toMatchObject({ matching: 3, recipients: 3 });
+    const searched = { allMatching: { search: 'an', rules: india } };
+    expect(await count(w.t.admin, searched)).toMatchObject({ matching: 2, recipients: 2 });
+    const unticked = { ...searched, excludedContactIds: [ids[0]!] };
+    expect(await count(w.t.admin, unticked)).toMatchObject({ matching: 1, recipients: 1 });
+    const { res, d } = await launch(w, unticked);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(await recipientPhones(d.id)).toEqual(['+919876510002']);
+  });
+
+  it('CSV: the upload is parsed on the server and reports valid, duplicate, invalid and opted-out numbers with line numbers', async () => {
+    const w = await world(lab, 'bwm4');
+    await people(lab, w.t, [
+      { name: 'Existing', phone: '+919876520001' },
+      { name: 'Opted out', phone: '+919876520002', isUnsubscribed: true },
+    ]);
+    const csv = [
+      'phone,first_name,last_name',
+      '+919876520001,Eva,Existing', // line 2: already a contact
+      '+919876520002,Olga,Out', // line 3: opted-out contact
+      '+919876520003,New,One', // line 4: new
+      '+91 98765 20003,New,Again', // line 5: same number as line 4
+      '12345,Bad,Number', // line 6: invalid
+      ',No,Phone', // line 7: missing
+      '9876520004,Local,Number', // line 8: local number, workspace default country applies
+      '+447700900456,Uk,Person', // line 9: new, other country
+    ].join('\n');
+    const r = await upload(w.t.admin, csv);
+    expect(r).toMatchObject({
+      fileName: 'numbers.csv',
+      totalRows: 8,
+      valid: 5,
+      duplicate: 1,
+      invalid: 2,
+      optedOut: 1,
+      existing: 2,
+      newContacts: 3,
+    });
+    expect(r.issues).toEqual([
+      { line: 5, value: '+91 98765 20003', reason: 'duplicate' },
+      { line: 6, value: '12345', reason: 'invalid_phone' },
+      { line: 7, value: '', reason: 'missing_phone' },
+    ]);
+    expect(r.preview[0]).toMatchObject({ line: 2, phone: '+919876520001', status: 'existing' });
+    expect(r.preview[1]).toMatchObject({ line: 3, status: 'optedOut' });
+    expect(r.preview[2]).toMatchObject({
+      line: 4,
+      phone: '+919876520003',
+      name: 'New One',
+      status: 'new',
+    });
+
+    // The report can be read again, and the error list downloads with the line numbers.
+    const again = await wiz(lab, w.t.admin).get(`/csv/${r.id}`);
+    expect(again.status).toBe(200);
+    expect(wizardCsvReportSchema.parse(again.body)).toMatchObject({ valid: 5, newContacts: 3 });
+    const errors = await wiz(lab, w.t.admin).get(`/csv/${r.id}/errors`);
+    expect(errors.status).toBe(200);
+    expect(errors.headers['content-type']).toContain('text/csv');
+    const lines = (errors.text as string)
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .split('\n');
+    expect(lines[0]).toBe('line,value,problem');
+    expect(lines.map((l) => l.split(',')[0])).toEqual(['line', '5', '6', '7']);
+
+    // A file without a phone column, a binary file and an oversized row count are refused with a reason.
+    const noPhone = await wiz(lab, w.t.admin).upload('/csv', 'name,email\nA,a@x.com');
+    expect(noPhone.status).toBe(422);
+    expect(noPhone.body.code).toBe('CON_IMPORT_FILE_INVALID');
+    const tpl = await wiz(lab, w.t.admin).get('/csv/template');
+    expect(tpl.status).toBe(200);
+    expect((tpl.text as string).replace(/^\uFEFF/, '').split('\n')[0]).toBe(
+      'phone,first_name,last_name',
+    );
+  });
+
+  it('CSV: the count includes numbers that are not contacts yet; the launch creates them as contacts and messages every valid number once', async () => {
+    const w = await world(lab, 'bwm5');
+    await people(lab, w.t, [
+      { name: 'Existing', phone: '+919876530001' },
+      { name: 'Opted out', phone: '+919876530002', isUnsubscribed: true },
+    ]);
+    const r = await upload(
+      w.t.admin,
+      [
+        'phone,name',
+        '+919876530001,Eva',
+        '+919876530002,Olga',
+        '+919876530003,Nina',
+        '+919876530003,Nina again',
+        '+447700900777,Uma',
+      ].join('\n'),
+    );
+    const audience = {
+      csv: {
+        id: r.id,
+        fileName: r.fileName,
+        valid: r.valid,
+        duplicate: r.duplicate,
+        invalid: r.invalid,
+        optedOut: r.optedOut,
+      },
+    };
+    const before = Number(
+      (await owner().query(`SELECT count(*) FROM contacts WHERE org_id = $1`, [w.t.orgId])).rows[0]
+        .count,
+    );
+    const c = await count(w.t.admin, audience);
+    expect(c).toMatchObject({ matching: 4, optedOut: 1, recipients: 3, newContacts: 2 });
+    expect(c.countries.map((x) => [x.country, x.count]).sort()).toEqual([
+      ['GB', 1],
+      ['IN', 2],
+    ]);
+    // Counting writes nothing.
+    expect(
+      Number(
+        (await owner().query(`SELECT count(*) FROM contacts WHERE org_id = $1`, [w.t.orgId]))
+          .rows[0].count,
+      ),
+    ).toBe(before);
+
+    const { res, d } = await launch(w, audience);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.recipients).toBe(3);
+    expect(await recipientPhones(d.id)).toEqual([
+      '+447700900777',
+      '+919876530001',
+      '+919876530003',
+    ]);
+    const made = await owner().query(
+      `SELECT name, source FROM contacts WHERE org_id = $1 AND phone = '+919876530003'`,
+      [w.t.orgId],
+    );
+    expect(made.rows).toEqual([{ name: 'Nina', source: 'broadcast_csv' }]);
+    // The opted-out contact was matched by phone and skipped, not duplicated.
+    expect(
+      Number(
+        (
+          await owner().query(
+            `SELECT count(*) FROM contacts WHERE org_id = $1 AND phone = '+919876530002'`,
+            [w.t.orgId],
+          )
+        ).rows[0].count,
+      ),
+    ).toBe(1);
+  });
+
+  it('the audience is the union of the modes: a contact in several is one recipient, opted-out and invalid are always out', async () => {
+    const w = await world(lab, 'bwm6');
+    const ids = await people(lab, w.t, [
+      { name: 'Both ticked and in group', phone: '+919876540001' },
+      { name: 'Only group', phone: '+919876540002' },
+      { name: 'Only ticked', phone: '+919876540003' },
+      { name: 'Opted out in group', phone: '+919876540004', isUnsubscribed: true },
+      { name: 'In CSV too', phone: '+919876540005' },
+    ]);
+    const g = await group(owner(), w.t, 'G', [ids[0]!, ids[1]!, ids[3]!]);
+    const seg = await lab.api
+      .http()
+      .post('/v2/segments')
+      .set('authorization', `Bearer ${w.t.admin}`)
+      .send({
+        name: 'Phone 5',
+        visibility: 'shared',
+        rules: {
+          type: 'group',
+          combinator: 'and',
+          children: [{ type: 'condition', field: 'name', operator: 'contains', value: 'CSV' }],
+        },
+      });
+    expect(seg.status, JSON.stringify(seg.body)).toBe(201);
+    const r = await upload(
+      w.t.admin,
+      ['phone', '+919876540005', '+919876540006', '+919876540001'].join('\n'),
+    );
+    const audience = {
+      groupIds: [g],
+      segmentIds: [seg.body.id as string],
+      contactIds: [ids[0]!, ids[2]!],
+      csv: {
+        id: r.id,
+        fileName: r.fileName,
+        valid: r.valid,
+        duplicate: r.duplicate,
+        invalid: r.invalid,
+        optedOut: r.optedOut,
+      },
+    };
+    const c = await count(w.t.admin, audience);
+    // 0,1,3 (group) + 5 (segment, CSV) + 0,2 (ticked) + csv: 5,1 and the new 6 => contacts 0,1,2,3,4 and new 6
+    expect(c).toMatchObject({ matching: 6, optedOut: 1, recipients: 5, newContacts: 1 });
+    const { res, d } = await launch(w, audience);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(await recipientPhones(d.id)).toEqual([
+      '+919876540001',
+      '+919876540002',
+      '+919876540003',
+      '+919876540005',
+      '+919876540006',
+    ]);
+  });
+
+  it('a CSV is private to its workspace: another workspace cannot read it, count it or launch with it', async () => {
+    const a = await world(lab, 'bwm7a');
+    const b = await world(lab, 'bwm7b');
+    const r = await upload(a.t.admin, ['phone', '+919876550001'].join('\n'));
+    expect((await wiz(lab, b.t.admin).get(`/csv/${r.id}`)).status).toBe(404);
+    expect((await wiz(lab, b.t.admin).get(`/csv/${r.id}/errors`)).status).toBe(404);
+    const foreign = {
+      csv: { id: r.id, fileName: 'x.csv', valid: 1, duplicate: 0, invalid: 0, optedOut: 0 },
+    };
+    const c = await count(b.t.admin, foreign);
+    expect(c).toMatchObject({ matching: 0, recipients: 0, newContacts: 0 });
+    const res = await wiz(lab, b.t.admin).post('/audience/count', { audience: foreign });
+    expect(res.body.invalidConditions[0]).toMatchObject({ reason: 'csv_missing' });
+    const { res: launched } = await launch(b, foreign);
+    expect(launched.status).toBe(422);
+    // The row-level policy holds even for a query that names the upload (the app role, the other workspace's context).
+    const rows = await owner().query(
+      `SELECT count(*)::int AS n FROM camp_wizard_csv_rows WHERE org_id = $1`,
+      [a.t.orgId],
+    );
+    expect(rows.rows[0].n).toBe(1);
+  });
+
+  it('an expired upload is deleted by the retention pass; a pinned one is kept', async () => {
+    const w = await world(lab, 'bwm8');
+    const keep = await upload(w.t.admin, 'phone\n+919876560001');
+    const gone = await upload(w.t.admin, 'phone\n+919876560002');
+    await owner().query(
+      `UPDATE camp_wizard_csv SET expires_at = now() - interval '1 minute' WHERE uuid = $1`,
+      [gone.id],
+    );
+    await owner().query(`UPDATE camp_wizard_csv SET expires_at = NULL WHERE uuid = $1`, [keep.id]);
+    const csv = lab.h.app.get(WizardCsvService, { strict: false });
+    expect(await csv.purgeExpired()).toBeGreaterThanOrEqual(1);
+    expect((await wiz(lab, w.t.admin).get(`/csv/${gone.id}`)).status).toBe(404);
+    expect((await wiz(lab, w.t.admin).get(`/csv/${keep.id}`)).status).toBe(200);
   });
 });
 
@@ -883,6 +1246,58 @@ describe('list, detail and control', () => {
       (await wiz(lab, one.w.t.admin).get('/broadcasts?status=scheduled')).body,
     );
     expect(filtered.data.map((b) => b.kind)).toEqual(['campaign']);
+  });
+
+  it('the history pages: a "now" broadcast is history with its type, a scheduled one is only on the scheduled page, filters narrow, another workspace sees none', async () => {
+    const now = await launched('bwx5', { mode: 'now' });
+    const t = now.w.t.admin;
+    const groupId = (
+      await owner().query(`SELECT uuid FROM contact_groups WHERE org_id = $1`, [now.w.t.orgId])
+    ).rows[0].uuid;
+    const later = await makeDraft(
+      lab,
+      now.w,
+      readyDraft(now.w, groupId, { schedule: scheduled() }),
+    );
+    const laterRes = await wiz(lab, t).post(`/drafts/${later.id}/launch`, {
+      rowVersion: later.rowVersion,
+    });
+    expect(laterRes.status, JSON.stringify(laterRes.body)).toBe(200);
+
+    const history = wizardHistoryListSchema.parse((await wiz(lab, t).get('/history')).body);
+    expect(history.data.map((r) => r.id)).toEqual([now.id]);
+    expect(history.data[0]).toMatchObject({
+      source: 'wizard',
+      type: 'now',
+      status: 'running',
+      counts: { recipients: 2 },
+    });
+    const none = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?type=recurring')).body,
+    );
+    expect(none.data).toEqual([]);
+    const byName = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?q=DIWALI&status=running')).body,
+    );
+    expect(byName.data).toHaveLength(1);
+
+    const waiting = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?scope=scheduled')).body,
+    );
+    expect(waiting.data.map((r) => r.id)).toEqual([laterRes.body.id]);
+    expect(waiting.data[0]).toMatchObject({ type: 'scheduled', status: 'scheduled' });
+    expect(waiting.data[0]!.runAt).toBe(`${day(2)}T09:00:00.000Z`);
+
+    const recurringOnly = wizardBroadcastListSchema.parse(
+      (await wiz(lab, t).get('/broadcasts?type=recurring')).body,
+    );
+    expect(recurringOnly.data).toEqual([]);
+
+    const other = await world(lab, 'bwx6');
+    const theirs = wizardHistoryListSchema.parse(
+      (await wiz(lab, other.t.admin).get('/history')).body,
+    );
+    expect(theirs.data).toEqual([]);
   });
 
   it('the detail of a series carries its rule, blueprint and the runs it has started', async () => {

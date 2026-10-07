@@ -132,3 +132,36 @@
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--thumb-hover);
 }
+
+/* The right-side drawer (components/drawer.tsx): slides in from the end edge, fades the backdrop; still for reduced motion. */
+@keyframes crm-drawer-in {
+  from {
+    transform: translateX(var(--drawer-from, 100%));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes crm-drawer-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.crm-drawer[open] {
+  animation: crm-drawer-in 0.2s ease-out;
+}
+.crm-drawer[open]::backdrop {
+  animation: crm-drawer-fade 0.2s ease-out;
+}
+[dir='rtl'] .crm-drawer {
+  --drawer-from: -100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .crm-drawer[open],
+  .crm-drawer[open]::backdrop {
+    animation: none;
+  }
+}

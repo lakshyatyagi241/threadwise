@@ -336,6 +336,13 @@ export const wiz = (lab: Lab, token: string) => ({
       .send(body),
   put: (path: string, body: object) =>
     lab.api.http().put(`/v2/broadcast-wizard${path}`).set(bearer(token)).send(body),
+  /** A multipart upload of one file field called `file`. */
+  upload: (path: string, content: string | Buffer, filename = 'numbers.csv') =>
+    lab.api
+      .http()
+      .post(`/v2/broadcast-wizard${path}`)
+      .set(bearer(token))
+      .attach('file', Buffer.from(content), filename),
 });
 
 export const problem = (res: {

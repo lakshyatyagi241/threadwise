@@ -17,6 +17,7 @@ export { Alert } from './components/alert';
 export { Spinner } from './components/spinner';
 export { Tabs, type TabItem, type TabsProps } from './components/tabs';
 export { Modal, type ModalProps } from './components/modal';
+export { Drawer, type DrawerProps } from './components/drawer';
 export { PasswordInput, type PasswordInputProps } from './components/password-input';
 export { ConfirmDialog, type ConfirmDialogProps } from './components/confirm-dialog';
 export { EmptyState, type EmptyStateProps } from './components/empty-state';
