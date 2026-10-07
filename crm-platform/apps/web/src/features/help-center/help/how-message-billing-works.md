@@ -16,7 +16,7 @@ This guide explains the rules behind the numbers on your wallet: what is free, w
 
 The **How billing works** card on the wallet screen says which one applies to your workspace.
 
-- **Plan.** Your plan includes a number of messages every month. Messages inside that allowance are free. Each message beyond it is charged to your wallet. A plan with no maximum has no allowance to run out, and a plan that has ended no longer has an allowance. See [Plan and usage](help:plan-and-usage).
+- **Plan.** Your plan includes a number of messages every month. Messages inside that allowance are free. Each message beyond it is charged to your wallet. A plan with no maximum has no allowance to run out, and a plan that has ended no longer has an allowance. See [Plans](help:account-plans).
 - **Pay per message.** Every delivered message is charged to the wallet, whatever your plan includes. Messages are billed through the platform: your wallet and subscription pay for them.
 
 ## What is charged, and when

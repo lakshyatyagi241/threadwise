@@ -161,9 +161,9 @@
         "keywords": "vat, gst, sales tax, percent, rates, country"
       },
       "plans": {
-        "label": "Plan and usage",
-        "description": "See your plan, what it includes and upgrade.",
-        "keywords": "subscription, upgrade, limits, pricing, trial"
+        "label": "Plans",
+        "description": "See your plan and usage, what it includes, and upgrade.",
+        "keywords": "subscription, upgrade, limits, pricing, trial, usage, plan and usage, meters"
       },
       "wallet": {
         "label": "Wallet",
@@ -181,9 +181,9 @@
         "keywords": "profile, me, avatar, email, password, preferences"
       },
       "branding": {
-        "label": "Branding",
-        "description": "Your logo and colours across the workspace.",
-        "keywords": "logo, colors, colours, theme, appearance, white label"
+        "label": "Message footer",
+        "description": "The line added at the bottom of messages sent from automations, scheduled sends and team inbox replies.",
+        "keywords": "branding, footer, signature, white label, remove branding, sent via"
       },
       "team-members": {
         "label": "Team members",

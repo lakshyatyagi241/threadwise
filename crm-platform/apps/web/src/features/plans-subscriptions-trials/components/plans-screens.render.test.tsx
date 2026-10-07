@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { PLAN_LIMIT_KEYS, type BillingPlan, type BillingUsagePanelResponse } from '@crm/contracts';
+import {
+  PLAN_LIMIT_KEYS,
+  type BillingPlan,
+  type BillingPlansResponse,
+  type BillingUsagePanelResponse,
+} from '@crm/contracts';
 import { renderAccount } from '@/features/auth-registration-security/account/render-test-utils';
 import { ENTITLEMENTS_KEY } from '@/lib/use-unofficial-whatsapp';
 import { BILLING_KEYS } from '../api';
 import { CompareTable } from './compare-table';
 import { PlanAddons } from './plan-addons';
 import { PlanCard } from './plan-card';
-import { UsagePanel } from './usage-panel';
+import { PlansPicker } from './plans-picker';
+import { UsageSection } from './usage-section';
 
 const ID = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 const addon = (n: number, name: string, owned = false) => ({
@@ -73,9 +79,9 @@ const plan = (over: Partial<BillingPlan>): BillingPlan =>
   }) as unknown as BillingPlan;
 
 for (const locale of ['en', 'ar'] as const) {
-  describe(`usage panel (${locale})`, () => {
+  describe(`usage section (${locale})`, () => {
     const html = (on = true) =>
-      renderAccount(<UsagePanel />, {
+      renderAccount(<UsageSection />, {
         locale,
         seed: [[BILLING_KEYS.usage, usage()], ...(on ? [SWITCH_ON] : [])],
       });
@@ -106,8 +112,78 @@ for (const locale of ['en', 'ar'] as const) {
       expect(out).toContain('aria-pressed="false"');
     });
 
-    it('lists the add-ons of the plan: owned badge, buy link to the Marketplace app', () => {
+    it('has no add-ons or plan cards of its own: the plan picker draws those once', () => {
       const out = html();
+      expect(out).not.toContain('data-testid="plan-addons"');
+      expect(out).not.toContain('data-testid="plan-cards"');
+    });
+
+    it('shows the plan name, status badge, reset date and an Upgrade link that scrolls to the plans', () => {
+      const out = html();
+      expect(out).toContain('id="usage"');
+      expect(out).toContain('data-testid="usage-plan"');
+      expect(out).toContain('Growth');
+      expect(out).toContain('href="#plans"');
+      expect(out).not.toContain('href="/account/plans"');
+    });
+
+    it('lists the features of the plan, included or not', () => {
+      const out = html();
+      expect(out).toMatch(/data-enabled="true"/);
+      expect(out).toMatch(/data-enabled="false"/);
+    });
+
+    it('still renders a limit the payload has no counter for', () => {
+      const u = usage();
+      u.meters = u.meters.filter((m) => m.key !== 'contacts');
+      const out = renderAccount(<UsageSection />, {
+        locale,
+        seed: [[BILLING_KEYS.usage, u], SWITCH_ON],
+      });
+      expect(out).toContain('data-testid="meter-contacts"');
+    });
+  });
+
+  describe(`merged plans pane (${locale})`, () => {
+    const plans = (over: Partial<BillingPlansResponse> = {}): BillingPlansResponse => ({
+      data: [
+        plan({ slug: 'starter', name: 'Starter' }),
+        plan({ slug: 'growth', name: 'Growth', current: true }),
+      ],
+      current: { slug: 'growth', name: 'Growth', kind: 'paid' },
+      validity: usage().validity,
+      canManage: true,
+      subscription: null,
+      visibleAddons: [addon(1, 'Appointments', true), addon(2, 'Dialer')],
+      yearlyToggle: { enabled: false, discountPct: 0 },
+      ...over,
+    });
+    const page = (seed: Array<readonly [readonly unknown[], unknown]>) =>
+      renderAccount(<PlansPicker />, { locale, seed: [SWITCH_ON, ...seed] as never });
+
+    it('draws one header, then plan and usage (anchor usage), then the plan cards (anchor plans)', () => {
+      const out = page([
+        [BILLING_KEYS.usage, usage()],
+        [BILLING_KEYS.plans, plans()],
+      ]);
+      expect(out.match(/<h1/g)).toHaveLength(1);
+      expect(out).toContain('id="usage"');
+      expect(out).toContain('id="plans"');
+      expect(out.indexOf('id="usage"')).toBeLessThan(out.indexOf('id="plans"'));
+      expect(out).toContain('data-testid="usage-plan"');
+      expect(out).toContain('data-testid="meter-contacts"');
+      expect(out).toMatch(/data-enabled="true"/);
+      expect(out).toContain('data-testid="plan-cards"');
+      expect(out).toContain('Starter');
+      expect(out).not.toContain('/account/usage');
+    });
+
+    it('shows the add-ons of the plan once: owned badge, buy link to the Marketplace app', () => {
+      const out = page([
+        [BILLING_KEYS.usage, usage()],
+        [BILLING_KEYS.plans, plans()],
+      ]);
+      expect(out.match(/data-testid="plan-addons"/g)).toHaveLength(1);
       expect(out).toContain('data-testid="plan-addon-appointments"');
       expect(out).toContain('data-owned="true"');
       expect(out).toContain('href="/marketplace/app/dialer"');
@@ -115,21 +191,33 @@ for (const locale of ['en', 'ar'] as const) {
     });
 
     it('hides the add-ons section when the plan offers none', () => {
-      const out = renderAccount(<UsagePanel />, {
-        locale,
-        seed: [[BILLING_KEYS.usage, usage({ visibleAddons: [] })]],
-      });
+      const out = page([
+        [BILLING_KEYS.usage, usage()],
+        [BILLING_KEYS.plans, plans({ visibleAddons: [] })],
+      ]);
       expect(out).not.toContain('data-testid="plan-addons"');
     });
 
-    it('still renders a limit the payload has no counter for', () => {
-      const u = usage();
-      u.meters = u.meters.filter((m) => m.key !== 'contacts');
-      const out = renderAccount(<UsagePanel />, {
-        locale,
-        seed: [[BILLING_KEYS.usage, u], SWITCH_ON],
+    it('shows the validity banner once, from the usage section', () => {
+      const lapsed = usage({
+        validity: { ...usage().validity, state: 'paid_lapsed' },
       });
-      expect(out).toContain('data-testid="meter-contacts"');
+      const out = page([
+        [BILLING_KEYS.usage, lapsed],
+        [BILLING_KEYS.plans, plans({ validity: lapsed.validity })],
+      ]);
+      expect(out.match(/data-testid="validity-banner"/g)).toHaveLength(1);
+    });
+
+    it('keeps the plans when the usage query is still loading, and the usage when the plans are', () => {
+      const onlyPlans = page([[BILLING_KEYS.plans, plans()]]);
+      expect(onlyPlans).toContain('data-testid="plan-cards"');
+      expect(onlyPlans).toContain('id="usage"');
+      expect(onlyPlans).not.toContain('data-testid="usage-plan"');
+      const onlyUsage = page([[BILLING_KEYS.usage, usage()]]);
+      expect(onlyUsage).toContain('data-testid="usage-plan"');
+      expect(onlyUsage).toContain('id="plans"');
+      expect(onlyUsage).not.toContain('data-testid="plan-cards"');
     });
   });
 

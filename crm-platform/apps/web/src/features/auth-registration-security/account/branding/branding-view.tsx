@@ -18,7 +18,8 @@ import { FOOTER_MAX, clampCodePoints, codePointLength, footerPreview } from './f
 
 const BRANDING_PERMISSION = 'auth.branding.update';
 
-export function BrandingView() {
+/** `showHeading` is false where the page already carries the title and description (the Settings page). */
+export function BrandingView({ showHeading = true }: { showHeading?: boolean }) {
   const c = useTranslations('auth-registration-security.account.common');
   const { permissions, user } = useSession();
   const query = useQuery({ queryKey: keys.branding, queryFn: authApi.branding, staleTime: 0 });
@@ -47,6 +48,7 @@ export function BrandingView() {
       data={query.data}
       hasPermission={hasPermission}
       name={user.displayName ?? user.fullName}
+      showHeading={showHeading}
     />
   );
 }
@@ -74,11 +76,13 @@ function BrandingPane({
   data,
   hasPermission,
   name,
+  showHeading,
 }: {
   data: BrandingResponse;
   hasPermission: boolean;
   /** The person's name, for the "Sent via ..." placeholder. */
   name: string;
+  showHeading: boolean;
 }) {
   const t = useTranslations('auth-registration-security.account.branding');
   const router = useRouter();
@@ -145,8 +149,12 @@ function BrandingPane({
   if (!editable) {
     return (
       <Card className="max-w-2xl space-y-4 p-5">
-        <h2 className="text-lg font-semibold">{t('title')}</h2>
-        <p className="text-sm text-muted-foreground">{t('description')}</p>
+        {showHeading && (
+          <>
+            <h2 className="text-lg font-semibold">{t('title')}</h2>
+            <p className="text-sm text-muted-foreground">{t('description')}</p>
+          </>
+        )}
         <div>
           <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             {!data.canEdit ? t('currentDefault') : t('current')}
@@ -186,10 +194,12 @@ function BrandingPane({
 
   return (
     <Card className="max-w-2xl space-y-5 p-5">
-      <div>
-        <h2 className="text-lg font-semibold">{t('title')}</h2>
-        <p className="text-sm text-muted-foreground">{t('description')}</p>
-      </div>
+      {showHeading && (
+        <div>
+          <h2 className="text-lg font-semibold">{t('title')}</h2>
+          <p className="text-sm text-muted-foreground">{t('description')}</p>
+        </div>
+      )}
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <Field label={t('label', { max: FOOTER_MAX })} htmlFor={`${uid}-footer`} error={fieldError}>
           <Textarea
