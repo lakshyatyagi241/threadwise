@@ -49,6 +49,7 @@ export class DashRepository {
       FROM ${stream(orgId, from, to)}`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
+      contactsGoalCompleted: await this.goalCompleted(tx, orgId, from, to),
       sent: n(r.sent),
       delivered: n(r.delivered),
       failed: n(r.failed),
@@ -59,6 +60,20 @@ export class DashRepository {
       contactsDelivered: n(r.contacts_delivered),
       contactsReplied: n(r.repliers),
     };
+  }
+
+  /**
+   * The Engagement funnel's "Goal completed" stage: distinct conversations (the contact proxy) with at least one flow run that
+   * finished (`status = 'completed'`, i.e. the run reached its end; failed, cancelled, expired and still-live runs never count) with
+   * `ended_at` inside [from, to). A run carries its own `conversation_id`; runs without one (no conversation yet) cannot be a
+   * funnel contact and are skipped. Empty flow tables give 0.
+   */
+  async goalCompleted(tx: Tx, orgId: number, from: Date, to: Date): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(DISTINCT conversation_id)::int AS c FROM flow_runs
+      WHERE org_id = ${orgId} AND status = 'completed' AND conversation_id IS NOT NULL
+        AND ended_at >= ${from.toISOString()}::timestamptz AND ended_at < ${to.toISOString()}::timestamptz`);
+    return n((res.rows[0] as Raw | undefined)?.c);
   }
 
   /** Outbound counts per whole hour back from `now`: index 0 is the hour just ended. Length `hours`. */
