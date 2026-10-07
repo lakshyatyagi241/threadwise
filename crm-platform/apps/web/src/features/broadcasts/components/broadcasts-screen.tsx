@@ -20,6 +20,7 @@ import {
 import { parseState, RANGES, stateToSearch, type ListState } from '../lib/list-model';
 import { downloadBlob } from '../lib/download';
 import { BroadcastsPagination } from './broadcasts-pagination';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { BroadcastsTable } from './broadcasts-table';
 import { RefreshIcon, SearchIcon } from './icons';
 import { KpiStrip } from './kpi-strip';
@@ -70,6 +71,7 @@ export function BroadcastsScreen() {
 
   const list = useBroadcastsPage(state);
   const summary = useBroadcastSummary();
+  const unofficial = useUnofficialWhatsapp();
   const [pendingDelete, setPendingDelete] = useState<BroadcastListItem | null>(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -233,6 +235,7 @@ export function BroadcastsScreen() {
                   canDeleteRows={canDelete}
                   onExport={(b) => void exportRows(b)}
                   onDelete={setPendingDelete}
+                  unofficial={unofficial}
                 />
               )}
             </div>

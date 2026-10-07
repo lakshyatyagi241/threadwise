@@ -1,3 +1,4 @@
+import { GATE_ON } from '../../support/unofficial-gate';
 import { PgDialect } from 'drizzle-orm/pg-core';
 import { describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -39,6 +40,7 @@ function service(answers: Array<[RegExp, Row[]]>, flags: Record<string, unknown>
     settings as never,
     { get: (k: string) => ({ APP_URL: 'https://api.test/', APP_NAME: 'Acme' })[k] } as never,
     { tokenFor: (org: number) => `${org}.${'f'.repeat(64)}` } as never,
+    GATE_ON,
   );
   return { svc, seen };
 }

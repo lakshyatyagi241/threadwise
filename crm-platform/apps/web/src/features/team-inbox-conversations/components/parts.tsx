@@ -5,6 +5,8 @@ import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import type { MessageStatus } from '@crm/contracts';
 import { WhatsappGlyph } from '@/features/channel-whatsapp-cloud';
+import { isUnofficialChannelKind } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { errorCode, errorKind, requestIdOf } from '../lib/errors';
 import { avatarColor, initials } from '../lib/time';
 import { AlertIcon, CloseIcon, ClockIcon } from './icons';
@@ -27,7 +29,11 @@ export function Avatar({
       className={cn(
         'flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white',
         avatarColor(id),
-        size === 'sm' ? 'size-7 text-[11px]' : size === 'lg' ? 'size-16 text-lg' : 'size-10 text-sm',
+        size === 'sm'
+          ? 'size-7 text-[11px]'
+          : size === 'lg'
+            ? 'size-16 text-lg'
+            : 'size-10 text-sm',
         className,
       )}
     >
@@ -52,8 +58,12 @@ export function ChannelTag({
   /** The name is written next to the tag: hide the tag from assistive technology instead of saying it twice. */
   decorative?: boolean;
 }) {
+  const unofficial = useUnofficialWhatsapp();
+  // The QR badge marks a personal number: with the unofficial engine off it is not drawn (the conversation itself stays).
+  if (isUnofficialChannelKind(kind) && !unofficial) return null;
   const whatsapp = kind === 'whatsapp_cloud';
-  const label = kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+  const label =
+    kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}
@@ -85,7 +95,12 @@ export function Ticks({ status }: { status: MessageStatus }) {
   const label = t(status);
   if (status === 'queued') {
     return (
-      <span role="img" aria-label={label} title={label} className="inline-flex text-muted-foreground">
+      <span
+        role="img"
+        aria-label={label}
+        title={label}
+        className="inline-flex text-muted-foreground"
+      >
         <ClockIcon width={12} height={12} />
       </span>
     );

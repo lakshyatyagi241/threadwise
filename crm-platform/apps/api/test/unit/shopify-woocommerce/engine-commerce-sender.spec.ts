@@ -74,8 +74,10 @@ describe('the commerce sender (TW-ECOM-010)', () => {
     const f = build({ rows: [[{ default_engine: 'baileys' }]] });
     const out = await f.s.send(7, { to: '15550001', template, ctx, reference: 'r1' });
     expect(out).toEqual({ providerMessageId: 'tx1' });
+    // A stored `baileys` default is handed over blank: the resolver picks the unofficial engine while its platform switch is on and the
+    // Cloud API while it is off.
     expect(f.resolver.resolve).toHaveBeenCalledWith(f.tx, 7, {
-      provider: 'baileys',
+      provider: null,
       deviceId: null,
     });
     expect(f.sent).toEqual([

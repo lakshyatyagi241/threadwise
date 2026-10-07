@@ -55,7 +55,8 @@ export class EngineCommerceSender implements CommerceSender {
       );
       const engine = (def.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
       return this.resolver.resolve(tx, orgId, {
-        provider: engine && ENGINES.has(engine) ? engine : 'baileys',
+        // A blank engine (and a stored `baileys`) lets the resolver pick: the unofficial engine while it is on, else the Cloud API.
+        provider: engine && engine !== 'baileys' && ENGINES.has(engine) ? engine : null,
         deviceId: null,
       });
     });

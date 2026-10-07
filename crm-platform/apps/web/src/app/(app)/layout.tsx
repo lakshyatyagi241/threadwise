@@ -5,16 +5,18 @@ import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { HelpProvider } from '@/features/help-center';
 import { helpFor } from '@/features/help-center/view';
+import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
 import { WalletAppShell } from '@/features/wallet-message-billing';
 import { NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
-import { PLANNED_NAV } from '@/features/_registry/planned';
+import { MENU_PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
 import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
 import { resolveSettings } from '@/features/_registry/settings-resolve';
@@ -47,6 +49,17 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     href: n.href,
     feature: n.gates!.planFeature!,
   }));
+  // A Marketplace app's screens are closed (not paywalled) while the workspace does not have the app; see `gates.app`.
+  const appGates: AppRouteGate[] = NAV.filter((n) => n.gates?.app).map((n) => ({
+    href: n.href,
+    feature: n.gates!.app!,
+    labelKey: n.labelKey,
+  }));
+  // Where the "not part of your workspace" screen can send a person: only when they may open the Marketplace.
+  const marketplaceHref =
+    capabilities.permissions.has('market.apps.read') && enabledFeatures?.has('marketplace')
+      ? '/marketplace/apps'
+      : null;
 
   return (
     <SessionProvider session={session}>
@@ -63,19 +76,29 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
               email: session.user.email,
               avatarUrl: session.user.avatarUrl,
             }}
-            nav={resolveNav(NAV, capabilities, { planned: PLANNED_NAV })}
+            nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
             settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
             theme={theme}
             navFooter={<WorkspaceSwitcher />}
             banners={
               <>
+                {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                <ImpersonationBanner key="impersonation" />
                 <TrialBar />
                 <AccountBanners key="banners" />
               </>
             }
             bell={<NotificationBell key="bell" />}
           >
-            <AccountGate>{children}</AccountGate>
+            <AccountGate>
+              <AppGate
+                gates={appGates}
+                enabled={enabledFeatures ? [...enabledFeatures] : null}
+                marketplaceHref={marketplaceHref}
+              >
+                {children}
+              </AppGate>
+            </AccountGate>
             <PlanPaywall
               gates={paywallGates}
               enabled={enabledFeatures ? [...enabledFeatures] : null}

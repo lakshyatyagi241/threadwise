@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import { cleanNumbers, parseCsv, parseManualNumbers } from './campaign-rules';
+import { SegmentsService } from '../crm';
 import { CampaignsRepository } from './campaigns.repository';
 
 export interface AudienceInput {
   contactIds?: readonly string[];
   groupIds?: readonly string[];
   tagIds?: readonly string[];
+  segmentIds?: readonly string[];
   manualNumbers?: string;
   csvText?: string;
 }
@@ -16,19 +18,23 @@ export const hasAudience = (a: AudienceInput): boolean =>
   (a.contactIds?.length ?? 0) +
     (a.groupIds?.length ?? 0) +
     (a.tagIds?.length ?? 0) +
+    (a.segmentIds?.length ?? 0) +
     (a.manualNumbers?.trim().length ?? 0) +
     (a.csvText?.trim().length ?? 0) >
   0;
 
 /**
- * Builds a campaign's audience (TW-CAMP-004): the contacts picked, the members of the groups and tags picked, and the typed or
+ * Builds a campaign's audience (TW-CAMP-004): the contacts picked, the members of the groups, tags and segments picked, and the typed or
  * uploaded numbers, each of which becomes a contact (found by its phone, else created). The result is the unique union in that
  * order. Contacts of another organization are dropped; archived ones too. Opted-out contacts stay on the list on purpose: Reference
  * stamps them `unsubscribed` when the run starts, which is what shows them on the opt-outs tab and lets the campaign finish.
  */
 @Injectable()
 export class CampaignAudienceService {
-  constructor(private readonly repo: CampaignsRepository) {}
+  constructor(
+    private readonly repo: CampaignsRepository,
+    private readonly segments: SegmentsService,
+  ) {}
 
   async resolve(
     tx: Tx,
@@ -40,6 +46,7 @@ export class CampaignAudienceService {
       ...(await this.repo.contactIdsByUuid(tx, orgId, input.contactIds ?? [])),
       ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds ?? [])),
       ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds ?? [])),
+      ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
     ];
 
     const csv = parseCsv(input.csvText ?? '');

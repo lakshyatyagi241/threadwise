@@ -57,6 +57,7 @@ const IMPORTS = [PlansCoreModule, PlatformSettingsModule, BspBillingEngineModule
     WalletQueryService,
     RateCardService,
     BillingCurrencyService,
+    WalletQueryService,
   ],
 })
 export class WalletMessageBillingModule {}

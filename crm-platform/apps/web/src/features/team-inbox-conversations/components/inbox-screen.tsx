@@ -3,30 +3,20 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import { uuidSchema } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent } from '@/lib/realtime';
 import { useStoredValue } from '@/lib/use-stored-value';
-import {
-  KEYS,
-  useChannels,
-  useNotes,
-  useNowMs,
-  useOpenConversation,
-} from '../api/hooks';
+import { KEYS, useChannels, useNotes, useNowMs, useOpenConversation } from '../api/hooks';
+import { offerChannels } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { inboxApi } from '../api/service';
 import { useThread } from '../api/use-thread';
 import { useConversationList } from '../api/use-list';
+import { isGroupThread } from '../lib/group-thread';
 import { DEFAULT_FILTERS, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
@@ -91,6 +81,9 @@ export function InboxScreen() {
   const list = useConversationList(filters, meId);
   const channelsQ = useChannels();
   const channels = channelsQ.data?.data;
+  const unofficial = useUnofficialWhatsapp();
+  // The channel filter and picker offer personal-number (QR) channels only while the platform has that engine on.
+  const filterChannels = channels ? offerChannels(channels, unofficial) : channels;
   const simulatorAvailable = (channels ?? []).some((c) => c.kind === 'simulator');
 
   const detail = useOpenConversation(selectedId, list.placeRow);
@@ -122,7 +115,8 @@ export function InboxScreen() {
   const inlineOpen = stored !== 'closed';
   const [drawerOpen, setDrawerOpen] = useState(false);
   const panelOpen = isXl ? inlineOpen : drawerOpen;
-  const togglePanel = () => (isXl ? setStored(inlineOpen ? 'closed' : 'open') : setDrawerOpen((v) => !v));
+  const togglePanel = () =>
+    isXl ? setStored(inlineOpen ? 'closed' : 'open') : setDrawerOpen((v) => !v);
 
   // --- opening and closing a thread ---
   const focusNext = useRef(false);
@@ -301,12 +295,14 @@ export function InboxScreen() {
 
   const onSend = useCallback(
     (draft: { body: string; file: File | null }) => {
+      // A group thread cannot be replied to yet (the composer is off; this is the belt to that braces).
+      if (isGroupThread(detail.detail?.peerKey)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
       if (fault !== 'none') setFault('none');
       thread.send({ body, file: draft.file });
     },
-    [fault, thread],
+    [fault, thread, detail.detail?.peerKey],
   );
 
   // --- presence ---
@@ -401,7 +397,7 @@ export function InboxScreen() {
             list={list.state}
             filters={filters}
             onFilters={patchFilters}
-            channels={channels}
+            channels={filterChannels}
             channelsLoaded={channelsQ.isSuccess}
             activeId={selectedId}
             nowMs={nowMs}
@@ -522,4 +518,3 @@ function Placeholder() {
     </div>
   );
 }
-

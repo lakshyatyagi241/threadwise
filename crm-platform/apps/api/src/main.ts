@@ -4,8 +4,15 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import type { NextFunction, Request, Response } from 'express';
 import { RedisIoAdapter } from './realtime/redis-io.adapter';
 import { AppModule } from './app.module';
+import { FormsPreflightMiddleware } from './modules/forms-builder';
+import {
+  ApiV1DocsService,
+  CUSTOMER_API_CORS,
+  isCustomerApiPath,
+} from './modules/developer-rest-api-v1';
 import {
   corsIsClosedInProduction,
   corsOriginFor,
@@ -46,6 +53,8 @@ async function bootstrap(): Promise<void> {
   installBodyLimits(app);
 
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '2' });
+  // The customer API's OpenAPI document (`GET /docs/api.json`) is generated from the live application, in every environment.
+  app.get(ApiV1DocsService).attach(app);
   app.enableShutdownHooks();
 
   const origins = config.get('CORS_ORIGINS', { infer: true });
@@ -53,7 +62,12 @@ async function bootstrap(): Promise<void> {
   if (corsIsClosedInProduction(origins, nodeEnv)) {
     logger.warn('CORS_ORIGINS is empty in production: browsers on other origins are refused');
   }
-  app.enableCors({
+  // The Forms add-on answers the CORS preflight of its public routes from each form's own allow-list: before the API-wide policy below,
+  // which only knows the web app's origins and would refuse a customer's page.
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    void app.get(FormsPreflightMiddleware).use(req, res, next);
+  });
+  const staffCors = {
     origin: corsOriginFor(origins, nodeEnv),
     credentials: true,
     // The throttle's headers (TW-INFRA-010): a browser client reads them only if they are exposed.
@@ -64,7 +78,11 @@ async function bootstrap(): Promise<void> {
       'x-ratelimit-remaining',
       'x-ratelimit-reset',
     ],
-  });
+  };
+  // The customer API (`/api/v1`, `/docs/api.json`) answers every origin without credentials; everything else keeps the staff policy.
+  app.enableCors((req: { url?: string }, callback) =>
+    callback(null, isCustomerApiPath(req.url) ? CUSTOMER_API_CORS : staffCors),
+  );
 
   // Redis adapter for socket.io: without it, a message emitted on one pod
   // never reaches a socket held by another.

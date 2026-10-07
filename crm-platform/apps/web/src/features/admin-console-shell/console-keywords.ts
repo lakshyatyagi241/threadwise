@@ -14,8 +14,9 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'ai-dashboard': 'ai usage tokens openai gemini llm cost spend assistants',
   'system-health': 'health status uptime queue redis database errors monitoring performance',
 
+  workspaces:
+    'workspaces customers accounts wallet workspaces workspace plans plan override limits per workspace custom quota assignments provider whatsapp provider mapping suspend suspended login as owner impersonate owner mrr balance support customers',
   plans: 'packages pricing tiers subscription catalogue free trial limits features',
-  'workspace-plans': 'workspace plan override limits per workspace custom quota',
   'addon-packs': 'addons add ons billing extras packs purchase',
   coupons: 'discount promo code voucher offer percent off',
   'plan-settings': 'pricing settings trial currency yearly discount tax',
@@ -30,7 +31,6 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'wallet-pricing': 'message pricing credits per message rate cost price meta',
   'wallet-margins': 'margin markup meta cost profit percent country category',
   'wallet-packages': 'credit packages top up recharge bundles wallet',
-  'wallet-workspaces': 'wallets balance workspace credits customers funds',
   'wallet-logs': 'ledger transactions credits debit log history wallet',
   'bsp-income': 'message income profit p and l revenue meta charges ledger earnings',
   'bsp-credit': 'reseller meta credit line billing bsp whatsapp',
@@ -39,7 +39,6 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'support-platform-inbox': 'platform inbox tickets conversations support staff queue',
   'support-team': 'support team members staff roles helpdesk',
   'support-agents': 'support agents staff availability helpdesk',
-  'support-customers': 'support customers workspaces accounts contacts helpdesk',
   'support-sla': 'sla response time resolution policy deadline helpdesk',
   'support-playbooks': 'playbooks macros canned replies saved replies helpdesk',
   'support-reports': 'support reports analytics tickets response time helpdesk',
@@ -52,7 +51,6 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'cms-legal': 'legal terms privacy policy pages cookies',
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
-  'wap-assignments': 'workspace assignments whatsapp provider mapping customers',
   'wap-switch': 'switch provider number migrate whatsapp number change',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
   'webhook-forwarding':

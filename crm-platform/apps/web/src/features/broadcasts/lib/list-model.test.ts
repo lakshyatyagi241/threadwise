@@ -3,6 +3,7 @@ import {
   canDelete,
   parseState,
   providerLabel,
+  providerTag,
   reference,
   scheduleText,
   statusLabel,
@@ -53,6 +54,15 @@ describe('labels', () => {
     expect(providerLabel('baileys')).toBe('Unofficial API');
     expect(providerLabel('WABA')).toBe('WABA');
     expect(providerLabel(null)).toBe('—');
+  });
+
+  it('tags a broadcast of the unofficial engine as disabled while the platform switch is off', () => {
+    const off = 'Unofficial (disabled)';
+    expect(providerTag('baileys', false, off)).toBe(off);
+    expect(providerTag('BAILEYS', false, off)).toBe(off);
+    expect(providerTag('baileys', true, off)).toBe('Unofficial API');
+    expect(providerTag('waba', false, off)).toBe('WABA');
+    expect(providerTag(null, false, off)).toBe('—');
   });
 
   it('only scheduled and failed broadcasts can be deleted', () => {

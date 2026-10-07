@@ -41,7 +41,10 @@
       "recurring_invoices": "Recurring invoices",
       "api_keys": "API keys",
       "webhooks": "Outbound webhooks",
-      "ai_token_limit_monthly": "AI tokens per month"
+      "ai_token_limit_monthly": "AI tokens per month",
+      "forms": "Web forms",
+      "form_submissions_monthly": "Form submissions per month",
+      "ai_form_generations_monthly": "AI form builder generations per month"
     },
     "features": {
       "automation": "Automation",
@@ -70,7 +73,8 @@
       "storefront_builder": "Storefront builder",
       "invoicing": "Invoicing",
       "forms_and_links": "Forms and links",
-      "extra_channels": "Telegram, Facebook and Instagram"
+      "extra_channels": "Telegram, Facebook and Instagram",
+      "form_builder": "Forms"
     },
     "limitGroups": {
       "messaging": "Messaging",
@@ -91,7 +95,7 @@
       "broadcasts": "Broadcasts that are not archived.",
       "scheduled_messages": "Scheduled messages the workspace holds, in any status. Deleting one frees its place.",
       "total_campaigns": "Campaigns created in the plan period. Deleting a campaign does not give the place back.",
-      "devices": "Connected WhatsApp numbers (QR devices). Removing one frees its place.",
+      "devices": "Connected WhatsApp numbers. Removing one frees its place.",
       "users": "Team members that are not deactivated.",
       "contacts": "Contacts in the workspace.",
       "tags": "Contact tags.",
@@ -117,7 +121,10 @@
       "recurring_invoices": "Recurring invoice schedules, in any status.",
       "api_keys": "Active API keys. Revoking a key frees its place.",
       "webhooks": "Outbound webhook endpoints (inbox webhooks and API webhooks together).",
-      "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped."
+      "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped.",
+      "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
+      "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
+      "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",

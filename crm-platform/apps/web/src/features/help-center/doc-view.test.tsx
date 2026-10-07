@@ -26,6 +26,7 @@ const entry = (id: string, over: Partial<HelpIndexEntry> = {}): HelpIndexEntry =
   keywords: [],
   routes: [],
   headings: [],
+  readMinutes: 1,
   fallback: false,
   ...over,
 });
@@ -48,8 +49,10 @@ const base = {
 describe('DocView', () => {
   it('shows the breadcrumb, title and summary', () => {
     const out = html(<DocView {...base} />);
-    expect(out).toMatch(/<a[^>]*href="\/help"[^>]*>[^<]*All help<\/a>/);
-    expect(out).toMatch(/<h1[^>]*>Deals<\/h1>/);
+    expect(out).toMatch(/<a[^>]*href="\/help\?area=sales"[^>]*>.*Back to help<\/a>/);
+    expect(out).toContain('More / Help / Sales');
+    expect(out).toMatch(/<h1[^>]*><span[^>]*>Deals<\/span><\/h1>/);
+    expect(out).toContain('1 min read');
     expect(out).toContain('Track opportunities.');
   });
 

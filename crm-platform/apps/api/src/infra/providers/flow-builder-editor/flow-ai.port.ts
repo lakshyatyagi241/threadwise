@@ -5,7 +5,7 @@
  */
 export const FLOW_AI_PORT = Symbol('FLOW_AI_PORT');
 
-export type FlowAiProvider = 'openai' | 'anthropic' | 'gemini';
+export type FlowAiProvider = 'openai' | 'anthropic' | 'gemini' | 'openrouter';
 
 export interface FlowAiRequest {
   provider: FlowAiProvider;

@@ -16,7 +16,7 @@
       "chip": "خطة {plan} - {role}",
       "wallet": "المحفظة",
       "orders": "سجل الطلبات",
-      "plans": "الأسعار والخطط",
+      "plans": "مساحات العمل والخطط",
       "tour": "ابدأ الجولة"
     },
     "nav": {
@@ -48,6 +48,10 @@
         "privacy": "الخصوصية والتتبع",
         "infrastructure": "البنية التحتية",
         "localization": "التوطين"
+      },
+      "badges": {
+        "notSupported": "غير مدعوم",
+        "noWorkspaces": "لا مساحات عمل"
       }
     },
     "search": {

@@ -15,6 +15,10 @@ export {
   toContactResponse,
 } from './contacts';
 export type { ContactRow } from './contacts';
+export { missingRequired, requiredPropertiesError, isBlank } from './contacts';
+export type { RequiredRule } from './contacts';
+export { CompaniesService, CompaniesRepository, normaliseCompanyDomain } from './companies';
+export type { CompanyRow } from './companies';
 export {
   FieldSectionsService,
   FieldSectionsRepository,

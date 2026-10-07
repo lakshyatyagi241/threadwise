@@ -6,7 +6,7 @@ import { Badge, cn } from '@crm/ui';
 import type { BroadcastListItem } from '@crm/contracts';
 import {
   canDelete,
-  providerLabel,
+  providerTag,
   reference,
   scheduleText,
   statusLabel,
@@ -42,8 +42,11 @@ export function BroadcastsTable({
   canDeleteRows,
   onExport,
   onDelete,
+  unofficial = false,
 }: {
   rows: BroadcastListItem[];
+  /** Whether the platform has the unofficial engine on; off, a broadcast sent through it reads "Unofficial (disabled)". */
+  unofficial?: boolean;
   canExport: boolean;
   canDeleteRows: boolean;
   onExport: (b: BroadcastListItem) => void;
@@ -83,7 +86,7 @@ export function BroadcastsTable({
                     {b.name}
                   </Link>
                   <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-wider">
-                    {providerLabel(b.provider)}
+                    {providerTag(b.provider, unofficial, t('unofficialDisabled'))}
                   </span>
                 </div>
                 <div className="text-[10.5px] text-muted-foreground">

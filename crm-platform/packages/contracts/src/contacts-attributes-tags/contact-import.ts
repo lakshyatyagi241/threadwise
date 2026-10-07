@@ -235,3 +235,22 @@ export type ContactImportJob = z.infer<typeof contactImportJobSchema>;
 
 export const listImportJobsQuerySchema = paginationQuerySchema;
 export type ListImportJobsQuery = z.infer<typeof listImportJobsQuerySchema>;
+
+/** Past exports of contacts (the audit trail keeps who, when and how many; the file itself is not kept). */
+export const exportHistoryQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+});
+export type ExportHistoryQuery = z.infer<typeof exportHistoryQuerySchema>;
+
+export const exportHistoryItemSchema = z.object({
+  at: z.string().datetime(),
+  /** Who exported; null for a deleted user or a system actor. */
+  by: z.string().nullable(),
+  rows: z.number().int(),
+  /** `ids`: the rows ticked; `filter`: everything the filter matched ("select all N matching" or Export all). */
+  selection: z.enum(['ids', 'filter']),
+});
+export type ExportHistoryItem = z.infer<typeof exportHistoryItemSchema>;
+
+export const exportHistoryResponseSchema = z.object({ data: z.array(exportHistoryItemSchema) });
+export type ExportHistoryResponse = z.infer<typeof exportHistoryResponseSchema>;

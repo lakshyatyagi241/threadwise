@@ -208,7 +208,7 @@ describe('message keys used in code', () => {
       'nav.stages',
       'nav.properties',
       'list.listView',
-      'list.gridView',
+      'list.kanbanView',
       'nav.contacts',
       'nav.groups',
       'nav.attributes',

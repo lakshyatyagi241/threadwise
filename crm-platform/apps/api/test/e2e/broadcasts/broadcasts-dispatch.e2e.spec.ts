@@ -1,3 +1,4 @@
+import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { PacingRuntime } from '../../../src/modules/broadcasts/send-safety';
@@ -160,7 +161,11 @@ describe('TW-BCAST-016: handing due broadcasts to the queue', () => {
     const { t, tpl, senderKey, contacts } = await arrange('q1', 2);
     const b = await now(t, tpl, senderKey, contacts, 'Q');
     const add = vi.fn().mockResolvedValue(undefined);
-    const due = new BroadcastDueService(h.app.get(DatabaseService), { add } as never);
+    const due = new BroadcastDueService(
+      h.app.get(DatabaseService),
+      { add } as never,
+      h.app.get(UNOFFICIAL_WHATSAPP_GATE),
+    );
 
     expect(await due.enqueueDue()).toBeGreaterThanOrEqual(1);
     expect(add).toHaveBeenCalledWith(
@@ -187,7 +192,11 @@ describe('TW-BCAST-016: handing due broadcasts to the queue', () => {
       sendTime: '09:00',
     });
     const add = vi.fn().mockResolvedValue(undefined);
-    const due = new BroadcastDueService(h.app.get(DatabaseService), { add } as never);
+    const due = new BroadcastDueService(
+      h.app.get(DatabaseService),
+      { add } as never,
+      h.app.get(UNOFFICIAL_WHATSAPP_GATE),
+    );
     await due.enqueueDue();
     expect(add.mock.calls.some((c) => c[1].broadcastId === b.id)).toBe(false);
     expect((await broadcast(b.id)).status).toBe('scheduled');
@@ -205,9 +214,13 @@ describe('TW-BCAST-016: handing due broadcasts to the queue', () => {
     reset();
     const { t, tpl, senderKey, contacts } = await arrange('q3', 1);
     const b = await now(t, tpl, senderKey, contacts, 'Retry');
-    const failing = new BroadcastDueService(h.app.get(DatabaseService), {
-      add: vi.fn().mockRejectedValue(new Error('redis down')),
-    } as never);
+    const failing = new BroadcastDueService(
+      h.app.get(DatabaseService),
+      {
+        add: vi.fn().mockRejectedValue(new Error('redis down')),
+      } as never,
+      h.app.get(UNOFFICIAL_WHATSAPP_GATE),
+    );
     await expect(failing.enqueueDue()).rejects.toThrow('redis down');
     expect((await broadcast(b.id)).node_schedule_id).toBeNull();
   });

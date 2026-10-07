@@ -25,3 +25,4 @@ export { WalletQueryService } from './wallet-query.service';
 export { countryOfPhone } from './phone-country';
 export { RateCardService } from './rate-card.service';
 export { BillingCurrencyService } from './billing-currency.service';
+export { WalletQueryService } from './wallet-query.service';

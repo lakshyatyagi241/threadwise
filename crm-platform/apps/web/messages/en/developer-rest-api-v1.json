@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Dismiss",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the text and copy it by hand."
+    },
+    "rail": {
+      "name": "Developer API",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Key active",
+      "noKey": "No key yet",
+      "baseUrl": "Base URL",
+      "authHeader": "Auth header",
+      "help": {
+        "title": "Need help?",
+        "body": "Full request and response reference, with copy-able examples for every endpoint.",
+        "link": "Read the docs"
+      }
+    },
+    "page": {
+      "crumbLabel": "Breadcrumb",
+      "crumbSettings": "Settings",
+      "crumbHere": "Developers",
+      "title": "Developer",
+      "titleAccent": "API keys",
+      "lead": "Generate a key to call the REST API from your own apps, CRM or automation: send messages, manage contacts, templates, broadcasts and more. One key per workspace.",
+      "back": "Back",
+      "openDocs": "Open docs",
+      "loading": "Loading your API key",
+      "forbidden": {
+        "title": "You cannot view API keys",
+        "body": "Your role does not include access to API keys. Ask a workspace admin to give you the API keys permission."
+      }
+    },
+    "banner": {
+      "title": "Your new API key",
+      "warning": "Copy this now and store it safely. For your security we only keep a hash, so it will never be shown again."
+    },
+    "key": {
+      "title": "Your API key",
+      "active": "Active",
+      "untitled": "Untitled key",
+      "created": "Created {date}",
+      "lastUsed": "Last used {when}",
+      "never": "never",
+      "revoke": "Revoke",
+      "noRevoke": "Your role cannot revoke API keys.",
+      "revoked": "API key revoked. Any app using it will stop working immediately.",
+      "footer": "Only one key is allowed per workspace. Revoke this one to issue a new key.",
+      "confirm": {
+        "title": "Revoke this key?",
+        "message": "Any app or integration using this key will immediately stop working. This cannot be undone. You can create a new key afterwards.",
+        "accept": "Revoke",
+        "cancel": "Cancel"
+      }
+    },
+    "create": {
+      "title": "Create your key",
+      "help": "Give the key a name so you remember where it is used. The key is shown once on creation.",
+      "name": "Key name",
+      "placeholder": "e.g. Production backend",
+      "submit": "Create key",
+      "submitting": "Creating key…",
+      "created": "API key created. Copy it now - it won't be shown again.",
+      "noCreate": "Your role cannot create API keys. Ask a workspace admin.",
+      "planLocked": "Your plan does not include the REST API.",
+      "errors": {
+        "required": "Enter a name for the key.",
+        "tooLong": "The name can be at most 120 characters."
+      }
+    },
+    "quickstart": {
+      "title": "Quickstart",
+      "reference": "Full reference",
+      "intro": "Send your first message. Replace the key and recipient:"
+    },
+    "errors": {
+      "planLimit": "You already have an active API key. Revoke it before creating a new one - only one key per workspace is allowed.",
+      "planLocked": "Your plan does not include the REST API. Upgrade to create API keys.",
+      "forbidden": "You do not have permission to do that.",
+      "validation": "The key name is not valid. Check it and try again.",
+      "notFound": "That key no longer exists. The list has been refreshed.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "unexpected": "Something went wrong on our side. Try again in a moment.",
+      "loadFailed": "Could not load your API key.",
+      "retry": "Retry",
+      "upgrade": "See plans",
+      "requestId": "Request id: {id}"
+    }
+  }
+}

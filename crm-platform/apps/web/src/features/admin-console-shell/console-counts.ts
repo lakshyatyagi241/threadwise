@@ -5,6 +5,7 @@ import {
   couponListResponseSchema,
   guidebookAdminListResponseSchema,
   planAdminListResponseSchema,
+  nodeBridgeResponseSchema,
   platformRoleListResponseSchema,
 } from '@crm/contracts';
 import { cookieNames } from '@/lib/auth/cookies';
@@ -91,6 +92,26 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     }
   } catch {
     // network failure: the marketing badges stay blank
+  }
+
+  // The unofficial WhatsApp switch: the Node bridge entry says "Not supported" while it is off, "No workspaces" while it is on and the
+  // allow-list is empty. `unofficialOff` and `unofficialNoWorkspaces` are flags, not counts;
+  // an operator who cannot read the bridge settings, or an API without the field, simply sees no badge.
+  try {
+    const res = await fetch(`${apiBase()}/v2/platform/node-bridge`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const parsed = nodeBridgeResponseSchema.safeParse(await res.json());
+      if (parsed.success) {
+        if (!parsed.data.unofficialEnabled) counts.unofficialOff = 1;
+        // On, but off for everyone until a super admin allows a workspace (owner decision 2026-10-06).
+        else if (parsed.data.unofficialWorkspaceCount === 0) counts.unofficialNoWorkspaces = 1;
+      }
+    }
+  } catch {
+    // network failure: the node bridge badge stays blank
   }
 
   return counts;
