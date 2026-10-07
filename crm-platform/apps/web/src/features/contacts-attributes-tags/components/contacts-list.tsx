@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Fragment, useState, type ReactNode } from 'react';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
-import { isAttrId, type ColumnDef, type ColumnId } from '../lib/columns';
+import { isAttrId, sortKeyOf, type ColumnDef, type ColumnId } from '../lib/columns';
 import { formatDateTime } from '../lib/format';
 import type { Choice } from '../lib/option-sets';
 import { menuActions, quickActions } from '../lib/row-actions';
@@ -451,12 +451,37 @@ function Cell({
   }
 }
 
+export interface TableSort {
+  /** The API sort in force (`createdAt` when nothing was chosen). */
+  key: string;
+  order: 'asc' | 'desc';
+}
+
+function SortArrow({ order, active }: { order: 'asc' | 'desc'; active: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      className={cn(
+        'size-3 shrink-0 transition',
+        active ? 'opacity-100' : 'opacity-0 group-hover/th:opacity-40',
+      )}
+    >
+      <path d={order === 'asc' ? 'M8 3l4 5H4z' : 'M8 13L4 8h8z'} fill="currentColor" />
+    </svg>
+  );
+}
+
 export function ContactsTable({
   rows,
   columns,
   headerState,
   onToggleAll,
   selectable = true,
+  sort,
+  onSort,
+  onMoveColumn,
+  onNudgeColumn,
   ...h
 }: {
   rows: RowView[];
@@ -465,8 +490,16 @@ export function ContactsTable({
   onToggleAll: (checked: boolean) => void;
   /** False for a read-only listing (the members of a segment): no checkbox column, the name column is frozen alone. */
   selectable?: boolean;
+  /** With `onSort`, column headers sort the list (not on a read-only listing or a column with many values). */
+  sort?: TableSort;
+  onSort?: (key: string) => void;
+  /** With these, headers can be dragged (or moved with Alt + arrow keys) to rearrange the columns. */
+  onMoveColumn?: (id: ColumnId, target: ColumnId) => void;
+  onNudgeColumn?: (id: ColumnId, step: -1 | 1) => void;
 } & ListHandlers) {
   const t = useTranslations('contacts-attributes-tags.list');
+  const [dragging, setDragging] = useState<ColumnId | null>(null);
+  const [over, setOver] = useState<ColumnId | null>(null);
   const locale = useLocale();
   const timeZone = useTimeZone();
   // The shadow along the frozen edge shows only once something has scrolled underneath it.
@@ -502,24 +535,93 @@ export function ContactsTable({
                 <HeaderCheckbox state={headerState} onChange={onToggleAll} label={t('selectAll')} />
               </th>
             )}
-            {columns.map((c) => (
-              <th
-                key={c.id}
-                scope="col"
-                className={cn(
-                  th,
-                  c.id === 'name' &&
-                    `${selectable ? STICKY_NAME_HEAD : STICKY_NAME_ALONE_HEAD} ${frozenEdge(scrolled)}`,
-                )}
-              >
+            {columns.map((c) => {
+              const label = 'key' in c.label ? t(c.label.key) : c.label.text;
+              const key = onSort ? sortKeyOf(c.id) : null;
+              const active = key !== null && sort?.key === key;
+              const movable = !!onMoveColumn && c.id !== 'name';
+              const heading = (
                 <span className="flex min-w-0 items-center gap-1.5">
                   <HeaderIcon id={c.id} />
-                  <span className="truncate">
-                    {'key' in c.label ? t(c.label.key) : c.label.text}
-                  </span>
+                  <span className="truncate">{label}</span>
+                  {key !== null && (
+                    <SortArrow order={active ? sort!.order : 'asc'} active={active} />
+                  )}
                 </span>
-              </th>
-            ))}
+              );
+              return (
+                <th
+                  key={c.id}
+                  scope="col"
+                  aria-sort={
+                    active ? (sort!.order === 'asc' ? 'ascending' : 'descending') : undefined
+                  }
+                  draggable={movable}
+                  onDragStart={
+                    movable
+                      ? (e) => {
+                          e.dataTransfer.effectAllowed = 'move';
+                          e.dataTransfer.setData('text/plain', c.id);
+                          setDragging(c.id);
+                        }
+                      : undefined
+                  }
+                  onDragOver={
+                    dragging && c.id !== 'name' && c.id !== dragging
+                      ? (e) => {
+                          e.preventDefault();
+                          setOver(c.id);
+                        }
+                      : undefined
+                  }
+                  onDrop={
+                    dragging
+                      ? (e) => {
+                          e.preventDefault();
+                          if (c.id !== 'name' && c.id !== dragging) onMoveColumn?.(dragging, c.id);
+                          setDragging(null);
+                          setOver(null);
+                        }
+                      : undefined
+                  }
+                  onDragEnd={() => {
+                    setDragging(null);
+                    setOver(null);
+                  }}
+                  className={cn(
+                    th,
+                    'group/th',
+                    movable && 'cursor-grab',
+                    dragging === c.id && 'opacity-50',
+                    over === c.id && 'bg-brand/10',
+                    c.id === 'name' &&
+                      `${selectable ? STICKY_NAME_HEAD : STICKY_NAME_ALONE_HEAD} ${frozenEdge(scrolled)}`,
+                  )}
+                >
+                  {key !== null ? (
+                    <button
+                      type="button"
+                      onClick={() => onSort?.(key)}
+                      onKeyDown={(e) => {
+                        if (!movable || !e.altKey) return;
+                        const step = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
+                        if (!step) return;
+                        // In a right-to-left page the arrows point the other way round.
+                        const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+                        e.preventDefault();
+                        onNudgeColumn?.(c.id, (rtl ? -step : step) as -1 | 1);
+                      }}
+                      title={t('sortBy', { column: label })}
+                      className="flex w-full min-w-0 items-center rounded text-start uppercase tracking-wide outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+                    >
+                      {heading}
+                    </button>
+                  ) : (
+                    heading
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

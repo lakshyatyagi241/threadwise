@@ -128,7 +128,7 @@ export class DashService {
         sentDeltaPct: percentChange(current.sent, previous.sent),
         readRateDeltaPp: deltaPp(current.readRate, previous.readRate),
         sparkline: hours.reverse(),
-        funnel: funnelOf(current),
+        funnel: funnelOf(current, previous),
       };
     });
   }
@@ -218,7 +218,7 @@ export class DashService {
       });
       const idx = Array.from({ length: w.days }, (_, i) => i);
       const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
-      const f = funnelOf(current);
+      const f = funnelOf(current, previous);
       const pf = funnelOf(previous);
       return {
         range: q.range,
@@ -241,6 +241,7 @@ export class DashService {
           queuedPct: percentChange(current.queued, previous.queued),
           repliesPct: percentChange(current.replies, previous.replies),
           replyRatePp: deltaPp(current.replyRate, previous.replyRate),
+          replyRateContactPp: deltaPp(f.replyRate, pf.replyRate),
           endToEndPp: deltaPp(f.endToEnd, pf.endToEnd),
         },
         daily: {

@@ -7,6 +7,7 @@ import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'rea
 import {
   Alert,
   Button,
+  ConfirmDialog,
   EmptyState,
   Field,
   Input,
@@ -17,6 +18,7 @@ import {
   cn,
 } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useUnsavedGuard } from '@/features/segments/components/use-unsaved-guard';
 import { useDoc } from '../api/hooks';
 import type { DocRow, Ref, SalesDoc } from '../api/schemas';
 import { salesDocsApi } from '../api/service';
@@ -240,15 +242,9 @@ function BuilderForm({
     onDuplicated: (copy) => router.push(docHref(copy.kind, copy.id)),
   });
 
-  // Leaving with unsaved changes asks first (the browser's own prompt).
-  useEffect(() => {
-    if (!dirty || !editable) return;
-    const onLeave = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-    };
-    window.addEventListener('beforeunload', onLeave);
-    return () => window.removeEventListener('beforeunload', onLeave);
-  }, [dirty, editable]);
+  // Leaving with unsaved changes asks first: the browser's own prompt for a reload or closing the tab, and our dialog for a
+  // click on the menu or a breadcrumb and for the Back button.
+  const guard = useUnsavedGuard(dirty && editable);
 
   /** Validates, then creates or updates. Resolves to the saved document, or null when nothing was saved. */
   async function save(): Promise<SalesDoc | null> {
@@ -801,6 +797,16 @@ function BuilderForm({
         />
       )}
       {controller.node}
+      <ConfirmDialog
+        open={guard.pending !== null}
+        title={t('leaveTitle')}
+        message={t('leaveMessage')}
+        confirmLabel={t('leave')}
+        cancelLabel={t('keepEditing')}
+        tone="danger"
+        onClose={guard.stay}
+        onConfirm={guard.leave}
+      />
     </div>
   );
 }

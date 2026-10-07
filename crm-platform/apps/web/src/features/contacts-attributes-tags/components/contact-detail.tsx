@@ -271,7 +271,7 @@ export function ContactDetail({ id }: { id: string }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-6">
-          <LinkedTasks kind="contact" id={id} />
+          <LinkedTasks kind="contact" id={id} label={name} />
           <LinkedInvoices kind="contact" id={id} />
           <LinkedSalesDocs kind="contact" id={id} />
           <LinkedAppointments contactId={id} />

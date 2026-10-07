@@ -12,7 +12,8 @@ export function filterSegments(
   return rows
     .filter((s) => {
       if (params.show === 'mine' && s.ownerId !== meId) return false;
-      if (params.show === 'shared' && s.visibility !== 'shared') return false;
+      // "Shared" is everything that is not private: with everyone, or with chosen people.
+      if (params.show === 'shared' && s.visibility === 'private') return false;
       if (!needle) return true;
       return `${s.name} ${s.description ?? ''} ${s.ownerName ?? ''}`
         .toLocaleLowerCase()

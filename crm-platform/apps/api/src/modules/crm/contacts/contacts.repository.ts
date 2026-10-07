@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { alias } from 'drizzle-orm/pg-core';
 import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
-import type { RecordScope } from '@crm/contracts';
+import { ERROR_CODES, type ContactSort, type RecordScope } from '@crm/contracts';
+import { AppError } from '../../../common/errors/app-error';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
 import type { StatusScopeOption } from './contact-status-stage';
+import type { PropertyDef } from './contact-property-values';
 import type { RequiredRule } from './required-properties';
 import {
   contactConditions,
@@ -26,6 +28,8 @@ const {
 } = schema;
 
 export interface ContactRow {
+  /** Only on a list ordered by a column: the lower-cased value it was ordered by (null = blank). */
+  sortKey?: string | null;
   id: number;
   /** created_at at microsecond precision (keyset cursor). */
   createdAtIso?: string;
@@ -66,10 +70,52 @@ export interface ContactRow {
   updatedAt: Date;
 }
 
+/** The text a sort column orders by: a real column, or a value kept in the contact's custom fields. */
+function sortExpression(sort: Exclude<ContactSort, 'createdAt'>): SQL {
+  switch (sort) {
+    case 'name':
+      return sql`${contacts.name}`;
+    case 'phone':
+      return sql`${contacts.phone}`;
+    case 'email':
+      return sql`${contacts.email}`;
+    case 'stage':
+      return sql`${contacts.lifecycleStage}`;
+    case 'status':
+      return sql`${contacts.status}`;
+    case 'language':
+    case 'memo':
+      return sql`${contacts.data} ->> ${sort}`;
+    default:
+      return sql`${contacts.data} ->> ${sort.slice('attr:'.length)}`;
+  }
+}
+
+/** Cursor of a sorted page: the last row's sort value (null = blank) and id. */
+export function encodeSortCursor(key: string | null, id: number): string {
+  return Buffer.from(JSON.stringify({ k: key, i: id }), 'utf8').toString('base64url');
+}
+
+function decodeSortCursor(raw: string): { key: string | null; id: number } {
+  try {
+    const v = JSON.parse(Buffer.from(raw, 'base64url').toString('utf8')) as {
+      k: unknown;
+      i: unknown;
+    };
+    if ((v.k !== null && typeof v.k !== 'string') || !Number.isSafeInteger(v.i))
+      throw new Error('bad');
+    return { key: v.k as string | null, id: v.i as number };
+  } catch {
+    throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'Invalid pagination cursor', 400);
+  }
+}
+
 export interface ListContactsFilter {
   limit: number;
   cursor?: string;
   order: 'asc' | 'desc';
+  /** Column to order by; `createdAt` keeps the (created_at, id) keyset. */
+  sort?: ContactSort;
   filter: ResolvedContactFilter;
   /** Row visibility from the caller's RBAC grant. */
   scope: RecordScope;
@@ -149,9 +195,9 @@ export class ContactsRepository {
   }
 
   /** Select + joins, without a WHERE — each caller adds its own. */
-  private baseQuery(tx: Tx) {
+  private baseQuery(tx: Tx, extra: Record<string, SQL> = {}) {
     return tx
-      .select(this.selection())
+      .select({ ...this.selection(), ...extra })
       .from(contacts)
       .leftJoin(users, and(eq(users.orgId, contacts.orgId), eq(users.id, contacts.ownerId)))
       .leftJoin(
@@ -167,6 +213,10 @@ export class ContactsRepository {
       filter.filter,
       this.scopeCondition(orgId, filter.scope, filter.actorUserId),
     );
+
+    if (filter.sort && filter.sort !== 'createdAt') {
+      return this.listSorted(tx, conditions, filter, filter.sort);
+    }
 
     // Keyset boundary over the (created_at, id) tuple. Row-value comparison so
     // the planner can use the composite index directly.
@@ -197,6 +247,36 @@ export class ContactsRepository {
       .orderBy(...orderBy)
       .limit(filter.limit + 1);
 
+    return rows as ContactRow[];
+  }
+
+  /**
+   * A list ordered by one column. Keyset like the default list, over (blank, value, id): the value is the lower-cased
+   * column (an empty one counts as blank and sorts last in both directions), the id breaks ties.
+   */
+  private async listSorted(
+    tx: Tx,
+    conditions: SQL[],
+    filter: ListContactsFilter,
+    sort: Exclude<ContactSort, 'createdAt'>,
+  ): Promise<ContactRow[]> {
+    const key = sql`nullif(lower(btrim(${sortExpression(sort)})), '')`;
+    const dir = filter.order === 'desc' ? sql`DESC` : sql`ASC`;
+    if (filter.cursor) {
+      const c = decodeSortCursor(filter.cursor);
+      const idAfter =
+        filter.order === 'desc' ? sql`${contacts.id} < ${c.id}` : sql`${contacts.id} > ${c.id}`;
+      const keyAfter = filter.order === 'desc' ? sql`${key} < ${c.key}` : sql`${key} > ${c.key}`;
+      conditions.push(
+        c.key === null
+          ? sql`(${key} IS NULL AND ${idAfter})`
+          : sql`(${key} IS NULL OR ${keyAfter} OR (${key} = ${c.key} AND ${idAfter}))`,
+      );
+    }
+    const rows = await this.baseQuery(tx, { sortKey: sql<string | null>`${key}` })
+      .where(and(...conditions))
+      .orderBy(sql`(${key} IS NULL) ASC`, sql`${key} ${dir}`, sql`${contacts.id} ${dir}`)
+      .limit(filter.limit + 1);
     return rows as ContactRow[];
   }
 
@@ -620,6 +700,58 @@ export class ContactsRepository {
         .filter((d) => d.fieldId === r.id)
         .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
     }));
+  }
+
+  /**
+   * The custom properties among `keys` that a bulk edit may set: active, not a system property, not hidden, not read-only,
+   * not a formula. Keys missing from the answer are not editable.
+   */
+  async editableProperties(
+    tx: Tx,
+    orgId: number,
+    keys: readonly string[],
+  ): Promise<Map<string, PropertyDef>> {
+    if (keys.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: fields.id, key: fields.key, label: fields.label, fieldType: fields.fieldType })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'contacts'),
+          inArray(fields.key, [...keys]),
+          eq(fields.isActive, true),
+          eq(fields.isSystem, false),
+          eq(fields.isHidden, false),
+          eq(fields.isReadOnly, false),
+          sql`${fields.fieldType} <> 'formula'`,
+        ),
+      );
+    if (rows.length === 0) return new Map();
+    const options = await tx
+      .select({ fieldId: fieldOptions.fieldId, value: fieldOptions.value })
+      .from(fieldOptions)
+      .where(
+        and(
+          eq(fieldOptions.orgId, orgId),
+          eq(fieldOptions.isHidden, false),
+          inArray(
+            fieldOptions.fieldId,
+            rows.map((r) => r.id),
+          ),
+        ),
+      );
+    return new Map(
+      rows.map((r) => [
+        r.key,
+        {
+          key: r.key,
+          label: r.label,
+          fieldType: r.fieldType,
+          options: options.filter((o) => o.fieldId === r.id).map((o) => o.value),
+        },
+      ]),
+    );
   }
 
   async findByIdentity(
