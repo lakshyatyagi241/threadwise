@@ -17,17 +17,27 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../../auth/unofficial-whatsapp.port';
-import { waKeys } from './wa-redis';
+import { parseStoredQr, waKeys, type StoredCode } from './wa-redis';
 
 const POLL_MS = 200;
+
+/** What the control service answers when no worker holds the command channel, and when the owning worker stays silent: the API maps both to 503 WA_WORKER_UNAVAILABLE. */
+export const WORKER_NOT_RUNNING = 'The WhatsApp worker is not running.';
+export const WORKER_NO_ANSWER = 'The WhatsApp worker did not answer in time.';
 
 export interface DeviceStatusView {
   /** `connected`, `disconnected` or `needs_pair`: the device row's own status. */
   status: string;
   /** What the runtime last reported (`Ready`, `Qr generated`, `Reconnecting`, ...), when it said anything recently. */
   label: string | null;
-  /** The QR waiting to be scanned, if any. */
+  /** The QR waiting to be scanned, if any. A secret: never log it. */
   qr: string | null;
+  /** When that QR was produced (epoch ms), for a countdown. */
+  qrAt: number | null;
+  /** The pairing code waiting to be entered, if any. A secret: never log it. */
+  code: string | null;
+  /** When that code was issued (epoch ms). */
+  codeAt: number | null;
   /** Reference's progress bar: 100 when linked, 30 with a QR showing, else 50. */
   progress: number;
 }
@@ -128,16 +138,27 @@ export class DeviceControlService {
     return this.send(command);
   }
 
-  /** Starts a pairing and returns the QR (or `connected` when the device is already linked). Within 35 s. */
-  async requestQr(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+  /**
+   * Starts a pairing and returns the QR (or `connected` when the device is already linked). Within 35 s. A saved session that is still
+   * healthy is kept (`not_pairable`) unless `relink` says to forget it (spec R1).
+   */
+  async requestQr(
+    orgId: number,
+    deviceId: number,
+    opts: { relink?: boolean } = {},
+  ): Promise<DeviceCommandResult> {
     await this.unofficial.assertEnabledFor(orgId);
-    return this.send({ type: 'qr', orgId, deviceId });
+    return this.send({ type: 'qr', orgId, deviceId, relink: opts.relink === true });
   }
 
-  /** The 8-character code that links the phone without a QR. The same code is returned for 2 minutes. */
-  async requestPairingCode(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+  /** The 8-character code that links the phone without a QR. The same code is returned for 2 minutes. `relink` as for the QR. */
+  async requestPairingCode(
+    orgId: number,
+    deviceId: number,
+    opts: { relink?: boolean } = {},
+  ): Promise<DeviceCommandResult> {
     await this.unofficial.assertEnabledFor(orgId);
-    return this.send({ type: 'code', orgId, deviceId });
+    return this.send({ type: 'code', orgId, deviceId, relink: opts.relink === true });
   }
 
   /** Unlinks the device from the phone and forgets its session (the product's "Disconnect"). */
@@ -158,16 +179,22 @@ export class DeviceControlService {
       return res.rows[0] as { status: string } | undefined;
     });
     if (!device) return null;
-    const [reported, qr] = await Promise.all([
+    const [reported, qrRaw, codeRaw] = await Promise.all([
       this.redis.get(waKeys.status(orgId, deviceId)),
       this.redis.get(waKeys.qr(orgId, deviceId)),
+      this.redis.get(waKeys.code(orgId, deviceId)),
     ]);
     const label = reported ? (JSON.parse(reported) as { label: string }).label : null;
+    const stored = parseStoredQr(qrRaw);
+    const code = codeRaw ? (JSON.parse(codeRaw) as StoredCode) : null;
     return {
       status: device.status,
       label,
-      qr,
-      progress: device.status === 'connected' ? 100 : qr ? 30 : 50,
+      qr: stored?.qr ?? null,
+      qrAt: stored?.at ?? null,
+      code: code?.code ?? null,
+      codeAt: code?.at ?? null,
+      progress: device.status === 'connected' ? 100 : stored ? 30 : 50,
     };
   }
 
@@ -175,6 +202,7 @@ export class DeviceControlService {
     type: DeviceCommand['type'];
     orgId: number;
     deviceId: number;
+    relink?: boolean;
   }): Promise<DeviceCommandResult> {
     const id = randomUUID();
     const receivers = await this.redis.publish(
@@ -182,15 +210,16 @@ export class DeviceControlService {
       JSON.stringify({ ...command, id }),
     );
     if (receivers === 0) {
-      return { ok: false, status: 'error', message: 'The WhatsApp worker is not running.' };
+      return { ok: false, status: 'error', message: WORKER_NOT_RUNNING };
     }
     const until = Date.now() + COMMAND_TIMEOUT_MS[command.type];
     while (Date.now() < until) {
-      const raw = await this.redis.get(waKeys.commandResult(id));
+      // Read once: the answer can carry a QR or a code, so it is removed as it is taken instead of waiting out its 60 s (spec R6).
+      const raw = await this.redis.getdel(waKeys.commandResult(id));
       if (raw) return JSON.parse(raw) as DeviceCommandResult;
       await new Promise((r) => setTimeout(r, POLL_MS));
     }
-    return { ok: false, status: 'timeout', message: 'The WhatsApp worker did not answer in time.' };
+    return { ok: false, status: 'timeout', message: WORKER_NO_ANSWER };
   }
 }
 
