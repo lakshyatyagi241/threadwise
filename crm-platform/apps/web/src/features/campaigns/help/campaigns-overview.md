@@ -5,7 +5,8 @@ summary: Message a chosen audience with a text, a rich message, a template or a 
 area: campaigns
 order: 10
 documents: [nav:campaigns]
-keywords: [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, delivery, replies, clicks]
+keywords:
+  [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, delivery, replies, clicks]
 ---
 
 ## What it is for

@@ -163,7 +163,14 @@ const DYNAMIC = [
     (c) => `campaigns.wizard.status.col.${c}`,
   ),
   ...['saved', 'saving', 'failed'].map((k) => `campaigns.wizard.save.${k}`),
-  ...['searchGroups', 'searchSegments'].map((k) => `campaigns.wizard.audience.${k}`),
+  ...['searchGroups', 'searchSegments', 'groups', 'segments', 'noGroups', 'noSegments'].map(
+    (k) => `campaigns.wizard.audience.${k}`,
+  ),
+  ...['contacts', 'groups', 'segments', 'csv'].map((k) => `campaigns.wizard.audience.mode.${k}`),
+  ...['new', 'existing', 'optedOut'].map((k) => `campaigns.wizard.audience.csvRow.${k}`),
+  ...['missing_phone', 'invalid_phone', 'duplicate'].map(
+    (k) => `campaigns.wizard.audience.csvReason.${k}`,
+  ),
   ...['pending', 'recovered', 'exhausted'].map((k) => `campaigns.wizard.status.retry.${k}`),
   ...KNOWN_STATES.map((s) => `campaigns.wizard.status.state.${s}`),
 ];

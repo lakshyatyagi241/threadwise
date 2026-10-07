@@ -4,6 +4,7 @@ import type { WizardDraft, WizardSchedule } from '@crm/contracts';
 import { KEYS } from '../api/wizard';
 import { defaultRule } from '../lib/schedule';
 import {
+  audience,
   NOW,
   count,
   credit,
@@ -34,7 +35,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 const none = () => undefined;
-const withGroup = { groupIds: [uuid(11)], segmentIds: [], rules: null };
+const withGroup = audience({ groupIds: [uuid(11)] });
 
 describe('credit check', () => {
   const card = (c: Parameters<typeof CreditCard>[0]['credit']) => html(<CreditCard credit={c} />);
@@ -176,7 +177,7 @@ describe('step 3 as a whole', () => {
         draft={draft({
           name: 'October offer',
           templateId: uuid(1),
-          audience: { groupIds: [uuid(11)], segmentIds: [uuid(21)], rules: null },
+          audience: audience({ groupIds: [uuid(11)], segmentIds: [uuid(21)] }),
           variables: {
             'body.1': { kind: 'field', field: 'first_name', fallback: 'friend' },
             'body.2': { kind: 'fixed', text: 'A-1' },
@@ -206,7 +207,6 @@ describe('step 3 as a whole', () => {
     expect(out).toContain('Utility');
     expect(out).toContain('Groups: VIP customers');
     expect(out).toContain('Segments: Active last 30 days');
-    expect(out).toContain('No extra conditions');
     expect(out).toContain('950');
     expect(out).toContain('50 skipped (30 opted out, 20 invalid numbers)');
     expect(out).toContain('$95.00');
@@ -238,11 +238,11 @@ describe('step 3 as a whole', () => {
     const out = review({
       draft: draft({
         templateId: uuid(1),
-        audience: { groupIds: [uuid(99)], segmentIds: [], rules },
+        audience: audience({ groupIds: [uuid(99)], allMatching: { search: null, rules } }),
       }),
     });
     expect(out).toContain('(deleted)');
-    expect(out).toMatch(/Conditions: .*\+91/);
+    expect(out).toMatch(/All contacts matching .*\+91/);
   });
 });
 

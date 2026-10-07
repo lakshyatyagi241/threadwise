@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { draft, NOW, uuid } from '../testing';
+import { audience, draft, NOW, uuid } from '../testing';
 import { issueFor, stepIssues, stepOfPath, unmappedSlots } from './issues';
 
 const ctx = { slots: ['body.1', 'body.2'], now: NOW };
@@ -15,7 +15,7 @@ describe('stepIssues', () => {
 
   it('step 2 needs a source, and blocks a known empty audience', () => {
     expect(stepIssues(2, draft(), ctx).map((i) => i.code)).toEqual(['audience_required']);
-    const d = draft({ audience: { groupIds: [uuid(11)], segmentIds: [], rules: null } });
+    const d = draft({ audience: audience({ groupIds: [uuid(11)] }) });
     expect(stepIssues(2, d, ctx)).toEqual([]);
     expect(stepIssues(2, d, { ...ctx, count: { recipients: 0 } }).map((i) => i.code)).toEqual([
       'no_recipients',

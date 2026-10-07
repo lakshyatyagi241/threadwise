@@ -310,6 +310,8 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
             countUpdating={!settled.settled}
             hasSource={countable !== null}
             issues={visible}
+            template={template}
+            senderName={sendersList?.find((x) => x.key === draft.senderKey)?.label ?? null}
             onAudience={(patch) => w.dispatch({ type: 'audience', patch })}
           />
         )}
