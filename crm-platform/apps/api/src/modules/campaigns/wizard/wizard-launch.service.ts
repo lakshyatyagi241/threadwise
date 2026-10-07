@@ -13,6 +13,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PacingRuntime } from '../../broadcasts';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsService } from '../campaigns.service';
@@ -48,6 +49,7 @@ export class WizardLaunchService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly runtime: PacingRuntime,
+    private readonly rbac: RbacService,
   ) {}
 
   async launch(uuid: string, input: WizardLaunchRequest): Promise<WizardLaunchResult> {
@@ -68,6 +70,13 @@ export class WizardLaunchService {
       if (row.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Broadcast draft');
 
       const draft = draftOf(row);
+      // Launching an audience that holds an uploaded CSV turns its new numbers into contacts: that needs the right to create them.
+      if (
+        draft.audience.csv &&
+        !(ctx.grants && this.rbac.can(ctx.grants, 'record.contacts.create').allowed)
+      ) {
+        throw AppError.forbidden('record.contacts.create');
+      }
       const template = draft.templateId
         ? await this.repo.templateByUuid(tx, orgId, draft.templateId)
         : undefined;
