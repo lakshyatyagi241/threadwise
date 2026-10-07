@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { segmentRulesSchema } from '../segments/rules';
+import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
 import {
   isIanaTimeZone,
@@ -51,12 +52,18 @@ export const wizardAudienceSchema = z.object({
    * must be in one of them and match the rules); on its own it selects from every contact.
    */
   rules: segmentRulesSchema.nullable().default(null),
+  /**
+   * Contacts picked in the Contact Hub ("Send campaign" over the ticked rows, or over everything the Hub's filters match): either explicit
+   * ids or the saved filter with the rows un-ticked after "select all matching", exactly what a bulk action takes. A source like a group:
+   * the contacts it names are included, and `rules` narrow them.
+   */
+  selection: contactSelectionSchema.nullish(),
 });
 export type WizardAudience = z.infer<typeof wizardAudienceSchema>;
 export const EMPTY_WIZARD_AUDIENCE: WizardAudience = { groupIds: [], segmentIds: [], rules: null };
 
 export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
-  a.groupIds.length > 0 || a.segmentIds.length > 0 || a.rules !== null;
+  a.groupIds.length > 0 || a.segmentIds.length > 0 || a.rules !== null || Boolean(a.selection);
 
 // ---------------------------------------------------------------------------------------- variables
 

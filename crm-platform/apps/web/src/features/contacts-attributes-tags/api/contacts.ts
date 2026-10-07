@@ -51,6 +51,8 @@ export interface ContactFilters {
   /** Ad-hoc conditions (a segment's rule tree as JSON text) from the Hub's "Add condition"; empty for none. */
   rules: string;
   order: 'asc' | 'desc';
+  /** What `order` applies to: `createdAt` (the default, newest first), a column id the API sorts by, or `attr:<key>`. */
+  sort: string;
   limit: PageSize;
   /** 1-based page number; it is not part of the saved filter of a bulk action. */
   page: number;
@@ -66,6 +68,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   segment: '',
   rules: '',
   order: 'desc',
+  sort: 'createdAt',
   limit: 10,
   page: 1,
 };
@@ -104,6 +107,7 @@ export function listQuery(f: ContactFilters) {
     segmentId: b.segmentId,
     rules: b.rules,
     order: f.order,
+    sort: f.sort === 'createdAt' ? undefined : f.sort,
     limit: f.limit,
     expand: 'groups,tags',
     includeTotal: true,

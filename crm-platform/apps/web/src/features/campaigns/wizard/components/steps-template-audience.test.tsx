@@ -266,6 +266,33 @@ describe('step 2: audience', () => {
     expect(out).toContain('Loading the fields'); // the field catalog loads from the contacts module
   });
 
+  it('shows what the Contact Hub sent, ticked rows or the whole view, with a way to remove it', () => {
+    const ticked = step({
+      audience: {
+        groupIds: [],
+        segmentIds: [],
+        rules: null,
+        selection: { ids: [uuid(1), uuid(2)] },
+      },
+    });
+    expect(ticked).toContain('Chosen in the Contact Hub');
+    expect(ticked).toContain('2 contacts ticked');
+    expect(ticked).toContain('Remove');
+    const view = step({
+      audience: {
+        groupIds: [],
+        segmentIds: [],
+        rules: null,
+        selection: {
+          filter: { q: 'a', includeArchived: false, tagMode: 'any' },
+          excludeIds: [uuid(3)],
+        },
+      },
+    });
+    expect(view).toContain('Everything the Contact Hub view matched (1 left out)');
+    expect(step()).not.toContain('Chosen in the Contact Hub');
+  });
+
   it('shows the rule problem after a try', () => {
     const out = step({
       issues: [{ path: 'audience', code: 'audience_required' }],

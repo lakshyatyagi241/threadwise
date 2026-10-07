@@ -13,6 +13,7 @@ import {
   collectRuleRefs,
   compileRules,
   loadRuleContext,
+  contactSelectionWhere,
   segmentContactsWhere,
 } from '../../crm';
 import { countryOfPhone } from '../../wallet-message-billing';
@@ -104,6 +105,9 @@ export class WizardAudienceService {
       sources.push(compiled.where);
       for (const p of compiled.invalid) invalid.push({ ...p, path: `segments.${uuid}.${p.path}` });
     }
+
+    if (audience.selection)
+      sources.push(await contactSelectionWhere(tx, orgId, audience.selection));
 
     const parts: SQL[] = [];
     if (sources.length > 0) parts.push(sql`(${sql.join(sources, sql` OR `)})`);
