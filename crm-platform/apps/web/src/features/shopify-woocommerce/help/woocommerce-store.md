@@ -5,20 +5,7 @@ summary: Connect your WooCommerce store with its REST API keys so orders, produc
 area: store
 order: 41
 documents: [nav:woocommerce, tile:woocommerce]
-keywords:
-  [
-    woocommerce,
-    wordpress,
-    store,
-    REST API,
-    consumer key,
-    orders,
-    products,
-    customers,
-    automations,
-    cart recovery,
-    sync,
-  ]
+keywords: [woocommerce, wordpress, store, REST API, consumer key, orders, products, customers, automations, cart recovery, sync]
 ---
 
 ## What it is for

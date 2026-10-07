@@ -183,8 +183,8 @@ describe('a Shopify import (TW-ECOM-011)', () => {
       sku: 'SKU-1',
       name: 'Shirt 1',
       slug: 'shirt-1',
-      price_minor: '10000',
-      compare_price_minor: '15000',
+      price_minor: 10000,
+      compare_price_minor: 15000,
       currency_code: 'INR',
       in_stock: true,
       availability: 'in stock',
@@ -203,7 +203,7 @@ describe('a Shopify import (TW-ECOM-011)', () => {
       source: 'shopify',
       customer_phone: '919876543210',
       customer_name: 'Asha K',
-      total_minor: '30000',
+      total_minor: 30000,
       currency_code: 'INR',
       status: 'paid',
     });
@@ -213,7 +213,7 @@ describe('a Shopify import (TW-ECOM-011)', () => {
     expect(contacts).toHaveLength(1);
     expect(contacts[0]).toMatchObject({
       name: 'Asha K',
-      phone: '919876543210',
+      phone: '+919876543210',
       email: 'asha@x.test',
     });
     expect(contacts[0].data).toMatchObject({
@@ -222,12 +222,12 @@ describe('a Shopify import (TW-ECOM-011)', () => {
       total_spent: '300.00',
     });
     const group = await q(
-      `SELECT g.user_group, g.color, count(m.id)::int AS members FROM contact_groups g
+      `SELECT g.name, g.color, count(m.id)::int AS members FROM contact_groups g
        LEFT JOIN contact_group_members m ON m.org_id = g.org_id AND m.group_id = g.id
-       WHERE g.org_id = $1 GROUP BY g.id`,
+       WHERE g.org_id = $1 GROUP BY g.org_id, g.id`,
       t,
     );
-    expect(group).toEqual([{ user_group: 'Shopify Customers', color: '#95BF47', members: 1 }]);
+    expect(group).toEqual([{ name: 'Shopify Customers', color: '#95BF47', members: 1 }]);
 
     const [store] = await q(`SELECT * FROM shopify_integrations WHERE org_id = $1`, t);
     expect(store.sync_stats).toEqual({ products: 2, orders: 1, customers: 1, incomplete: 0 });
@@ -259,7 +259,7 @@ describe('a Shopify import (TW-ECOM-011)', () => {
     await imports.run(t.orgId, 'shopify', id);
 
     const products = await q(`SELECT name, price_minor FROM wa_products WHERE org_id = $1`, t);
-    expect(products).toEqual([{ name: 'Renamed shirt', price_minor: '25000' }]);
+    expect(products).toEqual([{ name: 'Renamed shirt', price_minor: 25000 }]);
     expect(await q(`SELECT status FROM wa_orders WHERE org_id = $1`, t)).toEqual([
       { status: 'paid' },
     ]);
@@ -285,21 +285,21 @@ describe('a Shopify import (TW-ECOM-011)', () => {
     const id = await shopifyStore(t);
     shopifyData.customers = read([{ id: 1, first_name: 'A', phone: '111111' }]);
     await imports.run(t.orgId, 'shopify', id);
-    await h.owner.query(`UPDATE contact_groups SET user_group = 'VIPs' WHERE org_id = $1`, [
+    await h.owner.query(`UPDATE contact_groups SET name = 'VIPs' WHERE org_id = $1`, [
       t.orgId,
     ]);
     shopifyData.customers = read([{ id: 2, first_name: 'B', phone: '222222' }]);
     await imports.run(t.orgId, 'shopify', id);
-    expect(await q(`SELECT user_group FROM contact_groups WHERE org_id = $1`, t)).toEqual([
-      { user_group: 'VIPs' },
+    expect(await q(`SELECT name FROM contact_groups WHERE org_id = $1`, t)).toEqual([
+      { name: 'VIPs' },
     ]);
     expect(await q(`SELECT 1 FROM contact_group_members WHERE org_id = $1`, t)).toHaveLength(2);
 
     await h.owner.query(`DELETE FROM contact_groups WHERE org_id = $1`, [t.orgId]);
     shopifyData.customers = read([{ id: 3, first_name: 'C', phone: '333333' }]);
     await imports.run(t.orgId, 'shopify', id);
-    expect(await q(`SELECT user_group FROM contact_groups WHERE org_id = $1`, t)).toEqual([
-      { user_group: 'Shopify Customers' },
+    expect(await q(`SELECT name FROM contact_groups WHERE org_id = $1`, t)).toEqual([
+      { name: 'Shopify Customers' },
     ]);
   });
 
@@ -382,8 +382,8 @@ describe('a WooCommerce import (TW-ECOM-011, 028)', () => {
     expect(p).toMatchObject({
       woo_product_id: '5',
       sku: 'WOO-5',
-      price_minor: '800',
-      compare_price_minor: '1000',
+      price_minor: 800,
+      compare_price_minor: 1000,
       in_stock: false,
       status: 'active',
       currency_code: 'USD',
@@ -393,15 +393,15 @@ describe('a WooCommerce import (TW-ECOM-011, 028)', () => {
       woo_order_id: '900',
       source: 'woocommerce',
       customer_phone: '2348012345678',
-      total_minor: '4950',
+      total_minor: 4950,
       status: 'paid',
     });
     expect(o.meta_json).toMatchObject({ name: '#900', woo_status: 'processing' });
     const [c] = await q(`SELECT phone, data FROM contacts WHERE org_id = $1`, t);
-    expect(c.phone).toBe('2348012345678');
+    expect(c.phone).toBe('+2348012345678');
     expect(c.data).toMatchObject({ woo_customer_id: '3' });
-    expect(await q(`SELECT user_group, color FROM contact_groups WHERE org_id = $1`, t)).toEqual([
-      { user_group: 'WooCommerce Customers', color: '#7F54B3' },
+    expect(await q(`SELECT name, color FROM contact_groups WHERE org_id = $1`, t)).toEqual([
+      { name: 'WooCommerce Customers', color: '#7F54B3' },
     ]);
   });
 });
