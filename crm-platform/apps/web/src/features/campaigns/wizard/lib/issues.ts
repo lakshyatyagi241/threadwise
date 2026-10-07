@@ -3,6 +3,7 @@ import {
   type WizardAudienceCount,
   type WizardCreditCheck,
   type WizardDraft,
+  type WizardEligibility,
   type WizardIssue,
 } from '@crm/contracts';
 import type { WizardView } from './state';
@@ -14,7 +15,12 @@ export type IssueCode =
   | 'no_recipients'
   | 'insufficient_balance'
   | 'checking_balance'
-  | 'balance_unavailable';
+  | 'balance_unavailable'
+  | 'eligibility_contacts'
+  | 'eligibility_template'
+  | 'eligibility_billing'
+  | 'checking_eligibility'
+  | 'eligibility_unavailable';
 
 export interface StepIssue {
   path: string;
@@ -31,6 +37,11 @@ export interface IssueContext {
   creditPending?: boolean;
   /** The wallet check could not be done: the balance is unknown, so the broadcast does not go on. */
   creditFailed?: boolean;
+  /** The eligibility check of step 3 (null until it answers): a failing group blocks Next, a warning does not. */
+  eligibility?: Pick<WizardEligibility, 'contacts' | 'template' | 'billing'> | null;
+  eligibilityPending?: boolean;
+  /** The eligibility check could not be done: whether the broadcast can go out is unknown, so it does not go on. */
+  eligibilityFailed?: boolean;
 }
 
 /** The step a draft path belongs to (also how the launch's `errors[].path` finds the screen to open). */
@@ -38,7 +49,7 @@ export function stepOfPath(path: string): WizardView {
   const head = path.split('.')[0];
   if (head === 'name' || head === 'templateId' || head === 'senderKey') return 1;
   if (head === 'audience') return 2;
-  if (head === 'variables') return 3;
+  if (head === 'variables' || head === 'eligibility') return 3;
   return 4;
 }
 
@@ -83,7 +94,34 @@ export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueConte
       if (ctx.credit.recipients === 0) out.push({ path: 'audience', code: 'no_recipients' });
       else if (!ctx.credit.sufficient) out.push({ path: 'credit', code: 'insufficient_balance' });
     }
+    out.push(...eligibilityIssues(ctx, out));
   }
+  return out;
+}
+
+/**
+ * What the eligibility check adds to step 3. The wallet check above already blocks on an empty audience and a short balance (and on
+ * its own pending and failed states), so those are not said twice: the eligibility check only adds what it alone knows.
+ */
+function eligibilityIssues(ctx: IssueContext, said: readonly StepIssue[]): StepIssue[] {
+  const has = (code: IssueCode) => said.some((i) => i.code === code);
+  if (ctx.eligibilityPending) {
+    return has('checking_balance') ? [] : [{ path: 'eligibility', code: 'checking_eligibility' }];
+  }
+  if (ctx.eligibilityFailed) {
+    return has('balance_unavailable')
+      ? []
+      : [{ path: 'eligibility', code: 'eligibility_unavailable' }];
+  }
+  const e = ctx.eligibility;
+  if (!e) return [];
+  const out: StepIssue[] = [];
+  if (e.contacts.state === 'fail' && !has('no_recipients'))
+    out.push({ path: 'eligibility.contacts', code: 'eligibility_contacts' });
+  if (e.template.state === 'fail')
+    out.push({ path: 'eligibility.template', code: 'eligibility_template' });
+  if (e.billing.state === 'fail' && !has('insufficient_balance') && !has('balance_unavailable'))
+    out.push({ path: 'eligibility.billing', code: 'eligibility_billing' });
   return out;
 }
 

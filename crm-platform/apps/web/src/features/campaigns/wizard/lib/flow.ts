@@ -25,7 +25,9 @@ export type Preflight =
  */
 export function launchPreflight(draft: WizardDraft, ctx: IssueContext): Preflight {
   for (const step of [1, 2, 3, 4] as const) {
-    const issues = stepIssues(step, draft, ctx).filter((i) => i.code !== 'checking_balance');
+    const issues = stepIssues(step, draft, ctx).filter(
+      (i) => i.code !== 'checking_balance' && i.code !== 'checking_eligibility',
+    );
     if (issues.length > 0) return { kind: 'issues', step, issues };
   }
   return { kind: 'ok' };

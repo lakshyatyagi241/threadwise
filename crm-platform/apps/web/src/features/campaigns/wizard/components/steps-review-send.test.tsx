@@ -9,6 +9,7 @@ import {
   count,
   credit,
   draft,
+  eligibility,
   failed,
   html,
   pending,
@@ -19,6 +20,7 @@ import {
   uuid,
 } from '../testing';
 import { CreditCard } from './credit-card';
+import { EligibilityCard } from './eligibility-card';
 import { LaunchDialog } from './launch-dialog';
 import { RecurrencePanel } from './recurrence-panel';
 import { RetriesCard } from './retries-card';
@@ -36,6 +38,75 @@ vi.mock('next/navigation', () => ({
 
 const none = () => undefined;
 const withGroup = audience({ groupIds: [uuid(11)] });
+
+describe('eligibility check', () => {
+  const card = (e: Parameters<typeof EligibilityCard>[0]['eligibility'], locale = 'en') =>
+    html(<EligibilityCard eligibility={e} />, { locale });
+
+  it('has the three groups, each with a state and a one-line reason', () => {
+    const out = card(ready(eligibility()));
+    expect(out).toContain('Eligibility check');
+    for (const g of ['Contacts', 'Template and sender', 'Billing']) expect(out).toContain(g);
+    expect(out).toContain('950 eligible of 950 selected.');
+    expect(out).toContain('Pay per message: each delivered message is charged from the wallet');
+    expect(out).toContain('data-testid="eligibility-contacts" data-state="pass"');
+  });
+
+  it('shows the skipped contacts as chips by reason and the plan allowance in plan mode', () => {
+    const e = eligibility();
+    const out = card(
+      ready({
+        ...e,
+        contacts: {
+          ...e.contacts,
+          state: 'warn',
+          code: 'contacts_some_skipped',
+          values: { eligible: 900, selected: 950, skipped: 50 },
+          chips: [
+            { key: 'eligible', count: 900 },
+            { key: 'selected', count: 950 },
+            { key: 'optedOut', count: 30 },
+            { key: 'invalidNumber', count: 20 },
+            { key: 'duplicate', count: 0 },
+          ],
+        },
+        billing: {
+          ...e.billing,
+          code: 'billing_mode_plan',
+          values: { remaining: 120, limit: 1000, used: 880 },
+        },
+      }),
+    );
+    expect(out).toContain('30 opted out');
+    expect(out).toContain('20 invalid number');
+    expect(out).not.toContain('duplicate merged');
+    expect(out).toContain('Plan mode: 120 messages left in your plan this month.');
+  });
+
+  it('writes money in the workspace currency and works in Arabic', () => {
+    const e = eligibility();
+    const out = card(
+      ready({
+        ...e,
+        billing: {
+          ...e.billing,
+          state: 'fail',
+          code: 'billing_wallet_insufficient',
+          values: { balanceMinor: 100, estimatedMinor: 9_500, currency: 'USD' },
+        },
+      }),
+    );
+    expect(out).toContain('The wallet ($1.00) does not cover the estimated $95.00.');
+    expect(card(ready(eligibility()), 'ar')).toContain('فحص الأهلية');
+  });
+
+  it('says it could not check, and asks again', () => {
+    const out = card(failed());
+    expect(out).toContain('Eligibility could not be checked here');
+    expect(out).toContain('Try again');
+    expect(card(pending)).toContain('Running the eligibility check');
+  });
+});
 
 describe('credit check', () => {
   const card = (c: Parameters<typeof CreditCard>[0]['credit']) => html(<CreditCard credit={c} />);
@@ -188,6 +259,7 @@ describe('step 3 as a whole', () => {
         sources={sources()}
         count={count()}
         credit={ready(credit())}
+        eligibility={ready(eligibility())}
         properties={[]}
         issues={[]}
         showIssues={false}
@@ -201,7 +273,8 @@ describe('step 3 as a whole', () => {
 
   it('has the three cards and the summary of every value', () => {
     const out = review();
-    for (const h of ['Credit check', 'Variables', 'Summary']) expect(out).toContain(h);
+    for (const h of ['Eligibility check', 'Credit check', 'Variables', 'Summary'])
+      expect(out).toContain(h);
     expect(out).toContain('October offer');
     expect(out).toContain('order_update');
     expect(out).toContain('Utility');

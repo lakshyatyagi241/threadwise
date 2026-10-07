@@ -109,7 +109,9 @@ export function templateGroup(input: {
       checks.push(row('template_not_approved', 'fail', { status: meta || 'unknown' }));
     } else if (t.pausedUntil && t.pausedUntil.getTime() > input.now.getTime()) {
       checks.push(
-        row('template_paused', 'fail', { until: t.pausedUntil.toISOString().slice(0, 16) }),
+        row('template_paused', 'fail', {
+          until: t.pausedUntil.toISOString().slice(0, 16).replace('T', ' '),
+        }),
       );
     } else if (t.metaTemplateId && (t.qualityScore ?? '').toUpperCase() === 'RED') {
       checks.push(row('template_quality_low', 'fail'));

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { audience, draft, NOW, uuid } from '../testing';
+import { audience, draft, eligibility, NOW, uuid } from '../testing';
 import { issueFor, stepIssues, stepOfPath, unmappedSlots } from './issues';
 
 const ctx = { slots: ['body.1', 'body.2'], now: NOW };
@@ -46,6 +46,66 @@ describe('stepIssues', () => {
     expect(
       stepIssues(3, d, { ...ctx, credit: { sufficient: true, recipients: 0 } }).map((i) => i.code),
     ).toEqual(['no_recipients']);
+  });
+
+  it('step 3: a failing eligibility group blocks, a warning does not, and nothing is said twice', () => {
+    const d = draft({
+      variables: { 'body.1': { kind: 'fixed', text: 'x' }, 'body.2': { kind: 'fixed', text: 'y' } },
+    });
+    const ok = { sufficient: true, recipients: 10 };
+    const e = eligibility();
+    const fail = (g: 'contacts' | 'template' | 'billing') => ({
+      ...e,
+      [g]: { ...e[g], state: 'fail' as const },
+    });
+    expect(stepIssues(3, d, { ...ctx, credit: ok, eligibility: e })).toEqual([]);
+    expect(
+      stepIssues(3, d, {
+        ...ctx,
+        credit: ok,
+        eligibility: { ...e, contacts: { ...e.contacts, state: 'warn' as const } },
+      }),
+    ).toEqual([]);
+    expect(stepIssues(3, d, { ...ctx, credit: ok, eligibility: fail('template') })).toEqual([
+      { path: 'eligibility.template', code: 'eligibility_template' },
+    ]);
+    expect(stepIssues(3, d, { ...ctx, credit: ok, eligibility: fail('contacts') })).toEqual([
+      { path: 'eligibility.contacts', code: 'eligibility_contacts' },
+    ]);
+    // The wallet check already says "no recipients" and "balance too low".
+    expect(
+      stepIssues(3, d, {
+        ...ctx,
+        credit: { sufficient: false, recipients: 0 },
+        eligibility: fail('contacts'),
+      }).map((i) => i.code),
+    ).toEqual(['no_recipients']);
+    expect(
+      stepIssues(3, d, {
+        ...ctx,
+        credit: { sufficient: false, recipients: 5 },
+        eligibility: fail('billing'),
+      }).map((i) => i.code),
+    ).toEqual(['insufficient_balance']);
+  });
+
+  it('step 3 waits for the eligibility check and does not go on when it could not run', () => {
+    const d = draft({
+      variables: { 'body.1': { kind: 'fixed', text: 'x' }, 'body.2': { kind: 'fixed', text: 'y' } },
+    });
+    expect(stepIssues(3, d, { ...ctx, eligibilityPending: true }).map((i) => i.code)).toEqual([
+      'checking_eligibility',
+    ]);
+    expect(stepIssues(3, d, { ...ctx, eligibilityFailed: true }).map((i) => i.code)).toEqual([
+      'eligibility_unavailable',
+    ]);
+    // One "checking" or "could not check" line is enough when the wallet check says it already.
+    expect(
+      stepIssues(3, d, { ...ctx, creditPending: true, eligibilityPending: true }).map(
+        (i) => i.code,
+      ),
+    ).toEqual(['checking_balance']);
+    expect(stepOfPath('eligibility.template')).toBe(3);
   });
 
   it('step 4: a scheduled time in the past, an empty date, and retries need an end date', () => {
