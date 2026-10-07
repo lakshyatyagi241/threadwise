@@ -229,6 +229,35 @@ export function AnalyticsScreen() {
                   ][i % 5]!,
                 }))}
               />
+              {a.types.length > 0 && (
+                <table className="mt-4 w-full border-t border-border text-sm">
+                  <caption className="sr-only">{t('types.byType')}</caption>
+                  <thead>
+                    <tr className="text-xs text-muted-foreground">
+                      <th scope="col" className="py-2 text-start font-normal">
+                        {t('types.kind')}
+                      </th>
+                      <th scope="col" className="py-2 text-end font-normal">
+                        {t('types.sent')}
+                      </th>
+                      <th scope="col" className="py-2 text-end font-normal">
+                        {t('types.delivered')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {a.types.map((row) => (
+                      <tr key={row.key} className="border-t border-border/60">
+                        <th scope="row" className="py-1.5 text-start font-normal">
+                          {t(`types.${row.key}`)}
+                        </th>
+                        <td className="py-1.5 text-end tabular-nums">{compact(row.count)}</td>
+                        <td className="py-1.5 text-end tabular-nums">{compact(row.delivered)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </Panel>
             <Panel
               className="lg:col-span-2"

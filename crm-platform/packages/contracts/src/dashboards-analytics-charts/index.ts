@@ -145,11 +145,12 @@ export const analyticsResponseSchema = z.object({
     queued: z.array(z.number().int()),
   }),
   funnel: dashFunnelSchema,
-  /** Outbound by type; zero buckets omitted. */
+  /** Outbound by type (sent = count, and how many of those were delivered); zero buckets omitted. */
   types: z.array(
     z.object({
       key: z.enum(['text', 'template', 'media', 'interactive', 'location']),
       count: z.number().int(),
+      delivered: z.number().int(),
     }),
   ),
   /** 7 rows (Sunday = 0) of 24 hourly message counts, both directions, in the workspace zone. */

@@ -11,7 +11,7 @@ import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import type { CustomDates } from '../api/service';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
-import { BarChart, Legend, Sparkline } from './charts';
+import { BarChart, Sparkline } from './charts';
 import {
   ActivityCard,
   CampaignsCard,
@@ -323,28 +323,12 @@ export function DashboardScreen() {
                         },
                         { name: t('throughput.failed'), values: f.failed, color: 'var(--danger)' },
                       ]}
+                      seriesTotals={
+                        s ? [s.current.sent, s.current.delivered, s.current.failed] : undefined
+                      }
                     />
                     {s && (
                       <>
-                        <Legend
-                          series={[
-                            {
-                              name: t('throughput.sent'),
-                              color: 'var(--brand)',
-                              total: s.current.sent,
-                            },
-                            {
-                              name: t('throughput.delivered'),
-                              color: 'var(--success)',
-                              total: s.current.delivered,
-                            },
-                            {
-                              name: t('throughput.failed'),
-                              color: 'var(--danger)',
-                              total: s.current.failed,
-                            },
-                          ]}
-                        />
                         <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
                           <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
                           <Tile
