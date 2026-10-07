@@ -13,7 +13,6 @@ import {
   MailError,
   MAIL_PORT,
 } from '../../../src/infra/providers/auth-registration-security/mail.port';
-import { PusherProbe } from '../../../src/infra/providers/platform-settings-branding-storage/pusher.probe';
 import { PlatformSettingsService } from '../../../src/modules/auth';
 import { BrandingService } from '../../../src/modules/platform-settings-branding-storage/branding.service';
 import { CurrencyService } from '../../../src/modules/platform-settings-branding-storage/currency.service';
@@ -27,9 +26,9 @@ import {
 } from '../auth-registration-security/harness';
 
 /**
- * The platform settings slice end to end through HTTP (TW-SET-001, 002, 003, 004, 005, 008, 024, 025, 039,
- * 041 and the public projection): real Postgres with the restricted role, real Redis, the real AppModule.
- * Only the outbound edges are faked: the mail port, a local S3 stand-in, a local Pusher stand-in.
+ * The platform settings slice end to end through HTTP (TW-SET-001, 002, 003, 004, 005, 008, 024, 025 and 039
+ * and the public projection): real Postgres with the restricted role, real Redis, the real AppModule.
+ * Only the outbound edges are faked: the mail port, a local S3 stand-in.
  */
 let h: Harness;
 const api = () => request(h.app.getHttpServer());
@@ -324,11 +323,11 @@ describe('secrets (TW-SET-001 rule 5, 024 rule 2)', () => {
   });
 
   it('a secret-only change still bumps the version and is audited', async () => {
-    const a = await save('realtime', {}, { appSecret: 's1' });
+    const a = await save('googleCalendar', {}, { clientSecret: 's1' });
     expect(a.rowVersion).toBe(1);
-    expect((await events('platform.settings.realtime_updated')).at(-1)!.payload.fields).toEqual([
-      'appSecret',
-    ]);
+    expect(
+      (await events('platform.settings.googleCalendar_updated')).at(-1)!.payload.fields,
+    ).toEqual(['clientSecret']);
   });
 });
 
@@ -518,35 +517,6 @@ describe('TW-SET-039 storage test', () => {
     expect((await events('platform.settings.storage_test')).at(-1)).toMatchObject({
       status: 'failure',
     });
-  });
-});
-
-describe('TW-SET-041 real-time test', () => {
-  it('asks for credentials first, then reports Pusher accepting or rejecting the event', async () => {
-    const probe = h.app.get(PusherProbe);
-    vi.spyOn(probe, 'baseUrl').mockReturnValue(stubUrl);
-    expect((await ops('post', '/realtime/test')).body).toEqual({
-      ok: false,
-      message: 'Fill in App ID, Key and Secret first.',
-    });
-    await save(
-      'realtime',
-      { enabled: true, appId: '42', appKey: 'key', cluster: 'eu' },
-      { appSecret: 'shh' },
-    );
-    const ok = await ops('post', '/realtime/test');
-    expect(ok.body.ok).toBe(true);
-    expect(stubSeen[0]!.method).toBe('POST');
-    expect(stubSeen[0]!.url).toContain('/apps/42/events?auth_key=key');
-    expect(stubSeen[0]!.url).not.toContain('shh');
-    stubStatus = 401;
-    stubBody = 'bad signature';
-    const bad = await ops('post', '/realtime/test');
-    expect(bad.body).toEqual({
-      ok: false,
-      message: 'Pusher rejected the credentials: HTTP 401 bad signature',
-    });
-    vi.restoreAllMocks();
   });
 });
 
