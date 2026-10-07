@@ -13,8 +13,9 @@ import type {
  * waited; here the API publishes a command and waits for the result, and the worker that owns the device's lease answers.
  */
 export type DeviceCommand =
-  | { id: string; type: 'qr'; orgId: number; deviceId: number }
-  | { id: string; type: 'code'; orgId: number; deviceId: number }
+  /** `relink`: forget a saved session that is still healthy and pair again. Without it a healthy session is never wiped (spec R1). */
+  | { id: string; type: 'qr'; orgId: number; deviceId: number; relink?: boolean }
+  | { id: string; type: 'code'; orgId: number; deviceId: number; relink?: boolean }
   | { id: string; type: 'terminate'; orgId: number; deviceId: number }
   | {
       id: string;
@@ -38,7 +39,15 @@ export type DeviceCommandResult =
   | { ok: true; status: 'group'; result: GroupResult }
   | {
       ok: false;
-      status: 'busy' | 'timeout' | 'error' | 'not_found' | 'not_ready' | 'unsupported';
+      status:
+        | 'busy'
+        | 'timeout'
+        | 'error'
+        | 'not_found'
+        | 'not_ready'
+        | 'unsupported'
+        /** A pairing would wipe a healthy saved session and the command did not carry `relink`. */
+        | 'not_pairable';
       message: string;
     };
 
