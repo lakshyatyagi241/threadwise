@@ -257,6 +257,40 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // Web forms the workspace has: every one that is not archived (an archived form frees its place). The Forms add-on.
+    key: 'forms',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM web_forms WHERE org_id = ${orgId} AND status <> 'archived'`,
+      ),
+  },
+  {
+    // Accepted submissions this calendar month, spam excluded. The cap never blocks a submission (it is stored `needs_review`), so
+    // this meter is the panel's number and the pipeline's own comparison.
+    key: 'form_submissions_monthly',
+    window: 'month',
+    count: (tx, orgId, from, to) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM web_form_submissions
+        WHERE org_id = ${orgId} AND status <> 'spam' AND NOT (status = 'needs_review' AND reason = 'submissions_cap')
+          AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
+      ),
+  },
+  {
+    // AI form builder generations this calendar month (counted from the builder's phase 2; the counter exists now).
+    key: 'ai_form_generations_monthly',
+    window: 'month',
+    count: (tx, orgId, from) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(ai_generations), 0)::int AS n FROM web_form_usage_monthly
+        WHERE org_id = ${orgId} AND period = ${from.toISOString().slice(0, 10)}::date`,
+      ),
+  },
+  {
     // Tokens billed to the platform's keys this calendar month: the same sum AiTokenMeter.guard compares with the cap (it enforces; this row is the panel's number).
     key: 'ai_token_limit_monthly',
     window: 'month',

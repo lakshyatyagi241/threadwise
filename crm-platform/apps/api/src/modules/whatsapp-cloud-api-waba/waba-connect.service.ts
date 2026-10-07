@@ -135,9 +135,32 @@ export class WabaConnectService {
 
   // --- reading -----------------------------------------------------------------------------------------------------
 
-  readiness(): WabaReadiness {
+  /**
+   * What the browser launches Embedded Signup with. The solution id is the provider's, not the platform's: a workspace on Interakt
+   * sends Interakt's, one on a partner program (Pinnacle) sends that program's, and a plain Meta workspace sends none. Sending the
+   * wrong one is visible to the person signing up (Meta names the partner in the popup) and onboards the number with the wrong one.
+   */
+  async readiness(): Promise<WabaReadiness> {
     const r = this.admin.readiness();
-    return { ...r, webhookUrl: this.callback().url };
+    const base = { ...r, webhookUrl: this.callback().url };
+    const { orgId } = RequestContextStore.require();
+    let route: Awaited<ReturnType<WhatsAppProviderResolver['forNewNumbers']>>;
+    try {
+      route = await this.providers.forNewNumbers(orgId);
+    } catch {
+      // A workspace whose provider is unavailable still needs a readable answer; connecting will say why it cannot.
+      return base;
+    }
+    if (route.key === 'interakt') return base;
+    const reg = route.registry;
+    const partner = reg?.partnerProgram ? reg : null;
+    return {
+      ...base,
+      solutionId: partner ? (partner.partnerSolutionId ?? null) : null,
+      // The code Meta returns is exchanged with the platform's own app (META_APP_ID), so the app never changes; a partner program
+      // may bring its own signup configuration of that app.
+      configId: partner?.onboardingConfigId ?? base.configId,
+    };
   }
 
   async list(): Promise<WabaConnectionDto[]> {

@@ -68,7 +68,6 @@
       "perPageOption": "{count} per page",
       "viewToggle": "Layout",
       "listView": "List view",
-      "gridView": "Grid view",
       "banner": {
         "pageSelected": "All {count} contacts on this page are selected.",
         "selectAllMatching": "Select all {total} matching this filter",
@@ -166,7 +165,11 @@
       "saveAsSegmentHint": "Turn the filters you have on into a segment that keeps itself up to date",
       "segmentInvalid": "{count, plural, one {# condition of this segment points at something that was deleted, so it matches fewer contacts than it should.} other {# conditions of this segment point at something that was deleted, so it matches fewer contacts than it should.}}",
       "segmentFix": "Fix the rules",
-      "approxTotal": "about {total, number}"
+      "approxTotal": "about {total, number}",
+      "import": "Import",
+      "columns": "Columns",
+      "addColumnField": "Add a custom field as a column",
+      "kanbanView": "Board view (by stage)"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -209,7 +212,10 @@
       "keep": "Keep contacts",
       "forbidden": "You do not have permission to do that.",
       "exportStarted": "Your export has been downloaded.",
-      "exportTooLarge": "That is too many contacts to export at once. Narrow the filter and try again."
+      "exportTooLarge": "That is too many contacts to export at once. Narrow the filter and try again.",
+      "update": "Update",
+      "updateNeedsRows": "Pick rows",
+      "updated": "{count, plural, one {Updated # contact.} other {Updated # contacts.}}"
     },
     "form": {
       "addEyebrow": "New contact",
@@ -368,7 +374,9 @@
           "body": "The group disappears from every contact that was in it. Other groups and the contacts themselves stay as they are."
         }
       },
-      "exists": "A group with this name already exists, so nothing new was created."
+      "exists": "A group with this name already exists, so nothing new was created.",
+      "import": "Import contacts",
+      "importInto": "Import"
     },
     "import": {
       "eyebrow": "Bulk import",
@@ -1095,6 +1103,65 @@
       "created": "Created the segment \"{name}\". Refine its rules below.",
       "forbidden": "You do not have permission to create segments.",
       "failed": "The segment could not be created. Try again."
+    },
+    "bulkUpdate": {
+      "title": "Update {count, plural, one {# contact} other {# contacts}}",
+      "hint": "Set the same values on {count, plural, one {the selected contact} other {all # selected contacts}}. Fields left on Keep are not changed.",
+      "stage": "Stage",
+      "status": "Status",
+      "owner": "Owner",
+      "keep": "Keep",
+      "unassign": "No owner",
+      "cancel": "Cancel",
+      "close": "Close",
+      "apply": "Update {count, plural, one {# contact} other {# contacts}}"
+    },
+    "kanban": {
+      "board": "Contacts by stage",
+      "empty": "No contacts in this stage.",
+      "failed": "Could not load this stage.",
+      "retry": "Try again",
+      "loadMore": "Load more",
+      "optedOut": "Opted out",
+      "moveTo": "Move {name} to stage"
+    },
+    "history": {
+      "title": "Import and export",
+      "subtitle": "Every contact import and export of this workspace: who did it, when, and how it went.",
+      "newImport": "Import contacts",
+      "when": "When",
+      "rejectsFailed": "The rejected rows could not be downloaded. Try again.",
+      "imports": {
+        "title": "Imports",
+        "hint": "Contact files uploaded, newest first. Rejected rows can be downloaded to fix and upload again.",
+        "empty": "No imports yet.",
+        "file": "File",
+        "status": "Status",
+        "created": "Created",
+        "updated": "Updated",
+        "rejected": "Rejected",
+        "actions": "Actions",
+        "downloadRejects": "Download rejects",
+        "statuses": {
+          "queued": "Queued",
+          "running": "Running",
+          "completed": "Completed",
+          "failed": "Failed"
+        }
+      },
+      "exports": {
+        "title": "Exports",
+        "hint": "Contact exports from the Hub, newest first. The downloaded file is not kept.",
+        "empty": "No exports yet.",
+        "by": "By",
+        "rows": "Contacts",
+        "selection": "Scope",
+        "unknown": "Unknown",
+        "selections": {
+          "ids": "Ticked contacts",
+          "filter": "Everything matching"
+        }
+      }
     }
   }
 }

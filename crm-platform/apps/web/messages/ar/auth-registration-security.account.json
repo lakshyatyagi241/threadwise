@@ -38,7 +38,7 @@
           "branding": "العلامة التجارية",
           "security": "كلمة المرور والأمان",
           "delete": "حذف الحساب",
-          "plan": "الباقة والاستخدام"
+          "plan": "الباقات"
         },
         "pages": {
           "profile": {
@@ -543,7 +543,8 @@
             "storefront_builder": "منشئ المتجر",
             "invoicing": "الفوترة",
             "forms_and_links": "النماذج والروابط",
-            "extra_channels": "تيليجرام وفيسبوك وإنستغرام"
+            "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
+            "form_builder": "النماذج"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

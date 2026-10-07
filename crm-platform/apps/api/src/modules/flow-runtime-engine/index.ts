@@ -8,6 +8,8 @@ export { FlowRuntimeEngineWorkerModule } from './flow-runtime-engine-worker.modu
 export { FlowLaunchService, type LaunchInput, type LaunchOutcome } from './runtime/launch.service';
 export { FlowTriggerService, type OrderPlaced } from './triggers/trigger.service';
 export { FlowEngine } from './runtime/engine.service';
+// The operator-facing reads and enrolment (flows, subscribers, enrol one contact), for the customer REST API's `/api/v1/flows`.
+export { FlowRuntimeService } from './flow-runtime.service';
 // Where a store domain binds what the Commerce shop node needs: stock, the native product list, a checkout link (WD-FLR-041).
 export {
   FlowShopGate,

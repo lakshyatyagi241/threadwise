@@ -80,3 +80,5 @@ export * from './flow-builder-editor';
 export * from './scheduled-queue-warmer';
 export * from './marketplace';
 export * from './leads';
+export * from './developer-rest-api-v1';
+export * from './forms-builder';

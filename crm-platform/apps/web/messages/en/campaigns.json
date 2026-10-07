@@ -284,7 +284,8 @@
         "windowEnd": "Send until",
         "windowHint": "Only send inside these hours, in the time zone above.",
         "tracking": "Track link clicks"
-      }
+      },
+      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number."
     },
     "detail": {
       "notFound": "That campaign was not found.",

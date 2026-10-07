@@ -12,6 +12,7 @@ const entry = (id: string): HelpIndexEntry => ({
   keywords: [],
   routes: [],
   headings: [],
+  readMinutes: 1,
   fallback: false,
 });
 

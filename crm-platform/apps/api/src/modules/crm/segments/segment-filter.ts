@@ -1,7 +1,8 @@
 import type { SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import type { InvalidCondition, SegmentGroup } from '@crm/contracts';
+import { segmentRulesSchema, type InvalidCondition, type SegmentGroup } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
+import { AppError } from '../../../common/errors/app-error';
 import { compileRules, collectRuleRefs } from './segment-compiler';
 import { loadRuleContext } from './segment-rule-context';
 import { SegmentsRepository, type SegmentRow } from './segments.repository';
@@ -61,6 +62,33 @@ export async function loadSegmentFilter(
   const filter = await compileSegment(tx, orgId, row);
   await repo.markUsed(tx, orgId, row.id);
   return filter;
+}
+
+/** The rule tree of a Contact Hub "Add condition" filter, sent as JSON text; the same checks and compiler as a saved segment. */
+export async function compileAdHocRules(
+  tx: Tx,
+  orgId: number,
+  text: string,
+): Promise<Omit<SegmentFilter, 'segmentId' | 'uuid'>> {
+  let raw: unknown;
+  try {
+    raw = JSON.parse(text);
+  } catch {
+    throw AppError.validation('The conditions are not valid JSON', [
+      { path: 'rules', message: 'not valid JSON' },
+    ]);
+  }
+  const parsed = segmentRulesSchema.safeParse(raw);
+  if (!parsed.success) {
+    throw AppError.validation(
+      'The conditions are not valid',
+      parsed.error.issues.slice(0, 5).map((i) => ({ path: 'rules', message: i.message })),
+    );
+  }
+  const rules = parsed.data as unknown as SegmentGroup;
+  const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
+  const compiled = compileRules(orgId, rules, rc);
+  return { where: compiled.where, invalid: compiled.invalid };
 }
 
 export async function compileSegment(

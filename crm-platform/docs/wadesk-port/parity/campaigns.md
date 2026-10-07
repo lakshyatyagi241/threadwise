@@ -124,3 +124,22 @@ used on either side):
 - Cloud API delivery reports now reach campaigns through `WabaReceiptRegistry`; this path is covered through the sandbox's reports (same receipt handler), not through a signed Meta webhook.
 - No side-by-side twin run (`wadesk-playwright-parity`) exists for the wizard: WaDesk has no equivalent screen to run it against.
 - Interactive web component tests (typing, clicking, the dialog) are not automated: jsdom and testing-library are not installed in this repo; the logic behind them is unit-tested and the flow was exercised in a real browser.
+
+## Intended difference: unofficial engine off by default (owner decision 2026-10-05)
+
+A campaign that names a personal-number (`baileys`) sender is refused with 422 `WA_UNOFFICIAL_DISABLED` unless a platform super admin turned the unofficial engine on; a blank sender or default engine resolves to `waba`; existing rows on that engine are kept, not sent, and resume when it is turned on. WaDesk always allowed it. Details and the full list of surfaces: [node-bridge-runtime.md](node-bridge-runtime.md#intended-difference-the-unofficial-engine-is-off-behind-a-platform-switch-owner-decision-2026-10-05).
+
+## Playwright twin run: WD-CAMP-004 (audience step: segments, tags, groups, filters)
+
+Spec `apps/web/e2e/campaigns/parity/WD-CAMP-004.twin.mjs`, depth full, against the running WaDesk and this branch on a freshly migrated scratch database. WaDesk's create screen is a stepped wizard with its own picker, so the audience scenarios run on our side only and are judged against absolute expectations.
+
+| Area                                                                  | Result                                                                                                                                                                                 |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Create-screen page probes (load, accessibility, degraded, auth, perf) | same as WaDesk                                                                                                                                                                         |
+| Segments, Tags and Groups rows and the three filters                  | present on load; empty rows say so                                                                                                                                                     |
+| Consent filter                                                        | refetches from the server (`unsubscribed=true`, 200); Clear filters restores the list                                                                                                  |
+| A segment picked as audience                                          | the chip checks, a draft saves (201); the test segment and draft are removed again                                                                                                     |
+| Keyboard reach                                                        | 64 of 76 in the probe; intended: the contact table scrolls in a fixed box so the probe stops at the first repeated position; tabbing 120 times reaches every control (checked by hand) |
+| Structure (landmarks, markup counts, nav collapse)                    | differs by design (our shell, a table instead of a wizard step); reviewed, no defect                                                                                                   |
+
+Small touch targets (fixed after the run): the 16 px checkboxes in the audience picker are now 24 px inside a 44 px clickable cell, and the chip checkboxes cover their whole chip; the probe's count fell from 33 to 6 (WaDesk 5, the rest outside the picker). Not covered: the launch path (it sends), a broadcast-screen twin.

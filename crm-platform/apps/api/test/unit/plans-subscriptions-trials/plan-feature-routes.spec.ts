@@ -8,7 +8,7 @@ import {
   REQUIRE_PLAN_FEATURE_KEY,
 } from '../../../src/modules/plans-subscriptions-trials';
 import { PlanFeatureGuard } from '../../../src/modules/plans-subscriptions-trials/plan-feature.guard';
-import { ApiKeyGuard } from '../../../src/modules/public-api/api-key.guard';
+import { ApiKeyAccessService } from '../../../src/modules/public-api/api-key-access.service';
 import { PublicApiController } from '../../../src/modules/public-api/public-api.controller';
 import { TeamChatController } from '../../../src/modules/team-chat/team-chat.controller';
 import { StoreController } from '../../../src/modules/storefront-builder/shops/store.controller';
@@ -168,9 +168,9 @@ describe('PlanFeatureGuard', () => {
   });
 });
 
-describe('ApiKeyGuard plan feature enforcement', () => {
+describe('API-key plan feature enforcement (ApiKeyAccessService, shared by both key guards)', () => {
   const run = (enabled: boolean, cls: object) => {
-    const guard = Object.create(ApiKeyGuard.prototype) as Record<string, unknown>;
+    const guard = Object.create(ApiKeyAccessService.prototype) as Record<string, unknown>;
     guard.entitlements = stubEntitlements(enabled);
     guard.reflector = new Reflector();
     const context = { getHandler: () => () => undefined, getClass: () => cls };

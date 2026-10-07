@@ -16,4 +16,14 @@ export const WSP_ERROR_CODES = {
   WSP_WORKSPACE_LIMIT_REACHED: 'WSP_WORKSPACE_LIMIT_REACHED',
   WSP_SLUG_TAKEN: 'WSP_SLUG_TAKEN',
   WSP_IMPERSONATION_REASON_REQUIRED: 'WSP_IMPERSONATION_REASON_REQUIRED',
+  /** A read-only impersonation session tried a write. */
+  WSP_IMPERSONATION_READ_ONLY: 'WSP_IMPERSONATION_READ_ONLY',
+  /** An impersonation session tried something only the owner may do themselves (password, 2FA, API keys, /platform...). */
+  WSP_IMPERSONATION_FORBIDDEN: 'WSP_IMPERSONATION_FORBIDDEN',
+  /** The workspace has no active owner to act as. */
+  WSP_IMPERSONATION_NO_OWNER: 'WSP_IMPERSONATION_NO_OWNER',
+  /** The handoff code is unknown, used, expired or its session ended. */
+  WSP_IMPERSONATION_CODE_INVALID: 'WSP_IMPERSONATION_CODE_INVALID',
+  /** The session the act-as token names has ended or run out. */
+  WSP_IMPERSONATION_ENDED: 'WSP_IMPERSONATION_ENDED',
 } as const;

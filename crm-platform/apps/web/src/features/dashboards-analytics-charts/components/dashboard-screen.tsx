@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DASH_RANGES, dashRangeSchema, type DashRange } from '@crm/contracts';
-import { Button, Card, Select, Spinner, cn } from '@crm/ui';
+import { Button, Card, Input, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
+import type { CustomDates } from '../api/service';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
 import { BarChart, Legend, Sparkline } from './charts';
 import {
@@ -31,13 +33,31 @@ import {
 } from './dashboard-extras';
 
 /** The range lives in the address so a link is shareable; anything unknown reads as 7d (WD-DASH-003). */
-function useRange(): [DashRange, (r: DashRange) => void] {
+function useRange(): [DashRange, CustomDates, (r: DashRange, c?: CustomDates) => void] {
   const params = useSearchParams();
   const router = useRouter();
   const path = usePathname();
   const parsed = dashRangeSchema.safeParse(params.get('range'));
   const range: DashRange = parsed.success ? parsed.data : '7d';
-  return [range, (r) => router.replace(`${path}?range=${r}`)];
+  const iso = /^\d{4}-\d{2}-\d{2}$/;
+  const from = params.get('from');
+  const to = params.get('to');
+  const custom: CustomDates = {
+    ...(from && iso.test(from) ? { from } : {}),
+    ...(to && iso.test(to) ? { to } : {}),
+  };
+  return [
+    range,
+    range === 'custom' ? custom : {},
+    (r, c = {}) => {
+      const q = new URLSearchParams({ range: r });
+      if (r === 'custom') {
+        if (c.from) q.set('from', c.from);
+        if (c.to) q.set('to', c.to);
+      }
+      router.replace(`${path}?${q.toString()}`);
+    },
+  ];
 }
 
 export function RangePicker({
@@ -79,13 +99,15 @@ export function RangePicker({
 /** `/dashboard` (WD-DASH-001..021): the operator dashboard, cards in the order WaDesk shows them. */
 export function DashboardScreen() {
   const t = useTranslations('dashboards-analytics-charts.dashboard');
+  const unofficial = useUnofficialWhatsapp();
   const tr = useTranslations('dashboards-analytics-charts.range');
   const locale = useLocale();
   const session = useSession();
-  const [range, setRange] = useRange();
-  const summary = useSummary(range);
-  const flow = useThroughput(range);
-  const widgets = useWidgets(range);
+  const [range, custom, setRange] = useRange();
+  const [draft, setDraft] = useState<CustomDates>({});
+  const summary = useSummary(range, custom);
+  const flow = useThroughput(range, custom);
+  const widgets = useWidgets(range, custom);
   const router = useRouter();
   const bounced = isForbidden(summary.error);
   // WaDesk sends an agent or viewer to the team inbox rather than showing an error.
@@ -140,7 +162,7 @@ export function DashboardScreen() {
           </h1>
           {s && (
             <p className="text-sm text-muted-foreground">
-              {t('subline', {
+              {t(unofficial ? 'subline' : 'sublineOfficial', {
                 date: new Intl.DateTimeFormat(locale, {
                   timeZone: tz,
                   weekday: 'long',
@@ -163,7 +185,7 @@ export function DashboardScreen() {
             aria-label={tr('label')}
             className="h-9 w-auto"
             value={range}
-            onChange={(e) => setRange(e.target.value as DashRange)}
+            onChange={(e) => setRange(e.target.value as DashRange, draft)}
           >
             {DASH_RANGES.map((r) => (
               <option key={r} value={r}>
@@ -171,6 +193,35 @@ export function DashboardScreen() {
               </option>
             ))}
           </Select>
+          {range === 'custom' && (
+            <form
+              className="flex flex-wrap items-center gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setRange('custom', draft);
+              }}
+            >
+              <Input
+                type="date"
+                aria-label={tr('from')}
+                className="h-9 w-auto"
+                max={draft.to || undefined}
+                value={draft.from ?? custom.from ?? ''}
+                onChange={(e) => setDraft({ ...draft, from: e.target.value })}
+              />
+              <Input
+                type="date"
+                aria-label={tr('to')}
+                className="h-9 w-auto"
+                min={draft.from || undefined}
+                value={draft.to ?? custom.to ?? ''}
+                onChange={(e) => setDraft({ ...draft, to: e.target.value })}
+              />
+              <Button type="submit" size="sm">
+                {tr('apply')}
+              </Button>
+            </form>
+          )}
           <Link
             href="/campaigns/create"
             className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
@@ -319,12 +370,15 @@ export function DashboardScreen() {
               {w && (
                 <>
                   <div className="grid gap-4 lg:grid-cols-12">
-                    <div className="lg:col-span-7">
+                    <div className={unofficial ? 'lg:col-span-7' : 'lg:col-span-12'}>
                       <CampaignsCard data={w.campaigns} />
                     </div>
-                    <div className="lg:col-span-5">
-                      <DevicesCard data={w.devices} />
-                    </div>
+                    {/* The Devices card counts personal numbers paired by QR: it exists only while the platform has that engine on. */}
+                    {unofficial && (
+                      <div className="lg:col-span-5">
+                        <DevicesCard data={w.devices} />
+                      </div>
+                    )}
                   </div>
                   <TemplatesCard data={w.templates} />
                 </>

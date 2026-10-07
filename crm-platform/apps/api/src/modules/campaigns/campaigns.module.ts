@@ -95,6 +95,9 @@ import { WizardRepository } from './wizard/wizard.repository';
   ],
   // The worker module reuses this module's providers and the kits it was built from.
   exports: [
+    CampaignsService,
+    CampaignsReadService,
+    CampaignsActionsService,
     BroadcastsModule,
     CrmModule,
     CryptoService,

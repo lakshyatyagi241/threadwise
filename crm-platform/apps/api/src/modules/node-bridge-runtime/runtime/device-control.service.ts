@@ -13,6 +13,10 @@ import type {
   SendOutcome,
 } from '../../../infra/providers/node-bridge-runtime/outbound.port';
 import type { GroupAction } from '../../../infra/providers/node-bridge-runtime/socket.port';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { waKeys } from './wa-redis';
 
 const POLL_MS = 200;
@@ -54,6 +58,7 @@ export class DeviceControlService {
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   /** Sends a message through a connected number. The error says what to do when the number is not connected. */
@@ -63,6 +68,8 @@ export class DeviceControlService {
     command: SendCommand,
     context: SendContext,
   ): Promise<SendOutcome> {
+    // Every action on a device refuses with WA_UNOFFICIAL_DISABLED while the platform switch is off or the workspace is not allowed (owner decisions 2026-10-05, 2026-10-06).
+    await this.unofficial.assertEnabledFor(orgId);
     if (this.local?.owns(orgId, deviceId))
       return this.local.send(orgId, deviceId, command, context);
     // The file does not travel in the command (it is JSON on a channel): it waits in Redis for the worker that owns the device.
@@ -85,6 +92,7 @@ export class DeviceControlService {
   }
 
   async messageAction(orgId: number, deviceId: number, action: MessageAction): Promise<void> {
+    await this.unofficial.assertEnabledFor(orgId);
     if (this.local?.owns(orgId, deviceId)) return this.local.act(orgId, deviceId, action);
     const r = await this.sendIfOwned({ type: 'act', orgId, deviceId, action });
     if (!(r.ok && r.status === 'acted')) throw failure(r);
@@ -96,6 +104,7 @@ export class DeviceControlService {
     deviceId: number,
     action: GroupAction,
   ): Promise<DeviceCommandResult> {
+    await this.unofficial.assertEnabledFor(orgId);
     if (this.local?.owns(orgId, deviceId)) return this.local.groups(orgId, deviceId, action);
     return this.sendIfOwned({ type: 'group', orgId, deviceId, action });
   }
@@ -120,17 +129,20 @@ export class DeviceControlService {
   }
 
   /** Starts a pairing and returns the QR (or `connected` when the device is already linked). Within 35 s. */
-  requestQr(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+  async requestQr(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+    await this.unofficial.assertEnabledFor(orgId);
     return this.send({ type: 'qr', orgId, deviceId });
   }
 
   /** The 8-character code that links the phone without a QR. The same code is returned for 2 minutes. */
-  requestPairingCode(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+  async requestPairingCode(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+    await this.unofficial.assertEnabledFor(orgId);
     return this.send({ type: 'code', orgId, deviceId });
   }
 
   /** Unlinks the device from the phone and forgets its session (the product's "Disconnect"). */
-  terminate(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+  async terminate(orgId: number, deviceId: number): Promise<DeviceCommandResult> {
+    await this.unofficial.assertEnabledFor(orgId);
     return this.send({ type: 'terminate', orgId, deviceId });
   }
 

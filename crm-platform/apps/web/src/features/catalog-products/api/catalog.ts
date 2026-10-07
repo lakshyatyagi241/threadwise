@@ -17,6 +17,8 @@ import {
   type SyncProductsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { offerSenders } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 
 export const KEYS = {
   all: ['cat'] as const,
@@ -32,20 +34,25 @@ export const KEYS = {
 
 /** The Setup tab in one read, also used by the header pill and the Send and Collections tabs. */
 export function useOverview() {
+  // Personal-number (unofficial engine) senders are not offered while the platform has that engine off.
+  const unofficial = useUnofficialWhatsapp();
   return useQuery({
     queryKey: KEYS.overview,
     queryFn: ({ signal }) =>
       apiFetch('/catalog/overview', { schema: catalogOverviewSchema, signal }),
     retry: false,
+    select: (o) => ({ ...o, senders: offerSenders(o.senders, unofficial) }),
   });
 }
 
 export function useSendOptions() {
+  const unofficial = useUnofficialWhatsapp();
   return useQuery({
     queryKey: KEYS.sendOptions,
     queryFn: ({ signal }) =>
       apiFetch('/catalog/send-options', { schema: catalogSendOptionsSchema, signal }),
     retry: false,
+    select: (o) => ({ ...o, senders: offerSenders(o.senders, unofficial) }),
   });
 }
 

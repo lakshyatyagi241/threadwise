@@ -29,8 +29,7 @@ export function WorkspaceDetailPage({ id }: { id: string }) {
     <div className="space-y-6">
       <Breadcrumb
         items={[
-          { label: tb('wallet'), href: '/admin/wallet' },
-          { label: tb('workspacesLabel'), href: '/admin/wallet/workspaces' },
+          { label: tb('workspacesLabel'), href: '/admin/workspaces' },
           { label: q.data?.workspace.name ?? t('crumb') },
         ]}
       />

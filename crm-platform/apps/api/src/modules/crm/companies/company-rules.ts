@@ -97,3 +97,30 @@ export function foldActivity(
       })),
   }));
 }
+
+/**
+ * A website as people type it ("https://www.Acme.com/about", "acme.com") to the bare lower-case host the company match compares, or null
+ * when it is not a host. `www.` is dropped: the two spellings are one site.
+ */
+export function normaliseCompanyDomain(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const text = raw.trim().toLowerCase();
+  if (text === '' || text.length > 191) return null;
+  const host = (text.replace(/^[a-z][a-z0-9+.-]*:\/\//, '').split(/[/?#]/)[0] ?? '')
+    .replace(/^.*@/, '')
+    .replace(/:\d+$/, '')
+    .replace(/^www\./, '');
+  return /^(?=.{1,191}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(host)
+    ? host
+    : null;
+}
+
+/**
+ * Every way a host is commonly stored in `companies.domain`, lower-cased: the company match compares `lower(domain)` with this list, which
+ * keeps it on the (org_id, lower(domain)) index instead of normalising every row.
+ */
+export function companyDomainSpellings(host: string): string[] {
+  const bare = [host, `www.${host}`];
+  const withScheme = bare.flatMap((h) => [`http://${h}`, `https://${h}`]);
+  return [...bare, ...withScheme].flatMap((h) => [h, `${h}/`]);
+}

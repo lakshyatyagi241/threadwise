@@ -167,3 +167,25 @@ describe('segment filter', () => {
     expect(listQuery(DEFAULT_FILTERS).segmentId).toBeUndefined();
   });
 });
+
+describe('ad-hoc conditions (rules)', () => {
+  const RULES = JSON.stringify({
+    type: 'group',
+    combinator: 'and',
+    children: [{ type: 'condition', field: 'source', operator: 'equals', value: 'web' }],
+  });
+  it('round-trips through the URL and reaches the list and bulk bodies', () => {
+    const f = parseFilters(new URLSearchParams({ rules: RULES }));
+    expect(f.rules).toBe(RULES);
+    expect(parseFilters(new URLSearchParams(filtersToSearch(f).slice(1))).rules).toBe(RULES);
+    expect(contactFilterBody(f).rules).toBe(RULES);
+    expect(hasActiveFilter(f)).toBe(true);
+  });
+  it('text that is not JSON, or too long, reads as none', () => {
+    expect(parseFilters(new URLSearchParams({ rules: 'nope' })).rules).toBe('');
+    expect(parseFilters(new URLSearchParams({ rules: `[${'1,'.repeat(11_000)}1]` })).rules).toBe(
+      '',
+    );
+    expect(contactFilterBody(DEFAULT_FILTERS).rules).toBeUndefined();
+  });
+});

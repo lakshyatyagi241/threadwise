@@ -17,6 +17,10 @@ import {
 import { ChatMediaStore } from '../../../infra/providers/chat-conversations/media/chat-media.store';
 import { UnsupportedSendError } from '../../../infra/providers/node-bridge-runtime/outbound.port';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { DeviceControlService } from '../runtime/device-control.service';
 import { inboxKeys, SENT_MARKER_TTL_S } from './inbox-keys';
 
@@ -54,6 +58,7 @@ export class QrChannelAdapter implements ChannelAdapter {
     private readonly db: DatabaseService,
     private readonly control: DeviceControlService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     /** Present in the worker (which sends); the HTTP app only reads capabilities. */
     @Optional() private readonly media?: ChatMediaStore,
   ) {}
@@ -71,6 +76,14 @@ export class QrChannelAdapter implements ChannelAdapter {
   }
 
   async send(channel: ChannelRuntime, envelope: OutboundEnvelope): Promise<SendResult> {
+    // Not retryable: the queue would otherwise keep trying a send the platform has switched off (owner decision 2026-10-05).
+    if (!(await this.unofficial.isEnabledFor(channel.orgId))) {
+      throw new ChannelError(
+        'WA_UNOFFICIAL_DISABLED',
+        'The unofficial WhatsApp engine is turned off on this platform. Reply from a WhatsApp Cloud API number.',
+        false,
+      );
+    }
     const deviceId = await this.deviceOf(channel);
     const to = digits(envelope.to);
     const context = { clientReference: envelope.clientReference, screen: { source: 'inbox' } };

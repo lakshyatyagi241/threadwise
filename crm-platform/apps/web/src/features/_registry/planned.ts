@@ -149,3 +149,14 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'help',
   },
 ];
+
+/**
+ * Whether the sidebar draws the screens above as disabled "Soon" entries. Off (owner decision, 2026-10-05): the menu lists only what
+ * works, so a workspace is not offered a dozen dead entries. The list itself stays: it is the record of what is still to be built, the
+ * Help coverage check reads it, and switching this on brings the old menu back with no other change. The Settings tiles' own "Soon"
+ * entries (`settings-planned.ts`) are not affected.
+ */
+export const SHOW_PLANNED_IN_MENU = false;
+
+/** What the sidebar is given as planned entries. */
+export const MENU_PLANNED_NAV: readonly NavItem[] = SHOW_PLANNED_IN_MENU ? PLANNED_NAV : [];

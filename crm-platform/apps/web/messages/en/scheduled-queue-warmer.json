@@ -18,6 +18,7 @@
       "ROW_VERSION_CONFLICT": "This schedule changed in the meantime. Reload and try again.",
       "PLAN_FEATURE_LOCKED": "Your plan does not include this feature.",
       "PLAN_LIMIT_REACHED": "You have reached the limit of your plan.",
+      "WA_UNOFFICIAL_DISABLED": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "AUTH_SEND_HALTED": "Sending is halted for this workspace.",
       "upgrade": "See plans and upgrade",
       "requestId": "Request {id}"

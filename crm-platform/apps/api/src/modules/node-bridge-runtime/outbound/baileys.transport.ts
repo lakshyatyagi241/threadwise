@@ -1,4 +1,8 @@
-import { Injectable, type OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, type OnModuleInit } from '@nestjs/common';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import type { EngineTransport, OpenTransport, SenderRef } from './outbound';
 import { OutboundRegistry } from './outbound-registry.service';
 import { DeviceControlService } from '../runtime/device-control.service';
@@ -12,6 +16,7 @@ export class BaileysTransport implements EngineTransport, OnModuleInit {
   constructor(
     private readonly registry: OutboundRegistry,
     private readonly control: DeviceControlService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   onModuleInit(): void {
@@ -19,6 +24,8 @@ export class BaileysTransport implements EngineTransport, OnModuleInit {
   }
 
   async open(orgId: number, sender: SenderRef): Promise<OpenTransport> {
+    // The one door every send path (broadcast, campaign, scheduled message, flow) goes through to reach a Baileys socket.
+    await this.unofficial.assertEnabledFor(orgId);
     return {
       send: (command, context) => this.control.sendMessage(orgId, sender.id, command, context),
     };

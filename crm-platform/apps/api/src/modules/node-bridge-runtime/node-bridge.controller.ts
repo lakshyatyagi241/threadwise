@@ -1,18 +1,38 @@
-import { Body, Controller, Get, HttpCode, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   nodeBridgeTestRequestSchema,
+  setUnofficialWorkspaceInputSchema,
+  unofficialWorkspaceListQuerySchema,
+  unofficialWorkspaceOptionsQuerySchema,
   updateNodeBridgeSchema,
   updateNodePacingSchema,
+  updateUnofficialWhatsappSchema,
   type NodeBridgeTestRequest,
+  type SetUnofficialWorkspaceInput,
+  type UnofficialWorkspaceListQuery,
+  type UnofficialWorkspaceOptionsQuery,
   type UpdateNodeBridgeInput,
   type UpdateNodePacingInput,
+  type UpdateUnofficialWhatsappInput,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
 import { NodeBridgeSettingsService } from './node-bridge-settings.service';
+import { UnofficialWorkspacesService } from './unofficial-workspaces.service';
 
 /**
  * The operator console's Node bridge panel (WD-NODE-052, 029). WaDesk gated it by "is an admin"; here every operator may
@@ -24,7 +44,10 @@ import { NodeBridgeSettingsService } from './node-bridge-settings.service';
 @UseGuards(OperatorGuard)
 @Controller({ path: 'platform/node-bridge', version: '2' })
 export class NodeBridgeController {
-  constructor(private readonly settings: NodeBridgeSettingsService) {}
+  constructor(
+    private readonly settings: NodeBridgeSettingsService,
+    private readonly workspaces: UnofficialWorkspacesService,
+  ) {}
 
   private operatorId(): number {
     return RequestContextStore.require().actorId!;
@@ -55,6 +78,58 @@ export class NodeBridgeController {
   @ApiOperation({ summary: 'Save the sender pacing and batching ("Update timing")' })
   updatePacing(@Body(zodPipe(updateNodePacingSchema)) body: UpdateNodePacingInput) {
     return this.settings.updatePacing(body, this.operatorId());
+  }
+
+  @Put('unofficial')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary:
+      'Turn the unofficial WhatsApp engine (personal numbers over Baileys) on or off for the whole platform',
+    description:
+      'Off by default. Nothing is deleted either way: devices, broadcasts and channels stay and work again when it is turned on. Audited as platform.whatsapp_unofficial.updated.',
+  })
+  updateUnofficial(
+    @Body(zodPipe(updateUnofficialWhatsappSchema)) body: UpdateUnofficialWhatsappInput,
+  ) {
+    return this.settings.updateUnofficial(body, this.operatorId());
+  }
+
+  @Get('unofficial/workspaces')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'The workspaces allowed to use the unofficial WhatsApp engine',
+    description:
+      'Newest first, keyset-paged (`q` filters by name or slug). The platform switch is the global kill-switch: a workspace has access only when the switch is on and it is listed here.',
+  })
+  listUnofficialWorkspaces(
+    @Query(zodPipe(unofficialWorkspaceListQuerySchema)) query: UnofficialWorkspaceListQuery,
+  ) {
+    return this.workspaces.list(query);
+  }
+
+  @Get('unofficial/workspace-options')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'Search workspaces to allow (name, slug or owner email, at most 20)',
+  })
+  unofficialWorkspaceOptions(
+    @Query(zodPipe(unofficialWorkspaceOptionsQuerySchema)) query: UnofficialWorkspaceOptionsQuery,
+  ) {
+    return this.workspaces.options(query);
+  }
+
+  @Put('unofficial/workspaces/:orgUuid')
+  @OperatorRoles('super_admin')
+  @ApiOperation({
+    summary: 'Allow or remove one workspace for the unofficial WhatsApp engine',
+    description:
+      '`enabled: true` upserts the allow-list row (a note may be sent), `false` deletes it; idempotent, 404 for an unknown workspace. Nothing the workspace owns is deleted. Audited as platform.whatsapp_unofficial.workspace_enabled / workspace_disabled.',
+  })
+  setUnofficialWorkspace(
+    @Param('orgUuid') orgUuid: string,
+    @Body(zodPipe(setUnofficialWorkspaceInputSchema)) body: SetUnofficialWorkspaceInput,
+  ) {
+    return this.workspaces.set(orgUuid, body, this.operatorId());
   }
 
   @Post('test')

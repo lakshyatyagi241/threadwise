@@ -1,6 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
+import { orgIdList } from '../../common/sql/org-id-list';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PacingRuntime } from '../broadcasts';
 import { CAMPAIGN_SETTINGS, type CampaignSettingsSource } from './_shims/tokens';
@@ -50,6 +55,7 @@ export class CampaignSweeper {
     private readonly jobs: CampaignJobs,
     private readonly runtime: PacingRuntime,
     @Inject(CAMPAIGN_SETTINGS) private readonly settings: CampaignSettingsSource,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   @Interval(5_000)
@@ -69,6 +75,9 @@ export class CampaignSweeper {
   /** Public for tests. Returns how many campaigns were started. */
   async sweep(): Promise<number> {
     const started: Array<{ orgId: number; id: number; uuid: string }> = [];
+    // Campaigns on the unofficial engine are not started while it is off (owner decision 2026-10-05); they stay `scheduled`.
+    // Decided per row's workspace (owner decision 2026-10-06): the platform switch on AND the campaign's org on the allow-list.
+    const allowedOrgs = orgIdList(await this.unofficial.enabledOrgIds());
     await this.db.privileged(async (tx) => {
       await tx.execute(sql`
         UPDATE wp_campaign_contacts SET status = 'queued'
@@ -84,6 +93,7 @@ export class CampaignSweeper {
         SELECT id, uuid, org_id, timezone, schedule_type, send_date, to_char(send_time, 'HH24:MI') AS send_time
         FROM wpcampaigns
         WHERE status = 'scheduled' AND schedule_type IN ('scheduled', 'recurring') AND send_date IS NOT NULL
+          AND (provider IS DISTINCT FROM 'baileys' OR org_id = ANY(${allowedOrgs}))
           AND send_date <= (now() AT TIME ZONE 'UTC')::date + 1
         ORDER BY send_date, send_time LIMIT ${MAX_FIRED} FOR UPDATE SKIP LOCKED`);
       for (const r of res.rows as unknown as Row[]) {

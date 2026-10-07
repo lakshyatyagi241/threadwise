@@ -140,6 +140,12 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M2 6h12M5 1.5v2M11 1.5v2M5.5 9l1.3 1.3L10 8" />
     </>
   ),
+  forms: (
+    <>
+      <rect x="2.5" y="2" width="11" height="12" rx="1.5" />
+      <path d="M5 5.2h6M5 8h6M5 10.8h3.2" />
+    </>
+  ),
   widget: (
     <>
       <rect x="3" y="3" width="10" height="8" rx="2" />

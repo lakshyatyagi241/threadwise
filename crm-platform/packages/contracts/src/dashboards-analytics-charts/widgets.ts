@@ -33,6 +33,8 @@ export const dashWidgetsSchema = z.object({
   devices: z.object({
     total: z.number().int(),
     online: z.number().int(),
+    /** True when the platform's unofficial-engine switch is off: the card then carries no devices and the page hides it. */
+    unofficialDisabled: z.boolean().optional(),
     /** The plan's device limit, or WaDesk's 6 when the plan is unlimited. */
     slotCap: z.number().int(),
     rows: z.array(

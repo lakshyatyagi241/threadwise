@@ -3,7 +3,10 @@ import type { OperatorNavItem } from '@/features/auth-registration-security/plat
 import type { ConsoleSection } from './console-layout';
 import {
   activeLeafId,
+  activeStatusBadge,
+  activeStatusBadgeInfo,
   buildConsoleNav,
+  CONSOLE_NAV_ITEMS,
   emptySection,
   formatCount,
   groupByHeading,
@@ -193,5 +196,48 @@ describe('formatCount', () => {
     [12_400_000, '12M'],
   ])('%s -> %s', (input, expected) => {
     expect(formatCount(input as number | null | undefined)).toBe(expected);
+  });
+});
+
+describe('status badges', () => {
+  const leaf = buildConsoleNav(CONSOLE_NAV_ITEMS)
+    .flatMap((e) => ('children' in e ? e.children : [e]))
+    .find((l) => l.id === 'node-bridge');
+
+  it('puts a "Not supported" badge on the Node bridge page, driven by a flag and not a count', () => {
+    expect(leaf?.statusBadge).toEqual({
+      key: 'unofficialOff',
+      labelKey: 'admin-console-shell.nav.badges.notSupported',
+    });
+    expect(leaf?.badgeKey).toBeUndefined();
+  });
+
+  it('shows it only while the platform switch is off', () => {
+    expect(activeStatusBadge(leaf!, { unofficialOff: 1 })).toBe(
+      'admin-console-shell.nav.badges.notSupported',
+    );
+    // switch on, or the settings could not be read: no badge
+    expect(activeStatusBadge(leaf!, {})).toBeNull();
+    expect(activeStatusBadge(leaf!, { unofficialOff: 0 })).toBeNull();
+  });
+
+  it('says "No workspaces" (neutral) when the switch is on and the allow-list is empty; "Not supported" wins while off', () => {
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.noWorkspaces',
+      tone: 'neutral',
+    });
+    expect(activeStatusBadgeInfo(leaf!, { unofficialOff: 1, unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.notSupported',
+      tone: 'warning',
+    });
+    expect(activeStatusBadgeInfo(leaf!, {})).toBeNull();
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 0 })).toBeNull();
+  });
+
+  it('leaves every other page without one', () => {
+    const others = buildConsoleNav(CONSOLE_NAV_ITEMS)
+      .flatMap((e) => ('children' in e ? e.children : [e]))
+      .filter((l) => l.id !== 'node-bridge');
+    expect(others.some((l) => l.statusBadge)).toBe(false);
   });
 });

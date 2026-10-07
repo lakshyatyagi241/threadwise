@@ -47,8 +47,9 @@ export function compareNav(a: NavItem, b: NavItem): number {
 
 /**
  * WaDesk's rule: a missing permission or unavailable channel removes the entry, a missing plan feature keeps it
- * visible but locked (so it can upsell). Returns `null` when the entry is removed, else whether it is locked. A planned
- * (not built) entry is never locked. Shared by the menu and the Settings tiles.
+ * visible but locked (so it can upsell). Our addition: a Marketplace app the workspace does not own (`gates.app`) removes
+ * the entry too, with no upsell mark. Returns `null` when the entry is removed, else whether it is locked. A planned
+ * (not built) entry is never locked. Shared by the menu, the Settings tiles and the Help center.
  */
 export function evaluateGates(
   gates: NavGates | undefined,
@@ -58,6 +59,7 @@ export function evaluateGates(
   const g = gates ?? {};
   if (g.permission && caps.permissions && !caps.permissions.has(g.permission)) return null;
   if (g.channel && caps.channels && !caps.channels.has(g.channel)) return null;
+  if (g.app && caps.planFeatures && !caps.planFeatures.has(g.app)) return null;
   const locked =
     !comingSoon &&
     Boolean(g.planFeature && caps.planFeatures && !caps.planFeatures.has(g.planFeature));

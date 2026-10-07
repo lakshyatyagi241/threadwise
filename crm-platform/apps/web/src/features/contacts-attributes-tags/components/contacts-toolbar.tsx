@@ -19,12 +19,13 @@ import type { ContactFilters } from '../api/contacts';
 import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
 import type { Choice } from '../lib/option-sets';
+import { AdvancedFilter } from '@/features/segments';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
   DownloadIcon,
   FilterIcon,
-  GridIcon,
+  KanbanIcon,
   ListIcon,
   MergeIcon,
   RefreshIcon,
@@ -62,6 +63,10 @@ export interface ContactsToolbarProps {
   /** Present when the person may save the active filters as a segment: the button then shows. */
   onSaveAsSegment?: () => void;
   canCreateSegment: boolean;
+
+  /** Ad-hoc conditions applied now (JSON text of a rule tree), or empty. */
+  rules: string;
+  onRules: (rulesJson: string) => void;
 
   tag: string;
   onTag: (id: string) => void;
@@ -107,9 +112,15 @@ export interface ContactsToolbarProps {
   visibleIds: ReadonlySet<ColumnId>;
   onColumn: (id: ColumnId, on: boolean) => void;
   onResetColumns: () => void;
+  /** Opens the bulk Update dialog for the selected contacts. */
+  onUpdateSelected: () => void;
+  /** "Select all N matching" has no explicit ids, which a bulk update needs. */
+  updateDisabled: boolean;
+  /** Opens where a custom field is made (it then shows up as a column); absent when the caller may not manage fields. */
+  onAddColumnField?: () => void;
 
-  view: 'list' | 'grid';
-  onView: (v: 'list' | 'grid') => void;
+  view: 'list' | 'kanban';
+  onView: (v: 'list' | 'kanban') => void;
 
   onRefresh: () => void;
   /** The list is being fetched (the refresh icon spins). */
@@ -272,6 +283,8 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </MenuRadioItem>
         </Menu>
 
+        <AdvancedFilter value={p.rules} onApply={p.onRules} />
+
         {p.onSaveAsSegment && (
           <Button
             variant="secondary"
@@ -294,6 +307,13 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           <SendIcon />
           {t('sendCampaign')}
         </Button>
+
+        {p.can.import && (
+          <button type="button" onClick={p.onImport} className={trigger}>
+            <UploadIcon className="size-4 text-muted-foreground" />
+            {t('import')}
+          </button>
+        )}
 
         {hasMoreActions && (
           <div className="relative">
@@ -340,6 +360,13 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               )}
               {p.can.update && (
                 <>
+                  <MenuItem
+                    onSelect={p.onUpdateSelected}
+                    disabled={none || p.busy || p.updateDisabled}
+                    hint={p.updateDisabled && !none ? tb('updateNeedsRows') : undefined}
+                  >
+                    {tb('update')}
+                  </MenuItem>
                   <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
                     {tb('addToGroup')}
                   </MenuItem>
@@ -374,9 +401,14 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           <Menu
             label={t('modifyColumns')}
             align="end"
-            triggerClassName={cn(iconBtn, 'px-0')}
-            triggerProps={{ 'aria-label': t('modifyColumns'), title: t('modifyColumns') }}
-            trigger={<SettingsIcon className="size-4" />}
+            triggerClassName={trigger}
+            triggerProps={{ title: t('modifyColumns') }}
+            trigger={
+              <>
+                <SettingsIcon className="size-4 text-muted-foreground" />
+                {t('columns')}
+              </>
+            }
           >
             {p.allColumns.map((c) => {
               const locked = c.id === 'name';
@@ -392,6 +424,9 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               );
             })}
             <MenuSeparator />
+            {p.onAddColumnField && (
+              <MenuItem onSelect={p.onAddColumnField}>{t('addColumnField')}</MenuItem>
+            )}
             <MenuItem keepOpen onSelect={p.onResetColumns}>
               {t('resetColumns')}
             </MenuItem>
@@ -410,20 +445,20 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
             aria-label={t('viewToggle')}
             className="inline-flex overflow-hidden rounded-md border border-border"
           >
-            {(['list', 'grid'] as const).map((v) => (
+            {(['list', 'kanban'] as const).map((v) => (
               <button
                 key={v}
                 type="button"
                 aria-pressed={p.view === v}
-                title={t(v === 'list' ? 'listView' : 'gridView')}
-                aria-label={t(v === 'list' ? 'listView' : 'gridView')}
+                title={t(v === 'list' ? 'listView' : 'kanbanView')}
+                aria-label={t(v === 'list' ? 'listView' : 'kanbanView')}
                 onClick={() => p.onView(v)}
                 className={cn(
                   'inline-flex size-9 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
                   p.view === v ? 'bg-brand text-brand-foreground' : 'hover:bg-muted',
                 )}
               >
-                {v === 'list' ? <ListIcon /> : <GridIcon />}
+                {v === 'list' ? <ListIcon /> : <KanbanIcon />}
               </button>
             ))}
           </div>

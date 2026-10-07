@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PLAN_LIMIT_KEYS, type BillingPlan, type BillingUsagePanelResponse } from '@crm/contracts';
 import { renderAccount } from '@/features/auth-registration-security/account/render-test-utils';
+import { ENTITLEMENTS_KEY } from '@/lib/use-unofficial-whatsapp';
 import { BILLING_KEYS } from '../api';
 import { CompareTable } from './compare-table';
 import { PlanAddons } from './plan-addons';
@@ -43,6 +44,9 @@ const usage = (over: Partial<BillingUsagePanelResponse> = {}): BillingUsagePanel
   ...over,
 });
 
+/** What `/billing/entitlements` answers while the platform has switched the unofficial WhatsApp engine on / leaves it off. */
+const SWITCH_ON = [ENTITLEMENTS_KEY, { features: ['automation', 'unofficial_whatsapp'] }] as const;
+
 const plan = (over: Partial<BillingPlan>): BillingPlan =>
   ({
     slug: 'p',
@@ -70,8 +74,16 @@ const plan = (over: Partial<BillingPlan>): BillingPlan =>
 
 for (const locale of ['en', 'ar'] as const) {
   describe(`usage panel (${locale})`, () => {
-    const html = () =>
-      renderAccount(<UsagePanel />, { locale, seed: [[BILLING_KEYS.usage, usage()]] });
+    const html = (on = true) =>
+      renderAccount(<UsagePanel />, {
+        locale,
+        seed: [[BILLING_KEYS.usage, usage()], ...(on ? [SWITCH_ON] : [])],
+      });
+
+    it('hides the devices meter from the workspace while the platform has unofficial WhatsApp off', () => {
+      expect(html(false)).not.toContain('data-testid="meter-devices"');
+      expect(html(true)).toContain('data-testid="meter-devices"');
+    });
 
     it('groups the limits, opens capped groups and drops groups with nothing to show', () => {
       const out = html();
@@ -113,7 +125,10 @@ for (const locale of ['en', 'ar'] as const) {
     it('still renders a limit the payload has no counter for', () => {
       const u = usage();
       u.meters = u.meters.filter((m) => m.key !== 'contacts');
-      const out = renderAccount(<UsagePanel />, { locale, seed: [[BILLING_KEYS.usage, u]] });
+      const out = renderAccount(<UsagePanel />, {
+        locale,
+        seed: [[BILLING_KEYS.usage, u], SWITCH_ON],
+      });
       expect(out).toContain('data-testid="meter-contacts"');
     });
   });
@@ -161,9 +176,24 @@ describe('plan card', () => {
     });
     const out = renderAccount(
       <PlanCard plan={many} canManage busy={false} period="monthly" onSwitch={() => undefined} />,
+      { seed: [SWITCH_ON] },
     );
     expect(out.match(/<li /g)).toHaveLength(7);
     expect(out).toContain('aria-expanded="false"');
+  });
+
+  it('does not list the devices limit while the platform has unofficial WhatsApp off', () => {
+    const many = plan({
+      limits: { devices: 5, contacts: 10, monthly_messages: 9 } as never,
+      features: {} as never,
+    });
+    const card = (on: boolean) =>
+      renderAccount(
+        <PlanCard plan={many} canManage busy={false} period="monthly" onSwitch={() => undefined} />,
+        { seed: on ? [SWITCH_ON] : [] },
+      );
+    expect(card(false)).not.toContain('Connected numbers');
+    expect(card(true)).toContain('Connected numbers');
   });
 });
 

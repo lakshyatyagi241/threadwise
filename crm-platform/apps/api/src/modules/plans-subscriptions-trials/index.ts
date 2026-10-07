@@ -41,3 +41,4 @@ export {
   REQUIRE_PLAN_FEATURE_KEY,
   planFeatureLabel,
 } from './plan-feature.guard';
+export { validityForState, fallsBackToFree } from './plan-lifecycle';

@@ -2,6 +2,11 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   PACING_SETTINGS,
@@ -72,6 +77,7 @@ export class ScheduledRunService {
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
     private readonly warmer: WarmerService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -84,6 +90,15 @@ export class ScheduledRunService {
         FROM scheduled_messages WHERE org_id = ${orgId} AND id = ${scheduledId} FOR UPDATE`);
       const row = res.rows[0] as unknown as ScheduledRow | undefined;
       if (!row || !['scheduled', 'running'].includes(row.status)) return { skip: true as const };
+      // The unofficial engine is off (owner decision 2026-10-05): nothing is sent and the row is only handed back to the due sweep
+      // (`scheduled`, no job), which skips it until the engine is turned on. No recipient is touched, nothing is marked failed.
+      if (row.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId))) {
+        await tx.execute(sql`
+          UPDATE scheduled_messages SET status = 'scheduled', node_schedule_id = NULL
+           WHERE org_id = ${orgId} AND id = ${scheduledId}`);
+        this.logger.warn({ orgId, scheduledId }, '[SCHED] not sent: the unofficial engine is off');
+        return { skip: true as const };
+      }
       await tx.execute(
         sql`UPDATE scheduled_messages SET status = 'running' WHERE org_id = ${orgId} AND id = ${scheduledId}`,
       );

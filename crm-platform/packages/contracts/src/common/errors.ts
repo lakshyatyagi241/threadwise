@@ -22,6 +22,7 @@ import { MKT_ERROR_CODES } from '../marketplace/errors';
 import { LEAD_ERROR_CODES } from '../leads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
+import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -42,7 +43,13 @@ export const ERROR_CODES = {
   ...LEAD_ERROR_CODES,
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
+  ...FORMS_ERROR_CODES,
   // generic
+  /**
+   * An action targeted the unofficial WhatsApp engine (personal numbers over Baileys) while the platform switch is off.
+   * 422: the request is well formed but policy refuses it. Owner decision 2026-10-05.
+   */
+  WA_UNOFFICIAL_DISABLED: 'WA_UNOFFICIAL_DISABLED',
   VALIDATION_FAILED: 'VALIDATION_FAILED',
   NOT_FOUND: 'NOT_FOUND',
   UNAUTHENTICATED: 'UNAUTHENTICATED',
@@ -342,7 +349,7 @@ export const ERROR_CODES = {
   AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
   /** No key (own or platform) is available for the provider a call asked for. */
   AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
-  // marketing site, blog, legal pages and guidebook (WD-CMS)
+  // marketing site, blog and legal pages (WD-CMS)
   CMS_SLUG_TAKEN: 'CMS_SLUG_TAKEN',
 
   // reseller billing (WD-BSP)
