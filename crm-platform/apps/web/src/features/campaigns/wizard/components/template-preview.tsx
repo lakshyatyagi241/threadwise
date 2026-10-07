@@ -23,9 +23,12 @@ export function TemplatePreview({ template }: { template: WizardTemplate | null 
           )}
         </>
       ) : (
-        <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+        <div
+          data-testid="phone-preview-empty"
+          className="flex min-h-72 items-center justify-center rounded-2xl border border-border bg-muted p-6 text-center text-sm text-muted-foreground"
+        >
           {t('previewEmpty')}
-        </p>
+        </div>
       )}
     </div>
   );
