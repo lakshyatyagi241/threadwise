@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NotificationsRepository } from '../notifications';
+import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { FormNotificationConsumer } from './form-notification.consumer';
 import { FormRetentionSweepService } from './form-retention-sweep.service';
 
@@ -9,6 +9,11 @@ import { FormRetentionSweepService } from './form-retention-sweep.service';
  * which the drain loop in that process fans events out to, and an API pod that also swept would multiply the polling load.
  */
 @Module({
-  providers: [NotificationsRepository, FormNotificationConsumer, FormRetentionSweepService],
+  providers: [
+    NotificationsRepository,
+    NotificationPublisher,
+    FormNotificationConsumer,
+    FormRetentionSweepService,
+  ],
 })
 export class FormsBuilderWorkerModule {}

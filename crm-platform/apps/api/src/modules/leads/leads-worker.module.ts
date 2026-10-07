@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NotificationsRepository } from '../notifications';
+import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { LeadNotificationConsumer } from './lead-notification.consumer';
 import { LeadRetentionSweepService } from './lead-retention-sweep.service';
 
@@ -9,6 +9,11 @@ import { LeadRetentionSweepService } from './lead-retention-sweep.service';
  * process fans events out to, and an API pod that also swept would multiply the polling load on the database.
  */
 @Module({
-  providers: [NotificationsRepository, LeadNotificationConsumer, LeadRetentionSweepService],
+  providers: [
+    NotificationsRepository,
+    NotificationPublisher,
+    LeadNotificationConsumer,
+    LeadRetentionSweepService,
+  ],
 })
 export class LeadsWorkerModule {}

@@ -14,7 +14,6 @@
       "custom": "Custom code",
       "pwa": "PWA",
       "storage": "Cloud storage",
-      "realtime": "Real-time",
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Campaigns",
       "googleCalendar": "Google Calendar",
@@ -800,34 +799,6 @@
           }
         }
       },
-      "realtime": {
-        "title": "Real-time",
-        "description": "Pusher credentials for live updates, with a connection test.",
-        "sections": {
-          "live": {
-            "title": "Live delivery"
-          }
-        },
-        "fields": {
-          "enabled": {
-            "label": "Enabled",
-            "hint": "Off keeps the inbox on polling."
-          },
-          "appId": {
-            "label": "App ID"
-          },
-          "cluster": {
-            "label": "Cluster"
-          },
-          "appKey": {
-            "label": "App key"
-          },
-          "appSecret": {
-            "label": "App secret",
-            "hint": "Stored encrypted and never shown again."
-          }
-        }
-      },
       "whatsapp": {
         "title": "WhatsApp settings",
         "description": "The Meta app and Interakt partner used to onboard WhatsApp numbers.",
@@ -1076,11 +1047,6 @@
         "title": "Cloud storage",
         "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or MinIO.",
         "tags": "S3 / Wasabi / Bunny / R2"
-      },
-      "realtime": {
-        "title": "Real-time",
-        "description": "Pusher keys that power the live Team Inbox feed for every workspace.",
-        "tags": "Pusher / broadcasting"
       },
       "whatsapp": {
         "title": "WhatsApp (WABA)",
@@ -1575,40 +1541,6 @@
         "tip": {
           "title": "Safe by default",
           "body": "Existing files stay where they are. Only new uploads go to the bucket; nothing is migrated or deleted."
-        }
-      },
-      "realtime": {
-        "title": "Real-time notifications",
-        "eyebrow": "Admin - Live broadcasting",
-        "description": "One Pusher app powers the live Team Inbox for every workspace: new messages, status changes and snooze wake-ups appear instantly. Platform-wide; users never enter keys.",
-        "sections": {
-          "live": {
-            "title": "Live delivery"
-          },
-          "pusher": {
-            "title": "Pusher credentials"
-          }
-        },
-        "guide": {
-          "title": "How it works",
-          "items": {
-            "how": {
-              "title": "One app, all workspaces",
-              "body": "The server broadcasts with the secret; pages load only the public key."
-            },
-            "live": {
-              "title": "What goes live",
-              "body": "Inbound messages and operator replies push a light signal and the inbox refreshes instantly."
-            },
-            "poll": {
-              "title": "Polling stays as fallback",
-              "body": "If Pusher is off or unreachable the inbox keeps its slower poll so nothing is missed."
-            },
-            "test": {
-              "title": "Test it",
-              "body": "Use \"Save & test connection\" to fire a live event at Pusher and confirm the credentials."
-            }
-          }
         }
       },
       "whatsapp": {
