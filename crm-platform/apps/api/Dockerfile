@@ -40,7 +40,8 @@ RUN pnpm --filter @crm/tax build \
 # Strip dev dependencies from what ships.
 RUN pnpm --filter @crm/api --prod deploy /out \
  && cp -r apps/api/dist /out/dist \
- && cp -r packages/db/migrations /out/migrations
+ && cp -r packages/db/migrations /out/migrations \
+ && cp -r apps/api/assets /out/assets
 
 # --- runtime ---------------------------------------------------------------
 FROM node:22-alpine AS runtime

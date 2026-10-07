@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CRM settings</title>
+    <style>
+      body {
+        font:
+          14px/1.45 Arial,
+          sans-serif;
+        color: #1f2933;
+        margin: 0;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 4px;
+      }
+      p {
+        margin: 6px 0;
+      }
+      .muted {
+        color: #5f6c7b;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin: 14px 0 4px;
+      }
+      input[type='password'],
+      input[type='text'] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px;
+        font: inherit;
+        border: 1px solid #9aa5b1;
+        border-radius: 4px;
+      }
+      input:focus,
+      button:focus {
+        outline: 2px solid #1a73e8;
+        outline-offset: 1px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+      button {
+        font: inherit;
+        padding: 8px 14px;
+        border-radius: 4px;
+        border: 1px solid #1a73e8;
+        background: #1a73e8;
+        color: #fff;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #fff;
+        color: #1a73e8;
+      }
+      button.danger {
+        background: #fff;
+        color: #b3261e;
+        border-color: #b3261e;
+      }
+      button[disabled] {
+        opacity: 0.6;
+        cursor: default;
+      }
+      .box {
+        border: 1px solid #d3d9e0;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-top: 12px;
+      }
+      .masked {
+        font-family: monospace;
+        word-break: break-all;
+      }
+      .ok {
+        border-color: #1e7e34;
+        background: #eef8f0;
+      }
+      .error {
+        border-color: #b3261e;
+        background: #fdf0ef;
+        color: #7a1a15;
+      }
+      ul {
+        margin: 6px 0 0 18px;
+        padding: 0;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CRM settings</h1>
+    <p class="muted">
+      Your personal key connects this sheet to your CRM workspace. It stays in your own Google
+      account.
+    </p>
+
+    <div id="current" class="box" hidden>
+      <p><strong>Saved key</strong></p>
+      <p id="masked" class="masked"></p>
+    </div>
+
+    <form id="form" novalidate>
+      <label for="key">Paste your key</label>
+      <input
+        id="key"
+        type="password"
+        autocomplete="off"
+        spellcheck="false"
+        aria-describedby="hint"
+      />
+      <p id="hint" class="muted">
+        Create it in the CRM under Settings, Google Sheets add-on. It starts with wsn_live_.
+      </p>
+      <div class="row">
+        <button id="save" type="submit">Save and check</button>
+        <button id="remove" type="button" class="danger" hidden>Remove key</button>
+        <button id="close" type="button" class="secondary">Close</button>
+      </div>
+    </form>
+
+    <div id="result" role="status" aria-live="polite"></div>
+
+    <script>
+      var el = function (id) {
+        return document.getElementById(id);
+      };
+      var busy = false;
+
+      function setBusy(value) {
+        busy = value;
+        el('save').disabled = value;
+        el('remove').disabled = value;
+      }
+
+      function showState(state) {
+        el('current').hidden = !state.hasKey;
+        el('remove').hidden = !state.hasKey;
+        el('masked').textContent = state.masked || '';
+      }
+
+      function show(kind, lines) {
+        var box = el('result');
+        box.textContent = '';
+        var wrap = document.createElement('div');
+        wrap.className = 'box ' + kind;
+        for (var i = 0; i < lines.length; i++) {
+          var p = document.createElement('p');
+          p.textContent = lines[i];
+          wrap.appendChild(p);
+        }
+        box.appendChild(wrap);
+      }
+
+      function connectedLines(info) {
+        var can = info.can || {};
+        var lines = [
+          'Connected as ' + (info.user.name || 'a member') + ' (' + (info.user.email || '') + ').',
+          'Workspace: ' + (info.workspace.name || ''),
+        ];
+        var allowed = [];
+        if (can.read_contacts) allowed.push('pull contacts');
+        if (can.write_contacts) allowed.push('push contacts');
+        if (can.read_catalog) allowed.push('see shops');
+        if (can.write_catalog) allowed.push('sync products');
+        lines.push(
+          allowed.length
+            ? 'Your role can: ' + allowed.join(', ') + '.'
+            : 'Your role cannot use any action of this add-on yet. Ask an admin.',
+        );
+        return lines;
+      }
+
+      function fail(result) {
+        var lines = [result.message || 'Something went wrong.'];
+        if (result.requestId) lines.push('Reference for support: ' + result.requestId);
+        show('error', lines);
+      }
+
+      el('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (busy) return;
+        var value = el('key').value;
+        if (value.trim() === '') {
+          show('error', ['Paste your key first.']);
+          el('key').focus();
+          return;
+        }
+        setBusy(true);
+        show('', ['Checking the key...']);
+        google.script.run
+          .withSuccessHandler(function (result) {
+            setBusy(false);
+            if (!result.ok) {
+              fail(result);
+              return;
+            }
+            el('key').value = '';
+            google.script.run.withSuccessHandler(showState).getSettingsState();
+            show('ok', connectedLines(result));
+          })
+          .withFailureHandler(function () {
+            setBusy(false);
+            show('error', ['The add-on could not run. Close this window and try again.']);
+          })
+          .saveKey(value);
+      });
+
+      el('remove').addEventListener('click', function () {
+        if (
+          busy ||
+          !window.confirm(
+            'Remove the saved key from this Google account? The add-on stops working until you paste a key again.',
+          )
+        )
+          return;
+        setBusy(true);
+        google.script.run
+          .withSuccessHandler(function () {
+            setBusy(false);
+            showState({ hasKey: false, masked: '' });
+            show('ok', ['The key was removed from this Google account.']);
+          })
+          .withFailureHandler(function () {
+            setBusy(false);
+            show('error', ['The key could not be removed. Try again.']);
+          })
+          .clearKey();
+      });
+
+      el('close').addEventListener('click', function () {
+        google.script.host.close();
+      });
+
+      google.script.run.withSuccessHandler(showState).getSettingsState();
+    </script>
+  </body>
+</html>

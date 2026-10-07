@@ -12,8 +12,10 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
 
@@ -59,6 +61,10 @@ export const userSettings = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('cascade'),
     index('idx_user_settings_sheets_key_hash').on(t.orgId, t.sheetsKeyHash),
+    // The Sheets add-on finds a key before it knows the tenant (EXT, 20261108090000_ext_sheets_addon.sql).
+    uniqueIndex('uq_user_settings_sheets_key_hash')
+      .on(t.sheetsKeyHash)
+      .where(sql`${t.sheetsKeyHash} IS NOT NULL`),
   ],
 );
 

@@ -84,6 +84,7 @@ import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy
 import { LeadsModule } from './modules/leads';
 import { FormsBuilderModule } from './modules/forms-builder';
 import { MarketplaceModule } from './modules/marketplace';
+import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
@@ -226,6 +227,7 @@ import { HealthModule } from './health/health.module';
     LeadsModule,
     FormsBuilderModule,
     MarketplaceModule,
+    ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],

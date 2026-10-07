@@ -41,6 +41,20 @@ export const MARKET_SCOPES = [
     permissions: ['record.contacts.create', 'record.contacts.update'],
   },
   {
+    id: 'catalog.read',
+    label: 'Read products and shops',
+    description: 'See your products and your online shops.',
+    risk: 'low',
+    permissions: ['cat.products.read', 'store.storefront.read'],
+  },
+  {
+    id: 'catalog.write',
+    label: 'Create and edit products and shops',
+    description: 'Add products and change them, and create or rename your online shops.',
+    risk: 'medium',
+    permissions: ['cat.products.create', 'cat.products.update', 'store.shops.manage'],
+  },
+  {
     id: 'leads.write',
     label: 'Add leads',
     description:
