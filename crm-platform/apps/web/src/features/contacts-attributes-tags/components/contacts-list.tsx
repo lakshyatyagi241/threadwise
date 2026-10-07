@@ -21,7 +21,7 @@ import {
   STICKY_SELECT,
   STICKY_SELECT_HEAD,
 } from '../lib/sticky';
-import { AttributeChip, ContactAvatar, GroupChip, MoreChip, OutlineTag, TagChip } from './chips';
+import { ContactAvatar, GroupChip, MoreChip, OutlineTag, TagChip } from './chips';
 import {
   CalendarIcon,
   EyeIcon,
@@ -563,71 +563,5 @@ export function ContactsTable({
         </tbody>
       </table>
     </div>
-  );
-}
-
-/** Card layout of the same rows: the mobile-friendly alternative to the wide table. */
-export function ContactsGrid({ rows, ...h }: { rows: RowView[] } & ListHandlers) {
-  const t = useTranslations('contacts-attributes-tags.list');
-  const locale = useLocale();
-  const timeZone = useTimeZone();
-  return (
-    <ul className="grid gap-3 p-4 sm:grid-cols-2 min-[1700px]:grid-cols-3">
-      {rows.map((row) => {
-        const isSel = h.selected.has(row.id);
-        return (
-          <li
-            key={row.id}
-            className={cn(
-              'flex flex-col gap-3 rounded-lg border border-border p-4',
-              isSel && 'border-brand/50 bg-brand/5',
-            )}
-          >
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={isSel}
-                onChange={() => h.onToggle(row.id)}
-                aria-label={t('selectRow', { name: row.name || t('unnamed') })}
-                className="mt-2 size-4 cursor-pointer accent-[var(--brand)]"
-              />
-              <ContactAvatar id={row.id} name={row.name} />
-              <div className="min-w-0 flex-1">
-                <Link
-                  href={`/contacts/${row.id}`}
-                  className="block truncate font-semibold hover:text-primary hover:underline"
-                >
-                  {row.name || t('unnamed')}
-                </Link>
-                <div className="truncate text-xs text-muted-foreground" dir="ltr">
-                  <span className="text-start">{row.email || '-'}</span>
-                </div>
-                <div className="truncate text-xs tabular-nums" dir="ltr">
-                  {row.phone || '-'}
-                </div>
-              </div>
-              <QuickActions row={row} h={h} />
-            </div>
-            <StatusCell row={row} h={h} />
-            {row.groups.length > 0 && <GroupsCell row={row} />}
-            {row.tags.length > 0 && <TagsCell row={row} h={h} />}
-            {row.attributes.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {row.attributes.map((a) => (
-                  <AttributeChip key={a.key} label={a.label} text={a.text} full={a.full} />
-                ))}
-              </div>
-            )}
-            <div className="text-xs text-muted-foreground">
-              {t('colCreatedOn')}:{' '}
-              <span className="tabular-nums">
-                {formatDateTime(row.createdAt, locale, timeZone) || '-'}
-              </span>
-            </div>
-            {row.memo && <p className="line-clamp-2 text-xs text-muted-foreground">{row.memo}</p>}
-          </li>
-        );
-      })}
-    </ul>
   );
 }

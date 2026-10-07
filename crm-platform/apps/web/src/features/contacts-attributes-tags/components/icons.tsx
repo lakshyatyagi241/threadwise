@@ -64,6 +64,13 @@ export const GridIcon = (p: IconProps) => (
     <rect x="13" y="13" width="7" height="7" rx="1" />
   </Svg>
 );
+export const KanbanIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3.5" y="4" width="5" height="16" rx="1" />
+    <rect x="9.5" y="4" width="5" height="10" rx="1" />
+    <rect x="15.5" y="4" width="5" height="13" rx="1" />
+  </Svg>
+);
 export const UsersPlusIcon = (p: IconProps) => (
   <Svg {...p}>
     <circle cx="9" cy="8" r="3.5" />

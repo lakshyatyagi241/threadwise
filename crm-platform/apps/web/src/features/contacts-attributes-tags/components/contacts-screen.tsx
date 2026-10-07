@@ -14,8 +14,10 @@ import {
   bulkDelete,
   bulkGroupMembership,
   bulkTag,
+  bulkUpdate,
   exportContacts,
   type BulkOutcome,
+  type BulkUpdateValues,
 } from '../api/bulk';
 import {
   contactFilterBody,
@@ -56,8 +58,10 @@ import {
 } from '../lib/selection';
 import { useStoredChoice } from '../lib/use-stored-choice';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
+import { BulkUpdateDialog } from './bulk-update-dialog';
 import { ContactFormModal } from './contact-form-modal';
-import { ContactsGrid, ContactsTable } from './contacts-list';
+import { ContactsKanban } from './contacts-kanban';
+import { ContactsTable } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, filtersOfSegment, segmentOf } from './contacts-toolbar';
 import { SaveSegmentModal } from './save-segment-modal';
@@ -71,8 +75,8 @@ import { GroupModal } from './group-modal';
 import { ImportModal } from './import-modal';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
 
-type View = 'list' | 'grid';
-const VIEWS = ['list', 'grid'] as const;
+type View = 'list' | 'kanban';
+const VIEWS = ['list', 'kanban'] as const;
 const STATS_KEY = 'cat:contacts:stats';
 
 const num = (n: number | undefined) => (n === undefined ? '—' : n.toLocaleString());
@@ -238,6 +242,7 @@ export function ContactsScreen() {
   const [groupOpen, setGroupOpen] = useState(false);
   const [saveSegmentOpen, setSaveSegmentOpen] = useState(false);
   const [picker, setPicker] = useState<BulkPicker>(null);
+  const [updateOpen, setUpdateOpen] = useState(false);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
   const closePicker = () => {
@@ -312,6 +317,15 @@ export function ContactsScreen() {
     await refresh();
     const name = (groups.data ?? []).find((g) => g.id === groupId)?.name ?? '';
     report(tb(action === 'add' ? 'groupAdded' : 'groupRemoved', { count: out.changed, name }), out);
+    return true;
+  }
+
+  async function onBulkUpdate(values: BulkUpdateValues): Promise<boolean> {
+    const out = await guarded(() => bulkUpdate([...sel.ids], values));
+    if (!out) return false;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(tb('updated', { count: out.changed }), out);
     return true;
   }
 
@@ -516,6 +530,9 @@ export function ContactsScreen() {
         onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
         onExportSelected={() => void runExport(target(), setBusy)}
         onImport={() => setImportOpen(true)}
+        onAddColumnField={() => router.push('/contact-properties')}
+        onUpdateSelected={() => setUpdateOpen(true)}
+        updateDisabled={sel.allMatching}
         onDedupe={() => setDedupeOpen(true)}
         onNewGroup={() => setGroupOpen(true)}
         onDeleteSelected={() => setConfirmBulkDelete(true)}
@@ -666,12 +683,16 @@ export function ContactsScreen() {
               {...handlers}
             />
           ) : (
-            <div className="thin-scrollbar min-h-0 flex-1 overflow-auto">
-              <ContactsGrid rows={views} {...handlers} />
-            </div>
+            <ContactsKanban
+              filters={filters}
+              stages={stages}
+              toView={(r) => rowView(r, attrLabels)}
+              onStageChange={handlers.onStageChange}
+              stageBusyId={stageBusy}
+            />
           )}
         </div>
-        {!list.isError && (
+        {!list.isError && view === 'list' && (
           <ContactsPagination
             page={list.page}
             total={total}
@@ -709,6 +730,13 @@ export function ContactsScreen() {
         busy={stageBusy !== null}
         onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
         onClose={() => setLostPrompt(null)}
+      />
+      <BulkUpdateDialog
+        open={updateOpen}
+        count={sel.ids.size}
+        busy={busy}
+        onApply={onBulkUpdate}
+        onClose={() => setUpdateOpen(false)}
       />
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
       <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
