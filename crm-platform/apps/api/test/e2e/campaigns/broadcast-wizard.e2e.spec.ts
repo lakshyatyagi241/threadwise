@@ -670,6 +670,50 @@ describe('step 2: the four audience modes', () => {
     expect(await csv.purgeExpired()).toBeGreaterThanOrEqual(1);
     expect((await wiz(lab, w.t.admin).get(`/csv/${gone.id}`)).status).toBe(404);
     expect((await wiz(lab, w.t.admin).get(`/csv/${keep.id}`)).status).toBe(200);
+    // Pinned by nothing (no active or paused series names it), so the pass let it go: it now expires like any upload.
+    const kept = await owner().query(`SELECT expires_at FROM camp_wizard_csv WHERE uuid = $1`, [
+      keep.id,
+    ]);
+    expect(kept.rows[0].expires_at).not.toBeNull();
+  });
+
+  it('the error list writes values a spreadsheet would run as formulas as text, and keeps plain numbers', async () => {
+    const w = await world(lab, 'bwm9');
+    const r = await upload(
+      w.t.admin,
+      ['phone', "+1+cmd|'/c calc'!A0", '=1+1', '@SUM(A1)', '-5+3', '+12'].join('\n'),
+    );
+    const errors = await wiz(lab, w.t.admin).get(`/csv/${r.id}/errors`);
+    const text = errors.text as string;
+    expect(text).toContain("'+1+cmd|");
+    expect(text).toContain("'=1+1");
+    expect(text).toContain("'@SUM(A1)");
+    expect(text).toContain("'-5+3");
+    // A bare short number is not a formula: written as it is.
+    expect(text).toMatch(/\n6,\+12,/);
+  });
+
+  it('a workspace holds at most 20 unexpired uploads at a time', async () => {
+    const w = await world(lab, 'bwm10');
+    for (let i = 0; i < 20; i++) {
+      await owner().query(
+        `INSERT INTO camp_wizard_csv (org_id, file_name, total_rows, valid_count, duplicate_count, invalid_count, created_by, expires_at)
+         VALUES ($1, $2, 0, 0, 0, 0, $3, now() + interval '3 days')`,
+        [w.t.orgId, `old-${i}.csv`, w.t.adminUserId],
+      );
+    }
+    const res = await wiz(lab, w.t.admin).upload('/csv', 'phone\n+919876570001', 'one-more.csv');
+    expect(res.status, JSON.stringify(res.body)).toBe(429);
+    expect(res.body.code).toBe('RATE_LIMITED');
+    // An expired one frees a place.
+    await owner().query(
+      `UPDATE camp_wizard_csv SET expires_at = now() - interval '1 minute' WHERE org_id = $1 AND file_name = 'old-0.csv'`,
+      [w.t.orgId],
+    );
+    await lab.h.app.get(WizardCsvService, { strict: false }).purgeExpired();
+    expect(
+      (await wiz(lab, w.t.admin).upload('/csv', 'phone\n+919876570001', 'one-more.csv')).status,
+    ).toBe(201);
   });
 });
 
@@ -1466,6 +1510,69 @@ describe('tenant isolation and permissions', () => {
         })
       ).status,
     ).toBe(422);
+  });
+
+  it('the contacts table needs the right to read contacts, and shows only what that right covers', async () => {
+    const w = await world(lab, 'bwi5');
+    await people(lab, w.t, [{ name: 'Visible one' }, { name: 'Visible two' }]);
+    const builder = await lab.api.member(w.t, 'builder2', [['camp.campaigns.create']]);
+    const forbidden = await wiz(lab, builder.token).post('/contacts/query', {});
+    expect(forbidden.status).toBe(403);
+    const reader = await lab.api.member(w.t, 'reader2', [
+      ['camp.campaigns.create'],
+      ['record.contacts.read', 'all'],
+    ]);
+    const all = await wiz(lab, reader.token).post('/contacts/query', {});
+    expect(all.status, JSON.stringify(all.body)).toBe(200);
+    expect(all.body.total).toBe(2);
+    // "own" shows the contacts the person owns: none of these.
+    const own = await lab.api.member(w.t, 'own2', [
+      ['camp.campaigns.create'],
+      ['record.contacts.read', 'own'],
+    ]);
+    const mine = await wiz(lab, own.token).post('/contacts/query', {});
+    expect(mine.status).toBe(200);
+    expect(mine.body.total).toBe(0);
+  });
+
+  it('launching an audience that holds a CSV needs the right to create contacts', async () => {
+    const w = await world(lab, 'bwi6');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const up = await wiz(lab, w.t.admin).upload('/csv', 'phone\n+919876580001', 'n.csv');
+    expect(up.status).toBe(201);
+    const g = await group(owner(), w.t, 'G', []);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(w, g, {
+        audience: {
+          groupIds: [],
+          segmentIds: [],
+          rules: null,
+          csv: {
+            id: up.body.id,
+            fileName: 'n.csv',
+            valid: 1,
+            duplicate: 0,
+            invalid: 0,
+            optedOut: 0,
+          },
+        },
+      }),
+    );
+    const builder = await lab.api.member(w.t, 'builder3', [['camp.campaigns.create']]);
+    const denied = await wiz(lab, builder.token).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(denied.status, JSON.stringify(denied.body)).toBe(403);
+    const maker = await lab.api.member(w.t, 'maker3', [
+      ['camp.campaigns.create'],
+      ['record.contacts.create'],
+    ]);
+    const ok = await wiz(lab, maker.token).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
   });
 
   it('an unauthenticated call is refused', async () => {
