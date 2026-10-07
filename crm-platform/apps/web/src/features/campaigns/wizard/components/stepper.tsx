@@ -54,31 +54,43 @@ export function Stepper({
                 disabled={!reachable}
                 onClick={() => onGo(n)}
                 className={cn(
-                  'flex min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm outline-none',
+                  'flex min-w-0 items-center gap-2 rounded-full px-2.5 py-1.5 text-start text-sm outline-none',
                   'focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed',
-                  active ? 'font-semibold' : reachable ? 'hover:bg-muted' : 'text-muted-foreground',
+                  active
+                    ? 'bg-brand/10 font-semibold'
+                    : reachable
+                      ? 'hover:bg-muted'
+                      : 'text-muted-foreground',
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'grid size-7 shrink-0 place-items-center rounded-full border text-xs font-semibold',
+                    'grid size-8 shrink-0 place-items-center rounded-full border text-sm font-semibold',
                     active
-                      ? 'border-brand bg-brand text-brand-foreground'
+                      ? 'border-brand bg-brand text-brand-foreground shadow ring-4 ring-brand/15'
                       : n < current
-                        ? 'border-brand/40 bg-brand/10 text-brand'
+                        ? 'border-success bg-success text-white'
                         : 'border-border text-muted-foreground',
                   )}
                 >
                   {n < current ? '✓' : n}
                 </span>
-                <span className="truncate">{label(n)}</span>
-                <span className="sr-only">
-                  {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
+                <span className="min-w-0 leading-tight">
+                  <span className="block truncate">{label(n)}</span>
+                  <span className="block truncate text-[11px] font-normal text-muted-foreground">
+                    {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
+                  </span>
                 </span>
               </button>
               {n < WIZARD_STEP_COUNT && (
-                <span aria-hidden="true" className="h-px min-w-3 flex-1 bg-border" />
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'h-0.5 min-w-3 flex-1 rounded-full',
+                    n < current ? 'bg-brand/50' : 'bg-border',
+                  )}
+                />
               )}
             </li>
           );
