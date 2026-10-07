@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { OperatorNavItem } from '@/features/auth-registration-security/platform/operator-nav';
-import type { ConsoleSection } from './console-layout';
+import type { ConsoleHub } from './console-layout';
 import {
   activeLeafId,
   activeStatusBadge,
@@ -10,7 +10,8 @@ import {
   emptySection,
   formatCount,
   groupByHeading,
-  initiallyOpenGroups,
+  hubHref,
+  hubOf,
   isGroup,
   leaves,
 } from './console-nav';
@@ -29,14 +30,10 @@ const items = [
 ];
 
 /** A layout of its own, so these tests do not move when the real menu is reorganised. */
-const layout: ConsoleSection[] = [
-  {
-    id: 'access',
-    icon: 'shield',
-    blocks: [{ caption: 'security', items: ['security', 'security-events'] }],
-  },
-  { id: 'plans', icon: 'tag', blocks: [{ items: ['plans', 'not-built-yet'] }] },
-  { id: 'empty', icon: 'tag', blocks: [{ items: ['also-not-built'] }] },
+const layout: ConsoleHub[] = [
+  { id: 'access', icon: 'shield', kind: 'tabs', tabs: ['security', 'security-events'] },
+  { id: 'plans', icon: 'tag', kind: 'tabs', tabs: ['plans', 'not-built-yet'] },
+  { id: 'empty', icon: 'tag', kind: 'tabs', tabs: ['also-not-built'] },
 ];
 
 describe('buildConsoleNav', () => {
@@ -57,13 +54,8 @@ describe('buildConsoleNav', () => {
     expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
   });
 
-  it('puts the block heading on the first page of the block only', () => {
-    const [access, plans] = nav.filter(isGroup);
-    expect(access!.children.map((c) => c.captionKey)).toEqual([
-      'admin-console-shell.nav.captions.security',
-      undefined,
-    ]);
-    expect(plans!.children[0]!.captionKey).toBeUndefined();
+  it('carries the hub kind, so a Settings-style index hub can be told from a tab hub', () => {
+    expect(nav.filter(isGroup)[0]).toMatchObject({ kind: 'tabs' });
   });
 
   it('skips pages that are not in the menu data, and drops a section left with none', () => {
@@ -76,19 +68,17 @@ describe('buildConsoleNav', () => {
     expect(nav.some((e) => e.id === 'empty')).toBe(false);
   });
 
-  it('puts the caption on the first page that exists when the block starts with a missing one', () => {
-    const late: ConsoleSection[] = [
-      {
-        id: 'access',
-        icon: 'shield',
-        blocks: [{ caption: 'security', items: ['missing', 'security-events'] }],
-      },
-    ];
-    const group = buildConsoleNav(items, late).filter(isGroup)[0]!;
-    expect(group.children[0]).toMatchObject({
-      id: 'security-events',
-      captionKey: 'admin-console-shell.nav.captions.security',
-    });
+  it('hides the pages `visible` refuses, and a hub left with none disappears', () => {
+    const onlyPlans = buildConsoleNav(items, layout, (id) => id === 'plans');
+    expect(onlyPlans.filter(isGroup).map((g) => g.id)).toEqual(['plans']);
+    const noEvents = buildConsoleNav(items, layout, (id) => id !== 'security');
+    expect(noEvents.filter(isGroup)[0]!.children.map((c) => c.id)).toEqual(['security-events']);
+  });
+
+  it('does not offer a hidden page again under an unplaced heading', () => {
+    const extra = [...items, item('new-page', '/admin/new', 'g.new')];
+    const out = buildConsoleNav(extra, layout, (id) => id !== 'new-page').filter(isGroup);
+    expect(out.map((g) => g.id)).toEqual(['access', 'plans']);
   });
 
   it('keeps a page the layout does not place, under its own heading after the sections', () => {
@@ -100,9 +90,9 @@ describe('buildConsoleNav', () => {
   });
 
   it('places a page once even if the layout lists it twice', () => {
-    const twice: ConsoleSection[] = [
-      { id: 'a', icon: 'tag', blocks: [{ items: ['plans'] }] },
-      { id: 'b', icon: 'tag', blocks: [{ items: ['plans', 'security'] }] },
+    const twice: ConsoleHub[] = [
+      { id: 'a', icon: 'tag', kind: 'tabs', tabs: ['plans'] },
+      { id: 'b', icon: 'tag', kind: 'tabs', tabs: ['plans', 'security'] },
     ];
     const placed = leaves(buildConsoleNav(items, twice)).map((l) => l.id);
     expect(placed.filter((id) => id === 'plans')).toHaveLength(1);
@@ -126,11 +116,12 @@ describe('groupByHeading', () => {
 });
 
 describe('emptySection', () => {
-  it('takes the heading key and icon from the layout', () => {
+  it('takes the heading key, icon and kind from the layout', () => {
     expect(emptySection('access', layout)).toEqual({
       id: 'access',
       labelKey: 'admin-console-shell.nav.sections.access',
       icon: 'shield',
+      kind: 'tabs',
       children: [],
     });
   });
@@ -162,16 +153,36 @@ describe('activeLeafId', () => {
   });
 });
 
-describe('initiallyOpenGroups', () => {
+describe('hubHref and hubOf', () => {
   const nav = buildConsoleNav(items, layout);
+  const access = nav.filter(isGroup)[0]!;
 
-  it('opens only the group that holds the active leaf', () => {
-    expect([...initiallyOpenGroups(nav, 'security-events')]).toEqual(['access']);
+  it('sends a hub to its first visible page', () => {
+    expect(hubHref(access)).toBe('/admin/security');
+    const noFirst = buildConsoleNav(items, layout, (id) => id !== 'security').filter(isGroup)[0]!;
+    expect(hubHref(noFirst)).toBe('/admin/security/events');
   });
 
-  it('opens nothing for a top-level leaf or no match', () => {
-    expect(initiallyOpenGroups(nav, 'overview').size).toBe(0);
-    expect(initiallyOpenGroups(nav, null).size).toBe(0);
+  it('finds the hub holding a page, and none for Home or no page', () => {
+    expect(hubOf(nav, 'security-events')?.id).toBe('access');
+    expect(hubOf(nav, 'overview')).toBeNull();
+    expect(hubOf(nav, null)).toBeNull();
+  });
+});
+
+describe('the real label overrides', () => {
+  const real = leaves(buildConsoleNav(CONSOLE_NAV_ITEMS));
+  const label = (id: string) => real.find((l) => l.id === id)?.labelKey;
+
+  it('gives the clashing names one meaning each, from the shell file', () => {
+    expect(label('addon-packs')).toBe('admin-console-shell.nav.labels.addonPacks');
+    expect(label('extensions')).toBe('admin-console-shell.nav.labels.extensions');
+    expect(label('settings-analytics')).toBe('admin-console-shell.nav.labels.trackingCode');
+  });
+
+  it('adds the pages that had no menu entry', () => {
+    expect(label('flow-templates')).toBeDefined();
+    expect(label('wallet-overview')).toBeDefined();
   });
 });
 
