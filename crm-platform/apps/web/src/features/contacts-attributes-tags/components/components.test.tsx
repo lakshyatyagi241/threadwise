@@ -459,11 +459,13 @@ describe('ContactsToolbar', () => {
     expect(toolbar({})).not.toContain('More Actions');
   });
 
-  it('shows Import and a labelled Columns button without opening any menu', () => {
+  it('shows a labelled Columns button and keeps Import only inside More Actions', () => {
     const out = toolbar({ import: true });
-    for (const label of ['Import', 'Columns']) expect(out).toContain(label);
-    expect(toolbar({})).not.toContain('>Import<');
+    expect(out).toContain('Columns');
+    expect(out).toContain('More Actions');
+    expect(out).not.toContain('>Import<');
   });
+
   it('shows "More Actions" as soon as one action is allowed', () => {
     expect(toolbar({ export: true })).toContain('More Actions');
     expect(toolbar({ delete: true })).toContain('More Actions');
