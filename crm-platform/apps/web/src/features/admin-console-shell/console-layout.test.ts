@@ -3,7 +3,13 @@ import { join, resolve, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { hasConsoleIcon } from './console-icons';
 import { CONSOLE_KEYWORDS } from './console-keywords';
-import { CONSOLE_LAYOUT, MAX_HUBS, MAX_TABS, MODULES_SECTION, NOT_IN_MENU } from './console-layout';
+import {
+  CONSOLE_LAYOUT,
+  MAX_HUBS,
+  MAX_PAGES,
+  MODULES_SECTION,
+  NOT_IN_MENU,
+} from './console-layout';
 import { CONSOLE_NAV_ITEMS, buildConsoleNav, isGroup, leaves } from './console-nav';
 
 const layoutIds = CONSOLE_LAYOUT.flatMap((h) => h.tabs);
@@ -44,10 +50,8 @@ describe('the real console menu', () => {
     expect(CONSOLE_LAYOUT.length).toBeLessThanOrEqual(MAX_HUBS);
   });
 
-  it('keeps every tab bar short enough to scan (Settings is an index of tiles, not a bar)', () => {
-    const long = CONSOLE_LAYOUT.filter((h) => h.kind === 'tabs' && h.tabs.length > MAX_TABS).map(
-      (h) => h.id,
-    );
+  it('keeps every hub short enough to be one area', () => {
+    const long = CONSOLE_LAYOUT.filter((h) => h.tabs.length > MAX_PAGES).map((h) => h.id);
     expect(long).toEqual([]);
   });
 
@@ -62,10 +66,18 @@ describe('the real console menu', () => {
     expect(missing).toEqual([]);
   });
 
-  it('opens an index hub (Settings) on its landing page', () => {
-    for (const hub of CONSOLE_LAYOUT.filter((h) => h.kind === 'index')) {
-      const first = CONSOLE_NAV_ITEMS.find((i) => i.id === hub.tabs[0]);
-      expect(first?.href, hub.id).toBe('/admin/settings');
+  it('opens Settings on its overview page, which lists the pages as tiles', () => {
+    const settings = CONSOLE_LAYOUT.find((h) => h.id === 'settings');
+    const first = CONSOLE_NAV_ITEMS.find((i) => i.id === settings?.tabs[0]);
+    expect(first?.href).toBe('/admin/settings');
+  });
+
+  it('puts every group heading on a page of its own hub, and uses each heading key once per hub', () => {
+    for (const hub of CONSOLE_LAYOUT) {
+      const heads = Object.entries(hub.heads ?? {});
+      for (const [id] of heads) expect(hub.tabs, `${hub.id}: ${id}`).toContain(id);
+      const keys = heads.map(([, key]) => key);
+      expect(new Set(keys).size, hub.id).toBe(keys.length);
     }
   });
 });
@@ -137,7 +149,7 @@ const nav = (locale: string) =>
       readFileSync(join(WEB, 'messages', locale, 'admin-console-shell.json'), 'utf8'),
     ) as Tree
   )['admin-console-shell'] as Tree;
-const names = (locale: string, part: 'sections' | 'hubNotes' | 'labels') =>
+const names = (locale: string, part: 'sections' | 'hubNotes' | 'labels' | 'captions') =>
   ((nav(locale).nav as Tree)[part] ?? {}) as Record<string, string>;
 
 const hubIds = CONSOLE_LAYOUT.map((h) => h.id).sort();
@@ -153,6 +165,13 @@ describe.each(['en', 'ar'])('menu names (%s)', (locale) => {
     const notes = names(locale, 'hubNotes');
     expect(Object.keys(notes).sort()).toEqual(hubIds);
     for (const value of Object.values(notes)) expect(value.trim()).not.toBe('');
+  });
+
+  it('has a name for every group heading and no stray ones', () => {
+    const used = [...new Set(CONSOLE_LAYOUT.flatMap((h) => Object.values(h.heads ?? {})))].sort();
+    const captions = names(locale, 'captions');
+    expect(Object.keys(captions).sort()).toEqual(used);
+    for (const value of Object.values(captions)) expect(value.trim()).not.toBe('');
   });
 
   it('has the same page-name overrides in both languages, none empty', () => {

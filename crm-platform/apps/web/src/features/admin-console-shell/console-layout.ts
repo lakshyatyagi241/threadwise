@@ -1,13 +1,13 @@
 /**
- * How the console menu is organised (docs/specs/admin-menu-hubs.md). The rail lists one entry per hub; a hub opens on its first
- * page and shows its other pages as a tab bar above the page. Domains still contribute their pages through the operator nav data
+ * How the console menu is organised (docs/specs/admin-menu-hubs.md). Home is a grid of one block per hub; opening a hub puts its
+ * pages in a menu on the left (grouped under small headings where a hub is long), and the collapsed rail keeps one icon per hub. Domains still contribute their pages through the operator nav data
  * (`OPERATOR_NAV`); this file only decides which hub each page sits in, so a page's place no longer depends on which domain built it.
  *
  * Order follows the operator's day: look (reports), run the business (plans, billing, support, website), configure the product
  * (WhatsApp, apps), then administer the platform (team, settings, system).
  *
  * Rules the tests enforce: every page is in exactly one hub (or is named in `NOT_IN_MENU` with a reason), no more than
- * `MAX_HUBS` hubs, no more than `MAX_TABS` tabs in one hub, and no hub with a single page. A page missing here still shows in the
+ * `MAX_HUBS` hubs, no more than `MAX_PAGES` pages in one hub, and no hub with a single page. A page missing here still shows in the
  * rail under its own heading rather than disappearing, and the placement test fails until someone decides where it goes.
  */
 export interface ConsoleHub {
@@ -15,28 +15,23 @@ export interface ConsoleHub {
   id: string;
   /** Icon name, resolved by `ConsoleIcon`. */
   icon: string;
-  /**
-   * `tabs`: the hub's pages are a tab bar above each page.
-   * `index`: the hub's first page is a landing page that lists the others (Settings: one entry, tiles on the hub page);
-   * its other pages get a back link to the landing page instead of a tab bar.
-   */
-  kind: 'tabs' | 'index';
-  /** Operator-nav item ids, in the order they are listed. The first one the operator may open is where the rail entry goes. */
+  /** Operator-nav item ids, in the order they are listed. The first one the operator may open is where the hub's block goes. */
   tabs: readonly string[];
+  /** Page id to the key (under `admin-console-shell.nav.captions`) of the small heading drawn above it: it opens a group of pages. */
+  heads?: Readonly<Record<string, string>>;
 }
 
 /** Active modules append their own pages to this hub, after its own, under its "More" menu (WD-ADD-012). */
 export const MODULES_SECTION = 'apps';
 
 export const MAX_HUBS = 12;
-/** Pages beyond this (and module pages added at run time) go under the tab bar's "More" menu. */
-export const MAX_TABS = 9;
+/** A hub longer than this has stopped being one area: split it. Module pages added at run time are not counted. */
+export const MAX_PAGES = 20;
 
 export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'reports',
     icon: 'analytics',
-    kind: 'tabs',
     // WaDesk's top-level dashboards, in its order.
     tabs: [
       'financial',
@@ -50,19 +45,16 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'plans',
     icon: 'tag',
-    kind: 'tabs',
     tabs: ['workspaces', 'plans', 'addon-packs', 'coupons', 'plan-settings', 'pricing-faqs'],
   },
   {
     id: 'billing',
     icon: 'payment',
-    kind: 'tabs',
     tabs: ['billing-history', 'order-history', 'invoices', 'payment-gateways', 'checkout-settings'],
   },
   {
     id: 'messaging',
     icon: 'sms',
-    kind: 'tabs',
     tabs: [
       'wallet-overview',
       'wallet-pricing',
@@ -76,7 +68,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'support',
     icon: 'help',
-    kind: 'tabs',
     tabs: [
       'support-inbox',
       'support-team',
@@ -91,13 +82,11 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'website',
     icon: 'globe',
-    kind: 'tabs',
     tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements', 'cms-guidebook'],
   },
   {
     id: 'whatsapp',
     icon: 'channels',
-    kind: 'tabs',
     tabs: [
       'wap-providers',
       'wap-switch',
@@ -110,7 +99,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: MODULES_SECTION,
     icon: 'modules',
-    kind: 'tabs',
     tabs: [
       'market-catalogue',
       'market-categories',
@@ -123,7 +111,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'team',
     icon: 'shield',
-    kind: 'tabs',
     tabs: [
       'roles',
       'permissions',
@@ -134,11 +121,11 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'social-login',
       'auth-pages',
     ],
+    heads: { roles: 'roles', security: 'security', registration: 'signin' },
   },
   {
     id: 'settings',
     icon: 'settings',
-    kind: 'index',
     tabs: [
       'settings-hub',
       'settings-general',
@@ -158,11 +145,16 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-custom',
       'settings-storage',
     ],
+    heads: {
+      'settings-general': 'branding',
+      'settings-mail': 'integrations',
+      'settings-privacy': 'privacy',
+      'settings-storage': 'infrastructure',
+    },
   },
   {
     id: 'system',
     icon: 'gear',
-    kind: 'tabs',
     tabs: ['system', 'i18n-languages', 'currencies', 'i18n-providers', 'i18n-usage'],
   },
 ];

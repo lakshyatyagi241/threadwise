@@ -12,6 +12,7 @@ import {
   groupByHeading,
   hubHref,
   hubOf,
+  pageRuns,
   isGroup,
   leaves,
 } from './console-nav';
@@ -31,9 +32,9 @@ const items = [
 
 /** A layout of its own, so these tests do not move when the real menu is reorganised. */
 const layout: ConsoleHub[] = [
-  { id: 'access', icon: 'shield', kind: 'tabs', tabs: ['security', 'security-events'] },
-  { id: 'plans', icon: 'tag', kind: 'tabs', tabs: ['plans', 'not-built-yet'] },
-  { id: 'empty', icon: 'tag', kind: 'tabs', tabs: ['also-not-built'] },
+  { id: 'access', icon: 'shield', tabs: ['security', 'security-events'] },
+  { id: 'plans', icon: 'tag', tabs: ['plans', 'not-built-yet'] },
+  { id: 'empty', icon: 'tag', tabs: ['also-not-built'] },
 ];
 
 describe('buildConsoleNav', () => {
@@ -54,8 +55,37 @@ describe('buildConsoleNav', () => {
     expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
   });
 
-  it('carries the hub kind, so a Settings-style index hub can be told from a tab hub', () => {
-    expect(nav.filter(isGroup)[0]).toMatchObject({ kind: 'tabs' });
+  it('puts the group heading on the first page of the group only', () => {
+    const grouped: ConsoleHub[] = [
+      {
+        id: 'access',
+        icon: 'shield',
+        tabs: ['security', 'security-events', 'plans'],
+        heads: { security: 'security', plans: 'other' },
+      },
+    ];
+    const [hub] = buildConsoleNav(items, grouped).filter(isGroup);
+    expect(hub!.children.map((c) => c.captionKey)).toEqual([
+      'admin-console-shell.nav.captions.security',
+      undefined,
+      'admin-console-shell.nav.captions.other',
+    ]);
+  });
+
+  it('gives the heading to the next page shown when the page that names it is hidden', () => {
+    const grouped: ConsoleHub[] = [
+      {
+        id: 'access',
+        icon: 'shield',
+        tabs: ['security', 'security-events'],
+        heads: { security: 'security' },
+      },
+    ];
+    const [hub] = buildConsoleNav(items, grouped, (id) => id !== 'security').filter(isGroup);
+    expect(hub!.children[0]).toMatchObject({
+      id: 'security-events',
+      captionKey: 'admin-console-shell.nav.captions.security',
+    });
   });
 
   it('skips pages that are not in the menu data, and drops a section left with none', () => {
@@ -91,8 +121,8 @@ describe('buildConsoleNav', () => {
 
   it('places a page once even if the layout lists it twice', () => {
     const twice: ConsoleHub[] = [
-      { id: 'a', icon: 'tag', kind: 'tabs', tabs: ['plans'] },
-      { id: 'b', icon: 'tag', kind: 'tabs', tabs: ['plans', 'security'] },
+      { id: 'a', icon: 'tag', tabs: ['plans'] },
+      { id: 'b', icon: 'tag', tabs: ['plans', 'security'] },
     ];
     const placed = leaves(buildConsoleNav(items, twice)).map((l) => l.id);
     expect(placed.filter((id) => id === 'plans')).toHaveLength(1);
@@ -116,12 +146,11 @@ describe('groupByHeading', () => {
 });
 
 describe('emptySection', () => {
-  it('takes the heading key, icon and kind from the layout', () => {
+  it('takes the heading key and icon from the layout', () => {
     expect(emptySection('access', layout)).toEqual({
       id: 'access',
       labelKey: 'admin-console-shell.nav.sections.access',
       icon: 'shield',
-      kind: 'tabs',
       children: [],
     });
   });
@@ -150,6 +179,36 @@ describe('activeLeafId', () => {
 
   it('does not match a path that merely shares a string prefix', () => {
     expect(activeLeafId('/admin/plans-archive', nav)).toBeNull();
+  });
+});
+
+describe('pageRuns', () => {
+  const grouped: ConsoleHub[] = [
+    {
+      id: 'access',
+      icon: 'shield',
+      tabs: ['security', 'security-events', 'plans'],
+      heads: { 'security-events': 'events' },
+    },
+  ];
+  const [hub] = buildConsoleNav(items, grouped).filter(isGroup);
+
+  it('splits a hub into the groups its menu draws, the first one without a heading', () => {
+    const runs = pageRuns(hub!);
+    expect(runs.map((r) => r.captionKey)).toEqual([
+      undefined,
+      'admin-console-shell.nav.captions.events',
+    ]);
+    expect(runs.map((r) => r.pages.map((p) => p.id))).toEqual([
+      ['security'],
+      ['security-events', 'plans'],
+    ]);
+  });
+
+  it('is one run with no heading for a hub without groups', () => {
+    const [plain] = buildConsoleNav(items, layout).filter(isGroup);
+    expect(pageRuns(plain!)).toHaveLength(1);
+    expect(pageRuns(plain!)[0]!.captionKey).toBeUndefined();
   });
 });
 

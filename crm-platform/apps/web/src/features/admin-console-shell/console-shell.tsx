@@ -30,14 +30,12 @@ import {
   activeLeafId,
   buildConsoleNav,
   CONSOLE_NAV_ITEMS,
-  hubHref,
   hubOf,
-  isGroup,
-  type ConsoleGroup,
 } from './console-nav';
 import { CONSOLE_LAYOUT } from './console-layout';
 import { pageVisibleTo } from './console-access';
-import { HubTabs } from './hub-tabs';
+import { AreaLinks, HubMenu } from './hub-menu';
+import { HIDE_WHEN_COLLAPSED, RailLink } from './rail-link';
 import type { ConsoleCounts } from './console-counts';
 import { ConsoleIcon } from './console-icons';
 import { ConsolePalette, useIsApple } from './console-palette';
@@ -110,6 +108,7 @@ export function ConsoleShell({
   const { operator } = session;
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
+  const onHome = pathname === CONSOLE_HOME;
   const blocked = gated && !onAccountPage;
   // The API refused this address (operator IP allowlist, WD-AUTH-038): say so instead of showing empty screens.
   const ipBlock = useIpBlock();
@@ -234,62 +233,7 @@ export function ConsoleShell({
     </button>
   );
 
-  // Labels and headings vanish only on desktop and only when collapsed; the phone drawer is always full.
-  const hideWhenCollapsed = 'md:group-data-[collapsed=true]/rail:hidden';
-
-  /** A link that stands on its own in the rail (Overview, Your account): an icon, which is all the collapsed rail shows. */
-  const topLink = (opts: {
-    id: string;
-    href: string;
-    icon: string;
-    label: string;
-    active: boolean;
-    disabled?: boolean;
-    testId?: string;
-  }) => {
-    const body = (
-      <>
-        <ConsoleIcon name={opts.icon} />
-        <span className={cn('min-w-0 flex-1 truncate', hideWhenCollapsed)}>{opts.label}</span>
-      </>
-    );
-    const cls = cn(
-      'flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
-      'md:group-data-[collapsed=true]/rail:justify-center',
-    );
-    return opts.disabled ? (
-      <span key={opts.id} aria-disabled="true" className={cn(cls, 'opacity-40')}>
-        {body}
-      </span>
-    ) : (
-      <Link
-        key={opts.id}
-        href={opts.href}
-        title={opts.label}
-        data-testid={opts.testId}
-        aria-current={opts.active ? 'page' : undefined}
-        className={cn(
-          cls,
-          'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-          opts.active && 'bg-sidebar-active text-white',
-        )}
-      >
-        {body}
-      </Link>
-    );
-  };
-
-  /** One hub in the rail: an icon and its name, linking to the hub's first page. Its other pages are the tab bar on that page. */
-  const hubLink = (entry: ConsoleGroup) =>
-    topLink({
-      id: entry.id,
-      href: hubHref(entry),
-      icon: entry.icon ?? 'dashboard',
-      label: tAll(entry.labelKey),
-      active: entry.id === activeHub?.id,
-      disabled: gated,
-      testId: `hub-${entry.id}`,
-    });
+  const hideWhenCollapsed = HIDE_WHEN_COLLAPSED;
 
   return (
     <OperatorProvider session={session}>
@@ -318,6 +262,8 @@ export function ConsoleShell({
             className={cn(
               'group/rail z-40 flex shrink-0 flex-col bg-sidebar p-3 text-sidebar-foreground',
               'w-64 md:sticky md:top-0 md:h-dvh md:overflow-hidden md:data-[collapsed=true]:w-16',
+              // Home is a grid of area blocks, so the desktop page has no rail; the phone drawer still lists the areas.
+              onHome && 'md:hidden',
               'max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:overflow-hidden',
               open ? 'max-md:flex' : 'max-md:hidden',
             )}
@@ -363,28 +309,45 @@ export function ConsoleShell({
 
             {/* Only the list scrolls: the brand row above and the account row below stay in view. Padding keeps the focus ring from being clipped. */}
             <nav className="-mx-1 mt-2 min-h-0 flex-1 space-y-0.5 overflow-y-auto px-1 [scrollbar-color:rgb(255_255_255/0.25)_transparent] [scrollbar-width:thin]">
-              {entries.map((entry) =>
-                isGroup(entry)
-                  ? hubLink(entry)
-                  : topLink({
-                      id: entry.id,
-                      href: entry.href,
-                      icon: 'dashboard',
-                      label: entry.label ?? tAll(entry.labelKey),
-                      active: entry.id === activeId,
-                      disabled: gated,
-                    }),
+              {activeHub ? (
+                <>
+                  <div className={hideWhenCollapsed}>
+                    <HubMenu
+                      hub={activeHub}
+                      entries={entries}
+                      activeId={activeId}
+                      counts={counts}
+                      gated={gated}
+                    />
+                  </div>
+                  {/* An icon-only rail has no room for page names: it shows one icon per area instead. */}
+                  <div className="hidden space-y-0.5 md:group-data-[collapsed=true]/rail:block">
+                    <AreaLinks
+                      entries={entries}
+                      activeHubId={activeHub.id}
+                      homeActive={false}
+                      gated={gated}
+                    />
+                  </div>
+                </>
+              ) : (
+                <AreaLinks
+                  entries={entries}
+                  activeHubId={null}
+                  homeActive={pathname === CONSOLE_HOME}
+                  gated={gated}
+                />
               )}
             </nav>
 
             <div className="mt-3 border-t border-white/10 pt-2">
-              {topLink({
-                id: 'account',
-                href: OPERATOR_ACCOUNT_PATH,
-                icon: 'user',
-                label: tn('account'),
-                active: onAccountPage,
-              })}
+              <RailLink
+                href={OPERATOR_ACCOUNT_PATH}
+                icon="user"
+                label={tn('account')}
+                active={onAccountPage}
+                testId="rail-account"
+              />
             </div>
 
             <div className="mt-2 border-t border-white/10 pt-3 sm:hidden">
@@ -517,12 +480,7 @@ export function ConsoleShell({
               ) : ipBlock ? (
                 <IpBlockedView ip={ipBlock.ip} />
               ) : (
-                <>
-                  {activeHub && !gated && (
-                    <HubTabs hub={activeHub} activeId={activeId} counts={counts} />
-                  )}
-                  {children}
-                </>
+                children
               )}
             </main>
           </div>
