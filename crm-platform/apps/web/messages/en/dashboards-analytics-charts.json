@@ -40,8 +40,10 @@
       "stage": {
         "messaged": "Contacts messaged",
         "delivered": "Delivered",
-        "replied": "Replied"
+        "replied": "Replied",
+        "goalCompleted": "Goal completed"
       },
+      "goalCompletedHint": "Contacts whose flow finished",
       "activity": {
         "title": "Conversation activity",
         "summary": "{inbound, plural, one {# inbound message} other {# inbound messages}} · {contacts, plural, one {# responding contact} other {# responding contacts}} · {perContact} replies/responding contact"

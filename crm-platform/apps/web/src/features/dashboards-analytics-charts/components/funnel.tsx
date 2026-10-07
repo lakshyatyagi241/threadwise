@@ -7,9 +7,9 @@ import { funnelStages } from '../lib/funnel-model';
 import { Trend } from './parts';
 
 /**
- * The Engagement funnel card body (dashboard and analytics): contacts messaged, delivered, replied as bars of the share of
+ * The Engagement funnel card body (dashboard and analytics): contacts messaged, delivered, replied, goal completed as bars of the share of
  * contacts messaged, the conversation activity under a divider, and the reply-rate change against the previous period.
- * The stage list is data driven (`funnelStages`); a "Goal completed" stage is deliberately absent (no goal event exists).
+ * The stage list is data driven (`funnelStages`); "Goal completed" is the contacts whose flow finished.
  */
 export function Funnel({ funnel }: { funnel: DashFunnel }) {
   const t = useTranslations('dashboards-analytics-charts.funnel');
@@ -23,6 +23,7 @@ export function Funnel({ funnel }: { funnel: DashFunnel }) {
             key={s.key}
             className="space-y-1"
             aria-label={t('stageLabel', { stage: t(`stage.${s.key}`), n: s.count, pct: s.pct })}
+            title={s.key === 'goalCompleted' ? t('goalCompletedHint') : undefined}
           >
             <p className="flex items-baseline gap-1.5 text-sm" aria-hidden>
               {i > 0 && <span className="text-muted-foreground">↓</span>}
