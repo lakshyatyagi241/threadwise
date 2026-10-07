@@ -5,6 +5,7 @@ import {
   type FlbAskGiveUp,
 } from './ask-media';
 import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
+import { flbSanitizeConditionGroup } from './condition-group';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -356,6 +357,7 @@ const SHAPERS: Record<string, Shaper> = {
       };
     }),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   buttons: (d) => ({
@@ -367,6 +369,7 @@ const SHAPERS: Record<string, Shaper> = {
         typeof opt === 'string' ? opt : s(isRecord(opt) ? opt.title : undefined, `Option ${i + 1}`),
     })),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   ask: (d) => {
@@ -419,7 +422,12 @@ const SHAPERS: Record<string, Shaper> = {
         })
       : [{ variable: flbCleanVarName(d.var, ''), operator: s(d.op, 'equals'), value: s(d.value) }];
     const first = conditions[0] ?? { variable: '', operator: 'equals', value: '' };
+    // The optional nested tree (beyond WaDesk): sanitised, and absent when the node only has the flat chain.
+    const conditionGroup = flbSanitizeConditionGroup(d.conditionGroup, (v) =>
+      flbCleanVarName(v, ''),
+    );
     return {
+      ...(conditionGroup ? { conditionGroup } : {}),
       conditions,
       logicOperators: list(d.operators).map((o) => (s(o).toUpperCase() === 'OR' ? 'OR' : 'AND')),
       variable: first.variable,

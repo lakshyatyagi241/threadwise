@@ -243,6 +243,7 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
         ) : null}
       </div>
       <VarField step={step} set={set} label="Save the tapped button in" />
+      <SavePropertyField step={step} set={set} noun="the tapped button" />
     </div>
   );
 }
@@ -329,6 +330,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
         ) : null}
       </div>
       <VarField step={step} set={set} label="Save the chosen row in" />
+      <SavePropertyField step={step} set={set} noun="the chosen row" />
     </div>
   );
 }
@@ -388,9 +390,11 @@ function WrongAnswerFields({
 function SavePropertyField({
   step,
   set,
+  noun = 'the answer',
 }: {
   step: SimpleStep;
   set: (patch: Record<string, unknown>) => void;
+  noun?: string;
 }) {
   const feed = usePickerFeed();
   const on = step.data.saveProperty === true;
@@ -402,7 +406,7 @@ function SavePropertyField({
           checked={on}
           onChange={(e) => set({ saveProperty: e.target.checked })}
         />
-        Also copy the answer to the contact
+        Also copy {noun} to the contact
       </label>
       {on ? (
         <Select
@@ -473,9 +477,9 @@ function AskEditor({ step, set }: EditorProps) {
             placeholder={flbAskInputWrongText(type, step.data.dateFormat)}
             defaultRetries="0 keeps asking until the answer is right."
           />
-          <SavePropertyField step={step} set={set} />
         </>
       ) : null}
+      <SavePropertyField step={step} set={set} />
     </div>
   );
 }

@@ -360,6 +360,18 @@
             "bare": "Bare pin"
           }
         }
+      },
+      "choiceSave": {
+        "variableLabel": "Save the selected option as variable",
+        "variableHint": "The title of the option the customer picks is stored here. Reuse it later as {variable} in a Send message or a Condition.",
+        "saveToAttribute": "Also save to a contact attribute",
+        "choiceSaveHelp": "Write the picked option's title to a contact property",
+        "choicePropertyHint": "The title of the option the customer picks is written to this property of the contact. Choose a property of your workspace.",
+        "answerSaveHelp": "Write the customer's answer to a contact property",
+        "answerPropertyHint": "The customer's answer is written to this property of the contact. Choose a property of your workspace.",
+        "propertyLabel": "Contact property",
+        "propertyChoose": "Choose a property...",
+        "propertyRequired": "Choose the contact property to save to, or turn this off."
       }
     }
   }

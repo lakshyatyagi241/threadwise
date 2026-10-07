@@ -280,12 +280,20 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'sequence':
       return { replies: [{ type: 'text', text: 'Hi {{name}}!' }] };
     case 'buttons':
-      return { prompt: 'Pick one', options: ['Option A', 'Option B'], var: 'choice' };
+      return {
+        prompt: 'Pick one',
+        options: ['Option A', 'Option B'],
+        var: 'choice',
+        saveProperty: false,
+        propertyKey: '',
+      };
     case 'list':
       return {
         prompt: 'Pick from list',
         button: 'View options',
         var: 'choice',
+        saveProperty: false,
+        propertyKey: '',
         options: [
           { title: 'Item 1', description: '', section: '' },
           { title: 'Item 2', description: '', section: '' },
