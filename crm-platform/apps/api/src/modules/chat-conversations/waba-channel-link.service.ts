@@ -96,6 +96,14 @@ export class WabaChannelLinkService {
 
   // --- internals ---------------------------------------------------------------------------------------------------------------
 
+  /** The number is held by another workspace's inbox, so this connection gets no channel. Never silent: someone has to free the number. */
+  private heldElsewhere(orgId: number, configId: number, phoneNumberId: string): void {
+    this.logger.warn(
+      { orgId, configId, phoneNumberId },
+      'whatsapp number is held by another workspace: no inbox channel was made for this connection',
+    );
+  }
+
   private async ensureInContext(
     orgId: number,
     configId: number,
@@ -132,27 +140,56 @@ export class WabaChannelLinkService {
             clearLastError: true,
           });
         } else {
-          row = await this.repo.insert(tx, orgId, {
-            kind: WHATSAPP_CHANNEL_KIND,
-            name: nameOf(cfg),
-            status: desired,
-            externalId: cfg.phoneNumberId,
-            displayAddress: display,
-            businessAccountId: account,
-            wabaConfigId: configId,
-            credentialsEnc: null,
-            credentialHints: {},
-            webhookTokenHash: null,
-            settings: normalizeSettings(WHATSAPP_CHANNEL_KIND, {}),
-            createdBy: null,
-          });
-          if (row) {
-            created = true;
-            before = null;
+          // A channel of this workspace that let go of the number when its connection was disconnected comes back with its history.
+          const digits = (cfg.phoneNumber ?? '').replace(/\D/g, '');
+          const released =
+            desired === 'connected' && digits.length >= 5
+              ? await this.repo.releasedByDisplay(tx, orgId, WHATSAPP_CHANNEL_KIND, digits)
+              : null;
+          if (released) {
+            const claimed = await this.repo.claimNumber(
+              tx,
+              orgId,
+              released.id,
+              WHATSAPP_CHANNEL_KIND,
+              cfg.phoneNumberId,
+            );
+            if (claimed) {
+              before = released;
+              row = await this.repo.syncWaba(tx, orgId, claimed.id, {
+                wabaConfigId: configId,
+                status: 'connected',
+                displayAddress: claimed.displayAddress ?? display,
+                businessAccountId: account ?? claimed.businessAccountId,
+                clearLastError: true,
+              });
+            } else {
+              this.heldElsewhere(orgId, configId, cfg.phoneNumberId);
+            }
           } else {
-            // No row back: either a concurrent first message made this very channel a moment ago (the unique keys held), or another
-            // workspace holds the number (the first to connect it does). Only the first is ours to use.
-            row = await this.repo.byWabaConfig(tx, orgId, configId);
+            row = await this.repo.insert(tx, orgId, {
+              kind: WHATSAPP_CHANNEL_KIND,
+              name: nameOf(cfg),
+              status: desired,
+              externalId: cfg.phoneNumberId,
+              displayAddress: display,
+              businessAccountId: account,
+              wabaConfigId: configId,
+              credentialsEnc: null,
+              credentialHints: {},
+              webhookTokenHash: null,
+              settings: normalizeSettings(WHATSAPP_CHANNEL_KIND, {}),
+              createdBy: null,
+            });
+            if (row) {
+              created = true;
+              before = null;
+            } else {
+              // No row back: either a concurrent first message made this very channel a moment ago (the unique keys held), or another
+              // workspace holds the number (the first to connect it does). Only the first is ours to use.
+              row = await this.repo.byWabaConfig(tx, orgId, configId);
+              if (!row) this.heldElsewhere(orgId, configId, cfg.phoneNumberId);
+            }
           }
         }
       } else {
@@ -163,10 +200,28 @@ export class WabaChannelLinkService {
         } else if (desired === 'disconnected' && row.status !== 'disconnected') {
           patch.status = 'disconnected';
         }
+        // A disconnected number is let go, so it does not keep another workspace from connecting it; it is taken back on reconnect.
+        if (desired === 'disconnected' && row.externalId !== null) patch.externalId = null;
         if (row.displayAddress === null && display) patch.displayAddress = display;
         if (account && row.businessAccountId !== account) patch.businessAccountId = account;
         if (Object.keys(patch).length > 0)
           row = (await this.repo.syncWaba(tx, orgId, row.id, patch)) ?? row;
+        if (
+          desired === 'connected' &&
+          row.externalId === null &&
+          cfg.phoneNumberId &&
+          DIGITS.test(cfg.phoneNumberId)
+        ) {
+          const claimed = await this.repo.claimNumber(
+            tx,
+            orgId,
+            row.id,
+            WHATSAPP_CHANNEL_KIND,
+            cfg.phoneNumberId,
+          );
+          if (claimed) row = claimed;
+          else this.heldElsewhere(orgId, configId, cfg.phoneNumberId);
+        }
       }
       if (!row) return null;
 
