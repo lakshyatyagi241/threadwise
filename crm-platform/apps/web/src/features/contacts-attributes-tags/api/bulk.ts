@@ -25,14 +25,19 @@ export function selectionBody(target: BulkTarget) {
 }
 
 /**
- * "Send campaign" from the Hub: a broadcast draft whose audience is this selection, created so the wizard opens on it. Returns the draft's
+ * "Send campaign" from the Hub: a broadcast draft whose audience is this selection (ticked rows open in the wizard's Contacts mode), created so the wizard opens on it. Returns the draft's
  * id (the wizard resumes at `/campaigns/wizard/<id>`).
  */
 export async function startCampaignDraft(target: BulkTarget): Promise<string> {
   const draft = await apiFetch('/broadcast-wizard/drafts', {
     method: 'POST',
     body: {
-      audience: { groupIds: [], segmentIds: [], rules: null, selection: selectionBody(target) },
+      // Ticked rows are the wizard's own "contacts" mode (`contactIds`); a whole filtered view has no equivalent there, so it travels as
+      // the `selection` source.
+      audience:
+        target.kind === 'ids'
+          ? { groupIds: [], segmentIds: [], rules: null, contactIds: target.ids }
+          : { groupIds: [], segmentIds: [], rules: null, selection: selectionBody(target) },
     },
     schema: z.object({ id: z.string().uuid() }),
   });

@@ -42,28 +42,88 @@ export const FREQUENCY_CAP_ERROR_CODE = '131049';
 
 // ---------------------------------------------------------------------------------------- audience
 
+/** Contacts one broadcast may name one by one (a longer list is a group, a segment or "all matching"). */
+export const WIZARD_CONTACTS_MAX = 5000;
+/** The CSV of the "Broadcast via CSV" mode: the file's size and its data rows. */
+export const WIZARD_CSV_MAX_BYTES = 2 * 1024 * 1024;
+export const WIZARD_CSV_MAX_ROWS = 10_000;
+/** The CSV template the audience step offers: a phone column and optional names (served by the API and built by the web from these). */
+export const WIZARD_CSV_TEMPLATE_HEADERS = ['phone', 'first_name', 'last_name'] as const;
+export const WIZARD_CSV_TEMPLATE_ROWS: ReadonlyArray<readonly string[]> = [
+  ['+919812345678', 'Aarav', 'Sharma'],
+  ['+919898765432', 'Priya', 'Patel'],
+];
+/** A parsed upload is kept this long unless a recurring broadcast pins it. */
+export const WIZARD_CSV_TTL_DAYS = 7;
+/** Rows per page the contacts table offers. */
+export const WIZARD_CONTACT_PAGE_SIZES = [25, 50, 100] as const;
+
+/** A parsed CSV upload as the draft refers to it: the id of the stored upload and the counts the person saw. */
+export const wizardCsvRefSchema = z.object({
+  id: uuidSchema,
+  fileName: z.string().trim().max(255),
+  valid: z.number().int().min(0),
+  duplicate: z.number().int().min(0),
+  invalid: z.number().int().min(0),
+  optedOut: z.number().int().min(0),
+});
+export type WizardCsvRef = z.infer<typeof wizardCsvRefSchema>;
+
+/** "Select all N matching" in the contacts table: everyone the search and the conditions found at that moment (frozen with the choice). */
+export const wizardAllMatchingSchema = z.object({
+  search: z.string().trim().max(100).nullable().default(null),
+  rules: segmentRulesSchema.nullable().default(null),
+});
+export type WizardAllMatching = z.infer<typeof wizardAllMatchingSchema>;
+
+/**
+ * Who the broadcast goes to: the UNION of what each mode of the audience step holds, so a contact in two of them is messaged once.
+ * Opted-out contacts and numbers WhatsApp cannot deliver to are always left out.
+ */
 export const wizardAudienceSchema = z.object({
   /** Contact groups (static lists); a contact in any of them is included. */
   groupIds: z.array(uuidSchema).max(WIZARD_SOURCES_MAX).default([]),
   /** Saved segments (rules that fill themselves); a contact in any of them is included. */
   segmentIds: z.array(uuidSchema).max(WIZARD_SOURCES_MAX).default([]),
   /**
-   * The condition builder: the same AND/OR rule tree a segment holds. With groups or segments chosen it NARROWS them (a contact
-   * must be in one of them and match the rules); on its own it selects from every contact.
+   * The condition builder's filter of the contacts table (the same AND/OR rule tree a segment holds). It only decides which rows the
+   * table shows; it joins the audience through `allMatching`.
    */
   rules: segmentRulesSchema.nullable().default(null),
+  /** Contacts ticked one by one in the table. */
+  contactIds: z.array(uuidSchema).max(WIZARD_CONTACTS_MAX).default([]),
+  /** Contacts un-ticked after "select all matching". */
+  excludedContactIds: z.array(uuidSchema).max(WIZARD_CONTACTS_MAX).default([]),
+  /** Every contact the table's search and conditions matched when "select all matching" was chosen; null when it was not. */
+  allMatching: wizardAllMatchingSchema.nullable().default(null),
   /**
-   * Contacts picked in the Contact Hub ("Send campaign" over the ticked rows, or over everything the Hub's filters match): either explicit
-   * ids or the saved filter with the rows un-ticked after "select all matching", exactly what a bulk action takes. A source like a group:
-   * the contacts it names are included, and `rules` narrow them.
+   * Contacts handed over by the Contact Hub's "Send campaign" when they are "everything the Hub's filters match" (the saved filter minus
+   * the un-ticked rows), which the table's own search and conditions cannot express. Ticked Hub rows arrive as `contactIds` instead.
+   * A source like a group; shown above the four modes with a way to remove it.
    */
   selection: contactSelectionSchema.nullish(),
+  /** The valid numbers of an uploaded CSV. Numbers that are not contacts yet become contacts when the broadcast is launched. */
+  csv: wizardCsvRefSchema.nullable().default(null),
 });
 export type WizardAudience = z.infer<typeof wizardAudienceSchema>;
-export const EMPTY_WIZARD_AUDIENCE: WizardAudience = { groupIds: [], segmentIds: [], rules: null };
+export const EMPTY_WIZARD_AUDIENCE: WizardAudience = {
+  groupIds: [],
+  segmentIds: [],
+  rules: null,
+  contactIds: [],
+  excludedContactIds: [],
+  allMatching: null,
+  csv: null,
+};
 
+/** Any one source makes an audience (the conditions alone do not: they only filter the contacts table). */
 export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
-  a.groupIds.length > 0 || a.segmentIds.length > 0 || a.rules !== null || Boolean(a.selection);
+  a.groupIds.length > 0 ||
+  a.segmentIds.length > 0 ||
+  a.contactIds.length > 0 ||
+  a.allMatching !== null ||
+  a.csv !== null ||
+  Boolean(a.selection);
 
 // ---------------------------------------------------------------------------------------- variables
 
@@ -157,7 +217,7 @@ export const wizardDraftSchema = z.object({
   /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
   senderKey: senderKeySchema.nullable().default(null),
   /** Step 2. */
-  audience: wizardAudienceSchema.default({ groupIds: [], segmentIds: [], rules: null }),
+  audience: wizardAudienceSchema.default({}),
   /** Step 3. Keys are the template's placeholders. */
   variables: wizardVariablesSchema.default({}),
   /** Step 4. */
@@ -268,6 +328,8 @@ export const wizardAudienceCountSchema = z.object({
   invalidNumber: z.number().int(),
   /** Who will be messaged: matching minus the two above. */
   recipients: z.number().int(),
+  /** Of the recipients, numbers from the CSV that are not contacts yet (they are created when the broadcast is launched). */
+  newContacts: z.number().int().default(0),
   /** The database could not count in time: the numbers are the planner's estimate. */
   approximate: z.boolean(),
   /** Recipients by destination country, largest first (what the price follows). */
@@ -278,6 +340,86 @@ export const wizardAudienceCountSchema = z.object({
   ),
 });
 export type WizardAudienceCount = z.infer<typeof wizardAudienceCountSchema>;
+
+// ---- the contacts table
+
+export const wizardContactsQuerySchema = z.object({
+  /** Matched against name, first and last name, email and phone, every word. */
+  search: z.string().trim().max(100).nullish(),
+  /** Conditions, evaluated by the segments rule engine on the server. */
+  rules: segmentRulesSchema.nullish(),
+  page: z.number().int().min(1).max(100_000).default(1),
+  perPage: z.number().int().min(1).max(100).default(25),
+});
+export type WizardContactsQuery = z.infer<typeof wizardContactsQuerySchema>;
+
+export const wizardContactRowSchema = z.object({
+  id: uuidSchema,
+  name: z.string().nullable(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  email: z.string().nullable(),
+  phone: z.string().nullable(),
+  /** Opted out or without a usable number: shown, never selectable, never messaged. */
+  sendable: z.boolean(),
+  optedOut: z.boolean(),
+});
+export type WizardContactRow = z.infer<typeof wizardContactRowSchema>;
+
+export const wizardContactsPageSchema = z.object({
+  data: z.array(wizardContactRowSchema),
+  /** Contacts matching the search and the conditions. */
+  total: z.number().int(),
+  /** The total is the planner's estimate (the count did not finish in time). */
+  approximate: z.boolean(),
+  page: z.number().int(),
+  perPage: z.number().int(),
+});
+export type WizardContactsPage = z.infer<typeof wizardContactsPageSchema>;
+
+// ---- the CSV upload
+
+export const WIZARD_CSV_REJECT_REASONS = ['missing_phone', 'invalid_phone', 'duplicate'] as const;
+export type WizardCsvRejectReason = (typeof WIZARD_CSV_REJECT_REASONS)[number];
+
+export const wizardCsvReportSchema = z.object({
+  /** The stored upload: what `audience.csv.id` carries. */
+  id: uuidSchema,
+  fileName: z.string(),
+  totalRows: z.number().int(),
+  /** Different numbers that passed the check (opted-out ones included). */
+  valid: z.number().int(),
+  /** Rows repeating a number already in the file (the first row is kept). */
+  duplicate: z.number().int(),
+  /** Rows without a number, or with one that is not a number WhatsApp can reach. */
+  invalid: z.number().int(),
+  /** Of the valid numbers, those of contacts who opted out: never messaged. */
+  optedOut: z.number().int(),
+  /** Of the valid numbers, those that are contacts already (matched by phone). */
+  existing: z.number().int(),
+  /** Of the valid numbers, those that become contacts at launch. */
+  newContacts: z.number().int(),
+  /** The first valid rows. */
+  preview: z.array(
+    z.object({
+      line: z.number().int(),
+      phone: z.string(),
+      name: z.string().nullable(),
+      status: z.enum(['new', 'existing', 'optedOut']),
+    }),
+  ),
+  /** The first rejected rows (the whole list is the download). */
+  issues: z.array(
+    z.object({
+      line: z.number().int(),
+      value: z.string(),
+      reason: z.enum(WIZARD_CSV_REJECT_REASONS),
+    }),
+  ),
+  issuesTotal: z.number().int(),
+  expiresAt: z.string().datetime().nullable(),
+});
+export type WizardCsvReport = z.infer<typeof wizardCsvReportSchema>;
 
 // ---------------------------------------------------------------------------------------- step 3: review
 

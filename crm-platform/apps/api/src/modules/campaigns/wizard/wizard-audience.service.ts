@@ -8,15 +8,20 @@ import type {
   WizardCountryCount,
 } from '@crm/contracts';
 import {
+  ContactResolverService,
   SegmentsRepository,
   SegmentsService,
   collectRuleRefs,
   compileRules,
+  contactConditions,
   loadRuleContext,
   contactSelectionWhere,
   segmentContactsWhere,
+  whereOf,
 } from '../../crm';
 import { countryOfPhone } from '../../wallet-message-billing';
+import { WizardCsvService } from './wizard-csv.service';
+import { csvContactsWhere, csvNewRowsWhere } from './wizard-csv-sql';
 
 /** A count that is not done in this long is answered with the planner's estimate (the same ceiling segment counts use). */
 const COUNT_TIMEOUT_MS = 3000;
@@ -36,6 +41,8 @@ export interface AudienceWhere {
   /** A condition over `contacts`: the organization, not archived, and the audience. */
   where: SQL;
   invalid: WizardAudienceCount['invalidConditions'];
+  /** The stored CSV upload the audience names (its numbers that are not contacts yet are counted apart), when it still exists. */
+  csvUploadId: number | null;
 }
 
 export interface SampleContact {
@@ -45,6 +52,13 @@ export interface SampleContact {
   phone: string | null;
 }
 
+/** `a, b, c` of uuid parameters, for an IN list. */
+const uuidList = (ids: readonly string[]): SQL =>
+  sql.join(
+    ids.map((id) => sql`${id}::uuid`),
+    sql`, `,
+  );
+
 const isTimeout = (err: unknown): boolean => {
   const e = err as { code?: string; cause?: { code?: string } };
   return e?.code === '57014' || e?.cause?.code === '57014';
@@ -52,18 +66,22 @@ const isTimeout = (err: unknown): boolean => {
 
 /**
  * Who a broadcast goes to, evaluated by ONE function for the count the wizard shows, the sample it resolves variables for and the
- * recipients a launch writes, so the number on screen is the list that is messaged. The audience is the contacts of the chosen groups and
- * segments (any of them) that also match the condition rules; with no group or segment the rules select from every contact; with
- * neither, nobody. Opted-out contacts and numbers WhatsApp cannot be asked to deliver to are removed last and counted apart.
+ * recipients a launch writes, so the number on screen is the list that is messaged. The audience is the UNION of every source the
+ * person filled in: the contacts ticked one by one, "all contacts matching" a search and conditions (minus the ones un-ticked), the
+ * members of the chosen groups, of the chosen segments, and the numbers of an uploaded CSV. A contact in several is one recipient.
+ * Opted-out contacts and numbers WhatsApp cannot be asked to deliver to are removed last and counted apart.
  *
- * Segments and the condition rules are compiled by the CRM's own rule engine, so a rule means here exactly what it means on the
- * segments screen.
+ * Segments and conditions are compiled by the CRM's own rule engine, so a rule means here exactly what it means on the segments
+ * screen. CSV numbers that are not contacts yet cannot be a row of `contacts`: they are counted from the stored upload, and the launch
+ * turns them into contacts (`materializeCsv`) before it lists the recipients.
  */
 @Injectable()
 export class WizardAudienceService {
   constructor(
     private readonly segments: SegmentsService,
     private readonly segmentsRepo: SegmentsRepository,
+    private readonly csv: WizardCsvService,
+    private readonly resolver: ContactResolverService,
   ) {}
 
   async where(tx: Tx, orgId: number, audience: WizardAudience): Promise<AudienceWhere> {
@@ -106,24 +124,65 @@ export class WizardAudienceService {
       for (const p of compiled.invalid) invalid.push({ ...p, path: `segments.${uuid}.${p.path}` });
     }
 
+    if (audience.contactIds.length > 0) {
+      sources.push(sql`contacts.uuid IN (${uuidList(audience.contactIds)})`);
+    }
+
+    // The Contact Hub's "everything the view matched" hand-over (ticked rows arrive as contactIds).
     if (audience.selection)
       sources.push(await contactSelectionWhere(tx, orgId, audience.selection));
 
-    const parts: SQL[] = [];
-    if (sources.length > 0) parts.push(sql`(${sql.join(sources, sql` OR `)})`);
-    if (audience.rules) {
-      const rules = audience.rules as unknown as SegmentGroup;
-      const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
-      const compiled = compileRules(orgId, rules, rc);
-      parts.push(compiled.where);
-      for (const p of compiled.invalid) invalid.push({ ...p, path: `rules.${p.path}` });
+    if (audience.allMatching) {
+      let segment: SQL | undefined;
+      if (audience.allMatching.rules) {
+        const rules = audience.allMatching.rules as unknown as SegmentGroup;
+        const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
+        const compiled = compileRules(orgId, rules, rc);
+        segment = compiled.where;
+        for (const p of compiled.invalid) invalid.push({ ...p, path: `allMatching.${p.path}` });
+      }
+      const matching = whereOf(
+        contactConditions(
+          orgId,
+          {
+            includeArchived: false,
+            tagMode: 'any',
+            q: audience.allMatching.search ?? undefined,
+            segment,
+          },
+          undefined,
+        ),
+      );
+      sources.push(
+        audience.excludedContactIds.length > 0
+          ? sql`(${matching} AND contacts.uuid NOT IN (${uuidList(audience.excludedContactIds)}))`
+          : matching,
+      );
     }
-    const rulesSql = parts.length === 0 ? sql`false` : sql`(${sql.join(parts, sql` AND `)})`;
-    return { where: segmentContactsWhere(orgId, rulesSql), invalid };
+
+    let csvUploadId: number | null = null;
+    if (audience.csv) {
+      const up = await this.csv.find(tx, orgId, audience.csv.id);
+      if (up) {
+        csvUploadId = up.id;
+        sources.push(csvContactsWhere(orgId, up.id));
+      } else {
+        invalid.push({
+          path: 'csv',
+          field: 'csv',
+          reason: 'csv_missing',
+          message: 'The uploaded CSV is gone (uploads are kept for a week). Upload it again.',
+        });
+      }
+    }
+
+    const rulesSql = sources.length === 0 ? sql`false` : sql`(${sql.join(sources, sql` OR `)})`;
+    return { where: segmentContactsWhere(orgId, rulesSql), invalid, csvUploadId };
   }
 
   async count(tx: Tx, orgId: number, audience: WizardAudience): Promise<WizardAudienceCount> {
-    const { where, invalid } = await this.where(tx, orgId, audience);
+    const { where, invalid, csvUploadId } = await this.where(tx, orgId, audience);
+    const fresh = await this.newCsvNumbers(tx, orgId, csvUploadId);
     // The count runs in a savepoint: a cancelled statement aborts only that, and the timeout is undone with it.
     const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
       .rows[0] as {
@@ -157,27 +216,90 @@ export class WizardAudienceService {
       });
       await tx.execute(sql`SELECT set_config('statement_timeout', ${before.v}, true)`);
       return {
-        matching: Number(out.totals.matching),
+        matching: Number(out.totals.matching) + fresh.total,
         optedOut: Number(out.totals.opted_out),
         invalidNumber: Number(out.totals.invalid_number),
-        recipients: Number(out.totals.recipients),
+        recipients: Number(out.totals.recipients) + fresh.total,
+        newContacts: fresh.total,
         approximate: false,
-        countries: this.countries(out.byPrefix),
+        countries: this.countries([...out.byPrefix, ...fresh.byPrefix]),
         invalidConditions: invalid,
       };
     } catch (err) {
       if (!isTimeout(err)) throw err;
       const estimate = await this.estimate(tx, where);
       return {
-        matching: estimate,
+        matching: estimate + fresh.total,
         optedOut: 0,
         invalidNumber: 0,
-        recipients: estimate,
+        recipients: estimate + fresh.total,
+        newContacts: fresh.total,
         approximate: true,
         countries: [],
         invalidConditions: invalid,
       };
     }
+  }
+
+  /** The upload's valid numbers that are not contacts yet, with their country prefixes (all of them are deliverable: they passed the E.164 check). */
+  private async newCsvNumbers(
+    tx: Tx,
+    orgId: number,
+    uploadId: number | null,
+  ): Promise<{ total: number; byPrefix: Array<{ prefix: string; n: number }> }> {
+    if (uploadId === null) return { total: 0, byPrefix: [] };
+    const rows = (
+      await tx.execute(sql`
+        SELECT left(r.digits, ${COUNTRY_PREFIX_DIGITS}) AS prefix, count(*)::int AS n
+        FROM camp_wizard_csv_rows r WHERE ${csvNewRowsWhere(orgId, uploadId)} GROUP BY 1`)
+    ).rows as Array<{ prefix: string; n: number }>;
+    return { total: rows.reduce((n, r) => n + Number(r.n), 0), byPrefix: rows };
+  }
+
+  /** Numbers of the CSV that are not contacts yet, for the wallet's per-country estimate. */
+  async newCsvPhones(
+    tx: Tx,
+    orgId: number,
+    audience: WizardAudience,
+    limit: number,
+  ): Promise<string[]> {
+    if (!audience.csv) return [];
+    const up = await this.csv.find(tx, orgId, audience.csv.id);
+    if (!up) return [];
+    const rows = await this.csv.newNumbers(tx, orgId, up.id, 0, limit);
+    return rows.map((r) => r.phone);
+  }
+
+  /**
+   * Launch only, inside the launch transaction: every valid CSV number that is not a contact yet becomes one (find-or-create by phone,
+   * so a repeat or a recurring run finds it again). A number the plan's contact cap refuses is not messaged; it is counted in `skipped`.
+   * Idempotent. Call it before `recipientIds`, which then sees the new contacts.
+   */
+  async materializeCsv(
+    tx: Tx,
+    orgId: number,
+    audience: WizardAudience,
+  ): Promise<{ created: number; skipped: number }> {
+    const out = { created: 0, skipped: 0 };
+    if (!audience.csv) return out;
+    const up = await this.csv.find(tx, orgId, audience.csv.id);
+    if (!up) return out;
+    let after = 0;
+    for (;;) {
+      const rows = await this.csv.newNumbers(tx, orgId, up.id, after, 500);
+      if (rows.length === 0) break;
+      for (const r of rows) {
+        const link = await this.resolver.findOrCreateByPhone(tx, orgId, {
+          phone: r.phone,
+          name: r.name,
+          source: 'broadcast_csv',
+        });
+        if (link.outcome === 'created') out.created += 1;
+        else if (link.outcome === 'skipped') out.skipped += 1;
+      }
+      after = rows[rows.length - 1]!.line;
+    }
+    return out;
   }
 
   /** Recipients by destination country, largest first. */
