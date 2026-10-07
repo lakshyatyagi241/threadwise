@@ -27,6 +27,7 @@ export interface TemplateListRow {
   attachmentType: string | null;
   attachmentFile: string | null;
   metaTemplateId: string | null;
+  status: string | null;
   metaStatus: string | null;
   pausedUntil: Date | null;
   qualityScore: string | null;
@@ -214,7 +215,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.meta_template_id, t.status, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       FROM wa_templates t
@@ -230,7 +231,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.meta_template_id, t.status, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       FROM wa_templates t
@@ -238,6 +239,39 @@ export class WizardRepository {
       WHERE t.org_id = ${orgId} AND t.uuid = ${uuid}::uuid`);
     const r = res.rows[0] as Raw | undefined;
     return r ? this.template(r) : undefined;
+  }
+
+  /**
+   * What the stored records say about a Cloud API number: its quality rating (kept on the connection when Meta reports it) and the
+   * number status the linked channel last recorded (RESTRICTED, FLAGGED, ...), and the WhatsApp Business Account it is on. Each is
+   * null when nothing was recorded.
+   */
+  async senderHealth(
+    tx: Tx,
+    orgId: number,
+    configId: number,
+  ): Promise<{ qualityRating: string | null; phoneStatus: string | null; wabaId: string | null }> {
+    const res = await tx.execute(sql`
+      SELECT c.meta_json ->> 'quality_rating' AS quality, ch.health ->> 'phoneStatus' AS phone_status,
+             c.meta_json ->> 'waba_id' AS waba_id
+      FROM wa_provider_configs c
+      LEFT JOIN channels ch ON ch.org_id = c.org_id AND ch.waba_config_id = c.id
+      WHERE c.org_id = ${orgId} AND c.id = ${configId}`);
+    const r = res.rows[0] as
+      { quality: string | null; phone_status: string | null; waba_id: string | null } | undefined;
+    return {
+      qualityRating: str(r?.quality),
+      phoneStatus: str(r?.phone_status),
+      wabaId: str(r?.waba_id),
+    };
+  }
+
+  /** Whether the workspace has a wallet in `unit` (a balance of 0 and no wallet read the same in the summary). */
+  async walletExists(tx: Tx, orgId: number, unit: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM wallets WHERE org_id = ${orgId} AND unit = ${unit} LIMIT 1`,
+    );
+    return res.rows.length > 0;
   }
 
   private template(r: Raw): TemplateListRow {
@@ -258,6 +292,7 @@ export class WizardRepository {
       attachmentType: str(r.attachment_type),
       attachmentFile: str(r.attachment_file),
       metaTemplateId: str(r.meta_template_id),
+      status: str(r.status),
       metaStatus: str(r.meta_status),
       pausedUntil: when(r.paused_until),
       qualityScore: str(r.quality_score),

@@ -42,6 +42,8 @@ export interface AudienceWhere {
   invalid: WizardAudienceCount['invalidConditions'];
   /** The stored CSV upload the audience names (its numbers that are not contacts yet are counted apart), when it still exists. */
   csvUploadId: number | null;
+  /** One condition per source the person filled in; `where` is their union. */
+  sources: SQL[];
 }
 
 export interface SampleContact {
@@ -172,7 +174,7 @@ export class WizardAudienceService {
     }
 
     const rulesSql = sources.length === 0 ? sql`false` : sql`(${sql.join(sources, sql` OR `)})`;
-    return { where: segmentContactsWhere(orgId, rulesSql), invalid, csvUploadId };
+    return { where: segmentContactsWhere(orgId, rulesSql), invalid, csvUploadId, sources };
   }
 
   async count(tx: Tx, orgId: number, audience: WizardAudience): Promise<WizardAudienceCount> {
@@ -233,6 +235,52 @@ export class WizardAudienceService {
         countries: [],
         invalidConditions: invalid,
       };
+    }
+  }
+
+  /**
+   * How many contacts of the audience are in more than one source (a group and a segment, a ticked contact and a group): they are
+   * messaged once, so this is how many extra rows were merged. One scan, bounded like the count; null when it did not finish in time.
+   */
+  async overlap(tx: Tx, orgId: number, audience: WizardAudience): Promise<number | null> {
+    const { where, sources: merged } = await this.where(tx, orgId, audience);
+    // `where` joins every group into ONE source (the first); here each group counts on its own.
+    const sources = merged.slice(audience.groupIds.length > 0 ? 1 : 0);
+    if (audience.groupIds.length > 0) {
+      const tree = (id: string) =>
+        ({
+          type: 'group',
+          combinator: 'or',
+          children: [{ type: 'condition', field: 'groups', operator: 'has_any', value: [id] }],
+        }) as unknown as SegmentGroup;
+      for (const id of audience.groupIds) {
+        const rc = await loadRuleContext(tx, orgId, collectRuleRefs(tree(id)));
+        sources.push(compileRules(orgId, tree(id), rc).where);
+      }
+    }
+    if (sources.length < 2) return 0;
+    const memberships = sql.join(
+      sources.map((src) => sql`(CASE WHEN ${src} THEN 1 ELSE 0 END)`),
+      sql` + `,
+    );
+    const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
+      .rows[0] as { v: string };
+    try {
+      const out = await tx.transaction(async (sp) => {
+        await sp.execute(
+          sql`SELECT set_config('statement_timeout', ${String(COUNT_TIMEOUT_MS)}, true)`,
+        );
+        return (
+          await sp.execute(sql`
+            SELECT coalesce(sum(m - 1), 0)::int AS merged
+            FROM (SELECT ${memberships} AS m FROM contacts WHERE ${where} AND ${ELIGIBLE}) s`)
+        ).rows[0] as { merged: number };
+      });
+      await tx.execute(sql`SELECT set_config('statement_timeout', ${before.v}, true)`);
+      return Number(out.merged);
+    } catch (err) {
+      if (!isTimeout(err)) throw err;
+      return null;
     }
   }
 

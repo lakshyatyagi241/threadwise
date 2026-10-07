@@ -27,6 +27,7 @@ import {
   wizardContactsQuerySchema,
   wizardCreditCheckRequestSchema,
   wizardLaunchRequestSchema,
+  wizardEligibilityRequestSchema,
   wizardTestSendRequestSchema,
   wizardVariablePreviewRequestSchema,
   type ListWizardBroadcastsQuery,
@@ -36,6 +37,7 @@ import {
   type WizardAudienceCountRequest,
   type WizardContactsQuery,
   type WizardCreditCheckRequest,
+  type WizardEligibilityRequest,
   type WizardLaunchRequest,
   type WizardTestSendRequest,
   type WizardVariablePreviewRequest,
@@ -46,6 +48,7 @@ import { type UploadedCsv } from '../../crm';
 import { WizardBroadcastsService } from './wizard-broadcasts.service';
 import { WizardContactsService } from './wizard-contacts.service';
 import { WizardCsvService } from './wizard-csv.service';
+import { WizardEligibilityService } from './wizard-eligibility.service';
 import { WizardDraftsService } from './wizard-drafts.service';
 import { WizardLaunchService } from './wizard-launch.service';
 import { WizardReadService } from './wizard-read.service';
@@ -67,6 +70,7 @@ export class WizardController {
     private readonly read: WizardReadService,
     private readonly drafts: WizardDraftsService,
     private readonly review: WizardReviewService,
+    private readonly eligibilityCheck: WizardEligibilityService,
     private readonly tests: WizardTestSendService,
     private readonly launcher: WizardLaunchService,
     private readonly broadcasts: WizardBroadcastsService,
@@ -219,6 +223,17 @@ export class WizardController {
   })
   credit(@Body(zodPipe(wizardCreditCheckRequestSchema)) body: WizardCreditCheckRequest) {
     return this.review.creditCheck(body);
+  }
+
+  @Post('eligibility')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('camp.campaigns.create')
+  @ApiOperation({
+    summary:
+      'Can this broadcast really go out: the contacts that can receive it, the template and number, and how it is billed',
+  })
+  eligibility(@Body(zodPipe(wizardEligibilityRequestSchema)) body: WizardEligibilityRequest) {
+    return this.eligibilityCheck.check(body);
   }
 
   @Post('variables/preview')

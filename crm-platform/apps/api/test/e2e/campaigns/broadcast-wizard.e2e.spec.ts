@@ -10,6 +10,7 @@ import {
   wizardHistoryListSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
+  wizardEligibilitySchema,
   wizardLaunchResultSchema,
   wizardTemplatesResponseSchema,
   wizardVariablePreviewSchema,
@@ -18,6 +19,7 @@ import {
   addSender,
   balanceMinor,
   buildLab,
+  fund,
   group,
   idOfCampaign,
   makeDraft,
@@ -1118,6 +1120,202 @@ describe('step 4: launch', () => {
         .rows[0].n,
     ).toBe(0);
     expect((await wiz(lab, w.t.admin).get(`/drafts/${d.id}`)).status).toBe(404);
+  });
+});
+
+describe('step 3: the eligibility check, and the launch refusing what it refuses', () => {
+  async function eligibility(w: Awaited<ReturnType<typeof world>>, groupId: string, o = {}) {
+    const res = await wiz(lab, w.t.admin).post('/eligibility', {
+      templateId: w.template,
+      senderKey: `waba:${w.config}`,
+      audience: { groupIds: [groupId], segmentIds: [], rules: null },
+      variables: { 'body.1': { kind: 'field', field: 'first_name', fallback: 'there' } },
+      ...o,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return wizardEligibilitySchema.parse(res.body);
+  }
+  const launch = (w: Awaited<ReturnType<typeof world>>, d: { id: string; rowVersion: number }) =>
+    wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, { rowVersion: d.rowVersion });
+
+  it('everything passes: contacts counted, template and number fine, pay per message with a funded wallet', async () => {
+    const w = await world(lab, 'bwe1');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(lab, w.t, [{}, {}, {}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const e = await eligibility(w, g);
+    expect(e.state).toBe('pass');
+    expect(e.contacts).toMatchObject({ state: 'pass', code: 'contacts_ok' });
+    expect(e.contacts.chips).toEqual([
+      { key: 'eligible', count: 3 },
+      { key: 'selected', count: 3 },
+      { key: 'optedOut', count: 0 },
+      { key: 'invalidNumber', count: 0 },
+      { key: 'duplicate', count: 0 },
+    ]);
+    expect(e.template).toMatchObject({ state: 'pass', code: 'template_group_ok' });
+    expect(e.template.checks.map((c) => c.code)).toEqual([
+      'template_ok',
+      'sender_ok',
+      'variables_ok',
+    ]);
+    expect(e.billing).toMatchObject({ state: 'pass', code: 'billing_mode_wallet' });
+    expect(e.billing.checks.map((c) => c.code)).toEqual([
+      'billing_mode_wallet',
+      'billing_wallet_present',
+      'billing_ok',
+    ]);
+    // The credit card says the same thing about the same facts.
+    const credit = wizardCreditCheckSchema.parse(
+      (
+        await wiz(lab, w.t.admin).post('/credit-check', {
+          templateId: w.template,
+          audience: { groupIds: [g], segmentIds: [], rules: null },
+        })
+      ).body,
+    );
+    expect(credit.sufficient).toBe(true);
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+    expect((await launch(w, d)).status).toBe(200);
+  });
+
+  it('skipped contacts are counted by reason and make the group warn; one contact in two groups is a merged duplicate', async () => {
+    const w = await world(lab, 'bwe2');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(lab, w.t, [{}, {}, { isUnsubscribed: true }, { phone: '12345' }]);
+    const a = await group(owner(), w.t, 'A', ids);
+    const b = await group(owner(), w.t, 'B', [ids[0]!]);
+    const e = await eligibility(w, a, {
+      audience: { groupIds: [a, b], segmentIds: [], rules: null },
+    });
+    expect(e.contacts).toMatchObject({ state: 'warn', code: 'contacts_some_skipped' });
+    expect(Object.fromEntries(e.contacts.chips.map((c) => [c.key, c.count]))).toEqual({
+      eligible: 2,
+      selected: 4,
+      optedOut: 1,
+      invalidNumber: 1,
+      duplicate: 1,
+    });
+    expect(e.state).toBe('warn');
+  });
+
+  it('zero eligible contacts fails, and the launch refuses with the group and the code', async () => {
+    const w = await world(lab, 'bwe3');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(lab, w.t, [{ isUnsubscribed: true }, { phone: null }]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const e = await eligibility(w, g);
+    expect(e.contacts).toMatchObject({ state: 'fail', code: 'contacts_none_eligible' });
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+    const res = await launch(w, d);
+    expect(res.status).toBe(422);
+    expect(problem(res)).toMatchObject({
+      code: 'CAMP_NO_RECIPIENTS',
+      errors: [{ path: 'eligibility.contacts', message: 'contacts_none_eligible' }],
+    });
+  });
+
+  it('an unapproved template fails; so do a paused one and a template of another WhatsApp Business Account; a number with a red quality rating warns', async () => {
+    const w = await world(lab, 'bwe4');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(lab, w.t, [{}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+
+    await owner().query(`UPDATE wa_templates SET status = 'pending' WHERE uuid = $1`, [w.template]);
+    let e = await eligibility(w, g);
+    expect(e.template).toMatchObject({ state: 'fail', code: 'template_not_approved' });
+    expect(e.state).toBe('fail');
+    await owner().query(`UPDATE wa_templates SET status = 'approved' WHERE uuid = $1`, [
+      w.template,
+    ]);
+
+    await owner().query(
+      `UPDATE wa_templates SET paused_until = now() + interval '1 day', meta_template_id = 'm1', meta_status = 'APPROVED' WHERE uuid = $1`,
+      [w.template],
+    );
+    e = await eligibility(w, g);
+    expect(e.template).toMatchObject({ state: 'fail', code: 'template_paused' });
+    const paused = await launch(w, d);
+    expect(paused.status).toBe(422);
+    expect(problem(paused).errors).toEqual([
+      { path: 'eligibility.template', message: 'template_paused' },
+    ]);
+    await owner().query(`UPDATE wa_templates SET paused_until = NULL WHERE uuid = $1`, [
+      w.template,
+    ]);
+
+    await owner().query(
+      `UPDATE wa_provider_configs SET meta_json = '{"quality_rating":"RED","waba_id":"W1"}'::jsonb WHERE uuid = $1`,
+      [w.config],
+    );
+    e = await eligibility(w, g);
+    expect(e.template).toMatchObject({ state: 'warn', code: 'sender_quality_low' });
+
+    const second = await owner().query(
+      `INSERT INTO wa_provider_configs (org_id, provider, status, phone_number, display_label, connected_at, meta_json)
+       VALUES ($1, 'waba', 'connected', '+15557776666', 'Second', now(), '{"waba_id":"W2"}'::jsonb) RETURNING uuid`,
+      [w.t.orgId],
+    );
+    e = await eligibility(w, g, { senderKey: `waba:${second.rows[0].uuid}` });
+    expect(e.template).toMatchObject({ state: 'fail', code: 'template_other_sender' });
+  });
+
+  it('a variable without a source is a failing row of the template group', async () => {
+    const w = await world(lab, 'bwe5');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(lab, w.t, [{}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const e = await eligibility(w, g, { variables: {} });
+    expect(e.template).toMatchObject({
+      state: 'fail',
+      code: 'variables_incomplete',
+      values: { missing: 1 },
+    });
+  });
+
+  it('pay per message with a balance under the estimate fails, with the wallet verdict the launch uses', async () => {
+    const w = await world(lab, 'bwe6');
+    await payPerMessage(lab, w.t, 1);
+    const ids = await people(lab, w.t, [{}, {}, {}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const e = await eligibility(w, g);
+    expect(e.billing).toMatchObject({ state: 'fail', code: 'billing_wallet_insufficient' });
+    expect(e.billing.values).toMatchObject({ balanceMinor: 1, chargeable: 3 });
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+    const res = await launch(w, d);
+    expect(res.status).toBe(422);
+    expect(problem(res).code).toBe('WALLET_EMPTY');
+  });
+
+  it('plan mode with an allowance that runs out during the send warns; one that covers it passes', async () => {
+    const w = await world(lab, 'bwe7');
+    await owner().query(
+      `INSERT INTO org_plan_state (org_id, overrides) VALUES ($1, '{"limits":{"monthly_messages":3}}'::jsonb)
+       ON CONFLICT (org_id) DO UPDATE SET overrides = EXCLUDED.overrides`,
+      [w.t.orgId],
+    );
+    await fund(lab, w.t.orgId, 1_000_000);
+    const ids = await people(lab, w.t, [{}, {}, {}, {}, {}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    let e = await eligibility(w, g);
+    expect(e.billing).toMatchObject({ state: 'warn', code: 'billing_allowance_runs_out' });
+    expect(e.billing.values).toMatchObject({ chargeable: 2, remaining: 3 });
+    expect(e.state).toBe('warn');
+    const small = await group(owner(), w.t, 'S', ids.slice(0, 2));
+    e = await eligibility(w, small);
+    expect(e.billing).toMatchObject({ state: 'pass', code: 'billing_mode_plan' });
+    expect(e.billing.values).toMatchObject({ remaining: 3, limit: 3, used: 0 });
+  });
+
+  it('a template of another workspace is not found', async () => {
+    const a = await world(lab, 'bwe8a');
+    const b = await world(lab, 'bwe8b');
+    const res = await wiz(lab, b.t.admin).post('/eligibility', {
+      templateId: a.template,
+      audience: { groupIds: [], segmentIds: [], rules: null },
+    });
+    expect(res.status).toBe(422);
   });
 });
 
