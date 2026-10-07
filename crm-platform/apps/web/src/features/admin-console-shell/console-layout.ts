@@ -164,6 +164,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
           'settings-whatsapp',
           'settings-campaigns',
           'settings-google-calendar',
+          'settings-flow-builder',
           'settings-catalog',
           'ai-keys',
         ],

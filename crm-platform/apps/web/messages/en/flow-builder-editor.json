@@ -14,6 +14,14 @@
       "titleAccent": "flows",
       "subtitle": "Build reusable WhatsApp workflows — triggered by events, branched by replies, and measured end-to-end.",
       "useAi": "Use AI prompt",
+      "builder": {
+        "label": "Builder",
+        "title": "Which builder this workspace uses to build flows. Existing flows are not changed.",
+        "inherit": "Platform default ({mode})",
+        "simple": "Simple",
+        "advanced": "Advanced",
+        "saved": "Flow builder changed to {mode}"
+      },
       "create": "Create flow",
       "import": "Import",
       "importTitle": "Import a flow from a .json file",

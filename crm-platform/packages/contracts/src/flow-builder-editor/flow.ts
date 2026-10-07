@@ -158,8 +158,20 @@ export const flowsOverviewSchema = z.object({
   categoryCounts: z.record(z.number().int()),
   featured: flowFeaturedSchema.nullable(),
   templates: z.array(flowTemplateCardSchema),
+  /** The builder this workspace uses: its own override, else the platform default (Admin > Platform settings > Flow builder). */
+  builderMode: z.enum(['simple', 'advanced']).default('advanced'),
+  /** The platform default, shown beside the workspace's override. */
+  platformBuilderMode: z.enum(['simple', 'advanced']).default('advanced'),
+  /** The workspace's own choice; null follows the platform default. */
+  workspaceBuilderMode: z.enum(['simple', 'advanced']).nullable().default(null),
 });
 export type FlowsOverview = z.infer<typeof flowsOverviewSchema>;
+
+/** Flows > Builder: a workspace picks its builder, or `inherit` to follow the platform default again. */
+export const setBuilderModeRequestSchema = z.object({
+  mode: z.enum(['inherit', 'simple', 'advanced']),
+});
+export type SetBuilderModeRequest = z.infer<typeof setBuilderModeRequestSchema>;
 
 // --- detail / save -----------------------------------------------------------------------------------------------
 
