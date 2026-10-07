@@ -87,10 +87,30 @@ turn it on.
    ends `failed` ("Missed its time"), as after any outage; recurring ones move to their next occurrence.
 4. The bridge pull route answers normally again.
 
+## What an allowed workspace can now do (BL-095, phase 1 backend)
+
+Allowing a workspace gives its **Owner and Admin** members (the presets that hold the `wa.devices.*` keys; nobody else by default) the personal-number API
+([api/whatsapp-devices-baileys.md](../api/whatsapp-devices-baileys.md)). The screens come with the web part of phase 1; until then it is reachable over the API.
+
+- **Add a number** (`POST /v2/devices`), up to **2 personal numbers per workspace** during the pilot (a constant, `PILOT_DEVICE_CAP`, in
+  `modules/whatsapp-devices-baileys/device-rules.ts`; the plan's `devices` limit still applies when it is lower, and a plan limit of 0 does not lift the cap).
+- **Link it** by QR or by pairing code, **after each person accepted the risk notice themselves** (current version `2026-10-07.1`, recorded in
+  `device_risk_acknowledgements`: who, when, a hash of the exact text, the locale; append-only). Raising the version in `@crm/contracts` asks everybody again.
+  The notice says, honestly, that this is unofficial, against WhatsApp's terms, that the number can be restricted or banned at any time, that a ban is not covered by support, and that
+  every private chat on the number lands in the shared inbox.
+- **Rename, disconnect, delete**; see its state (`created`, `awaiting_qr`, `awaiting_pairing_code`, `connecting`, `connected`, `disconnected`, `logged_out`, `error`).
+- Limits an operator should know: 5 pairing starts per device per hour, 20 per workspace per day, 10 devices created per workspace per hour; one pairing attempt at a time per device.
+- The sockets run in the **worker**: with no worker a pairing start answers 503 `WA_WORKER_UNAVAILABLE`.
+- **Pilot rule (decision D1)**: add no workspace to the allow-list until counsel has approved the notice text (English and Arabic). The text is a draft.
+- Removing a workspace from the allow-list mid-pairing: its next call is 422 `WA_UNOFFICIAL_DISABLED`, the worker closes its sockets within 20 s, nothing is deleted.
+- To see what happened: `audit_log` (module `devices`) and the outbox events `device.created`, `device.pairing_started`, `device.connected`, `device.disconnected`,
+  `device.logged_out`, `device.deleted`, `device.risk_acknowledged` (no consumer yet: notifications are phase 2).
+- Before a pilot number is linked for real, run [personal-whatsapp-manual-test.md](personal-whatsapp-manual-test.md) on one real phone: nothing here was ever run against a real WhatsApp session.
+
 ## Not covered
 
 - A flow stamped `baileys` is not refused when it is saved; when it runs on a `whatsapp_qr` channel its send fails with `WA_UNOFFICIAL_DISABLED` (a
   prompt ends the run `failed`, a plain message is skipped).
-- The devices API and screens (domain not built yet) must call `UnofficialWhatsappGate.assertEnabledFor(orgId)` (`modules/auth/unofficial-whatsapp.port.ts`).
+- Every route of the devices API (`/v2/devices`, below) calls `UnofficialWhatsappGate.assertEnabledFor(orgId)` first. Anything new that targets the engine must do the same (`modules/auth/unofficial-whatsapp.port.ts`).
 - `GET /api/whatsapp-message-settings` (the bridge's pull) has no workspace: it follows the PLATFORM switch only.
 - Nothing here was run against a real WhatsApp session; the engine is covered with a fake socket.
