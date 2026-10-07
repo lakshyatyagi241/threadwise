@@ -356,6 +356,7 @@ const SHAPERS: Record<string, Shaper> = {
       };
     }),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   buttons: (d) => ({
@@ -367,6 +368,7 @@ const SHAPERS: Record<string, Shaper> = {
         typeof opt === 'string' ? opt : s(isRecord(opt) ? opt.title : undefined, `Option ${i + 1}`),
     })),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   ask: (d) => {
