@@ -37,7 +37,7 @@ import { missingRequired, requiredPropertiesError } from './required-properties'
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { toContactResponse } from './contacts.mapper';
-import { ContactsRepository } from './contacts.repository';
+import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
 const MODULE_KEY = 'contacts';
 const DISPLAY_PREFIX = 'CON';
@@ -81,6 +81,21 @@ export type ResolvedContact =
  *   3. uuid -> internal id resolution at the edge, never deeper
  *   4. optimistic locking on update, 409 on a lost race
  */
+/** A page of a list ordered by a column: the cursor carries the last row's sort value, not its creation time. */
+function buildSortedPage(rows: ContactRow[], limit: number) {
+  const hasMore = rows.length > limit;
+  const items = hasMore ? rows.slice(0, limit) : rows;
+  const last = items[items.length - 1];
+  return {
+    items,
+    page: {
+      nextCursor: hasMore && last ? encodeSortCursor(last.sortKey ?? null, last.id) : null,
+      hasMore,
+      limit,
+    },
+  };
+}
+
 @Injectable()
 export class ContactsService {
   private readonly logger = new Logger(ContactsService.name);
@@ -116,12 +131,16 @@ export class ContactsService {
         limit: query.limit,
         cursor: query.cursor,
         order: query.order,
+        sort: query.sort,
         filter: resolution.filter,
         scope,
         actorUserId: ctx.userId,
       });
 
-      const { items, page } = buildPage(rows, query.limit);
+      const { items, page } =
+        query.sort === 'createdAt'
+          ? buildPage(rows, query.limit)
+          : buildSortedPage(rows, query.limit);
 
       const ids = items.map((i) => i.id);
       const groupChips = query.expand?.includes('groups')

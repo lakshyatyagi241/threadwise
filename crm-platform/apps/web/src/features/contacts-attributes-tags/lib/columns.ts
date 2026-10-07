@@ -36,6 +36,8 @@ export const DEFAULT_FIXED: readonly FixedColumnId[] = [
 export const DEFAULT_ATTRIBUTE_COLUMNS = 2;
 
 export const STORAGE_KEY = 'cat:contacts:columns';
+/** The left-to-right order the person arranged (a list of column ids); absent until they move one. */
+export const ORDER_STORAGE_KEY = 'cat:contacts:column-order';
 
 export interface AttributeColumn {
   key: string;
@@ -120,9 +122,60 @@ export function serializeColumns(ids: readonly ColumnId[]): string {
 export function visibleColumns(
   stored: readonly ColumnId[] | null,
   attributes: readonly AttributeColumn[],
+  order: readonly ColumnId[] | null = null,
 ): ColumnDef[] {
   const chosen = new Set<ColumnId>([...(stored ?? defaultColumns(attributes)), ...LOCKED_COLUMNS]);
-  return allColumns(attributes).filter((c) => chosen.has(c.id));
+  const canonical = allColumns(attributes).filter((c) => chosen.has(c.id));
+  if (!order || order.length === 0) return canonical;
+  // Arranged columns first, in the arranged order; one the person never placed (turned on later, a new attribute)
+  // follows in its usual order. The name column stays first: the checkbox column and the freeze edge sit beside it.
+  const rank = new Map(order.map((id, i) => [id, i] as const));
+  const placed = canonical
+    .filter((c) => rank.has(c.id))
+    .sort((a, b) => rank.get(a.id)! - rank.get(b.id)!);
+  const rest = canonical.filter((c) => !rank.has(c.id));
+  const all = [...placed, ...rest];
+  const locked = all.filter((c) => LOCKED_COLUMNS.includes(c.id));
+  return [...locked, ...all.filter((c) => !LOCKED_COLUMNS.includes(c.id))];
+}
+
+/**
+ * Moves `id` to where `target` is (dragging a header onto another, or the arrow keys). Locked columns neither move nor
+ * can be passed, so nothing lands before the name. Returns the ids to store; the same list when nothing changes.
+ */
+export function moveColumn(
+  visible: readonly ColumnId[],
+  id: ColumnId,
+  target: ColumnId,
+): ColumnId[] {
+  const from = visible.indexOf(id);
+  const to = visible.indexOf(target);
+  if (from < 0 || to < 0 || from === to || LOCKED_COLUMNS.includes(id)) return [...visible];
+  const next = visible.filter((c) => c !== id);
+  const lockedCount = next.filter((c) => LOCKED_COLUMNS.includes(c)).length;
+  next.splice(Math.max(to, lockedCount), 0, id);
+  return next;
+}
+
+/** One step left (-1) or right (1) for the keyboard. */
+export function nudgeColumn(visible: readonly ColumnId[], id: ColumnId, step: -1 | 1): ColumnId[] {
+  const at = visible.indexOf(id);
+  const target = visible[at + step];
+  return at < 0 || target === undefined ? [...visible] : moveColumn(visible, id, target);
+}
+
+/** The API sort a header click asks for; null for columns that cannot be sorted (many values per contact). */
+export function sortKeyOf(id: ColumnId): string | null {
+  if (isAttrId(id)) return /^attr:[a-z0-9_]{1,64}$/.test(id) ? id : null;
+  switch (id) {
+    case 'tags':
+    case 'groups':
+      return null;
+    case 'createdOn':
+      return 'createdAt';
+    default:
+      return id;
+  }
 }
 
 /** Flips one column. The result is what to store; locked columns are left alone. */

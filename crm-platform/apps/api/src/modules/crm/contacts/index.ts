@@ -18,6 +18,7 @@ export {
   contactScopeCondition,
   type ResolvedContactFilter,
 } from './contact-conditions';
+export { contactSelectionWhere } from './contact-selection-where';
 export { ContactResolverService } from './contact-resolver.service';
 export { missingRequired, requiredPropertiesError, isBlank } from './required-properties';
 export type { RequiredRule } from './required-properties';
