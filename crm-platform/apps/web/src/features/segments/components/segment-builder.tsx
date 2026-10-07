@@ -24,7 +24,7 @@ import {
   updateSegment,
   useSegment,
 } from '../api/segments';
-import { useSegmentCatalog } from '../api/lookups';
+import { usePeople, useSegmentCatalog, useTeams } from '../api/lookups';
 import {
   SEGMENT_DESCRIPTION_MAX,
   SEGMENT_NAME_MAX,
@@ -53,10 +53,12 @@ import {
   signature,
   type Group,
 } from '../lib/model';
+import { buildShareOptions, type ShareSelection } from '../lib/share';
 import { summarize } from '../lib/summary';
 import { ROUTES } from '../lib/url';
 import { conditionAtPath, parseRules, toWire } from '../lib/wire';
-import { ArrowLeftIcon, LockIcon, UsersIcon } from './icons';
+import { ArrowLeftIcon, LockIcon, UserCheckIcon, UsersIcon } from './icons';
+import { SharePicker } from './share-picker';
 import { LivePreview } from './live-preview';
 import { ErrorLine, GroupVsSegment } from './parts';
 import { RuleBuilder, Section, type ConditionWarning } from './rule-builder';
@@ -163,6 +165,7 @@ function BuilderForm({
   const t = useTranslations('segments.builder');
   const tf = useTranslations('segments.fields');
   const tv = useTranslations('segments.visibility');
+  const te = useTranslations('segments.errors');
   const tp = useTranslations('segments.problem');
   const router = useRouter();
   const qc = useQueryClient();
@@ -177,6 +180,7 @@ function BuilderForm({
   const [description, setDescription] = useState(initial.description);
   const [color, setColor] = useState(initial.color);
   const [visibility, setVisibility] = useState<SegmentVisibility>(initial.visibility);
+  const [shared, setShared] = useState<ShareSelection>(initial.shared);
   const [rules, setRules] = useState<Group>(initial.rules);
   const dispatch = (a: RuleAction) => setRules((r) => ruleReducer(r, a, catalog));
   const [showProblems, setShowProblems] = useState(false);
@@ -184,11 +188,23 @@ function BuilderForm({
   const [conflict, setConflict] = useState(false);
   const [rulesStale, setRulesStale] = useState(false);
 
-  const form = { name, description, color, visibility, rules };
+  const form = { name, description, color, visibility, shared, rules };
+  const specific = visibility === 'specific';
+  // The people and teams are only fetched once the third option is chosen (the people list is the catalog's own query).
+  const people = usePeople();
+  const teams = useTeams(specific);
+  const shareOptions = useMemo(
+    () => buildShareOptions(people.data, teams.data),
+    [people.data, teams.data],
+  );
   const dirty = formSignature(form) !== initialSignature;
   const guard = useUnsavedGuard(dirty && allowed);
 
-  const problems = useMemo(() => validateForm(form, catalog), [name, description, rules, catalog]); // eslint-disable-line react-hooks/exhaustive-deps
+  const problems = useMemo(
+    () => validateForm(form, catalog),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [name, description, visibility, shared, rules, catalog],
+  );
   const kindOf = useMemo(() => kindLookup(catalog), [catalog]);
   const pruned = useMemo(() => pruneIncomplete(rules, kindOf), [rules, kindOf]);
   const previewRules = useMemo(() => parseRules(toWire(rules, catalog)), [rules, catalog]);
@@ -239,6 +255,9 @@ function BuilderForm({
         setShowProblems(true);
       } else if (kind === 'nameTaken') {
         setServer({ conditions: {}, name: t('nameTaken') });
+      } else if (kind === 'shareEmpty' || kind === 'shareInvalid') {
+        setServer({ conditions: {}, sharedWith: te(kind) });
+        setShowProblems(true);
       } else if (kind === 'rulesInvalid') {
         // Something the rules point at is gone: reload the lookups so the stale conditions are flagged.
         setRulesStale(true);
@@ -274,11 +293,15 @@ function BuilderForm({
   const descriptionError =
     server.description ??
     (showProblems && problems.description ? tp('description.tooLong') : undefined);
+  const shareProblem =
+    server.sharedWith ?? (showProblems && problems.sharedWith ? t('shareRequired') : undefined);
   const rulesProblem =
     server.rules ?? (showProblems && problems.rules ? tp(`rules.${problems.rules}`) : undefined);
   const otherError =
     save.isError &&
-    !['conflict', 'validation', 'nameTaken', 'rulesInvalid'].includes(errorKind(save.error));
+    !['conflict', 'validation', 'nameTaken', 'rulesInvalid', 'shareEmpty', 'shareInvalid'].includes(
+      errorKind(save.error),
+    );
 
   const savedAt = segment
     ? format.dateTime(new Date(segment.updatedAt), { dateStyle: 'medium', timeStyle: 'short' })
@@ -409,38 +432,60 @@ function BuilderForm({
                 <fieldset className="space-y-1.5">
                   <legend className="text-sm font-medium">{t('visibility')}</legend>
                   <div role="radiogroup" aria-label={t('visibility')} className="grid gap-2">
-                    {(['private', 'shared'] as const).map((v) => (
-                      <label
-                        key={v}
-                        className={cn(
-                          'flex cursor-pointer items-start gap-2.5 rounded-md border p-2.5 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
-                          visibility === v
-                            ? 'border-brand bg-brand/5'
-                            : 'border-border hover:bg-muted',
+                    {(['private', 'shared', 'specific'] as const).map((v) => (
+                      <div key={v} className="space-y-2">
+                        <label
+                          className={cn(
+                            'flex cursor-pointer items-start gap-2.5 rounded-md border p-2.5 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
+                            visibility === v
+                              ? 'border-brand bg-brand/5'
+                              : 'border-border hover:bg-muted',
+                          )}
+                        >
+                          <input
+                            type="radio"
+                            name="segment-visibility"
+                            value={v}
+                            checked={visibility === v}
+                            onChange={() => {
+                              setVisibility(v);
+                              if (server.sharedWith)
+                                setServer((x) => ({ ...x, sharedWith: undefined }));
+                            }}
+                            className="mt-1 accent-[var(--brand)]"
+                          />
+                          <span className="min-w-0">
+                            <span className="flex items-center gap-1.5 font-medium">
+                              {v === 'private' ? (
+                                <LockIcon className="size-3.5" />
+                              ) : v === 'shared' ? (
+                                <UsersIcon className="size-3.5" />
+                              ) : (
+                                <UserCheckIcon className="size-3.5" />
+                              )}
+                              {tv(v)}
+                            </span>
+                            <span className="block text-xs text-muted-foreground">
+                              {tv(`${v}Hint`)}
+                            </span>
+                          </span>
+                        </label>
+                        {v === 'specific' && specific && (
+                          <SharePicker
+                            options={shareOptions}
+                            selection={shared}
+                            known={segment?.sharedWith}
+                            loading={people.isLoading || teams.isLoading}
+                            error={shareProblem}
+                            disabled={!allowed}
+                            onChange={(next) => {
+                              setShared(next);
+                              if (server.sharedWith)
+                                setServer((x) => ({ ...x, sharedWith: undefined }));
+                            }}
+                          />
                         )}
-                      >
-                        <input
-                          type="radio"
-                          name="segment-visibility"
-                          value={v}
-                          checked={visibility === v}
-                          onChange={() => setVisibility(v)}
-                          className="mt-1 accent-[var(--brand)]"
-                        />
-                        <span className="min-w-0">
-                          <span className="flex items-center gap-1.5 font-medium">
-                            {v === 'private' ? (
-                              <LockIcon className="size-3.5" />
-                            ) : (
-                              <UsersIcon className="size-3.5" />
-                            )}
-                            {tv(v)}
-                          </span>
-                          <span className="block text-xs text-muted-foreground">
-                            {tv(v === 'private' ? 'privateHint' : 'sharedHint')}
-                          </span>
-                        </span>
-                      </label>
+                      </div>
                     ))}
                   </div>
                 </fieldset>

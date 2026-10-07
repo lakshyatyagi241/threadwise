@@ -6,7 +6,16 @@ import { Alert, Button, ToastProvider, cn } from '@crm/ui';
 import type { Segment, SegmentVisibility } from '../api/schemas';
 import { errorKind, requestIdOf } from '../lib/errors';
 import { countState } from '../lib/hub';
-import { FunnelIcon, GroupIcon, LockIcon, RefreshIcon, UsersIcon, WarningIcon } from './icons';
+import { shareSummary } from '../lib/share';
+import {
+  FunnelIcon,
+  GroupIcon,
+  LockIcon,
+  RefreshIcon,
+  UserCheckIcon,
+  UsersIcon,
+  WarningIcon,
+} from './icons';
 
 /** Toast host for every screen of the domain (one region, translated dismiss label). */
 export function SegmentProviders({ children }: { children: ReactNode }) {
@@ -31,17 +40,42 @@ export function ColorDot({
   );
 }
 
-/** Private (lock) or Shared (people): an outlined chip so the two read apart at a glance. */
-export function VisibilityChip({ visibility }: { visibility: SegmentVisibility }) {
+/**
+ * Private (lock), Shared (people) or Specific people (a person with a tick, and how many): an outlined chip so the three
+ * read apart at a glance. A specific one lists the first names in its tooltip and for assistive technology.
+ */
+export function VisibilityChip({
+  visibility,
+  sharedWith,
+}: {
+  visibility: SegmentVisibility;
+  sharedWith?: Segment['sharedWith'];
+}) {
   const t = useTranslations('segments.visibility');
-  const shared = visibility === 'shared';
+  const specific = visibility === 'specific';
+  const summary = specific && sharedWith ? shareSummary(sharedWith) : null;
+  const names = summary
+    ? summary.names.join(', ') + (summary.more > 0 ? t('andMore', { count: summary.more }) : '')
+    : '';
+  const title = summary
+    ? summary.count === 0
+      ? t('specificNobody')
+      : t('specificTitle', { names })
+    : t(visibility === 'shared' ? 'sharedHint' : 'privateHint');
   return (
     <span
-      title={t(shared ? 'sharedHint' : 'privateHint')}
+      title={title}
       className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-0.5 text-xs font-medium"
     >
-      {shared ? <UsersIcon className="size-3" /> : <LockIcon className="size-3" />}
-      {t(shared ? 'shared' : 'private')}
+      {visibility === 'private' ? (
+        <LockIcon className="size-3" />
+      ) : visibility === 'shared' ? (
+        <UsersIcon className="size-3" />
+      ) : (
+        <UserCheckIcon className="size-3" />
+      )}
+      {specific ? t('specificCount', { count: summary?.count ?? 0 }) : t(visibility)}
+      {summary && summary.count > 0 && <span className="sr-only">{`: ${names}`}</span>}
     </span>
   );
 }
