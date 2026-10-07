@@ -543,7 +543,8 @@
         "no_recipients": "No contacts would receive this broadcast. Widen the audience.",
         "insufficient_balance": "Your wallet balance is too low for this broadcast.",
         "checking_balance": "Checking your wallet balance...",
-        "sender_required": "Pick the WhatsApp number to send from."
+        "sender_required": "Pick the WhatsApp number to send from.",
+        "balance_unavailable": "We could not check your wallet balance. Try again before sending."
       },
       "template": {
         "nameLabel": "Broadcast name",
@@ -867,7 +868,6 @@
           "on_date": "On date",
           "after": "After a number of runs"
         },
-        "endDate": "Last day",
         "endAfter": "Number of runs",
         "nextRuns": "Next runs",
         "noRuns": "The rule has no upcoming runs.",
@@ -876,7 +876,10 @@
         "retryEnd": "Set an end date",
         "retriesInfoWhy": "Retries are only for messages that fail because of Meta's frequency capping (error {code}).",
         "retriesInfoWhen": "They run at exactly {hours}-hour intervals until the end date.",
-        "retriesInfoCost": "No extra cost: you are only charged for a message when it is delivered."
+        "retriesInfoCost": "No extra cost: you are only charged for a message when it is delivered.",
+        "recurringTitle": "Recurring broadcast",
+        "recurringHint": "Send this on a recurring schedule",
+        "occurrences": "runs"
       },
       "words": {
         "now": "Sent right away, once.",
@@ -987,6 +990,19 @@
         },
         "recipients": "{count, plural, one {# recipient} other {# recipients}}",
         "next": "Next run {when}"
+      },
+      "pickers": {
+        "selectDate": "Select date",
+        "selectTime": "Select time",
+        "datePlaceholder": "DD/MM/YYYY",
+        "prevMonth": "Previous month",
+        "nextMonth": "Next month",
+        "cancel": "Cancel",
+        "ok": "OK",
+        "am": "AM",
+        "pm": "PM",
+        "hour": "Hour",
+        "minute": "Minute"
       }
     }
   }

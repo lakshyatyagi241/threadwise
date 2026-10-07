@@ -7,9 +7,10 @@ import {
   WIZARD_RETRY_INTERVAL_HOURS,
   type WizardRetries,
 } from '@crm/contracts';
-import { Alert, Field, Input, Switch } from '@crm/ui';
+import { Alert, Field, Switch } from '@crm/ui';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { WizardCard } from './parts';
+import { DatePicker } from './pickers';
 
 /** "Activate Retries": try again every 24 hours, until an end date, the messages Meta refused for frequency capping. */
 export function RetriesCard({
@@ -49,14 +50,12 @@ export function RetriesCard({
             error={issue ? ti(issue.code) : undefined}
             className="max-w-xs"
           >
-            <Input
+            <DatePicker
               id={`${uid}-end`}
-              type="date"
               value={retries.endDate ?? ''}
-              required
               disabled={disabled}
               invalid={Boolean(issue)}
-              onChange={(e) => onRetries({ ...retries, endDate: e.target.value || null })}
+              onChange={(endDate) => onRetries({ ...retries, endDate: endDate || null })}
             />
           </Field>
         )}

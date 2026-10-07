@@ -3,11 +3,12 @@
 import { useId } from 'react';
 import { useTranslations } from 'next-intl';
 import { dateInZone, type WizardSchedule } from '@crm/contracts';
-import { Field, Input, Select } from '@crm/ui';
+import { Field, Select } from '@crm/ui';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { scheduleForMode, timeZoneOptions } from '../lib/schedule';
 import { ChoiceCard, WizardCard } from './parts';
 import { RecurrencePanel } from './recurrence-panel';
+import { DatePicker, TimePicker } from './pickers';
 
 const MODES = ['now', 'scheduled', 'recurring'] as const;
 
@@ -59,24 +60,22 @@ export function ScheduleCard({
               htmlFor={`${uid}-date`}
               error={dateIssue ? ti(dateIssue.code) : undefined}
             >
-              <Input
+              <DatePicker
                 id={`${uid}-date`}
-                type="date"
                 value={schedule.date}
                 min={safeToday(schedule.timezone, now)}
                 disabled={disabled}
                 invalid={Boolean(dateIssue)}
-                onChange={(e) => onSchedule({ ...schedule, date: e.target.value })}
+                onChange={(date) => onSchedule({ ...schedule, date })}
               />
             </Field>
             <Field label={t('time')} htmlFor={`${uid}-time`}>
-              <Input
+              <TimePicker
                 id={`${uid}-time`}
-                type="time"
                 value={schedule.time}
                 disabled={disabled}
                 invalid={Boolean(dateIssue)}
-                onChange={(e) => onSchedule({ ...schedule, time: e.target.value })}
+                onChange={(time) => onSchedule({ ...schedule, time })}
               />
             </Field>
             <Field label={t('timezone')} htmlFor={`${uid}-zone`}>
