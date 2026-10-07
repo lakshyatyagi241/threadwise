@@ -1,9 +1,9 @@
 {
   "wallet-message-billing": {
     "tile": {
-      "label": "Wallet and statement",
-      "description": "Your message balance, top-ups and the full statement.",
-      "keywords": "wallet balance top up add money credits statement billing"
+      "label": "Expenses, wallet and statement",
+      "description": "Track what you spend: your message balance, top-ups, every charge and the full statement.",
+      "keywords": "wallet balance top up add money credits statement billing expenses expense spend spending charges costs usage transactions history ledger"
     },
     "common": {
       "loading": "Loading",
