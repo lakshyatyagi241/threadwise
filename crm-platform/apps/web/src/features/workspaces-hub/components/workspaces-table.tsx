@@ -70,7 +70,7 @@ export function WorkspacesTable({
   const t = useTranslations('workspaces-hub.list');
   const tc = useTranslations('workspaces-hub.list.columns');
   return (
-    <Card className={cn('overflow-x-auto p-0', rows.length <= 4 && 'min-h-80')}>
+    <Card className="overflow-x-auto p-0">
       <table
         className="w-full min-w-max text-sm"
         aria-label={t('tableLabel')}

@@ -308,13 +308,6 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           {t('sendCampaign')}
         </Button>
 
-        {p.can.import && (
-          <button type="button" onClick={p.onImport} className={trigger}>
-            <UploadIcon className="size-4 text-muted-foreground" />
-            {t('import')}
-          </button>
-        )}
-
         {hasMoreActions && (
           <div className="relative">
             <Menu
