@@ -28,6 +28,8 @@ export interface PhoneInfo {
   id: string;
   verifiedName: string | null;
   displayPhoneNumber: string | null;
+  /** The number exactly as Meta displays it ("+91 91122 90122"), spaces and all. Only a partner that wants Meta's own formatting reads it. */
+  displayPhoneNumberRaw?: string | null;
   qualityRating: string | null;
   messagingLimitTier: string | null;
   codeVerificationStatus: string | null;

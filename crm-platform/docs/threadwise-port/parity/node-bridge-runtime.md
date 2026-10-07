@@ -151,14 +151,24 @@ Reference: Admin > Channel Settings (`/admin/settings/channel-setting`), ours: `
   health card's Node check shows that ("1 worker · 2 devices connected"). With no worker reporting it falls back to the saved-address probe, as before.
 - Not changed: template-kind campaigns on the unofficial engine and Twilio (a Meta template has no plain-text body here); interactive buttons are ignored on these engines.
 
-## Intended difference: the unofficial engine is OFF behind a platform switch (owner decision 2026-10-05)
+## Intended difference: the unofficial engine is OFF behind a platform switch and a per-workspace allow-list (owner decisions 2026-10-05, 2026-10-06)
 
 Reference supports the unofficial WhatsApp engine (personal numbers over Baileys, channel kind `whatsapp_qr`, the `devices` table, the Node bridge) as a
 first-class sender. **We disable it by owner decision.** Only the official route (Meta Cloud API / WABA, directly or through a BSP of the provider
 registry) is supported now. The engine stays in the code, **default OFF**, and only a platform super admin can turn it on in the admin console.
 Status: `intended`. Runbook: [whatsapp-unofficial-switch.md](../../runbooks/whatsapp-unofficial-switch.md).
 
-- **The switch.** `platform_settings` key `wa.unofficial.enabled` (JSON boolean, a missing row is OFF), read through `UnofficialWhatsappSwitch`
+**Two levels (2026-10-06).** The engine is not open to all workspaces: a workspace has access only when the platform switch is ON **and** the workspace is on
+the allow-list `unofficial_whatsapp_workspaces` (migration `20261103090000`; `org_id` PK, `enabled_at`, `enabled_by_operator_id`, `note`; a tenant may read only
+its own row, only the privileged flag writes). No row means off, nothing is inserted, platform-owned workspaces get no special treatment. The platform switch
+stays the global kill-switch. `UnofficialWhatsappGate` has `isEnabledFor(orgId)` / `assertEnabledFor(orgId)` (platform on AND allowed, allow-list cached 5 s,
+dropped at once on a write on that instance) and `enabledOrgIds()` (the allow-list when the platform switch is on, for sweeps that decide per row with
+`org_id = ANY(...)`); `isEnabled()` / `assertEnabled()` answer the platform question only. Every site below that has an orgId (request or row) uses the
+org-aware form; the bridge pull `GET /api/whatsapp-message-settings` has no workspace and follows the platform switch. Admin API (super admin only):
+`GET /v2/platform/node-bridge/unofficial/workspaces`, `GET .../workspace-options`, `PUT .../workspaces/:orgUuid` `{ enabled, note? }`, audited as
+`platform.whatsapp_unofficial.workspace_enabled` / `workspace_disabled`; `GET /v2/platform/node-bridge` carries `unofficialWorkspaceCount`.
+
+- **The platform switch.** `platform_settings` key `wa.unofficial.enabled` (JSON boolean, a missing row is OFF), read through `UnofficialWhatsappSwitch`
   (`modules/auth/platform/unofficial-whatsapp-switch.ts`, injected by the `UNOFFICIAL_WHATSAPP_GATE` token from `modules/auth/unofficial-whatsapp.port.ts`),
   5 s snapshot cache of `PlatformSettingsService`.
 - **API.** `GET /v2/platform/node-bridge` now carries `unofficialEnabled`; `PUT /v2/platform/node-bridge/unofficial` `{ enabled }` (super admin only) returns
@@ -174,10 +184,12 @@ Status: `intended`. Runbook: [whatsapp-unofficial-switch.md](../../runbooks/what
 - **Read surfaces.** The inbox channel list hides `whatsapp_qr` channels (the rows, conversations and the adapter stay; a send on one fails non-retryable with
   `WA_UNOFFICIAL_DISABLED`); the sender pickers of broadcasts, scheduled messages, flows, WooCommerce automations, the warmer page and the store wizard list no
   devices; the dashboard devices card and the analytics devices panel return an empty list with `unofficialDisabled: true`.
-- **Entitlements.** `GET /v2/billing/entitlements` appends the synthetic key `unofficial_whatsapp` for every workspace (platform-owned included) only while on.
-  It is not a plan feature. The plan `devices` limit stays in the catalogue and keeps its value, but only applies while the switch is on.
+- **Entitlements.** `GET /v2/billing/entitlements` appends the synthetic key `unofficial_whatsapp` only when the platform switch is on AND the workspace is on
+  the allow-list (platform-owned workspaces included in the rule, no exemption). It is not a plan feature. The plan `devices` limit stays in the catalogue and keeps its value, but only applies while the switch is on.
 - **Not enforced here.** The flow runtime sends through the channel dispatcher, so a flow on a `whatsapp_qr` channel ends its prompt as failed or skips a plain
   message with `WA_UNOFFICIAL_DISABLED` instead of being refused when the flow is saved (flows keep their `provider` stamp). There is no devices CRUD API yet
-  (`blocked:` the devices domain): it must call `UnofficialWhatsappGate.assertEnabled()` when built.
-- **Evidence.** `test/unit/node-bridge-runtime/unofficial-switch.spec.ts`, `test/e2e/node-bridge-runtime/unofficial-switch.e2e.spec.ts`. The e2e harness starts the
-  older suites with the switch ON (they exercise the engine); the new spec starts with the production default OFF.
+  (`blocked:` the devices domain): it must call `UnofficialWhatsappGate.assertEnabledFor(orgId)` when built.
+- **Evidence.** `test/unit/node-bridge-runtime/unofficial-switch.spec.ts`, `test/e2e/node-bridge-runtime/unofficial-switch.e2e.spec.ts` (admin API, two-workspace
+  enforcement, per-row due sweep, device runtime stopping one workspace's sockets), `test/integration/node-bridge-runtime/unofficial-workspaces-rls.spec.ts`.
+  The e2e harness starts the older suites with the switch ON and every test workspace allowed (a test-only trigger on `organizations`); `unofficialWhatsapp:
+'platform-only'` turns only the platform switch on, `false` leaves both off (the new spec).

@@ -477,7 +477,7 @@
    "cluster": "platform",
    "wave": 3,
    "estDays": 130,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "developer",
    "zone": [
     "apps/api/src/modules/developer-rest-api-v1/",
@@ -494,6 +494,9 @@
     "apps/web/src/app/(admin)/(developer-rest-api-v1)/",
     "apps/web/src/features/developer-rest-api-v1/",
     "apps/web/messages/*/developer-rest-api-v1.json",
+    "apps/web/messages/*/developer-rest-api-v1-docs.json",
+    "apps/web/src/app/(developer-rest-api-v1-docs)/",
+    "apps/web/src/app/docs/",
     "apps/web/e2e/developer-rest-api-v1/",
     "docs/api/developer-rest-api-v1.md",
     "apps/api/src/modules/partner/",

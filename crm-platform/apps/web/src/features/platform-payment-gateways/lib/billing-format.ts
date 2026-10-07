@@ -18,6 +18,8 @@ export function shortMoney(amount: string, currency: string, locale: string): st
       style: 'currency',
       currency,
       notation: 'compact',
+      // No trailing zero: $85, not $85.0 (compact currency otherwise keeps one fraction digit).
+      minimumFractionDigits: 0,
       maximumFractionDigits: 1,
     }).format(Number(amount));
   } catch {

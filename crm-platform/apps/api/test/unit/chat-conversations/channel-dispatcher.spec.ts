@@ -381,3 +381,78 @@ describe('ChannelDispatcher.send: the worker side', () => {
     expect([...redis.store.keys()].some((k) => k.endsWith(':lock'))).toBe(false);
   });
 });
+
+describe('ChannelDispatcher: a WhatsApp group thread is never sent to (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+  const GROUP = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
+  const send = vi.fn(async () => ({ providerMessageId: 'wamid.1', acceptedAt: new Date() }));
+  const whatsapp = {
+    kind: 'whatsapp_cloud',
+    live: true,
+    capabilities: () => ({
+      windowHours: 24,
+      templates: true,
+      reactions: true,
+      typing: true,
+      media: ['image', 'document'],
+    }),
+    windowInfo: () => ({ open: true, expiresAt: null }),
+    send,
+  } as unknown as ChannelAdapter;
+  const wa = () =>
+    channel({ kind: 'whatsapp_cloud', settings: { metered: false } as ChannelSettings });
+  const to = (kind: string, extra: Record<string, unknown>) => ({
+    clientReference: 'ref-g',
+    attempt: 1,
+    to: GROUP,
+    kind,
+    ...extra,
+  });
+  const kinds = [
+    to('text', { body: 'hi' }),
+    to('media', { media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg' } }),
+    to('template', { template: { name: 't', language: 'en', variables: {} } }),
+    to('reaction', { reaction: { providerMessageId: 'wamid.1', emoji: '👍' } }),
+    to('interactive', { interactive: { type: 'location_request', body: 'Where?' } }),
+  ];
+
+  it.each(kinds.map((e) => [e.kind, e] as const))(
+    'refuses a %s at enqueue with a 422 and at send time, never calling the adapter',
+    async (_k, envelope) => {
+      const { dispatcher, guard } = build(whatsapp);
+      const queue = await dispatcher
+        .assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent })
+        .catch((e: unknown) => e as AppError);
+      expect(queue).toBeInstanceOf(AppError);
+      expect((queue as AppError).code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect((queue as AppError).getStatus()).toBe(422);
+      const sent = await dispatcher
+        .send({ channel: wa(), envelope, lastInboundAt: recent })
+        .catch((e: unknown) => e as AppError);
+      expect((sent as AppError).code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect(send).not.toHaveBeenCalled();
+      expect(guard.beforeSend).not.toHaveBeenCalled();
+    },
+  );
+
+  it('refuses even when the window is closed or the channel is not connected: the group reason comes first and is not retryable', async () => {
+    const { dispatcher } = build(whatsapp);
+    const r = await code(
+      dispatcher.assertCanQueue({
+        channel: { ...wa(), status: 'disconnected' },
+        envelope: to('text', { body: 'hi' }),
+        lastInboundAt: null,
+      }),
+    );
+    expect(r).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+  });
+
+  it('a normal phone thread on the same channel still sends through the adapter once', async () => {
+    const { dispatcher } = build(whatsapp);
+    const envelope = { ...text('hello', 'ref-phone'), attempt: 1 };
+    const q = await dispatcher.assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent });
+    expect(q.window.open).toBe(true);
+    const r = await dispatcher.send({ channel: wa(), envelope, lastInboundAt: recent });
+    expect(r.providerMessageId).toBe('wamid.1');
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+});

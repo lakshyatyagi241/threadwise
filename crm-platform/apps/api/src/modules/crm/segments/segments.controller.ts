@@ -67,7 +67,7 @@ export class SegmentsController {
   @ApiOperation({
     summary: 'List the segments the caller can see (newest first)',
     description:
-      'Counts are the cached ones; a list never counts. Private segments are visible to their owner and to callers who can edit every segment.',
+      'Counts are the cached ones; a list never counts. Private segments are visible to their owner and to callers who can edit every segment; `specific` ones also to the people and teams they are shared with.',
   })
   async list(@Query(zodPipe(listSegmentsQuerySchema)) query: ListSegmentsQuery) {
     return this.segments.list(query);
@@ -116,7 +116,7 @@ export class SegmentsController {
   @ApiOperation({
     summary: 'Create a segment',
     description:
-      'Rules that point at a tag, group, stage, status, user or property that does not exist are 422 SEG_RULES_INVALID. A name another segment has is 409 SEG_NAME_TAKEN.',
+      'Rules that point at a tag, group, stage, status, user or property that does not exist are 422 SEG_RULES_INVALID. A name another segment has is 409 SEG_NAME_TAKEN. With visibility `specific`, `sharedWith` must name at least one person or team of this workspace (422 SEG_SHARE_EMPTY / SEG_SHARE_USER_NOT_FOUND / SEG_SHARE_TEAM_NOT_FOUND).',
   })
   async create(@Body(zodPipe(createSegmentSchema)) body: CreateSegmentInput) {
     return this.segments.create(body);
@@ -138,7 +138,7 @@ export class SegmentsController {
   @ApiOperation({
     summary: 'Update a segment',
     description:
-      'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). Callers with an `own` scope may edit only segments they own.',
+      'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). Callers with an `own` scope may edit only segments they own. `sharedWith`, when sent, replaces the people list; sharing never grants edit rights.',
   })
   async update(
     @Param('id', ParseUUIDPipe) id: string,

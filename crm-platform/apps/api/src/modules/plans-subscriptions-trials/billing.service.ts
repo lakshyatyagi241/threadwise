@@ -75,9 +75,11 @@ export class BillingService {
   async entitlementKeys(): Promise<EntitlementsResponse> {
     const e = await this.mustResolve(RequestContextStore.require().orgId);
     const features: string[] = PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k));
-    // `unofficial_whatsapp` is not a plan feature: it is present for every workspace (platform-owned included) only while a
-    // platform super admin has the unofficial engine switched on, and the web hides every personal-number surface without it.
-    if (await this.unofficial.isEnabled()) features.push(UNOFFICIAL_WHATSAPP_FEATURE_KEY);
+    // `unofficial_whatsapp` is not a plan feature: it is present only while the platform switch is on AND a platform super admin
+    // allowed this workspace (owner decision 2026-10-06; platform-owned workspaces get no special treatment), and the web hides
+    // every personal-number surface without it.
+    if (await this.unofficial.isEnabledFor(RequestContextStore.require().orgId))
+      features.push(UNOFFICIAL_WHATSAPP_FEATURE_KEY);
     return { features };
   }
 

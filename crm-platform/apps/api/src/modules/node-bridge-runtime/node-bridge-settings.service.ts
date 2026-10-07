@@ -74,6 +74,7 @@ export class NodeBridgeSettingsService {
       pacing: this.pacingValues(pacing),
       pacingRowVersion: pacing?._rv ?? 0,
       unofficialEnabled: await this.unofficial.isEnabled(),
+      unofficialWorkspaceCount: await this.unofficial.allowedCount(),
     };
   }
 

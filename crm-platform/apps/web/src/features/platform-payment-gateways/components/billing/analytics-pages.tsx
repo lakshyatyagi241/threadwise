@@ -194,7 +194,7 @@ export function BillingAnalyticsPage() {
               <p className="mt-1 text-xs text-muted-foreground">{tb('topPayers.hint')}</p>
             </div>
             <Link
-              href="/admin/workspace-plans"
+              href="/admin/workspaces"
               className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
             >
               {tb('topPayers.all')}
@@ -228,7 +228,7 @@ export function BillingAnalyticsPage() {
                       <td className="px-4 py-3 font-semibold">
                         {w.workspace ? (
                           <Link
-                            href={`/admin/workspace-plans?q=${encodeURIComponent(w.workspace.slug)}`}
+                            href={`/admin/workspaces?q=${encodeURIComponent(w.workspace.slug)}`}
                             className="hover:underline"
                           >
                             {w.workspace.name}

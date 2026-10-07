@@ -68,7 +68,7 @@ export class DashService {
     const { orgId } = RequestContextStore.require();
     const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
     const deviceCap = await this.plans.limit(orgId, 'devices');
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveDashWindow(range, tz, now, custom);
@@ -128,7 +128,7 @@ export class DashService {
         sentDeltaPct: percentChange(current.sent, previous.sent),
         readRateDeltaPp: deltaPp(current.readRate, previous.readRate),
         sparkline: hours.reverse(),
-        funnel: funnelOf(current),
+        funnel: funnelOf(current, previous),
       };
     });
   }
@@ -185,7 +185,7 @@ export class DashService {
   /** The analytics list panels (TW-DASH-026, 028, 030) for the same window rules as the overview. */
   async panels(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsPanels> {
     const { orgId } = RequestContextStore.require();
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
       const w = resolveAnalyticsWindow(q, tz, now);
@@ -218,7 +218,7 @@ export class DashService {
       });
       const idx = Array.from({ length: w.days }, (_, i) => i);
       const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
-      const f = funnelOf(current);
+      const f = funnelOf(current, previous);
       const pf = funnelOf(previous);
       return {
         range: q.range,
@@ -241,6 +241,7 @@ export class DashService {
           queuedPct: percentChange(current.queued, previous.queued),
           repliesPct: percentChange(current.replies, previous.replies),
           replyRatePp: deltaPp(current.replyRate, previous.replyRate),
+          replyRateContactPp: deltaPp(f.replyRate, pf.replyRate),
           endToEndPp: deltaPp(f.endToEnd, pf.endToEnd),
         },
         daily: {
@@ -252,7 +253,11 @@ export class DashService {
         },
         funnel: f,
         types: (await this.repo.types(tx, orgId, w.from, w.to))
-          .map((t) => ({ key: t.key as AnalyticsResponse['types'][number]['key'], count: t.count }))
+          .map((t) => ({
+            key: t.key as AnalyticsResponse['types'][number]['key'],
+            count: t.count,
+            delivered: t.delivered,
+          }))
           .sort((a, b) => b.count - a.count),
         heatmap: await this.repo.heatmap(tx, orgId, w.from, w.to, tz),
       };

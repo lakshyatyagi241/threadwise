@@ -436,7 +436,7 @@ function InvoiceRowView({
           {inv.workspace && (
             <MenuItem
               onSelect={() =>
-                router.push(`/admin/workspace-plans?q=${encodeURIComponent(inv.workspace!.slug)}`)
+                router.push(`/admin/workspaces?q=${encodeURIComponent(inv.workspace!.slug)}`)
               }
             >
               {tc('openWorkspace')}

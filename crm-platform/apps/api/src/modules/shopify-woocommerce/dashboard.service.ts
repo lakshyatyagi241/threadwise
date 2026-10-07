@@ -96,7 +96,7 @@ export class DashboardService {
         this.data.coupons(tx, orgId),
         this.data.offerProducts(tx, orgId, kind),
         kind === 'woocommerce'
-          ? this.data.senders(tx, orgId, await this.unofficial.isEnabled())
+          ? this.data.senders(tx, orgId, await this.unofficial.isEnabledFor(orgId))
           : Promise.resolve([]),
       ]);
       return {

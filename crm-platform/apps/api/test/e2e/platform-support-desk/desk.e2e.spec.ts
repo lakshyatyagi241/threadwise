@@ -974,7 +974,7 @@ describe('platform inbox (TW-SUPP-037..046)', () => {
     expect((await inbox(t, 'get', 'bootstrap')).status).toBe(200);
   });
 
-  it('impersonation: reason of 8+ characters is enforced, the target must exist, and the session start waits for WSP (501)', async () => {
+  it('impersonation: reason of 8+ characters is enforced, the target must exist, and the session starts with a handoff URL', async () => {
     expect(
       (
         await inbox(superToken, 'post', `workspaces/${a.orgUuid}/impersonate`).send({
@@ -991,13 +991,13 @@ describe('platform inbox (TW-SUPP-037..046)', () => {
         ).send({ reason: 'long enough reason' })
       ).status,
     ).toBe(404);
-    expect(
-      (
-        await inbox(superToken, 'post', `workspaces/${a.orgUuid}/impersonate`).send({
-          reason: 'long enough reason',
-        })
-      ).status,
-    ).toBe(501);
+    // The launcher starts the same act-as session as the Workspaces hub (TW-WSP-032): a one-time handoff URL comes back.
+    const started = await inbox(superToken, 'post', `workspaces/${a.orgUuid}/impersonate`).send({
+      reason: 'long enough reason',
+    });
+    expect(started.status).toBe(201);
+    expect(started.body.workspaceId).toBe(a.orgUuid);
+    expect(started.body.handoffUrl).toMatch(/\/impersonate\?code=[\w-]{20,}$/);
     expect(
       (
         await inbox(auditorToken, 'post', `workspaces/${a.orgUuid}/impersonate`).send({

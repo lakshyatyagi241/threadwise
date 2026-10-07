@@ -66,6 +66,9 @@ export function UnofficialCard({ data, canEdit }: { data: NodeBridgeResponse; ca
       </div>
       <p className="max-w-3xl text-sm text-muted-foreground">{t('explanation')}</p>
       <p className="max-w-3xl text-sm">{t(`state.${view.status}`)}</p>
+      <p className="text-sm font-medium" data-testid="unofficial-allowed-count">
+        {t('allowedCount', { count: data.unofficialWorkspaceCount })}
+      </p>
 
       {canEdit && (
         <div className="flex flex-wrap items-center gap-3">
@@ -73,6 +76,7 @@ export function UnofficialCard({ data, canEdit }: { data: NodeBridgeResponse; ca
             variant={view.next ? 'danger' : 'secondary'}
             disabled={change.isPending}
             onClick={() => setDialog(view.next ? 'enable' : 'disable')}
+            id="unofficial-toggle"
             data-testid="unofficial-toggle"
           >
             {t(view.next ? 'enable' : 'disable')}

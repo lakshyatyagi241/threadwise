@@ -1,4 +1,5 @@
-import { evaluateConditions } from './condition';
+import { flbSanitizeConditionGroup } from '@crm/contracts';
+import { evaluateConditions, evaluateConditionTree } from './condition';
 import { askItems, buttonItems, listRows, REPLY_BUTTONS_MAX } from './menus';
 import type { NodeContext, NodeExecutor, NodeResult, OutboundMessage, SendOutcome } from './types';
 
@@ -281,11 +282,15 @@ const condition: NodeExecutor = {
   types: ['Condition'],
   async execute(ctx) {
     const p = ctx.node.props;
-    const met = evaluateConditions(
-      ctx.run.vars,
-      arr(p.conditions) as Parameters<typeof evaluateConditions>[1],
-      arr(p.logicOperators),
-    );
+    // A valid nested `conditionGroup` wins; the flat chain is the fallback (and every pre-existing flow).
+    const met =
+      p.conditionGroup !== undefined && flbSanitizeConditionGroup(p.conditionGroup)
+        ? evaluateConditionTree(ctx.run.vars, p.conditionGroup)
+        : evaluateConditions(
+            ctx.run.vars,
+            arr(p.conditions) as Parameters<typeof evaluateConditions>[1],
+            arr(p.logicOperators),
+          );
     ctx.note(met ? 'condition true' : 'condition false');
     return { kind: 'advance', port: met ? 1 : 2, branch: true };
   },

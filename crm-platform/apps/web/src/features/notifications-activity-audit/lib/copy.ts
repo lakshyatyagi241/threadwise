@@ -2,7 +2,7 @@ import { NOTIFICATION_TYPES, type NotificationResponse } from '@crm/contracts';
 
 /** The slice of next-intl's translator these helpers need (so they can be tested without React). */
 export interface Translator {
-  (key: string, values?: Record<string, string>): string;
+  (key: string, values?: Record<string, string | number>): string;
   has(key: string): boolean;
 }
 
@@ -16,11 +16,12 @@ const text = (v: unknown): string => (typeof v === 'string' ? v : '');
  */
 export function notificationText(
   t: Translator,
-  n: Pick<NotificationResponse, 'type' | 'title' | 'body' | 'data'>,
+  n: Pick<NotificationResponse, 'type' | 'title' | 'body' | 'data' | 'count'>,
 ): { title: string; body: string | null } {
   if (!KNOWN.has(n.type) || !t.has(`types.${n.type}.title`))
     return { title: n.title, body: n.body };
   if (n.type === 'new_lead') return leadText(t, n.data);
+  if (isChatType(n.type)) return conversationText(t, n);
   const task = text(n.data?.taskTitle);
   const actor = text(n.data?.actorName);
   const body = actor
@@ -31,6 +32,77 @@ export function notificationText(
       ? t(`types.${n.type}.bodyNoActor`, { task })
       : task;
   return { title: t(`types.${n.type}.title`), body: body || null };
+}
+
+/** The notification types about a conversation: they toast, ping and open the thread. */
+export const CHAT_NOTIFICATION_TYPES = [
+  'new_chat',
+  'new_message',
+  'conversation_assigned',
+  'mention',
+] as const;
+export type ChatNotificationType = (typeof CHAT_NOTIFICATION_TYPES)[number];
+export function isChatType(type: string): type is ChatNotificationType {
+  return (CHAT_NOTIFICATION_TYPES as readonly string[]).includes(type);
+}
+
+/** The longest preview a bell row, toast or announcement shows (decision D4). */
+export const PREVIEW_MAX = 80;
+
+/** A preview cut to `max` characters (code points, so an emoji is never split) on one line, with an ellipsis when cut. */
+export function clipPreview(value: unknown, max = PREVIEW_MAX): string {
+  const flat = text(value).replace(/\s+/g, ' ').trim();
+  const chars = Array.from(flat);
+  return chars.length <= max
+    ? flat
+    : `${chars
+        .slice(0, max - 1)
+        .join('')
+        .trimEnd()}…`;
+}
+
+/**
+ * The chat types worded from `data.contactName`, `data.preview` and the row's `count`. Every field may be missing (a row from an
+ * older server, a contact with no name), so each has a wording of its own that needs no name.
+ */
+function conversationText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'data' | 'count'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const name = text(d.contactName).trim();
+  const preview = clipPreview(d.preview);
+  const rawCount = n.count ?? d.count;
+  const count = typeof rawCount === 'number' && rawCount >= 1 ? Math.floor(rawCount) : 1;
+  const base = `types.${n.type}`;
+  switch (n.type) {
+    case 'new_message':
+      return {
+        title: name ? t(`${base}.title`, { name, count }) : t(`${base}.titleNoName`, { count }),
+        body: preview || null,
+      };
+    case 'conversation_assigned': {
+      const team = d.teamAssigned === true;
+      const key = `${base}.${team ? 'titleTeam' : 'title'}${name ? '' : 'NoName'}`;
+      const actor = text(d.assignedByName).trim();
+      return {
+        title: name ? t(key, { name }) : t(key),
+        body: actor ? t(`${base}.body`, { actor }) : preview || null,
+      };
+    }
+    case 'mention': {
+      const actor = text(d.authorName).trim();
+      return {
+        title: actor ? t(`${base}.title`, { actor }) : t(`${base}.titleNoName`),
+        body: name && preview ? t(`${base}.body`, { name, preview }) : preview || name || null,
+      };
+    }
+    default:
+      return {
+        title: name ? t(`${base}.title`, { name }) : t(`${base}.titleNoName`),
+        body: preview || null,
+      };
+  }
 }
 
 /** A lead from a lead source: the contact's name and the platform it came from (`data.contactName`, `data.platform`); `returning` for a repeat. */

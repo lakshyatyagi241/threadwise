@@ -25,7 +25,7 @@ export class SqlSenderDirectory implements SenderDirectory {
 
   async resolve(tx: Tx, orgId: number, keys: readonly string[]): Promise<ResolvedSender[]> {
     const out = new Map<string, ResolvedSender>();
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     for (const raw of keys) {
       const key = raw.trim();
       const [engine, uuid] = key.split(':');
@@ -57,12 +57,12 @@ export class SqlSenderDirectory implements SenderDirectory {
     if (
       engine &&
       ENGINES.has(engine) &&
-      (engine !== 'baileys' || (await this.unofficial.isEnabled()))
+      (engine !== 'baileys' || (await this.unofficial.isEnabledFor(orgId)))
     ) {
       return engine;
     }
     // No setting, or `baileys` while the engine is off: the official Cloud API.
-    return (await this.unofficial.isEnabled()) ? 'baileys' : 'waba';
+    return (await this.unofficial.isEnabledFor(orgId)) ? 'baileys' : 'waba';
   }
 
   async resolveForDispatch(
@@ -70,7 +70,7 @@ export class SqlSenderDirectory implements SenderDirectory {
     orgId: number,
     broadcast: { provider: string | null; deviceId: number | null },
   ): Promise<DispatchSender | null> {
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const engine =
       broadcast.provider && ENGINES.has(broadcast.provider)
         ? broadcast.provider

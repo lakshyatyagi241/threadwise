@@ -85,8 +85,8 @@ export class BroadcastsComposeService {
 
   async compose(): Promise<BroadcastCompose> {
     const { orgId } = RequestContextStore.require();
-    // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off.
-    const unofficialOn = await this.unofficial.isEnabled();
+    // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off or the workspace is not allowed.
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const eng = await tx.execute(
         sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,

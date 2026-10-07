@@ -17,6 +17,10 @@ const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
 ) as Record<string, unknown>;
 
+const messagesAr = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'ar', 'team-inbox-conversations.json'), 'utf8'),
+) as Record<string, unknown>;
+
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
@@ -279,6 +283,68 @@ describe('Composer', () => {
   });
 });
 
+describe('Composer on a WhatsApp group thread (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+  const group = (locale: 'en' | 'ar', over: Partial<Parameters<typeof Composer>[0]> = {}) =>
+    renderToStaticMarkup(
+      <NextIntlClientProvider
+        locale={locale}
+        messages={locale === 'en' ? messages : messagesAr}
+        timeZone="UTC"
+      >
+        <Composer
+          conversationId={id(1)}
+          mode="reply"
+          onMode={noop}
+          replyDisabled={false}
+          canReply
+          canNote
+          canAttach
+          canTemplate
+          onTemplate={noop}
+          groupSendBlocked
+          onSend={noop}
+          onNote={() => Promise.resolve(true)}
+          {...over}
+        />
+      </NextIntlClientProvider>,
+    );
+
+  it('switches the reply box off, with the explanation, and offers no attach, template or send', () => {
+    const out = group('en');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toMatch(/<button[^>]*data-testid="inbox-send"[^>]*\sdisabled=""/);
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+    expect(out).toContain('data-testid="inbox-group-send-unavailable"');
+    expect(out).toContain(
+      'Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.',
+    );
+    expect(out).not.toContain('Enter sends');
+  });
+
+  it('says the same in Arabic', () => {
+    const out = group('ar');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('الإرسال إلى مجموعات واتساب غير متاح بعد');
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+  });
+
+  it('leaves internal notes working on a group thread', () => {
+    const out = group('en', { mode: 'note' });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).not.toContain('inbox-group-send-unavailable');
+  });
+
+  it('a normal thread is unchanged: the same props without the flag keep attach, template and the key hint', () => {
+    const out = group('en', { groupSendBlocked: false });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('inbox-file-input');
+    expect(out).toContain('inbox-template-button');
+    expect(out).toContain('Enter sends');
+  });
+});
+
 describe('ConversationList states', () => {
   const props = (over: Partial<Parameters<typeof ConversationList>[0]> = {}) => ({
     list: listReducer(EMPTY_LIST, {
@@ -304,6 +370,27 @@ describe('ConversationList states', () => {
     ...over,
   });
   const render = (p: ReturnType<typeof props>) => html(<ConversationList {...p} />);
+
+  it('the status filter offers Open first, one Resolved (no separate Closed), Pending, Snoozed, Spam and every status', () => {
+    const out = render(props());
+    const options = [...out.matchAll(/<option value="([^"]*)"[^>]*>([^<]*)<\/option>/g)].map(
+      (m) => [m[1], m[2]],
+    );
+    const status = options.filter(([v]) =>
+      ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
+    );
+    expect(status.map(([v]) => v)).toEqual([
+      'open',
+      'pending',
+      'snoozed',
+      'resolved',
+      'spam',
+      'all',
+    ]);
+    expect(status[0]).toEqual(['open', 'Open']);
+    expect(out).not.toContain('Open and pending');
+    expect(out).not.toContain('>Closed<');
+  });
 
   it('tells a workspace with no channel to connect one, with a link', () => {
     const out = render(props());

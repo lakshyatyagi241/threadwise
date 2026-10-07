@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
@@ -12,7 +13,7 @@ import { HelpProvider } from '@/features/help-center';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
 import { WalletAppShell } from '@/features/wallet-message-billing';
-import { NotificationBell } from '@/features/notifications-activity-audit';
+import { LiveNotifications, NotificationBell } from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
 import { MENU_PLANNED_NAV } from '@/features/_registry/planned';
@@ -68,6 +69,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         key={`${session.org.id}:${session.user.id}`}
         url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
       >
+        {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
+        <LiveNotifications />
         <HelpProvider entries={help.entries}>
           <WalletAppShell
             user={{
@@ -81,6 +84,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             navFooter={<WorkspaceSwitcher />}
             banners={
               <>
+                {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                <ImpersonationBanner key="impersonation" />
                 <TrialBar />
                 <AccountBanners key="banners" />
               </>

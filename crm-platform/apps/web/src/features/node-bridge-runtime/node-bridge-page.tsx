@@ -12,6 +12,7 @@ import { unofficialView } from './lib/unofficial';
 import { PacingCard } from './pacing-card';
 import { NODE_BRIDGE_QUERY_KEY } from './queries';
 import { UnofficialCard } from './unofficial-card';
+import { WorkspacesPanel } from './workspaces-panel';
 
 const NS = 'node-bridge-runtime';
 
@@ -49,6 +50,11 @@ export function NodeBridgePage() {
     <div className="mx-auto max-w-5xl space-y-6">
       {!canEdit && <Alert tone="info">{t('page.superOnly')}</Alert>}
       <UnofficialCard data={q.data} canEdit={canEdit} />
+      <WorkspacesPanel
+        platformOn={q.data.unofficialEnabled}
+        workspaceCount={q.data.unofficialWorkspaceCount}
+        canEdit={canEdit}
+      />
       {view.dimRest && (
         <Alert tone="warning" data-testid="unofficial-off-note">
           {t('unofficial.dimNote')}

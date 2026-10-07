@@ -30,7 +30,9 @@ describe('migration checksums ignore line endings', () => {
     expect(acceptedChecksums(LF)[0]).toBe(migrationChecksum(LF));
     expect(acceptedChecksums(LF)).toEqual([...new Set(acceptedChecksums(LF))]);
     expect(acceptedChecksums(LF)).toHaveLength(2);
-    expect(acceptedChecksums('SELECT 1;\r\nSELECT 2;\r\n')).toHaveLength(3);
+    // A pure CRLF file is its own CRLF form, so it has two distinct checksums; the third exists only for mixed line endings.
+    expect(acceptedChecksums('SELECT 1;\r\nSELECT 2;\r\n')).toHaveLength(2);
+    expect(acceptedChecksums('SELECT 1;\r\nSELECT 2;\n')).toHaveLength(3);
   });
 });
 

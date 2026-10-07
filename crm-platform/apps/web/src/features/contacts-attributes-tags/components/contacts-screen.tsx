@@ -14,8 +14,11 @@ import {
   bulkDelete,
   bulkGroupMembership,
   bulkTag,
+  bulkUpdate,
   exportContacts,
+  startCampaignDraft,
   type BulkOutcome,
+  type BulkUpdateValues,
 } from '../api/bulk';
 import {
   contactFilterBody,
@@ -36,6 +39,9 @@ import {
   parseStoredColumns,
   serializeColumns,
   STORAGE_KEY as COLUMNS_KEY,
+  ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
+  moveColumn,
+  nudgeColumn,
   toggleColumn,
   visibleColumns,
 } from '../lib/columns';
@@ -56,8 +62,10 @@ import {
 } from '../lib/selection';
 import { useStoredChoice } from '../lib/use-stored-choice';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
+import { BulkUpdateDialog } from './bulk-update-dialog';
 import { ContactFormModal } from './contact-form-modal';
-import { ContactsGrid, ContactsTable } from './contacts-list';
+import { ContactsKanban } from './contacts-kanban';
+import { ContactsTable } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, filtersOfSegment, segmentOf } from './contacts-toolbar';
 import { SaveSegmentModal } from './save-segment-modal';
@@ -71,8 +79,8 @@ import { GroupModal } from './group-modal';
 import { ImportModal } from './import-modal';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
 
-type View = 'list' | 'grid';
-const VIEWS = ['list', 'grid'] as const;
+type View = 'list' | 'kanban';
+const VIEWS = ['list', 'kanban'] as const;
 const STATS_KEY = 'cat:contacts:stats';
 
 const num = (n: number | undefined) => (n === undefined ? '—' : n.toLocaleString());
@@ -114,6 +122,18 @@ export function ContactsScreen() {
       `${pathname}${filtersToSearch({ ...filters, page: 1, ...patch }, patch.limit ?? sizeDefault)}`,
       { scroll: false },
     );
+  };
+
+  /**
+   * A header click: first A to Z, then Z to A, then back to the default (newest first). The created-on column is the
+   * default itself, so it only flips between newest and oldest.
+   */
+  const onSortColumn = (key: string) => {
+    if (filters.sort !== key) return setFilters({ sort: key, order: 'asc' });
+    if (key === 'createdAt')
+      return setFilters({ order: filters.order === 'desc' ? 'asc' : 'desc' });
+    if (filters.order === 'asc') return setFilters({ order: 'desc' });
+    setFilters({ sort: 'createdAt', order: 'desc' });
   };
 
   // Search is applied 450 ms after typing stops (Reference's rhythm), without a page reload.
@@ -195,6 +215,7 @@ export function ContactsScreen() {
   // layout, columns and the stats strip (remembered per browser)
   const [view, chooseView] = useStoredChoice<View>('cat:contacts:view', VIEWS, 'list');
   const [storedColumns, setStoredColumns] = useStoredValue(COLUMNS_KEY);
+  const [storedOrder, setStoredOrder] = useStoredValue(COLUMN_ORDER_KEY);
   const [statsRaw, setStatsRaw] = useStoredValue(STATS_KEY);
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
@@ -205,8 +226,8 @@ export function ContactsScreen() {
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
   const baseColumns = stored ?? defaultColumns(attributeColumns);
   const columns = useMemo(
-    () => visibleColumns(stored, attributeColumns),
-    [stored, attributeColumns],
+    () => visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
+    [stored, attributeColumns, storedOrder],
   );
   const allCols = useMemo(() => allColumns(attributeColumns), [attributeColumns]);
   const visibleIds = useMemo(() => new Set(columns.map((c) => c.id)), [columns]);
@@ -224,6 +245,7 @@ export function ContactsScreen() {
     consent: filters.consent,
     imported: filters.imported,
     segment: filters.segment,
+    rules: filters.rules,
   };
   const target = (): BulkTarget =>
     pickerRow ? { kind: 'ids', ids: [pickerRow] } : bulkTarget(sel, snapshot);
@@ -237,6 +259,7 @@ export function ContactsScreen() {
   const [groupOpen, setGroupOpen] = useState(false);
   const [saveSegmentOpen, setSaveSegmentOpen] = useState(false);
   const [picker, setPicker] = useState<BulkPicker>(null);
+  const [updateOpen, setUpdateOpen] = useState(false);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
   const closePicker = () => {
@@ -295,6 +318,18 @@ export function ContactsScreen() {
     }
   }
 
+  /** Opens the broadcast wizard on a draft whose audience is the ticked rows (or everything the view matches, after "select all"). */
+  async function onSendCampaign() {
+    setBusy(true);
+    try {
+      router.push(`/campaigns/wizard/${await startCampaignDraft(target())}`);
+    } catch {
+      toast(tb('failed'), 'danger');
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function onBulkDelete() {
     const out = await guarded(() => bulkDelete(target()));
     setConfirmBulkDelete(false);
@@ -311,6 +346,15 @@ export function ContactsScreen() {
     await refresh();
     const name = (groups.data ?? []).find((g) => g.id === groupId)?.name ?? '';
     report(tb(action === 'add' ? 'groupAdded' : 'groupRemoved', { count: out.changed, name }), out);
+    return true;
+  }
+
+  async function onBulkUpdate(values: BulkUpdateValues): Promise<boolean> {
+    const out = await guarded(() => bulkUpdate([...sel.ids], values));
+    if (!out) return false;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(tb('updated', { count: out.changed }), out);
     return true;
   }
 
@@ -481,10 +525,12 @@ export function ContactsScreen() {
         canCreateSegment={canCreateSegments}
         // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
         onSaveAsSegment={
-          canCreateSegments && filtered && !filters.segment
+          canCreateSegments && filtered && !filters.segment && !filters.rules
             ? () => setSaveSegmentOpen(true)
             : undefined
         }
+        rules={filters.rules}
+        onRules={(rules) => setFilters({ rules })}
         tag={filters.tag}
         onTag={(id) => setFilters({ tag: id })}
         tags={tags.data ?? []}
@@ -493,13 +539,13 @@ export function ContactsScreen() {
         stages={stages}
         consent={filters.consent}
         onConsent={(v) => setFilters({ consent: v })}
-        order={filters.order}
-        onOrder={(v) => setFilters({ order: v })}
+        order={filters.sort === 'createdAt' ? filters.order : null}
+        onOrder={(v) => setFilters({ order: v, sort: 'createdAt' })}
         selectedCount={count}
         anySelected={selectedAny}
         busy={busy}
         onClearSelection={() => dispatch({ type: 'clear' })}
-        onSendCampaign={() => toast(t('sendCampaignSoon'), 'info')}
+        onSendCampaign={() => void onSendCampaign()}
         can={{
           update: canUpdate,
           delete: canDelete,
@@ -513,6 +559,9 @@ export function ContactsScreen() {
         onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
         onExportSelected={() => void runExport(target(), setBusy)}
         onImport={() => setImportOpen(true)}
+        onAddColumnField={() => router.push('/contact-properties')}
+        onUpdateSelected={() => setUpdateOpen(true)}
+        updateDisabled={sel.allMatching}
         onDedupe={() => setDedupeOpen(true)}
         onNewGroup={() => setGroupOpen(true)}
         onDeleteSelected={() => setConfirmBulkDelete(true)}
@@ -523,7 +572,10 @@ export function ContactsScreen() {
         allColumns={allCols}
         visibleIds={visibleIds}
         onColumn={(id, on) => setStoredColumns(serializeColumns(toggleColumn(baseColumns, id, on)))}
-        onResetColumns={() => setStoredColumns(null)}
+        onResetColumns={() => {
+          setStoredColumns(null);
+          setStoredOrder(null);
+        }}
         view={view}
         onView={chooseView}
         onRefresh={() => void Promise.all([refresh(), list.refetch()])}
@@ -660,15 +712,43 @@ export function ContactsScreen() {
               columns={columns}
               headerState={header}
               onToggleAll={(checked) => dispatch({ type: 'setMany', ids: rowIds, checked })}
+              sort={{ key: filters.sort, order: filters.order }}
+              onSort={onSortColumn}
+              onMoveColumn={(id, target) =>
+                setStoredOrder(
+                  serializeColumns(
+                    moveColumn(
+                      columns.map((c) => c.id),
+                      id,
+                      target,
+                    ),
+                  ),
+                )
+              }
+              onNudgeColumn={(id, step) =>
+                setStoredOrder(
+                  serializeColumns(
+                    nudgeColumn(
+                      columns.map((c) => c.id),
+                      id,
+                      step,
+                    ),
+                  ),
+                )
+              }
               {...handlers}
             />
           ) : (
-            <div className="thin-scrollbar min-h-0 flex-1 overflow-auto">
-              <ContactsGrid rows={views} {...handlers} />
-            </div>
+            <ContactsKanban
+              filters={filters}
+              stages={stages}
+              toView={(r) => rowView(r, attrLabels)}
+              onStageChange={handlers.onStageChange}
+              stageBusyId={stageBusy}
+            />
           )}
         </div>
-        {!list.isError && (
+        {!list.isError && view === 'list' && (
           <ContactsPagination
             page={list.page}
             total={total}
@@ -706,6 +786,13 @@ export function ContactsScreen() {
         busy={stageBusy !== null}
         onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
         onClose={() => setLostPrompt(null)}
+      />
+      <BulkUpdateDialog
+        open={updateOpen}
+        count={sel.ids.size}
+        busy={busy}
+        onApply={onBulkUpdate}
+        onClose={() => setUpdateOpen(false)}
       />
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
       <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />

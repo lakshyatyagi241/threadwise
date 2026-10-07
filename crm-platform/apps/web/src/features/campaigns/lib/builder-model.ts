@@ -44,6 +44,7 @@ export interface BuilderForm {
   contactIds: string[];
   groupIds: string[];
   tagIds: string[];
+  segmentIds: string[];
   manualNumbers: string;
   csvText: string;
 }
@@ -84,6 +85,7 @@ export const EMPTY_FORM: BuilderForm = {
   contactIds: [],
   groupIds: [],
   tagIds: [],
+  segmentIds: [],
   manualNumbers: '',
   csvText: '',
 };
@@ -219,6 +221,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     contactIds: f.contactIds,
     groupIds: f.groupIds,
     tagIds: f.tagIds,
+    segmentIds: f.segmentIds,
     manualNumbers: f.manualNumbers,
     csvText: f.csvText,
   };
@@ -259,6 +262,7 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
     f.contactIds.length +
     f.groupIds.length +
     f.tagIds.length +
+    f.segmentIds.length +
     f.manualNumbers.trim().length +
     f.csvText.trim().length;
   if (!o.draft && audience === 0) out.push('audience');

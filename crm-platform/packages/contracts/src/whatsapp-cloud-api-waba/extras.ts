@@ -75,9 +75,23 @@ export const WABA_COEXISTENCE_FIELDS = [
   'history',
 ] as const;
 
+/** The four Groups webhook fields (Meta Cloud API Groups); the group ingest handles each one. */
+export const WABA_GROUP_WEBHOOK_FIELDS = [
+  'group_lifecycle_update',
+  'group_participants_update',
+  'group_settings_update',
+  'group_status_update',
+] as const;
+
+/** Every field the platform's Meta app must be subscribed to: coexistence first, then Groups. */
+export const WABA_PLATFORM_WEBHOOK_FIELDS = [
+  ...WABA_COEXISTENCE_FIELDS,
+  ...WABA_GROUP_WEBHOOK_FIELDS,
+] as const;
+
 /** `GET /v2/platform/waba/webhook-status` and the result of `POST /v2/platform/waba/webhook-subscribe` (super admin). */
 export const wabaWebhookStatusSchema = z.object({
-  /** True only when all four coexistence fields are subscribed. */
+  /** True only when every platform field (the four coexistence and the four Groups fields) is subscribed. */
   ok: z.boolean(),
   subscribed: z.array(z.string()),
   missing: z.array(z.string()),

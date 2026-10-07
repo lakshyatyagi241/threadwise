@@ -10,6 +10,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ClerkService } from './clerk.service';
 import { AccountController } from './controllers/account.controller';
+import { ImpersonationController } from './controllers/impersonation.controller';
 import { OnboardingController } from './controllers/onboarding.controller';
 import {
   PlatformAuthController,
@@ -27,12 +28,14 @@ import { UserTokensService } from './flows/user-tokens.service';
 import { WorkspaceSwitchService } from './flows/workspace-switch.service';
 import { AccountGateGuard } from './guards/account-gate.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ImpersonationGuard } from './guards/impersonation.guard';
 import { OperatorGuard } from './guards/operator.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { MailService } from './mail/mail.service';
 import { SecurityHeadersMiddleware } from './middleware-security-headers';
 import { AuthSettingsService } from './platform/auth-settings.service';
 import { ConfiguredOtpSender } from './platform/configured-otp-sender';
+import { ImpersonationService } from './platform/impersonation.service';
 import { OperatorAuthService } from './platform/operator-auth.service';
 import { OtpSenderRegistryService } from './platform/otp-sender-registry.service';
 import { OtpTemplateService } from './platform/otp-template.service';
@@ -57,6 +60,7 @@ import { PasswordService } from './security/password.service';
 import { RateLimitService } from './security/rate-limit.service';
 import { SendPolicyService } from './security/send-policy.service';
 import { UploadPolicyService } from './security/upload-policy.service';
+import { OrgSuspensionService } from './security/org-suspension.service';
 import { WebhookSecretRegistry } from './security/webhook-secret-registry';
 import { TokenService } from './token.service';
 
@@ -78,6 +82,7 @@ import { TokenService } from './token.service';
     RegistrationController,
     AccountController,
     OnboardingController,
+    ImpersonationController,
     PlatformAuthController,
     PlatformSecurityController,
     PlatformSettingsController,
@@ -92,6 +97,7 @@ import { TokenService } from './token.service';
     PermissionsGuard,
     AccountGateGuard,
     OperatorGuard,
+    ImpersonationGuard,
     // sessions
     SessionService,
     EpochService,
@@ -111,6 +117,7 @@ import { TokenService } from './token.service';
     // security services
     AuthAuditService,
     AccountGateService,
+    OrgSuspensionService,
     CaptchaService,
     MfaService,
     PasswordService,
@@ -130,6 +137,7 @@ import { TokenService } from './token.service';
     SecurityPolicyService,
     AuthSettingsService,
     OperatorAuthService,
+    ImpersonationService,
     SecurityCenterService,
     // sign-up OTP delivery: the sender registry, the real sender behind OTP_SENDER_PORT,
     // the activation rule and the template flow (TW-AUTH-006/007)
@@ -149,9 +157,12 @@ import { TokenService } from './token.service';
     // the operator guard and what it needs, for other domains' /v2/platform controllers (PLAN)
     OperatorGuard,
     OperatorAuthService,
+    // operator impersonation: the start call of the workspaces domain and the inbox launcher
+    ImpersonationService,
     SessionService,
     EpochService,
     AccountGateService,
+    OrgSuspensionService,
     PasswordService,
     // the invite-by-link member flows (WSP): mail, one-time tokens and the one place a session is opened
     MailService,

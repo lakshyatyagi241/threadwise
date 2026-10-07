@@ -7,6 +7,7 @@ const err = (code: string, status = 403) => new ApiError(status, code, 'x', 'req
 describe('gate error mapping', () => {
   it.each([
     ['AUTH_ACCOUNT_SUSPENDED', '/suspended'],
+    ['WSP_ORG_SUSPENDED', '/suspended'],
     ['AUTH_PASSWORD_CHANGE_REQUIRED', '/account/security?required=password'],
     ['AUTH_MFA_ENROLMENT_REQUIRED', '/account/security?required=mfa'],
     ['AUTH_EMAIL_UNVERIFIED', '/verify-email-required'],

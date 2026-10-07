@@ -39,14 +39,14 @@
         "unread": "غير مقروءة"
       },
       "statusFilter": "الحالة",
-      "statusOpen": "مفتوحة ومعلّقة",
+      "statusOpen": "مفتوحة",
       "statusAll": "كل الحالات",
       "status": {
         "open": "مفتوحة",
         "pending": "معلّقة",
         "snoozed": "مؤجلة",
         "resolved": "تم حلها",
-        "closed": "مغلقة",
+        "closed": "تم حلها",
         "spam": "رسائل مزعجة"
       },
       "priority": {
@@ -130,7 +130,8 @@
       "network": "تعذّر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.",
       "generic": "حدث خطأ ما. حاول مرة أخرى.",
       "genericWithId": "حدث خطأ ما. حاول مرة أخرى. المرجع: {id}",
-      "templateNotSendable": "لا يمكن إرسال هذا القالب في هذه المحادثة. اختر قالبًا آخر."
+      "templateNotSendable": "لا يمكن إرسال هذا القالب في هذه المحادثة. اختر قالبًا آخر.",
+      "groupSendUnavailable": "الإرسال إلى مجموعات واتساب غير متاح بعد. ردّ من تطبيق WhatsApp Business."
     },
     "bubble": {
       "kind": {
@@ -221,7 +222,8 @@
       "send": "إرسال",
       "addNote": "إضافة ملاحظة",
       "hint": "Enter للإرسال. Shift+Enter لسطر جديد.",
-      "template": "إرسال قالب"
+      "template": "إرسال قالب",
+      "groupSendUnavailable": "الإرسال إلى مجموعات واتساب غير متاح بعد. ردّ من تطبيق WhatsApp Business."
     },
     "panel": {
       "tabsLabel": "الملاحظات والسجل الزمني",

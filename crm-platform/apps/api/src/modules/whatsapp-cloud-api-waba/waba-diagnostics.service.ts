@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  WABA_COEXISTENCE_FIELDS,
+  WABA_PLATFORM_WEBHOOK_FIELDS,
   type WabaInboundCheck,
   type WabaInboundVerdict,
   type WabaWebhookConfig,
@@ -23,13 +23,14 @@ import { WabaConnectService } from './waba-connect.service';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { inboundUrlKey, verifyTokenFor, webhookUrl } from './waba-rules';
 
-const REQUIRED = [...WABA_COEXISTENCE_FIELDS];
+/** The four coexistence fields and the four Groups fields. */
+const REQUIRED = [...WABA_PLATFORM_WEBHOOK_FIELDS];
 const trim = (s: string, n: number) => s.replace(/\s+/g, ' ').trim().slice(0, n);
 const same = (a: string, b: string) =>
   a.replace(/\/+$/, '').toLowerCase() === b.replace(/\/+$/, '').toLowerCase();
 
 /**
- * Webhook diagnostics (TW-WABA-002, 003, 015): is the platform's Meta app subscribed to the fields coexistence needs, subscribe the
+ * Webhook diagnostics (TW-WABA-002, 003, 015): is the platform's Meta app subscribed to the fields coexistence and Groups need, subscribe the
  * missing ones, and ask Meta where one number's events actually go. Every Meta call has a timeout and happens in the request.
  * A check that cannot finish is a result (`error`), not an exception, so the panel always has something to show.
  */
@@ -104,7 +105,7 @@ export class WabaDiagnosticsService {
   }
 
   /**
-   * Subscribes the app to every coexistence field, keeping each field it already has and the callback Meta has on file (this
+   * Subscribes the app to every coexistence and Groups field, keeping each field it already has and the callback Meta has on file (this
    * platform's own when it has none). Meta checks the callback during the call, with the token the webhook handshake compares.
    */
   async subscribeFields(): Promise<WabaWebhookStatus> {

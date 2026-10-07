@@ -2,6 +2,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { FLOW_AI_PORT } from '../../../src/infra/providers/flow-builder-editor/flow-ai.port';
 import type { HttpFlowAiAdapter } from '../../../src/infra/providers/flow-builder-editor/http-flow-ai.adapter';
+import { PlatformSettingsService } from '../../../src/modules/auth';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { FlowReaderService } from '../../../src/modules/flow-builder-editor';
 import { FlowTriggerService } from '../../../src/modules/flow-runtime-engine';
@@ -2171,6 +2172,76 @@ describe('acceptance: save, trigger columns, keyword matching, publish, gates, p
       'flb.flows.read',
       'flb.flows.update',
     ]);
+  });
+
+  it('a workspace picks its own flow builder; inherit follows the platform default again; one workspace never changes another', async () => {
+    const o = await api.signup('flbm');
+    const p = await api.signup('flbn');
+    const overview = async (who: string) => (await api.as(who).get('/v2/flows/overview')).body;
+
+    expect(await overview(o.admin)).toMatchObject({
+      builderMode: 'advanced',
+      platformBuilderMode: 'advanced',
+      workspaceBuilderMode: null,
+    });
+
+    const set = await api.as(o.admin).put('/v2/flows/builder-mode').send({ mode: 'simple' });
+    expect(set.status).toBe(200);
+    expect(set.body).toMatchObject({ builderMode: 'simple', workspaceBuilderMode: 'simple' });
+    expect(await overview(o.admin)).toMatchObject({
+      builderMode: 'simple',
+      platformBuilderMode: 'advanced',
+      workspaceBuilderMode: 'simple',
+    });
+    expect(await overview(p.admin)).toMatchObject({
+      builderMode: 'advanced',
+      workspaceBuilderMode: null,
+    });
+
+    // The same choice twice writes nothing more; the change itself is audited once.
+    await api.as(o.admin).put('/v2/flows/builder-mode').send({ mode: 'simple' });
+    const audited = await h.owner.query(
+      `SELECT count(*)::int AS n FROM audit_log WHERE org_id = $1 AND module = 'flow_builder_settings'`,
+      [o.orgId],
+    );
+    expect(audited.rows[0]).toEqual({ n: 1 });
+
+    // A platform default that changes is followed by a workspace with no choice, and ignored by one that has chosen.
+    await h.owner.query(
+      `INSERT INTO platform_settings (key, value, is_secret) VALUES ('set.flowBuilder', $1, false)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [JSON.stringify({ mode: 'simple', _rv: 1 })],
+    );
+    h.app.get(PlatformSettingsService, { strict: false }).invalidate();
+    try {
+      expect(await overview(p.admin)).toMatchObject({
+        builderMode: 'simple',
+        platformBuilderMode: 'simple',
+        workspaceBuilderMode: null,
+      });
+      const back = await api.as(o.admin).put('/v2/flows/builder-mode').send({ mode: 'advanced' });
+      expect(back.body).toMatchObject({
+        builderMode: 'advanced',
+        workspaceBuilderMode: 'advanced',
+      });
+      const inherit = await api.as(o.admin).put('/v2/flows/builder-mode').send({ mode: 'inherit' });
+      expect(inherit.body).toMatchObject({ builderMode: 'simple', workspaceBuilderMode: null });
+    } finally {
+      await h.owner.query(`DELETE FROM platform_settings WHERE key = 'set.flowBuilder'`);
+      h.app.get(PlatformSettingsService, { strict: false }).invalidate();
+    }
+  });
+
+  it('the builder choice needs the update key and rejects a mode that does not exist', async () => {
+    const o = await api.signup('flbo');
+    const reader = await api.member(o, 'reader', [['flb.flows.read']]);
+    const editor = await api.member(o, 'editor', [['flb.flows.read'], ['flb.flows.update']]);
+    const put = (who: string, mode: string) =>
+      api.as(who).put('/v2/flows/builder-mode').send({ mode });
+    expect((await put(reader.token, 'simple')).status).toBe(403);
+    expect((await put(editor.token, 'simple')).status).toBe(200);
+    expect((await put(o.admin, 'both')).status).toBe(422);
+    expect((await put(o.admin, '')).status).toBe(422);
   });
 
   it('TW-FLB-028 #3: with the plan feature `automation` off the page data still loads (soft paywall) but creating or editing is 422 PLAN_FEATURE_LOCKED; pause, unpublish and delete stay open', async () => {
