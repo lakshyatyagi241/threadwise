@@ -1,4 +1,5 @@
 import { decideClose, isMismatch, QR_MIN_GAP_MS, QR_STALL_MS, shortStatus } from './close-policy';
+import type { DeviceStateReason } from '@crm/contracts';
 import type { RuntimeStatus } from './device-status';
 import type {
   GroupSnapshot,
@@ -44,6 +45,8 @@ export interface StatusReport {
   code?: string;
   /** The exact label for `pair_failed` (`Pair failed: connection replaced`). */
   reason?: string;
+  /** The reason CODE for the state beside `status` (a 403 is `forbidden`, any other logout `unlinked_on_phone`; spec R8). */
+  stateReason?: DeviceStateReason;
 }
 
 /** What a session needs from the runtime around it. */
@@ -349,7 +352,12 @@ export class DeviceSession {
         this.shouldStayConnected = false;
         this.clearTimers();
         await this.factory.deleteSession(this.ids.orgId, this.ids.deviceId);
-        await this.host.report({ status: 'logged_out', progress: 0 });
+        // The code is kept as the reason: a refusal (403) can mean a restriction, an unlink (401) is the person removing the link.
+        await this.host.report({
+          status: 'logged_out',
+          progress: 0,
+          stateReason: code === 403 ? 'forbidden' : 'unlinked_on_phone',
+        });
         this.host.ended();
         return;
       case 'reset-session':

@@ -22,6 +22,27 @@ describe('proxy: referral cookie (WD-AUTH-005)', () => {
     expect(cookie).toContain('Path=/');
   });
 
+  it('turns /pricing?ref=abcd-1234 into crm_ref=ABCD1234 (WD-CPN-030)', () => {
+    const cookie = get('/pricing?ref=abcd-1234').headers.get('set-cookie') ?? '';
+    expect(cookie).toContain('crm_ref=ABCD1234');
+    expect(cookie.toLowerCase()).toContain('httponly');
+    expect(cookie.toLowerCase()).toContain('samesite=lax');
+  });
+
+  it('replaces the stored code when a later visit carries a different one (last touch wins)', () => {
+    const res = get('/pricing?ref=second2', { cookie: 'crm_ref=FIRST1' });
+    const cookie = res.headers.get('set-cookie') ?? '';
+    expect(cookie).toContain('crm_ref=SECOND2');
+    expect(cookie).not.toContain('FIRST1');
+  });
+
+  it('keeps the stored code when a later visit carries none or an unusable one', () => {
+    expect(get('/pricing', { cookie: 'crm_ref=FIRST1' }).headers.get('set-cookie')).toBeNull();
+    expect(
+      get('/pricing?ref=***', { cookie: 'crm_ref=FIRST1' }).headers.get('set-cookie'),
+    ).toBeNull();
+  });
+
   it('works on a page other than sign-up (the visitor may click around first)', () => {
     expect(get('/login?ref=AB12')?.headers.get('set-cookie')).toContain('crm_ref=AB12');
     expect(get('/forgot-password?ref=zz9')?.headers.get('set-cookie')).toContain('crm_ref=ZZ9');

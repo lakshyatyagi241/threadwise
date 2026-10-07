@@ -1,4 +1,5 @@
 import { ChannelError, type OutboundEnvelope } from '../chat-conversations/channel.port';
+import { assertNotGroupPeer } from './group-peer';
 import { META_FAILURE } from './meta-errors';
 import { whatsappMediaMessage, type PreparedWhatsappMedia } from './media';
 
@@ -15,6 +16,8 @@ export type MetaMessageBody = Record<string, unknown>;
 const digits = (to: string): string => to.replace(/\D+/g, '');
 
 export function metaRecipient(to: string): string {
+  // A group thread's key must never be stripped to digits and sent to a stranger (WABA_GROUP_SEND_UNAVAILABLE).
+  assertNotGroupPeer(to);
   const d = digits(to);
   if (d.length < 4 || d.length > 20) {
     throw new ChannelError(

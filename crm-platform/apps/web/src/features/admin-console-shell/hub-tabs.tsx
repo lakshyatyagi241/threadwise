@@ -2,9 +2,15 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { MAX_TABS } from './console-layout';
-import { activeStatusBadge, formatCount, type ConsoleGroup, type ConsoleLeaf } from './console-nav';
+import {
+  activeStatusBadgeInfo,
+  formatCount,
+  type ConsoleGroup,
+  type ConsoleLeaf,
+} from './console-nav';
 import type { ConsoleCounts } from './console-counts';
 
 const tabClass = (active: boolean) =>
@@ -62,7 +68,7 @@ export function HubTabs({
   const tab = (leaf: ConsoleLeaf) => {
     const active = leaf.id === activeId;
     const count = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
-    const status = activeStatusBadge(leaf, counts);
+    const status = activeStatusBadgeInfo(leaf, counts);
     return (
       <Link
         key={leaf.id}
@@ -83,9 +89,13 @@ export function HubTabs({
         {status && (
           <span
             data-testid={`status-${leaf.id}`}
-            className="rounded-full bg-warning/25 px-1.5 text-[0.6875rem] font-medium leading-4"
+            data-tone={status.tone}
+            className={cn(
+              'rounded-full px-1.5 text-[0.6875rem] font-medium leading-4',
+              status.tone === 'warning' ? 'bg-warning/25' : 'bg-muted text-muted-foreground',
+            )}
           >
-            {t(status)}
+            {t(status.labelKey)}
           </span>
         )}
       </Link>
@@ -93,42 +103,120 @@ export function HubTabs({
   };
 
   return (
+    <div className="-mx-4 mb-4 flex items-end gap-1 border-b border-border px-4 md:-mx-6 md:px-6">
+      <TabScroller label={label} activeId={activeId}>
+        {inBar.map(tab)}
+      </TabScroller>
+      {more.length > 0 && (
+        <MoreMenu
+          active={moreActive}
+          activeId={activeId}
+          label={tc('moreTabs')}
+          items={more.map((leaf) => ({
+            id: leaf.id,
+            href: leaf.href,
+            text: leaf.label ?? t(leaf.labelKey),
+          }))}
+        />
+      )}
+    </div>
+  );
+}
+
+/** The scrolling row of tabs; the open tab is brought into view (a narrow screen shows only a few of them). */
+function TabScroller({
+  label,
+  activeId,
+  children,
+}: {
+  label: string;
+  activeId: string | null;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    ref.current
+      ?.querySelector('[aria-current="page"]')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [activeId]);
+  return (
     <nav
+      ref={ref}
       aria-label={label}
       data-testid="hub-tabs"
-      className="-mx-4 mb-4 flex items-end gap-1 overflow-x-auto border-b border-border px-4 md:-mx-6 md:px-6"
+      className="flex min-w-0 flex-1 items-end gap-1 overflow-x-auto"
     >
-      {inBar.map(tab)}
-      {more.length > 0 && (
-        <details className="group relative">
-          <summary
-            className={cn(
-              tabClass(moreActive),
-              'cursor-pointer list-none [&::-webkit-details-marker]:hidden',
-            )}
-          >
-            {tc('moreTabs')}
-            <span aria-hidden="true" className="text-xs">
-              ▾
-            </span>
-          </summary>
-          <div className="absolute end-0 top-full z-10 mt-1 flex min-w-48 flex-col rounded-md border border-border bg-background p-1 shadow-lg">
-            {more.map((leaf) => (
-              <Link
-                key={leaf.id}
-                href={leaf.href}
-                aria-current={leaf.id === activeId ? 'page' : undefined}
-                className={cn(
-                  'rounded-md px-3 py-1.5 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-                  leaf.id === activeId && 'bg-muted font-medium',
-                )}
-              >
-                {leaf.label ?? t(leaf.labelKey)}
-              </Link>
-            ))}
-          </div>
-        </details>
-      )}
+      {children}
     </nav>
+  );
+}
+
+/**
+ * The tabs that did not fit (module pages added at run time). Outside the scrolling row, so the list is not clipped by it; it closes
+ * on a pick, on Escape, on a click elsewhere and whenever another page opens.
+ */
+function MoreMenu({
+  active,
+  activeId,
+  label,
+  items,
+}: {
+  active: boolean;
+  activeId: string | null;
+  label: string;
+  items: ReadonlyArray<{ id: string; href: string; text: string }>;
+}) {
+  // Opening another page closes the menu: the open state remembers which page it was opened on.
+  const [openOn, setOpenOn] = useState<string | null | false>(false);
+  const open = openOn === activeId;
+  const setOpen = (v: boolean | ((o: boolean) => boolean)) =>
+    setOpenOn((cur) => ((typeof v === 'function' ? v(cur === activeId) : v) ? activeId : false));
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpenOn(false);
+    const onDown = (e: PointerEvent) => {
+      if (!box.current?.contains(e.target as Node)) setOpenOn(false);
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onDown);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onDown);
+    };
+  }, [open]);
+  return (
+    <div ref={box} className="relative shrink-0">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen((v) => !v)}
+        className={cn(tabClass(active), 'cursor-pointer')}
+      >
+        {label}
+        <span aria-hidden="true" className="text-xs">
+          ▾
+        </span>
+      </button>
+      {open && (
+        <div className="absolute end-0 top-full z-20 mt-1 flex min-w-48 flex-col rounded-md border border-border bg-background p-1 shadow-lg">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              aria-current={item.id === activeId ? 'page' : undefined}
+              onClick={() => setOpen(false)}
+              className={cn(
+                'rounded-md px-3 py-1.5 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+                item.id === activeId && 'bg-muted font-medium',
+              )}
+            >
+              {item.text}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

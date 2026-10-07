@@ -4,6 +4,8 @@ import {
   flbCleanAskFileExtensions,
   type FlbAskGiveUp,
 } from './ask-media';
+import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
+import { flbSanitizeConditionGroup } from './condition-group';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -355,6 +357,7 @@ const SHAPERS: Record<string, Shaper> = {
       };
     }),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   buttons: (d) => ({
@@ -366,16 +369,28 @@ const SHAPERS: Record<string, Shaper> = {
         typeof opt === 'string' ? opt : s(isRecord(opt) ? opt.title : undefined, `Option ${i + 1}`),
     })),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
-  ask: (d) => ({
-    question: s(d.prompt),
-    variable: flbCleanVarName(d.var, 'answer'),
-    acceptMedia: toBool(d.acceptMedia),
-    expectedAnswers: list(coalesce(d.options, d.expected, []))
-      .map((v) => (typeof v === 'string' ? v.trim() : ''))
-      .filter((v) => v !== ''),
-  }),
+  ask: (d) => {
+    const retries = isNil(d.retries) ? 0 : toInt(d.retries);
+    const mode = s(d.onFail, 'continue');
+    return {
+      question: s(d.prompt),
+      variable: flbCleanVarName(d.var, 'answer'),
+      acceptMedia: toBool(d.acceptMedia),
+      expectedAnswers: list(coalesce(d.options, d.expected, []))
+        .map((v) => (typeof v === 'string' ? v.trim() : ''))
+        .filter((v) => v !== ''),
+      // The checked answer (not WaDesk: its Ask saved "Validate as" and never read it). `maxRetries` 0 keeps asking, as the console does.
+      inputType: flbCleanAskInputType(d.validate),
+      dateFormat: flbCleanDateFormat(d.dateFormat),
+      wrongReplyText: s(d.wrongReply).trim(),
+      maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
+      onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
+      savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+    };
+  },
 
   // Not WaDesk nodes (WD-FLB-081, 082): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
   ask_file: (d) => ({
@@ -407,7 +422,12 @@ const SHAPERS: Record<string, Shaper> = {
         })
       : [{ variable: flbCleanVarName(d.var, ''), operator: s(d.op, 'equals'), value: s(d.value) }];
     const first = conditions[0] ?? { variable: '', operator: 'equals', value: '' };
+    // The optional nested tree (beyond WaDesk): sanitised, and absent when the node only has the flat chain.
+    const conditionGroup = flbSanitizeConditionGroup(d.conditionGroup, (v) =>
+      flbCleanVarName(v, ''),
+    );
     return {
+      ...(conditionGroup ? { conditionGroup } : {}),
       conditions,
       logicOperators: list(d.operators).map((o) => (s(o).toUpperCase() === 'OR' ? 'OR' : 'AND')),
       variable: first.variable,

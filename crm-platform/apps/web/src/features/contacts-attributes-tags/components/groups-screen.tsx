@@ -7,14 +7,17 @@ import { Button } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { ContactGroup } from '../api/schemas';
 import { GroupModal } from './group-modal';
+import { ImportModal } from './import-modal';
 import { GroupsPanel } from './groups-panel';
-import { PlusIcon } from './icons';
+import { PlusIcon, UploadIcon } from './icons';
 
 /** `/contact-groups`: the Groups view as its own screen (WD-CON-033). */
 export function GroupsScreen() {
   const t = useTranslations('contacts-attributes-tags.groups');
   const session = useSession();
   const canManage = useCan('record.contacts.update');
+  const canImport = useCan('record.contacts.import');
+  const [importing, setImporting] = useState<ContactGroup | 'any' | null>(null);
   const [editing, setEditing] = useState<ContactGroup | 'new' | null>(null);
 
   return (
@@ -34,6 +37,11 @@ export function GroupsScreen() {
           >
             {t('allContacts')}
           </Link>
+          {canImport && (
+            <Button variant="secondary" onClick={() => setImporting('any')}>
+              <UploadIcon /> {t('import')}
+            </Button>
+          )}
           {canManage && (
             <Button onClick={() => setEditing('new')}>
               <PlusIcon /> {t('newGroup')}
@@ -42,7 +50,11 @@ export function GroupsScreen() {
         </div>
       </div>
 
-      <GroupsPanel onCreate={() => setEditing('new')} onEdit={setEditing} />
+      <GroupsPanel
+        onCreate={() => setEditing('new')}
+        onEdit={setEditing}
+        onImport={canImport ? setImporting : undefined}
+      />
 
       <div className="grid gap-4 lg:grid-cols-3">
         {(['one', 'two', 'three'] as const).map((k, i) => (
@@ -56,6 +68,12 @@ export function GroupsScreen() {
         ))}
       </div>
 
+      <ImportModal
+        requireGroup
+        open={importing !== null}
+        groupId={importing === null || importing === 'any' ? undefined : importing.id}
+        onClose={() => setImporting(null)}
+      />
       <GroupModal
         open={editing !== null}
         group={editing === 'new' || editing === null ? undefined : editing}

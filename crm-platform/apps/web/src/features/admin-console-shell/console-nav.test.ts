@@ -4,6 +4,7 @@ import type { ConsoleHub } from './console-layout';
 import {
   activeLeafId,
   activeStatusBadge,
+  activeStatusBadgeInfo,
   buildConsoleNav,
   CONSOLE_NAV_ITEMS,
   emptySection,
@@ -229,6 +230,19 @@ describe('status badges', () => {
     // switch on, or the settings could not be read: no badge
     expect(activeStatusBadge(leaf!, {})).toBeNull();
     expect(activeStatusBadge(leaf!, { unofficialOff: 0 })).toBeNull();
+  });
+
+  it('says "No workspaces" (neutral) when the switch is on and the allow-list is empty; "Not supported" wins while off', () => {
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.noWorkspaces',
+      tone: 'neutral',
+    });
+    expect(activeStatusBadgeInfo(leaf!, { unofficialOff: 1, unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.notSupported',
+      tone: 'warning',
+    });
+    expect(activeStatusBadgeInfo(leaf!, {})).toBeNull();
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 0 })).toBeNull();
   });
 
   it('leaves every other page without one', () => {

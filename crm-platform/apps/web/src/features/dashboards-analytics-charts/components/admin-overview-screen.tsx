@@ -218,7 +218,7 @@ function Overview({ data }: { data: AdminOverview }) {
           className="xl:col-span-2"
           action={
             <Link
-              href="/admin/workspace-plans"
+              href="/admin/workspaces"
               className="text-sm font-medium text-primary underline-offset-2 hover:underline"
             >
               {t('overview.workspaces.viewAll')}

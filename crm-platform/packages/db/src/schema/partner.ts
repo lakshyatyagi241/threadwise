@@ -1,4 +1,6 @@
+import { sql } from 'drizzle-orm';
 import {
+  check,
   foreignKey,
   index,
   integer,
@@ -90,7 +92,10 @@ export const apiKeys = pgTable(
     name: text('name').notNull(),
     keyPrefix: text('key_prefix').notNull(),
     keyHash: text('key_hash').notNull(),
-    signingSecretEnc: text('signing_secret_enc').notNull(),
+    /** Null for a `bearer` key (WaDesk's plain key has no request signature). */
+    signingSecretEnc: text('signing_secret_enc'),
+    /** `signed`: the partner scheme (`ApiKey <prefix>.<secret>` + HMAC). `bearer`: WaDesk's customer key (`wsk_...`, sha256). */
+    kind: text('kind').notNull().default('signed'),
     scopes: text('scopes').array().notNull().default([]),
     status: apiKeyStatusEnum('status').notNull().default('active'),
     rateLimitPerMinute: integer('rate_limit_per_minute').notNull().default(120),
@@ -113,6 +118,12 @@ export const apiKeys = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     index('idx_api_keys_org_status').on(t.orgId, t.status),
+    index('idx_api_keys_org_kind_created').on(t.orgId, t.kind, t.createdAt.desc(), t.id.desc()),
+    check('chk_api_keys_kind', sql`${t.kind} in ('signed', 'bearer')`),
+    check(
+      'chk_api_keys_signing_secret',
+      sql`${t.kind} = 'bearer' or ${t.signingSecretEnc} is not null`,
+    ),
   ],
 );
 

@@ -5,7 +5,7 @@ MFA for super admins). Every operator role may read; only `super_admin` may writ
 `application/problem+json` with a stable `code`.
 
 A settings **group** is one typed document edited as a page. Groups: `general`, `branding`, `site`, `mail`, `seo`, `privacy`,
-`analytics`, `customCode`, `pwa`, `storage`, `realtime`, and `googleCalendar` (the Google OAuth client every workspace connects its
+`analytics`, `customCode`, `pwa`, `storage`, and `googleCalendar` (the Google OAuth client every workspace connects its
 calendar through: `enabled`, `clientId`, `redirectUri`, secret `clientSecret`; the group's `extra.redirectUri` is the address to register at Google;
 see [appointments-booking.md](appointments-booking.md#google-calendar-wd-appt-012-028-029-d-08)). Field lists are the zod schemas in
 `packages/contracts/src/platform-settings-branding-storage/groups.ts`.
@@ -29,7 +29,7 @@ The hub: which groups are saved, which need a connection test, key numbers.
 }
 ```
 
-`needsTest`: a testable group (mail, storage, real-time) that is configured (mail with a host, the others enabled) and has no
+`needsTest`: a testable group (mail, storage) that is configured (mail with a host, the others enabled) and has no
 successful test yet.
 
 ## GET /groups/:group
@@ -95,9 +95,13 @@ Response: the same shape as GET.
 ```
 
 Redaction comes from the secret flag and a per-group list of account identifiers (storage `accessKeyId`, mail `username`,
-analytics `posthogKey` and `mixpanelToken`, real-time `appKey`), not from key-name patterns. Audited as `platform.settings.exported`.
+analytics `posthogKey` and `mixpanelToken`), not from key-name patterns. Audited as `platform.settings.exported`.
 
-## POST /mail/test, /storage/test, /realtime/test (super admin)
+> Removed 2026-10-07 (owner decision): the `realtime` (Pusher) group, `POST /realtime/test` and the `realtime` flag of the public site
+> config. Real-time runs on our Socket.IO gateway ([realtime.md](realtime.md)) and nothing read the saved Pusher values. Migration
+> `20261105090000_remove_pusher_realtime_settings` deletes the stored `set.realtime*` rows.
+
+## POST /mail/test, /storage/test (super admin)
 
 Always use the SAVED settings. Answer `200 { "ok": boolean, "message": string }` (WaDesk used 422 on failure; the page shows the
 message either way). Mail takes `{ "to": "me@acme.test" }`.
@@ -106,15 +110,14 @@ message either way). Mail takes `{ "to": "me@acme.test" }`.
 username or password`, `the server refused the connection`, ...), never server text.
 - Storage: writes `<basePath>/connection-tests/<random>.txt` to the bucket with a hand-signed S3 request, then deletes it.
   Failure: `Connection failed: HTTP 403 AccessDenied` (the provider's error code, never the body).
-- Real-time: fires a `ping` event at Pusher's REST API.
 
 A success is remembered (clears "needs test"); every test writes `platform.settings.<group>_test` with status success or failure.
 
 ## Public (no authentication)
 
 - `GET /v2/public/site-config`: brand (name, URL, favicon, logos with paper fallback, font, platform footer), defaults, maintenance
-  flag, `themeCss`, SEO tags, footer, cookie banner, tracker ids (non-empty only), custom code (empty unless enabled), PWA flag,
-  real-time flag. Built field by field; never echoes a stored document.
+  flag, `themeCss`, SEO tags, footer, cookie banner, tracker ids (non-empty only), custom code (empty unless enabled), PWA flag.
+  Built field by field; never echoes a stored document.
 - `GET /v2/public/manifest.webmanifest`: 404 until the PWA switch is on.
 - `GET /v2/public/robots.txt`: from the SEO robots directive; a `Sitemap:` line only when the app URL is set.
 

@@ -24,6 +24,7 @@ const data = (unofficialEnabled: boolean): NodeBridgeResponse =>
     },
     pacingRowVersion: 2,
     unofficialEnabled,
+    unofficialWorkspaceCount: 0,
   }) as unknown as NodeBridgeResponse;
 
 const page = (unofficialEnabled: boolean, locale: 'en' | 'ar', role?: 'super_admin' | 'admin') =>

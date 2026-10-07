@@ -63,6 +63,7 @@ const toPhone = (p: RawPhone): PhoneInfo => ({
   verifiedName: p.verified_name ?? null,
   // Meta formats the number for display ("+91 91122 90122"); everything downstream wants digits and a plus.
   displayPhoneNumber: p.display_phone_number ? p.display_phone_number.replace(/\s+/g, '') : null,
+  displayPhoneNumberRaw: p.display_phone_number ?? null,
   qualityRating: p.quality_rating ?? null,
   messagingLimitTier: p.messaging_limit_tier ?? null,
   codeVerificationStatus: p.code_verification_status ?? null,

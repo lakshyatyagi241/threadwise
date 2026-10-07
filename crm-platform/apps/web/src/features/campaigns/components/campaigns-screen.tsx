@@ -181,6 +181,15 @@ export function CampaignsScreen() {
               </Button>
               {canCreate && (
                 <Link
+                  href="/campaigns/wizard"
+                  className="inline-flex h-10 items-center gap-2 rounded-full border border-brand bg-background px-4 text-xs font-semibold text-brand hover:bg-brand/10"
+                >
+                  <PlusIcon className="size-3.5" />
+                  {t('createBroadcast')}
+                </Link>
+              )}
+              {canCreate && (
+                <Link
                   href="/campaigns/create"
                   className="inline-flex h-10 items-center gap-2 rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
                 >

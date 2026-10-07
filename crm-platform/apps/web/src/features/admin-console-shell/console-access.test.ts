@@ -21,6 +21,8 @@ describe('what the menu offers each operator role', () => {
     expect(pageVisibleTo('support', 'platform-analytics')).toBe(false);
     expect(pageVisibleTo('auditor', 'platform-analytics')).toBe(true);
     expect(pageVisibleTo('auditor', 'webhook-forwarding')).toBe(false);
+    expect(pageVisibleTo('support', 'settings-whatsapp')).toBe(false);
+    expect(pageVisibleTo('auditor', 'settings-whatsapp')).toBe(false);
   });
 
   it('only restricts pages that exist', () => {

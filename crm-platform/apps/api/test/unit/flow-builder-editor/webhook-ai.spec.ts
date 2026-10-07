@@ -37,6 +37,10 @@ describe('SSRF guard (WD-FLB-024 rule 7)', () => {
       'fe80::1',
       'ff02::1',
       '::ffff:10.0.0.1',
+      '::ffff:7f00:1', // IPv4-mapped loopback in the hex form Node writes
+      '::ffff:a9fe:a9fe', // IPv4-mapped metadata address, hex
+      '64:ff9b::7f00:1', // NAT64 of loopback
+      '2002:7f00:1::1', // 6to4 of loopback
       '2001:db8::1',
     ]) {
       expect(isPublicIp(ip), ip).toBe(false);
@@ -51,6 +55,26 @@ describe('SSRF guard (WD-FLB-024 rule 7)', () => {
     ]) {
       expect(isPublicIp(ip), ip).toBe(true);
     }
+  });
+
+  it.each(['http://[::ffff:127.0.0.1]/', 'http://[::ffff:169.254.169.254]/latest/meta-data/'])(
+    'refuses %s (Node writes the mapped literal in hex)',
+    async (url) => {
+      const v = await guardSsrf(url, async () => PUBLIC);
+      expect(v.ok).toBe(false);
+      if (!v.ok) expect(v.reason).toContain('private/reserved IP');
+    },
+  );
+
+  it('refuses a name that resolves to a hex-mapped loopback address', async () => {
+    const v = await guardSsrf('http://rebind.example/', async () => [
+      ...PUBLIC,
+      { address: '::ffff:7f00:1', family: 6 },
+    ]);
+    expect(v).toEqual({
+      ok: false,
+      reason: 'host resolves to a private/reserved IP (::ffff:7f00:1)',
+    });
   });
 
   it('refuses a metadata endpoint literal with the exact WaDesk message', async () => {

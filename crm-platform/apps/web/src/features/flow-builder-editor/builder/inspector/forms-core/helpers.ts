@@ -158,7 +158,7 @@ export function senderHint(channel: SenderChannel, unofficial = false): LinkedCo
     case 'facebook':
       return {
         before: 'Required — which connected Facebook Page this flow runs on. Connect one on ',
-        href: '/devices',
+        href: '/facebook',
         after: '.',
       };
     case 'line':
@@ -183,7 +183,7 @@ export function senderHint(channel: SenderChannel, unofficial = false): LinkedCo
       return {
         before:
           'Required — which linked mailbox this flow runs on. Replies are sent from that address. Link one on ',
-        href: '/devices',
+        href: '/settings/channels',
         after: '.',
       };
     default:
@@ -225,14 +225,14 @@ export function senderNoneCopy(channel: SenderChannel, unofficial = false): Link
       return {
         before:
           'No Facebook Page is connected to this workspace yet. You can still build and save this flow — connect one on ',
-        href: '/devices',
+        href: '/facebook',
         after: ' and pick it here before publishing.',
       };
     case 'email':
       return {
         before:
           'No mailbox is linked to this workspace yet. You can still build and save this flow — link one on ',
-        href: '/devices',
+        href: '/settings/channels',
         after: ' and pick it here before publishing.',
       };
     default:

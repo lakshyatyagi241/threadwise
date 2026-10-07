@@ -113,6 +113,7 @@ const audienceFields = {
   contactIds: z.array(uuidSchema).max(100_000).default([]),
   groupIds: z.array(uuidSchema).max(1_000).default([]),
   tagIds: z.array(uuidSchema).max(1_000).default([]),
+  segmentIds: z.array(uuidSchema).max(1_000).default([]),
   /** One per line, or separated by commas or semicolons. */
   manualNumbers: z.string().max(500_000).default(''),
   /** The text of an uploaded CSV (`name,country_code,phone` plus any attribute columns). */
@@ -164,6 +165,7 @@ export const updateCampaignSchema = z
     contactIds: audienceFields.contactIds.optional(),
     groupIds: audienceFields.groupIds.optional(),
     tagIds: audienceFields.tagIds.optional(),
+    segmentIds: audienceFields.segmentIds.optional(),
     manualNumbers: audienceFields.manualNumbers.optional(),
     csvText: audienceFields.csvText.optional(),
   })
@@ -212,6 +214,8 @@ export const campaignSchema = z.object({
   status: z.enum(CAMPAIGN_STATUSES),
   provider: z.string().nullable(),
   abTesting: z.boolean(),
+  /** Made by the "Create broadcast" wizard (a draft of it resumes there, not in the classic builder). */
+  wizard: z.boolean().default(false),
   scheduleType: z.enum(CAMPAIGN_SCHEDULE_TYPES),
   sendDate: z.string().nullable(),
   sendTime: z.string().nullable(),

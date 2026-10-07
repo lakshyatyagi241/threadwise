@@ -8,6 +8,7 @@ import {
   IMPORT_MAX_BYTES,
   IMPORT_REJECT_REASONS,
   type ImportField,
+  GROUP_NAME_MAX,
 } from '@crm/contracts';
 import {
   Alert,
@@ -23,7 +24,7 @@ import {
 } from '@crm/ui';
 import { useStatusOptions } from '../api/attributes';
 import { invalidateContacts, KEYS } from '../api/contacts';
-import { useGroups } from '../api/groups';
+import { createGroup, useGroups } from '../api/groups';
 import {
   downloadRejects,
   getImportJob,
@@ -61,7 +62,22 @@ type Mapping = Partial<Record<ImportField, number | null>>;
  * would create, the plan's remaining quota. Set the values every imported contact gets, upload, follow a large
  * import to the end, download the rejected rows.
  */
-export function ImportModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ImportModal({
+  open,
+  onClose,
+  groupId,
+  requireGroup = false,
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** Preselects the group every imported contact joins (the Groups screen's per-group Import). */
+  groupId?: string;
+  /**
+   * The import must name its group: an existing one or a new name (the Groups screen). The file's own group column is then ignored
+   * unless it is mapped again, so one import never quietly makes or fills several groups.
+   */
+  requireGroup?: boolean;
+}) {
   const t = useTranslations('contacts-attributes-tags.import');
   return (
     <Modal
@@ -72,12 +88,22 @@ export function ImportModal({ open, onClose }: { open: boolean; onClose: () => v
       title={t('title')}
       closeLabel={t('close')}
     >
-      {open && <ImportBody onClose={onClose} />}
+      {open && (
+        <ImportBody onClose={onClose} initialGroupId={groupId} requireGroup={requireGroup} />
+      )}
     </Modal>
   );
 }
 
-function ImportBody({ onClose }: { onClose: () => void }) {
+function ImportBody({
+  onClose,
+  initialGroupId,
+  requireGroup,
+}: {
+  onClose: () => void;
+  initialGroupId?: string;
+  requireGroup: boolean;
+}) {
   const t = useTranslations('contacts-attributes-tags.import');
   const ts = useTranslations('contacts-attributes-tags.form');
   const qc = useQueryClient();
@@ -88,12 +114,19 @@ function ImportBody({ onClose }: { onClose: () => void }) {
   const statusOptions = useStatusOptions();
 
   const [file, setFile] = useState<File | null>(null);
-  const [mapping, setMapping] = useState<Mapping>({});
+  // With a required group the file's own group column starts ignored (null): the chosen group is the only one that applies.
+  const baseMapping: Mapping = requireGroup ? { group: null } : {};
+  const [mapping, setMapping] = useState<Mapping>(baseMapping);
   const [fileError, setFileError] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState('');
   const [source, setSource] = useState('');
-  const [groupId, setGroupId] = useState('');
+  const [groupId, setGroupId] = useState(initialGroupId ?? '');
+  const [groupModeChoice, setGroupMode] = useState<'existing' | 'new'>('existing');
+  const [newGroupName, setNewGroupName] = useState('');
+  // With no group to pick, a new one is the only choice (what the form shows is what the import does).
+  const groupMode: 'existing' | 'new' =
+    groups.isSuccess && groups.data.length === 0 ? 'new' : groupModeChoice;
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [jobId, setJobId] = useState<string | null>(null);
 
@@ -122,7 +155,14 @@ function ImportBody({ onClose }: { onClose: () => void }) {
   });
 
   const start = useMutation({
-    mutationFn: () => startImport(file!, options),
+    mutationFn: async () => {
+      // A new group is made first (creating a name that already exists returns that group), then every contact joins it.
+      if (requireGroup && groupMode === 'new') {
+        const made = await createGroup({ name: newGroupName.trim() });
+        return startImport(file!, { ...options, groupId: made.id });
+      }
+      return startImport(file!, options);
+    },
     onSuccess: (job) => setJobId(job.id),
   });
 
@@ -168,7 +208,7 @@ function ImportBody({ onClose }: { onClose: () => void }) {
       setFileError(true);
       return;
     }
-    setMapping({});
+    setMapping(baseMapping);
     setFile(next);
   }
 
@@ -183,8 +223,15 @@ function ImportBody({ onClose }: { onClose: () => void }) {
   }
 
   const p = preview.data;
+  // A required group is chosen (an existing one or a typed new name) before the import can start.
+  const groupChosen =
+    !requireGroup || (groupMode === 'existing' ? groupId !== '' : newGroupName.trim() !== '');
   const ready =
-    file !== null && p !== undefined && p.missingRequired.length === 0 && p.totals.valid > 0;
+    file !== null &&
+    p !== undefined &&
+    p.missingRequired.length === 0 &&
+    p.totals.valid > 0 &&
+    groupChosen;
   const overQuota =
     p !== undefined && p.quota.remaining !== null && p.totals.willCreate > p.quota.remaining;
   const mb = Math.round(IMPORT_MAX_BYTES / (1024 * 1024));
@@ -293,27 +340,91 @@ function ImportBody({ onClose }: { onClose: () => void }) {
               onChange={(e) => setSource(e.target.value)}
             />
           </Field>
-          <Field
-            className="sm:col-span-2"
-            label={t('group')}
-            htmlFor={`${uid}-group`}
-            hint={groups.isError ? undefined : t('groupHint')}
-            error={groups.isError ? t('groupsFailed') : undefined}
-          >
-            <Select
-              id={`${uid}-group`}
-              value={groupId}
-              disabled={groups.isError}
-              onChange={(e) => setGroupId(e.target.value)}
+          {requireGroup ? (
+            <fieldset className="space-y-2 sm:col-span-2">
+              <legend className="text-sm font-medium">
+                {t('groupRequired')} <span className="text-danger">*</span>
+              </legend>
+              <div
+                role="radiogroup"
+                aria-label={t('groupRequired')}
+                className="flex flex-wrap gap-4 text-sm"
+              >
+                {(groups.data ?? []).length > 0 && (
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`${uid}-gm`}
+                      checked={groupMode === 'existing'}
+                      onChange={() => setGroupMode('existing')}
+                    />
+                    {t('groupExisting')}
+                  </label>
+                )}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name={`${uid}-gm`}
+                    checked={groupMode === 'new'}
+                    onChange={() => setGroupMode('new')}
+                  />
+                  {t('groupNew')}
+                </label>
+              </div>
+              {groupMode === 'existing' ? (
+                <Select
+                  id={`${uid}-group`}
+                  aria-label={t('groupExisting')}
+                  value={groupId}
+                  disabled={groups.isError}
+                  invalid={file !== null && groupId === ''}
+                  onChange={(e) => setGroupId(e.target.value)}
+                >
+                  <option value="">{t('groupPick')}</option>
+                  {(groups.data ?? []).map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.name}
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                <Input
+                  id={`${uid}-group-new`}
+                  aria-label={t('groupNewPlaceholder')}
+                  value={newGroupName}
+                  maxLength={GROUP_NAME_MAX}
+                  placeholder={t('groupNewPlaceholder')}
+                  invalid={file !== null && newGroupName.trim() === ''}
+                  onChange={(e) => setNewGroupName(e.target.value)}
+                />
+              )}
+              <p className="text-xs text-muted-foreground">
+                {groups.isError ? t('groupsFailed') : t('groupRequiredHint')}
+              </p>
+            </fieldset>
+          ) : (
+            <Field
+              className="sm:col-span-2"
+              label={t('group')}
+              htmlFor={`${uid}-group`}
+              hint={groups.isError ? undefined : t('groupHint')}
+              error={groups.isError ? t('groupsFailed') : undefined}
             >
-              <option value="">{t('none')}</option>
-              {(groups.data ?? []).map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.name}
-                </option>
-              ))}
-            </Select>
-          </Field>
+              <Select
+                id={`${uid}-group`}
+                value={groupId}
+                disabled={groups.isError}
+                onChange={(e) => setGroupId(e.target.value)}
+              >
+                <option value="">{t('none')}</option>
+                {(groups.data ?? []).map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.name}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          )}
           {(tags.data ?? []).length > 0 && (
             <fieldset className="space-y-1.5 sm:col-span-2">
               <legend className="text-sm font-medium">{t('tags')}</legend>

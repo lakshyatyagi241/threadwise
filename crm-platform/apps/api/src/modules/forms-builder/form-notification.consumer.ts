@@ -15,7 +15,11 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { NotificationsRepository } from '../notifications';
+import {
+  NotificationPublisher,
+  NotificationsRepository,
+  type WrittenNotification,
+} from '../notifications';
 
 export const FORM_NOTIFY_EVENTS = ['form.submitted', 'form.needs_review'] as const;
 
@@ -68,6 +72,7 @@ export class FormNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     config: ConfigService<Env, true>,
     @Optional() @Inject(MAIL_PORT) private readonly mail?: MailPort,
+    @Optional() private readonly publisher?: NotificationPublisher,
   ) {
     this.webUrl = config.get('WEB_APP_URL', { infer: true }).replace(/\/+$/, '');
     this.brand = config.get('APP_NAME', { infer: true });
@@ -139,6 +144,7 @@ export class FormNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     },
   ): Promise<void> {
     if (recipients.length === 0) return;
+    const pending: WrittenNotification[] = [];
     await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const users = await tx.execute(sql`
         SELECT id FROM users
@@ -148,9 +154,14 @@ export class FormNotificationConsumer implements OutboxSubscriber, OnModuleInit 
             sql`, `,
           )})`);
       for (const u of users.rows as Array<{ id: number | string }>) {
-        await this.repo.insertOnce(tx, event.orgId, { userId: Number(u.id), ...note });
+        const written = await this.repo.insertReturning(tx, event.orgId, {
+          userId: Number(u.id),
+          ...note,
+        });
+        if (written) pending.push(written);
       }
     });
+    for (const row of pending) await this.publisher?.created(event.orgId, row);
   }
 
   private async emailAll(

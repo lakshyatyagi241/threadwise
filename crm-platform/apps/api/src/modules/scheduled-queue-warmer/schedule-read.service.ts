@@ -178,7 +178,7 @@ export class ScheduleReadService {
   async options(minLeadMinutes: number): Promise<ScheduleOptions> {
     const { orgId } = RequestContextStore.require();
     // No personal-number senders are offered while the platform switch is off (owner decision 2026-10-05).
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const devices = await tx.execute(sql`
         SELECT uuid, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number, warmer_config

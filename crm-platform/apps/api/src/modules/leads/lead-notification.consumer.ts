@@ -1,4 +1,4 @@
-import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, Optional, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -6,7 +6,11 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { NotificationsRepository } from '../notifications';
+import {
+  NotificationPublisher,
+  NotificationsRepository,
+  type WrittenNotification,
+} from '../notifications';
 
 export const LEAD_NOTIFY_EVENTS = ['lead.created', 'lead.updated'] as const;
 
@@ -43,6 +47,7 @@ export class LeadNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     private readonly db: DatabaseService,
     private readonly repo: NotificationsRepository,
     private readonly registry: OutboxSubscriberRegistry,
+    @Optional() private readonly publisher?: NotificationPublisher,
   ) {}
 
   onModuleInit(): void {
@@ -64,6 +69,7 @@ export class LeadNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     const platform = plain(str(p.platform) ?? 'a lead source', 60);
     const sourceName = plain(str(p.sourceName) ?? '', 120);
 
+    const pending: WrittenNotification[] = [];
     await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const users = await tx.execute(sql`
         SELECT id, uuid FROM users
@@ -73,7 +79,7 @@ export class LeadNotificationConsumer implements OutboxSubscriber, OnModuleInit 
             sql`, `,
           )})`);
       for (const u of users.rows as Array<{ id: number | string; uuid: string }>) {
-        const written = await this.repo.insertOnce(tx, event.orgId, {
+        const written = await this.repo.insertReturning(tx, event.orgId, {
           userId: Number(u.id),
           type: 'new_lead',
           title: returning ? 'Lead came in again' : 'New lead',
@@ -85,9 +91,11 @@ export class LeadNotificationConsumer implements OutboxSubscriber, OnModuleInit 
           dedupeKey: leadDedupeKey(leadEventId),
         });
         if (written) {
+          pending.push(written);
           this.logger.debug({ orgId: event.orgId, eventId: event.id }, 'lead notification written');
         }
       }
     });
+    for (const row of pending) await this.publisher?.created(event.orgId, row);
   }
 }

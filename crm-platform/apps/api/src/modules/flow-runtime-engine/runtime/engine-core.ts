@@ -1,7 +1,7 @@
 import { FLOW_MAX_NODE_VISITS, type FlowRunEndReason, type FlowRunStatus } from '@crm/contracts';
 import { edgeFrom, nodeById } from '../graph/runtime-graph';
 import { CORE_EXECUTORS } from './nodes';
-import { routeReply } from './reply-router';
+import { propertyToSave, routeReply } from './reply-router';
 import type {
   InboundReply,
   NodeContext,
@@ -44,6 +44,8 @@ export interface StepOutcome {
   nodeId: string | null;
   nodeType: string | null;
   notes: string[];
+  /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
+  saveProperty?: { key: string; value: string };
 }
 
 export interface StepDeps {
@@ -274,16 +276,26 @@ export function applyReply(run: RunState, reply: InboundReply): StepOutcome {
         transition: { t: 'wait', wait: decision.wait },
         notes: ['no option matched: still waiting'],
       };
-    case 'route':
+    case 'route': {
       Object.assign(run.vars, decision.setVars);
       run.currentNodeId = decision.fromNodeId;
+      const save = propertyToSave(run.graph, decision);
       return {
         ...base,
         nodeId: decision.fromNodeId,
         transition: advanceFrom(run, decision.fromNodeId, decision.port, true, 0),
+        ...(save ? { saveProperty: save } : {}),
       };
-    case 'dead_end':
+    }
+    case 'dead_end': {
       Object.assign(run.vars, decision.setVars);
-      return { ...base, transition: parkOrEnd(run), notes: ['the branch picked has no next node'] };
+      const save = propertyToSave(run.graph, decision);
+      return {
+        ...base,
+        transition: parkOrEnd(run),
+        notes: ['the branch picked has no next node'],
+        ...(save ? { saveProperty: save } : {}),
+      };
+    }
   }
 }

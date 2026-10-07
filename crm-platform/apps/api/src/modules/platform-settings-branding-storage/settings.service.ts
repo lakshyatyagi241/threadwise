@@ -34,7 +34,6 @@ const EXPORT_MASKED: Partial<Record<SetGroup, readonly string[]>> = {
   storage: ['accessKeyId'],
   mail: ['username'],
   analytics: ['posthogKey', 'mixpanelToken'],
-  realtime: ['appKey'],
 };
 
 /** A stored value that says something: not blank, not an empty list, not an object of blanks. */

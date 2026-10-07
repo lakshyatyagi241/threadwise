@@ -77,7 +77,8 @@ async function setWindow(
  * One sign-in for the whole file: the API caps the sessions of an account, so every window reuses the same cookies instead of
  * signing in again (two windows of one person see the same inbox, which is all these tests need).
  */
-let storage: Awaited<ReturnType<import('@playwright/test').BrowserContext['storageState']>> | null = null;
+let storage: Awaited<ReturnType<import('@playwright/test').BrowserContext['storageState']>> | null =
+  null;
 
 async function newSession(browser: Browser) {
   const baseURL = process.env.WEB_URL ?? 'http://localhost:3001';
@@ -106,7 +107,9 @@ test.describe('the inbox, live in two windows', () => {
     await context.close();
   });
 
-  test('a customer message appears live in both windows, with an unread badge', async ({ browser }) => {
+  test('a customer message appears live in both windows, with an unread badge', async ({
+    browser,
+  }) => {
     const a = await newSession(browser);
     const b = await newSession(browser);
     for (const { page } of [a, b]) {
@@ -125,7 +128,9 @@ test.describe('the inbox, live in two windows', () => {
     await b.context.close();
   });
 
-  test('opening it shows the thread, clears the unread badge and keeps the deep link', async ({ browser }) => {
+  test('opening it shows the thread, clears the unread badge and keeps the deep link', async ({
+    browser,
+  }) => {
     const { context, page } = await newSession(browser);
     await page.goto('/inbox');
     await row(page).click();
@@ -167,7 +172,9 @@ test.describe('the inbox, live in two windows', () => {
     await context.close();
   });
 
-  test('a message the provider refuses shows the reason and can be retried', async ({ browser }) => {
+  test('a message the provider refuses shows the reason and can be retried', async ({
+    browser,
+  }) => {
     const { context, page } = await newSession(browser);
     await page.goto('/inbox');
     await row(page).click();
@@ -180,7 +187,9 @@ test.describe('the inbox, live in two windows', () => {
     await context.close();
   });
 
-  test('assigning moves the row between Unassigned and Mine in the other window', async ({ browser }) => {
+  test('assigning moves the row between Unassigned and Mine in the other window', async ({
+    browser,
+  }) => {
     const a = await newSession(browser);
     const b = await newSession(browser);
     await b.page.goto('/inbox');
@@ -231,15 +240,21 @@ test.describe('the inbox, live in two windows', () => {
     await context.close();
   });
 
-  test('an internal note is drawn apart from the messages and can be removed', async ({ browser }) => {
+  test('an internal note is drawn apart from the messages and can be removed', async ({
+    browser,
+  }) => {
     const { context, page } = await newSession(browser);
     await page.goto('/inbox');
     await row(page).click();
     await page.getByTestId('inbox-mode-note').click();
     await page.getByTestId('inbox-composer').fill('Customer prefers WhatsApp calls');
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('inbox-note').filter({ hasText: 'prefers WhatsApp' })).toBeVisible();
-    await expect(page.getByTestId('inbox-note').filter({ hasText: 'prefers WhatsApp' })).toContainText('Internal note');
+    await expect(
+      page.getByTestId('inbox-note').filter({ hasText: 'prefers WhatsApp' }),
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('inbox-note').filter({ hasText: 'prefers WhatsApp' }),
+    ).toContainText('Internal note');
     await context.close();
   });
 
@@ -260,13 +275,17 @@ test.describe('the inbox, live in two windows', () => {
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('the list is the home screen, the thread slides over it, and nothing scrolls sideways', async ({ browser }) => {
+  test('the list is the home screen, the thread slides over it, and nothing scrolls sideways', async ({
+    browser,
+  }) => {
     const { context, page } = await newSession(browser);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/inbox');
     await expect(page.getByTestId('inbox-list')).toBeVisible();
     const overflow = () =>
-      page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
     expect(await overflow()).toBeLessThanOrEqual(0);
 
     await row(page).click();

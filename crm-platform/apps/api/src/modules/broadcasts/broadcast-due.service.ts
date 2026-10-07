@@ -8,6 +8,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { DatabaseService } from '../../infra/db/database.service';
+import { orgIdList } from '../../common/sql/org-id-list';
 import { QUEUES } from '../../infra/queue/queues';
 import type { BroadcastDispatchJob } from './broadcast-dispatch.processor';
 
@@ -49,13 +50,14 @@ export class BroadcastDueService {
 
   /** Public for tests. */
   async enqueueDue(): Promise<number> {
-    // Broadcasts on the unofficial engine stay untouched while it is off (owner decision 2026-10-05) and are queued once it is on.
-    const unofficialOn = await this.unofficial.isEnabled();
+    // Broadcasts on the unofficial engine stay untouched while it is off for their workspace (owner decisions 2026-10-05, 2026-10-06) and are queued once it is on.
+    // Decided per row's workspace (owner decision 2026-10-06): the platform switch on AND the row's org on the allow-list.
+    const allowedOrgs = orgIdList(await this.unofficial.enabledOrgIds());
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT id, uuid, org_id FROM broadcasts
         WHERE status IN ('processing', 'scheduled') AND node_schedule_id IS NULL AND scheduled_at <= now()
-          AND (provider IS DISTINCT FROM 'baileys' OR ${unofficialOn}::boolean)
+          AND (provider IS DISTINCT FROM 'baileys' OR org_id = ANY(${allowedOrgs}))
         ORDER BY scheduled_at, id LIMIT ${BATCH}
         FOR UPDATE SKIP LOCKED`);
       const rows = res.rows as Array<{

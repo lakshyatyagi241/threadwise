@@ -21,6 +21,8 @@ A campaign sends one message to an audience of contacts, groups, tags or phone n
 5. Under **When to send**, choose **Send now**, **Schedule** (one date and time) or **Recurring** (every day, week or month, optionally until a date).
 6. Check the live preview on the right, then select **Launch campaign**, **Schedule campaign** or **Save recurring campaign**. **Save as draft** keeps it for later.
 
+> **Create broadcast** is a shorter four-step way to send an approved template, with a credit check, a test message, scheduling and retries. See [Create a broadcast](help:campaigns-create-broadcast).
+
 ## Options and settings
 
 - **A/B test this campaign** sends a second version to part of the audience. You set the split, and the results appear per version on the campaign page.

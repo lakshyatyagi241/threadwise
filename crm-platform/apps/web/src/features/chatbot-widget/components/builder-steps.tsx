@@ -168,7 +168,7 @@ export function SetupStep({
           </select>
           <div className={HINT}>
             {t('agentHintBefore')}{' '}
-            <Link href="/ai-assistants" className="font-semibold text-brand underline">
+            <Link href="/ai-training" className="font-semibold text-brand underline">
               {t('agentBuild')}
             </Link>{' '}
             {t('agentHintAfter')}

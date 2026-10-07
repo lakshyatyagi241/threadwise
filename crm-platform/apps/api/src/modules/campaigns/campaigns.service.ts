@@ -218,6 +218,16 @@ export class CampaignsService {
     return { campaign: toCampaign(row), message: 'Campaign updated.' };
   }
 
+  /** The template gate of WD-CAMP-005 for a caller that launches a template campaign by its own route (the broadcast wizard). */
+  assertTemplateUsable(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    engine: string,
+  ): Promise<number | null> {
+    return this.template(tx, orgId, 'template', uuid, engine);
+  }
+
   // ------------------------------------------------------------------ shared
 
   /** Everything that can be decided without a database: time zone, end date, body, guardrails. */
@@ -349,7 +359,7 @@ export class CampaignsService {
     if (input.senderKey) {
       // A pick that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
       if (input.senderKey.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
-        await this.unofficial.assertEnabled();
+        await this.unofficial.assertEnabledFor(orgId);
       const [picked] = await this.senders.resolve(tx, orgId, [input.senderKey]);
       if (!picked) throw field('senderKey', 'That number is not connected.');
       provider = picked.engine;

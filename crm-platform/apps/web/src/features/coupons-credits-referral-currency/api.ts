@@ -1,5 +1,8 @@
 import {
   billingOptionsResponseSchema,
+  referralListResponseSchema,
+  type ReferralListQuery,
+  type ReferralRange,
   couponItemSchema,
   couponListResponseSchema,
   currencyItemSchema,
@@ -10,6 +13,9 @@ import {
   type CurrencyListQuery,
 } from '@crm/contracts';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
+import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
+import { fileNameFromDisposition } from './lib/download';
 
 /** Query keys, one place. Everything here is an operator-console call (`/api/platform/*`). */
 export const KEYS = {
@@ -18,6 +24,8 @@ export const KEYS = {
   coupon: (id: string) => ['operator', 'coupons', 'one', id] as const,
   options: ['operator', 'billing-options'] as const,
   currencies: ['operator', 'currencies'] as const,
+  affiliate: ['affiliate'] as const,
+  affiliateList: (q: ReferralListQuery) => ['affiliate', 'list', q] as const,
   currencyList: (q: Partial<CurrencyListQuery>) => ['operator', 'currencies', 'list', q] as const,
 };
 
@@ -51,3 +59,42 @@ export {
   fetchRatesResponseSchema,
   setDefaultCurrencyResponseSchema,
 };
+
+/** The signed-in user's own affiliate data (`/api/v2/me/*`, any authenticated user; nothing here is operator-only). */
+export const fetchReferrals = (q: ReferralListQuery, signal?: AbortSignal) =>
+  apiFetch('/me/referrals', {
+    query: { range: q.range, bucket: q.bucket, q: q.q, cursor: q.cursor, limit: q.limit },
+    schema: referralListResponseSchema,
+    signal,
+  });
+
+/**
+ * The CSV of a range. It needs the session, so it is fetched (a bare link would carry no auth header) and the body is
+ * handed to the browser as a file. Search is not part of it: the export is the whole range.
+ */
+export async function downloadReferralsCsv(
+  range: ReferralRange,
+  now = new Date(),
+): Promise<{ blob: Blob; fileName: string }> {
+  const res = await fetch(`/api/v2/me/referrals/export?range=${encodeURIComponent(range)}`, {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) {
+    let body: unknown;
+    try {
+      body = await res.json();
+    } catch {
+      body = undefined;
+    }
+    throw toApiError(res.status, body, res.headers.get('x-request-id'));
+  }
+  const stamp = now.toISOString().replace(/[-:]/g, '').replace('T', '-').slice(0, 15);
+  return {
+    blob: await res.blob(),
+    fileName: fileNameFromDisposition(
+      res.headers.get('content-disposition'),
+      `affiliate-history-${stamp}.csv`,
+    ),
+  };
+}

@@ -51,7 +51,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
     id: 'plans',
     icon: 'tag',
     kind: 'tabs',
-    tabs: ['plans', 'workspace-plans', 'addon-packs', 'coupons', 'plan-settings', 'pricing-faqs'],
+    tabs: ['workspaces', 'plans', 'addon-packs', 'coupons', 'plan-settings', 'pricing-faqs'],
   },
   {
     id: 'billing',
@@ -68,7 +68,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'wallet-pricing',
       'wallet-margins',
       'wallet-packages',
-      'wallet-workspaces',
       'wallet-logs',
       'bsp-income',
       'bsp-credit',
@@ -83,7 +82,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'support-team',
       'support-platform-inbox',
       'support-agents',
-      'support-customers',
       'support-sla',
       'support-playbooks',
       'support-reports',
@@ -102,7 +100,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
     kind: 'tabs',
     tabs: [
       'wap-providers',
-      'wap-assignments',
       'wap-switch',
       'node-bridge',
       'webhook-forwarding',
@@ -154,12 +151,12 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-mail',
       'settings-campaigns',
       'settings-google-calendar',
+      'settings-flow-builder',
       'ai-keys',
       'settings-privacy',
       'settings-analytics',
       'settings-custom',
       'settings-storage',
-      'settings-realtime',
     ],
   },
   {
@@ -177,6 +174,11 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
  */
 export const NOT_IN_MENU: Readonly<Record<string, string>> = {
   login: 'the sign-in page, outside the console',
+  'workspace-plans': 'legacy address, redirects to the Workspaces tab',
+  'support/customers': 'legacy address, redirects to the Workspaces tab',
+  'wallet/workspaces': 'legacy address, redirects to the Workspaces tab',
+  'whatsapp-providers/assignments': 'legacy address, redirects to the Workspaces tab',
+  'workspaces/[id]': 'a workspace, opened from the Workspaces tab',
   'account/security': 'opened from "Your account" and the account menu',
   notifications: 'opened from the notification bell',
   'ai-keys': 'legacy address, redirects to /admin/api-keys',

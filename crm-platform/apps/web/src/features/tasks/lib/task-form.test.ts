@@ -30,7 +30,15 @@ const task: TaskResponse = {
 describe('validateDraft', () => {
   it('needs a title', () => {
     expect(validateDraft({ ...emptyDraft(ME), title: '   ' }).title).toBe('titleRequired');
-    expect(validateDraft({ ...emptyDraft(ME), title: 'ok' })).toEqual({});
+    expect(validateDraft({ ...emptyDraft(ME), title: 'ok', due: '2026-10-05T14:30' })).toEqual({});
+  });
+  it('needs a due date, an assignee and a priority', () => {
+    const p = validateDraft({ ...emptyDraft(''), title: 'a', priority: '' as never });
+    expect(p).toEqual({
+      due: 'dueRequired',
+      assignee: 'assigneeRequired',
+      priority: 'priorityRequired',
+    });
   });
   it('limits the title to 255 and the notes to 5000 characters', () => {
     expect(validateDraft({ ...emptyDraft(ME), title: 'x'.repeat(256) }).title).toBe('titleTooLong');
