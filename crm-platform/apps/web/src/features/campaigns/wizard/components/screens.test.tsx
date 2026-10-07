@@ -69,7 +69,7 @@ describe('wizard screen: resume', () => {
     const out = html(<WizardScreen draftId={ID} />, { qc: seeded({ ...READY_DRAFT, step: 1 }) });
     expect(out).toContain('value="October offer"');
     expect(out).toContain('data-testid="phone-preview"');
-    expect(out).toContain('selected=""');
+    expect(out).toMatch(/checked=""/);
   });
 
   it('the stepper lets the person go back to the steps reached, not beyond', () => {
