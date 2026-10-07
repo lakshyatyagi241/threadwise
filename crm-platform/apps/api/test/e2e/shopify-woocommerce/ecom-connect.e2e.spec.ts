@@ -245,7 +245,7 @@ describe('platform settings (WD-ECOM-001, 002)', () => {
   });
 
   it('refuses a body it cannot read and a caller who is not an operator', async () => {
-    expect((await ops('put', '/woocommerce').send({ enabled: 'yes' })).status).toBe(400);
+    expect((await ops('put', '/woocommerce').send({ enabled: 'yes' })).status).toBe(422);
     const t = await api.signup('ecs');
     const res = await api.http().get('/v2/platform/ecom/shopify').set(bearer(t.admin));
     expect([401, 403]).toContain(res.status);

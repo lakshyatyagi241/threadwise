@@ -825,7 +825,8 @@ export class OperatorCatalogueService {
         path: 'recipe.connector.type',
         message: `must equal the manifest connector type "${manifest.connector?.type}"`,
       });
-    if (problems.length === 0) {
+    // A client has nothing to run on our side, so it has no connector class to check its recipe against (ConnectorRegistry.isImplemented).
+    if (problems.length === 0 && recipe.connector.type !== 'client') {
       for (const p of this.registry.get(recipe.connector.type).checkRecipe(recipe))
         problems.push({ path: `recipe.${p.path}`, message: p.message });
     }
