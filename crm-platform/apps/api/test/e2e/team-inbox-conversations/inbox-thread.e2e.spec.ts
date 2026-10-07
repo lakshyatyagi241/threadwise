@@ -256,13 +256,13 @@ describe('sending: 202, queued, idempotent, and refused before anything is store
     );
   });
 
-  it('a template is refused while the template library is not part of the deployment', async () => {
+  it('a template that does not exist is refused, and nothing is stored', async () => {
     const res = await api
       .as(agent.token)
       .post(`/v2/inbox/conversations/${conv.uuid}/messages`)
       .send({ kind: 'template', templateId: randomUUID(), clientMessageId: randomUUID() });
     expect(res.status).toBe(422);
-    expect(res.body.code).toBe('INBOX_TEMPLATES_UNAVAILABLE');
+    expect(res.body.code).toBe('INBOX_TEMPLATE_NOT_SENDABLE');
   });
 
   it('needs the reply permission; a read-only member gets 403 and nothing is stored', async () => {

@@ -31,6 +31,7 @@ import {
   cleanVariables,
   isApproved,
   renderBody,
+  templatePreviewOf,
 } from './inbox-template-rules';
 import { MediaUploadsRepository } from './media-uploads.repository';
 
@@ -62,7 +63,31 @@ export class InboxThreadService {
       if (!record) throw conversationNotFound();
       this.access.assertVisible(viewer, record);
     });
-    return this.conversations.listMessages(uuid, query);
+    const page = await this.conversations.listMessages(uuid, query);
+    return { ...page, data: await this.withTemplatePreviews(page.data) };
+  }
+
+  /**
+   * Draws the template messages of a page: the header, footer and buttons come from the stored template, resolved for the whole page in
+   * ONE tenant-scoped query. A template deleted since leaves the message without a preview, and the bubble falls back to the body the
+   * thread stored at send time.
+   */
+  private async withTemplatePreviews(messages: MessageResponse[]): Promise<MessageResponse[]> {
+    const ids = [
+      ...new Set(
+        messages.flatMap((m) =>
+          m.kind === 'template' && m.template?.templateId ? [m.template.templateId] : [],
+        ),
+      ),
+    ];
+    if (ids.length === 0) return messages;
+    const orgId = RequestContextStore.orgId();
+    const rows = await this.db.tx((tx) => this.templates.findManyByUuids(tx, orgId, ids));
+    const byUuid = new Map(rows.map((r) => [r.uuid, templatePreviewOf(r)]));
+    return messages.map((m) => {
+      const preview = m.template?.templateId ? byUuid.get(m.template.templateId) : undefined;
+      return preview && m.template ? { ...m, template: { ...m.template, preview } } : m;
+    });
   }
 
   /**
@@ -114,7 +139,7 @@ export class InboxThreadService {
         content,
         replyToMessageId: input.replyToMessageId,
       });
-      return message;
+      return (await this.withTemplatePreviews([message]))[0]!;
     } catch (err) {
       const mine = claimed as { id: number; fresh: boolean } | null;
       if (mine?.fresh) {
@@ -262,7 +287,9 @@ export class InboxThreadService {
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
     });
-    return this.conversations.retryOutbound(messageUuid);
+    return (
+      await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
+    )[0]!;
   }
 
   private async assertCanReply(

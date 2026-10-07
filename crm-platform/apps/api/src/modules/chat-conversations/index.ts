@@ -9,6 +9,7 @@ export {
   type OutboundContent,
   type OutboundMediaRef,
   type RecordOutboundInput,
+  type RecordOutboundTemplate,
   type ThreadRef,
 } from './conversations.facade';
 export {
