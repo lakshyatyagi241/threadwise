@@ -4,7 +4,7 @@ title: Attributes
 summary: Message variables you can insert with a slash: create your own, give each a key and a fallback value, and switch them on or off.
 area: settings
 order: 24
-documents: [tile:attributes]
+documents: [tile:contact-properties]
 keywords: [variables, merge fields, placeholders, tokens, slash, personalization, template attributes]
 ---
 
