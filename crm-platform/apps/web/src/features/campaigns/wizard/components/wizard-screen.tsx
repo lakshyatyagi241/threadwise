@@ -84,7 +84,7 @@ export function WizardScreen({ draftId }: { draftId?: string }) {
 function Frame({ children }: { children: ReactNode }) {
   const t = useTranslations('campaigns.wizard');
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+    <main className="w-full px-4 py-6 sm:px-6 lg:px-10">
       <Link href="/campaigns" className="text-sm text-muted-foreground hover:underline">
         {t('backToCampaigns')}
       </Link>
@@ -227,7 +227,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   const stepKey = (['template', 'audience', 'review', 'send'] as const)[view - 1]!;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 pt-6 sm:px-6">
+    <main className="w-full px-4 pt-6 sm:px-6 lg:px-10">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <Link href="/campaigns" className="text-sm text-muted-foreground hover:underline">
@@ -283,13 +283,11 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
           <StepTemplate
             name={draft.name}
             templateId={draft.templateId}
-            senderKey={draft.senderKey}
-            senders={sendersList}
+            noSender={sendersList !== undefined && sendersList.length === 0}
             templates={templates}
             issues={visible}
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
-            onSender={(senderKey) => w.dispatch({ type: 'sender', senderKey })}
           />
         )}
         {view === 2 && (
