@@ -69,6 +69,7 @@ export function GroupsScreen() {
       </div>
 
       <ImportModal
+        requireGroup
         open={importing !== null}
         groupId={importing === null || importing === 'any' ? undefined : importing.id}
         onClose={() => setImporting(null)}
