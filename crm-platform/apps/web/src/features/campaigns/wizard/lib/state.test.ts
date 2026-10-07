@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EMPTY_WIZARD_DRAFT } from '@crm/contracts';
-import { draft, slot, template, uuid } from '../testing';
+import { audience, draft, slot, template, uuid } from '../testing';
 import { clampStep, draftPatch, initialState, keepMatchingVariables, wizardReducer } from './state';
 
 const withVars = () =>
@@ -99,8 +99,8 @@ describe('draftPatch', () => {
   });
 
   it('compares nested values by content', () => {
-    const a = draft({ audience: { groupIds: [uuid(1)], segmentIds: [], rules: null } });
-    const b = draft({ audience: { groupIds: [uuid(1)], segmentIds: [], rules: null } });
+    const a = draft({ audience: audience({ groupIds: [uuid(1)] }) });
+    const b = draft({ audience: audience({ groupIds: [uuid(1)] }) });
     expect(draftPatch(a, b)).toEqual({});
   });
 });

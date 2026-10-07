@@ -79,9 +79,9 @@ export function SummaryCard({
   const { catalog } = useSegmentCatalog();
   const ctx = useSummaryContext(catalog);
   const names = audienceNames(draft.audience, sources);
-  const sentence = draft.audience.rules
-    ? summarize(editorFromRules(draft.audience.rules), ctx)
-    : '';
+  const all = draft.audience.allMatching;
+  const sentence = all?.rules ? summarize(editorFromRules(all.rules), ctx) : '';
+  const allWhat = [all?.search ? `"${all.search}"` : '', sentence].filter(Boolean).join(', ');
   const recipients = credit?.recipients ?? count?.recipients;
   const skipped = count ? count.optedOut + count.invalidNumber : null;
   const slots = template?.slots ?? [];
@@ -116,6 +116,12 @@ export function SummaryCard({
         </Row>
         <Row label={t('sumAudience')} step={2} onEdit={onEdit}>
           <ul className="space-y-0.5">
+            {draft.audience.contactIds.length > 0 && (
+              <li>{t('sumContacts', { count: draft.audience.contactIds.length })}</li>
+            )}
+            {all && (
+              <li>{allWhat ? t('sumAllMatching', { what: allWhat }) : t('sumAllContacts')}</li>
+            )}
             {draft.audience.selection && (
               <li>
                 {t('sumSelection', {
@@ -132,13 +138,14 @@ export function SummaryCard({
             {names.segments.length > 0 && (
               <li>{t('sumSegments', { names: list(names.segments) })}</li>
             )}
-            <li>
-              {sentence ? (
-                t('sumConditions', { rules: sentence })
-              ) : (
-                <span className="text-muted-foreground">{t('sumNoConditions')}</span>
-              )}
-            </li>
+            {draft.audience.csv && (
+              <li>
+                {t('sumCsv', {
+                  name: draft.audience.csv.fileName,
+                  count: draft.audience.csv.valid,
+                })}
+              </li>
+            )}
           </ul>
         </Row>
         <Row label={t('sumRecipients')} step={2} onEdit={onEdit}>

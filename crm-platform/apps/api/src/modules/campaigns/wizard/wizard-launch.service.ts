@@ -16,6 +16,7 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PacingRuntime } from '../../broadcasts';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsService } from '../campaigns.service';
+import { WizardCsvService } from './wizard-csv.service';
 import { WizardDraftsService, draftOf } from './wizard-drafts.service';
 import { WizardRunService } from './wizard-run.service';
 import { templateSlots } from './wizard-rules';
@@ -40,6 +41,7 @@ export class WizardLaunchService {
     private readonly db: DatabaseService,
     private readonly repo: WizardRepository,
     private readonly drafts: WizardDraftsService,
+    private readonly csv: WizardCsvService,
     private readonly runs: WizardRunService,
     private readonly campaigns: CampaignsService,
     private readonly jobs: CampaignJobs,
@@ -98,6 +100,7 @@ export class WizardLaunchService {
       const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
       await this.campaigns.assertTemplateUsable(tx, orgId, template.uuid, via.provider);
       await this.drafts.assertSources(tx, orgId, draft.audience);
+      await this.drafts.assertCsv(tx, orgId, draft.audience);
 
       const schedule = draft.schedule;
       const base = {
@@ -131,6 +134,8 @@ export class WizardLaunchService {
           nextRunAt: first.at,
           createdBy: ctx.userId,
         });
+        // Every run of the series reads the uploaded numbers again, so the upload is kept.
+        await this.csv.pin(tx, orgId, draft.audience);
         const series = await this.repo.seriesById(tx, orgId, seriesId);
         await this.repo.deleteCampaignOnly(tx, orgId, row.id);
         await this.audit.record(tx, {

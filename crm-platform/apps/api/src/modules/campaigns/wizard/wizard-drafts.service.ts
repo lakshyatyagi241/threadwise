@@ -24,6 +24,7 @@ import { CAMPAIGN_PLAN_GATE, type CampaignPlanGate } from '../_shims/tokens';
 import { MODULE_KEY } from '../campaign-events';
 import { CampaignsRepository } from '../campaigns.repository';
 import { blankCampaignFor } from './wizard-blank';
+import { WizardCsvService } from './wizard-csv.service';
 import { WizardRepository, type WizardCampaignRow } from './wizard.repository';
 
 const UNTITLED = 'Untitled broadcast';
@@ -56,6 +57,7 @@ export class WizardDraftsService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: WizardRepository,
+    private readonly csv: WizardCsvService,
     private readonly campaigns: CampaignsRepository,
     private readonly audit: AuditService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
@@ -147,6 +149,16 @@ export class WizardDraftsService {
     }
     await this.assertSources(tx, orgId, draft.audience);
     return templateId;
+  }
+
+  /** Launch only (a draft keeps a reference to an upload that may have expired in the meantime, and still saves). */
+  async assertCsv(tx: Tx, orgId: number, audience: WizardAudience): Promise<void> {
+    if (audience.csv && !(await this.csv.find(tx, orgId, audience.csv.id))) {
+      throw field(
+        'audience.csv',
+        'The uploaded CSV is not in this workspace (or has expired). Upload it again.',
+      );
+    }
   }
 
   async assertSources(tx: Tx, orgId: number, audience: WizardAudience): Promise<void> {
