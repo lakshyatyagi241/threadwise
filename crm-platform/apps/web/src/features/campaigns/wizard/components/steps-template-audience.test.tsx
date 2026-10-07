@@ -29,7 +29,6 @@ import { CsvUpload } from './csv-upload';
 import { StepAudience } from './step-audience';
 import { StepTemplate } from './step-template';
 import { TemplatePicker } from './template-picker';
-import { TemplatePicker } from './template-picker';
 import { SourcePicker } from './source-picker';
 import { Stepper } from './stepper';
 import { WizardFooter } from './wizard-footer';
