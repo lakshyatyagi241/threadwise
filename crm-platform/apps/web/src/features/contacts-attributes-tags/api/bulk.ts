@@ -1,5 +1,6 @@
 'use client';
 
+import { z } from 'zod';
 import { BULK_IDS_MAX } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
@@ -21,6 +22,26 @@ import {
 /** The `ids` / `filter` half of every bulk body. */
 export function selectionBody(target: BulkTarget) {
   return target.kind === 'ids' ? { ids: target.ids } : { filter: contactFilterBody(target.filter) };
+}
+
+/**
+ * "Send campaign" from the Hub: a broadcast draft whose audience is this selection (ticked rows open in the wizard's Contacts mode), created so the wizard opens on it. Returns the draft's
+ * id (the wizard resumes at `/campaigns/wizard/<id>`).
+ */
+export async function startCampaignDraft(target: BulkTarget): Promise<string> {
+  const draft = await apiFetch('/broadcast-wizard/drafts', {
+    method: 'POST',
+    body: {
+      // Ticked rows are the wizard's own "contacts" mode (`contactIds`); a whole filtered view has no equivalent there, so it travels as
+      // the `selection` source.
+      audience:
+        target.kind === 'ids'
+          ? { groupIds: [], segmentIds: [], rules: null, contactIds: target.ids }
+          : { groupIds: [], segmentIds: [], rules: null, selection: selectionBody(target) },
+    },
+    schema: z.object({ id: z.string().uuid() }),
+  });
+  return draft.id;
 }
 
 export interface BulkOutcome {
@@ -118,6 +139,8 @@ export interface BulkUpdateValues {
   ownerId?: string | null;
   lostReason?: string | null;
   otherLostReason?: string | null;
+  /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
+  customFields?: Record<string, unknown>;
 }
 
 /**

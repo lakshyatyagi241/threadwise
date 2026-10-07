@@ -136,6 +136,8 @@ describe('message keys used in code', () => {
           'notFound',
           'nameTaken',
           'rulesInvalid',
+          'shareEmpty',
+          'shareInvalid',
           'rateLimited',
           'planLimit',
           'unavailable',
@@ -151,7 +153,7 @@ describe('message keys used in code', () => {
         (k) => `problem.rules.${k}`,
       ),
       ...SHOW_VALUES.map((v) => `hub.show.${v}`),
-      ...(['private', 'shared'] as const).flatMap((v) => [
+      ...(['private', 'shared', 'specific'] as const).flatMap((v) => [
         `visibility.${v}`,
         `visibility.${v}Hint`,
       ]),

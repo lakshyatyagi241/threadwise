@@ -39,14 +39,14 @@
         "unread": "غير مقروءة"
       },
       "statusFilter": "الحالة",
-      "statusOpen": "مفتوحة ومعلّقة",
+      "statusOpen": "مفتوحة",
       "statusAll": "كل الحالات",
       "status": {
         "open": "مفتوحة",
         "pending": "معلّقة",
         "snoozed": "مؤجلة",
         "resolved": "تم حلها",
-        "closed": "مغلقة",
+        "closed": "تم حلها",
         "spam": "رسائل مزعجة"
       },
       "priority": {

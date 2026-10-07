@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { segmentRulesSchema } from '../segments/rules';
+import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
 import {
   isIanaTimeZone,
@@ -95,6 +96,12 @@ export const wizardAudienceSchema = z.object({
   excludedContactIds: z.array(uuidSchema).max(WIZARD_CONTACTS_MAX).default([]),
   /** Every contact the table's search and conditions matched when "select all matching" was chosen; null when it was not. */
   allMatching: wizardAllMatchingSchema.nullable().default(null),
+  /**
+   * Contacts handed over by the Contact Hub's "Send campaign" when they are "everything the Hub's filters match" (the saved filter minus
+   * the un-ticked rows), which the table's own search and conditions cannot express. Ticked Hub rows arrive as `contactIds` instead.
+   * A source like a group; shown above the four modes with a way to remove it.
+   */
+  selection: contactSelectionSchema.nullish(),
   /** The valid numbers of an uploaded CSV. Numbers that are not contacts yet become contacts when the broadcast is launched. */
   csv: wizardCsvRefSchema.nullable().default(null),
 });
@@ -115,7 +122,8 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
   a.segmentIds.length > 0 ||
   a.contactIds.length > 0 ||
   a.allMatching !== null ||
-  a.csv !== null;
+  a.csv !== null ||
+  Boolean(a.selection);
 
 // ---------------------------------------------------------------------------------------- variables
 

@@ -320,11 +320,17 @@ export class WizardRepository {
     }));
   }
 
-  /** Shared segments and the caller's own. The count is the last one the segment stored (a list never counts). */
+  /** Shared segments, the caller's own and those shared with them (by name or through a team). The count is the last one the segment stored (a list never counts). */
   async segments(tx: Tx, orgId: number, userId: number | null) {
     const res = await tx.execute(sql`
       SELECT uuid, name, color, member_count_cache FROM segments
-      WHERE org_id = ${orgId} AND (visibility = 'shared' OR owner_id = ${userId}::bigint)
+      WHERE org_id = ${orgId} AND (visibility = 'shared' OR owner_id = ${userId}::bigint
+        OR (visibility = 'specific' AND EXISTS (
+          SELECT 1 FROM segment_shares sh
+          WHERE sh.org_id = segments.org_id AND sh.segment_id = segments.id
+            AND (sh.user_id = ${userId}::bigint
+                 OR sh.team_id IN (SELECT tm.team_id FROM team_members tm
+                                   WHERE tm.org_id = segments.org_id AND tm.user_id = ${userId}::bigint)))))
       ORDER BY lower(name), id`);
     return (res.rows as Raw[]).map((r) => ({
       id: String(r.uuid),

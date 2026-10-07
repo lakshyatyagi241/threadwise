@@ -420,7 +420,7 @@ function SegmentsTable({
                   />
                 </td>
                 <td className="border-b border-border px-3 py-2">
-                  <VisibilityChip visibility={s.visibility} />
+                  <VisibilityChip visibility={s.visibility} sharedWith={s.sharedWith} />
                 </td>
                 <td className="max-w-0 border-b border-border px-3 py-2">
                   <span title={owner} className="block truncate">
