@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Field, NumberInput } from '../kit';
+import { Check, Field, KnowledgeBaseActions, NumberInput } from '../kit';
 import type { FormComponent } from '../types';
 import {
   AddLink,
@@ -57,6 +57,7 @@ export const CfAiForm: FormComponent = (p) => (
       hint="Attach a trained assistant from AI Training to answer from your content."
     >
       {Sel(p, 'assistant', knowledgeBaseOptions(p))}
+      <KnowledgeBaseActions refresh={() => p.env.refresh()} />
     </Field>
     <Field label="Save spoken reply to">{Txt(p, 'save', 'ai_reply')}</Field>
     <Check checked={!!p.data.endOnGoodbye} onChange={(v) => p.set('endOnGoodbye', v)}>

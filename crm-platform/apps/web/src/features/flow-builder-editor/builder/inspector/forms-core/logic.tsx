@@ -16,6 +16,7 @@ import {
   controlClass,
   Field,
   IconButton,
+  KnowledgeBaseActions,
   NumberInput,
   PasswordInput,
   SelectInput,
@@ -608,17 +609,26 @@ export function AiForm({ data: d, set, env }: FormProps) {
 
   const assistantHint = !assistants.length ? (
     <>
-      No trained assistants yet — create one in <Link href="/ai-training">AI Training</Link>.
+      No knowledge bases yet. Create one in{' '}
+      <Link href="/ai-training" newTab>
+        AI Training
+      </Link>
+      , then press Refresh list to pick it here.
     </>
   ) : picked && picked.sources === 0 ? (
     <>
-      Note: this assistant has 0 trained sources — add some in{' '}
-      <Link href="/ai-training">AI Training</Link> or the reply uses the prompt only.
+      Note: this assistant has 0 trained sources. Add some in{' '}
+      <Link href="/ai-training" newTab>
+        AI Training
+      </Link>{' '}
+      or the reply uses the prompt only.
     </>
   ) : (
     <>
       Pulls the chosen assistant&apos;s trained content into this reply.{' '}
-      <Link href="/ai-training">Manage knowledge →</Link>
+      <Link href="/ai-training" newTab>
+        Manage knowledge →
+      </Link>
     </>
   );
 
@@ -659,6 +669,7 @@ export function AiForm({ data: d, set, env }: FormProps) {
           options={assistantOpts}
           onChange={(v) => set('assistant', v)}
         />
+        <KnowledgeBaseActions refresh={() => env.refresh()} />
       </Field>
       <div className="mb-1 mt-1">
         <Check checked={!!d.extract} onChange={(v) => set('extract', v)}>
