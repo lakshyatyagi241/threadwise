@@ -252,7 +252,8 @@ export class WabaConnectService {
           registry: partner,
           wabaId,
           phoneNumberId: phone.id,
-          displayPhoneNumber: phone.displayPhoneNumber ?? null,
+          // Pinnacle gets the number as Meta shows it, the way Geta's own onboarding sends it.
+          displayPhoneNumber: phone.displayPhoneNumberRaw ?? phone.displayPhoneNumber ?? null,
           businessId,
           accessToken: token.accessToken,
         })
