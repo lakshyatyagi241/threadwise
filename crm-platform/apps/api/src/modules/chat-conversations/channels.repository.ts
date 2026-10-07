@@ -320,10 +320,13 @@ export class ChannelsRepository {
       displayAddress?: string | null;
       businessAccountId?: string | null;
       clearLastError?: boolean;
+      /** `null` releases the number (see `releaseNumber`); a value is set only through `claimNumber`. */
+      externalId?: null;
     },
   ): Promise<ChannelRow | null> {
     const sets: SQL[] = [];
     if (p.wabaConfigId !== undefined) sets.push(sql`waba_config_id = ${p.wabaConfigId}`);
+    if (p.externalId === null) sets.push(sql`external_id = NULL`);
     if (p.status !== undefined) sets.push(sql`status = ${p.status}`);
     if (p.displayAddress !== undefined) sets.push(sql`display_address = ${p.displayAddress}`);
     if (p.businessAccountId !== undefined)
@@ -343,10 +346,52 @@ export class ChannelsRepository {
    * `connected` are shown `disconnected`. Returns the rows that moved.
    */
   async disconnectUnlinked(tx: Tx, orgId: number, kind: string): Promise<ChannelRow[]> {
+    // A channel that lost its connection also lets go of the number: a number belongs to one workspace's inbox at a time, so a
+    // disconnected channel must not keep another workspace from connecting it (the channel, its conversations and its history stay).
     const res = await tx.execute(sql`
-      UPDATE channels SET status = 'disconnected'
-      WHERE org_id = ${orgId} AND kind = ${kind} AND waba_config_id IS NULL AND status = 'connected'
+      UPDATE channels SET status = 'disconnected', external_id = NULL
+      WHERE org_id = ${orgId} AND kind = ${kind} AND waba_config_id IS NULL
+        AND (status = 'connected' OR external_id IS NOT NULL)
       RETURNING ${COLUMNS}`);
     return rowsOf(res).map(toRow);
+  }
+
+  /**
+   * A channel of this workspace that let go of its number (a disconnected connection releases it): found again by the number as
+   * people write it, so reconnecting the same number brings back the old channel and its history instead of making a second one.
+   */
+  async releasedByDisplay(
+    tx: Tx,
+    orgId: number,
+    kind: string,
+    digits: string,
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(sql`
+      SELECT ${COLUMNS} FROM channels
+      WHERE org_id = ${orgId} AND kind = ${kind} AND external_id IS NULL AND waba_config_id IS NULL
+        AND regexp_replace(coalesce(display_address, ''), '[^0-9]', '', 'g') = ${digits}
+      ORDER BY created_at, id LIMIT 1`);
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
+  }
+
+  /**
+   * Takes the number for this channel, unless another channel holds it (null then: a number belongs to one workspace's inbox at a
+   * time, and the first to connect it holds it).
+   */
+  async claimNumber(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    kind: string,
+    externalId: string,
+  ): Promise<ChannelRow | null> {
+    const res = await tx.execute(sql`
+      UPDATE channels SET external_id = ${externalId}
+      WHERE org_id = ${orgId} AND id = ${id} AND external_id IS NULL
+        AND NOT EXISTS (SELECT 1 FROM channels o WHERE o.kind = ${kind} AND o.external_id = ${externalId})
+      RETURNING ${COLUMNS}`);
+    const r = rowsOf(res)[0];
+    return r ? toRow(r) : null;
   }
 }
