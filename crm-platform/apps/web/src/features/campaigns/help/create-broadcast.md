@@ -39,7 +39,7 @@ Turn on **Activate Retries** and set an end date to try again the messages that 
 
 ## Launch
 
-The last button reads **Broadcast now**, **Schedule** or **Start recurring**. It opens a confirmation with the name, template, recipients, skipped contacts, estimated cost, schedule and retries. After you confirm you land on the broadcast status page.
+The last button reads **Broadcast now**, **Schedule** or **Start recurring**. It opens a confirmation with the name, template, recipients, skipped contacts, estimated cost, schedule and retries. After you confirm you land on the page that matches how you sent it, with the new broadcast marked **New**: **Broadcast history** for a broadcast sent now, **Scheduled broadcasts** for a scheduled one, **Recurring broadcasts** for a recurring one (see [Broadcast history](help:campaigns-broadcast-history)). Select a row to open its status page.
 
 ## The status page
 
