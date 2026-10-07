@@ -27,6 +27,8 @@ export interface TaskFormModalProps {
   task?: TaskResponse;
   /** Pre-links a new task (from a contact or a deal). */
   link?: { contact?: RecordRef; deal?: RecordRef };
+  /** A title typed elsewhere (the quick add on a contact or deal) to start the new task from. */
+  initialTitle?: string;
   onClose: () => void;
   onSaved?: (task: TaskResponse) => void;
 }
@@ -34,7 +36,7 @@ export interface TaskFormModalProps {
 type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'form';
 
 /** "New task" and "Edit task" (TW-TASK-003/005). Mount it only while it is open: it starts from the task every time. */
-export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalProps) {
+export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: TaskFormModalProps) {
   const t = useTranslations('tasks.form');
   const toastText = useTranslations('tasks.toast');
   const { toast } = useToast();
@@ -48,6 +50,7 @@ export function TaskFormModal({ task, link, onClose, onSaved }: TaskFormModalPro
       ? draftOf(task)
       : {
           ...emptyDraft(session.user.id),
+          title: initialTitle ?? '',
           contactId: link?.contact?.id ?? '',
           dealId: link?.deal?.id ?? '',
         },
