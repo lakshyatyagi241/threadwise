@@ -132,6 +132,14 @@ describe('the compiler binds every operand', () => {
     );
   });
 
+  it('the country code field is compared with the contact column, the dial code bound as a parameter', () => {
+    const { invalid, sql, params } = compile(group('and', cond('countryCode', 'equals', '+91')));
+    expect(invalid).toEqual([]);
+    expect(sql).toContain('country_code');
+    expect(sql).not.toContain('+91');
+    expect(params).toContain('+91');
+  });
+
   it('AND / OR keep their grouping', () => {
     const { sql } = compile(
       group(

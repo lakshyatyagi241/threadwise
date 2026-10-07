@@ -55,6 +55,7 @@ export class CampaignReceiptsService {
               ? (receipt.errorMessage ?? '').trim() ||
                 (receipt.errorCode ? `error_code:${receipt.errorCode}` : null)
               : null,
+          errorCode: receipt.status === 'failed' ? (receipt.errorCode ?? null) : null,
           sentAt: receipt.status === 'sent' ? at : null,
           deliveredAt: receipt.status === 'delivered' ? at : null,
           readAt: receipt.status === 'read' ? at : null,

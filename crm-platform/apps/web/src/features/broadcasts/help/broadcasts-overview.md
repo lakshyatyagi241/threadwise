@@ -15,13 +15,8 @@ A broadcast sends one approved message template to a set of contacts, now or at 
 ## How to use it
 
 1. Open **Broadcasts** and select **New broadcast**. If a Telegram bot or an Instagram account is also connected, a window asks you to pick a channel first. Choose WhatsApp for a template send.
-2. Enter a **Broadcast name**. It is an internal label used in reports.
-3. Under **Select template message**, pick an approved template. Only approved templates are listed. If there are none, use the **Create one** link, or read [Message templates](help:message-templates-overview).
-4. If the template has variables, header media or button links, a **Fill in this send** panel appears. What you type there applies to this send only. Blank fields keep what the template already does.
-5. Pick the number to send from. With one connected number it is used automatically. With several, tick each one and give it a share weight: weights of 7 and 3 send 70% and 30% of the contacts.
-6. Choose who gets it: tags, groups or individual contacts. The count of selected contacts is shown.
-7. Choose **Send now** or **Schedule for later**, then set the date, time and timezone.
-8. Select **Add Broadcast**. If you ticked several numbers, one broadcast is created per number.
+2. The four-step **Create broadcast** wizard opens: **Name and template**, **Audience**, **Check and variables**, **Test and send**. Each step must be complete before **Next** works, and your work is saved as a draft you can resume. Read [Create a broadcast](help:campaigns-create-broadcast) for every step.
+3. Broadcasts made with the wizard are listed at the top of the Broadcasts screen, under **Created with Create broadcast**. Open one to see its runs, retries and to pause, resume or cancel it.
 
 ## Options and settings
 

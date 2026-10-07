@@ -30,7 +30,7 @@ export function NewBroadcast() {
 
   if (!channels.telegram && !channels.instagram) {
     return (
-      <Link href="/broadcasts/create" className={BUTTON}>
+      <Link href="/campaigns/wizard" className={BUTTON}>
         {label}
       </Link>
     );
@@ -49,7 +49,7 @@ export function NewBroadcast() {
         size="md"
       >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Link href="/broadcasts/create" className={CARD}>
+          <Link href="/campaigns/wizard" className={CARD}>
             <div className="text-lg font-semibold">{t('whatsapp.name')}</div>
             <p className="mt-1.5 text-xs text-muted-foreground">{t('whatsapp.hint')}</p>
             <div className="mt-3 text-xs font-semibold text-brand">{t('whatsapp.cta')} →</div>
