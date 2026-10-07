@@ -42,7 +42,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   tile('integrations', 'webhooks', '/webhooks', 'webhook', 20),
 
   // Data and security
-  tile('security', 'import-export', '/import-export', 'transfer', 10),
   tile('security', 'activity-log', '/activity-log', 'history', 20),
   tile('security', 'privacy', '/privacy', 'lock', 40),
 ];

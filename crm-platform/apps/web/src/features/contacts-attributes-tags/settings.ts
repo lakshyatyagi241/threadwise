@@ -3,6 +3,14 @@ import { settingsTile } from '../_registry/settings-types';
 /** Contact stages, Contact properties and Attributes left the menu for Settings (the screens and their routes are unchanged). */
 export const settings = [
   settingsTile({
+    id: 'import-export',
+    section: 'security',
+    href: '/import-export',
+    icon: 'transfer',
+    order: 10,
+    gates: { permission: 'record.contacts.import' },
+  }),
+  settingsTile({
     id: 'contact-stages',
     shortcutFrom: ['/contacts', '/contact-groups', '/segments'],
     section: 'data',
