@@ -37,6 +37,7 @@ import { WizardBroadcastsService } from './wizard/wizard-broadcasts.service';
 import { WizardContactsService } from './wizard/wizard-contacts.service';
 import { WizardController } from './wizard/wizard.controller';
 import { WizardCsvService } from './wizard/wizard-csv.service';
+import { WizardEligibilityService } from './wizard/wizard-eligibility.service';
 import { WizardDraftsService } from './wizard/wizard-drafts.service';
 import { WizardLaunchService } from './wizard/wizard-launch.service';
 import { WizardReadService } from './wizard/wizard-read.service';
@@ -86,6 +87,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     WizardReadService,
     WizardDraftsService,
     WizardReviewService,
+    WizardEligibilityService,
     WizardRunService,
     WizardLaunchService,
     WizardTestSendService,

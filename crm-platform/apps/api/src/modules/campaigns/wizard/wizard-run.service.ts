@@ -10,17 +10,13 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
-import {
-  SENDER_DIRECTORY,
-  WALLET_GATE,
-  type SenderDirectory,
-  type WalletGate,
-} from '../../broadcasts';
+import { WALLET_GATE, type WalletGate } from '../../broadcasts';
 import { MODULE_KEY } from '../campaign-events';
 import { CampaignsRepository } from '../campaigns.repository';
 import { createdWebhook, toSnapshot } from '../campaign-webhook-events';
 import { WizardAudienceService } from './wizard-audience.service';
 import { templateCategory } from './wizard-read.service';
+import { WizardEligibilityService } from './wizard-eligibility.service';
 import { WizardReviewService } from './wizard-review.service';
 import { WizardRepository, type TemplateListRow } from './wizard.repository';
 import { blankCampaignFor } from './wizard-blank';
@@ -28,17 +24,6 @@ import { blankCampaignFor } from './wizard-blank';
 /** Recipient rows are written in one transaction with the campaign; past this the audience must be narrowed (the classic builder caps at the same size). */
 export const WIZARD_MAX_RECIPIENTS = 100_000;
 const WRITE_CHUNK = 5000;
-
-const BUILT_IN_ENGINES = new Set(['baileys', 'waba', 'twilio']);
-
-/** The engine a template is sent through: its number's, else its stored channel, else the workspace's default. */
-export function engineOf(t: TemplateListRow, defaultEngine: string): string {
-  if (t.configProvider && BUILT_IN_ENGINES.has(t.configProvider)) return t.configProvider;
-  if (t.channel && BUILT_IN_ENGINES.has(t.channel)) return t.channel;
-  if (t.twilioContentSid) return 'twilio';
-  if (t.metaTemplateId) return 'waba';
-  return defaultEngine;
-}
 
 export interface RunInput {
   /** The draft being launched, or the series' blueprint. */
@@ -79,9 +64,9 @@ export class WizardRunService {
     private readonly campaigns: CampaignsRepository,
     private readonly audience: WizardAudienceService,
     private readonly review: WizardReviewService,
+    private readonly eligibility: WizardEligibilityService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
-    @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
@@ -92,43 +77,17 @@ export class WizardRunService {
     template: TemplateListRow,
     senderKey: string | null,
   ): Promise<{ provider: string; deviceId: number | null }> {
-    // The number the person picked in step 1 wins; a draft without one (an old one) falls back to the template's own number.
-    if (senderKey) {
-      const [picked] = await this.senders.resolve(tx, orgId, [senderKey]);
-      if (!picked) {
-        throw new AppError(
-          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
-          'The WhatsApp number you picked is not connected.',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      return { provider: picked.engine, deviceId: picked.id };
-    }
-    const def = await this.senders.defaultEngine(tx, orgId);
-    const engine = engineOf(template, def);
-    if (template.configUuid) {
-      const [picked] = await this.senders.resolve(tx, orgId, [`${engine}:${template.configUuid}`]);
-      if (!picked) {
-        throw new AppError(
-          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
-          'The WhatsApp number this template is tied to is not connected.',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      }
-      return { provider: picked.engine, deviceId: picked.id };
-    }
-    const found = await this.senders.resolveForDispatch(tx, orgId, {
-      provider: engine,
-      deviceId: null,
-    });
-    if (!found) {
-      throw new AppError(
-        ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
-        'No WhatsApp number is connected to send this template.',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
-    return { provider: found.engine, deviceId: null };
+    const found = await this.eligibility.lookupSender(tx, orgId, template, senderKey);
+    if (found.ok) return { provider: found.provider, deviceId: found.deviceId };
+    throw new AppError(
+      ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+      {
+        picked: 'The WhatsApp number you picked is not connected.',
+        template: 'The WhatsApp number this template is tied to is not connected.',
+        none: 'No WhatsApp number is connected to send this template.',
+      }[found.why],
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
   }
 
   /**
@@ -145,12 +104,15 @@ export class WizardRunService {
     count: WizardAudienceCount;
   }> {
     const sender = await this.sender(tx, orgId, template, draft.senderKey);
+    // The template, the number's standing and the variable mapping: the same check step 3 shows.
+    await this.eligibility.assertLaunchable(tx, orgId, draft, template, new Date());
     const count = await this.audience.count(tx, orgId, draft.audience);
     if (count.recipients === 0) {
       throw new AppError(
         ERROR_CODES.CAMP_NO_RECIPIENTS,
         'Nobody on this audience can be messaged (everyone matching opted out or has no valid number).',
         HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'eligibility.contacts', message: 'contacts_none_eligible' }],
       );
     }
     if (count.recipients > WIZARD_MAX_RECIPIENTS) {

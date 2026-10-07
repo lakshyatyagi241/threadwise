@@ -450,6 +450,105 @@ export const wizardCreditCheckSchema = z.object({
 });
 export type WizardCreditCheck = z.infer<typeof wizardCreditCheckSchema>;
 
+// ---- the eligibility check (step 3): "can this broadcast really go out?"
+
+export const WIZARD_ELIGIBILITY_GROUPS = ['contacts', 'template', 'billing'] as const;
+export type WizardEligibilityGroupKey = (typeof WIZARD_ELIGIBILITY_GROUPS)[number];
+export const WIZARD_ELIGIBILITY_STATES = ['pass', 'warn', 'fail'] as const;
+export type WizardEligibilityState = (typeof WIZARD_ELIGIBILITY_STATES)[number];
+
+/**
+ * Why a row of the check has the state it has. The web words each code in every language, the launch names the failing one in its
+ * 422 (`errors[].message`), so a code is never reworded server-side.
+ */
+export const WIZARD_ELIGIBILITY_CODES = [
+  // contacts
+  'contacts_ok',
+  'contacts_some_skipped',
+  'contacts_none_eligible',
+  'contacts_no_audience',
+  'contacts_approximate',
+  // template
+  'template_group_ok',
+  'template_ok',
+  'template_not_approved',
+  'template_paused',
+  'template_quality_low',
+  'template_auth_not_allowed',
+  'template_other_sender',
+  // sender (the number it is sent from)
+  'sender_ok',
+  'sender_not_connected',
+  'sender_restricted',
+  'sender_flagged',
+  'sender_quality_low',
+  // variables
+  'variables_ok',
+  'variables_incomplete',
+  // billing
+  'billing_mode_plan',
+  'billing_mode_plan_unlimited',
+  'billing_mode_plan_inactive',
+  'billing_mode_wallet',
+  'billing_wallet_present',
+  'billing_wallet_none',
+  'billing_ok',
+  'billing_allowance_runs_out',
+  'billing_wallet_empty',
+  'billing_wallet_insufficient',
+  'billing_unavailable',
+] as const;
+export const wizardEligibilityCodeSchema = z.enum(WIZARD_ELIGIBILITY_CODES);
+export type WizardEligibilityCode = z.infer<typeof wizardEligibilityCodeSchema>;
+
+export const wizardEligibilityRequestSchema = z.object({
+  templateId: uuidSchema,
+  audience: wizardAudienceSchema,
+  /** The number picked in step 1; null for an old draft (the template's own number is then used, as the launch does). */
+  senderKey: senderKeySchema.nullable().default(null),
+  /** The variable mapping of step 3, to tell whether it is complete for the template. */
+  variables: wizardVariablesSchema.default({}),
+});
+export type WizardEligibilityRequest = z.infer<typeof wizardEligibilityRequestSchema>;
+
+/** Numbers a message needs to word itself (`{remaining}`, `{status}`): plain values, never markup. */
+export const wizardEligibilityValuesSchema = z.record(z.union([z.string(), z.number()]));
+
+export const wizardEligibilityCheckSchema = z.object({
+  code: wizardEligibilityCodeSchema,
+  state: z.enum(WIZARD_ELIGIBILITY_STATES),
+  values: wizardEligibilityValuesSchema,
+});
+export type WizardEligibilityCheck = z.infer<typeof wizardEligibilityCheckSchema>;
+
+export const wizardEligibilityChipSchema = z.object({
+  /** `eligible`, `selected`, `optedOut`, `invalidNumber`, `duplicate`. */
+  key: z.enum(['eligible', 'selected', 'optedOut', 'invalidNumber', 'duplicate']),
+  count: z.number().int(),
+});
+
+export const wizardEligibilityGroupSchema = z.object({
+  group: z.enum(WIZARD_ELIGIBILITY_GROUPS),
+  /** The worst state of its rows. `fail` blocks the launch, `warn` does not. */
+  state: z.enum(WIZARD_ELIGIBILITY_STATES),
+  /** The one-line reason: the worst row (or, when all pass, the group's summary row). */
+  code: wizardEligibilityCodeSchema,
+  values: wizardEligibilityValuesSchema,
+  checks: z.array(wizardEligibilityCheckSchema),
+  /** Counts shown as chips (the contacts group). */
+  chips: z.array(wizardEligibilityChipSchema),
+});
+export type WizardEligibilityGroup = z.infer<typeof wizardEligibilityGroupSchema>;
+
+export const wizardEligibilitySchema = z.object({
+  /** Worst state of the three groups. */
+  state: z.enum(WIZARD_ELIGIBILITY_STATES),
+  contacts: wizardEligibilityGroupSchema,
+  template: wizardEligibilityGroupSchema,
+  billing: wizardEligibilityGroupSchema,
+});
+export type WizardEligibility = z.infer<typeof wizardEligibilitySchema>;
+
 export const wizardVariablePreviewRequestSchema = z.object({
   templateId: uuidSchema,
   audience: wizardAudienceSchema,

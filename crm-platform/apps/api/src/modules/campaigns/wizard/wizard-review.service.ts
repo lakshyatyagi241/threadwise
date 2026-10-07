@@ -8,6 +8,7 @@ import {
   type WizardCreditCheckRequest,
   type WizardVariablePreview,
   type WizardVariablePreviewRequest,
+  type WalletSummary,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
@@ -72,6 +73,18 @@ export class WizardReviewService {
    * balance, the price per country in this template's category, and what the send is expected to cost after the plan's allowance.
    */
   async creditCheck(req: WizardCreditCheckRequest): Promise<WizardCreditCheck> {
+    return (await this.creditFacts(req)).check;
+  }
+
+  /**
+   * The credit check and the facts behind it (the wallet summary and why the launch rule refused, if it did). The eligibility
+   * check's billing group reads these same facts, so the two cards cannot disagree.
+   */
+  async creditFacts(req: WizardCreditCheckRequest): Promise<{
+    check: WizardCreditCheck;
+    summary: WalletSummary;
+    refusal: 'empty' | 'insufficient' | null;
+  }> {
     const { orgId } = RequestContextStore.require();
     const prepared = await this.db.tx(async (tx) => {
       const template = await this.repo.templateByUuid(tx, orgId, req.templateId);
@@ -99,6 +112,7 @@ export class WizardReviewService {
     const cost = estimateCost(lines, chargeable);
 
     let sufficient = true;
+    let refusal: 'empty' | 'insufficient' | null = null;
     try {
       await this.gate.precheck(orgId, prepared.count.recipients, {
         source: 'campaign',
@@ -106,10 +120,15 @@ export class WizardReviewService {
         category,
       });
     } catch (err) {
-      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) sufficient = false;
-      else throw err;
+      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) {
+        sufficient = false;
+        refusal =
+          err.details?.find((d) => d.path === 'reason')?.message === 'insufficient'
+            ? 'insufficient'
+            : 'empty';
+      } else throw err;
     }
-    return {
+    const check: WizardCreditCheck = {
       currency: summary.currency,
       balanceMinor: summary.balanceMinor,
       billingMode: summary.billingMode,
@@ -122,6 +141,7 @@ export class WizardReviewService {
       shortfallMinor: sufficient ? 0 : Math.max(0, cost.totalMinor - summary.balanceMinor),
       topupUrl: summary.topupUrl,
     };
+    return { check, summary, refusal };
   }
 
   private async priceLines(
