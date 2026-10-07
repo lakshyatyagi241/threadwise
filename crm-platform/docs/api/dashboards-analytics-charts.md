@@ -76,8 +76,10 @@ distinct conversations with an inbound message (it can exceed `messaged`; client
 the inbound message count, the responding contacts, and `repliesPerContact` (one decimal, `null` when nobody replied). `replyRate` is
 replied / messaged in percent (one decimal, capped at 100). `comparison` holds the previous window's reply rate and the change in
 percentage points, `null` when that window messaged no contacts. `current` and `previous` carry `contactsMessaged`,
-`contactsDelivered` and `contactsReplied`. `stages` and `endToEnd` stay for the message-based figures. There is no goal stage:
-the data model has no goal event.
+`contactsDelivered`, `contactsReplied` and `contactsGoalCompleted`. `stages` and `endToEnd` stay for the message-based figures. `goalCompleted` (the "Goal completed" stage) =
+distinct conversations with at least one `flow_runs` row of `status = 'completed'` (the run reached its end; failed, cancelled, expired
+and live runs never count) whose `ended_at` falls in the window; runs without a `conversation_id` are skipped. It is 0 when no flow
+has finished, and clients draw it as a share of `messaged`, capped at 100.
 
 ## GET /v2/dashboard/throughput?range=... (`dash.dashboard.read`)
 
