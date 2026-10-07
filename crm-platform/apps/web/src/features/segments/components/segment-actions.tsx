@@ -154,6 +154,15 @@ export function useSegmentActions({
           description: segment.description,
           color: segment.color,
           visibility: segment.visibility,
+          // A copy of a specific segment is shared with the same people and teams.
+          ...(segment.visibility === 'specific'
+            ? {
+                sharedWith: {
+                  userIds: segment.sharedWith.users.map((u) => u.id),
+                  teamIds: segment.sharedWith.teams.map((x) => x.id),
+                },
+              }
+            : {}),
           rules: segment.rules,
         });
         await invalidateSegments(qc);

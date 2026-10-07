@@ -142,7 +142,7 @@ function Header({
           <div className="min-w-0 space-y-1">
             <h1 className="break-words text-xl font-bold tracking-tight">{segment.name}</h1>
             <div className="flex flex-wrap items-center gap-2">
-              <VisibilityChip visibility={segment.visibility} />
+              <VisibilityChip visibility={segment.visibility} sharedWith={segment.sharedWith} />
               {segment.invalidConditions.length > 0 && (
                 <AttentionChip count={segment.invalidConditions.length} />
               )}
