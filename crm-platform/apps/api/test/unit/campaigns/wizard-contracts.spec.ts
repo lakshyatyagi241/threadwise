@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  EMPTY_WIZARD_AUDIENCE,
   EMPTY_WIZARD_DRAFT,
   firstRunInstant,
   parseTestRecipients,
@@ -7,6 +8,7 @@ import {
   retryWindowCloses,
   saveWizardDraftSchema,
   updateWizardDraftSchema,
+  wizardAudienceHasSource,
   wizardDraftSchema,
   wizardLaunchIssues,
   wizardScheduleSchema,
@@ -129,12 +131,44 @@ describe('schedule', () => {
   });
 });
 
+describe('the audience of the four modes', () => {
+  const U = '3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11';
+  const csv = { id: U, fileName: 'a.csv', valid: 1, duplicate: 0, invalid: 0, optedOut: 0 };
+
+  it('any one source is an audience: groups, segments, ticked contacts, all matching, or a CSV', () => {
+    expect(wizardAudienceHasSource(EMPTY_WIZARD_AUDIENCE)).toBe(false);
+    for (const patch of [
+      { groupIds: [U] },
+      { segmentIds: [U] },
+      { contactIds: [U] },
+      { allMatching: { search: null, rules: null } },
+      { csv },
+    ]) {
+      expect(wizardAudienceHasSource({ ...EMPTY_WIZARD_AUDIENCE, ...patch })).toBe(true);
+    }
+  });
+
+  it('the table filter alone is not an audience, and an audience from the older shape still parses', () => {
+    const filter = { type: 'group', combinator: 'and', children: [] } as const;
+    expect(wizardAudienceHasSource({ ...EMPTY_WIZARD_AUDIENCE, rules: filter })).toBe(false);
+    expect(
+      wizardDraftSchema.parse({ audience: { groupIds: [U], segmentIds: [], rules: null } })
+        .audience,
+    ).toMatchObject({ groupIds: [U], contactIds: [], allMatching: null, csv: null });
+  });
+
+  it('a CSV-only draft passes the audience step', () => {
+    const d = draft({ audience: { ...EMPTY_WIZARD_AUDIENCE, csv } });
+    expect(wizardStepIssues(2, d, { now: NOW }).map((i) => i.code)).toEqual([]);
+  });
+});
+
 describe('step validation (the web before Next, the API at launch)', () => {
   const ok = draft({
     name: 'Offer',
     templateId: T,
     senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
-    audience: { groupIds: [T], segmentIds: [], rules: null },
+    audience: { ...EMPTY_WIZARD_AUDIENCE, groupIds: [T] },
     variables: { 'body.1': { kind: 'field', field: 'first_name' } },
   });
 

@@ -15,6 +15,7 @@ export { ContactQuotaService } from './contact-quota.service';
 export type { ContactQuota } from './contact-quota.service';
 export {
   contactConditions,
+  whereOf,
   contactScopeCondition,
   type ResolvedContactFilter,
 } from './contact-conditions';
