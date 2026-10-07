@@ -76,8 +76,8 @@ export function copyFor(
         title: 'Task completed',
         body: actorName ? `${plainText(actorName, 60)} completed: ${task}` : task,
       };
-    // Never reached from a task event: the lead pipeline's consumer words its own notification.
-    case 'new_lead':
+    // Never reached from a task event: the lead pipeline and the conversation consumer word their own notifications.
+    default:
       return { title: 'New lead', body: task };
   }
 }
