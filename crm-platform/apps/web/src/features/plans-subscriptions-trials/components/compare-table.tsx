@@ -4,6 +4,7 @@ import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { BillingPlan } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { cellValue, compareSections, type CompareRowDef } from '../lib/limits';
 
 const NS = 'plans-subscriptions-trials';
@@ -23,9 +24,10 @@ export function CompareTable({ plans }: { plans: readonly BillingPlan[] }) {
   const locale = useLocale();
   const diffId = useId();
   const [onlyDiff, setOnlyDiff] = useState(false);
+  const unofficial = useUnofficialWhatsapp();
   if (plans.length < 2) return null;
 
-  const sections = compareSections(plans, { onlyDiffering: onlyDiff });
+  const sections = compareSections(plans, { onlyDiffering: onlyDiff, unofficial });
   const label = (row: CompareRowDef) =>
     row.kind === 'limit' ? tl(row.key) : row.kind === 'flag' ? tf(row.key) : row.name;
   const sectionTitle = (s: (typeof sections)[number]) =>

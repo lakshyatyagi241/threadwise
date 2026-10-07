@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import {
   type ListSchedulesQuery,
@@ -7,6 +7,10 @@ import {
   type ScheduleOptions,
   type ScheduleSummary,
 } from '@crm/contracts';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -59,7 +63,10 @@ function summary(r: Raw, senderLabel: string | null): ScheduleSummary {
 /** What the list, the detail page and the composer's pickers read (TW-SCHED-001, 002, 012). Everything is the caller's workspace. */
 @Injectable()
 export class ScheduleReadService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
 
   async list(q: ListSchedulesQuery): Promise<ScheduleList> {
     const { orgId } = RequestContextStore.require();
@@ -170,10 +177,12 @@ export class ScheduleReadService {
   /** The composer's pickers: connected senders, groups, tags, earlier broadcasts and templates. */
   async options(minLeadMinutes: number): Promise<ScheduleOptions> {
     const { orgId } = RequestContextStore.require();
+    // No personal-number senders are offered while the platform switch is off (owner decision 2026-10-05).
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const devices = await tx.execute(sql`
         SELECT uuid, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number, warmer_config
-          FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active ORDER BY id`);
+          FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND active AND ${unofficialOn}::boolean ORDER BY id`);
       const configs = await tx.execute(sql`
         SELECT uuid, provider, coalesce(nullif(display_label, ''), provider) AS label, phone_number, warmer_config
           FROM wa_provider_configs WHERE org_id = ${orgId} AND provider IN ('waba', 'twilio') AND status = 'connected' ORDER BY id`);

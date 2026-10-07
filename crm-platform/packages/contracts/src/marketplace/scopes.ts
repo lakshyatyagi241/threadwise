@@ -105,6 +105,20 @@ export const MARKET_SCOPES = [
     permissions: ['record.appointments.create', 'record.appointments.update'],
   },
   {
+    id: 'forms.read',
+    label: 'Read forms and submissions',
+    description: 'See your web forms and what visitors submitted through them.',
+    risk: 'medium',
+    permissions: ['record.forms.read', 'record.form-submissions.read'],
+  },
+  {
+    id: 'forms.write',
+    label: 'Create and edit forms',
+    description: 'Build, publish and change web forms, and retry or review their submissions.',
+    risk: 'medium',
+    permissions: ['record.forms.create', 'record.forms.update', 'record.form-submissions.update'],
+  },
+  {
     id: 'templates.read',
     label: 'Read message templates',
     description: 'See your WhatsApp message templates.',

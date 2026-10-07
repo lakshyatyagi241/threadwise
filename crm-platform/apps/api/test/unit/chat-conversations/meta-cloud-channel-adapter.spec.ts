@@ -526,3 +526,29 @@ describe('parseInbound: the normaliser the inbox reads a Cloud API change with',
     expect(adapter.parseInbound(meta(), null)).toEqual({ messages: [], receipts: [], ignored: [] });
   });
 });
+
+describe('send: a WhatsApp group thread key is never a recipient (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+  it('refuses a g: peer before the file upload and before any Graph call, not retryable', async () => {
+    const { adapter, calls, uploader, guard } = build();
+    const to = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
+    const envelopes: OutboundEnvelope[] = [
+      { ...text('hi'), to },
+      {
+        kind: 'media',
+        to,
+        clientReference: 'ref-m',
+        attempt: 1,
+        media: { key: 'k', mediaKind: 'image', mime: 'image/jpeg', caption: 'c' },
+      },
+    ];
+    for (const envelope of envelopes) {
+      const err = (await adapter.send(meta(), envelope).catch((e: unknown) => e)) as ChannelError;
+      expect(err).toBeInstanceOf(ChannelError);
+      expect(err.code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+      expect(err.retryable).toBe(false);
+    }
+    expect(calls).toHaveLength(0);
+    expect(uploader.prepare).not.toHaveBeenCalled();
+    expect(guard.withFooter).not.toHaveBeenCalled();
+  });
+});

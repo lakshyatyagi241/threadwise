@@ -169,6 +169,39 @@ describe('TW-CAMP-003, 004: create and the audience', () => {
     expect(typed.name).toBe('Recipient · 5670');
   });
 
+  it("a segment picked as audience brings its members; another workspace's segment is not found", async () => {
+    const t = await api.signup('cc-seg');
+    const u = await api.signup('cc-seg-b');
+    const rule = {
+      type: 'group',
+      combinator: 'and',
+      children: [{ type: 'condition', field: 'source', operator: 'equals', value: 'import' }],
+    };
+    await api.seedContacts(t, [
+      { name: 'In A', phone: phone(), source: 'import' },
+      { name: 'In B', phone: phone(), source: 'import' },
+      { name: 'Out', phone: phone(), source: 'web' },
+    ]);
+    const mine = await api
+      .http()
+      .post('/v2/segments')
+      .set(bearer(t.admin))
+      .send({ name: 'Imported', rules: rule });
+    expect(mine.status, JSON.stringify(mine.body)).toBe(201);
+    const theirs = await api
+      .http()
+      .post('/v2/segments')
+      .set(bearer(u.admin))
+      .send({ name: 'Theirs', rules: rule });
+
+    const ok = await post(t, '', base({ segmentIds: [mine.body.id] }));
+    expect(ok.status, JSON.stringify(ok.body)).toBe(201);
+    expect(ok.body.campaign.counts.recipients).toBe(2);
+
+    const foreign = await post(t, '', base({ segmentIds: [theirs.body.id] }));
+    expect(foreign.status).toBe(404);
+  });
+
   it("another workspace's contacts, groups and tags are dropped, and nobody left is refused", async () => {
     const t = await api.signup('cc3');
     const u = await api.signup('cc3b');

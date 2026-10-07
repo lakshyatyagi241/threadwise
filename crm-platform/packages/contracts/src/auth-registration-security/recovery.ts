@@ -75,5 +75,10 @@ export const socialStartResponseSchema = z.object({ url: z.string().url() });
 export const socialCallbackRequestSchema = z.object({
   code: z.string().min(1).max(2048),
   state: z.string().min(16).max(128),
+  /**
+   * The referral code the visitor arrived with (the web server fills it from the 30-day `?ref` cookie). Used only when this
+   * callback creates a brand-new account; ignored for a sign-in. Reference never attributed a social sign-up (TW-CPN-031 rule 4).
+   */
+  referralCode: z.string().trim().max(16).optional(),
 });
 export type SocialCallbackRequest = z.infer<typeof socialCallbackRequestSchema>;

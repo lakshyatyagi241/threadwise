@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { CurrencyItem, CurrencyListResponse } from '@crm/contracts';
 import {
@@ -40,6 +40,23 @@ import { cpnErrorKey, usedByList } from '../lib/errors';
 import { Accent, ErrorBlock, LoadingBlock, PageHead, Pager, Problems } from './ui';
 
 const NS = 'coupons-credits-referral-currency.currencies';
+/** The API's limit on the search text. */
+const MAX_SEARCH = 100;
+/** Form fields in their on-screen order, and the id fragment each input carries. */
+const FIELD_ORDER: readonly CurrencyField[] = [
+  'name',
+  'code',
+  'symbol',
+  'precision',
+  'exchangeRate',
+];
+const FIELD_ID: Record<CurrencyField, string> = {
+  name: 'name',
+  code: 'code',
+  symbol: 'symbol',
+  precision: 'precision',
+  exchangeRate: 'rate',
+};
 const LBL = 'mb-1.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
 
 export function CurrenciesPage() {
@@ -55,18 +72,42 @@ function CurrenciesScreen() {
   const sp = useSearchParams();
   const q = sp.get('q') ?? '';
   const page = Math.max(1, Number(sp.get('page')) || 1);
+  // A search longer than the API accepts cannot match anything: it is never sent.
+  const tooLong = q.length > MAX_SEARCH;
+  const apiQ = tooLong ? undefined : q || undefined;
+  const apiPage = tooLong ? 1 : page;
   const query = useQuery({
-    queryKey: KEYS.currencyList({ q: q || undefined, page }),
-    queryFn: ({ signal }) => fetchCurrencies({ q: q || undefined, page }, signal),
+    queryKey: KEYS.currencyList({ q: apiQ, page: apiPage }),
+    queryFn: ({ signal }) => fetchCurrencies({ q: apiQ, page: apiPage }, signal),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
+    retry: false,
   });
-  if (query.isPending) return <LoadingBlock />;
-  if (query.isError) return <ErrorBlock error={query.error} onRetry={() => void query.refetch()} />;
-  return <Catalogue data={query.data} q={q} />;
+  if (query.isPending) return <Catalogue q={q} notice={<LoadingBlock />} />;
+  if (query.isError) {
+    return (
+      <Catalogue
+        q={q}
+        notice={<ErrorBlock error={query.error} onRetry={() => void query.refetch()} />}
+      />
+    );
+  }
+  const data: CurrencyListResponse = tooLong
+    ? { ...query.data, data: [], total: 0, pageCount: 0, from: 0, to: 0, page: 1 }
+    : query.data;
+  return <Catalogue data={data} q={q} />;
 }
 
-function Catalogue({ data, q }: { data: CurrencyListResponse; q: string }) {
+/** `data` is absent while the list loads or failed: the frame, the search box and `notice` still show. */
+function Catalogue({
+  data,
+  q,
+  notice,
+}: {
+  data?: CurrencyListResponse;
+  q: string;
+  notice?: ReactNode;
+}) {
   const t = useTranslations(NS);
   const te = useTranslations('coupons-credits-referral-currency.errors');
   const tc = useTranslations('coupons-credits-referral-currency.common');
@@ -80,7 +121,7 @@ function Catalogue({ data, q }: { data: CurrencyListResponse; q: string }) {
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<CurrencyItem | null>(null);
   const [deleting, setDeleting] = useState<CurrencyItem | null>(null);
-  const [defaultPick, setDefaultPick] = useState(data.summary.defaultCode);
+  const [defaultPick, setDefaultPick] = useState<string | null>(null);
   const refresh = () => qc.invalidateQueries({ queryKey: KEYS.currencies });
 
   const failure = (e: unknown) => {
@@ -222,79 +263,87 @@ function Catalogue({ data, q }: { data: CurrencyListResponse; q: string }) {
       />
       {!canEdit && <Alert tone="info">{tc('readOnly')}</Alert>}
 
-      <section
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
-        aria-label={t('crumbHere')}
-      >
-        <StatTile
-          label={t('kpi.total')}
-          value={<span className="font-serif font-normal">{nf.format(data.summary.total)}</span>}
-          hint={t('kpi.totalHint')}
-          className="rounded-2xl"
-        />
-        <StatTile
-          tone="accent"
-          label={t('kpi.active')}
-          value={<span className="font-serif font-normal">{nf.format(data.summary.active)}</span>}
-          hint={t('kpi.activeHint')}
-          className="rounded-2xl"
-        />
-        <StatTile
-          label={t('kpi.default')}
-          value={
-            <span className="font-serif font-normal uppercase">{data.summary.defaultCode}</span>
-          }
-          hint={t('kpi.defaultHint')}
-          className="rounded-2xl"
-        />
-        <StatTile
-          label={t('kpi.inactive')}
-          value={<span className="font-serif font-normal">{nf.format(data.summary.inactive)}</span>}
-          hint={t('kpi.inactiveHint')}
-          className="rounded-2xl"
-        />
-      </section>
+      {data && (
+        <section
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
+          aria-label={t('crumbHere')}
+        >
+          <StatTile
+            label={t('kpi.total')}
+            value={<span className="font-serif font-normal">{nf.format(data.summary.total)}</span>}
+            hint={t('kpi.totalHint')}
+            className="rounded-2xl"
+          />
+          <StatTile
+            tone="accent"
+            label={t('kpi.active')}
+            value={<span className="font-serif font-normal">{nf.format(data.summary.active)}</span>}
+            hint={t('kpi.activeHint')}
+            className="rounded-2xl"
+          />
+          <StatTile
+            label={t('kpi.default')}
+            value={
+              <span className="font-serif font-normal uppercase">{data.summary.defaultCode}</span>
+            }
+            hint={t('kpi.defaultHint')}
+            className="rounded-2xl"
+          />
+          <StatTile
+            label={t('kpi.inactive')}
+            value={
+              <span className="font-serif font-normal">{nf.format(data.summary.inactive)}</span>
+            }
+            hint={t('kpi.inactiveHint')}
+            className="rounded-2xl"
+          />
+        </section>
+      )}
 
-      <Card className="overflow-hidden rounded-2xl p-0">
-        <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              {t('defaultCard.eyebrow')}
+      {data && (
+        <Card className="overflow-hidden rounded-2xl p-0">
+          <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                {t('defaultCard.eyebrow')}
+              </div>
+              <h2 className="mt-0.5 font-serif text-xl leading-tight">{t('defaultCard.title')}</h2>
+              <p className="mt-1 max-w-2xl text-xs text-muted-foreground">
+                {t('defaultCard.body')}
+              </p>
             </div>
-            <h2 className="mt-0.5 font-serif text-xl leading-tight">{t('defaultCard.title')}</h2>
-            <p className="mt-1 max-w-2xl text-xs text-muted-foreground">{t('defaultCard.body')}</p>
+            {canEdit && (
+              <form
+                className="flex shrink-0 flex-wrap items-center gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setDefault.mutate(defaultPick ?? data.summary.defaultCode);
+                }}
+              >
+                <Select
+                  aria-label={t('defaultCard.select')}
+                  value={defaultPick ?? data.summary.defaultCode}
+                  onChange={(e) => setDefaultPick(e.target.value)}
+                  className="h-auto w-auto py-2 font-mono text-[12.5px]"
+                >
+                  {data.defaultChoices.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.code} — {c.name} {c.symbol ? `(${c.symbol})` : ''}
+                    </option>
+                  ))}
+                </Select>
+                <Button
+                  type="submit"
+                  className="h-9 rounded-full px-4 text-xs"
+                  disabled={setDefault.isPending}
+                >
+                  {setDefault.isPending ? t('defaultCard.setting') : t('defaultCard.set')}
+                </Button>
+              </form>
+            )}
           </div>
-          {canEdit && (
-            <form
-              className="flex shrink-0 flex-wrap items-center gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setDefault.mutate(defaultPick);
-              }}
-            >
-              <Select
-                aria-label={t('defaultCard.select')}
-                value={defaultPick}
-                onChange={(e) => setDefaultPick(e.target.value)}
-                className="h-auto w-auto py-2 font-mono text-[12.5px]"
-              >
-                {data.defaultChoices.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.code} — {c.name} {c.symbol ? `(${c.symbol})` : ''}
-                  </option>
-                ))}
-              </Select>
-              <Button
-                type="submit"
-                className="h-9 rounded-full px-4 text-xs"
-                disabled={setDefault.isPending}
-              >
-                {setDefault.isPending ? t('defaultCard.setting') : t('defaultCard.set')}
-              </Button>
-            </form>
-          )}
-        </div>
-      </Card>
+        </Card>
+      )}
 
       {adding && canEdit && (
         <CurrencyForm
@@ -339,128 +388,134 @@ function Catalogue({ data, q }: { data: CurrencyListResponse; q: string }) {
             />
           </form>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-[12.5px]">
-            <caption className="sr-only">{t('table.label')}</caption>
-            <thead className="bg-muted font-mono text-[10.5px] uppercase text-muted-foreground">
-              <tr>
-                <th scope="col" className={cn(th, 'w-[110px] text-start')}>
-                  {t('table.code')}
-                </th>
-                <th scope="col" className={cn(th, 'text-start')}>
-                  {t('table.name')}
-                </th>
-                <th scope="col" className={cn(th, 'w-[70px] text-start')}>
-                  {t('table.symbol')}
-                </th>
-                <th scope="col" className={cn(th, 'w-[150px] text-end')}>
-                  {t('table.rate')}
-                </th>
-                <th scope="col" className={cn(th, 'w-[80px] text-center')}>
-                  {t('table.decimals')}
-                </th>
-                <th scope="col" className={cn(th, 'w-[100px] text-center')}>
-                  {t('table.active')}
-                </th>
-                <th scope="col" className={cn(th, 'w-[150px] text-end')}>
-                  <span className="sr-only">{t('table.actions')}</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {data.data.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className="px-4 py-10 text-center text-[13px] text-muted-foreground"
-                  >
-                    {q ? t('empty.noMatch', { q }) : t('empty.none')}
-                  </td>
-                </tr>
-              )}
-              {data.data.map((c) => (
-                <tr key={c.id} className="hover:bg-muted/50">
-                  <td className="px-4 py-2.5 font-mono font-semibold">
-                    {c.code}
-                    {c.isDefault && (
-                      <span className="ms-1 rounded border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] uppercase text-primary">
-                        {t('defaultBadge')}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-4 py-2.5">{c.name}</td>
-                  <td className="px-4 py-2.5">{c.symbol}</td>
-                  <td className="px-4 py-2.5 text-end font-mono" dir="ltr">
-                    {rate.format(Number(c.exchangeRate))}
-                  </td>
-                  <td className="px-4 py-2.5 text-center font-mono">{c.precision}</td>
-                  <td className="px-4 py-2.5 text-center">
-                    <button
-                      type="button"
-                      disabled={!canEdit || toggle.isPending}
-                      aria-pressed={c.isActive}
-                      aria-label={t('actions.toggle', { code: c.code })}
-                      onClick={() => toggle.mutate(c)}
-                      className={cn(
-                        'rounded-full border px-2.5 py-1 font-mono text-[10.5px]',
-                        c.isActive
-                          ? 'border-primary/40 bg-primary/10 text-primary'
-                          : 'border-border bg-muted text-muted-foreground',
-                      )}
-                    >
-                      {c.isActive ? t('on') : t('off')}
-                    </button>
-                  </td>
-                  <td className="px-4 py-2.5 text-end">
-                    {canEdit && (
-                      <span className="inline-flex gap-1.5">
+        {data ? (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-[12.5px]">
+                <caption className="sr-only">{t('table.label')}</caption>
+                <thead className="bg-muted font-mono text-[10.5px] uppercase text-muted-foreground">
+                  <tr>
+                    <th scope="col" className={cn(th, 'w-[110px] text-start')}>
+                      {t('table.code')}
+                    </th>
+                    <th scope="col" className={cn(th, 'text-start')}>
+                      {t('table.name')}
+                    </th>
+                    <th scope="col" className={cn(th, 'w-[70px] text-start')}>
+                      {t('table.symbol')}
+                    </th>
+                    <th scope="col" className={cn(th, 'w-[150px] text-end')}>
+                      {t('table.rate')}
+                    </th>
+                    <th scope="col" className={cn(th, 'w-[80px] text-center')}>
+                      {t('table.decimals')}
+                    </th>
+                    <th scope="col" className={cn(th, 'w-[100px] text-center')}>
+                      {t('table.active')}
+                    </th>
+                    <th scope="col" className={cn(th, 'w-[150px] text-end')}>
+                      <span className="sr-only">{t('table.actions')}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {data.data.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="px-4 py-10 text-center text-[13px] text-muted-foreground"
+                      >
+                        {q ? t('empty.noMatch', { q }) : t('empty.none')}
+                      </td>
+                    </tr>
+                  )}
+                  {data.data.map((c) => (
+                    <tr key={c.id} className="hover:bg-muted/50">
+                      <td className="px-4 py-2.5 font-mono font-semibold">
+                        {c.code}
+                        {c.isDefault && (
+                          <span className="ms-1 rounded border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] uppercase text-primary">
+                            {t('defaultBadge')}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5">{c.name}</td>
+                      <td className="px-4 py-2.5">{c.symbol}</td>
+                      <td className="px-4 py-2.5 text-end font-mono" dir="ltr">
+                        {rate.format(Number(c.exchangeRate))}
+                      </td>
+                      <td className="px-4 py-2.5 text-center font-mono">{c.precision}</td>
+                      <td className="px-4 py-2.5 text-center">
                         <button
                           type="button"
-                          onClick={() => setEditing(c)}
-                          className="rounded-full border border-border px-2.5 py-1 font-mono text-[10.5px] hover:bg-muted"
+                          disabled={!canEdit || toggle.isPending}
+                          aria-pressed={c.isActive}
+                          aria-label={t('actions.toggle', { code: c.code })}
+                          onClick={() => toggle.mutate(c)}
+                          className={cn(
+                            'rounded-full border px-2.5 py-1 font-mono text-[10.5px]',
+                            c.isActive
+                              ? 'border-primary/40 bg-primary/10 text-primary'
+                              : 'border-border bg-muted text-muted-foreground',
+                          )}
                         >
-                          {t('actions.edit')}
+                          {c.isActive ? t('on') : t('off')}
                         </button>
-                        {!c.isDefault && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              remove.reset();
-                              setDeleting(c);
-                            }}
-                            className="rounded-full border border-danger/40 px-2.5 py-1 font-mono text-[10.5px] text-danger hover:bg-danger/10"
-                          >
-                            {t('actions.delete')}
-                          </button>
+                      </td>
+                      <td className="px-4 py-2.5 text-end">
+                        {canEdit && (
+                          <span className="inline-flex gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setEditing(c)}
+                              className="rounded-full border border-border px-2.5 py-1 font-mono text-[10.5px] hover:bg-muted"
+                            >
+                              {t('actions.edit')}
+                            </button>
+                            {!c.isDefault && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  remove.reset();
+                                  setDeleting(c);
+                                }}
+                                className="rounded-full border border-danger/40 px-2.5 py-1 font-mono text-[10.5px] text-danger hover:bg-danger/10"
+                              >
+                                {t('actions.delete')}
+                              </button>
+                            )}
+                          </span>
                         )}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/40 px-4 py-3">
-          <div className="font-mono text-[11px] text-muted-foreground">
-            {t('footer', {
-              from: nf.format(data.from),
-              to: nf.format(data.to),
-              total: nf.format(data.total),
-            })}
-          </div>
-          <Pager
-            page={data.page}
-            pageCount={data.pageCount}
-            onGo={(n) => go({ page: n })}
-            labels={{
-              nav: tc('pager.label'),
-              previous: tc('pager.previous'),
-              next: tc('pager.next'),
-              page: (n) => tc('pager.page', { n }),
-            }}
-          />
-        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/40 px-4 py-3">
+              <div className="font-mono text-[11px] text-muted-foreground">
+                {t('footer', {
+                  from: nf.format(data.from),
+                  to: nf.format(data.to),
+                  total: nf.format(data.total),
+                })}
+              </div>
+              <Pager
+                page={data.page}
+                pageCount={data.pageCount}
+                onGo={(n) => go({ page: n })}
+                labels={{
+                  nav: tc('pager.label'),
+                  previous: tc('pager.previous'),
+                  next: tc('pager.next'),
+                  page: (n) => tc('pager.page', { n }),
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="p-5">{notice}</div>
+        )}
       </Card>
 
       {editing && (
@@ -542,13 +597,28 @@ function CurrencyForm({
           })
         : operatorFetch('/currencies', { method: 'POST', body, schema: currencyItemSchema }),
     onSuccess: onSaved,
+    // a server refusal that names fields puts the keyboard on the first of them, in form order
+    onError: (e) => {
+      if (!(e instanceof ApiError) || e.status !== 422) return;
+      const named = new Set(e.fieldErrors.map((f) => f.path.split('.')[0]));
+      focusFirst(FIELD_ORDER.filter((f) => named.has(f)));
+    },
   });
+
+  const focusFirst = (fields: readonly CurrencyField[]) => {
+    const first = fields.find((f) => {
+      const el = document.getElementById(`cu-${FIELD_ID[f]}-${mode}`);
+      return el instanceof HTMLInputElement && !el.disabled;
+    });
+    if (first) document.getElementById(`cu-${FIELD_ID[first]}-${mode}`)?.focus();
+  };
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const r = buildCurrencyRequest(draft);
     if (!r.ok) {
       setProblems(r.problems);
+      focusFirst(r.problems);
       return;
     }
     setProblems([]);

@@ -56,3 +56,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 - `PlanEcomGate`: real, the plan flags `shopify` and `woocommerce`.
 - `EngineCommerceSender` (real, through the engine registry), `SqlEcomTemplates`, `SqlStoreMirror` (writes the catalog, checkout and contacts tables until those domains export writers).
 - Blocked: plugin download, Invoices tab, flow links and resume, embedded session (E6).
+
+## Menu location (our change, see parity/product-extensions.md item 22)
+
+Shopify and WooCommerce are no longer entries of the sidebar's Store group (`inMenu: false` in `apps/web/src/features/shopify-woocommerce/nav.ts`, kept registered for the paywall, Help and the command palette). Each has a tile in Settings > Integrations (`settings.ts`, ids `shopify` and `woocommerce`, gates `ecom.read` plus the plan features `shopify` and `woocommerce`). Routes `/shopify` and `/woocommerce` are unchanged. The nav gates used the keys `integration_shopify` and `integration_woocommerce`, which are not plan-feature keys (the API gates on `shopify` and `woocommerce`), so both entries always rendered locked; they now use the catalogue keys. Other consumers of the routes: the flow builder's commerce node links to both (`flow-builder-editor/builder/inspector/forms-channels/commerce.tsx`); the Shopify products tab links to `/shopify?tab=offers`.

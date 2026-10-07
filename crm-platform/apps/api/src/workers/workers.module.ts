@@ -22,6 +22,7 @@ import {
   SegmentsWorkerModule,
   TasksWorkerModule,
 } from '../modules/crm';
+import { CouponsCreditsReferralCurrencyWorkerModule } from '../modules/coupons-credits-referral-currency';
 import { PaygwWorkerModule } from '../modules/platform-payment-gateways';
 import { PlatformSupportDeskWorkerModule } from '../modules/platform-support-desk';
 import { PlansWorkerModule } from '../modules/plans-subscriptions-trials';
@@ -33,6 +34,7 @@ import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
+import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { OutboxDrainService } from './outbox-drain.service';
@@ -66,6 +68,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     BroadcastsWorkerModule,
     PlansWorkerModule,
     PaygwWorkerModule,
+    CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
     CallingVoiceWorkerModule,
@@ -84,6 +87,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     FlowRuntimeEngineWorkerModule,
     NodeBridgeRuntimeWorkerModule,
     LeadsWorkerModule,
+    FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
   ],

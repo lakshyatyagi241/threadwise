@@ -1,6 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { type AutomationsView, type SaveAutomationsInput } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -36,6 +41,7 @@ export class AutomationsService {
     private readonly outbox: OutboxService,
     @Inject(ECOM_PLAN_GATE) private readonly plan: EcomPlanGate,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   async get(kind: StoreKind, uuid: string): Promise<AutomationsView> {
@@ -145,6 +151,8 @@ export class AutomationsService {
     key: string,
   ): Promise<void> {
     const [engine, uuid] = key.split(':');
+    // Choosing a personal number as the "send from" is refused while the platform switch is off (owner decision 2026-10-05).
+    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabledFor(orgId);
     const res =
       engine === 'baileys'
         ? await tx.execute(

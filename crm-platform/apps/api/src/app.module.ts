@@ -21,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
+import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
 import {
@@ -76,10 +77,13 @@ import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/cha
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
+import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
+import { FormsBuilderModule } from './modules/forms-builder';
 import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
+import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
@@ -201,6 +205,7 @@ import { HealthModule } from './health/health.module';
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
+    DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,
@@ -211,7 +216,9 @@ import { HealthModule } from './health/health.module';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
+    WorkspaceImpersonationModule,
     LeadsModule,
+    FormsBuilderModule,
     MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
@@ -220,6 +227,9 @@ import { HealthModule } from './health/health.module';
     CryptoService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // An operator acting as a workspace owner (TW-WSP-032/033): read-only sessions cannot write, nobody touches the owner's credentials.
+    // Straight after authentication, so it sees the act-as context and runs before anything that reads or writes tenant data.
+    { provide: APP_GUARD, useClass: ImpersonationGuard },
     // The request throttle (TW-INFRA-010): once the caller is known, before any guard that reads the database.
     { provide: APP_GUARD, useExisting: ThrottleGuard },
     // After authentication, before permissions: a gated account (suspended,

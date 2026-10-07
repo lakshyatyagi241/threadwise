@@ -3,6 +3,8 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { z } from 'zod';
 import {
   loginRequestSchema,
+  selectWorkspaceRequestSchema,
+  type SelectWorkspaceRequest,
   mfaLoginRequestSchema,
   logoutRequestSchema,
   refreshRequestSchema,
@@ -94,6 +96,19 @@ export class AuthController {
   @ApiOperation({ summary: 'Complete a sign-in with an authenticator or recovery code' })
   async signInMfa(@Body(zodPipe(mfaLoginRequestSchema)) body: MfaLoginRequest) {
     return this.login.loginMfa(body, clientMeta());
+  }
+
+  @Public()
+  @Post('login/workspace')
+  @ApiOperation({
+    summary: 'Pick the workspace after a sign-in that matched several',
+    description:
+      'Takes the `selectionToken` from a `workspace_required` login answer and the chosen slug. Single use; answers like login.',
+  })
+  async signInWorkspace(
+    @Body(zodPipe(selectWorkspaceRequestSchema)) body: SelectWorkspaceRequest,
+  ) {
+    return this.login.selectWorkspace(body, clientMeta());
   }
 
   @Public()

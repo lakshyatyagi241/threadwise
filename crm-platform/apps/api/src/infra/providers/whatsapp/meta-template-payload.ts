@@ -1,3 +1,4 @@
+import { assertNotGroupPeer } from './group-peer';
 import type { SendTemplateParams } from './whatsapp.port';
 
 /**
@@ -8,6 +9,7 @@ import type { SendTemplateParams } from './whatsapp.port';
  * Variables are sent in key order: `{ "1": "Ana", "2": "Hoodie" }` fills `{{1}}` and `{{2}}`.
  */
 export function buildTemplateMessage(params: SendTemplateParams) {
+  assertNotGroupPeer(params.to);
   if (params.components) {
     return {
       messaging_product: 'whatsapp',

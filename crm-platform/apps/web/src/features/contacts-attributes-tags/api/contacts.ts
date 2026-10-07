@@ -2,6 +2,7 @@
 
 import {
   keepPreviousData,
+  useInfiniteQuery,
   useQuery,
   useQueryClient,
   type QueryClient,
@@ -47,6 +48,8 @@ export interface ContactFilters {
   imported: boolean;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
   segment: string;
+  /** Ad-hoc conditions (a segment's rule tree as JSON text) from the Hub's "Add condition"; empty for none. */
+  rules: string;
   order: 'asc' | 'desc';
   limit: PageSize;
   /** 1-based page number; it is not part of the saved filter of a bulk action. */
@@ -61,6 +64,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   consent: '',
   imported: false,
   segment: '',
+  rules: '',
   order: 'desc',
   limit: 10,
   page: 1,
@@ -71,7 +75,7 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  >,
+  > & { rules?: string },
 ) {
   return {
     q: f.q.trim() || undefined,
@@ -82,6 +86,7 @@ export function contactFilterBody(
     unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
     imported: f.imported ? true : undefined,
     segmentId: f.segment || undefined,
+    rules: f.rules || undefined,
   };
 }
 
@@ -97,6 +102,7 @@ export function listQuery(f: ContactFilters) {
     unsubscribed: b.unsubscribed,
     imported: b.imported,
     segmentId: b.segmentId,
+    rules: b.rules,
     order: f.order,
     limit: f.limit,
     expand: 'groups,tags',
@@ -233,4 +239,29 @@ export function invalidateContacts(qc: QueryClient) {
     qc.invalidateQueries({ queryKey: KEYS.contacts }),
     qc.invalidateQueries({ queryKey: KEYS.stats }),
   ]);
+}
+
+/** Contacts shown per column of the stage board before "Load more". */
+export const BOARD_PAGE = 20;
+
+/**
+ * One column of the stage board: the contacts in `stage` that match the other filters (search, tag, group, consent...),
+ * a page at a time with "load more", and the column's own total. The stage filter itself is ignored: every column is one.
+ */
+export function useStageColumn(filters: ContactFilters, stage: string) {
+  const base = listQuery({ ...filters, lifecycleStage: stage, page: 1 });
+  const query = { ...base, limit: BOARD_PAGE };
+  return useInfiniteQuery({
+    queryKey: [...KEYS.contacts, 'board', stage, query] as const,
+    initialPageParam: undefined as string | undefined,
+    queryFn: ({ pageParam, signal }) =>
+      apiFetch('/contacts', {
+        query: { ...query, cursor: pageParam },
+        schema: contactPageSchema,
+        signal,
+      }),
+    getNextPageParam: (last) =>
+      last.page.hasMore && last.page.nextCursor ? last.page.nextCursor : undefined,
+    placeholderData: keepPreviousData,
+  });
 }

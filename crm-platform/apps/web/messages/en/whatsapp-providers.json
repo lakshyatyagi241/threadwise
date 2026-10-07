@@ -427,7 +427,8 @@
         "ok": "Connected",
         "failed": "Failed",
         "never": "Not tested"
-      }
+      },
+      "officialLabel": "Official WhatsApp (supported)"
     },
     "detail": {
       "title": "WhatsApp provider",

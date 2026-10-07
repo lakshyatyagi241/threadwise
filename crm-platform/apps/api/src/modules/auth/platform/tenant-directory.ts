@@ -92,19 +92,41 @@ export class TenantDirectory {
     });
   }
 
-  /** Slugs of active organizations holding an active user with this email (login without a workspace). Max 2 rows: only "none, one or many" matters. */
-  async activeOrgSlugsForEmail(email: string): Promise<string[]> {
+  /** Active organizations holding an active user with this email (login without a workspace). Capped: nobody has more. */
+  async activeOrgsForEmail(email: string): Promise<OrgRef[]> {
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT o.slug
+        SELECT o.id, o.uuid, o.slug, o.name, o.status, o.plan, o.settings
         FROM users u
         JOIN organizations o ON o.id = u.org_id
         WHERE u.email = ${email} AND u.status = 'active' AND o.status = 'active'
-        ORDER BY o.id
-        LIMIT 2
+        ORDER BY o.name, o.id
+        LIMIT 20
       `);
-      return (res.rows as unknown as Array<{ slug: string }>).map((r) => r.slug);
+      return res.rows as unknown as OrgRef[];
     });
+  }
+
+  /** What a workspace card shows: the person's role there and how many people are in it. */
+  async workspaceCardDetails(
+    pairs: Array<{ orgId: number; userId: number }>,
+  ): Promise<Map<number, { role: string | null; memberCount: number }>> {
+    const out = new Map<number, { role: string | null; memberCount: number }>();
+    await this.db.privileged(async (tx) => {
+      for (const { orgId, userId } of pairs) {
+        const res = await tx.execute(sql`
+          SELECT
+            (SELECT r.name FROM user_roles ur
+               JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
+              WHERE ur.org_id = ${orgId} AND ur.user_id = ${userId}
+              ORDER BY r.is_locked DESC, r.name LIMIT 1) AS role,
+            (SELECT count(*)::int FROM users WHERE org_id = ${orgId} AND status = 'active') AS member_count
+        `);
+        const r = res.rows[0] as { role: string | null; member_count: number } | undefined;
+        out.set(orgId, { role: r?.role ?? null, memberCount: r?.member_count ?? 0 });
+      }
+    });
+    return out;
   }
 
   async slugExists(slug: string): Promise<boolean> {
@@ -144,7 +166,9 @@ export class TenantDirectory {
         `);
         orgRow = res.rows[0] as unknown as { id: number; uuid: string };
       } catch (err) {
-        if ((err as { code?: string }).code === '23505') {
+        // drizzle wraps the driver error: the SQLSTATE is on `cause` there
+        const e = err as { code?: string; cause?: { code?: string } };
+        if (e.code === '23505' || e.cause?.code === '23505') {
           throw new AppError(
             ERROR_CODES.AUTH_SLUG_TAKEN,
             'That workspace address is already taken.',

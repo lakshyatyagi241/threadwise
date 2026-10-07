@@ -38,3 +38,16 @@ A coverage test fails when a built screen, Settings tile or plan feature has nei
 `help-docs-sync` skill drafts them. This is a team process, not a screen, so there is nothing to compare.
 
 Owner's words: "who so every build anything and if I take the pull then we make document of that pending items too automatically".
+
+## HC-5. One help screen: the guidebook layout, with how-to guides written for this build (owner request 2026-10-05)
+
+`/help` now has the layout Reference's Guidebook has (header band with "Ask support", a category rail with a count per area and "Need a human?
+Contact support", a search card with popular guides, cards with area, minutes to read and "Read guide") instead of two help screens.
+The categories are our areas (Platform, Inbox & Chat, CRM, ..., Getting started, plus a new Troubleshooting). The guidebook's sample
+articles were not copied, because most describe pages and behaviour this build does not have; each topic was checked against the code
+and written as a native guide only when it exists (connecting a number, inviting teammates, CSV import, moving from another platform,
+the four template topics, campaign A/B, stop and resume, read rate, scheduled and recurring sends, segments and bulk tag, first flow,
+flow run log, stuck messages, receipts, missing incoming messages, two-step lock-out, message billing). Skipped because the build has no
+such feature: outbound webhook signature, timeouts and replay, auto-reply rules (cooldown, fuzzy match, hours), a stored payment method.
+
+Not decided yet: what happens to `/guidebook` and its operator editor (`/admin/guidebook`, with helpful/not-helpful votes).

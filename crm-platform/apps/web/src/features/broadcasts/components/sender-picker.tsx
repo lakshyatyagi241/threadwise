@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Input, cn } from '@crm/ui';
 import type { ComposeSender } from '@crm/contracts';
+import { offerSenders } from '@/lib/unofficial-whatsapp';
 import { sharePercents } from '../lib/compose-model';
 
 /**
@@ -11,19 +12,26 @@ import { sharePercents } from '../lib/compose-model';
  * weights decide how the audience is split across the ticked numbers.
  */
 export function SenderPicker({
-  senders,
+  senders: allSenders,
+  unofficialEnabled = false,
   checked,
   shares,
   onChecked,
   onShare,
 }: {
   senders: ComposeSender[];
+  /**
+   * Whether the platform has switched the unofficial engine (personal numbers) on. While it is off those senders are not offered,
+   * whatever the list holds, and the picker shows no "Unofficial API" group.
+   */
+  unofficialEnabled?: boolean;
   checked: string[];
   shares: Record<string, number>;
   onChecked: (key: string, on: boolean) => void;
   onShare: (key: string, weight: number) => void;
 }) {
   const t = useTranslations('broadcasts.compose');
+  const senders = offerSenders(allSenders, unofficialEnabled);
   const pcts = sharePercents(
     senders.map((s) => s.key),
     checked,

@@ -121,7 +121,9 @@ export class PlatformInboxController {
 
   @Post('workspaces/:id/impersonate')
   @PlatformPermission('platform.workspace.impersonate')
-  @ApiOperation({ summary: 'Start impersonating a workspace owner (needs the workspaces domain)' })
+  @ApiOperation({
+    summary: 'Start impersonating a workspace owner (the same session as the Workspaces hub)',
+  })
   impersonate(
     @id() uuid: string,
     @Body(zodPipe(impersonateRequestSchema)) body: ImpersonateRequest,

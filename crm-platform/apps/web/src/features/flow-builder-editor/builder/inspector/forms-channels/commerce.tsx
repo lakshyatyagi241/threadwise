@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Modal, cn } from '@crm/ui';
 import { useCommerceProducts } from '../../../api/hooks';
 import { Field, SelectInput, TextArea, TextInput, controlClass } from '../kit';
@@ -223,6 +224,7 @@ export function ProductPickerModal(props: {
 }
 
 function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider }) {
+  const unofficial = useUnofficialWhatsapp();
   const [pickerOpen, setPickerOpen] = useState(false);
   const copy = PROVIDER_COPY[provider];
   const stores = p.env.ctx.stores[provider];
@@ -246,7 +248,8 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
         }
       >
         Pick a store, then pick the products this node will send. On a WABA conversation we send a
-        native catalog message; on Baileys we send each product as a card + a checkout link.
+        native catalog message
+        {unofficial ? '; on Baileys we send each product as a card + a checkout link' : ''}.
       </Intro>
       <Field
         label="Store"

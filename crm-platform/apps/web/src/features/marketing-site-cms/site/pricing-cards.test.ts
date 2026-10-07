@@ -87,7 +87,12 @@ describe('toPricingCard (TW-CMS-003)', () => {
   it('lists at most four volume lines, zero meaning unlimited', () => {
     const c = toPricingCard(plan(), 0, words);
     expect(c.volume).toHaveLength(4);
-    expect(c.volume[0]!.label).toBe('Unlimited label devices');
+    expect(c.volume[0]!.label).toBe('Unlimited label monthly_messages');
+  });
+
+  it('never advertises the devices cap (personal numbers by QR are not part of the supported product)', () => {
+    const c = toPricingCard(plan(), 0, words);
+    expect(c.volume.map((r) => r.label).join(' ')).not.toContain('devices');
   });
 
   it('lists enabled features first (at most seven) then a few greyed ones (at most three)', () => {

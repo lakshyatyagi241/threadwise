@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Impersonating",
+      "viewing": "Viewing {workspace} as {owner}",
+      "reason": "Reason: {reason}",
+      "readOnly": "Read-only",
+      "timeLeft": "{minutes, plural, one {# minute left} other {# minutes left}}",
+      "endsSoon": "Less than a minute left",
+      "stop": "Stop impersonating",
+      "stopping": "Stopping",
+      "stopFailed": "Could not stop the session. Try again.",
+      "readOnlyRefused": "This session is read-only, so changes are not allowed.",
+      "forbiddenRefused": "This is not available while you are viewing the workspace as its owner.",
+      "ended": {
+        "title": "This impersonation session has ended",
+        "expired": "The link was already used or has expired. Start again from the console.",
+        "body": "Nothing more can be done in the workspace from here. Go back to the console to start a new session.",
+        "back": "Back to the console"
+      }
+    }
+  }
+}

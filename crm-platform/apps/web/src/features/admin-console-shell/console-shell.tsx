@@ -38,6 +38,7 @@ import {
   activeLeafId,
   buildConsoleNav,
   CONSOLE_NAV_ITEMS,
+  activeStatusBadgeInfo,
   formatCount,
   initiallyOpenGroups,
   isGroup,
@@ -316,6 +317,7 @@ export function ConsoleShell({
   const leafLink = (leaf: ConsoleLeaf) => {
     const label = leaf.label ?? tAll(leaf.labelKey);
     const badge = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
+    const status = activeStatusBadgeInfo(leaf, counts);
     const active = leaf.id === activeId;
     const body = (
       <>
@@ -326,6 +328,18 @@ export function ConsoleShell({
             className="rounded-full bg-white/15 px-1.5 text-xs tabular-nums"
           >
             {badge}
+          </span>
+        )}
+        {status && (
+          <span
+            data-testid={`status-${leaf.id}`}
+            data-tone={status.tone}
+            className={cn(
+              'rounded-full px-1.5 text-[0.6875rem] font-medium leading-4',
+              status.tone === 'neutral' ? 'bg-white/15' : 'bg-warning/25',
+            )}
+          >
+            {tAll(status.labelKey)}
           </span>
         )}
       </>

@@ -40,6 +40,7 @@ export const createBroadcastSchema = z
     contactIds: z.array(uuidSchema).max(100_000).default([]),
     groupIds: z.array(uuidSchema).max(1_000).default([]),
     tagIds: z.array(uuidSchema).max(1_000).default([]),
+    segmentIds: z.array(uuidSchema).max(1_000).default([]),
     /** One broadcast row is created per sender; none picked = one sender-less broadcast on the default engine. */
     senderKeys: z.array(senderKeySchema).max(50).default([]),
     /** Audience split weights keyed by sender key; missing or non-positive means 1. */

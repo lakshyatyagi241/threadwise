@@ -8,6 +8,7 @@ import type {
   ComposeSender,
   ComposeTemplate,
   ContactGroupResponse,
+  SegmentResponse,
   ContactResponse,
   TagResponse,
 } from '@crm/contracts';
@@ -72,17 +73,17 @@ describe('sender picker', () => {
     expect(same).toContain('70%');
     expect(same).toContain('30%');
     expect(same).not.toContain('Meta</div>');
+    const personal = sender({
+      key: 'baileys:3',
+      engine: 'baileys',
+      engineLabel: 'Unofficial API',
+      label: 'Phone',
+    });
+    // The platform has switched the unofficial engine on: its group is offered next to the official one.
     const mixed = html(
       <SenderPicker
-        senders={[
-          ...two,
-          sender({
-            key: 'baileys:3',
-            engine: 'baileys',
-            engineLabel: 'Unofficial API',
-            label: 'Phone',
-          }),
-        ]}
+        senders={[...two, personal]}
+        unofficialEnabled
         checked={[]}
         shares={{}}
         onChecked={none}
@@ -93,6 +94,39 @@ describe('sender picker', () => {
     expect(mixed).toContain('Meta');
     expect(mixed).toContain('—');
   });
+
+  it('switch off (the default): personal-number senders and the Unofficial API group are not offered', () => {
+    const personal = sender({
+      key: 'baileys:3',
+      engine: 'baileys',
+      engineLabel: 'Unofficial API',
+      label: 'Phone',
+    });
+    const off = html(
+      <SenderPicker
+        senders={[sender(), sender({ key: 'waba:2', label: 'Cloud 2' }), personal]}
+        checked={[]}
+        shares={{}}
+        onChecked={none}
+        onShare={none}
+      />,
+    );
+    expect(off).not.toContain('Unofficial API');
+    expect(off).not.toContain('Phone');
+    expect(off).toContain('Cloud 2');
+    // Only a personal number connected: nothing is offered, and the picker says so instead of listing it.
+    const onlyPersonal = html(
+      <SenderPicker
+        senders={[personal]}
+        checked={[]}
+        shares={{}}
+        onChecked={none}
+        onShare={none}
+      />,
+    );
+    expect(onlyPersonal).toContain('No connected devices.');
+    expect(onlyPersonal).not.toContain('Phone');
+  });
 });
 
 describe('audience picker', () => {
@@ -101,23 +135,40 @@ describe('audience picker', () => {
   const props = {
     tags: [{ id: 't1', name: 'VIP', color: null }] as TagResponse[],
     groups: [{ id: 'g1', name: 'Leads' }] as ContactGroupResponse[],
+    segments: [{ id: 's1', name: 'Hot leads', memberCount: 12 }] as SegmentResponse[],
     contacts: [contact('c1', 'Asha Rao', '+91 98'), contact('c2', 'Ravi', '+91 77')],
     contactsDenied: false,
+    filter: {},
+    onFilter: none,
     selectedTags: [],
     selectedGroups: ['g1'],
+    selectedSegments: [],
     selectedContacts: ['c1'],
     onTags: none,
     onGroups: none,
+    onSegments: none,
     onContacts: none,
   };
   it('shows chips, the table, the selected count and the checked state', () => {
     const out = html(<AudiencePicker {...props} />);
-    for (const s of ['VIP', 'Leads', 'Asha Rao', 'Ravi', '1 selected', 'Search by name or phone'])
+    for (const s of [
+      'VIP',
+      'Leads',
+      'Hot leads · 12',
+      'Filter contacts',
+      'Asha Rao',
+      'Ravi',
+      '1 selected',
+      'Search by name or phone',
+    ])
       expect(out).toContain(s);
   });
-  it('hides the tag and group rows when there are none; says so when contacts are empty or denied', () => {
-    const out = html(<AudiencePicker {...props} tags={[]} groups={[]} contacts={[]} />);
-    expect(out).not.toContain('Tags');
+  it('keeps the segment, tag and group rows when there are none and links to making one; says so when contacts are empty or denied', () => {
+    const out = html(
+      <AudiencePicker {...props} segments={[]} tags={[]} groups={[]} contacts={[]} />,
+    );
+    for (const s of ['No segments yet.', 'No tags yet.', 'No groups yet.', 'Create one'])
+      expect(out).toContain(s);
     expect(out).toContain('No contacts yet.');
     expect(html(<AudiencePicker {...props} contactsDenied />)).toContain(
       'You do not have access to the contact list',

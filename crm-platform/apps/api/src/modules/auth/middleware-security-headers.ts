@@ -1,8 +1,12 @@
 import { Injectable, type NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
 
-/** Paths that must be embeddable cross-origin (the chat widget); everything else refuses framing. */
-const FRAMEABLE = /^\/(?:v\d+\/)?widget(?:\/|$)/;
+/**
+ * Paths that must be embeddable cross-origin (the chat widget, and the Forms add-on's loader); everything else refuses framing. The
+ * form's page itself is served by the web app, which answers `frame-ancestors` per form from its allow-list; only the API's own
+ * `/form-embed/*` script is listed here so it carries no blanket frame policy of its own.
+ */
+const FRAMEABLE = /^\/(?:v\d+\/)?(?:widget|form-embed)(?:\/|$)/;
 /** Responses that carry credentials, tokens or personal data must never sit in a shared cache. */
 const NO_STORE = /^\/v\d+\/(?:auth|account|platform|onboarding)(?:\/|$)/;
 
