@@ -227,18 +227,29 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   const stepKey = (['template', 'audience', 'review', 'send'] as const)[view - 1]!;
 
   return (
-    <main className="w-full px-4 pt-6 sm:px-6 lg:px-10">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <main className="w-full px-4 pt-3 sm:px-6 lg:px-10">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-2">
         <div>
           <Link href="/campaigns" className="text-sm text-muted-foreground hover:underline">
             {t('backToCampaigns')}
           </Link>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">{t('title')}</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t('title')}</h1>
         </div>
-        <SaveIndicator status={w.status} onRetry={() => void w.flush()} />
+        <div className="flex flex-wrap items-center justify-end gap-4">
+          <SaveIndicator status={w.status} onRetry={() => void w.flush()} />
+          <WizardFooter
+            step={view}
+            launch={launchKind(draft.schedule)}
+            busy={launch.busy}
+            blocked={blocked}
+            canLaunch
+            onBack={() => void openStep(previousStep(view))}
+            onNext={() => void onNext()}
+          />
+        </div>
       </div>
 
-      <div className="my-5">
+      <div className="my-3 shrink-0">
         <Stepper current={view} reached={draft.step} onGo={(s) => void openStep(s)} />
       </div>
 
@@ -273,12 +284,12 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
         </Alert>
       )}
 
-      <h2 ref={headingRef} tabIndex={-1} className="mb-1 text-lg font-semibold outline-none">
+      <h2 ref={headingRef} tabIndex={-1} className="sr-only">
         {ts(stepKey)}
       </h2>
-      <p className="mb-4 text-sm text-muted-foreground">{t(`stepHint.${stepKey}`)}</p>
+      <p className="sr-only">{t(`stepHint.${stepKey}`)}</p>
 
-      <div className="pb-8" key={w.epoch}>
+      <div className="pb-6" key={w.epoch}>
         {view === 1 && (
           <StepTemplate
             name={draft.name}
@@ -331,16 +342,6 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
           />
         )}
       </div>
-
-      <WizardFooter
-        step={view}
-        launch={launchKind(draft.schedule)}
-        busy={launch.busy}
-        blocked={blocked}
-        canLaunch
-        onBack={() => void openStep(previousStep(view))}
-        onNext={() => void onNext()}
-      />
 
       <LaunchDialog
         open={launch.open}

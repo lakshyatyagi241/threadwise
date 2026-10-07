@@ -30,7 +30,7 @@ export function TemplatePreview({
   const model = useMemo(() => (template ? previewModelOf(template) : null), [template]);
   const title = senderName?.trim() || t('previewBusiness');
   return (
-    <div className="space-y-3 rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted p-5 lg:sticky lg:top-4">
+    <div className="space-y-3 rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted p-4 lg:sticky lg:top-4">
       <h2 className="flex items-center gap-2 text-sm font-semibold">
         <span aria-hidden="true" className="size-2 rounded-full bg-success" />
         {t('livePreview')}
@@ -38,7 +38,7 @@ export function TemplatePreview({
       <section
         aria-label={t('previewTitle')}
         data-testid="phone-preview"
-        className="mx-auto flex h-[600px] w-full max-w-[340px] flex-col overflow-hidden rounded-[2rem] border-[6px] border-neutral-800 bg-[#ece5dd] shadow-xl"
+        className="mx-auto flex h-[clamp(340px,calc(100vh-390px),600px)] w-full max-w-[340px] flex-col overflow-hidden rounded-[2rem] border-[6px] border-neutral-800 bg-[#ece5dd] shadow-xl"
       >
         <header className="flex items-center gap-3 bg-[#075e54] px-3 py-2.5 text-white">
           <span

@@ -564,13 +564,11 @@
         "previewToday": "Today",
         "previewInput": "Message",
         "previewBusiness": "Your business",
-        "nameCardTitle": "Name your broadcast",
-        "templateCardTitle": "Choose a template",
         "sendingFrom": "Sending from {sender}",
         "livePreview": "Live preview",
         "chipVariables": "{count, plural, =0 {No variables} one {# variable} other {# variables}}",
         "chipButtons": "{count, plural, =0 {No buttons} one {# button} other {# buttons}}",
-        "nameCount": "{used} / {max}"
+        "detailsTitle": "Broadcast details"
       },
       "audience": {
         "explainer": "Contacts in the selected groups or segments that also match the conditions. With no group or segment, the conditions select from all contacts.",
