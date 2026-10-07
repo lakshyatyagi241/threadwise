@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { InboxConversationDetail } from '@crm/contracts';
 import { useRealtimeEvent, useResync } from '@/lib/realtime';
 import { inboxApi } from './service';
+import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
 export const KEYS = {
   all: ['inbox'] as const,
@@ -21,7 +22,8 @@ export function useChannels() {
     queryKey: KEYS.channels,
     queryFn: ({ signal }) => inboxApi.channels(signal),
     staleTime: 30_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -35,7 +37,8 @@ export function useConversationTemplates(conversationId: string, enabled: boolea
     queryFn: ({ signal }) => inboxApi.templates(conversationId, q, signal),
     enabled,
     staleTime: 60_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -45,7 +48,8 @@ export function useAssignees(enabled: boolean) {
     queryFn: ({ signal }) => inboxApi.assignees(signal),
     enabled,
     staleTime: 5 * 60_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -56,7 +60,8 @@ export function useNotes(conversationId: string | null) {
     queryFn: ({ signal }) => inboxApi.notes(conversationId!, signal),
     enabled: conversationId !== null,
     staleTime: 15_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
   // A note someone else adds is a change to the conversation row: its upsert signal refreshes the notes of an open thread.
   useRealtimeEvent('inbox.conversation.upsert', (e) => {
@@ -77,7 +82,8 @@ export function useTimeline(conversationId: string | null, enabled: boolean) {
     queryFn: ({ signal }) => inboxApi.events(conversationId!, signal),
     enabled: enabled && conversationId !== null,
     staleTime: 15_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -112,7 +118,8 @@ export function useOpenConversation(
     },
     enabled: id !== null,
     staleTime: 10_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
   const refetch = q.refetch;
 

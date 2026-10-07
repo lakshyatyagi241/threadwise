@@ -39,14 +39,14 @@
         "unread": "Unread"
       },
       "statusFilter": "Status",
-      "statusOpen": "Open and pending",
+      "statusOpen": "Open",
       "statusAll": "Every status",
       "status": {
         "open": "Open",
         "pending": "Pending",
         "snoozed": "Snoozed",
         "resolved": "Resolved",
-        "closed": "Closed",
+        "closed": "Resolved",
         "spam": "Spam"
       },
       "priority": {
