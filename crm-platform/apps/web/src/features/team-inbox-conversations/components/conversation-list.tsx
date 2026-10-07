@@ -109,7 +109,7 @@ export function ConversationList(props: ConversationListProps) {
             className="h-8 text-xs"
           >
             <option value="open">{t('statusOpen')}</option>
-            {CONVERSATION_STATUSES.filter((s) => s !== 'open').map((s) => (
+            {CONVERSATION_STATUSES.filter((s) => s !== 'open' && s !== 'closed').map((s) => (
               <option key={s} value={s}>
                 {t(`status.${s}`)}
               </option>

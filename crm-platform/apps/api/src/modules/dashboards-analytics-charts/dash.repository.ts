@@ -43,7 +43,9 @@ export class DashRepository {
         count(*) FILTER (WHERE direction = 'out' AND status = 'failed')::int AS failed,
         count(*) FILTER (WHERE direction = 'out' AND ${READ})::int AS read,
         count(*) FILTER (WHERE direction = 'in')::int AS replies,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers,
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out')::int AS contacts_messaged,
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS contacts_delivered
       FROM ${stream(orgId, from, to)}`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
@@ -53,6 +55,9 @@ export class DashRepository {
       read: n(r.read),
       replies: n(r.replies),
       repliers: n(r.repliers),
+      contactsMessaged: n(r.contacts_messaged),
+      contactsDelivered: n(r.contacts_delivered),
+      contactsReplied: n(r.repliers),
     };
   }
 
@@ -107,16 +112,21 @@ export class DashRepository {
     orgId: number,
     from: Date,
     to: Date,
-  ): Promise<Array<{ key: string; count: number }>> {
+  ): Promise<Array<{ key: string; count: number; delivered: number }>> {
     const res = await tx.execute(sql`
       SELECT CASE
           WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template'
           WHEN kind IN ('image','video','audio','voice','document','sticker') THEN 'media'
           WHEN kind = 'location' THEN 'location'
           WHEN kind IN ('contact','interactive') THEN 'interactive'
-          ELSE 'text' END AS k, count(*)::int AS c
+          ELSE 'text' END AS k, count(*)::int AS c,
+          count(*) FILTER (WHERE ${DELIVERED})::int AS d
       FROM ${stream(orgId, from, to)} WHERE direction = 'out' GROUP BY 1`);
-    return (res.rows as Raw[]).map((r) => ({ key: r.k as string, count: n(r.c) }));
+    return (res.rows as Raw[]).map((r) => ({
+      key: r.k as string,
+      count: n(r.c),
+      delivered: n(r.d),
+    }));
   }
 
   /** Message volume by weekday (Sunday 0) and hour in the zone, both directions (TW-DASH-031). */

@@ -1,3 +1,4 @@
+import { CONTACT_SORT_FIELDS } from '@crm/contracts';
 import {
   DEFAULT_FILTERS,
   PAGE_SIZES,
@@ -7,7 +8,7 @@ import {
 } from '../api/contacts';
 
 /**
- * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&segment=&per=&order=&page=`), as they did in Reference,
+ * The list filters live in the URL (`?q=&group=&tag=&stage=&consent=&imported=&segment=&per=&sort=&order=&page=`), as they did in Reference,
  * so a filtered view can be bookmarked or shared and the back button restores it. Unknown or malformed values fall
  * back to the defaults: a hand-edited URL never breaks the page.
  */
@@ -31,6 +32,14 @@ function cleanRules(v: string | null): string {
   } catch {
     return '';
   }
+}
+
+const SORTS: ReadonlySet<string> = new Set(CONTACT_SORT_FIELDS);
+
+/** A `sort=` the API accepts: one of its columns or `attr:<key>`; anything else is the default order. */
+function cleanSort(v: string | null): string {
+  if (!v) return DEFAULT_FILTERS.sort;
+  return SORTS.has(v) || /^attr:[a-z0-9_]{1,64}$/.test(v) ? v : DEFAULT_FILTERS.sort;
 }
 
 /** A 1-based page number; anything else is page 1. Capped so a hand-edited URL cannot ask for a million pages. */
@@ -59,6 +68,7 @@ export function parseFilters(
     segment: cleanId(params.get('segment'), false),
     rules: cleanRules(params.get('rules')),
     order: params.get('order') === 'asc' ? 'asc' : 'desc',
+    sort: cleanSort(params.get('sort')),
     limit,
     page: cleanPage(params.get('page')),
   };
@@ -78,6 +88,7 @@ export function filtersToSearch(
   if (f.imported) p.set('imported', '1');
   if (f.segment) p.set('segment', f.segment);
   if (f.rules) p.set('rules', f.rules);
+  if (f.sort !== DEFAULT_FILTERS.sort) p.set('sort', f.sort);
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
   if (f.limit !== defaultLimit) p.set('per', String(f.limit));
   if (f.page > 1) p.set('page', String(f.page));

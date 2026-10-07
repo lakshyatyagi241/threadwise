@@ -487,3 +487,76 @@ describe('marketing opt-out write path (TW-CON-017)', () => {
     expect(same.body.isUnsubscribed).toBe(true);
   });
 });
+
+describe('sorting by a column', () => {
+  let t: Tenant;
+  beforeAll(async () => {
+    t = await api.signup('srt');
+    await api.seedContacts(t, [
+      { name: 'bravo', email: 'b@x.test', data: { language: 'fr', size: 'M' } },
+      { name: 'Alpha', email: 'C@x.test', data: { language: 'en', size: 'S' } },
+      { name: 'charlie', email: null, data: { language: 'de' } },
+      { name: 'Delta', email: '', data: { size: 'L' } },
+      { name: 'echo', email: 'a@x.test' },
+    ]);
+  });
+
+  const all = async (qs: string, limit = 2) => {
+    const out: string[] = [];
+    let cursor: string | null = null;
+    for (let i = 0; i < 10; i++) {
+      const res = await api
+        .as(t.admin)
+        .get(`/v2/contacts?limit=${limit}&${qs}${cursor ? `&cursor=${cursor}` : ''}`);
+      expect(res.status, JSON.stringify(res.body)).toBe(200);
+      out.push(...names(res.body.data).map((n) => n ?? ''));
+      cursor = res.body.page.nextCursor;
+      if (!cursor) break;
+    }
+    return out;
+  };
+
+  it('sorts names case-insensitively, both ways, across pages', async () => {
+    expect(await all('sort=name&order=asc')).toEqual([
+      'Alpha',
+      'bravo',
+      'charlie',
+      'Delta',
+      'echo',
+    ]);
+    expect(await all('sort=name&order=desc')).toEqual([
+      'echo',
+      'Delta',
+      'charlie',
+      'bravo',
+      'Alpha',
+    ]);
+  });
+
+  it('puts contacts with no value last, in either direction', async () => {
+    const asc = await all('sort=email&order=asc');
+    expect(asc.slice(0, 3)).toEqual(['echo', 'bravo', 'Alpha']);
+    expect(asc.slice(3).sort()).toEqual(['Delta', 'charlie']);
+    const desc = await all('sort=email&order=desc');
+    expect(desc.slice(0, 3)).toEqual(['Alpha', 'bravo', 'echo']);
+    expect(desc.slice(3).sort()).toEqual(['Delta', 'charlie']);
+  });
+
+  it('sorts by a custom field and by a custom attribute key', async () => {
+    expect((await all('sort=language&order=asc')).slice(0, 3)).toEqual([
+      'charlie',
+      'Alpha',
+      'bravo',
+    ]);
+    expect((await all('sort=attr:size&order=asc')).slice(0, 3)).toEqual([
+      'Delta',
+      'bravo',
+      'Alpha',
+    ]);
+  });
+
+  it('rejects an unknown column and a forged cursor', async () => {
+    expect((await api.as(t.admin).get('/v2/contacts?sort=password')).status).toBe(422);
+    expect((await api.as(t.admin).get('/v2/contacts?sort=name&cursor=abc')).status).toBe(400);
+  });
+});

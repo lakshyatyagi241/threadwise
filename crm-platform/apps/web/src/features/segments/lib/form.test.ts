@@ -132,6 +132,7 @@ describe('unsaved changes', () => {
       description: wire.description ?? null,
       color: wire.color ?? null,
       visibility: wire.visibility,
+      sharedWith: { users: [], teams: [] },
       rules: wire.rules,
     });
     expect(formSignature(loaded)).toBe(formSignature(formWith('new')));
@@ -183,5 +184,73 @@ describe('server validation mapped to the form', () => {
       f.rules,
     );
     expect(p.name).toBe('first');
+  });
+});
+
+describe('specific people in the form', () => {
+  const picked = { userIds: ['u1', 'u2'], teamIds: ['t1'] };
+
+  it('a specific segment with nobody chosen cannot be saved', () => {
+    expect(validateForm(formWith('new', { visibility: 'specific' }), catalog).sharedWith).toBe(
+      'required',
+    );
+    expect(hasProblems(validateForm(formWith('new', { visibility: 'specific' }), catalog))).toBe(
+      true,
+    );
+  });
+
+  it('the choice only counts while the visibility is specific', () => {
+    expect(
+      validateForm(formWith('new', { visibility: 'specific', shared: picked }), catalog).sharedWith,
+    ).toBeUndefined();
+    expect(
+      validateForm(formWith('new', { visibility: 'shared' }), catalog).sharedWith,
+    ).toBeUndefined();
+  });
+
+  it('sends the people with specific and with nothing else', () => {
+    const specific = formToInput(
+      formWith('new', { visibility: 'specific', shared: picked }),
+      catalog,
+    )!;
+    expect(specific.visibility).toBe('specific');
+    expect(specific.sharedWith).toEqual({ userIds: ['u1', 'u2'], teamIds: ['t1'] });
+    const shared = formToInput(formWith('new', { visibility: 'shared', shared: picked }), catalog)!;
+    expect(shared).not.toHaveProperty('sharedWith');
+  });
+
+  it('loads the people of a segment, and ignores the order they were picked in', () => {
+    const loaded = formFromSegment({
+      name: 'Hot leads',
+      description: null,
+      color: null,
+      visibility: 'specific',
+      sharedWith: {
+        users: [
+          { id: 'u2', name: 'B', email: null },
+          { id: 'u1', name: 'A', email: null },
+        ],
+        teams: [{ id: 't1', name: 'Sales', memberCount: 3 }],
+      },
+      rules: formToInput(formWith('new'), catalog)!.rules,
+    });
+    expect(loaded.shared).toEqual({ userIds: ['u2', 'u1'], teamIds: ['t1'] });
+    expect(formSignature(loaded)).toBe(
+      formSignature({ ...loaded, shared: { userIds: ['u1', 'u2'], teamIds: ['t1'] } }),
+    );
+    expect(formSignature(loaded)).not.toBe(
+      formSignature({ ...loaded, shared: { userIds: ['u1'], teamIds: ['t1'] } }),
+    );
+  });
+
+  it('people picked but then hidden by another visibility do not make the form dirty', () => {
+    expect(formSignature(formWith('new', { visibility: 'private', shared: picked }))).toBe(
+      formSignature(formWith('new', { visibility: 'private' })),
+    );
+  });
+
+  it('puts a server error about the people on the people field', () => {
+    const p = mapServerProblems([{ path: 'sharedWith.userIds.0', message: 'gone' }], emptyRoot());
+    expect(p.sharedWith).toBe('gone');
   });
 });
