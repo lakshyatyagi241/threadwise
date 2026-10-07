@@ -11,7 +11,7 @@ export const setGroupResponseSchema = z.object({
   /** Send it back unchanged with the next PATCH. 0 = never saved. */
   rowVersion: z.number().int().min(0),
   updatedAt: z.string().datetime().nullable(),
-  /** The last connection test of a testable group (mail, storage, realtime), if any. */
+  /** The last connection test of a testable group (mail, storage), if any. */
   test: z.object({ ok: z.boolean(), at: z.string().datetime() }).nullable(),
   /** Read-only facts that are not editable fields (the Team Inbox app's push state). Absent for most groups. */
   extra: z.record(z.unknown()).optional(),
@@ -127,6 +127,5 @@ export const publicSiteConfigSchema = z.object({
   teamInboxPwa: z.object({ enabled: z.boolean() }),
   /** Where the legal pages live: the saved URL, else the built-in `/legal/<page>` (TW-SET-030 rule 5). */
   legal: z.object({ terms: z.string(), privacy: z.string(), cookies: z.string() }),
-  realtime: z.object({ enabled: z.boolean() }),
 });
 export type PublicSiteConfig = z.infer<typeof publicSiteConfigSchema>;

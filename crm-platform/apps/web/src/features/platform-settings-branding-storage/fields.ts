@@ -453,21 +453,6 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
-    id: 'realtime',
-    group: 'realtime',
-    slug: 'realtime',
-    test: 'realtime',
-    guide: ['how', 'live', 'poll', 'test'],
-    sections: [
-      { id: 'live', eyebrow: 'broadcasting', fields: [f('enabled', 'toggle')] },
-      {
-        id: 'pusher',
-        eyebrow: 'pusher-app',
-        fields: halves(f('appId'), f('cluster'), f('appKey'), f('appSecret', 'secret')),
-      },
-    ],
-  },
-  {
     id: 'campaigns',
     group: 'campaigns',
     slug: 'campaigns',
@@ -606,7 +591,6 @@ export const HUB_ORDER = [
   'registration',
   'custom',
   'storage',
-  'realtime',
   'campaigns',
   'flowBuilder',
   'googleCalendar',
