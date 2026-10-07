@@ -1,30 +1,10 @@
 import { lookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
+import { isBlockedAddress } from '../../infra/net/blocked-address';
 
-const PRIVATE_V4 = [
-  /^0\./,
-  /^10\./,
-  /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./, // carrier-grade NAT
-  /^127\./,
-  /^169\.254\./,
-  /^172\.(1[6-9]|2\d|3[01])\./,
-  /^192\.0\.0\./,
-  /^192\.168\./,
-  /^198\.1[89]\./,
-  /^(22[4-9]|2[3-5]\d)\./, // multicast and reserved
-];
-
-/** True for an address a webhook target must never resolve to: loopback, private, link-local, reserved, mapped. */
+/** True for an address a webhook target must never resolve to: loopback, private, link-local, reserved, mapped (the shared rule). */
 export function isPrivateAddress(address: string): boolean {
-  const addr = address.replace(/^\[|\]$/g, '').toLowerCase();
-  const kind = isIP(addr);
-  if (kind === 4) return PRIVATE_V4.some((r) => r.test(addr));
-  if (kind === 6) {
-    const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(addr);
-    if (mapped?.[1]) return isPrivateAddress(mapped[1]);
-    return addr === '::' || addr === '::1' || /^(fc|fd|fe[89ab])/.test(addr);
-  }
-  return true; // not an address at all: refuse
+  return isBlockedAddress(address.replace(/^\[|\]$/g, ''));
 }
 
 const BAD_SUFFIXES = ['.local', '.internal', '.localhost', '.test', '.lan', '.home.arpa'];
