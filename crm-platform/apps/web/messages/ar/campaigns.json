@@ -95,7 +95,8 @@
         "no_recipients": "لن تصل هذه الرسالة إلى أي جهة اتصال. وسّع الجمهور.",
         "insufficient_balance": "رصيد محفظتك لا يكفي لهذا البث.",
         "checking_balance": "جارٍ التحقق من رصيد محفظتك...",
-        "sender_required": "اختر رقم واتساب للإرسال منه."
+        "sender_required": "اختر رقم واتساب للإرسال منه.",
+        "balance_unavailable": "تعذّر التحقق من رصيد محفظتك. حاول مرة أخرى قبل الإرسال."
       },
       "template": {
         "nameLabel": "اسم البث",
@@ -411,7 +412,6 @@
           "on_date": "في تاريخ",
           "after": "بعد عدد من الدورات"
         },
-        "endDate": "آخر يوم",
         "endAfter": "عدد الدورات",
         "nextRuns": "الدورات القادمة",
         "noRuns": "لا توجد دورات قادمة وفق هذه القاعدة.",
@@ -534,6 +534,19 @@
         },
         "recipients": "{count, plural, one {# مستلم} two {# مستلمان} few {# مستلمين} many {# مستلمًا} other {# مستلم}}",
         "next": "التشغيل التالي {when}"
+      },
+      "pickers": {
+        "selectDate": "اختر التاريخ",
+        "selectTime": "اختر الوقت",
+        "datePlaceholder": "يوم/شهر/سنة",
+        "prevMonth": "الشهر السابق",
+        "nextMonth": "الشهر التالي",
+        "cancel": "إلغاء",
+        "ok": "موافق",
+        "am": "ص",
+        "pm": "م",
+        "hour": "الساعة",
+        "minute": "الدقيقة"
       }
     },
     "builder": {

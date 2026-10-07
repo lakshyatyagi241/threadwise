@@ -13,7 +13,8 @@ export type IssueCode =
   | 'schedule_required'
   | 'no_recipients'
   | 'insufficient_balance'
-  | 'checking_balance';
+  | 'checking_balance'
+  | 'balance_unavailable';
 
 export interface StepIssue {
   path: string;
@@ -28,6 +29,8 @@ export interface IssueContext {
   /** The wallet check of step 3 (null until it answers); `pending` while it is being asked. */
   credit?: Pick<WizardCreditCheck, 'sufficient' | 'recipients'> | null;
   creditPending?: boolean;
+  /** The wallet check could not be done: the balance is unknown, so the broadcast does not go on. */
+  creditFailed?: boolean;
 }
 
 /** The step a draft path belongs to (also how the launch's `errors[].path` finds the screen to open). */
@@ -75,6 +78,7 @@ export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueConte
   }
   if (step === 3) {
     if (ctx.creditPending) out.push({ path: 'credit', code: 'checking_balance' });
+    else if (ctx.creditFailed) out.push({ path: 'credit', code: 'balance_unavailable' });
     else if (ctx.credit) {
       if (ctx.credit.recipients === 0) out.push({ path: 'audience', code: 'no_recipients' });
       else if (!ctx.credit.sufficient) out.push({ path: 'credit', code: 'insufficient_balance' });

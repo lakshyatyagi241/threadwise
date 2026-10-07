@@ -14,6 +14,7 @@ import {
 import { Alert, Field, Input, Select, cn } from '@crm/ui';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { ruleWithFrequency, timeZoneOptions, toggleWeekday, validRule } from '../lib/schedule';
+import { DatePicker, TimePicker } from './pickers';
 import { useScheduleWords } from './use-words';
 
 const ENDS = ['never', 'on_date', 'after'] as const;
@@ -76,22 +77,20 @@ export function RecurrencePanel({
           htmlFor={`${uid}-start`}
           error={startIssue ? ti(startIssue.code) : undefined}
         >
-          <Input
+          <DatePicker
             id={`${uid}-start`}
-            type="date"
             value={rule.startDate}
             disabled={disabled}
             invalid={Boolean(startIssue)}
-            onChange={(e) => patch({ startDate: e.target.value })}
+            onChange={(startDate) => patch({ startDate })}
           />
         </Field>
         <Field label={t('timeOfDay')} htmlFor={`${uid}-time`}>
-          <Input
+          <TimePicker
             id={`${uid}-time`}
-            type="time"
             value={rule.timeOfDay}
             disabled={disabled}
-            onChange={(e) => patch({ timeOfDay: e.target.value })}
+            onChange={(timeOfDay) => patch({ timeOfDay })}
           />
         </Field>
       </div>
@@ -232,16 +231,15 @@ export function RecurrencePanel({
                 {t(`endsKind.${k}`)}
               </label>
               {k === 'on_date' && (
-                <Input
-                  id={`${uid}-endd`}
-                  type="date"
-                  aria-label={t('endDate')}
-                  value={rule.ends.kind === 'on_date' ? rule.ends.date : ''}
-                  min={rule.startDate}
-                  disabled={disabled || !picked}
-                  className="w-44"
-                  onChange={(e) => patch({ ends: { kind: 'on_date', date: e.target.value } })}
-                />
+                <div className="w-44">
+                  <DatePicker
+                    id={`${uid}-endd`}
+                    value={rule.ends.kind === 'on_date' ? rule.ends.date : ''}
+                    min={rule.startDate}
+                    disabled={disabled || !picked}
+                    onChange={(date) => patch({ ends: { kind: 'on_date', date } })}
+                  />
+                </div>
               )}
               {k === 'after' && (
                 <>

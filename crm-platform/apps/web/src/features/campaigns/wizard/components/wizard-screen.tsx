@@ -40,6 +40,7 @@ const STATE_ISSUES: readonly IssueCode[] = [
   'no_recipients',
   'insufficient_balance',
   'checking_balance',
+  'balance_unavailable',
 ];
 
 /** `/campaigns/wizard` and `/campaigns/wizard/[id]`: the four-step "Create broadcast" wizard. */
@@ -157,6 +158,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
     count: countKnown ? count.data : null,
     credit: credit.data,
     creditPending: view === 3 && Boolean(draft.templateId) && credit.isPending,
+    creditFailed: view === 3 && Boolean(draft.templateId) && credit.isError,
   };
   const issues = stepIssues(view, draft, ctx);
 
@@ -386,5 +388,6 @@ const KNOWN_ISSUES: ReadonlySet<string> = new Set([
   'no_recipients',
   'insufficient_balance',
   'checking_balance',
+  'balance_unavailable',
 ]);
 const knownIssue = (code: string) => KNOWN_ISSUES.has(code);
