@@ -1,4 +1,4 @@
-import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, Optional, type OnModuleInit } from '@nestjs/common';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -7,7 +7,8 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { NotificationsRepository } from './notifications.repository';
+import { NotificationPublisher } from './notification.publisher';
+import { NotificationsRepository, type WrittenNotification } from './notifications.repository';
 import {
   SALESDOC_NOTIFICATION_TYPE,
   SALESDOC_NOTIFY_EVENTS,
@@ -43,6 +44,7 @@ export class SalesDocNotificationConsumer implements OutboxSubscriber, OnModuleI
     private readonly db: DatabaseService,
     private readonly repo: NotificationsRepository,
     private readonly registry: OutboxSubscriberRegistry,
+    @Optional() private readonly publisher?: NotificationPublisher,
   ) {}
 
   onModuleInit(): void {
@@ -66,6 +68,7 @@ export class SalesDocNotificationConsumer implements OutboxSubscriber, OnModuleI
     const recipients = recipientsFor(facts);
     if (recipients.length === 0) return;
 
+    const pending: WrittenNotification[] = [];
     await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const doc = await tx.execute(sql`
         SELECT title FROM sales_docs WHERE org_id = ${event.orgId} AND uuid = ${docUuid}::uuid
@@ -80,7 +83,7 @@ export class SalesDocNotificationConsumer implements OutboxSubscriber, OnModuleI
       const outcome = facts.eventType === 'salesdoc.accepted' ? 'accepted' : 'declined';
       for (const person of people) {
         if (person.status !== 'active') continue;
-        const written = await this.repo.insertOnce(tx, event.orgId, {
+        const written = await this.repo.insertReturning(tx, event.orgId, {
           userId: Number(person.id),
           type: SALESDOC_NOTIFICATION_TYPE,
           title: copy.title,
@@ -90,6 +93,7 @@ export class SalesDocNotificationConsumer implements OutboxSubscriber, OnModuleI
           dedupeKey: dedupeKeyFor(facts.eventType, event.id),
         });
         if (written) {
+          pending.push(written);
           this.logger.debug(
             { orgId: event.orgId, eventId: event.id, type: facts.eventType },
             'quote decision notification written',
@@ -97,5 +101,6 @@ export class SalesDocNotificationConsumer implements OutboxSubscriber, OnModuleI
         }
       }
     });
+    for (const row of pending) await this.publisher?.created(event.orgId, row);
   }
 }

@@ -17,6 +17,24 @@ interface OutboxRow {
 
 const BATCH_SIZE = 200;
 const MAX_ATTEMPTS = 8;
+/**
+ * A tick keeps claiming while the last batch came back full, up to this many batches. Without it a backlog drained at one batch per
+ * 2 second tick (a ceiling of 100 events a second) however fast the consumers are; with it a backlog drains as fast as the consumers
+ * run. The bound keeps one tick from holding the loop for ever (the next tick takes over), which matters now that every inbound
+ * message adds a `message.received` event (BL-096, spec risk R2).
+ */
+const MAX_BATCHES_PER_TICK = 10;
+/**
+ * How many different aggregates one batch dispatches at the same time. Events of ONE aggregate (the same conversation, task, ...)
+ * still go one after another in claim order, so a consumer that relies on that order keeps it; events of different aggregates are
+ * independent. Without this a batch ran strictly one event at a time, and the round trips of each consumer (the conversation
+ * notifications make several per message) set a hard ceiling on events per second. `OUTBOX_DRAIN_CONCURRENCY`, 1 to 16, default 6
+ * (the worker's database pool is 20 by default, and each concurrent consumer holds one connection while it works).
+ */
+function drainConcurrency(): number {
+  const n = Number.parseInt(process.env.OUTBOX_DRAIN_CONCURRENCY ?? '6', 10);
+  return Number.isFinite(n) ? Math.min(16, Math.max(1, n)) : 6;
+}
 
 /**
  * Drains event_outbox.
@@ -49,7 +67,12 @@ export class OutboxDrainService {
     this.running = true;
 
     try {
-      const processed = await this.drainBatch();
+      let processed = 0;
+      for (let batch = 0; batch < MAX_BATCHES_PER_TICK; batch += 1) {
+        const n = await this.drainBatch();
+        processed += n;
+        if (n < BATCH_SIZE) break;
+      }
       if (processed > 0) {
         this.logger.debug({ processed }, 'outbox batch drained');
       }
@@ -82,15 +105,19 @@ export class OutboxDrainService {
       const rows = claimed.rows as unknown as OutboxRow[];
       if (rows.length === 0) return 0;
 
+      // Dispatch first (a few aggregates at a time), then record each outcome on the claiming connection, in claim order.
+      const failures = await this.dispatchAll(rows);
+
       for (const row of rows) {
-        try {
-          await this.dispatch(row);
+        const failure = failures.get(row);
+        if (failure === undefined) {
           await tx.execute(sql`
             UPDATE event_outbox
             SET status = 'done', processed_at = now()
             WHERE id = ${row.id} AND created_at = ${row.created_at}
           `);
-        } catch (err) {
+        } else {
+          const err = failure;
           const attempts = row.attempts + 1;
           const dead = attempts >= MAX_ATTEMPTS;
           // 2^attempts seconds, capped at 15 minutes.
@@ -116,6 +143,36 @@ export class OutboxDrainService {
 
       return rows.length;
     });
+  }
+
+  /**
+   * Runs the dispatch of every claimed row and returns the ones that failed with their error (a row absent from the map succeeded).
+   * Rows are grouped by aggregate; a group's rows run in order, and up to `drainConcurrency()` groups run at once. A failure never
+   * stops the rest of its group or any other group: each row is retried on its own.
+   */
+  private async dispatchAll(rows: OutboxRow[]): Promise<Map<OutboxRow, unknown>> {
+    const groups = new Map<string, OutboxRow[]>();
+    for (const row of rows) {
+      const key = `${row.org_id}:${row.aggregate_module}:${row.aggregate_id}`;
+      const group = groups.get(key);
+      if (group) group.push(row);
+      else groups.set(key, [row]);
+    }
+    const failures = new Map<OutboxRow, unknown>();
+    const queue = [...groups.values()];
+    const worker = async (): Promise<void> => {
+      for (let group = queue.shift(); group; group = queue.shift()) {
+        for (const row of group) {
+          try {
+            await this.dispatch(row);
+          } catch (err) {
+            failures.set(row, err ?? new Error('unknown error'));
+          }
+        }
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(drainConcurrency(), queue.length) }, worker));
+    return failures;
   }
 
   /**
