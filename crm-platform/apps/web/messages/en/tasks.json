@@ -311,6 +311,7 @@
     },
     "linked": {
       "title": "Tasks",
+      "addPlaceholder": "Type a task title, then Add to fill in the details",
       "viewAll": "View all",
       "loading": "Loading tasks",
       "unavailableTitle": "Tasks are not available yet",

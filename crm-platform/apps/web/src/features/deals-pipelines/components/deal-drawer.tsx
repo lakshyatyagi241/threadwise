@@ -336,6 +336,7 @@ function DrawerBody({
         <LinkedTasks
           kind="deal"
           id={deal.id}
+          label={deal.title}
           compact
           className="border-t border-border pt-5"
           onChanged={() => void qc.invalidateQueries({ queryKey: KEYS.activities(deal.id) })}
