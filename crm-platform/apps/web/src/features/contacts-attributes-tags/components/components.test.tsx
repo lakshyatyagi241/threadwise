@@ -111,6 +111,35 @@ describe('ContactsTable', () => {
     }
   });
 
+  it('makes sortable headers buttons, marks the sorted one, and leaves tags and groups alone', () => {
+    const out = html(
+      <ContactsTable
+        rows={[row()]}
+        columns={EVERY_COLUMN}
+        headerState="none"
+        onToggleAll={() => undefined}
+        sort={{ key: 'email', order: 'desc' }}
+        onSort={() => undefined}
+        onMoveColumn={() => undefined}
+        onNudgeColumn={() => undefined}
+        {...handlers()}
+      />,
+    );
+    expect(out.match(/aria-sort="descending"/g)?.length).toBe(1);
+    expect(out).toContain('Sort by Email ID');
+    expect(out).not.toContain('Sort by Tags');
+    expect(out).not.toContain('Sort by Groups');
+    // Every column but the name can be dragged.
+    expect(out.match(/draggable="true"/g)?.length).toBe(EVERY_COLUMN.length - 1);
+  });
+
+  it('has no sort buttons or drag handles without handlers (the read-only listing)', () => {
+    const out = table([row()]);
+    expect(out).not.toContain('Sort by');
+    expect(out).not.toContain('aria-sort');
+    expect(out).not.toContain('draggable="true"');
+  });
+
   it('links the name to the detail page (WaDesk had no detail link)', () => {
     expect(table([row()])).toContain('href="/contacts/294dca7c-5806-4548-9035-dcca9befc7b1"');
   });

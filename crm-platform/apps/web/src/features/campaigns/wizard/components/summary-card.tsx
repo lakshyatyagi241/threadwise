@@ -14,7 +14,7 @@ import {
 import { useSegmentCatalog } from '@/features/segments/api/lookups';
 import { summarize } from '@/features/segments/lib/summary';
 import { useSummaryContext } from '@/features/segments/components/use-summary';
-import { audienceNames, editorFromRules } from '../lib/audience';
+import { audienceNames, editorFromRules, selectionKind } from '../lib/audience';
 import { formatMinor } from '../lib/money';
 import type { WizardView } from '../lib/state';
 import { Chip, WizardCard } from './parts';
@@ -72,6 +72,7 @@ export function SummaryCard({
   onEdit: (step: WizardView) => void;
 }) {
   const t = useTranslations('campaigns.wizard.review');
+  const ta = useTranslations('campaigns.wizard.audience');
   const tc = useTranslations('campaigns.wizard.categories');
   const tf = useTranslations('campaigns.wizard.fields');
   const locale = useLocale();
@@ -115,6 +116,18 @@ export function SummaryCard({
         </Row>
         <Row label={t('sumAudience')} step={2} onEdit={onEdit}>
           <ul className="space-y-0.5">
+            {draft.audience.selection && (
+              <li>
+                {t('sumSelection', {
+                  what: (() => {
+                    const k = selectionKind(draft.audience.selection);
+                    return k.kind === 'ids'
+                      ? ta('selectionIds', { count: k.count })
+                      : ta('selectionFilter');
+                  })(),
+                })}
+              </li>
+            )}
             {names.groups.length > 0 && <li>{t('sumGroups', { names: list(names.groups) })}</li>}
             {names.segments.length > 0 && (
               <li>{t('sumSegments', { names: list(names.segments) })}</li>
