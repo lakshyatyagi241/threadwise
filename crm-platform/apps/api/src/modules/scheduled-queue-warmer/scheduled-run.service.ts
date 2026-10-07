@@ -92,7 +92,7 @@ export class ScheduledRunService {
       if (!row || !['scheduled', 'running'].includes(row.status)) return { skip: true as const };
       // The unofficial engine is off (owner decision 2026-10-05): nothing is sent and the row is only handed back to the due sweep
       // (`scheduled`, no job), which skips it until the engine is turned on. No recipient is touched, nothing is marked failed.
-      if (row.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabled())) {
+      if (row.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId))) {
         await tx.execute(sql`
           UPDATE scheduled_messages SET status = 'scheduled', node_schedule_id = NULL
            WHERE org_id = ${orgId} AND id = ${scheduledId}`);

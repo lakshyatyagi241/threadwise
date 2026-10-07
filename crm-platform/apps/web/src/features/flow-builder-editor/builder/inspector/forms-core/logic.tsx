@@ -1,11 +1,22 @@
 'use client';
 
+import {
+  FLB_COND_MAX_DEPTH,
+  FLB_COND_MAX_RULES,
+  flbCondProblems,
+  flbCondSummary,
+  flbIsCondGroup,
+  type FlbCondGroup,
+  type FlbCondRule,
+} from '@crm/contracts';
 import { cn } from '@crm/ui';
+import type { ReactNode } from 'react';
 import {
   Check,
   controlClass,
   Field,
   IconButton,
+  KnowledgeBaseActions,
   NumberInput,
   PasswordInput,
   SelectInput,
@@ -13,6 +24,18 @@ import {
   TextInput,
   XIcon,
 } from '../kit';
+import {
+  addGroup,
+  addRule,
+  canAddGroup,
+  canAddRule,
+  conditionTreeOf,
+  depthAt,
+  patchRule,
+  removeAt,
+  setGroupOp,
+  type CondPath,
+} from '../../../lib/condition-tree';
 import type { FormProps } from '../types';
 import {
   addConditionRow,
@@ -37,7 +60,217 @@ const OPERATOR_CHOICES = [
   { v: 'exists', l: 'Is set' },
 ];
 
-export function ConditionForm({ data: d, setMany }: FormProps) {
+const joinerClass = (active: boolean, or: boolean) =>
+  cn(
+    'px-3 py-1 transition',
+    active
+      ? or
+        ? 'bg-amber-400 text-foreground'
+        : 'bg-brand text-white'
+      : 'text-foreground/70 hover:bg-background',
+  );
+
+function RuleCard({
+  rule,
+  label,
+  onPatch,
+  onRemove,
+  flagged,
+}: {
+  rule: FlbCondRule;
+  label: string;
+  onPatch: (patch: Partial<FlbCondRule>) => void;
+  onRemove: () => void;
+  flagged: boolean;
+}) {
+  const operator = rule.operator || 'equals';
+  return (
+    <div
+      className={cn(
+        'mb-2 rounded-lg border bg-background p-2',
+        flagged ? 'border-[#E87A5D]' : 'border-border',
+      )}
+    >
+      <div className="mb-1 flex items-center gap-2">
+        <span className="font-mono text-[10px] text-muted-foreground">{label}</span>
+        <div className="flex-1" />
+        <IconButton title="Remove rule" danger onClick={onRemove}>
+          <XIcon />
+        </IconButton>
+      </div>
+      <input
+        type="text"
+        value={str(rule.variable)}
+        onChange={(e) => onPatch({ variable: e.target.value })}
+        placeholder="Variable name (e.g. plan)"
+        className={cn(controlClass, 'mb-1.5')}
+      />
+      {flagged ? (
+        <div className="mb-1.5 text-[11px] text-[#E87A5D]">Pick the variable to test.</div>
+      ) : null}
+      <select
+        value={operator}
+        onChange={(e) => onPatch({ operator: e.target.value })}
+        className={cn(controlClass, 'mb-1.5')}
+      >
+        {OPERATOR_CHOICES.map((o) => (
+          <option key={o.v} value={o.v}>
+            {o.l}
+          </option>
+        ))}
+      </select>
+      {operator !== 'exists' ? (
+        <input
+          type="text"
+          value={str(rule.value)}
+          onChange={(e) => onPatch({ value: e.target.value })}
+          placeholder="Compare against…"
+          className={controlClass}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function GroupEditor({
+  root,
+  group,
+  path,
+  onChange,
+}: {
+  root: FlbCondGroup;
+  group: FlbCondGroup;
+  path: CondPath;
+  onChange: (next: FlbCondGroup) => void;
+}) {
+  const isRoot = path.length === 0;
+  const depth = depthAt(path);
+  const canRule = canAddRule(root);
+  const canGroup = canAddGroup(path);
+  const or = group.op === 'or';
+  return (
+    <div
+      data-cond-group={depth}
+      className={cn(!isRoot && 'mb-2 ml-1 border-l-2 border-border pl-2')}
+    >
+      <div className="mb-1.5 flex items-center gap-2">
+        <div className="inline-flex overflow-hidden rounded-full border border-border bg-muted text-[11px] font-semibold">
+          <button
+            type="button"
+            onClick={() => onChange(setGroupOp(root, path, 'and'))}
+            className={joinerClass(!or, false)}
+          >
+            AND
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(setGroupOp(root, path, 'or'))}
+            className={joinerClass(or, true)}
+          >
+            OR
+          </button>
+        </div>
+        <span className="min-w-0 flex-1 truncate text-[11px] text-muted-foreground">
+          {group.items.length === 0 ? 'Empty group: always false' : flbCondSummary(group)}
+        </span>
+        {!isRoot ? (
+          <IconButton title="Remove group" danger onClick={() => onChange(removeAt(root, path))}>
+            <XIcon />
+          </IconButton>
+        ) : null}
+      </div>
+      {group.items.map((item, i) => {
+        const childPath = [...path, i];
+        return flbIsCondGroup(item) ? (
+          <GroupEditor key={i} root={root} group={item} path={childPath} onChange={onChange} />
+        ) : (
+          <RuleCard
+            key={i}
+            rule={item}
+            label={`Rule ${i + 1}`}
+            flagged={!item.variable.trim()}
+            onPatch={(patch) => onChange(patchRule(root, childPath, patch))}
+            onRemove={() => onChange(removeAt(root, childPath))}
+          />
+        );
+      })}
+      {group.items.length === 0 ? (
+        <div className="mb-2 text-[11px] text-[#E87A5D]">
+          This group has no rules, so it is always false. Add a rule or remove the group.
+        </div>
+      ) : null}
+      <div className="flex gap-3">
+        <GroupAction disabled={!canRule} onClick={() => onChange(addRule(root, path))}>
+          Add rule
+        </GroupAction>
+        <GroupAction disabled={!canGroup} onClick={() => onChange(addGroup(root, path))}>
+          Add group
+        </GroupAction>
+      </div>
+    </div>
+  );
+}
+
+function GroupAction({
+  onClick,
+  disabled,
+  children,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className="mt-1 inline-flex items-center gap-1 text-[12px] font-semibold text-brand hover:underline disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
+    >
+      + {children}
+    </button>
+  );
+}
+
+/**
+ * The Condition inspector. A node edits a nested tree of AND/OR groups (`conditionGroup`, beyond WaDesk); a node that only has the
+ * flat chain is shown as the equal tree and saved as `conditionGroup` on its first edit (the flat arrays are left as they were and
+ * ignored by the runtime). A flat chain too long or too alternating for the tree limits keeps the flat editor.
+ */
+export function ConditionForm(props: FormProps) {
+  const model = conditionTreeOf(props.data);
+  if (!model) return <FlatConditionForm {...props} />;
+  const { tree, from } = model;
+  const problems = flbCondProblems(tree);
+  return (
+    <>
+      <InfoBox>
+        Rules are grouped. Each group combines its rules and sub-groups with <b>AND</b> (all must
+        match) or <b>OR</b> (any can match). The whole tree either evaluates to TRUE (then the{' '}
+        <span className="font-mono text-brand">IF · true</span> port fires) or FALSE (then the{' '}
+        <span className="font-mono text-[#E87A5D]">ELSE · false</span> port fires). Groups nest up
+        to {FLB_COND_MAX_DEPTH} levels, with at most {FLB_COND_MAX_RULES} rules in total.
+        {from === 'flat' ? ' This node still uses the old flat list until you edit it here.' : ''}
+      </InfoBox>
+      <GroupEditor
+        root={tree}
+        group={tree}
+        path={[]}
+        onChange={(next) => props.setMany({ conditionGroup: next })}
+      />
+      {problems.incompleteRules + problems.emptyGroups > 0 ? (
+        <div className="mt-2 text-[11px] text-[#E87A5D]">
+          {problems.incompleteRules > 0
+            ? `${problems.incompleteRules} rule(s) have no variable. `
+            : ''}
+          {problems.emptyGroups > 0 ? `${problems.emptyGroups} empty group(s).` : ''}
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function FlatConditionForm({ data: d, setMany }: FormProps) {
   const conds = asArray(d.conditions).map(asRecord) as ConditionRow[];
   const ops = asArray(d.operators).map(String);
   const updateRow = (i: number, patch: Partial<ConditionRow>) =>
@@ -376,17 +609,26 @@ export function AiForm({ data: d, set, env }: FormProps) {
 
   const assistantHint = !assistants.length ? (
     <>
-      No trained assistants yet — create one in <Link href="/ai-training">AI Training</Link>.
+      No knowledge bases yet. Create one in{' '}
+      <Link href="/ai-training" newTab>
+        AI Training
+      </Link>
+      , then press Refresh list to pick it here.
     </>
   ) : picked && picked.sources === 0 ? (
     <>
-      Note: this assistant has 0 trained sources — add some in{' '}
-      <Link href="/ai-training">AI Training</Link> or the reply uses the prompt only.
+      Note: this assistant has 0 trained sources. Add some in{' '}
+      <Link href="/ai-training" newTab>
+        AI Training
+      </Link>{' '}
+      or the reply uses the prompt only.
     </>
   ) : (
     <>
       Pulls the chosen assistant&apos;s trained content into this reply.{' '}
-      <Link href="/ai-training">Manage knowledge →</Link>
+      <Link href="/ai-training" newTab>
+        Manage knowledge →
+      </Link>
     </>
   );
 
@@ -427,6 +669,7 @@ export function AiForm({ data: d, set, env }: FormProps) {
           options={assistantOpts}
           onChange={(v) => set('assistant', v)}
         />
+        <KnowledgeBaseActions refresh={() => env.refresh()} />
       </Field>
       <div className="mb-1 mt-1">
         <Check checked={!!d.extract} onChange={(v) => set('extract', v)}>

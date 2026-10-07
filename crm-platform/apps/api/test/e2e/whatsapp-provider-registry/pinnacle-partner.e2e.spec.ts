@@ -340,7 +340,8 @@ describe('connecting a number through the partner', () => {
     expect(create.json).toMatchObject({
       template_namespace: 'ns_acme_1',
       waba_id: ids.waba,
-      waba_number: ['+919112290122'],
+      // exactly as Meta shows it, spaces and all, the way Geta's own onboarding sends it
+      waba_number: ['+91 91122 90122'],
     });
 
     const embedded = calls.find((c) => c.url === `${PART}/client-embedded-detail-receiver`)!;

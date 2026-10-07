@@ -33,7 +33,7 @@
       "browse": "Browse the Marketplace",
       "back": "Back to the dashboard",
       "unofficialTitle": "{app} isn't available",
-      "unofficialBody": "{app} is only used with personal WhatsApp numbers paired by QR code, which this platform does not support. WhatsApp connects through the official WhatsApp Business API."
+      "unofficialBody": "{app} is only used with personal WhatsApp numbers paired by QR code, which are not enabled for your workspace. WhatsApp connects through the official WhatsApp Business API."
     },
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",

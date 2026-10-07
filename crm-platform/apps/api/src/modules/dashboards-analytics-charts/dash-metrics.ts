@@ -8,6 +8,10 @@ export interface RawCounts {
   read: number;
   replies: number;
   repliers: number;
+  contactsMessaged: number;
+  contactsDelivered: number;
+  contactsReplied: number;
+  contactsGoalCompleted: number;
 }
 
 const round1 = (n: number): number => Math.round(n * 10) / 10;
@@ -33,8 +37,38 @@ export function totalsOf(c: RawCounts): DashTotals {
   };
 }
 
-/** Sent, delivered, replied (inbound), engaged (distinct repliers); drops are measured from the stage the story comes from. */
-export function funnelOf(t: DashTotals): DashFunnel {
+/** Percent of contacts messaged, capped at 100: a contact can reply without being messaged in this window. */
+export const contactPct = (num: number, messaged: number): number =>
+  Math.min(100, pct(num, messaged));
+
+/** Contacts replied over contacts messaged, percent, one decimal, never above 100. */
+export const contactReplyRate = (
+  t: Pick<DashTotals, 'contactsReplied' | 'contactsMessaged'>,
+): number => contactPct(t.contactsReplied, t.contactsMessaged);
+
+/** Replies per responding contact, one decimal; null when nobody replied. */
+export const repliesPerContact = (inbound: number, respondingContacts: number): number | null =>
+  respondingContacts > 0 ? round1(inbound / respondingContacts) : null;
+
+/**
+ * Reply-rate change against the previous window, in percentage points (one decimal). Null when the previous window messaged no
+ * contacts (nothing to compare with), so the card hides the comparison.
+ */
+export function replyRateComparison(
+  current: DashTotals,
+  previous: DashTotals | undefined,
+): { previousReplyRate: number; replyRatePp: number } | null {
+  if (!previous || previous.contactsMessaged <= 0) return null;
+  const prev = contactReplyRate(previous);
+  return { previousReplyRate: prev, replyRatePp: deltaPp(contactReplyRate(current), prev) };
+}
+
+/**
+ * Sent, delivered, replied (inbound), engaged (distinct repliers) kept for the CSV and older readers (drops are measured from the
+ * stage the story comes from), plus the contact-based view the Engagement funnel card draws: contacts messaged, delivered, replied,
+ * the conversation activity and the reply-rate comparison with `previous` (the same function serves dashboard and analytics).
+ */
+export function funnelOf(t: DashTotals, previous?: DashTotals): DashFunnel {
   const stages = [
     { key: 'sent' as const, count: t.sent, from: t.sent },
     { key: 'delivered' as const, count: t.delivered, from: t.sent },
@@ -47,5 +81,21 @@ export function funnelOf(t: DashTotals): DashFunnel {
     pct: pct(s.count, t.sent),
     drop: i === 0 ? 0 : Math.max(0, s.from - s.count),
   }));
-  return { stages: out, endToEnd: out[3]!.pct };
+  return {
+    stages: out,
+    endToEnd: out[3]!.pct,
+    contacts: {
+      messaged: t.contactsMessaged,
+      delivered: t.contactsDelivered,
+      replied: t.contactsReplied,
+      goalCompleted: t.contactsGoalCompleted,
+    },
+    activity: {
+      inbound: t.replies,
+      respondingContacts: t.contactsReplied,
+      repliesPerContact: repliesPerContact(t.replies, t.contactsReplied),
+    },
+    replyRate: contactReplyRate(t),
+    comparison: replyRateComparison(t, previous),
+  };
 }

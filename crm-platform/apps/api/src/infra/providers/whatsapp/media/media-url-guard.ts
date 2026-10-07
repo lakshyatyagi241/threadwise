@@ -1,5 +1,6 @@
 import { lookup as dnsLookup, type LookupAddress } from 'node:dns';
 import { isIP } from 'node:net';
+import { isBlockedAddress } from '../../../net/blocked-address';
 import { providerHostOf, type MediaProviderProfile } from './media-provider';
 import type { WhatsappMediaConfig } from './whatsapp-media.config';
 import { MEDIA_FAILURE, MediaFetchError } from './media-fetch-error';
@@ -136,87 +137,11 @@ export function assertAllowedUrl(raw: string, policy: HostPolicy): URL {
 
 // --- layer 2: addresses ---------------------------------------------------------------------------------------------------------
 
-function v4Bytes(addr: string): number[] | null {
-  const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(addr);
-  if (!m) return null;
-  const b = m.slice(1).map(Number);
-  return b.every((n) => n <= 255) ? b : null;
-}
-
-/** An IPv6 address as 16 bytes, or null. Handles `::` compression and a trailing dotted IPv4. */
-function v6Bytes(addr: string): number[] | null {
-  let text = addr.toLowerCase().split('%')[0]!; // a zone id (fe80::1%eth0) is not part of the address
-  const tail = /(\d{1,3}(?:\.\d{1,3}){3})$/.exec(text);
-  if (tail) {
-    const v4 = v4Bytes(tail[1]!);
-    if (!v4) return null;
-    text = `${text.slice(0, -tail[1]!.length)}${((v4[0]! << 8) | v4[1]!).toString(16)}:${((v4[2]! << 8) | v4[3]!).toString(16)}`;
-  }
-  const halves = text.split('::');
-  if (halves.length > 2) return null;
-  const head = halves[0] ? halves[0].split(':') : [];
-  const rest = halves.length === 2 && halves[1] ? halves[1].split(':') : [];
-  const missing = 8 - head.length - rest.length;
-  if (halves.length === 2 ? missing < 1 : missing !== 0) return null;
-  const groups = [...head, ...Array<string>(halves.length === 2 ? missing : 0).fill('0'), ...rest];
-  if (groups.length !== 8) return null;
-  const out: number[] = [];
-  for (const g of groups) {
-    if (!/^[0-9a-f]{1,4}$/.test(g)) return null;
-    const n = parseInt(g, 16);
-    out.push(n >> 8, n & 0xff);
-  }
-  return out;
-}
-
-function publicV4(b: number[]): boolean {
-  const [a, c, d] = b as [number, number, number, number];
-  if (a === 0 || a === 10 || a === 127) return false; // this network, private, loopback
-  if (a === 100 && c >= 64 && c <= 127) return false; // shared address space (carrier NAT)
-  if (a === 169 && c === 254) return false; // link local, including the cloud metadata address
-  if (a === 172 && c >= 16 && c <= 31) return false; // private
-  if (a === 192 && c === 0 && (d === 0 || d === 2)) return false; // IETF protocol assignments, documentation
-  if (a === 192 && c === 88 && d === 99) return false; // 6to4 relay (deprecated)
-  if (a === 192 && c === 168) return false; // private
-  if (a === 198 && (c === 18 || c === 19)) return false; // benchmarking
-  if (a === 198 && c === 51 && d === 100) return false; // documentation
-  if (a === 203 && c === 0 && d === 113) return false; // documentation
-  if (a >= 224) return false; // multicast, reserved, broadcast
-  return true;
-}
-
 /**
- * True only for an address that is routable on the public internet. Everything else (loopback, private, link local, carrier NAT,
- * multicast, documentation, unspecified, unique-local and link-local IPv6) is false, and so is an IPv6 form that carries a private
- * IPv4 address inside it (IPv4-mapped `::ffff:a.b.c.d`, NAT64 `64:ff9b::/96`, 6to4 `2002::/16`). Text that is not an address is false.
+ * True only for an address routable on the public internet. The rule is shared (`infra/net/blocked-address.ts`): it also refuses every
+ * IPv6 form that carries a blocked IPv4 address (mapped in dotted or hex form, NAT64, 6to4). Text that is not an address is false.
  */
-export function isPublicAddress(address: string): boolean {
-  const kind = isIP(address);
-  if (kind === 4) {
-    const b = v4Bytes(address);
-    return b !== null && publicV4(b);
-  }
-  if (kind === 6) {
-    const b = v6Bytes(address);
-    if (!b) return false;
-    const allZero = (from: number, to: number) => b.slice(from, to).every((x) => x === 0);
-    if (allZero(0, 16)) return false; // ::
-    if (allZero(0, 15) && b[15] === 1) return false; // ::1
-    if (allZero(0, 10) && b[10] === 0xff && b[11] === 0xff) return publicV4(b.slice(12)); // ::ffff:a.b.c.d
-    if (allZero(0, 12)) return false; // ::a.b.c.d (deprecated IPv4-compatible)
-    if (b[0] === 0x00 && b[1] === 0x64 && b[2] === 0xff && b[3] === 0x9b && allZero(4, 12))
-      return publicV4(b.slice(12)); // NAT64
-    if (b[0] === 0x20 && b[1] === 0x02) return publicV4(b.slice(2, 6)); // 6to4
-    if ((b[0]! & 0xfe) === 0xfc) return false; // fc00::/7 unique local
-    if (b[0] === 0xfe && (b[1]! & 0xc0) === 0x80) return false; // fe80::/10 link local
-    if (b[0] === 0xfe && (b[1]! & 0xc0) === 0xc0) return false; // fec0::/10 site local (deprecated)
-    if (b[0] === 0xff) return false; // multicast
-    if (b[0] === 0x20 && b[1] === 0x01 && b[2] === 0x0d && b[3] === 0xb8) return false; // documentation
-    if (b[0] === 0x01 && b[1] === 0x00 && allZero(2, 8)) return false; // 100::/64 discard
-    return true;
-  }
-  return false;
-}
+export const isPublicAddress = (address: string): boolean => !isBlockedAddress(address);
 
 export type DnsResolver = (
   host: string,

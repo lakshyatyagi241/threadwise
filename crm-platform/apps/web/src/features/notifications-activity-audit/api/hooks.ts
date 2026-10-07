@@ -2,23 +2,32 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { NotificationListResponse } from '@crm/contracts';
+import { useRealtimeStatus } from '@/lib/realtime';
+import { NOTIFICATION_KEYS } from './keys';
 import { notificationsApi } from './service';
 
-export const NOTIFICATION_KEYS = {
-  unread: ['notifications', 'unread'] as const,
-  feed: ['notifications', 'feed'] as const,
-};
+export { NOTIFICATION_KEYS };
 
-/** The bell polls once a minute (WaDesk did too) and again when the window regains focus. */
+/**
+ * While the live socket is connected the server pushes every change, so the bell does not poll. Without a connection (not
+ * configured, connecting, dropped) it polls once a minute, as WaDesk's bell did, and always again when the window regains focus.
+ * A reconnect fetches once more by itself (the live provider asks for a catch-up).
+ */
 export const POLL_MS = 60_000;
 export const FEED_SIZE = 8;
 
+/** The poll interval for the current socket state: none while the socket is connected, `POLL_MS` otherwise. */
+export function pollIntervalFor(status: ReturnType<typeof useRealtimeStatus>): number | false {
+  return status === 'connected' ? false : POLL_MS;
+}
+
 /** The badge. A failure only hides the count: the bell still opens. */
 export function useUnreadCount() {
+  const interval = pollIntervalFor(useRealtimeStatus());
   return useQuery({
     queryKey: NOTIFICATION_KEYS.unread,
     queryFn: ({ signal }) => notificationsApi.unread(signal),
-    refetchInterval: POLL_MS,
+    refetchInterval: interval,
     refetchOnWindowFocus: true,
     staleTime: 15_000,
     retry: false,
@@ -27,11 +36,12 @@ export function useUnreadCount() {
 
 /** The newest few, fetched while the panel is open. */
 export function useFeed(open: boolean) {
+  const interval = pollIntervalFor(useRealtimeStatus());
   return useQuery({
     queryKey: NOTIFICATION_KEYS.feed,
     queryFn: ({ signal }) => notificationsApi.list(FEED_SIZE, signal),
     enabled: open,
-    refetchInterval: open ? POLL_MS : false,
+    refetchInterval: open ? interval : false,
     staleTime: 0,
     retry: false,
   });

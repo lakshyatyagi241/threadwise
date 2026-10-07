@@ -215,7 +215,7 @@ describe('the real menu', () => {
 
   it('finds the WhatsApp provider pages by the word "whatsapp" through their address and section', () => {
     expect(ids(searchEntries(index, 'whatsapp'))).toEqual(
-      expect.arrayContaining(['wap-providers', 'wap-assignments', 'wap-switch']),
+      expect.arrayContaining(['wap-providers', 'wap-switch']),
     );
   });
 

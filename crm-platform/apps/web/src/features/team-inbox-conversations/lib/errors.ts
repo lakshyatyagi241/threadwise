@@ -20,6 +20,7 @@ export const ERROR_KINDS = [
   'tooLarge',
   'unsupported',
   'templateNotSendable',
+  'groupSendUnavailable',
   'network',
   'generic',
 ] as const;
@@ -48,6 +49,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   VALIDATION_FAILED: 'validation',
   PAYLOAD_TOO_LARGE: 'tooLarge',
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
+  WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
   UNSUPPORTED_MEDIA_TYPE: 'unsupported',
   NETWORK: 'network',
 };

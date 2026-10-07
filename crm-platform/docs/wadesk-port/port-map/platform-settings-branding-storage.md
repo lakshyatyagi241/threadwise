@@ -7,7 +7,7 @@ Spec: `docs/wadesk-port/inventory/platform-settings-branding-storage.md`. Zone: 
 | Piece          | Where                                                                                       |
 | -------------- | ------------------------------------------------------------------------------------------- |
 | API module     | `apps/api/src/modules/platform-settings-branding-storage/` (flat, one Nest module)          |
-| Providers      | `apps/api/src/infra/providers/platform-settings-branding-storage/` (S3 probe, Pusher probe) |
+| Providers      | `apps/api/src/infra/providers/platform-settings-branding-storage/` (S3 probe) |
 | Contracts      | `packages/contracts/src/platform-settings-branding-storage/`                                |
 | Web (operator) | `apps/web/src/app/(admin)/(platform-settings-branding-storage)/admin/settings/...`          |
 | Web feature    | `apps/web/src/features/platform-settings-branding-storage/`, messages `messages/en/...json` |
@@ -25,7 +25,7 @@ Keys written by SET: `set.<group>` (JSON document, includes `_rv`, the optimisti
 group is the unit of conflict. Replaces WaDesk's per-key rows, string typing and double encryption scheme (one scheme now).
 
 Groups: general (005, 006, 008, 012), branding (010, 013-015), site (022, 023), mail (024), seo (026), privacy (029),
-analytics (032), customCode (034), pwa (035), storage (039), realtime (041).
+analytics (032), customCode (034), pwa (035), storage (039); realtime (041) was removed 2026-10-07.
 
 ## Endpoints (all `/v2/platform/settings/...`, operator console only)
 
@@ -37,7 +37,6 @@ analytics (032), customCode (034), pwa (035), storage (039), realtime (041).
 | `GET  /export`         | super_admin  | 004                        |
 | `POST /mail/test`      | super_admin  | 025                        |
 | `POST /storage/test`   | super_admin  | 039                        |
-| `POST /realtime/test`  | super_admin  | 041                        |
 
 Public (no auth): `GET /v2/public/site-config` (027, 030, 033, 036 data), `GET /v2/public/manifest.webmanifest` (036),
 `GET /v2/public/robots.txt` (028).
@@ -72,5 +71,5 @@ registration policy), ASHELL (admin nav), I18N and WSP (consumers of defaults; n
 ## Risks
 
 Secrets rotate with `CREDENTIALS_ENCRYPTION_KEY` (undecryptable secret reads as "not set"). Object storage probe is hand-signed
-SigV4 (no SDK dependency may be added); real uploads need the file module (not built). Pusher is probe-only: runtime realtime is
-the existing Socket.IO gateway (WD-SET-042 is not ported, see inventory port notes).
+SigV4 (no SDK dependency may be added); real uploads need the file module (not built). The Pusher settings and probe were removed
+(owner decision 2026-10-07): runtime realtime is the existing Socket.IO gateway (WD-SET-042 is not ported, see inventory port notes).

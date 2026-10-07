@@ -128,7 +128,7 @@
       "contact-properties": {
         "label": "Contact properties",
         "description": "Add the fields you want to keep on every contact.",
-        "keywords": "custom fields, fields, required, dropdown, columns"
+        "keywords": "custom fields, fields, required, dropdown, columns, attributes, variables, merge fields"
       },
       "attributes": {
         "label": "Attributes",
@@ -175,11 +175,6 @@
         "description": "Your plan and wallet purchases, with receipts.",
         "keywords": "payments, receipts, invoices, purchases, orders"
       },
-      "bsp-billing-mode": {
-        "label": "Message billing",
-        "description": "Choose who is billed for your WhatsApp messages.",
-        "keywords": "whatsapp, conversation charges, meta billing, bsp, wallet"
-      },
       "account": {
         "label": "Account",
         "description": "Your name, email, password and language.",
@@ -209,6 +204,11 @@
         "label": "AI provider keys",
         "description": "Add your own AI provider key to power AI features.",
         "keywords": "openai, gemini, claude, api key, model, token"
+      },
+      "ai-training": {
+        "label": "AI Training",
+        "description": "Train chat assistants on your own content for flows and the website chat.",
+        "keywords": "knowledge base, assistant, smart agent, faq, train, sources, meta business agent, responder"
       },
       "booking-types": {
         "label": "Booking types",

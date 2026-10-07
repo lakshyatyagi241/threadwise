@@ -167,3 +167,38 @@ describe('segment filter', () => {
     expect(listQuery(DEFAULT_FILTERS).segmentId).toBeUndefined();
   });
 });
+
+describe('ad-hoc conditions (rules)', () => {
+  const RULES = JSON.stringify({
+    type: 'group',
+    combinator: 'and',
+    children: [{ type: 'condition', field: 'source', operator: 'equals', value: 'web' }],
+  });
+  it('round-trips through the URL and reaches the list and bulk bodies', () => {
+    const f = parseFilters(new URLSearchParams({ rules: RULES }));
+    expect(f.rules).toBe(RULES);
+    expect(parseFilters(new URLSearchParams(filtersToSearch(f).slice(1))).rules).toBe(RULES);
+    expect(contactFilterBody(f).rules).toBe(RULES);
+    expect(hasActiveFilter(f)).toBe(true);
+  });
+  it('text that is not JSON, or too long, reads as none', () => {
+    expect(parseFilters(new URLSearchParams({ rules: 'nope' })).rules).toBe('');
+    expect(parseFilters(new URLSearchParams({ rules: `[${'1,'.repeat(11_000)}1]` })).rules).toBe(
+      '',
+    );
+    expect(contactFilterBody(DEFAULT_FILTERS).rules).toBeUndefined();
+  });
+});
+
+describe('sort in the URL', () => {
+  it('reads a known column or attribute, ignores anything else, and writes only a non-default sort', () => {
+    expect(parseFilters(new URLSearchParams('sort=name&order=asc')).sort).toBe('name');
+    expect(parseFilters(new URLSearchParams('sort=attr:city')).sort).toBe('attr:city');
+    expect(parseFilters(new URLSearchParams('sort=password')).sort).toBe('createdAt');
+    expect(parseFilters(new URLSearchParams('sort=attr:Bad Key')).sort).toBe('createdAt');
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, sort: 'email', order: 'asc' })).toBe(
+      '?sort=email&order=asc',
+    );
+    expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
+  });
+});

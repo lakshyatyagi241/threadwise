@@ -25,7 +25,7 @@ export class BaileysTransport implements EngineTransport, OnModuleInit {
 
   async open(orgId: number, sender: SenderRef): Promise<OpenTransport> {
     // The one door every send path (broadcast, campaign, scheduled message, flow) goes through to reach a Baileys socket.
-    await this.unofficial.assertEnabled();
+    await this.unofficial.assertEnabledFor(orgId);
     return {
       send: (command, context) => this.control.sendMessage(orgId, sender.id, command, context),
     };

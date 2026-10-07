@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { cn } from '@crm/ui';
 import { useCommerceProducts } from '../../../api/hooks';
-import { Field, controlClass } from '../kit';
+import { Field, KnowledgeBaseActions, controlClass } from '../kit';
 import type { FormComponent } from '../types';
 import {
   AddLink,
@@ -163,6 +163,7 @@ export const IgAiForm: FormComponent = (p) => (
       hint="Attach a trained assistant from AI Training to answer from your content."
     >
       {Sel(p, 'assistant', knowledgeBaseOptions(p))}
+      <KnowledgeBaseActions refresh={() => p.env.refresh()} />
     </Field>
     <Field label="Save reply to">{Txt(p, 'save', 'ai_reply')}</Field>
   </>

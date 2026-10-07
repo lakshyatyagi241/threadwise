@@ -9,7 +9,16 @@
       "loading": "جارٍ تحميل الإشعارات",
       "failed": "تعذّر تحميل الإشعارات.",
       "retry": "حاول مرة أخرى",
-      "unread": "غير مقروء"
+      "unread": "غير مقروء",
+      "settings": "إعدادات التنبيهات",
+      "sound": "تشغيل صوت للمحادثات والرسائل الجديدة",
+      "soundOn": "الصوت: مفعّل",
+      "soundOff": "الصوت: متوقف",
+      "desktopEnable": "تفعيل تنبيهات سطح المكتب",
+      "desktopOn": "تنبيهات سطح المكتب: مفعّلة",
+      "desktopOff": "تنبيهات سطح المكتب: متوقفة",
+      "desktopBlocked": "تنبيهات سطح المكتب محظورة في إعدادات المتصفح.",
+      "desktopHint": "تعرض اسم جهة الاتصال فقط عندما يكون هذا التبويب في الخلفية."
     },
     "types": {
       "task_assigned": {
@@ -33,6 +42,46 @@
         "body": "{name} وصل من {platform}",
         "bodyReturning": "{name} أرسل عميلاً محتملاً آخر من {platform}",
         "bodyNoActor": "{name} وصل"
+      },
+      "new_chat": {
+        "title": "محادثة جديدة من {name}",
+        "titleNoName": "محادثة جديدة",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, zero {# رسالة جديدة من {name}} one {رسالة جديدة من {name}} two {رسالتان جديدتان من {name}} few {# رسائل جديدة من {name}} many {# رسالة جديدة من {name}} other {# رسالة جديدة من {name}}}",
+        "titleNoName": "{count, plural, zero {# رسالة جديدة} one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "تم إسناد {name} إليك",
+        "titleNoName": "تم إسناد محادثة إليك",
+        "titleTeam": "تم إسناد {name} إلى فريقك",
+        "titleTeamNoName": "تم إسناد محادثة إلى فريقك",
+        "body": "أسندها {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "أشار إليك {actor}",
+        "titleNoName": "تمت الإشارة إليك في ملاحظة",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      }
+    },
+    "live": {
+      "open": "فتح",
+      "dismiss": "إغلاق",
+      "toastRegion": "الإشعارات",
+      "summary": "{count, plural, one {إشعار جديد واحد} two {إشعاران جديدان} few {# إشعارات جديدة} many {# إشعارًا جديدًا} other {# إشعار جديد}}",
+      "announceMany": "{count, plural, one {إشعار جديد واحد} two {إشعاران جديدان} few {# إشعارات جديدة} many {# إشعارًا جديدًا} other {# إشعار جديد}}",
+      "desktop": {
+        "new_chat": "محادثة جديدة",
+        "new_message": "رسالة جديدة",
+        "conversation_assigned": "أُسندت إليك",
+        "mention": "أشار إليك أحد",
+        "fallbackTitle": "إشعار جديد"
       }
     }
   }

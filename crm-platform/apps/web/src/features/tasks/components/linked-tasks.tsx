@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, EmptyState, Spinner, cn } from '@crm/ui';
-import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useTasksList, useTasksSetup } from '../api/hooks';
 import { isUnavailable } from '../lib/errors';
 import {
@@ -18,12 +17,15 @@ import {
   useWorkspaceZone,
 } from './parts';
 import { QuickAdd, type QuickAddValue } from './quick-add';
+import { TaskFormModal } from './task-form-modal';
 import { useTaskActions } from './use-task-actions';
 
 export interface LinkedTasksProps {
   /** The record whose tasks are listed, and the link a new task gets. */
   kind: 'contact' | 'deal';
   id: string;
+  /** The record's name, shown on the link chip of the New task form. */
+  label?: string;
   /** A short heading style for narrow panels (the deal drawer). */
   compact?: boolean;
   className?: string;
@@ -36,13 +38,14 @@ export interface LinkedTasksProps {
  * completed ones, and a link to the Tasks hub filtered to the record. Shared by the contact page and the deal drawer, so
  * both behave the same. Renders nothing for someone who may not read tasks.
  */
-export function LinkedTasks({ kind, id, compact, className, onChanged }: LinkedTasksProps) {
+export function LinkedTasks({ kind, id, label, compact, className, onChanged }: LinkedTasksProps) {
   const can = useTasksCan();
   if (!can.read) return null;
   return (
     <Panel
       kind={kind}
       id={id}
+      label={label}
       compact={compact}
       className={className}
       onChanged={onChanged}
@@ -54,17 +57,19 @@ export function LinkedTasks({ kind, id, compact, className, onChanged }: LinkedT
 function Panel({
   kind,
   id,
+  label,
   compact,
   className,
   onChanged,
   can,
 }: LinkedTasksProps & { can: ReturnType<typeof useTasksCan> }) {
   const t = useTranslations('tasks.linked');
-  const session = useSession();
   const actions = useTaskActions();
   const now = useNow();
   const zone = useWorkspaceZone();
   const [showDone, setShowDone] = useState(false);
+  /** The New task form, opened by the quick add with the typed title (null = closed). */
+  const [form, setForm] = useState<{ title: string } | null>(null);
   useTasksSetup();
   const source = { kind, id } as const;
   const open = useTasksList(source, { status: 'open' }, { limit: 50 });
@@ -76,16 +81,10 @@ function Panel({
   const heading = `linked-tasks-${kind}-${id}`;
   const hub = `/tasks?tab=all&status=all&${kind}=${id}`;
 
+  /** Add (or Enter) opens the full form, linked to this record, instead of creating the task at once. */
   async function add(v: QuickAddValue): Promise<boolean> {
-    const next = await actions.create({
-      title: v.title,
-      priority: v.priority,
-      dueAt: v.dueAt,
-      assigneeId: session.user.id,
-      ...(kind === 'contact' ? { contactId: id } : { dealId: id }),
-    });
-    if (next !== null) onChanged?.();
-    return next !== null;
+    setForm({ title: v.title });
+    return true;
   }
 
   const rows = [...open.items, ...(showDone ? done.items : [])];
@@ -125,7 +124,16 @@ function Panel({
         </Link>
       </div>
 
-      {can.create && <QuickAdd compact onAdd={add} />}
+      {can.create && <QuickAdd compact placeholder={t('addPlaceholder')} onAdd={add} />}
+
+      {form && (
+        <TaskFormModal
+          initialTitle={form.title}
+          link={{ [kind]: { id, label: label ?? '' } }}
+          onClose={() => setForm(null)}
+          onSaved={() => onChanged?.()}
+        />
+      )}
 
       {open.isPending ? (
         <div role="status" className="flex items-center gap-2 py-3 text-sm text-muted-foreground">

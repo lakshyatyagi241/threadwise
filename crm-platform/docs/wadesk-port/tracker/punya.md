@@ -79,3 +79,26 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-STORE-029 | done |  |  |
 | WD-STORE-030 | done |  |  |
 | WD-STORE-031 | done |  |  |
+
+## ai-agents-training (aiag)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-AIAG-001 | frontend-done |  | built by lakshya on lakshya/aiag/ai-training for the owner's reported 404; twin parity run and gate not yet done |
+| WD-AIAG-002 | frontend-done |  | five-step wizard; creativity 0 kept (WaDesk bug) |
+| WD-AIAG-003 | frontend-done |  | PATCH on an unknown id is 404 (WaDesk created a new assistant); rowVersion lock |
+| WD-AIAG-004 | frontend-done |  | files are copied per entry (WaDesk shared one file) |
+| WD-AIAG-005 | frontend-done |  | files removed after commit |
+| WD-AIAG-006 | frontend-done |  | pastes over the 100 KiB JSON body cap are 413; use a file |
+| WD-AIAG-007 | frontend-done |  | read by the worker (outbox consumer); fetched with own SSRF rule, shared helper misses hex-mapped IPv6 (follow-up task) |
+| WD-AIAG-008 | frontend-done |  | PDF via unpdf (new dependency), DOCX via own ZIP reader; files on local disk behind TRAINING_FILE_STORE |
+| WD-AIAG-009 | frontend-done |  |  |
+| WD-AIAG-010 | frontend-done |  | readers include them; nothing creates one (as WaDesk) |
+| WD-AIAG-011 | frontend-done |  | /ai-training/assistants/picker; the flow and widget pickers are unchanged |
+| WD-AIAG-012 | done |  | intended: FK cascade, no orphans to sweep |
+| WD-AIAG-013 | frontend-done |  | stores and audits the choice; the stand-down of our AI/keyword replies is not changed (see wiring WIRE-AIAG-012) |
+| WD-AIAG-014 | frontend-done |  | plan feature ai_assistants; keys aiag.training.* and aiag.responder.manage |
+| WD-AIAG-015 | frontend-done |  | readers unchanged and covered by e2e |
+| WD-AIAG-016 | frontend-done |  | our addition: Create knowledge base link and Refresh list in the three AI node forms |
+| WD-AIAG-017 | blocked |  | inbox AI agents (ai_agents, /ai-agents): separate port, not in this slice |
+| WD-AIAG-018 | blocked |  | AI voice assistants (ai_call_assistants): belongs with calling-voice, not in this slice |

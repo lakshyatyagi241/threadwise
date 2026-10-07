@@ -442,7 +442,7 @@ export class BuilderContextService {
 
   private async chatSenders(tx: Tx, orgId: number): Promise<FlowSender[]> {
     // Personal-number senders are not offered while the platform switch is off (owner decision 2026-10-05).
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const [dev, cfg] = await Promise.all([
       tx.execute(
         sql`SELECT id, uuid, device_name, phone_number FROM devices WHERE org_id = ${orgId} AND status = 'connected' AND ${unofficialOn}::boolean ORDER BY id`,

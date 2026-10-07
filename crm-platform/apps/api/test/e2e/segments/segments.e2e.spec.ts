@@ -753,6 +753,46 @@ describe('contacts of a segment: GET /contacts?segmentId=', () => {
     expect(names([...first.body.data, ...second.body.data])).toEqual(['L1', 'L2', 'L4']);
   });
 
+  it('GET /contacts?rules= filters by ad-hoc conditions, ANDed with a segment and other filters', async () => {
+    const q = (r: unknown) => encodeURIComponent(JSON.stringify(r));
+    const web = await api
+      .as(t.admin)
+      .get(`/v2/contacts?includeTotal=true&rules=${q(rules(cond('source', 'equals', 'web')))}`);
+    expect(web.status, JSON.stringify(web.body)).toBe(200);
+    expect(names(web.body.data)).toEqual(['L3']);
+    expect(web.body.meta).toEqual({ total: 1 });
+
+    // OR group
+    const either = await api
+      .as(t.admin)
+      .get(
+        `/v2/contacts?rules=${q({ type: 'group', combinator: 'or', children: [cond('source', 'equals', 'web'), cond('name', 'equals', 'L1')] })}`,
+      );
+    expect(names(either.body.data)).toEqual(['L1', 'L3']);
+
+    // with a segment: import AND name L2 -> L2 only
+    const both = await api
+      .as(t.admin)
+      .get(`/v2/contacts?segmentId=${segId}&rules=${q(rules(cond('name', 'equals', 'L2')))}`);
+    expect(names(both.body.data)).toEqual(['L2']);
+
+    // another workspace sees none of these
+    const other = await api.signup('seg-list-b');
+    const foreign = await api
+      .as(other.admin)
+      .get(`/v2/contacts?rules=${q(rules(cond('source', 'equals', 'web')))}`);
+    expect(foreign.body.data).toEqual([]);
+  });
+
+  it('GET /contacts?rules= answers 422 for text that is not a rule tree', async () => {
+    const bad = await api.as(t.admin).get('/v2/contacts?rules=not-json');
+    expect(bad.status).toBe(422);
+    const wrong = await api
+      .as(t.admin)
+      .get(`/v2/contacts?rules=${encodeURIComponent('{"type":"nope"}')}`);
+    expect(wrong.status).toBe(422);
+  });
+
   it('the same list through the segment route, in the same shape', async () => {
     const res = await api
       .as(t.admin)
@@ -1516,5 +1556,359 @@ describe('what other domains call', () => {
           .send({ rules: rules(cond('name', 'contains', 'a')) })
       ).status,
     ).toBe(200);
+  });
+});
+
+describe('specific people: sharing a segment with chosen users and teams', () => {
+  let t: Tenant;
+  let other: Tenant;
+  let owner: { token: string; userId: number };
+  let listed: { token: string; userId: number };
+  let teamMate: { token: string; userId: number };
+  let outsider: { token: string; userId: number };
+  let listedUuid: string;
+  let outsiderUuid: string;
+  let teamUuid: string;
+  let teamId: number;
+  const allRule = rules(cond('name', 'contains', 'e'));
+  // Lists segments, reads every contact, may launch a broadcast (to see the audience picker).
+  const READER: Grant[] = [
+    ['record.segments.read'],
+    ['record.contacts.read'],
+    ['camp.campaigns.create'],
+  ];
+  const uuidOf = async (id: number) =>
+    String((await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [id])).rows[0].uuid);
+  const shareRows = async (segUuid: string) =>
+    Number(
+      (
+        await h.owner.query(
+          `SELECT count(*)::int AS n FROM segment_shares sh JOIN segments s ON s.org_id = sh.org_id AND s.id = sh.segment_id WHERE s.uuid = $1`,
+          [segUuid],
+        )
+      ).rows[0].n,
+    );
+  const get = (token: string, id: string) => api.as(token).get(`/v2/segments/${id}`);
+  const patch = (token: string, id: string, body: Record<string, unknown>) =>
+    api.as(token).patch(`/v2/segments/${id}`).send(body);
+
+  beforeAll(async () => {
+    t = await api.signup('seg-share');
+    other = await api.signup('seg-share-other');
+    owner = await api.member(t, 'owner', AGENT);
+    listed = await api.member(t, 'listed', READER);
+    teamMate = await api.member(t, 'teammate', READER);
+    outsider = await api.member(t, 'outsider', READER);
+    listedUuid = await uuidOf(listed.userId);
+    outsiderUuid = await uuidOf(outsider.userId);
+    const team = await h.owner.query(
+      `INSERT INTO teams (org_id, name) VALUES ($1, 'Closers') RETURNING id, uuid`,
+      [t.orgId],
+    );
+    teamId = Number(team.rows[0].id);
+    teamUuid = String(team.rows[0].uuid);
+    await h.owner.query(`INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1, $2, $3)`, [
+      t.orgId,
+      teamId,
+      teamMate.userId,
+    ]);
+    await api.seedContacts(t, [
+      { name: 'Eve One', phone: '+919822000001' },
+      { name: 'Eve Two', phone: '+919822000002' },
+    ]);
+  });
+
+  const makeSpecific = async (name: string, sharedWith: Record<string, unknown>) => {
+    const res = await create(owner.token, {
+      name,
+      visibility: 'specific',
+      sharedWith,
+      rules: allRule,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    return res.body as { id: string; rowVersion: number; sharedWith: Record<string, unknown[]> };
+  };
+
+  it('only the listed person, the listed team, the owner and edit-all see it; anyone else gets 404 and an empty list', async () => {
+    const seg = await makeSpecific('Closers only', { userIds: [listedUuid], teamIds: [teamUuid] });
+    expect(seg.sharedWith.users).toHaveLength(1);
+    expect(seg.sharedWith.teams).toHaveLength(1);
+    for (const who of [listed, teamMate, owner]) {
+      expect((await get(who.token, seg.id)).status).toBe(200);
+      expect(names((await api.as(who.token).get('/v2/segments')).body.data)).toContain(
+        'Closers only',
+      );
+    }
+    expect((await get(t.admin, seg.id)).status).toBe(200);
+    expect((await get(outsider.token, seg.id)).status).toBe(404);
+    expect(names((await api.as(outsider.token).get('/v2/segments')).body.data)).not.toContain(
+      'Closers only',
+    );
+    expect(
+      names((await api.as(outsider.token).get('/v2/segments?visibility=specific')).body.data),
+    ).toEqual([]);
+    expect(
+      names((await api.as(listed.token).get('/v2/segments?visibility=specific')).body.data),
+    ).toEqual(['Closers only']);
+  });
+
+  it('sharing is view-only: a listed person cannot edit or delete, and does not see emails', async () => {
+    const seg = await makeSpecific('View only', { userIds: [listedUuid] });
+    const asListed = await get(listed.token, seg.id);
+    expect(asListed.body.canEdit).toBe(false);
+    expect(asListed.body.sharedWith.users[0].email).toBeNull();
+    expect((await patch(listed.token, seg.id, { name: 'Mine', rowVersion: 1 })).status).toBe(403);
+    expect((await api.as(listed.token).delete(`/v2/segments/${seg.id}`)).status).toBe(403);
+    const asOwner = await get(owner.token, seg.id);
+    expect(asOwner.body.canEdit).toBe(true);
+    expect(asOwner.body.sharedWith.users[0].email).toMatch(/@example\.test$/);
+  });
+
+  it('contacts filtered by the segment, its members, and the actions follow the same visibility', async () => {
+    const seg = await makeSpecific('Filter me', { userIds: [listedUuid] });
+    const seen = await api.as(listed.token).get(`/v2/contacts?segmentId=${seg.id}`);
+    expect(seen.status).toBe(200);
+    expect(seen.body.data).toHaveLength(2);
+    expect((await api.as(listed.token).get(`/v2/segments/${seg.id}/contacts`)).status).toBe(200);
+    const hidden = await api.as(outsider.token).get(`/v2/contacts?segmentId=${seg.id}`);
+    expect(hidden.body.data).toEqual([]);
+    expect((await api.as(outsider.token).get(`/v2/segments/${seg.id}/contacts`)).status).toBe(404);
+    expect((await api.as(outsider.token).post(`/v2/segments/${seg.id}/refresh-count`)).status).toBe(
+      404,
+    );
+  });
+
+  it('the broadcast audience picker lists it for the listed person only', async () => {
+    const seg = await makeSpecific('Audience pick', { userIds: [listedUuid] });
+    const ids = async (token: string) =>
+      ((await api.as(token).get('/v2/broadcast-wizard/audience-sources')).body.segments ?? []).map(
+        (s: { id: string }) => s.id,
+      );
+    expect(await ids(listed.token)).toContain(seg.id);
+    expect(await ids(outsider.token)).not.toContain(seg.id);
+  });
+
+  it('building an audience from it checks the caller; a job that already runs is not gated', async () => {
+    const seg = await makeSpecific('Audience build', { userIds: [listedUuid] });
+    const segments = h.app.get(SegmentsService, { strict: false });
+    const db = h.app.get(DatabaseService, { strict: false });
+    const as = <T>(user: { userId: number }, fn: () => Promise<T>) =>
+      RequestContextStore.run(
+        {
+          requestId: 'share-audience',
+          orgId: t.orgId,
+          actorType: 'user',
+          actorId: user.userId,
+          userId: user.userId,
+          grants: new Map([['record.segments.read', { effect: 'allow', scope: 'all' }]]),
+        },
+        fn,
+      );
+    const members = (user: { userId: number }) =>
+      as(user, () => db.tx((tx) => segments.memberIdsIn(tx, t.orgId, [seg.id])));
+    expect(await members(listed)).toHaveLength(2);
+    await expect(members(outsider)).rejects.toThrow(/not found/i);
+    // Executing a broadcast later resolves members without asking who is looking.
+    const run = await RequestContextStore.run(
+      { requestId: 'job', orgId: t.orgId, actorType: 'system', actorId: null, userId: null },
+      () => segments.resolveMembers(seg.id, { limit: 10 }),
+    );
+    expect(run.members).toHaveLength(2);
+    // Even after the creator lost access the segment still resolves (only selection is gated).
+    await h.owner.query(`DELETE FROM segment_shares WHERE org_id = $1`, [t.orgId]);
+    const after = await RequestContextStore.run(
+      { requestId: 'job2', orgId: t.orgId, actorType: 'system', actorId: null, userId: null },
+      () => segments.resolveMembers(seg.id, { limit: 10 }),
+    );
+    expect(after.members).toHaveLength(2);
+  });
+
+  it('removing a person hides it from them at once, and a share-only change moves the version', async () => {
+    const seg = await makeSpecific('Shrinks', { userIds: [listedUuid, outsiderUuid] });
+    expect((await get(outsider.token, seg.id)).status).toBe(200);
+    const removed = await patch(owner.token, seg.id, {
+      sharedWith: { userIds: [listedUuid] },
+      rowVersion: seg.rowVersion,
+    });
+    expect(removed.status, JSON.stringify(removed.body)).toBe(200);
+    expect(removed.body.rowVersion).toBe(seg.rowVersion + 1);
+    expect(removed.body.sharedWith.users).toHaveLength(1);
+    expect((await get(outsider.token, seg.id)).status).toBe(404);
+    expect((await get(listed.token, seg.id)).status).toBe(200);
+    expect(await shareRows(seg.id)).toBe(1);
+    // The old copy of the form can no longer overwrite the list.
+    const stale = await patch(owner.token, seg.id, {
+      sharedWith: { userIds: [outsiderUuid] },
+      rowVersion: seg.rowVersion,
+    });
+    expect(stale.status).toBe(409);
+    expect(stale.body.code).toBe('ROW_VERSION_CONFLICT');
+    // Sending the same list again changes nothing.
+    const same = await patch(owner.token, seg.id, {
+      sharedWith: { userIds: [listedUuid] },
+      rowVersion: removed.body.rowVersion,
+    });
+    expect(same.status).toBe(200);
+    expect(same.body.rowVersion).toBe(removed.body.rowVersion);
+  });
+
+  it('switching to shared or private clears the list; coming back to specific needs a new one', async () => {
+    const seg = await makeSpecific('Switches', { userIds: [listedUuid], teamIds: [teamUuid] });
+    expect(await shareRows(seg.id)).toBe(2);
+    const shared = await patch(owner.token, seg.id, {
+      visibility: 'shared',
+      rowVersion: seg.rowVersion,
+    });
+    expect(shared.status).toBe(200);
+    expect(shared.body.sharedWith).toEqual({ users: [], teams: [] });
+    expect(await shareRows(seg.id)).toBe(0);
+    expect((await get(outsider.token, seg.id)).status).toBe(200);
+    const back = await patch(owner.token, seg.id, {
+      visibility: 'specific',
+      rowVersion: shared.body.rowVersion,
+    });
+    expect(back.status).toBe(422);
+    expect(back.body.code).toBe('SEG_SHARE_EMPTY');
+    const again = await patch(owner.token, seg.id, {
+      visibility: 'specific',
+      sharedWith: { userIds: [listedUuid] },
+      rowVersion: shared.body.rowVersion,
+    });
+    expect(again.status).toBe(200);
+    expect((await get(outsider.token, seg.id)).status).toBe(404);
+    const priv = await patch(owner.token, seg.id, {
+      visibility: 'private',
+      rowVersion: again.body.rowVersion,
+    });
+    expect(priv.status).toBe(200);
+    expect(await shareRows(seg.id)).toBe(0);
+  });
+
+  it('refuses an empty list, people from another workspace and teams that are not here, with stable codes', async () => {
+    const empty = await create(owner.token, {
+      name: 'Nobody',
+      visibility: 'specific',
+      sharedWith: { userIds: [], teamIds: [] },
+      rules: allRule,
+    });
+    expect(empty.status).toBe(422);
+    expect(empty.body.code).toBe('SEG_SHARE_EMPTY');
+    const missing = await create(owner.token, {
+      name: 'Nobody 2',
+      visibility: 'specific',
+      rules: allRule,
+    });
+    expect(missing.body.code).toBe('SEG_SHARE_EMPTY');
+
+    const foreignUser = await h.owner.query(`SELECT uuid FROM users WHERE org_id = $1 LIMIT 1`, [
+      other.orgId,
+    ]);
+    const foreign = await create(owner.token, {
+      name: 'Foreign',
+      visibility: 'specific',
+      sharedWith: { userIds: [listedUuid, String(foreignUser.rows[0].uuid)] },
+      rules: allRule,
+    });
+    expect(foreign.status).toBe(422);
+    expect(foreign.body.code).toBe('SEG_SHARE_USER_NOT_FOUND');
+    expect(foreign.body.errors?.[0]?.path ?? foreign.body.details?.[0]?.path).toBe(
+      'sharedWith.userIds.1',
+    );
+    const foreignTeam = await h.owner.query(
+      `INSERT INTO teams (org_id, name) VALUES ($1, 'Elsewhere') RETURNING uuid`,
+      [other.orgId],
+    );
+    const team = await create(owner.token, {
+      name: 'Foreign team',
+      visibility: 'specific',
+      sharedWith: { teamIds: [String(foreignTeam.rows[0].uuid)] },
+      rules: allRule,
+    });
+    expect(team.status).toBe(422);
+    expect(team.body.code).toBe('SEG_SHARE_TEAM_NOT_FOUND');
+    // Nothing was left behind by the refused saves.
+    const left = await h.owner.query(
+      `SELECT count(*)::int AS n FROM segments WHERE org_id = $1 AND name IN ('Nobody','Nobody 2','Foreign','Foreign team')`,
+      [t.orgId],
+    );
+    expect(left.rows[0].n).toBe(0);
+  });
+
+  it('people can only be chosen for a specific segment', async () => {
+    const res = await create(owner.token, {
+      name: 'Wrong kind',
+      visibility: 'shared',
+      sharedWith: { userIds: [listedUuid] },
+      rules: allRule,
+    });
+    expect(res.status).toBe(422);
+    expect(res.body.code).toBe('VALIDATION_FAILED');
+  });
+
+  it('removing the person from the workspace drops them from the list; a deleted team too', async () => {
+    const gone = await api.member(t, 'leaver', READER);
+    const goneUuid = await uuidOf(gone.userId);
+    const doomed = await h.owner.query(
+      `INSERT INTO teams (org_id, name) VALUES ($1, 'Doomed') RETURNING id, uuid`,
+      [t.orgId],
+    );
+    const seg = await makeSpecific('Cascades', {
+      userIds: [listedUuid, goneUuid],
+      teamIds: [String(doomed.rows[0].uuid)],
+    });
+    expect(await shareRows(seg.id)).toBe(3);
+    await h.owner.query(`DELETE FROM users WHERE org_id = $1 AND id = $2`, [t.orgId, gone.userId]);
+    await h.owner.query(`DELETE FROM teams WHERE org_id = $1 AND id = $2`, [
+      t.orgId,
+      doomed.rows[0].id,
+    ]);
+    expect(await shareRows(seg.id)).toBe(1);
+    const read = await get(owner.token, seg.id);
+    expect(read.body.sharedWith.users).toHaveLength(1);
+    expect(read.body.sharedWith.teams).toEqual([]);
+  });
+
+  it('deleting the segment deletes its list', async () => {
+    const seg = await makeSpecific('Short lived', { userIds: [listedUuid] });
+    expect((await api.as(owner.token).delete(`/v2/segments/${seg.id}`)).status).toBe(204);
+    expect(await shareRows(seg.id)).toBe(0);
+  });
+
+  it('audits and announces counts, never names', async () => {
+    const before = (await api.events(t.orgId, 'segment.updated')).length;
+    const seg = await makeSpecific('Counted', { userIds: [listedUuid], teamIds: [teamUuid] });
+    const created = (await api.events(t.orgId, 'segment.created')).find(
+      (e) => e.uuid === seg.id,
+    ) as Record<string, unknown>;
+    expect(created).toMatchObject({ visibility: 'specific', sharedUsers: 1, sharedTeams: 1 });
+    await patch(owner.token, seg.id, {
+      sharedWith: { userIds: [listedUuid] },
+      rowVersion: seg.rowVersion,
+    });
+    const events = await api.events(t.orgId, 'segment.updated');
+    expect(events.length).toBe(before + 1);
+    expect(events.at(-1)).toMatchObject({ sharesChanged: true, sharedUsers: 1, sharedTeams: 0 });
+    const audit = await h.owner.query(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'segments' AND action = 'update' ORDER BY at DESC LIMIT 1`,
+      [t.orgId],
+    );
+    // Only what changed is recorded (the team went, the person stayed), and only as counts.
+    expect(audit.rows[0].delta).toEqual({ sharedTeams: { old: 1, new: 0 } });
+    expect(JSON.stringify(audit.rows[0].delta)).not.toContain('listed');
+  });
+
+  it('save-this-filter can share with chosen people too', async () => {
+    const res = await api
+      .as(owner.token)
+      .post('/v2/segments/from-filters')
+      .send({
+        name: 'From a filter',
+        visibility: 'specific',
+        sharedWith: { userIds: [listedUuid] },
+        filter: { q: 'Eve' },
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.sharedWith.users).toHaveLength(1);
+    expect((await get(outsider.token, res.body.id)).status).toBe(404);
   });
 });

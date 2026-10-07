@@ -690,7 +690,7 @@ export function ResultView({
       <div className="flex flex-wrap items-center gap-2">
         <Button onClick={onStartOver}>{t('another')}</Button>
         <Link
-          href="/admin/whatsapp-providers/assignments"
+          href="/admin/workspaces"
           className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           {t('toAssignments')}

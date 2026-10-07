@@ -346,3 +346,64 @@ describe('the contacts list query', () => {
     expect(listContactsQuerySchema.safeParse({ createdFrom: '01/02/2026' }).success).toBe(false);
   });
 });
+
+describe('segment visibility and sharing (contract)', () => {
+  const rules = {
+    type: 'group',
+    combinator: 'and',
+    children: [{ type: 'condition', field: 'name', operator: 'contains', value: 'a' }],
+  };
+  const uuid = () => randomUUID();
+
+  it('accepts the three visibilities and rejects anything else', () => {
+    for (const visibility of ['private', 'shared', 'specific'])
+      expect(createSegmentSchema.safeParse({ name: 'x', visibility, rules }).success).toBe(true);
+    expect(createSegmentSchema.safeParse({ name: 'x', visibility: 'public', rules }).success).toBe(
+      false,
+    );
+  });
+
+  it('takes people and teams as uuids, defaulting each list to empty', () => {
+    const ok = createSegmentSchema.parse({
+      name: 'x',
+      visibility: 'specific',
+      sharedWith: { userIds: [uuid()] },
+      rules,
+    });
+    expect(ok.sharedWith?.teamIds).toEqual([]);
+    expect(
+      createSegmentSchema.safeParse({ name: 'x', sharedWith: { userIds: ['nope'] }, rules })
+        .success,
+    ).toBe(false);
+  });
+
+  it('caps the list at 200 people and teams together, and refuses unknown keys', () => {
+    const many = (n: number) => Array.from({ length: n }, uuid);
+    expect(
+      updateSegmentSchema.safeParse({ sharedWith: { userIds: many(200) }, rowVersion: 1 }).success,
+    ).toBe(true);
+    expect(
+      updateSegmentSchema.safeParse({ sharedWith: { userIds: many(201) }, rowVersion: 1 }).success,
+    ).toBe(false);
+    expect(
+      updateSegmentSchema.safeParse({
+        sharedWith: { userIds: many(150), teamIds: many(60) },
+        rowVersion: 1,
+      }).success,
+    ).toBe(false);
+    expect(
+      updateSegmentSchema.safeParse({ sharedWith: { users: [] }, rowVersion: 1 }).success,
+    ).toBe(false);
+  });
+
+  it('"save this filter" can be shared with chosen people too', () => {
+    expect(
+      segmentFromFiltersSchema.safeParse({
+        name: 'x',
+        visibility: 'specific',
+        sharedWith: { userIds: [uuid()] },
+        filter: { q: 'a' },
+      }).success,
+    ).toBe(true);
+  });
+});

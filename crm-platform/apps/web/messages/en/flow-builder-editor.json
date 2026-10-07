@@ -14,6 +14,14 @@
       "titleAccent": "flows",
       "subtitle": "Build reusable WhatsApp workflows — triggered by events, branched by replies, and measured end-to-end.",
       "useAi": "Use AI prompt",
+      "builder": {
+        "label": "Builder",
+        "title": "Which builder this workspace uses to build flows. Existing flows are not changed.",
+        "inherit": "Platform default ({mode})",
+        "simple": "Simple",
+        "advanced": "Advanced",
+        "saved": "Flow builder changed to {mode}"
+      },
       "create": "Create flow",
       "import": "Import",
       "importTitle": "Import a flow from a .json file",
@@ -352,6 +360,18 @@
             "bare": "Bare pin"
           }
         }
+      },
+      "choiceSave": {
+        "variableLabel": "Save the selected option as variable",
+        "variableHint": "The title of the option the customer picks is stored here. Reuse it later as {variable} in a Send message or a Condition.",
+        "saveToAttribute": "Also save to a contact attribute",
+        "choiceSaveHelp": "Write the picked option's title to a contact property",
+        "choicePropertyHint": "The title of the option the customer picks is written to this property of the contact. Choose a property of your workspace.",
+        "answerSaveHelp": "Write the customer's answer to a contact property",
+        "answerPropertyHint": "The customer's answer is written to this property of the contact. Choose a property of your workspace.",
+        "propertyLabel": "Contact property",
+        "propertyChoose": "Choose a property...",
+        "propertyRequired": "Choose the contact property to save to, or turn this off."
       }
     }
   }

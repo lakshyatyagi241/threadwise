@@ -64,6 +64,8 @@ import {
     MarketingMediaController,
   ],
   exports: [
+    BroadcastsService,
+    BroadcastsReadService,
     BroadcastReceiptsService,
     BroadcastProgressService,
     BroadcastDispatchService,

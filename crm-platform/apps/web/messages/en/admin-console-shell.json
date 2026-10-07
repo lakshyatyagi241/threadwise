@@ -8,7 +8,7 @@
       },
       "sections": {
         "reports": "Reports",
-        "plans": "Plans & pricing",
+        "plans": "Workspaces & plans",
         "billing": "Billing",
         "messaging": "Messaging billing",
         "support": "Support",
@@ -20,7 +20,8 @@
         "system": "System"
       },
       "badges": {
-        "notSupported": "Not supported"
+        "notSupported": "Not supported",
+        "noWorkspaces": "No workspaces"
       },
       "labels": {
         "addonPacks": "Add-on packs",
@@ -33,12 +34,12 @@
       },
       "hubNotes": {
         "reports": "Revenue, plan, AI and system reports.",
-        "plans": "Plans, workspace plans, add-on packs, coupons and the pricing page.",
+        "plans": "Workspaces, plans, add-on packs, coupons and the pricing page.",
         "billing": "Orders, invoices, payments and checkout settings.",
-        "messaging": "Message pricing, margins, credit packages, wallets and Meta reseller income.",
+        "messaging": "Message pricing, margins, credit packages and Meta reseller income.",
         "support": "Tickets, the team and platform inboxes, agents, SLA, playbooks and contact messages.",
         "website": "The site editor, blog, legal pages, announcements and the guidebook.",
-        "whatsapp": "Providers, assignments, the number switch, Node bridge, webhooks, WABA and catalog settings.",
+        "whatsapp": "Providers, the number switch, Node bridge, webhooks, WABA and catalog settings.",
         "apps": "The marketplace, extensions and flow templates.",
         "team": "Roles, permissions, security and sign-in rules.",
         "settings": "Branding, mail, integrations, privacy, storage and more.",

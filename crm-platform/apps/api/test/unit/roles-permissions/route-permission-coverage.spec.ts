@@ -49,8 +49,9 @@ interface Route {
   gated: boolean;
 }
 
+// `@V1Controller(...)` is the customer REST API's controller decorator: `@Public()` plus the API-key guard, scopes per route.
 const GATE =
-  /@RequirePermission|@Public\(\)|@UseGuards\([^)]*OperatorGuard|@ActorKinds\('(partner_agent|platform_operator|candidate)'/;
+  /@RequirePermission|@Public\(\)|@V1Controller\(|@UseGuards\([^)]*OperatorGuard|@ActorKinds\('(partner_agent|platform_operator|candidate)'/;
 
 function routesOf(path: string): Route[] {
   const src = readFileSync(path, 'utf8');

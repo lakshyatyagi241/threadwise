@@ -42,6 +42,10 @@ describe('isPrivateAddress', () => {
     'fd00::1',
     'fe80::1',
     '::ffff:10.0.0.1',
+    '::ffff:7f00:1', // IPv4-mapped loopback in the hex form Node writes
+    '::ffff:a9fe:a9fe', // IPv4-mapped metadata address, hex
+    '64:ff9b::7f00:1',
+    '2002:7f00:1::1',
   ])('refuses %s', (a) => expect(isPrivateAddress(a)).toBe(true));
   it.each(['8.8.8.8', '172.32.0.1', '100.128.0.1', '2606:4700:4700::1111', '::ffff:8.8.8.8'])(
     'allows %s',
@@ -60,6 +64,8 @@ describe('targetUrlProblem', () => {
     'https://svc.internal/hook',
     'https://127.0.0.1/hook',
     'https://[::1]/hook',
+    'https://[::ffff:127.0.0.1]/hook',
+    'https://[::ffff:169.254.169.254]/hook',
     'https://169.254.169.254/latest/meta-data',
     'not a url',
     'ftp://example.com',

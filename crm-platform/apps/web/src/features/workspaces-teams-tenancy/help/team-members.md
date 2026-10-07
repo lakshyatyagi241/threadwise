@@ -4,7 +4,7 @@ title: Team members
 summary: See everyone in your workspace, invite teammates, change roles, reset passwords and remove access.
 area: settings
 order: 70
-documents: [tile:team-members]
+documents: [tile:workspace-team]
 keywords: [team members, invite, teammate, staff, agents, seats, reset password, remove, roles]
 ---
 

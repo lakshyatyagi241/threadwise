@@ -318,6 +318,7 @@ describe('plan limits, group B: guard before insert', () => {
         as({ assertEnabled: vi.fn() }),
         as({ assertAudienceWithin }),
         GATE_ON,
+        as({ memberIdsIn: vi.fn().mockResolvedValue([]) }),
       );
       const body = {
         name: 'Promo',

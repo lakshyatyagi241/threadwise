@@ -3,6 +3,9 @@ import type { CouponItem, CurrencyItem } from '@crm/contracts';
 import {
   buildCouponRequest,
   couponToDraft,
+  createSingleFlight,
+  firstFieldInFormOrder,
+  serverFlaggedFields,
   fromLocalInput,
   newCouponDraft,
   toLocalInput,
@@ -168,5 +171,26 @@ describe('list formatting', () => {
     expect(relativeTime('2026-06-18T00:00:00Z', 'en', now)).toBe('in 3 days');
     expect(relativeTime('2026-06-14T00:00:00Z', 'en', now)).toBe('yesterday');
     expect(relativeTime('2026-09-15T00:00:00Z', 'en', now)).toBe('in 3 months');
+  });
+});
+
+describe('coupon form focus and double submit helpers', () => {
+  it('picks the first flagged field in page order', () => {
+    expect(firstFieldInFormOrder(['perUserLimit', 'amount', 'code'])).toBe('code');
+    expect(firstFieldInFormOrder(['maxUses', 'amount'])).toBe('amount');
+    expect(firstFieldInFormOrder([])).toBeNull();
+  });
+  it('maps server paths onto form fields and drops unknown ones', () => {
+    expect(serverFlaggedFields(['amount', 'applicablePlans.1', 'rowVersion'])).toEqual([
+      'amount',
+      'applicablePlans',
+    ]);
+  });
+  it('lets one submit through until it settles', () => {
+    const f = createSingleFlight();
+    expect(f.tryStart()).toBe(true);
+    expect(f.tryStart()).toBe(false);
+    f.done();
+    expect(f.tryStart()).toBe(true);
   });
 });

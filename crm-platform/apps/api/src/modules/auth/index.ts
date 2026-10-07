@@ -5,6 +5,8 @@
 export { AuthModule } from './auth.module';
 export { AllowWhileGated, OperatorRoles } from './guards/auth-gates';
 export { OperatorGuard } from './guards/operator.guard';
+export { ImpersonationGuard } from './guards/impersonation.guard';
+export { ImpersonationService } from './platform/impersonation.service';
 export { AuthAuditService, type SecurityEventInput } from './security/auth-audit.service';
 export { CaptchaService } from './security/captcha.service';
 export { RateLimitService } from './security/rate-limit.service';
@@ -27,6 +29,11 @@ export { TokenService, type TokenClaims } from './token.service';
 export { AuthMaintenanceService } from './maintenance/auth-maintenance.service';
 export { OtpTemplateRefreshService } from './maintenance/otp-template-refresh.service';
 export { AccountGateService } from './security/account-gate.service';
+export {
+  OrgSuspensionService,
+  isOperatorImpersonation,
+  orgSuspendedError,
+} from './security/org-suspension.service';
 export { LoginService } from './flows/login.service';
 export { UserTokensService, type TokenKind } from './flows/user-tokens.service';
 export { MailService } from './mail/mail.service';
