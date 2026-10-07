@@ -158,7 +158,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
         caption: 'privacy',
         items: ['settings-privacy', 'settings-analytics', 'settings-custom'],
       },
-      { caption: 'infrastructure', items: ['settings-storage', 'settings-realtime'] },
+      { caption: 'infrastructure', items: ['settings-storage'] },
     ],
   },
   {
