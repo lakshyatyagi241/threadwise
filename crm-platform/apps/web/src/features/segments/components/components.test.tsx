@@ -16,7 +16,9 @@ import {
   type Group,
 } from '../lib/model';
 import { LivePreview } from './live-preview';
+import type { ShareOption } from '../lib/share';
 import { AttentionChip, GroupVsSegment, MemberCount, VisibilityChip } from './parts';
+import { SharePicker } from './share-picker';
 import { RuleBuilder, type ConditionWarning } from './rule-builder';
 import { ValueInput } from './value-inputs';
 
@@ -238,6 +240,7 @@ const segment = (over: Partial<Segment> = {}): Segment => ({
   description: null,
   color: null,
   visibility: 'private',
+  sharedWith: { users: [], teams: [] },
   ownerId: 'u1',
   ownerName: 'Asha',
   rules: {
@@ -279,6 +282,77 @@ describe('member count, chips and help', () => {
     expect(html(<VisibilityChip visibility="private" />)).toContain('Private');
     expect(html(<VisibilityChip visibility="shared" />)).toContain('Shared');
     expect(html(<AttentionChip count={2} />)).toContain('2 conditions need fixing');
+  });
+
+  it('marks a segment shared with chosen people: the count, and the names for the tooltip', () => {
+    const sharedWith = {
+      users: [
+        { id: 'u1', name: 'Asha Rao', email: null },
+        { id: 'u2', name: 'Ravi Menon', email: null },
+      ],
+      teams: [{ id: 't1', name: 'Sales', memberCount: 4 }],
+    };
+    const out = html(<VisibilityChip visibility="specific" sharedWith={sharedWith} />);
+    expect(out).toContain('Specific people (3)');
+    expect(out).toContain('title="Shared with Asha Rao, Ravi Menon, Sales"');
+    expect(html(<VisibilityChip visibility="specific" sharedWith={sharedWith} />, 'ar')).toContain(
+      'أشخاص محددون',
+    );
+    expect(
+      html(<VisibilityChip visibility="specific" sharedWith={{ users: [], teams: [] }} />),
+    ).toContain('Shared with nobody yet.');
+  });
+
+  it('the people picker: a labelled search, the count, chips that remove, and the empty states', () => {
+    const options: ShareOption[] = [
+      { kind: 'user', id: 'u1', name: 'Asha Rao', email: 'asha@example.com' },
+      { kind: 'user', id: 'u2', name: 'Ravi Menon', email: 'ravi@example.com' },
+      { kind: 'team', id: 't1', name: 'Sales', email: null, memberCount: 4 },
+    ];
+    const out = html(
+      <SharePicker
+        options={options}
+        selection={{ userIds: ['u1'], teamIds: [] }}
+        onChange={noop}
+      />,
+    );
+    expect(out).toContain('1 person selected');
+    expect(out).toContain('aria-label="Search people"');
+    expect(out).toContain('aria-label="Remove Asha Rao"');
+    expect(out).toContain('ravi@example.com');
+    expect(out).toContain('Team, 4 members');
+    expect(out.match(/type="checkbox"/g)).toHaveLength(3);
+    expect(out.match(/checked=""/g)).toHaveLength(1);
+    // Nothing chosen: says so, and no chips list.
+    const none = html(
+      <SharePicker options={options} selection={{ userIds: [], teamIds: [] }} onChange={noop} />,
+    );
+    expect(none).toContain('Nobody selected yet');
+    expect(none).not.toContain('Selected people and teams');
+    // A pick that left the workspace is still shown (by the name the server sent) so it can be removed.
+    const gone = html(
+      <SharePicker
+        options={options}
+        selection={{ userIds: ['u9'], teamIds: [] }}
+        known={{ users: [{ id: 'u9', name: 'Left Co', email: null }], teams: [] }}
+        onChange={noop}
+      />,
+    );
+    expect(gone).toContain('aria-label="Remove Left Co"');
+    // The error is announced and tied to the list.
+    const bad = html(
+      <SharePicker
+        options={options}
+        selection={{ userIds: [], teamIds: [] }}
+        error="Choose at least one person or team."
+        onChange={noop}
+      />,
+    );
+    expect(bad).toContain('role="alert"');
+    expect(bad).toContain('aria-invalid="true"');
+    expect(
+      html(<SharePicker options={[]} selection={{ userIds: [], teamIds: [] }} onChange={noop} />),
+    ).toContain('There is nobody to choose from yet.');
   });
 
   it('explains Group vs Segment in both languages', () => {
