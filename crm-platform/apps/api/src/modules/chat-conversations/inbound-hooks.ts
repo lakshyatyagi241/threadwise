@@ -15,6 +15,8 @@ export interface InboundStoredEvent {
   peerKey: string;
   peerName: string | null;
   createdConversation: boolean;
+  /** The status the thread was reopened from (it was resolved, closed or snoozed), or null/absent when it was already live. */
+  reopenedFrom?: string | null;
   message: {
     kind: 'text' | 'media' | 'location' | 'contact' | 'reaction' | 'interactive' | 'unsupported';
     body: string | null;
