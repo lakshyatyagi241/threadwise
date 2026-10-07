@@ -11,6 +11,7 @@ export interface ComposeForm {
   /** Weight per sender key; a missing or non-positive weight is 1 on the server. */
   shares: Record<string, number>;
   tagIds: string[];
+  segmentIds: string[];
   groupIds: string[];
   contactIds: string[];
   scheduleType: ScheduleType;
@@ -27,6 +28,7 @@ export const EMPTY_FORM: ComposeForm = {
   senderKeys: [],
   shares: {},
   tagIds: [],
+  segmentIds: [],
   groupIds: [],
   contactIds: [],
   scheduleType: 'now',
@@ -94,6 +96,7 @@ export function buildBody(f: ComposeForm): CreateBroadcastInput {
     contactIds: f.contactIds,
     groupIds: f.groupIds,
     tagIds: f.tagIds,
+    segmentIds: f.segmentIds,
     senderKeys: f.senderKeys,
     senderShare: share,
     scheduleType: f.scheduleType,

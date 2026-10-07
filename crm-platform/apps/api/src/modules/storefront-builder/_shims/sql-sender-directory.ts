@@ -48,7 +48,7 @@ export class SqlSenderDirectory implements SenderDirectory {
   async wizard(tx: Tx, orgId: number): Promise<{ devices: WizardDevice[]; hasSender: boolean }> {
     const devices = await tx.execute(sql`
       SELECT id, uuid, device_name, country_code, phone_number FROM devices
-      WHERE org_id = ${orgId} AND status = 'connected' AND ${await this.unofficial.isEnabled()}::boolean ORDER BY id`);
+      WHERE org_id = ${orgId} AND status = 'connected' AND ${await this.unofficial.isEnabledFor(orgId)}::boolean ORDER BY id`);
     const primary = await this.primaryConfig(tx, orgId);
     const rows = devices.rows as unknown as DeviceRow[];
     return {
@@ -65,7 +65,7 @@ export class SqlSenderDirectory implements SenderDirectory {
   }
 
   async connectedDevice(tx: Tx, orgId: number, uuid: string): Promise<{ id: number } | undefined> {
-    if (!(await this.unofficial.isEnabled())) return undefined;
+    if (!(await this.unofficial.isEnabledFor(orgId))) return undefined;
     const res = await tx.execute(sql`
       SELECT id FROM devices WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid AND status = 'connected'`);
     const r = res.rows[0] as { id: number | string } | undefined;
@@ -116,7 +116,7 @@ export class SqlSenderDirectory implements SenderDirectory {
         live: true,
       };
     }
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     if (deviceId !== null && unofficialOn) {
       const res = await tx.execute(sql`
         SELECT id, uuid, device_name, country_code, phone_number FROM devices
@@ -138,7 +138,7 @@ export class SqlSenderDirectory implements SenderDirectory {
   async waNumber(tx: Tx, orgId: number, deviceId: number | null): Promise<string | null> {
     // The SHOP's own sending number, in Reference's order: its bound device, the first connected official number, then whatever
     // the primary config says.
-    if (deviceId !== null && (await this.unofficial.isEnabled())) {
+    if (deviceId !== null && (await this.unofficial.isEnabledFor(orgId))) {
       const res = await tx.execute(sql`
         SELECT country_code, phone_number FROM devices WHERE org_id = ${orgId} AND id = ${deviceId}`);
       const d = res.rows[0] as
@@ -155,7 +155,7 @@ export class SqlSenderDirectory implements SenderDirectory {
 
   async recoverySender(tx: Tx, orgId: number): Promise<RecoverySender | null> {
     const engine = await this.engine(tx, orgId);
-    if (engine === 'baileys' && !(await this.unofficial.isEnabled())) return null;
+    if (engine === 'baileys' && !(await this.unofficial.isEnabledFor(orgId))) return null;
     if (engine === 'baileys') {
       const res = await tx.execute(sql`
         SELECT id, country_code, phone_number FROM devices
@@ -201,7 +201,7 @@ export class SqlSenderDirectory implements SenderDirectory {
       sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
     );
     const d = (settings.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     if (d && SEND_ENGINES.includes(d) && (d !== 'baileys' || unofficialOn)) return d;
     return unofficialOn ? 'baileys' : 'waba';
   }

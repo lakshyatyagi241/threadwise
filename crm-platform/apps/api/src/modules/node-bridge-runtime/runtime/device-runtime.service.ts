@@ -16,7 +16,7 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { DeviceAuthStore } from '../../../infra/providers/node-bridge-runtime/device-auth-store';
 import { shortStatus } from './close-policy';
 import { DeviceSession, type SessionHost, type StatusReport } from './device-session';
-import { deviceStatusOf, statusLabel } from './device-status';
+import { connectionStateOf, deviceStatusOf, statusLabel } from './device-status';
 import { COMMAND_TIMEOUT_MS, type DeviceCommand, type DeviceCommandResult } from './device-command';
 import type {
   ProxySettings,
@@ -27,7 +27,7 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../../auth/unofficial-whatsapp.port';
-import { DeviceLease, waKeys } from './wa-redis';
+import { CODE_TTL_S, DeviceLease, parseStoredQr, QR_TTL_S, waKeys } from './wa-redis';
 import { DeviceControlService } from './device-control.service';
 import { InboundRouter, ReceiptRouter } from './routers';
 import { WORKER_ALIVE_S } from './worker-status';
@@ -47,7 +47,6 @@ const HEALTHY_SESSION_ROWS = 3;
 /** A device that nobody has touched for this long is no longer connected. */
 const STALE_SECONDS = 90;
 const TICK_MS = 20_000;
-const CODE_TTL_S = 180;
 /** The same code is handed back inside this window: asking again mid-entry makes WhatsApp refuse the first one. */
 const CODE_REUSE_MS = 120_000;
 const QR_WAIT_MS = 30_000;
@@ -71,6 +70,13 @@ interface DeviceRow {
   proxy_username: string | null;
   proxy_password: string | null;
 }
+
+/** The domain event a state change into one of these states also raises (consumers are phase 2: notifications, webhook, audit). */
+const TRANSITION_EVENTS: Partial<Record<string, string>> = {
+  connected: 'device.connected',
+  disconnected: 'device.disconnected',
+  logged_out: 'device.logged_out',
+};
 
 const key = (orgId: number, deviceId: number) => `${orgId}:${deviceId}`;
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -110,10 +116,13 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
 
   /** Logged once per off period, so a switched-off engine does not write a line every 20 s tick. */
   private offLogged = false;
+  /** Workspaces already logged as not allowed, so each is logged once per off period (not per 20 s tick). */
+  private readonly orgOffLogged = new Set<number>();
 
   /**
-   * Whether this worker may hold Baileys sockets now (owner decision 2026-10-05: the unofficial engine is off unless a
-   * platform super admin turns it on). Read on every loop; PlatformSettingsService serves it from a 5 s snapshot.
+   * Whether this worker may hold Baileys sockets at all now (owner decision 2026-10-05: the unofficial engine is off unless a
+   * platform super admin turns it on; this is the global kill-switch). Read on every loop; PlatformSettingsService serves it
+   * from a 5 s snapshot. Per-workspace access is `engineOnFor`.
    */
   private async engineOn(): Promise<boolean> {
     if (await this.unofficial.isEnabled()) {
@@ -127,6 +136,41 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       );
     }
     return false;
+  }
+
+  /**
+   * Whether this worker may hold sockets of this workspace's devices: the platform switch is on AND the workspace is allowed
+   * (owner decision 2026-10-06). Logs once per workspace while it is not.
+   */
+  private async engineOnFor(orgId: number): Promise<boolean> {
+    if (!(await this.engineOn())) return false;
+    if (await this.unofficial.isEnabledFor(orgId)) {
+      this.orgOffLogged.delete(orgId);
+      return true;
+    }
+    this.logNotAllowed(orgId);
+    return false;
+  }
+
+  private logNotAllowed(orgId: number): void {
+    if (this.orgOffLogged.has(orgId)) return;
+    this.orgOffLogged.add(orgId);
+    this.logger.log(
+      { orgId },
+      '[NODE] unofficial WhatsApp engine is not enabled for this workspace: its device sockets are not opened or leased',
+    );
+  }
+
+  /** Closes the sockets of workspaces that are no longer allowed; their sessions and device rows are kept. */
+  private async releaseDisallowed(allowed: ReadonlySet<number>): Promise<void> {
+    for (const id of [...this.orgOffLogged]) if (allowed.has(id)) this.orgOffLogged.delete(id);
+    for (const o of [...this.owned.values()]) {
+      if (allowed.has(o.orgId)) continue;
+      this.logNotAllowed(o.orgId);
+      o.session.softDisconnect();
+      await this.lease.release(o.orgId, o.deviceId, o.token).catch(() => undefined);
+      this.owned.delete(key(o.orgId, o.deviceId));
+    }
   }
 
   /** Closes every session this worker holds and gives the leases back; the sessions and device rows are kept. */
@@ -192,8 +236,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     opts: { connect?: boolean } = {},
   ): Promise<'started' | 'already' | 'busy' | 'missing'> {
     if (this.owned.has(key(orgId, deviceId))) return 'already';
-    // Never lease or open a socket while the engine is off, whoever asks (restore, a command, a test).
-    if (!(await this.engineOn())) return 'missing';
+    // Never lease or open a socket while the engine is off for this workspace, whoever asks (restore, a command, a test).
+    if (!(await this.engineOnFor(orgId))) return 'missing';
     const dev = await this.loadDevice(orgId, deviceId);
     if (!dev) return 'missing';
     const token = await this.lease.acquire(orgId, deviceId);
@@ -231,6 +275,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
    */
   async restore(): Promise<{ started: number; skipped: number }> {
     if (!(await this.engineOn())) return { started: 0, skipped: 0 };
+    const allowed = await this.unofficial.enabledOrgIds();
     const rows = await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT d.org_id, d.id, count(a.id)::int AS n
@@ -248,10 +293,19 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       const orgId = Number(r.org_id);
       const deviceId = Number(r.id);
       if (this.owned.has(key(orgId, deviceId))) continue;
+      // A workspace that is not allowed keeps its devices and sessions untouched: nothing is opened, leased or flipped.
+      if (!allowed.has(orgId)) {
+        this.logNotAllowed(orgId);
+        continue;
+      }
       if (r.n < HEALTHY_SESSION_ROWS) {
         skipped++;
         if ((await this.lease.holder(orgId, deviceId)) === null) {
-          await this.applyStatus(orgId, deviceId, { status: 'disconnected', progress: 0 });
+          await this.applyStatus(orgId, deviceId, {
+            status: 'disconnected',
+            progress: 0,
+            stateReason: 'session_incomplete',
+          });
         }
         continue;
       }
@@ -289,6 +343,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       await this.beat();
       return;
     }
+    // A workspace taken off the allow-list while running: close its sockets on this pass, keep the saved sessions.
+    await this.releaseDisallowed(await this.unofficial.enabledOrgIds());
     const alive: Array<[number, number]> = [];
     for (const o of [...this.owned.values()]) {
       // A lease that is no longer ours means another worker has the device: stop at once, never run two sockets.
@@ -336,7 +392,9 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   private async flipStale(): Promise<void> {
     await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
-        UPDATE devices SET status = 'disconnected'
+        UPDATE devices
+           SET status = 'disconnected', connection_state = 'disconnected', state_reason = 'worker_silent',
+               state_changed_at = now()
          WHERE status = 'connected' AND last_seen_at < now() - ${`${STALE_SECONDS} seconds`}::interval
         RETURNING org_id, id`);
       for (const r of res.rows as unknown as Array<{
@@ -348,7 +406,13 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
           aggregateId: Number(r.id),
           orgId: Number(r.org_id),
           eventType: 'device.status_changed',
-          payload: { status: 'disconnected', label: 'Disconnected', progress: 0 },
+          payload: {
+            status: 'disconnected',
+            label: 'Disconnected',
+            progress: 0,
+            state: 'disconnected',
+            reason: 'worker_silent',
+          },
         });
       }
     });
@@ -356,28 +420,63 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
 
   // --- status (TW-NODE-012) -------------------------------------------------------------------
 
-  /** Turns what a session reports into the device row, an outbox event and what the API reads from Redis. */
+  /**
+   * Turns what a session reports into the device row, an outbox event and what the API reads from Redis. The row gets `status` (what
+   * the senders read) and `connection_state` + `state_reason` (what a person watching a pairing reads) in ONE update.
+   * `device.connected`, `device.disconnected` and `device.logged_out` are raised on the transition only. No event carries the QR
+   * or the code.
+   */
   async applyStatus(orgId: number, deviceId: number, r: StatusReport): Promise<void> {
     const label = statusLabel(r.status, r.reason);
     const status = deviceStatusOf(label);
+    const { state, reason } = connectionStateOf(r);
     await this.db.txAs({ orgId, userId: null }, async (tx) => {
-      await tx.execute(sql`
-        UPDATE devices
+      const res = await tx.execute(sql`
+        WITH prev AS (
+          SELECT connection_state FROM devices WHERE org_id = ${orgId} AND id = ${deviceId} FOR UPDATE
+        )
+        UPDATE devices d
            SET status = ${status}, last_seen_at = now(),
-               active = active OR ${status === 'connected'}
-         WHERE org_id = ${orgId} AND id = ${deviceId}`);
+               active = d.active OR (${status === 'connected'} AND d.activate_after_pairing),
+               connection_state = ${state}, state_reason = ${reason},
+               state_changed_at = CASE
+                 WHEN d.connection_state IS DISTINCT FROM ${state} OR d.state_reason IS DISTINCT FROM ${reason} THEN now()
+                 ELSE d.state_changed_at END
+          FROM prev
+         WHERE d.org_id = ${orgId} AND d.id = ${deviceId}
+        RETURNING prev.connection_state AS previous`);
+      const previous = (res.rows[0] as { previous: string } | undefined)?.previous ?? null;
       await this.outbox.emit(tx, {
         aggregateModule: 'devices',
         aggregateId: deviceId,
         orgId,
         eventType: 'device.status_changed',
-        payload: { status, label, progress: r.progress },
+        payload: { status, label, progress: r.progress, state, reason },
       });
+      const transition = TRANSITION_EVENTS[state];
+      if (transition && previous !== state) {
+        await this.outbox.emit(tx, {
+          aggregateModule: 'devices',
+          aggregateId: deviceId,
+          orgId,
+          eventType: transition,
+          payload: { state, reason, previous },
+        });
+      }
     });
     const finished = ['open', 'logged_out', 'pair_failed', 'mismatch', 'disconnected'].includes(
       r.status,
     );
-    if (r.qr) await this.redis.set(waKeys.qr(orgId, deviceId), r.qr, 'EX', 120);
+    // The QR is a credential for as long as it can be scanned and WhatsApp rotates it about every 20 s: it lives 45 s, stored with its
+    // age so a client can show a countdown (spec R6). It is never logged.
+    if (r.qr) {
+      await this.redis.set(
+        waKeys.qr(orgId, deviceId),
+        JSON.stringify({ qr: r.qr, at: Date.now() }),
+        'EX',
+        QR_TTL_S,
+      );
+    }
     if (r.code) {
       await this.redis.set(
         waKeys.code(orgId, deviceId),
@@ -524,12 +623,12 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   /** Public for tests. Returns null when this worker is not the one to answer. */
   async handle(cmd: DeviceCommand): Promise<DeviceCommandResult | null> {
     const { orgId, deviceId } = cmd;
-    if (!(await this.engineOn())) {
+    if (!(await this.engineOnFor(orgId))) {
       // Only the worker that owns the device answers a send; with the engine off nobody owns one, so answer once for all.
       return {
         ok: false,
         status: 'error',
-        message: 'The unofficial WhatsApp engine is turned off on this platform.',
+        message: 'The unofficial WhatsApp engine is not enabled for this workspace.',
       };
     }
     if (cmd.type === 'send' || cmd.type === 'act' || cmd.type === 'group') {
@@ -563,19 +662,39 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     const o = this.owned.get(key(orgId, deviceId))!;
     switch (cmd.type) {
       case 'qr':
-        return this.qr(o);
+        return this.qr(o, cmd.relink === true);
       case 'code':
-        return this.code(o);
+        return this.code(o, cmd.relink === true);
       case 'terminate':
         return this.terminate(o);
     }
     return null;
   }
 
-  private async qr(o: Owned): Promise<DeviceCommandResult> {
+  /**
+   * A pairing wipes the saved session first, so it is refused for a device whose session is still healthy (3 or more rows) unless the
+   * command says `relink` (spec R1). Without this, a device that merely has no worker right now (just after a restart, or just after
+   * the workspace was allowed again) would lose its link to a stray QR request. Null means "go ahead".
+   */
+  private async refuseHealthySession(
+    o: Owned,
+    relink: boolean,
+  ): Promise<DeviceCommandResult | null> {
+    if (relink) return null;
+    if ((await this.store.count(o.orgId, o.deviceId)) < HEALTHY_SESSION_ROWS) return null;
+    return {
+      ok: false,
+      status: 'not_pairable',
+      message: 'This device has a saved WhatsApp session. Pair again only by asking to relink.',
+    };
+  }
+
+  private async qr(o: Owned, relink: boolean): Promise<DeviceCommandResult> {
     if (o.session.isReady) {
       return { ok: true, status: 'connected', qr: null, message: 'Client already ready' };
     }
+    const refused = await this.refuseHealthySession(o, relink);
+    if (refused) return refused;
     // One attempt at a time per device: a second call inside a minute is refused (Reference: 429).
     const lock = await this.redis.set(waKeys.initLock(o.orgId, o.deviceId), '1', 'EX', 60, 'NX');
     if (lock !== 'OK') {
@@ -592,8 +711,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       while (Date.now() < until) {
         if (o.session.isReady)
           return { ok: true, status: 'connected', qr: null, message: 'Client already ready' };
-        const qr = await this.redis.get(waKeys.qr(o.orgId, o.deviceId));
-        if (qr) return { ok: true, status: 'qr_ready', qr };
+        const stored = parseStoredQr(await this.redis.get(waKeys.qr(o.orgId, o.deviceId)));
+        if (stored) return { ok: true, status: 'qr_ready', qr: stored.qr };
         if (o.session.isEnded) break;
         await sleep(POLL_MS);
       }
@@ -603,7 +722,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     }
   }
 
-  private async code(o: Owned): Promise<DeviceCommandResult> {
+  private async code(o: Owned, relink: boolean): Promise<DeviceCommandResult> {
     const { orgId, deviceId } = o;
     const phone = (await this.loadDevice(orgId, deviceId))?.phone_number ?? '';
     const digits = senderDigits(
@@ -620,6 +739,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       return { ok: false, status: 'error', message };
     }
     if (!o.session.isReady) {
+      const refused = await this.refuseHealthySession(o, relink);
+      if (refused) return refused;
       const prior = await this.redis.get(waKeys.code(orgId, deviceId));
       if (prior) {
         const p = JSON.parse(prior) as { code: string; at: number };

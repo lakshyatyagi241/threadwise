@@ -53,6 +53,8 @@ export interface ComposerProps {
   canReply: boolean;
   canNote: boolean;
   canAttach: boolean;
+  /** A WhatsApp group thread: sending is not available yet, so the Reply tab can neither type, attach, pick a template nor send. */
+  groupSendBlocked?: boolean;
   /** The channel sends templates and the agent may reply: the "Template" button is shown (it works with the window closed). */
   canTemplate?: boolean;
   /** Opens the template picker. */
@@ -121,7 +123,8 @@ export function Composer(props: ComposerProps) {
   }, [text, mode]);
 
   const isNote = mode === 'note';
-  const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply;
+  const groupBlocked = !isNote && props.groupSendBlocked === true;
+  const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply || groupBlocked;
   const max = isNote ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = text.trim();
   const canSubmit = !disabled && !savingNote && (trimmed.length > 0 || (!isNote && file !== null));
@@ -200,7 +203,7 @@ export function Composer(props: ComposerProps) {
         ))}
       </div>
 
-      {file && !isNote && (
+      {file && !isNote && !groupBlocked && (
         <div className="mx-3 mt-2 flex items-center gap-2 rounded-md border border-border bg-muted/50 px-2.5 py-1.5 text-xs">
           <FileIcon width={14} height={14} className="shrink-0 text-muted-foreground" />
           <span className="min-w-0 flex-1 truncate" data-testid="inbox-attachment-name">
@@ -227,7 +230,7 @@ export function Composer(props: ComposerProps) {
       )}
 
       <div className="flex items-end gap-2 p-3">
-        {!isNote && props.canTemplate && props.onTemplate && (
+        {!isNote && !groupBlocked && props.canTemplate && props.onTemplate && (
           <button
             type="button"
             title={t('template')}
@@ -239,7 +242,7 @@ export function Composer(props: ComposerProps) {
             <TemplateIcon />
           </button>
         )}
-        {!isNote && props.canAttach && (
+        {!isNote && !groupBlocked && props.canAttach && (
           <>
             <input
               ref={input}
@@ -298,9 +301,14 @@ export function Composer(props: ComposerProps) {
           <span className="hidden sm:inline">{isNote ? t('addNote') : t('send')}</span>
         </Button>
       </div>
-      <p id={hintId} className="px-3 pb-2 text-[11px] text-muted-foreground">
-        {t('hint')}
-        {limited && !isNote && props.canAttach && (
+      <p
+        id={hintId}
+        role={groupBlocked ? 'status' : undefined}
+        data-testid={groupBlocked ? 'inbox-group-send-unavailable' : undefined}
+        className="px-3 pb-2 text-[11px] text-muted-foreground"
+      >
+        {groupBlocked ? t('groupSendUnavailable') : t('hint')}
+        {limited && !isNote && !groupBlocked && props.canAttach && (
           <>
             {' '}
             <AttachmentHints allowed={limited.allowed} />

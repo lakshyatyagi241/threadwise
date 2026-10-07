@@ -20,6 +20,7 @@ import {
   type CreateAdminFlowTemplateInput,
   type ListFlowsQuery,
   type SaveFlowRequest,
+  type SetBuilderModeRequest,
   type FlbTestWebhookRequest,
   type UpdateAdminFlowTemplateInput,
   type UpdateFlowRequest,
@@ -39,6 +40,8 @@ export const flowsApi = {
     apiFetch('/flows', { query: q as Query, schema: listFlowsResponseSchema, signal }),
   overview: (signal?: AbortSignal) =>
     apiFetch('/flows/overview', { schema: flowsOverviewSchema, signal }),
+  setBuilderMode: (body: SetBuilderModeRequest) =>
+    apiFetch('/flows/builder-mode', { method: 'PUT', body, schema: flowsOverviewSchema }),
   get: (id: string, signal?: AbortSignal) =>
     apiFetch(`/flows/${id}`, { schema: flowDetailSchema, signal }),
   create: (body: SaveFlowRequest) =>

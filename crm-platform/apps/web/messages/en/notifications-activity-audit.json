@@ -9,7 +9,16 @@
       "loading": "Loading notifications",
       "failed": "Could not load notifications.",
       "retry": "Try again",
-      "unread": "Unread"
+      "unread": "Unread",
+      "settings": "Alert settings",
+      "sound": "Play a sound for new chats and messages",
+      "soundOn": "Sound: on",
+      "soundOff": "Sound: off",
+      "desktopEnable": "Enable desktop alerts",
+      "desktopOn": "Desktop alerts: on",
+      "desktopOff": "Desktop alerts: off",
+      "desktopBlocked": "Desktop alerts are blocked in your browser settings.",
+      "desktopHint": "Shows the contact name only when this tab is in the background."
     },
     "types": {
       "task_assigned": {
@@ -33,6 +42,46 @@
         "body": "{name} came in from {platform}",
         "bodyReturning": "{name} sent another lead from {platform}",
         "bodyNoActor": "{name} came in"
+      },
+      "new_chat": {
+        "title": "New chat from {name}",
+        "titleNoName": "New chat",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {New message from {name}} other {# new messages from {name}}}",
+        "titleNoName": "{count, plural, one {New message} other {# new messages}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} was assigned to you",
+        "titleNoName": "A chat was assigned to you",
+        "titleTeam": "{name} was assigned to your team",
+        "titleTeamNoName": "A chat was assigned to your team",
+        "body": "Assigned by {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} mentioned you",
+        "titleNoName": "You were mentioned in a note",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      }
+    },
+    "live": {
+      "open": "Open",
+      "dismiss": "Dismiss",
+      "toastRegion": "Notifications",
+      "summary": "{count} new notifications",
+      "announceMany": "{count} new notifications",
+      "desktop": {
+        "new_chat": "New chat",
+        "new_message": "New message",
+        "conversation_assigned": "Assigned to you",
+        "mention": "Mentioned you",
+        "fallbackTitle": "New notification"
       }
     }
   }

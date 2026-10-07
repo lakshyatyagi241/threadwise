@@ -108,7 +108,7 @@ describe('the real menu', () => {
 
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
     expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
-    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat']);
+    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat', 'devices']);
     expect(ids('audience')).toEqual([
       'contacts',
       'contact-groups',
@@ -215,7 +215,6 @@ describe('the menu after the Settings move', () => {
       'addons-workspace',
       'i18n-translation',
       'ai-keys',
-      'bsp-billing-mode',
       'billing-orders',
       'account',
       'chat-widget',

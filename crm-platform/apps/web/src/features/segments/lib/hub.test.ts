@@ -9,6 +9,7 @@ const seg = (over: Partial<Segment>): Segment => ({
   description: null,
   color: null,
   visibility: 'private',
+  sharedWith: { users: [], teams: [] },
   ownerId: 'u1',
   ownerName: 'Asha',
   rules: {
@@ -64,13 +65,22 @@ describe('hub list', () => {
     expect(filterSegments(rows, { q: 'ravi', show: 'all' }, 'u1').map((s) => s.id)).toEqual(['b']);
   });
 
-  it('Mine keeps the signed-in person own segments, Shared the shared ones', () => {
+  it('Mine keeps the signed-in person own segments, Shared everything that is not private', () => {
     expect(filterSegments(rows, { q: '', show: 'mine' }, 'u1').map((s) => s.id)).toEqual([
       'a',
       'c',
     ]);
     expect(filterSegments(rows, { q: '', show: 'shared' }, 'u1').map((s) => s.id)).toEqual(['b']);
     expect(filterSegments(rows, { q: '', show: 'mine' }, null)).toEqual([]);
+  });
+
+  it('Shared also keeps the segments shared with chosen people', () => {
+    const withSpecific = [...rows, seg({ id: 'd', visibility: 'specific' })];
+    expect(
+      filterSegments(withSpecific, { q: '', show: 'shared' }, 'u1')
+        .map((s) => s.id)
+        .sort(),
+    ).toEqual(['b', 'd']);
   });
 });
 

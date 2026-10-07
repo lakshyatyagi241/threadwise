@@ -4,7 +4,8 @@
       "group": "Billing & plans",
       "coupons": "Coupons",
       "currencies": "Currencies",
-      "currenciesGroup": "Localization"
+      "currenciesGroup": "Localization",
+      "affiliate": "Affiliate"
     },
     "common": {
       "loading": "Loading",
@@ -45,8 +46,8 @@
       "titleLead": "Discount",
       "titleAccent": "coupons",
       "crumbHere": "Coupons",
-      "eyebrow": "Admin · Billing & plans · Coupons",
-      "description": "Codes customers apply at checkout. Percent or fixed amount, time-bounded, plan-scoped, capped redemptions — admin's choice.",
+      "eyebrow": "Admin · Billing · Coupon codes",
+      "description": "Promo codes shoppers enter at checkout. Choose a percentage or flat amount, set a validity window, limit them to certain plans, and cap total redemptions.",
       "new": "New coupon",
       "kpi": {
         "total": "Total coupons",
@@ -64,7 +65,7 @@
         "active": "Active",
         "disabled": "Disabled",
         "expired": "Expired",
-        "search": "Search code or description...",
+        "search": "Find by code or description…",
         "searchLabel": "Search coupons"
       },
       "table": {
@@ -83,7 +84,7 @@
       },
       "empty": {
         "title": "No coupons match.",
-        "hint": "Try clearing the filters or",
+        "hint": "Adjust or reset the filters, or",
         "create": "create the first one"
       },
       "footer": "Showing {from}–{to} of {total} coupons",
@@ -112,12 +113,15 @@
         "confirm": "Yes, delete"
       },
       "editor": {
+        "notFoundTitle": "Coupon not found",
+        "notFoundBody": "No coupon exists with this address. It may have been deleted, or the link may be wrong.",
+        "backToList": "Back to coupons",
         "crumbNew": "New",
-        "eyebrowNew": "Admin · Billing & plans · Coupons · New",
-        "eyebrowEdit": "Admin · Billing & plans · Coupons · Edit",
+        "eyebrowNew": "Admin · Billing · Coupon codes · Create",
+        "eyebrowEdit": "Admin · Billing · Coupon codes · Modify",
         "titleLead": "New",
         "titleAccent": "coupon",
-        "descriptionNew": "Discount codes applied at /checkout. Percent or fixed amount, single-plan or any, time-bounded if you want — admin's choice.",
+        "descriptionNew": "Promo codes redeemed during /checkout. Choose a percentage or flat amount, tie it to one plan or all plans, and optionally give it a validity window.",
         "redeemed": "Redeemed {used}{max} times",
         "redeemedMax": " / {max}",
         "expires": "expires {when}",
@@ -127,7 +131,7 @@
         "saveChanges": "Save changes",
         "saving": "Saving",
         "cancel": "Cancel",
-        "problemsTitle": "Please fix the following:",
+        "problemsTitle": "Some fields need attention:",
         "problems": {
           "code": "Code: enter a code of up to 64 characters.",
           "description": "Description: at most 255 characters.",
@@ -151,34 +155,34 @@
         },
         "fields": {
           "code": "Code",
-          "codeHint": "Uppercased on save. This is what customers type at checkout.",
+          "codeHint": "Saved in capitals. Customers enter this exact code when paying.",
           "codePlaceholder": "WELCOME10",
           "description": "Description",
           "descriptionNote": "(shown to customer)",
-          "descriptionPlaceholder": "10% off the first month for new signups",
+          "descriptionPlaceholder": "Welcome offer: 10% off month one",
           "adminNote": "Admin note",
           "adminNoteNote": "(internal, not shown)",
-          "adminNotePlaceholder": "Black Friday batch · Slack #marketing · expires after promo",
+          "adminNotePlaceholder": "Holiday sale batch · Slack #marketing · ends with campaign",
           "activeTitle": "Active",
-          "activeHint": "Customers can redeem it at checkout",
+          "activeHint": "Shoppers are able to apply it at checkout",
           "type": "Type",
           "typePercent": "Percent (%)",
           "typeFixed": "Fixed amount",
           "amount": "Amount",
-          "amountHint": "% type: 10 = 10%. Fixed: 10 = 10 currency units.",
+          "amountHint": "For percent coupons, 10 means 10%. For fixed coupons, 10 means 10 units of currency.",
           "maxDiscount": "Max discount cap",
           "maxDiscountNote": "(% type only)",
           "maxDiscountPlaceholder": "blank = no cap",
-          "maxDiscountHint": "e.g. 20% off, but never more than $50.",
+          "maxDiscountHint": "For instance, 20% off with a ceiling of $50.",
           "currency": "Currency lock",
           "currencyAny": "Any currency",
-          "currencyHint": "Restrict redemption to one currency (fixed-amount coupons).",
+          "currencyHint": "Limit redemption to a single currency (applies to fixed-amount coupons).",
           "minOrder": "Minimum order amount",
           "minOrderPlaceholder": "0 = no minimum",
           "plans": "Applicable plans",
           "plansNote": "(empty = any plan)",
           "plansPlaceholder": "Pick one or more plans (empty = any plan)...",
-          "plansHint": "Type to filter. Click to add. Click chip × to remove.",
+          "plansHint": "Start typing to narrow the list, select to add, and use the chip's × to drop one.",
           "plansEmpty": "No more plans to pick.",
           "plansRemove": "Remove {name}",
           "plansClear": "Remove all plans",
@@ -190,11 +194,11 @@
           "unlimitedPlaceholder": "blank = unlimited",
           "maxUsesHint": "Across all customers.",
           "perUser": "Per-user limit",
-          "perUserHint": "How many times one customer can redeem.",
+          "perUserHint": "Number of redemptions allowed for each customer.",
           "firstPurchaseTitle": "First purchase only",
-          "firstPurchaseHint": "Workspaces with no paid orders yet",
-          "stackableTitle": "Stackable with other coupons",
-          "stackableHint": "Allow combining with another active code at checkout"
+          "firstPurchaseHint": "Only workspaces that have not placed a paid order",
+          "stackableTitle": "Can be combined with other coupons",
+          "stackableHint": "Lets shoppers use it alongside another active code at checkout"
         }
       }
     },
@@ -205,7 +209,7 @@
       "crumbGroup": "System",
       "crumbGroup2": "Localization",
       "crumbHere": "Currencies",
-      "eyebrow": "Admin · System · Localization",
+      "eyebrow": "Admin · Platform · Localisation",
       "description": "Manage the currencies workspaces can pick. Exchange rates are stored relative to USD. Changing the default propagates to every user dashboard, invoice, and wallet display.",
       "fetchRates": "Fetch live rates",
       "fetching": "Fetching",
@@ -216,14 +220,14 @@
         "active": "Active",
         "activeHint": "visible to workspaces",
         "default": "System default",
-        "defaultHint": "fallback for new workspaces",
+        "defaultHint": "used for newly created workspaces",
         "inactive": "Inactive",
-        "inactiveHint": "hidden from workspace settings"
+        "inactiveHint": "not offered in workspace settings"
       },
       "defaultCard": {
         "eyebrow": "System default",
-        "title": "Platform-wide currency fallback",
-        "body": "Workspaces without an explicit currency choice use this one. Saving here flushes the cache instantly — the next page load anywhere in the app picks it up.",
+        "title": "Fallback currency for the whole platform",
+        "body": "Any workspace that has not picked a currency uses this one. Saving clears the cache immediately, so the change shows up on the very next page load throughout the app.",
         "select": "Default currency",
         "set": "Set default",
         "setting": "Saving"
@@ -280,12 +284,12 @@
         "symbol": "Symbol",
         "symbolPlaceholder": "Fr",
         "precision": "Decimals *",
-        "rate": "Exchange rate (1 USD = ?) *",
+        "rate": "Conversion rate (1 USD = ?) *",
         "active": "Active immediately",
         "save": "Add currency",
         "saveChanges": "Save changes",
         "cancel": "Cancel",
-        "problemsTitle": "Please fix the following:",
+        "problemsTitle": "Some fields need attention:",
         "problems": {
           "name": "Name: enter a name of up to 120 characters.",
           "code": "ISO code: three letters, such as CHF.",
@@ -294,12 +298,114 @@
           "exchangeRate": "Exchange rate: a number of at least 0.000001."
         },
         "eyebrow": "New entry",
-        "rateHint": "Hit \"Fetch live rates\" above to auto-fill from open.er-api.com.",
+        "rateHint": "Use \"Fetch live rates\" above to pre-fill values from open.er-api.com.",
         "editEyebrow": "Edit entry"
       },
       "catalog": {
         "eyebrow": "Catalog",
         "title": "All currencies"
+      }
+    },
+    "affiliate": {
+      "title": "Affiliate",
+      "subtitle": "Share your link and follow the workspaces you bring in.",
+      "common": {
+        "dismiss": "Dismiss"
+      },
+      "states": {
+        "loading": "Loading your affiliate data"
+      },
+      "header": {
+        "codeLabel": "Your referral code",
+        "noCode": "No code yet",
+        "linkLabel": "Your referral link",
+        "copyLink": "Copy link",
+        "copied": "Link copied.",
+        "copyFailed": "Could not copy the link. Select it and copy it by hand.",
+        "reward": "Each referred workspace that makes a first payment earns you {amount}.",
+        "rewardMessages": "That covers {count, plural, one {# message} other {# messages}}.",
+        "rewardNone": "The programme currently pays nothing for new referrals. Your code and history stay here."
+      },
+      "filters": {
+        "label": "Range and export",
+        "range": "Range",
+        "ranges": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days",
+          "all": "All time"
+        },
+        "search": "Search referrals",
+        "searchPlaceholder": "Name, email or code",
+        "reset": "Reset",
+        "export": "Export CSV",
+        "exporting": "Preparing the file",
+        "exported": "Downloaded {fileName}."
+      },
+      "kpi": {
+        "inRange": "Referrals in range",
+        "vsPrevious": "{delta} vs previous period",
+        "earned": "Earned, lifetime",
+        "last30": "Referrals, last 30 days",
+        "last30Earned": "{amount} earned in the last 30 days",
+        "average": "Average per referral"
+      },
+      "chart": {
+        "title": "Referrals over time",
+        "label": "Referrals as bars and credits earned as a line, by period",
+        "buckets": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly"
+        },
+        "signups": "Referrals",
+        "credits": "Credits earned",
+        "bucket": "Period",
+        "empty": "No referrals in this range yet."
+      },
+      "topCodes": {
+        "title": "Top codes",
+        "referrals": "{count, plural, one {# referral} other {# referrals}}",
+        "empty": "No code was used in this range."
+      },
+      "payouts": {
+        "title": "Recent payouts",
+        "balanceAfter": "Balance after {amount}",
+        "empty": "No payouts yet. A reward lands in your wallet when a referred workspace makes its first payment."
+      },
+      "table": {
+        "title": "Referrals",
+        "label": "Referrals in the selected range",
+        "when": "When",
+        "referee": "Referee",
+        "code": "Code used",
+        "credits": "Credits earned",
+        "status": "Status",
+        "transaction": "Wallet transaction",
+        "noName": "Unnamed user",
+        "paid": "Paid",
+        "pending": "Pending",
+        "noTransaction": "No wallet transaction",
+        "pagination": "Referral pages",
+        "previous": "Previous",
+        "next": "Next",
+        "showing": "Showing {from}-{to} of {total}"
+      },
+      "empty": {
+        "noneTitle": "No referrals yet",
+        "noneBody": "Share your link. People who sign up with it appear here.",
+        "filteredTitle": "No referrals match",
+        "filteredBody": "Try another range or clear the search."
+      },
+      "errors": {
+        "unauthenticated": "Your session has ended. Sign in again to see your affiliate data.",
+        "forbidden": "You do not have access to this page.",
+        "rateLimited": "Too many requests. Wait a moment and try again.",
+        "validation": "Those filters could not be applied. Reset them and try again.",
+        "network": "The server could not be reached. Check your connection and try again.",
+        "generic": "Something went wrong. Try again in a moment.",
+        "requestId": "Request id",
+        "retry": "Try again"
       }
     }
   }

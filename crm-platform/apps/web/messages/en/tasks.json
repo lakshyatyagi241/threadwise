@@ -160,6 +160,7 @@
       },
       "due": "Due date and time",
       "add": "Add",
+      "dueRequired": "Choose a due date and time.",
       "titleRequired": "Type what needs doing.",
       "options": "More options (priority and due date)"
     },
@@ -183,7 +184,6 @@
       "unassigned": "Nobody",
       "me": "{name} (me)",
       "due": "Due",
-      "dueHint": "Leave empty for a task with no date.",
       "presets": {
         "today": "Today",
         "tomorrow": "Tomorrow",
@@ -194,7 +194,11 @@
       "deal": "Deal",
       "notes": "Notes",
       "reminderHint": "The assignee gets a reminder when the task becomes due.",
+      "assigneePick": "Pick who owns this task.",
       "problems": {
+        "dueRequired": "Choose a due date and time.",
+        "priorityRequired": "Choose a priority.",
+        "assigneeRequired": "Choose who this task is for.",
         "titleRequired": "Type what needs doing.",
         "titleTooLong": "The task is too long (255 characters at most).",
         "notesTooLong": "The notes are too long (5000 characters at most).",
@@ -311,6 +315,7 @@
     },
     "linked": {
       "title": "Tasks",
+      "addPlaceholder": "Type a task title, then Add to fill in the details",
       "viewAll": "View all",
       "loading": "Loading tasks",
       "unavailableTitle": "Tasks are not available yet",

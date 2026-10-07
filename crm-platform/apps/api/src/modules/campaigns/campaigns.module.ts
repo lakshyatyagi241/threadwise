@@ -30,6 +30,20 @@ import { CampaignsReadService } from './campaigns-read.service';
 import { CampaignsController } from './campaigns.controller';
 import { CampaignsRepository } from './campaigns.repository';
 import { CampaignsService } from './campaigns.service';
+import { FixtureRegistrar } from './fixture/fixture-registrar';
+import { FixtureReceiptQueue } from './fixture/fixture-receipts';
+import { WizardAudienceService } from './wizard/wizard-audience.service';
+import { WizardBroadcastsService } from './wizard/wizard-broadcasts.service';
+import { WizardContactsService } from './wizard/wizard-contacts.service';
+import { WizardController } from './wizard/wizard.controller';
+import { WizardCsvService } from './wizard/wizard-csv.service';
+import { WizardDraftsService } from './wizard/wizard-drafts.service';
+import { WizardLaunchService } from './wizard/wizard-launch.service';
+import { WizardReadService } from './wizard/wizard-read.service';
+import { WizardReviewService } from './wizard/wizard-review.service';
+import { WizardRunService } from './wizard/wizard-run.service';
+import { WizardTestSendService } from './wizard/wizard-test-send.service';
+import { WizardRepository } from './wizard/wizard.repository';
 
 /**
  * WhatsApp campaigns (CAMP). The sending kit (senders, templates, pacing, link tracking) is broadcasts', reached through its
@@ -46,6 +60,8 @@ import { CampaignsService } from './campaigns.service';
     WalletMessageBillingModule,
   ],
   controllers: [
+    // The wizard's own route base, so nothing it serves can be shadowed by `campaigns/:id`.
+    WizardController,
     CampaignsController,
     CampaignsReadController,
     CampaignsActionsController,
@@ -63,6 +79,19 @@ import { CampaignsService } from './campaigns.service';
     CampaignMirrorService,
     CampaignCallbacksService,
     CampaignReceiptsService,
+    WizardRepository,
+    WizardAudienceService,
+    WizardCsvService,
+    WizardContactsService,
+    WizardReadService,
+    WizardDraftsService,
+    WizardReviewService,
+    WizardRunService,
+    WizardLaunchService,
+    WizardTestSendService,
+    WizardBroadcastsService,
+    FixtureReceiptQueue,
+    FixtureRegistrar,
     { provide: CAMPAIGN_PLAN_GATE, useClass: PlanCampaignGate },
     { provide: CAMPAIGN_BILLING, useClass: WalletCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },
@@ -70,6 +99,9 @@ import { CampaignsService } from './campaigns.service';
   ],
   // The worker module reuses this module's providers and the kits it was built from.
   exports: [
+    CampaignsService,
+    CampaignsReadService,
+    CampaignsActionsService,
     BroadcastsModule,
     CrmModule,
     CryptoService,
@@ -78,6 +110,10 @@ import { CampaignsService } from './campaigns.service';
     CampaignJobs,
     CampaignMirrorService,
     CampaignReceiptsService,
+    WizardRepository,
+    WizardRunService,
+    WizardTestSendService,
+    WizardCsvService,
     CAMPAIGN_PLAN_GATE,
     CAMPAIGN_BILLING,
     CAMPAIGN_FLOW_STARTER,

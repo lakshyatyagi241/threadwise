@@ -44,7 +44,7 @@ export class SqlSenderDirectory implements SenderDirectory {
 
   async list(tx: Tx, orgId: number): Promise<CatalogSenderRow[]> {
     // Personal numbers are not senders while the platform switch is off (owner decision 2026-10-05).
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const devices = await tx.execute(sql`
       SELECT id, uuid, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number
       FROM devices

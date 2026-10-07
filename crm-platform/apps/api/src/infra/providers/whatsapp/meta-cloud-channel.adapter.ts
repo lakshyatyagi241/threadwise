@@ -23,6 +23,7 @@ import {
 import { buildHealth, type Read } from './meta-health';
 import { META_FAILURE, metaFailure } from './meta-errors';
 import { normaliseMetaWebhook } from './meta-inbound';
+import { assertNotGroupPeer } from './group-peer';
 import { buildMessageBody } from './meta-outbound';
 import type { OutboundSendGuard } from './send-guard.port';
 
@@ -103,6 +104,8 @@ export class MetaCloudChannelAdapter implements ChannelAdapter {
   // --- outbound --------------------------------------------------------------------------------------------------------------
 
   async send(channel: ChannelRuntime, envelope: OutboundEnvelope): Promise<SendResult> {
+    // Before the file upload and any Graph call: a group thread key is not a recipient.
+    assertNotGroupPeer(envelope.to);
     const call = this.callContext(channel);
     try {
       let prepared: PreparedWhatsappMedia | undefined;

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import {
   CONSOLE_HOME,
-  activeStatusBadge,
+  activeStatusBadgeInfo,
   formatCount,
   hubHref,
   isGroup,
@@ -83,7 +83,7 @@ function PageLink({
   const t = useTranslations();
   const label = leaf.label ?? t(leaf.labelKey);
   const count = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
-  const status = activeStatusBadge(leaf, counts);
+  const status = activeStatusBadgeInfo(leaf, counts);
   const body = (
     <>
       <span className="min-w-0 flex-1 truncate">{label}</span>
@@ -98,9 +98,13 @@ function PageLink({
       {status && (
         <span
           data-testid={`status-${leaf.id}`}
-          className="rounded-full bg-warning/25 px-1.5 text-[0.6875rem] font-medium leading-4"
+          data-tone={status.tone}
+          className={cn(
+            'rounded-full px-1.5 text-[0.6875rem] font-medium leading-4',
+            status.tone === 'warning' ? 'bg-warning/25' : 'bg-white/15',
+          )}
         >
-          {t(status)}
+          {t(status.labelKey)}
         </span>
       )}
     </>

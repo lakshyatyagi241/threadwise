@@ -115,7 +115,7 @@ export class ScheduleCreateService {
     // --- who ---
     // A sender that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
     if (input.senders.some((k) => k.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))) {
-      await this.unofficial.assertEnabled();
+      await this.unofficial.assertEnabledFor(orgId);
     }
     const { sendersResolved, audience } = await this.db.tx(async (tx) => ({
       sendersResolved: await this.senders.resolve(tx, orgId, input.senders),

@@ -14,6 +14,18 @@ import { maskSecretUrl } from '../logging/mask-secret-url';
 import { reportServerError } from '../../modules/platform-infrastructure';
 
 /**
+ * A surface whose clients expect their own error body (Reference's `/api/v1` answers `{ error: { code, message } }`) registers a renderer for
+ * its path prefix. The problem is still built, logged and reported here; the renderer only decides how it is written. Returns true when
+ * it wrote the response.
+ */
+export type ProblemRenderer = (problem: Problem, request: Request, response: Response) => boolean;
+const problemRenderers: Array<{ prefix: string; render: ProblemRenderer }> = [];
+
+export function registerProblemRenderer(prefix: string, render: ProblemRenderer): void {
+  if (!problemRenderers.some((r) => r.prefix === prefix)) problemRenderers.push({ prefix, render });
+}
+
+/**
  * Single exit point for every error. Emits RFC 9457 problem+json:
  *
  *   { type, title, status, detail, code, requestId, errors? }
@@ -46,6 +58,11 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         { path: maskSecretUrl(request.url), code: problem.code, requestId },
         problem.title,
       );
+    }
+
+    const path = request.path ?? request.url;
+    for (const { prefix, render } of problemRenderers) {
+      if (path.startsWith(prefix) && render(problem, request, response)) return;
     }
 
     response.status(problem.status).type('application/problem+json').send(problem);

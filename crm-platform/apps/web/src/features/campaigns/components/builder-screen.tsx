@@ -20,7 +20,9 @@ import {
   useAttributeCatalog,
   useAudienceContacts,
   useAudienceGroups,
+  useAudienceSegments,
   useAudienceTags,
+  type AudienceFilter,
 } from '@/features/broadcasts/api/compose';
 import {
   KEYS,
@@ -91,7 +93,10 @@ function Builder({
   const canContacts = useCan('record.contacts.read');
   const canGroups = useCan('record.contact-groups.read');
   const canTags = useCan('record.tags.read');
-  const contacts = useAudienceContacts(canContacts);
+  const canSegments = useCan('record.segments.read');
+  const [audienceFilter, setAudienceFilter] = useState<AudienceFilter>({});
+  const contacts = useAudienceContacts(canContacts, audienceFilter);
+  const segments = useAudienceSegments(canSegments);
   const groups = useAudienceGroups(canGroups);
   const tags = useAudienceTags(canTags);
   const catalog = useAttributeCatalog();
@@ -231,13 +236,18 @@ function Builder({
             <AudiencePicker
               tags={tags.data?.data ?? []}
               groups={groups.data?.data ?? []}
+              segments={segments.data?.data ?? []}
+              filter={audienceFilter}
+              onFilter={setAudienceFilter}
               contacts={contacts.data?.data ?? []}
               contactsDenied={!canContacts}
               selectedTags={form.tagIds}
               selectedGroups={form.groupIds}
+              selectedSegments={form.segmentIds}
               selectedContacts={form.contactIds}
               onTags={(tagIds) => patch({ tagIds })}
               onGroups={(groupIds) => patch({ groupIds })}
+              onSegments={(segmentIds) => patch({ segmentIds })}
               onContacts={(contactIds) => patch({ contactIds })}
             />
             <Field

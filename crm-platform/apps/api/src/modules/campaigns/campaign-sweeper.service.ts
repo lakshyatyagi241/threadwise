@@ -5,10 +5,11 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
+import { orgIdList } from '../../common/sql/org-id-list';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PacingRuntime } from '../broadcasts';
 import { CAMPAIGN_SETTINGS, type CampaignSettingsSource } from './_shims/tokens';
-import { CampaignEvents } from './campaign-events';
+import { CampaignEvents, asSystem } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { dateInZone, dueAtUtc, isEcosystemThrottle } from './campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
@@ -75,7 +76,8 @@ export class CampaignSweeper {
   async sweep(): Promise<number> {
     const started: Array<{ orgId: number; id: number; uuid: string }> = [];
     // Campaigns on the unofficial engine are not started while it is off (owner decision 2026-10-05); they stay `scheduled`.
-    const unofficialOn = await this.unofficial.isEnabled();
+    // Decided per row's workspace (owner decision 2026-10-06): the platform switch on AND the campaign's org on the allow-list.
+    const allowedOrgs = orgIdList(await this.unofficial.enabledOrgIds());
     await this.db.privileged(async (tx) => {
       await tx.execute(sql`
         UPDATE wp_campaign_contacts SET status = 'queued'
@@ -91,7 +93,7 @@ export class CampaignSweeper {
         SELECT id, uuid, org_id, timezone, schedule_type, send_date, to_char(send_time, 'HH24:MI') AS send_time
         FROM wpcampaigns
         WHERE status = 'scheduled' AND schedule_type IN ('scheduled', 'recurring') AND send_date IS NOT NULL
-          AND (provider IS DISTINCT FROM 'baileys' OR ${unofficialOn}::boolean)
+          AND (provider IS DISTINCT FROM 'baileys' OR org_id = ANY(${allowedOrgs}))
           AND send_date <= (now() AT TIME ZONE 'UTC')::date + 1
         ORDER BY send_date, send_time LIMIT ${MAX_FIRED} FOR UPDATE SKIP LOCKED`);
       for (const r of res.rows as unknown as Row[]) {
@@ -104,7 +106,8 @@ export class CampaignSweeper {
         const orgId = Number(r.org_id);
         const id = Number(r.id);
         await this.repo.setStatus(tx, orgId, id, 'running', { lastRun: true });
-        await this.events.statusChanged(tx, orgId, id, 'scheduled');
+        // The outbox takes its tenant from the context, and a sweep across tenants has none: run the event as the system for this one.
+        await asSystem(orgId, () => this.events.statusChanged(tx, orgId, id, 'scheduled'));
         started.push({ orgId, id, uuid: r.uuid });
       }
     });
@@ -159,6 +162,8 @@ export class CampaignSweeper {
       const c = await this.repo.findById(tx, orgId, id);
       if (!c || ['cancelled', 'paused', 'draft', 'scheduled', 'running'].includes(c.status))
         continue;
+      // A wizard broadcast's frequency-cap failures belong to the wizard's own retry job (24 hours apart, or none): never re-run here.
+      if (c.wizard !== null) continue;
       const { retryAttempts } = await this.settings.get(tx, orgId);
       const max = Math.max(1, retryAttempts);
       const rows = await tx.execute(sql`

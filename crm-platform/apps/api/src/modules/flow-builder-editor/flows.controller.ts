@@ -27,6 +27,7 @@ import {
   listFlowsQuerySchema,
   renameFlowRequestSchema,
   saveFlowRequestSchema,
+  setBuilderModeRequestSchema,
   flbTestWebhookRequestSchema,
   updateFlowRequestSchema,
   uuidSchema,
@@ -37,6 +38,7 @@ import {
   type PlanFeatureKey,
   type RenameFlowRequest,
   type SaveFlowRequest,
+  type SetBuilderModeRequest,
   type FlbTestWebhookRequest,
   type UpdateFlowRequest,
 } from '@crm/contracts';
@@ -104,6 +106,18 @@ export class FlowsController {
   })
   async overview() {
     return this.flows.overview();
+  }
+
+  @Put('builder-mode')
+  @RequirePermission('flb.flows.update')
+  @ApiOperation({
+    summary:
+      "Pick this workspace's flow builder (Simple or Advanced), or `inherit` the platform default",
+    description:
+      'Existing flows are never changed; each opens in the builder that is on. Answers the overview so the page can refresh.',
+  })
+  async setBuilderMode(@Body(zodPipe(setBuilderModeRequestSchema)) body: SetBuilderModeRequest) {
+    return this.flows.setBuilderMode(body);
   }
 
   @Get('templates')

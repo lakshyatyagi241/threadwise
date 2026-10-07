@@ -31,7 +31,7 @@ export function OverviewPage() {
         description={t('subtitle')}
         actions={
           <>
-            <Link href="/admin/wallet/workspaces">
+            <Link href="/admin/workspaces">
               <Button variant="secondary" size="sm">
                 {t('linkWorkspaces')}
               </Button>

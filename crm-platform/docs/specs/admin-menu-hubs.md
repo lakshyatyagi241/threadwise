@@ -72,20 +72,20 @@ An operator who knows what they want to do finds it in two clicks without readin
 
 Twelve rail entries. Each is a hub: a landing page plus a tab bar of related pages. Every tab is an existing route.
 
-| #   | Hub               | Tabs (existing page ids)                                                                                                                             |
-| --- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Home              | `/admin` (rebuilt, see 4.5)                                                                                                                          |
-| 2   | Reports           | financial, premium, plan-analytics, platform-analytics, ai-dashboard, system-health                                                                  |
-| 3   | Plans & pricing   | plans, workspace-plans, addon-packs, coupons, plan-settings, pricing-faqs                                                                            |
-| 4   | Billing           | billing-history, order-history, invoices, payment-gateways, checkout-settings                                                                        |
-| 5   | Messaging billing | wallet overview, wallet-pricing, wallet-margins, wallet-packages, wallet-workspaces, wallet-logs, bsp-income, bsp-credit                             |
-| 6   | Support           | support-inbox, support-team, support-platform-inbox, support-agents, support-customers, support-sla, support-playbooks, support-reports, cms-contact |
-| 7   | Website           | cms-frontend, cms-blog, cms-legal, cms-announcements                                                                                                 |
-| 8   | WhatsApp          | wap-providers, wap-assignments, wap-switch, node-bridge, webhook-forwarding, settings-whatsapp (WABA), settings-catalog                              |
-| 9   | Apps              | market-catalogue, market-categories, market-requests, market-usage, extensions, flow-templates (new), then active module pages in "More"             |
-| 10  | Team & security   | roles, permissions, staff-roles, security, security-events, registration, social-login, auth-pages                                                   |
-| 11  | Settings          | index hub: one rail entry, the existing hub tiles (4.4)                                                                                              |
-| 12  | System            | system (Updater), i18n-languages, currencies, i18n-providers, i18n-usage                                                                             |
+| #   | Hub                | Tabs (existing page ids)                                                                                                                 |
+| --- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Home               | `/admin` (rebuilt, see 4.5)                                                                                                              |
+| 2   | Reports            | financial, premium, plan-analytics, platform-analytics, ai-dashboard, system-health                                                      |
+| 3   | Workspaces & plans | workspaces, plans, addon-packs, coupons, plan-settings, pricing-faqs                                                                     |
+| 4   | Billing            | billing-history, order-history, invoices, payment-gateways, checkout-settings                                                            |
+| 5   | Messaging billing  | wallet overview, wallet-pricing, wallet-margins, wallet-packages, wallet-logs, bsp-income, bsp-credit                                    |
+| 6   | Support            | support-inbox, support-team, support-platform-inbox, support-agents, support-sla, support-playbooks, support-reports, cms-contact        |
+| 7   | Website            | cms-frontend, cms-blog, cms-legal, cms-announcements                                                                                     |
+| 8   | WhatsApp           | wap-providers, wap-switch, node-bridge, webhook-forwarding, settings-whatsapp (WABA), settings-catalog                                   |
+| 9   | Apps               | market-catalogue, market-categories, market-requests, market-usage, extensions, flow-templates (new), then active module pages in "More" |
+| 10  | Team & security    | roles, permissions, staff-roles, security, security-events, registration, social-login, auth-pages                                       |
+| 11  | Settings           | index hub: one rail entry, the existing hub tiles (4.4)                                                                                  |
+| 12  | System             | system (Updater), i18n-languages, currencies, i18n-providers, i18n-usage                                                                 |
 
 Names that clash today are fixed in this change (the keys live in `admin-console-shell.nav`, en and ar):
 

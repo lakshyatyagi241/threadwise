@@ -23,6 +23,8 @@ import { LEAD_ERROR_CODES } from '../leads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
 import { FORMS_ERROR_CODES } from '../forms-builder/errors';
+import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
+import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 
 export const ERROR_CODES = {
   ...CPN_ERROR_CODES,
@@ -44,6 +46,8 @@ export const ERROR_CODES = {
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
   ...FORMS_ERROR_CODES,
+  ...WADEV_ERROR_CODES,
+  ...AIAG_ERROR_CODES,
   // generic
   /**
    * An action targeted the unofficial WhatsApp engine (personal numbers over Baileys) while the platform switch is off.
@@ -165,12 +169,20 @@ export const ERROR_CODES = {
   CON_LOST_REASON_REQUIRED: 'CON_LOST_REASON_REQUIRED',
   /** A status that belongs to another lifecycle stage was set on a contact (details: path `status`, names the stage). */
   CON_STATUS_STAGE_MISMATCH: 'CON_STATUS_STAGE_MISMATCH',
+  /** A bulk update named a property that is not an active, editable custom property of the workspace (details: one `customFields.<key>` per key). */
+  CON_PROPERTY_NOT_EDITABLE: 'CON_PROPERTY_NOT_EDITABLE',
 
   // segments (product extension)
   /** Another segment in the workspace has this name (any case). */
   SEG_NAME_TAKEN: 'SEG_NAME_TAKEN',
   /** The rules point at something that does not exist (a tag, group, stage, status, user or property) or use an operator the property's type does not have. */
   SEG_RULES_INVALID: 'SEG_RULES_INVALID',
+  /** `specific` visibility with nobody chosen (details: path `sharedWith`). */
+  SEG_SHARE_EMPTY: 'SEG_SHARE_EMPTY',
+  /** A chosen person is not a member of this workspace (details: one `sharedWith.userIds.<n>` per unknown id). */
+  SEG_SHARE_USER_NOT_FOUND: 'SEG_SHARE_USER_NOT_FOUND',
+  /** A chosen team does not exist in this workspace (details: one `sharedWith.teamIds.<n>` per unknown id). */
+  SEG_SHARE_TEAM_NOT_FOUND: 'SEG_SHARE_TEAM_NOT_FOUND',
 
   // broadcasts (TW-BCAST)
   BCAST_NO_RECIPIENTS: 'BCAST_NO_RECIPIENTS',
@@ -271,6 +283,14 @@ export const ERROR_CODES = {
   CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
+  /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */
+  CAMP_WIZARD_INCOMPLETE: 'CAMP_WIZARD_INCOMPLETE',
+  /** The wizard draft was already launched, so it can no longer be edited or launched again. */
+  CAMP_WIZARD_LAUNCHED: 'CAMP_WIZARD_LAUNCHED',
+  /** A test send needs at least one valid E.164 number and at most ten. */
+  CAMP_TEST_RECIPIENTS_INVALID: 'CAMP_TEST_RECIPIENTS_INVALID',
+  /** Pause, resume or cancel asked of a broadcast whose status does not allow it. */
+  CAMP_BROADCAST_NOT_CONTROLLABLE: 'CAMP_BROADCAST_NOT_CONTROLLABLE',
 
   // deals and pipelines (TW-DEAL)
   /** The stage belongs to a different pipeline than the deal (Reference ignored it, defaulted it, or 422'd by path). */
@@ -341,7 +361,7 @@ export const ERROR_CODES = {
   AIADM_KEY_REQUIRED: 'AIADM_KEY_REQUIRED',
   /** No key (own or platform) is available for the provider a call asked for. */
   AIADM_NO_KEY_AVAILABLE: 'AIADM_NO_KEY_AVAILABLE',
-  // marketing site, blog, legal pages and guidebook (TW-CMS)
+  // marketing site, blog and legal pages (TW-CMS)
   CMS_SLUG_TAKEN: 'CMS_SLUG_TAKEN',
 
   // reseller billing (TW-BSP)

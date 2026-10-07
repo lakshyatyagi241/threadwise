@@ -155,3 +155,50 @@ export function buildCouponRequest(d: CouponDraft): CouponBuildResult {
 
 export const isDraftDirty = (a: CouponDraft, b: CouponDraft): boolean =>
   JSON.stringify(a) !== JSON.stringify(b);
+
+/** The id of the input behind each field of the coupon form, so a rejected submit can move focus to it. */
+export const COUPON_FIELD_INPUT_ID: Record<CouponField, string> = {
+  code: 'co-code',
+  description: 'co-desc',
+  adminNote: 'co-note',
+  type: 'co-type',
+  amount: 'co-amount',
+  maxDiscountAmount: 'co-max-discount',
+  currencyCode: 'co-currency',
+  minOrderAmount: 'co-min',
+  applicablePlans: 'co-plans',
+  startsAt: 'co-start',
+  expiresAt: 'co-exp',
+  maxUses: 'co-max-uses',
+  perUserLimit: 'co-per-user',
+};
+
+/** The first of the given fields in form order (the order of the page), or null. */
+export function firstFieldInFormOrder(fields: readonly string[]): CouponField | null {
+  return FIELDS.find((f) => fields.includes(f)) ?? null;
+}
+
+/** Field names an API validation answer flagged ("code", "amount.0" ...), reduced to the form's own fields. */
+export function serverFlaggedFields(paths: readonly string[]): CouponField[] {
+  return paths
+    .map((p) => p.split(/[.[]/)[0] ?? '')
+    .filter((p): p is CouponField => (FIELDS as readonly string[]).includes(p));
+}
+
+/**
+ * Lets only one submit run at a time. `tryStart` is synchronous, so a second click that arrives before React has re-rendered
+ * the disabled button is refused; `done` re-opens it once the request has settled.
+ */
+export function createSingleFlight() {
+  let busy = false;
+  return {
+    tryStart(): boolean {
+      if (busy) return false;
+      busy = true;
+      return true;
+    },
+    done(): void {
+      busy = false;
+    },
+  };
+}

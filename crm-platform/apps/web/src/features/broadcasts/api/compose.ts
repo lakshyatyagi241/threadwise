@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   attributeCatalogSchema,
   broadcastComposeSchema,
@@ -8,6 +8,7 @@ import {
   contactResponseSchema,
   createBroadcastResponseSchema,
   pageResponseSchema,
+  segmentResponseSchema,
   tagResponseSchema,
   type CreateBroadcastInput,
 } from '@crm/contracts';
@@ -27,14 +28,47 @@ export function useCompose() {
 }
 
 /** The newest contacts, for the audience table. Needs the contacts permission; without it the table says so and groups and tags still work. */
-export function useAudienceContacts(enabled: boolean) {
+export function useAudienceContacts(enabled: boolean, filter: AudienceFilter = {}) {
   return useQuery({
-    queryKey: [...KEYS.all, 'audience-contacts'],
+    queryKey: [...KEYS.all, 'audience-contacts', filter],
     enabled,
+    placeholderData: keepPreviousData,
     queryFn: ({ signal }) =>
       apiFetch('/contacts', {
-        query: { limit: AUDIENCE_LIMIT, order: 'desc' },
+        query: {
+          limit: AUDIENCE_LIMIT,
+          order: 'desc',
+          tagId: filter.tagId,
+          groupId: filter.groupId,
+          unsubscribed:
+            filter.consent === 'optedOut'
+              ? true
+              : filter.consent === 'subscribed'
+                ? false
+                : undefined,
+        },
         schema: pageResponseSchema(contactResponseSchema),
+        signal,
+      }),
+  });
+}
+
+/** Server-side filters of the audience table; the search box narrows what these return. */
+export interface AudienceFilter {
+  tagId?: string;
+  groupId?: string;
+  consent?: 'subscribed' | 'optedOut';
+}
+
+/** Saved segments, shared ones and the caller's own. Needs the segments permission. */
+export function useAudienceSegments(enabled: boolean) {
+  return useQuery({
+    queryKey: [...KEYS.all, 'audience-segments'],
+    enabled,
+    queryFn: ({ signal }) =>
+      apiFetch('/segments', {
+        query: { limit: 200 },
+        schema: pageResponseSchema(segmentResponseSchema),
         signal,
       }),
   });

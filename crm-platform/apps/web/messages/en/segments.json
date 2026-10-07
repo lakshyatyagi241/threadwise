@@ -13,6 +13,7 @@
       "name": "Name",
       "email": "Email",
       "phone": "Phone",
+      "countryCode": "Country code",
       "search": "Name, email or phone",
       "tags": "Tags",
       "groups": "Groups",
@@ -100,7 +101,13 @@
       "private": "Private",
       "shared": "Shared",
       "privateHint": "Only you, and people who can edit every segment, can see it.",
-      "sharedHint": "Everyone who can view segments can see it."
+      "sharedHint": "Everyone who can view segments can see it.",
+      "specific": "Specific people",
+      "specificHint": "Only the people you choose, plus you and people who can edit every segment.",
+      "specificCount": "Specific people ({count, number})",
+      "specificTitle": "Shared with {names}",
+      "specificNobody": "Shared with nobody yet.",
+      "andMore": " and {count, number} more"
     },
     "count": {
       "about": "about {count, number}",
@@ -122,7 +129,9 @@
       "unavailable": "Segments are not available yet on this server.",
       "unexpected": "Something went wrong. Try again.",
       "requestId": "Request ID",
-      "retry": "Try again"
+      "retry": "Try again",
+      "shareEmpty": "Choose at least one person or team to share the segment with.",
+      "shareInvalid": "Some of the chosen people or teams are no longer in this workspace. Remove them and save again."
     },
     "help": {
       "groupTitle": "Group: a list you fill by hand",
@@ -282,7 +291,8 @@
       "fieldOf": "Field of condition {n}",
       "operatorOf": "Operator of condition {n}",
       "valueOf": "Value of condition {n}",
-      "removeCondition": "Remove condition {n}"
+      "removeCondition": "Remove condition {n}",
+      "shareRequired": "Choose at least one person or team."
     },
     "problem": {
       "empty": "Fill this in.",
@@ -391,6 +401,31 @@
       "pagination": "Pages",
       "perPage": "Members per page",
       "perPageOption": "{count, number} per page"
+    },
+    "advancedFilter": {
+      "trigger": "Add condition",
+      "triggerOn": "Conditions",
+      "title": "Filter by conditions",
+      "hint": "Match all or any of your conditions, and add groups for more complex filters. Applies to this list only.",
+      "loading": "Loading fields",
+      "counts": "{conditions} of {max} conditions",
+      "apply": "Apply",
+      "clear": "Clear conditions"
+    },
+    "share": {
+      "countNone": "Nobody selected yet",
+      "count": "{count, plural, one {# person selected} other {# people selected}}",
+      "countMixed": "{people, plural, one {# person} other {# people}} and {teams, plural, one {# team} other {# teams}} selected",
+      "selected": "Selected people and teams",
+      "remove": "Remove {name}",
+      "searchLabel": "Search people",
+      "searchPlaceholder": "Search by name or email",
+      "listLabel": "People and teams in this workspace",
+      "loading": "Loading people",
+      "noPeople": "There is nobody to choose from yet.",
+      "noMatch": "Nobody matches this search.",
+      "team": "Team, {count, plural, one {# member} other {# members}}",
+      "cap": "You can choose up to {max, number} people and teams."
     }
   }
 }

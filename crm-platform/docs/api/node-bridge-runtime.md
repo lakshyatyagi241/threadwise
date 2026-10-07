@@ -2,12 +2,15 @@
 
 Operator console, `v2`, platform operator token. Every operator may read; a super admin saves and tests. Errors are problem+json with a stable `code`.
 
-| Method | Path                              | Who         | What                                                                                                          |
-| ------ | --------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------- |
-| GET    | `/v2/platform/node-bridge`        | operator    | `{ serverUrl, tokenSet, rowVersion, pacing, pacingRowVersion }`. The token is never returned.                 |
-| PATCH  | `/v2/platform/node-bridge`        | super admin | `{ serverUrl, token?, rowVersion }`. Blank token keeps the saved one; blank URL clears it.                    |
-| PATCH  | `/v2/platform/node-bridge/pacing` | super admin | `{ msgGap 1..600, batchesGap 1..10000, bwMsgGap 1..1440, enableBatches, rowVersion }`                         |
-| POST   | `/v2/platform/node-bridge/test`   | super admin | `{ serverUrl, token? }` (blank token = saved). 422 if the address is not http(s); else 200 `{ ok, message }`. |
+| Method | Path                                                      | Who         | What                                                                                                                                                                         |
+| ------ | --------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/v2/platform/node-bridge`                                | operator    | `{ serverUrl, tokenSet, rowVersion, pacing, pacingRowVersion }`. The token is never returned.                                                                                |
+| PATCH  | `/v2/platform/node-bridge`                                | super admin | `{ serverUrl, token?, rowVersion }`. Blank token keeps the saved one; blank URL clears it.                                                                                   |
+| GET    | `/v2/platform/node-bridge/unofficial/workspaces`          | super admin | `?q=&limit=&cursor=` -> `{ data: UnofficialWorkspace[], page }` (the workspaces allowed to use the unofficial engine)                                                        |
+| GET    | `/v2/platform/node-bridge/unofficial/workspace-options`   | super admin | `?q=&limit<=20` -> `{ data: [{ orgUuid, name, slug, planSlug, ownerEmail, alreadyEnabled }] }`                                                                               |
+| PUT    | `/v2/platform/node-bridge/unofficial/workspaces/:orgUuid` | super admin | `{ enabled, note?<=500 }` -> `UnofficialWorkspace`; `false` removes the workspace; 404 unknown workspace; audited `platform.whatsapp_unofficial.workspace_enabled/_disabled` |
+| PATCH  | `/v2/platform/node-bridge/pacing`                         | super admin | `{ msgGap 1..600, batchesGap 1..10000, bwMsgGap 1..1440, enableBatches, rowVersion }`                                                                                        |
+| POST   | `/v2/platform/node-bridge/test`                           | super admin | `{ serverUrl, token? }` (blank token = saved). 422 if the address is not http(s); else 200 `{ ok, message }`.                                                                |
 
 Failures: 409 `ROW_VERSION_CONFLICT` (stale `rowVersion`), 422 `VALIDATION_FAILED`, 403 for a non-super operator on a write.
 

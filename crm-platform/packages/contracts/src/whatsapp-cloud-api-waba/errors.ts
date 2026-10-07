@@ -23,4 +23,6 @@ export const WABA_ERROR_CODES = {
   WABA_NUMBER_IN_USE: 'WABA_NUMBER_IN_USE',
   /** The connection holds no token (disconnected, or a coexistence connect that left it empty): reconnect or paste one. */
   WABA_NO_CREDENTIALS: 'WABA_NO_CREDENTIALS',
+  /** A reply to a WhatsApp group thread (`g:<group id>`): sending to a group is not built yet, and the individual-send path would reach a stranger's number. Non-retryable; reply from the WhatsApp Business app. */
+  WABA_GROUP_SEND_UNAVAILABLE: 'WABA_GROUP_SEND_UNAVAILABLE',
 } as const;

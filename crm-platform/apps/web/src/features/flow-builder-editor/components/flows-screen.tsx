@@ -19,6 +19,8 @@ import { useCan, useSession } from '@/features/auth-registration-security/shared
 import { flowsApi } from '../api/flows';
 import { FLB_KEYS } from '../api/hooks';
 import { useFlowsOverview, useFlowsPage } from '../api/list';
+import { newHref, openHref, type BuilderMode } from '../lib/builder-mode';
+import { isWaboExport, waboToGraph } from '../lib/wabo-import';
 import {
   PAGE_SIZE,
   SEARCH_DEBOUNCE_MS,
@@ -93,6 +95,7 @@ export function FlowsScreen() {
 
   const list = useFlowsPage(state);
   const overview = useFlowsOverview();
+  const builderMode: BuilderMode = overview.data?.builderMode ?? 'advanced';
   const counts = overview.data?.statusCounts ?? { all: 0, live: 0, paused: 0, draft: 0 };
   const cats = overview.data?.categoryCounts ?? { all: 0 };
 
@@ -130,6 +133,7 @@ export function FlowsScreen() {
 
   const actions: CardActions = {
     can: { update: canUpdate, create: canCreate, remove: canDelete },
+    builderMode,
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);
@@ -147,7 +151,7 @@ export function FlowsScreen() {
       try {
         const copy = await flowsApi.duplicate(f.id);
         flash(tt('duplicated'));
-        router.push(`/flows/builder/${copy.id}`);
+        router.push(openHref(builderMode, copy.id, copy.flowType));
       } catch (e) {
         duplicating.current.delete(f.id);
         fail(e);
@@ -198,6 +202,18 @@ export function FlowsScreen() {
     } catch {
       payload = null;
     }
+    // A flow exported from the wabo console (the bot builder's records) is converted here into this app's export file.
+    if (isWaboExport(payload)) {
+      const w = waboToGraph(payload);
+      payload = {
+        _threadwise_flow_export: 1,
+        exported_at: new Date().toISOString(),
+        name: file.name.replace(/\.json$/i, '').slice(0, 120) || 'Imported flow',
+        flow_type: 'chat',
+        category: null,
+        flow_data: w.graph,
+      };
+    }
     try {
       // Not JSON / not an object: let the server answer, so the "not a valid <brand> flow export" wording is the one source.
       const created = await flowsApi.importFlow(
@@ -206,7 +222,7 @@ export function FlowsScreen() {
           : {},
       );
       flash(tt('imported'));
-      router.push(`/flows/builder/${created.id}`);
+      router.push(openHref(builderMode, created.id, created.flowType));
     } catch (e) {
       setImportError(e instanceof ApiError ? e.message : t('importFailed'));
     } finally {
@@ -337,6 +353,24 @@ export function FlowsScreen() {
               <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              {canUpdate && overview.data ? (
+                <BuilderPicker
+                  platform={overview.data.platformBuilderMode}
+                  own={overview.data.workspaceBuilderMode}
+                  onChange={async (mode) => {
+                    try {
+                      const next = await flowsApi.setBuilderMode({ mode });
+                      toast(
+                        t('builder.saved', { mode: t(`builder.${next.builderMode}`) }),
+                        'success',
+                      );
+                      await refresh();
+                    } catch (e) {
+                      fail(e);
+                    }
+                  }}
+                />
+              ) : null}
               <Link
                 href="/flow-runtime/analytics"
                 title={t('analyticsTitle')}
@@ -348,7 +382,7 @@ export function FlowsScreen() {
                 />
                 {t('analytics')}
               </Link>
-              {canCreate ? (
+              {canCreate && builderMode !== 'simple' ? (
                 <button
                   type="button"
                   onClick={() => router.push('/flows/builder?ai=1')}
@@ -364,7 +398,11 @@ export function FlowsScreen() {
                 <button
                   type="button"
                   data-flow-create
-                  onClick={() => setCreateOpen(true)}
+                  onClick={() =>
+                    builderMode === 'simple'
+                      ? router.push(newHref(builderMode))
+                      : setCreateOpen(true)
+                  }
                   className="flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
                 >
                   <Svg d="M8 3v10M3 8h10" />
@@ -531,7 +569,7 @@ export function FlowsScreen() {
                   </button>
                   {canCreate ? (
                     <Link
-                      href="/flows/builder"
+                      href={newHref(builderMode)}
                       className="rounded-full bg-brand px-4 py-2 text-[12px] font-semibold text-brand-foreground"
                     >
                       {t('create')}
@@ -734,6 +772,37 @@ function TemplateGallery({
         })}
       </div>
     </section>
+  );
+}
+
+/** Flows > Builder: this workspace's own builder, or the platform default (set in the admin panel). */
+function BuilderPicker({
+  platform,
+  own,
+  onChange,
+}: {
+  platform: BuilderMode;
+  own: BuilderMode | null;
+  onChange: (mode: 'inherit' | BuilderMode) => void;
+}) {
+  const t = useTranslations('flb.list.builder');
+  return (
+    <label
+      className="flex items-center gap-2 rounded-full border border-border bg-background py-1.5 pr-2 pl-4 text-[12px] font-medium"
+      title={t('title')}
+    >
+      {t('label')}
+      <select
+        data-builder-mode
+        value={own ?? 'inherit'}
+        onChange={(e) => onChange(e.target.value as 'inherit' | BuilderMode)}
+        className="rounded-full bg-transparent py-0.5 text-[12px] font-semibold text-brand outline-none"
+      >
+        <option value="inherit">{t('inherit', { mode: t(platform) })}</option>
+        <option value="simple">{t('simple')}</option>
+        <option value="advanced">{t('advanced')}</option>
+      </select>
+    </label>
   );
 }
 
