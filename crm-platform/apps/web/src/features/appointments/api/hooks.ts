@@ -11,6 +11,7 @@ import { browserZone, safeZone } from '../lib/zone';
 import { configureMock, mockEnabled } from './http';
 import { appointmentsApi, type AppointmentSource } from './service';
 import type { Appointment } from './schemas';
+import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
 export const KEYS = {
   all: ['appointments'] as const,
@@ -90,7 +91,8 @@ export function useAppointmentsInRange(query: Query, enabled: boolean) {
     },
     enabled,
     placeholderData: keepPreviousData,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
   return q;
 }
@@ -101,7 +103,8 @@ export function useAppointmentCounts(query: Query) {
     queryKey: [...KEYS.counts, query],
     queryFn: ({ signal }) => appointmentsApi.counts(query, signal),
     placeholderData: keepPreviousData,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 15_000,
   });
 }
@@ -111,7 +114,8 @@ export function useAppointment(id: string | null) {
     queryKey: KEYS.one(id ?? ''),
     queryFn: ({ signal }) => appointmentsApi.get(id!, signal),
     enabled: id !== null && id !== '',
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -119,7 +123,8 @@ export function useBookingTypes() {
   return useQuery({
     queryKey: KEYS.types,
     queryFn: ({ signal }) => appointmentsApi.types(signal),
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 30_000,
   });
 }
@@ -129,7 +134,8 @@ export function useBookingType(id: string | null) {
     queryKey: KEYS.type(id ?? ''),
     queryFn: ({ signal }) => appointmentsApi.type(id!, signal),
     enabled: id !== null,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -137,7 +143,8 @@ export function useBookingSettings() {
   return useQuery({
     queryKey: KEYS.settings,
     queryFn: ({ signal }) => appointmentsApi.settings(signal),
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 30_000,
   });
 }
@@ -164,7 +171,8 @@ export function useCalendarConnection() {
   return useQuery({
     queryKey: KEYS.calendar,
     queryFn: ({ signal }) => appointmentsApi.calendar(signal),
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 15_000,
   });
 }
@@ -175,7 +183,8 @@ export function useCalendarOptions(enabled: boolean) {
     queryKey: KEYS.calendars,
     queryFn: ({ signal }) => appointmentsApi.calendars(signal),
     enabled,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
     staleTime: 60_000,
   });
 }

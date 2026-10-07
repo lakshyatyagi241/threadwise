@@ -130,9 +130,28 @@ export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 /** Page sizes: Reference offered 12/50/100/500/1000 and snapped anything else to 12; here any size up to 1000. */
 export const CONTACT_LIST_MAX_LIMIT = 1000;
 
+/** Columns the list can be sorted by, besides the default (newest first). `attr:<key>` sorts by a custom attribute. */
+export const CONTACT_SORT_FIELDS = [
+  'createdAt',
+  'name',
+  'phone',
+  'email',
+  'stage',
+  'status',
+  'language',
+  'memo',
+] as const;
+export const contactSortSchema = z.union([
+  z.enum(CONTACT_SORT_FIELDS),
+  z.string().regex(/^attr:[a-z0-9_]{1,64}$/),
+]);
+export type ContactSort = z.infer<typeof contactSortSchema>;
+
 export const listContactsQuerySchema = paginationQuerySchema
   .extend({
     ...contactFilterShape,
+    /** What `order` applies to. Text columns sort case-insensitively with empty values last, ties broken by id. */
+    sort: contactSortSchema.default('createdAt'),
     limit: z.coerce.number().int().min(1).max(CONTACT_LIST_MAX_LIMIT).default(50),
     /** `groups`, `tags` or `groups,tags`: adds the chips for each row. */
     expand: queryList(z.enum(['groups', 'tags'])).optional(),
@@ -195,6 +214,12 @@ export const bulkUpdateContactsSchema = z.object({
     lostReason: z.string().max(255).nullish(),
     otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
+    /**
+     * Custom properties to set on every contact, by property key. Each key must be an active, editable custom
+     * property of the workspace (422 CON_PROPERTY_NOT_EDITABLE otherwise) and each value must fit the property's type
+     * (422 VALIDATION_FAILED, nothing written). `null` (or a blank text / empty list) clears that key on every
+     * contact; keys not named are left alone.
+     */
     customFields: z.record(z.unknown()).optional(),
   }),
 });

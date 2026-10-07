@@ -4,6 +4,9 @@ import {
   defaultColumns,
   parseStoredColumns,
   serializeColumns,
+  moveColumn,
+  nudgeColumn,
+  sortKeyOf,
   toggleColumn,
   visibleColumns,
   type ColumnId,
@@ -93,5 +96,69 @@ describe('formatDmy', () => {
     expect(formatDmy(null)).toBe('');
     expect(formatDmy(undefined)).toBe('');
     expect(formatDmy('not a date')).toBe('');
+  });
+});
+
+describe('arranging columns', () => {
+  const shown = ['name', 'phone', 'email', 'tags', 'stage'] as ColumnId[];
+
+  it('keeps the usual order until the person arranges one', () => {
+    expect(ids(visibleColumns(shown, attrs, null))).toEqual(shown);
+    expect(ids(visibleColumns(shown, attrs, []))).toEqual(shown);
+  });
+
+  it('follows the arranged order, drops columns no longer shown, and puts unplaced ones last', () => {
+    const order = ['name', 'stage', 'email', 'attr:gone', 'phone'] as ColumnId[];
+    expect(ids(visibleColumns(shown, attrs, order))).toEqual([
+      'name',
+      'stage',
+      'email',
+      'phone',
+      'tags',
+    ]);
+  });
+
+  it('keeps the name column first even if an order puts it elsewhere', () => {
+    expect(ids(visibleColumns(shown, attrs, ['email', 'name', 'phone'] as ColumnId[]))[0]).toBe(
+      'name',
+    );
+  });
+
+  it('moves a column onto another, never in front of the name, never the name itself', () => {
+    expect(moveColumn(shown, 'stage', 'phone')).toEqual([
+      'name',
+      'stage',
+      'phone',
+      'email',
+      'tags',
+    ]);
+    expect(moveColumn(shown, 'phone', 'stage')).toEqual([
+      'name',
+      'email',
+      'tags',
+      'stage',
+      'phone',
+    ]);
+    expect(moveColumn(shown, 'phone', 'name')).toEqual(['name', 'phone', 'email', 'tags', 'stage']);
+    expect(moveColumn(shown, 'name', 'stage')).toEqual(shown);
+    expect(moveColumn(shown, 'phone', 'phone')).toEqual(shown);
+  });
+
+  it('nudges one step and stops at the ends', () => {
+    expect(nudgeColumn(shown, 'email', -1)).toEqual(['name', 'email', 'phone', 'tags', 'stage']);
+    expect(nudgeColumn(shown, 'email', 1)).toEqual(['name', 'phone', 'tags', 'email', 'stage']);
+    expect(nudgeColumn(shown, 'phone', -1)).toEqual(shown);
+    expect(nudgeColumn(shown, 'stage', 1)).toEqual(shown);
+  });
+});
+
+describe('sortKeyOf', () => {
+  it('maps columns to the API sort and refuses the many-valued ones', () => {
+    expect(sortKeyOf('name')).toBe('name');
+    expect(sortKeyOf('createdOn')).toBe('createdAt');
+    expect(sortKeyOf('attr:order_count')).toBe('attr:order_count');
+    expect(sortKeyOf('tags')).toBeNull();
+    expect(sortKeyOf('groups')).toBeNull();
+    expect(sortKeyOf('attr:Has Space' as ColumnId)).toBeNull();
   });
 });

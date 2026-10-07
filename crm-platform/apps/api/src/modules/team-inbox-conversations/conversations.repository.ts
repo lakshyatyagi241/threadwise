@@ -220,6 +220,8 @@ export class ConversationsRepository {
     // The archive view shows everything archived whatever the tab or status (Reference rule); otherwise the tab and status narrow it.
     if (!f.archived) {
       if (f.status === undefined) where.push(sql`c.status IN ('open', 'pending')`);
+      // Resolved and closed are one thing to an agent (the same Resolve button, the same reopen), so the Resolved view lists both.
+      else if (f.status === 'resolved') where.push(sql`c.status IN ('resolved', 'closed')`);
       else if (f.status !== 'all') where.push(sql`c.status = ${f.status}`);
       const tab = this.tabCondition(f.tab, viewer.userId);
       if (tab) where.push(tab);

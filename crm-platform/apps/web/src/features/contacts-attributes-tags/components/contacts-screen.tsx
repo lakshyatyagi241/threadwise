@@ -16,6 +16,7 @@ import {
   bulkTag,
   bulkUpdate,
   exportContacts,
+  startCampaignDraft,
   type BulkOutcome,
   type BulkUpdateValues,
 } from '../api/bulk';
@@ -38,6 +39,9 @@ import {
   parseStoredColumns,
   serializeColumns,
   STORAGE_KEY as COLUMNS_KEY,
+  ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
+  moveColumn,
+  nudgeColumn,
   toggleColumn,
   visibleColumns,
 } from '../lib/columns';
@@ -120,6 +124,18 @@ export function ContactsScreen() {
     );
   };
 
+  /**
+   * A header click: first A to Z, then Z to A, then back to the default (newest first). The created-on column is the
+   * default itself, so it only flips between newest and oldest.
+   */
+  const onSortColumn = (key: string) => {
+    if (filters.sort !== key) return setFilters({ sort: key, order: 'asc' });
+    if (key === 'createdAt')
+      return setFilters({ order: filters.order === 'desc' ? 'asc' : 'desc' });
+    if (filters.order === 'asc') return setFilters({ order: 'desc' });
+    setFilters({ sort: 'createdAt', order: 'desc' });
+  };
+
   // Search is applied 450 ms after typing stops (Reference's rhythm), without a page reload.
   const [q, setQ] = useState(filters.q);
   const [seenQ, setSeenQ] = useState(filters.q);
@@ -199,6 +215,7 @@ export function ContactsScreen() {
   // layout, columns and the stats strip (remembered per browser)
   const [view, chooseView] = useStoredChoice<View>('cat:contacts:view', VIEWS, 'list');
   const [storedColumns, setStoredColumns] = useStoredValue(COLUMNS_KEY);
+  const [storedOrder, setStoredOrder] = useStoredValue(COLUMN_ORDER_KEY);
   const [statsRaw, setStatsRaw] = useStoredValue(STATS_KEY);
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
@@ -209,8 +226,8 @@ export function ContactsScreen() {
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
   const baseColumns = stored ?? defaultColumns(attributeColumns);
   const columns = useMemo(
-    () => visibleColumns(stored, attributeColumns),
-    [stored, attributeColumns],
+    () => visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
+    [stored, attributeColumns, storedOrder],
   );
   const allCols = useMemo(() => allColumns(attributeColumns), [attributeColumns]);
   const visibleIds = useMemo(() => new Set(columns.map((c) => c.id)), [columns]);
@@ -298,6 +315,18 @@ export function ContactsScreen() {
       );
     } finally {
       set(false);
+    }
+  }
+
+  /** Opens the broadcast wizard on a draft whose audience is the ticked rows (or everything the view matches, after "select all"). */
+  async function onSendCampaign() {
+    setBusy(true);
+    try {
+      router.push(`/campaigns/wizard/${await startCampaignDraft(target())}`);
+    } catch {
+      toast(tb('failed'), 'danger');
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -510,13 +539,13 @@ export function ContactsScreen() {
         stages={stages}
         consent={filters.consent}
         onConsent={(v) => setFilters({ consent: v })}
-        order={filters.order}
-        onOrder={(v) => setFilters({ order: v })}
+        order={filters.sort === 'createdAt' ? filters.order : null}
+        onOrder={(v) => setFilters({ order: v, sort: 'createdAt' })}
         selectedCount={count}
         anySelected={selectedAny}
         busy={busy}
         onClearSelection={() => dispatch({ type: 'clear' })}
-        onSendCampaign={() => toast(t('sendCampaignSoon'), 'info')}
+        onSendCampaign={() => void onSendCampaign()}
         can={{
           update: canUpdate,
           delete: canDelete,
@@ -543,7 +572,10 @@ export function ContactsScreen() {
         allColumns={allCols}
         visibleIds={visibleIds}
         onColumn={(id, on) => setStoredColumns(serializeColumns(toggleColumn(baseColumns, id, on)))}
-        onResetColumns={() => setStoredColumns(null)}
+        onResetColumns={() => {
+          setStoredColumns(null);
+          setStoredOrder(null);
+        }}
         view={view}
         onView={chooseView}
         onRefresh={() => void Promise.all([refresh(), list.refetch()])}
@@ -680,6 +712,30 @@ export function ContactsScreen() {
               columns={columns}
               headerState={header}
               onToggleAll={(checked) => dispatch({ type: 'setMany', ids: rowIds, checked })}
+              sort={{ key: filters.sort, order: filters.order }}
+              onSort={onSortColumn}
+              onMoveColumn={(id, target) =>
+                setStoredOrder(
+                  serializeColumns(
+                    moveColumn(
+                      columns.map((c) => c.id),
+                      id,
+                      target,
+                    ),
+                  ),
+                )
+              }
+              onNudgeColumn={(id, step) =>
+                setStoredOrder(
+                  serializeColumns(
+                    nudgeColumn(
+                      columns.map((c) => c.id),
+                      id,
+                      step,
+                    ),
+                  ),
+                )
+              }
               {...handlers}
             />
           ) : (

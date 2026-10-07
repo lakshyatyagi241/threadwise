@@ -5,6 +5,7 @@ import {
   type TaskPriority,
   type TaskResponse,
 } from '@crm/contracts';
+import { PRIORITIES } from '../api/schemas';
 import { fromLocalInput, toLocalInput } from './dates';
 
 /** The form's own state: strings, as the inputs hold them. */
@@ -40,17 +41,28 @@ export const draftOf = (t: TaskResponse): TaskDraft => ({
   dealId: t.deal?.id ?? '',
 });
 
-export type DraftProblem = 'titleRequired' | 'titleTooLong' | 'notesTooLong' | 'dueInvalid';
+export type DraftProblem =
+  | 'titleRequired'
+  | 'titleTooLong'
+  | 'notesTooLong'
+  | 'dueRequired'
+  | 'dueInvalid'
+  | 'priorityRequired'
+  | 'assigneeRequired';
 
-export function validateDraft(
-  d: TaskDraft,
-): Partial<Record<'title' | 'notes' | 'due', DraftProblem>> {
-  const out: Partial<Record<'title' | 'notes' | 'due', DraftProblem>> = {};
+type DraftField = 'title' | 'notes' | 'due' | 'priority' | 'assignee';
+
+/** Priority, assignee and due are required (a task with no owner or no date drops out of Today and Upcoming, so nobody is reminded). */
+export function validateDraft(d: TaskDraft): Partial<Record<DraftField, DraftProblem>> {
+  const out: Partial<Record<DraftField, DraftProblem>> = {};
+  if (!(PRIORITIES as readonly string[]).includes(d.priority)) out.priority = 'priorityRequired';
+  if (d.assigneeId === '') out.assignee = 'assigneeRequired';
   const title = d.title.trim();
   if (title === '') out.title = 'titleRequired';
   else if ([...title].length > TASK_TITLE_MAX) out.title = 'titleTooLong';
   if ([...d.notes.trim()].length > TASK_NOTES_MAX) out.notes = 'notesTooLong';
-  if (d.due !== '' && fromLocalInput(d.due) === null) out.due = 'dueInvalid';
+  if (d.due === '') out.due = 'dueRequired';
+  else if (fromLocalInput(d.due) === null) out.due = 'dueInvalid';
   return out;
 }
 

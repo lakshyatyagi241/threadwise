@@ -6,6 +6,12 @@ import { Button, Field, Modal, Select, Spinner } from '@crm/ui';
 import { usePeople } from '@/features/segments';
 import { useStatusOptions } from '../api/attributes';
 import type { BulkUpdateValues } from '../api/bulk';
+import { useContactFields } from '../api/properties';
+import {
+  bulkCustomFields,
+  bulkPropertyProblems,
+  type BulkPropertyChanges,
+} from '../lib/bulk-properties';
 import { statusChoices, stageChoices } from '../lib/option-sets';
 import {
   isLostStage,
@@ -14,14 +20,15 @@ import {
   lostReasonProblem,
   type LostReasonAnswer,
 } from '../lib/stage-flow';
+import { BulkPropertiesSection } from './bulk-properties-section';
 import { LostReasonFields } from './lost-reason';
 
 const KEEP = '';
 const UNASSIGN = '__none__';
 
 /**
- * "Update" on the selected contacts: set the stage, the status and the owner of all of them at once. A field left on
- * "Keep" is not touched; a lost stage asks for the reason once, which is recorded on every contact moved.
+ * "Update" on the selected contacts: set the stage, the status, the owner and any custom properties of all of them at
+ * once. A field left on "Keep" is not touched; a lost stage asks for the reason once, which is recorded on every contact moved.
  */
 export function BulkUpdateDialog({
   open,
@@ -66,6 +73,16 @@ function Form({
   const [owner, setOwner] = useState(KEEP);
   const [reason, setReason] = useState<LostReasonAnswer>({ pick: '', text: '' });
   const [showProblems, setShowProblems] = useState(false);
+  const registry = useContactFields();
+  const [changes, setChanges] = useState<BulkPropertyChanges>({});
+  const fieldsByKey = useMemo(
+    () => new Map((registry.data ?? []).map((f) => [f.key, f])),
+    [registry.data],
+  );
+  const propertyProblems = useMemo(
+    () => bulkPropertyProblems(changes, fieldsByKey),
+    [changes, fieldsByKey],
+  );
 
   const statuses = useMemo(
     () => statusChoices(options.data, (v) => tf(`statuses.${v}`), undefined, stage || undefined),
@@ -74,18 +91,21 @@ function Form({
   const reasons = useMemo(() => lostReasonChoices(options.data), [options.data]);
   const lost = stage !== KEEP && isLostStage(stages, stage);
   const problem = lost ? lostReasonProblem(reason, reasons.length > 0) : null;
-  const nothing = stage === KEEP && status === KEEP && owner === KEEP;
+  const nothing =
+    stage === KEEP && status === KEEP && owner === KEEP && Object.keys(changes).length === 0;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (nothing || busy) return;
     setShowProblems(true);
-    if (problem) return;
+    if (problem || Object.keys(propertyProblems).length > 0) return;
+    const customFields = bulkCustomFields(changes, fieldsByKey);
     const values: BulkUpdateValues = {
       ...(stage !== KEEP ? { lifecycleStage: stage } : {}),
       ...(status !== KEEP ? { status } : {}),
       ...(owner !== KEEP ? { ownerId: owner === UNASSIGN ? null : owner } : {}),
       ...(lost ? lostReasonPayload(reason, reasons.length > 0) : {}),
+      ...(customFields ? { customFields } : {}),
     };
     if (await onApply(values)) onClose();
   }
@@ -140,6 +160,14 @@ function Form({
           ))}
         </Select>
       </Field>
+      <BulkPropertiesSection
+        fields={registry.data ?? []}
+        changes={changes}
+        problems={showProblems ? propertyProblems : {}}
+        count={count}
+        idPrefix={`${uid}-props`}
+        onChange={setChanges}
+      />
       <div className="flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onClose}>
           {t('cancel')}

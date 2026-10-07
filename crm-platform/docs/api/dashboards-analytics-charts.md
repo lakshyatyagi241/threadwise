@@ -59,12 +59,25 @@ An unknown or missing `range` is `7d`. `7d` and `30d` run from the start of that
       { "key": "replied", "count": 5, "pct": 33.3, "drop": 6 },
       { "key": "engaged", "count": 2, "pct": 13.3, "drop": 3 }
     ],
-    "endToEnd": 13.3
+    "endToEnd": 13.3,
+    "contacts": { "messaged": 1, "delivered": 1, "replied": 2 },
+    "activity": { "inbound": 5, "respondingContacts": 2, "repliesPerContact": 2.5 },
+    "replyRate": 100,
+    "comparison": null
   }
 }
 ```
 
 `sparkline` is 20 hourly outbound counts, oldest first.
+
+`funnel.contacts` is the contact-based Engagement funnel (a contact is a conversation): `messaged` = distinct conversations with an
+outbound message in the window, `delivered` = those with an outbound message in the delivered set (delivered, read, sent), `replied` =
+distinct conversations with an inbound message (it can exceed `messaged`; clients cap percentages of messaged at 100). `activity` is
+the inbound message count, the responding contacts, and `repliesPerContact` (one decimal, `null` when nobody replied). `replyRate` is
+replied / messaged in percent (one decimal, capped at 100). `comparison` holds the previous window's reply rate and the change in
+percentage points, `null` when that window messaged no contacts. `current` and `previous` carry `contactsMessaged`,
+`contactsDelivered` and `contactsReplied`. `stages` and `endToEnd` stay for the message-based figures. There is no goal stage:
+the data model has no goal event.
 
 ## GET /v2/dashboard/throughput?range=... (`dash.dashboard.read`)
 
@@ -79,7 +92,7 @@ today, an inverted pair is swapped, bad dates are dropped, and a span over 366 d
 `422 PLAN_FEATURE_LOCKED` (`upgradeUrl` in the details).
 
 Returns `window` (with `days`, `fromDate`, `toDate`), `current`, `previous`, `trends` (percent per metric; percentage points for
-`replyRatePp` and `endToEndPp`), `daily` (`dates`, `sent`, `delivered`, `failed`, `queued`, one value per day, zeros included),
+`replyRatePp`, `replyRateContactPp` and `endToEndPp`), `daily` (`dates`, `sent`, `delivered`, `failed`, `queued`, one value per day, zeros included),
 `funnel`, `types` (`text`, `template`, `media`, `interactive`, `location`; template wins over media; zero buckets omitted) and
 `heatmap` (7 rows, Sunday first, of 24 hourly counts, both directions, in the workspace zone).
 
