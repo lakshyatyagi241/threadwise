@@ -596,6 +596,7 @@ Other pages in WaDesk are also "dashboards" but belong to the domain that owns t
 - **Acceptance criteria:**
   - Given 100 sent, 90 delivered, 30 inbound messages from 20 conversations, Then stages read 100 / 90 (90%) / 30 (30%) / 20 (20%) and end-to-end 20%.
   - Given zero sends, Then all percentages are 0 and the drops are 0.
+- **Redesign (intended change, user request 2026-10):** The card is now contact based, not message based: "Contacts messaged" (distinct conversations with an outbound message, 100%), "Delivered" (distinct conversations with an outbound message in the delivered set) and "Replied" (distinct conversations with an inbound message), each as a share of contacts messaged (capped at 100 when a contact replied without being messaged in the window). Under a divider, "Conversation activity" shows inbound messages, responding contacts and replies per responding contact (one decimal, "-" when none); below it, "Compared with previous period" shows the contact reply rate (replied / messaged) with an arrow and the change in points (up good, down warning, zero neutral; hidden when the previous window messaged no contacts). The old message stages and end-to-end remain in the response (`funnel.stages`, `endToEnd`) for other readers but are no longer drawn. A fourth stage "Goal completed" is `blocked: no goal event` (the data model has no goal concept); the web keeps a clearly marked extension point (`funnelStages` in `lib/funnel-model.ts`).
 - **Source refs:** app/Http/Controllers/UserPagesController.php (dashboard funnel), resources/views/user/dashboard/index.blade.php
 - **Port notes:** Share one funnel function with WD-DASH-025 (analytics) and pass `engineScope` explicitly; the WaDesk analytics page forgot the engine filter, do not copy that.
 
@@ -774,6 +775,7 @@ Other pages in WaDesk are also "dashboards" but belong to the domain that owns t
 - **Acceptance criteria:**
   - Given end-to-end 20% now and 15% before, Then the footer shows "▲ 5pp vs prev".
   - Given no data, Then all stages show 0 and end-to-end 0%.
+- **Redesign (intended change):** Analytics uses the same contact-based card as WD-DASH-018 (one shared component); `trends.replyRateContactPp` is the contact reply-rate change in points. The message-based end-to-end delta (`endToEndPp`) stays in the response but is not drawn. Goal completed: `blocked: no goal event`.
 - **Source refs:** app/Http/Controllers/UserPagesController.php (analytics funnel), resources/views/user/analytics/index.blade.php
 - **Port notes:** Reuse the dashboard funnel function with a `from/to` parameter and a shared engine filter.
 

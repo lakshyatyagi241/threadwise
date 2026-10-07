@@ -193,6 +193,61 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
     expect(res.body.funnel.endToEnd).toBe(13.3);
   });
 
+  it('Engagement funnel (contacts): messaged, delivered, replied, activity, reply rate capped, no comparison without a previous window', async () => {
+    const res = await api.as(t.admin).get('/v2/dashboard/summary?range=7d');
+    // all 15 outbound rows sit in one thread; two other threads only replied (never messaged in this window)
+    expect(res.body.current.contactsMessaged).toBe(1);
+    expect(res.body.current.contactsDelivered).toBe(1);
+    expect(res.body.current.contactsReplied).toBe(2);
+    expect(res.body.funnel.contacts).toEqual({ messaged: 1, delivered: 1, replied: 2 });
+    expect(res.body.funnel.activity).toEqual({
+      inbound: 5,
+      respondingContacts: 2,
+      repliesPerContact: 2.5,
+    });
+    expect(res.body.funnel.replyRate).toBe(100);
+    expect(res.body.funnel.comparison).toBeNull();
+    expect(res.body.previous.contactsMessaged).toBe(0);
+  });
+
+  it('Engagement funnel (contacts): another workspace never leaks into the counts', async () => {
+    const res = await api.as(other.admin).get('/v2/dashboard/summary?range=7d');
+    expect(res.body.funnel.contacts).toEqual({ messaged: 1, delivered: 1, replied: 0 });
+    expect(res.body.funnel.activity.repliesPerContact).toBeNull();
+    expect(res.body.funnel.replyRate).toBe(0);
+  });
+
+  it('Engagement funnel (contacts): the reply rate is compared with the previous window in points', async () => {
+    const p = await api.signup('dfunnelcmp');
+    await withAnalytics(p);
+    const cur = await Promise.all([1, 2, 3, 4].map(() => conversation(p)));
+    const prev = await Promise.all([1, 2].map(() => conversation(p)));
+    await seed(p, [
+      ...cur.map((conv, i) => ({
+        status: i === 3 ? 'failed' : 'delivered',
+        ago: '2 days',
+        conv,
+      })),
+      { dir: 'in' as const, status: 'received', ago: '1 day', conv: cur[0]! },
+      { dir: 'in' as const, status: 'received', ago: '1 day', conv: cur[0]! },
+      ...prev.map((conv) => ({ status: 'delivered', ago: '9 days', conv })),
+      { dir: 'in' as const, status: 'received', ago: '8 days', conv: prev[0]! },
+    ]);
+    const res = await api.as(p.admin).get('/v2/dashboard/summary?range=7d');
+    expect(res.body.funnel.contacts).toEqual({ messaged: 4, delivered: 3, replied: 1 });
+    expect(res.body.funnel.activity).toEqual({
+      inbound: 2,
+      respondingContacts: 1,
+      repliesPerContact: 2,
+    });
+    expect(res.body.funnel.replyRate).toBe(25);
+    expect(res.body.funnel.comparison).toEqual({ previousReplyRate: 50, replyRatePp: -25 });
+    const an = await api.as(p.admin).get('/v2/analytics/overview?range=7d');
+    expect(an.body.funnel.replyRate).toBe(25);
+    expect(an.body.trends.replyRateContactPp).toBe(-25);
+    expect(an.body.funnel.comparison.replyRatePp).toBe(-25);
+  });
+
   it('WD-DASH-003/004: nothing in the previous window, so the pill is +100; an unknown range behaves as 7d', async () => {
     const res = await api.as(t.admin).get('/v2/dashboard/summary?range=bogus');
     expect(res.status).toBe(200);

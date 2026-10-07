@@ -43,7 +43,9 @@ export class DashRepository {
         count(*) FILTER (WHERE direction = 'out' AND status = 'failed')::int AS failed,
         count(*) FILTER (WHERE direction = 'out' AND ${READ})::int AS read,
         count(*) FILTER (WHERE direction = 'in')::int AS replies,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers,
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out')::int AS contacts_messaged,
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS contacts_delivered
       FROM ${stream(orgId, from, to)}`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
@@ -53,6 +55,9 @@ export class DashRepository {
       read: n(r.read),
       replies: n(r.replies),
       repliers: n(r.repliers),
+      contactsMessaged: n(r.contacts_messaged),
+      contactsDelivered: n(r.contacts_delivered),
+      contactsReplied: n(r.repliers),
     };
   }
 
