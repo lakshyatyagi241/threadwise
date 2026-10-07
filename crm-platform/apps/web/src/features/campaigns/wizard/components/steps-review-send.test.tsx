@@ -368,7 +368,7 @@ describe('when to send', () => {
     expect(out).toContain(
       'Recurring: sent again and again on the rule, each run to the audience as it is at that time.',
     );
-    expect(out).not.toContain('type="date"');
+    expect(out).not.toContain('data-picker="date"');
   });
 
   it('schedule: date, time and a zone select that defaults to the zone it is given', () => {
@@ -378,9 +378,10 @@ describe('when to send', () => {
       time: '09:00',
       timezone: 'Asia/Kolkata',
     });
-    expect(out).toContain('type="date"');
-    expect(out).toContain('type="time"');
-    expect(out).toContain('value="2026-10-07"');
+    expect(out).toContain('data-picker="date"');
+    expect(out).toContain('data-picker="time"');
+    expect(out).toContain('07/10/2026');
+    expect(out).toContain('09:00 AM');
     expect(out).toMatch(/<option value="Asia\/Kolkata" selected="">/);
   });
 
@@ -511,7 +512,7 @@ describe('retries', () => {
     ]);
     expect(out).toContain('aria-checked="true"');
     expect(out).toContain('Set an end date');
-    expect(out).toContain('type="date"');
+    expect(out).toContain('data-picker="date"');
     expect(out).toContain('Set an end date for retries.');
   });
 });

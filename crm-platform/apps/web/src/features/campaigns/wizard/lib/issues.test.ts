@@ -101,3 +101,10 @@ describe('stepOfPath', () => {
     expect(stepOfPath('something.else')).toBe(4);
   });
 });
+
+describe('step 3 when the balance cannot be checked', () => {
+  it('stops the broadcast: an unknown balance is not a sufficient one', () => {
+    const out = stepIssues(3, draft(), { slots: [], now: NOW, credit: null, creditFailed: true });
+    expect(out.map((i) => i.code)).toContain('balance_unavailable');
+  });
+});
