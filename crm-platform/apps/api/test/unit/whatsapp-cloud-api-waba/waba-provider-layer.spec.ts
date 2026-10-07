@@ -294,6 +294,8 @@ describe('WabaAdminClient onboarding calls', () => {
     expect(phones[0]).toMatchObject({
       id: 'P1',
       displayPhoneNumber: '+919112290122',
+      // kept as Meta wrote it, for the one partner that wants Meta's own formatting
+      displayPhoneNumberRaw: '+91 91122 90122',
       verifiedName: 'Acme',
       qualityRating: 'GREEN',
     });
