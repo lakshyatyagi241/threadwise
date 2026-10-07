@@ -550,6 +550,11 @@
         "balance_unavailable": "We could not check your wallet balance. Try again before sending."
       },
       "template": {
+        "previewOnline": "online",
+        "previewToday": "Today",
+        "previewInput": "Message",
+        "previewBusiness": "Your business",
+        "livePreview": "Live preview",
         "nameLabel": "Broadcast name",
         "nameHint": "Only your team sees it.",
         "namePlaceholder": "For example: October offer",

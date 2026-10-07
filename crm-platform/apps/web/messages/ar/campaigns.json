@@ -99,6 +99,11 @@
         "balance_unavailable": "تعذّر التحقق من رصيد محفظتك. حاول مرة أخرى قبل الإرسال."
       },
       "template": {
+        "previewOnline": "متصل",
+        "previewToday": "اليوم",
+        "previewInput": "اكتب رسالة",
+        "previewBusiness": "نشاطك التجاري",
+        "livePreview": "معاينة مباشرة",
         "nameLabel": "اسم البث",
         "nameHint": "يراه فريقك فقط.",
         "namePlaceholder": "مثال: عرض أكتوبر",
