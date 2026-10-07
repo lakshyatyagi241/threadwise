@@ -159,6 +159,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         }),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
       };
     }
     case 'buttons': {
@@ -171,6 +172,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         })),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
