@@ -1,4 +1,4 @@
-import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, Optional, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -6,7 +6,11 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { NotificationsRepository } from '../notifications';
+import {
+  NotificationPublisher,
+  NotificationsRepository,
+  type WrittenNotification,
+} from '../notifications';
 import { formatMinor } from './wallet-rules';
 import { WalletRealtimePublisher } from './wallet-realtime.publisher';
 import { WalletSettingsService } from './wallet-settings.service';
@@ -32,6 +36,7 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
     private readonly registry: OutboxSubscriberRegistry,
     private readonly settings: WalletSettingsService,
     private readonly realtime: WalletRealtimePublisher,
+    @Optional() private readonly publisher?: NotificationPublisher,
   ) {}
 
   onModuleInit(): void {
@@ -64,6 +69,7 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
             title: 'Wallet credited by platform support',
             body: `${currency} ${formatMinor(Number(p.amountMinor ?? 0))} was added to your wallet. New balance: ${currency} ${balance}.`,
           };
+    const pending: WrittenNotification[] = [];
     await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const owners = await tx.execute(sql`
         SELECT DISTINCT u.id FROM users u
@@ -71,7 +77,7 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
         JOIN roles r ON r.org_id = ur.org_id AND r.id = ur.role_id
         WHERE u.org_id = ${event.orgId} AND u.status = 'active' AND r.system_key = 'admin'`);
       for (const o of owners.rows as Array<{ id: string | number }>) {
-        await this.notifications.insertOnce(tx, event.orgId, {
+        const written = await this.notifications.insertReturning(tx, event.orgId, {
           userId: Number(o.id),
           type: copy.type,
           title: copy.title,
@@ -80,9 +86,11 @@ export class WalletNotificationsConsumer implements OutboxSubscriber, OnModuleIn
           data: { eventType: event.eventType, ...p },
           dedupeKey: `${event.eventType}:${event.id}`,
         });
+        if (written) pending.push(written);
       }
       if (owners.rows.length === 0)
         this.logger.warn({ orgId: event.orgId }, 'wallet notification has no owner to tell');
     });
+    for (const row of pending) await this.publisher?.created(event.orgId, row);
   }
 }

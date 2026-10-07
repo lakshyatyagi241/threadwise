@@ -44,6 +44,7 @@ import {
   encodeListCursor,
   type InboxConversationRow,
 } from './conversations.repository';
+import { NotificationsService } from '../notifications';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
 
@@ -82,6 +83,7 @@ export class InboxConversationsService {
     private readonly contacts: ContactsRepository,
     @Inject(CHANNEL_ADAPTERS) private readonly adapters: ChannelAdapter[],
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly notifications: NotificationsService,
   ) {}
 
   async list(query: ListConversationsQuery): Promise<ConversationListResponse> {
@@ -186,7 +188,10 @@ export class InboxConversationsService {
     });
   }
 
-  /** `POST .../read`: the visibility check is ours, the counter and the `inbox.unread` signal are the conversation core's. */
+  /**
+   * `POST .../read`: the visibility check is ours, the counter and the `inbox.unread` signal are the conversation core's, and the
+   * person's bell rows about the thread are marked read here (`notification.read` goes to their other tabs).
+   */
   async markRead(
     uuid: string,
     input: MarkConversationReadInput,
@@ -199,6 +204,8 @@ export class InboxConversationsService {
       this.access.assertVisible(viewer, record);
     });
     const { unreadCount } = await this.conversations.markRead(uuid, input.upToSeq);
+    // The thread is read, so its bell rows are too (on every device), and an alert for a message that lands while it is open is skipped.
+    await this.notifications.markConversationRead(uuid);
     return { conversationId: uuid, unreadCount };
   }
 
