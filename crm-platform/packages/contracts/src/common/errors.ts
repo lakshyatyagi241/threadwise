@@ -25,8 +25,10 @@ import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
 import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
+import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
 
 export const ERROR_CODES = {
+  ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
