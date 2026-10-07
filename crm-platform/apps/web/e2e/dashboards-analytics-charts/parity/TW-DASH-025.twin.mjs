@@ -61,7 +61,8 @@ export default (h) => ({
     tags: ['edge'],
     run: {
       ours: shapeRun(path, vp),
-      threadwise: async (c) => c.obs.info('n/a', 'Reference draws plain stacked rows, shape not comparable'),
+      threadwise: async (c) =>
+        c.obs.info('n/a', 'Reference draws plain stacked rows, shape not comparable'),
     },
   })),
   intended: [
@@ -69,14 +70,16 @@ export default (h) => ({
       scenario: /\.keyboard$/,
       key: 'abs.keyboard.focusVisible',
       quirk: 'the stop without a ring is the Next.js dev-tools overlay element',
-      reason: 'dev server only: the overlay is not part of the app and does not exist in a production build',
+      reason:
+        'dev server only: the overlay is not part of the app and does not exist in a production build',
     },
   ],
   skip: [
     {
       scenario: /^funnel\.shape\./,
       side: 'threadwise',
-      reason: 'tapered-band graph is a deliberate redesign; judged against absolute expectations on ours',
+      reason:
+        'tapered-band graph is a deliberate redesign; judged against absolute expectations on ours',
     },
   ],
 });
