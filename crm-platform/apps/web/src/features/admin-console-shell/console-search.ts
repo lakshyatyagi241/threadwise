@@ -52,8 +52,8 @@ export function makeSearchEntry(
 }
 
 /**
- * Every page of the rail as a search entry, in menu order. A page keeps the block heading of the block it
- * belongs to (only the first page of a block carries the key), and module pages added at run time are included.
+ * Every page of the console as a search entry, in menu order, labelled with the hub it sits in (`Billing > Invoices`), so
+ * search finds pages that are tabs and not rail entries. Module pages added at run time are included.
  */
 export function buildSearchIndex(
   entries: readonly ConsoleEntry[],
@@ -68,11 +68,9 @@ export function buildSearchIndex(
       continue;
     }
     const section = text(entry.labelKey);
-    let caption = '';
     for (const leaf of entry.children) {
-      if (leaf.captionKey) caption = text(leaf.captionKey);
       out.push(
-        makeSearchEntry(leaf.id, leaf.href, labelOf(leaf), section, caption, keywordsOf(leaf.id)),
+        makeSearchEntry(leaf.id, leaf.href, labelOf(leaf), section, '', keywordsOf(leaf.id)),
       );
     }
   }

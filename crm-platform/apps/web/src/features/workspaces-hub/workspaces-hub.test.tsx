@@ -369,11 +369,9 @@ describe('menu and redirects', () => {
     }
   });
 
-  it('puts Workspaces first in the section it opens', () => {
-    const section = CONSOLE_LAYOUT.find((s) =>
-      s.blocks.some((b) => b.items.includes('workspaces')),
-    );
-    expect(section?.blocks[0]!.items[0]).toBe('workspaces');
+  it('puts Workspaces first in the hub it opens', () => {
+    const hub = CONSOLE_LAYOUT.find((h) => h.tabs.includes('workspaces'));
+    expect(hub?.tabs[0]).toBe('workspaces');
   });
 
   it('is found by the words of the pages it replaced', () => {

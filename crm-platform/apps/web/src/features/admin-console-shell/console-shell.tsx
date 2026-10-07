@@ -3,15 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import {
-  Fragment,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-  type ReactNode,
-} from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import type { OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Badge, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
@@ -38,13 +30,14 @@ import {
   activeLeafId,
   buildConsoleNav,
   CONSOLE_NAV_ITEMS,
-  activeStatusBadgeInfo,
-  formatCount,
-  initiallyOpenGroups,
+  hubHref,
+  hubOf,
   isGroup,
   type ConsoleGroup,
-  type ConsoleLeaf,
 } from './console-nav';
+import { CONSOLE_LAYOUT } from './console-layout';
+import { pageVisibleTo } from './console-access';
+import { HubTabs } from './hub-tabs';
 import type { ConsoleCounts } from './console-counts';
 import { ConsoleIcon } from './console-icons';
 import { ConsolePalette, useIsApple } from './console-palette';
@@ -62,19 +55,6 @@ const PLATFORM = 'auth-registration-security.platform';
 const MAIN_CLASS =
   'min-w-0 flex-1 p-4 outline-none md:p-6 [&_.sr-only]:start-0 [&_nav_a]:inline-flex [&_nav_a]:min-h-6 [&_nav_a]:items-center';
 const ROLE_TONE = { super_admin: 'success', support: 'neutral', auditor: 'neutral' } as const;
-
-const Chevron = ({ open }: { open: boolean }) => (
-  <svg
-    aria-hidden="true"
-    viewBox="0 0 20 20"
-    className={cn('size-4 shrink-0 transition-transform', open && 'rotate-180')}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 const PanelIcon = ({ collapsed }: { collapsed: boolean }) => (
   <svg
@@ -119,12 +99,8 @@ export function ConsoleShell({
   const [, start] = useTransition();
   const [signingOut, setSigningOut] = useState(false);
   const [collapsed, setCollapsed] = useState(initialSidebar === 'collapsed');
-  // Drawer and group toggles belong to the page they were made on, so navigating resets them without an effect.
+  // The drawer belongs to the page it was opened on, so navigating closes it without an effect.
   const [openAt, setOpenAt] = useState<string | null>(null);
-  const [flipped, setFlipped] = useState<{ path: string; ids: string[] }>({
-    path: pathname,
-    ids: [],
-  });
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
@@ -141,29 +117,17 @@ export function ConsoleShell({
   // Active modules append their own entries (add-ons domain, WD-ADD-012).
   const moduleNav = useModuleNav(!gated);
   const entries = useMemo(
-    () => withModuleLeaves(buildConsoleNav(CONSOLE_NAV_ITEMS), moduleNav),
-    [moduleNav],
+    () =>
+      withModuleLeaves(
+        buildConsoleNav(CONSOLE_NAV_ITEMS, CONSOLE_LAYOUT, (id) =>
+          pageVisibleTo(session.operator.role, id),
+        ),
+        moduleNav,
+      ),
+    [moduleNav, session.operator.role],
   );
   const activeId = activeLeafId(pathname, entries);
-  const defaultOpen = useMemo(() => initiallyOpenGroups(entries, activeId), [entries, activeId]);
-  const flippedIds = flipped.path === pathname ? flipped.ids : [];
-  const isGroupOpen = (id: string) => defaultOpen.has(id) !== flippedIds.includes(id);
-  const toggleGroup = (id: string) =>
-    setFlipped({
-      path: pathname,
-      ids: flippedIds.includes(id) ? flippedIds.filter((x) => x !== id) : [...flippedIds, id],
-    });
-
-  // An icon-only rail has no room for pages, so choosing a section opens the rail on it. Phones always show the full drawer.
-  const chooseSection = (id: string) => {
-    if (collapsed && window.matchMedia('(min-width: 768px)').matches) {
-      setCollapsed(false);
-      saveSidebarState('expanded');
-      if (!isGroupOpen(id)) toggleGroup(id);
-      return;
-    }
-    toggleGroup(id);
-  };
+  const activeHub = hubOf(entries, activeId);
 
   // Console search (Ctrl+K): every page of the rail plus Your account. Off while the menu is disabled (two-factor enrolment pending).
   const apple = useIsApple();
@@ -281,6 +245,7 @@ export function ConsoleShell({
     label: string;
     active: boolean;
     disabled?: boolean;
+    testId?: string;
   }) => {
     const body = (
       <>
@@ -301,6 +266,7 @@ export function ConsoleShell({
         key={opts.id}
         href={opts.href}
         title={opts.label}
+        data-testid={opts.testId}
         aria-current={opts.active ? 'page' : undefined}
         className={cn(
           cls,
@@ -313,111 +279,17 @@ export function ConsoleShell({
     );
   };
 
-  /** One page inside a section: text only, with the small heading of its block above it when it opens one. */
-  const leafLink = (leaf: ConsoleLeaf) => {
-    const label = leaf.label ?? tAll(leaf.labelKey);
-    const badge = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
-    const status = activeStatusBadgeInfo(leaf, counts);
-    const active = leaf.id === activeId;
-    const body = (
-      <>
-        <span className="min-w-0 flex-1 truncate">{label}</span>
-        {badge && (
-          <span
-            data-testid={`count-${leaf.id}`}
-            className="rounded-full bg-white/15 px-1.5 text-xs tabular-nums"
-          >
-            {badge}
-          </span>
-        )}
-        {status && (
-          <span
-            data-testid={`status-${leaf.id}`}
-            data-tone={status.tone}
-            className={cn(
-              'rounded-full px-1.5 text-[0.6875rem] font-medium leading-4',
-              status.tone === 'neutral' ? 'bg-white/15' : 'bg-warning/25',
-            )}
-          >
-            {tAll(status.labelKey)}
-          </span>
-        )}
-      </>
-    );
-    const cls = 'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm';
-    return (
-      <Fragment key={leaf.id}>
-        {leaf.captionKey && (
-          <div className="px-2 pb-0.5 pt-2.5 text-[0.6875rem] font-semibold uppercase tracking-wider opacity-60">
-            {tAll(leaf.captionKey)}
-          </div>
-        )}
-        {gated ? (
-          <span aria-disabled="true" className={cn(cls, 'opacity-40')}>
-            {body}
-          </span>
-        ) : (
-          <Link
-            href={leaf.href}
-            title={label}
-            aria-current={active ? 'page' : undefined}
-            className={cn(
-              cls,
-              'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-              active && 'bg-sidebar-active text-white',
-            )}
-          >
-            {body}
-          </Link>
-        )}
-      </Fragment>
-    );
-  };
-
-  /** A collapsible section: icon and name on one row, its pages (with block headings) below. Icon only when the rail is collapsed. */
-  const section = (entry: ConsoleGroup) => {
-    const label = tAll(entry.labelKey);
-    const expanded = isGroupOpen(entry.id);
-    const holdsActive = entry.children.some((leaf) => leaf.id === activeId);
-    return (
-      <div key={entry.id}>
-        <button
-          type="button"
-          data-testid={`group-${entry.id}`}
-          aria-expanded={expanded}
-          aria-controls={`console-group-${entry.id}`}
-          aria-label={tc('toggleGroup', { group: label })}
-          title={label}
-          onClick={() => chooseSection(entry.id)}
-          className={cn(
-            'flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
-            'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-            'md:group-data-[collapsed=true]/rail:justify-center',
-            holdsActive && 'text-white md:group-data-[collapsed=true]/rail:bg-sidebar-active',
-          )}
-        >
-          <ConsoleIcon name={entry.icon} />
-          <span className={cn('min-w-0 flex-1 truncate text-start', hideWhenCollapsed)}>
-            {label}
-          </span>
-          <span className={hideWhenCollapsed}>
-            <Chevron open={expanded} />
-          </span>
-        </button>
-        {/* An icon-only rail has no room for pages: they come back when the rail is expanded. */}
-        <div
-          id={`console-group-${entry.id}`}
-          className={cn(
-            'ms-4 space-y-0.5 border-s border-white/10 pb-1 ps-2',
-            !expanded && 'hidden',
-            hideWhenCollapsed,
-          )}
-        >
-          {entry.children.map(leafLink)}
-        </div>
-      </div>
-    );
-  };
+  /** One hub in the rail: an icon and its name, linking to the hub's first page. Its other pages are the tab bar on that page. */
+  const hubLink = (entry: ConsoleGroup) =>
+    topLink({
+      id: entry.id,
+      href: hubHref(entry),
+      icon: entry.icon ?? 'dashboard',
+      label: tAll(entry.labelKey),
+      active: entry.id === activeHub?.id,
+      disabled: gated,
+      testId: `hub-${entry.id}`,
+    });
 
   return (
     <OperatorProvider session={session}>
@@ -493,7 +365,7 @@ export function ConsoleShell({
             <nav className="-mx-1 mt-2 min-h-0 flex-1 space-y-0.5 overflow-y-auto px-1 [scrollbar-color:rgb(255_255_255/0.25)_transparent] [scrollbar-width:thin]">
               {entries.map((entry) =>
                 isGroup(entry)
-                  ? section(entry)
+                  ? hubLink(entry)
                   : topLink({
                       id: entry.id,
                       href: entry.href,
@@ -645,7 +517,12 @@ export function ConsoleShell({
               ) : ipBlock ? (
                 <IpBlockedView ip={ipBlock.ip} />
               ) : (
-                children
+                <>
+                  {activeHub && !gated && (
+                    <HubTabs hub={activeHub} activeId={activeId} counts={counts} />
+                  )}
+                  {children}
+                </>
               )}
             </main>
           </div>

@@ -28,6 +28,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'payment-gateways': 'stripe razorpay paypal paystack gateway payments cards checkout keys',
   'checkout-settings':
     'billing settings checkout tax refund window yearly discount auto renew recurring company invoice identity',
+  'wallet-overview': 'wallet overview balance credits messaging billing summary totals',
   'wallet-pricing': 'message pricing credits per message rate cost price meta',
   'wallet-margins': 'margin markup meta cost profit percent country category',
   'wallet-packages': 'credit packages top up recharge bundles wallet',
@@ -61,6 +62,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'market-requests': 'requests installs approvals marketplace pending',
   'market-usage': 'usage installs marketplace stats',
   extensions: 'extensions modules plugins addons code install upload zip',
+  'flow-templates': 'flow templates chatbot automation gallery start from a template tenants clone',
 
   roles: 'roles permissions staff access admins team',
   permissions: 'permissions capabilities rights access control rbac',
