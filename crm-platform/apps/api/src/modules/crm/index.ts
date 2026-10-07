@@ -91,8 +91,13 @@ export {
   SegmentsRepository,
   SegmentActionsService,
   toSegmentResponse,
+  compileRules,
+  collectRuleRefs,
+  loadRuleContext,
+  countWithTimeout,
+  segmentContactsWhere,
 } from './segments';
-export type { SegmentRow } from './segments';
+export type { SegmentRow, CompiledRules, CountResult } from './segments';
 export { SegmentsWorkerModule } from './segments/segments-worker.module';
 export { ContactImportEngine, ContactImportProcessor } from './contact-import';
 export { ContactImportWorkerModule } from './contact-import/contact-import-worker.module';

@@ -17,11 +17,8 @@ export {
   type InboundContext,
   type WabaInboundSink,
 } from './waba-inbound-sink';
-export {
-  WABA_CALLS_SINK,
-  WABA_CALLS_SINK_OVERRIDE,
-  type WabaCallsSink,
-} from './waba-calls-sink';
+export { WABA_CALLS_SINK, WABA_CALLS_SINK_OVERRIDE, type WabaCallsSink } from './waba-calls-sink';
+export { WabaReceiptRegistry, type WabaReceiptSink } from './waba-receipt-registry';
 export { WabaWebhookService } from './waba-webhook.service';
 export { WabaConnectionsRepository } from './waba-connections.repository';
 export { WEBHOOK_PATH } from './waba-rules';
