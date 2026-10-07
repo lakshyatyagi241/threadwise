@@ -41,61 +41,55 @@ export function Stepper({
           />
         </div>
       </div>
-      <ol className="hidden gap-3 sm:grid sm:grid-cols-4">
+      <ol className="hidden items-center gap-2 sm:flex">
         {WIZARD_STEPS.map((_, i) => {
           const n = (i + 1) as WizardView;
           const active = n === current;
-          const done = n < current;
           const reachable = n <= reached;
           return (
-            <li key={n} className="min-w-0">
+            <li key={n} className="flex min-w-0 flex-1 items-center gap-2">
               <button
                 type="button"
                 aria-current={active ? 'step' : undefined}
                 disabled={!reachable}
                 onClick={() => onGo(n)}
                 className={cn(
-                  'group relative flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl border px-3.5 py-2.5 text-start outline-none transition-colors',
+                  'flex min-w-0 items-center gap-2 rounded-full px-2.5 py-1.5 text-start text-sm outline-none',
                   'focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed',
                   active
-                    ? 'border-brand bg-brand/5 shadow-sm'
-                    : done
-                      ? 'border-border bg-background hover:border-brand/50 hover:bg-brand/5'
-                      : reachable
-                        ? 'border-border bg-background hover:bg-muted'
-                        : 'border-dashed border-border bg-muted/30 text-muted-foreground',
+                    ? 'bg-brand/10 font-semibold'
+                    : reachable
+                      ? 'hover:bg-muted'
+                      : 'text-muted-foreground',
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'grid size-9 shrink-0 place-items-center rounded-full text-sm font-semibold',
+                    'grid size-8 shrink-0 place-items-center rounded-full border text-sm font-semibold',
                     active
-                      ? 'bg-brand text-brand-foreground shadow'
-                      : done
-                        ? 'bg-success text-white'
-                        : 'border border-border bg-background text-muted-foreground',
+                      ? 'border-brand bg-brand text-brand-foreground'
+                      : n < current
+                        ? 'border-brand/40 bg-brand/10 text-brand'
+                        : 'border-border text-muted-foreground',
                   )}
                 >
-                  {done ? '✓' : n}
+                  {n < current ? '✓' : n}
                 </span>
-                <span className="min-w-0">
-                  <span
-                    className={cn(
-                      'block truncate text-sm',
-                      active ? 'font-semibold' : 'font-medium',
-                    )}
-                  >
-                    {label(n)}
-                  </span>
-                  <span className="block truncate text-xs text-muted-foreground">
-                    {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
-                  </span>
+                <span className="truncate">{label(n)}</span>
+                <span className="sr-only">
+                  {t('stepOf', { current: n, total: WIZARD_STEP_COUNT })}
                 </span>
-                {active && (
-                  <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-0.5 bg-brand" />
-                )}
               </button>
+              {n < WIZARD_STEP_COUNT && (
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'h-0.5 min-w-3 flex-1 rounded-full',
+                    n < current ? 'bg-brand/50' : 'bg-border',
+                  )}
+                />
+              )}
             </li>
           );
         })}
