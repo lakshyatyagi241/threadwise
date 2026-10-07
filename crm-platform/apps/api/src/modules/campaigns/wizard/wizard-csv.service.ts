@@ -27,6 +27,8 @@ const { campWizardCsv, campWizardCsvRows } = schema;
 /** Rows per INSERT. */
 const CHUNK = 1000;
 /** Rows of the preview and of the issue list the report carries (the download has them all). */
+/** Uploads (not pinned by a recurring broadcast) one workspace keeps at a time. */
+const MAX_LIVE_UPLOADS = 20;
 const PREVIEW_ROWS = 10;
 const ISSUE_ROWS = 50;
 
@@ -38,7 +40,8 @@ const REASON_TEXT = {
 } as const;
 
 /** A cell of the error list: a value that a spreadsheet would read as a formula is written as text. */
-const safe = (v: string): string => (/^(?:[=@\t\r]|[+-][^\d\s().])/.test(v) ? `'${v}` : v);
+const safe = (v: string): string =>
+  /^[=+\-@\t\r]/.test(v) && !/^\+?[\d\s().-]+$/.test(v) ? `'${v}` : v;
 
 export interface CsvUploadRef {
   id: number;
@@ -71,6 +74,7 @@ export class WizardCsvService {
       );
     }
     const { text, name } = decodeUpload(file);
+    await this.assertRoomForUpload(orgId);
     const parsed = parseWizardCsv(text, await this.resolver.defaultCountryCode());
     return this.db.tx(async (tx) => {
       const [created] = await tx
@@ -103,6 +107,22 @@ export class WizardCsvService {
       }
       return (await this.reportOf(tx, orgId, created!.uuid))!;
     });
+  }
+
+  /** Each upload keeps up to 10,000 rows for a week (longer when a series pins it), so a workspace may hold only so many at once. */
+  private async assertRoomForUpload(orgId: number): Promise<void> {
+    const res = await this.db.tx((tx) =>
+      tx.execute(
+        sql`SELECT count(*)::int AS n FROM camp_wizard_csv WHERE org_id = ${orgId} AND expires_at IS NOT NULL`,
+      ),
+    );
+    if (Number((res.rows[0] as { n: number }).n) >= MAX_LIVE_UPLOADS) {
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        `This workspace already holds ${MAX_LIVE_UPLOADS} uploaded files that have not expired. Use one of them, or wait for one to expire (a week after it was uploaded).`,
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
   }
 
   /** The stored upload and what it comes to now (opted-out and existing contacts are read live). */
@@ -166,6 +186,14 @@ export class WizardCsvService {
   /** The worker's retention pass: uploads past their expiry go, rows with them. Privileged (every tenant). */
   async purgeExpired(): Promise<number> {
     return this.db.privileged(async (tx) => {
+      // An upload pinned for a recurring broadcast is let go (kept a week more) once no active or paused series uses it: the series
+      // was cancelled, ended or deleted.
+      await tx.execute(sql`
+        UPDATE camp_wizard_csv u SET expires_at = now() + ${`${WIZARD_CSV_TTL_DAYS} days`}::interval
+        WHERE u.expires_at IS NULL AND NOT EXISTS (
+          SELECT 1 FROM camp_series s
+          WHERE s.org_id = u.org_id AND s.status IN ('active', 'paused')
+            AND s.blueprint -> 'audience' -> 'csv' ->> 'id' = u.uuid::text)`);
       const res = await tx.execute(
         sql`DELETE FROM camp_wizard_csv WHERE expires_at IS NOT NULL AND expires_at < now()`,
       );
