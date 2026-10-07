@@ -83,9 +83,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
 | TW-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
 | TW-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
-| TW-WSP-023 | todo |  |  |
+| TW-WSP-023 | todo |  | Backend built (GET /v2/platform/workspaces, e2e green); web screen pending |
 | TW-WSP-024 | todo |  |  |
-| TW-WSP-025 | todo |  |  |
+| TW-WSP-025 | todo |  | Backend built (GET /v2/platform/workspaces/:id, suspend, unsuspend); web screen pending |
 | TW-WSP-026 | todo |  |  |
 | TW-WSP-027 | todo |  |  |
 | TW-WSP-028 | todo |  |  |

@@ -190,7 +190,7 @@
     "admin": {
       "admin": "Admin",
       "wallet": "Wallet",
-      "workspacesLabel": "Workspace wallets",
+      "workspacesLabel": "Workspaces",
       "breadcrumb": "Breadcrumb",
       "readOnly": "You are signed in as {role}. Only super admins can change wallet settings, prices or balances.",
       "nav": {

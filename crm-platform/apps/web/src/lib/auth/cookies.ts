@@ -63,6 +63,18 @@ export function setSessionCookies(
   });
 }
 
+/**
+ * The act-as token of an operator impersonation session (TW-WSP-032): the normal access cookie, for exactly as long as the token
+ * lives, and NO refresh or remember cookie, so nothing in the browser can renew it. The caller clears the session cookies first.
+ */
+export function setImpersonationCookie(
+  store: CookieWriter,
+  accessToken: string,
+  expiresIn: number,
+) {
+  store.set(ACCESS_COOKIE, accessToken, { ...base(), maxAge: expiresIn });
+}
+
 export function clearSessionCookies(store: CookieWriter, kind: SessionKind = 'user') {
   if (kind === 'operator') {
     store.delete(OP_ACCESS_COOKIE);

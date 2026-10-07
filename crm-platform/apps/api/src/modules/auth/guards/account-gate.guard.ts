@@ -1,11 +1,21 @@
 import { CanActivate, ExecutionContext, HttpStatus, Injectable } from '@nestjs/common';
+import type { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { ERROR_CODES } from '@crm/contracts';
 import { IS_PUBLIC_KEY } from '../../../common/decorators';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { AccountGateService } from '../security/account-gate.service';
+import {
+  OrgSuspensionService,
+  isOperatorImpersonation,
+  orgSuspendedError,
+} from '../security/org-suspension.service';
 import { ALLOW_WHILE_GATED_KEY, type AllowWhileGatedOptions } from './auth-gates';
+import { suspendedPathAllowed } from './suspended-paths';
+
+/** Identity pools whose requests belong to a workspace and stop when it is suspended. Operators and candidates are other pools. */
+const ORG_GATED_ACTORS: ReadonlySet<string> = new Set(['user', 'partner_agent', 'api_key']);
 
 /**
  * Runs after JwtAuthGuard. Staff users only (partner agents, operators and
@@ -21,6 +31,7 @@ export class AccountGateGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly gates: AccountGateService,
+    private readonly orgs: OrgSuspensionService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -35,13 +46,33 @@ export class AccountGateGuard implements CanActivate {
     }
 
     const ctx = RequestContextStore.require();
-    if (ctx.actorType !== 'user' || !ctx.userId) return true;
-
-    const state = await this.gates.stateFor(ctx.orgId, ctx.userId);
     const opts = this.reflector.getAllAndOverride<AllowWhileGatedOptions | undefined>(
       ALLOW_WHILE_GATED_KEY,
       [context.getHandler(), context.getClass()],
     );
+
+    // A suspended workspace stops all of its members, not only staff users (ADR-0019). One cached lookup per organization.
+    if (
+      ORG_GATED_ACTORS.has(ctx.actorType) &&
+      ctx.orgId > 0 &&
+      !opts?.suspended &&
+      !isOperatorImpersonation(ctx)
+    ) {
+      const req = context.switchToHttp().getRequest<Request>();
+      if (
+        !suspendedPathAllowed(req.originalUrl ?? req.url ?? '', req.method ?? 'GET') &&
+        (await this.orgs.isSuspended(ctx.orgId))
+      ) {
+        throw orgSuspendedError();
+      }
+    }
+
+    if (ctx.actorType !== 'user' || !ctx.userId) return true;
+    // The owner's own account gates (password change due, 2FA enrolment, unverified email, a suspended account) are the owner's to
+    // resolve: an operator acting as the owner must reach the workspace to help, and cannot resolve them (the routes are forbidden).
+    if (isOperatorImpersonation(ctx)) return true;
+
+    const state = await this.gates.stateFor(ctx.orgId, ctx.userId);
 
     if (state.suspended && !opts?.suspended) {
       throw new AppError(

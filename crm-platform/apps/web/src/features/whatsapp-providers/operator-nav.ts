@@ -22,12 +22,6 @@ export const WAP_OPERATOR_NAV: readonly OperatorNavEntry[] = [
     groupKey: `${NS}.group`,
   },
   {
-    id: 'wap-assignments',
-    href: '/admin/whatsapp-providers/assignments',
-    labelKey: `${NS}.assignments`,
-    groupKey: `${NS}.group`,
-  },
-  {
     id: 'wap-switch',
     href: '/admin/whatsapp-providers/switch',
     labelKey: `${NS}.switch`,
