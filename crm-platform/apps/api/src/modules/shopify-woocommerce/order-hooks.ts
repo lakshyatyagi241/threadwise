@@ -22,6 +22,9 @@ export interface EcomOrderListener {
   onFlowOrder(event: EcomFlowOrder): Promise<void>;
 }
 
+/** What a checkout puts in an order's note so the order finds its run again; the shop node's `flowTag` reads the same text. */
+export const flowNoteOf = (runRef: string): string => `wadesk-flow:${runRef}`;
+
 const TAG = /wadesk-flow:(\S+)/;
 const clean = (s: string): string => s.replace(/[.,;)"']+$/, '');
 

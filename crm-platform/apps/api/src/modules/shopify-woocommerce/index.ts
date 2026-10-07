@@ -9,3 +9,6 @@ export {
   type EcomFlowOrder,
   type EcomOrderListener,
 } from './order-hooks';
+// What the flow runtime's shop node asks of the stores: stock, checkout links (WD-ECOM-036). The flow runtime binds it to its gate.
+export { EcomFlowShop } from './ecom-flow-shop';
+export { flowNoteOf } from './order-hooks';

@@ -46,6 +46,8 @@ export interface ExternalOrderInput {
   orderTotalMinor: bigint;
   docType: 'tax_invoice' | 'receipt';
   meta: Record<string, unknown>;
+  /** Where the order came from, as the invoice's `source` (the store's own kind); the storefront and WhatsApp carts are `own`. */
+  source?: 'own' | 'shopify' | 'woocommerce';
 }
 
 export interface ExternalSalesOrderRef {
@@ -227,7 +229,7 @@ export class ExternalOrderBillingService {
         { all: true, includeShipping: true, issue: false },
         {
           docType: input.docType,
-          source: 'own',
+          source: input.source ?? 'own',
           buyerAddress: input.buyer.address,
           meta: { ...input.meta, [FIELD_META]: input.waOrderId },
         },
@@ -289,6 +291,14 @@ export class ExternalOrderBillingService {
       metaJson: { [FIELD_META]: true },
     });
     return payment !== undefined;
+  }
+
+  /**
+   * Queues an issued invoice for the buyer (the workspace turned auto-send on for the channel): WhatsApp when the buyer has a phone,
+   * else email, else nothing to do. Same event a person's "Send" raises, for the delivery adapter. Returns the channel, or null.
+   */
+  autoSendIn(tx: Tx, orgId: number, invoiceId: number): Promise<'whatsapp' | 'email' | null> {
+    return this.invoices.autoSendIn(tx, orgId, invoiceId);
   }
 
   /** Cancels the sales order of a channel order that was cancelled there; false when an invoice made from it is still live. */

@@ -29,7 +29,7 @@ describe('the store screens model (WD-ECOM-004, 009, 023)', () => {
   it('reads the tab from the address and falls back to the overview', () => {
     expect(parseTab('orders')).toBe('orders');
     expect(parseTab('events')).toBe('events');
-    expect(parseTab('invoices')).toBe('overview');
+    expect(parseTab('invoices')).toBe('invoices');
     expect(parseTab('nope')).toBe('overview');
     expect(parseTab(null)).toBe('overview');
   });

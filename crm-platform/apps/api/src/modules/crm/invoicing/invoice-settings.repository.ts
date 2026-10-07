@@ -73,6 +73,11 @@ const COLUMNS: Record<keyof SettingsPatch, string> = {
   defaultTaxRegime: 'default_tax_regime',
   overdueReminders: 'overdue_reminders',
 };
+export type EcomSource = 'shopify' | 'woocommerce';
+const ECOM_COLUMNS: Record<EcomSource, { auto: string; trigger: string }> = {
+  shopify: { auto: 'auto_send_shopify', trigger: 'trigger_shopify' },
+  woocommerce: { auto: 'auto_send_woocommerce', trigger: 'trigger_woocommerce' },
+};
 const JSON_COLUMNS = new Set<string>(['sellerExtra', 'bankDetails']);
 
 @Injectable()
@@ -135,6 +140,50 @@ export class InvoiceSettingsRepository {
     );
     const r = (res.rows as Raw[])[0];
     return { triggerOwn: s(r?.trigger_own) ?? 'on_paid', taxLabel: s(r?.tax_label) };
+  }
+
+  /**
+   * What the Shopify and WooCommerce hand-off reads (WD-ECOM-035): `auto_send_<source>` (the workspace's switch for invoicing a
+   * store's orders on its own), `trigger_<source>` (the event that does it) and the tax label. Defaults (off, `on_paid`) when the
+   * workspace never saved settings. The column names are constants of this file, never input.
+   */
+  async ecomOrderPolicy(
+    tx: Tx,
+    orgId: number,
+    source: EcomSource,
+  ): Promise<{ autoSend: boolean; trigger: string; taxLabel: string | null }> {
+    const auto = sql.raw(ECOM_COLUMNS[source].auto);
+    const trigger = sql.raw(ECOM_COLUMNS[source].trigger);
+    const res = await tx.execute(
+      sql`SELECT ${auto} AS auto_send, ${trigger} AS trigger, tax_label FROM invoice_settings WHERE org_id = ${orgId}`,
+    );
+    const r = (res.rows as Raw[])[0];
+    return {
+      autoSend: r?.auto_send === true,
+      trigger: s(r?.trigger) ?? 'on_paid',
+      taxLabel: s(r?.tax_label),
+    };
+  }
+
+  /** Writes the store's switch and trigger, creating the settings row on the first save. */
+  async setEcomOrderPolicy(
+    tx: Tx,
+    orgId: number,
+    source: EcomSource,
+    v: { autoSend?: boolean; trigger?: string },
+  ): Promise<void> {
+    await tx.execute(
+      sql`INSERT INTO invoice_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`,
+    );
+    const sets: SQL[] = [];
+    if (v.autoSend !== undefined)
+      sets.push(sql`${sql.raw(ECOM_COLUMNS[source].auto)} = ${v.autoSend}`);
+    if (v.trigger !== undefined)
+      sets.push(sql`${sql.raw(ECOM_COLUMNS[source].trigger)} = ${v.trigger}`);
+    if (sets.length === 0) return;
+    await tx.execute(
+      sql`UPDATE invoice_settings SET ${sql.join(sets, sql`, `)} WHERE org_id = ${orgId}`,
+    );
   }
 
   /** Creates the row on the first save (never on a read) and applies the patch to it, under a row lock. */
