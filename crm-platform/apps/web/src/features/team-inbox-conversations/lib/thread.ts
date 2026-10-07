@@ -90,6 +90,13 @@ export function pickMessage(old: MessageResponse, incoming: MessageResponse): Me
   };
 }
 
+/** A realtime copy of a template message carries no preview (only a thread read does): keep the one already held. */
+function withKnownPreview(old: MessageResponse, next: MessageResponse): MessageResponse {
+  const preview = old.template?.preview;
+  if (!preview || !next.template || next.template.preview) return next;
+  return { ...next, template: { ...next.template, preview } };
+}
+
 /** Adds messages that are not held yet, replaces those that are, and orders by seq. */
 export function mergeMessages(
   existing: MessageResponse[],
@@ -99,7 +106,7 @@ export function mergeMessages(
   const byId = new Map(existing.map((m) => [m.id, m]));
   for (const m of incoming) {
     const old = byId.get(m.id);
-    byId.set(m.id, old ? pickMessage(old, m) : m);
+    byId.set(m.id, old ? withKnownPreview(old, pickMessage(old, m)) : m);
   }
   return [...byId.values()].sort((a, b) => a.seq - b.seq);
 }

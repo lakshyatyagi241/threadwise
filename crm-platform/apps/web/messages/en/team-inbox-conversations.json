@@ -153,7 +153,16 @@
       "dismiss": "Dismiss",
       "noteLabel": "Internal note",
       "unknownAuthor": "A teammate",
-      "deleteNote": "Delete this note"
+      "deleteNote": "Delete this note",
+      "templateHeader": {
+        "image": "Image",
+        "video": "Video",
+        "document": "Document",
+        "location": "Location"
+      },
+      "templateCopyCode": "Copy code",
+      "templateButtonUnnamed": "Button",
+      "templateButtonPrefix": "Button: "
     },
     "media": {
       "openImage": "Open image {name}",

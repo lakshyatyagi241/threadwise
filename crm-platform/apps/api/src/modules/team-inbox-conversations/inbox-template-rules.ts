@@ -1,4 +1,10 @@
-import type { InboxTemplateBlockReason, InboxTemplateSlot } from '@crm/contracts';
+import type {
+  InboxTemplateBlockReason,
+  InboxTemplateSlot,
+  MessageTemplateButton,
+  MessageTemplateHeader,
+  MessageTemplatePreview,
+} from '@crm/contracts';
 import { tokensOf, type VariableMap } from '../message-templates';
 
 /**
@@ -119,4 +125,57 @@ export function cleanVariables(
 /** The body as the customer reads it: each `{{token}}` replaced by its value. A token without a value is left as written. */
 export function renderBody(body: string, variables: Record<string, string>): string {
   return body.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (m, t: string) => variables[t] ?? m);
+}
+
+/** The kind of a stored button as the bubble draws it. An OTP button is the copy-code button WhatsApp shows for a login code. */
+export function buttonTypeOf(raw: unknown): MessageTemplateButton['type'] {
+  switch (typeof raw === 'string' ? raw.toUpperCase() : '') {
+    case 'QUICK_REPLY':
+      return 'quick_reply';
+    case 'URL':
+      return 'url';
+    case 'PHONE_NUMBER':
+      return 'phone';
+    case 'COPY_CODE':
+    case 'OTP':
+      return 'copy_code';
+    default:
+      return 'other';
+  }
+}
+
+/** The buttons of a stored template in order, each with its kind and label (empty when the button has none, as a copy-code one). */
+export function previewButtonsOf(raw: unknown): MessageTemplateButton[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((b): MessageTemplateButton[] => {
+    if (!b || typeof b !== 'object') return [];
+    const o = b as Record<string, unknown>;
+    return [{ type: buttonTypeOf(o.type), text: typeof o.text === 'string' ? o.text : '' }];
+  });
+}
+
+const MEDIA_HEADERS: ReadonlySet<string> = new Set(['image', 'video', 'document', 'location']);
+
+/** The header as the bubble draws it: a media or location marker (never the file: it is not stored with the message), else its text, else none. */
+export function previewHeaderOf(
+  t: Pick<TemplateFacts, 'attachmentType' | 'header'>,
+): MessageTemplateHeader | null {
+  const attachment = (t.attachmentType ?? 'none').toLowerCase();
+  if (MEDIA_HEADERS.has(attachment)) {
+    return { format: attachment as MessageTemplateHeader['format'], text: null };
+  }
+  const text = t.header?.trim() ?? '';
+  return text === '' ? null : { format: 'text', text };
+}
+
+/** What the thread draws around a template message's body: read from the stored template, never from what was typed at send time. */
+export function templatePreviewOf(
+  t: Pick<TemplateFacts, 'attachmentType' | 'header' | 'buttons'> & { footer: string | null },
+): MessageTemplatePreview {
+  const footer = t.footer?.trim() ?? '';
+  return {
+    header: previewHeaderOf(t),
+    footer: footer === '' ? null : footer,
+    buttons: previewButtonsOf(t.buttons),
+  };
 }
