@@ -7,11 +7,14 @@ import type {
   WizardContactsQuery,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
+import { AppError } from '../../../common/errors/app-error';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { DatabaseService } from '../../../infra/db/database.service';
 import {
   collectRuleRefs,
   compileRules,
   contactConditions,
+  contactScopeCondition,
   countWithTimeout,
   loadRuleContext,
   whereOf,
@@ -25,10 +28,18 @@ import { VALID_NUMBER } from './wizard-audience.service';
  */
 @Injectable()
 export class WizardContactsService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly rbac: RbacService,
+  ) {}
 
   async page(q: WizardContactsQuery): Promise<WizardContactsPage> {
-    const { orgId } = RequestContextStore.require();
+    const ctx = RequestContextStore.require();
+    const { orgId } = ctx;
+    // The route is open to anyone who may create a broadcast; the table lists contact names, emails and numbers, so it also needs the
+    // right to read contacts, and shows only the contacts that right covers (own, team or all), like the Contact Hub.
+    const read = ctx.grants ? this.rbac.can(ctx.grants, 'record.contacts.read') : undefined;
+    if (!read?.allowed) throw AppError.forbidden('record.contacts.read');
     return this.db.tx(async (tx) => {
       let segment: SQL | undefined;
       if (q.rules) {
@@ -40,7 +51,7 @@ export class WizardContactsService {
         contactConditions(
           orgId,
           { includeArchived: false, tagMode: 'any', q: q.search || undefined, segment },
-          undefined,
+          contactScopeCondition(orgId, read.scope, ctx.userId ?? null),
         ),
       );
       const total = await countWithTimeout(tx, where);
