@@ -30,9 +30,9 @@ export function LimitsSection({ meters }: { meters: readonly UsageMeter[] }) {
   return (
     <section aria-labelledby="meters-title" className="space-y-3" data-testid="limits-section">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="meters-title" className="text-lg font-semibold">
+        <h3 id="meters-title" className="text-base font-semibold">
           {t('meters')}
-        </h2>
+        </h3>
         {unlimited > 0 && (
           <button
             type="button"

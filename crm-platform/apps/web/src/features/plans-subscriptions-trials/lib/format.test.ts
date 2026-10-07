@@ -15,6 +15,13 @@ const v = (over: Partial<PlanValidity>): PlanValidity => ({
   ...over,
 });
 
+describe('usage path', () => {
+  it('points at the usage section of the merged Plans pane', async () => {
+    const { USAGE_PATH } = await import('./format');
+    expect(USAGE_PATH).toBe('/account/plans#usage');
+  });
+});
+
 describe('top bar (TW-PLAN-013)', () => {
   it('shows the trial countdown, the ended notice or the renewal reminder, never two', () => {
     expect(barFor(v({ state: 'free_trial' }))).toBe('trial');

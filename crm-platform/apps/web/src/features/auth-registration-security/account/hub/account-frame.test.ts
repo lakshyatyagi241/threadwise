@@ -13,7 +13,7 @@ vi.mock('@/features/_registry/nav.generated', () => ({
     {
       id: 'wallet',
       group: 'settings',
-      labelKey: 'auth-registration-security.account.hub.tabs.branding',
+      labelKey: 'auth-registration-security.account.hub.tabs.profile',
       href: '/account/wallet',
       order: 30,
     },
@@ -56,11 +56,11 @@ describe('AccountFrame', () => {
 
   it('lists the panes in Reference order, with another domain’s pane from its nav entry', () => {
     const html = render('/account/profile');
-    const order = ['/account/profile', '/account/plans', '/account/wallet', '/account/branding'];
+    const order = ['/account/profile', '/account/plans', '/account/wallet'];
     const at = order.map((href) => html.indexOf(`href="${href}"`));
     expect(at.every((i) => i > -1)).toBe(true);
     expect([...at].sort((a, b) => a - b)).toEqual(at);
-    expect(html.indexOf('href="/account/security"')).toBeGreaterThan(at[3] as number);
+    expect(html.indexOf('href="/account/security"')).toBeGreaterThan(at[2] as number);
     expect(html.indexOf('href="/account/delete"')).toBeGreaterThan(
       html.indexOf('href="/account/security"'),
     );

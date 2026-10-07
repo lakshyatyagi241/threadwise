@@ -52,7 +52,7 @@ Everyone in the workspace can read the member list. Inviting, resetting password
 
 ## If something looks wrong
 
-- **The invite says all seats are in use.** Your plan's seat limit is reached. Remove someone who no longer needs access, or upgrade from [Plan and usage](help:plan-and-usage).
+- **The invite says all seats are in use.** Your plan's seat limit is reached. Remove someone who no longer needs access, or upgrade from [Plans](help:account-plans).
 - **The role you want is not in the list.** You can only hand out roles at or below your own, and a custom role only if you hold every permission in it.
 - **The invited person says the link no longer works.** Invite links work once and expire. Select **Resend invite** to send a fresh one.
 - **You cannot change your own role.** Ask another Owner or Admin. The workspace always keeps at least one Owner.

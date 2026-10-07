@@ -102,6 +102,7 @@ const nextConfig: NextConfig = {
       { source: '/register/verify', destination: '/verify-otp', permanent: false },
       { source: '/register/workspace', destination: '/onboarding', permanent: false },
       { source: '/register/plan', destination: '/onboarding', permanent: false },
+      { source: '/account/branding', destination: '/settings/message-footer', permanent: false },
       { source: '/account/suspended', destination: '/suspended', permanent: false },
       { source: '/account/verify-email', destination: '/verify-email-required', permanent: false },
       {
