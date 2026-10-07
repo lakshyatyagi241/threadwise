@@ -1,13 +1,7 @@
-import { settingsTile } from '../_registry/settings-types';
+import type { SettingsTile } from '../_registry/settings-types';
 
-/** The warmer prepares a WhatsApp number for sending, so it sits with the channels instead of in the Campaigns group (see `nav.ts`). */
-export const settings = [
-  settingsTile({
-    id: 'warmer',
-    section: 'channels',
-    href: '/warmer',
-    icon: 'whatsapp',
-    order: 15,
-    gates: { permission: 'sched.warmer.manage', app: 'unofficial_whatsapp' },
-  }),
-];
+/**
+ * The warmer has no Settings tile of its own: it is the "Warmer" tab of the Unofficial WhatsApp API area
+ * (`features/whatsapp-devices-baileys/settings.ts`), so both appear and disappear together (see `nav.ts`).
+ */
+export const settings: SettingsTile[] = [];

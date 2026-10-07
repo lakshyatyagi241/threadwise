@@ -65,6 +65,11 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "unofficial-whatsapp": {
+        "label": "Unofficial WhatsApp API",
+        "description": "Link a personal WhatsApp number by QR code and warm it up for safe sending.",
+        "keywords": "personal whatsapp, qr, pairing code, devices, baileys, warmer, warm up, unofficial"
+      },
       "warmer": {
         "label": "Warmer",
         "description": "Warm up your WhatsApp numbers so scheduled messages go out at a safe pace.",
