@@ -42,6 +42,8 @@ export const dashTotalsSchema = z.object({
   contactsDelivered: z.number().int(),
   /** Distinct conversations with an inbound message; equals `repliers`. May exceed `contactsMessaged` (replied without being messaged in this window). */
   contactsReplied: z.number().int(),
+  /** Distinct conversations with at least one flow run that finished (`flow_runs.status = 'completed'`) with `ended_at` in the window. */
+  contactsGoalCompleted: z.number().int(),
   /** Percent, one decimal. */
   deliverability: z.number(),
   readRate: z.number(),
@@ -72,11 +74,13 @@ export const dashFunnelSchema = z.object({
   ),
   /** The last stage's share. */
   endToEnd: z.number(),
-  /** Contact-based funnel (the Engagement funnel card): contacts messaged, delivered to, and replied. Percentages are of `messaged`. */
+  /** Contact-based funnel (the Engagement funnel card): contacts messaged, delivered to, replied, and goal completed (a flow finished). Percentages are of `messaged`. */
   contacts: z.object({
     messaged: z.number().int(),
     delivered: z.number().int(),
     replied: z.number().int(),
+    /** Contacts whose flow finished in the window (a completed flow run). */
+    goalCompleted: z.number().int(),
   }),
   /** Conversation activity under the funnel; `repliesPerContact` is replies / responding contacts, one decimal, null when nobody replied. */
   activity: z.object({

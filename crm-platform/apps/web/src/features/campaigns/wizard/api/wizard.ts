@@ -2,11 +2,14 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
+  WIZARD_CONTACT_PAGE_SIZES,
   wizardAudienceCountSchema,
   wizardAudienceSourcesSchema,
   wizardBroadcastDetailSchema,
   wizardBroadcastListSchema,
+  wizardContactsPageSchema,
   wizardControlResponseSchema,
+  wizardCsvReportSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
   wizardLaunchResultSchema,
@@ -15,10 +18,13 @@ import {
   wizardTestLogSchema,
   wizardTestSendResponseSchema,
   wizardVariablePreviewSchema,
+  type SegmentGroup,
   type WizardAudience,
+  type WizardCsvReport,
   type WizardVariables,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 import type { DraftPatch } from '../lib/state';
 import type { TestSendStatusLike } from '../lib/test-log';
 import { shouldPollTests } from '../lib/test-log';
@@ -214,3 +220,73 @@ export const controlBroadcast = (id: string, action: BroadcastAction) =>
     body: {},
     schema: wizardControlResponseSchema,
   });
+
+// ---------------------------------------------------------------------------------------- the audience modes
+
+export const PER_PAGE_CHOICES = WIZARD_CONTACT_PAGE_SIZES;
+
+/** One page of the contacts table, searched and filtered on the server. The previous page stays on screen while the next loads. */
+export function useWizardContacts(query: {
+  search: string;
+  rules: SegmentGroup | null;
+  page: number;
+  perPage: number;
+}) {
+  return useQuery({
+    queryKey: ['camp', 'wizard', 'contacts', query] as const,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/contacts/query`, {
+        method: 'POST',
+        body: {
+          search: query.search.trim() || null,
+          rules: query.rules,
+          page: query.page,
+          perPage: query.perPage,
+        },
+        schema: wizardContactsPageSchema,
+        signal,
+      }),
+    placeholderData: keepPreviousData,
+    retry: false,
+    staleTime: 10_000,
+  });
+}
+
+/** A stored CSV upload: counts, preview and the first rejected rows (read again after a reload, opted-out numbers live). */
+export function useCsvReport(id: string | null) {
+  return useQuery({
+    queryKey: ['camp', 'wizard', 'csv', id] as const,
+    enabled: id !== null,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/csv/${id}`, { schema: wizardCsvReportSchema, signal }),
+    retry: false,
+    staleTime: 30_000,
+  });
+}
+
+/** Uploads the CSV as multipart; the server parses and validates it and answers with the report. */
+export async function uploadCsv(file: File, signal?: AbortSignal): Promise<WizardCsvReport> {
+  const form = new FormData();
+  form.set('file', file);
+  const res = await fetch(`/api/v2${BASE}/csv`, {
+    method: 'POST',
+    body: form,
+    headers: { Accept: 'application/json', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+    signal,
+  });
+  const text = await res.text();
+  const json: unknown = text ? JSON.parse(text) : undefined;
+  if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  return wizardCsvReportSchema.parse(json);
+}
+
+/** The rejected rows of an upload, with line numbers, as the CSV the API builds. */
+export async function downloadCsvErrors(id: string): Promise<Blob> {
+  const res = await fetch(`/api/v2${BASE}/csv/${id}/errors`, {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) throw toApiError(res.status, undefined, res.headers.get('x-request-id'));
+  return res.blob();
+}

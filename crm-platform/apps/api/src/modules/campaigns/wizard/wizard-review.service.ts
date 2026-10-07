@@ -55,7 +55,16 @@ export class WizardReviewService {
     const res = await tx.execute(sql`
       SELECT coalesce(contacts.normalized_phone, contacts.phone) AS phone FROM contacts
       WHERE ${where} AND ${ELIGIBLE} ORDER BY contacts.id LIMIT ${GATE_PHONES}`);
-    return (res.rows as Array<{ phone: string | null }>).flatMap((r) => (r.phone ? [r.phone] : []));
+    const phones = (res.rows as Array<{ phone: string | null }>).flatMap((r) =>
+      r.phone ? [r.phone] : [],
+    );
+    // CSV numbers that are not contacts yet are part of the audience too: they price the send like any other.
+    if (phones.length < GATE_PHONES) {
+      phones.push(
+        ...(await this.audience.newCsvPhones(tx, orgId, audience, GATE_PHONES - phones.length)),
+      );
+    }
+    return phones;
   }
 
   /**

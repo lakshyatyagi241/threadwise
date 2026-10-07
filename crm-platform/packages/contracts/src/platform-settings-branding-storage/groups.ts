@@ -308,14 +308,6 @@ export const storageSettingsSchema = z.object({
   storageZone: text(191),
 });
 
-// --- WD-SET-041 -------------------------------------------------------------------------------
-export const realtimeSettingsSchema = z.object({
-  enabled: flag(false),
-  appId: text(64),
-  appKey: text(191),
-  cluster: z.string().trim().max(32).default('mt1'),
-});
-
 // --- WD-SET-038 (the VAPID key pair is generated, never typed: see the generate-keys endpoint) --
 export const tiPwaSettingsSchema = z.object({
   enabled: flag(false),
@@ -396,7 +388,6 @@ export const SET_GROUP_SCHEMAS = {
   customCode: customCodeSettingsSchema,
   pwa: pwaSettingsSchema,
   storage: storageSettingsSchema,
-  realtime: realtimeSettingsSchema,
   tiPwa: tiPwaSettingsSchema,
   whatsapp: whatsappSettingsSchema,
   campaigns: campaignsSettingsSchema,
@@ -419,7 +410,6 @@ export const SET_SECRET_FIELDS = {
   customCode: [],
   pwa: [],
   storage: ['secret', 'storagePassword'],
-  realtime: ['appSecret'],
   tiPwa: [],
   /** appSecret signs/verifies Meta calls; verifyToken is the webhook handshake token (blank: derived). */
   whatsapp: ['appSecret', 'verifyToken', 'partnerAuthKey', 'systemUserToken'],
@@ -430,10 +420,6 @@ export const SET_SECRET_FIELDS = {
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */
-export const SET_TESTABLE_GROUPS = [
-  'mail',
-  'storage',
-  'realtime',
-] as const satisfies readonly SetGroup[];
+export const SET_TESTABLE_GROUPS = ['mail', 'storage'] as const satisfies readonly SetGroup[];
 export type SetTestableGroup = (typeof SET_TESTABLE_GROUPS)[number];
 export type SetGroupValues<G extends SetGroup> = z.infer<(typeof SET_GROUP_SCHEMAS)[G]>;

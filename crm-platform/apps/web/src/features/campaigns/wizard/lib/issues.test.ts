@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { draft, NOW, uuid } from '../testing';
+import { audience, draft, NOW, uuid } from '../testing';
 import { issueFor, stepIssues, stepOfPath, unmappedSlots } from './issues';
 
 const ctx = { slots: ['body.1', 'body.2'], now: NOW };
@@ -15,7 +15,7 @@ describe('stepIssues', () => {
 
   it('step 2 needs a source, and blocks a known empty audience', () => {
     expect(stepIssues(2, draft(), ctx).map((i) => i.code)).toEqual(['audience_required']);
-    const d = draft({ audience: { groupIds: [uuid(11)], segmentIds: [], rules: null } });
+    const d = draft({ audience: audience({ groupIds: [uuid(11)] }) });
     expect(stepIssues(2, d, ctx)).toEqual([]);
     expect(stepIssues(2, d, { ...ctx, count: { recipients: 0 } }).map((i) => i.code)).toEqual([
       'no_recipients',
@@ -99,5 +99,12 @@ describe('stepOfPath', () => {
     expect(stepOfPath('schedule.date')).toBe(4);
     expect(stepOfPath('retries.endDate')).toBe(4);
     expect(stepOfPath('something.else')).toBe(4);
+  });
+});
+
+describe('step 3 when the balance cannot be checked', () => {
+  it('stops the broadcast: an unknown balance is not a sufficient one', () => {
+    const out = stepIssues(3, draft(), { slots: [], now: NOW, credit: null, creditFailed: true });
+    expect(out.map((i) => i.code)).toContain('balance_unavailable');
   });
 });

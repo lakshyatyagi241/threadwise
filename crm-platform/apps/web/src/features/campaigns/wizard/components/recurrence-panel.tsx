@@ -14,7 +14,7 @@ import {
 import { Alert, Field, Input, Select, cn } from '@crm/ui';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { ruleWithFrequency, timeZoneOptions, toggleWeekday, validRule } from '../lib/schedule';
-import { ChoiceCard } from './parts';
+import { DatePicker, TimePicker } from './pickers';
 import { useScheduleWords } from './use-words';
 
 const ENDS = ['never', 'on_date', 'after'] as const;
@@ -43,61 +43,59 @@ export function RecurrencePanel({
   const patch = (p: Partial<RecurrenceRule>) => onRule({ ...rule, ...p });
 
   return (
-    <div className="space-y-4 rounded-lg border border-border p-3">
+    <div className="space-y-4 rounded-xl border border-border bg-background p-5 shadow-sm">
+      <header className="border-b border-border pb-3">
+        <h3 className="text-base font-semibold">{t('recurringTitle')}</h3>
+        <p className="text-sm text-muted-foreground">{t('recurringHint')}</p>
+      </header>
       <div
         aria-live="polite"
-        className="rounded-md border border-brand/30 bg-brand/5 px-3 py-2 text-sm"
+        className="flex items-center gap-2.5 rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-brand-foreground"
         data-testid="recurrence-banner"
       >
-        {valid ? (
-          words.recurrence(valid)
-        ) : (
-          <span className="text-muted-foreground">{t('ruleIncomplete')}</span>
-        )}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          className="size-5 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="17" rx="2" />
+          <path d="M8 2v4M16 2v4M3 9h18" />
+          <path d="M15 15a3 3 0 1 1-1-2.2M15 11v2h-2" />
+        </svg>
+        {valid ? words.recurrence(valid) : <span>{t('ruleIncomplete')}</span>}
       </div>
       {ruleIssue && <Alert tone="danger">{ti(ruleIssue.code)}</Alert>}
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label={t('startDate')}
           htmlFor={`${uid}-start`}
           error={startIssue ? ti(startIssue.code) : undefined}
         >
-          <Input
+          <DatePicker
             id={`${uid}-start`}
-            type="date"
             value={rule.startDate}
             disabled={disabled}
             invalid={Boolean(startIssue)}
-            onChange={(e) => patch({ startDate: e.target.value })}
+            onChange={(startDate) => patch({ startDate })}
           />
         </Field>
         <Field label={t('timeOfDay')} htmlFor={`${uid}-time`}>
-          <Input
+          <TimePicker
             id={`${uid}-time`}
-            type="time"
             value={rule.timeOfDay}
             disabled={disabled}
-            onChange={(e) => patch({ timeOfDay: e.target.value })}
+            onChange={(timeOfDay) => patch({ timeOfDay })}
           />
-        </Field>
-        <Field label={t('timezone')} htmlFor={`${uid}-zone`}>
-          <Select
-            id={`${uid}-zone`}
-            value={rule.timezone}
-            disabled={disabled}
-            onChange={(e) => patch({ timezone: e.target.value })}
-          >
-            {timeZoneOptions(rule.timezone).map((z) => (
-              <option key={z} value={z}>
-                {z}
-              </option>
-            ))}
-          </Select>
         </Field>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field label={t('frequency')} htmlFor={`${uid}-freq`}>
           <Select
             id={`${uid}-freq`}
@@ -129,6 +127,23 @@ export function RecurrencePanel({
               {t(`unit.${rule.frequency}`, { count: Math.max(1, rule.interval) })}
             </span>
           </div>
+        </Field>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label={t('timezone')} htmlFor={`${uid}-zone`}>
+          <Select
+            id={`${uid}-zone`}
+            value={rule.timezone}
+            disabled={disabled}
+            onChange={(e) => patch({ timezone: e.target.value })}
+          >
+            {timeZoneOptions(rule.timezone).map((z) => (
+              <option key={z} value={z}>
+                {z}
+              </option>
+            ))}
+          </Select>
         </Field>
       </div>
 
@@ -186,65 +201,75 @@ export function RecurrencePanel({
         </Field>
       )}
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">{t('ends')}</legend>
-        <div className="grid gap-2 sm:grid-cols-3">
-          {ENDS.map((k) => (
-            <ChoiceCard
-              key={k}
-              type="radio"
-              name={`${uid}-ends`}
-              checked={rule.ends.kind === k}
-              disabled={disabled}
-              onChange={() =>
-                patch({
-                  ends:
-                    k === 'never'
-                      ? { kind: 'never' }
-                      : k === 'on_date'
-                        ? { kind: 'on_date', date: rule.startDate }
-                        : { kind: 'after', occurrences: 10 },
-                })
-              }
-              className="py-2"
-            >
-              {t(`endsKind.${k}`)}
-            </ChoiceCard>
-          ))}
-        </div>
-        {rule.ends.kind === 'on_date' && (
-          <Field label={t('endDate')} htmlFor={`${uid}-endd`}>
-            <Input
-              id={`${uid}-endd`}
-              type="date"
-              value={rule.ends.date}
-              min={rule.startDate}
-              disabled={disabled}
-              onChange={(e) => patch({ ends: { kind: 'on_date', date: e.target.value } })}
-            />
-          </Field>
-        )}
-        {rule.ends.kind === 'after' && (
-          <Field label={t('endAfter')} htmlFor={`${uid}-enda`}>
-            <Input
-              id={`${uid}-enda`}
-              type="number"
-              min={1}
-              max={RECURRENCE_AFTER_MAX}
-              value={rule.ends.occurrences || ''}
-              disabled={disabled}
-              className="w-28"
-              onChange={(e) =>
-                patch({
-                  ends: { kind: 'after', occurrences: Math.trunc(Number(e.target.value)) || 0 },
-                })
-              }
-            />
-          </Field>
-        )}
+      <fieldset className="space-y-3 rounded-lg bg-muted/40 p-4">
+        <legend className="sr-only">{t('ends')}</legend>
+        <p className="text-sm text-muted-foreground" aria-hidden="true">
+          {t('ends')}
+        </p>
+        {ENDS.map((k) => {
+          const picked = rule.ends.kind === k;
+          return (
+            <div key={k} className="flex min-h-9 flex-wrap items-center gap-3">
+              <label className="flex min-w-24 cursor-pointer items-center gap-2.5 text-sm font-medium">
+                <input
+                  type="radio"
+                  name={`${uid}-ends`}
+                  checked={picked}
+                  disabled={disabled}
+                  className="size-4 accent-brand"
+                  onChange={() =>
+                    patch({
+                      ends:
+                        k === 'never'
+                          ? { kind: 'never' }
+                          : k === 'on_date'
+                            ? { kind: 'on_date', date: rule.startDate }
+                            : { kind: 'after', occurrences: 10 },
+                    })
+                  }
+                />
+                {t(`endsKind.${k}`)}
+              </label>
+              {k === 'on_date' && (
+                <div className="w-44">
+                  <DatePicker
+                    id={`${uid}-endd`}
+                    value={rule.ends.kind === 'on_date' ? rule.ends.date : ''}
+                    min={rule.startDate}
+                    disabled={disabled || !picked}
+                    onChange={(date) => patch({ ends: { kind: 'on_date', date } })}
+                  />
+                </div>
+              )}
+              {k === 'after' && (
+                <>
+                  <Input
+                    id={`${uid}-enda`}
+                    type="number"
+                    aria-label={t('endAfter')}
+                    min={1}
+                    max={RECURRENCE_AFTER_MAX}
+                    value={rule.ends.kind === 'after' ? rule.ends.occurrences || '' : ''}
+                    disabled={disabled || !picked}
+                    className="w-24"
+                    onChange={(e) =>
+                      patch({
+                        ends: {
+                          kind: 'after',
+                          occurrences: Math.trunc(Number(e.target.value)) || 0,
+                        },
+                      })
+                    }
+                  />
+                  <span className="text-sm text-muted-foreground">{t('occurrences')}</span>
+                </>
+              )}
+            </div>
+          );
+        })}
       </fieldset>
 
-      <div>
+      <div className="rounded-lg border border-border p-4">
         <h3 className="text-sm font-semibold">{t('nextRuns')}</h3>
         {runs.length === 0 ? (
           <p className="text-sm text-muted-foreground">

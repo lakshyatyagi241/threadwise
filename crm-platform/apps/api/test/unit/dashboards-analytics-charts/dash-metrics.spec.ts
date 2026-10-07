@@ -20,6 +20,7 @@ const zero = {
   contactsMessaged: 0,
   contactsDelivered: 0,
   contactsReplied: 0,
+  contactsGoalCompleted: 0,
 };
 
 describe('metric rules (WD-DASH-002)', () => {
@@ -96,9 +97,10 @@ describe('contact-based funnel (Engagement funnel card)', () => {
       contactsMessaged: 31,
       contactsDelivered: 31,
       contactsReplied: 4,
+      contactsGoalCompleted: 3,
     });
     const f = funnelOf(cur);
-    expect(f.contacts).toEqual({ messaged: 31, delivered: 31, replied: 4 });
+    expect(f.contacts).toEqual({ messaged: 31, delivered: 31, replied: 4, goalCompleted: 3 });
     expect(f.activity).toEqual({ inbound: 27, respondingContacts: 4, repliesPerContact: 6.8 });
     expect(f.replyRate).toBe(12.9);
     expect(f.comparison).toBeNull(); // no previous window passed
