@@ -1,12 +1,22 @@
 'use client';
 
+import {
+  FLB_ASK_INPUT_LABELS,
+  FLB_ASK_INPUT_TYPES,
+  FLB_DATE_FORMATS,
+  flbAskInputWrongText,
+  flbCleanAskInputType,
+  flbCleanDateFormat,
+} from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import {
   Check,
   controlClass,
   Field,
   IconButton,
+  NumberInput,
   SelectInput,
   TextArea,
   TextInput,
@@ -162,23 +172,101 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
+  const feed = usePickerFeed();
+  // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
+  const checked =
+    flbCleanAskInputType(d.validate) !== 'text' && options.length === 0 && d.acceptMedia !== true;
   return (
     <>
       <Field label="Question">
         <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
       </Field>
-      <Field label="Validate as">
+      <Field
+        label="Validate as"
+        hint={
+          checked
+            ? 'The answer is checked before the flow goes on; a wrong one gets the message below.'
+            : 'Free text takes any answer.'
+        }
+      >
         <SelectInput
-          value={d.validate}
-          options={[
-            { v: 'text', l: 'Free text' },
-            { v: 'email', l: 'Email' },
-            { v: 'phone', l: 'Phone' },
-            { v: 'number', l: 'Number' },
-          ]}
+          value={flbCleanAskInputType(d.validate)}
+          options={FLB_ASK_INPUT_TYPES.map((v) => ({ v, l: FLB_ASK_INPUT_LABELS[v] }))}
           onChange={(v) => set('validate', v)}
         />
       </Field>
+      {checked ? (
+        <>
+          {flbCleanAskInputType(d.validate) === 'date' ? (
+            <Field
+              label="Date format"
+              hint="How the customer writes the date. It is saved as typed, with an ISO copy in the _iso variable."
+            >
+              <SelectInput
+                value={flbCleanDateFormat(d.dateFormat)}
+                options={FLB_DATE_FORMATS.map((v) => ({ v, l: v.toUpperCase() }))}
+                onChange={(v) => set('dateFormat', v)}
+              />
+            </Field>
+          ) : null}
+          <Field
+            label="Wrong-answer message"
+            hint="Leave blank to use a ready-made one for this type."
+          >
+            <TextArea
+              value={d.wrongReply}
+              rows={2}
+              placeholder={flbAskInputWrongText(flbCleanAskInputType(d.validate), d.dateFormat)}
+              onChange={(v) => set('wrongReply', v)}
+            />
+          </Field>
+          <Field
+            label="Stop after wrong answers"
+            hint="0 keeps asking until the answer is right (the run's idle limit still ends it)."
+          >
+            <NumberInput
+              value={d.retries}
+              min={0}
+              max={10}
+              onChange={(v) =>
+                set('retries', Number.isNaN(v) ? 0 : Math.min(10, Math.max(0, Math.trunc(v))))
+              }
+            />
+          </Field>
+          {Number(d.retries) > 0 ? (
+            <Field label="Then">
+              <SelectInput
+                value={d.onFail === 'end' ? 'end' : 'continue'}
+                options={[
+                  { v: 'continue', l: 'Carry on without an answer' },
+                  { v: 'end', l: 'End the flow' },
+                ]}
+                onChange={(v) => set('onFail', v)}
+              />
+            </Field>
+          ) : null}
+          <Field label="Also save on a contact property">
+            <Check checked={d.saveProperty === true} onChange={(x) => set('saveProperty', x)}>
+              Copy the answer to the contact
+            </Check>
+            {d.saveProperty === true ? (
+              <select
+                aria-label="Contact property"
+                value={typeof d.propertyKey === 'string' ? d.propertyKey : ''}
+                onChange={(e) => set('propertyKey', e.target.value)}
+                className={`${controlClass} mt-2`}
+              >
+                <option value="">Choose a property…</option>
+                {(feed.data?.custom ?? []).map((pr) => (
+                  <option key={pr.key} value={pr.key}>
+                    {pr.name}
+                  </option>
+                ))}
+              </select>
+            ) : null}
+          </Field>
+        </>
+      ) : null}
       <Field
         label="Save answer to variable"
         hint={
