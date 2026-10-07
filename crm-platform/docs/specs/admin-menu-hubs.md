@@ -1,7 +1,28 @@
 # Admin menu: hubs with tabs
 
-Status: steps 1 to 3 built on branch `lakshya/admin/menu-hubs` (2026-10-07), unit-tested, not yet run in a browser and not
-committed. Zone: `admin-console-shell` (owner: lakshya). Section 10 lists what changed from this plan while building it.
+Status: steps 1 to 3 are in PR #159 (branch `lakshya/admin/menu-hubs`, 2026-10-07); revision 2 (blocks and a left menu) is built on
+top of it, uncommitted. All of it is unit-tested and none of it has been run in a browser. Zone: `admin-console-shell` (owner: lakshya). Section 10 lists what changed from this plan while building it.
+
+## Revision 2 (2026-10-07): a left menu instead of a tab bar
+
+After a clickable mockup the owner asked for blocks on Home and a menu on the left once an area is open. This replaces the tab bar
+described in 4.3 and everything that depends on it. What changed:
+
+| Earlier in this document                       | Now                                                                                                             |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Rail with 11 hub entries, tab bar on each page | Home is a grid of 11 blocks and has no left rail on desktop. An open area shows its pages in a left menu        |
+| `hub-tabs.tsx`, "More" overflow, `MAX_TABS` 9  | `hub-menu.tsx` (back link, area switcher, grouped pages) and `rail-link.tsx`; `MAX_PAGES` 20 per area           |
+| `kind: 'tabs' \| 'index'`, Settings back link  | No `kind`. Settings is an area like the others; its overview page is the first item of its menu                 |
+| Small headings only in Settings tiles          | `heads` in the layout: group headings in the menu for Team and security (Roles, Security, Sign-in) and Settings |
+| Collapsed rail: one icon per hub               | Unchanged: collapsed, the rail shows one icon per area; expanded inside an area it shows that area's menu       |
+| Home: 11 cards with a sentence                 | Home blocks: icon tile, name, one line, and the page count                                                      |
+
+Unchanged: the 11 areas and their pages, every address, the role table, search, the route-coverage test, label fixes, and the
+rule that a page belongs to exactly one area. On a phone the drawer shows the areas list on Home and the area menu inside an area.
+Away from an area (Your account, the notification page) the rail lists Home and all areas. Pages outside every area (for example
+`/admin/update`) show that same list.
+
+Not verified in a browser (see section 10): neither the blocks nor the left menu have been looked at in a running app.
 
 ## 1. Why
 

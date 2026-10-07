@@ -31,7 +31,7 @@ describe('buildSearchIndex', () => {
       id: 'billing',
       labelKey: 'k.billing',
       children: [
-        { id: 'orders', href: '/admin/order-history', labelKey: 'k.orders' },
+        { id: 'orders', href: '/admin/order-history', labelKey: 'k.orders', captionKey: 'k.cap' },
         { id: 'invoices', href: '/admin/invoices', labelKey: 'k.invoices' },
         { id: 'module-x-reports', href: '/admin/reports', labelKey: '', label: 'Reports' },
       ],
@@ -45,9 +45,10 @@ describe('buildSearchIndex', () => {
     expect(index[0]).toMatchObject({ label: 'T(k.overview)', section: '', caption: '' });
   });
 
-  it('labels each page with the hub it sits in, so a tab is found as "Billing > Invoices"', () => {
-    expect(index[1]).toMatchObject({ section: 'T(k.billing)', caption: '' });
-    expect(index[2]).toMatchObject({ section: 'T(k.billing)' });
+  it('gives each page its hub and the heading of the group it belongs to', () => {
+    expect(index[1]).toMatchObject({ section: 'T(k.billing)', caption: 'T(k.cap)' });
+    // Only the first page of a group carries the heading key; the rest keep the group they follow.
+    expect(index[2]).toMatchObject({ caption: 'T(k.cap)' });
   });
 
   it('uses the literal label of a module page', () => {
