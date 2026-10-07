@@ -70,6 +70,7 @@ import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gatewa
 import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { WebhookFanoutModule } from './modules/webhook-fanout';
+import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
@@ -209,6 +210,7 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,
+    OutboundWebhooksModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,
