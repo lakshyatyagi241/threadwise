@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { timezoneList } from '@/lib/timezones';
 import { Input, Select, cn } from '@crm/ui';
 import type { ScheduleType } from '../lib/compose-model';
 
@@ -31,11 +32,7 @@ export function ScheduleSection({
   onTimezone: (v: string) => void;
 }) {
   const t = useTranslations('broadcasts.compose');
-  const zones = useMemo(() => {
-    const all =
-      typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
-    return all.includes(timezone) ? all : [timezone, ...all];
-  }, [timezone]);
+  const zones = useMemo(() => timezoneList(timezone), [timezone]);
 
   const card = (value: ScheduleType, title: string, hint: string) => (
     <label
