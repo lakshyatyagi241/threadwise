@@ -1,4 +1,4 @@
-import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, Optional, type OnModuleInit } from '@nestjs/common';
 import { and, eq, inArray, or, sql } from 'drizzle-orm';
 import { schema } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -7,7 +7,8 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { NotificationsRepository } from './notifications.repository';
+import { NotificationPublisher } from './notification.publisher';
+import { NotificationsRepository, type WrittenNotification } from './notifications.repository';
 import {
   TASK_NOTIFY_EVENTS,
   copyFor,
@@ -48,6 +49,7 @@ export class TaskNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     private readonly db: DatabaseService,
     private readonly repo: NotificationsRepository,
     private readonly registry: OutboxSubscriberRegistry,
+    @Optional() private readonly publisher?: NotificationPublisher,
   ) {}
 
   onModuleInit(): void {
@@ -61,6 +63,7 @@ export class TaskNotificationConsumer implements OutboxSubscriber, OnModuleInit 
     const taskUuid = str(p.uuid);
     if (!taskUuid) return;
 
+    const pending: WrittenNotification[] = [];
     await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       // The people the event names, plus the actor (an internal id in `_meta`), resolved in one query.
       const ids = [str(p.assigneeId), str(p.createdById)].filter((v): v is string => v !== null);
@@ -108,7 +111,7 @@ export class TaskNotificationConsumer implements OutboxSubscriber, OnModuleInit 
       if (eventType === 'task.assigned' && now.assignee_uuid !== recipient.userUuid) return;
 
       const copy = copyFor(recipient.type, facts.taskTitle, actor?.full_name ?? null);
-      const written = await this.repo.insertOnce(tx, event.orgId, {
+      const written = await this.repo.insertReturning(tx, event.orgId, {
         userId: Number(user.id),
         type: recipient.type,
         title: copy.title,
@@ -123,11 +126,14 @@ export class TaskNotificationConsumer implements OutboxSubscriber, OnModuleInit 
         dedupeKey: dedupeKeyFor(eventType, event.id),
       });
       if (written) {
+        pending.push(written);
         this.logger.debug(
           { orgId: event.orgId, type: recipient.type, eventId: event.id },
           'task notification written',
         );
       }
     });
+    // After the commit, so the unread total the push carries includes the row.
+    for (const row of pending) await this.publisher?.created(event.orgId, row);
   }
 }
