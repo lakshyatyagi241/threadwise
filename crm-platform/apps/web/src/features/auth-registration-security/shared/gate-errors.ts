@@ -3,18 +3,20 @@ import { ApiError } from '@/lib/api/errors';
 import { GATE_ROUTES, pathOf } from './gate-routes';
 
 /**
- * The API refuses a gated account with one of four problem+json codes. Any
+ * The API refuses a gated account with one of five problem+json codes. Any
  * screen that calls the API can run its errors through these helpers to send
  * the person to the screen that resolves the gate, instead of showing a
  * generic failure.
  *
  *   AUTH_ACCOUNT_SUSPENDED          -> /suspended
+ *   WSP_ORG_SUSPENDED               -> /suspended (the whole workspace is suspended by the platform)
  *   AUTH_PASSWORD_CHANGE_REQUIRED   -> /account/security?required=password
  *   AUTH_MFA_ENROLMENT_REQUIRED     -> /account/security?required=mfa
  *   AUTH_EMAIL_UNVERIFIED           -> /verify-email-required
  */
 const TARGETS: Readonly<Record<string, string>> = {
   [ERROR_CODES.AUTH_ACCOUNT_SUSPENDED]: GATE_ROUTES.suspended,
+  [ERROR_CODES.WSP_ORG_SUSPENDED]: GATE_ROUTES.suspended,
   [ERROR_CODES.AUTH_PASSWORD_CHANGE_REQUIRED]: GATE_ROUTES.passwordRequired,
   [ERROR_CODES.AUTH_MFA_ENROLMENT_REQUIRED]: GATE_ROUTES.mfaRequired,
   [ERROR_CODES.AUTH_EMAIL_UNVERIFIED]: GATE_ROUTES.verifyEmail,

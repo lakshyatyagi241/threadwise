@@ -127,11 +127,29 @@ export class AuthAuditService {
     const actorType = input.actorType ?? ctx?.actorType ?? 'system';
     const actorId = input.actorId ?? ctx?.actorId ?? null;
     const ip = normalizeIp(ctx?.ip);
-    const payload = JSON.stringify(redact(input.payload ?? {}));
+    // An act-as request (operator inside a workspace): the platform-wide stream records the OPERATOR as the actor and the owner
+    // they acted as in the payload; the workspace's own trail below keeps the owner as the actor, stamped with the operator by the
+    // audit_log trigger. Both actor ids are on the record either way.
+    // Callers name the actor explicitly (`actorType: 'user'`), so the rule is "the actor is the person this request is acting as", not
+    // "the caller left the actor out".
+    const imp =
+      ctx?.impersonation && actorType === 'user' && actorId === ctx.userId
+        ? ctx.impersonation
+        : undefined;
+    const payload = JSON.stringify(
+      redact(
+        imp
+          ? {
+              ...(input.payload ?? {}),
+              impersonation: { sessionId: imp.sessionId, asUserId: actorId },
+            }
+          : (input.payload ?? {}),
+      ),
+    );
 
     await tx.execute(sql`
       INSERT INTO security_events (subject_org_id, actor_type, actor_id, event, status, ip, user_agent, request_id, payload)
-      VALUES (${orgId}, ${actorType}, ${actorId}, ${input.event}, ${input.status},
+      VALUES (${orgId}, ${imp ? 'platform_operator' : actorType}, ${imp ? imp.operatorId : actorId}, ${input.event}, ${input.status},
               ${ip}::inet, ${ctx?.userAgent ?? null}, ${ctx?.requestId ?? null}, ${payload}::jsonb)
     `);
 
