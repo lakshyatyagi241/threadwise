@@ -54,6 +54,13 @@ export const REALTIME_EVENT = {
   channelStatus: 'inbox.channel.status',
   /** The workspace wallet's balance moved (a message charge, a refund, a top-up, an adjustment). */
   walletUpdated: 'wallet.updated',
+  /**
+   * A bell row was written for this person (any type: a message, an assignment, a mention, a task, a lead, a form, the wallet).
+   * Room `user`. The event is a hint: it carries the new unread total and ids, never text; the client refetches the feed.
+   */
+  notificationCreated: 'notification.created',
+  /** The person's unread rows were marked read (here or on another tab or device): every open tab converges. Room `user`. */
+  notificationRead: 'notification.read',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -107,6 +114,24 @@ export const realtimeEventSchemas = {
   [REALTIME_EVENT.walletUpdated]: z.object({
     balanceMinor: z.number().int(),
     reason: z.enum(['charge', 'refund', 'topup', 'adjustment']),
+  }),
+  [REALTIME_EVENT.notificationCreated]: z.object({
+    notificationId: uuidSchema,
+    /** A NotificationType today; a plain string so a newer server's type does not break an older client. */
+    type: z.string().min(1),
+    /** The person's true unread total after this row: the badge shows it as is. */
+    unread: z.number().int().nonnegative(),
+    subjectKind: z.string().nullable(),
+    subjectId: uuidSchema.nullable(),
+    /** The row replaced an earlier unread row of the same chat (its count went up). */
+    collapsed: z.boolean(),
+    /** Update the bell but do not toast or ping: a burst inside the throttle window, a team-wide assignment. */
+    silent: z.boolean(),
+  }),
+  [REALTIME_EVENT.notificationRead]: z.object({
+    unread: z.number().int().nonnegative(),
+    /** The rows that were marked read, or `all`. */
+    notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
   }),
 } as const;
 

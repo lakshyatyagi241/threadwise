@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConversationNotificationConsumer } from './conversation-notification.consumer';
+import { ConversationReadState } from './conversation-read-state';
+import { NotificationPrefsResolver } from './notification-prefs.resolver';
+import { NotificationPublisher } from './notification.publisher';
 import { NotificationsRepository } from './notifications.repository';
 import { SalesDocNotificationConsumer } from './salesdoc-notification.consumer';
 import { TaskNotificationConsumer } from './task-notification.consumer';
@@ -8,6 +12,14 @@ import { TaskNotificationConsumer } from './task-notification.consumer';
  * registers itself with the kernel's OutboxSubscriberRegistry, which the drain loop in that process fans events out to.
  */
 @Module({
-  providers: [NotificationsRepository, TaskNotificationConsumer, SalesDocNotificationConsumer],
+  providers: [
+    NotificationsRepository,
+    NotificationPublisher,
+    NotificationPrefsResolver,
+    ConversationReadState,
+    TaskNotificationConsumer,
+    SalesDocNotificationConsumer,
+    ConversationNotificationConsumer,
+  ],
 })
 export class NotificationsWorkerModule {}

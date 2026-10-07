@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { MESSAGE_RECEIVED_EVENT, NOTIFICATION_PREVIEW_MAX } from '@crm/contracts';
+import type { MessageReceivedPayload } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { notifyConfig } from '../../config/domains/notifications.env';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { ChannelRow } from './channels.repository';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
+import { isPhoneChannel } from './peer-key';
 
 export const CONVERSATIONS_MODULE = 'conversations';
 
@@ -70,6 +74,44 @@ export class ConversationLifecycleService {
     });
   }
 
+  /**
+   * A customer's message was stored: the one per-message outbox event, read by the conversation notifications (BL-096). Written in the
+   * ingest transaction, so a message that committed always has its event and a rolled-back one has none. The event carries ids and an
+   * 80-character preview, never the body. Skipped (nothing written) while `NOTIFY_CONVERSATIONS_ENABLED` is off, so the outbox does not
+   * grow with events nobody reads.
+   *
+   * This is the exception to "messages never come through here": it is one small row per inbound message (no receipts, no outbound), and
+   * the notification must not be lost if the process dies between the commit and a direct call.
+   */
+  async messageReceived(
+    tx: Tx,
+    orgId: number,
+    channel: ChannelRow,
+    conv: ConversationRow,
+    message: { uuid: string; preview: string | null },
+    facts: { firstInbound: boolean; group: boolean; at: string },
+  ): Promise<void> {
+    if (!notifyConfig().conversationsEnabled) return;
+    const payload: MessageReceivedPayload = {
+      conversationId: conv.uuid,
+      messageId: message.uuid,
+      channelId: channel.uuid,
+      channelKind: channel.kind,
+      firstInbound: facts.firstInbound,
+      group: facts.group,
+      preview: (message.preview ?? '').slice(0, NOTIFICATION_PREVIEW_MAX),
+      contactName: notificationNameOf(channel.kind, conv, facts.group),
+      at: facts.at,
+    };
+    await this.outbox.emit(tx, {
+      aggregateModule: CONVERSATIONS_MODULE,
+      aggregateId: conv.id,
+      eventType: MESSAGE_RECEIVED_EVENT,
+      payload: { ...payload },
+      orgId,
+    });
+  }
+
   /** The first human answer the provider accepted: the SLA's first-response moment. */
   async firstResponse(
     tx: Tx,
@@ -103,4 +145,19 @@ export class ConversationLifecycleService {
       needsContact: conv.needsContact,
     };
   }
+}
+
+/**
+ * What a notification calls the sender: the sender's own name; a group's title; else, for a phone channel, the last four digits
+ * (decision D4: a bare number is not put in a notification); else null and the client falls back to the channel's name.
+ */
+export function notificationNameOf(
+  channelKind: string,
+  conv: Pick<ConversationRow, 'peerName' | 'peerKey' | 'title'>,
+  group: boolean,
+): string | null {
+  if (group) return conv.title.trim() || null;
+  const name = conv.peerName?.trim();
+  if (name) return name.slice(0, 200);
+  return isPhoneChannel(channelKind) ? `…${conv.peerKey.slice(-4)}` : null;
 }
