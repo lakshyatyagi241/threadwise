@@ -74,6 +74,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
+import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
 import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
@@ -167,6 +168,7 @@ import { HealthModule } from './health/health.module';
     AiKeysUsageAdminModule,
     AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
+    WhatsappDevicesBaileysModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
     FlowBuilderEditorModule,

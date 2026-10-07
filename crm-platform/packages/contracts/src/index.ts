@@ -64,6 +64,7 @@ export * from './webhook-fanout';
 export * from './whatsapp-cloud-api-waba';
 export * from './message-templates';
 export * from './node-bridge-runtime';
+export * from './whatsapp-devices-baileys';
 export * from './realtime';
 export * from './chat-conversations';
 export * from './team-inbox-conversations';
