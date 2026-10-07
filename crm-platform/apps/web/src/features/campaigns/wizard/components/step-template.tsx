@@ -57,88 +57,88 @@ export function StepTemplate({
   const senderIssue = issueFor(issues, 'senderKey');
   return (
     <div className="grid items-start gap-6 lg:grid-cols-2">
-      <div className="min-w-0 space-y-4">
-        <WizardCard title={t('nameCardTitle')} hint={t('nameHint')}>
-          <Field
-            label={t('nameLabel')}
-            htmlFor="wizard-name"
-            error={nameIssue ? ti(nameIssue.code) : undefined}
-          >
-            <Input
-              id="wizard-name"
-              value={name}
-              maxLength={WIZARD_NAME_MAX}
-              disabled={disabled}
-              invalid={Boolean(nameIssue)}
-              autoComplete="off"
-              onChange={(e) => onName(e.target.value)}
-              placeholder={t('namePlaceholder')}
-            />
-          </Field>
-          <p className="mt-1.5 text-end text-xs text-muted-foreground" aria-hidden="true">
-            {t('nameCount', { used: name.length, max: WIZARD_NAME_MAX })}
-          </p>
-        </WizardCard>
-
-        <WizardCard title={t('templateCardTitle')} hint={t('pickHint')}>
-          {templates.isPending ? (
-            <Skeleton label={t('loading')} lines={2} />
-          ) : templates.isError ? (
-            <ErrorBlock error={templates.error} onRetry={() => void templates.refetch()} />
-          ) : !list || list.length === 0 ? (
-            <EmptyState
-              title={t('emptyTitle')}
-              message={t('emptyHint')}
-              actions={
-                <Link
-                  href="/templates"
-                  className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90"
+      <div className="min-w-0 space-y-3">
+        <WizardCard title={t('detailsTitle')}>
+          <div className="space-y-4">
+            <Field
+              label={t('nameLabel')}
+              htmlFor="wizard-name"
+              hint={t('nameHint')}
+              error={nameIssue ? ti(nameIssue.code) : undefined}
+            >
+              <Input
+                id="wizard-name"
+                value={name}
+                maxLength={WIZARD_NAME_MAX}
+                disabled={disabled}
+                invalid={Boolean(nameIssue)}
+                autoComplete="off"
+                onChange={(e) => onName(e.target.value)}
+                placeholder={t('namePlaceholder')}
+              />
+            </Field>
+            {templates.isPending ? (
+              <Skeleton label={t('loading')} lines={2} />
+            ) : templates.isError ? (
+              <ErrorBlock error={templates.error} onRetry={() => void templates.refetch()} />
+            ) : !list || list.length === 0 ? (
+              <EmptyState
+                title={t('emptyTitle')}
+                message={t('emptyHint')}
+                actions={
+                  <Link
+                    href="/templates"
+                    className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90"
+                  >
+                    {t('createTemplate')}
+                  </Link>
+                }
+              />
+            ) : (
+              <>
+                <Field
+                  label={t('pickTitle')}
+                  htmlFor="wizard-template"
+                  hint={t('pickHint')}
+                  error={tplIssue ? ti(tplIssue.code) : undefined}
                 >
-                  {t('createTemplate')}
-                </Link>
-              }
-            />
-          ) : (
-            <div className="space-y-3">
-              <Field
-                label={t('pickTitle')}
-                htmlFor="wizard-template"
-                error={tplIssue ? ti(tplIssue.code) : undefined}
-              >
-                <Select
-                  id="wizard-template"
-                  value={templateId ?? ''}
-                  disabled={disabled}
-                  invalid={Boolean(tplIssue)}
-                  onChange={(e) => {
-                    const picked = list.find((x) => x.id === e.target.value);
-                    if (picked) onTemplate(picked);
-                  }}
-                >
-                  {!selected && <option value="">{t('pickPlaceholder')}</option>}
-                  {list.map((tpl) => (
-                    <option key={tpl.id} value={tpl.id}>
-                      {tpl.name} ({tpl.language})
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              {selected && (
-                <div
-                  data-testid="template-summary"
-                  className="space-y-2 rounded-lg border border-border bg-muted/40 p-3"
-                >
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <Chip>{selected.language}</Chip>
-                    <Chip tone="brand">{tc(selected.category)}</Chip>
-                    <Chip>{t('chipVariables', { count: selected.slots.length })}</Chip>
-                    <Chip>{t('chipButtons', { count: selected.buttons.length })}</Chip>
+                  <Select
+                    id="wizard-template"
+                    value={templateId ?? ''}
+                    disabled={disabled}
+                    invalid={Boolean(tplIssue)}
+                    onChange={(e) => {
+                      const picked = list.find((x) => x.id === e.target.value);
+                      if (picked) onTemplate(picked);
+                    }}
+                  >
+                    {!selected && <option value="">{t('pickPlaceholder')}</option>}
+                    {list.map((tpl) => (
+                      <option key={tpl.id} value={tpl.id}>
+                        {tpl.name} ({tpl.language})
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                {selected && (
+                  <div
+                    data-testid="template-summary"
+                    className="space-y-2 rounded-lg border border-border bg-muted/40 p-3"
+                  >
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <Chip>{selected.language}</Chip>
+                      <Chip tone="brand">{tc(selected.category)}</Chip>
+                      <Chip>{t('chipVariables', { count: selected.slots.length })}</Chip>
+                      <Chip>{t('chipButtons', { count: selected.buttons.length })}</Chip>
+                    </div>
+                    <p className="line-clamp-2 text-sm text-muted-foreground">
+                      {snippet(selected.body)}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">{snippet(selected.body)}</p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </>
+            )}
+          </div>
         </WizardCard>
 
         {noSender || senderIssue ? (
