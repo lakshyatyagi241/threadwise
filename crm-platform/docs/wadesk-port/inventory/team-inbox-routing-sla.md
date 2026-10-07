@@ -1274,3 +1274,20 @@ Connections: **TIB1** (conversation columns, queue poll host, kanban, bulk toolb
 which any edit bumps). `conversations` now carries `waiting_since` (the start of the current wait for a human answer) and `msg_seq`; the
 partial due-date indexes for the sweeps are in `20261014100000_chat_conversation_reshape.sql`. See
 [docs/api/chat-conversations.md](../../api/chat-conversations.md).
+
+## Port note: auto-assignment rules (2026-10-07)
+
+Built: WD-TIB2-004, 005, 006, 007, 008, 009 (the manager modal is a page, `/auto-assignment`, with a form page) and, for the **assign** action only, 010, 011, 012, 013, 020.
+See [docs/api/team-inbox-routing-sla.md](../../api/team-inbox-routing-sla.md#auto-assignment-routing-rules-wd-tib2-004-to-011-020-assign-action-only).
+Not built (the rows stay in-progress): the actions `set_priority`, `add_tag`, `mark_spam`, `set_sla`, `assign_agent`, `auto_reply`, `trigger_flow`, `set_escalation`
+(WD-TIB2-014 to 018); the `sticky` and team-`strategy` assignment and capacity (020); follow-up filtering (rules only act on a new or reopened conversation); the
+`priority`, `time_of_day`/`day_of_week` and `incoming_device` conditions; business hours settings (001), SLA, snooze, reports.
+
+Additions beyond the inventory (parity deviations, decided by the owner's request):
+- Strategies `least_busy` and `specific` on a set of people and teams (WaDesk's only assign actions were `assign_team`/`assign_user`).
+- The `contact` condition (the shared segment rule builder over contact fields and tags), `keywords` any/all, `languages` (from the translation reading), `channelKinds`.
+- Real priority (`sort`) with a reorder endpoint and up/down buttons; duplicate; one fallback only; rules saved switched off ("Save" vs "Save and Activate").
+- Description of a rule (stored as a `note` action); read needs `inbox.settings.read` (WaDesk: every member), write `inbox.routing.manage`.
+- Rule-driven assignment emits the timeline event (actor `system`), audit, the `conversation.assigned` outbox event and realtime, as the inventory's port notes recommended.
+- "Keep returning contacts with their agent" (`workspace_settings.routing_keep_contact_agent`).
+- With `stop_on_match` off, a later firing rule reassigns (parity with WaDesk's sequential actions).

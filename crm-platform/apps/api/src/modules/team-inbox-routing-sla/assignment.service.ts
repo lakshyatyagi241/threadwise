@@ -48,6 +48,12 @@ export interface AssignmentChange {
   afterUuids: { userId: string | null; teamId: string | null };
 }
 
+/**
+ * How the person was chosen, for the timeline: `manual` is a human's choice; the others are the routing engine's (a rule's strategy,
+ * or `contact_agent` for "keep returning contacts with their agent").
+ */
+export type AssignmentHow = 'manual' | 'round_robin' | 'least_busy' | 'specific' | 'contact_agent';
+
 /** Who is assigning, for the timeline and the audit: a person, or the system (routing rules, escalation, flows, later). */
 export type AssignmentActor =
   { kind: 'user'; userId: number } | { kind: 'system' | 'bot' | 'flow' };
@@ -215,7 +221,9 @@ export class AssignmentService {
       teamUuid: string | null;
     },
     actor: AssignmentActor,
-    strategy: 'manual' = 'manual',
+    strategy: AssignmentHow = 'manual',
+    /** More facts for the timeline event and the outbox event (the routing rule that decided). Uuids only. */
+    meta: Record<string, unknown> = {},
   ): Promise<AssignmentChange> {
     const before = await this.summaryIds(tx, orgId, locked);
     const humanAssigned = next.userId !== null || next.teamId !== null;
@@ -247,6 +255,7 @@ export class AssignmentService {
       fromTeamId: before.teamUuid,
       toTeamId: next.teamUuid,
       strategy,
+      ...meta,
     };
     await this.events.append(tx, orgId, {
       conversationId: locked.id,

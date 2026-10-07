@@ -153,6 +153,7 @@ export class InboundIngestService {
             peerKey,
             peerName: result.conv.peerName,
             createdConversation: result.createdConversation,
+            reopenedFrom: result.reopenedFrom,
             message: {
               kind: m.kind,
               body: result.message.body,
