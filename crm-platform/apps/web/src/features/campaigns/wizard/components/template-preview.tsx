@@ -36,8 +36,8 @@ export function TemplatePreview({
   return (
     <div
       className={cn(
-        'space-y-3 rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted p-4',
-        !compact && 'lg:sticky lg:top-4',
+        'rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted p-4',
+        compact ? 'flex min-h-[26rem] flex-1 flex-col gap-3' : 'space-y-3 lg:sticky lg:top-4',
       )}
     >
       <h2 className="flex items-center gap-2 text-sm font-semibold">
@@ -49,9 +49,7 @@ export function TemplatePreview({
         data-testid="phone-preview"
         className={cn(
           'mx-auto flex w-full max-w-[340px] flex-col overflow-hidden rounded-[2rem] border-[6px] border-neutral-800 bg-[#ece5dd] shadow-xl',
-          compact
-            ? 'h-[clamp(200px,calc(100dvh-39rem),520px)]'
-            : 'h-[clamp(340px,calc(100vh-390px),600px)]',
+          compact ? 'min-h-0 flex-1' : 'h-[clamp(340px,calc(100vh-390px),600px)]',
         )}
       >
         <header className="flex items-center gap-3 bg-[#075e54] px-3 py-2.5 text-white">
