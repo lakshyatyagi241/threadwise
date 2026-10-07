@@ -157,7 +157,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
     ...users.map((u) => ({
       id: u.id,
       label: u.name ?? u.email,
-      note: t(`availability.${u.availability}`, { open: u.openConversations }),
+      note: t('openCount', { open: u.openConversations }),
       kind: 'user' as const,
     })),
     ...teams.map((tm) => ({

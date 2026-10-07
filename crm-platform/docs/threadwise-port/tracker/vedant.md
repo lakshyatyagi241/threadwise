@@ -303,23 +303,23 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-TIB2-001 | todo |  |  |
 | TW-TIB2-002 | todo |  |  |
 | TW-TIB2-003 | todo |  |  |
-| TW-TIB2-004 | todo |  |  |
-| TW-TIB2-005 | todo |  |  |
-| TW-TIB2-006 | todo |  |  |
-| TW-TIB2-007 | todo |  |  |
-| TW-TIB2-008 | todo |  |  |
-| TW-TIB2-009 | todo |  |  |
-| TW-TIB2-010 | todo |  |  |
-| TW-TIB2-011 | todo |  |  |
-| TW-TIB2-012 | todo |  |  |
-| TW-TIB2-013 | todo |  |  |
+| TW-TIB2-004 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-005 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-006 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-007 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-008 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-009 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| TW-TIB2-010 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| TW-TIB2-011 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| TW-TIB2-012 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| TW-TIB2-013 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | TW-TIB2-014 | todo |  |  |
 | TW-TIB2-015 | todo |  |  |
 | TW-TIB2-016 | todo |  |  |
 | TW-TIB2-017 | todo |  |  |
 | TW-TIB2-018 | todo |  |  |
 | TW-TIB2-019 | todo |  |  |
-| TW-TIB2-020 | todo |  |  |
+| TW-TIB2-020 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | TW-TIB2-021 | todo |  |  |
 | TW-TIB2-022 | todo |  |  |
 | TW-TIB2-023 | todo |  |  |
