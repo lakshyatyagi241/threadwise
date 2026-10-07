@@ -380,6 +380,10 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
       res.body.types.map((x: { key: string; count: number }) => [x.key, x.count]),
     );
     expect(m).toEqual({ text: 1006, template: 3, media: 1 });
+    // Delivered per type: never above the type's sent, and the types add up to the window's delivered total.
+    const rows = res.body.types as Array<{ count: number; delivered: number }>;
+    for (const r of rows) expect(r.delivered).toBeLessThanOrEqual(r.count);
+    expect(rows.reduce((a, r) => a + r.delivered, 0)).toBe(res.body.current.delivered);
   });
 
   it('WD-DASH-031: the heatmap is 7 x 24 and counts every message of the window', async () => {
