@@ -16,7 +16,10 @@ export function senderDigits(countryCode: string | null, phone: string | null): 
   if (local === '') return '';
   if ((phone ?? '').trim().startsWith('+')) return local;
   const cc = digits(countryCode);
-  return cc !== '' && !local.startsWith(cc) ? `${cc}${local}` : local;
+  // The local number already carries its country code only when removing it still leaves a whole number (9 or more digits, Reference's own
+  // rule when it stores a number): a 10-digit number that merely begins with the country code (91 9123456789) is NOT one.
+  const carriesCode = local.startsWith(cc) && local.length - cc.length >= 9;
+  return cc !== '' && !carriesCode ? `${cc}${local}` : local;
 }
 
 /**

@@ -75,6 +75,15 @@ describe('sender copy while the platform has unofficial WhatsApp off', () => {
     expect(senderNoneCopy('chat', true).href).toBe('/devices');
   });
 
+  it('never sends Facebook or mailbox hints to the personal-number page', () => {
+    for (const on of [false, true]) {
+      expect(senderHint('facebook', on).href).toBe('/facebook');
+      expect(senderNoneCopy('facebook', on).href).toBe('/facebook');
+      expect(senderHint('email', on).href).toBe('/settings/channels');
+      expect(senderNoneCopy('email', on).href).toBe('/settings/channels');
+    }
+  });
+
   it('does not touch the copy of the other channels', () => {
     expect(senderHint('instagram').href).toBe('/instagram');
     expect(senderHint('line').href).toBe(senderHint('line', true).href);
