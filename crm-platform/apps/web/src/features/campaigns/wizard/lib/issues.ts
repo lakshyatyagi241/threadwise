@@ -1,0 +1,92 @@
+import {
+  wizardStepIssues,
+  type WizardAudienceCount,
+  type WizardCreditCheck,
+  type WizardDraft,
+  type WizardIssue,
+} from '@crm/contracts';
+import type { WizardView } from './state';
+
+/** The contract's issue codes plus the few only the screen can see (an empty date box, the wallet, a zero audience). */
+export type IssueCode =
+  | WizardIssue['code']
+  | 'schedule_required'
+  | 'no_recipients'
+  | 'insufficient_balance'
+  | 'checking_balance';
+
+export interface StepIssue {
+  path: string;
+  code: IssueCode;
+}
+
+export interface IssueContext {
+  slots: readonly string[];
+  now: Date;
+  /** The live count of step 2 (null until it answers). */
+  count?: Pick<WizardAudienceCount, 'recipients'> | null;
+  /** The wallet check of step 3 (null until it answers); `pending` while it is being asked. */
+  credit?: Pick<WizardCreditCheck, 'sufficient' | 'recipients'> | null;
+  creditPending?: boolean;
+}
+
+/** The step a draft path belongs to (also how the launch's `errors[].path` finds the screen to open). */
+export function stepOfPath(path: string): WizardView {
+  const head = path.split('.')[0];
+  if (head === 'name' || head === 'templateId' || head === 'senderKey') return 1;
+  if (head === 'audience') return 2;
+  if (head === 'variables') return 3;
+  return 4;
+}
+
+/** Date and time boxes the person cleared: the contract's check cannot see an empty text. */
+function scheduleIncomplete(draft: WizardDraft): StepIssue[] {
+  const s = draft.schedule;
+  if (s.mode === 'scheduled') {
+    return s.date && s.time && s.timezone
+      ? []
+      : [{ path: 'schedule.date', code: 'schedule_required' }];
+  }
+  if (s.mode === 'recurring') {
+    return s.rule.startDate && s.rule.timeOfDay
+      ? []
+      : [{ path: 'schedule.rule.startDate', code: 'schedule_required' }];
+  }
+  return [];
+}
+
+/**
+ * What stops a step: the shared validation (`wizardStepIssues`) plus what only the screen knows. An empty list means Next is open.
+ * A zone name the runtime does not know makes the shared check throw; that is reported as an incomplete schedule.
+ */
+export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueContext): StepIssue[] {
+  let shared: StepIssue[] = [];
+  const incomplete = step === 4 ? scheduleIncomplete(draft) : [];
+  if (incomplete.length === 0) {
+    try {
+      shared = wizardStepIssues(step, draft, { slots: ctx.slots, now: ctx.now });
+    } catch {
+      shared = [{ path: 'schedule', code: 'schedule_required' }];
+    }
+  }
+  const out: StepIssue[] = [...incomplete, ...shared];
+  if (step === 2 && ctx.count && ctx.count.recipients === 0 && shared.length === 0) {
+    out.push({ path: 'audience', code: 'no_recipients' });
+  }
+  if (step === 3) {
+    if (ctx.creditPending) out.push({ path: 'credit', code: 'checking_balance' });
+    else if (ctx.credit) {
+      if (ctx.credit.recipients === 0) out.push({ path: 'audience', code: 'no_recipients' });
+      else if (!ctx.credit.sufficient) out.push({ path: 'credit', code: 'insufficient_balance' });
+    }
+  }
+  return out;
+}
+
+export const unmappedSlots = (issues: readonly StepIssue[]): string[] =>
+  issues
+    .filter((i) => i.code === 'variable_unmapped')
+    .map((i) => i.path.replace(/^variables\./, ''));
+
+export const issueFor = (issues: readonly StepIssue[], path: string): StepIssue | undefined =>
+  issues.find((i) => i.path === path);

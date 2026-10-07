@@ -101,6 +101,12 @@ export interface CampaignRow {
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
+  /** The broadcast wizard's `{ draft, launch? }`; null on a campaign the classic builder made. */
+  wizard: { draft?: unknown; launch?: Record<string, unknown> } | null;
+  seriesId: number | null;
+  occurrenceNo: number | null;
+  retryEnabled: boolean;
+  retryUntil: Date | null;
   /** Counts from the recipient rows, never from the row's own columns. */
   counts: Counts;
 }
@@ -176,6 +182,11 @@ function toRow(r: Raw): CampaignRow {
     createdAt: new Date(r.created_at as string),
     updatedAt: new Date(r.updated_at as string),
     rowVersion: Number(r.row_version),
+    wizard: (r.wizard as CampaignRow['wizard']) ?? null,
+    seriesId: num(r.series_id),
+    occurrenceNo: num(r.occurrence_no),
+    retryEnabled: Boolean(r.retry_enabled),
+    retryUntil: date(r.retry_until),
     counts: {
       sent: Number(r.a_sent ?? 0),
       delivered: Number(r.a_delivered ?? 0),
@@ -678,6 +689,8 @@ export class CampaignsRepository {
     v: {
       status: string;
       error?: string | null;
+      /** The provider's error code (`131049`), kept apart from the text so a retry rule never parses prose. */
+      errorCode?: string | null;
       providerMessageId?: string | null;
       variant?: string | null;
       sentAt?: Date | null;
@@ -688,6 +701,7 @@ export class CampaignsRepository {
     await tx.execute(sql`
       UPDATE wp_campaign_contacts SET status = ${v.status},
         error_message = coalesce(${v.error ? v.error.slice(0, 1024) : null}, error_message),
+        error_code = coalesce(${v.errorCode ? v.errorCode.slice(0, 32) : null}, error_code),
         whatsapp_message_id = coalesce(${v.providerMessageId ?? null}, whatsapp_message_id),
         variant = coalesce(${v.variant ? v.variant.slice(0, 8) : null}, variant),
         sent_at = coalesce(sent_at, ${v.sentAt ? v.sentAt.toISOString() : null}::timestamptz),

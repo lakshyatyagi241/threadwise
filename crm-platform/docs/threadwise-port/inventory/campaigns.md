@@ -65,6 +65,13 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 | TW-CAMP-026 | Build with AI: model list and message generation                            | implemented | P2       | M      |
 | TW-CAMP-027 | Meta click sync (template analytics)                                        | implemented | P2       | M      |
 | TW-CAMP-028 | SMS and email campaign runners                                              | implemented | P2       | L      |
+| TW-CAMP-029 | ADDITION. Create-broadcast wizard: four steps, one autosaved draft, resume  | implemented | P1       | L      |
+| TW-CAMP-030 | ADDITION. Wizard audience: groups, segments, condition builder, live count  | implemented | P1       | L      |
+| TW-CAMP-031 | ADDITION. Wizard review: credit check and per-template variable mapping     | implemented | P1       | M      |
+| TW-CAMP-032 | ADDITION. Wizard test send: E.164 list, logged, charged on delivery         | implemented | P1       | M      |
+| TW-CAMP-033 | ADDITION. Wizard schedule: now, scheduled, recurring series with runs       | implemented | P1       | L      |
+| TW-CAMP-034 | ADDITION. Frequency-cap (131049) retries every 24 h until an end date       | implemented | P1       | L      |
+| TW-CAMP-035 | ADDITION. Wizard broadcasts: list, status, pause, resume, cancel            | implemented | P2       | M      |
 
 ## Features
 
@@ -216,6 +223,54 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 - **027 Meta click sync:** at most every 15 minutes per campaign on the detail refresh, the template's button clicks from Meta template analytics fill `meta_clicked_count`. Depends on whatsapp-cloud-api-waba.
 - **028 SMS and email runners:** campaigns with provider `sms` or `email` run through their own transports. Skipped on the owner's word (SMS and email are not ported).
 
+## Additions beyond Reference: the Create broadcast wizard
+
+Reference has one campaign builder (`/wa-campaigns/create`, one long form). The project owner asked for a simpler four-step "Create broadcast" screen in our own look
+and feel for WhatsApp **template** broadcasts. It is an **addition**, not a replacement: the classic builder (TW-CAMP-002/003) is untouched and still the way to
+send custom text, media, flows and A/B tests; the wizard is a second front end over the same tables and the same sender. Every id below is an addition
+(`ADDITION`), mapped to the Reference behaviour it builds on. API: [docs/api/campaigns.md](../../api/campaigns.md#broadcast-wizard-an-addition-beyond-threadwise).
+
+### TW-CAMP-029: the wizard and its draft (ADDITION)
+
+- **Builds on:** TW-CAMP-003 (create), TW-CAMP-010 (a `draft` can be edited). Reference saves a draft only through the full form.
+- **Rules:**
+  1. Steps: 1 Name and template, 2 Audience, 3 Check and variables, 4 Test and send. Each step validates before Next with the shared `wizardStepIssues`; the server runs all four again at launch.
+  2. One draft per wizard run: a `wpcampaigns` row in `draft` with `wizard.draft` JSON (name, template, audience, variables, schedule, retries, furthest step), created on the first change and autosaved with `rowVersion`. It is listed with the campaigns (`wizard: true`) and reopens at its step. A launched draft is read-only (409 `CAMP_WIZARD_LAUNCHED`).
+  3. Step 1 offers only approved templates (the compose rule: Meta-approved on the Cloud engine, locally approved otherwise; not OTP; the number connected) with search, language and category filters and the shared WhatsApp preview.
+- **Routes:** `/campaigns/wizard`, `/campaigns/wizard/:id`, `/v2/broadcast-wizard/*`. **Permission:** `camp.campaigns.create`.
+
+### TW-CAMP-030: audience (ADDITION)
+
+- **Builds on:** TW-CAMP-004 (audience inputs: groups, tags, numbers, CSV) and the segments engine (rules, counts). Typed numbers, CSV and tags stay in the classic builder.
+- **Rules:** groups and segments (any of them) narrowed by an AND/OR condition tree (the segments rule schema, so the builder, the count and the send agree; new built-in field `countryCode`); rules alone select from all contacts; nothing picked selects nobody. Opted-out contacts and numbers that are not 8 to 15 digits are always skipped and counted apart. The count is debounced on the screen, bounded by a 3-second timeout (an estimate beyond it, flagged `approximate`), and is the same function the launch writes recipients with (at most 100,000).
+
+### TW-CAMP-031: review (ADDITION)
+
+- **Builds on:** TW-WALLET-013 (launch gate), the Meta rate card (price by country and category), TW-CAMP-006 (variable resolution), TW-BCAST-017 (template variables).
+- **Rules:** the credit check shows the balance, the estimate per destination country and category, whether the plan's monthly allowance covers part of it, and "insufficient balance" (decided by the wallet's own launch rule) with a top-up link; it blocks the launch. Each template placeholder (`header.n`, `body.n`, a link button's `button.i`) must be mapped to a contact field or property (with a fallback for contacts that lack it) or to fixed text; sample messages are resolved for real contacts; an unmapped placeholder blocks Next and the launch.
+
+### TW-CAMP-032: test send (ADDITION)
+
+- **Builds on:** the broadcasts send port (`EngineSender`), TW-WALLET-009..012 (charge on delivery).
+- **Rules:** up to ten numbers, E.164, the draft's template and variables resolved for a real contact of the audience, tracking off, wallet precheck first, a log row per number (`camp_test_sends`), charged exactly once per provider message when delivery is reported. Needs `camp.campaigns.test`.
+
+### TW-CAMP-033: schedule and recurring series (ADDITION)
+
+- **Builds on:** TW-CAMP-008 (now, scheduled, recurring; zone; `advanceRecurring`). Reference's recurring campaign is one row that is re-queued, so past runs are lost, it repeats daily, weekly or monthly with a single end date, and a monthly run clamps with `addMonthNoOverflow`.
+- **Differences (all additions):** the recurring broadcast is a **series** with one **child campaign per run** (own recipients, counters, history); rule with every N, weekly weekdays, monthly day, ends never / on a date / after N runs; the audience is re-evaluated at each run; a run more than 6 h stale is skipped, not sent in a burst; DST-safe wall-clock times. The scheduled one-off reads its date and time in the chosen zone (as TW-CAMP-008 requires) and snapshots its audience at launch.
+
+### TW-CAMP-034: frequency-cap retries (ADDITION)
+
+- **Builds on:** TW-CAMP-012 (Meta's "healthy ecosystem" throttle 131049 is tried twice, 6 h then 12 h later). The wizard replaces that for its own campaigns: retries are opt-in, exactly 24 h apart from the first send until an end date the person sets, only for 131049, with an attempt log. No extra cost (a failed message is not charged; a retry is charged only when delivered).
+
+### TW-CAMP-035: wizard broadcasts (ADDITION)
+
+- List, detail (runs, retry summary), pause, resume, cancel of a one-off or a series (`/campaigns/wizard/broadcasts/:id`). Cancel of a series also stops the runs it started.
+
+### Reference comparison (live Reference, read-only)
+
+See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.
+
 ## Coverage
 
 ```json threadwise-coverage
@@ -223,7 +278,7 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
   "domain": "campaigns",
   "routes_seen": ["wa-campaigns.*", "wa-campaigns.node.*"],
   "source_files": 9,
-  "features": 28,
+  "features": 35,
   "unread": ["WpCampaignContact", "user-wa-campaigns-*.js", "resources/views/user/wa-campaigns/*"]
 }
 ```
