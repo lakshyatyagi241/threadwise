@@ -11,7 +11,8 @@ import { compact, shares } from '../lib/format';
 import { BarChart, Donut, Heatmap, Sparkline } from './charts';
 import { RangePicker } from './dashboard-screen';
 import { AnalyticsPanelsSection } from './analytics-panels';
-import { Funnel, LoadError, Panel, Trend } from './parts';
+import { Funnel } from './funnel';
+import { LoadError, Panel, Trend } from './parts';
 
 type Range = AnalyticsQuery['range'];
 
@@ -205,10 +206,7 @@ export function AnalyticsScreen() {
               />
             </Panel>
             <Panel title={t('funnel.title')} subtitle={`${a.window.fromDate} – ${a.window.toDate}`}>
-              <Funnel
-                funnel={a.funnel}
-                previousEndToEnd={Math.round((a.funnel.endToEnd - a.trends.endToEndPp) * 10) / 10}
-              />
+              <Funnel funnel={a.funnel} />
             </Panel>
           </div>
 

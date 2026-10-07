@@ -35,14 +35,21 @@
       "apply": "Apply"
     },
     "funnel": {
+      "listLabel": "Contacts funnel",
+      "stageLabel": "{stage}: {n} contacts, {pct}% of contacts messaged",
       "stage": {
-        "sent": "Outbound messages",
+        "messaged": "Contacts messaged",
         "delivered": "Delivered",
-        "replied": "Inbound replies",
-        "engaged": "Unique repliers"
+        "replied": "Replied"
       },
-      "drop": "−{n}",
-      "endToEnd": "End-to-end conversion"
+      "activity": {
+        "title": "Conversation activity",
+        "summary": "{inbound, plural, one {# inbound message} other {# inbound messages}} · {contacts, plural, one {# responding contact} other {# responding contacts}} · {perContact} replies/responding contact"
+      },
+      "comparison": {
+        "title": "Compared with previous period",
+        "replyRate": "Reply rate"
+      }
     },
     "error": {
       "locked": "Your plan does not include analytics.",

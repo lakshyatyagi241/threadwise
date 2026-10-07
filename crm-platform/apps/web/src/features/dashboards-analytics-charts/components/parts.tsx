@@ -2,21 +2,23 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import type { DashFunnel } from '@crm/contracts';
 import { PLAN_UPGRADE_PATH } from '@crm/contracts';
 import { Alert, Card, cn } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { compact, directionOf, isGood, signed } from '../lib/format';
+import { directionOf, isGood, signed } from '../lib/format';
 
 /** A change against the previous window: arrow, size, and green or red by whether it is good news. */
 export function Trend({
   delta,
   unit = '%',
   lowerIsBetter = false,
+  downTone = 'danger',
 }: {
   delta: number;
   unit?: '%' | 'pp';
   lowerIsBetter?: boolean;
+  /** Colour of a move for the worse: red by default, amber where a drop is a nudge, not an alarm. */
+  downTone?: 'danger' | 'warning';
 }) {
   const dir = directionOf(delta);
   const good = isGood(delta, lowerIsBetter);
@@ -28,7 +30,9 @@ export function Trend({
           ? 'bg-muted text-muted-foreground'
           : good
             ? 'bg-success/10 text-success'
-            : 'bg-danger/10 text-danger',
+            : downTone === 'warning'
+              ? 'bg-warning/10 text-warning'
+              : 'bg-danger/10 text-danger',
       )}
     >
       <span aria-hidden>{dir === 'up' ? '▲' : dir === 'down' ? '▼' : '–'}</span>
@@ -62,63 +66,6 @@ export function Panel({
       </div>
       {children}
     </Card>
-  );
-}
-
-const STAGE_KEYS = ['sent', 'delivered', 'replied', 'engaged'] as const;
-
-/** Sent, delivered, replied, engaged: count, share of sent, drop from the stage before, and the end-to-end share. */
-export function Funnel({
-  funnel,
-  previousEndToEnd,
-}: {
-  funnel: DashFunnel;
-  previousEndToEnd?: number;
-}) {
-  const t = useTranslations('dashboards-analytics-charts.funnel');
-  return (
-    <div className="space-y-2">
-      <ol className="space-y-2">
-        {funnel.stages.map((s, i) => (
-          <li key={s.key} className="space-y-1">
-            <div className="flex items-baseline justify-between gap-2 text-sm">
-              <span>
-                <span className="me-1.5 text-xs text-muted-foreground tabular-nums">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                {t(`stage.${STAGE_KEYS[i]!}`)}
-              </span>
-              <span className="tabular-nums">
-                <span className="font-medium">{compact(s.count)}</span>
-                <span className="ms-2 text-xs text-muted-foreground">
-                  {i === 0 ? '100%' : `${s.pct}%`}
-                </span>
-                {i > 0 && s.drop > 0 && (
-                  <span className="ms-2 text-xs text-muted-foreground">
-                    {t('drop', { n: compact(s.drop) })}
-                  </span>
-                )}
-              </span>
-            </div>
-            <div className="h-2 rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary"
-                style={{ width: `${Math.min(100, Math.max(s.count > 0 ? 2 : 0, s.pct))}%` }}
-              />
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p className="flex items-center justify-between border-t border-border pt-2 text-sm">
-        <span className="text-muted-foreground">{t('endToEnd')}</span>
-        <span className="flex items-center gap-2 tabular-nums">
-          <strong>{funnel.endToEnd}%</strong>
-          {previousEndToEnd !== undefined && (
-            <Trend delta={Math.round((funnel.endToEnd - previousEndToEnd) * 10) / 10} unit="pp" />
-          )}
-        </span>
-      </p>
-    </div>
   );
 }
 
