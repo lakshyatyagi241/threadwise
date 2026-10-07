@@ -466,6 +466,7 @@
       "conflict": "This draft was changed somewhere else, so your latest edits were not saved. Reload to continue from the latest version.",
       "reload": "Reload draft",
       "launchWallet": "The wallet cannot cover this broadcast. Top up, then continue from the review step.",
+      "launchEligibility": "This broadcast cannot go out yet. Fix what the Eligibility check shows:",
       "launchIncomplete": "The broadcast is not complete yet. Fix these and try again:",
       "launchFailed": "The broadcast could not be started. Try again.",
       "leaveTitle": "Leave without saving?",
@@ -547,7 +548,12 @@
         "insufficient_balance": "Your wallet balance is too low for this broadcast.",
         "checking_balance": "Checking your wallet balance...",
         "sender_required": "Pick the WhatsApp number to send from.",
-        "balance_unavailable": "We could not check your wallet balance. Try again before sending."
+        "balance_unavailable": "We could not check your wallet balance. Try again before sending.",
+        "eligibility_contacts": "No contact can receive this broadcast. See the Eligibility check.",
+        "eligibility_template": "The template or the WhatsApp number cannot send this broadcast. See the Eligibility check.",
+        "eligibility_billing": "This workspace cannot pay for this broadcast. See the Eligibility check.",
+        "checking_eligibility": "Running the eligibility check...",
+        "eligibility_unavailable": "We could not run the eligibility check. Try again before sending."
       },
       "template": {
         "nameLabel": "Broadcast name",
@@ -998,6 +1004,60 @@
         "pm": "PM",
         "hour": "Hour",
         "minute": "Minute"
+      },
+      "eligibility": {
+        "title": "Eligibility check",
+        "loading": "Running the eligibility check",
+        "unavailable": "Eligibility could not be checked here, so the broadcast does not go on. It is checked again when you start it.",
+        "showDetails": "Show details",
+        "hideDetails": "Hide details",
+        "group": {
+          "contacts": "Contacts",
+          "template": "Template and sender",
+          "billing": "Billing"
+        },
+        "state": {
+          "pass": "Passed",
+          "warn": "Warning",
+          "fail": "Blocked"
+        },
+        "chip": {
+          "optedOut": "{count} opted out",
+          "invalidNumber": "{count} invalid number",
+          "duplicate": "{count} duplicate merged"
+        },
+        "code": {
+          "contacts_ok": "{eligible} eligible of {selected} selected. Everyone selected can receive this template.",
+          "contacts_some_skipped": "{eligible} eligible of {selected} selected. {skipped} will be skipped: they are never sent to and never charged.",
+          "contacts_none_eligible": "No selected contact can receive this template. Opted-out contacts and invalid numbers are skipped.",
+          "contacts_no_audience": "Nobody is selected. Go back and choose who receives it.",
+          "contacts_approximate": "About {eligible} of {selected} selected can receive it. The audience is too large to count exactly, so skipped contacts are not itemised.",
+          "template_group_ok": "The template is approved, the number is connected and every variable is mapped.",
+          "template_ok": "The template is approved and can be sent.",
+          "template_not_approved": "The template is not approved (status: {status}). Only approved templates can be sent.",
+          "template_paused": "The template is paused until {until} UTC because of customer feedback.",
+          "template_quality_low": "Meta rates this template's quality as low (red). Sending it now risks the template and the number.",
+          "template_auth_not_allowed": "Authentication (OTP) templates cannot be sent in a broadcast.",
+          "template_other_sender": "The template belongs to another WhatsApp Business Account than the number you picked. Pick a number of that account or another template.",
+          "sender_ok": "Sending from {label}, which is connected.",
+          "sender_not_connected": "The number you picked is not connected. Reconnect it or pick another number.",
+          "sender_restricted": "Meta reports this number as {status}, so it cannot send.",
+          "sender_flagged": "Meta reports this number as {status}. Sending can continue but may be limited.",
+          "sender_quality_low": "This number's quality rating is low (red). Meta may limit how many people you can message.",
+          "variables_ok": "Every template variable is mapped.",
+          "variables_incomplete": "{missing, plural, one {# template variable still needs} other {# template variables still need}} a source. Map {missing, plural, one {it} other {them}} below.",
+          "billing_mode_plan": "Plan mode: {remaining} messages left in your plan this month. Messages inside the plan are not charged to the wallet.",
+          "billing_mode_plan_unlimited": "Plan mode: your plan has no monthly message limit. Messages inside the plan are not charged to the wallet.",
+          "billing_mode_plan_inactive": "Your plan period is not active, so every message is charged from the wallet at the country rate.",
+          "billing_mode_wallet": "Pay per message: each delivered message is charged from the wallet at the country rate.",
+          "billing_wallet_present": "Wallet balance: {balance}.",
+          "billing_wallet_none": "This workspace has no wallet yet (balance {balance}).",
+          "billing_ok": "This broadcast can be paid for. Estimated charge: {estimated} for {chargeable, plural, one {# message} other {# messages}}.",
+          "billing_allowance_runs_out": "Your plan allowance runs out during this send: {chargeable} of {recipients} messages will be charged from the wallet (about {estimated}).",
+          "billing_wallet_empty": "The wallet is empty ({balance}). Top up before sending.",
+          "billing_wallet_insufficient": "The wallet ({balance}) does not cover the estimated {estimated}. Top up before sending.",
+          "billing_unavailable": "Could not check how this broadcast would be billed. Try again before sending."
+        }
       }
     },
     "history": {

@@ -28,6 +28,25 @@ describe('classifyLaunchError', () => {
     });
   });
 
+  it('a launch refused by the eligibility check goes back to step 3 and names the groups', () => {
+    expect(
+      classifyLaunchError(
+        err(422, 'CAMP_TEMPLATE_NOT_ALLOWED', [
+          { path: 'eligibility.template', message: 'template_paused' },
+        ]),
+      ),
+    ).toEqual({ kind: 'eligibility', step: 3, groups: ['template'] });
+    expect(
+      classifyLaunchError(
+        err(422, 'CAMP_NO_RECIPIENTS', [
+          { path: 'eligibility.contacts', message: 'contacts_none_eligible' },
+        ]),
+      ),
+    ).toEqual({ kind: 'eligibility', step: 3, groups: ['contacts'] });
+    // The same codes without the group are an ordinary failure.
+    expect(classifyLaunchError(err(422, 'CAMP_NO_RECIPIENTS'))).toMatchObject({ kind: 'other' });
+  });
+
   it('an incomplete error with no details still opens a step', () => {
     expect(classifyLaunchError(err(422, 'CAMP_WIZARD_INCOMPLETE'))).toMatchObject({
       kind: 'incomplete',

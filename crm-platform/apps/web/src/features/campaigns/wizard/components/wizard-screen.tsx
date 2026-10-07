@@ -12,6 +12,7 @@ import {
   useAudienceCount,
   useAudienceSources,
   useCreditCheck,
+  useEligibility,
   useWizardDraft,
   useWizardSenders,
   useWizardTemplates,
@@ -41,6 +42,11 @@ const STATE_ISSUES: readonly IssueCode[] = [
   'insufficient_balance',
   'checking_balance',
   'balance_unavailable',
+  'eligibility_contacts',
+  'eligibility_template',
+  'eligibility_billing',
+  'checking_eligibility',
+  'eligibility_unavailable',
 ];
 
 /** `/campaigns/wizard` and `/campaigns/wizard/[id]`: the four-step "Create broadcast" wizard. */
@@ -117,6 +123,7 @@ export function LaunchedNotice({ id }: { id: string }) {
 function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   const t = useTranslations('campaigns.wizard');
   const ti = useTranslations('campaigns.wizard.issues');
+  const te = useTranslations('campaigns.wizard.eligibility');
   const ts = useTranslations('campaigns.wizard.steps');
   const w = useWizard(initial);
   const session = useSession();
@@ -149,6 +156,12 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   const settled = useSettled(countable, 500);
   const count = useAudienceCount(view >= 2 ? settled.value : null);
   const credit = useCreditCheck(view >= 3 ? draft.templateId : null, countable ?? draft.audience);
+  const eligibility = useEligibility(
+    view >= 3 ? draft.templateId : null,
+    draft.senderKey,
+    countable ?? draft.audience,
+    draft.variables,
+  );
   const countKnown = settled.settled && !count.isFetching && !count.isPlaceholderData;
 
   const now = new Date();
@@ -159,6 +172,9 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
     credit: credit.data,
     creditPending: view === 3 && Boolean(draft.templateId) && credit.isPending,
     creditFailed: view === 3 && Boolean(draft.templateId) && credit.isError,
+    eligibility: eligibility.data,
+    eligibilityPending: view === 3 && Boolean(draft.templateId) && eligibility.isPending,
+    eligibilityFailed: view === 3 && Boolean(draft.templateId) && eligibility.isError,
   };
   const issues = stepIssues(view, draft, ctx);
 
@@ -192,8 +208,9 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
     release: guard.release,
     onFailure: (f) => {
       setNotice(f);
-      if (f.kind === 'wallet') {
+      if (f.kind === 'wallet' || f.kind === 'eligibility') {
         void credit.refetch();
+        void eligibility.refetch();
         go(3);
       } else if (f.kind === 'incomplete') {
         setAttempted((a) => ({ ...a, [f.step]: true }));
@@ -268,6 +285,16 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
           {t('launchWallet')}
         </Alert>
       )}
+      {notice?.kind === 'eligibility' && (
+        <Alert tone="danger" className="mb-4">
+          <span className="block">{t('launchEligibility')}</span>
+          <ul className="mt-1 list-disc ps-5 text-sm">
+            {notice.groups.map((g) => (
+              <li key={g}>{te(`group.${g}`)}</li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       {notice?.kind === 'incomplete' && (
         <Alert tone="danger" className="mb-4">
           <span className="block">{t('launchIncomplete')}</span>
@@ -325,6 +352,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
             sources={sources.data}
             count={count.data}
             credit={credit}
+            eligibility={eligibility}
             properties={properties}
             issues={issues}
             showIssues={Boolean(attempted[3])}
@@ -389,5 +417,10 @@ const KNOWN_ISSUES: ReadonlySet<string> = new Set([
   'insufficient_balance',
   'checking_balance',
   'balance_unavailable',
+  'eligibility_contacts',
+  'eligibility_template',
+  'eligibility_billing',
+  'checking_eligibility',
+  'eligibility_unavailable',
 ]);
 const knownIssue = (code: string) => KNOWN_ISSUES.has(code);

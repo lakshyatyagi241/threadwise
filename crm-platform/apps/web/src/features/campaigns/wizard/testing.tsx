@@ -10,6 +10,7 @@ import type {
   WizardCreditCheck,
   WizardDraft,
   WizardDraftResponse,
+  WizardEligibility,
   WizardSender,
   WizardTemplate,
 } from '@crm/contracts';
@@ -188,6 +189,62 @@ export const credit = (over: Partial<WizardCreditCheck> = {}): WizardCreditCheck
   topupUrl: '/billing/top-up',
   ...over,
 });
+
+/** All three groups passing: 950 of 1000 selected, an approved template on a connected number, pay per message with a funded wallet. */
+export const eligibility = (over: Partial<WizardEligibility> = {}): WizardEligibility => {
+  const e: WizardEligibility = {
+    state: 'pass',
+    contacts: {
+      group: 'contacts',
+      state: 'pass',
+      code: 'contacts_ok',
+      values: { eligible: 950, selected: 950, skipped: 0 },
+      checks: [
+        {
+          code: 'contacts_ok',
+          state: 'pass',
+          values: { eligible: 950, selected: 950, skipped: 0 },
+        },
+      ],
+      chips: [
+        { key: 'eligible', count: 950 },
+        { key: 'selected', count: 950 },
+        { key: 'optedOut', count: 0 },
+        { key: 'invalidNumber', count: 0 },
+        { key: 'duplicate', count: 0 },
+      ],
+    },
+    template: {
+      group: 'template',
+      state: 'pass',
+      code: 'template_group_ok',
+      values: {},
+      checks: [
+        { code: 'template_ok', state: 'pass', values: {} },
+        { code: 'sender_ok', state: 'pass', values: { label: 'Acme Support' } },
+        { code: 'variables_ok', state: 'pass', values: {} },
+      ],
+      chips: [],
+    },
+    billing: {
+      group: 'billing',
+      state: 'pass',
+      code: 'billing_mode_wallet',
+      values: {},
+      checks: [
+        { code: 'billing_mode_wallet', state: 'pass', values: {} },
+        {
+          code: 'billing_wallet_present',
+          state: 'pass',
+          values: { balanceMinor: 50_000, currency: 'USD' },
+        },
+        { code: 'billing_ok', state: 'pass', values: { estimatedMinor: 9_500, chargeable: 950 } },
+      ],
+      chips: [],
+    },
+  };
+  return { ...e, ...over };
+};
 
 /** The shape a screen takes for a query that has not resolved or has failed. */
 export const pending = {

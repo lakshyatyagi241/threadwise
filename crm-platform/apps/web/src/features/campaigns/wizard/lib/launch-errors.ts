@@ -13,6 +13,8 @@ export type LaunchFailure =
       steps: WizardView[];
       issues: Array<{ path: string; code: string }>;
     }
+  /** The contacts, the template or its number failed the eligibility check at the launch: show the check again on step 3. */
+  | { kind: 'eligibility'; step: 3; groups: Array<'contacts' | 'template'> }
   /** The draft changed elsewhere (409): reload it. */
   | { kind: 'conflict' }
   /** Already launched. */
@@ -32,6 +34,23 @@ export function classifyLaunchError(e: unknown): LaunchFailure {
       (a, b) => a - b,
     ) as WizardView[];
     return { kind: 'incomplete', step: steps[0] ?? 1, steps, issues };
+  }
+  if (
+    e.code === ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED ||
+    e.code === ERROR_CODES.CAMP_NO_RECIPIENTS
+  ) {
+    const groups = [
+      ...new Set(
+        e.fieldErrors.flatMap((f) =>
+          f.path === 'eligibility.contacts'
+            ? ['contacts' as const]
+            : f.path === 'eligibility.template'
+              ? ['template' as const]
+              : [],
+        ),
+      ),
+    ];
+    if (groups.length > 0) return { kind: 'eligibility', step: 3, groups };
   }
   return { kind: 'other', message: e.message, requestId: e.requestId };
 }

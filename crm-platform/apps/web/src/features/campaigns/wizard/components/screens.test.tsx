@@ -11,6 +11,7 @@ import {
   count,
   credit,
   draftResponse,
+  eligibility,
   html,
   sources,
   templates,
@@ -26,6 +27,10 @@ vi.mock('next/navigation', () => ({
 }));
 
 const ID = uuid(100);
+const eligibilityKey = KEYS.eligibility(uuid(1), null, audience({ groupIds: [uuid(11)] }), [
+  'body.1',
+  'body.2',
+]);
 const READY_DRAFT: Partial<WizardDraft> = {
   name: 'October offer',
   templateId: uuid(1),
@@ -116,10 +121,14 @@ describe('wizard screen: final button by schedule mode', () => {
 });
 
 describe('wizard screen: step 3 gating', () => {
-  const review = (c: ReturnType<typeof credit>) =>
+  const review = (
+    c: ReturnType<typeof credit>,
+    e: ReturnType<typeof eligibility> | null = eligibility(),
+  ) =>
     html(<WizardScreen draftId={ID} />, {
       qc: seeded({ ...READY_DRAFT, step: 3 }, (qc) => {
         qc.setQueryData(KEYS.credit(uuid(1), READY_DRAFT.audience!), c);
+        if (e) qc.setQueryData(eligibilityKey, e);
       }),
     });
 
@@ -135,6 +144,46 @@ describe('wizard screen: step 3 gating', () => {
     const out = review(credit());
     expect(out).toContain('Your balance covers this broadcast.');
     expect(out).not.toContain('aria-disabled="true"');
+  });
+
+  it('a failing eligibility group blocks Next and says why, even when the wallet is fine', () => {
+    const e = eligibility();
+    const out = review(credit(), {
+      ...e,
+      state: 'fail',
+      template: {
+        ...e.template,
+        state: 'fail',
+        code: 'template_not_approved',
+        values: { status: 'pending' },
+        checks: [{ code: 'template_not_approved', state: 'fail', values: { status: 'pending' } }],
+      },
+    });
+    expect(out).toContain('The template or the WhatsApp number cannot send this broadcast.');
+    expect(out).toContain('aria-disabled="true"');
+  });
+
+  it('a warning does not block Next', () => {
+    const e = eligibility();
+    const out = review(credit(), {
+      ...e,
+      state: 'warn',
+      contacts: {
+        ...e.contacts,
+        state: 'warn',
+        code: 'contacts_some_skipped',
+        values: { eligible: 900, selected: 950, skipped: 50 },
+        checks: [],
+      },
+    });
+    expect(out).toContain('900 eligible of 950 selected.');
+    expect(out).not.toContain('aria-disabled="true"');
+  });
+
+  it('while the eligibility check is running Next waits, and the card says so', () => {
+    const out = review(credit(), null);
+    expect(out).toContain('aria-disabled="true"');
+    expect(out).toContain('Running the eligibility check...');
   });
 
   it('the stepper reads step 3 and the wallet is asked for', () => {

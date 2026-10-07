@@ -14,10 +14,11 @@ import type {
 import type { StepIssue } from '../lib/issues';
 import type { WizardView } from '../lib/state';
 import { CreditCard, type CreditQuery } from './credit-card';
+import { EligibilityCard, type EligibilityQuery } from './eligibility-card';
 import { SummaryCard } from './summary-card';
 import { VariablesCard, type CustomProperty } from './variables-card';
 
-/** Step 3: the wallet check, the variable mapping with sample messages, and the summary of everything so far. */
+/** Step 3: the eligibility check, the wallet check, the variable mapping with sample messages, and the summary of everything so far. */
 export function StepReview({
   draft,
   template,
@@ -25,6 +26,7 @@ export function StepReview({
   sources,
   count,
   credit,
+  eligibility,
   properties,
   issues,
   showIssues,
@@ -39,6 +41,7 @@ export function StepReview({
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: CreditQuery;
+  eligibility: EligibilityQuery;
   properties: readonly CustomProperty[];
   issues: StepIssue[];
   showIssues: boolean;
@@ -52,6 +55,7 @@ export function StepReview({
   return (
     <div className="space-y-5">
       <p className="text-sm text-muted-foreground">{t('intro')}</p>
+      <EligibilityCard eligibility={eligibility} />
       <CreditCard credit={credit} />
       <VariablesCard
         template={template}

@@ -12,6 +12,7 @@ import {
   wizardCsvReportSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
+  wizardEligibilitySchema,
   wizardLaunchResultSchema,
   wizardSendersResponseSchema,
   wizardTemplatesResponseSchema,
@@ -40,6 +41,12 @@ export const KEYS = {
   count: (audience: WizardAudience) => ['camp', 'wizard', 'count', audience] as const,
   credit: (templateId: string, audience: WizardAudience) =>
     ['camp', 'wizard', 'credit', templateId, audience] as const,
+  eligibility: (
+    templateId: string,
+    senderKey: string | null,
+    audience: WizardAudience,
+    mappedSlots: readonly string[],
+  ) => ['camp', 'wizard', 'eligibility', templateId, senderKey, audience, mappedSlots] as const,
   preview: (templateId: string, audience: WizardAudience, variables: WizardVariables) =>
     ['camp', 'wizard', 'preview', templateId, audience, variables] as const,
   draft: (id: string) => ['camp', 'wizard', 'draft', id] as const,
@@ -110,6 +117,34 @@ export function useCreditCheck(templateId: string | null, audience: WizardAudien
       }),
     retry: false,
     // The wallet moves: a check older than a minute is asked again.
+    staleTime: 0,
+    gcTime: 60_000,
+  });
+}
+
+/**
+ * Can this broadcast really go out: contacts, template with its number and variables, billing. The variables only matter by which
+ * slots have a source, so the cache follows that and a change of a fallback text does not ask again.
+ */
+export function useEligibility(
+  templateId: string | null,
+  senderKey: string | null,
+  audience: WizardAudience,
+  variables: WizardVariables,
+) {
+  const mapped = Object.keys(variables).sort();
+  return useQuery({
+    queryKey: KEYS.eligibility(templateId ?? '', senderKey, audience, mapped),
+    enabled: templateId !== null,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/eligibility`, {
+        method: 'POST',
+        body: { templateId, senderKey, audience, variables },
+        schema: wizardEligibilitySchema,
+        signal,
+      }),
+    retry: false,
+    // The wallet and the number's standing move: always asked again on opening the step.
     staleTime: 0,
     gcTime: 60_000,
   });
