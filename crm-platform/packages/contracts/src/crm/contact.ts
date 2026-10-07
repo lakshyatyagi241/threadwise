@@ -195,6 +195,12 @@ export const bulkUpdateContactsSchema = z.object({
     lostReason: z.string().max(255).nullish(),
     otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
+    /**
+     * Custom properties to set on every contact, by property key. Each key must be an active, editable custom
+     * property of the workspace (422 CON_PROPERTY_NOT_EDITABLE otherwise) and each value must fit the property's type
+     * (422 VALIDATION_FAILED, nothing written). `null` (or a blank text / empty list) clears that key on every
+     * contact; keys not named are left alone.
+     */
     customFields: z.record(z.unknown()).optional(),
   }),
 });
