@@ -2,9 +2,11 @@ import {
   markAllReadResponseSchema,
   notificationListResponseSchema,
   notificationResponseSchema,
+  readSubjectResponseSchema,
   unreadCountResponseSchema,
   type NotificationListResponse,
   type NotificationResponse,
+  type ReadSubjectResponse,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
@@ -38,5 +40,13 @@ export const notificationsApi = {
       schema: markAllReadResponseSchema,
     });
     return res.updated;
+  },
+  /** Marks the caller's unread rows about one conversation read (the client's guard when the thread is already open). */
+  readSubject(id: string): Promise<ReadSubjectResponse> {
+    return apiFetch('/notifications/read-subject', {
+      method: 'POST',
+      body: { kind: 'conversation', id },
+      schema: readSubjectResponseSchema,
+    });
   },
 };
