@@ -33,7 +33,7 @@ export interface TaskFormModalProps {
   onSaved?: (task: TaskResponse) => void;
 }
 
-type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'form';
+type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'priority' | 'form';
 
 /** "New task" and "Edit task" (TW-TASK-003/005). Mount it only while it is open: it starts from the task every time. */
 export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: TaskFormModalProps) {
@@ -75,6 +75,8 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
         title: problems.title && t(`problems.${problems.title}`),
         notes: problems.notes && t(`problems.${problems.notes}`),
         due: problems.due && t(`problems.${problems.due}`),
+        priority: problems.priority && t(`problems.${problems.priority}`),
+        assignee: problems.assignee && t(`problems.${problems.assignee}`),
       });
       return;
     }
@@ -169,10 +171,11 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             onChange={(e) => set('title', e.target.value)}
           />
         </Field>
-        <Field label={t('priority')} htmlFor="task-priority">
+        <Field label={`${t('priority')} *`} htmlFor="task-priority" error={errors.priority}>
           <Select
             id="task-priority"
             value={draft.priority}
+            invalid={!!errors.priority}
             onChange={(e) => set('priority', e.target.value as TaskDraft['priority'])}
           >
             {PRIORITIES.map((p) => (
@@ -182,14 +185,14 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             ))}
           </Select>
         </Field>
-        <Field label={t('assignee')} htmlFor="task-assignee" error={errors.assignee}>
+        <Field label={`${t('assignee')} *`} htmlFor="task-assignee" error={errors.assignee}>
           <Select
             id="task-assignee"
             value={draft.assigneeId}
             invalid={!!errors.assignee}
             onChange={(e) => set('assigneeId', e.target.value)}
           >
-            <option value="">{t('unassigned')}</option>
+            {draft.assigneeId === '' && <option value="">{t('assigneePick')}</option>}
             {!known && task?.assignee && (
               <option value={task.assignee.id}>{task.assignee.name}</option>
             )}
@@ -201,10 +204,9 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
           </Select>
         </Field>
         <Field
-          label={t('due')}
+          label={`${t('due')} *`}
           htmlFor="task-due"
           error={errors.due}
-          hint={t('dueHint')}
           className="sm:col-span-2"
         >
           <div className="flex flex-wrap items-center gap-2">
@@ -214,6 +216,8 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
               value={draft.due}
               invalid={!!errors.due}
               className="w-auto min-w-52"
+              required
+              aria-required
               onChange={(e) => set('due', e.target.value)}
             />
             {presets.map((p) => (
@@ -226,11 +230,6 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
                 {t(`presets.${p}`)}
               </Button>
             ))}
-            {draft.due && (
-              <Button size="sm" variant="ghost" onClick={() => set('due', '')}>
-                {t('clearDue')}
-              </Button>
-            )}
           </div>
         </Field>
         <Field label={t('contact')} htmlFor="task-contact">

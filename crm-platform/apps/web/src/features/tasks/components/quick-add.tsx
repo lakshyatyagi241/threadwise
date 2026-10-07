@@ -15,8 +15,9 @@ export interface QuickAddValue {
 }
 
 /**
- * The quick add row above the table: type a title, press Enter. Priority and due are optional; the task goes to the
- * signed-in person (the screen decides the rest). Stays in place after adding so several tasks can be entered in a row.
+ * The quick add row above the table: type a title, pick a due date and time, press Enter. Priority starts on Medium; the
+ * due date is required (a task with no date never comes due); the task goes to the signed-in person (the screen decides
+ * the rest). Stays in place after adding so several tasks can be entered in a row.
  *
  * On a phone the row is one line (the title, an options toggle and an icon-only add); priority and due open on a second
  * line from the toggle. From `sm` up everything sits in the one row, as before.
@@ -40,21 +41,27 @@ export function QuickAdd({
   const [due, setDue] = useState('');
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState(false);
+  const [dueProblem, setDueProblem] = useState(false);
   const [more, setMore] = useState(false);
 
   async function submit() {
     if (busy) return;
-    if (title.trim() === '') {
-      setProblem(true);
+    const noTitle = title.trim() === '';
+    const noDue = fromLocalInput(due) === null;
+    setProblem(noTitle);
+    setDueProblem(noDue);
+    if (noTitle || noDue) {
+      // The due date sits behind the options toggle on a phone: open it so the error is visible.
+      if (noDue) setMore(true);
       return;
     }
-    setProblem(false);
     setBusy(true);
     const ok = await onAdd({ title: title.trim(), priority, dueAt: fromLocalInput(due) });
     setBusy(false);
     if (ok) {
       setTitle('');
       setDue('');
+      setDueProblem(false);
     }
   }
 
@@ -83,50 +90,56 @@ export function QuickAdd({
         className="min-w-0 flex-1 sm:min-w-48"
       />
       {!compact && (
-        <>
-          <Button
-            variant="secondary"
-            aria-label={t('options')}
-            title={t('options')}
-            aria-expanded={more}
-            aria-controls="quick-add-options"
-            onClick={() => setMore((v) => !v)}
-            className={cn('px-2.5 sm:hidden', more && 'bg-muted')}
-          >
-            <OptionsIcon />
-          </Button>
-          <div
-            id="quick-add-options"
-            className={cn(
-              'order-last basis-full flex-wrap items-center gap-2',
-              more ? 'flex' : 'hidden',
-              'sm:order-none sm:contents',
-            )}
-          >
-            <Select
-              aria-label={t('priority')}
-              value={priority}
-              disabled={disabled}
-              onChange={(e) => setPriority(e.target.value as TaskPriority)}
-              className="w-auto min-w-28"
-            >
-              {PRIORITIES.map((p) => (
-                <option key={p} value={p}>
-                  {t(`priorities.${p}`)}
-                </option>
-              ))}
-            </Select>
-            <Input
-              type="datetime-local"
-              aria-label={t('due')}
-              value={due}
-              disabled={disabled}
-              onChange={(e) => setDue(e.target.value)}
-              className="w-auto min-w-48"
-            />
-          </div>
-        </>
+        <Button
+          variant="secondary"
+          aria-label={t('options')}
+          title={t('options')}
+          aria-expanded={more}
+          aria-controls="quick-add-options"
+          onClick={() => setMore((v) => !v)}
+          className={cn('px-2.5 sm:hidden', more && 'bg-muted')}
+        >
+          <OptionsIcon />
+        </Button>
       )}
+      <div
+        id="quick-add-options"
+        className={cn(
+          'order-last basis-full flex-wrap items-center gap-2',
+          more || compact ? 'flex' : 'hidden',
+          'sm:order-none sm:contents',
+        )}
+      >
+        {!compact && (
+          <Select
+            aria-label={t('priority')}
+            value={priority}
+            disabled={disabled}
+            onChange={(e) => setPriority(e.target.value as TaskPriority)}
+            className="w-auto min-w-28"
+          >
+            {PRIORITIES.map((p) => (
+              <option key={p} value={p}>
+                {t(`priorities.${p}`)}
+              </option>
+            ))}
+          </Select>
+        )}
+        <Input
+          type="datetime-local"
+          aria-label={`${t('due')} *`}
+          aria-required
+          aria-describedby={dueProblem ? 'quick-add-due-problem' : undefined}
+          invalid={dueProblem}
+          value={due}
+          disabled={disabled}
+          onChange={(e) => {
+            setDue(e.target.value);
+            if (dueProblem) setDueProblem(false);
+          }}
+          className="w-auto min-w-48"
+        />
+      </div>
       <Button
         type="submit"
         variant="secondary"
@@ -141,6 +154,11 @@ export function QuickAdd({
       {problem && (
         <p id="quick-add-problem" role="alert" className="basis-full text-xs text-danger">
           {t('titleRequired')}
+        </p>
+      )}
+      {dueProblem && (
+        <p id="quick-add-due-problem" role="alert" className="basis-full text-xs text-danger">
+          {t('dueRequired')}
         </p>
       )}
     </form>
