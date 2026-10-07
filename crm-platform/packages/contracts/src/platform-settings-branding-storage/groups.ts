@@ -327,7 +327,8 @@ export const tiPwaSettingsSchema = z.object({
 
 // --- WD-WABA-001: the one Meta app (and Interakt partner) every workspace's WhatsApp numbers are onboarded through -------
 export const WABA_PROVIDERS = ['interakt', 'meta'] as const;
-const metaId = (max: number) => z.union([z.literal(''), z.string().trim().regex(/^\d+$/).max(max)]).default('');
+const metaId = (max: number) =>
+  z.union([z.literal(''), z.string().trim().regex(/^\d+$/).max(max)]).default('');
 export const whatsappSettingsSchema = z.object({
   /** Meta app id (also sent to the browser for the Facebook SDK). */
   appId: metaId(64),
@@ -336,7 +337,13 @@ export const whatsappSettingsSchema = z.object({
   coexistence: flag(false),
   /** `vNN.N`; empty keeps the server default. */
   graphVersion: z
-    .union([z.literal(''), z.string().trim().regex(/^v\d{1,2}\.\d{1,2}$/, 'must look like v25.0')])
+    .union([
+      z.literal(''),
+      z
+        .string()
+        .trim()
+        .regex(/^v\d{1,2}\.\d{1,2}$/, 'must look like v25.0'),
+    ])
     .default(''),
   /** Which route a newly connected number uses. */
   defaultProvider: z.enum(WABA_PROVIDERS).default('interakt'),
@@ -370,6 +377,14 @@ export const googleCalendarSettingsSchema = z.object({
   redirectUri: url(300),
 });
 
+// --- Flow builder: which builder(s) every workspace is offered (an addition beyond WaDesk) ---------------------------------------
+export const FLB_BUILDER_MODES = ['simple', 'advanced'] as const;
+export type FlbBuilderMode = (typeof FLB_BUILDER_MODES)[number];
+export const flowBuilderSettingsSchema = z.object({
+  /** The platform default for every workspace; a workspace can override it (workspace_settings.flow_builder_mode). `simple`: the step-by-step builder. `advanced`: the canvas builder. */
+  mode: z.enum(FLB_BUILDER_MODES).default('advanced'),
+});
+
 export const SET_GROUP_SCHEMAS = {
   general: generalSettingsSchema,
   branding: brandingSettingsSchema,
@@ -386,6 +401,7 @@ export const SET_GROUP_SCHEMAS = {
   whatsapp: whatsappSettingsSchema,
   campaigns: campaignsSettingsSchema,
   googleCalendar: googleCalendarSettingsSchema,
+  flowBuilder: flowBuilderSettingsSchema,
 } as const;
 export type SetGroup = keyof typeof SET_GROUP_SCHEMAS;
 export const SET_GROUPS = Object.keys(SET_GROUP_SCHEMAS) as SetGroup[];
@@ -410,6 +426,7 @@ export const SET_SECRET_FIELDS = {
   campaigns: [],
   /** The OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
   googleCalendar: ['clientSecret'],
+  flowBuilder: [],
 } as const satisfies Record<SetGroup, readonly string[]>;
 
 /** Groups whose saved state can be checked against the outside world (a "test" button). */

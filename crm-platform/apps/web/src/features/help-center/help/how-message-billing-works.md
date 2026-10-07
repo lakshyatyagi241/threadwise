@@ -10,7 +10,7 @@ keywords: [billing, wallet, per message, allowance, charge, refund, balance, cur
 
 ## What it is for
 
-This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send can be refused. For the screens themselves, see [Wallet and statement](help:wallet-statement) and [Wallet top-up](help:wallet-top-up).
+This guide explains the rules behind the numbers on your wallet: what is free, what is charged, when the money moves and why a send can be refused. For the screens themselves, see [Expenses, wallet and statement](help:wallet-statement) and [Wallet top-up](help:wallet-top-up).
 
 ## Two ways messages are paid for
 

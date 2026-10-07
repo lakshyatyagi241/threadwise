@@ -83,9 +83,9 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
 | WD-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
 | WD-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
-| WD-WSP-023 | todo |  |  |
+| WD-WSP-023 | todo |  | Backend built (GET /v2/platform/workspaces, e2e green); web screen pending |
 | WD-WSP-024 | todo |  |  |
-| WD-WSP-025 | todo |  |  |
+| WD-WSP-025 | todo |  | Backend built (GET /v2/platform/workspaces/:id, suspend, unsuspend); web screen pending |
 | WD-WSP-026 | todo |  |  |
 | WD-WSP-027 | todo |  |  |
 | WD-WSP-028 | todo |  |  |

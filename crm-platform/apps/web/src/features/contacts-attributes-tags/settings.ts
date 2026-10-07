@@ -1,7 +1,15 @@
 import { settingsTile } from '../_registry/settings-types';
 
-/** Contact stages, Contact properties and Attributes left the menu for Settings (the screens and their routes are unchanged). */
+/** Contact stages and Contact properties left the menu for Settings. Attributes has no tile of its own: it is the same records as Contact properties, so the page stays at /attributes (linked from the slash picker, the flow builder and Contact properties) without a second tile. */
 export const settings = [
+  settingsTile({
+    id: 'import-export',
+    section: 'security',
+    href: '/import-export',
+    icon: 'transfer',
+    order: 10,
+    gates: { permission: 'record.contacts.import' },
+  }),
   settingsTile({
     id: 'contact-stages',
     shortcutFrom: ['/contacts', '/contact-groups', '/segments'],
@@ -18,15 +26,6 @@ export const settings = [
     href: '/contact-properties',
     icon: 'catalog',
     order: 10,
-    gates: { permission: 'record.contact-properties.read' },
-  }),
-  settingsTile({
-    id: 'attributes',
-    shortcutFrom: ['/contacts', '/contact-groups'],
-    section: 'data',
-    href: '/attributes',
-    icon: 'attributes',
-    order: 20,
     gates: { permission: 'record.contact-properties.read' },
   }),
 ];

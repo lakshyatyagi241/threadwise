@@ -68,7 +68,7 @@
         "replyRate": "{rate}% reply rate",
         "readMini": {
           "sent": "Sent",
-          "delivered": "Deliv",
+          "delivered": "Delivered",
           "read": "Read"
         }
       },
@@ -251,6 +251,7 @@
       },
       "quickActions": {
         "title": "Quick actions",
+        "soon": "Soon",
         "broadcast": {
           "label": "New broadcast",
           "hint": "to a contact group"

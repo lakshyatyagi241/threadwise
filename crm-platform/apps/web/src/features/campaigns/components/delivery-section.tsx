@@ -1,7 +1,9 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Field, Input, Select, cn } from '@crm/ui';
+import { timezoneList } from '@/lib/timezones';
 import { type BuilderForm } from '../lib/builder-model';
 import { Section } from './message-section';
 
@@ -24,6 +26,7 @@ export function DeliverySection({
 }) {
   const t = useTranslations('campaigns.builder.delivery');
   const later = form.scheduleType !== 'now';
+  const zones = useMemo(() => timezoneList(form.timezone), [form.timezone]);
   const num = (key: keyof BuilderForm, label: string, hint?: string, max?: number) => (
     <Field label={label} htmlFor={`camp-${key}`} hint={hint}>
       <Input
@@ -84,12 +87,17 @@ export function DeliverySection({
               />
             </Field>
             <Field label={t('timezone')} htmlFor="camp-tz">
-              <Input
+              <Select
                 id="camp-tz"
                 value={form.timezone}
                 onChange={(e) => patch({ timezone: e.target.value })}
-                placeholder="Asia/Kolkata"
-              />
+              >
+                {zones.map((z) => (
+                  <option key={z} value={z}>
+                    {z}
+                  </option>
+                ))}
+              </Select>
             </Field>
           </div>
         )}

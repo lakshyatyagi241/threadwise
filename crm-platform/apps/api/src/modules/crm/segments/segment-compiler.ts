@@ -240,6 +240,8 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
       return text(sql`${contacts.email}`);
     case 'phone':
       return text(sql`${contacts.phone}`);
+    case 'countryCode':
+      return text(sql`${contacts.countryCode}`);
     case 'source':
       return text(sql`${contacts.source}`);
     case 'leadScore':

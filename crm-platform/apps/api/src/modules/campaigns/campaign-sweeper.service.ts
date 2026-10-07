@@ -9,7 +9,7 @@ import { orgIdList } from '../../common/sql/org-id-list';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PacingRuntime } from '../broadcasts';
 import { CAMPAIGN_SETTINGS, type CampaignSettingsSource } from './_shims/tokens';
-import { CampaignEvents } from './campaign-events';
+import { CampaignEvents, asSystem } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { dateInZone, dueAtUtc, isEcosystemThrottle } from './campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
@@ -106,7 +106,8 @@ export class CampaignSweeper {
         const orgId = Number(r.org_id);
         const id = Number(r.id);
         await this.repo.setStatus(tx, orgId, id, 'running', { lastRun: true });
-        await this.events.statusChanged(tx, orgId, id, 'scheduled');
+        // The outbox takes its tenant from the context, and a sweep across tenants has none: run the event as the system for this one.
+        await asSystem(orgId, () => this.events.statusChanged(tx, orgId, id, 'scheduled'));
         started.push({ orgId, id, uuid: r.uuid });
       }
     });
@@ -161,6 +162,8 @@ export class CampaignSweeper {
       const c = await this.repo.findById(tx, orgId, id);
       if (!c || ['cancelled', 'paused', 'draft', 'scheduled', 'running'].includes(c.status))
         continue;
+      // A wizard broadcast's frequency-cap failures belong to the wizard's own retry job (24 hours apart, or none): never re-run here.
+      if (c.wizard !== null) continue;
       const { retryAttempts } = await this.settings.get(tx, orgId);
       const max = Math.max(1, retryAttempts);
       const rows = await tx.execute(sql`

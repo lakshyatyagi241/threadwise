@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
-import type { TokenPair } from '@crm/contracts';
+import { IMPERSONATION_MAX_MINUTES, type TokenPair } from '@crm/contracts';
 import type { ActorType } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
@@ -25,6 +25,22 @@ export interface TokenClaims {
   rv?: number;
   /** Session was created with "keep me signed in": exempt from the idle timeout. */
   rm?: boolean;
+  /**
+   * Act-as claim: a platform operator is using this workspace user's identity (WD-WSP-032). Only ever on an access token
+   * from `issueImpersonation`; `sid` is then the impersonation session's uuid, not an auth_sessions row.
+   */
+  imp?: ImpersonationClaim;
+}
+
+export interface ImpersonationClaim {
+  /** impersonation_sessions.uuid (equals the token's `sid`). */
+  sid: string;
+  /** Operator id (platform_operators.id). */
+  oid: number;
+  /** Read-only session: the guard refuses every write. */
+  ro: boolean;
+  /** Session end, unix seconds. The token's own `exp` is never later. */
+  exp: number;
 }
 
 /**
@@ -96,6 +112,23 @@ export class TokenService {
     ]);
 
     return { accessToken, refreshToken, expiresIn: accessTtl };
+  }
+
+  /**
+   * The act-as token of an impersonation session: access only, no refresh token, and it can never outlive the session. Nothing
+   * can renew it; when it runs out the operator starts again from the console. Unlike a normal access token it is not capped by
+   * the 15-minute access TTL (there is no refresh to extend it); the cap is the impersonation maximum.
+   */
+  async issueImpersonation(
+    claims: TokenClaims & { imp: ImpersonationClaim },
+    ttlSeconds: number,
+  ): Promise<{ accessToken: string; expiresIn: number }> {
+    const expiresIn = Math.max(1, Math.min(Math.floor(ttlSeconds), IMPERSONATION_MAX_MINUTES * 60));
+    const accessToken = await this.jwt.signAsync(
+      claims,
+      signOptions(this.config.get('JWT_ACCESS_SECRET', { infer: true }), expiresIn),
+    );
+    return { accessToken, expiresIn };
   }
 
   async verifyAccess(token: string): Promise<TokenClaims> {

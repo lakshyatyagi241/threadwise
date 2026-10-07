@@ -128,7 +128,7 @@
       "contact-properties": {
         "label": "Contact properties",
         "description": "Add the fields you want to keep on every contact.",
-        "keywords": "custom fields, fields, required, dropdown, columns"
+        "keywords": "custom fields, fields, required, dropdown, columns, attributes, variables, merge fields"
       },
       "attributes": {
         "label": "Attributes",

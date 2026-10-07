@@ -49,6 +49,8 @@ const TOKEN_ISSUING = new Set([
   'auth/partner/login',
   'auth/clerk/session',
   'auth/logout',
+  // The act-as token of an operator impersonation: only /impersonate (a route handler) may receive it.
+  'auth/impersonation/redeem',
 ]);
 const isTokenIssuing = (path: string[]) => {
   const joined = path.join('/');

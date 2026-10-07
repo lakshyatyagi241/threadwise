@@ -5,6 +5,7 @@ import { CrmModule } from '../../../../crm';
 import { TeamInboxConversationsModule } from '../../../../team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from '../../../../team-inbox-routing-sla';
 import { ActionNodes } from './actions-nodes';
+import { AskInputNode } from './ask-input-node';
 import { AskMediaNodes } from './ask-media-nodes';
 import { NumberSender } from './number-sender.service';
 
@@ -16,7 +17,7 @@ import { NumberSender } from './number-sender.service';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
   ],
-  providers: [ActionNodes, AskMediaNodes, NumberSender, SafeFetch],
-  exports: [ActionNodes, AskMediaNodes],
+  providers: [ActionNodes, AskMediaNodes, AskInputNode, NumberSender, SafeFetch],
+  exports: [ActionNodes, AskMediaNodes, AskInputNode],
 })
 export class ActionNodesModule {}

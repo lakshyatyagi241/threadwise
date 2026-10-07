@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { type FlowFeatured, type FlowState, type FlowSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { plural, purposeOf, relativeTime } from '../lib/list-model';
+import { openHref, type BuilderMode } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
   live: { pill: 'bg-primary/10 text-brand border-primary/30', dot: 'bg-primary' },
@@ -123,6 +124,8 @@ export interface CardActions {
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
   can: { update: boolean; create: boolean; remove: boolean };
+  /** Which builder(s) the platform admin offers; absent means both. */
+  builderMode?: BuilderMode;
 }
 
 export function triggerLabelKey(
@@ -255,7 +258,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
           </Link>
         ) : (
           <Link
-            href={`/flows/builder/${flow.id}`}
+            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
             className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
           >
             {t('openBuilder')}
@@ -409,7 +412,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={`/flows/builder/${flow.id}`}
+            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}
