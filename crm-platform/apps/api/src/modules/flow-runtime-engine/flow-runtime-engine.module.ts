@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { ChatConversationsModule } from '../chat-conversations';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ApiKeyGuard } from '../public-api';
 import { CapTally, PacingRuntime } from './caps';
@@ -46,6 +47,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
   imports: [
     ChatConversationsModule,
     PlansCoreModule,
+    CrmModule,
     ActionNodesModule,
     AiNodesModule,
     CommerceNodesModule,
