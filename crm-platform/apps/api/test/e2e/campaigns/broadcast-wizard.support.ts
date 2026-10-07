@@ -1,3 +1,4 @@
+import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
 import { randomUUID } from 'node:crypto';
 import type { Client } from 'pg';
 import { RequestContextStore } from '../../../src/common/context/request-context';
@@ -128,6 +129,7 @@ export function buildLab(h: Harness): Lab {
     runtime,
     get<SenderLease>(SenderLease),
     get(SENDER_DIRECTORY),
+    get(UNOFFICIAL_WHATSAPP_GATE),
     get(TEMPLATE_DIRECTORY),
     get(WARMER_GATE),
     get(PACING_SETTINGS),

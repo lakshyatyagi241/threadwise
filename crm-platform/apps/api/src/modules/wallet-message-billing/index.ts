@@ -20,8 +20,6 @@ export {
 } from './message-billing.service';
 export { WalletGateService, type LaunchRequest } from './wallet-gate.service';
 export { WalletSettingsService } from './wallet-settings.service';
-/** The balance and plan allowance a screen shows; the broadcast wizard's credit check reads it. */
-export { WalletQueryService } from './wallet-query.service';
 export { countryOfPhone } from './phone-country';
 export { RateCardService } from './rate-card.service';
 export { BillingCurrencyService } from './billing-currency.service';
