@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import { afterLaunchPath } from '../../history/lib';
 import { launchDraft } from '../api/wizard';
 import { classifyLaunchError, type LaunchFailure } from '../lib/launch-errors';
 
@@ -46,7 +47,8 @@ export function useLaunch({
       const result = await launchDraft(id, version, key.current);
       release();
       void qc.invalidateQueries({ queryKey: ['camp'] });
-      router.push(statusPath(result.id));
+      // Each kind lands on its own history page, with the new row marked: now, scheduled or recurring.
+      router.push(afterLaunchPath(result.mode, result.id));
     } catch (e) {
       const f = classifyLaunchError(e);
       if (f.kind === 'other') {

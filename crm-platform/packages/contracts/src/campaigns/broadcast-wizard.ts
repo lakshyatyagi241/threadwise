@@ -185,6 +185,7 @@ const timeOfDay = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'must be HH:mm (
 const zone = z.string().trim().min(1).max(64).refine(isIanaTimeZone, 'unknown time zone');
 
 export const WIZARD_SCHEDULE_MODES = ['now', 'scheduled', 'recurring'] as const;
+export type WizardScheduleMode = (typeof WIZARD_SCHEDULE_MODES)[number];
 
 export const wizardScheduleSchema = z.discriminatedUnion('mode', [
   z.object({ mode: z.literal('now') }),
@@ -629,6 +630,10 @@ export const listWizardBroadcastsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(25),
   cursor: z.string().min(1).max(512).optional(),
   status: z.string().trim().max(32).optional(),
+  /** `recurring` lists the series only; `now` and `scheduled` the one-off campaigns of that kind. Missing: both. */
+  type: z.enum(WIZARD_SCHEDULE_MODES).optional(),
+  /** A part of the name, any case. */
+  q: z.string().trim().max(120).optional(),
 });
 export type ListWizardBroadcastsQuery = z.infer<typeof listWizardBroadcastsQuerySchema>;
 
@@ -641,6 +646,68 @@ export const wizardBroadcastListSchema = z.object({
   }),
 });
 export type WizardBroadcastList = z.infer<typeof wizardBroadcastListSchema>;
+
+// ---------------------------------------------------------------------------------------- history pages
+
+/**
+ * The three history pages of the left menu. `history`: every broadcast that has run or is running, newest first. `scheduled`:
+ * what waits for its time, soonest first. (Recurring series are listed by `GET /broadcasts?type=recurring`.)
+ */
+export const WIZARD_HISTORY_SCOPES = ['history', 'scheduled'] as const;
+
+export const WIZARD_HISTORY_SOURCES = ['wizard', 'classic'] as const;
+
+/** One broadcast run: a one-off campaign, or one occurrence of a recurring series. */
+export const wizardHistoryRowSchema = z.object({
+  /** The campaign's uuid. */
+  id: uuidSchema,
+  /** `wizard`: made with Create broadcast (opens its status page); `classic`: made in the classic builder (opens the campaign). */
+  source: z.enum(WIZARD_HISTORY_SOURCES),
+  /** How it was sent: right away, at a set time, or as a run of a recurring series. */
+  type: z.enum(WIZARD_SCHEDULE_MODES),
+  name: z.string(),
+  status: z.enum(CAMPAIGN_STATUSES),
+  templateName: z.string().nullable(),
+  /** The WhatsApp number it is sent from. */
+  senderLabel: z.string().nullable(),
+  /** The series a recurring run belongs to. */
+  seriesId: uuidSchema.nullable(),
+  /** 1-based position among the series' runs. */
+  occurrence: z.number().int().nullable(),
+  counts: campaignCountsSchema,
+  /** When it was due (scheduled and recurring). */
+  runAt: z.string().datetime().nullable(),
+  startedAt: z.string().datetime().nullable(),
+  finishedAt: z.string().datetime().nullable(),
+  createdAt: z.string().datetime(),
+});
+export type WizardHistoryRow = z.infer<typeof wizardHistoryRowSchema>;
+
+export const listWizardHistoryQuerySchema = z
+  .object({
+    scope: z.enum(WIZARD_HISTORY_SCOPES).default('history'),
+    limit: z.coerce.number().int().min(1).max(100).default(25),
+    cursor: z.string().min(1).max(512).optional(),
+    type: z.enum(WIZARD_SCHEDULE_MODES).optional(),
+    status: z.enum(CAMPAIGN_STATUSES).optional(),
+    /** Day range (inclusive) on the start time, `YYYY-MM-DD`, read in `tz`. */
+    from: dateOnly.optional(),
+    to: dateOnly.optional(),
+    tz: zone.default('UTC'),
+    q: z.string().trim().max(120).optional(),
+  })
+  .refine((v) => !v.from || !v.to || v.from <= v.to, { message: 'from is after to', path: ['to'] });
+export type ListWizardHistoryQuery = z.infer<typeof listWizardHistoryQuerySchema>;
+
+export const wizardHistoryListSchema = z.object({
+  data: z.array(wizardHistoryRowSchema),
+  page: z.object({
+    nextCursor: z.string().nullable(),
+    hasMore: z.boolean(),
+    limit: z.number().int(),
+  }),
+});
+export type WizardHistoryList = z.infer<typeof wizardHistoryListSchema>;
 
 export const wizardControlResponseSchema = z.object({
   id: uuidSchema,

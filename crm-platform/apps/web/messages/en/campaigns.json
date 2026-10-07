@@ -1,7 +1,10 @@
 {
   "campaigns": {
     "nav": {
-      "title": "Campaigns"
+      "title": "Campaigns",
+      "history": "Broadcast history",
+      "scheduled": "Scheduled broadcasts",
+      "recurring": "Recurring broadcasts"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -1003,6 +1006,77 @@
         "pm": "PM",
         "hour": "Hour",
         "minute": "Minute"
+      }
+    },
+    "history": {
+      "create": "Create broadcast",
+      "open": "Open",
+      "new": "New",
+      "loading": "Loading broadcasts",
+      "pager": "Pages",
+      "page": "Page {page}",
+      "previous": "Previous",
+      "next": "Next",
+      "noMatchTitle": "Nothing matches",
+      "noMatch": "No broadcast matches these filters. Change or clear them.",
+      "runNumber": "Run {n}",
+      "type": {
+        "now": "Broadcast now",
+        "scheduled": "Scheduled",
+        "recurring": "Recurring run"
+      },
+      "filters": {
+        "search": "Search by name",
+        "searchPlaceholder": "Broadcast name",
+        "type": "Type",
+        "allTypes": "All types",
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "from": "From",
+        "to": "To",
+        "clear": "Clear filters"
+      },
+      "col": {
+        "name": "Name",
+        "type": "Type",
+        "template": "Template",
+        "audience": "Audience",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed",
+        "status": "Status",
+        "started": "Started",
+        "finished": "Finished",
+        "sender": "Sent from",
+        "runAt": "Runs at",
+        "countdown": "Starts",
+        "actions": "Actions",
+        "rule": "Repeats",
+        "nextRun": "Next run",
+        "lastRun": "Last run",
+        "runs": "Runs",
+        "run": "Run"
+      },
+      "history": {
+        "title": "Broadcast history",
+        "hint": "Every broadcast that has run or is running, newest first: sent now, scheduled, and the runs of recurring broadcasts.",
+        "empty": "No broadcast has been sent yet."
+      },
+      "scheduled": {
+        "title": "Scheduled broadcasts",
+        "hint": "Broadcasts waiting for their time, soonest first. Each one starts by itself.",
+        "empty": "No broadcast is waiting for its time.",
+        "zone": "Times are shown in {zone}."
+      },
+      "recurring": {
+        "title": "Recurring broadcasts",
+        "hint": "Broadcasts that repeat on a schedule. Open a row to see the runs it has started.",
+        "empty": "No recurring broadcast yet.",
+        "showRuns": "Show runs",
+        "hideRuns": "Hide runs",
+        "runs": "Runs",
+        "noRuns": "No run has started yet.",
+        "cancel": "Cancel series"
       }
     }
   }
