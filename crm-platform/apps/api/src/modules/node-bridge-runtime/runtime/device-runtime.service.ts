@@ -110,10 +110,13 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
 
   /** Logged once per off period, so a switched-off engine does not write a line every 20 s tick. */
   private offLogged = false;
+  /** Workspaces already logged as not allowed, so each is logged once per off period (not per 20 s tick). */
+  private readonly orgOffLogged = new Set<number>();
 
   /**
-   * Whether this worker may hold Baileys sockets now (owner decision 2026-10-05: the unofficial engine is off unless a
-   * platform super admin turns it on). Read on every loop; PlatformSettingsService serves it from a 5 s snapshot.
+   * Whether this worker may hold Baileys sockets at all now (owner decision 2026-10-05: the unofficial engine is off unless a
+   * platform super admin turns it on; this is the global kill-switch). Read on every loop; PlatformSettingsService serves it
+   * from a 5 s snapshot. Per-workspace access is `engineOnFor`.
    */
   private async engineOn(): Promise<boolean> {
     if (await this.unofficial.isEnabled()) {
@@ -127,6 +130,41 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       );
     }
     return false;
+  }
+
+  /**
+   * Whether this worker may hold sockets of this workspace's devices: the platform switch is on AND the workspace is allowed
+   * (owner decision 2026-10-06). Logs once per workspace while it is not.
+   */
+  private async engineOnFor(orgId: number): Promise<boolean> {
+    if (!(await this.engineOn())) return false;
+    if (await this.unofficial.isEnabledFor(orgId)) {
+      this.orgOffLogged.delete(orgId);
+      return true;
+    }
+    this.logNotAllowed(orgId);
+    return false;
+  }
+
+  private logNotAllowed(orgId: number): void {
+    if (this.orgOffLogged.has(orgId)) return;
+    this.orgOffLogged.add(orgId);
+    this.logger.log(
+      { orgId },
+      '[NODE] unofficial WhatsApp engine is not enabled for this workspace: its device sockets are not opened or leased',
+    );
+  }
+
+  /** Closes the sockets of workspaces that are no longer allowed; their sessions and device rows are kept. */
+  private async releaseDisallowed(allowed: ReadonlySet<number>): Promise<void> {
+    for (const id of [...this.orgOffLogged]) if (allowed.has(id)) this.orgOffLogged.delete(id);
+    for (const o of [...this.owned.values()]) {
+      if (allowed.has(o.orgId)) continue;
+      this.logNotAllowed(o.orgId);
+      o.session.softDisconnect();
+      await this.lease.release(o.orgId, o.deviceId, o.token).catch(() => undefined);
+      this.owned.delete(key(o.orgId, o.deviceId));
+    }
   }
 
   /** Closes every session this worker holds and gives the leases back; the sessions and device rows are kept. */
@@ -192,8 +230,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     opts: { connect?: boolean } = {},
   ): Promise<'started' | 'already' | 'busy' | 'missing'> {
     if (this.owned.has(key(orgId, deviceId))) return 'already';
-    // Never lease or open a socket while the engine is off, whoever asks (restore, a command, a test).
-    if (!(await this.engineOn())) return 'missing';
+    // Never lease or open a socket while the engine is off for this workspace, whoever asks (restore, a command, a test).
+    if (!(await this.engineOnFor(orgId))) return 'missing';
     const dev = await this.loadDevice(orgId, deviceId);
     if (!dev) return 'missing';
     const token = await this.lease.acquire(orgId, deviceId);
@@ -231,6 +269,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
    */
   async restore(): Promise<{ started: number; skipped: number }> {
     if (!(await this.engineOn())) return { started: 0, skipped: 0 };
+    const allowed = await this.unofficial.enabledOrgIds();
     const rows = await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT d.org_id, d.id, count(a.id)::int AS n
@@ -248,6 +287,11 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       const orgId = Number(r.org_id);
       const deviceId = Number(r.id);
       if (this.owned.has(key(orgId, deviceId))) continue;
+      // A workspace that is not allowed keeps its devices and sessions untouched: nothing is opened, leased or flipped.
+      if (!allowed.has(orgId)) {
+        this.logNotAllowed(orgId);
+        continue;
+      }
       if (r.n < HEALTHY_SESSION_ROWS) {
         skipped++;
         if ((await this.lease.holder(orgId, deviceId)) === null) {
@@ -289,6 +333,8 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       await this.beat();
       return;
     }
+    // A workspace taken off the allow-list while running: close its sockets on this pass, keep the saved sessions.
+    await this.releaseDisallowed(await this.unofficial.enabledOrgIds());
     const alive: Array<[number, number]> = [];
     for (const o of [...this.owned.values()]) {
       // A lease that is no longer ours means another worker has the device: stop at once, never run two sockets.
@@ -524,12 +570,12 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   /** Public for tests. Returns null when this worker is not the one to answer. */
   async handle(cmd: DeviceCommand): Promise<DeviceCommandResult | null> {
     const { orgId, deviceId } = cmd;
-    if (!(await this.engineOn())) {
+    if (!(await this.engineOnFor(orgId))) {
       // Only the worker that owns the device answers a send; with the engine off nobody owns one, so answer once for all.
       return {
         ok: false,
         status: 'error',
-        message: 'The unofficial WhatsApp engine is turned off on this platform.',
+        message: 'The unofficial WhatsApp engine is not enabled for this workspace.',
       };
     }
     if (cmd.type === 'send' || cmd.type === 'act' || cmd.type === 'group') {

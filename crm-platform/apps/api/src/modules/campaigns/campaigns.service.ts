@@ -349,7 +349,7 @@ export class CampaignsService {
     if (input.senderKey) {
       // A pick that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
       if (input.senderKey.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
-        await this.unofficial.assertEnabled();
+        await this.unofficial.assertEnabledFor(orgId);
       const [picked] = await this.senders.resolve(tx, orgId, [input.senderKey]);
       if (!picked) throw field('senderKey', 'That number is not connected.');
       provider = picked.engine;

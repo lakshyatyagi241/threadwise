@@ -152,7 +152,7 @@ export class AutomationsService {
   ): Promise<void> {
     const [engine, uuid] = key.split(':');
     // Choosing a personal number as the "send from" is refused while the platform switch is off (owner decision 2026-10-05).
-    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabled();
+    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabledFor(orgId);
     const res =
       engine === 'baileys'
         ? await tx.execute(

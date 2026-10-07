@@ -84,7 +84,7 @@ export class ChannelRegistryService {
   async list(): Promise<ChannelListResponse> {
     const orgId = RequestContextStore.orgId();
     // Personal-number channels are hidden while the platform switch is off; their rows and conversations stay (owner decision 2026-10-05).
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, orgId);
       const data: ChannelResponse[] = [];
