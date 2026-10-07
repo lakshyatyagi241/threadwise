@@ -152,6 +152,7 @@ const DYNAMIC = [
     'no_recipients',
     'insufficient_balance',
     'checking_balance',
+    'balance_unavailable',
   ].map((c) => `campaigns.wizard.issues.${c}`),
   ...['header', 'body', 'button'].map((s) => `campaigns.wizard.review.slotSection.${s}`),
   ...['multiple', 'tracking', 'credits', 'format'].map((n) => `campaigns.wizard.test.notes.${n}`),

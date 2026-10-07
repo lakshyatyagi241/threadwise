@@ -61,7 +61,7 @@ export function StepAudience({
   const issue = issueFor(issues, 'audience');
   const tally = audienceTally(audience);
   return (
-    <div className="grid gap-4 lg:h-[calc(100dvh-15.5rem)] lg:min-h-[28rem] lg:grid-cols-[minmax(0,1fr)_21rem]">
+    <div className="grid gap-4 lg:h-[calc(100dvh-15.5rem)] lg:min-h-[28rem] lg:grid-cols-[minmax(0,1fr)_25rem]">
       <div className="flex min-h-0 min-w-0 flex-col gap-3">
         <AudienceModes mode={mode} tally={tally} onMode={setMode} panelId={panelId} />
         <AudienceSummary tally={tally} allTotal={audience.allMatching ? allTotal : null} />
