@@ -33,6 +33,7 @@ import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
+import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
@@ -826,6 +827,18 @@ export class ContactsService {
           ? await this.repo.statusContext(tx, ctx.orgId)
           : undefined;
 
+      // Custom properties are checked once for the whole request, before any row is written: an unknown key or a value
+      // that does not fit its property's type is a 422 and nothing is changed.
+      const customInput = input.values.customFields;
+      if (customInput !== undefined) assertFormFieldLimits(customInput);
+      const propertyPlan =
+        customInput !== undefined && Object.keys(customInput).length > 0
+          ? planPropertyChanges(
+              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(customInput)),
+              customInput,
+            )
+          : undefined;
+
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
@@ -873,21 +886,32 @@ export class ContactsService {
           });
           if (plan.status !== undefined) values.status = plan.status;
         }
-        if (input.values.customFields !== undefined) {
-          assertFormFieldLimits(input.values.customFields);
-          values.data = { ...(existing.data ?? {}), ...input.values.customFields };
+        let changedKeys: string[] = [];
+        if (propertyPlan) {
+          // Merge, don't replace: the contact's other properties stay. A cleared key is removed.
+          const applied = applyPropertyPlan(existing.data ?? {}, propertyPlan);
+          values.data = applied.data;
+          changedKeys = applied.changedKeys;
           // Only the keys this edit sets are held to the rule: it may not blank a required property, but contacts
           // that never had one are not all refused.
           await this.assertRequiredProperties(
             rowTx,
             ctx.orgId,
-            values.data as Record<string, unknown>,
-            new Set(Object.keys(input.values.customFields)),
+            applied.data,
+            new Set(Object.keys(customInput!)),
           );
         }
 
         await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);
-        await this.audit.record(rowTx, { module: MODULE_KEY, recordId: id, action: 'update' });
+        // The keys that changed are recorded, never their values.
+        await this.audit.record(rowTx, {
+          module: MODULE_KEY,
+          recordId: id,
+          action: 'update',
+          ...(changedKeys.length > 0
+            ? { delta: { customFieldKeys: { old: null, new: changedKeys } } }
+            : {}),
+        });
         await this.outbox.emit(rowTx, {
           aggregateModule: MODULE_KEY,
           aggregateId: id,
@@ -900,6 +924,7 @@ export class ContactsService {
             uuid,
             previousStage: existing.lifecycleStage,
             stage: input.values.lifecycleStage ?? existing.lifecycleStage,
+            ...(changedKeys.length > 0 ? { customFieldKeys: changedKeys } : {}),
           },
         });
       });
