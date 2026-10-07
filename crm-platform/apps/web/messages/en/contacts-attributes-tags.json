@@ -32,6 +32,7 @@
       "statusInUse": "Some contacts still hold this value. Choose where to move them.",
       "dependencyCycle": "That condition would make two properties wait for each other.",
       "requiredProperty": "Some required properties have no value. Fill them in and save again.",
+      "propertyNotEditable": "One of the properties is no longer available for editing. Close this window, reopen it and try again.",
       "lostReason": "Choose why this contact was lost before moving it to a lost stage.",
       "stageFlag": "Won and lost can only be set on a contact stage, and a stage cannot be both.",
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
@@ -93,6 +94,7 @@
       "optedOut": "Opted out",
       "filterByTag": "Filter by {name}",
       "selectAll": "Select all loaded contacts",
+      "sortBy": "Sort by {column}. Drag a heading to move the column, or press Alt and an arrow key.",
       "selectRow": "Select {name}",
       "unnamed": "No Name",
       "colGroups": "Groups",
@@ -114,7 +116,6 @@
       "moreFilters": "More filters",
       "sendCampaign": "Send Campaign",
       "sendCampaignHint": "Select contacts to send a campaign",
-      "sendCampaignSoon": "Campaigns are coming soon.",
       "moreActions": "More Actions",
       "selectedActions": "Selected contacts",
       "selectedActionsNone": "Selected contacts (select rows first)",
@@ -473,7 +474,13 @@
       "failed": "The import failed.",
       "limitExceeded": "Over plan limit",
       "limitExceededNote": "Some new contacts were not imported because the contact limit of your plan was reached.",
-      "rejectsFailed": "The rejected rows could not be downloaded."
+      "rejectsFailed": "The rejected rows could not be downloaded.",
+      "groupRequired": "Add these contacts to",
+      "groupExisting": "An existing group",
+      "groupNew": "A new group",
+      "groupPick": "Choose a group",
+      "groupNewPlaceholder": "New group name",
+      "groupRequiredHint": "Every imported contact joins this one group. The file's own group column is ignored unless you map it above."
     },
     "detail": {
       "back": "All contacts",
@@ -1114,7 +1121,23 @@
       "unassign": "No owner",
       "cancel": "Cancel",
       "close": "Close",
-      "apply": "Update {count, plural, one {# contact} other {# contacts}}"
+      "apply": "Update {count, plural, one {# contact} other {# contacts}}",
+      "properties": {
+        "title": "Custom properties",
+        "hint": "Properties you add here are set on {count, plural, one {the selected contact} other {all # selected contacts}}. Properties you do not add are not changed.",
+        "add": "Add property",
+        "search": "Search properties",
+        "available": "Properties you can add",
+        "noMatch": "No property matches.",
+        "closePicker": "Close",
+        "changed": "Properties to change",
+        "clear": "Clear",
+        "keep": "Keep",
+        "setValue": "Set a value",
+        "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
+        "requiredNoClear": "A required property cannot be cleared.",
+        "problemEmpty": "Enter a value, or choose Clear."
+      }
     },
     "kanban": {
       "board": "Contacts by stage",

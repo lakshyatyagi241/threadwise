@@ -26,6 +26,30 @@ read and create, and update and delete with scope `own`.
 segment's existence is not revealed. A segment the caller can see but not change is `403 FORBIDDEN` on PATCH and DELETE; the
 response's `canEdit` tells the screen.
 
+**Specific people** (a change beyond WaDesk, by request; WaDesk has no segments). A third visibility, `specific`, shows a segment
+only to the people and teams in `sharedWith`, plus its owner and callers who can edit every segment. A person is on the list
+directly (`sharedWith.userIds`) or through a team (`sharedWith.teamIds`: every member of the team **as it is when the question is
+asked**, so joining or leaving the team changes who sees it at once). Being listed grants **view and use only** (see it, filter
+contacts by it, pick it as an audience, export, tag, add to a group, duplicate it): editing and deleting stay with the owner and
+the edit-all scope, so `canEdit` is false for a listed person. They still need `record.segments.read`: a listed person without it
+sees nothing. Everyone else gets `404`, as for a private one, in `GET /segments/:id`, the list, `/segments/:id/contacts`, every
+action, `GET /contacts?segmentId=` (no contacts) and the broadcast wizard's audience picker.
+
+`sharedWith` is a request body field and a response field with different shapes. In: `{ userIds: uuid[], teamIds?: uuid[] }`, at
+most 200 people and teams together, only with `visibility: "specific"` (any other kind with a non-empty list is 422
+`VALIDATION_FAILED`), required and non-empty when the result is `specific`: `422 SEG_SHARE_EMPTY` (also when switching a private or
+shared segment to `specific` without a list), `422 SEG_SHARE_USER_NOT_FOUND` / `SEG_SHARE_TEAM_NOT_FOUND` for an id that is not in
+this workspace (`errors[].path` is `sharedWith.userIds.<n>` / `sharedWith.teamIds.<n>`; nothing is saved). On PATCH, absent keeps the
+list, sent replaces it (the server diffs it: only the added and removed rows are written), and moving off `specific` clears it.
+Out: `{ users: [{ id, name, email|null }], teams: [{ id, name, memberCount }] }`, empty unless `specific`; `email` is only filled in
+for callers who can edit the segment. A change of the list alone bumps `rowVersion`, so two editors cannot overwrite each other.
+Removing a person from the workspace, or deleting a team or the segment, removes the rows (`ON DELETE CASCADE`).
+
+**Stale audiences.** Only creating and selecting is gated. A broadcast or campaign that already targets a segment keeps working after
+the person who picked it, or the segment's list, lost access: sending resolves members through `SegmentsService.resolveMembers`
+(no visibility check, as for private segments), and `memberIdsIn` (building an audience inside a request) is the one place that asks
+who is looking. The broadcast wizard's draft check only requires that the segment exists in the workspace, as before.
+
 **Using a segment on contacts needs the contact permission too**: the member list needs `record.contacts.read`, the export
 `record.contacts.export`, tag and add-to-group `record.contacts.update`. Every one of them applies the caller's record scope to the
 contacts: an agent with `record.contacts.read` scope `own` sees, counts, exports and tags only their own contacts of a segment.
@@ -38,7 +62,8 @@ contacts: an agent with `record.contacts.read` scope `own` sees, counts, exports
   "name": "Hot leads from imports",
   "description": null,
   "color": "#22C55E",
-  "visibility": "shared",
+  "visibility": "specific",
+  "sharedWith": { "users": [{ "id": "…", "name": "Ravi", "email": null }], "teams": [] },
   "ownerId": "…",
   "ownerName": "Ana",
   "rules": { "type": "group", "combinator": "and", "children": [ … ] },
@@ -139,7 +164,7 @@ create a broken segment; a rule also cannot point at another workspace's tag or 
 
 | Route                              | Capability                                      | Notes                                                                                                                                               |
 | ---------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /segments`                    | `record.segments.read`                          | cursor-paged, newest first; `q`, `visibility`, `mine=true`. Counts are the cached ones: a list never counts                                         |
+| `GET /segments`                    | `record.segments.read`                          | cursor-paged, newest first; `q`, `visibility` (`private\|shared\|specific`), `mine=true`. Counts are the cached ones: a list never counts           |
 | `GET /segments/usage?kind&ref`     | `record.segments.read`                          | segments (visible to the caller) that use a `tag`, `group`, `stage`, `status`, `field` (key) or `user`: the warning before a delete                 |
 | `POST /segments/preview`           | `record.segments.read` + `record.contacts.read` | `{ rules }` → `{ count, countApproximate, sample[≤10 contacts], invalidConditions }`; nothing is saved; 30 per minute per user (`429 RATE_LIMITED`) |
 | `POST /segments/from-filters`      | `record.segments.create`                        | `{ name, description?, color?, visibility?, filter }`: the contacts list filter converted to rules (AND of its parts); no conditions = 422          |
@@ -224,9 +249,9 @@ while membership moves; a sender that must not target a half-broken audience can
 
 ## Events and audit
 
-`segment.created`, `segment.updated` (`{ uuid, name, visibility, rulesChanged }`), `segment.deleted`, each with an audit row
+`segment.created`, `segment.updated` (`{ uuid, name, visibility, rulesChanged, sharesChanged, sharedUsers?, sharedTeams? }`; `segment.created` also carries the two counts), `segment.deleted`, each with an audit row
 (module `segments`) in the same transaction as the write. An edit that changes nothing writes neither; a failed write (a taken
-name, a stale `rowVersion`) leaves neither. Cached counts and the usage stamp are bookkeeping and are not audited.
+name, a stale `rowVersion`) leaves neither. Sharing is audited as counts (`sharedUsers`, `sharedTeams`, old and new), never names. Cached counts and the usage stamp are bookkeeping and are not audited.
 
 ## Storage
 
@@ -237,3 +262,8 @@ Forced RLS with the tenant policy. The touch trigger is `segments_touch()`, `tou
 count and the usage stamp leave `row_version` and `updated_at` alone (otherwise a count refresh would turn the editor's next save
 into a 409). `segment_safe_numeric()` and `segment_safe_timestamptz()` do the casts of custom property values so a dirty value is a
 non-match, not an error. Permissions: `20261011090100_seg_permissions.sql`.
+
+`segment_shares` (`20261106090000_seg_share_with_users.sql`): `(org_id, id)` primary key, `segment_id`, and exactly one of `user_id` /
+`team_id` (CHECK), composite foreign keys with `ON DELETE CASCADE` to `segments`, `users` and `teams`, unique per segment and person and
+per segment and team, forced RLS. The same migration widens `chk_segments_visibility` to `private|shared|specific` (existing rows are
+not rewritten) and adds `segments.shares_rev`, which the service bumps with every change of the list so that it moves `row_version`.

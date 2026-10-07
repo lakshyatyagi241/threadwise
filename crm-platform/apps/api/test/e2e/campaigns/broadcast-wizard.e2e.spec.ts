@@ -205,6 +205,57 @@ describe('step 2: audience sources and the count', () => {
     });
   });
 
+  it('a Contact Hub selection is a source: ticked ids, or the saved filter minus the un-ticked rows', async () => {
+    const w = await world(lab, 'bwa-sel');
+    const ids = await people(lab, w.t, [
+      { name: 'Ticked one', countryCode: '+91' },
+      { name: 'Ticked two', countryCode: '+91' },
+      { name: 'Ticked opted out', isUnsubscribed: true },
+      { name: 'Left out', countryCode: '+44' },
+    ]);
+    const picked = await count(w.t.admin, {
+      groupIds: [],
+      segmentIds: [],
+      rules: null,
+      selection: { ids: ids.slice(0, 3) },
+    });
+    expect(picked).toMatchObject({ matching: 3, optedOut: 1, recipients: 2 });
+
+    // "Select all matching" with a filter, one row un-ticked.
+    const filtered = await count(w.t.admin, {
+      groupIds: [],
+      segmentIds: [],
+      rules: null,
+      selection: { filter: { q: 'Ticked' }, excludeIds: [ids[1]!] },
+    });
+    expect(filtered).toMatchObject({ matching: 2, recipients: 1 });
+
+    // A selection joins the other sources as a union (a contact in both is counted once).
+    const joined = await count(w.t.admin, {
+      groupIds: [],
+      segmentIds: [],
+      rules: null,
+      contactIds: [ids[0]!, ids[3]!],
+      selection: { ids: ids.slice(0, 2) },
+    });
+    expect(joined.matching).toBe(3);
+
+    // Ids that are not in this workspace select nobody; a selection naming both ids and a filter is refused.
+    const foreign = '3f1c2b7a-5d4e-4a90-8b21-0c9d7e6f5a43';
+    expect(
+      await count(w.t.admin, {
+        groupIds: [],
+        segmentIds: [],
+        rules: null,
+        selection: { ids: [foreign] },
+      }),
+    ).toMatchObject({ matching: 0, recipients: 0 });
+    const both = await wiz(lab, w.t.admin).post('/audience/count', {
+      audience: { selection: { ids, filter: { q: 'x' } } },
+    });
+    expect(both.status).toBe(422);
+  });
+
   it('reports the recipients by destination country, for the price', async () => {
     const w = await world(lab, 'bwa3');
     const ids = await people(lab, w.t, [

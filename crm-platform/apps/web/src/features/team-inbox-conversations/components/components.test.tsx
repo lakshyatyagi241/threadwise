@@ -371,6 +371,27 @@ describe('ConversationList states', () => {
   });
   const render = (p: ReturnType<typeof props>) => html(<ConversationList {...p} />);
 
+  it('the status filter offers Open first, one Resolved (no separate Closed), Pending, Snoozed, Spam and every status', () => {
+    const out = render(props());
+    const options = [...out.matchAll(/<option value="([^"]*)"[^>]*>([^<]*)<\/option>/g)].map(
+      (m) => [m[1], m[2]],
+    );
+    const status = options.filter(([v]) =>
+      ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
+    );
+    expect(status.map(([v]) => v)).toEqual([
+      'open',
+      'pending',
+      'snoozed',
+      'resolved',
+      'spam',
+      'all',
+    ]);
+    expect(status[0]).toEqual(['open', 'Open']);
+    expect(out).not.toContain('Open and pending');
+    expect(out).not.toContain('>Closed<');
+  });
+
   it('tells a workspace with no channel to connect one, with a link', () => {
     const out = render(props());
     expect(out).toContain('Connect a channel to start');

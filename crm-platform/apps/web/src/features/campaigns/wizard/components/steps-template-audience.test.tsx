@@ -325,6 +325,26 @@ describe('step 2: audience', () => {
     expect(groupsOnly).toContain('VIP customers');
   });
 
+  it('shows what the Contact Hub sent, ticked rows or the whole view, with a way to remove it', () => {
+    const ticked = step({
+      audience: audience({ selection: { ids: [uuid(1), uuid(2)] } }),
+    });
+    expect(ticked).toContain('Chosen in the Contact Hub');
+    expect(ticked).toContain('2 contacts ticked');
+    expect(ticked).toContain('Remove');
+    const view = step({
+      audience: audience({
+        selection: {
+          filter: { q: 'a', includeArchived: false, tagMode: 'any' },
+          excludeIds: [uuid(3)],
+        },
+      }),
+    });
+    expect(view).toContain('Everything the Contact Hub view matched (1 left out)');
+    expect(tallyIsEmpty(audienceTally(audience({ selection: { ids: [uuid(1)] } })))).toBe(false);
+    expect(step()).not.toContain('Chosen in the Contact Hub');
+  });
+
   it('shows the problem after a try', () => {
     const out = step({
       issues: [{ path: 'audience', code: 'audience_required' }],

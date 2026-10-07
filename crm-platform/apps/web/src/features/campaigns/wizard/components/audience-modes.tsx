@@ -129,6 +129,7 @@ export function AudienceSummary({
   if (tally.groups > 0) chips.push(t('chipGroups', { count: tally.groups }));
   if (tally.segments > 0) chips.push(t('chipSegments', { count: tally.segments }));
   if (tally.csv > 0) chips.push(t('chipCsv', { count: tally.csv }));
+  if (tally.hubSelection) chips.push(t('chipHub'));
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5" data-testid="audience-summary">
       <div className="flex flex-wrap items-center gap-1.5" aria-live="polite">

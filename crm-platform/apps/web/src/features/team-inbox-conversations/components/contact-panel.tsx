@@ -61,7 +61,9 @@ export function ContactPanel(props: ContactPanelProps) {
             {
               id: 'notes',
               label:
-                props.notes.length > 0 ? `${t('notes.tab')} (${props.notes.length})` : t('notes.tab'),
+                props.notes.length > 0
+                  ? `${t('notes.tab')} (${props.notes.length})`
+                  : t('notes.tab'),
               content: <NotesTab {...props} />,
             },
             {
@@ -81,7 +83,12 @@ export function ContactPanel(props: ContactPanelProps) {
 
       {contactId && (
         <div className="space-y-3" data-testid="inbox-contact-links">
-          <LinkedTasks kind="contact" id={contactId} compact />
+          <LinkedTasks
+            kind="contact"
+            id={contactId}
+            label={detail.contactSummary?.name ?? detail.contact?.name ?? undefined}
+            compact
+          />
           <LinkedAppointments contactId={contactId} />
         </div>
       )}
@@ -173,7 +180,10 @@ function AssigneeSection(props: ContactPanelProps) {
     users.find((u) => u.id === current?.id)?.availability;
 
   return (
-    <section aria-label={t('assignee.title')} className="space-y-2 rounded-md border border-border p-3">
+    <section
+      aria-label={t('assignee.title')}
+      className="space-y-2 rounded-md border border-border p-3"
+    >
       <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {t('assignee.title')}
       </h3>
@@ -207,7 +217,9 @@ function AssigneeSection(props: ContactPanelProps) {
         )}
       </p>
       {currentTeam && (
-        <p className="text-xs text-muted-foreground">{t('assignee.team', { name: currentTeam.name })}</p>
+        <p className="text-xs text-muted-foreground">
+          {t('assignee.team', { name: currentTeam.name })}
+        </p>
       )}
 
       {can.assign && (
@@ -231,7 +243,8 @@ function AssigneeSection(props: ContactPanelProps) {
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.name ?? u.email}
-                  {u.isMe ? ` (${t('assignee.you')})` : ''} · {t('assignee.open', { count: u.openConversations })}
+                  {u.isMe ? ` (${t('assignee.you')})` : ''} ·{' '}
+                  {t('assignee.open', { count: u.openConversations })}
                 </option>
               ))}
             </Select>
@@ -410,7 +423,9 @@ function NotesTab(props: ContactPanelProps) {
                   </button>
                 )}
               </div>
-              <p dir="auto" className="whitespace-pre-wrap break-words">{n.body}</p>
+              <p dir="auto" className="whitespace-pre-wrap break-words">
+                {n.body}
+              </p>
             </li>
           ))}
       </ul>
@@ -448,7 +463,10 @@ function TimelineTab({ conversationId }: { conversationId: string }) {
   if (sorted.length === 0) return <p className="text-sm text-muted-foreground">{t('empty')}</p>;
 
   return (
-    <ol className="relative ms-1 space-y-3 border-s-2 border-border ps-4" data-testid="inbox-timeline">
+    <ol
+      className="relative ms-1 space-y-3 border-s-2 border-border ps-4"
+      data-testid="inbox-timeline"
+    >
       {sorted.map((e) => {
         const label = eventLabel(e);
         const actor = e.actor.name ?? t(`actors.${e.actor.kind}`);

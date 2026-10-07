@@ -22,7 +22,8 @@ import {
   TemplatesCard,
   WalletOrAutopilotCard,
 } from './dashboard-cards';
-import { Funnel, LoadError, Panel, Trend } from './parts';
+import { Funnel } from './funnel';
+import { LoadError, Panel, Trend } from './parts';
 import { QuickAccessTiles } from '@/features/admin-console-shell/quick-access/quick-access-tiles';
 import {
   CopilotCard,

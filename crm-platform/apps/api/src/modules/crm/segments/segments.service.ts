@@ -15,6 +15,7 @@ import {
   type PageResponse,
   type PreviewSegmentInput,
   type RecordScope,
+  type SegmentSharedWithInput,
   type SegmentCountResponse,
   type SegmentFromFiltersInput,
   type SegmentGroup,
@@ -47,7 +48,7 @@ import { loadRuleContext } from './segment-rule-context';
 import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { SegmentThrottle } from './segment-throttle';
 import { segmentsUsing } from './segment-usage';
-import { toSegmentResponse, type SegmentCountView } from './segments.mapper';
+import { toSegmentResponse, type SegmentCountView, type SegmentShareView } from './segments.mapper';
 import { SegmentsRepository, type SegmentRow } from './segments.repository';
 
 export const SEGMENT_MODULE = 'segments';
@@ -59,6 +60,30 @@ const nameTaken = (name: string, existingId: string) =>
     HttpStatus.CONFLICT,
     existingId ? [{ path: 'existingId', message: existingId }] : undefined,
   );
+
+const shareError = (
+  code:
+    | typeof ERROR_CODES.SEG_SHARE_EMPTY
+    | typeof ERROR_CODES.SEG_SHARE_USER_NOT_FOUND
+    | typeof ERROR_CODES.SEG_SHARE_TEAM_NOT_FOUND,
+  message: string,
+  details: Array<{ path: string; message: string }>,
+) => new AppError(code, message, HttpStatus.UNPROCESSABLE_ENTITY, details);
+
+interface ShareTargets {
+  userIds: number[];
+  teamIds: number[];
+}
+
+/** What a save changes on the people list (ids are internal; only counts leave this file). */
+interface ShareChange {
+  add: ShareTargets;
+  remove: ShareTargets;
+  usersBefore: number;
+  teamsBefore: number;
+  usersAfter: number;
+  teamsAfter: number;
+}
 
 /**
  * Segments: saved rules that fill themselves.
@@ -104,6 +129,11 @@ export class SegmentsService {
       // One lookup of everything the page's rules point at, then each is compiled only to learn which
       // conditions are broken. The count is whatever is cached: a list never counts.
       const rc = await this.ruleContextFor(tx, ctx.orgId, items);
+      const shares = await this.repo.sharesFor(
+        tx,
+        ctx.orgId,
+        items.filter((r) => r.visibility === 'specific').map((r) => r.id),
+      );
       const data: SegmentResponse[] = [];
       for (const row of items) {
         const compiled = compileRules(ctx.orgId, row.rules as unknown as SegmentGroup, rc);
@@ -117,6 +147,7 @@ export class SegmentsService {
             },
             compiled.invalid,
             await this.canEdit(tx, ctx.orgId, row, 'update'),
+            shares.get(row.id),
           ),
         );
       }
@@ -137,6 +168,7 @@ export class SegmentsService {
         view,
         compiled.invalid,
         await this.canEdit(tx, ctx.orgId, row, 'update'),
+        await this.sharesOf(tx, ctx.orgId, row),
       );
     });
   }
@@ -166,6 +198,21 @@ export class SegmentsService {
       const clash = await this.repo.findByName(tx, ctx.orgId, input.name);
       if (clash) throw nameTaken(input.name, clash.uuid);
 
+      // Checked before the insert so a bad list never leaves a half-made segment behind the 422.
+      const shares =
+        input.visibility === 'specific'
+          ? await this.resolveShares(tx, ctx.orgId, input.sharedWith)
+          : undefined;
+      if (input.visibility !== 'specific' && input.sharedWith) {
+        const n = input.sharedWith.userIds.length + input.sharedWith.teamIds.length;
+        if (n > 0) {
+          throw AppError.validation(
+            'People can only be chosen when the segment is shared with specific people.',
+            [{ path: 'sharedWith', message: 'Set visibility to specific first.' }],
+          );
+        }
+      }
+
       const created = await this.repo.insertIfAbsent(tx, ctx.orgId, {
         name: input.name,
         description: input.description ?? null,
@@ -176,17 +223,32 @@ export class SegmentsService {
         rulesVersion: SEGMENT_RULES_VERSION,
       });
       if (!created) throw nameTaken(input.name, '');
+      if (shares) await this.repo.addShares(tx, ctx.orgId, created.id, shares);
 
       await this.audit.record(tx, {
         module: SEGMENT_MODULE,
         recordId: created.id,
         action: 'insert',
+        ...(shares
+          ? {
+              delta: {
+                sharedUsers: { old: 0, new: shares.userIds.length },
+                sharedTeams: { old: 0, new: shares.teamIds.length },
+              },
+            }
+          : {}),
       });
       await this.outbox.emit(tx, {
         aggregateModule: SEGMENT_MODULE,
         aggregateId: created.id,
         eventType: 'segment.created',
-        payload: { uuid: created.uuid, name: input.name, visibility: input.visibility },
+        payload: {
+          uuid: created.uuid,
+          name: input.name,
+          visibility: input.visibility,
+          sharedUsers: shares?.userIds.length ?? 0,
+          sharedTeams: shares?.teamIds.length ?? 0,
+        },
       });
 
       return this.respondAfterWrite(tx, ctx.orgId, created.id);
@@ -206,6 +268,7 @@ export class SegmentsService {
       description: input.description,
       color: input.color,
       visibility: input.visibility,
+      sharedWith: input.sharedWith,
       rules,
     });
   }
@@ -228,6 +291,21 @@ export class SegmentsService {
       if (input.visibility !== undefined && input.visibility !== existing.visibility) {
         values.visibility = input.visibility;
       }
+      const shareChange = await this.planShares(
+        tx,
+        ctx.orgId,
+        existing,
+        input.visibility ?? existing.visibility,
+        input.sharedWith,
+      );
+      const sharesChanged =
+        shareChange !== undefined &&
+        shareChange.add.userIds.length +
+          shareChange.add.teamIds.length +
+          shareChange.remove.userIds.length +
+          shareChange.remove.teamIds.length >
+          0;
+      if (sharesChanged) values.sharesChanged = true;
       const rulesChanged =
         input.rules !== undefined && JSON.stringify(input.rules) !== JSON.stringify(existing.rules);
       if (rulesChanged) {
@@ -261,6 +339,10 @@ export class SegmentsService {
         throw err;
       }
       if (!updated) throw AppError.rowVersionConflict('Segment');
+      if (sharesChanged) {
+        await this.repo.removeShares(tx, ctx.orgId, existing.id, shareChange.remove);
+        await this.repo.addShares(tx, ctx.orgId, existing.id, shareChange.add);
+      }
 
       const after = (await this.repo.findById(tx, ctx.orgId, existing.id))!;
       await this.audit.record(tx, {
@@ -274,6 +356,9 @@ export class SegmentsService {
             color: existing.color,
             visibility: existing.visibility,
             rules: existing.rules,
+            ...(sharesChanged
+              ? { sharedUsers: shareChange.usersBefore, sharedTeams: shareChange.teamsBefore }
+              : {}),
           },
           {
             name: after.name,
@@ -281,6 +366,9 @@ export class SegmentsService {
             color: after.color,
             visibility: after.visibility,
             rules: after.rules,
+            ...(sharesChanged
+              ? { sharedUsers: shareChange.usersAfter, sharedTeams: shareChange.teamsAfter }
+              : {}),
           },
         ),
       });
@@ -288,7 +376,16 @@ export class SegmentsService {
         aggregateModule: SEGMENT_MODULE,
         aggregateId: existing.id,
         eventType: 'segment.updated',
-        payload: { uuid, name: after.name, visibility: after.visibility, rulesChanged },
+        payload: {
+          uuid,
+          name: after.name,
+          visibility: after.visibility,
+          rulesChanged,
+          sharesChanged,
+          ...(sharesChanged
+            ? { sharedUsers: shareChange.usersAfter, sharedTeams: shareChange.teamsAfter }
+            : {}),
+        },
       });
 
       return this.respondAfterWrite(tx, ctx.orgId, existing.id);
@@ -620,6 +717,119 @@ export class SegmentsService {
       view,
       compiled.invalid,
       await this.canEdit(tx, orgId, row, 'update'),
+      await this.sharesOf(tx, orgId, row),
     );
+  }
+
+  private async sharesOf(
+    tx: Tx,
+    orgId: number,
+    row: SegmentRow,
+  ): Promise<SegmentShareView | undefined> {
+    if (row.visibility !== 'specific') return undefined;
+    return (await this.repo.sharesFor(tx, orgId, [row.id])).get(row.id);
+  }
+
+  /**
+   * The people list a save asks for, as ids. A pick that is not in this workspace is named by position (422), never
+   * silently dropped: the caller believed that person would see the segment.
+   */
+  private async resolveShares(
+    tx: Tx,
+    orgId: number,
+    input: SegmentSharedWithInput | undefined,
+  ): Promise<ShareTargets> {
+    const userUuids = [...new Set(input?.userIds ?? [])];
+    const teamUuids = [...new Set(input?.teamIds ?? [])];
+    if (userUuids.length + teamUuids.length === 0) {
+      throw shareError(
+        ERROR_CODES.SEG_SHARE_EMPTY,
+        'Choose at least one person or team to share the segment with.',
+        [{ path: 'sharedWith', message: 'Choose at least one person or team.' }],
+      );
+    }
+    const users = await this.repo.usersByUuid(tx, orgId, userUuids);
+    const missingUsers = userUuids.flatMap((u, i) => (users.has(u) ? [] : [i]));
+    if (missingUsers.length > 0) {
+      throw shareError(
+        ERROR_CODES.SEG_SHARE_USER_NOT_FOUND,
+        'Some of the chosen people are not members of this workspace.',
+        missingUsers.map((i) => ({
+          path: `sharedWith.userIds.${i}`,
+          message: 'Not a member of this workspace.',
+        })),
+      );
+    }
+    const teams = await this.repo.teamsByUuid(tx, orgId, teamUuids);
+    const missingTeams = teamUuids.flatMap((u, i) => (teams.has(u) ? [] : [i]));
+    if (missingTeams.length > 0) {
+      throw shareError(
+        ERROR_CODES.SEG_SHARE_TEAM_NOT_FOUND,
+        'Some of the chosen teams do not exist in this workspace.',
+        missingTeams.map((i) => ({
+          path: `sharedWith.teamIds.${i}`,
+          message: 'No such team in this workspace.',
+        })),
+      );
+    }
+    return {
+      userIds: userUuids.map((u) => users.get(u)!),
+      teamIds: teamUuids.map((u) => teams.get(u)!),
+    };
+  }
+
+  /**
+   * What a save does to the people list: the diff between what is stored and what the result must be (nothing for a
+   * segment that is not, and stays not, `specific`; everything removed when it stops being `specific`). Throws like
+   * `resolveShares` when the result must be `specific` and the list is empty or wrong.
+   */
+  private async planShares(
+    tx: Tx,
+    orgId: number,
+    existing: SegmentRow,
+    nextVisibility: SegmentRow['visibility'],
+    input: SegmentSharedWithInput | undefined,
+  ): Promise<ShareChange | undefined> {
+    const none: ShareTargets = { userIds: [], teamIds: [] };
+    if (nextVisibility !== 'specific') {
+      if ((input?.userIds.length ?? 0) + (input?.teamIds.length ?? 0) > 0) {
+        throw AppError.validation(
+          'People can only be chosen when the segment is shared with specific people.',
+          [{ path: 'sharedWith', message: 'Set visibility to specific first.' }],
+        );
+      }
+      if (existing.visibility !== 'specific') return undefined;
+      const current = await this.repo.shareTargets(tx, orgId, existing.id);
+      return {
+        add: none,
+        remove: current,
+        usersBefore: current.userIds.length,
+        teamsBefore: current.teamIds.length,
+        usersAfter: 0,
+        teamsAfter: 0,
+      };
+    }
+    // Becoming `specific` needs a list; staying `specific` keeps the list unless a new one is sent.
+    if (input === undefined && existing.visibility === 'specific') return undefined;
+    const wanted = await this.resolveShares(tx, orgId, input);
+    const current =
+      existing.visibility === 'specific'
+        ? await this.repo.shareTargets(tx, orgId, existing.id)
+        : none;
+    const diff = (a: number[], b: number[]) => a.filter((x) => !b.includes(x));
+    return {
+      add: {
+        userIds: diff(wanted.userIds, current.userIds),
+        teamIds: diff(wanted.teamIds, current.teamIds),
+      },
+      remove: {
+        userIds: diff(current.userIds, wanted.userIds),
+        teamIds: diff(current.teamIds, wanted.teamIds),
+      },
+      usersBefore: current.userIds.length,
+      teamsBefore: current.teamIds.length,
+      usersAfter: wanted.userIds.length,
+      teamsAfter: wanted.teamIds.length,
+    };
   }
 }
