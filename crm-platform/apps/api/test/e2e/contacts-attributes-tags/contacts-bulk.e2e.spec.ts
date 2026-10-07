@@ -339,6 +339,29 @@ describe('export (TW-CON-021, 022)', () => {
     expect(await api.auditCount(t.orgId, 'contacts', 'export')).toBe(before + 1);
   });
 
+  it('lists past exports, newest first, with who, when, how many and how selected', async () => {
+    const ids = await api.seedContacts(t, [
+      { name: 'Hist One', phone: phone(401) },
+      { name: 'Hist Two', phone: phone(402) },
+    ]);
+    await csv({ ids, bom: false });
+    await csv({ filter: {}, bom: false });
+    const res = await api.as(t.admin).get('/v2/contacts/exports?limit=2');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.data).toHaveLength(2);
+    expect(res.body.data[0]).toMatchObject({ selection: 'filter' });
+    expect(res.body.data[1]).toMatchObject({ selection: 'ids', rows: 2 });
+    expect(typeof res.body.data[0].by).toBe('string');
+    expect(new Date(res.body.data[0].at).getTime()).toBeGreaterThanOrEqual(
+      new Date(res.body.data[1].at).getTime(),
+    );
+    // another workspace sees none of them; no export capability, no history
+    const other = await api.signup('exp-hist-b');
+    expect((await api.as(other.admin).get('/v2/contacts/exports')).body.data).toEqual([]);
+    const reader = await api.member(t, 'nohist', [['record.contacts.read']]);
+    expect((await api.as(reader.token).get('/v2/contacts/exports')).status).toBe(403);
+  });
+
   it("needs the export capability, and only exports what the caller's record scope allows", async () => {
     const reader = await api.member(t, 'noexp', [['record.contacts.read']]);
     expect(

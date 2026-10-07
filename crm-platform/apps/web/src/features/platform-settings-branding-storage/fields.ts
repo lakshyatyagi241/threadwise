@@ -492,6 +492,19 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'flowBuilder',
+    group: 'flowBuilder',
+    slug: 'flow-builder',
+    guide: ['modes', 'existing'],
+    sections: [
+      {
+        id: 'mode',
+        eyebrow: 'automation',
+        fields: [f('mode', 'select', { options: ['simple', 'advanced'] })],
+      },
+    ],
+  },
+  {
     id: 'googleCalendar',
     group: 'googleCalendar',
     slug: 'google-calendar',
@@ -595,5 +608,6 @@ export const HUB_ORDER = [
   'storage',
   'realtime',
   'campaigns',
+  'flowBuilder',
   'googleCalendar',
 ] as const;

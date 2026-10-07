@@ -4,6 +4,7 @@ import {
   flbCleanAskFileExtensions,
   type FlbAskGiveUp,
 } from './ask-media';
+import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -368,14 +369,25 @@ const SHAPERS: Record<string, Shaper> = {
     variable: flbCleanVarName(d.var, 'choice'),
   }),
 
-  ask: (d) => ({
-    question: s(d.prompt),
-    variable: flbCleanVarName(d.var, 'answer'),
-    acceptMedia: toBool(d.acceptMedia),
-    expectedAnswers: list(coalesce(d.options, d.expected, []))
-      .map((v) => (typeof v === 'string' ? v.trim() : ''))
-      .filter((v) => v !== ''),
-  }),
+  ask: (d) => {
+    const retries = isNil(d.retries) ? 0 : toInt(d.retries);
+    const mode = s(d.onFail, 'continue');
+    return {
+      question: s(d.prompt),
+      variable: flbCleanVarName(d.var, 'answer'),
+      acceptMedia: toBool(d.acceptMedia),
+      expectedAnswers: list(coalesce(d.options, d.expected, []))
+        .map((v) => (typeof v === 'string' ? v.trim() : ''))
+        .filter((v) => v !== ''),
+      // The checked answer (not Reference: its Ask saved "Validate as" and never read it). `maxRetries` 0 keeps asking, as the console does.
+      inputType: flbCleanAskInputType(d.validate),
+      dateFormat: flbCleanDateFormat(d.dateFormat),
+      wrongReplyText: s(d.wrongReply).trim(),
+      maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
+      onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
+      savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+    };
+  },
 
   // Not Reference nodes (TW-FLB-081, 082): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
   ask_file: (d) => ({

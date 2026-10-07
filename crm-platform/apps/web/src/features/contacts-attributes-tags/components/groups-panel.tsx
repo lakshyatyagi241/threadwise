@@ -11,15 +11,18 @@ import { deleteGroup, GROUP_DOT_FALLBACK, useGroups } from '../api/groups';
 import type { ContactGroup } from '../api/schemas';
 import { errorKind } from '../lib/errors';
 import { ErrorLine } from './error-line';
-import { PencilIcon, PlusIcon, TrashIcon, UsersIcon } from './icons';
+import { PencilIcon, PlusIcon, TrashIcon, UsersIcon, UploadIcon } from './icons';
 
 /** The Groups view (TW-CON-033): one card per group with its member count, an edit and delete button, and a "create" tile. */
 export function GroupsPanel({
   onCreate,
   onEdit,
+  onImport,
 }: {
   onCreate: () => void;
   onEdit: (g: ContactGroup) => void;
+  /** Opens the import with this group preselected; absent when the caller may not import. */
+  onImport?: (g: ContactGroup) => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.groups');
   const qc = useQueryClient();
@@ -90,6 +93,16 @@ export function GroupsPanel({
               >
                 {t('viewContacts')}
               </Link>
+              {onImport && (
+                <button
+                  type="button"
+                  onClick={() => onImport(g)}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted"
+                >
+                  <UploadIcon className="size-3.5" />
+                  {t('importInto')}
+                </button>
+              )}
               {canManage && (
                 <>
                   <button

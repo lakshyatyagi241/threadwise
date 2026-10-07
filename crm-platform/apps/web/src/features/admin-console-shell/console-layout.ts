@@ -49,14 +49,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
     icon: 'tag',
     blocks: [
       {
-        items: [
-          'plans',
-          'workspace-plans',
-          'addon-packs',
-          'coupons',
-          'plan-settings',
-          'pricing-faqs',
-        ],
+        items: ['workspaces', 'plans', 'addon-packs', 'coupons', 'plan-settings', 'pricing-faqs'],
       },
     ],
   },
@@ -72,7 +65,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
           'wallet-pricing',
           'wallet-margins',
           'wallet-packages',
-          'wallet-workspaces',
           'wallet-logs',
           'bsp-income',
           'bsp-credit',
@@ -91,7 +83,6 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
           'support-platform-inbox',
           'support-team',
           'support-agents',
-          'support-customers',
           'support-sla',
           'support-playbooks',
           'support-reports',
@@ -110,13 +101,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
     blocks: [
       {
         caption: 'whatsapp',
-        items: [
-          'wap-providers',
-          'wap-assignments',
-          'wap-switch',
-          'node-bridge',
-          'webhook-forwarding',
-        ],
+        items: ['wap-providers', 'wap-switch', 'node-bridge', 'webhook-forwarding'],
       },
     ],
   },
@@ -164,6 +149,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleSection[] = [
           'settings-whatsapp',
           'settings-campaigns',
           'settings-google-calendar',
+          'settings-flow-builder',
           'settings-catalog',
           'ai-keys',
         ],

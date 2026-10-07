@@ -293,7 +293,20 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         ],
       };
     case 'ask':
-      return { prompt: "What's your name?", var: 'answer', validate: 'text', options: [] };
+      return {
+        prompt: "What's your name?",
+        var: 'answer',
+        validate: 'text',
+        options: [],
+        // Used when "Validate as" is not free text: the date shape, the wrong-answer text (blank: a ready-made one), how many wrong
+        // answers are tolerated (0: keep asking), what happens after that, and the contact property the answer is also saved to.
+        dateFormat: 'dd-mm-yyyy',
+        wrongReply: '',
+        retries: 0,
+        onFail: 'continue',
+        saveProperty: false,
+        propertyKey: '',
+      };
     case 'ask_file':
       return {
         prompt: 'Please send the file or image.',

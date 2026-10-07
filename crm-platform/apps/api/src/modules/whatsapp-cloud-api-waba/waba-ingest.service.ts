@@ -14,6 +14,7 @@ import {
 import { BroadcastReceiptsService } from '../broadcasts';
 import { ContactsService } from '../crm';
 import { WabaConnectionsRepository } from './waba-connections.repository';
+import { WabaReceiptRegistry } from './waba-receipt-registry';
 import { WABA_CALLS_SINK, type WabaCallsSink } from './waba-calls-sink';
 import { WABA_INBOUND_SINK, type InboundContext, type WabaInboundSink } from './waba-inbound-sink';
 import { usernameOf, usernameUpdatePatch } from './waba-extras-rules';
@@ -62,6 +63,7 @@ export class WabaIngestService {
     @Inject(WABA_INBOUND_SINK) private readonly sink: WabaInboundSink,
     @Inject(WABA_CALLS_SINK) private readonly calls: WabaCallsSink,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly receiptSinks: WabaReceiptRegistry,
   ) {}
 
   async process(changes: WebhookChange[]): Promise<{ handled: number; dropped: number }> {
@@ -297,13 +299,16 @@ export class WabaIngestService {
       }>;
     };
     const first = raw.errors?.[0];
-    const claimed = await this.receipts.handle({
+    const receipt = {
       providerMessageId: event.providerMessageId,
       status: event.event,
       occurredAt: event.occurredAt,
       errorCode: event.errorCode ?? null,
       errorMessage: first?.error_data?.details ?? first?.message ?? first?.title ?? null,
-    });
+    };
+    // Broadcasts first; then any domain that registered for the Cloud API (campaigns and their test sends); then the inbox.
+    const claimed =
+      (await this.receipts.handle(receipt)) || (await this.receiptSinks.route(receipt));
     if (!claimed) await this.sink.onStatus(ctx, event);
   }
 

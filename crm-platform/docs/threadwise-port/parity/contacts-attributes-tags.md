@@ -296,3 +296,29 @@ Spec `apps/web/e2e/contacts-attributes-tags/parity/TW-CON-004.twin.mjs`, depth f
 | Page probes (load, auth, perf, a11y) | same as Reference except the three below                                                                                                                                                            |
 
 Open (found by the run on the Hub page, not examined further, probably not from this change): the degraded-network probe reports a spinner that stays after failed data requests; the keyboard probe reaches 83 percent of controls (the table scrolls in a box, as on the campaign screen, which the probe cannot walk past); 32 small touch targets (the 16 px row checkboxes). Not covered: saving the conditions as a segment from the Hub, the grid view.
+
+## Playwright twin run: TW-CON-019 (Hub bulk update, Import and Columns, board view, group import)
+
+Spec `apps/web/e2e/contacts-attributes-tags/parity/TW-CON-019.twin.mjs`, against the running Reference and this branch on a freshly migrated scratch database. Reference's menus and screens are structured differently, so the scenarios run on our side only and are judged against absolute expectations.
+
+| Area                                | Result                                                                                                                                                                                                                                                                                                                  |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Import and Columns                  | labelled buttons on the Hub (Import opens the import; Columns lists fixed and custom columns and links to where a custom field is made); Groups has an Import button and each group card an Import that preselects the group                                                                                            |
+| Bulk update                         | "Update" in the selected-contacts menu opens a dialog (stage with the lost reason when needed, status, owner); the Update button is disabled until a field is chosen; two selected contacts both updated in one call (`POST /contacts/bulk/update`); not offered for "select all matching" (the API takes explicit ids) |
+| Board view (replaces the card view) | one column per stage with its own count and "Load more", cards link to the contact; a card moves by dragging onto a column or with the stage list on the card; the save is the table's stage save (a lost stage still asks why) and the stage persists; a stage chosen in Filters narrows the board to that column      |
+| Campaign time zone                  | the schedule's zone is a dropdown of IANA zones in both campaigns and broadcasts, not a text box                                                                                                                                                                                                                        |
+
+Not covered: dragging with a pointer (the stage list was used), the board with a very large stage, SMS and email broadcasts and expense tracking (not built).
+
+## Playwright twin run: TW-CON-020 (Import and export history)
+
+Spec `apps/web/e2e/contacts-attributes-tags/parity/TW-CON-020.twin.mjs`, against the running Reference and this branch on a freshly migrated scratch database. Reference's workspace settings have no import or export history screen, so the scenarios run on our side and are judged against absolute expectations.
+
+| Area          | Result                                                                                                                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Settings tile | "Import and export" under Data and security is live (it was a "Soon" placeholder) and opens `/import-export`                                                                                           |
+| Imports       | recent import jobs, newest first: file, when, status, created, updated, rejected; a rejected-rows download for jobs that rejected rows; polls while one is running; "Import contacts" starts a new one |
+| Exports       | recent exports from the audit trail: when, who, contacts, ticked or everything matching; a fresh export appears at once (`GET /contacts/exports`); the file itself is not kept                         |
+| Page probes   | same as Reference; the stuck loading spinner on failing requests was fixed by turning retries off                                                                                                         |
+
+Not covered: the Audit log and Privacy tiles stay "Soon"; an import that is still queued (no worker in the test run); paging beyond the last 50.

@@ -273,6 +273,14 @@ export const ERROR_CODES = {
   CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
+  /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */
+  CAMP_WIZARD_INCOMPLETE: 'CAMP_WIZARD_INCOMPLETE',
+  /** The wizard draft was already launched, so it can no longer be edited or launched again. */
+  CAMP_WIZARD_LAUNCHED: 'CAMP_WIZARD_LAUNCHED',
+  /** A test send needs at least one valid E.164 number and at most ten. */
+  CAMP_TEST_RECIPIENTS_INVALID: 'CAMP_TEST_RECIPIENTS_INVALID',
+  /** Pause, resume or cancel asked of a broadcast whose status does not allow it. */
+  CAMP_BROADCAST_NOT_CONTROLLABLE: 'CAMP_BROADCAST_NOT_CONTROLLABLE',
 
   // deals and pipelines (TW-DEAL)
   /** The stage belongs to a different pipeline than the deal (Reference ignored it, defaulted it, or 422'd by path). */

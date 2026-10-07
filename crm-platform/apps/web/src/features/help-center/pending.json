@@ -6,11 +6,6 @@
       "reason": "Its menu group is help, which is not a guide area yet. Waiting for the owner to choose: add a help area, or file it under getting-started."
     },
     {
-      "unit": "nav:flows",
-      "owner": "lakshya",
-      "reason": "The flow builder screens are not in this build yet; the guide is written when they ship."
-    },
-    {
       "unit": "nav:guidebook",
       "owner": "lakshya",
       "reason": "The in-app guidebook comes from the site CMS; its guide waits for the owner."
@@ -24,11 +19,6 @@
       "unit": "feature:team_chat",
       "owner": "lakshya",
       "reason": "Plan feature added with the plan limits work. Team chat is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
-      "unit": "feature:outbound_webhooks",
-      "owner": "lakshya",
-      "reason": "Plan feature added with the plan limits work. Outbound webhooks is now gated by this key; the plan guide is written once the plan editor copy for it settles."
     },
     {
       "unit": "feature:storefront_builder",

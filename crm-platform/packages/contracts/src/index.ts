@@ -82,4 +82,5 @@ export * from './scheduled-queue-warmer';
 export * from './marketplace';
 export * from './leads';
 export * from './developer-rest-api-v1';
+export * from './outbound-webhooks';
 export * from './forms-builder';

@@ -5,7 +5,12 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import type { BulkTarget } from '../lib/selection';
 import { contactFilterBody } from './contacts';
-import { bulkSelectionResultSchema, dedupePreviewSchema, dedupeResultSchema } from './schemas';
+import {
+  bulkResultSchema,
+  bulkSelectionResultSchema,
+  dedupePreviewSchema,
+  dedupeResultSchema,
+} from './schemas';
 
 /**
  * Bulk actions over a selection (TW-CON-019..025). A target is explicit ids or the saved filter behind
@@ -104,3 +109,35 @@ export const previewDuplicates = (signal?: AbortSignal) =>
 /** Merges up to `maxSets` sets per call; the answer says how many are left, so callers loop until it is 0. */
 export const mergeDuplicates = (maxSets = 1000) =>
   apiFetch('/contacts/dedupe', { method: 'POST', body: { maxSets }, schema: dedupeResultSchema });
+
+/** The fields a bulk update can set; each one left out is left as it is on every contact. */
+export interface BulkUpdateValues {
+  lifecycleStage?: string;
+  status?: string;
+  /** A person's id; `null` clears the owner. */
+  ownerId?: string | null;
+  lostReason?: string | null;
+  otherLostReason?: string | null;
+}
+
+/**
+ * Sets the same fields on the selected contacts (`POST /contacts/bulk/update`). Explicit ids only (the API takes at most 500
+ * per call, so a longer list is sent in slices); each row succeeds or fails on its own, so a few bad ones never sink the rest.
+ */
+export async function bulkUpdate(
+  ids: readonly string[],
+  values: BulkUpdateValues,
+): Promise<BulkOutcome> {
+  const total: BulkOutcome = { matched: 0, changed: 0, failed: 0 };
+  for (let i = 0; i < ids.length; i += BULK_IDS_MAX) {
+    const r = await apiFetch('/contacts/bulk/update', {
+      method: 'POST',
+      body: { ids: ids.slice(i, i + BULK_IDS_MAX), values },
+      schema: bulkResultSchema,
+    });
+    total.matched += r.succeeded.length + r.failed.length;
+    total.changed += r.succeeded.length;
+    total.failed += r.failed.length;
+  }
+  return total;
+}
