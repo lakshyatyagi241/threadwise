@@ -75,6 +75,14 @@ one of its conditions holds (the same test the contact form uses to show it). A 
 result; a patch without `customFields` (a stage, owner or source change) is not, so a contact that predates a newly required property stays editable.
 `POST /contacts/bulk/update` may not blank a required property it sets; the refusal is listed per contact in `failed` with the same code.
 
+**Bulk update of custom properties.** `POST /contacts/bulk/update` takes `values.customFields`, an object of property key to value, applied to every contact in `ids` (up to 500;
+permission `record.contacts.update`, the caller's record scope applies per contact, one transaction, one SAVEPOINT per contact). `null` (or blank text, or an empty list) clears that
+key: it is removed from the contact's `customFields`; keys not named are kept. The whole request is checked before anything is written: a key that is not an active, non-system,
+visible, writable, non-formula contact property of the workspace is 422 `CON_PROPERTY_NOT_EDITABLE` (`errors: [{ "path": "customFields.<key>", "message": ... }]`), and a value that does
+not fit the type is 422 `VALIDATION_FAILED` (text up to 1,000 characters, long text 4,000, integer/decimal numbers (strings such as `"12"` are parsed), checkbox `true`/`false`, `date` as
+`YYYY-MM-DD`, `datetime` as `YYYY-MM-DDTHH:mm`, `email`, `url` with http(s), select/radio one of the property's visible option values, multi-select a list of them). Each contact's audit row
+lists the keys that changed (`delta.customFieldKeys`), never the values; the `contact.updated` event carries `customFieldKeys` the same way.
+
 **Won and lost stages.** When the contact's `lifecycleStage` changes to a stage flagged `isWon` or `isLost` (see Contact stages), `wonAt` / `lostAt`
 are stamped (and the other cleared). Entering a lost stage needs a reason: `lostReason` (a `lost_reason` option's value) or `otherLostReason` (free
 text), sent with the change or already on the contact, else 422 `CON_LOST_REASON_REQUIRED` (`errors: [{ path: "lostReason", message: "required" }]`).
