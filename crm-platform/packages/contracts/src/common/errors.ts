@@ -263,6 +263,8 @@ export const ERROR_CODES = {
   ECOM_DISABLED: 'ECOM_DISABLED',
   /** The Shopify domain is not `<handle>.myshopify.com`. */
   ECOM_SHOP_INVALID: 'ECOM_SHOP_INVALID',
+  /** An embedded-app session token is malformed, badly signed, expired, for another app, or for another shop (TW-ECOM-038). */
+  ECOM_SESSION_TOKEN_INVALID: 'ECOM_SESSION_TOKEN_INVALID',
   /** The WooCommerce store address has no host. */
   ECOM_STORE_INVALID: 'ECOM_STORE_INVALID',
   /** The WooCommerce store did not accept the keys, or could not be reached. */
