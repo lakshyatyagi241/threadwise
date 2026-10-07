@@ -94,7 +94,7 @@ export function CountPanel({
                 </div>
               )}
             </dl>
-            <p className="text-xs text-muted-foreground">{t('alwaysSkipped')}</p>
+            {!compact && <p className="text-xs text-muted-foreground">{t('alwaysSkipped')}</p>}
             <div className="rounded-lg bg-brand/10 px-3 py-2.5">
               <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 {t('willBeMessaged')}
