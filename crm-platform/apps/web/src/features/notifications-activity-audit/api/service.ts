@@ -1,12 +1,15 @@
 import {
   markAllReadResponseSchema,
   notificationListResponseSchema,
+  notificationPreferencesResponseSchema,
   notificationResponseSchema,
   readSubjectResponseSchema,
   unreadCountResponseSchema,
   type NotificationListResponse,
+  type NotificationPreferencesResponse,
   type NotificationResponse,
   type ReadSubjectResponse,
+  type UpdateNotificationPreferencesRequest,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
@@ -47,6 +50,23 @@ export const notificationsApi = {
       method: 'POST',
       body: { kind: 'conversation', id },
       schema: readSubjectResponseSchema,
+    });
+  },
+  /** The signed-in person's preferences: every type with what is in force, the default, and what they chose themselves. */
+  preferences(signal?: AbortSignal): Promise<NotificationPreferencesResponse> {
+    return apiFetch('/notifications/preferences', {
+      schema: notificationPreferencesResponseSchema,
+      signal,
+    });
+  },
+  /** A partial, idempotent update (`null` = follow the default again); answers with the full list. */
+  updatePreferences(
+    body: UpdateNotificationPreferencesRequest,
+  ): Promise<NotificationPreferencesResponse> {
+    return apiFetch('/notifications/preferences', {
+      method: 'PUT',
+      body,
+      schema: notificationPreferencesResponseSchema,
     });
   },
 };

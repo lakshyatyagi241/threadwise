@@ -4,3 +4,4 @@
  */
 export { InboxScreen } from './components/inbox-screen';
 export { ChannelsList, ChannelsScreen } from './components/channels-list';
+export { InboxNavCounts } from './api/counts';

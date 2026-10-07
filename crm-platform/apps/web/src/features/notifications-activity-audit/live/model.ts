@@ -3,6 +3,7 @@ import type {
   RealtimeEventPayload,
   NotificationResponse,
 } from '@crm/contracts';
+import { mayAlert, type PrefEntry } from '../prefs/model';
 
 /**
  * The pure parts of the live notifications: how an event changes the cached bell, when a toast may show, how the tab title reads.
@@ -22,8 +23,6 @@ export const TOAST_WINDOW_MAX = 3;
 /** The ping and the screen-reader announcement are each spaced at least this far apart. */
 export const PING_MIN_GAP_MS = 3_000;
 export const ANNOUNCE_MIN_GAP_MS = 3_000;
-/** How long a toast stays (the UI package's info toast is 5 s). */
-export const TOAST_LIFETIME_MS = 5_000;
 
 // --- caches -----------------------------------------------------------------------------------------------------------------
 
@@ -133,12 +132,29 @@ export class ToastPlanner {
 export interface LiveAlert {
   /** The notification id of the newest event this alert stands for (what tabs claim). */
   notificationId: string;
+  /** Whether the ping plays for it: the type allows it and this person has not turned it off. */
+  sound: boolean;
   /** Groups alerts of one conversation (its uuid), else the type. */
   subject: string;
   type: string;
   row: NotificationResponse;
   /** The app path the alert opens, or null. */
   href: string | null;
+}
+
+/**
+ * Whether an event may raise a toast (`toast`) or the ping (`sound`). A `silent` event never does. The server's own answer (the
+ * flag the event carries, which already includes the person's preferences) decides when present; an older server sends none and the
+ * type's default applies, narrowed by the preferences already loaded in this tab.
+ */
+export function eventWants(
+  payload: Pick<CreatedPayload, 'type' | 'silent' | 'toast' | 'sound'>,
+  channel: 'toast' | 'sound',
+  prefs: readonly PrefEntry[] | undefined,
+): boolean {
+  if (payload.silent) return false;
+  const explicit = payload[channel];
+  return explicit !== undefined ? explicit : mayAlert(prefs, payload.type, channel);
 }
 
 /** The last item per key, ordered by when each key last appeared (a collapsed row replaced the earlier ones). */

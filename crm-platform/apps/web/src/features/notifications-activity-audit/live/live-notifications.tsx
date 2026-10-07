@@ -6,6 +6,9 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRealtimeClient } from '@/lib/realtime';
 import { useMarkRead, useUnreadCount } from '../api/hooks';
+import { NOTIFICATION_KEYS } from '../api/keys';
+import { usePreferences } from '../api/prefs-hooks';
+import type { PrefsState } from '../prefs/model';
 import { notificationsApi } from '../api/service';
 import type { Translator } from '../lib/copy';
 import {
@@ -19,7 +22,8 @@ import {
 import { EventClaimer, browserChannel } from './claim';
 import { LiveNotificationsController, type LivePresenter } from './controller';
 import { LiveToastHost, type LiveToastView } from './live-toast';
-import { TOAST_LIFETIME_MS, type LiveAlert } from './model';
+import { toastLifetimeMs, typeMeta } from '../lib/catalogue';
+import type { LiveAlert } from './model';
 import { alertText, announcementText, desktopTag, desktopText } from './present';
 
 const MAX_TOASTS = 3;
@@ -39,6 +43,9 @@ export function LiveNotifications() {
   const client = useRealtimeClient();
   const unread = useUnreadCount();
   const { markRead } = useMarkRead();
+  // The person's own preferences, loaded once so a pop-up or ping they turned off stays quiet even on a server that does not yet
+  // put the flags on the event. A failed load changes nothing: the type defaults apply.
+  usePreferences();
 
   const [toasts, setToasts] = useState<LiveToastView[]>([]);
   const [announcement, setAnnouncement] = useState({ n: 0, text: '' });
@@ -63,7 +70,7 @@ export function LiveNotifications() {
       setToasts((cur) => [...cur.slice(-(MAX_TOASTS - 1)), { ...view, id }]);
       timers.current.set(
         id,
-        setTimeout(() => dismiss(id), TOAST_LIFETIME_MS),
+        setTimeout(() => dismiss(id), toastLifetimeMs(view.tone ?? 'info')),
       );
     },
     [dismiss],
@@ -109,7 +116,15 @@ export function LiveNotifications() {
           return;
         }
         const { title, body } = alertText(tr, toast.alert);
-        push({ title, body, href: toast.alert.href, rowId: toast.alert.row.id });
+        const meta = typeMeta(toast.alert.type);
+        push({
+          title,
+          body,
+          href: toast.alert.href,
+          rowId: toast.alert.row.id,
+          icon: meta.icon,
+          tone: meta.tone,
+        });
       },
       announce: (alerts) =>
         setAnnouncement((cur) => ({
@@ -125,6 +140,7 @@ export function LiveNotifications() {
     const controller = new LiveNotificationsController({
       client,
       qc,
+      prefs: () => qc.getQueryData<PrefsState>(NOTIFICATION_KEYS.preferences)?.entries,
       api: {
         list: (limit, signal) => notificationsApi.list(limit, signal),
         readSubject: (id) => notificationsApi.readSubject(id),

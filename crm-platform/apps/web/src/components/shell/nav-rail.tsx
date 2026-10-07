@@ -9,6 +9,7 @@ import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { NavCollapsedContext } from './nav-context';
 import { BrandMark, CloseIcon, NavIcon } from './nav-icons';
+import { countBadge, groupCount, itemCount, useNavCounts } from './nav-badges';
 import { railSections, type NavSection } from './nav-model';
 
 /** The Settings group is pinned under the scrolling list, always in reach; everything else scrolls. */
@@ -36,6 +37,19 @@ function Pill({ tone, children }: { tone: 'new' | 'soon' | 'upgrade'; children: 
   );
 }
 
+/** The live number on a menu entry: "99+" past 99, announced as "N unread" to a screen reader. */
+function CountPill({ count, t }: { count: number; t: Translate }) {
+  return (
+    <span
+      data-testid="nav-count"
+      className="shrink-0 rounded-full bg-nav-badge px-1.5 py-0.5 text-[10px] font-semibold leading-none text-nav-badge-foreground"
+    >
+      <span aria-hidden="true">{countBadge(count)}</span>
+      <span className="sr-only">{t('shell.unreadCount', { count })}</span>
+    </span>
+  );
+}
+
 /** One row of the labelled panel (wide rail and mobile drawer). */
 function PanelItem({
   item,
@@ -49,11 +63,15 @@ function PanelItem({
   onNavigate?: () => void;
 }) {
   const label = t(item.labelKey);
+  const counts = useNavCounts();
+  const count = itemCount(item, counts);
   const body = (
     <>
       <NavIcon name={item.icon} className="size-[18px]" />
       <span className="min-w-0 flex-1 truncate">{label}</span>
-      {item.comingSoon ? (
+      {count > 0 && !item.comingSoon && !item.locked ? (
+        <CountPill count={count} t={t} />
+      ) : item.comingSoon ? (
         <Pill tone="soon">{t('shell.soon')}</Pill>
       ) : item.locked ? (
         <Pill tone="upgrade">{t('shell.locked')}</Pill>
@@ -253,6 +271,19 @@ export function NavRail({
   );
 }
 
+/** The count on a rail icon, in its top corner. The words for a screen reader are in the link's label. */
+function RailCount({ count }: { count: number }) {
+  return (
+    <span
+      aria-hidden="true"
+      data-testid="rail-count"
+      className="absolute -end-1 -top-1 min-w-4 rounded-full bg-nav-badge px-1 py-0.5 text-center text-[9px] font-bold leading-none text-nav-badge-foreground ring-2 ring-nav"
+    >
+      {countBadge(count)}
+    </span>
+  );
+}
+
 /** One icon of the slim rail, with its tooltip. */
 function RailLink({
   item,
@@ -267,10 +298,12 @@ function RailLink({
 }) {
   const t = useTranslations();
   const label = t(item.labelKey);
+  const counts = useNavCounts();
+  const count = item.locked ? 0 : itemCount(item, counts);
   return (
     <Link
       href={item.href}
-      aria-label={label}
+      aria-label={count > 0 ? `${label}, ${t('shell.unreadCount', { count })}` : label}
       aria-current={active ? 'page' : undefined}
       onMouseEnter={(e) => show(e.currentTarget, label)}
       onMouseLeave={hide}
@@ -285,10 +318,14 @@ function RailLink({
       )}
     >
       <NavIcon name={item.icon} />
-      {item.badge === 'new' && (
-        <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
-          {t('shell.new')}
-        </span>
+      {count > 0 ? (
+        <RailCount count={count} />
+      ) : (
+        item.badge === 'new' && (
+          <span className="absolute -end-1 -top-1 rounded-full bg-nav-badge px-1 py-0.5 text-[8px] font-bold uppercase leading-none text-nav-badge-foreground">
+            {t('shell.new')}
+          </span>
+        )
       )}
       {item.locked && (
         <span
@@ -347,6 +384,7 @@ function RailGroups({
   const buttons = useRef(new Map<string, HTMLButtonElement>());
   const panel = useRef<HTMLElement | null>(null);
 
+  const counts = useNavCounts();
   const live = railSections(sections);
   const groups = live.map((s) => {
     const full = sections.find((x) => x.group === s.group);
@@ -420,6 +458,7 @@ function RailGroups({
         const label = t(`shell.groups.${g.group}`);
         const active = g.items.some((it) => it.id === activeId);
         const open = openGroup === g.group;
+        const waiting = groupCount(g.items, counts);
         const icon = GROUP_ICON[g.group] ?? g.items.find((it) => !it.comingSoon)?.icon;
         return (
           <div key={g.group} className={wrap}>
@@ -429,7 +468,9 @@ function RailGroups({
                 if (el) buttons.current.set(g.group, el);
                 else buttons.current.delete(g.group);
               }}
-              aria-label={label}
+              aria-label={
+                waiting > 0 ? `${label}, ${t('shell.unreadCount', { count: waiting })}` : label
+              }
               aria-haspopup="true"
               aria-expanded={open}
               aria-controls={open ? `${uid}-flyout` : undefined}
@@ -445,6 +486,7 @@ function RailGroups({
               )}
             >
               <NavIcon name={icon} />
+              {waiting > 0 && <RailCount count={waiting} />}
             </button>
           </div>
         );
