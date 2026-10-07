@@ -86,6 +86,12 @@ round trip including malformed files and both exporters' file formats.
 - Web app serves a page shell for an anonymous visitor and redirects on the client (no content served); the Next.js dev indicator is the one Tab stop without a ring.
 - Literal backslash-n in two WaDesk placeholders is not reproduced.
 
+## Channel links and the Facebook switch (verified against the other domains, 2026-10-08)
+
+- **Links:** every in-app link the builder shows is now checked by `features/flow-builder-editor/links.test.ts` against the real routes. LINE, WeChat and Viber have no connect screen here (channels not built), so their "Connect one on" links go to `/settings/channels`, the Settings section that lists the connectable channels. Telegram now says "Telegram bot" and links to `/telegram` instead of the WhatsApp number wording.
+- **Facebook switch:** WaDesk offered a Facebook Page in the builder only when an admin switch was on. Nothing in this platform writes `facebook_enabled`, so connected Pages never appeared. Unset now means on (an explicit `false` still hides it); TikTok and Email stay off until those channels exist.
+- **What the dropdowns read:** Instagram `workspace_ig_accounts`, Facebook `facebook_pages`, Telegram `telegram_bots`, stores `shopify_integrations` and `woocommerce_integrations`, catalogue `wa_catalogs`: all written by the channel and store modules. LINE, WeChat, Viber, TikTok and Email tables have no writer, so those channels are never offered.
+
 ## Intended additions (not WaDesk features)
 
 - **Ask for file / image (`ask_file`, WD-FLB-081) and Ask for location (`ask_location`, WD-FLB-082)** exist in another product's flow palette and not in WaDesk, so there is no
