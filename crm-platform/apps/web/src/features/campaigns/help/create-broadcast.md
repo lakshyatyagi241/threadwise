@@ -5,8 +5,7 @@ summary: Send an approved WhatsApp template to contacts, groups, segments or a C
 area: campaigns
 order: 20
 documents: [nav:campaigns]
-keywords:
-  [broadcast, wizard, template, audience, contacts, groups, segments, csv, filter, schedule, recurring, retries, test, variables, credit]
+keywords: [broadcast, wizard, template, audience, contacts, groups, segments, csv, filter, schedule, recurring, retries, test, variables, credit]
 ---
 
 ## What it is for
