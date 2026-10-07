@@ -205,6 +205,11 @@
         "description": "Add your own AI provider key to power AI features.",
         "keywords": "openai, gemini, claude, api key, model, token"
       },
+      "ai-training": {
+        "label": "AI Training",
+        "description": "Train chat assistants on your own content for flows and the website chat.",
+        "keywords": "knowledge base, assistant, smart agent, faq, train, sources, meta business agent, responder"
+      },
       "booking-types": {
         "label": "Booking types",
         "description": "The services customers can book, with hours and rules.",

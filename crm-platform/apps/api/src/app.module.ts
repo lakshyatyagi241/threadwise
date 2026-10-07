@@ -41,6 +41,7 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
@@ -164,6 +165,7 @@ import { HealthModule } from './health/health.module';
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
+    AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,

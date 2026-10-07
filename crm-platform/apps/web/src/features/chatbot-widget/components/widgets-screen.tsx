@@ -224,7 +224,7 @@ export function WidgetsScreen() {
             </div>
             {t.rich('trainBody', {
               link: (chunks) => (
-                <Link href="/ai-assistants" className="font-semibold text-brand underline">
+                <Link href="/ai-training" className="font-semibold text-brand underline">
                   {chunks}
                 </Link>
               ),
