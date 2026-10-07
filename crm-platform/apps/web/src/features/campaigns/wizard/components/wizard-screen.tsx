@@ -284,6 +284,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
             name={draft.name}
             templateId={draft.templateId}
             noSender={sendersList !== undefined && sendersList.length === 0}
+            senderName={sendersList?.find((x) => x.key === draft.senderKey)?.label ?? null}
             templates={templates}
             issues={visible}
             onName={(name) => w.dispatch({ type: 'name', name })}

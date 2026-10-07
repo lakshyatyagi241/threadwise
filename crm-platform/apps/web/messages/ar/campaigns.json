@@ -111,7 +111,18 @@
         "previewVariables": "{count, plural, one {يُملأ # متغير في الخطوات التالية.} two {يُملأ متغيران في الخطوات التالية.} few {تُملأ # متغيرات في الخطوات التالية.} many {يُملأ # متغيرًا في الخطوات التالية.} other {يُملأ # متغير في الخطوات التالية.}}",
         "previewEmpty": "اختر قالبًا لترى شكل الرسالة.",
         "noSenders": "لا يوجد رقم واتساب متصل. قم بربط رقم أولاً.",
-        "pickPlaceholder": "اختر قالبًا معتمدًا"
+        "pickPlaceholder": "اختر قالبًا معتمدًا",
+        "previewOnline": "متصل",
+        "previewToday": "اليوم",
+        "previewInput": "اكتب رسالة",
+        "previewBusiness": "نشاطك التجاري",
+        "nameCardTitle": "سمِّ البث",
+        "templateCardTitle": "اختر قالبًا",
+        "sendingFrom": "يُرسل من {sender}",
+        "livePreview": "معاينة مباشرة",
+        "chipVariables": "{count, plural, =0 {بلا متغيرات} one {متغير واحد} two {متغيران} few {# متغيرات} many {# متغيرًا} other {# متغير}}",
+        "chipButtons": "{count, plural, =0 {بلا أزرار} one {زر واحد} two {زران} few {# أزرار} many {# زرًا} other {# زر}}",
+        "nameCount": "{used} / {max}"
       },
       "audience": {
         "explainer": "جهات الاتصال في المجموعات أو الشرائح المختارة التي تطابق الشروط أيضًا. إذا لم تختر مجموعة أو شريحة فإن الشروط تختار من كل جهات الاتصال.",
