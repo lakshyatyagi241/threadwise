@@ -18,17 +18,17 @@ export interface ConsoleLeaf {
    * counts is set (greater than zero). `labelKey` is the full next-intl key of the word.
    */
   statusBadge?: { key: string; labelKey: string };
+  /** Full next-intl key of the small heading drawn above this link: it opens a group of related pages in the hub's menu. */
+  captionKey?: string;
 }
 
-/** A hub: one rail entry that opens on its first page, whose other pages are the tab bar. */
+/** A hub: one block on Home and one icon in the collapsed rail; its pages are the menu on the left. */
 export interface ConsoleGroup {
   id: string;
   /** Full next-intl key of the heading. */
   labelKey: string;
   /** Icon name for `ConsoleIcon`. A group without one (an unplaced heading) gets a dot. */
   icon?: string;
-  /** `index` hubs (Settings) list their pages on a landing page instead of a tab bar. */
-  kind?: ConsoleHub['kind'];
   children: ConsoleLeaf[];
 }
 
@@ -105,8 +105,9 @@ export function activeStatusBadge(
 }
 
 export const sectionLabelKey = (id: string): string => `${NS}.sections.${id}`;
+export const captionLabelKey = (caption: string): string => `${NS}.captions.${caption}`;
 
-const toLeaf = (item: OperatorNavItem): ConsoleLeaf => {
+const toLeaf = (item: OperatorNavItem, captionKey?: string): ConsoleLeaf => {
   const badgeKey = BADGE_KEYS[item.id];
   const statusBadge = STATUS_BADGES[item.id];
   return {
@@ -115,6 +116,7 @@ const toLeaf = (item: OperatorNavItem): ConsoleLeaf => {
     labelKey: LABEL_OVERRIDES[item.id] ?? item.labelKey,
     ...(badgeKey ? { badgeKey } : {}),
     ...(statusBadge ? { statusBadge } : {}),
+    ...(captionKey ? { captionKey } : {}),
   };
 };
 
@@ -147,18 +149,23 @@ export function buildConsoleNav(
   ];
   for (const hub of layout) {
     const children: ConsoleLeaf[] = [];
+    // A heading belongs to the first page of its group that is shown, even when the page that names it is hidden or missing.
+    let caption: string | undefined;
     for (const id of hub.tabs) {
+      const head = hub.heads?.[id];
+      if (head) caption = captionLabelKey(head);
       const item = byId.get(id);
       if (!item || placed.has(id)) continue;
       placed.add(id);
-      if (visible(id)) children.push(toLeaf(item));
+      if (!visible(id)) continue;
+      children.push(toLeaf(item, caption));
+      caption = undefined;
     }
     if (children.length > 0) {
       entries.push({
         id: hub.id,
         labelKey: sectionLabelKey(hub.id),
         icon: hub.icon,
-        kind: hub.kind,
         children,
       });
     }
@@ -176,12 +183,12 @@ export function emptySection(
   return {
     id,
     labelKey: sectionLabelKey(id),
-    ...(hub ? { icon: hub.icon, kind: hub.kind } : {}),
+    ...(hub ? { icon: hub.icon } : {}),
     children: [],
   };
 }
 
-/** Where a hub's rail entry goes: its first page the operator may open. */
+/** Where a hub's block and rail icon go: its first page the operator may open. */
 export const hubHref = (hub: ConsoleGroup): string => hub.children[0]?.href ?? CONSOLE_HOME;
 
 /** The hub holding a page, or null (Home, and pages outside the menu). */
@@ -192,6 +199,24 @@ export function hubOf(
   if (!leafId) return null;
   for (const e of entries) if (isGroup(e) && e.children.some((c) => c.id === leafId)) return e;
   return null;
+}
+
+/** A run of pages under one small heading in a hub's menu; the first run has none when the hub starts ungrouped. */
+export interface PageRun {
+  captionKey?: string;
+  pages: ConsoleLeaf[];
+}
+
+/** The hub's pages split into the groups its menu draws, in order. */
+export function pageRuns(hub: ConsoleGroup): PageRun[] {
+  const runs: PageRun[] = [];
+  for (const leaf of hub.children) {
+    const last = runs[runs.length - 1];
+    if (leaf.captionKey || !last) {
+      runs.push({ ...(leaf.captionKey ? { captionKey: leaf.captionKey } : {}), pages: [leaf] });
+    } else last.pages.push(leaf);
+  }
+  return runs;
 }
 
 /** Every leaf, in rail order. */
