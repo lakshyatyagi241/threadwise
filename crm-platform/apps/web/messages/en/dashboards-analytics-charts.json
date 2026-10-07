@@ -331,7 +331,11 @@
       },
       "types": {
         "title": "Message types",
-        "subtitle": "Outbound messages by kind",
+        "subtitle": "Outbound distribution",
+        "byType": "Sent and delivered by message type",
+        "kind": "Type",
+        "sent": "Sent",
+        "delivered": "Delivered",
         "text": "Text",
         "template": "Template",
         "media": "Media",
