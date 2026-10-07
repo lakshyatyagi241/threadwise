@@ -362,7 +362,7 @@ Connections: **WGT** (assistant picker, `contextFor`), **FLR/FLB** (AI node pick
 - `ai_chat_assistants` (org, id, uuid, user, name, slug unique per org, greeting, system_prompt, tone, language, ai_provider, ai_model, reply_max_tokens, temperature numeric(4,2), fallback_message, handoff_enabled, handoff_keyword, handoff_message, status, row_version). No change needed.
 - `ai_training_sources` (org, id, uuid, assistant_id nullable cascade, user, kind, label, url, file_path, content, question, answer, status, tokens_estimate, error, row_version). No change needed; `file_path` never leaves the server.
 - `workspace_settings.ai_responder_mode`, `.meta_agent_enabled` (existing columns).
-- Migration `20261101100100_aiag_permissions.sql`: five permission keys.
+- Migration `20261105100000_aiag_permissions.sql`: five permission keys.
 
 ## Cross-domain contracts
 
