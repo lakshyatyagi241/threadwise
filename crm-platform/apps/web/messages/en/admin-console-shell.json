@@ -64,7 +64,7 @@
     },
     "overview": {
       "title": "Platform console",
-      "note": "Pick an area. Each one opens with its related pages as tabs, and Ctrl+K finds any page by name.",
+      "note": "Pick an area. Each one opens with its pages in a menu on the left, and Ctrl+K finds any page by name.",
       "open": "Open",
       "attentionTitle": "Needs attention",
       "attentionAll": "{count, plural, one {# unread notification} other {# unread notifications}}",
