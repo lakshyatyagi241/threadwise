@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CHANNEL_KINDS, ROUTING_STRATEGIES, AGENT_AVAILABILITY } from '@crm/contracts';
+import { CHANNEL_KINDS, ROUTING_STRATEGIES } from '@crm/contracts';
 
 const load = (lang: string) =>
   JSON.parse(
@@ -18,14 +18,12 @@ describe('team-inbox-routing-sla messages', () => {
     expect(keys(load('ar')).sort()).toEqual(keys(load('en')).sort());
   });
 
-  it('labels every channel, strategy and availability the API can send, in both languages', () => {
+  it('labels every channel and strategy the API can send, in both languages', () => {
     for (const lang of ['en', 'ar']) {
       const m = load(lang)['team-inbox-routing-sla']!;
       for (const k of CHANNEL_KINDS) expect(m.channels![k], `${lang} channel ${k}`).toBeTruthy();
       const strategy = (m.rules as { strategy: Record<string, string> }).strategy;
       for (const s of ROUTING_STRATEGIES) expect(strategy[s], `${lang} strategy ${s}`).toBeTruthy();
-      const availability = (m.form as { availability: Record<string, string> }).availability;
-      for (const a of AGENT_AVAILABILITY) expect(availability[a], `${lang} ${a}`).toBeTruthy();
     }
   });
 });

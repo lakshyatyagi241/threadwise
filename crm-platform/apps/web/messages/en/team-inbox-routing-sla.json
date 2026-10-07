@@ -13,7 +13,7 @@
       "instagram": "Instagram"
     },
     "page": {
-      "back": "Automation",
+      "back": "Automation and AI",
       "title": "Auto-assignment",
       "subtitle": "Give each new conversation to the right agent automatically. Rules are tried in order, from the top.",
       "noAccess": "You do not have permission to view the auto-assignment settings.",
@@ -160,12 +160,6 @@
       "noAgents": "There are no agents who can open the inbox yet.",
       "teamBadge": "Team",
       "teamNote": "{count, plural, one {# member} other {# members}}",
-      "availability": {
-        "online": "Online, {open} open",
-        "away": "Away, {open} open",
-        "busy": "Busy, {open} open",
-        "offline": "Offline, {open} open"
-      },
       "stale": "{count, plural, one {# chosen agent or team is no longer available.} other {# chosen agents or teams are no longer available.}}",
       "removeStale": "Remove them",
       "optionsTitle": "Options",
@@ -175,7 +169,8 @@
       "fallbackHint": "Used when no other rule matched. There is only one fallback; choosing this one replaces the previous one.",
       "cancel": "Cancel",
       "save": "Save",
-      "saveActivate": "Save and activate"
+      "saveActivate": "Save and activate",
+      "openCount": "{open} open"
     }
   }
 }
