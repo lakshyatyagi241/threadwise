@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -11,13 +11,14 @@ import {
   type InboxQueueQuery,
   type InboxQueueResponse,
   type PlatformNoteRequest,
+  type StartImpersonationResponse,
   type SuspendWorkspaceRequest,
 } from '@crm/contracts';
 import { WORKSPACE_FLAGS } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
-import { AuthAuditService } from '../auth';
+import { AuthAuditService, ImpersonationService, OrgSuspensionService } from '../auth';
 import { PlatformRbacService } from '../roles-permissions';
 import { SupportStore } from './support-store';
 
@@ -120,6 +121,9 @@ export class PlatformInboxService {
     private readonly audit: AuthAuditService,
     private readonly rbac: PlatformRbacService,
   ) {}
+
+  @Inject(OrgSuspensionService) @Optional() private readonly suspension?: OrgSuspensionService;
+  @Inject(ImpersonationService) @Optional() private readonly impersonation?: ImpersonationService;
 
   private actor(): number {
     const id = RequestContextStore.require().actorId;
@@ -401,6 +405,7 @@ export class PlatformInboxService {
             AND f.flag IN ('frozen', 'tos_violation', 'fraud')) THEN 'suspended' ELSE 'active' END
       WHERE o.id = ${orgId} AND o.status IN ('active', 'suspended')
     `);
+    await this.suspension?.invalidate(orgId); // enforcement caches the status for a few seconds (ADR-0019)
   }
 
   private async setFlag(
@@ -523,15 +528,20 @@ export class PlatformInboxService {
   // --- WD-SUPP-045 ----------------------------------------------------------------------------------------------------------------
 
   /**
-   * The launcher's endpoint. Starting the session (minting the owner's access, the banner, the audit start/stop) belongs to
-   * the workspaces domain (WSP), which is not built yet, so after validating the reason and the target this answers 501.
+   * The launcher's endpoint (WD-SUPP-045): the same act-as session as the Workspaces hub's "Login as owner" (WD-WSP-032), started
+   * by the auth domain's ImpersonationService. The answer is the handoff URL the launcher opens.
    */
-  async impersonate(orgUuid: string, _input: ImpersonateRequest): Promise<never> {
-    await this.store.tx((tx) => this.org(tx, orgUuid));
-    throw new AppError(
-      ERROR_CODES.INTERNAL,
-      'Impersonation is provided by the workspaces domain, which is not available yet.',
-      HttpStatus.NOT_IMPLEMENTED,
-    );
+  async impersonate(
+    orgUuid: string,
+    input: ImpersonateRequest,
+  ): Promise<StartImpersonationResponse> {
+    if (!this.impersonation) {
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Impersonation is not available.',
+        HttpStatus.NOT_IMPLEMENTED,
+      );
+    }
+    return this.impersonation.start(orgUuid, { reason: input.reason, readOnly: false });
   }
 }

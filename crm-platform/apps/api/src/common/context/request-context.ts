@@ -4,6 +4,18 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 export type ActorType =
   'user' | 'partner_agent' | 'candidate' | 'bot' | 'api_key' | 'system' | 'platform_operator';
 
+/** Set while a platform operator is acting as a workspace user through an act-as token (WD-WSP-032/033). */
+export interface ImpersonationContext {
+  /** impersonation_sessions.uuid */
+  sessionId: string;
+  /** platform_operators.id and uuid: the real actor behind every write of this request. */
+  operatorId: number;
+  operatorUuid: string;
+  /** Every non-GET/HEAD request is refused. */
+  readOnly: boolean;
+  expiresAt: Date;
+}
+
 export interface RequestContext {
   requestId: string;
   orgId: number;
@@ -20,6 +32,8 @@ export interface RequestContext {
   sessionId?: string;
   /** Operator role, only for actorType 'platform_operator'. */
   operatorRole?: 'super_admin' | 'support' | 'auditor';
+  /** Present only on an act-as request: `actorType` is then 'user' (the workspace owner) and this names the operator behind it. */
+  impersonation?: ImpersonationContext;
 }
 
 const storage = new AsyncLocalStorage<RequestContext>();

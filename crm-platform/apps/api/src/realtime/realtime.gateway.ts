@@ -183,15 +183,18 @@ export class RealtimeGateway
   /** Disconnects sockets whose session ended since they connected: a signed-out or revoked session must stop receiving. */
   private async dropRevoked(): Promise<void> {
     const sockets = [...(this.server?.sockets.values() ?? [])].filter(
-      (s) => (s.data as Partial<SocketData>).identity?.sid,
+      (s) => (s.data as Partial<SocketData>).identity,
     );
     for (let i = 0; i < sockets.length; i += SESSION_SWEEP_CHUNK) {
       const chunk = sockets.slice(i, i + SESSION_SWEEP_CHUNK);
-      const revoked = new Set(
-        await this.auth.revoked(chunk.map((s) => (s.data as SocketData).identity)),
-      );
+      const identities = chunk.map((s) => (s.data as SocketData).identity);
+      // Revoked sessions and members of a suspended workspace (ADR-0019) are dropped the same way.
+      const dropped = new Set([
+        ...(await this.auth.revoked(identities)),
+        ...(await this.auth.suspended(identities)),
+      ]);
       for (const socket of chunk) {
-        if (revoked.has((socket.data as SocketData).identity)) socket.disconnect(true);
+        if (dropped.has((socket.data as SocketData).identity)) socket.disconnect(true);
       }
     }
   }

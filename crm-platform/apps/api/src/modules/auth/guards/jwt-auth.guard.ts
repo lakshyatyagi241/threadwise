@@ -3,9 +3,14 @@ import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import { Redis } from 'ioredis';
 import { ACTOR_KINDS_KEY, IS_PUBLIC_KEY } from '../../../common/decorators';
-import { RequestContextStore, type ActorType } from '../../../common/context/request-context';
+import {
+  RequestContextStore,
+  type ActorType,
+  type ImpersonationContext,
+} from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { ImpersonationService } from '../platform/impersonation.service';
 import { OperatorAuthService } from '../platform/operator-auth.service';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { EpochService } from '../sessions/epoch.service';
@@ -45,6 +50,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly policy: SecurityPolicyService,
     private readonly sessions: SessionService,
     private readonly operators: OperatorAuthService,
+    private readonly impersonations: ImpersonationService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -80,7 +86,19 @@ export class JwtAuthGuard implements CanActivate {
     // after deploy is the price of being able to revoke at all.
     if (sessionBacked && !claims.sid) throw AppError.unauthenticated('Invalid or expired token');
 
-    if (sessionBacked) {
+    // An act-as token (operator inside a workspace) has no auth_sessions row: its session is the impersonation row, checked
+    // here on every request so stop, expiry and the operator losing access all take effect at once. It skips the idle timeout
+    // and the session cap, which belong to the owner's real sessions and must not be touched by the operator.
+    let impersonation: ImpersonationContext | undefined;
+    if (claims.imp) {
+      if (claims.typ !== 'user' || claims.imp.sid !== claims.sid) {
+        throw AppError.unauthenticated('Invalid or expired token');
+      }
+      if ((claims.ep ?? 0) < (await this.epoch.current())) {
+        throw AppError.unauthenticated('Invalid or expired token');
+      }
+      impersonation = await this.impersonations.assertOpen(claims);
+    } else if (sessionBacked) {
       if ((claims.ep ?? 0) < (await this.epoch.current())) {
         throw AppError.unauthenticated('Invalid or expired token');
       }
@@ -93,6 +111,7 @@ export class JwtAuthGuard implements CanActivate {
     ctx.actorId = claims.sub;
     ctx.userId = claims.typ === 'user' ? claims.sub : null;
     ctx.sessionId = claims.sid;
+    ctx.impersonation = impersonation;
 
     return true;
   }

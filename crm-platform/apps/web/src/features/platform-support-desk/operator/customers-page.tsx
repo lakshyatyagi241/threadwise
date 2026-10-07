@@ -139,7 +139,7 @@ export function CustomerDetailPage({ id }: { id: string }) {
     return q.error instanceof ApiError && q.error.status === 404 ? (
       <div className="space-y-4">
         <p>{t('notFound')}</p>
-        <Link href="/admin/support/customers" className="text-primary hover:underline">
+        <Link href="/admin/workspaces" className="text-primary hover:underline">
           {t('all')}
         </Link>
       </div>
@@ -155,7 +155,7 @@ export function CustomerDetailPage({ id }: { id: string }) {
         title={d.workspace.name}
         description={t('subtitle')}
         actions={
-          <Link href="/admin/support/customers">
+          <Link href="/admin/workspaces">
             <Button variant="secondary">{t('all')}</Button>
           </Link>
         }

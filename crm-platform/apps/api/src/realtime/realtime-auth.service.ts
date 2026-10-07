@@ -3,7 +3,7 @@ import { Redis } from 'ioredis';
 import { AppError } from '../common/errors/app-error';
 import type { ActorType } from '../common/context/request-context';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
-import { TokenService, type TokenClaims } from '../modules/auth';
+import { OrgSuspensionService, TokenService, type TokenClaims } from '../modules/auth';
 import { EpochService } from '../modules/auth/sessions/epoch.service';
 import { AuthKeys } from '../modules/auth/support/redis-keys';
 import { RealtimeTicketService } from './ticket/realtime-ticket.service';
@@ -19,6 +19,8 @@ export interface SocketIdentity {
   /** The session behind the connection: ending it ends the socket. */
   sid?: string;
   ep?: number;
+  /** An operator's impersonation session: it may stay connected to a suspended workspace so support can look (ADR-0019). */
+  imp?: boolean;
 }
 
 const toIdentity = (claims: Omit<TokenClaims, 'rv'>): SocketIdentity => ({
@@ -28,6 +30,7 @@ const toIdentity = (claims: Omit<TokenClaims, 'rv'>): SocketIdentity => ({
   uid: claims.uid,
   sid: claims.sid,
   ep: claims.ep,
+  imp: claims.imp !== undefined ? true : undefined,
 });
 
 /**
@@ -45,6 +48,7 @@ export class RealtimeAuthService {
     private readonly tickets: RealtimeTicketService,
     private readonly tokens: TokenService,
     private readonly epoch: EpochService,
+    private readonly orgs: OrgSuspensionService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
@@ -71,10 +75,26 @@ export class RealtimeAuthService {
     }
 
     const identity = toIdentity(claims);
-    if ((await this.revoked([identity])).length > 0) {
+    if (
+      (await this.revoked([identity])).length > 0 ||
+      (await this.suspended([identity])).length > 0
+    ) {
       throw AppError.unauthenticated('Invalid or expired credential');
     }
     return identity;
+  }
+
+  /**
+   * The identities among these that belong to a suspended workspace (ADR-0019): refused at the handshake and dropped by the
+   * sweep, so a suspension stops live updates within the sweep interval. One cached lookup per distinct organization.
+   */
+  async suspended(identities: SocketIdentity[]): Promise<SocketIdentity[]> {
+    const orgIds = [...new Set(identities.filter((i) => !i.imp).map((i) => i.orgId))];
+    const flags = await Promise.all(
+      orgIds.map(async (id) => [id, await this.orgs.isSuspended(id)] as const),
+    );
+    const blocked = new Set(flags.filter(([, s]) => s).map(([id]) => id));
+    return identities.filter((i) => !i.imp && blocked.has(i.orgId));
   }
 
   /**
