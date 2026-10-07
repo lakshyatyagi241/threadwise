@@ -32,7 +32,82 @@ export interface TestPanelProps {
   flowName?: (id: string) => string | undefined;
 }
 
-export function LogBubble({ entry }: { entry: LogEntry }): ReactElement {
+/** The tap targets under a Quick replies / List message. A tap sends that option as the customer's reply; once answered they go dim. */
+function Choices({
+  choices,
+  live,
+  onPick,
+}: {
+  choices: NonNullable<LogEntry['choices']>;
+  live: boolean;
+  onPick: (label: string) => void;
+}): ReactElement {
+  const [open, setOpen] = useState(false);
+  const pill =
+    'flex w-full items-center justify-center gap-1.5 rounded-md border border-[#0b8a73]/40 bg-white px-2 py-1.5 text-[12.5px] font-medium text-[#0b8a73] transition disabled:cursor-default disabled:opacity-50 enabled:hover:bg-[#0b8a73]/10';
+  if (choices.kind === 'list') {
+    return (
+      <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-list">
+        <button
+          type="button"
+          className={pill}
+          disabled={!live}
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <svg
+            viewBox="0 0 16 16"
+            className="size-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path d="M3 4h10M3 8h10M3 12h10" strokeLinecap="round" />
+          </svg>
+          {choices.button || 'Choose'}
+        </button>
+        {open && live && (
+          <ul className="max-h-44 overflow-y-auto rounded-md border border-black/10 bg-white">
+            {choices.labels.map((l, i) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  className="w-full px-2.5 py-1.5 text-start text-[12.5px] hover:bg-black/5"
+                  onClick={() => {
+                    setOpen(false);
+                    onPick(l);
+                  }}
+                >
+                  {l}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+  return (
+    <div className="mt-1.5 space-y-1 border-t border-black/10 pt-1.5" data-testid="choices-buttons">
+      {choices.labels.map((l, i) => (
+        <button key={i} type="button" className={pill} disabled={!live} onClick={() => onPick(l)}>
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function LogBubble({
+  entry,
+  live = false,
+  onPick,
+}: {
+  entry: LogEntry;
+  /** This message is the one the run is waiting on, so its buttons can be tapped. */
+  live?: boolean;
+  onPick?: (label: string) => void;
+}): ReactElement {
   if (entry.kind === 'system')
     return (
       <div className="py-1 text-center font-mono text-[10.5px] italic text-muted-foreground">
@@ -81,7 +156,16 @@ export function LogBubble({ entry }: { entry: LogEntry }): ReactElement {
         )
       ) : null}
       {entry.text ? (
-        <div className="whitespace-pre-wrap px-1 text-[12.5px] leading-snug">{entry.text}</div>
+        <div className="whitespace-pre-wrap px-1 text-[12.5px] leading-snug">
+          {entry.choices ? entry.choices.prompt : entry.text}
+        </div>
+      ) : null}
+      {entry.choices ? (
+        <Choices
+          choices={entry.choices}
+          live={live && Boolean(onPick)}
+          onPick={(l) => onPick?.(l)}
+        />
       ) : null}
     </div>
   );
@@ -207,7 +291,12 @@ export function TestPanel({
         className="flex flex-1 flex-col space-y-2 overflow-y-auto bg-muted/40 p-3"
       >
         {log.map((entry, i) => (
-          <LogBubble key={i} entry={entry} />
+          <LogBubble
+            key={i}
+            entry={entry}
+            live={awaiting && i === log.length - 1}
+            onPick={(label) => simRef.current?.send(label)}
+          />
         ))}
       </div>
       {awaiting && waitType === 'ask_file' ? (
