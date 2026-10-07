@@ -82,6 +82,7 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('name', 'who'),
     sys('email', 'who'),
     sys('phone', 'who'),
+    sys('countryCode', 'who'),
     sys('search', 'who'),
     sys('tags', 'who', { options: l.tags, optionsFrom: 'tag' }),
     sys('groups', 'who', { options: l.groups, optionsFrom: 'group' }),

@@ -214,6 +214,8 @@ export const campaignSchema = z.object({
   status: z.enum(CAMPAIGN_STATUSES),
   provider: z.string().nullable(),
   abTesting: z.boolean(),
+  /** Made by the "Create broadcast" wizard (a draft of it resumes there, not in the classic builder). */
+  wizard: z.boolean().default(false),
   scheduleType: z.enum(CAMPAIGN_SCHEDULE_TYPES),
   sendDate: z.string().nullable(),
   sendTime: z.string().nullable(),

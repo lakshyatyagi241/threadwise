@@ -54,6 +54,18 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WADEV-045 | todo |  |  |
 | WD-WADEV-046 | todo |  |  |
 
+## campaigns (camp) additions: Create broadcast wizard
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-CAMP-029 | done |  | ADDITION (not in WaDesk): Create-broadcast wizard shell, draft, resume. api+web+e2e on akshay/campaigns/broadcast-wizard; not parity-checked against a WaDesk twin (none exists) |
+| WD-CAMP-030 | done |  | ADDITION: audience groups+segments+rules, count, exclusions |
+| WD-CAMP-031 | done |  | ADDITION: credit check, variable mapping, sample messages |
+| WD-CAMP-032 | done |  | ADDITION: test send, logged, charged on delivery; Cloud API delivery reports now reach campaigns (WabaReceiptRegistry) |
+| WD-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
+| WD-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
+| WD-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+
 ## whatsapp-cloud-api-waba (waba)
 
 | Feature | Status | PR | Notes |

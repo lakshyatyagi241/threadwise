@@ -16,6 +16,7 @@ export { mapBaileysAck, mapTwilioStatus } from './receipt-rules';
 export { BroadcastsComposeService } from './broadcasts-compose.service';
 export {
   EngineSenderRegistry,
+  type EngineSender,
   type OpenedSender,
   type OutgoingMessage,
   type OutgoingText,
