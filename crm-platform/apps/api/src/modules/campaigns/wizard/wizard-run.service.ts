@@ -190,6 +190,9 @@ export class WizardRunService {
         }),
       ));
 
+    // CSV numbers that are not contacts yet become contacts now, so the recipient list below (the same function the count used) has them.
+    const csv = await this.audience.materializeCsv(tx, orgId, i.draft.audience);
+
     let after = 0;
     let written = 0;
     for (;;) {
@@ -214,6 +217,8 @@ export class WizardRunService {
           optedOut: count.optedOut,
           invalidNumber: count.invalidNumber,
           recipients: written,
+          csvContactsCreated: csv.created,
+          csvSkipped: csv.skipped,
         },
       },
       provider: sender.provider,
