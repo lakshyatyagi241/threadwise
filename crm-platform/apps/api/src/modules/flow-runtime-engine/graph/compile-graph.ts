@@ -1,4 +1,4 @@
-import { flbToRuntimeData } from '@crm/contracts';
+import { flbAskNeedsInputCheck, flbCleanAskInputType, flbToRuntimeData } from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
 import { cleanVar } from './clean-var';
@@ -183,6 +183,13 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
           .map((v) => (typeof v === 'string' ? v.trim() : ''))
           .filter((s) => s !== ''),
         footerText: str(data.footerText),
+        // A checked answer (see AskInputNode); `flbToRuntimeData` has already normalised these.
+        inputType: flbCleanAskInputType(data.inputType),
+        dateFormat: str(data.dateFormat),
+        wrongReplyText: str(data.wrongReplyText),
+        maxRetries: int(data.maxRetries, 0),
+        onGiveUp: str(data.onGiveUp, 'continue'),
+        savePropertyKey: str(data.savePropertyKey),
       };
     // Not Reference nodes (TW-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
     case 'ask_file':
@@ -289,12 +296,16 @@ export function compileGraph(input: unknown): RuntimeGraph {
     if (id === '') continue;
     const builderType = str(n.type ?? n.flowNodeType);
     typeById.set(id, builderType);
-    const mapped = TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType));
-    nodes.push({
-      id,
-      type: mapped,
-      props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: obj(n.data) })),
-    });
+    const props = shapeNode(
+      builderType,
+      flbToRuntimeData({ type: builderType, data: obj(n.data) }),
+    );
+    // An Ask with "Validate as" set (and no fixed answers or file upload) is the checked question; every other Ask keeps Reference's.
+    const mapped =
+      builderType === 'ask' && flbAskNeedsInputCheck(props)
+        ? 'AskInput'
+        : (TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType)));
+    nodes.push({ id, type: mapped, props });
   }
 
   const edges: RuntimeEdge[] = [];

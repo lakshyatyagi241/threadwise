@@ -322,6 +322,7 @@ export const workspaceSettings = pgTable(
     autoTranslateLanguages: text('auto_translate_languages'),
     defaultLanguage: text('default_language'),
     inboxTranslate: boolean('inbox_translate').notNull().default(true),
+    flowBuilderMode: text('flow_builder_mode'),
     dataResidency: text('data_residency').notNull().default('any'),
     appointmentSettings: text('appointment_settings'),
     timezone: text('timezone').notNull().default('UTC'),
