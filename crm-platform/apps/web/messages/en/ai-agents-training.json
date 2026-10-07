@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "AI Training"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "AI Training is not in your plan",
+      "body": "Your plan doesn't include AI assistants. Upgrade to unlock this feature.",
+      "upgrade": "See plans"
+    },
+    "responder": {
+      "title": "Who answers your WhatsApp?",
+      "body": "If you turn on Meta's own Business Agent, our AI and keyword auto-replies stand down for this workspace, so your customer never gets two answers to the same message.",
+      "metaCheck": "I use Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "Our AI answers",
+          "desc": "Our AI and keyword auto-replies handle chats (default)."
+        },
+        "meta_agent_only": {
+          "label": "Meta agent answers",
+          "desc": "Meta's Business Agent replies. We only log the thread, our AI stays silent."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta agent, then handoff",
+          "desc": "Meta fronts the first questions. When it escalates, the chat lands in your Team Inbox for a person. Our auto-AI stays silent."
+        }
+      },
+      "save": "Save",
+      "hint": "Meta's agent needs a WhatsApp Business (Cloud API) number. Numbers on the unofficial engine always use our AI.",
+      "readOnly": "You can see this setting but not change it.",
+      "saved": "AI responder mode saved.",
+      "saveFailed": "Could not save the responder mode.",
+      "loadError": "Could not load the responder mode.",
+      "retry": "Try again",
+      "loading": "Loading the responder mode"
+    },
+    "list": {
+      "tip": "Tip",
+      "tipBody": "Smart agents power your <link>chatbot widgets</link> and the AI step of your flows. The five-step builder walks you through identity, persona, brain, safety and knowledge.",
+      "statusViews": "Agent status",
+      "view": {
+        "all": "All agents",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "status": {
+        "all": "All",
+        "active": "Active",
+        "paused": "Paused"
+      },
+      "knowledgeTip": "Knowledge tip",
+      "knowledgeTipBody": "One FAQ question and answer is often enough. A few help-page URLs cover most support questions, so there is no need to load your whole site.",
+      "workspace": "Workspace",
+      "title": "AI",
+      "titleAccent": "Training",
+      "intro": "Build smart agents that speak in your brand's voice. Train them on URLs, text, Q&A pairs and files.",
+      "activePill": "{count} active",
+      "newAgent": "New smart agent",
+      "card": {
+        "total": "Total agents",
+        "knowledge": "Knowledge entries",
+        "avg": "Avg / agent",
+        "health": "Health",
+        "activeHint": "{count} active",
+        "indexedHint": "{count} indexed",
+        "entriesUnit": "entries"
+      },
+      "health": {
+        "healthy": "healthy",
+        "empty": "empty",
+        "attention": "attention"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Provider",
+        "knowledge": "Knowledge",
+        "tone": "Tone",
+        "updated": "Updated",
+        "actions": "Actions"
+      },
+      "search": "Search by name or slug…",
+      "loading": "Loading agents",
+      "loadError": "Could not load the agents",
+      "retry": "Try again",
+      "emptyTitle": "No smart agents yet",
+      "emptyBody": "Build your first agent. The five-step builder walks you through identity, persona, brain, safety and the knowledge it should have.",
+      "buildAgent": "Build smart agent",
+      "noMatch": "No agent matches your search or status view.",
+      "entries": "{count, plural, one {# entry} other {# entries}}",
+      "edit": "Edit agent",
+      "editNamed": "Edit {name}",
+      "duplicate": "Duplicate agent",
+      "duplicateNamed": "Duplicate {name}",
+      "deleteAgent": "Delete agent",
+      "deleteNamed": "Delete {name}",
+      "deleteTitle": "Delete \"{name}\"?",
+      "deleteBody": "The agent and its knowledge entries will be removed. Widgets and flows that use it will stop replying with this agent until you pick a different one.",
+      "delete": "Delete agent",
+      "keep": "Keep",
+      "deleted": "Agent deleted.",
+      "deleteFailed": "Delete failed: {reason}",
+      "duplicateFailed": "Could not duplicate the agent.",
+      "networkError": "network error",
+      "showing": "Showing",
+      "of": "of",
+      "agentsCount": "{count, plural, one {# agent} other {# agents}}",
+      "loadMore": "Load more"
+    },
+    "builder": {
+      "back": "Back to AI Training",
+      "crumb": "AI Training",
+      "crumbNew": "New",
+      "crumbEdit": "Edit",
+      "titleNew": "Build a smart",
+      "titleEdit": "Edit smart",
+      "titleAccent": "agent",
+      "stateSaved": "Saved",
+      "stateDraft": "Draft / unsaved",
+      "saveDraft": "Save draft",
+      "stepper": "Builder steps",
+      "steps": {
+        "identity": "Identity",
+        "persona": "Persona",
+        "brain": "Brain",
+        "safety": "Safety",
+        "knowledge": "Knowledge"
+      },
+      "stepOf": "Step {n} of {total}",
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish & close",
+      "loading": "Loading the agent",
+      "loadError": "Could not load the agent",
+      "notFoundTitle": "Agent not found",
+      "notFoundBody": "This agent does not exist in your workspace, or it was deleted.",
+      "backToList": "Back to AI Training",
+      "saved": "Agent saved.",
+      "saveFailed": "Save failed. Check the fields and try again.",
+      "conflict": "This agent was changed somewhere else. Reload the page to get the latest version, then save again.",
+      "problem": {
+        "name": "Name your assistant.",
+        "greeting": "Write an opening line.",
+        "model": "Pick a model.",
+        "tokens": "Reply length must be 50–4000 tokens.",
+        "temperature": "Creativity must be between 0 and 2."
+      },
+      "identity": {
+        "title": "Agent identity",
+        "required": "required",
+        "name": "Agent display name",
+        "namePlaceholder": "e.g. Pricing concierge",
+        "nameHint": "For your records. Visitors don't see this label.",
+        "status": "Roll-out status",
+        "statusActive": "Live: pick this agent in widgets and flows",
+        "statusPaused": "Paused: hide from pickers",
+        "statusHint": "Paused agents stay in the list but cannot be attached to new widgets.",
+        "language": "Preferred language",
+        "languageHint": "ISO 639-1 code. Matches the visitor's language when it differs.",
+        "tone": "Conversational tone",
+        "toneHint": "Sets the writing style, independent of the persona brief.",
+        "tones": {
+          "helpful": "Helpful · calm and on point",
+          "friendly": "Friendly · warm and casual",
+          "formal": "Formal · neutral and precise",
+          "playful": "Playful · light and witty"
+        }
+      },
+      "persona": {
+        "title": "Persona & opening line",
+        "tag": "content",
+        "greeting": "Opening line",
+        "greetingPlaceholder": "Hi! I'm here to help. Ask me anything about pricing or plans.",
+        "greetingHint": "Visitor-facing. Shown as the first bubble when the chat opens.",
+        "brief": "Character brief (system instructions)",
+        "briefPlaceholder": "You are the friendly support agent for Acme Inc. Always answer in short sentences and hand over to a person for anything about refunds.",
+        "briefHint": "Internal, never shown to visitors. Include do's, don'ts and escalation rules."
+      },
+      "brain": {
+        "title": "Model & reply controls",
+        "tag": "brain",
+        "provider": "Model provider",
+        "providerHint": "Your admin sets up the provider keys. Providers you added your own key for show too, on plans that allow it.",
+        "notEnabled": "{name} (not enabled)",
+        "model": "Model name",
+        "modelHint": "Pick one of the models enabled for you, or type another model id.",
+        "noModels": "No AI model is enabled for your workspace yet. Ask your admin to switch one on, or add your own key under Settings, AI keys.",
+        "tokens": "Reply length budget (tokens)",
+        "tokensHint": "Roughly 1 token is 4 characters. 400 fits a paragraph.",
+        "temperature": "Creativity (0 = strict, 2 = wild)",
+        "temperatureHint": "Lower is consistent and factual. Higher gives varied phrasing."
+      },
+      "safety": {
+        "title": "Fallback & human handoff",
+        "tag": "safety",
+        "fallback": "Fallback reply (used when the model errors out)",
+        "fallbackPlaceholder": "A teammate will follow up shortly. Thanks for your patience.",
+        "fallbackHint": "Sent as written if the model returns nothing or the call fails.",
+        "handoff": "Enable handoff to a person",
+        "handoffHint": "The visitor types the trigger phrase, the agent stops replying and your team inbox lights up.",
+        "keyword": "Trigger phrase",
+        "keywordPlaceholder": "talk to human",
+        "keywordHint": "When a visitor types this anywhere in a message, the handoff fires.",
+        "ack": "Handoff acknowledgement",
+        "ackPlaceholder": "Sure, pulling in a teammate now. Stay on the line.",
+        "ackHint": "The last message before the agent goes silent."
+      }
+    },
+    "knowledge": {
+      "title": "Train the agent",
+      "tag": "knowledge",
+      "saveFirst": "Save the agent first. Knowledge entries attach to a saved agent.",
+      "addLabel": "Add knowledge",
+      "add": {
+        "url": {
+          "title": "Live URL",
+          "body": "Fetch a public page and keep its text."
+        },
+        "text": {
+          "title": "Free text",
+          "body": "Paste a help snippet or a policy."
+        },
+        "qa": {
+          "title": "Q&A pair",
+          "body": "One question with its canonical answer."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT & more",
+          "body": "Upload a file. The text is extracted for you."
+        }
+      },
+      "panel": {
+        "url": "Fetch a public URL",
+        "text": "Paste plain text",
+        "qa": "Single Q&A",
+        "file": "Upload a knowledge file"
+      },
+      "label": "Label",
+      "url": "URL",
+      "content": "Text",
+      "question": "Question",
+      "answer": "Answer",
+      "file": "File",
+      "placeholder": {
+        "label": {
+          "url": "Label (e.g. Pricing page)",
+          "text": "Label (e.g. Refund policy summary)",
+          "qa": "Label (e.g. Refund timing)",
+          "file": "Label (e.g. Product handbook)"
+        },
+        "content": "Paste any text the agent should know…",
+        "question": "Question, e.g. How long do refunds take?",
+        "answer": "Answer, e.g. Refunds settle within 3 to 5 business days."
+      },
+      "urlHint": "Only public http and https pages are read. The page is fetched in the background, so the entry shows Processing for a moment.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV or HTML, up to 10 MB. Text is extracted automatically.",
+      "uploading": "Upload progress",
+      "submit": {
+        "url": "Fetch & train",
+        "text": "Save text",
+        "qa": "Save pair",
+        "file": "Upload"
+      },
+      "cancel": "Cancel",
+      "added": "Knowledge added.",
+      "addFailed": "Could not add the entry.",
+      "problem": {
+        "label": "Add a label so you can find this entry later.",
+        "url": "Add the page address.",
+        "content": "Paste some text first.",
+        "question": "Add the question.",
+        "answer": "Add the answer.",
+        "file": "Pick a file (PDF, DOCX, TXT, Markdown, CSV or HTML).",
+        "file_type": "Accepted file types: TXT, Markdown, CSV, HTML, PDF, DOCX. For anything else, paste the text into a Text entry.",
+        "file_legacyDoc": "Legacy .doc files are not supported. Re-save as .docx (or export to .pdf) and upload again.",
+        "file_size": "That file is over 10 MB.",
+        "file_empty": "That file is empty.",
+        "tooLarge": "That is too much text for one paste. Upload it as a file instead."
+      },
+      "col": {
+        "kind": "Kind",
+        "label": "Label",
+        "state": "State",
+        "actions": "Actions"
+      },
+      "kind": {
+        "url": "url",
+        "text": "text",
+        "qa": "q&a",
+        "file": "file"
+      },
+      "state": {
+        "ready": "ready",
+        "processing": "processing",
+        "failed": "failed"
+      },
+      "tokens": "about {count} tokens",
+      "workspaceWide": "workspace-wide",
+      "loading": "Loading entries",
+      "loadError": "Could not load the entries.",
+      "retry": "Try again",
+      "empty": "No knowledge yet. Pick a kind above to add the first entry.",
+      "remove": "Remove",
+      "removeNamed": "Remove {label}",
+      "removeTitle": "Remove this knowledge entry?",
+      "removeBody": "The agent will stop using it for new replies. Older conversations stay unchanged.",
+      "keep": "Keep",
+      "removed": "Removed.",
+      "removeFailed": "Remove failed."
+    }
+  }
+}

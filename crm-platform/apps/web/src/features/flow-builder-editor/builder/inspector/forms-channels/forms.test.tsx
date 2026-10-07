@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { FlbBuilderContext } from '@crm/contracts';
 import { EMPTY_CONTEXT } from '../../../api/hooks';
+import { KnowledgeBaseActions } from '../kit';
 import { NODE_FORMS } from '../registry';
 import type { FormEnv, FormProps } from '../types';
 
@@ -95,6 +96,48 @@ describe('Sub-flow form', () => {
   it('says Loading while the context loads, and keeps a flow that left the workspace selectable', () => {
     expect(render('subflow', { flow: '' }, {}, { loading: true })).toContain('Loading flows…');
     expect(render('subflow', { flow: U(9) }, { flows })).toContain('(not in workspace)');
+  });
+});
+
+describe('Knowledge base picker: create one from the AI nodes', () => {
+  const ai = { model: '', prompt: '', assistant: '', save: 'reply' };
+
+  it('every AI node offers "Create knowledge base" in a new tab and a Refresh list button', () => {
+    for (const type of ['ai', 'cf_ai', 'ig_ai']) {
+      const html = render(type, ai);
+      expect(html, type).toMatch(
+        /<a[^>]*href="\/ai-training\/create"[^>]*target="_blank"[^>]*rel="noopener noreferrer"[^>]*>\+ Create knowledge base<\/a>/,
+      );
+      expect(html, type).toContain('Refresh list');
+    }
+  });
+
+  it('Refresh list is wired to the builder context re-read', () => {
+    const refresh = vi.fn();
+    // KnowledgeBaseActions has no hooks, so calling it returns its element tree and the button's handler can be pressed.
+    const tree = KnowledgeBaseActions({ refresh }) as {
+      props: { children: Array<{ type: string; props: { onClick?: () => void } }> };
+    };
+    const button = tree.props.children.find((c) => c.type === 'button')!;
+    button.props.onClick!();
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('with no knowledge base yet the hint says so and tells the person to refresh after creating one', () => {
+    const html = render('ai', ai);
+    expect(html).toContain('No knowledge bases yet.');
+    expect(html).toContain('then press Refresh list to pick it here');
+    expect(html).not.toContain('No trained assistants yet');
+  });
+
+  it('the AI Training links of the hint also open in a new tab, so the flow in progress is never replaced', () => {
+    const html = render(
+      'ai',
+      { ...ai, assistant: U(8) },
+      { assistants: [{ id: U(8), name: 'FAQ', status: 'active', sources: 3 }] },
+    );
+    expect(html).toMatch(/<a[^>]*href="\/ai-training"[^>]*target="_blank"/);
+    expect(html).toContain('FAQ · 3 source');
   });
 });
 

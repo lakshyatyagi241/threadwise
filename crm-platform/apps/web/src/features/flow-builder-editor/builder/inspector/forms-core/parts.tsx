@@ -27,13 +27,20 @@ export function Link({
   href,
   children,
   strong,
+  newTab,
 }: {
   href: string;
   children: ReactNode;
   strong?: boolean;
+  /** Opens beside the builder, so a screen elsewhere in the app never replaces a flow with unsaved changes. */
+  newTab?: boolean;
 }) {
   return (
-    <a href={href} className={cn('text-brand underline', strong && 'font-semibold')}>
+    <a
+      href={href}
+      className={cn('text-brand underline', strong && 'font-semibold')}
+      {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
       {children}
     </a>
   );
