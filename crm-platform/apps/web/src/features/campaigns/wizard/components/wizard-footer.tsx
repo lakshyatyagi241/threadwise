@@ -34,8 +34,8 @@ export function WizardFooter({
   const label = last ? t(`launch.${launch}`) : t('next');
   const stopped = blocked.length > 0 || (last && !canLaunch);
   return (
-    <div className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+    <div className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10">
+      <div className="flex w-full flex-wrap items-center justify-between gap-3">
         <Button variant="secondary" onClick={onBack} disabled={step === 1 || busy}>
           {t('back')}
         </Button>
