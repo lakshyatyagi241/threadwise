@@ -169,6 +169,8 @@ export const ERROR_CODES = {
   CON_LOST_REASON_REQUIRED: 'CON_LOST_REASON_REQUIRED',
   /** A status that belongs to another lifecycle stage was set on a contact (details: path `status`, names the stage). */
   CON_STATUS_STAGE_MISMATCH: 'CON_STATUS_STAGE_MISMATCH',
+  /** A bulk update named a property that is not an active, editable custom property of the workspace (details: one `customFields.<key>` per key). */
+  CON_PROPERTY_NOT_EDITABLE: 'CON_PROPERTY_NOT_EDITABLE',
 
   // segments (product extension)
   /** Another segment in the workspace has this name (any case). */

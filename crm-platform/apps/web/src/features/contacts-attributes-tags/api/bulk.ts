@@ -118,6 +118,8 @@ export interface BulkUpdateValues {
   ownerId?: string | null;
   lostReason?: string | null;
   otherLostReason?: string | null;
+  /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
+  customFields?: Record<string, unknown>;
 }
 
 /**

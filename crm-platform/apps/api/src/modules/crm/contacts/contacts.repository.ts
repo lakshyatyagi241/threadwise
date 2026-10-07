@@ -6,6 +6,7 @@ import type { RecordScope } from '@crm/contracts';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
 import type { StatusScopeOption } from './contact-status-stage';
+import type { PropertyDef } from './contact-property-values';
 import type { RequiredRule } from './required-properties';
 import {
   contactConditions,
@@ -620,6 +621,58 @@ export class ContactsRepository {
         .filter((d) => d.fieldId === r.id)
         .map((d) => ({ parentKey: d.parentKey, wanted: d.value ?? d.optionValue ?? null })),
     }));
+  }
+
+  /**
+   * The custom properties among `keys` that a bulk edit may set: active, not a system property, not hidden, not read-only,
+   * not a formula. Keys missing from the answer are not editable.
+   */
+  async editableProperties(
+    tx: Tx,
+    orgId: number,
+    keys: readonly string[],
+  ): Promise<Map<string, PropertyDef>> {
+    if (keys.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: fields.id, key: fields.key, label: fields.label, fieldType: fields.fieldType })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'contacts'),
+          inArray(fields.key, [...keys]),
+          eq(fields.isActive, true),
+          eq(fields.isSystem, false),
+          eq(fields.isHidden, false),
+          eq(fields.isReadOnly, false),
+          sql`${fields.fieldType} <> 'formula'`,
+        ),
+      );
+    if (rows.length === 0) return new Map();
+    const options = await tx
+      .select({ fieldId: fieldOptions.fieldId, value: fieldOptions.value })
+      .from(fieldOptions)
+      .where(
+        and(
+          eq(fieldOptions.orgId, orgId),
+          eq(fieldOptions.isHidden, false),
+          inArray(
+            fieldOptions.fieldId,
+            rows.map((r) => r.id),
+          ),
+        ),
+      );
+    return new Map(
+      rows.map((r) => [
+        r.key,
+        {
+          key: r.key,
+          label: r.label,
+          fieldType: r.fieldType,
+          options: options.filter((o) => o.fieldId === r.id).map((o) => o.value),
+        },
+      ]),
+    );
   }
 
   async findByIdentity(
