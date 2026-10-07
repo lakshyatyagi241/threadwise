@@ -98,6 +98,7 @@
         "basics": "Add-on basics",
         "features": "Features this add-on unlocks",
         "featuresHint": "Tick only what this add-on grants. Everything unticked stays governed by the customer's plan.",
+        "coreFeature": "in every plan",
         "limits": "Limit boosts",
         "limitsHint": "Blank = the add-on does not touch this limit. Enter a number to ADD on top of the plan (for example +2 devices). Use -1 for unlimited.",
         "fields": {
