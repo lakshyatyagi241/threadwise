@@ -25,8 +25,11 @@ export function QuickAdd({
   onAdd,
   disabled,
   compact,
+  placeholder,
 }: {
   onAdd: (value: QuickAddValue) => Promise<boolean>;
+  /** Replaces the default hint (the contact and deal panels open a form instead of adding at once). */
+  placeholder?: string;
   disabled?: boolean;
   /** One line: just the title and the button (the contact and deal panels). */
   compact?: boolean;
@@ -70,8 +73,8 @@ export function QuickAdd({
         disabled={disabled}
         maxLength={TASK_TITLE_MAX}
         invalid={problem}
-        placeholder={t('placeholder')}
-        aria-label={t('placeholder')}
+        placeholder={placeholder ?? t('placeholder')}
+        aria-label={placeholder ?? t('placeholder')}
         aria-describedby={problem ? 'quick-add-problem' : undefined}
         onChange={(e) => {
           setTitle(e.target.value);
