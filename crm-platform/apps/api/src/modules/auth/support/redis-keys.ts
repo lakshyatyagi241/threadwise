@@ -61,6 +61,10 @@ export const AuthKeys = {
   sendDay: (orgId: number, stamp: string) => `auth:send-day:${orgId}:${stamp}`,
   /** Operator-facing emergency halt mirror. */
   halt: 'auth:send-halt',
+  /** Tombstone of an ended impersonation session: its act-as token fails on the next request, on every instance. */
+  impersonationEnded: (sessionUuid: string) => `auth:imp-end:${sessionUuid}`,
+  /** Cached "is this workspace suspended" verdict, one per organization. */
+  orgSuspended: (orgId: number) => `auth:org-susp:${orgId}`,
 } as const;
 
 export const Ttl = {
@@ -71,6 +75,8 @@ export const Ttl = {
   mfaMaxAttempts: 5,
   socialStateSeconds: 10 * 60,
   gateSeconds: 30,
+  /** Short on purpose: a suspend or unsuspend reaches every instance within this, even when the invalidation was missed. */
+  orgSuspendedSeconds: 5,
   refreshGraceSeconds: 30,
   verifyEmailSeconds: 60 * 60,
   resetPasswordSeconds: 60 * 60,

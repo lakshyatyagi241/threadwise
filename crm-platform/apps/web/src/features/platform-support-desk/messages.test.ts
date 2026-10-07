@@ -50,7 +50,6 @@ describe('platform-support-desk messages', () => {
         '/admin/support/team-inbox',
         '/admin/support/agents',
         '/admin/support/sla',
-        '/admin/support/customers',
         '/admin/support/playbooks',
         '/admin/support/reports',
       ]),

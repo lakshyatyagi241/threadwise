@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { AccountBanners } from '@/features/auth-registration-security/account/account-banners';
 import { AccountGate } from '@/features/auth-registration-security/account/account-gate';
 import { WorkspaceSwitcher } from '@/features/auth-registration-security/account/workspace-switcher';
+import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
@@ -81,6 +82,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             navFooter={<WorkspaceSwitcher />}
             banners={
               <>
+                {/* An operator acting as the owner (WD-WSP-033): non-dismissible, first thing under the top bar. */}
+                <ImpersonationBanner key="impersonation" />
                 <TrialBar />
                 <AccountBanners key="banners" />
               </>
