@@ -1,4 +1,9 @@
-import { flbAskNeedsInputCheck, flbCleanAskInputType, flbToRuntimeData } from '@crm/contracts';
+import {
+  flbAskNeedsInputCheck,
+  flbCleanAskInputType,
+  flbSanitizeConditionGroup,
+  flbToRuntimeData,
+} from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
 import { cleanVar } from './clean-var';
@@ -226,7 +231,10 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
               value: str(data.value),
             },
           ];
+      // The optional nested tree (beyond Reference): when valid it wins over the flat chain at run time.
+      const conditionGroup = flbSanitizeConditionGroup(data.conditionGroup, (v) => cleanVar(v, ''));
       return {
+        ...(conditionGroup ? { conditionGroup } : {}),
         conditions,
         logicOperators: arr(data.operators).map((o) =>
           str(o).toUpperCase() === 'OR' ? 'OR' : 'AND',

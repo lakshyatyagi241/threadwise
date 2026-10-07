@@ -1,3 +1,4 @@
+import { flbIsCondGroup, flbSanitizeConditionGroup, type FlbCondGroup } from '@crm/contracts';
 import { asText, isSet, resolveVariable, type VariableBag } from './variables';
 
 export interface ConditionRule {
@@ -78,4 +79,21 @@ export function evaluateConditions(
     met = String(js[i - 1] ?? 'AND').toUpperCase() === 'OR' ? met || next : met && next;
   }
   return met;
+}
+
+/**
+ * The nested tree (beyond Reference). `and` is every item true, `or` is any item true; each rule goes through the same `evalRule` as the
+ * flat chain, so operators and type coercion are identical. An empty group is false, like an empty flat list. The tree is
+ * re-sanitised here, so a graph that skipped `compileGraph` still cannot exceed the depth (3) or rule (20) limits.
+ */
+export function evaluateConditionTree(bag: VariableBag, tree: unknown): boolean {
+  const clean = flbSanitizeConditionGroup(tree);
+  if (!clean) return false;
+  const walk = (g: FlbCondGroup): boolean => {
+    if (g.items.length === 0) return false;
+    const test = (i: FlbCondGroup['items'][number]) =>
+      flbIsCondGroup(i) ? walk(i) : evalRule(bag, i);
+    return g.op === 'or' ? g.items.some(test) : g.items.every(test);
+  };
+  return walk(clean);
 }

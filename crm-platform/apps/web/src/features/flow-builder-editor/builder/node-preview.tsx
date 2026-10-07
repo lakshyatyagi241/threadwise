@@ -1,7 +1,13 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import type { FlbBuilderContext, FlowNode, FlbNodeData } from '@crm/contracts';
+import {
+  flbCondSummary,
+  flbSanitizeConditionGroup,
+  type FlbBuilderContext,
+  type FlowNode,
+  type FlbNodeData,
+} from '@crm/contracts';
 import { findTemplate } from '../lib/templates';
 
 /** Message text (140) and media caption (80) end in an ellipsis when cut, as in Reference; every other preview line is a plain cut. */
@@ -9,6 +15,10 @@ const trunc = (s: unknown, n: number): string => {
   const t = String(s ?? '');
   return t.length > n ? `${t.slice(0, n)}…` : t;
 };
+/** The card line for a tree summary, cut at a word-ish length with an ellipsis. */
+export const COND_CARD_MAX = 90;
+export const condCardText = (line: string): string =>
+  line.length > COND_CARD_MAX ? `${line.slice(0, COND_CARD_MAX - 1).trimEnd()}…` : line;
 const cut = (s: unknown, n: number): string => String(s ?? '').slice(0, n);
 const asArr = (v: unknown): Array<Record<string, unknown>> =>
   Array.isArray(v) ? (v as Array<Record<string, unknown>>) : [];
@@ -241,6 +251,20 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       );
     }
     case 'condition': {
+      // A nested tree (beyond Reference) wins: one parenthesised line, cut so the card stays small.
+      const tree = flbSanitizeConditionGroup(d.conditionGroup);
+      if (tree) {
+        const line = flbCondSummary(tree);
+        return (
+          <div
+            title={line}
+            className="px-3 pt-2 pb-1.5 text-[11px] leading-snug text-[var(--flb-ink-700)]"
+          >
+            <span className="font-mono text-[10px] text-muted-foreground">IF </span>
+            <Mono>{tree.items.length === 0 ? 'No conditions set' : condCardText(line)}</Mono>
+          </div>
+        );
+      }
       const conds = asArr(d.conditions);
       const ops = Array.isArray(d.operators) ? (d.operators as string[]) : [];
       if (conds.length === 0)
