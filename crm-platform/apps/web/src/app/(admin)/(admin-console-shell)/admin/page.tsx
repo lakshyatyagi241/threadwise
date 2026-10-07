@@ -13,8 +13,8 @@ import { HomeAttention } from '@/features/admin-console-shell/home-attention';
 import { getOperatorSession } from '@/lib/auth/server';
 
 /**
- * The console home: what needs attention now, then one card per hub the operator can open, with a sentence on what is inside.
- * The pages themselves are the hub's tabs, so this is a map of eleven areas, not a second copy of the whole menu. Reference's
+ * The console home: what needs attention now, then one block per area the operator can open, with a sentence on what is inside
+ * and how many pages. The pages themselves are the area's left menu, so this is a map of eleven areas, not a second copy of the menu. Reference's
  * overview is a KPI dashboard (DASH owns it); the KPI tiles join this page when that lands.
  */
 export default async function AdminHome() {
@@ -41,14 +41,20 @@ export default async function AdminHome() {
             key={hub.id}
             href={hubHref(hub)}
             data-testid={`home-hub-${hub.id}`}
-            className="group rounded-lg border border-border p-4 transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex flex-col gap-1.5 rounded-xl border border-border p-4 transition hover:border-foreground/30 hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide">
-              <ConsoleIcon name={hub.icon} className="size-4 text-muted-foreground" />
-              {tAll(hub.labelKey)}
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <span
+              aria-hidden="true"
+              className="mb-1 flex size-9 items-center justify-center rounded-[10px] bg-primary/10 text-primary"
+            >
+              <ConsoleIcon name={hub.icon} className="size-5" />
+            </span>
+            <h2 className="text-sm font-medium">{tAll(hub.labelKey)}</h2>
+            <p className="text-sm text-muted-foreground">
               {tAll(`admin-console-shell.nav.hubNotes.${hub.id}`)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {t('pages', { count: hub.children.length })}
             </p>
           </Link>
         ))}

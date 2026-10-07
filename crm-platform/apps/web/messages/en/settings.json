@@ -299,6 +299,11 @@
         "label": "Geta publishing",
         "description": "Push published flows live on the Geta console.",
         "keywords": "geta, publish, bot, console, go live, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Auto-assignment",
+        "description": "Give new conversations to the right agent automatically, in turn or by rules.",
+        "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
       }
     }
   }

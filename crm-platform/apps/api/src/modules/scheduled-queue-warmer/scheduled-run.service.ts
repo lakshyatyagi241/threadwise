@@ -8,6 +8,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { DatabaseService } from '../../infra/db/database.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import {
   PACING_SETTINGS,
   PacingRuntime,
@@ -36,6 +37,7 @@ import {
   type ScheduledRow,
 } from './scheduled-message';
 import { nextRun } from './schedule-time';
+import { emitScheduledStatus } from './scheduled-events';
 import { spin } from './warmer/warmer-rules';
 import { WarmerService } from './warmer/warmer.service';
 
@@ -78,6 +80,7 @@ export class ScheduledRunService {
     private readonly lease: SenderLease,
     private readonly warmer: WarmerService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    private readonly outbox: OutboxService,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -330,6 +333,7 @@ export class ScheduledRunService {
       UPDATE scheduled_messages
          SET status = 'failed', failed_at = now(), failure_reason = ${reason}, last_error = ${reason}
        WHERE org_id = ${orgId} AND id = ${scheduledId}`);
+    await emitScheduledStatus(this.outbox, tx, orgId, scheduledId, 'failed', { reason });
   }
 
   /** A stop the system chose (daily cap, halt): the row waits, and the due poller resumes it at `resumeAt`. */
@@ -392,6 +396,11 @@ export class ScheduledRunService {
                last_run_at = ${now.toISOString()}::timestamptz, next_attempt_at = NULL,
                total_sent = total_sent + ${counts.sent}, total_failed = total_failed + ${counts.failed}
          WHERE org_id = ${orgId} AND id = ${id}`);
+      await emitScheduledStatus(this.outbox, tx, orgId, id, allFailed ? 'failed' : 'completed', {
+        reason: allFailed ? 'Every recipient failed' : null,
+        sent: counts.sent,
+        failed: counts.failed,
+      });
     });
   }
 
