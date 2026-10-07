@@ -20,6 +20,7 @@ import type { Response } from 'express';
 import {
   WIZARD_CSV_MAX_BYTES,
   listWizardBroadcastsQuerySchema,
+  listWizardHistoryQuerySchema,
   saveWizardDraftSchema,
   updateWizardDraftSchema,
   wizardAudienceCountRequestSchema,
@@ -29,6 +30,7 @@ import {
   wizardTestSendRequestSchema,
   wizardVariablePreviewRequestSchema,
   type ListWizardBroadcastsQuery,
+  type ListWizardHistoryQuery,
   type SaveWizardDraftInput,
   type UpdateWizardDraftInput,
   type WizardAudienceCountRequest,
@@ -280,6 +282,16 @@ export class WizardController {
   })
   list(@Query(zodPipe(listWizardBroadcastsQuerySchema)) query: ListWizardBroadcastsQuery) {
     return this.broadcasts.list(query);
+  }
+
+  @Get('history')
+  @RequirePermission('camp.campaigns.read')
+  @ApiOperation({
+    summary:
+      'Broadcast runs for the History (every run, newest first) and Scheduled (waiting, soonest first) pages',
+  })
+  history(@Query(zodPipe(listWizardHistoryQuerySchema)) query: ListWizardHistoryQuery) {
+    return this.broadcasts.history(query);
   }
 
   @Get('broadcasts/:id')

@@ -7,6 +7,7 @@ import {
   wizardAudienceSchema,
   wizardBroadcastDetailSchema,
   wizardBroadcastListSchema,
+  wizardHistoryListSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
   wizardLaunchResultSchema,
@@ -1194,6 +1195,58 @@ describe('list, detail and control', () => {
       (await wiz(lab, one.w.t.admin).get('/broadcasts?status=scheduled')).body,
     );
     expect(filtered.data.map((b) => b.kind)).toEqual(['campaign']);
+  });
+
+  it('the history pages: a "now" broadcast is history with its type, a scheduled one is only on the scheduled page, filters narrow, another workspace sees none', async () => {
+    const now = await launched('bwx5', { mode: 'now' });
+    const t = now.w.t.admin;
+    const groupId = (
+      await owner().query(`SELECT uuid FROM contact_groups WHERE org_id = $1`, [now.w.t.orgId])
+    ).rows[0].uuid;
+    const later = await makeDraft(
+      lab,
+      now.w,
+      readyDraft(now.w, groupId, { schedule: scheduled() }),
+    );
+    const laterRes = await wiz(lab, t).post(`/drafts/${later.id}/launch`, {
+      rowVersion: later.rowVersion,
+    });
+    expect(laterRes.status, JSON.stringify(laterRes.body)).toBe(200);
+
+    const history = wizardHistoryListSchema.parse((await wiz(lab, t).get('/history')).body);
+    expect(history.data.map((r) => r.id)).toEqual([now.id]);
+    expect(history.data[0]).toMatchObject({
+      source: 'wizard',
+      type: 'now',
+      status: 'running',
+      counts: { recipients: 2 },
+    });
+    const none = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?type=recurring')).body,
+    );
+    expect(none.data).toEqual([]);
+    const byName = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?q=DIWALI&status=running')).body,
+    );
+    expect(byName.data).toHaveLength(1);
+
+    const waiting = wizardHistoryListSchema.parse(
+      (await wiz(lab, t).get('/history?scope=scheduled')).body,
+    );
+    expect(waiting.data.map((r) => r.id)).toEqual([laterRes.body.id]);
+    expect(waiting.data[0]).toMatchObject({ type: 'scheduled', status: 'scheduled' });
+    expect(waiting.data[0]!.runAt).toBe(`${day(2)}T09:00:00.000Z`);
+
+    const recurringOnly = wizardBroadcastListSchema.parse(
+      (await wiz(lab, t).get('/broadcasts?type=recurring')).body,
+    );
+    expect(recurringOnly.data).toEqual([]);
+
+    const other = await world(lab, 'bwx6');
+    const theirs = wizardHistoryListSchema.parse(
+      (await wiz(lab, other.t.admin).get('/history')).body,
+    );
+    expect(theirs.data).toEqual([]);
   });
 
   it('the detail of a series carries its rule, blueprint and the runs it has started', async () => {

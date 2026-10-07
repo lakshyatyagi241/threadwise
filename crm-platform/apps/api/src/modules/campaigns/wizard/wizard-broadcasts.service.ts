@@ -4,6 +4,8 @@ import {
   recurrenceRuleSchema,
   wizardDraftSchema,
   type ListWizardBroadcastsQuery,
+  type ListWizardHistoryQuery,
+  type WizardHistoryList,
   type WizardBroadcast,
   type WizardBroadcastDetail,
   type WizardBroadcastList,
@@ -65,6 +67,8 @@ export class WizardBroadcastsService {
         limit: query.limit,
         cursor: decodeCursor(query.cursor),
         status: query.status ?? null,
+        type: query.type ?? null,
+        q: query.q ?? null,
       });
       const page = rows.slice(0, query.limit);
       const data: WizardBroadcast[] = [];
@@ -79,6 +83,48 @@ export class WizardBroadcastsService {
           nextCursor:
             rows.length > query.limit && last ? encodeCursor(last.createdAtIso, last.uuid) : null,
           hasMore: rows.length > query.limit,
+          limit: query.limit,
+        },
+      };
+    });
+  }
+
+  /** The rows of the History and Scheduled pages: one per run (a series' runs included), see `WizardRepository.historyPage`. */
+  async history(query: ListWizardHistoryQuery): Promise<WizardHistoryList> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const { rows, hasMore } = await this.repo.historyPage(tx, orgId, {
+        scope: query.scope,
+        limit: query.limit,
+        cursor: decodeCursor(query.cursor),
+        type: query.type ?? null,
+        status: query.status ?? null,
+        from: query.from ?? null,
+        to: query.to ?? null,
+        tz: query.tz,
+        q: query.q ?? null,
+      });
+      const last = rows[rows.length - 1];
+      return {
+        data: rows.map((r) => ({
+          id: r.uuid,
+          source: r.isWizard ? ('wizard' as const) : ('classic' as const),
+          type: r.kind,
+          name: r.name,
+          status: r.status as CampaignStatus,
+          templateName: r.templateName,
+          senderLabel: r.senderLabel,
+          seriesId: r.seriesUuid,
+          occurrence: r.occurrenceNo === null ? null : r.occurrenceNo + 1,
+          counts: r.counts,
+          runAt: r.runAt ? r.runAt.toISOString() : null,
+          startedAt: r.startedAt ? r.startedAt.toISOString() : null,
+          finishedAt: r.finishedAt ? r.finishedAt.toISOString() : null,
+          createdAt: r.createdAt.toISOString(),
+        })),
+        page: {
+          nextCursor: hasMore && last ? encodeCursor(last.sortIso, last.uuid) : null,
+          hasMore,
           limit: query.limit,
         },
       };
