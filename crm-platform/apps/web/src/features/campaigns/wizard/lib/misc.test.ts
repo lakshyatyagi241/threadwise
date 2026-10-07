@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { EMPTY_WIZARD_AUDIENCE, type SegmentGroup } from '@crm/contracts';
 import { buildCatalog } from '@/features/segments/lib/fields';
 import { addCondition, emptyRoot, newCondition } from '@/features/segments/lib/model';
-import { draft, NOW, sources, uuid } from '../testing';
+import { audience, draft, NOW, sources, uuid } from '../testing';
 import {
   audienceNames,
   conditionTotal,
@@ -63,15 +63,18 @@ describe('audience helpers', () => {
     expect(editorFromRules(null).children).toEqual([]);
   });
 
-  it('countableAudience is null with nothing chosen and keeps valid rules', () => {
+  it('countableAudience is null with nothing chosen, and ignores the table filter (it only decides which rows show)', () => {
     expect(countableAudience(EMPTY_WIZARD_AUDIENCE)).toBeNull();
+    const filter = { type: 'group' as const, combinator: 'and' as const, children: [] };
+    expect(countableAudience({ ...EMPTY_WIZARD_AUDIENCE, rules: filter })).toBeNull();
     const a = { ...EMPTY_WIZARD_AUDIENCE, groupIds: [uuid(11)] };
     expect(countableAudience(a)).toEqual(a);
+    expect(countableAudience({ ...a, rules: filter })).toEqual(a);
   });
 
   it('names the chosen sources and flags one that was deleted', () => {
     const names = audienceNames(
-      { groupIds: [uuid(11), uuid(99)], segmentIds: [uuid(21)], rules: null },
+      audience({ groupIds: [uuid(11), uuid(99)], segmentIds: [uuid(21)] }),
       sources(),
     );
     expect(names.groups).toEqual([
@@ -79,10 +82,9 @@ describe('audience helpers', () => {
       { id: uuid(99), name: uuid(99), found: false },
     ]);
     expect(names.segments[0]).toMatchObject({ name: 'Active last 30 days', found: true });
-    expect(
-      audienceNames({ groupIds: [uuid(1)], segmentIds: [], rules: null }, undefined).groups[0]!
-        .found,
-    ).toBe(false);
+    expect(audienceNames(audience({ groupIds: [uuid(1)] }), undefined).groups[0]!.found).toBe(
+      false,
+    );
   });
 });
 
@@ -125,7 +127,7 @@ describe('flow', () => {
       name: 'A',
       templateId: uuid(1),
       senderKey: `waba:${uuid(31)}`,
-      audience: { groupIds: [uuid(11)], segmentIds: [], rules: null },
+      audience: audience({ groupIds: [uuid(11)] }),
       variables: { 'body.1': { kind: 'fixed', text: 'x' } },
     });
     expect(launchPreflight(ok, ctx)).toEqual({ kind: 'ok' });

@@ -188,6 +188,18 @@ if (psql(`SELECT count(*) FROM contacts WHERE org_id = ${org}`) === '0') {
   assert.ok(seg.status < 300, `segment ${seg.status} ${JSON.stringify(seg.json)}`);
 }
 
+// Enough contacts to page through (the audience step's contacts table): top the workspace up to 150 with generated people. Idempotent.
+if (Number(psql(`SELECT count(*) FROM contacts WHERE org_id = ${org}`)) < 150) {
+  psql(`INSERT INTO contacts (org_id, name, first_name, last_name, email, phone, country_code, is_unsubscribed, data, created_at)
+        SELECT ${org}, f.n || ' ' || l.n, f.n, l.n, lower(f.n || '.' || l.n || g) || '@example.com',
+               '+9199' || lpad((7000000 + g * 7919)::text, 8, '0'), '+91', g % 23 = 0,
+               jsonb_build_object('city', (ARRAY['Pune','Mumbai','Delhi','Bengaluru'])[1 + g % 4], 'tier', CASE WHEN g % 3 = 0 THEN 'Gold' ELSE 'Silver' END),
+               now() - (g || ' hours')::interval
+        FROM generate_series(1, 126) g,
+             LATERAL (SELECT (ARRAY['Aditi','Bhavya','Chirag','Darshan','Esha','Farhan','Gauri','Harsh','Ira','Jai','Komal','Lakshya','Mohit','Nandini','Pranav','Qasim','Ritika','Sameer','Trisha','Uday'])[1 + g % 20] AS n) f,
+             LATERAL (SELECT (ARRAY['Iyer','Kapoor','Mehta','Nair','Patel','Reddy','Singh','Verma','Bose','Joshi','Menon'])[1 + g % 11] AS n) l`);
+}
+
 // Pay per message, funded (hundredths of a dollar).
 psql(
   `INSERT INTO workspace_settings (org_id, bill_to_platform_credit) VALUES (${org}, true) ON CONFLICT (org_id) DO UPDATE SET bill_to_platform_credit = true`,

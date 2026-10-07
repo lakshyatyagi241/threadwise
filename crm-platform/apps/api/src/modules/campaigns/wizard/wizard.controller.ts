@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
   Param,
@@ -9,13 +10,20 @@ import {
   Post,
   Put,
   Query,
+  Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import {
+  WIZARD_CSV_MAX_BYTES,
   listWizardBroadcastsQuerySchema,
   saveWizardDraftSchema,
   updateWizardDraftSchema,
   wizardAudienceCountRequestSchema,
+  wizardContactsQuerySchema,
   wizardCreditCheckRequestSchema,
   wizardLaunchRequestSchema,
   wizardTestSendRequestSchema,
@@ -24,6 +32,7 @@ import {
   type SaveWizardDraftInput,
   type UpdateWizardDraftInput,
   type WizardAudienceCountRequest,
+  type WizardContactsQuery,
   type WizardCreditCheckRequest,
   type WizardLaunchRequest,
   type WizardTestSendRequest,
@@ -31,7 +40,10 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
+import { type UploadedCsv } from '../../crm';
 import { WizardBroadcastsService } from './wizard-broadcasts.service';
+import { WizardContactsService } from './wizard-contacts.service';
+import { WizardCsvService } from './wizard-csv.service';
 import { WizardDraftsService } from './wizard-drafts.service';
 import { WizardLaunchService } from './wizard-launch.service';
 import { WizardReadService } from './wizard-read.service';
@@ -43,6 +55,8 @@ import { WizardTestSendService } from './wizard-test-send.service';
  * own route base (`broadcast-wizard`) so none of it can be shadowed by `campaigns/:id`. Creating and launching ride on
  * `camp.campaigns.create`, the test send has its own key, and the controls reuse `camp.campaigns.control`.
  */
+const csvUpload = FileInterceptor('file', { limits: { fileSize: WIZARD_CSV_MAX_BYTES, files: 1 } });
+
 @ApiTags('campaigns')
 @ActorKinds('user')
 @Controller({ path: 'broadcast-wizard', version: '2' })
@@ -54,6 +68,8 @@ export class WizardController {
     private readonly tests: WizardTestSendService,
     private readonly launcher: WizardLaunchService,
     private readonly broadcasts: WizardBroadcastsService,
+    private readonly contacts: WizardContactsService,
+    private readonly csv: WizardCsvService,
   ) {}
 
   // ---------------------------------------------------------------- step 1 and 2: what to pick from
@@ -93,6 +109,66 @@ export class WizardController {
   })
   count(@Body(zodPipe(wizardAudienceCountRequestSchema)) body: WizardAudienceCountRequest) {
     return this.read.countAudience(body.audience);
+  }
+
+  @Post('contacts/query')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('camp.campaigns.create')
+  @ApiOperation({
+    summary: 'The contacts table of the audience step: search, conditions, page and total',
+    description:
+      'Searched and filtered on the server (the conditions are compiled by the segments rule engine). A POST because the conditions are a tree; it writes nothing.',
+  })
+  contactsPage(@Body(zodPipe(wizardContactsQuerySchema)) body: WizardContactsQuery) {
+    return this.contacts.page(body);
+  }
+
+  @Get('csv/template')
+  @RequirePermission('camp.campaigns.create')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="broadcast-numbers-template.csv"')
+  @ApiOperation({
+    summary: 'A CSV template for "Broadcast via CSV" (a phone column, optional names)',
+  })
+  csvTemplate(): string {
+    return this.csv.template();
+  }
+
+  @Post('csv')
+  @RequirePermission('camp.campaigns.create')
+  @UseInterceptors(csvUpload)
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({
+    summary:
+      'Upload a CSV of numbers for "Broadcast via CSV": parsed, validated and stored for this workspace',
+    description:
+      'Form field `file`. Numbers are normalised to E.164, repeated numbers kept once, invalid rows reported with their line. Nothing is ' +
+      'written to the contacts: numbers that are not contacts yet become contacts when the broadcast is launched. 422 CON_IMPORT_FILE_INVALID, ' +
+      '413 CON_IMPORT_TOO_LARGE.',
+  })
+  uploadCsv(@UploadedFile() file: UploadedCsv | undefined) {
+    return this.csv.upload(file);
+  }
+
+  @Get('csv/:id')
+  @RequirePermission('camp.campaigns.create')
+  @ApiOperation({ summary: 'A stored CSV upload: counts, preview and the first rejected rows' })
+  csvReport(@Param('id', ParseUUIDPipe) id: string) {
+    return this.csv.report(id);
+  }
+
+  @Get('csv/:id/errors')
+  @RequirePermission('camp.campaigns.create')
+  @ApiOperation({
+    summary: 'The rows of a CSV upload that cannot be used, with line numbers, as a CSV',
+  })
+  async csvErrors(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="broadcast-numbers-errors.csv"');
+    return this.csv.errorsCsv(id);
   }
 
   // ---------------------------------------------------------------- the draft

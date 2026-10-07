@@ -5,6 +5,7 @@ import { CampaignCard } from '@/features/campaigns/components/campaign-card';
 import { KEYS } from '../api/wizard';
 import { defaultRule } from '../lib/schedule';
 import {
+  audience,
   ALL_PERMISSIONS,
   NOW,
   count,
@@ -28,7 +29,7 @@ const ID = uuid(100);
 const READY_DRAFT: Partial<WizardDraft> = {
   name: 'October offer',
   templateId: uuid(1),
-  audience: { groupIds: [uuid(11)], segmentIds: [], rules: null },
+  audience: audience({ groupIds: [uuid(11)] }),
   variables: {
     'body.1': { kind: 'field', field: 'first_name', fallback: null },
     'body.2': { kind: 'fixed', text: 'A-1' },

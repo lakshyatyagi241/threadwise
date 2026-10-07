@@ -2,6 +2,7 @@ import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { WabaReceiptRegistry } from '../../whatsapp-cloud-api-waba';
 import { CampaignReceiptsService } from '../campaign-receipts.service';
+import { WizardCsvService } from './wizard-csv.service';
 import { WizardRetryService } from './wizard-retry.service';
 import { WizardSeriesService } from './wizard-series.service';
 import { WizardTestSendService } from './wizard-test-send.service';
@@ -19,6 +20,7 @@ export class WizardWorker implements OnModuleInit {
   private readonly logger = new Logger(WizardWorker.name);
   private planning = false;
   private retrying = false;
+  private purging = false;
 
   constructor(
     private readonly series: WizardSeriesService,
@@ -26,6 +28,7 @@ export class WizardWorker implements OnModuleInit {
     private readonly receipts: WabaReceiptRegistry,
     private readonly campaignReceipts: CampaignReceiptsService,
     private readonly tests: WizardTestSendService,
+    private readonly csv: WizardCsvService,
   ) {}
 
   onModuleInit(): void {
@@ -60,6 +63,21 @@ export class WizardWorker implements OnModuleInit {
       this.logger.error({ err }, '[CAMP] frequency-cap retries failed');
     } finally {
       this.retrying = false;
+    }
+  }
+
+  /** Retention of the CSV audiences: an upload nobody pinned is deleted a week after it was made. */
+  @Interval(60 * 60_000)
+  async purgeTick(): Promise<void> {
+    if (this.purging) return;
+    this.purging = true;
+    try {
+      const gone = await this.csv.purgeExpired();
+      if (gone > 0) this.logger.log({ gone }, '[CAMP] expired CSV audiences deleted');
+    } catch (err) {
+      this.logger.error({ err }, '[CAMP] deleting expired CSV audiences failed');
+    } finally {
+      this.purging = false;
     }
   }
 }
