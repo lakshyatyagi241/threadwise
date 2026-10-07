@@ -252,7 +252,11 @@ export class DashService {
         },
         funnel: f,
         types: (await this.repo.types(tx, orgId, w.from, w.to))
-          .map((t) => ({ key: t.key as AnalyticsResponse['types'][number]['key'], count: t.count }))
+          .map((t) => ({
+            key: t.key as AnalyticsResponse['types'][number]['key'],
+            count: t.count,
+            delivered: t.delivered,
+          }))
           .sort((a, b) => b.count - a.count),
         heatmap: await this.repo.heatmap(tx, orgId, w.from, w.to, tz),
       };
