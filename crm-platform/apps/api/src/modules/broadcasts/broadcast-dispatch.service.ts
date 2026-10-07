@@ -112,9 +112,9 @@ export class BroadcastDispatchService {
       const b = res.rows[0] as unknown as BroadcastRow | undefined;
       if (!b || !['processing', 'scheduled'].includes(b.status)) return { skip: true as const };
 
-      // The unofficial engine is off (owner decision 2026-10-05): nothing is sent and nothing is changed. The row keeps its status
+      // The unofficial engine is off for this workspace (owner decisions 2026-10-05, 2026-10-06): nothing is sent and nothing is changed. The row keeps its status
       // and recipients, and the queue link is cleared so the due sweep picks it up again once the engine is turned back on.
-      if (b.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabled())) {
+      if (b.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId))) {
         await tx.execute(sql`
           UPDATE broadcasts SET node_schedule_id = NULL WHERE org_id = ${orgId} AND id = ${broadcastId}`);
         this.logger.warn({ orgId, broadcastId }, '[BCAST] not sent: the unofficial engine is off');

@@ -142,9 +142,10 @@ export class CampaignDispatchService {
     const prep = await this.db.txAs({ orgId }, async (t) => {
       const c = await this.repo.findById(t, orgId, campaignId);
       if (!c || c.status !== 'running') return null;
-      // The unofficial engine is off (owner decision 2026-10-05): nothing is sent and the campaign is not touched. It keeps its
+      // The unofficial engine is off for this workspace (owner decisions 2026-10-05, 2026-10-06): nothing is sent and the campaign is not touched. It keeps its
       // recipients; the sweeper parks it as `scheduled` once it stalls and starts it again when the engine is turned back on.
-      if (c.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabled())) return null;
+      if (c.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId)))
+        return null;
       await this.repo.touch(t, orgId, campaignId);
       const settings = await this.settingsSource.get(t, orgId);
       await this.repo.screenRecipients(t, orgId, campaignId);

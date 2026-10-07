@@ -8,6 +8,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { scheduledConfig } from '../../config/domains/scheduled-queue-warmer.env';
+import { orgIdList } from '../../common/sql/org-id-list';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { dateOnly, isRecurring, runAt, weekdays, type ScheduledRow } from './scheduled-message';
@@ -84,14 +85,15 @@ export class ScheduledDueService {
   private async enqueueDue(now: Date): Promise<{ queued: number; missed: number }> {
     const maxLate = scheduledConfig().SCHED_MAX_LATE_MINUTES;
     // A schedule on the unofficial engine stays `scheduled`, untouched, while it is off (owner decision 2026-10-05).
-    const unofficialOn = await this.unofficial.isEnabled();
+    // Decided per row's workspace (owner decision 2026-10-06): the platform switch on AND the row's org on the allow-list.
+    const allowedOrgs = orgIdList(await this.unofficial.enabledOrgIds());
     return this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT id, uuid, org_id, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
                days_of_week, end_date, template_type, message_content, media_file, latitude, longitude, provider, device_id,
                send_attempts
         FROM scheduled_messages
-        WHERE status = 'scheduled' AND (provider IS DISTINCT FROM 'baileys' OR ${unofficialOn}::boolean)
+        WHERE status = 'scheduled' AND (provider IS DISTINCT FROM 'baileys' OR org_id = ANY(${allowedOrgs}))
           AND coalesce(next_run_at, scheduled_time) <= ${new Date(now.getTime() + FIRE_NOW_WINDOW_MS).toISOString()}::timestamptz
         ORDER BY coalesce(next_run_at, scheduled_time), id LIMIT ${BATCH}
         FOR UPDATE SKIP LOCKED`);

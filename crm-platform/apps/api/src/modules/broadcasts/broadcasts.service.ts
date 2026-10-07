@@ -99,7 +99,7 @@ export class BroadcastsService {
 
     // A sender that names the unofficial engine is a refusal, not a silently dropped key (owner decision 2026-10-05).
     if (input.senderKeys.some((k) => k.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))) {
-      await this.unofficial.assertEnabled();
+      await this.unofficial.assertEnabledFor(orgId);
     }
 
     return this.db.tx(async (tx) => {

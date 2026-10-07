@@ -167,7 +167,7 @@ export class WarmerService implements WarmerGate {
   async list(orgId: number): Promise<WarmerList> {
     const day = todayUtc(this.now());
     // Personal numbers are left out while the platform switch is off (owner decision 2026-10-05); their profiles are kept.
-    const unofficialOn = await this.unofficial.isEnabled();
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const items = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const devices = await tx.execute(sql`
         SELECT id, uuid, device_name AS label, country_code, phone_number, status, warmer_config, created_at
@@ -191,7 +191,7 @@ export class WarmerService implements WarmerGate {
   async save(orgId: number, key: string, input: WarmerProfileInput): Promise<WarmerNumber> {
     const [engine, uuid] = key.split(':');
     if (!engine || !uuid || !/^[0-9a-f-]{36}$/i.test(uuid)) throw AppError.notFound('Number', key);
-    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabled();
+    if (engine === UNOFFICIAL_ENGINE) await this.unofficial.assertEnabledFor(orgId);
     const table = engine === 'baileys' ? 'devices' : 'wa_provider_configs';
     const day = todayUtc(this.now());
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
