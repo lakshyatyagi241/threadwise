@@ -71,14 +71,19 @@ describe('NotificationPublisher', () => {
       subjectId: CONV,
       collapsed: false,
       silent: false,
+      // Phase 2: the person's own toast and ping choice (a chat type defaults to both on).
+      toast: true,
+      sound: true,
     });
     expect(Object.keys(payload).sort()).toEqual(
       [
         'collapsed',
         'notificationId',
         'silent',
+        'sound',
         'subjectId',
         'subjectKind',
+        'toast',
         'type',
         'unread',
       ].sort(),

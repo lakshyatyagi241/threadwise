@@ -76,8 +76,10 @@ interface Pending {
  * Every rule is recomputed at delivery time from the conversation as it is NOW, so a change that landed between the event and its
  * delivery is honoured and a stale one is dropped: who owns the thread, whether it is muted, who may read it. A muted thread
  * (`conversations.muted_at`) writes no row for a new chat or a message; an assignment or a mention still does (the person was addressed).
- * A person who just marked the thread read is looking at it and is skipped (`ConversationReadState`). The workspace owner's toggles
- * (decision D3) gate these four types. At most `NOTIFY_MAX_RECIPIENTS` people per event.
+ * A person who just marked the thread read is looking at it and is skipped (`ConversationReadState`). The bell is the person's own
+ * preference, else the workspace owner's toggle (decision D3), else on (`resolveNotificationChannels`): the owner's toggle is read once
+ * per event and handed to the repository with each recipient's stored preference, which decides whether the row exists and what its
+ * toast and ping say. At most `NOTIFY_MAX_RECIPIENTS` people per event.
  *
  * Idempotent: each row carries a dedupe key built from the outbox event id (or the note), and the writes are ON CONFLICT DO NOTHING (a
  * collapsing row looks the key up first, so a redelivery does not delete the row it already replaced). The live push goes out AFTER the
@@ -129,7 +131,8 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
     if (!parsed.success) return [];
     const p = parsed.data;
     const type = typeForMessage(p.firstInbound);
-    if (!(await this.prefs.inappAllowed(event.orgId, type))) return [];
+    // The owner's toggle is the default for the bell, not a veto: a person who chose for themselves is honoured below.
+    const workspaceInapp = await this.prefs.inappAllowed(event.orgId, type);
 
     // One transaction for the read of the conversation and the writes: this runs once per inbound message, so the round trips count.
     return this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
@@ -163,6 +166,8 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
       );
       const userIds = capped.userIds.filter((id) => !looking.has(id));
       if (userIds.length === 0) return [];
+      const userPrefs = await this.repo.userPrefsFor(tx, event.orgId, userIds, type);
+      if (!workspaceInapp && ![...userPrefs.values()].some((u) => u.bell === true)) return [];
 
       const link = `/inbox?c=${p.conversationId}`;
       const subject = { subjectKind: 'conversation', subjectUuid: p.conversationId } as const;
@@ -186,6 +191,8 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
             link,
             data: { ...dataBase, count: 1 },
             dedupeKey: newChatKey(p.conversationId, event.id),
+            userPref: userPrefs.get(userId) ?? null,
+            workspaceInapp,
             ...subject,
           });
           if (row) written.push({ row });
@@ -198,6 +205,8 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
             eventId: Number(event.id),
             collapseKey: collapseKeyFor(p.conversationId),
             adds: 1,
+            userPref: userPrefs.get(userId) ?? null,
+            workspaceInapp,
             build: (count) => {
               const copy = newMessageCopy(name, p.preview, count);
               return { title: copy.title, body: copy.body, data: { ...dataBase, count } };
@@ -228,7 +237,7 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
     const toTeamUuid = str(p.toTeamId);
     // An unassignment tells nobody.
     if (!toUserUuid && !toTeamUuid) return [];
-    if (!(await this.prefs.inappAllowed(event.orgId, 'conversation_assigned'))) return [];
+    const workspaceInapp = await this.prefs.inappAllowed(event.orgId, 'conversation_assigned');
 
     const conv = await this.conversation(event.orgId, conversationUuid);
     if (!conv) return [];
@@ -274,9 +283,17 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
     const link = `/inbox?c=${conversationUuid}`;
     return this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const recipients = await this.users(tx, event.orgId, undefined, capped.userIds);
+      const userPrefs = await this.repo.userPrefsFor(
+        tx,
+        event.orgId,
+        recipients.map((u) => u.id),
+        'conversation_assigned',
+      );
       const written: Pending[] = [];
       for (const user of recipients) {
         const row = await this.repo.insertReturning(tx, event.orgId, {
+          userPref: userPrefs.get(user.id) ?? null,
+          workspaceInapp,
           userId: user.id,
           type: 'conversation_assigned',
           title: copy.title,
@@ -309,7 +326,7 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
     const authorUuid = str(p.authorId);
     const mentions = uuidList(p.mentions).filter((m) => m !== authorUuid);
     if (!conversationUuid || !noteUuid || mentions.length === 0) return [];
-    if (!(await this.prefs.inappAllowed(event.orgId, 'mention'))) return [];
+    const workspaceInapp = await this.prefs.inappAllowed(event.orgId, 'mention');
 
     const conv = await this.conversation(event.orgId, conversationUuid);
     if (!conv) return [];
@@ -343,8 +360,17 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
       const link = `/inbox?c=${conversationUuid}`;
 
       const written: Pending[] = [];
-      for (const user of mentioned.filter((u) => allowed.userIds.includes(u.id))) {
+      const told = mentioned.filter((u) => allowed.userIds.includes(u.id));
+      const userPrefs = await this.repo.userPrefsFor(
+        tx,
+        event.orgId,
+        told.map((u) => u.id),
+        'mention',
+      );
+      for (const user of told) {
         const row = await this.repo.insertReturning(tx, event.orgId, {
+          userPref: userPrefs.get(user.id) ?? null,
+          workspaceInapp,
           userId: user.id,
           type: 'mention',
           title: copy.title,

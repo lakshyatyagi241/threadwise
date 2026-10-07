@@ -6,12 +6,14 @@ import {
 } from '@crm/contracts';
 import type { RealtimeClient } from '@/lib/realtime';
 import { NOTIFICATION_KEYS } from '../api/keys';
-import { isChatType, safeLink } from '../lib/copy';
+import { notificationHref } from '../lib/catalogue';
+import type { PrefEntry } from '../prefs/model';
 import type { EventClaimer } from './claim';
 import {
   ANNOUNCE_MIN_GAP_MS,
   FLUSH_MS,
   ToastPlanner,
+  eventWants,
   feedAfterRead,
   isOnConversation,
   newestBy,
@@ -59,6 +61,8 @@ export interface LiveSettings {
 }
 
 export interface LiveOptions {
+  /** The person's loaded preferences, if any (read when an event arrives, so a saved change applies at once). */
+  prefs?: () => readonly PrefEntry[] | undefined;
   client: Pick<RealtimeClient, 'subscribe' | 'onResync'>;
   qc: QueryClient;
   api: LiveApi;
@@ -171,6 +175,11 @@ export class LiveNotificationsController {
     );
   }
 
+  /** Toast / ping for an event: the server's flag, else the type's default narrowed by the preferences already loaded. */
+  private wants(p: CreatedPayload, channel: 'toast' | 'sound'): boolean {
+    return eventWants(p, channel, this.o.prefs?.());
+  }
+
   private scheduleInbox(): void {
     this.inboxTimer ??= setTimeout(() => {
       this.inboxTimer = undefined;
@@ -208,7 +217,7 @@ export class LiveNotificationsController {
 
     void qc.invalidateQueries({ queryKey: INBOX_COUNTS_KEY });
     const candidates = newestPerSubject(
-      batch.filter((p) => !p.silent && isChatType(p.type) && !this.isLookingAt(p)),
+      batch.filter((p) => this.wants(p, 'toast') && !this.isLookingAt(p)),
     );
     if (candidates.length === 0) {
       // Nothing to tell: keep the list right if it is on screen (a list nobody watches is only marked stale).
@@ -238,10 +247,11 @@ export class LiveNotificationsController {
       if (!row || row.readAt !== null) continue;
       alerts.push({
         notificationId: c.notificationId,
+        sound: this.wants(c, 'sound'),
         subject: c.subjectId ?? `type:${c.type}`,
         type: c.type,
         row,
-        href: safeLink(row.link),
+        href: notificationHref(row),
       });
     }
     if (alerts.length > 0) await this.alert(alerts);
@@ -259,7 +269,7 @@ export class LiveNotificationsController {
     let pinged = false;
     alerts.forEach((a, i) => {
       if (!claimed[i]) return;
-      if (settings.soundOn() && !pinged) {
+      if (a.sound && settings.soundOn() && !pinged) {
         pinged = true;
         presenter.ping();
       }

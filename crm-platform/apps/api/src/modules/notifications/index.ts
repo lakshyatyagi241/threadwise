@@ -9,3 +9,4 @@ export type {
   WrittenNotification,
 } from './notifications.repository';
 export { NotificationPublisher } from './notification.publisher';
+export { NotificationFanout, type PendingNotification } from './notification-fanout';

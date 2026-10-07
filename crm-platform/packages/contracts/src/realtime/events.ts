@@ -127,6 +127,13 @@ export const realtimeEventSchemas = {
     collapsed: z.boolean(),
     /** Update the bell but do not toast or ping: a burst inside the throttle window, a team-wide assignment. */
     silent: z.boolean(),
+    /**
+     * The person's own preference (phase 2): show a toast for this row. Absent from an older server, which means "as before"
+     * (decide by type). `silent` still wins: a silent event never toasts or pings.
+     */
+    toast: z.boolean().optional(),
+    /** Likewise for the two-tone ping. */
+    sound: z.boolean().optional(),
   }),
   [REALTIME_EVENT.notificationRead]: z.object({
     unread: z.number().int().nonnegative(),

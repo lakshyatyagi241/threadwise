@@ -5,6 +5,7 @@ import {
   TOAST_WINDOW_MAX,
   TOAST_WINDOW_MS,
   ToastPlanner,
+  eventWants,
   feedAfterRead,
   formatTitle,
   isOnConversation,
@@ -142,5 +143,38 @@ describe('ToastPlanner', () => {
     for (let i = 0; i < 250; i++) p.record(`s${i}`, i);
     p.record('late', 100_000);
     expect(p.decide('s0', 100_001)).toEqual({ action: 'show' });
+  });
+});
+
+describe('eventWants (may this event toast or ping?)', () => {
+  const ev = (over: Record<string, unknown> = {}) => ({
+    type: 'new_message',
+    silent: false,
+    ...over,
+  });
+
+  it('a silent event never does, even when its flags say yes', () => {
+    expect(
+      eventWants(ev({ silent: true, toast: true, sound: true }) as never, 'toast', undefined),
+    ).toBe(false);
+    expect(eventWants(ev({ silent: true, sound: true }) as never, 'sound', undefined)).toBe(false);
+  });
+
+  it('the flag the server put on the event decides when present', () => {
+    expect(eventWants(ev({ toast: false }) as never, 'toast', undefined)).toBe(false);
+    expect(eventWants(ev({ toast: true }) as never, 'toast', undefined)).toBe(true);
+    expect(
+      eventWants(ev({ type: 'device_connected', sound: true }) as never, 'sound', undefined),
+    ).toBe(true);
+  });
+
+  it('without flags the type default applies', () => {
+    expect(eventWants(ev() as never, 'toast', undefined)).toBe(true);
+    expect(eventWants(ev() as never, 'sound', undefined)).toBe(true);
+    expect(eventWants(ev({ type: 'device_disconnected' }) as never, 'sound', undefined)).toBe(
+      false,
+    );
+    expect(eventWants(ev({ type: 'task_completed' }) as never, 'toast', undefined)).toBe(false);
+    expect(eventWants(ev({ type: 'a_future_type' }) as never, 'toast', undefined)).toBe(false);
   });
 });
