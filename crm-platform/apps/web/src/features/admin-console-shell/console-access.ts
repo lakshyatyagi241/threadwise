@@ -24,6 +24,8 @@ const ONLY_ROLES: Readonly<Record<string, readonly OperatorRole[]>> = {
   'webhook-forwarding': ['super_admin'],
   // AdminDashController (platform/dashboard): class-level super_admin and auditor, so not support.
   'platform-analytics': ['super_admin', 'auditor'],
+  // The AI report assistant (platform/report-copilot): super admin and auditor read, only a super admin changes the library.
+  'ai-reports': ['super_admin', 'auditor'],
 };
 
 /** Whether the menu offers this page to an operator with this role. */

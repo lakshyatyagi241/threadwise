@@ -12,6 +12,7 @@ import {
   FORM_SUBMIT_MAX_BODY_BYTES,
   LEAD_HOOK_MAX_BODY_BYTES,
   MARKET_HOOK_MAX_BYTES,
+  REPORT_RUNTIME_MAX_BODY_BYTES,
 } from '@crm/contracts';
 import { readInfraEnv, type InfraEnv } from '../../../config/domains/platform-infrastructure.env';
 
@@ -58,6 +59,13 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
       name: 'marketplace-hook',
       pattern: under('public/marketplace'),
       bytes: MARKET_HOOK_MAX_BYTES,
+    },
+    // The AI report assistant's runtime carries the chat so far, the screen's readable context and the tool schemas: past the default
+    // after a few turns. Authenticated like every staff route; the cap is the contract's number.
+    {
+      name: 'report-copilot-runtime',
+      pattern: new RegExp('^/(?:v\\d+/)?(?:platform/)?report-copilot/runtime(?:/|$)'),
+      bytes: REPORT_RUNTIME_MAX_BODY_BYTES,
     },
     {
       name: 'webhook',

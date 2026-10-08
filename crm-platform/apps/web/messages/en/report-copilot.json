@@ -1,0 +1,173 @@
+{
+  "report-copilot": {
+    "panel": {
+      "tabsLabel": "Assistant sections",
+      "tab": {
+        "chat": "Assistant",
+        "report": "Report",
+        "documents": "Documents"
+      },
+      "window": {
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days"
+      },
+      "documentsButton": "Documents ({count})",
+      "closeDocuments": "Close documents"
+    },
+    "documents": {
+      "title": "Documents",
+      "intro": "Add the files the assistant should read. It uses all of them every time you ask.",
+      "accepted": "Accepted: {extensions}. Up to {size} MB each, {max} documents.",
+      "drop": "Drop a file here, or choose one",
+      "choose": "Choose file",
+      "uploading": "Reading {name}…",
+      "count": "{count} of {max} documents",
+      "status": {
+        "ready": "Ready",
+        "failed": "Could not read"
+      },
+      "truncated": "Long file: only the first {chars} characters are used.",
+      "chars": "{n} characters",
+      "delete": "Delete {name}",
+      "deleteConfirm": {
+        "title": "Delete this document?",
+        "message": "{name} will be removed from the library. Reports already on screen stay as they are.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "title": "No documents yet",
+        "message": "Add a PDF, a Word file or a text file and ask the assistant about it."
+      },
+      "readOnly": "You can see the library but not change it.",
+      "full": "The library is full ({max} documents). Delete one to add another.",
+      "loadError": "The library could not be loaded.",
+      "retry": "Try again",
+      "error": {
+        "forbidden": "You do not have permission to change the library.",
+        "tooBig": "{name} is larger than {size} MB.",
+        "badType": "{name} is not a file type the assistant can read.",
+        "full": "The library is full. Delete a document and try again.",
+        "network": "The upload did not reach the server. Check your connection and try again.",
+        "generic": "{name} could not be added. Try again.",
+        "unreadable": "{name} could not be read. Try another file."
+      },
+      "dismiss": "Dismiss",
+      "deleteFailed": "The document could not be deleted. Try again.",
+      "added": "Added {name}. Ask me about it."
+    },
+    "chat": {
+      "title": "Assistant",
+      "placeholder": "Ask about your documents or your numbers…",
+      "welcome": "Ask me to summarise your documents or build a report from them and your live numbers.",
+      "disclaimer": "The assistant can make mistakes. Check figures before you share a report.",
+      "suggestion": {
+        "summarise": {
+          "title": "Summarise my documents",
+          "message": "Summarise my documents."
+        },
+        "performance": {
+          "title": "Build a performance report for the last 30 days",
+          "message": "Build a performance report for the last 30 days."
+        },
+        "compare": {
+          "title": "Compare the PDF with this month's numbers",
+          "message": "Compare the PDF with this month's numbers."
+        }
+      },
+      "noDocuments": "No documents yet. The assistant can still build a report from the numbers on this screen.",
+      "keyRequired": {
+        "workspace": "Add an AI key in Settings to use the assistant.",
+        "platform": "Add a platform AI key to use the assistant.",
+        "link": "Open AI keys",
+        "providerUnsupported": "The assistant needs an Anthropic, OpenAI, Google Gemini or OpenRouter key. Add one to use it."
+      },
+      "error": "The assistant could not answer. Try again in a moment.",
+      "uploadMenu": "Upload documents (PDF, DOCX, TXT…)"
+    },
+    "tool": {
+      "drawing": "Drawing your report…",
+      "ready": "Report ready: {title}",
+      "show": "Show report",
+      "failed": "The assistant sent a report we could not draw.",
+      "blockFailed": "The assistant sent a block we could not draw."
+    },
+    "report": {
+      "empty": {
+        "title": "No report yet",
+        "message": "Ask the assistant to build a report. It is drawn here."
+      },
+      "error": {
+        "title": "The assistant sent a report we could not draw",
+        "message": "Ask it to try again. The chat is still working.",
+        "details": "What was wrong"
+      },
+      "keyFigures": "Key figures",
+      "sources": "Sources",
+      "chart": "Chart",
+      "table": "Table",
+      "actions": {
+        "label": "Report actions",
+        "print": "Print / Save as PDF",
+        "copy": "Copy as Markdown",
+        "copied": "Copied",
+        "copyFailed": "Copy failed. Select the text and copy it by hand.",
+        "download": "Download JSON"
+      },
+      "picker": {
+        "label": "Previous reports",
+        "item": "Report {n}: {title}",
+        "note": "Reports live until you leave this page. Print or export one to keep it.",
+        "designed": "Report {n}: designed by the assistant",
+        "blocks": "Report {n}: {title}",
+        "untitled": "Report {n}"
+      },
+      "meta": {
+        "generated": "Generated {time} from {count, plural, one {# document} other {# documents}}",
+        "refresh": "Refresh data",
+        "refreshing": "Refreshing…",
+        "refreshHint": "Asks the assistant the same question again, so it reads your current documents and live numbers."
+      }
+    },
+    "nav": {
+      "title": "Reports"
+    },
+    "page": {
+      "title": "Reports",
+      "description": {
+        "workspace": "Add your documents, then ask the assistant for a report built from them and your workspace's numbers.",
+        "platform": "Add documents, then ask the assistant for a report built from them and the platform's numbers."
+      },
+      "window": "Numbers to use",
+      "noAccess": "You do not have access to reports.",
+      "sessionNote": "Reports you build stay on this page until you leave it. Print or export one to keep it."
+    },
+    "designed": {
+      "designing": "The assistant is designing your report…",
+      "ready": "Report designed by the assistant",
+      "show": "Show report",
+      "download": "Download HTML",
+      "fileTitle": "Report",
+      "exportNote": "Print, Markdown and JSON export are only available for structured reports."
+    },
+    "chart": {
+      "chart": "Chart",
+      "empty": "There is no data to draw for this chart.",
+      "category": "Category",
+      "other": "Other",
+      "total": "Total"
+    },
+    "blocks": {
+      "source": "Source: {sources}",
+      "noSource": "No source stated",
+      "live": "Live",
+      "liveHint": "Updated from the live dashboard numbers",
+      "tone": {
+        "good": "Good news",
+        "bad": "Bad news",
+        "neutral": "No change"
+      }
+    }
+  }
+}

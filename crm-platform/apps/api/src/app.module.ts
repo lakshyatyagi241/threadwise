@@ -55,6 +55,7 @@ import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
+import { ReportCopilotModule } from './modules/report-copilot';
 import { NotificationsModule } from './modules/notifications';
 import { PlansModule } from './modules/plans-subscriptions-trials/plans.module';
 import { TrialGateGuard } from './modules/plans-subscriptions-trials/trial-gate.guard';
@@ -196,6 +197,7 @@ import { HealthModule } from './health/health.module';
     RolesPermissionsModule,
     CrmModule,
     DashboardsAnalyticsChartsModule,
+    ReportCopilotModule,
     AppointmentsBookingModule,
     NotificationsModule,
     BroadcastsModule,

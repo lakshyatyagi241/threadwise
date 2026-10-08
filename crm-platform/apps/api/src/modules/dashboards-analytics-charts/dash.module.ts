@@ -33,5 +33,7 @@ import { HealthService } from './health.service';
     HealthService,
     PlatformMetricsService,
   ],
+  // The AI report assistant (report-copilot) reads the same numbers the screens show, through these two.
+  exports: [DashService, PlatformMetricsService],
 })
 export class DashboardsAnalyticsChartsModule {}

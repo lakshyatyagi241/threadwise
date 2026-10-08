@@ -46,6 +46,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'cms-announcements': 'announcements banner notice news website updates',
   'cms-guidebook': 'guidebook help guides docs articles knowledge base website',
   'platform-analytics': 'platform analytics usage workspaces growth signups activity',
+  'ai-reports':
+    'reports ai assistant copilot documents pdf summary chat export print platform numbers',
   'cms-contact': 'contact form messages inbox enquiries website leads',
   'cms-frontend': 'website landing page homepage cms editor frontend pages site builder',
   'cms-blog': 'blog posts articles news seo content',

@@ -21,6 +21,7 @@ import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
+import { REPORT_OPERATOR_NAV } from '../../report-copilot/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -181,6 +182,7 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'dashboards-analytics-charts.admin.nav.analytics',
     groupKey: 'dashboards-analytics-charts.health.group',
   },
+  ...REPORT_OPERATOR_NAV,
   {
     id: 'system-health',
     href: '/admin/health',

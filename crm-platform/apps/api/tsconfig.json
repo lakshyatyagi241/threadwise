@@ -8,7 +8,10 @@
     "baseUrl": ".",
     "types": ["node"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      /* Type-only: moduleResolution "node" ignores the package's exports map, so the v2 entry point is pointed at its declarations.
+         Runtime resolution (swc, vitest, node) still goes through the exports map, which this does not touch. */
+      "@copilotkit/runtime/v2": ["node_modules/@copilotkit/runtime/dist/v2/index.d.cts"]
     }
   },
   "include": ["src/**/*.ts"],

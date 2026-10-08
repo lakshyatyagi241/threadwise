@@ -107,7 +107,7 @@ describe('the real menu', () => {
   });
 
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
-    expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
+    expect(ids('overview')).toEqual(['dashboard', 'analytics', 'reports', 'notifications']);
     expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat', 'devices']);
     expect(ids('audience')).toEqual([
       'contacts',
