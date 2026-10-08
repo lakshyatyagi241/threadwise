@@ -137,6 +137,43 @@ export function windowStart(window: AiUsageWindow, now: Date): Date {
   return new Date(today - (days - 1) * DAY_MS);
 }
 
+/** A resolved usage range: `from` inclusive, `until` exclusive, `days` UTC day buckets, `to` the last day. */
+export interface UsageRange {
+  window: AiUsageWindow | 'custom';
+  from: Date;
+  until: Date;
+  days: number;
+  to: string;
+}
+
+/** The range a query asks for: its custom from/to days when sent, else the preset window ending today. */
+export function usageRange(
+  query: { window: AiUsageWindow; from?: string | undefined; to?: string | undefined },
+  now: Date,
+): UsageRange {
+  if (query.from !== undefined && query.to !== undefined) {
+    const from = new Date(`${query.from}T00:00:00Z`);
+    const until = new Date(Date.parse(`${query.to}T00:00:00Z`) + DAY_MS);
+    return {
+      window: 'custom',
+      from,
+      until,
+      days: Math.round((until.getTime() - from.getTime()) / DAY_MS),
+      to: query.to,
+    };
+  }
+  const from = windowStart(query.window, now);
+  const days = AI_USAGE_WINDOW_DAYS[query.window];
+  const until = new Date(from.getTime() + days * DAY_MS);
+  return {
+    window: query.window,
+    from,
+    until,
+    days,
+    to: new Date(until.getTime() - DAY_MS).toISOString().slice(0, 10),
+  };
+}
+
 /** The start of the calendar month (UTC) that `now` falls in: the cap counts from here. */
 export function monthStart(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));

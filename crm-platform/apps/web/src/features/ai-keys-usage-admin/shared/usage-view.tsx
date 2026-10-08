@@ -1,43 +1,122 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { AI_USAGE_WINDOWS, type AiUsageWindow } from '@crm/contracts';
+import { AI_USAGE_MAX_CUSTOM_DAYS, AI_USAGE_WINDOWS, type AiUsageWindow } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { barPercent, compactNumber, maxOf, shortDay } from '../lib/format';
 
 const NS = 'ai-keys-usage-admin';
 
-/** The 7 days / 30 days / 90 days / 1 year switch of both usage screens. */
+/** The usage screens' range: a preset window, or `custom` with inclusive UTC days. */
+export interface UsageRangeValue {
+  window: AiUsageWindow | 'custom';
+  from: string;
+  to: string;
+}
+
+export const DEFAULT_USAGE_RANGE: UsageRangeValue = { window: '30d', from: '', to: '' };
+
+/** Whether the range can be asked for: a preset, or custom days both filled in, in order and within the ceiling. */
+export function usageRangeReady(r: UsageRangeValue): boolean {
+  if (r.window !== 'custom') return true;
+  if (!r.from || !r.to || r.from > r.to) return false;
+  return (Date.parse(r.to) - Date.parse(r.from)) / 86_400_000 + 1 <= AI_USAGE_MAX_CUSTOM_DAYS;
+}
+
+/** The query the API takes: a preset, or the custom days. */
+export function usageRangeQuery(r: UsageRangeValue): Record<string, string> {
+  return r.window === 'custom' ? { from: r.from, to: r.to } : { window: r.window };
+}
+
+const todayUtc = () => new Date().toISOString().slice(0, 10);
+
+/** The 7 days / 30 days / 90 days / 1 year / custom switch of both usage screens, with the two date pickers. */
 export function WindowSwitch({
   value,
   onChange,
 }: {
-  value: AiUsageWindow;
-  onChange: (w: AiUsageWindow) => void;
+  value: UsageRangeValue;
+  onChange: (r: UsageRangeValue) => void;
 }) {
   const t = useTranslations(`${NS}.windows`);
+  const pill = (active: boolean) =>
+    cn(
+      'h-8 rounded px-3 text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
+      active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted',
+    );
+  const custom = value.window === 'custom';
+  const invalid = custom && value.from !== '' && value.to !== '' && value.from > value.to;
+  const days =
+    custom && value.from && value.to && !invalid
+      ? (Date.parse(value.to) - Date.parse(value.from)) / 86_400_000 + 1
+      : 0;
+  const tooLong = days > AI_USAGE_MAX_CUSTOM_DAYS;
+  const dateInput = 'h-8 rounded-md border border-border bg-background px-2 text-sm';
   return (
-    <div
-      role="group"
-      aria-label={t('label')}
-      className="inline-flex rounded-md border border-border p-0.5"
-    >
-      {AI_USAGE_WINDOWS.map((w) => (
+    <div className="flex flex-col items-end gap-2">
+      <div
+        role="group"
+        aria-label={t('label')}
+        className="inline-flex rounded-md border border-border p-0.5"
+      >
+        {AI_USAGE_WINDOWS.map((w) => (
+          <button
+            key={w}
+            type="button"
+            aria-pressed={w === value.window}
+            onClick={() => onChange({ ...value, window: w })}
+            className={pill(w === value.window)}
+          >
+            {t(w)}
+          </button>
+        ))}
         <button
-          key={w}
           type="button"
-          aria-pressed={w === value}
-          onClick={() => onChange(w)}
-          className={cn(
-            'h-8 rounded px-3 text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
-            w === value
-              ? 'bg-primary text-primary-foreground'
-              : 'text-muted-foreground hover:bg-muted',
-          )}
+          aria-pressed={custom}
+          onClick={() =>
+            onChange(
+              custom ? value : { window: 'custom', from: value.from, to: value.to || todayUtc() },
+            )
+          }
+          className={pill(custom)}
         >
-          {t(w)}
+          {t('custom')}
         </button>
-      ))}
+      </div>
+      {custom && (
+        <div className="flex flex-wrap items-center justify-end gap-2 text-sm">
+          <label className="flex items-center gap-1.5 text-muted-foreground">
+            {t('from')}
+            <input
+              type="date"
+              className={dateInput}
+              value={value.from}
+              max={value.to || todayUtc()}
+              onChange={(e) => onChange({ ...value, from: e.target.value })}
+            />
+          </label>
+          <label className="flex items-center gap-1.5 text-muted-foreground">
+            {t('to')}
+            <input
+              type="date"
+              className={dateInput}
+              value={value.to}
+              min={value.from || undefined}
+              max={todayUtc()}
+              onChange={(e) => onChange({ ...value, to: e.target.value })}
+            />
+          </label>
+          {(invalid || tooLong || !value.from || !value.to) && (
+            <p role="status" className="basis-full text-end text-xs text-muted-foreground">
+              {invalid
+                ? t('invalid')
+                : tooLong
+                  ? t('tooLong', { days: AI_USAGE_MAX_CUSTOM_DAYS })
+                  : t('pick')}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

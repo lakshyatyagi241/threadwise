@@ -279,6 +279,9 @@ export type StartFlowOnConversationInput = z.infer<typeof startFlowOnConversatio
 export const flowAnalyticsQuerySchema = z.object({
   /** How many days back the numbers cover; 0 is all time (WaDesk's 7, 30, 90 and "All time" chips). */
   days: z.coerce.number().int().min(0).max(3650).default(30),
+  /** Explicit UTC days (inclusive); either end may be open, and they win over `days`. */
+  dateFrom: dayStringSchema.optional(),
+  dateTo: dayStringSchema.optional(),
   flowId: uuidSchema.optional(),
 });
 export type FlowAnalyticsQuery = z.infer<typeof flowAnalyticsQuerySchema>;

@@ -5,16 +5,16 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Button, EmptyState, Select, Spinner, StatTile, Tabs, cn } from '@crm/ui';
+import { Button, EmptyState, Input, Select, Spinner, StatTile, Tabs, cn } from '@crm/ui';
 import type { FlowAnalytics } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { refreshAll, useAnalytics, useFlowOptions } from '../api/flow-runtime';
 import {
   RANGES,
   TABS,
+  isCustomRange,
   analyticsStateToSearch,
   parseAnalyticsState,
-  rangeDays,
   type AnalyticsState,
 } from '../lib/history-model';
 import { dayLabel, percent, shortId, statusMix } from '../lib/model';
@@ -66,8 +66,10 @@ export function AnalyticsScreen() {
       scroll: false,
     });
 
-  const a = useAnalytics(rangeDays(state.range), state.flowId);
+  const a = useAnalytics(state);
   const flows = useFlowOptions();
+  const custom = isCustomRange(state);
+  const today = new Date().toISOString().slice(0, 10);
 
   if (!canRead) return <Denied />;
 
@@ -131,11 +133,11 @@ export function AnalyticsScreen() {
               <button
                 key={r}
                 type="button"
-                aria-pressed={state.range === r}
-                onClick={() => go({ range: r })}
+                aria-pressed={!custom && state.range === r}
+                onClick={() => go({ range: r, from: '', to: '' })}
                 className={cn(
                   'rounded-full px-3 py-2 text-xs font-semibold',
-                  state.range === r
+                  !custom && state.range === r
                     ? 'bg-brand text-brand-foreground'
                     : 'border border-border hover:bg-muted',
                 )}
@@ -143,8 +145,51 @@ export function AnalyticsScreen() {
                 {r === 'all' ? ta('rangeAll') : ta('days', { days: Number(r) })}
               </button>
             ))}
+            <button
+              type="button"
+              aria-pressed={custom}
+              onClick={() => {
+                if (!custom) go({ from: today, to: today });
+              }}
+              className={cn(
+                'rounded-full px-3 py-2 text-xs font-semibold',
+                custom ? 'bg-brand text-brand-foreground' : 'border border-border hover:bg-muted',
+              )}
+            >
+              {ta('rangeCustom')}
+            </button>
           </div>
         </div>
+        {custom && (
+          <div className="flex flex-wrap items-end gap-2">
+            <label className="block">
+              <span className={KICKER}>{ta('rangeFrom')}</span>
+              <Input
+                type="date"
+                className="mt-1 h-9 w-auto rounded-full px-3 text-xs"
+                value={state.from}
+                max={state.to || today}
+                onChange={(e) => go({ from: e.target.value })}
+              />
+            </label>
+            <label className="block">
+              <span className={KICKER}>{ta('rangeTo')}</span>
+              <Input
+                type="date"
+                className="mt-1 h-9 w-auto rounded-full px-3 text-xs"
+                value={state.to}
+                min={state.from || undefined}
+                max={today}
+                onChange={(e) => go({ to: e.target.value })}
+              />
+            </label>
+            {state.from && state.to && state.from > state.to && (
+              <p role="status" className="basis-full text-xs text-danger">
+                {ta('rangeInvalid')}
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       {a.isPending ? (

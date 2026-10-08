@@ -15,6 +15,7 @@
       "teamInbox": "Team inbox",
       "broadcasts": "Reply-only broadcast",
       "loadError": "The linked Instagram accounts could not be loaded. Try again.",
+      "loadErrorDetail": "The linked Instagram accounts could not be loaded (error {status}{code}). Try again.",
       "engineOff": "{engine} is not connected. An administrator has to connect it in Admin → Add-ons before an Instagram account can be linked.",
       "connectedCount": "{count, plural, one {# account linked} other {# accounts linked}}",
       "notConnected": "Not connected",
