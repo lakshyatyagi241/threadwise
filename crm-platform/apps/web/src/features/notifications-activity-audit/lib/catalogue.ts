@@ -20,6 +20,7 @@ export { NOTIFICATION_GROUPS, type NotificationGroup };
 
 export const NOTIFICATION_ICONS = [
   'chat',
+  'waiting',
   'assign',
   'mention',
   'team_chat',
@@ -79,6 +80,7 @@ const look = (
 const LOOK: Record<NotificationPrefType, Look> = {
   new_chat: look('chat', 'info', 'conversation'),
   new_message: look('chat', 'info', 'conversation'),
+  chat_waiting: look('waiting', 'info', 'conversation'),
   conversation_assigned: look('assign', 'info', 'conversation'),
   mention: look('mention', 'info', 'conversation'),
   task_assigned: look('task', 'info'),

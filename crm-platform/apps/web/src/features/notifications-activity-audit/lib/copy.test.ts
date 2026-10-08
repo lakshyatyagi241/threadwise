@@ -2,8 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createTranslator } from 'next-intl';
 import { describe, expect, it } from 'vitest';
-import { badgeText, notificationText, safeLink, type Translator } from './copy';
-
+import { badgeText, isChatType, notificationText, safeLink, type Translator } from './copy';
 const load = (locale: string) =>
   JSON.parse(
     readFileSync(
@@ -81,6 +80,48 @@ describe('notificationText', () => {
       title: 'Task completed',
       body: null,
     });
+  });
+});
+
+describe('the waiting-for-a-reply nudge (chat_waiting)', () => {
+  const data = { contactName: 'Ada', preview: 'Is anyone there?', conversationId: 'c' };
+
+  it('says nobody has answered the contact yet, with the preview (en)', () => {
+    expect(notificationText(translator('en'), n('chat_waiting', data))).toEqual({
+      title: 'No one has answered Ada yet',
+      body: 'Is anyone there?',
+    });
+  });
+
+  it('has a wording for a contact with no name, and for a row with no preview (en)', () => {
+    expect(notificationText(translator('en'), n('chat_waiting', { preview: 'Hi' }))).toEqual({
+      title: 'A chat is still waiting for a reply',
+      body: 'Hi',
+    });
+    expect(
+      notificationText(translator('en'), n('chat_waiting', { contactName: 'Ada' })).body,
+    ).toBeNull();
+  });
+
+  it('is worded in Arabic with the name inside and no English left over', () => {
+    const ar = notificationText(translator('ar'), n('chat_waiting', data));
+    expect(ar.title).toBe('لم يردّ أحد على Ada بعد');
+    expect(ar.body).toBe('Is anyone there?');
+    expect(notificationText(translator('ar'), n('chat_waiting', { preview: 'x' })).title).toBe(
+      'هناك محادثة ما زالت تنتظر ردًا',
+    );
+  });
+
+  it('cuts a long preview to the 80 character limit', () => {
+    const long = notificationText(
+      translator('en'),
+      n('chat_waiting', { contactName: 'Ada', preview: 'y'.repeat(300) }),
+    );
+    expect(Array.from(long.body ?? '').length).toBe(80);
+  });
+
+  it('is a chat type: it opens the conversation', () => {
+    expect(isChatType('chat_waiting')).toBe(true);
   });
 });
 

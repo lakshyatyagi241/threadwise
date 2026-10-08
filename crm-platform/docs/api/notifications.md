@@ -59,7 +59,7 @@ Rules, recomputed at delivery from the conversation as it is then: "may read" is
 REST read and every socket delivery); a muted conversation (`conversations.muted_at`) writes no `new_chat` or `new_message` (an assignment or a mention still
 does); an assignment the conversation no longer shows is dropped; a person who marked the thread read at or after the message arrived (the open thread does
 this when a message lands, `POST /inbox/conversations/:id/read`) is not alerted. The workspace owner's toggles (Settings, Notifications) gate exactly these four
-types (decision D3): `new_chat` and `new_message` by `new_customer_reply`, `conversation_assigned`, `mention` by `mention_in_inbox`; `inapp` off stops the row and
+types (decision D3; `chat_waiting`, below, joins them): `new_chat`, `new_message` and `chat_waiting` by `new_customer_reply`, `conversation_assigned`, `mention` by `mention_in_inbox`; `inapp` off stops the row and
 the push. Tasks, leads, forms, sales docs and the wallet are not gated. `NOTIFY_CONVERSATIONS_ENABLED` is the off switch (default on outside production, off in
 production until set; off: the ingest stops writing `message.received` and the consumer drops what is queued).
 
@@ -178,12 +178,12 @@ section 18. It is **fully off and invisible** unless the deployment sets the VAP
 
 ### Settings
 
-| Env                    | Default | Meaning                                                                                                                                                       |
-| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VAPID_PUBLIC_KEY`     | empty   | base64url, 87 characters. The "application server key" a browser subscribes with. Generate a pair once: `npx web-push generate-vapid-keys`.                    |
-| `VAPID_PRIVATE_KEY`    | empty   | base64url, 43 characters. A secret: never logged, never returned.                                                                                             |
-| `VAPID_SUBJECT`        | empty   | `mailto:you@example.com` or an https URL: how the push services reach the operator.                                                                           |
-| `WEB_PUSH_TTL_SECONDS` | `14400` | How long a push service keeps a notification for an offline device (60 to 86400).                                                                             |
+| Env                    | Default | Meaning                                                                                                                                     |
+| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VAPID_PUBLIC_KEY`     | empty   | base64url, 87 characters. The "application server key" a browser subscribes with. Generate a pair once: `npx web-push generate-vapid-keys`. |
+| `VAPID_PRIVATE_KEY`    | empty   | base64url, 43 characters. A secret: never logged, never returned.                                                                           |
+| `VAPID_SUBJECT`        | empty   | `mailto:you@example.com` or an https URL: how the push services reach the operator.                                                         |
+| `WEB_PUSH_TTL_SECONDS` | `14400` | How long a push service keeps a notification for an offline device (60 to 86400).                                                           |
 
 The feature is on only when all three VAPID values are present and well formed (`config/domains/web-push.env.ts`); a half-set or malformed triple leaves it off, it never
 stops the app from booting. Changing the pair later makes every saved device unusable (a browser ties a subscription to the key it was made with): people enable it again.
@@ -191,13 +191,13 @@ The older platform setting that generates a key pair (`platform-settings-brandin
 
 ### Routes (`/v2/notifications/push`, staff only, pinned to the caller, no permission key)
 
-| Route                       | What                                                                                                                                                                                                                                                      |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /public-key`           | `{ enabled, publicKey }`. `enabled: false` and `publicKey: null` when unconfigured (a 200, so browsers do not log 404s on every page load).                                                                                                                |
-| `GET /subscriptions`        | `{ items: [{ id, label, createdAt, lastUsedAt }] }`: the caller's live devices only. Never the endpoint, the keys or the raw user agent. Empty when unconfigured.                                                                                           |
+| Route                       | What                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /public-key`           | `{ enabled, publicKey }`. `enabled: false` and `publicKey: null` when unconfigured (a 200, so browsers do not log 404s on every page load).                                                                                                                                                                                                                                                                          |
+| `GET /subscriptions`        | `{ items: [{ id, label, createdAt, lastUsedAt }] }`: the caller's live devices only. Never the endpoint, the keys or the raw user agent. Empty when unconfigured.                                                                                                                                                                                                                                                    |
 | `POST /subscriptions`       | Body is `PushSubscription.toJSON()` (`endpoint` https, `keys.p256dh`, `keys.auth`). Idempotent per (person, endpoint): the same browser again refreshes its keys, clears failures and returns the same device. 404 when unconfigured. Keeps at most **10** devices per person: the least recently used beyond that are deleted. The same endpoint is removed from other people of the workspace (a shared computer). |
-| `DELETE /subscriptions/:id` | Removes one of the caller's own devices (204). Someone else's, or an unknown id, is 404, the same answer for both.                                                                                                                                          |
-| `POST /test`                | Sends a test notification to every live device of the caller now, ignoring preferences and whether a tab is open. Returns `{ sent, failed }`. One test per person every 10 seconds (429 `RATE_LIMITED`). 404 when unconfigured.                              |
+| `DELETE /subscriptions/:id` | Removes one of the caller's own devices (204). Someone else's, or an unknown id, is 404, the same answer for both.                                                                                                                                                                                                                                                                                                   |
+| `POST /test`                | Sends a test notification to every live device of the caller now, ignoring preferences and whether a tab is open. Returns `{ sent, failed }`. One test per person every 10 seconds (429 `RATE_LIMITED`). 404 when unconfigured.                                                                                                                                                                                      |
 
 Contracts: `packages/contracts/src/notifications-activity-audit/web-push.ts`. Adding or removing a device is the person's own convenience setting (like marking a row read):
 no audit row. The endpoint and keys are **secrets** (whoever holds them can push to that browser): stored in `push_subscriptions` for the sender, looked up by the sha256 of the
@@ -205,7 +205,7 @@ endpoint, never returned by any route, never logged, never put in the queue.
 
 ### The `push` preference
 
-`notification_user_prefs` gains `push boolean` and `NOTIFICATION_CATALOG` a `push` default per type: **on** for `new_chat`, `new_message`, `conversation_assigned`, `mention`,
+`notification_user_prefs` gains `push boolean` and `NOTIFICATION_CATALOG` a `push` default per type: **on** for `new_chat`, `new_message`, `chat_waiting`, `conversation_assigned`, `mention`,
 `task_assigned`, `teamchat_mention`, `teamchat_message`; **off** for everything else (noisy ones: task due or completed, leads, forms, documents, wallet, devices,
 broadcasts, campaigns, scheduled sends). The same resolution as the other channels: the person's own setting, else the default. `GET`/`PUT /v2/notifications/preferences`
 carry `push` in the item (`push`, `defaults.push`, `overrides.push`) and in the request. Push rides on the bell row like the toast: **no row, no push**, so a person whose
@@ -251,6 +251,47 @@ endpoint, `last_notified_at` renamed `last_used_at`). A worker cron (`push-subsc
 
 Queue `web-push` (`QUEUES.WEB_PUSH`). A growing backlog means the push service is slow or down: jobs retry for about a minute and then drop, so a backlog drains by itself. Nothing in the app depends on a push being
 delivered. See [runbooks/web-push.md](../runbooks/web-push.md).
+
+## Waiting for a reply (BL-098): the nudge for unassigned chats
+
+The rule "a later customer message on an unassigned chat tells nobody" stands (everyone who can answer was told at `new_chat`). The cost is that nobody owns the chat, so it can sit
+unanswered. A worker sweep closes that gap: **one nudge per waiting episode** to the people who may read AND reply, through the same fan-out as every other event, so it is a bell row, a live
+`notification.created` (toast) and, where the person's `push` is on, a browser push. Spec: [realtime-notifications.md](../specs/realtime-notifications.md) section 19.
+
+| Type           | Source                                            | Who is told                                                                                                              | Row                                                                                                                                                                                                                                      |
+| -------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat_waiting` | `WaitingNudgeService` (worker cron, every minute) | everyone who may read AND reply to the unassigned chat (as for `new_chat`, decision D1), at most `NOTIFY_MAX_RECIPIENTS` | one per person and waiting episode, dedupe key `chat_waiting:<conversation>:<latest customer message>`; title "No one has answered <contact> yet", body the 80-character preview, link `/inbox?c=<conversation>`, subject `conversation` |
+
+**A chat is nudged when all of these hold:** `status = 'open'`, not archived, not muted, no assignee (person, team or AI agent), not a group thread (`peer_key` starts `g:`), no human has
+answered (`waiting_since` is set; only a human reply clears it, so an auto-reply or a bot does not count as an answer), nobody has read it since the customer wrote (`unread_count > 0`; the counter is
+shared by all agents), the latest live customer message is at least `NOTIFY_WAITING_MINUTES` old (default **5**) and not older than `NOTIFY_WAITING_LOOKBACK_HOURS` (default 24, so switching the feature on never wakes an
+old backlog), and no `chat_waiting` row exists for the chat since the wait began. A snoozed or closed chat is excluded by the status rule. Anyone who marked the chat read in the last minute (the open thread does
+this, `ConversationReadState`) is skipped for this nudge.
+
+**Once per episode.** An episode runs from `waiting_since` (the oldest unanswered customer message) until a human answers. More customer messages inside the same unanswered stretch do **not** nudge again; a new
+customer message after an agent answered is a new episode with a new message id, so it nudges again. Repeated sweeps and two worker pods write one row: the unique `(org, user, dedupe_key)` index, with only the writer announcing.
+
+**How the sweep runs** (`waiting-nudge.service.ts`, imported by `NotificationsWorkerModule` only; `@Cron` like the retention job, an overlapping run is skipped). Step 1 is one cross-tenant (privileged) indexed query
+for the ids of qualifying chats, newest customer message first, at most `NOTIFY_WAITING_BATCH` (default 100) per sweep; chats already nudged in their wait are left out so they never use the cap. Step 2 is per
+workspace under the tenant (RLS applies): one read of the candidates' current facts with the latest customer message in a LATERAL join (no query per chat), `waitingSkipReason` decides again (a chat assigned, answered or
+read since step 1 is dropped), and `NotificationFanout.write` / `publish` write the rows and announce them. Cost per sweep with nothing to do: one index probe.
+
+**Push.** The title is the contact's name and the body "Waiting for a reply", never the message text (`push-payload.ts`); the bell and toast may show the 80-character preview like `new_chat`. Defaults:
+bell on (gated by the owner's `new_customer_reply` toggle like the other chat types), pop-up on, **sound off**, **push on**. A person can change each of them on Account, Notifications ("Chat still waiting for a reply", under Chats).
+
+| Env                             | Default | Meaning                                                                                                                                                                                             |
+| ------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NOTIFY_WAITING_MINUTES`        | `5`     | Minutes the latest customer message must have gone unanswered (1 to 1440). One value for all workspaces; a per-workspace setting was left out (a settings join in the sweep for no asked-for need). |
+| `NOTIFY_WAITING_ENABLED`        | `true`  | Off switch of the nudge alone. It also needs `NOTIFY_CONVERSATIONS_ENABLED` (so it is off in production until that is set).                                                                         |
+| `NOTIFY_WAITING_LOOKBACK_HOURS` | `24`    | Chats whose latest customer message is older are never nudged.                                                                                                                                      |
+| `NOTIFY_WAITING_BATCH`          | `100`   | The most chats one sweep handles.                                                                                                                                                                   |
+
+Migrations: `20261110090000_conversations_waiting_nudge_idx` (partial index `idx_conversations_waiting_nudge` on `conversations (last_inbound_at DESC)` for exactly the qualifying chats) and
+`20261110090100_inbox_notifications_chat_waiting_idx` (partial index `idx_inbox_notifications_chat_waiting` on `(org_id, subject_uuid, created_at DESC) WHERE type = 'chat_waiting'`, the "already nudged in this wait" probe).
+No new table. Opening the conversation marks its `chat_waiting` rows read like any conversation row (`read-subject`).
+
+Known limits: a chat nobody can be told about (no one may reply, everyone has the bell off) is looked at again every minute until the lookback ends (cheap, and newest-first keeps it from starving fresh chats);
+business hours are not considered; a chat assigned to someone who has not answered is not covered (an SLA, BL-004).
 
 ## Not built here
 

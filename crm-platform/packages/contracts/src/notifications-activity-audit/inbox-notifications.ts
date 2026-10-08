@@ -26,6 +26,11 @@ export const NOTIFICATION_TYPES = [
   'conversation_assigned',
   /** Someone mentioned me in a conversation note. */
   'mention',
+  /**
+   * An unassigned, open chat has had a customer message nobody answered for N minutes (BL-098): told once per waiting episode to the people
+   * who may read and reply, by the worker's sweep (not by an outbox event).
+   */
+  'chat_waiting',
   // --- Phase 2 (BL-096): device, broadcast / campaign / scheduled outcomes, team chat ---------------------------------------
   /** A personal WhatsApp number came online. */
   'device_connected',
@@ -81,6 +86,8 @@ export const NOTIFICATION_TYPE_PREF_KEY: Partial<
   new_message: 'new_customer_reply',
   conversation_assigned: 'conversation_assigned',
   mention: 'mention_in_inbox',
+  // The nudge is a follow-up to a customer's message the owner already governs with the same toggle (BL-098).
+  chat_waiting: 'new_customer_reply',
   // Phase 2 (decision D3: the owner's toggles start to work for the new types and for the wallet alert).
   device_connected: 'device_connected',
   device_disconnected: 'device_disconnected',
@@ -113,7 +120,7 @@ export const notificationSubjectSchema = z.object({
 export type NotificationSubject = z.infer<typeof notificationSubjectSchema>;
 
 /**
- * The `data` of the conversation types (`new_chat`, `new_message`, `conversation_assigned`, `mention`). Every field is optional for a
+ * The `data` of the conversation types (`new_chat`, `new_message`, `chat_waiting`, `conversation_assigned`, `mention`). Every field is optional for a
  * reader: a row written by an older server lacks the newer ones. `preview` is at most 80 characters of the customer's words and is
  * rendered as text, never HTML.
  */

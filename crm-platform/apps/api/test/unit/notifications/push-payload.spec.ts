@@ -63,6 +63,31 @@ describe('the push payload of a bell row', () => {
     expect(chat.body).toBe('New chat');
   });
 
+  it('the waiting nudge is titled with the contact and says only that it is waiting, never the message', () => {
+    const p = buildPushPayload(
+      row({
+        type: 'chat_waiting',
+        title: 'No one has answered Asha yet',
+        body: 'my passport is X9981',
+        data: { contactName: 'Asha', preview: 'my passport is X9981' },
+      }),
+    );
+    expect(p.title).toBe('Asha');
+    expect(p.body).toBe('Waiting for a reply');
+    expect(JSON.stringify(p)).not.toContain('X9981');
+    // No contact name: the row's own title, still no message text.
+    const anon = buildPushPayload(
+      row({
+        type: 'chat_waiting',
+        title: 'No one has answered a customer yet',
+        body: 'secret',
+        data: {},
+      }),
+    );
+    expect(anon.title).toBe('No one has answered a customer yet');
+    expect(anon.body).toBe('Waiting for a reply');
+  });
+
   it('never carries the words of a note or a team chat message, only who and what kind', () => {
     for (const type of ['mention', 'teamchat_mention', 'teamchat_message']) {
       const p = buildPushPayload(

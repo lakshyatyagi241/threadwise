@@ -10,7 +10,7 @@ keywords: [notifications, preferences, bell, pop-up, toast, sound, push, browser
 
 ## What it is for
 
-Notification preferences are yours alone. They decide how each kind of event reaches you: a new chat, a message on a chat you own, a mention, a WhatsApp number that disconnects, a broadcast or campaign that finishes or fails, a message in Team chat, and the tasks, leads, forms and wallet alerts. Your colleagues keep their own choices. Open the page from **Account**, **Notifications**, or from **Notification settings** at the bottom of the bell panel.
+Notification preferences are yours alone. They decide how each kind of event reaches you: a new chat, a message on a chat you own, a chat that is still waiting for a reply, a mention, a WhatsApp number that disconnects, a broadcast or campaign that finishes or fails, a message in Team chat, and the tasks, leads, forms and wallet alerts. Your colleagues keep their own choices. Open the page from **Account**, **Notifications**, or from **Notification settings** at the bottom of the bell panel.
 
 ## The switches
 
@@ -19,9 +19,13 @@ Every event has up to four switches:
 - **Bell**: the event is added to the bell and counts in its number. Turn it off and the event never reaches your bell.
 - **Pop-up**: while this tab is in front, a small pop-up appears with a link to open what happened. It needs the bell to be on.
 - **Sound**: a short two-tone ping. It also needs the bell, and only some events can ping (new chats and messages, mentions and Team chat).
-- **Push**: a notification from your browser, even when the CRM is closed. It also needs the bell. This column only appears when browser notifications are available on your CRM (see below). New chats, messages on your chats, chats assigned to you, mentions, direct Team chat messages and tasks assigned to you start on; every other event starts off, and you can turn any of them on.
+- **Push**: a notification from your browser, even when the CRM is closed. It also needs the bell. This column only appears when browser notifications are available on your CRM (see below). New chats, messages on your chats, chats still waiting for a reply, chats assigned to you, mentions, direct Team chat messages and tasks assigned to you start on; every other event starts off, and you can turn any of them on.
 
 A dash in a column means that kind of event does not offer that switch.
+
+## Chat still waiting for a reply
+
+Under **Chats**, **Chat still waiting for a reply** tells you when a chat that nobody owns has had a customer message without an answer for a few minutes (5 by default; your administrator can change it). Everyone who is allowed to read and reply to the chat gets it, once: if the chat then stays unanswered it does not repeat, and it stops mattering as soon as someone is assigned, replies, opens the chat, mutes it or resolves it. If the customer writes again after someone answered and is left waiting again, you get a new one. It starts on for the bell, the pop-up and push, and off for sound. A browser notification for it shows the contact name and "Waiting for a reply", never the message.
 
 ## Change a switch
 

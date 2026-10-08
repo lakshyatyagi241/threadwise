@@ -50,7 +50,7 @@ export function safePushLink(link: string | null | undefined): string {
 }
 
 /** Types whose bell row names the contact: the push title is the contact name. */
-const CONTACT_TITLED = new Set(['new_chat', 'new_message']);
+const CONTACT_TITLED = new Set(['new_chat', 'new_message', 'chat_waiting']);
 /**
  * Types whose row body is somebody's words (a customer message, a note excerpt, a team chat message). An OS notification can show on a
  * locked screen, so by decision D4 of the spec these carry the name and the kind of event only, never the text.
@@ -58,6 +58,7 @@ const CONTACT_TITLED = new Set(['new_chat', 'new_message']);
 const TEXT_BEARING = new Set([
   'new_chat',
   'new_message',
+  'chat_waiting',
   'mention',
   'teamchat_mention',
   'teamchat_message',
@@ -75,11 +76,15 @@ export function pushText(
     // "Title = contact name": who wrote, then what kind of event it is.
     const contact = str(data.contactName);
     const count = row.eventCount > 1 ? row.eventCount : 0;
-    const body = count
-      ? `${count} new messages`
-      : row.type === 'new_chat'
-        ? 'New chat'
-        : 'New message';
+    // The waiting nudge is about the silence, not the words: it says so and nothing of the customer's message (BL-098).
+    const body =
+      row.type === 'chat_waiting'
+        ? 'Waiting for a reply'
+        : count
+          ? `${count} new messages`
+          : row.type === 'new_chat'
+            ? 'New chat'
+            : 'New message';
     return { title: clip(contact ?? row.title), body };
   }
   return { title: clip(row.title), body: TEXT_BEARING.has(row.type) ? '' : clip(row.body ?? '') };

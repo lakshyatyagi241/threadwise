@@ -233,6 +233,39 @@ describe('the preferences screen (en)', () => {
   });
 });
 
+describe('the waiting-for-a-reply row (en, ar)', () => {
+  const waiting = () =>
+    state(
+      item('chat_waiting', 'conversations', {
+        push: true,
+        defaults: { bell: true, toast: true, sound: false, push: true },
+      }),
+    );
+
+  it('is listed under Chats with its hint, its default and no sound', () => {
+    const out = html(view({ state: waiting(), pushEnabled: true }));
+    expect(out).toContain('Chats');
+    expect(out).toContain('Chat still waiting for a reply');
+    expect(out).toContain('A chat nobody owns has had a customer message unanswered');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: bell"');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: pop-up"');
+    // Like the other quiet types it has no ping at all, so the sound column says so instead of showing a dead switch.
+    expect(out).toContain('Chat still waiting for a reply: sound: Not available');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: push"');
+    expect(out).toContain('Default: bell on, pop-up on, sound off');
+    expect(out).not.toContain('notifications.prefs');
+  });
+
+  it('is worded in Arabic, with the group and switches named', () => {
+    const out = html(view({ state: waiting(), pushEnabled: true }), 'ar');
+    expect(out).toContain('المحادثات');
+    expect(out).toContain('محادثة ما زالت تنتظر ردًا');
+    expect(out).toContain('aria-label="محادثة ما زالت تنتظر ردًا: الجرس"');
+    expect(out).not.toContain('Chat still waiting');
+    expect(out).not.toContain('notifications.prefs');
+  });
+});
+
 describe('the preferences screen (ar)', () => {
   it('is worded in Arabic, switches included, with no English or key leaking', () => {
     const out = html(view(), 'ar');

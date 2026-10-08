@@ -15,7 +15,12 @@ import {
   recipientsForMention,
   recipientsForMessage,
   recipientsForNewChat,
+  recipientsForWaiting,
   typeForMessage,
+  waitingCopy,
+  waitingKey,
+  waitingSkipReason,
+  type WaitingFacts,
 } from '../../../src/modules/notifications/conversation-notification-rules';
 import { senderName } from '../../../src/modules/notifications/conversation-notification.consumer';
 
@@ -195,5 +200,124 @@ describe('how a notification names the sender (decision D4)', () => {
   it('uses a group title for a group, and nothing for a nameless visitor', () => {
     expect(senderName({ ...base, peer_key: 'g:120363', title: 'Team group' })).toBe('Team group');
     expect(senderName({ ...base, channel_kind: 'webchat', peer_key: 'visitor-1' })).toBeNull();
+  });
+});
+
+describe('still waiting for a reply (row 5, BL-098)', () => {
+  const NOW = Date.parse('2026-10-08T12:00:00Z');
+  const minutesAgo = (m: number) => NOW - m * 60_000;
+  /** A chat that qualifies: unassigned, open, unread, the customer wrote 6 minutes ago and nobody answered. */
+  const waiting = (over: Partial<WaitingFacts> = {}): WaitingFacts => ({
+    status: 'open',
+    archived: false,
+    muted: false,
+    assigneeUserId: null,
+    assigneeTeamId: null,
+    assigneeAgentId: null,
+    group: false,
+    waitingSince: minutesAgo(6),
+    lastInboundAt: minutesAgo(6),
+    unread: true,
+    latestInboundMessageUuid: '11111111-1111-4111-8111-111111111111',
+    nudgedThisEpisode: false,
+    ...over,
+  });
+  const skip = (over: Partial<WaitingFacts> = {}, wait = 5, lookback = 24) =>
+    waitingSkipReason(waiting(over), NOW, wait, lookback);
+
+  it('nudges an unassigned, open, unread chat that has waited longer than N minutes', () => {
+    expect(skip()).toBeNull();
+  });
+
+  it('waits the full N minutes: just under is too recent, exactly N qualifies', () => {
+    expect(skip({ lastInboundAt: minutesAgo(4.9) })).toBe('too_recent');
+    expect(skip({ lastInboundAt: minutesAgo(5) })).toBeNull();
+    expect(skip({ lastInboundAt: minutesAgo(6) }, 10)).toBe('too_recent');
+  });
+
+  it('counts from the LATEST customer message, not the first unanswered one', () => {
+    // The wait began 30 minutes ago but the customer wrote again a minute ago: not yet.
+    expect(skip({ waitingSince: minutesAgo(30), lastInboundAt: minutesAgo(1) })).toBe('too_recent');
+  });
+
+  it('leaves an old backlog alone (lookback)', () => {
+    expect(skip({ lastInboundAt: minutesAgo(25 * 60) })).toBe('too_old');
+    expect(skip({ lastInboundAt: minutesAgo(23 * 60) })).toBeNull();
+  });
+
+  it('skips a chat that is not open: resolved, closed, snoozed, pending, spam', () => {
+    for (const status of ['resolved', 'closed', 'snoozed', 'pending', 'spam']) {
+      expect(skip({ status }), status).toBe('not_open');
+    }
+  });
+
+  it('skips an archived chat', () => {
+    expect(skip({ archived: true })).toBe('archived');
+  });
+
+  it('skips a muted chat', () => {
+    expect(skip({ muted: true })).toBe('muted');
+  });
+
+  it('skips any assigned chat: to a person, to a team, or to an AI agent', () => {
+    expect(skip({ assigneeUserId: 3 })).toBe('assigned');
+    expect(skip({ assigneeTeamId: 10 })).toBe('assigned');
+    expect(skip({ assigneeAgentId: 7 })).toBe('assigned');
+  });
+
+  it('skips a group thread', () => {
+    expect(skip({ group: true })).toBe('group');
+  });
+
+  it('skips a chat a person has answered (the wait is cleared by the first human reply)', () => {
+    expect(skip({ waitingSince: null })).toBe('answered');
+  });
+
+  it('skips a chat somebody opened since the message (it is no longer unread)', () => {
+    expect(skip({ unread: false })).toBe('read');
+  });
+
+  it('skips a chat with no live customer message to key on', () => {
+    expect(skip({ latestInboundMessageUuid: null })).toBe('no_message');
+    expect(skip({ lastInboundAt: null })).toBe('no_message');
+  });
+
+  it('nudges once per waiting episode: a second sweep, or a later message in the same wait, does not', () => {
+    expect(skip({ nudgedThisEpisode: true })).toBe('already_nudged');
+  });
+
+  it('keys the nudge on the conversation and the newest customer message', () => {
+    const conv = '22222222-2222-4222-8222-222222222222';
+    const msg = '11111111-1111-4111-8111-111111111111';
+    const first = waitingKey(conv, msg);
+    expect(first).toBe(`chat_waiting:${conv}:${msg}`);
+    // Repeated sweeps build the same key (the unique index makes the second a no-op) ...
+    expect(waitingKey(conv, msg)).toBe(first);
+    // ... and a new customer message after an answer is a new episode with a new key.
+    expect(waitingKey(conv, '33333333-3333-4333-8333-333333333333')).not.toBe(first);
+    // Another chat never collides.
+    expect(waitingKey('44444444-4444-4444-8444-444444444444', msg)).not.toBe(first);
+  });
+
+  it('tells the people who may read AND reply, as for a new unassigned chat', () => {
+    const told = recipientsForWaiting(rec(null), readers, repliers);
+    expect(told.sort()).toEqual([1, 2]);
+    // Reads but cannot reply (5), cannot read (4), sees only own threads (3): not told.
+    for (const id of [3, 4, 5]) expect(told).not.toContain(id);
+  });
+
+  it('tells nobody once the chat has an owner', () => {
+    expect(recipientsForWaiting(rec(3), readers, repliers)).toEqual([]);
+    expect(recipientsForWaiting(rec(null, 10), readers, repliers)).toEqual([]);
+  });
+
+  it('words the row: the contact is named, the preview is cut to 80, no name falls back', () => {
+    expect(waitingCopy('Ada', 'is anyone there?')).toEqual({
+      title: 'No one has answered Ada yet',
+      body: 'is anyone there?',
+    });
+    expect(waitingCopy(null, '').title).toBe('No one has answered a customer yet');
+    expect(waitingCopy(null, '').body).toBeNull();
+    expect(waitingCopy('Ada', 'x'.repeat(200)).body!.length).toBe(80);
   });
 });
