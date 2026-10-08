@@ -85,6 +85,8 @@ export function useBroadcastsPage(state: ListState) {
     queryFn: ({ signal }) => loadPage(qc, q, index, signal),
     placeholderData: keepPreviousData,
     refetchInterval: POLL_MS,
+    // The list polls anyway, so a failed read shows its error state at once instead of a spinner through the retries.
+    retry: false,
   });
   const hasMore = res.data?.response.page.hasMore ?? false;
   const identity = JSON.stringify(q);

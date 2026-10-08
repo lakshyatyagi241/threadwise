@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Badge, cn } from '@crm/ui';
 import type { BroadcastListItem } from '@crm/contracts';
@@ -43,8 +44,11 @@ export function BroadcastsTable({
   onExport,
   onDelete,
   unofficial = false,
+  empty,
 }: {
   rows: BroadcastListItem[];
+  /** Shown under the column heads when there are no rows, as Reference keeps the heads on an empty list. */
+  empty?: ReactNode;
   /** Whether the platform has the unofficial engine on; off, a broadcast sent through it reads "Unofficial (disabled)". */
   unofficial?: boolean;
   canExport: boolean;
@@ -158,6 +162,7 @@ export function BroadcastsTable({
           ))}
         </tbody>
       </table>
+      {rows.length === 0 && empty}
     </div>
   );
 }

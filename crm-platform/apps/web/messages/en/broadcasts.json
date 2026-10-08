@@ -73,8 +73,8 @@
       "cancel": "Cancel",
       "deleted": "Broadcast deleted.",
       "exportFailed": "Could not export the recipients.",
-      "emptyTitle": "No broadcasts match the current filters",
-      "emptyBody": "Try clearing filters or create your first broadcast.",
+      "emptyTitle": "No data found",
+      "emptyBody": "No broadcasts match the current filters. Try clearing filters or create your first broadcast.",
       "resetFilters": "Reset filters",
       "showing": "Showing {shown} of {total} filtered broadcasts",
       "loading": "Loading",
@@ -95,7 +95,9 @@
         "t3": "How do I improve results?",
         "b3": "Keep the audience focused, choose the most relevant template, and review failed counts before sending again."
       },
-      "unofficialDisabled": "Unofficial (disabled)"
+      "unofficialDisabled": "Unofficial (disabled)",
+      "noData": "No data found",
+      "railLabel": "Broadcast filters"
     },
     "detail": {
       "back": "Back",
@@ -241,7 +243,7 @@
       "template": "Select template message",
       "pickTemplate": "— Pick an approved template —",
       "noTemplates": "No approved templates yet.",
-      "createOne": "Create one →",
+      "createOne": "Create one",
       "templateHint": "Broadcasts send approved templates only.",
       "twilioHint": "Twilio compliant sends require a Content SID per template — flag a template as \"Twilio ready\" via /templates/{id}/edit. Templates without a ContentSid will send as plain text (loses Meta template approval).",
       "device": "Send from device",
@@ -260,7 +262,6 @@
       "noSegments": "No segments yet.",
       "noTags": "No tags yet.",
       "noGroups": "No groups yet.",
-      "createOne": "Create one",
       "filters": "Filter contacts",
       "filterTag": "Any tag",
       "filterGroup": "Any group",
@@ -294,7 +295,8 @@
       "later": "Later",
       "media": "{kind} preview",
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
-      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number."
+      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
+      "previewLabel": "Template preview"
     },
     "overrides": {
       "title": "Fill in this send",

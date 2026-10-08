@@ -35,6 +35,9 @@ import {
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
 const RANGES = ['all', '7d', '30d', '90d'] as const;
 const n = (v: number | undefined) => (v === undefined ? '—' : v.toLocaleString());
+/** A share of `of` as a percentage with one decimal (0 when there is nothing to divide by). */
+const rate = (part: number | undefined, of: number | undefined) =>
+  of && part ? ((part / of) * 100).toFixed(1) : '0';
 
 type Pending =
   | { kind: 'delete'; c: Campaign }
@@ -145,14 +148,12 @@ export function CampaignsScreen() {
   const items = data?.data ?? [];
   const total = data?.page.total ?? 0;
   const pages = pageCount(total, data?.page.perPage ?? 12);
-  const filtered =
-    state.status !== 'all' || state.type !== 'all' || state.range !== 'all' || state.q !== '';
   const allShown = items.length > 0 && items.every((c) => picked.includes(c.id));
   const pill = (active: boolean) =>
-    `rounded-full border px-3 py-1 text-[11.5px] transition ${active ? 'border-brand bg-brand text-brand-foreground' : 'border-border bg-background hover:bg-muted'}`;
+    `rounded-full border px-3 py-1 text-[11.5px] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? 'border-brand bg-brand text-brand-foreground' : 'border-border bg-background hover:bg-muted'}`;
 
   return (
-    <main className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
         <CampaignsRail
           list={data}
@@ -172,22 +173,13 @@ export function CampaignsScreen() {
               <h1 className="text-3xl font-normal leading-none tracking-tight lg:text-[44px]">
                 {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
               </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground">{t('intro')}</p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <Button variant="secondary" className="rounded-full" onClick={refresh}>
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && (
-                <Link
-                  href="/campaigns/wizard"
-                  className="inline-flex h-10 items-center gap-2 rounded-full border border-brand bg-background px-4 text-xs font-semibold text-brand hover:bg-brand/10"
-                >
-                  <PlusIcon className="size-3.5" />
-                  {t('createBroadcast')}
-                </Link>
-              )}
               {canCreate && (
                 <Link
                   href="/campaigns/create"
@@ -200,30 +192,37 @@ export function CampaignsScreen() {
             </div>
           </div>
 
-          <div className="mb-3 grid grid-cols-3 gap-3 lg:grid-cols-6">
+          <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             <StatTile
               label={t('tile.sent')}
               value={n(data?.stats.sentTotal)}
               hint={t('tile.campaigns', { count: n(data?.stats.total) })}
-              tone="accent"
             />
             <StatTile
               label={t('tile.delivered')}
               value={n(data?.stats.deliveredTotal)}
+              hint={t('tile.deliveredRate', {
+                rate: rate(data?.stats.deliveredTotal, data?.stats.sentTotal),
+              })}
               tone="accent"
             />
-            <StatTile label={t('tile.read')} value={n(data?.stats.readTotal)} />
-            <StatTile label={t('tile.failed')} value={n(data?.stats.failedTotal)} />
+            <StatTile
+              label={t('tile.read')}
+              value={n(data?.stats.readTotal)}
+              hint={t('tile.readRate', {
+                rate: rate(data?.stats.readTotal, data?.stats.deliveredTotal),
+              })}
+            />
+            <StatTile
+              label={t('tile.failed')}
+              value={n(data?.stats.failedTotal)}
+              hint={t('tile.failedCampaigns', { count: n(data?.stats.failed) })}
+            />
             <StatTile
               label={t('tile.processing')}
               value={n(data?.stats.processing)}
-              hint={t('tile.inFlight')}
+              hint={t('tile.queued', { count: n(data?.stats.queued) })}
               tone="warning"
-            />
-            <StatTile
-              label={t('tile.queued')}
-              value={n(data?.stats.queued)}
-              hint={t('tile.awaiting')}
             />
           </div>
 
@@ -257,7 +256,7 @@ export function CampaignsScreen() {
               <label className="flex cursor-pointer items-center gap-2">
                 <input
                   type="checkbox"
-                  className="size-4 accent-[var(--primary)]"
+                  className="size-6 accent-[var(--primary)]"
                   checked={allShown}
                   onChange={(e) =>
                     setPicked(
@@ -290,26 +289,29 @@ export function CampaignsScreen() {
           ) : list.isError ? (
             <EmptyState title={t('loadError')} />
           ) : items.length === 0 ? (
-            <EmptyState
-              title={filtered ? t('noMatch') : t('empty')}
-              message={filtered ? t('noMatchHint') : t('emptyHint')}
-              actions={
-                filtered ? (
-                  <Button variant="secondary" onClick={() => router.replace(pathname)}>
-                    {t('reset')}
-                  </Button>
-                ) : (
-                  canCreate && (
-                    <Link
-                      href="/campaigns/create"
-                      className="inline-flex h-10 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground"
-                    >
-                      {t('newCampaign')}
-                    </Link>
-                  )
-                )
-              }
-            />
+            <div className="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+              <h2 className="text-2xl">{t('noData')}</h2>
+              <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+                {t('noDataHint')}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                <Button
+                  variant="secondary"
+                  className="rounded-full"
+                  onClick={() => router.replace(pathname)}
+                >
+                  {t('reset')}
+                </Button>
+                {canCreate && (
+                  <Link
+                    href="/campaigns/create"
+                    className="inline-flex h-10 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
+                  >
+                    {t('createCampaign')}
+                  </Link>
+                )}
+              </div>
+            </div>
           ) : (
             <div className="space-y-3">
               {items.map((c) => (
@@ -389,6 +391,19 @@ export function CampaignsScreen() {
               )}
             </div>
           )}
+          <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="rounded-2xl border border-border bg-background p-5 shadow-sm">
+                <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {t('help.label', { n: String(i + 1).padStart(2, '0') })}
+                </div>
+                <h2 className="mt-2 text-lg leading-snug">{t(`help.items.${i}.title`)}</h2>
+                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                  {t(`help.items.${i}.body`)}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
 
@@ -409,6 +424,6 @@ export function CampaignsScreen() {
         onClose={() => setPending(null)}
         onConfirm={() => void confirm()}
       />
-    </main>
+    </div>
   );
 }

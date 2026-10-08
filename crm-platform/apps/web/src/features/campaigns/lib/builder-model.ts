@@ -3,7 +3,7 @@ import type { CampaignConfig, CampaignType, CreateCampaignInput } from '@crm/con
 /** What the campaign builder decides without the network (TW-CAMP-003 to 010). Pure. */
 
 export interface ButtonRow {
-  type: 'url' | 'quick_reply' | 'phone_number';
+  type: 'url' | 'quick_reply' | 'phone_number' | 'copy_code';
   text: string;
   value: string;
 }
@@ -126,7 +126,10 @@ export function fromConfig(c: CampaignConfig, zone: string): BuilderForm {
     const text = typeof o.text === 'string' ? o.text : typeof o.title === 'string' ? o.title : '';
     if (text === '') return [];
     const value = String(o.value ?? o.url ?? o.phone_number ?? '');
-    const type = o.type === 'url' || o.type === 'phone_number' ? o.type : 'quick_reply';
+    const type =
+      o.type === 'url' || o.type === 'phone_number' || o.type === 'copy_code'
+        ? o.type
+        : 'quick_reply';
     return [{ type, text, value } as ButtonRow];
   });
   return {
@@ -172,7 +175,9 @@ const rowToButton = (b: ButtonRow) =>
     ? { type: 'url', text: b.text, url: b.value, value: b.value }
     : b.type === 'phone_number'
       ? { type: 'phone_number', text: b.text, phone_number: b.value, value: b.value }
-      : { type: 'quick_reply', text: b.text, value: b.value || b.text };
+      : b.type === 'copy_code'
+        ? { type: 'copy_code', text: b.text, value: b.value }
+        : { type: 'quick_reply', text: b.text, value: b.value || b.text };
 
 /** The request body. Blank fields are left out (the server reads absent as "none"). */
 export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateCampaignInput {
@@ -229,6 +234,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
 
 export type Problem =
   | 'name'
+  | 'sender'
   | 'message'
   | 'template'
   | 'flow'
@@ -253,6 +259,8 @@ const isUrl = (v: string) => {
 export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[] {
   const out: Problem[] = [];
   if (f.name.trim() === '') out.push('name');
+  // Reference's builder starts on "Select a sender" and will not go on without one; a draft may still be saved without.
+  if (f.senderKey === '' && !o.draft) out.push('sender');
   if (isBodyType(f.type) && f.customMessage.trim() === '') out.push('message');
   if (f.type === 'template' && f.templateId === '') out.push('template');
   if (f.type === 'flow' && f.flowId === '') out.push('flow');
