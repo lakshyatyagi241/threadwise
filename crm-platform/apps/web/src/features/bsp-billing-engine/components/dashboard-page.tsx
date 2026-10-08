@@ -26,6 +26,7 @@ export function DashboardPage() {
   const locale = useLocale();
   // A P&L is one currency: workspaces billed in rupees are not added to those billed in dollars.
   const [currency, setCurrency] = useState<string | undefined>(undefined);
+  const [now] = useState(() => Date.now());
   const q = useQuery({
     queryKey: KEYS.dashboard(undefined, currency),
     queryFn: ({ signal }) => operatorApi.dashboard(undefined, currency, signal),
