@@ -35,6 +35,8 @@ Object.assign(process.env, {
   WABA_WEBHOOK_PUBLIC_URL: 'https://hooks.test',
   WABA_DEFAULT_PROVIDER: 'meta',
   WABA_PROVIDER_ALLOW_PRIVATE_HOSTS: 'true',
+  // Partner-key calls go here; the provider's own baseUrl (where messages are sent) is a different host.
+  PINNACLE_PARTNER_API_URL: 'https://partners.pinnacle-test.io',
 });
 
 let h: Harness;
@@ -44,6 +46,7 @@ let superToken = '';
 
 const G = 'https://graph.facebook.com/v25.0';
 const PART = 'https://partners.pinnacle-test.io';
+const SEND = 'https://send.pinnacle-test.io';
 const PARTNER_KEY = 'partner-key-7788';
 const CLIENT_KEY = 'client-key-4455';
 const SOLUTION = '1829345157783527';
@@ -144,7 +147,7 @@ const defaults = (waba: string, phone: string): Rule[] => [
     body: { code: 200 },
   },
   {
-    match: new RegExp(`GET ${PART}/v3/${phone}`),
+    match: new RegExp(`GET ${SEND}/v3/${phone}`),
     status: 200,
     body: { id: phone, verified_name: 'Acme Store', display_phone_number: '+91 91122 90122' },
   },
@@ -177,7 +180,7 @@ const sup = (method: 'get' | 'post' | 'put' | 'patch' | 'delete', path: string) 
 const PROVIDER = {
   key: 'pinnacle_partner',
   label: 'Pinnacle',
-  baseUrl: PART,
+  baseUrl: SEND,
   apiVersion: 'v3',
   authScheme: 'custom_headers',
   headerTemplates: { apikey: '{{channelToken}}' },
@@ -355,6 +358,8 @@ describe('connecting a number through the partner', () => {
       business_id: 'B1',
       mmlite: 1,
     });
+    // the partner-key calls never go to the provider's sending address, and nothing is sent through the partner host
+    expect(calls.some((c) => c.url.startsWith(SEND))).toBe(false);
     // account first, then the details
     expect(calls.indexOf(create)).toBeLessThan(calls.indexOf(embedded));
 
@@ -412,7 +417,7 @@ describe('connecting a number through the partner', () => {
     const res = await api.as(t.admin).get(`/v2/waba/numbers/${made.body.connection.id}/health`);
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     const read = calls.find(
-      (c) => c.method === 'GET' && c.url.startsWith(`${PART}/v3/${ids.phone}`),
+      (c) => c.method === 'GET' && c.url.startsWith(`${SEND}/v3/${ids.phone}`),
     )!;
     expect(read.headers.apikey).toBe(CLIENT_KEY);
     expect(JSON.stringify(read.headers)).not.toContain('BISU-1');
