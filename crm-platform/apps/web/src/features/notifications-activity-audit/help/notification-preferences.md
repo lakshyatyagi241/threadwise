@@ -23,6 +23,10 @@ Every event has up to four switches:
 
 A dash in a column means that kind of event does not offer that switch.
 
+## WhatsApp groups
+
+If your plan includes WhatsApp groups, a **WhatsApp groups** section lists three events: **Request to join a group**, **Group suspended** and **Group active again**. They are for people who manage groups. Ten requests to join the same group are one line with a count. They start with the bell and the pop-up on, and sound and push off; turn push on if you want a browser notification, which shows only the group name and the kind of event. Without the feature on your plan the section is not shown. See [WhatsApp groups](help:meta-groups).
+
 ## Chat still waiting for a reply
 
 Under **Chats**, **Chat still waiting for a reply** tells you when a chat that nobody owns has had a customer message without an answer for a few minutes (5 by default; your administrator can change it). Everyone who is allowed to read and reply to the chat gets it, once: if the chat then stays unanswered it does not repeat, and it stops mattering as soon as someone is assigned, replies, opens the chat, mutes it or resolves it. If the customer writes again after someone answered and is left waiting again, you get a new one. It starts on for the bell, the pop-up and push, and off for sound. A browser notification for it shows the contact name and "Waiting for a reply", never the message.

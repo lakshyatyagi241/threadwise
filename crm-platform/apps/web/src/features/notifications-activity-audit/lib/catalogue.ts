@@ -24,6 +24,7 @@ export const NOTIFICATION_ICONS = [
   'assign',
   'mention',
   'team_chat',
+  'group',
   'device_on',
   'device_off',
   'broadcast',
@@ -58,7 +59,8 @@ export interface TypeMeta {
     | 'broadcast'
     | 'campaign'
     | 'scheduled_message'
-    | 'team_chat_channel';
+    | 'team_chat_channel'
+    | 'waba_group';
 }
 
 type Look = Pick<TypeMeta, 'icon' | 'tone' | 'subject'>;
@@ -103,6 +105,9 @@ const LOOK: Record<NotificationPrefType, Look> = {
   scheduled_failed: look('schedule', 'danger', 'scheduled_message'),
   teamchat_mention: look('mention', 'info', 'team_chat_channel'),
   teamchat_message: look('team_chat', 'info', 'team_chat_channel'),
+  waba_group_join_request: look('group', 'info', 'waba_group'),
+  waba_group_suspended: look('group', 'danger', 'waba_group'),
+  waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
 };
 
 export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEntries(
@@ -199,6 +204,10 @@ export function notificationHref(n: LinkSource): string | null {
     case 'team_chat_channel': {
       const ch = id(d.channelId) ?? fromSubject('team_chat_channel');
       return ch ? `/team-chat?c=${ch}` : null;
+    }
+    case 'waba_group': {
+      const conn = id(d.connectionId);
+      return conn ? `/waba-groups?account=${conn}` : '/waba-groups';
     }
     default:
       return null;

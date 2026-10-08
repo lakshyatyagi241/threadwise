@@ -47,6 +47,7 @@ describe('metric rules (TW-DASH-002)', () => {
       contactsMessaged: 0,
       contactsDelivered: 0,
       contactsReplied: 20,
+      contactsGoalCompleted: 0,
     });
     expect(t).toMatchObject({ readRate: 25, deliverability: 90, replyRate: 15, queued: 15 });
     expect(totalsOf(zero)).toMatchObject({

@@ -24,6 +24,7 @@ import {
   errorsQuery,
   failedRowsQuery,
   historyQuery,
+  rangeDays,
   retriesQuery,
   type AnalyticsState,
 } from '../lib/history-model';
@@ -127,12 +128,17 @@ export const retryFailed = (flowId: string) =>
 export const enrollContacts = (flowId: string, body: EnrollContactsInput) =>
   apiFetch(`${BASE}/flows/${flowId}/enroll`, { method: 'POST', body, schema: enrollResultSchema });
 
-export function useAnalytics(days: number, flowId: string) {
+export function useAnalytics(state: AnalyticsState) {
+  const window =
+    state.from || state.to
+      ? { dateFrom: state.from || undefined, dateTo: state.to || undefined }
+      : { days: rangeDays(state.range) };
+  const flowId = state.flowId;
   return useQuery({
-    queryKey: [...KEYS.analytics, days, flowId],
+    queryKey: [...KEYS.analytics, window, flowId],
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/analytics`, {
-        query: { days, flowId: flowId || undefined },
+        query: { ...window, flowId: flowId || undefined },
         schema: flowAnalyticsSchema,
         signal,
       }),

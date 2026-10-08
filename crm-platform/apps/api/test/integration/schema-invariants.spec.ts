@@ -107,11 +107,15 @@ describe('schema invariants', () => {
       child: string;
       parent: string;
       cols: string[];
+      parent_cols: string[];
     }>(`
       SELECT c.conname, rel.relname AS child, frel.relname AS parent,
              (SELECT array_agg(att.attname::text ORDER BY k.ord)
                 FROM unnest(c.conkey) WITH ORDINALITY k(attnum, ord)
-                JOIN pg_attribute att ON att.attrelid = c.conrelid AND att.attnum = k.attnum) AS cols
+                JOIN pg_attribute att ON att.attrelid = c.conrelid AND att.attnum = k.attnum) AS cols,
+             (SELECT array_agg(att.attname::text ORDER BY k.ord)
+                FROM unnest(c.confkey) WITH ORDINALITY k(attnum, ord)
+                JOIN pg_attribute att ON att.attrelid = c.confrelid AND att.attnum = k.attnum) AS parent_cols
       FROM pg_constraint c
       JOIN pg_class rel ON rel.oid = c.conrelid
       JOIN pg_class frel ON frel.oid = c.confrelid
@@ -120,9 +124,11 @@ describe('schema invariants', () => {
         AND EXISTS (SELECT 1 FROM pg_attribute a WHERE a.attrelid = c.confrelid AND a.attname = 'org_id' AND NOT a.attisdropped)
     `);
     expect(rows.length).toBeGreaterThan(200);
-    // A tenant table may reference a global table by a plain key, but never another tenant table without org_id.
+    // A tenant table may reference a global table by a plain key, but never another tenant table without org_id. What makes a
+    // reference tenant-safe is the PARENT side: the key must include the parent's org_id. The child column may be named differently
+    // (impersonation_sessions keeps the workspace it acts in as target_workspace_id, referencing users (org_id, id)).
     const offenders = rows
-      .filter((r) => !r.cols.includes('org_id'))
+      .filter((r) => !r.parent_cols.includes('org_id'))
       .map((r) => `${r.child}.${r.conname} -> ${r.parent}`);
     expect(offenders).toEqual([]);
   });

@@ -285,3 +285,37 @@ export const bulkDeleteCampaignsResponseSchema = z.object({
   message: z.string(),
 });
 export type BulkDeleteCampaignsResponse = z.infer<typeof bulkDeleteCampaignsResponseSchema>;
+
+/**
+ * "Build with AI" on the campaign builder (TW-CAMP-002, Reference `POST /wa-campaigns/api/ai-generate`): a structured brief in, the copy
+ * for a campaign out. Nothing is stored; the builder pastes the answer into its own fields.
+ */
+export const CAMPAIGN_AI_PROVIDERS = ['openai', 'anthropic', 'gemini'] as const;
+const brief = (max: number) => z.string().trim().max(max).optional();
+export const campaignAiGenerateSchema = z.object({
+  model: z.string().trim().min(1).max(120),
+  provider: z.enum(CAMPAIGN_AI_PROVIDERS),
+  businessName: z.string().trim().min(1).max(191),
+  product: brief(255),
+  goal: brief(120),
+  audience: brief(500),
+  offer: brief(500),
+  ctaLabel: brief(60),
+  ctaUrl: brief(1024),
+  tone: brief(60),
+  customPrompt: brief(2000),
+});
+export type CampaignAiGenerateInput = z.infer<typeof campaignAiGenerateSchema>;
+
+export const campaignAiGenerateResponseSchema = z.object({
+  campaign: z.object({
+    campaignName: z.string(),
+    message: z.string(),
+    footer: z.string(),
+    buttonText: z.string(),
+    buttonUrl: z.string(),
+    quickReplies: z.array(z.string()).max(3),
+  }),
+  model: z.string(),
+});
+export type CampaignAiGenerateResponse = z.infer<typeof campaignAiGenerateResponseSchema>;

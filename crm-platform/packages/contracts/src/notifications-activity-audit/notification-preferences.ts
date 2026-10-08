@@ -27,6 +27,7 @@ export const NOTIFICATION_GROUPS = [
   'devices',
   'broadcasts',
   'team_chat',
+  'whatsapp_groups',
 ] as const;
 export type NotificationGroup = (typeof NOTIFICATION_GROUPS)[number];
 
@@ -71,6 +72,16 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   scheduled_failed: { group: 'broadcasts', toast: true, sound: false, push: false },
   teamchat_mention: { group: 'team_chat', toast: true, sound: true, push: true },
   teamchat_message: { group: 'team_chat', toast: true, sound: true, push: true },
+  // BL-099: quiet defaults, like the devices and the sends. Someone waiting to join is a task for the admins, not an emergency, and a
+  // suspension is news to read; a person who wants the OS notification turns the push on.
+  waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  waba_group_suspension_cleared: {
+    group: 'whatsapp_groups',
+    toast: true,
+    sound: false,
+    push: false,
+  },
 };
 
 export const notificationPrefTypeSchema = z.enum(NOTIFICATION_PREF_TYPES);
@@ -209,3 +220,17 @@ export const teamChatNotificationDataSchema = z.object({
   direct: z.boolean().optional(),
 });
 export type TeamChatNotificationData = z.infer<typeof teamChatNotificationDataSchema>;
+
+/**
+ * `waba_group_join_request`, `waba_group_suspended`, `waba_group_suspension_cleared`. Never a member's number, never the invite link:
+ * a join request is a count, a group is named by its subject.
+ */
+export const wabaGroupNotificationDataSchema = z.object({
+  groupId: uuidSchema,
+  /** The connected number the group belongs to (the Groups screen's `?account=`). */
+  connectionId: uuidSchema.optional(),
+  groupName: z.string().nullable().optional(),
+  /** Join requests only: how many people the row stands for. */
+  count: z.number().int().min(1).optional(),
+});
+export type WabaGroupNotificationData = z.infer<typeof wabaGroupNotificationDataSchema>;

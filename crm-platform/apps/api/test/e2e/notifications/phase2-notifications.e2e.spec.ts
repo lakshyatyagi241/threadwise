@@ -172,8 +172,9 @@ describe('GET and PUT /v2/notifications/preferences', () => {
       bell: true,
       toast: true,
       sound: true,
-      defaults: { bell: true, toast: true, sound: true },
-      overrides: { bell: null, toast: null, sound: null },
+      push: true,
+      defaults: { bell: true, toast: true, sound: true, push: true },
+      overrides: { bell: null, toast: null, sound: null, push: null },
       workspaceInapp: true,
     });
     expect(items.find((i) => i.type === 'task_completed')).toMatchObject({

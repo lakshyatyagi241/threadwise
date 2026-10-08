@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { NotificationEventKey } from '../admin-console-shell/workspace-settings';
+import type { PlanFeatureKey } from '../plans-subscriptions-trials/catalogue';
 import { uuidSchema } from '../common/ids';
 import { cursorSchema, pageInfoSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
@@ -48,6 +49,13 @@ export const NOTIFICATION_TYPES = [
   'teamchat_mention',
   /** A team chat direct message to me. */
   'teamchat_message',
+  // --- WhatsApp Groups (BL-099): told to the people who hold `waba.groups.manage`, on a plan with `waba_groups` -----------------
+  /** People asked to join a WhatsApp group of the business number. One unread row per group while unread; `count` says how many. */
+  'waba_group_join_request',
+  /** Meta suspended a group (a policy action): it cannot be messaged until Meta restores it. */
+  'waba_group_suspended',
+  /** Meta restored a group that was suspended. Only for people who were told about the suspension. */
+  'waba_group_suspension_cleared',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -100,6 +108,17 @@ export const NOTIFICATION_TYPE_PREF_KEY: Partial<
   wallet_low_balance: 'wallet_low_balance',
 };
 
+/**
+ * The plan feature a type needs. A workspace whose plan lacks it gets no row of that type and the type is left out of the preferences
+ * (BL-099: the Groups notifications follow the plan gate of the Groups screen).
+ */
+export const NOTIFICATION_TYPE_PLAN_FEATURE: Partial<Record<NotificationPrefType, PlanFeatureKey>> =
+  {
+    waba_group_join_request: 'waba_groups',
+    waba_group_suspended: 'waba_groups',
+    waba_group_suspension_cleared: 'waba_groups',
+  };
+
 /** What a row is about: lets a client mark rows read by subject and open the right screen. */
 export const NOTIFICATION_SUBJECT_KINDS = [
   'conversation',
@@ -108,6 +127,7 @@ export const NOTIFICATION_SUBJECT_KINDS = [
   'campaign',
   'scheduled_message',
   'team_chat_channel',
+  'waba_group',
 ] as const;
 export const notificationSubjectKindSchema = z.enum(NOTIFICATION_SUBJECT_KINDS);
 export type NotificationSubjectKind = z.infer<typeof notificationSubjectKindSchema>;

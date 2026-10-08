@@ -1,10 +1,7 @@
 {
   "campaigns": {
     "nav": {
-      "title": "Campaigns",
-      "history": "Broadcast history",
-      "scheduled": "Scheduled broadcasts",
-      "recurring": "Recurring broadcasts"
+      "title": "Campaigns"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -13,27 +10,30 @@
       "workspace": "Workspace",
       "title": "WhatsApp",
       "titleAccent": "campaigns",
-      "intro": "Send a message, a template or a flow to your contacts, groups, tags or a list of numbers, then follow sent, delivered, read, replies and clicks.",
+      "intro": "Broadcast queues, templates, flows, schedule status, and delivery outcomes in one place.",
       "refresh": "Refresh",
-      "newCampaign": "New campaign",
+      "newCampaign": "New WA campaign",
       "tile": {
         "sent": "Sent",
         "delivered": "Delivered",
         "read": "Read",
         "failed": "Failed",
         "processing": "Processing",
-        "queued": "Queued",
+        "queued": "{count} queued",
         "campaigns": "{count} campaigns",
         "inFlight": "in flight",
-        "awaiting": "awaiting"
+        "awaiting": "awaiting",
+        "deliveredRate": "{rate}% delivery",
+        "readRate": "{rate}% read rate",
+        "failedCampaigns": "{count} failed campaigns"
       },
       "range": {
         "all": "All time",
-        "7d": "7 days",
-        "30d": "30 days",
-        "90d": "90 days"
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days"
       },
-      "search": "Search campaigns",
+      "search": "Search campaigns…",
       "selectPage": "Select this page",
       "deleteSelected": "Delete {count} selected",
       "loadError": "Could not load your campaigns.",
@@ -62,32 +62,29 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "rail": {
-        "status": "Status",
+        "status": "Campaign status",
         "types": "Message type",
         "views": {
           "all": "All campaigns",
           "recently_created": "Recently created",
           "recently_updated": "Recently updated",
           "scheduled": "Scheduled",
-          "running": "Running",
+          "running": "Processing",
           "completed": "Completed",
           "failed": "Failed"
         },
         "typeNames": {
           "all": "All types",
-          "text": "Text",
+          "text": "Custom message",
           "template": "Template",
-          "flow": "Flow"
+          "flow": "Flow builder"
         },
-        "health": "Delivery health",
-        "healthWarning": "{count} campaigns have more than 5 failures. Open their analytics to see why.",
-        "healthy": "Healthy. Average delivery rate {rate}%.",
-        "queue": "Queue health",
-        "templates": "Template approvals",
-        "devices": "Devices ready",
-        "retry": "Retry backlog",
-        "createTitle": "Create a campaign",
-        "createBody": "Pick a sender, write or choose the message, pick who gets it."
+        "tipTitle": "Tip",
+        "tip": "Schedule campaigns when your customers are active. Pair each broadcast with an approved template so failed sends are flagged before they leave the queue.",
+        "healthyTitle": "All systems healthy",
+        "attentionTitle": "Delivery needs attention",
+        "healthLine": "{rate}% avg delivery · {count} campaigns need review.",
+        "label": "Campaign filters"
       },
       "card": {
         "select": "Select {name}",
@@ -130,19 +127,60 @@
         "instant": "Send: instant",
         "template": "Template {name}"
       },
+      "noData": "No data found",
+      "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first broadcast.",
+      "createCampaign": "Create campaign",
+      "help": {
+        "label": "Help - {n}",
+        "items": {
+          "0": {
+            "title": "What is a WhatsApp campaign?",
+            "body": "A broadcast queue that sends a custom message, approved template, or flow to selected contacts through your connected device."
+          },
+          "1": {
+            "title": "How do I improve delivery?",
+            "body": "Keep lists clean, use approved templates for outbound sends, and schedule larger broadcasts instead of pushing every contact at once."
+          },
+          "2": {
+            "title": "Which campaign should I launch first?",
+            "body": "Begin with a template update or re-engagement broadcast, then compare delivered, read, and failed counts before scaling."
+          }
+        }
+      },
       "createBroadcast": "Create broadcast"
     },
     "builder": {
       "loadError": "Could not load this campaign.",
       "builderError": "Could not load the senders and templates.",
       "back": "Back",
-      "kicker": "Campaigns · New campaign",
-      "kickerEdit": "Campaigns · Edit campaign",
-      "title": "Create a",
-      "titleEdit": "Edit your",
+      "kicker": "WA campaigns / New",
+      "kickerEdit": "WA campaigns / Edit",
+      "title": "Create new WhatsApp",
+      "titleEdit": "Edit your WhatsApp",
       "titleAccent": "campaign",
       "failed": "Could not save the campaign. Try again.",
-      "preview": "Live preview",
+      "preview": {
+        "title": "Live preview",
+        "typeText": "Text",
+        "type": {
+          "template": "Template",
+          "flow": "Flow"
+        },
+        "now": "Now",
+        "scheduled": "Later",
+        "recurring": "Recurring",
+        "flow": "Each recipient starts this flow.",
+        "emptyTitle": "No preview available",
+        "emptyHint": "Pick a device, write your message body, or select a template — the preview lands here.",
+        "from": "Sent from {sender}",
+        "note": "This is how your campaign will look in each recipient's chat.",
+        "recipients": "Recipients",
+        "schedule": "Schedule",
+        "typeLabel": "Type",
+        "ab": "A/B",
+        "off": "Off",
+        "step": "Step {n} of {total}"
+      },
       "previewEmpty": "Your message preview…",
       "previewTemplate": "Template",
       "previewFlow": "Each recipient starts this flow.",
@@ -159,32 +197,74 @@
         "window": "Set both the start and the end of the sending hours, or neither.",
         "throttle": "The longest gap must be at least the shortest.",
         "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
-        "media": "Enter a full address starting with http:// or https://."
+        "media": "Enter a full address starting with http:// or https://.",
+        "sender": "Pick a sender."
       },
       "submit": {
         "save": "Save changes",
         "launch": "Launch campaign",
         "schedule": "Schedule campaign",
         "saveRecurring": "Save recurring campaign",
-        "draft": "Save as draft"
+        "draft": "Save draft"
       },
       "setup": {
         "title": "Campaign setup",
         "name": "Campaign name",
         "namePlaceholder": "e.g. Diwali offer",
         "sender": "Send from",
-        "senderHint": "Left on the default, the campaign goes out on your workspace’s main engine.",
-        "defaultSender": "Default sender"
+        "senderHint": "Only connected senders can launch a queue.",
+        "defaultSender": "Default sender",
+        "nameHint": "Internal label for reports and queue history.",
+        "noSenders": "No connected senders.",
+        "connectOne": "Connect one →",
+        "type": "Campaign type",
+        "types": {
+          "custom": {
+            "title": "Custom message",
+            "hint": "Write text and attach media or buttons for a one-off broadcast."
+          },
+          "template": {
+            "title": "Use template",
+            "hint": "Pick an approved Meta template for marketing or utility messages."
+          },
+          "flow": {
+            "title": "Flow builder",
+            "hint": "Start a saved flow for every recipient in this queue."
+          }
+        },
+        "ab": "Enable A/B test",
+        "abHint": "Split recipients between two message variants.",
+        "split": "Variant A split {a}%",
+        "splitHint": "Variant B receives the remaining audience. Set Variant B content in the Compose step.",
+        "pickSender": "— Select a sender —"
       },
       "audience": {
         "title": "Audience",
-        "numbers": "Type numbers",
-        "numbersHint": "One per line, or separated by commas. Each becomes a contact.",
+        "numbers": "Manual numbers",
+        "numbersHint": "One per line, comma, or semicolon. Country code required (with or without +).",
         "csv": "Upload a CSV",
         "sample": "Download a sample",
         "csvTooBig": "That file is over 5 MB.",
         "csvHint": "Columns: name, country_code, phone. Any other column becomes a variable you can use in the message.",
-        "selected": "{count} contacts selected"
+        "selected": "{count} contacts selected",
+        "tag": "audience",
+        "modes": {
+          "audience": {
+            "title": "Contact groups",
+            "hint": "Use saved segments and tags."
+          },
+          "csv": {
+            "title": "Upload CSV",
+            "hint": "Import numbers for this queue."
+          },
+          "manual": {
+            "title": "Manual numbers",
+            "hint": "Paste one number per line."
+          }
+        },
+        "csvRows": "{count} numbers in the file",
+        "numbersPlaceholder": "One number per line — include the country code, no plus sign",
+        "numbersCount": "{count} numbers"
       },
       "message": {
         "title": "Message",
@@ -248,15 +328,15 @@
         "schedule": {
           "now": {
             "title": "Send now",
-            "hint": "Starts as soon as you launch"
+            "hint": "Launch after validation."
           },
           "scheduled": {
-            "title": "Schedule",
-            "hint": "Once, at a date and time"
+            "title": "Schedule later",
+            "hint": "Pick date and time."
           },
           "recurring": {
             "title": "Recurring",
-            "hint": "Again and again"
+            "hint": "Repeat on a schedule."
           }
         },
         "date": "Send date",
@@ -269,26 +349,251 @@
           "monthly": "Every month"
         },
         "repeatUntil": "Repeat until",
-        "repeatUntilHint": "Leave empty to repeat until you stop it.",
+        "repeatUntilHint": "Leave blank to repeat forever.",
         "expires": "Auto-end date (optional)",
-        "expiresHint": "After this moment nothing more is sent, whatever is left.",
+        "expiresHint": "Stop sending after this date & time (in the campaign time zone). Leave blank to use the platform default.",
         "smart": "Smart Delivery",
         "smartHint": "Optional pacing to protect your number. Blank uses the platform default.",
         "default": "Default",
-        "throttleMin": "Shortest gap (s)",
-        "throttleMax": "Longest gap (s)",
-        "throttleHint": "A random gap in this range before each message.",
+        "throttleMin": "Delay between messages — min (s)",
+        "throttleMax": "Delay between messages — max (s)",
+        "throttleHint": "Random wait per recipient, e.g. 8–25s. A range beats a fixed gap.",
         "batchSize": "Batch size",
         "batchPause": "Pause between batches (min)",
-        "batchHint": "Send this many, then rest.",
-        "dailyLimit": "Daily limit",
-        "dailyHint": "Stops for the day at this many; the rest goes the next day.",
-        "windowStart": "Send from",
-        "windowEnd": "Send until",
-        "windowHint": "Only send inside these hours, in the time zone above.",
-        "tracking": "Track link clicks"
+        "batchHint": "Messages per batch before a longer pause.",
+        "dailyLimit": "Daily send limit",
+        "dailyHint": "Max per day — extra recipients auto-resume the next day.",
+        "windowStart": "Active hours — from",
+        "windowEnd": "Active hours — to",
+        "windowHint": "Only send within these hours, in {zone} (the campaign time zone set above). Outside the window the run waits for the next opening. Leave both blank to send any time.",
+        "tracking": "Track link clicks",
+        "title": "Schedule & limits",
+        "queue": "queue",
+        "repeatHint": "How often a recurring campaign re-sends.",
+        "smartTag": "anti-ban · optional",
+        "smartIntro": "Leave blank to use the workspace default pacing. These rules space out sending so a large list looks human and stays under WhatsApp's ban radar.",
+        "smartZone": "Times in {zone}.",
+        "throttleMaxHint": "The longest wait before a message.",
+        "batchPauseHint": "Minutes to rest after each batch."
       },
-      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number."
+      "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
+      "draftChip": "Draft / unsaved",
+      "steps": {
+        "label": "Campaign steps",
+        "required": "required",
+        "previous": "Previous",
+        "next": "Next",
+        "of": "Step {n} of {total}",
+        "setup": {
+          "name": "Setup"
+        },
+        "compose": {
+          "name": "Compose"
+        },
+        "recipients": {
+          "name": "Recipients"
+        },
+        "schedule": {
+          "name": "Schedule"
+        },
+        "review": {
+          "name": "Review"
+        }
+      },
+      "compose": {
+        "title": "Compose",
+        "kind": {
+          "custom": "Custom message",
+          "template": "Template",
+          "flow": "Flow builder"
+        },
+        "header": "Header",
+        "headerNote": "optional",
+        "headerText": "Header text",
+        "headerPlaceholder": "e.g. May offer is live",
+        "required": "required",
+        "body": "Body",
+        "bodyPlaceholder": "Hi '{{name}}'! …",
+        "bodyHint": "Use '{{name}}' or '{{first_name}}' to personalise. Type / for any attribute.",
+        "variantB": "Variant B message",
+        "variantBNote": "A/B test — Variant A is the message above",
+        "variantBPlaceholder": "Alternate message for the Variant B audience…",
+        "variantBHint": "Recipients in the Variant B half receive this message instead of the Variant A one above. Media, buttons, header and footer are shared across both variants.",
+        "attachment": "Attachment",
+        "attachmentNote": "optional / image, video, or document",
+        "attachmentType": "Attachment type",
+        "attachments": {
+          "none": {
+            "name": "None"
+          },
+          "image": {
+            "name": "Image",
+            "title": "Choose an image",
+            "hint": "JPG or PNG, max 2 MB."
+          },
+          "video": {
+            "name": "Video",
+            "title": "Choose a video",
+            "hint": "MP4, max 16 MB."
+          },
+          "document": {
+            "name": "Document",
+            "title": "Choose a document",
+            "hint": "PDF or DOC, max 16 MB."
+          }
+        },
+        "noAttachment": "No attachment — a plain text message.",
+        "footer": "Footer",
+        "footerNote": "optional / max 60",
+        "footerPlaceholder": "e.g. Reply STOP to opt out",
+        "footerHint": "Plain text under the body. No variables.",
+        "buttons": "Buttons",
+        "buttonsNote": "optional / up to 3",
+        "modes": {
+          "cta": "Call to action",
+          "reply": "Quick reply",
+          "mix": "Mix"
+        },
+        "buttonType": "Button type",
+        "buttonTypes": {
+          "url": "Visit website",
+          "phone_number": "Call phone",
+          "quick_reply": "Quick reply",
+          "copy_code": "Copy code"
+        },
+        "buttonText": "Button text",
+        "buttonValue": "Value",
+        "buttonPhone": "Number with country code",
+        "removeButton": "Remove",
+        "addCta": "Add CTA button",
+        "addReply": "Add quick reply",
+        "templateIntro": "Pick a template - Unofficial API is active, so any template works (Meta approval not required). Variables are filled at send time from contact attributes.",
+        "template": "Template",
+        "approvedOnly": "Only approved templates can launch on WABA.",
+        "anyTemplate": "All templates can be used with the Unofficial API.",
+        "pickTemplate": "Select a template",
+        "noTemplates": "No templates yet.",
+        "createTemplate": "Create a template",
+        "variantBTemplate": "Variant B template",
+        "variantBTemplateHint": "A/B test — Variant A is selected above. Variable values are filled in for this template on its own.",
+        "sameTemplate": "— same template as A —",
+        "flowIntro": "Run a saved flow for every recipient. The flow's first message is the campaign trigger; downstream nodes follow each contact's replies.",
+        "flow": "Flow",
+        "pickFlow": "Select a flow",
+        "noFlows": "No flows yet.",
+        "createFlow": "Create a flow",
+        "variantBFlow": "Variant B flow",
+        "variantBFlowHint": "Recipients in the Variant B half run this flow instead of the Variant A one above.",
+        "sameFlow": "— same flow as A —",
+        "engineNotes": {
+          "twilio": "Twilio custom messages send text + media only. For buttons, create a Template campaign (Twilio Content SID).",
+          "waba": "WABA custom messages only reach contacts who messaged you in the last 24 hours. For cold or bulk sends — and for buttons — use a Template campaign."
+        },
+        "templateEmpty": {
+          "twilio": "No Twilio templates yet. Create one with a Content SID on the Templates page.",
+          "waba": "No approved Meta (WABA) templates for this number yet. Create or get one approved on the Templates page.",
+          "baileys": "No Unofficial API templates yet. Create one on the Templates page."
+        },
+        "templateIntroApproved": "Pick an approved Meta template. Per-contact variable values are filled at send time from contact attributes.",
+        "templateApproved": "Approved template"
+      },
+      "review": {
+        "title": "Review",
+        "tag": "confirm",
+        "device": "Device",
+        "type": "Type",
+        "recipients": "Recipients",
+        "schedule": "Schedule",
+        "types": {
+          "custom": "Custom message",
+          "template": "Template",
+          "flow": "Flow builder"
+        },
+        "now": "Sending immediately",
+        "recurring": "Recurring · {every}",
+        "checklist": "Validation checklist",
+        "summary": "Recipients summary",
+        "groups": "Contact groups and tags",
+        "contacts": "Individual contacts",
+        "numbers": "Manual / CSV numbers",
+        "total": "Total recipients",
+        "estimate": "An estimate: a contact in two groups is counted twice. The queue removes duplicates when it is built.",
+        "checks": {
+          "name": "Campaign name is set",
+          "content": "Message is ready",
+          "audience": "Recipients are chosen",
+          "schedule": "Schedule is valid",
+          "sender": "Sender is chosen"
+        },
+        "problems": {
+          "name": "Give the campaign a name.",
+          "message": "Write the message.",
+          "template": "Pick a template.",
+          "flow": "Pick a flow.",
+          "audience": "Pick who to send it to: contacts, a group, a tag, numbers or a CSV.",
+          "date": "Pick the send date.",
+          "time": "Pick the send time.",
+          "window": "Set both the start and the end of the sending hours, or neither.",
+          "throttle": "The longest gap must be at least the shortest.",
+          "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
+          "media": "Enter a full address starting with http:// or https://.",
+          "sender": "Pick a sender."
+        }
+      },
+      "ai": {
+        "open": "Build with AI",
+        "eyebrow": "WA campaigns / AI",
+        "title": "Build with",
+        "titleAccent": "AI",
+        "close": "Close",
+        "cancel": "Cancel",
+        "generate": "Generate campaign",
+        "intro": "Draft a campaign message, footer, CTA, and quick replies in seconds.",
+        "model": "AI model",
+        "modelsError": "Could not load the models.",
+        "noModels": "No AI provider is enabled for this workspace.",
+        "loadingModels": "Loading models…",
+        "pickModel": "Select a model",
+        "yourKey": "your key",
+        "business": "Business name",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Product or service",
+        "productPlaceholder": "Seasonal bouquets · same-day delivery",
+        "goal": "Campaign goal",
+        "pickGoal": "Select goal",
+        "goals": {
+          "purchase": "Drive a purchase",
+          "booking": "Drive a booking",
+          "sale": "Promote a sale",
+          "reengage": "Re-engage cold contacts",
+          "feedback": "Collect feedback",
+          "launch": "Announce a launch",
+          "reminder": "Send a reminder",
+          "festival": "Festival greeting"
+        },
+        "tone": "Tone",
+        "pickTone": "Select tone",
+        "tones": {
+          "friendly": "Friendly",
+          "professional": "Professional",
+          "urgent": "Urgent",
+          "playful": "Playful",
+          "premium": "Premium",
+          "empathetic": "Empathetic"
+        },
+        "ctaLabel": "CTA button label",
+        "ctaLabelPlaceholder": "Shop now",
+        "ctaUrl": "CTA destination URL",
+        "audience": "Target audience",
+        "audiencePlaceholder": "Repeat customers who bought a bouquet in the last 90 days",
+        "offer": "Offer / hook",
+        "offerPlaceholder": "15% off spring bouquets this weekend, free delivery over $40",
+        "notes": "Additional notes",
+        "notesNote": "optional / max 2000",
+        "notesPlaceholder": "Anything specific — must-have phrases, what to avoid, brand voice cues…",
+        "failed": "Could not generate the campaign. Try again.",
+        "applied": "The campaign copy was filled in. Review it before you go on."
+      }
     },
     "detail": {
       "notFound": "That campaign was not found.",
@@ -1015,77 +1320,6 @@
         "pm": "PM",
         "hour": "Hour",
         "minute": "Minute"
-      }
-    },
-    "history": {
-      "create": "Create broadcast",
-      "open": "Open",
-      "new": "New",
-      "loading": "Loading broadcasts",
-      "pager": "Pages",
-      "page": "Page {page}",
-      "previous": "Previous",
-      "next": "Next",
-      "noMatchTitle": "Nothing matches",
-      "noMatch": "No broadcast matches these filters. Change or clear them.",
-      "runNumber": "Run {n}",
-      "type": {
-        "now": "Broadcast now",
-        "scheduled": "Scheduled",
-        "recurring": "Recurring run"
-      },
-      "filters": {
-        "search": "Search by name",
-        "searchPlaceholder": "Broadcast name",
-        "type": "Type",
-        "allTypes": "All types",
-        "status": "Status",
-        "allStatuses": "All statuses",
-        "from": "From",
-        "to": "To",
-        "clear": "Clear filters"
-      },
-      "col": {
-        "name": "Name",
-        "type": "Type",
-        "template": "Template",
-        "audience": "Audience",
-        "sent": "Sent",
-        "delivered": "Delivered",
-        "failed": "Failed",
-        "status": "Status",
-        "started": "Started",
-        "finished": "Finished",
-        "sender": "Sent from",
-        "runAt": "Runs at",
-        "countdown": "Starts",
-        "actions": "Actions",
-        "rule": "Repeats",
-        "nextRun": "Next run",
-        "lastRun": "Last run",
-        "runs": "Runs",
-        "run": "Run"
-      },
-      "history": {
-        "title": "Broadcast history",
-        "hint": "Every broadcast that has run or is running, newest first: sent now, scheduled, and the runs of recurring broadcasts.",
-        "empty": "No broadcast has been sent yet."
-      },
-      "scheduled": {
-        "title": "Scheduled broadcasts",
-        "hint": "Broadcasts waiting for their time, soonest first. Each one starts by itself.",
-        "empty": "No broadcast is waiting for its time.",
-        "zone": "Times are shown in {zone}."
-      },
-      "recurring": {
-        "title": "Recurring broadcasts",
-        "hint": "Broadcasts that repeat on a schedule. Open a row to see the runs it has started.",
-        "empty": "No recurring broadcast yet.",
-        "showRuns": "Show runs",
-        "hideRuns": "Hide runs",
-        "runs": "Runs",
-        "noRuns": "No run has started yet.",
-        "cancel": "Cancel series"
       }
     }
   }

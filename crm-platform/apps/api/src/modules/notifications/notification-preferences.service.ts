@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   NOTIFICATION_CATALOG,
   NOTIFICATION_PREF_TYPES,
+  NOTIFICATION_TYPE_PLAN_FEATURE,
   resolveNotificationChannels,
   type NotificationPreferenceItem,
   type NotificationPreferencesResponse,
@@ -12,6 +13,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { NotificationPrefsResolver } from './notification-prefs.resolver';
 import { NotificationsRepository } from './notifications.repository';
 
@@ -25,6 +27,9 @@ const NONE: StoredUserPref = { bell: null, toast: null, sound: null, push: null 
  * else's. The stored document is sparse (a channel left unset inherits the owner's toggle, then the catalogue default), and the
  * producers read it through `NotificationsRepository.channelsFor`, so what this screen shows is exactly what the producers do.
  *
+ * A type that needs a plan feature (`NOTIFICATION_TYPE_PLAN_FEATURE`: the WhatsApp Groups ones) is left out of the list when the
+ * workspace's plan lacks it, so a person never sees a switch for something that cannot reach them. The producers apply the same gate.
+ *
  * Changing a preference is audited (who, which type and channel, from what to what) in the same transaction as the write. Sending the
  * same update twice changes nothing and audits nothing.
  */
@@ -35,6 +40,7 @@ export class NotificationPreferencesService {
     private readonly repo: NotificationsRepository,
     private readonly workspace: NotificationPrefsResolver,
     private readonly audit: AuditService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   private caller(): { orgId: number; userId: number } {
@@ -89,7 +95,15 @@ export class NotificationPreferencesService {
     const items: NotificationPreferenceItem[] = [];
     // A person who just asked the owner to change a toggle expects to see it: this read is rare, so it skips the producers' short cache.
     this.workspace.forget(orgId);
+    const offered = new Map<string, boolean>();
     for (const type of NOTIFICATION_PREF_TYPES) {
+      const feature = NOTIFICATION_TYPE_PLAN_FEATURE[type];
+      if (feature) {
+        if (!offered.has(feature)) {
+          offered.set(feature, await this.entitlements.featureEnabled(orgId, feature));
+        }
+        if (!offered.get(feature)) continue;
+      }
       const own = stored.get(type) ?? NONE;
       const workspaceInapp = await this.workspace.inappAllowed(orgId, type);
       const base = NOTIFICATION_CATALOG[type];

@@ -143,3 +143,29 @@ Spec `apps/web/e2e/campaigns/parity/TW-CAMP-004.twin.mjs`, depth full, against t
 | Structure (landmarks, markup counts, nav collapse)                    | differs by design (our shell, a table instead of a wizard step); reviewed, no defect                                                                                                   |
 
 Small touch targets (fixed after the run): the 16 px checkboxes in the audience picker are now 24 px inside a 44 px clickable cell, and the chip checkboxes cover their whole chip; the probe's count fell from 33 to 6 (Reference 5, the rest outside the picker). Not covered: the launch path (it sends), a broadcast-screen twin.
+
+## Playwright twin run: TW-CAMP-002 (campaigns list and the five-step campaign builder)
+
+Spec `apps/web/e2e/campaigns/parity/TW-CAMP-002.twin.mjs` (with `TW-CAMP-004.twin.mjs` updated to walk Setup and Compose first), depth full, against the running Reference and this branch. The builder is now Reference's five steps (Setup, Compose, Recipients, Schedule, Review) with the live preview beside them, the "Draft / unsaved" chip, **Build with AI** and **Save draft** in the header; the list has Reference's tip card, five tiles with their sub-lines, the status and message-type views, the date pills, the "No data found" state and three help cards.
+
+| Area                                                                                            | Result                                                     |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| List: heading, five tiles, seven status views, four type views, range pills, search, help cards | same (27 checks)                                           |
+| List: a search with no match                                                                    | "No data found", Reset filters and Create campaign on both |
+| Builder: five steps, three campaign types, A/B, Build with AI, Save draft, draft chip, preview  | same (15 checks)                                           |
+| Build with AI dialog                                                                            | same nine fields and the Generate button (11 checks)       |
+| Next with no name                                                                               | stays on Setup on both                                     |
+| Page probes (load, accessibility, degraded, auth, perf) on the list and the builder             | same, after the fixes below                                |
+| Audience scenarios on ours (rows and filters, consent filter, a segment as audience)            | pass through the new Recipients step                       |
+
+Fixed after the first run: the list showed a spinner through the read retries when every request failed (it now shows its error state at once); heading order (the help cards are `h2`); two `main` landmarks (the pages sit inside the shell's); unlabelled `aside` landmarks; missing focus rings on the choice cards, stepper, button tabs, date pills and rail rows.
+
+Also fixed after the last runs: the 16 px select checkboxes and the short campaign names were under the 24 px touch-target floor; the keyboard probe's one stop without a focus ring is the Next.js dev-tools button, which only the dev server renders (intended, recorded in both specs). The final run has no defects; the 18 review items are structure counts that differ by design (our shell and left sidebar instead of Reference's top menu, more buttons and landmarks in the shell).
+
+The sending number decides what a campaign can be, as in Reference's engine gate (`lib/engine-gate.ts`): a Meta number (the workspace's "Test Number" included) offers only **Use template**, shows only that number's approved templates under the label "Approved template", and drops buttons; a Twilio number keeps custom text and media but drops buttons and shows its own templates; the unofficial engine keeps everything. With no number picked, every type and every template is offered, exactly as Reference's builder starts (its sender list starts on "Select a sender"); the gate applies only once a number is chosen, and clearing the choice brings everything back. The sender list has no "Default sender" entry: it starts on "Select a sender" and Setup will not go on without one (a draft can still be saved without), as in Reference. The server already enforced the matching rules (custom sends on Meta, buttons on Meta and Twilio, pacing for the official engines).
+
+Not verified: Reference's own Compose, Recipients, Schedule and Review steps stay behind "Add a WhatsApp device" until a device is connected, so those steps were compared from Reference's source (the field names and copy) and not live. "Build with AI" was run against a stubbed vendor (e2e) and never against a real OpenAI, Anthropic or Gemini key.
+
+## Removed: Broadcast history, Scheduled broadcasts and Recurring broadcasts (owner request 2026-10-08)
+
+The three Campaigns menu entries and their pages (`/campaigns/history`, `/campaigns/scheduled`, `/campaigns/recurring`), their screens and tests (`features/campaigns/history/`), the "Broadcast history" help guide and the `campaigns.history` messages are gone. After a wizard launch the person now lands on that broadcast's own status page (`/campaigns/wizard/broadcasts/<id>`), which keeps the runs, the next run, the retries and pause, resume and cancel; the Broadcasts screen still lists wizard broadcasts at the top. Left in place on purpose: the API's `GET /broadcast-wizard/history` and its contract (no screen reads it now) and the two sort-index migrations behind it; removing them is a separate API and migration decision.

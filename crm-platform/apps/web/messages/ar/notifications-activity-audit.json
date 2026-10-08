@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, zero {# رسالة جديدة من {author}} one {رسالة جديدة من {author}} two {رسالتان جديدتان من {author}} few {# رسائل جديدة من {author}} many {# رسالة جديدة من {author}} other {# رسالة جديدة من {author}}}",
         "titleNoName": "{count, plural, zero {# رسالة مباشرة جديدة} one {رسالة مباشرة جديدة} two {رسالتان مباشرتان جديدتان} few {# رسائل مباشرة جديدة} many {# رسالة مباشرة جديدة} other {# رسالة مباشرة جديدة}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, zero {لا طلبات للانضمام إلى «{name}»} one {طلب انضمام إلى «{name}»} two {طلبان للانضمام إلى «{name}»} few {# طلبات للانضمام إلى «{name}»} many {# طلبًا للانضمام إلى «{name}»} other {# طلب للانضمام إلى «{name}»}}",
+        "titleNoName": "{count, plural, zero {لا طلبات للانضمام إلى مجموعة واتساب} one {طلب انضمام إلى مجموعة واتساب} two {طلبان للانضمام إلى مجموعة واتساب} few {# طلبات للانضمام إلى مجموعة واتساب} many {# طلبًا للانضمام إلى مجموعة واتساب} other {# طلب للانضمام إلى مجموعة واتساب}}",
+        "body": "افتح المجموعات للموافقة أو الرفض."
+      },
+      "waba_group_suspended": {
+        "title": "تم تعليق «{name}»",
+        "titleNoName": "تم تعليق مجموعة واتساب",
+        "body": "علّقت واتساب هذه المجموعة. لا يمكنك مراسلتها حتى تعيدها."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "عادت «{name}» إلى العمل",
+        "titleNoName": "عادت مجموعة واتساب إلى العمل",
+        "body": "أعادت واتساب هذه المجموعة. يمكنك مراسلتها من جديد."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "تم إرسال رسالة مجدولة",
         "scheduled_failed": "فشل إرسال رسالة مجدولة",
         "teamchat_mention": "أشار إليك أحد في دردشة الفريق",
-        "teamchat_message": "رسالة مباشرة جديدة"
+        "teamchat_message": "رسالة مباشرة جديدة",
+        "waba_group_join_request": "طلب انضمام إلى مجموعة",
+        "waba_group_suspended": "تم تعليق مجموعة واتساب",
+        "waba_group_suspension_cleared": "عادت مجموعة واتساب إلى العمل"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "المحفظة",
         "devices": "أرقام واتساب",
         "broadcasts": "البث والحملات",
-        "team_chat": "دردشة الفريق"
+        "team_chat": "دردشة الفريق",
+        "whatsapp_groups": "مجموعات واتساب"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "شحن المحفظة",
           "hint": "تم شحن محفظة مساحة العمل."
+        },
+        "waba_group_join_request": {
+          "label": "طلب انضمام إلى مجموعة",
+          "hint": "يطلب أشخاص الانضمام إلى مجموعة واتساب على رقم نشاطك. عشرة طلبات تظهر في سطر واحد."
+        },
+        "waba_group_suspended": {
+          "label": "تعليق مجموعة",
+          "hint": "علّقت واتساب إحدى مجموعاتك."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "عودة مجموعة إلى العمل",
+          "hint": "أعادت واتساب مجموعة كانت قد علّقتها. فقط إذا أُبلغت بالتعليق."
         }
       },
       "loading": "جارٍ تحميل تفضيلاتك",
