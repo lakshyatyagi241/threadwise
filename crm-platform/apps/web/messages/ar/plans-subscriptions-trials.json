@@ -64,7 +64,8 @@
       "invoicing": "الفواتير",
       "forms_and_links": "النماذج والروابط",
       "extra_channels": "تيليجرام وفيسبوك وإنستجرام",
-      "form_builder": "النماذج"
+      "form_builder": "النماذج",
+      "waba_groups": "مجموعات واتساب"
     },
     "limitGroups": {
       "messaging": "المراسلة",
