@@ -3,9 +3,13 @@ import { and, eq, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { escapeLike } from '../contacts/contact-conditions';
-import type { SegmentShareView } from './segments.mapper';
 
 const { segments, segmentShares } = schema;
+
+export interface SegmentShareView {
+  users: Array<{ uuid: string; name: string; email: string }>;
+  teams: Array<{ uuid: string; name: string; memberCount: number }>;
+}
 
 export type SegmentVisibilityValue = 'private' | 'shared' | 'specific';
 
