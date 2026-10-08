@@ -28,7 +28,7 @@ const usage = (over: Partial<BillingUsageResponse> = {}): BillingUsageResponse =
   planSlug: 'pro',
   planName: 'Pro',
   validity: {
-    state: 'paid',
+    state: 'paid_active',
     trialEndsAt: null,
     planEndsAt: '2026-12-01T00:00:00.000Z',
     daysLeft: 40,
