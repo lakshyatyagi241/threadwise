@@ -3,12 +3,21 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { aiUsageResponseSchema, type AiUsageWindow } from '@crm/contracts';
+import { aiUsageResponseSchema } from '@crm/contracts';
 import { Alert, Card, StatTile } from '@crm/ui';
 import { apiFetch } from '@/lib/api/client';
 import { compactNumber, dollars } from '../lib/format';
 import { ErrorBlock, LoadingBlock } from '../shared/state';
-import { DailyBars, ShareBars, SourceSplit, WindowSwitch } from '../shared/usage-view';
+import {
+  DEFAULT_USAGE_RANGE,
+  DailyBars,
+  ShareBars,
+  SourceSplit,
+  WindowSwitch,
+  usageRangeQuery,
+  usageRangeReady,
+  type UsageRangeValue,
+} from '../shared/usage-view';
 import { AI_KEYS } from './api';
 
 const NS = 'ai-keys-usage-admin.usage';
@@ -18,12 +27,17 @@ export function UsagePage() {
   const t = useTranslations(NS);
   const tc = useTranslations('ai-keys-usage-admin.common');
   const locale = useLocale();
-  const [window, setWindow] = useState<AiUsageWindow>('30d');
+  const [range, setRange] = useState<UsageRangeValue>(DEFAULT_USAGE_RANGE);
   const q = useQuery({
-    queryKey: [...AI_KEYS.usage, window],
+    queryKey: [...AI_KEYS.usage, range],
     queryFn: ({ signal }) =>
-      apiFetch('/ai/usage', { query: { window }, schema: aiUsageResponseSchema, signal }),
+      apiFetch('/ai/usage', {
+        query: usageRangeQuery(range),
+        schema: aiUsageResponseSchema,
+        signal,
+      }),
     placeholderData: keepPreviousData,
+    enabled: usageRangeReady(range),
   });
   const num = (n: number) => new Intl.NumberFormat(locale).format(n);
 
@@ -34,7 +48,7 @@ export function UsagePage() {
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('title')}</h1>
           <p className="text-sm text-muted-foreground">{t('description')}</p>
         </div>
-        <WindowSwitch value={window} onChange={setWindow} />
+        <WindowSwitch value={range} onChange={setRange} />
       </header>
 
       {q.isPending ? (

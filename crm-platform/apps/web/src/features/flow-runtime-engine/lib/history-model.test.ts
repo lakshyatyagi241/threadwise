@@ -67,10 +67,16 @@ describe('queries', () => {
     expect(retriesQuery({ ...s, outcome: 'failed' })).toMatchObject({ outcome: 'failed' });
   });
 
-  it('errors and retry records follow the period and the flow only', () => {
-    const s = { ...DEFAULT_ANALYTICS_STATE, flowId: FLOW, from: '2026-09-01', q: 'x' };
-    expect(errorsQuery(s)).toEqual({ flowId: FLOW, days: 30 });
-    expect(failedRowsQuery(s)).toMatchObject({ flowId: FLOW, status: 'failed', days: 30 });
+  it('errors and retry records follow the period (chip or custom dates) and the flow only', () => {
+    const chip = { ...DEFAULT_ANALYTICS_STATE, flowId: FLOW, q: 'x' };
+    expect(errorsQuery(chip)).toEqual({ flowId: FLOW, days: 30 });
+    expect(failedRowsQuery(chip)).toMatchObject({ flowId: FLOW, status: 'failed', days: 30 });
+    const custom = { ...chip, from: '2026-09-01', to: '2026-09-10' };
+    expect(errorsQuery(custom)).toEqual({
+      flowId: FLOW,
+      dateFrom: '2026-09-01',
+      dateTo: '2026-09-10',
+    });
   });
 
   it('knows when the history is narrowed', () => {
