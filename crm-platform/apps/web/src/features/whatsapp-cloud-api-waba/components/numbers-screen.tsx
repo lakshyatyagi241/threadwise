@@ -14,6 +14,7 @@ import {
   useSetPrimary,
 } from '../api/hooks';
 import { WorkspaceProviderNote } from '@/features/whatsapp-providers';
+import { RemoveNumberMessage } from '../groups/remove-number-warning';
 import { cardTitle } from '../lib/display';
 import { ConnectEmbeddedModal } from './connect-embedded-modal';
 import { ConnectManualModal } from './connect-manual-modal';
@@ -252,7 +253,15 @@ export function NumbersScreen() {
       <ConfirmDialog
         open={confirmKey !== null}
         title={confirmKey ? tc(`card.confirm.${confirmKey}Title`) : ''}
-        message={confirmKey ? tc(`card.confirm.${confirmKey}Message`) : ''}
+        message={
+          confirmKey === 'remove' && pending ? (
+            <RemoveNumberMessage id={pending.conn.id} message={tc('card.confirm.removeMessage')} />
+          ) : confirmKey ? (
+            tc(`card.confirm.${confirmKey}Message`)
+          ) : (
+            ''
+          )
+        }
         confirmLabel={confirmKey ? tc(`card.confirm.${confirmKey}`) : ''}
         cancelLabel={tc('common.cancel')}
         tone={confirmKey === 'disconnect' || confirmKey === 'remove' ? 'danger' : 'default'}

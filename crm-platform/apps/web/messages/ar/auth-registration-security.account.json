@@ -544,7 +544,8 @@
             "invoicing": "الفوترة",
             "forms_and_links": "النماذج والروابط",
             "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
-            "form_builder": "النماذج"
+            "form_builder": "النماذج",
+            "waba_groups": "مجموعات واتساب"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

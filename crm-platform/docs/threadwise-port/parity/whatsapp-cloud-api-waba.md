@@ -80,3 +80,20 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/threadwise-port/waba-int
   again in the send worker and in the Meta builders, and the inbox composer is switched off on a group thread with the line "Sending to WhatsApp groups is not available yet.
   Reply from the WhatsApp Business app." (en, ar). Sending stays `blocked` until phase 3.
 - Nothing about groups ran against real Meta (no Official Business Account is available); the Meta facts in the spec are from a summary of its docs and need re-reading.
+
+## Meta Groups management (BL-094 phases 1 and 2, built 2026-10-08)
+
+Spec: [waba-groups-management.md](../../specs/waba-groups-management.md). Reference source: `WabaGroupsController`, `GroupClient`, `waba-groups/index.blade.php`.
+
+Intended differences (each approved by the owner's answers of 2026-10-08, spec section 20):
+
+- **Plan gate**: Reference had none; ours needs plan feature `waba_groups` (D1 override). Every route refuses reads too (422 `PLAN_FEATURE_LOCKED`).
+- **Permissions** `waba.groups.read|create|manage|delete` instead of the workspace admin role (D2).
+- **Edit settings and Members screens**: Reference has the routes but no control; ours builds both (D3). Members are read from Meta on demand and never stored.
+- **Join request failures** show as a toast, not `alert()`; the create/reset/delete forms are modals and calls, not full-page POSTs; counts and numbers of people waiting are shown only with `waba.groups.manage`.
+- **Idempotency-Key, rate budget (30 changes per minute per number), retry once on a transient failure** (not create, not remove); delete treats 131041 as done after a retry.
+- **Refused routes**: a number on Interakt or a registry provider answers `WABA_GROUPS_PROVIDER_UNSUPPORTED` (Reference always called Meta directly).
+- **Audit and outbox events** on every change (Reference logged none); the thread title follows a rename.
+- Numbers pages ask no capacity figures (D9). Sending to a group and the suspended-group refusal (D8, D10) are phase 3, not built.
+
+Not verified: everything about Meta. No Official Business Account exists to test with (BL-030); the client and the screens were exercised only against `test/support/fake-waba-groups-gateway.ts`. The 15 operator sentences and error codes are Reference's, not re-verified. The reference screen was not run side by side (threadwise-playwright-parity not run for this change). Not built: Socket.IO push and notifications for the group events (BL-099).

@@ -1404,7 +1404,8 @@
             "invoicing": "Invoices, credit notes, payments, sales orders and tax rates.",
             "forms_and_links": "Lead capture forms and shareable links.",
             "extra_channels": "The Telegram, Facebook and Instagram channels.",
-            "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch."
+            "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
+            "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account."
           },
           "units": {
             "days": "Days",
@@ -1581,7 +1582,8 @@
             "invoicing": "Invoicing (invoices, credit notes, recurring invoices)",
             "forms_and_links": "Forms, click-to-chat links and groups",
             "extra_channels": "Telegram, Facebook and Instagram channels",
-            "form_builder": "Forms (web form builder)"
+            "form_builder": "Forms (web form builder)",
+            "waba_groups": "WhatsApp groups (Cloud API)"
           },
           "problems": {
             "required": "This field is required.",
