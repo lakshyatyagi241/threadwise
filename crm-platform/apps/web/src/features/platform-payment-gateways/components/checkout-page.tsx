@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import type { PaygwBilling, PaygwPeriod, PaygwQuote } from '@crm/contracts';
@@ -230,14 +231,32 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           if (selected) pay.mutate();
         }}
       >
-        <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-          <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
+        <header className="space-y-2">
+          <ol className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <Step n={1} tone="done" label={t('steps.plan')} />
+            <Step n={2} tone="current" label={t('steps.checkout')} />
+            <Step n={3} tone="todo" label={t('steps.confirmation')} />
+          </ol>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {target.kind === 'plan' ? (
+              <>
+                {t('titleFirst')}{' '}
+                <em className="font-semibold italic text-primary">{t('titleSecond')}</em>
+              </>
+            ) : (
+              title
+            )}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {q.refund.enabled && q.refund.days > 0
+              ? t('subtitleRefund', { days: q.refund.days })
+              : t('subtitle')}
+          </p>
         </header>
         {problem && <Alert tone="danger">{problem}</Alert>}
 
         <Card className="space-y-4 p-4">
-          <h2 className="font-medium">{t('account')}</h2>
+          <StepHeading n={1} title={t('account')} />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t('name')} htmlFor="co-name">
               <Input
@@ -260,7 +279,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         </Card>
 
         <Card className="space-y-4 p-4">
-          <h2 className="font-medium">{t('billingAddress')}</h2>
+          <StepHeading n={2} title={t('billingAddress')} />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t('company')} htmlFor="co-company">
               <Input
@@ -270,12 +289,10 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
                 onChange={set('company')}
               />
             </Field>
-            <Field label={t('taxId')} htmlFor="co-tax" hint={t('taxIdHint')}>
-              <Input id="co-tax" value={billing.taxId} onChange={set('taxId')} />
-            </Field>
             <Field label={t('address')} htmlFor="co-address" className="sm:col-span-2">
               <Input
                 id="co-address"
+                placeholder={t('addressPlaceholder')}
                 autoComplete="street-address"
                 value={billing.address}
                 onChange={set('address')}
@@ -284,6 +301,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             <Field label={t('city')} htmlFor="co-city">
               <Input
                 id="co-city"
+                placeholder={t('cityPlaceholder')}
                 autoComplete="address-level2"
                 value={billing.city}
                 onChange={set('city')}
@@ -292,6 +310,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             <Field label={t('postal')} htmlFor="co-postal">
               <Input
                 id="co-postal"
+                placeholder="400001"
                 autoComplete="postal-code"
                 value={billing.postal}
                 onChange={set('postal')}
@@ -312,11 +331,22 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
                 ))}
               </Select>
             </Field>
+            <Field label={t('taxId')} htmlFor="co-tax">
+              <Input
+                id="co-tax"
+                className="font-mono"
+                placeholder={t('taxIdPlaceholder')}
+                value={billing.taxId}
+                onChange={set('taxId')}
+              />
+            </Field>
           </div>
         </Card>
 
         {q.availableCurrencies.length > 1 && (
           <Card className="space-y-2 p-4">
+            <p className="text-sm font-medium">{t('currencyTitle')}</p>
+            <p className="text-xs text-muted-foreground">{t('currencyHint')}</p>
             <Field label={t('currency')} htmlFor="co-currency">
               <Select
                 id="co-currency"
@@ -357,6 +387,8 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               <div className="flex gap-2">
                 <Input
                   id="co-coupon"
+                  className="font-mono uppercase tracking-wider"
+                  placeholder={t('couponPlaceholder')}
                   autoComplete="off"
                   maxLength={64}
                   value={couponInput}
@@ -403,7 +435,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         )}
 
         <Card className="space-y-3 p-4">
-          <h2 className="font-medium">{t('paymentMethod')}</h2>
+          <StepHeading n={3} title={t('paymentMethod')} />
           {q.gateways.length === 0 ? (
             <Alert tone="warning">{t('noGateway', { currency: q.currency })}</Alert>
           ) : (
@@ -423,14 +455,21 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
                   />
                   <span className="min-w-0">
                     <span className="block font-medium">{g.name}</span>
-                    <span className="block text-xs text-muted-foreground">
-                      {g.description}
-                      {g.mode === 'sandbox' && ` · ${t('sandbox')}`}
-                    </span>
+                    <span className="block text-xs text-muted-foreground">{g.description}</span>
+                  </span>
+                  <span
+                    className={`ms-auto rounded-full px-2 py-0.5 font-mono text-[10px] uppercase ${g.mode === 'live' ? 'bg-success/10 text-success' : 'bg-warning/15 text-warning'}`}
+                  >
+                    {g.mode === 'live' ? t('live') : t('sandbox')}
                   </span>
                 </label>
               ))}
             </fieldset>
+          )}
+          {q.gateways.length > 0 && (
+            <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+              {t('tlsNote')}
+            </p>
           )}
           {selected?.autoRenew && q.kind === 'addon' && (
             <p className="text-sm text-muted-foreground" data-testid="addon-renews">
@@ -442,7 +481,12 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               id="co-autorenew"
               checked={autoRenew}
               onChange={(e) => setAutoRenew(e.target.checked)}
-              label={t('autoRenew')}
+              label={
+                <span>
+                  <span className="block text-sm font-semibold">{t('autoRenewTitle')}</span>
+                  <span className="block text-xs text-muted-foreground">{t('autoRenew')}</span>
+                </span>
+              }
             />
           )}
         </Card>
@@ -461,12 +505,20 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
         aria-label={t('summary')}
       >
         <h2 className="font-medium">{t('summary')}</h2>
-        <div>
-          <p className="font-medium">{q.itemName}</p>
-          {q.itemSubtitle && <p className="text-xs text-muted-foreground">{q.itemSubtitle}</p>}
-          {q.kind === 'plan' && (
-            <p className="text-xs text-muted-foreground">{t(`billed.${q.billingPeriod}`)}</p>
-          )}
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="font-medium">{q.itemName}</p>
+            {q.itemSubtitle && <p className="text-xs text-muted-foreground">{q.itemSubtitle}</p>}
+            {q.kind === 'plan' && (
+              <p className="text-xs text-muted-foreground">{t(`billed.${q.billingPeriod}`)}</p>
+            )}
+          </div>
+          <Link
+            href={q.kind === 'plan' ? '/account/plans' : '/billing/wallet'}
+            className="text-xs font-semibold text-primary hover:underline"
+          >
+            {t('change')}
+          </Link>
         </div>
         <dl className="space-y-1.5 text-sm">
           <div className="flex justify-between">
@@ -487,18 +539,73 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           )}
           <div className="flex justify-between border-t border-border pt-2 font-semibold">
             <dt>{t('total')}</dt>
-            <dd className="tabular-nums" data-testid="checkout-total">
+            <dd className="text-2xl tabular-nums" data-testid="checkout-total">
               {money(q.total)}
             </dd>
           </div>
         </dl>
+        <p className="text-xs text-muted-foreground">
+          {t.rich('terms', {
+            terms: (c) => (
+              <Link
+                href="/legal/terms"
+                target="_blank"
+                className="font-semibold text-primary hover:underline"
+              >
+                {c}
+              </Link>
+            ),
+            privacy: (c) => (
+              <Link
+                href="/legal/privacy"
+                target="_blank"
+                className="font-semibold text-primary hover:underline"
+              >
+                {c}
+              </Link>
+            ),
+          })}
+        </p>
         {q.refund.enabled && q.refund.days > 0 && (
-          <p className="rounded-md bg-success/10 p-2 text-xs text-success">
-            {t('refundGuarantee', { days: q.refund.days })}
-          </p>
+          <div className="rounded-md bg-success/10 p-3 text-xs text-foreground">
+            <p className="font-semibold text-success">
+              {t('refundGuarantee', { days: q.refund.days })}
+            </p>
+            <p className="mt-1">{t('refundNote', { days: q.refund.days })}</p>
+          </div>
         )}
         {quote.isFetching && <p className="text-xs text-muted-foreground">{t('updating')}</p>}
       </aside>
+    </div>
+  );
+}
+
+function Step({ n, label, tone }: { n: number; label: string; tone: 'done' | 'current' | 'todo' }) {
+  const dot =
+    tone === 'done'
+      ? 'bg-primary text-primary-foreground'
+      : tone === 'current'
+        ? 'bg-foreground text-background'
+        : 'bg-muted text-muted-foreground';
+  return (
+    <li
+      className="flex items-center gap-1.5"
+      aria-current={tone === 'current' ? 'step' : undefined}
+    >
+      <span className={`grid size-5 place-items-center rounded-full text-[10px] ${dot}`}>{n}</span>
+      <span className={tone === 'current' ? 'font-medium text-foreground' : ''}>{label}</span>
+    </li>
+  );
+}
+
+function StepHeading({ n, title }: { n: number; title: string }) {
+  const t = useTranslations(NS);
+  return (
+    <div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        {t('step', { n })}
+      </p>
+      <h2 className="font-medium">{title}</h2>
     </div>
   );
 }
