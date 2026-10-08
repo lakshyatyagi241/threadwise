@@ -33,10 +33,17 @@ export interface PinnacleOnboarded {
   password: string | null;
 }
 
-/** The partner key and address a Pinnacle-program provider is called with, or null when the registry row lacks them. */
-export function pinnacleRouteOf(registry: WabaRegistryProvider): PinnacleRoute | null {
-  if (!registry.providerToken || !registry.baseUrl) return null;
-  return { baseUrl: registry.baseUrl.replace(/\/+$/, ''), partnerKey: registry.providerToken };
+/**
+ * The partner key and address the partner-key calls go to, or null when the provider has no partner key. The address is Pinnacle's own
+ * partner host, not the provider's `baseUrl`: that one is where messages are sent (the white-label subdomain), and Pinnacle serves
+ * the partner-key endpoints on no white-label address.
+ */
+export function pinnacleRouteOf(
+  registry: WabaRegistryProvider,
+  partnerApiUrl: string,
+): PinnacleRoute | null {
+  if (!registry.providerToken || !partnerApiUrl) return null;
+  return { baseUrl: partnerApiUrl.replace(/\/+$/, ''), partnerKey: registry.providerToken };
 }
 
 /**
@@ -76,7 +83,7 @@ export class PinnacleOnboardingService {
     /** The business-integration token Embedded Signup produced. */
     accessToken: string;
   }): Promise<PinnacleOnboarded> {
-    const route = pinnacleRouteOf(a.registry);
+    const route = pinnacleRouteOf(a.registry, this.env.PINNACLE_PARTNER_API_URL);
     const solutionId = a.registry.partnerSolutionId;
     const configId = a.registry.onboardingConfigId ?? this.env.META_EMBEDDED_CONFIG_ID ?? null;
     const missing = [
