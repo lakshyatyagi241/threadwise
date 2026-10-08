@@ -17,12 +17,14 @@ import {
   REALTIME_SYSTEM_EVENTS,
   realtimeRoomKey,
   realtimeRoomSpecSchema,
+  realtimeVisibilitySchema,
   type RealtimeReady,
   type RealtimeRoomAck,
 } from '@crm/contracts';
 import { RealtimeAuthService, type SocketIdentity } from './realtime-auth.service';
 import { RealtimeEmitter } from './realtime-emitter.service';
 import { RoomAccessService } from './room-access.service';
+import { VisibilityPresence } from './visibility-presence.service';
 import { refFromSpec, roomKeyFor, roomName, type RoomRef } from './rooms';
 
 /** How often the live sockets are checked against ended sessions. */
@@ -66,6 +68,7 @@ export class RealtimeGateway
     private readonly auth: RealtimeAuthService,
     private readonly access: RoomAccessService,
     private readonly emitter: RealtimeEmitter,
+    private readonly presence: VisibilityPresence,
   ) {}
 
   afterInit(server: Namespace): void {
@@ -107,6 +110,10 @@ export class RealtimeGateway
   }
 
   handleDisconnect(client: Socket): void {
+    const identity = (client.data as Partial<SocketData>).identity;
+    if (identity?.actorType === 'user') {
+      void this.presence.clear(identity.orgId, identity.actorId, client.id);
+    }
     this.logger.debug(
       { actorId: (client.data as Partial<SocketData>).identity?.actorId },
       'realtime client disconnected',
@@ -148,6 +155,18 @@ export class RealtimeGateway
     return { ok: true, room, seq: await this.emitter.currentSeq(data.identity.orgId, ref) };
   }
 
+  /** A tab says whether it is in front (BL-097): the closed-tab browser push skips a person who can see the app. Fire and forget. */
+  @SubscribeMessage(REALTIME_CLIENT_EVENTS.visibility)
+  async onVisibility(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() body: unknown,
+  ): Promise<void> {
+    const parsed = realtimeVisibilitySchema.safeParse(body);
+    const identity = (client.data as Partial<SocketData>).identity;
+    if (!parsed.success || identity?.actorType !== 'user') return;
+    await this.presence.report(identity.orgId, identity.actorId, client.id, parsed.data.visible);
+  }
+
   @SubscribeMessage(REALTIME_CLIENT_EVENTS.leave)
   async onLeave(
     @ConnectedSocket() client: Socket,
@@ -183,18 +202,15 @@ export class RealtimeGateway
   /** Disconnects sockets whose session ended since they connected: a signed-out or revoked session must stop receiving. */
   private async dropRevoked(): Promise<void> {
     const sockets = [...(this.server?.sockets.values() ?? [])].filter(
-      (s) => (s.data as Partial<SocketData>).identity,
+      (s) => (s.data as Partial<SocketData>).identity?.sid,
     );
     for (let i = 0; i < sockets.length; i += SESSION_SWEEP_CHUNK) {
       const chunk = sockets.slice(i, i + SESSION_SWEEP_CHUNK);
-      const identities = chunk.map((s) => (s.data as SocketData).identity);
-      // Revoked sessions and members of a suspended workspace (ADR-0019) are dropped the same way.
-      const dropped = new Set([
-        ...(await this.auth.revoked(identities)),
-        ...(await this.auth.suspended(identities)),
-      ]);
+      const revoked = new Set(
+        await this.auth.revoked(chunk.map((s) => (s.data as SocketData).identity)),
+      );
       for (const socket of chunk) {
-        if (dropped.has((socket.data as SocketData).identity)) socket.disconnect(true);
+        if (revoked.has((socket.data as SocketData).identity)) socket.disconnect(true);
       }
     }
   }

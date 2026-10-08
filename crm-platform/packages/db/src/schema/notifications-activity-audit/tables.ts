@@ -103,6 +103,8 @@ export const notificationUserPrefs = pgTable(
     bell: boolean('bell'),
     toast: boolean('toast'),
     sound: boolean('sound'),
+    /** The browser (Web Push) channel; null inherits the catalogue default. */
+    push: boolean('push'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -172,14 +174,24 @@ export const pushSubscriptions = pgTable(
     orgId: orgIdColumn(),
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
+    userId: idColumn('user_id').notNull(),
+    /** A secret: whoever holds it (with the keys) can push to the browser. Read only by the sender; never logged or returned. */
     endpoint: text('endpoint').notNull(),
+    /** sha256 of the endpoint (hex): the lookup key, so an endpoint is never searched by its secret value. */
     endpointHash: text('endpoint_hash').notNull(),
     p256dh: text('p256dh').notNull(),
     auth: text('auth').notNull(),
+    /** The raw user agent, cut short. */
     ua: text('ua'),
     channel: text('channel').notNull().default('team-inbox'),
-    lastNotifiedAt: timestamp('last_notified_at', { withTimezone: true }),
+    /** A short name for the device ("Chrome on Windows"). */
+    label: text('label'),
+    /** The last time the push service accepted a push to this device. */
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+    failureCount: integer('failure_count').notNull().default(0),
+    /** The push service said the subscription is gone (404 / 410) or the person removed the device. Never sent to again. */
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -192,14 +204,20 @@ export const pushSubscriptions = pgTable(
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
-    unique('uq_push_subscriptions_endpoint_hash').on(t.endpointHash),
+    unique('uq_push_subscriptions_user_endpoint').on(t.orgId, t.userId, t.endpointHash),
     foreignKey({
       name: 'fk_push_subscriptions_user_id',
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
-    }).onDelete('set null'),
+    }).onDelete('cascade'),
     index('idx_push_subscriptions_channel').on(t.orgId, t.channel),
     index('idx_push_subscriptions_user_id').on(t.orgId, t.userId),
+    index('idx_push_subscriptions_live')
+      .on(t.orgId, t.userId)
+      .where(sql`${t.revokedAt} IS NULL`),
+    index('idx_push_subscriptions_revoked')
+      .on(t.revokedAt)
+      .where(sql`${t.revokedAt} IS NOT NULL`),
   ],
 );
 
