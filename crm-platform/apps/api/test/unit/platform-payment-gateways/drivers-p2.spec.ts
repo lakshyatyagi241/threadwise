@@ -6,7 +6,8 @@ import {
   hasDriver,
   type DriverContext,
   type DriverOrder,
-  type HttpFetch,
+  type HttpResponse,
+  type PinnedFetch,
   type HttpResponse,
 } from '../../../src/infra/providers/platform-payment-gateways';
 import { sslcommerzSign } from '../../../src/infra/providers/platform-payment-gateways/asia.drivers';
@@ -1964,5 +1965,92 @@ describe('LigdiCash (WD-PAYGW-025)', () => {
       ctx(creds, routes({ '/confirm': { response_code: '00', status: 'nocompleted' } })),
     );
     expect(await unpaid.verifyWebhook(json({ token: 'LTOK' }), {})).toBe(false);
+  });
+});
+
+describe('CinetPay DNS-over-HTTPS fallback (WD-PAYGW-025 rule 1), fixtures only', () => {
+  const creds = { api_key: 'ak', site_id: '123' };
+  const xof: DriverOrder = {
+    ...order,
+    currency: 'XOF',
+    amountMajor: '1234',
+    amountMinor: 1234n,
+    customerEmail: 'a@b.test',
+  };
+  const dnsErr = () =>
+    Object.assign(new Error('getaddrinfo ENOTFOUND'), { cause: { code: 'ENOTFOUND' } });
+  const doh = (answers: Record<string, unknown>) =>
+    vi.fn<HttpFetch>(async (url) => {
+      const k = Object.keys(answers).find((f) => url.includes(f));
+      if (!k) throw new Error('resolver down');
+      return res(200, answers[k]);
+    });
+  const okPay = { code: '201', data: { payment_url: 'https://cinet.test/pay' } };
+
+  it('retries against the DoH-resolved IP when local DNS fails, keeping the real host', async () => {
+    const primary = vi.fn<HttpFetch>(async () => {
+      throw dnsErr();
+    });
+    const pinned = vi.fn<PinnedFetch>(async () => res(200, okPay));
+    const dohHttp = doh({ cloudflare: { Status: 0, Answer: [{ type: 1, data: '203.0.114.9' }] } });
+    const r = await createDriver('cinetpay', {
+      ...ctx(creds, primary),
+      dohHttp,
+      pinnedHttp: pinned,
+    }).initiate(xof, urls);
+    expect(r).toMatchObject({ status: 'pending', redirectUrl: 'https://cinet.test/pay' });
+    expect(pinned.mock.calls[0]![0]).toBe('203.0.114.9');
+    expect(pinned.mock.calls[0]![1]).toContain('api-checkout.cinetpay.com/v2/payment');
+  });
+
+  it('falls back to Google when Cloudflare is down, and refuses a private answer', async () => {
+    const primary = async (): Promise<never> => {
+      throw dnsErr();
+    };
+    const pinned = vi.fn<PinnedFetch>(async () => res(200, okPay));
+    const dohHttp = doh({
+      'dns.google': {
+        Status: 0,
+        Answer: [
+          { type: 1, data: '10.0.0.5' },
+          { type: 1, data: '203.0.114.7' },
+        ],
+      },
+    });
+    await createDriver('cinetpay', {
+      ...ctx(creds, primary),
+      dohHttp,
+      pinnedHttp: pinned,
+    }).initiate(xof, urls);
+    expect(pinned.mock.calls[0]![0]).toBe('203.0.114.7');
+  });
+
+  it('reports a specific NXDOMAIN error and never pins when the name does not exist', async () => {
+    const primary = async (): Promise<never> => {
+      throw dnsErr();
+    };
+    const pinned = vi.fn<PinnedFetch>();
+    const dohHttp = doh({ cloudflare: { Status: 3 }, 'dns.google': { Status: 3 } });
+    const r = await createDriver('cinetpay', {
+      ...ctx(creds, primary),
+      dohHttp,
+      pinnedHttp: pinned,
+    }).initiate(xof, urls);
+    expect(r.error).toContain('DNS is missing (NXDOMAIN)');
+    expect(pinned).not.toHaveBeenCalled();
+  });
+
+  it('does not use DoH for an error that is not a DNS failure, and retries once', async () => {
+    const primary = vi.fn<HttpFetch>(async () => {
+      throw new Error('boom');
+    });
+    const dohHttp = vi.fn<HttpFetch>();
+    const r = await createDriver('cinetpay', { ...ctx(creds, primary), dohHttp }).initiate(
+      xof,
+      urls,
+    );
+    expect(r.error).toContain('boom');
+    expect(primary).toHaveBeenCalledTimes(2);
+    expect(dohHttp).not.toHaveBeenCalled();
   });
 });
