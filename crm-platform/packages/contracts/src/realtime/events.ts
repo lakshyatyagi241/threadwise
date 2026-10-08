@@ -40,7 +40,22 @@ export const REALTIME_SYSTEM_EVENTS = {
 } as const;
 
 /** The client's requests (socket.io events it emits, each with an acknowledgement). */
-export const REALTIME_CLIENT_EVENTS = { join: 'room:join', leave: 'room:leave' } as const;
+export const REALTIME_CLIENT_EVENTS = {
+  join: 'room:join',
+  leave: 'room:leave',
+  /**
+   * "Is this tab in front?" (`{ visible: boolean }`), sent on every change and about every 15 s while visible. The server remembers it for
+   * 35 s and skips the closed-tab browser push for a person who has a visible tab (the bell and toast cover them). No acknowledgement.
+   */
+  visibility: 'presence:visible',
+} as const;
+
+export const realtimeVisibilitySchema = z.object({ visible: z.boolean() });
+export type RealtimeVisibility = z.infer<typeof realtimeVisibilitySchema>;
+
+/** How often a visible tab repeats its report, and how long the server believes the last one. */
+export const REALTIME_VISIBILITY_REPORT_MS = 15_000;
+export const REALTIME_VISIBILITY_TTL_MS = 35_000;
 
 export const REALTIME_EVENT = {
   conversationUpsert: 'inbox.conversation.upsert',
@@ -54,6 +69,13 @@ export const REALTIME_EVENT = {
   channelStatus: 'inbox.channel.status',
   /** The workspace wallet's balance moved (a message charge, a refund, a top-up, an adjustment). */
   walletUpdated: 'wallet.updated',
+  /**
+   * A bell row was written for this person (any type: a message, an assignment, a mention, a task, a lead, a form, the wallet).
+   * Room `user`. The event is a hint: it carries the new unread total and ids, never text; the client refetches the feed.
+   */
+  notificationCreated: 'notification.created',
+  /** The person's unread rows were marked read (here or on another tab or device): every open tab converges. Room `user`. */
+  notificationRead: 'notification.read',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -107,6 +129,31 @@ export const realtimeEventSchemas = {
   [REALTIME_EVENT.walletUpdated]: z.object({
     balanceMinor: z.number().int(),
     reason: z.enum(['charge', 'refund', 'topup', 'adjustment']),
+  }),
+  [REALTIME_EVENT.notificationCreated]: z.object({
+    notificationId: uuidSchema,
+    /** A NotificationType today; a plain string so a newer server's type does not break an older client. */
+    type: z.string().min(1),
+    /** The person's true unread total after this row: the badge shows it as is. */
+    unread: z.number().int().nonnegative(),
+    subjectKind: z.string().nullable(),
+    subjectId: uuidSchema.nullable(),
+    /** The row replaced an earlier unread row of the same chat (its count went up). */
+    collapsed: z.boolean(),
+    /** Update the bell but do not toast or ping: a burst inside the throttle window, a team-wide assignment. */
+    silent: z.boolean(),
+    /**
+     * The person's own preference (phase 2): show a toast for this row. Absent from an older server, which means "as before"
+     * (decide by type). `silent` still wins: a silent event never toasts or pings.
+     */
+    toast: z.boolean().optional(),
+    /** Likewise for the two-tone ping. */
+    sound: z.boolean().optional(),
+  }),
+  [REALTIME_EVENT.notificationRead]: z.object({
+    unread: z.number().int().nonnegative(),
+    /** The rows that were marked read, or `all`. */
+    notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
   }),
 } as const;
 

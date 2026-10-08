@@ -7,6 +7,11 @@ import {
   type UpdateCampaignInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
@@ -79,6 +84,7 @@ export class CampaignsService {
     private readonly outbox: OutboxService,
     private readonly jobs: CampaignJobs,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(CAMPAIGN_PLAN_GATE) private readonly plan: CampaignPlanGate,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
@@ -212,6 +218,16 @@ export class CampaignsService {
     return { campaign: toCampaign(row), message: 'Campaign updated.' };
   }
 
+  /** The template gate of WD-CAMP-005 for a caller that launches a template campaign by its own route (the broadcast wizard). */
+  assertTemplateUsable(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    engine: string,
+  ): Promise<number | null> {
+    return this.template(tx, orgId, 'template', uuid, engine);
+  }
+
   // ------------------------------------------------------------------ shared
 
   /** Everything that can be decided without a database: time zone, end date, body, guardrails. */
@@ -341,6 +357,9 @@ export class CampaignsService {
     let provider: string;
     let deviceId: number | null = null;
     if (input.senderKey) {
+      // A pick that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
+      if (input.senderKey.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
+        await this.unofficial.assertEnabledFor(orgId);
       const [picked] = await this.senders.resolve(tx, orgId, [input.senderKey]);
       if (!picked) throw field('senderKey', 'That number is not connected.');
       provider = picked.engine;

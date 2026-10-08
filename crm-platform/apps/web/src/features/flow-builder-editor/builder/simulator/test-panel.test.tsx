@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { LogBubble, TestPanel } from './test-panel';
 
 vi.mock('../../api/flows', () => ({ flowsApi: { testWebhook: vi.fn() } }));
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 
 describe('test panel', () => {
   it('renders nothing when closed', () => {

@@ -3,6 +3,7 @@
  * shape the bridge pulls. Everything here crosses the network boundary.
  */
 import { z } from 'zod';
+import { cursorSchema, pageResponseSchema } from '../common/pagination';
 
 /** WaDesk defaults (WD-NODE-029): 3 s between sends, batches of 50, 5 minutes between batches, batching off. */
 export const NODE_PACING_DEFAULTS = {
@@ -40,6 +41,13 @@ export const nodeBridgeResponseSchema = z.object({
   rowVersion: z.number().int(),
   pacing: nodePacingSchema,
   pacingRowVersion: z.number().int(),
+  /**
+   * Whether the unofficial WhatsApp engine (personal numbers over Baileys, channel `whatsapp_qr`) is on for the whole
+   * platform. Off unless a super admin turns it on (owner decision 2026-10-05).
+   */
+  unofficialEnabled: z.boolean(),
+  /** How many workspaces are on the unofficial engine's allow-list (owner decision 2026-10-06). Counted whether or not the platform switch is on. */
+  unofficialWorkspaceCount: z.number().int().min(0),
 });
 export type NodeBridgeResponse = z.infer<typeof nodeBridgeResponseSchema>;
 
@@ -55,6 +63,18 @@ export const updateNodePacingSchema = nodePacingSchema.extend({
   rowVersion: z.number().int().min(0),
 });
 export type UpdateNodePacingInput = z.infer<typeof updateNodePacingSchema>;
+
+export const updateUnofficialWhatsappSchema = z.object({ enabled: z.boolean() });
+export type UpdateUnofficialWhatsappInput = z.infer<typeof updateUnofficialWhatsappSchema>;
+
+export const unofficialWhatsappStateSchema = z.object({ unofficialEnabled: z.boolean() });
+export type UnofficialWhatsappState = z.infer<typeof unofficialWhatsappStateSchema>;
+
+/**
+ * The synthetic entitlement key `GET /v2/billing/entitlements` carries only while the platform switch is on AND the asking workspace
+ * is on the allow-list (owner decision 2026-10-06). Not a plan feature.
+ */
+export const UNOFFICIAL_WHATSAPP_FEATURE_KEY = 'unofficial_whatsapp';
 
 export const nodeBridgeTestRequestSchema = z.object({
   serverUrl: z.string().trim().max(191),
@@ -78,3 +98,68 @@ export const nodeMessageSettingsSchema = z.object({
   enable_batches: z.union([z.literal(0), z.literal(1)]),
 });
 export type NodeMessageSettings = z.infer<typeof nodeMessageSettingsSchema>;
+
+// --- the per-workspace allow-list (owner decision 2026-10-06) ------------------------------------------------------------------
+// The platform switch above is the global kill-switch. A workspace may use the unofficial engine only when the switch is on AND
+// a platform super admin put the workspace on this list.
+
+export const unofficialWorkspaceSchema = z.object({
+  orgUuid: z.string().uuid(),
+  name: z.string(),
+  slug: z.string(),
+  planSlug: z.string().nullable(),
+  enabledAt: z.string().datetime({ offset: true }),
+  /** The operator who allowed the workspace; null when that operator no longer exists. */
+  enabledBy: z
+    .object({ operatorUuid: z.string().uuid().optional(), name: z.string().optional() })
+    .nullable(),
+  note: z.string(),
+  /** Devices rows of the workspace. */
+  deviceCount: z.number().int().min(0),
+  /** Devices whose status is `connected`. */
+  activeDeviceCount: z.number().int().min(0),
+});
+export type UnofficialWorkspace = z.infer<typeof unofficialWorkspaceSchema>;
+
+export const unofficialWorkspaceListQuerySchema = z.object({
+  /** Substring of the workspace name or slug. */
+  q: z.string().trim().max(120).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(25),
+  cursor: cursorSchema.optional(),
+});
+export type UnofficialWorkspaceListQuery = z.infer<typeof unofficialWorkspaceListQuerySchema>;
+
+export const unofficialWorkspaceListResponseSchema = pageResponseSchema(unofficialWorkspaceSchema);
+export type UnofficialWorkspaceListResponse = z.infer<typeof unofficialWorkspaceListResponseSchema>;
+
+/** One hit of the "add workspace" picker. */
+export const unofficialWorkspaceOptionSchema = z.object({
+  orgUuid: z.string().uuid(),
+  name: z.string(),
+  slug: z.string(),
+  planSlug: z.string().nullable(),
+  ownerEmail: z.string().nullable(),
+  alreadyEnabled: z.boolean(),
+});
+export type UnofficialWorkspaceOption = z.infer<typeof unofficialWorkspaceOptionSchema>;
+
+export const unofficialWorkspaceOptionsQuerySchema = z.object({
+  /** Substring of the workspace name, slug or the owner's email. */
+  q: z.string().trim().max(120).optional(),
+  limit: z.coerce.number().int().min(1).max(20).default(20),
+});
+export type UnofficialWorkspaceOptionsQuery = z.infer<typeof unofficialWorkspaceOptionsQuerySchema>;
+
+export const unofficialWorkspaceOptionListResponseSchema = z.object({
+  data: z.array(unofficialWorkspaceOptionSchema),
+});
+export type UnofficialWorkspaceOptionListResponse = z.infer<
+  typeof unofficialWorkspaceOptionListResponseSchema
+>;
+
+export const setUnofficialWorkspaceInputSchema = z.object({
+  /** true allows the workspace (upsert, a re-send updates the note); false removes it from the list. */
+  enabled: z.boolean(),
+  note: z.string().trim().max(500).optional(),
+});
+export type SetUnofficialWorkspaceInput = z.infer<typeof setUnofficialWorkspaceInputSchema>;

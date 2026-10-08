@@ -13,6 +13,7 @@ import { WabaTransport } from './outbound/waba.transport';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { QrChannelAdapter } from './inbox/qr-channel.adapter';
 import { NodeBridgeController } from './node-bridge.controller';
+import { UnofficialWorkspacesService } from './unofficial-workspaces.service';
 import { NodeBridgeSettingsService } from './node-bridge-settings.service';
 import { NodeInternalController } from './node-internal.controller';
 import { NodeTokenGuard } from './node-token.guard';
@@ -30,6 +31,7 @@ import { NodeTokenGuard } from './node-token.guard';
   controllers: [NodeBridgeController, NodeInternalController],
   providers: [
     NodeBridgeSettingsService,
+    UnofficialWorkspacesService,
     NodeBridgeProbe,
     NodeTokenGuard,
     SafeFetch,

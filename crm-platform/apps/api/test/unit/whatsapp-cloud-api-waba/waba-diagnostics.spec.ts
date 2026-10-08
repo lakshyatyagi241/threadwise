@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { WabaDiagnosticsService } from '../../../src/modules/whatsapp-cloud-api-waba/waba-diagnostics.service';
+import { GROUP_FIELDS } from '../../../src/modules/whatsapp-cloud-api-waba/waba-group-rules';
 import { WabaApiError } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-errors';
 
 const KEY = Buffer.alloc(32, 7).toString('base64');
@@ -23,6 +24,13 @@ const build = (
     env as never,
     admin as never,
   );
+const GROUPS = [
+  'group_lifecycle_update',
+  'group_participants_update',
+  'group_settings_update',
+  'group_status_update',
+];
+const COEXISTENCE = ['messages', 'smb_message_echoes', 'smb_app_state_sync', 'history'];
 const fail = (status: number, message: string) =>
   WabaApiError.fromResponse(status, { error: { message } });
 
@@ -33,7 +41,7 @@ describe('the platform app webhook check (WD-WABA-002)', () => {
     expect(r).toMatchObject({ ok: false, error: expect.stringContaining('App ID') });
     expect(getAppSubscription).not.toHaveBeenCalled();
   });
-  it('lists what is subscribed and what is missing; ok only with all four', async () => {
+  it('lists what is subscribed and what is missing; ok only with the four coexistence and the four Groups fields', async () => {
     const s = build({
       getAppSubscription: async () => ({
         hasWabaObject: true,
@@ -44,16 +52,37 @@ describe('the platform app webhook check (WD-WABA-002)', () => {
     expect(await s.webhookStatus()).toMatchObject({
       ok: false,
       subscribed: ['messages'],
-      missing: ['smb_message_echoes', 'smb_app_state_sync', 'history'],
+      missing: ['smb_message_echoes', 'smb_app_state_sync', 'history', ...GROUPS],
     });
     const all = build({
       getAppSubscription: async () => ({
         hasWabaObject: true,
-        fields: ['messages', 'smb_message_echoes', 'smb_app_state_sync', 'history', 'x'],
+        fields: [...COEXISTENCE, ...GROUPS, 'x'],
         callbackUrl: null,
       }),
     });
     expect(await all.webhookStatus()).toMatchObject({ ok: true, missing: [] });
+  });
+  it('is not ok when only the four coexistence fields are subscribed: the four Groups fields are reported missing', async () => {
+    const s = build({
+      getAppSubscription: async () => ({
+        hasWabaObject: true,
+        fields: COEXISTENCE,
+        callbackUrl: 'https://x',
+      }),
+    });
+    expect(await s.webhookStatus()).toMatchObject({
+      ok: false,
+      subscribed: COEXISTENCE,
+      missing: GROUPS,
+    });
+  });
+  it('subscribes exactly the Groups fields the ingest handles', () => {
+    expect(GROUPS).toEqual([...GROUP_FIELDS]);
+  });
+  it('asks for all eight fields when the app is not configured (the empty result lists them)', async () => {
+    const r = await build({ getAppSubscription: vi.fn() }, {}).webhookStatus();
+    expect(r.missing).toEqual([...COEXISTENCE, ...GROUPS]);
   });
   it('says so when Meta has no WhatsApp subscription, rejects, or cannot be reached', async () => {
     expect(
@@ -109,13 +138,14 @@ describe('one-click subscribe (WD-WABA-003)', () => {
           'smb_message_echoes',
           'smb_app_state_sync',
           'history',
+          ...GROUPS,
         ],
       }),
     );
     expect(r).toMatchObject({ ok: true, subscribedNow: true });
   });
   it("falls back to this platform's own callback, and reports Meta's refusal with the reachability hint", async () => {
-    const set = vi.fn(async () => {
+    const set = vi.fn(async (_a: unknown, _i: unknown) => {
       throw fail(400, 'Callback verification failed');
     });
     const s = build({

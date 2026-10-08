@@ -232,11 +232,14 @@ describe('storefront-builder: schema, isolation, public lookups', () => {
     const keys = (
       await owner.query(`SELECT key FROM permission_defs WHERE key LIKE 'store.%' ORDER BY key`)
     ).rows.map((r) => r.key);
-    expect(keys).toEqual([
-      'store.dashboard.read',
-      'store.shops.manage',
-      'store.storefront.manage',
-      'store.storefront.read',
-    ]);
+    // The merchant-side keys (orders, coupons, ...) are registered by the chk migration and checked in its own spec.
+    expect(keys).toEqual(
+      expect.arrayContaining([
+        'store.dashboard.read',
+        'store.shops.manage',
+        'store.storefront.manage',
+        'store.storefront.read',
+      ]),
+    );
   });
 });

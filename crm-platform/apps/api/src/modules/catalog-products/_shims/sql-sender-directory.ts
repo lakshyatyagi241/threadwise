@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../../common/crypto/crypto.service';
 import { assemblePhone } from '../catalog-rules';
 import type { CatalogSenderRow, SenderDirectory, WabaCredentials } from './tokens';
@@ -33,13 +37,18 @@ const asString = (v: unknown): string => (typeof v === 'string' ? v : v == null 
  */
 @Injectable()
 export class SqlSenderDirectory implements SenderDirectory {
-  constructor(private readonly crypto: CryptoService) {}
+  constructor(
+    private readonly crypto: CryptoService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
 
   async list(tx: Tx, orgId: number): Promise<CatalogSenderRow[]> {
+    // Personal numbers are not senders while the platform switch is off (owner decision 2026-10-05).
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     const devices = await tx.execute(sql`
       SELECT id, uuid, coalesce(nullif(device_name, ''), phone_number) AS label, country_code, phone_number
       FROM devices
-      WHERE org_id = ${orgId} AND status = 'connected'
+      WHERE org_id = ${orgId} AND status = 'connected' AND ${unofficialOn}::boolean
       ORDER BY active DESC, id DESC`);
     const configs = await tx.execute(sql`
       SELECT id, uuid, provider, coalesce(nullif(display_label, ''), upper(provider)) AS label, phone_number

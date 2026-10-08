@@ -10,11 +10,41 @@ export const waKeys = {
   code: (org: number, device: number) => `wa:code:${org}:${device}`,
   status: (org: number, device: number) => `wa:status:${org}:${device}`,
   initLock: (org: number, device: number) => `wa:init:${org}:${device}`,
+  /** The pairing attempt in progress (who started it, how, until when). Written by the API; holds no secret. */
+  attempt: (org: number, device: number) => `wa:attempt:${org}:${device}`,
   /** One per running worker: proof the runtime is alive (WD-NODE-004). */
   worker: (id: string) => `wa:worker:${id}`,
   commandChannel: 'wa:cmd',
   commandResult: (id: string) => `wa:cmd:res:${id}`,
 } as const;
+
+/**
+ * How long a QR stays in Redis. WhatsApp rotates it about every 20 s, so a longer life only keeps a dead credential around (spec R6).
+ * Stored as `{ qr, at }` so a client can show a countdown; the value is a secret and is never logged.
+ */
+export const QR_TTL_S = 45;
+/** How long a pairing code is valid (WhatsApp's own window). */
+export const CODE_TTL_S = 180;
+
+export interface StoredQr {
+  qr: string;
+  at: number;
+}
+export interface StoredCode {
+  code: string;
+  at: number;
+}
+
+/** Parses a `wa:qr` value; null for nothing or for a value that is not the `{ qr, at }` shape. */
+export function parseStoredQr(raw: string | null): StoredQr | null {
+  if (!raw) return null;
+  try {
+    const v = JSON.parse(raw) as Partial<StoredQr>;
+    return typeof v.qr === 'string' && typeof v.at === 'number' ? { qr: v.qr, at: v.at } : null;
+  } catch {
+    return null;
+  }
+}
 
 const LEASE_MS = 90_000;
 

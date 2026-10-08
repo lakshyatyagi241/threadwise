@@ -81,7 +81,23 @@ export const onboardingWorkspaceRequestSchema = z.object({
   sizeRange: teamSizeSchema.optional(),
   /** IANA id, validated server-side with Intl. */
   timezone: z.string().min(1).max(64),
-  currency: z.string().length(3).optional(),
+  /** ISO 3166-1 alpha-2, validated server-side. The currency default follows it (India: INR, elsewhere: USD). */
+  country: z
+    .string()
+    .trim()
+    .length(2)
+    .transform((v) => v.toUpperCase())
+    .optional(),
+  /**
+   * The currency the workspace is billed in: one the platform can bill in. Left out, the country's default applies. Settable here
+   * only until the wallet has any activity; after that an operator changes it (with a reason).
+   */
+  currency: z
+    .string()
+    .trim()
+    .length(3)
+    .transform((v) => v.toUpperCase())
+    .optional(),
   /**
    * Required whenever the account has no mobile number yet (`needsPhone`), whichever way it signed up;
    * never replaces one that is already saved.
@@ -104,7 +120,13 @@ export const onboardingResponseSchema = z.object({
     industry: industrySchema.nullable(),
     sizeRange: teamSizeSchema.nullable(),
     timezone: z.string().nullable(),
+    country: z.string().nullable(),
     currency: z.string().nullable(),
+  }),
+  /** The currencies this workspace can be billed in, and the platform's own (the fallback when a default is not available). */
+  currencies: z.object({
+    available: z.array(z.string()),
+    platform: z.string(),
   }),
   suggestedName: z.string(),
   /** True whenever the account has no mobile number yet (any sign-up path); `phone` is then required. */

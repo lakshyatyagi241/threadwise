@@ -35,6 +35,7 @@ import {
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
 import { PaymentsService } from './payments.service';
+import { RequirePlanFeature } from '../../plans-subscriptions-trials';
 
 /**
  * The payment ledger (WD-PAY-001..005, 015). Literal paths (`summary`, `aging`, `outstanding`) come before `:id`.
@@ -97,6 +98,8 @@ export class PaymentsController {
     return this.payments.outstanding(query, scope);
   }
 
+  // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
+  @RequirePlanFeature('invoicing')
   @Post()
   @Idempotent()
   @RequirePermission('record.payments.create')
@@ -132,6 +135,7 @@ export class PaymentsController {
     return this.payments.receipt(id, scope);
   }
 
+  @RequirePlanFeature('invoicing')
   @Post(':id/refund')
   @HttpCode(HttpStatus.OK)
   @Idempotent()

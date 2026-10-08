@@ -26,6 +26,8 @@ interface Row {
   included_plan_feature: string | null;
   included_min_plan: string | null;
   sub_status: string | null;
+  /** The buyer already has the app (installed, subscribed, or an add-on purchase): a plan that no longer shows it must not stop a renewal. */
+  held: boolean | null;
   paid_until: string | null;
   catalogue: string[] | null;
   org_plan: string | null;
@@ -45,10 +47,17 @@ export async function assertMarketplacePack(
   orgId: number,
   slug: string,
   featureEnabled: (key: string) => Promise<boolean>,
+  /** Whether the buyer's plan makes the app's add-on visible (a plan enables paid apps; see marketplace/plan-visibility.ts). */
+  planShowsApp: (appId: number) => Promise<boolean>,
 ): Promise<boolean> {
   const res = await tx.execute(sql`
     SELECT a.id::text AS app_id, a.status AS app_status, a.pricing_model, a.purchasable, a.included_plan_feature, a.included_min_plan,
            s.status AS sub_status,
+           (EXISTS (SELECT 1 FROM workspace_app_installations wi WHERE wi.org_id = ${orgId} AND wi.app_id = a.id)
+            OR s.org_id IS NOT NULL
+            OR EXISTS (SELECT 1 FROM workspace_addons w
+                        WHERE w.org_id = ${orgId} AND w.package_id = p.id AND w.status = 'active'
+                          AND (w.ends_at IS NULL OR w.ends_at > now()))) AS held,
            (SELECT max(w.ends_at) FROM workspace_addons w
              WHERE w.org_id = ${orgId} AND w.package_id = p.id AND w.status = 'active' AND w.ends_at > now()) AS paid_until,
            (SELECT array_agg(c.slug ORDER BY c.sort_order, c.amount, c.slug) FROM plans c WHERE c.kind = 'plan') AS catalogue,
@@ -60,9 +69,17 @@ export async function assertMarketplacePack(
   const r = res.rows[0] as unknown as Row | undefined;
   if (!r) return false;
 
+  // A paid app the buyer's plan keeps out of view, and the buyer does not already have, cannot be bought by a direct request either.
+  const shown =
+    r.app_id === null ||
+    r.held === true ||
+    r.included_plan_feature !== null ||
+    r.included_min_plan !== null ||
+    (await planShowsApp(Number(r.app_id)));
+
   const featureOn = r.included_plan_feature ? await featureEnabled(r.included_plan_feature) : false;
   const verdict = packPurchaseVerdict({
-    visible: r.app_id !== null,
+    visible: r.app_id !== null && shown,
     appStatus: r.app_status,
     pricingModel: r.pricing_model,
     purchasable: r.purchasable ?? false,

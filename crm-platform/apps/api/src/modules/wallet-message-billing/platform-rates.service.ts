@@ -9,6 +9,8 @@ import {
   normalizeWalletCategory,
   normalizeWalletCountry,
   walletMajorToMinor,
+  type ImportMetaCardInput,
+  type ImportMetaCardResult,
   type ImportRatesResult,
   type RateRow,
   type RatesResponse,
@@ -23,6 +25,8 @@ import { CurrencyService } from '../platform-settings-branding-storage';
 import { countryList, countryName } from './phone-country';
 import { convertMicros, parseRateCardCsv } from './rate-card-csv';
 import { BUNDLED_RATE_CARD, BUNDLED_RATE_CARD_VERSION } from './meta-rate-card';
+import { countriesOf, OTHER_MARKET } from './meta-markets';
+import { MetaRateCardService } from './meta-rate-card.service';
 import { RateCardService } from './rate-card.service';
 import type { Operator } from './platform-wallet.service';
 import { WalletLogService } from './wallet-log.service';
@@ -88,6 +92,7 @@ export class PlatformRatesService {
     private readonly settings: WalletSettingsService,
     private readonly rates: RateCardService,
     private readonly log: WalletLogService,
+    private readonly cards: MetaRateCardService,
   ) {}
 
   // --- the grid -----------------------------------------------------------------------------------------------------------------
@@ -307,21 +312,26 @@ export class PlatformRatesService {
   async syncMeta(dryRun: boolean, operator: Operator): Promise<SyncMetaResult> {
     const platformCurrency = await this.settings.currency();
     const live = await this.fetchLive();
-    const source = live ?? { version: BUNDLED_RATE_CARD_VERSION, rows: bundledAsRows() };
-    const entries: CostEntry[] = [];
-    for (const row of source.rows) {
-      const country = row.country === '*' ? '' : normalizeWalletCountry(row.country);
-      if (row.country !== '*' && country === '') continue;
-      for (const category of ['marketing', 'utility', 'authentication'] as const) {
-        const amount = row[category];
-        if (amount === undefined || amount === null) continue;
-        const micros = majorToMicros(String(amount));
-        if (micros === null) continue;
-        entries.push({
-          country,
-          category,
-          micros: await this.toPlatformMicros(micros, row.currency || 'USD', platformCurrency),
-        });
+    // Order: the operator's live endpoint, then the official Meta card stored for the platform currency, then the bundled
+    // indicative card (a last resort that the result says plainly is "bundled").
+    let entries: CostEntry[] = [];
+    let source: SyncMetaResult['source'] = 'bundled';
+    let sourceLabel = 'bundled reference';
+    let version: string | null = BUNDLED_RATE_CARD_VERSION;
+    if (live) {
+      source = 'live';
+      sourceLabel = 'Meta (live)';
+      version = live.version;
+      entries = await this.liveEntries(live.rows, platformCurrency);
+    } else {
+      const stored = await this.storedCardEntries(platformCurrency);
+      if (stored) {
+        source = 'card';
+        sourceLabel = `Meta rate card (${platformCurrency}, effective ${stored.effectiveOn})`;
+        version = stored.effectiveOn;
+        entries = stored.entries;
+      } else {
+        entries = await this.liveEntries(bundledAsRows(), platformCurrency);
       }
     }
     if (entries.length === 0) {
@@ -334,9 +344,9 @@ export class PlatformRatesService {
     const result = await this.applyCosts(entries, new Map(), dryRun);
     const out: SyncMetaResult = {
       dryRun,
-      source: live ? 'live' : 'bundled',
-      sourceLabel: live ? 'Meta (live)' : 'bundled reference',
-      version: source.version,
+      source,
+      sourceLabel,
+      version,
       currency: platformCurrency,
       added: result.added,
       updated: result.updated,
@@ -353,6 +363,119 @@ export class PlatformRatesService {
       );
     }
     return out;
+  }
+
+  /** Costs from rows of one amount per category, converted into the platform currency. */
+  private async liveEntries(rows: LiveRow[], platformCurrency: string): Promise<CostEntry[]> {
+    const entries: CostEntry[] = [];
+    for (const row of rows) {
+      const country = row.country === '*' ? '' : normalizeWalletCountry(row.country);
+      if (row.country !== '*' && country === '') continue;
+      for (const category of ['marketing', 'utility', 'authentication'] as const) {
+        const amount = row[category];
+        if (amount === undefined || amount === null) continue;
+        const micros = majorToMicros(String(amount));
+        if (micros === null) continue;
+        entries.push({
+          country,
+          category,
+          micros: await this.toPlatformMicros(micros, row.currency || 'USD', platformCurrency),
+        });
+      }
+    }
+    return entries;
+  }
+
+  /**
+   * The costs of the stored official card for `currency`, one entry per country Meta prices and category, plus the any-country
+   * default (Meta's "Other" market). No conversion: the card is already in this currency. Null when no card is stored.
+   */
+  private async storedCardEntries(
+    currency: string,
+  ): Promise<{ effectiveOn: string; entries: CostEntry[] } | null> {
+    const detail = await this.cards.detail(currency).catch(() => null);
+    if (!detail) return null;
+    const entries: CostEntry[] = [];
+    for (const m of detail.markets) {
+      const countries = m.market === OTHER_MARKET ? [''] : countriesOf(m.market);
+      for (const category of ['marketing', 'utility', 'authentication', 'service'] as const) {
+        const amount = m.costs[category];
+        const micros = amount === null || amount === undefined ? null : majorToMicros(amount);
+        if (micros === null) continue;
+        for (const country of countries) entries.push({ country, category, micros });
+      }
+    }
+    return entries.length === 0 ? null : { effectiveOn: detail.card.effectiveOn, entries };
+  }
+
+  // --- Meta's published card (the quarterly file) ---------------------------------------------------------------------------
+
+  /**
+   * Imports the file Meta publishes for one currency. The card is stored as a whole; when it is the platform currency's card the
+   * Meta cost behind pricing, margins and the reseller P&L is refreshed from it in the same call (customer prices are not touched).
+   * `dryRun` reads the file and reports what would change without writing.
+   */
+  async importMetaCard(
+    input: ImportMetaCardInput,
+    operator: Operator,
+  ): Promise<ImportMetaCardResult> {
+    const card = this.cards.parse(input.file);
+    const platformCurrency = await this.settings.currency();
+    const appliesToPricing = card.currency === platformCurrency;
+    const diff = await this.store.tx((tx) => this.cards.compare(tx, card));
+    let pricing: ImportMetaCardResult['pricing'] = null;
+    if (!input.dryRun) {
+      await this.store.tx(async (tx) => {
+        await this.cards.replace(tx, card, input.fileName);
+        await this.log.platform(tx, {
+          event: 'platform.meta_card.imported',
+          message: `Meta ${card.currency} rate card imported (effective ${card.effectiveOn}): ${diff.added} added, ${diff.changed} changed, ${diff.removed} removed`,
+          operatorId: operator.id,
+          actorLabel: operator.label,
+          payload: {
+            currency: card.currency,
+            effectiveOn: card.effectiveOn,
+            fileName: input.fileName ?? null,
+            added: diff.added,
+            changed: diff.changed,
+            unchanged: diff.unchanged,
+            removed: diff.removed,
+            problems: diff.problems.length,
+          },
+        });
+      });
+    }
+    if (appliesToPricing) {
+      // On a dry run nothing is stored yet, so the entries come from the parsed file; either way the same expansion.
+      const entries = this.cardEntries(card.rows);
+      pricing = await this.applyCosts(entries, new Map(), input.dryRun);
+      if (!input.dryRun) {
+        await this.store.tx((tx) =>
+          this.log.platform(tx, {
+            event: 'platform.rates.synced',
+            message: `Meta costs refreshed from the ${card.currency} card: ${pricing!.added} added, ${pricing!.updated} updated`,
+            operatorId: operator.id,
+            actorLabel: operator.label,
+            payload: { currency: card.currency, effectiveOn: card.effectiveOn, ...pricing },
+          }),
+        );
+      }
+    }
+    return { ...diff, dryRun: input.dryRun, appliedToPricing: appliesToPricing, pricing };
+  }
+
+  private cardEntries(
+    rows: ReadonlyArray<{ market: string; category: string; costMicros: number }>,
+  ): CostEntry[] {
+    const entries: CostEntry[] = [];
+    for (const r of rows) {
+      if (!['marketing', 'utility', 'authentication', 'service'].includes(r.category)) continue;
+      const countries = r.market === OTHER_MARKET ? [''] : countriesOf(r.market);
+      for (const country of countries) {
+        entries.push({ country, category: r.category, micros: r.costMicros });
+      }
+    }
+    return entries;
   }
 
   /** The operator's Meta pricing endpoint (set on the reseller page), or null: not configured, not 200, empty, or any error. */

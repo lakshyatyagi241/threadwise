@@ -17,6 +17,10 @@ const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
 ) as Record<string, unknown>;
 
+const messagesAr = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'ar', 'team-inbox-conversations.json'), 'utf8'),
+) as Record<string, unknown>;
+
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
     <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
@@ -54,11 +58,17 @@ describe('ConversationRow', () => {
   });
 
   it('says who spoke last and marks an unassigned conversation', () => {
-    const out = row({ lastOutboundAt: '2026-10-02T11:00:00.000Z', lastInboundAt: '2026-10-02T10:00:00.000Z' });
+    const out = row({
+      lastOutboundAt: '2026-10-02T11:00:00.000Z',
+      lastInboundAt: '2026-10-02T10:00:00.000Z',
+    });
     expect(out).toContain('You:');
     expect(out).toContain('Unassigned');
     expect(
-      lastWasOutbound({ lastInboundAt: '2026-10-02T11:00:00.000Z', lastOutboundAt: '2026-10-02T10:00:00.000Z' }),
+      lastWasOutbound({
+        lastInboundAt: '2026-10-02T11:00:00.000Z',
+        lastOutboundAt: '2026-10-02T10:00:00.000Z',
+      }),
     ).toBe(false);
   });
 
@@ -107,7 +117,10 @@ describe('MessageBubble', () => {
 
   it('shows the failure reason with a Retry button for a failed message', () => {
     const out = bubble(
-      outbound(2, { status: 'failed', failure: { code: 'SIM_REJECTED', reason: 'Rejected by the provider' } }),
+      outbound(2, {
+        status: 'failed',
+        failure: { code: 'SIM_REJECTED', reason: 'Rejected by the provider' },
+      }),
     );
     expect(out).toContain('Rejected by the provider');
     expect(out).toContain('data-testid="inbox-retry"');
@@ -129,7 +142,9 @@ describe('MessageBubble', () => {
     expect(doc).toContain('2.0 KB');
     expect(media('audio', 'audio/ogg', 'v.ogg')).toContain('<audio');
     const place = html(
-      <LocationCard location={{ latitude: 19.076, longitude: 72.8777, name: 'Office', address: 'Mumbai' }} />,
+      <LocationCard
+        location={{ latitude: 19.076, longitude: 72.8777, name: 'Office', address: 'Mumbai' }}
+      />,
     );
     expect(place).toContain('Office');
     expect(place).toContain('19.07600, 72.87770');
@@ -246,6 +261,88 @@ describe('Composer', () => {
   it('cannot reply without the right to', () => {
     expect(composer({ canReply: false })).toMatch(DISABLED_TEXTAREA);
   });
+
+  it('offers a template even when the window is closed, but never on a note', () => {
+    const open = composer({ canTemplate: true, onTemplate: noop });
+    expect(open).toContain('data-testid="inbox-template-button"');
+    expect(open).toContain('Send a template');
+    const closed = composer({ replyDisabled: true, canTemplate: true, onTemplate: noop });
+    expect(closed).toMatch(DISABLED_TEXTAREA);
+    expect(closed).toContain('data-testid="inbox-template-button"');
+    expect(composer({ mode: 'note', canTemplate: true, onTemplate: noop })).not.toContain(
+      'inbox-template-button',
+    );
+  });
+
+  it('hides the template button when the channel cannot send one or there is no handler', () => {
+    expect(composer()).not.toContain('inbox-template-button');
+    expect(composer({ canTemplate: false, onTemplate: noop })).not.toContain(
+      'inbox-template-button',
+    );
+    expect(composer({ canTemplate: true })).not.toContain('inbox-template-button');
+  });
+});
+
+describe('Composer on a WhatsApp group thread (WABA_GROUP_SEND_UNAVAILABLE)', () => {
+  const group = (locale: 'en' | 'ar', over: Partial<Parameters<typeof Composer>[0]> = {}) =>
+    renderToStaticMarkup(
+      <NextIntlClientProvider
+        locale={locale}
+        messages={locale === 'en' ? messages : messagesAr}
+        timeZone="UTC"
+      >
+        <Composer
+          conversationId={id(1)}
+          mode="reply"
+          onMode={noop}
+          replyDisabled={false}
+          canReply
+          canNote
+          canAttach
+          canTemplate
+          onTemplate={noop}
+          groupSendBlocked
+          onSend={noop}
+          onNote={() => Promise.resolve(true)}
+          {...over}
+        />
+      </NextIntlClientProvider>,
+    );
+
+  it('switches the reply box off, with the explanation, and offers no attach, template or send', () => {
+    const out = group('en');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toMatch(/<button[^>]*data-testid="inbox-send"[^>]*\sdisabled=""/);
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+    expect(out).toContain('data-testid="inbox-group-send-unavailable"');
+    expect(out).toContain(
+      'Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.',
+    );
+    expect(out).not.toContain('Enter sends');
+  });
+
+  it('says the same in Arabic', () => {
+    const out = group('ar');
+    expect(out).toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('الإرسال إلى مجموعات واتساب غير متاح بعد');
+    expect(out).not.toContain('inbox-file-input');
+    expect(out).not.toContain('inbox-template-button');
+  });
+
+  it('leaves internal notes working on a group thread', () => {
+    const out = group('en', { mode: 'note' });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).not.toContain('inbox-group-send-unavailable');
+  });
+
+  it('a normal thread is unchanged: the same props without the flag keep attach, template and the key hint', () => {
+    const out = group('en', { groupSendBlocked: false });
+    expect(out).not.toMatch(DISABLED_TEXTAREA);
+    expect(out).toContain('inbox-file-input');
+    expect(out).toContain('inbox-template-button');
+    expect(out).toContain('Enter sends');
+  });
 });
 
 describe('ConversationList states', () => {
@@ -274,6 +371,27 @@ describe('ConversationList states', () => {
   });
   const render = (p: ReturnType<typeof props>) => html(<ConversationList {...p} />);
 
+  it('the status filter offers Open first, one Resolved (no separate Closed), Pending, Snoozed, Spam and every status', () => {
+    const out = render(props());
+    const options = [...out.matchAll(/<option value="([^"]*)"[^>]*>([^<]*)<\/option>/g)].map(
+      (m) => [m[1], m[2]],
+    );
+    const status = options.filter(([v]) =>
+      ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
+    );
+    expect(status.map(([v]) => v)).toEqual([
+      'open',
+      'pending',
+      'snoozed',
+      'resolved',
+      'spam',
+      'all',
+    ]);
+    expect(status[0]).toEqual(['open', 'Open']);
+    expect(out).not.toContain('Open and pending');
+    expect(out).not.toContain('>Closed<');
+  });
+
   it('tells a workspace with no channel to connect one, with a link', () => {
     const out = render(props());
     expect(out).toContain('Connect a channel to start');
@@ -285,9 +403,7 @@ describe('ConversationList states', () => {
   });
 
   it('says there are no conversations yet once a channel exists', () => {
-    const out = render(
-      props({ channels: [{ id: id(900) } as never] }),
-    );
+    const out = render(props({ channels: [{ id: id(900) } as never] }));
     expect(out).toContain('No conversations yet');
   });
 

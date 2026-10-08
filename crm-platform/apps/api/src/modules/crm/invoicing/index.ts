@@ -16,3 +16,15 @@ export { InvoicingWorkerModule } from './invoicing-worker.module';
 export { CreditNotesService } from './credit-notes.service';
 export { RecurringInvoicesService } from './recurring-invoices.service';
 export { SalesOrdersService } from './sales-orders.service';
+export {
+  ExternalOrderBillingService,
+  allocateDiscount,
+  specsOfExternalOrder,
+} from './external-order-billing.service';
+export type {
+  ExternalInvoiceOutcome,
+  ExternalOrderInput,
+  ExternalOrderLine,
+  ExternalPaymentInput,
+  ExternalSalesOrderRef,
+} from './external-order-billing.service';

@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "nav": {
+      "forms": "Forms"
+    },
+    "kinds": {
+      "short_text": "Short text",
+      "long_text": "Long text",
+      "email": "Email",
+      "phone": "Phone number",
+      "number": "Number",
+      "currency": "Amount",
+      "date": "Date",
+      "dropdown": "Dropdown",
+      "radio": "Single choice",
+      "checkbox_group": "Multiple choice",
+      "checkbox": "Checkbox",
+      "rating": "Rating",
+      "hidden": "Hidden field"
+    },
+    "errors": {
+      "network": "The server could not be reached. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "Someone else changed this form. Reload the page to see the latest version.",
+      "nameTaken": "Another form already has this name. Choose a different name.",
+      "stateInvalid": "That is not possible in the form's current status.",
+      "definitionInvalid": "The form is not valid yet. Check the fields and try again.",
+      "publishInvalid": "The form cannot be published yet. Fix the problems listed and try again.",
+      "planLimit": "Your plan's limit has been reached.",
+      "planLimitForms": "You have reached the number of forms your plan allows. Archive a form you no longer use, or upgrade your plan.",
+      "planLocked": "Forms is not part of your workspace.",
+      "notFound": "This form was not found. It may have been deleted.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "upgrade": "See plans"
+    }
+  }
+}

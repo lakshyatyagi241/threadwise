@@ -102,7 +102,7 @@ export type SyncMetaInput = z.infer<typeof syncMetaSchema>;
 
 export const syncMetaResultSchema = z.object({
   dryRun: z.boolean(),
-  source: z.enum(['live', 'bundled']),
+  source: z.enum(['live', 'card', 'bundled']),
   sourceLabel: z.string(),
   version: z.string().nullable(),
   currency: z.string(),

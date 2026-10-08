@@ -21,6 +21,8 @@ export const securityPolicySchema = z.object({
   requireMfaForAll: z.boolean().default(false),
   requireMfaForAdmins: z.boolean().default(false),
   requireMfaForOwners: z.boolean().default(false),
+  /** Platform super admins. Off: they sign in with a password alone, enrolled or not. */
+  requireMfaForSuperAdmins: z.boolean().default(false),
   /** Only 'totp' exists; the others are accepted and stored for parity. WaDesk's default is authenticator app + email. */
   allowedMfaMethods: z
     .array(z.enum(['totp', 'email', 'telegram']))

@@ -32,6 +32,7 @@ const YEAR = 60 * 60 * 24 * 365;
 const UPSTREAM: Record<string, string | ((body: Record<string, unknown>) => string)> = {
   login: '/v2/auth/login',
   mfa: '/v2/auth/login/mfa',
+  'login-workspace': '/v2/auth/login/workspace',
   signup: '/v2/auth/signup',
   'signup-otp': '/v2/auth/signup/verify-otp',
   switch: '/v2/auth/workspaces/switch',
@@ -105,7 +106,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   void _provider;
   // A sign-up that left the referral box empty still counts the link that brought the visitor here.
   const outgoing =
-    action === 'signup'
+    action === 'signup' || action === 'social-callback'
       ? withReferralFallback(payload, store.get(REFERRAL_COOKIE)?.value)
       : payload;
 

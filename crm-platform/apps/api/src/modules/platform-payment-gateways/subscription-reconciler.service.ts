@@ -44,9 +44,12 @@ export class SubscriptionReconcilerService {
         WITH due AS (
           SELECT s.org_id, s.id FROM subscriptions s
           LEFT JOIN org_plan_state p ON p.org_id = s.org_id
+          LEFT JOIN workspace_addons wa ON wa.org_id = s.org_id AND wa.id = s.workspace_addon_id
           WHERE s.status IN ('pending', 'active', 'past_due')
-            AND (s.status <> 'active' OR p.plan_ends_at IS NULL
-                 OR p.plan_ends_at <= now() + make_interval(days => ${RECONCILE_LOOKAHEAD_DAYS}))
+            AND (s.status <> 'active'
+                 OR (CASE WHEN s.kind = 'addon' THEN wa.ends_at ELSE p.plan_ends_at END) IS NULL
+                 OR (CASE WHEN s.kind = 'addon' THEN wa.ends_at ELSE p.plan_ends_at END)
+                      <= now() + make_interval(days => ${RECONCILE_LOOKAHEAD_DAYS}))
             AND COALESCE((s.meta ->> 'last_polled_at')::timestamptz, 'epoch'::timestamptz)
                 < now() - make_interval(hours => ${RECONCILE_THROTTLE_HOURS})
           ORDER BY s.id
@@ -58,7 +61,7 @@ export class SubscriptionReconcilerService {
         FROM due
         WHERE s.org_id = due.org_id AND s.id = due.id
         RETURNING s.org_id, s.id, s.user_id, s.gateway, s.gateway_subscription_id, s.gateway_plan_id, s.gateway_customer_id,
-                  s.plan_id, s.billing_cycle, s.status, s.current_period_end, s.renewals_count, s.meta`);
+                  s.plan_id, s.kind, s.workspace_addon_id, s.billing_cycle, s.status, s.current_period_end, s.renewals_count, s.meta`);
       return (res.rows as Raw[]).map(toSub);
     });
     const tally: Record<string, number> = {};

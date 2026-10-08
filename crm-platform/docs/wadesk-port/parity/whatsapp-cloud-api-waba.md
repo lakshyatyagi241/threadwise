@@ -66,3 +66,34 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/wadesk-port/waba-interak
 - Not built, with the reason: 047 Twilio inbound (the Twilio connection and its inbox
   channel kind belong to WADEV), 054 ads reuse (MADS is the consumer), the buyer
   acknowledgement and pay link of 042 (CHK listens to `whatsapp.order.received`).
+
+## Groups management: blocked (WIRE-WABA-001 to 010, backlog BL-094, spec [waba-groups-management.md](../../specs/waba-groups-management.md))
+
+- Built: only the receiving side (above). **Blocked, not ported**: the `/waba-groups` page (001), create (002), refresh (003), reset invite link (004), edit settings (005),
+  join request approve and reject (006), remove participants (007), delete (008) and sending to a group from the inbox (009; guarded, see below). **Built (phase 0)**: the
+  webhook-field check and one-click subscribe now cover the four Groups fields beside the four coexistence fields (010). WaDesk has no inventory entry for these (its WFL domain is not inventoried), hence `WIRE-WABA-*` ids.
+- Found while reading WaDesk: settings (005) and remove participants (007) are routes with **no control on the page**; there is **no sync-all-groups** action (the list endpoint
+  is only the eligibility probe); the join queue is fed only by the webhook; a suspended group is not blocked on send; there is no plan gate. Recorded as decisions D3, D4 and
+  D10 in the spec (any addition becomes `intended` here once approved).
+- Finding in our code, not a WaDesk difference: a reply on a group thread (`g:<id>`) is built by `metaRecipient()` (digits only) with `recipient_type: 'individual'`, so it either
+  fails or can reach an unrelated number. **Phase 0 of BL-094 is built**: a `g:` thread is refused with `WABA_GROUP_SEND_UNAVAILABLE` (422, not retryable) before anything is stored,
+  again in the send worker and in the Meta builders, and the inbox composer is switched off on a group thread with the line "Sending to WhatsApp groups is not available yet.
+  Reply from the WhatsApp Business app." (en, ar). Sending stays `blocked` until phase 3.
+- Nothing about groups ran against real Meta (no Official Business Account is available); the Meta facts in the spec are from a summary of its docs and need re-reading.
+
+## Meta Groups management (BL-094 phases 1 and 2, built 2026-10-08)
+
+Spec: [waba-groups-management.md](../../specs/waba-groups-management.md). WaDesk source: `WabaGroupsController`, `GroupClient`, `waba-groups/index.blade.php`.
+
+Intended differences (each approved by the owner's answers of 2026-10-08, spec section 20):
+
+- **Plan gate**: WaDesk had none; ours needs plan feature `waba_groups` (D1 override). Every route refuses reads too (422 `PLAN_FEATURE_LOCKED`).
+- **Permissions** `waba.groups.read|create|manage|delete` instead of the workspace admin role (D2).
+- **Edit settings and Members screens**: WaDesk has the routes but no control; ours builds both (D3). Members are read from Meta on demand and never stored.
+- **Join request failures** show as a toast, not `alert()`; the create/reset/delete forms are modals and calls, not full-page POSTs; counts and numbers of people waiting are shown only with `waba.groups.manage`.
+- **Idempotency-Key, rate budget (30 changes per minute per number), retry once on a transient failure** (not create, not remove); delete treats 131041 as done after a retry.
+- **Refused routes**: a number on Interakt or a registry provider answers `WABA_GROUPS_PROVIDER_UNSUPPORTED` (WaDesk always called Meta directly).
+- **Audit and outbox events** on every change (WaDesk logged none); the thread title follows a rename.
+- Numbers pages ask no capacity figures (D9). Sending to a group and the suspended-group refusal (D8, D10) are phase 3, not built.
+
+Not verified: everything about Meta. No Official Business Account exists to test with (BL-030); the client and the screens were exercised only against `test/support/fake-waba-groups-gateway.ts`. The 15 operator sentences and error codes are WaDesk's, not re-verified. The reference screen was not run side by side (wadesk-playwright-parity not run for this change). Not built: Socket.IO push and notifications for the group events (BL-099).

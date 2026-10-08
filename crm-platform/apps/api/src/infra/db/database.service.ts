@@ -41,7 +41,7 @@ export class DatabaseService implements OnModuleDestroy {
    */
   async tx<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
     const ctx = RequestContextStore.require();
-    return withTenant(this.primary, { orgId: ctx.orgId, userId: ctx.userId }, fn);
+    return withTenant(this.primary, this.tenantOf(ctx), fn);
   }
 
   /**
@@ -50,12 +50,30 @@ export class DatabaseService implements OnModuleDestroy {
    */
   async txReplica<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
     const ctx = RequestContextStore.require();
-    return withTenant(this.replica, { orgId: ctx.orgId, userId: ctx.userId }, fn);
+    return withTenant(this.replica, this.tenantOf(ctx), fn);
+  }
+
+  /** The act-as operator (when there is one) rides along so audit rows written in the transaction name them. */
+  private tenantOf(ctx: ReturnType<typeof RequestContextStore.require>): TenantContext {
+    return {
+      orgId: ctx.orgId,
+      userId: ctx.userId,
+      impersonation: ctx.impersonation
+        ? { operatorUuid: ctx.impersonation.operatorUuid, sessionUuid: ctx.impersonation.sessionId }
+        : null,
+    };
   }
 
   /** Explicit tenant, for background jobs that carry org_id in the payload. */
   async txAs<T>(tenant: TenantContext, fn: (tx: Tx) => Promise<T>): Promise<T> {
-    return withTenant(this.primary, tenant, fn);
+    // Request-side code often names its own tenant (the auth flows do); inside an act-as request, in that same tenant, the operator
+    // still rides along so the audit rows say so. A background job has no request context and is untouched.
+    const ctx = RequestContextStore.peek();
+    const impersonation =
+      tenant.impersonation === undefined && ctx?.impersonation && ctx.orgId === tenant.orgId
+        ? { operatorUuid: ctx.impersonation.operatorUuid, sessionUuid: ctx.impersonation.sessionId }
+        : tenant.impersonation;
+    return withTenant(this.primary, { ...tenant, impersonation }, fn);
   }
 
   /**

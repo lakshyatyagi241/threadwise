@@ -10,7 +10,14 @@
  * unlimited too).
  */
 
-export const PLAN_LIMIT_GROUPS = ['messaging', 'workspace', 'content'] as const;
+export const PLAN_LIMIT_GROUPS = [
+  'messaging',
+  'workspace',
+  'content',
+  'sales',
+  'integrations',
+  'ai',
+] as const;
 export type PlanLimitGroup = (typeof PLAN_LIMIT_GROUPS)[number];
 
 /** WaDesk column in brackets: monthly_messages_limit, broadcast_limit, device_limit, user_seat_limit... */
@@ -21,6 +28,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'scheduled_messages', group: 'messaging' },
   // Campaigns CREATED over the life of a plan period, deleted ones included (the delete-proof quota ledger, WD-PLAN-018). 0 = unlimited.
   { key: 'total_campaigns', group: 'messaging' },
+  // Personal WhatsApp numbers (the unofficial engine). Kept so existing plans keep their value, but it only applies while the
+  // platform switch `wa.unofficial.enabled` is on (owner decision 2026-10-05); with the switch off no device can be added or used.
   { key: 'devices', group: 'workspace' },
   { key: 'users', group: 'workspace' },
   { key: 'contacts', group: 'workspace' },
@@ -41,6 +50,39 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'installed_apps', group: 'workspace' },
   // Lead sources (webhook doors into the lead pipeline) a workspace has at once (spec email-channel-and-social-leads, L-12). 0 = unlimited.
   { key: 'lead_sources', group: 'workspace' },
+  // Audience size of ONE broadcast (contacts it would be sent to); a bigger audience is refused when the broadcast is created or edited. 0 = unlimited.
+  { key: 'broadcast_recipients', group: 'messaging' },
+  // Saved contact segments the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'segments', group: 'workspace' },
+  // Custom (non-system) fields across every module of the workspace; deleted ones free the place. 0 = unlimited.
+  { key: 'custom_fields', group: 'workspace' },
+  // Team chat channels (public and private) the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'team_chat_channels', group: 'workspace' },
+  // Inbox SLA policies the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'sla_policies', group: 'workspace' },
+  // Booking types (the public booking pages' event types) the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'booking_types', group: 'workspace' },
+  // Website chatbot widgets the workspace holds; deleted ones free the place. 0 = unlimited.
+  { key: 'chatbot_widgets', group: 'content' },
+  // Products in the WhatsApp catalog / storefront; deleted ones free the place. 0 = unlimited.
+  { key: 'catalog_products', group: 'content' },
+  // Invoices created per calendar month (every status, a deleted or voided one still counts for the month it was created in). 0 = unlimited.
+  { key: 'invoices_monthly', group: 'sales' },
+  // Recurring invoice schedules the workspace holds, every status; deleted ones free the place. 0 = unlimited.
+  { key: 'recurring_invoices', group: 'sales' },
+  // Active API keys of the workspace; a revoked key frees the place. 0 = unlimited.
+  { key: 'api_keys', group: 'integrations' },
+  // Outbound webhook endpoints the workspace holds (inbox webhooks and API webhooks together); deleted ones free the place. 0 = unlimited.
+  { key: 'webhooks', group: 'integrations' },
+  // Monthly AI token allowance of the workspace's assistants (counted by the AI token meter, ai-keys-usage-admin). Enforced there; the key name is
+  // fixed because workspace overrides and the meter already read it. 0 = unlimited.
+  { key: 'ai_token_limit_monthly', group: 'ai' },
+  // The Forms add-on (docs/specs/forms-builder-app.md 12.3). Active web forms the workspace holds (archived ones free the place). 0 = unlimited.
+  { key: 'forms', group: 'content' },
+  // Web form submissions accepted per calendar month, spam excluded. Over the cap a submission is still stored (`needs_review: submissions_cap`), never dropped. 0 = unlimited.
+  { key: 'form_submissions_monthly', group: 'content' },
+  // AI form builder generations per calendar month, a repair retry included (counted from the AI builder's phase 2; registered now so plans carry it). 0 = unlimited.
+  { key: 'ai_form_generations_monthly', group: 'ai' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -87,6 +129,22 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'marketplace', group: 'integrations', default: true },
   // Lead sources: webhook and connector doors that turn ad and portal leads into contacts and deals (L-12). Default true: no plan row held it before.
   { key: 'lead_sources', group: 'integrations', default: true },
+  // Areas that had no plan gate before. All default true: no plan row held them, so every one that predates them keeps the area.
+  { key: 'team_chat', group: 'advanced', default: true },
+  { key: 'public_api', group: 'integrations', default: true },
+  { key: 'outbound_webhooks', group: 'integrations', default: true },
+  { key: 'storefront_builder', group: 'advanced', default: true },
+  { key: 'invoicing', group: 'advanced', default: true },
+  { key: 'forms_and_links', group: 'messaging', default: true },
+  // Telegram, Facebook, Instagram and the other non-WhatsApp channels.
+  { key: 'extra_channels', group: 'messaging', default: true },
+  // The Forms add-on (Form Builder): hosted and embedded web forms that land in the CRM. Default FALSE: the Marketplace app `forms` owns this
+  // key (`grants_plan_features`), so no plan row grants it and a default-on feature would be refused at publish. NOT `forms_and_links`, which
+  // is WaDesk's WhatsApp Flows forms and stays on by default.
+  { key: 'form_builder', group: 'advanced', default: false },
+  // WhatsApp Groups on a Cloud API number (BL-094, docs/specs/waba-groups-management.md 13). WaDesk had NO plan gate on its Groups page; the
+  // owner decided (2026-10-08) it is a plan feature and not in every plan, so it defaults to FALSE and a plan must be given it.
+  { key: 'waba_groups', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -113,6 +171,15 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   whatsapp_warmer: 'WhatsApp warmer',
   marketplace: 'Marketplace',
   lead_sources: 'Lead sources',
+  team_chat: 'Team chat',
+  public_api: 'Public API',
+  outbound_webhooks: 'Outbound webhooks',
+  storefront_builder: 'Storefront builder',
+  invoicing: 'Invoicing',
+  forms_and_links: 'Forms and links',
+  extra_channels: 'Telegram, Facebook and Instagram channels',
+  form_builder: 'Forms',
+  waba_groups: 'WhatsApp groups',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -142,6 +209,15 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'whatsapp_warmer',
   'marketplace',
   'lead_sources',
+  'team_chat',
+  'public_api',
+  'outbound_webhooks',
+  'storefront_builder',
+  'invoicing',
+  'forms_and_links',
+  'extra_channels',
+  'form_builder',
+  'waba_groups',
 ];
 export const PLAN_CHIP_MAX = 3;
 

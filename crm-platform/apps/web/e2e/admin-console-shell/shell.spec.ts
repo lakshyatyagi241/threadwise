@@ -32,9 +32,31 @@ async function reload(page: Page) {
   await hydrated(page);
 }
 
+/** The areas, in order (console-layout.ts). Home shows one block each; an open area lists its pages in the left menu. */
+const HUBS = [
+  'reports',
+  'plans',
+  'billing',
+  'messaging',
+  'support',
+  'website',
+  'whatsapp',
+  'apps',
+  'team',
+  'settings',
+  'system',
+];
+
+const palette = (page: Page) => page.getByTestId('console-palette');
+const paletteField = (page: Page) => palette(page).getByRole('combobox');
+
 const aside = (page: Page) => page.locator('#console-sidebar');
-const openGroups = (page: Page) =>
-  aside(page).locator('[data-testid^="group-"][aria-expanded="true"]');
+const hub = (page: Page, id: string) => aside(page).getByTestId(`hub-${id}`);
+/** The left menu of an open area, and one of its pages. Count and status badges live inside the link, so pages are found by test id. */
+const menu = (page: Page) => aside(page).getByTestId('hub-menu');
+const menuItem = (page: Page, id: string) => aside(page).getByTestId(`menu-${id}`);
+/** A page outside every area: the aside lists all areas here, which is the menu away from an area. */
+const OUTSIDE = '/admin/account/security';
 
 test.describe('access', () => {
   test('a guest is sent to the operator sign-in', async ({ page }) => {
@@ -49,7 +71,7 @@ test.describe('access', () => {
     await open(page, '/admin');
     await expect(page).toHaveURL(/\/admin\/account\/security/);
     await expect(aside(page).locator('[aria-disabled="true"]').first()).toBeVisible();
-    await expect(aside(page).getByRole('link', { name: 'Plans' })).toHaveCount(0);
+    await expect(aside(page).locator('a[href="/admin/plans"]')).toHaveCount(0);
   });
 
   test('signing out ends the session', async ({ page }) => {
@@ -60,7 +82,8 @@ test.describe('access', () => {
       .first()
       .click();
     await expect(page).toHaveURL(/\/admin\/login/);
-    await open(page, '/admin');
+    // No rail on the sign-in page, so there is nothing to wait for hydrating.
+    await page.goto('/admin');
     await expect(page).toHaveURL(/\/admin\/login/);
   });
 });
@@ -70,73 +93,105 @@ test.describe('rail (desktop)', () => {
     await signIn(page, SUPPORT);
   });
 
-  test('Overview is highlighted on /admin and the page lists every area', async ({ page }) => {
+  test('Home shows what needs attention and one block per area, and has no left rail', async ({
+    page,
+  }) => {
     await open(page, '/admin');
-    await expect(aside(page).getByRole('link', { name: 'Overview' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
     await expect(page.getByRole('heading', { name: 'Platform console' })).toBeVisible();
-    expect(
-      await page.locator('#console-main section[aria-labelledby]').count(),
-    ).toBeGreaterThanOrEqual(3);
+    await expect(page.getByRole('heading', { name: 'Needs attention' })).toBeVisible();
+    expect(await page.locator('[data-testid^="home-hub-"]').count()).toBe(HUBS.length);
+    await expect(aside(page)).toBeHidden();
   });
 
-  test('only the deepest matching leaf is highlighted, and only its group is open', async ({
+  test('away from an area the rail lists Home and the eleven areas, in order', async ({ page }) => {
+    await open(page, OUTSIDE);
+    const ids = await aside(page)
+      .locator('[data-testid^="hub-"]:not([data-testid="hub-menu"])')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-testid')));
+    expect(ids).toEqual(['hub-home', ...HUBS.map((id) => `hub-${id}`)]);
+  });
+
+  test('every block opens its area, whose left menu lists the pages once, with no page in two areas', async ({
     page,
   }) => {
+    const seen: string[] = [];
+    for (const id of HUBS) {
+      await open(page, '/admin');
+      await page.getByTestId(`home-hub-${id}`).click();
+      await expect(menu(page)).toBeVisible();
+      await expect(page.getByTestId('hub-switcher')).toBeVisible();
+      const hrefs = await menu(page)
+        .locator('[data-testid^="menu-"]')
+        .evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
+      expect(hrefs.length, id).toBeGreaterThanOrEqual(2);
+      // The block opens on the area's first page.
+      await expect(aside(page).locator('[aria-current="page"]')).toHaveAttribute('href', hrefs[0]!);
+      seen.push(...hrefs);
+    }
+    expect(new Set(seen).size).toBe(seen.length);
+  });
+
+  test('only the deepest matching page is highlighted in the left menu', async ({ page }) => {
     await open(page, '/admin/security/events');
-    const current = aside(page).locator('[aria-current="page"]');
-    await expect(current).toHaveCount(1);
-    await expect(current).toHaveAttribute('href', '/admin/security/events');
-    await expect(openGroups(page)).toHaveCount(1);
+    await expect(aside(page).locator('[aria-current="page"]')).toHaveCount(1);
+    await expect(menuItem(page, 'security-events')).toHaveAttribute('aria-current', 'page');
+    await expect(menuItem(page, 'security')).not.toHaveAttribute('aria-current', 'page');
   });
 
-  test('groups collapse and expand independently', async ({ page }) => {
-    await open(page, '/admin/security');
-    expect(await aside(page).locator('[data-testid^="group-"]').count()).toBeGreaterThanOrEqual(3);
-
-    // Located by its label so the locator keeps matching while aria-expanded flips.
-    const security = aside(page).getByRole('button', { name: /^Show or hide Security$/ });
-    await expect(security).toHaveAttribute('aria-expanded', 'true');
-    await security.click();
-    await expect(security).toHaveAttribute('aria-expanded', 'false');
-    await expect(aside(page).getByRole('link', { name: 'Security events' })).toBeHidden();
-    await security.click();
-    await expect(security).toHaveAttribute('aria-expanded', 'true');
-    await expect(aside(page).getByRole('link', { name: 'Security events' })).toBeVisible();
-
-    const plans = aside(page).getByRole('button', { name: /^Show or hide Plans/ });
-    await expect(plans).toHaveAttribute('aria-expanded', 'false');
-    await plans.click();
-    await expect(plans).toHaveAttribute('aria-expanded', 'true');
-    await expect(openGroups(page)).toHaveCount(2);
+  test('a menu page opens, and a detail page keeps its list page highlighted', async ({ page }) => {
+    await open(page, '/admin/roles');
+    await menuItem(page, 'security').click();
+    await expect(page).toHaveURL(/\/admin\/security$/);
+    await open(page, '/admin/roles/new');
+    await expect(menuItem(page, 'roles')).toHaveAttribute('aria-current', 'page');
   });
 
-  test('the Plans badge shows the live plan count and no other leaf shows one', async ({
+  test('a long area groups its pages under small headings, and All areas leads back to Home', async ({
     page,
   }) => {
+    await open(page, '/admin/settings/general');
+    await expect(menuItem(page, 'settings-general')).toHaveAttribute('aria-current', 'page');
+    await expect(menu(page).getByText('Integrations', { exact: true })).toBeVisible();
+    await expect(menu(page).getByText('Infrastructure', { exact: true })).toBeVisible();
+    await page.getByTestId('hub-all-areas').click();
+    await expect(page).toHaveURL(/\/admin$/);
+  });
+
+  test('the area switcher moves to a neighbouring area', async ({ page }) => {
+    await open(page, '/admin/invoices');
+    await page.getByTestId('hub-switcher').click();
+    await hub(page, 'support').click();
+    await expect(page).toHaveURL(/\/admin\/support/);
+    await expect(menuItem(page, 'support-inbox')).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('Flow templates, which had no menu entry, is a page of Apps', async ({ page }) => {
+    await open(page, '/admin/marketplace');
+    await menuItem(page, 'flow-templates').click();
+    await expect(page).toHaveURL(/\/admin\/flow-templates/);
+  });
+
+  test('the Plans page shows the live plan count in the left menu', async ({ page }) => {
     const api = await page.request.get('/api/platform/plans');
     expect(api.ok()).toBe(true);
     const total = ((await api.json()) as { summary: { total: number } }).summary.total;
     expect(total).toBeGreaterThan(0);
     await open(page, '/admin/plans');
     await expect(aside(page).getByTestId('count-plans')).toHaveText(String(total));
-    await expect(aside(page).locator('[data-testid^="count-"]')).toHaveCount(1);
   });
 
   test('collapsing the rail hides labels, sets the cookie and survives a reload with no flash', async ({
     page,
     context,
   }) => {
-    await open(page, '/admin');
+    await open(page, '/admin/plans');
     await expect(aside(page)).toHaveAttribute('data-collapsed', 'false');
     const toggle = page.getByTestId('console-sidebar-toggle');
     await expect(toggle).toHaveAttribute('aria-label', 'Collapse sidebar');
     await toggle.click();
     await expect(aside(page)).toHaveAttribute('data-collapsed', 'true');
     await expect(toggle).toHaveAttribute('aria-label', 'Expand sidebar');
-    await expect(aside(page).getByText('Overview', { exact: true })).toBeHidden();
+    await expect(menu(page)).toBeHidden();
     expect((await aside(page).boundingBox())!.width).toBeLessThan(100);
 
     const cookie = (await context.cookies()).find((c) => c.name === 'crm_console_sidebar');
@@ -157,17 +212,137 @@ test.describe('rail (desktop)', () => {
 
   test('a tampered cookie never hides the menu', async ({ page, context }) => {
     await context.addCookies([{ name: 'crm_console_sidebar', value: 'garbage', url: ORIGIN }]);
-    await open(page, '/admin');
+    await open(page, '/admin/plans');
     await expect(aside(page)).toHaveAttribute('data-collapsed', 'false');
-    await expect(aside(page).getByRole('link', { name: 'Overview' })).toBeVisible();
+    await expect(menuItem(page, 'plans')).toBeVisible();
   });
 
-  test('the collapsed rail still reaches every page', async ({ page }) => {
-    await open(page, '/admin');
+  test('the collapsed rail shows one icon per area, and an icon opens its area', async ({
+    page,
+  }) => {
+    await open(page, '/admin/plans');
     await page.getByTestId('console-sidebar-toggle').click();
-    await aside(page).getByRole('link', { name: 'Plans' }).click();
-    await expect(page).toHaveURL(/\/admin\/plans/);
     await expect(aside(page)).toHaveAttribute('data-collapsed', 'true');
+    // Icons only: no name is on screen, but every hub can be reached.
+    await expect(menu(page)).toBeHidden();
+    for (const id of HUBS) await expect(hub(page, id)).toBeVisible();
+
+    await hub(page, 'support').click();
+    await expect(page).toHaveURL(/\/admin\/support/);
+    await expect(hub(page, 'support')).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('the brand row and the account row stay in view while a long menu scrolls', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 420 });
+    await open(page, '/admin/settings/general');
+    const nav = aside(page).locator('nav');
+    expect(await nav.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+    await nav.evaluate((el) => (el.scrollTop = el.scrollHeight));
+    await expect(
+      aside(page).getByRole('link', { name: /account and two-factor/i }),
+    ).toBeInViewport();
+    await expect(aside(page).getByText('CRM', { exact: true })).toBeInViewport();
+  });
+
+  test('Ctrl+K opens the search with the field focused; typing finds a page and Enter opens it', async ({
+    page,
+  }) => {
+    await open(page, '/admin');
+    await page.keyboard.press('Control+K');
+    await expect(palette(page)).toBeVisible();
+    await expect(paletteField(page)).toBeFocused();
+    // Before anything is typed it offers the first eight pages of the menu (WD-ASHELL-019).
+    await expect(palette(page).getByRole('option')).toHaveCount(8);
+    await expect(palette(page).getByRole('option').first()).toContainText('Home');
+
+    await paletteField(page).fill('wallet logs');
+    const first = palette(page).getByRole('option').first();
+    await expect(first).toContainText('Wallet logs');
+    await expect(first).toContainText('Messaging billing');
+    await expect(first).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('Enter');
+
+    await expect(page).toHaveURL(/\/admin\/wallet\/logs/);
+    await expect(palette(page)).toHaveCount(0);
+    await expect(menuItem(page, 'wallet-logs')).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('the search finds a page by the words of its address, and says so when nothing matches', async ({
+    page,
+  }) => {
+    await open(page, '/admin');
+    await page.getByTestId('console-search-trigger').click();
+    await paletteField(page).fill('api keys');
+    await expect(palette(page).getByRole('option')).toHaveCount(1);
+    await expect(palette(page).getByRole('option')).toContainText('AI provider keys');
+
+    await paletteField(page).fill('zzzzzz');
+    await expect(palette(page).getByRole('option')).toHaveCount(0);
+    await expect(palette(page)).toContainText('No results for');
+    await page.keyboard.press('Enter'); // nothing highlighted: nothing happens
+    await expect(page).toHaveURL(/\/admin$/);
+  });
+
+  test('arrow keys move through the results and wrap around', async ({ page }) => {
+    await open(page, '/admin');
+    await page.keyboard.press('Control+K');
+    await paletteField(page).fill('invoices');
+    const options = palette(page).getByRole('option');
+    const count = await options.count();
+    expect(count).toBeGreaterThan(1);
+    await expect(options.nth(0)).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('ArrowDown');
+    await expect(options.nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(paletteField(page)).toHaveAttribute('aria-activedescendant', /option-1$/);
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await expect(options.nth(count - 1)).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('Escape closes the search and gives focus back; Ctrl+K again also closes it', async ({
+    page,
+  }) => {
+    await open(page, '/admin');
+    const trigger = page.getByTestId('console-search-trigger');
+    await trigger.click();
+    await expect(palette(page)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(palette(page)).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+
+    await page.keyboard.press('Control+K');
+    await expect(palette(page)).toBeVisible();
+    await page.keyboard.press('Control+K');
+    await expect(palette(page)).toHaveCount(0);
+  });
+
+  test('the search finds a page by a hidden keyword, and lists at most twelve matches', async ({
+    page,
+  }) => {
+    await open(page, '/admin');
+    await page.keyboard.press('Control+K');
+    await paletteField(page).fill('stripe');
+    await expect(palette(page).getByRole('option').first()).toContainText('Payment gateways');
+    await paletteField(page).fill('settings');
+    expect(await palette(page).getByRole('option').count()).toBeLessThanOrEqual(12);
+  });
+
+  test('a click outside the card closes the search', async ({ page }) => {
+    await open(page, '/admin');
+    await page.keyboard.press('Control+K');
+    await expect(palette(page)).toBeVisible();
+    await page.mouse.click(5, 5);
+    await expect(palette(page)).toHaveCount(0);
+  });
+
+  test('clicking a result opens it', async ({ page }) => {
+    await open(page, '/admin');
+    await page.keyboard.press('Control+K');
+    await paletteField(page).fill('coupons');
+    await palette(page).getByRole('option').first().click();
+    await expect(page).toHaveURL(/\/admin\/coupons/);
   });
 
   test('keyboard users reach the skip link first, and the theme toggles', async ({ page }) => {
@@ -222,13 +397,9 @@ test.describe('rail (phone)', () => {
     await expect(page.getByTestId('console-menu-button')).toBeFocused();
   });
 
-  test('choosing a page closes the drawer', async ({ page }) => {
+  test('choosing a hub closes the drawer', async ({ page }) => {
     await page.getByTestId('console-menu-button').click();
-    // Only the active group is open on first paint, so open the one holding Plans.
-    await aside(page)
-      .getByRole('button', { name: /^Show or hide Plans/ })
-      .click();
-    await aside(page).getByRole('link', { name: 'Plans' }).click();
+    await hub(page, 'plans').click();
     await expect(page).toHaveURL(/\/admin\/plans/);
     await expect(aside(page)).toBeHidden();
   });
@@ -240,11 +411,29 @@ test.describe('rail (phone)', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  test('the compact search button opens the search on a phone', async ({ page }) => {
+    await page.getByTestId('console-search-trigger-compact').click();
+    await expect(palette(page)).toBeVisible();
+    await paletteField(page).fill('security events');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/\/admin\/security\/events/);
+  });
+
+  test('Escape closes only the search, not the menu drawer behind it', async ({ page }) => {
+    await page.getByTestId('console-menu-button').click();
+    await expect(aside(page)).toBeVisible();
+    await page.keyboard.press('Control+K');
+    await expect(palette(page)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(palette(page)).toHaveCount(0);
+    await expect(aside(page)).toBeVisible();
+  });
+
   test('a collapsed-rail cookie does not shrink the phone drawer', async ({ page, context }) => {
     await context.addCookies([{ name: 'crm_console_sidebar', value: 'collapsed', url: ORIGIN }]);
     await reload(page);
     await page.getByTestId('console-menu-button').click();
-    await expect(aside(page).getByText('Overview', { exact: true })).toBeVisible();
+    await expect(aside(page).getByText('Home', { exact: true })).toBeVisible();
     expect((await aside(page).boundingBox())!.width).toBeGreaterThan(200);
   });
 });

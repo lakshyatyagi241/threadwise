@@ -66,7 +66,8 @@ type InboundJob = {
  *      only a shortcut in front of this;
  *   4. the next `msg_seq` is taken from the locked row (gap-free per thread), the message is inserted, and the thread's unread count,
  *      activity stamps, 24 hour window and wait are updated; a resolved, closed or snoozed thread is reopened;
- *   5. conversation events, the audit row and the `conversation.created` / `conversation.reopened` outbox events are written.
+ *   5. conversation events, the audit row and the `conversation.created` / `conversation.reopened` outbox events are written, plus the
+ *      per-message `message.received` event that drives the live notifications (BL-096).
  *
  * Realtime is published after the commit. An inbound message is never dropped for a business reason: when the contact cannot be
  * created (the plan's contact cap, a contact error) the thread simply has no contact and says so (`needs_contact`); a file that
@@ -152,12 +153,20 @@ export class InboundIngestService {
             peerKey,
             peerName: result.conv.peerName,
             createdConversation: result.createdConversation,
+            reopenedFrom: result.reopenedFrom,
             message: {
               kind: m.kind,
               body: result.message.body,
               meta: result.message.meta,
               location: m.location ?? null,
               mediaKey: result.message.mediaKey,
+              media: m.media
+                ? {
+                    kind: m.media.mediaKind,
+                    mime: m.media.mime,
+                    ...(m.media.name ? { name: m.media.name } : {}),
+                  }
+                : null,
             },
           });
         }
@@ -343,6 +352,21 @@ export class InboundIngestService {
     await this.conversations.touchChannel(tx, orgId, channel.id);
 
     const message = (await this.messages.byId(tx, orgId, alloc.id, alloc.createdAt))!;
+    // Imported history is quiet (nobody is alerted to a message from months ago), so only a live customer message gets the event.
+    if (!m.history) {
+      await this.lifecycle.messageReceived(
+        tx,
+        orgId,
+        channel,
+        after,
+        { uuid: message.uuid, preview },
+        {
+          firstInbound: createdConversation || reopenedFrom !== null,
+          group: Boolean(m.group),
+          at: arrivedAt.toISOString(),
+        },
+      );
+    }
     const changed = ['lastMessage', 'unread'];
     if (createdConversation) changed.push('created');
     if (reopenedFrom) changed.push('status');

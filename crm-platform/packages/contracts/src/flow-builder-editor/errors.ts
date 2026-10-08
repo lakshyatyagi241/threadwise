@@ -17,4 +17,10 @@ export const FLB_ERROR_CODES = {
   FLB_STORAGE_UNAVAILABLE: 'FLB_STORAGE_UNAVAILABLE',
   /** Google Sheets / Docs / Forms pickers: the Google integration is not connected on this deployment. */
   FLB_INTEGRATION_DISABLED: 'FLB_INTEGRATION_DISABLED',
+  /** Geta publishing: the workspace has no complete credentials (base URL, authorization, geta-host, chatbot record). */
+  FLB_GETA_NOT_CONFIGURED: 'FLB_GETA_NOT_CONFIGURED',
+  /** Geta publishing: the pasted chatbot record, or the base URL, is not acceptable. */
+  FLB_GETA_SETTINGS_INVALID: 'FLB_GETA_SETTINGS_INVALID',
+  /** Retry asked for a flow that is a draft or whose push is already running or live. */
+  FLB_GETA_NOT_RETRYABLE: 'FLB_GETA_NOT_RETRYABLE',
 } as const;

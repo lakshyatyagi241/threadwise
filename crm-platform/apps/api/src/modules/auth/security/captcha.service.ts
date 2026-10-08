@@ -22,9 +22,18 @@ export class CaptchaService {
     @Inject(CAPTCHA_PORT) private readonly port: CaptchaPort,
   ) {}
 
+  /**
+   * What a guest form needs to draw the widget: the provider version and the PUBLIC site key. Null when the gate is off or half-configured
+   * (then there is nothing to draw and `assert` lets everything through). The secret never leaves the settings service.
+   */
+  async publicConfig(): Promise<{ version: 'v2' | 'v3'; siteKey: string } | null> {
+    const config = await this.settings.captchaConfig();
+    return config ? { version: config.version, siteKey: config.siteKey } : null;
+  }
+
   async assert(
     token: string | undefined,
-    action: 'login' | 'register' | 'forgot' | 'operator' | 'contact',
+    action: 'login' | 'register' | 'forgot' | 'operator' | 'contact' | 'form',
   ): Promise<void> {
     const config = await this.settings.captchaConfig();
     if (!config) return;

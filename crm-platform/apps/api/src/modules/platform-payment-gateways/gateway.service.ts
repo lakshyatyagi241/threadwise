@@ -22,6 +22,8 @@ import {
   defaultHttp,
   type HttpFetch,
   type PaymentDriver,
+  type ProviderPlanCache,
+  type ProviderPlanKey,
 } from '../../infra/providers/platform-payment-gateways';
 import { AuthAuditService } from '../auth';
 import { mergeCredentials, missingRequired, type Credentials } from './gateway-rules';
@@ -84,7 +86,31 @@ export class GatewayService {
       http,
       // Square signs the exact URL the provider calls; it is the same one the admin screen tells the operator to paste.
       webhookUrl: `${this.config.get('APP_URL', { infer: true })}/v2/payments/webhook/${row.slug}`,
+      planCache: this.planCache(row.slug),
     });
+  }
+
+  /** The provider-plan cache of one gateway (`gateway_plan_cache`): a plan for the same account, price and cadence is made once. */
+  private planCache(slug: string): ProviderPlanCache {
+    const where = (k: ProviderPlanKey) => sql`gateway = ${slug} AND account_hash = ${k.account}
+      AND currency = ${k.currency} AND amount_minor = ${k.amountMinor.toString()}::bigint
+      AND interval_unit = ${k.unit} AND interval_count = ${k.count}`;
+    return {
+      find: (k) =>
+        this.store.tx(async (tx) => {
+          const res = await tx.execute(
+            sql`SELECT gateway_plan_id FROM gateway_plan_cache WHERE ${where(k)}`,
+          );
+          return (res.rows[0] as { gateway_plan_id: string } | undefined)?.gateway_plan_id ?? null;
+        }),
+      save: (k, id) =>
+        this.store.tx(async (tx) => {
+          await tx.execute(sql`
+            INSERT INTO gateway_plan_cache (gateway, account_hash, currency, amount_minor, interval_unit, interval_count, gateway_plan_id)
+            VALUES (${slug}, ${k.account}, ${k.currency}, ${k.amountMinor.toString()}::bigint, ${k.unit}, ${k.count}, ${id})
+            ON CONFLICT ON CONSTRAINT uq_gateway_plan_cache DO UPDATE SET gateway_plan_id = EXCLUDED.gateway_plan_id`);
+        }),
+    };
   }
 
   // ---- reads ---------------------------------------------------------------------------------------------------------

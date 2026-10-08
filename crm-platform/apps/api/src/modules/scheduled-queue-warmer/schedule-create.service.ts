@@ -19,8 +19,13 @@ import {
   type TemplateDirectory,
   type WalletGate,
 } from '../broadcasts';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { OutboundRegistry, SenderResolver, type SenderRef } from '../node-bridge-runtime';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import {
   ScheduleAudienceService,
   cleanNumber,
@@ -76,6 +81,7 @@ export class ScheduleCreateService {
   constructor(
     private readonly db: DatabaseService,
     private readonly plans: PlanEntitlementService,
+    private readonly usage: PlanUsageService,
     private readonly audience: ScheduleAudienceService,
     private readonly warmer: WarmerService,
     private readonly senderResolver: SenderResolver,
@@ -84,18 +90,13 @@ export class ScheduleCreateService {
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   async create(input: CreateScheduleInput): Promise<CreateScheduleResult> {
     const { orgId, userId } = RequestContextStore.require();
     await this.plans.assertFeature(orgId, 'scheduled_messages');
-    const held = await this.db.tx(async (tx) => {
-      const res = await tx.execute(
-        sql`SELECT count(*)::int AS n FROM scheduled_messages WHERE org_id = ${orgId}`,
-      );
-      return Number((res.rows[0] as { n?: number }).n ?? 0);
-    });
-    await this.plans.assertWithinLimit(orgId, 'scheduled_messages', held);
+    await this.usage.assertCanAdd(orgId, 'scheduled_messages');
 
     // --- when ---
     if (!isKnownTimeZone(input.timezone)) throw fail('Choose a valid timezone.', 'timezone');
@@ -112,6 +113,10 @@ export class ScheduleCreateService {
     const kind = await this.content(orgId, input);
 
     // --- who ---
+    // A sender that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
+    if (input.senders.some((k) => k.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))) {
+      await this.unofficial.assertEnabledFor(orgId);
+    }
     const { sendersResolved, audience } = await this.db.tx(async (tx) => ({
       sendersResolved: await this.senders.resolve(tx, orgId, input.senders),
       audience: await this.audience.resolve(tx, orgId, input),

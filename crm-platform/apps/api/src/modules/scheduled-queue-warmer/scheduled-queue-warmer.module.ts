@@ -29,7 +29,14 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
     ScheduleActionsService,
     ScheduleProducerService,
   ],
-  exports: [SchedulerService, WarmerService, ScheduleProducerService],
+  exports: [
+    SchedulerService,
+    WarmerService,
+    ScheduleProducerService,
+    ScheduleCreateService,
+    ScheduleReadService,
+    ScheduleActionsService,
+  ],
 })
 export class ScheduledQueueWarmerModule implements OnModuleInit {
   constructor(

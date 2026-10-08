@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Webhook forwarding"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "dash": "-",
+      "errors": {
+        "forbidden": "You do not have permission to do this.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "conflict": "Someone else changed this target. The list was reloaded: apply your change again.",
+        "validation": "Some values are not valid. Check the highlighted fields.",
+        "notFound": "That item no longer exists.",
+        "urlRejected": "This URL is not allowed. Use an https address that is reachable from the internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / System / Webhooks",
+      "title": "Webhook forwarding",
+      "description": "The platform operator's list of services that receive a copy of every Meta webhook.",
+      "banner": "Meta allows one callback URL. We receive it once, verify it, and forward the raw body unchanged (with the original signature) to every active target.",
+      "superOnly": "Only a super admin can manage webhook forwarding.",
+      "add": "Add target",
+      "tabs": {
+        "targets": "Targets",
+        "failures": "Failed deliveries"
+      }
+    },
+    "targets": {
+      "empty": "No forward targets yet",
+      "emptyBody": "Add a target to start forwarding Meta webhooks to another service.",
+      "columns": {
+        "target": "Target",
+        "active": "Active",
+        "fields": "Fields",
+        "deliveries": "Deliveries",
+        "last": "Last delivery",
+        "actions": "Actions"
+      },
+      "allFields": "All fields",
+      "success": "{count, number} ok",
+      "failure": "{count, number} failed",
+      "pending": "{count, number} pending",
+      "pendingLabel": "{count, number} failed deliveries waiting for replay",
+      "neverDelivered": "Nothing delivered yet",
+      "lastStatus": "Status {status}",
+      "lastError": "Error: {error}",
+      "lastAt": "at {time}",
+      "activeSwitch": "Forward to {name}",
+      "on": "Target on",
+      "off": "Target off",
+      "edit": "Edit",
+      "test": "Test",
+      "testing": "Testing",
+      "testOk": "Test passed: status {status} in {ms, number} ms",
+      "testFailed": "Test failed: {reason} ({ms, number} ms)",
+      "testNoStatus": "no answer",
+      "testStatus": "status {status}",
+      "delete": "Delete",
+      "deleteTitle": "Delete {name}?",
+      "deleteBody": "The target stops receiving webhooks and its kept failed deliveries are deleted. This cannot be undone.",
+      "deleteConfirm": "Delete target",
+      "cancel": "Cancel",
+      "toasts": {
+        "created": "{name} added",
+        "saved": "{name} saved",
+        "on": "{name} is on",
+        "off": "{name} is off",
+        "deleted": "{name} deleted"
+      }
+    },
+    "dialog": {
+      "createTitle": "Add forward target",
+      "editTitle": "Edit {name}",
+      "close": "Close",
+      "name": "Name",
+      "namePlaceholder": "Analytics service",
+      "url": "URL",
+      "urlHint": "https only. Addresses on private networks are refused.",
+      "headerName": "Header name (optional)",
+      "headerNameHint": "Sent with every delivery, for example Authorization.",
+      "headerValue": "Header value",
+      "headerValueSaved": "Saved, ends in ••••{last4}. Leave blank to keep it.",
+      "headerValueSavedNoLast4": "Saved. Leave blank to keep it.",
+      "headerValueHint": "Write-only: it is never shown again after saving.",
+      "removeHeader": "Remove the saved header",
+      "fieldFilter": "Field filter",
+      "fieldFilterHint": "Leave empty to forward every field. Type a field and press Enter, for example messages or message_template_status_update.",
+      "fieldFilterPlaceholder": "Add a field",
+      "fieldRemove": "Remove {field}",
+      "timeout": "Timeout (seconds)",
+      "timeoutHint": "1 to 30",
+      "maxAttempts": "Max attempts",
+      "maxAttemptsHint": "1 to 10",
+      "active": "Forward to this target",
+      "save": "Save",
+      "saving": "Saving",
+      "cancel": "Cancel",
+      "errors": {
+        "nameRequired": "Enter a name.",
+        "urlRequired": "Enter the URL.",
+        "urlHttps": "The URL must start with https://.",
+        "headerNameInvalid": "Use letters, digits and dashes only.",
+        "headerValueRequired": "A header needs both a name and a value.",
+        "headerNameRequired": "Enter the header name too.",
+        "timeout": "Enter a whole number from 1 to 30.",
+        "maxAttempts": "Enter a whole number from 1 to 10."
+      }
+    },
+    "failures": {
+      "empty": "No failed deliveries",
+      "emptyBody": "Deliveries that run out of retries are kept here for 14 days so you can send them again.",
+      "filterAll": "All targets",
+      "filterLabel": "Target",
+      "columns": {
+        "target": "Target",
+        "when": "Failed at",
+        "attempts": "Attempts",
+        "reason": "Reason",
+        "size": "Size",
+        "actions": "Action"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} bytes",
+      "replay": "Replay",
+      "replaying": "Replaying",
+      "replayed": "Replayed {time}",
+      "replayOk": "Delivered: status {status} in {ms, number} ms",
+      "replayFailed": "Not delivered: {reason} ({ms, number} ms)",
+      "reasonStatus": "status {status}",
+      "reasonNone": "no answer"
+    }
+  }
+}

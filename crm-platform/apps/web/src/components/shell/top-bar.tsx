@@ -97,6 +97,8 @@ export interface TopBarProps {
   notificationCount?: number;
   /** A live bell (badge and panel) owned by the notifications domain; replaces the link or the disabled placeholder. */
   bell?: ReactNode;
+  /** The "?" that opens the guide of the current screen (see `PageHelpTip`); renders nothing on a screen with no guide. */
+  pageHelp?: ReactNode;
   /** The gear that offers the settings behind the current screen (see `PageSettingsShortcut`); absent or empty on other screens. */
   pageSettings?: ReactNode;
   /** The Settings area; the user menu links to it (the gear that used to sit here is the menu's Settings entry now). */
@@ -117,6 +119,7 @@ export function TopBar({
   notificationsHref,
   notificationCount,
   bell,
+  pageHelp,
   pageSettings,
   settingsHref,
   helpItems,
@@ -162,6 +165,7 @@ export function TopBar({
               <span className="tabular-nums">{wallet.label}</span>
             </span>
           ))}
+        {pageHelp}
         <HeaderTools theme={theme} />
         {pageSettings}
         {bell ?? (

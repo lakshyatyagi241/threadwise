@@ -10,7 +10,9 @@ import {
   moveItem,
   removeConditionRow,
   resolveTriggerChannel,
+  senderHint,
   senderLabel,
+  senderNoneCopy,
   senderOptions,
   subflowLabel,
   toggleId,
@@ -55,6 +57,36 @@ describe('trigger sender', () => {
     const opts = senderOptions('chat', [{ key: 'waba:1', label: '+1 555', engineLabel: 'WABA' }]);
     expect(opts[0]?.l).toBe('— pick number —');
     expect(opts[1]).toEqual({ v: 'waba:1', l: '+1 555 · WABA' });
+  });
+});
+
+describe('sender copy while the platform has unofficial WhatsApp off', () => {
+  it('names only the official engines and links to the official WhatsApp connect flow', () => {
+    const off = senderHint('chat');
+    expect(off.before).toContain('WhatsApp Business API / Twilio');
+    expect(off.before).not.toContain('Unofficial');
+    expect(off.href).toBe('/channels/whatsapp');
+    expect(senderNoneCopy('chat').href).toBe('/channels/whatsapp');
+  });
+
+  it('keeps the three-engine wording and the device page only while the switch is on', () => {
+    expect(senderHint('chat', true).before).toContain('Unofficial / WABA / Twilio');
+    expect(senderHint('chat', true).href).toBe('/devices');
+    expect(senderNoneCopy('chat', true).href).toBe('/devices');
+  });
+
+  it('never sends Facebook or mailbox hints to the personal-number page', () => {
+    for (const on of [false, true]) {
+      expect(senderHint('facebook', on).href).toBe('/facebook');
+      expect(senderNoneCopy('facebook', on).href).toBe('/facebook');
+      expect(senderHint('email', on).href).toBe('/settings/channels');
+      expect(senderNoneCopy('email', on).href).toBe('/settings/channels');
+    }
+  });
+
+  it('does not touch the copy of the other channels', () => {
+    expect(senderHint('instagram').href).toBe('/instagram');
+    expect(senderHint('line').href).toBe(senderHint('line', true).href);
   });
 });
 

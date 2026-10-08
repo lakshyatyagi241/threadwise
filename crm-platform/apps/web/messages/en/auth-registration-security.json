@@ -268,6 +268,12 @@
       "login": {
         "workspace": "Workspace",
         "workspaceHint": "The address your team uses, like acme.",
+        "chooseTitle": "Choose a workspace",
+        "chooseSubtitle": "Your email is in more than one workspace. Pick the one you want to open.",
+        "chooseMembers": "{count, plural, one {# member} other {# members}}",
+        "chooseOpen": "Open",
+        "chooseBack": "Use a different account",
+        "chooseExpired": "That took too long. Sign in again.",
         "workspacePlaceholder": "your-workspace",
         "email": "Email",
         "emailPlaceholder": "you@company.com",

@@ -1,5 +1,12 @@
+import {
+  flbAskNeedsInputCheck,
+  flbCleanAskInputType,
+  flbSanitizeConditionGroup,
+  flbToRuntimeData,
+} from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
+import { cleanVar } from './clean-var';
 
 /** What the editor saves (WD-FLR-013): nodes with a lower-case `type` and a `data` bag, edges with a source handle. */
 export interface BuilderNode {
@@ -33,6 +40,8 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   buttons: 'InteractiveButtons',
   list: 'List',
   ask: 'Question',
+  ask_file: 'AskFile',
+  ask_location: 'AskLocation',
   condition: 'Condition',
   delay: 'TimeDelay',
   webhook: 'Webhook',
@@ -93,20 +102,7 @@ const int = (v: unknown, fallback: number): number => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-/**
- * A variable-name field as the author typed it: one surrounding `{{ }}`, a leading `@`, braces and spaces are dropped, so an Ask
- * never stores under a literal key `{{name}}` (WD-FLR-013 rule 7).
- */
-export function cleanVar(v: unknown, fallback: string): string {
-  let s = str(v).trim();
-  if (s === '') return fallback;
-  s = s
-    .replace(/^\{\{\s*/, '')
-    .replace(/\s*\}\}$/, '')
-    .replace(/^@/, '')
-    .replace(/[{}\s]/g, '');
-  return s === '' ? fallback : s;
-}
+export { cleanVar };
 
 function replyType(kind: string): 'Text' | 'Image' | 'Video' | 'Audio' | 'Document' {
   switch (kind.toLowerCase()) {
@@ -168,6 +164,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         }),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
       };
     }
     case 'buttons': {
@@ -180,6 +177,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         })),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
+        savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
@@ -192,6 +190,31 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
           .map((v) => (typeof v === 'string' ? v.trim() : ''))
           .filter((s) => s !== ''),
         footerText: str(data.footerText),
+        // A checked answer (see AskInputNode); `flbToRuntimeData` has already normalised these.
+        inputType: flbCleanAskInputType(data.inputType),
+        dateFormat: str(data.dateFormat),
+        wrongReplyText: str(data.wrongReplyText),
+        maxRetries: int(data.maxRetries, 0),
+        onGiveUp: str(data.onGiveUp, 'continue'),
+        savePropertyKey: str(data.savePropertyKey),
+      };
+    // Not WaDesk nodes (WD-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
+    case 'ask_file':
+    case 'ask_location':
+      return {
+        question: str(data.question ?? data.prompt),
+        variable: cleanVar(data.variable ?? data.var, type === 'ask_file' ? 'file' : 'location'),
+        ...(type === 'ask_file'
+          ? {
+              extensions: arr(data.extensions).map((e) => str(e)),
+              savePropertyKey: str(data.savePropertyKey),
+            }
+          : { interactive: data.interactive !== false }),
+        maxRetries: int(data.maxRetries, 2),
+        wrongReplyText: str(data.wrongReplyText ?? data.wrongReply),
+        skipKeyword: str(data.skipKeyword),
+        onGiveUp: str(data.onGiveUp ?? data.onFail, 'continue'),
+        timeoutMinutes: int(data.timeoutMinutes, 0),
       };
     case 'condition': {
       const raw = data.conditions;
@@ -208,7 +231,10 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
               value: str(data.value),
             },
           ];
+      // The optional nested tree (beyond WaDesk): when valid it wins over the flat chain at run time.
+      const conditionGroup = flbSanitizeConditionGroup(data.conditionGroup, (v) => cleanVar(v, ''));
       return {
+        ...(conditionGroup ? { conditionGroup } : {}),
         conditions,
         logicOperators: arr(data.operators).map((o) =>
           str(o).toUpperCase() === 'OR' ? 'OR' : 'AND',
@@ -280,8 +306,16 @@ export function compileGraph(input: unknown): RuntimeGraph {
     if (id === '') continue;
     const builderType = str(n.type ?? n.flowNodeType);
     typeById.set(id, builderType);
-    const mapped = TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType));
-    nodes.push({ id, type: mapped, props: shapeNode(builderType, obj(n.data)) });
+    const props = shapeNode(
+      builderType,
+      flbToRuntimeData({ type: builderType, data: obj(n.data) }),
+    );
+    // An Ask with "Validate as" set (and no fixed answers or file upload) is the checked question; every other Ask keeps WaDesk's.
+    const mapped =
+      builderType === 'ask' && flbAskNeedsInputCheck(props)
+        ? 'AskInput'
+        : (TYPE_MAP[builderType] ?? (str(n.flowNodeType) || ucfirst(builderType)));
+    nodes.push({ id, type: mapped, props });
   }
 
   const edges: RuntimeEdge[] = [];

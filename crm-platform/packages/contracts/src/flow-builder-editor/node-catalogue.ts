@@ -114,6 +114,9 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('buttons', 'Quick replies', 'Send', 'Tap-to-pick reply buttons', SOCIAL_AND_CHAT),
   def('list', 'List message', 'Send', 'Interactive list picker'),
   def('ask', 'Ask question', 'Listen', 'Save user reply to a var', SOCIAL_AND_CHAT),
+  // Not WaDesk nodes: an addition the project owner asked for (WD-FLB-081, 082). WhatsApp only: they wait for a media / location message.
+  def('ask_file', 'Ask for file / image', 'Listen', 'Wait for a photo, document, video or audio'),
+  def('ask_location', 'Ask for location', 'Listen', 'Wait for the customer to share a location'),
   def('condition', 'Condition', 'Logic', 'If / else branch', ALL),
   def('delay', 'Wait', 'Logic', 'Pause for X minutes', ALL),
   def('webhook', 'Webhook', 'Logic', 'Call external HTTPS endpoint', ALL),
@@ -277,12 +280,20 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'sequence':
       return { replies: [{ type: 'text', text: 'Hi {{name}}!' }] };
     case 'buttons':
-      return { prompt: 'Pick one', options: ['Option A', 'Option B'], var: 'choice' };
+      return {
+        prompt: 'Pick one',
+        options: ['Option A', 'Option B'],
+        var: 'choice',
+        saveProperty: false,
+        propertyKey: '',
+      };
     case 'list':
       return {
         prompt: 'Pick from list',
         button: 'View options',
         var: 'choice',
+        saveProperty: false,
+        propertyKey: '',
         options: [
           { title: 'Item 1', description: '', section: '' },
           { title: 'Item 2', description: '', section: '' },
@@ -290,7 +301,44 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         ],
       };
     case 'ask':
-      return { prompt: "What's your name?", var: 'answer', validate: 'text', options: [] };
+      return {
+        prompt: "What's your name?",
+        var: 'answer',
+        validate: 'text',
+        options: [],
+        // Used when "Validate as" is not free text: the date shape, the wrong-answer text (blank: a ready-made one), how many wrong
+        // answers are tolerated (0: keep asking), what happens after that, and the contact property the answer is also saved to.
+        dateFormat: 'dd-mm-yyyy',
+        wrongReply: '',
+        retries: 0,
+        onFail: 'continue',
+        saveProperty: false,
+        propertyKey: '',
+      };
+    case 'ask_file':
+      return {
+        prompt: 'Please send the file or image.',
+        extensions: [],
+        var: 'file',
+        retries: 2,
+        wrongReply: 'That is not a file we can accept. Please send it as an attachment.',
+        skipKeyword: '',
+        onFail: 'continue',
+        timeoutMinutes: 0,
+        saveProperty: false,
+        propertyKey: '',
+      };
+    case 'ask_location':
+      return {
+        prompt: 'Please share your location with us.',
+        var: 'location',
+        interactive: true,
+        retries: 2,
+        wrongReply: 'Please share your location with the attachment (+) menu, then Location.',
+        skipKeyword: '',
+        onFail: 'continue',
+        timeoutMinutes: 0,
+      };
     case 'condition':
       return { conditions: [{ variable: '', operator: 'equals', value: '' }], operators: [] };
     case 'delay':
@@ -693,6 +741,10 @@ export function flbPortsFor(
         { id: 'else', label: 'else / no match', kind: 'no' as const },
       ];
     }
+    case 'ask_file':
+      return out('file received');
+    case 'ask_location':
+      return out('location received');
     case 'condition':
       return yesNo(['yes', 'IF · true'], ['no', 'ELSE · false']);
     case 'delay':

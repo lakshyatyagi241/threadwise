@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Store / Payment gateways",
+      "title": "Payment gateways",
+      "subtitle": "Add your own gateway keys so payments land in your account. Paste the keys the gateway names in its dashboard.",
+      "banner": "One gateway setup is used by your store checkout and Sales invoices.",
+      "viewOnly": "You can see the gateway setup but not change it. Ask a workspace admin for permission to manage gateways.",
+      "scope": {
+        "label": "Where these settings apply",
+        "workspace": "Workspace (all stores)",
+        "workspaceHint": "Used by every store and by Sales invoices, unless a store has its own override.",
+        "store": "This store only (override)",
+        "storeHint": "Used only by the checkout of {shop}. It wins over the workspace setup.",
+        "storeNamed": "Store: {shop}",
+        "noShop": "Create a store first to set up an override.",
+        "shop": "Store"
+      },
+      "resolved": {
+        "used": "Currently used: {name} (source: {source})",
+        "none": "No gateway set up yet",
+        "noneHint": "Set up a gateway below and switch it on. Until then buyers cannot pay online and invoices have no pay button.",
+        "source": {
+          "store_override": "store override",
+          "workspace_default": "workspace default",
+          "legacy_storefront": "store keys"
+        }
+      },
+      "mode": {
+        "live": "Live",
+        "test": "Test"
+      },
+      "catalogue": {
+        "title": "Gateways",
+        "count": "{count, plural, one {# gateway} other {# gateways}}",
+        "search": "Search gateways",
+        "searchPlaceholder": "Search by name, country or currency",
+        "loading": "Loading gateways",
+        "noDriversTitle": "No gateways available",
+        "noDriversMessage": "This server has no payment gateways to set up yet.",
+        "noMatchTitle": "No gateway matches",
+        "noMatchMessage": "Try another name, country or currency code.",
+        "clearSearch": "Clear search"
+      },
+      "card": {
+        "available": "Available",
+        "unavailable": "Not available yet",
+        "paymentLinks": "Payment links",
+        "unavailableNote": "This gateway is listed but cannot take payments in this version yet.",
+        "active": "Active",
+        "off": "Off",
+        "incomplete": "Keys incomplete",
+        "default": "Default",
+        "migrated": "Migrated from your storefront keys. Save once here to keep them in the new setup.",
+        "webhookMissing": "Webhook secret missing: payment notifications from this gateway are refused until you add one.",
+        "notSetUp": "Not set up for this scope yet.",
+        "configure": "Configure",
+        "edit": "Edit",
+        "test": "Test connection",
+        "testing": "Testing",
+        "setDefault": "Set as default",
+        "activeSwitch": "{name} is switched on",
+        "remove": "Remove",
+        "removeTitle": "Remove {name}?",
+        "removeMessage": "Its saved keys are deleted for this scope ({scope}). Buyers can no longer pay through it and payments already in progress may not be confirmed.",
+        "removeConfirm": "Remove gateway"
+      },
+      "toast": {
+        "saved": "Gateway saved",
+        "switchedOn": "{name} switched on",
+        "switchedOff": "{name} switched off",
+        "defaultSet": "{name} is now the default",
+        "removed": "{name} removed"
+      },
+      "test": {
+        "verified": "The provider accepted the keys.",
+        "fieldsTitle": "Required fields are filled in",
+        "fieldsOnly": "Only the required fields were checked: this gateway has no cheap check call, so a payment is the real test.",
+        "missingTitle": "Keys are incomplete",
+        "missing": "These required fields are empty: {fields}.",
+        "rejected": "The provider did not accept the keys.",
+        "providerSaid": "The provider said: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Configure gateway",
+        "save": "Save gateway",
+        "appliesTo": "Applies to: {scope}",
+        "credentials": "Credentials",
+        "noFields": "This gateway needs no keys.",
+        "secretsNote": "Saved keys are never shown again. Only the end of each one is displayed as a reminder.",
+        "requiredField": "{field} is required.",
+        "invalidOption": "Choose one of the listed options for {field}.",
+        "mode": "Mode",
+        "modeHint": "Use Test while you try the gateway with its test keys, and Live to take real payments.",
+        "active": "Active",
+        "activeHint": "A gateway that is off is never used by the checkout or by invoices.",
+        "webhookTitle": "Webhook address",
+        "webhookHint": "Paste this into your {name} dashboard so payments confirm automatically.",
+        "webhookAfterSave": "The webhook address appears here after the first save.",
+        "willClear": "The saved value will be removed when you save.",
+        "keepBlank": "Leave blank to keep the saved value.",
+        "requiredMark": "(required)",
+        "stored": "Saved: {mask}",
+        "keepOption": "Keep the saved value",
+        "chooseOption": "Choose an option",
+        "clear": "Clear the saved value",
+        "show": "Show value",
+        "hide": "Hide value"
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { InboxConversationDetail } from '@crm/contracts';
 import { useRealtimeEvent, useResync } from '@/lib/realtime';
 import { inboxApi } from './service';
+import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
 export const KEYS = {
   all: ['inbox'] as const,
@@ -13,6 +14,7 @@ export const KEYS = {
   events: (id: string) => ['inbox', 'events', id] as const,
   assignees: ['inbox', 'assignees'] as const,
   channels: ['inbox', 'channels'] as const,
+  templates: (id: string, q: string) => ['inbox', 'templates', id, q] as const,
 };
 
 export function useChannels() {
@@ -20,12 +22,25 @@ export function useChannels() {
     queryKey: KEYS.channels,
     queryFn: ({ signal }) => inboxApi.channels(signal),
     staleTime: 30_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
 export const refreshChannels = (qc: QueryClient) =>
   qc.invalidateQueries({ queryKey: KEYS.channels });
+
+/** The templates the open conversation's number can send. Fetched only while the picker is open; a search narrows it on the server. */
+export function useConversationTemplates(conversationId: string, enabled: boolean, q: string) {
+  return useQuery({
+    queryKey: KEYS.templates(conversationId, q),
+    queryFn: ({ signal }) => inboxApi.templates(conversationId, q, signal),
+    enabled,
+    staleTime: 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
 
 export function useAssignees(enabled: boolean) {
   return useQuery({
@@ -33,7 +48,8 @@ export function useAssignees(enabled: boolean) {
     queryFn: ({ signal }) => inboxApi.assignees(signal),
     enabled,
     staleTime: 5 * 60_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -44,7 +60,8 @@ export function useNotes(conversationId: string | null) {
     queryFn: ({ signal }) => inboxApi.notes(conversationId!, signal),
     enabled: conversationId !== null,
     staleTime: 15_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
   // A note someone else adds is a change to the conversation row: its upsert signal refreshes the notes of an open thread.
   useRealtimeEvent('inbox.conversation.upsert', (e) => {
@@ -65,7 +82,8 @@ export function useTimeline(conversationId: string | null, enabled: boolean) {
     queryFn: ({ signal }) => inboxApi.events(conversationId!, signal),
     enabled: enabled && conversationId !== null,
     staleTime: 15_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }
 
@@ -100,7 +118,8 @@ export function useOpenConversation(
     },
     enabled: id !== null,
     staleTime: 10_000,
-    retry: false,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
   const refetch = q.refetch;
 
@@ -140,7 +159,9 @@ export function useNowMs(everyMs = 30_000): number {
 }
 
 /** A stable callback that always runs the latest function: for handlers passed down to memoised children. */
-export function useLatestCallback<A extends unknown[], R>(fn: (...args: A) => R): (...args: A) => R {
+export function useLatestCallback<A extends unknown[], R>(
+  fn: (...args: A) => R,
+): (...args: A) => R {
   const ref = useRef(fn);
   useEffect(() => {
     ref.current = fn;

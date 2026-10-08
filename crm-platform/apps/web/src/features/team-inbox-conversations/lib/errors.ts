@@ -19,6 +19,8 @@ export const ERROR_KINDS = [
   'validation',
   'tooLarge',
   'unsupported',
+  'templateNotSendable',
+  'groupSendUnavailable',
   'network',
   'generic',
 ] as const;
@@ -34,6 +36,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   CONVERSATION_NOTE_NOT_FOUND: 'notFound',
   INBOX_NOTE_NOT_DELETABLE: 'forbidden',
   INBOX_TEMPLATES_UNAVAILABLE: 'unsupported',
+  INBOX_TEMPLATE_NOT_SENDABLE: 'templateNotSendable',
   MESSAGE_NOT_FOUND: 'notFound',
   MESSAGE_NOT_RETRYABLE: 'notRetryable',
   MESSAGE_MEDIA_NOT_FOUND: 'mediaNotFound',
@@ -46,6 +49,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   VALIDATION_FAILED: 'validation',
   PAYLOAD_TOO_LARGE: 'tooLarge',
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
+  WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
   UNSUPPORTED_MEDIA_TYPE: 'unsupported',
   NETWORK: 'network',
 };

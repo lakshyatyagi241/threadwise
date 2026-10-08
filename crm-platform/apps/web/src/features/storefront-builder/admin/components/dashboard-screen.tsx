@@ -1,9 +1,11 @@
 'use client';
 
 import { currencySymbol, type StoreOverview } from '@crm/contracts';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect } from 'react';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { Badge, Card, StatTile } from '@crm/ui';
 import { useOverview } from '../api/hooks';
 import { isNoShop } from '../lib/errors';
@@ -14,6 +16,7 @@ import {
   formatOrderTotal,
   formatWhen,
   orderTone,
+  shopHref,
 } from '../lib/format';
 import { PlusIcon } from './icons';
 import { ErrorPanel, Eyebrow, LinkButton, Skeleton } from './parts';
@@ -80,6 +83,7 @@ function Body({ data, locale }: { data: StoreOverview; locale: string }) {
   const t = useTranslations('storefront-builder.admin.dashboard');
   const { shop, stats, salesByDay, topProducts, recentOrders } = data;
   const currency = shop.currencyCode;
+  const canOrders = useCan('store.orders.read');
   const leader = Math.max(1, ...topProducts.map((p) => p.qty));
   const kpis = [
     { label: t('kpi.revenue'), value: formatMoney(stats.revenue30, currency, locale) },
@@ -143,13 +147,14 @@ function Body({ data, locale }: { data: StoreOverview; locale: string }) {
       <Card className="overflow-hidden p-0">
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h2 className="text-base font-semibold">{t('recent.title')}</h2>
-          <span
-            aria-disabled="true"
-            title={t('recent.comingSoon')}
-            className="cursor-not-allowed text-xs font-semibold text-muted-foreground"
-          >
-            {t('recent.viewAll')}
-          </span>
+          {canOrders && (
+            <Link
+              href={shopHref('/store/orders', shop.id)}
+              className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('recent.viewAll')}
+            </Link>
+          )}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -221,13 +226,14 @@ function Body({ data, locale }: { data: StoreOverview; locale: string }) {
                       </Badge>
                     </td>
                     <td className="px-4 py-3 text-end">
-                      <span
-                        aria-disabled="true"
-                        title={t('recent.comingSoon')}
-                        className="cursor-not-allowed text-xs font-semibold text-muted-foreground"
-                      >
-                        {t('recent.open')}
-                      </span>
+                      {canOrders ? (
+                        <Link
+                          href={shopHref(`/store/orders/${o.id}`, shop.id)}
+                          className="text-xs font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        >
+                          {t('recent.open')}
+                        </Link>
+                      ) : null}
                     </td>
                   </tr>
                 ))

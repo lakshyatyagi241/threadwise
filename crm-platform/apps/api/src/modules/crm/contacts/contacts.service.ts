@@ -33,11 +33,12 @@ import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
+import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { toContactResponse } from './contacts.mapper';
-import { ContactsRepository } from './contacts.repository';
+import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
 const MODULE_KEY = 'contacts';
 const DISPLAY_PREFIX = 'CON';
@@ -81,6 +82,21 @@ export type ResolvedContact =
  *   3. uuid -> internal id resolution at the edge, never deeper
  *   4. optimistic locking on update, 409 on a lost race
  */
+/** A page of a list ordered by a column: the cursor carries the last row's sort value, not its creation time. */
+function buildSortedPage(rows: ContactRow[], limit: number) {
+  const hasMore = rows.length > limit;
+  const items = hasMore ? rows.slice(0, limit) : rows;
+  const last = items[items.length - 1];
+  return {
+    items,
+    page: {
+      nextCursor: hasMore && last ? encodeSortCursor(last.sortKey ?? null, last.id) : null,
+      hasMore,
+      limit,
+    },
+  };
+}
+
 @Injectable()
 export class ContactsService {
   private readonly logger = new Logger(ContactsService.name);
@@ -116,12 +132,16 @@ export class ContactsService {
         limit: query.limit,
         cursor: query.cursor,
         order: query.order,
+        sort: query.sort,
         filter: resolution.filter,
         scope,
         actorUserId: ctx.userId,
       });
 
-      const { items, page } = buildPage(rows, query.limit);
+      const { items, page } =
+        query.sort === 'createdAt'
+          ? buildPage(rows, query.limit)
+          : buildSortedPage(rows, query.limit);
 
       const ids = items.map((i) => i.id);
       const groupChips = query.expand?.includes('groups')
@@ -436,6 +456,41 @@ export class ContactsService {
       });
     }
     return { outcome: 'created', contactId: created.id, uuid: created.uuid };
+  }
+
+  /**
+   * The flow "Ask for file / image" node's "save the response as property": writes one custom property value of the contact the run
+   * belongs to (the file link). Only an active contact property of this workspace can be written, so a key typed by hand that names
+   * nothing is refused (`false`). No `contact.updated` event: a flow that fills in its own contact must not start flows of its own.
+   */
+  async setPropertyFromFlow(
+    orgId: number,
+    contactId: number,
+    key: string,
+    value: string,
+  ): Promise<boolean> {
+    const clean = key.trim();
+    if (clean === '') return false;
+    return this.db.txAs({ orgId }, async (tx) => {
+      const field = await tx.execute(
+        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+      );
+      if (field.rows.length === 0) return false;
+      const row = await this.repo.findById(tx, orgId, contactId);
+      if (!row) return false;
+      const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
+        data: { ...(row.data ?? {}), [clean]: value },
+      });
+      if (done) {
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: contactId,
+          action: 'update',
+          delta: { [clean]: { old: (row.data ?? {})[clean] ?? null, new: value } },
+        });
+      }
+      return done;
+    });
   }
 
   /** A name nobody has written yet is filled in; a curated one is never replaced. */
@@ -791,6 +846,18 @@ export class ContactsService {
           ? await this.repo.statusContext(tx, ctx.orgId)
           : undefined;
 
+      // Custom properties are checked once for the whole request, before any row is written: an unknown key or a value
+      // that does not fit its property's type is a 422 and nothing is changed.
+      const customInput = input.values.customFields;
+      if (customInput !== undefined) assertFormFieldLimits(customInput);
+      const propertyPlan =
+        customInput !== undefined && Object.keys(customInput).length > 0
+          ? planPropertyChanges(
+              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(customInput)),
+              customInput,
+            )
+          : undefined;
+
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
@@ -838,21 +905,32 @@ export class ContactsService {
           });
           if (plan.status !== undefined) values.status = plan.status;
         }
-        if (input.values.customFields !== undefined) {
-          assertFormFieldLimits(input.values.customFields);
-          values.data = { ...(existing.data ?? {}), ...input.values.customFields };
+        let changedKeys: string[] = [];
+        if (propertyPlan) {
+          // Merge, don't replace: the contact's other properties stay. A cleared key is removed.
+          const applied = applyPropertyPlan(existing.data ?? {}, propertyPlan);
+          values.data = applied.data;
+          changedKeys = applied.changedKeys;
           // Only the keys this edit sets are held to the rule: it may not blank a required property, but contacts
           // that never had one are not all refused.
           await this.assertRequiredProperties(
             rowTx,
             ctx.orgId,
-            values.data as Record<string, unknown>,
-            new Set(Object.keys(input.values.customFields)),
+            applied.data,
+            new Set(Object.keys(customInput!)),
           );
         }
 
         await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);
-        await this.audit.record(rowTx, { module: MODULE_KEY, recordId: id, action: 'update' });
+        // The keys that changed are recorded, never their values.
+        await this.audit.record(rowTx, {
+          module: MODULE_KEY,
+          recordId: id,
+          action: 'update',
+          ...(changedKeys.length > 0
+            ? { delta: { customFieldKeys: { old: null, new: changedKeys } } }
+            : {}),
+        });
         await this.outbox.emit(rowTx, {
           aggregateModule: MODULE_KEY,
           aggregateId: id,
@@ -865,6 +943,7 @@ export class ContactsService {
             uuid,
             previousStage: existing.lifecycleStage,
             stage: input.values.lifecycleStage ?? existing.lifecycleStage,
+            ...(changedKeys.length > 0 ? { customFieldKeys: changedKeys } : {}),
           },
         });
       });

@@ -31,7 +31,7 @@ export function OverviewPage() {
         description={t('subtitle')}
         actions={
           <>
-            <Link href="/admin/wallet/workspaces">
+            <Link href="/admin/workspaces">
               <Button variant="secondary" size="sm">
                 {t('linkWorkspaces')}
               </Button>
@@ -83,6 +83,48 @@ export function OverviewCards({ o }: { o: PlatformWalletOverview }) {
           tone={o.lowBalanceWorkspaces > 0 ? 'warning' : 'default'}
         />
       </div>
+      {o.otherCurrencies.length > 0 && (
+        <Card className="space-y-3">
+          <h2 className="text-base font-semibold">{t('otherCurrencies')}</h2>
+          <p className="text-sm text-muted-foreground">
+            {t('otherCurrenciesNote', { currency: o.currency })}
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[32rem] text-sm" aria-label={t('otherCurrencies')}>
+              <thead>
+                <tr className="border-b border-border text-xs text-muted-foreground">
+                  {(['currency', 'float', 'holding', 'toppedUp', 'charged'] as const).map((c) => (
+                    <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
+                      {t(`other.${c}`)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {o.otherCurrencies.map((c) => (
+                  <tr key={c.currency} className="border-b border-border last:border-0">
+                    <th scope="row" className="px-2 py-2 text-start font-semibold">
+                      {c.currency}
+                    </th>
+                    <td className="px-2 py-2 tabular-nums">
+                      {formatMinor(c.floatMinor, c.currency, locale)}
+                    </td>
+                    <td className="px-2 py-2 tabular-nums">
+                      {num.format(c.workspacesWithBalance)}
+                    </td>
+                    <td className="px-2 py-2 tabular-nums">
+                      {formatMinor(c.toppedUp30dMinor, c.currency, locale)}
+                    </td>
+                    <td className="px-2 py-2 tabular-nums">
+                      {formatMinor(c.charged30dMinor, c.currency, locale)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('last30')}</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">

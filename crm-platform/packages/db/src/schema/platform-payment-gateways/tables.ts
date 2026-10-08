@@ -137,6 +137,32 @@ export const paymentGateways = pgTable(
 export type PaymentGatewaysRow = typeof paymentGateways.$inferSelect;
 export type NewPaymentGatewaysRow = typeof paymentGateways.$inferInsert;
 
+/** A provider plan already created for this account, price and interval, so a checkout reuses it (platform-level, no tenant). */
+export const gatewayPlanCache = pgTable(
+  'gateway_plan_cache',
+  {
+    id: idColumn('id').notNull().primaryKey().generatedByDefaultAsIdentity(),
+    gateway: text('gateway').notNull(),
+    accountHash: text('account_hash').notNull(),
+    currency: text('currency').notNull(),
+    amountMinor: bigint('amount_minor', { mode: 'bigint' }).notNull(),
+    intervalUnit: text('interval_unit').notNull(),
+    intervalCount: integer('interval_count').notNull(),
+    gatewayPlanId: text('gateway_plan_id').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    unique('uq_gateway_plan_cache').on(
+      t.gateway,
+      t.accountHash,
+      t.currency,
+      t.amountMinor,
+      t.intervalUnit,
+      t.intervalCount,
+    ),
+  ],
+);
+
 export const orders = pgTable(
   'orders',
   {
@@ -189,6 +215,8 @@ export const orders = pgTable(
     planSlug: text('plan_slug'),
     returnToken: text('return_token').notNull(),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
+    /** The wallet a top-up credits, fixed when the order is placed; null = the platform currency (older orders). */
+    walletUnit: text('wallet_unit'),
     idempotencyKey: text('idempotency_key'),
     // 20261017090000_paygw_admin_billing.sql: the line printed on a manual invoice.
     description: text('description'),

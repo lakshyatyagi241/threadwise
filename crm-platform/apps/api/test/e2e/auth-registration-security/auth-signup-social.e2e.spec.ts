@@ -389,6 +389,79 @@ describe('onboarding', () => {
       settings.invalidate();
     }
   });
+
+  describe('country and billing currency', () => {
+    const stored = async (a: Account) =>
+      (
+        await h.owner.query(`SELECT settings FROM organizations WHERE id = $1`, [
+          (await idsOf(a.email)).org,
+        ])
+      ).rows[0].settings;
+
+    it('offers the platform currency and every currency Meta rates are stored for', async () => {
+      const a = await signup({ phone: nextPhone() });
+      const state = await api().get('/v2/onboarding').set(bearer(a.access));
+      expect(state.body.currencies.platform).toBe('USD');
+      expect(state.body.currencies.available).toEqual(expect.arrayContaining(['INR', 'USD']));
+      expect(state.body.workspace).toMatchObject({ country: null, currency: null });
+    });
+
+    it('bills India in INR and every other country in USD when no currency is picked', async () => {
+      const india = await signup({ phone: nextPhone() });
+      const saved = await save(india, { country: 'in' });
+      expect(saved.status, JSON.stringify(saved.body)).toBe(201);
+      expect(saved.body.workspace).toMatchObject({ country: 'IN', currency: 'INR' });
+      expect(saved.body.billing.displayCurrency).toBe('INR');
+
+      const uk = await signup({ phone: nextPhone() });
+      const other = await save(uk, { country: 'GB' });
+      expect(other.body.workspace).toMatchObject({ country: 'GB', currency: 'USD' });
+    });
+
+    it('lets the owner choose another billable currency than the country suggests', async () => {
+      const a = await signup({ phone: nextPhone() });
+      const saved = await save(a, { country: 'IN', currency: 'usd' });
+      expect(saved.body.workspace).toMatchObject({ country: 'IN', currency: 'USD' });
+      expect((await stored(a)).currency).toBe('USD');
+    });
+
+    it('refuses a country that does not exist and a currency the platform cannot bill', async () => {
+      const a = await signup({ phone: nextPhone() });
+      for (const [body, path] of [
+        [{ country: 'ZZ' }, 'country'],
+        [{ country: 'XX' }, 'country'],
+        [{ country: 'IN', currency: 'XTS' }, 'currency'],
+      ] as const) {
+        const res = await save(a, body);
+        expect(res.status, JSON.stringify(body)).toBe(422);
+        expect(res.body.errors).toEqual(
+          expect.arrayContaining([expect.objectContaining({ path })]),
+        );
+      }
+      expect(await stored(a)).not.toHaveProperty('currency');
+    });
+
+    it('fixes the currency once the wallet has been used, but still lets the same one be saved', async () => {
+      const a = await signup({ phone: nextPhone() });
+      await save(a, { country: 'IN' });
+      const { org } = await idsOf(a.email);
+      await h.owner.query(
+        `INSERT INTO wallet_transactions
+           (org_id, kind, type, amount, balance_after, idempotency_key, direction, unit)
+         VALUES ($1, 'credit', 'topup', 100, 100, $2, 'in', 'INR')`,
+        [org, `onb-lock-${org}`],
+      );
+      const changed = await save(a, { country: 'IN', currency: 'USD' });
+      expect(changed.status).toBe(422);
+      expect(changed.body.errors).toEqual(
+        expect.arrayContaining([expect.objectContaining({ path: 'currency' })]),
+      );
+      // renaming the workspace later is an ordinary profile save and must not trip the lock
+      const same = await save(a, { name: 'Renamed Co', country: 'IN', currency: 'INR' });
+      expect(same.status, JSON.stringify(same.body)).toBe(201);
+      expect(same.body.workspace.currency).toBe('INR');
+    });
+  });
 });
 
 // --- WD-AUTH-004: social sign-in -----------------------------------------------------------------

@@ -21,7 +21,7 @@ import {
 } from '@/features/channel-whatsapp-cloud';
 import { Button, Spinner, cn } from '@crm/ui';
 import { humanSize } from '../lib/time';
-import { CloseIcon, FileIcon, PaperclipIcon, SendIcon } from './icons';
+import { CloseIcon, FileIcon, PaperclipIcon, SendIcon, TemplateIcon } from './icons';
 
 /** What the file picker offers; the server decides what it really accepts, by the file's bytes. */
 const ACCEPT = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv';
@@ -53,6 +53,12 @@ export interface ComposerProps {
   canReply: boolean;
   canNote: boolean;
   canAttach: boolean;
+  /** A WhatsApp group thread: sending is not available yet, so the Reply tab can neither type, attach, pick a template nor send. */
+  groupSendBlocked?: boolean;
+  /** The channel sends templates and the agent may reply: the "Template" button is shown (it works with the window closed). */
+  canTemplate?: boolean;
+  /** Opens the template picker. */
+  onTemplate?: () => void;
   /** The type and size rules of the channel, so a file WhatsApp would refuse is turned away before it is uploaded. */
   attachments?: AttachmentRules;
   /** Reading only: neither tab can write. */
@@ -78,7 +84,10 @@ export function Composer(props: ComposerProps) {
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
   const attachmentError = useAttachmentError();
-  const limited = props.attachments && hasWhatsappLimits(props.attachments.channelKind) ? props.attachments : null;
+  const limited =
+    props.attachments && hasWhatsappLimits(props.attachments.channelKind)
+      ? props.attachments
+      : null;
   const accept = limited ? acceptAttribute(limited.allowed) || ACCEPT : ACCEPT;
 
   // Another conversation: its own draft (the previous one was saved as it was typed).
@@ -114,7 +123,8 @@ export function Composer(props: ComposerProps) {
   }, [text, mode]);
 
   const isNote = mode === 'note';
-  const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply;
+  const groupBlocked = !isNote && props.groupSendBlocked === true;
+  const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply || groupBlocked;
   const max = isNote ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = text.trim();
   const canSubmit = !disabled && !savingNote && (trimmed.length > 0 || (!isNote && file !== null));
@@ -193,7 +203,7 @@ export function Composer(props: ComposerProps) {
         ))}
       </div>
 
-      {file && !isNote && (
+      {file && !isNote && !groupBlocked && (
         <div className="mx-3 mt-2 flex items-center gap-2 rounded-md border border-border bg-muted/50 px-2.5 py-1.5 text-xs">
           <FileIcon width={14} height={14} className="shrink-0 text-muted-foreground" />
           <span className="min-w-0 flex-1 truncate" data-testid="inbox-attachment-name">
@@ -220,7 +230,19 @@ export function Composer(props: ComposerProps) {
       )}
 
       <div className="flex items-end gap-2 p-3">
-        {!isNote && props.canAttach && (
+        {!isNote && !groupBlocked && props.canTemplate && props.onTemplate && (
+          <button
+            type="button"
+            title={t('template')}
+            aria-label={t('template')}
+            data-testid="inbox-template-button"
+            onClick={props.onTemplate}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <TemplateIcon />
+          </button>
+        )}
+        {!isNote && !groupBlocked && props.canAttach && (
           <>
             <input
               ref={input}
@@ -279,9 +301,14 @@ export function Composer(props: ComposerProps) {
           <span className="hidden sm:inline">{isNote ? t('addNote') : t('send')}</span>
         </Button>
       </div>
-      <p id={hintId} className="px-3 pb-2 text-[11px] text-muted-foreground">
-        {t('hint')}
-        {limited && !isNote && props.canAttach && (
+      <p
+        id={hintId}
+        role={groupBlocked ? 'status' : undefined}
+        data-testid={groupBlocked ? 'inbox-group-send-unavailable' : undefined}
+        className="px-3 pb-2 text-[11px] text-muted-foreground"
+      >
+        {groupBlocked ? t('groupSendUnavailable') : t('hint')}
+        {limited && !isNote && !groupBlocked && props.canAttach && (
           <>
             {' '}
             <AttachmentHints allowed={limited.allowed} />

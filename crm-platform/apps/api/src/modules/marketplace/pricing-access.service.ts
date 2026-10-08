@@ -2,30 +2,39 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   accessFor,
+  availabilityFor,
   includedBy,
   marketCheckoutPath,
   marketEntitlementKey,
   marketPackSlug,
   trialAvailable,
   type MarketAccessState,
+  type MarketAvailability,
   type MarketCardPricing,
   type MarketIncludedBy,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AddonEntitlementService } from '../addons-extension-registry';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { visibilityOf, type PlanVisibility } from './plan-visibility';
 import type { AppPricingRow, SubscriptionRow } from './pricing-model';
 
 /** What it takes to decide what a workspace may do about one app's price. */
 export interface PricingFacts {
+  /** `marketplace_apps.id`: what the plan's visible set holds. */
+  appId: number;
   slug: string;
   uuid: string;
   pricing: AppPricingRow;
   sub: Pick<SubscriptionRow, 'status'> | null;
+  /** The workspace has the app installed (a held app is never hidden by a plan). */
+  installed?: boolean;
 }
 
 export interface PricingEvaluation {
   access: MarketAccessState;
+  /** Whether the app is plan-enabled, open or purchased for this workspace (see `MARKET_AVAILABILITY_STATES`). */
+  availability: MarketAvailability;
   includedBy: MarketIncludedBy | null;
   /** The workspace's entitlement service says it may use the app (a subscription, a trial, a comp or an override). */
   entitled: boolean;
@@ -46,7 +55,14 @@ export class PricingAccess {
     private readonly plans: PlanEntitlementService,
   ) {}
 
+  /** What the workspace's plan lets it see of the paid apps (platform-owned and plan-less workspaces see all). */
+  async visibility(orgId: number): Promise<PlanVisibility> {
+    return visibilityOf(await this.plans.forOrg(orgId));
+  }
+
   async evaluator(orgId: number): Promise<(f: PricingFacts) => Promise<PricingEvaluation>> {
+    const vis = await this.visibility(orgId);
+    const planEnables = new Set(vis.appIds);
     const features = new Map<string, Promise<boolean>>();
     const feature = (key: string) => {
       let p = features.get(key);
@@ -77,7 +93,7 @@ export class PricingAccess {
 
     return async (f) => {
       if (f.pricing.pricingModel === 'free')
-        return { access: 'free', includedBy: null, entitled: false };
+        return { access: 'free', availability: 'open', includedBy: null, entitled: false };
       const needsPlan = f.pricing.includedMinPlan !== null;
       const p = needsPlan ? await planFacts() : null;
       const by = includedBy({
@@ -98,6 +114,18 @@ export class PricingAccess {
           entitled,
           purchasable: f.pricing.purchasable,
           hasActiveSubscription: f.sub?.status === 'active',
+        }),
+        availability: availabilityFor({
+          model: f.pricing.pricingModel,
+          includedBy: by,
+          entitled,
+          // An inclusion rule (even one this workspace does not meet) keeps the app listed: it is the rule that sets its price here.
+          planVisible:
+            vis.all ||
+            planEnables.has(f.appId) ||
+            f.pricing.includedPlanFeature !== null ||
+            f.pricing.includedMinPlan !== null,
+          held: f.sub !== null || f.installed === true,
         }),
         includedBy: by,
         entitled,
@@ -122,6 +150,7 @@ export function cardPricing(f: PricingFacts, ev: PricingEvaluation): MarketCardP
       access: ev.access,
     }),
     access: ev.access,
+    availability: ev.availability,
     includedBy: ev.access === 'included' ? ev.includedBy : null,
     checkoutPath:
       paid && (ev.access === 'subscription_required' || ev.access === 'entitled')

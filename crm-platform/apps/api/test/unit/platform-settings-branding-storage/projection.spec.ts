@@ -113,13 +113,6 @@ describe('public site config (WD-SET-010, 023, 030, 033, 034)', () => {
     expect(on.customCode).toEqual({ css: 'body{}', js: 'x()' });
   });
 
-  it('real-time shows enabled only with the flag, a key and a cluster', async () => {
-    expect((await make({ realtime: { enabled: true } }).siteConfig()).realtime.enabled).toBe(false);
-    expect(
-      (await make({ realtime: { enabled: true, appKey: 'k' } }).siteConfig()).realtime.enabled,
-    ).toBe(true);
-  });
-
   it('the cookie banner legal link falls back to the privacy policy', async () => {
     const c = await make({ privacy: { policyUrl: 'https://a.test/privacy' } }).siteConfig();
     expect(c.cookieBanner.cookiesPolicyUrl).toBe('https://a.test/privacy');

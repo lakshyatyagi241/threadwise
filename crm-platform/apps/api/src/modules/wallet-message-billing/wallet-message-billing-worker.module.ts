@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { BspBillingEngineModule } from '../bsp-billing-engine';
-import { NotificationsRepository } from '../notifications';
+import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { RealtimeEmitterModule } from '../../realtime';
 import { WalletRealtimePublisher } from './wallet-realtime.publisher';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { DeliveryBillingConsumer } from './delivery.consumer';
 import { MessageBillingService } from './message-billing.service';
+import { BillingCurrencyService } from './billing-currency.service';
+import { MetaRateCardService } from './meta-rate-card.service';
 import { PlatformRatesService } from './platform-rates.service';
 import { PlatformWalletService } from './platform-wallet.service';
 import { RateCardService } from './rate-card.service';
@@ -33,7 +35,10 @@ import { WalletRepository } from './wallet.repository';
     MessageBillingService,
     PlatformWalletService,
     PlatformRatesService,
+    MetaRateCardService,
+    BillingCurrencyService,
     NotificationsRepository,
+    NotificationPublisher,
     WalletRealtimePublisher,
     DeliveryBillingConsumer,
     WalletNotificationsConsumer,

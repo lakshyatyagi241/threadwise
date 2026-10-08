@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Store / Payments",
+      "title": "Payments",
+      "subtitle": "The money side of your store orders: what is paid, what is waiting and what is cash on delivery.",
+      "listTitle": "Payment list",
+      "loading": "Loading payments",
+      "emptyFilteredTitle": "No payments match",
+      "emptyFilteredMessage": "Change the filters or reset them to see every payment.",
+      "resetFilters": "Reset filters",
+      "emptyTitle": "No payments yet",
+      "emptyMessage": "A payment shows up here as soon as a store order is placed. Open Orders to see your orders or add one by hand.",
+      "goToOrders": "Go to orders",
+      "summary": {
+        "loading": "Loading payment totals",
+        "orders": "orders",
+        "collected": "Collected",
+        "collectedNone": "Nothing collected yet."
+      },
+      "filters": {
+        "search": "Search",
+        "searchPlaceholder": "Order number, customer or reference",
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "method": "Method",
+        "allMethods": "All methods",
+        "prepaid": "Prepaid",
+        "cod": "Cash on delivery",
+        "gatewayOption": "A gateway...",
+        "gatewayCode": "Gateway code",
+        "gatewayCodePlaceholder": "e.g. razorpay",
+        "from": "From",
+        "to": "To",
+        "rangeInverted": "The start date is after the end date, so the date range is ignored.",
+        "reset": "Reset filters"
+      },
+      "table": {
+        "caption": "Payments of store orders, newest first",
+        "order": "Order",
+        "customer": "Customer",
+        "status": "Status",
+        "method": "Method",
+        "paidVia": "Paid via",
+        "reference": "Reference",
+        "amount": "Amount",
+        "shop": "Shop",
+        "date": "Date",
+        "methodPrepaid": "Prepaid",
+        "methodCod": "Cash on delivery",
+        "via": {
+          "razorpay_link": "Razorpay link",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay in chat",
+        "intro": "Let buyers pay for an order without leaving WhatsApp (UPI, cards, netbanking, wallets) and collect the money in your own Razorpay, PayU, BillDesk or Zaakpay account.",
+        "indiaOnly": "India is the only supported market for now: country and currency are fixed to India and INR.",
+        "viewOnly": "You can see the WhatsApp Pay configurations but not change them. Ask a workspace admin for permission to manage payments.",
+        "howTitle": "How to set it up",
+        "how1": "In WhatsApp Manager, under Payments for India, create a Direct Pay Method and link your gateway account.",
+        "how2": "Give it a name and copy that name here. It cannot be created from this app, it is a step on Meta's side.",
+        "how3": "Save the configuration, then open Orders and ask for payment on WhatsApp on any order.",
+        "how4": "The buyer taps Review and Pay, pays in the chat and the order is marked paid once Meta confirms it.",
+        "listTitle": "Your configurations",
+        "loading": "Loading configurations",
+        "emptyTitle": "No payment configurations yet",
+        "emptyMessage": "Add one on this page to start collecting payments in chat.",
+        "emptyMessageReadOnly": "Nobody has added one yet.",
+        "market": "India · INR",
+        "autoChargeOn": "Auto-charge on",
+        "active": "Active",
+        "off": "Off",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Configuration saved",
+          "removed": "Configuration removed"
+        },
+        "addTitle": "Add a payment configuration",
+        "editTitle": "Edit {name}",
+        "name": "Configuration name",
+        "nameLocked": "The name identifies the configuration. To rename it, remove it and add it again.",
+        "updatesExisting": "A configuration with this name exists: saving updates it.",
+        "nameHint": "Must exactly match the Direct Pay Method name in WhatsApp Manager (Payments, India).",
+        "nameInvalid": "Enter a name of 1 to {max} characters.",
+        "namePlaceholder": "e.g. my-razorpay-pay",
+        "gateway": "Gateway",
+        "activeLabel": "Active",
+        "autoCharge": "Auto-charge new orders",
+        "autoChargeHint": "Send the in-chat pay request automatically the moment an order is placed.",
+        "save": "Save configuration",
+        "cancelEdit": "Cancel edit",
+        "removeTitle": "Remove {name}?",
+        "removeMessage": "Orders can no longer be charged in chat with this configuration. The Direct Pay Method in WhatsApp Manager is not touched.",
+        "removeConfirm": "Remove configuration"
+      }
+    }
+  }
+}

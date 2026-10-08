@@ -17,12 +17,14 @@ import {
   REALTIME_SYSTEM_EVENTS,
   realtimeRoomKey,
   realtimeRoomSpecSchema,
+  realtimeVisibilitySchema,
   type RealtimeReady,
   type RealtimeRoomAck,
 } from '@crm/contracts';
 import { RealtimeAuthService, type SocketIdentity } from './realtime-auth.service';
 import { RealtimeEmitter } from './realtime-emitter.service';
 import { RoomAccessService } from './room-access.service';
+import { VisibilityPresence } from './visibility-presence.service';
 import { refFromSpec, roomKeyFor, roomName, type RoomRef } from './rooms';
 
 /** How often the live sockets are checked against ended sessions. */
@@ -66,6 +68,7 @@ export class RealtimeGateway
     private readonly auth: RealtimeAuthService,
     private readonly access: RoomAccessService,
     private readonly emitter: RealtimeEmitter,
+    private readonly presence: VisibilityPresence,
   ) {}
 
   afterInit(server: Namespace): void {
@@ -107,6 +110,10 @@ export class RealtimeGateway
   }
 
   handleDisconnect(client: Socket): void {
+    const identity = (client.data as Partial<SocketData>).identity;
+    if (identity?.actorType === 'user') {
+      void this.presence.clear(identity.orgId, identity.actorId, client.id);
+    }
     this.logger.debug(
       { actorId: (client.data as Partial<SocketData>).identity?.actorId },
       'realtime client disconnected',
@@ -146,6 +153,18 @@ export class RealtimeGateway
     // Read the counter AFTER joining: every event from now on reaches this socket, and any with a number at or below this one is
     // already accounted for.
     return { ok: true, room, seq: await this.emitter.currentSeq(data.identity.orgId, ref) };
+  }
+
+  /** A tab says whether it is in front (BL-097): the closed-tab browser push skips a person who can see the app. Fire and forget. */
+  @SubscribeMessage(REALTIME_CLIENT_EVENTS.visibility)
+  async onVisibility(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() body: unknown,
+  ): Promise<void> {
+    const parsed = realtimeVisibilitySchema.safeParse(body);
+    const identity = (client.data as Partial<SocketData>).identity;
+    if (!parsed.success || identity?.actorType !== 'user') return;
+    await this.presence.report(identity.orgId, identity.actorId, client.id, parsed.data.visible);
   }
 
   @SubscribeMessage(REALTIME_CLIENT_EVENTS.leave)

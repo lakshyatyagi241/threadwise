@@ -21,19 +21,24 @@ Intended / architecture-forced (beyond the lists below): `rowVersion` optimistic
 names (WaDesk encrypted both and kept a file mirror), no managed `keyword_replies` row (the runtime reads `flows` directly, WD-FLR-004), publish publishes the saved row,
 500 node / 2000 edge caps, writes need the `automation` plan feature, problem+json errors, media served from `/v2/flow-media`, saved `vars` are kept.
 
-## Open runtime items (owned by flow-runtime-engine, not changed here)
+## Runtime items (flow-runtime-engine is Vedant's; the first two were fixed there with the user's authorisation)
 
-- **Field mapping hook.** The editor saves WaDesk's builder field names (so exports and imports interoperate). `flbToRuntimeData` (contracts `runtime-shape.ts`, 98 + 83 + 92
-  tests, additive and idempotent, proven against the real `compileGraph`) is WaDesk's FlowNormalizer mapping, and `FlowReaderService.getRunnableFlow` already returns the
-  graph shaped with it. FLR's `compileGraph` does not call it yet; the one-line hook is
-  `props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: n.data }))` in `flow-runtime-engine/graph/compile-graph.ts`. Until it lands ten node types reach
-  the executors with the builder's names and misbehave at run time: ai (reply variable, assistant, extraction fields), chatbot (agent), subflow (target), webhook / code /
-  mysql (save variable), poll (multiple answers), location (coordinates sent as 0,0), a legacy single-kind CTA. After the hook, delete the `FLR hook status` block in
-  `apps/api/test/unit/flow-builder-editor/editor-field-seam.spec.ts`.
+- **Field mapping hook: FIXED.** `compileGraph` now calls `flbToRuntimeData` (`props: shapeNode(builderType, flbToRuntimeData({ type: builderType, data: obj(n.data) }))` in
+  `flow-runtime-engine/graph/compile-graph.ts`, change authorised by the user and made on the FLR side), so a graph exactly as the editor saves it reaches the executors with
+  the runtime's names: ai (reply variable, assistant, extraction fields), chatbot (agent), subflow (target), webhook / code / mysql (save variable), poll (multiple
+  answers), location (coordinates, no longer 0,0), a legacy single-kind CTA. To keep flows that already use the runtime names compiling to the same output, the shaper now also
+  reads the runtime-named key when the builder one is absent (`latitude` / `longitude`, `allowMultiple`, `ctaActions`, `templateName`, notify `mediaKind`, camelCase shop product
+  fields); the old `FLR hook status` block of `editor-field-seam.spec.ts` is inverted into "compileGraph itself applies the shaper". Proof: `runtime-shape-compile.spec.ts`
+  compares the real `compileGraph` with the same module loaded without the shaper (props byte-equal for the types that already worked), `compile-flb-hook.spec.ts` compiles all
+  58 types, and `test/e2e/flow-runtime-engine/editor-flows.e2e.spec.ts` creates the flows through `POST /v2/flows` and runs them (ai variable, extraction fields, webhook variable,
+  poll with several answers, location coordinates, sub-flow).
+- **UUID ids against numeric reads: FIXED.** `FlowRefResolver` (`flow-runtime-engine/runtime/nodes/flow-refs.ts`) turns the uuid of a template (`wa_templates`) or an AI assistant
+  (`ai_chat_assistants`) into the row id inside a tenant transaction scoped by `org_id`; an integer id (an old flow) is used as it was, and a uuid of another workspace resolves
+  to nothing (unit test for the SQL scope, e2e that a foreign assistant adds no knowledge and a foreign template sends nothing). Used by the Template node (`tplId`), the AI node's
+  knowledge base (`assistant`, `assistant_id`, `assistantId`) and the AI call node (`assistantId`, resolved before the port, which still takes a row id). Chatbot `agentId` and the
+  Sub-flow target already accepted a uuid. Google Docs `templateId` is a Google file id, not a row of ours, so it is untouched.
 - **Executors for 23 channel-specific types** are missing from FLR's `TYPE_MAP`: `cf_*` (8), `ig_*` (9), `fb_*` (5), `tg_payment`. The editor saves them; the run notes them and moves on
   (WD-FLR-016 rule 4). `compile-seam.spec.ts` pins the list.
-- **UUID ids against numeric reads.** The editor stores uuids for templates, AI assistants and `ai_call` assistants; the executors read numeric ids (`templateId`,
-  `assistant_id`, `assistantId`), so lookup falls back to name or is empty. Needs a uuid-to-id resolution scoped by org in FLR.
 - **Two additive lines in FLR's barrel and module** export `GoogleFormWebhookService`, which the editor needs to mint the Google Form Apps Script token (WD-FLB-059).
 
 ## Blocked on other domains
@@ -80,6 +85,22 @@ round trip including malformed files and both exporters' file formats.
 - WaDesk's middleware stores empty strings as null in node data; ours stores the empty string (the runtime reads both as unset).
 - Web app serves a page shell for an anonymous visitor and redirects on the client (no content served); the Next.js dev indicator is the one Tab stop without a ring.
 - Literal backslash-n in two WaDesk placeholders is not reproduced.
+
+## Intended additions (not WaDesk features)
+
+- **Ask for file / image (`ask_file`, WD-FLB-081) and Ask for location (`ask_location`, WD-FLB-082)** exist in another product's flow palette and not in WaDesk, so there is no
+  WaDesk behaviour to compare: the project owner asked for them, they sit in the WhatsApp palette, group Listen, and were designed to behave like Ask question and the form
+  nodes (park, resume, variables). The palette therefore lists 37 WhatsApp nodes (WaDesk's 35 plus these two) and the catalogue 60 types. They were checked against
+  our own running editor, not against WaDesk: contract and runtime unit tests, the API e2e `flow-runtime-engine/ask-media.e2e.spec.ts` (real Postgres and Redis, simulator
+  channel as the WhatsApp stand-in), web unit tests, and screenshots of the palette, both cards, the Allow Extensions panel, both inspector forms and the test runner.
+  Not verified: real WhatsApp (the interactive location request is built to Meta's documented shape and unit-tested, never sent to Meta; real media downloads).
+- **Double-click a node opens the inspector.** Added at the project owner's request (WaDesk opens it from the action bar's Edit button, which stays). A double-click on the card itself selects the node and opens its inspector; controls inside the card (prompt boxes, buttons, connection dots) keep their own double-click. Checked in the running editor (double-click on a Send message node opened its inspector) and by unit tests of the target rule (`builder/node-open.test.ts`).
+- **Geta console publishing (WD-FLB-083)** is not a WaDesk feature either: the project owner asked that Publish also push the bot live on the Geta console (a configuration update, then
+  publish-bot). There is no WaDesk behaviour to compare. It was checked against our own running editor and against a local stub of the console, never the real console: unit tests (the HTTP
+  adapter against the stub, exact headers, `appid` shape, bodies, retries, order, UTF-8, no secret in errors or output), contracts, API e2e with real Postgres and Redis through the real outbox drain
+  and consumer (publish to live, failure and retry from the failed step, no-credentials state, secrets masked in every response and absent from the database, outbox and audit rows, cross-workspace
+  isolation), schema and RLS integration tests, web unit tests, and screenshots of the settings form and the Going live, Live, Failed with Retry and not-configured states.
+  Not verified: the real Geta console (base URL, tokens and chatbot record shapes are as given by the owner; whether `modified_time` in that format is what Geta expects is unknown).
 
 ## Open
 

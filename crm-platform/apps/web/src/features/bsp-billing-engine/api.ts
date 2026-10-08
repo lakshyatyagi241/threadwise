@@ -2,25 +2,21 @@ import {
   attachAllResultSchema,
   bspAllocationListSchema,
   bspAllocationSchema,
-  bspBillingModeResponseSchema,
   bspDashboardSchema,
   bspSettingsResponseSchema,
   bspWabaCandidateListSchema,
   revokeResultSchema,
-  setBillingModeResponseSchema,
   type AttachCreditInput,
-  type BspBillingMode,
   type UpdateBspSettingsInput,
 } from '@crm/contracts';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
-import { apiFetch } from '@/lib/api/client';
 
 export const KEYS = {
   settings: ['bsp', 'settings'] as const,
   candidates: ['bsp', 'candidates'] as const,
   allocations: ['bsp', 'allocations'] as const,
-  dashboard: (month: string | undefined) => ['bsp', 'dashboard', month ?? 'current'] as const,
-  billingMode: ['bsp', 'billing-mode'] as const,
+  dashboard: (month: string | undefined, currency?: string) =>
+    ['bsp', 'dashboard', month ?? 'current', currency ?? 'base'] as const,
 };
 
 /** The operator console's calls (`/api/platform/*` becomes `/v2/platform/*`; the browser never sees a token). */
@@ -47,18 +43,10 @@ export const operatorApi = {
       body: { rowVersion },
       schema: revokeResultSchema,
     }),
-  dashboard: (month: string | undefined, signal?: AbortSignal) =>
-    operatorFetch('/bsp/dashboard', { query: { month }, schema: bspDashboardSchema, signal }),
-};
-
-/** The workspace's own calls (`/api/v2/*`). */
-export const customerApi = {
-  billingMode: (signal?: AbortSignal) =>
-    apiFetch('/bsp/billing-mode', { schema: bspBillingModeResponseSchema, signal }),
-  setBillingMode: (mode: BspBillingMode) =>
-    apiFetch('/bsp/billing-mode', {
-      method: 'PUT',
-      body: { mode },
-      schema: setBillingModeResponseSchema,
+  dashboard: (month: string | undefined, currency?: string, signal?: AbortSignal) =>
+    operatorFetch('/bsp/dashboard', {
+      query: { month, currency },
+      schema: bspDashboardSchema,
+      signal,
     }),
 };

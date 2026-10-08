@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { NAV } from '@/features/_registry/nav.generated';
-import { PLANNED_NAV } from '@/features/_registry/planned';
+import { MENU_PLANNED_NAV, PLANNED_NAV } from '@/features/_registry/planned';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '@/features/_registry/resolve';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import { SETTINGS } from '@/features/_registry/settings.generated';
@@ -14,6 +14,7 @@ import {
   matchesHref,
   menuItems,
   railSections,
+  routeGateFor,
   toSections,
 } from './nav-model';
 
@@ -107,7 +108,7 @@ describe('the real menu', () => {
 
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
     expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
-    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat']);
+    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat', 'devices']);
     expect(ids('audience')).toEqual([
       'contacts',
       'contact-groups',
@@ -129,13 +130,79 @@ describe('the real menu', () => {
   });
 });
 
+describe('menuItems and inMenu: false', () => {
+  const tile = (href: string, over: Partial<ResolvedSettingsTile> = {}): ResolvedSettingsTile =>
+    ({
+      id: 't',
+      section: 'integrations',
+      labelKey: 't',
+      href,
+      icon: 'x',
+      locked: false,
+      comingSoon: false,
+      ...over,
+    }) as ResolvedSettingsTile;
+  const store = item('store', 'store', '/store');
+  const orders = item('store-orders', 'store', '/store/orders', { inMenu: false });
+  const shopify = item('shopify', 'store', '/shopify', { inMenu: false });
+  const ids = (list: ResolvedNavItem[], tiles: ResolvedSettingsTile[] = []) =>
+    menuItems(list, tiles).map((i) => i.id);
+
+  it('drops a screen its area entry already covers', () => {
+    expect(ids([store, orders])).toEqual(['store']);
+  });
+
+  it('keeps it for a role that cannot see the area entry (nobody loses a screen)', () => {
+    expect(ids([orders])).toEqual(['store-orders']);
+  });
+
+  it('drops a screen a Settings tile points at, and keeps it while that tile is only planned', () => {
+    expect(ids([store, shopify], [tile('/shopify')])).toEqual(['store']);
+    expect(ids([store, shopify], [tile('/shopify', { comingSoon: true })])).toEqual([
+      'store',
+      'shopify',
+    ]);
+    expect(ids([store, shopify])).toEqual(['store', 'shopify']);
+  });
+
+  it('only matches on a path boundary and ignores entries without the flag', () => {
+    const lookalike = item('lookalike', 'store', '/store-archive', { inMenu: false });
+    expect(ids([store, lookalike])).toEqual(['store', 'lookalike']);
+    expect(ids([store, item('plain', 'store', '/store/plain')])).toEqual(['store', 'plain']);
+  });
+
+  it('lights the covering entry for a screen it does not draw', () => {
+    const drawn = menuItems([store, orders]);
+    expect(activeItemId(drawn, '/store/orders/42')).toBe('store');
+  });
+});
+
+describe('the sidebar as the workspace layout builds it', () => {
+  const sidebar = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: MENU_PLANNED_NAV });
+
+  it('offers no disabled "Soon" entries: only screens that work are listed', () => {
+    expect(sidebar.filter((i) => i.comingSoon).map((i) => i.id)).toEqual([]);
+    // Not-yet-built screens stay on record in PLANNED_NAV, and a real screen still takes over its planned id.
+    expect(PLANNED_NAV.length).toBeGreaterThan(0);
+  });
+
+  it('still lists every screen a domain has built', () => {
+    const real = new Set(NAV.filter((n) => !n.href.startsWith('/account/')).map((n) => n.id));
+    const listed = new Set(sidebar.map((i) => i.id));
+    expect([...real].filter((id) => !listed.has(id))).toEqual([]);
+  });
+});
+
 describe('the menu after the Settings move', () => {
   const resolved = resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV });
   const menuIds = new Set(resolved.map((i) => i.id));
   const tiles = resolveSettings(SETTINGS, CAPABILITIES_UNKNOWN, { planned: PLANNED_SETTINGS });
 
-  it('has only the Settings entry in the settings group', () => {
-    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual(['settings']);
+  it('pins only Help and Settings in the settings group, Help directly above Settings', () => {
+    expect(resolved.filter((i) => i.group === 'settings').map((i) => i.id)).toEqual([
+      'help-center',
+      'settings',
+    ]);
   });
 
   it('no longer lists the configuration screens', () => {
@@ -148,7 +215,6 @@ describe('the menu after the Settings move', () => {
       'addons-workspace',
       'i18n-translation',
       'ai-keys',
-      'bsp-billing-mode',
       'billing-orders',
       'account',
       'chat-widget',
@@ -222,5 +288,28 @@ describe('the menu after the Settings move', () => {
       comingSoon: false,
     } as ResolvedSettingsTile;
     expect(activeNavId(resolved, [tile], '/tasks')).toBe('tasks');
+  });
+});
+
+describe('routeGateFor', () => {
+  const gates = [
+    { href: '/appointments', feature: 'appointment_booking' },
+    { href: '/appointments/reports', feature: 'appointment_reports' },
+    { href: '/contacts', feature: 'contacts_app' },
+  ];
+
+  it('finds the gate that covers the page and its children', () => {
+    expect(routeGateFor(gates, '/appointments')?.feature).toBe('appointment_booking');
+    expect(routeGateFor(gates, '/appointments/types/new')?.feature).toBe('appointment_booking');
+  });
+
+  it('prefers the longest address, so a nested gate wins over its parent', () => {
+    expect(routeGateFor(gates, '/appointments/reports/2026')?.feature).toBe('appointment_reports');
+  });
+
+  it('matches on a path boundary only, and returns null off every gate', () => {
+    expect(routeGateFor(gates, '/appointments-archive')).toBeNull();
+    expect(routeGateFor(gates, '/dashboard')).toBeNull();
+    expect(routeGateFor([], '/appointments')).toBeNull();
   });
 });

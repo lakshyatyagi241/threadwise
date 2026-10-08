@@ -108,10 +108,13 @@ Every push is one envelope, and the socket.io event name is `type`:
 | `inbox.assignment`          | `user` / `conv`        | `{ conversationId, assigneeUserId, assigneeTeamId }`                         | assignment (Ph 1, 3)              |
 | `inbox.typing`              | `conv:<uuid>`          | `{ conversationId, userId, typing }`                                         | gateway (Ph 3)                    |
 | `inbox.presence`            | `org` / `inbox:`       | `{ userId, state }`                                                          | gateway (Ph 3)                    |
+| `notification.created`      | `user`                 | `{ notificationId, type, unread, subjectKind, subjectId, collapsed, silent, toast?, sound? }`: a hint (ids and the true unread total, never text); refetch the feed. `toast` / `sound` are the person's own choice for the type (absent from an older server = decide by type); `silent` still wins | notification consumers (BL-096)   |
+| `notification.read`         | `user`                 | `{ unread, notificationIds: uuid[] \| 'all' }`: the person's rows were marked read (here or on another tab or device)                         | notifications service, mark read  |
 | `rt.resync`                 | any                    | `{ reason }`: the server asks the client to refetch that room                | permission changes                |
 
 System events outside a room's stream: `rt.ready` (once per connection: `{ v, rooms: [{ room, seq }], serverTime }`, the baseline for `org` and `user`).
-Client requests: `room:join` and `room:leave`, both acknowledged.
+Client requests: `room:join` and `room:leave`, both acknowledged, and `presence:visible` (`{ visible: boolean }`, no acknowledgement): a tab says whether it is in front, on every change and about every 15 s while visible, so the
+closed-tab browser push (BL-097) can skip a person who can see the app. The server keeps it 35 s in Redis (`rt:vis:<org>:<user>`, `VisibilityPresence`); see [notifications.md](notifications.md).
 
 List-level events are **signals** (an id, a version, what changed, no body): the client refetches the row through REST. `inbox.message.new` carries the
 message because the thread is open and was already authorised.
@@ -185,6 +188,10 @@ const status = useRealtimeStatus();                       // idle | connecting |
 - Tests: `apps/api/test/unit/realtime/` (visibility rules, audience, ticket mint / consume / expiry / replay, sequence numbering),
   `apps/api/test/e2e/realtime/` (ticket endpoint, handshake, room authorisation matrix, delivery from a separate process spawned against the same Redis,
   cross-process counts, eviction, workspace isolation), `apps/web/src/lib/realtime/*.test.ts(x)` (client with a fake socket, server rendering).
+
+Notifications: a new bell row is announced with `notification.created` by whichever process wrote it (the worker, after its transaction) and a mark-read with
+`notification.read` (the API); rules and payloads in [notifications.md](notifications.md#live-conversation-notifications-bl-096-phase-1-the-server). Unlike the
+other message-level events these DO go through the outbox first (`message.received`), so a crash between the commit and the push cannot lose the bell row.
 
 ## Not built here
 

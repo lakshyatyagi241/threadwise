@@ -19,10 +19,13 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PagesService } from './pages.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Facebook Pages: connect an account, then refresh, fix inbound and disconnect each Page (WD-FB-001 to 004). */
 @ApiTags('facebook')
 @ActorKinds('user')
+// Facebook management is entirely the extra-channels feature; the public webhook controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'facebook', version: '2' })
 export class PagesController {
   constructor(private readonly pages: PagesService) {}

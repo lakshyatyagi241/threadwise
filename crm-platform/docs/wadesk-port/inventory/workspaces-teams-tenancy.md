@@ -1125,6 +1125,7 @@ the first workspace), ASHELL (admin console chrome and IP allow-list).
 ### WD-WSP-032 — Impersonation: start session
 
 - **Status:** implemented
+- **Port status:** built as an act-as session (ADR-0020): `POST /v2/platform/workspaces/:id/impersonate` (permission + super admin) returns a one-time handoff URL; the web `/impersonate` route redeems it for an access-only token with no refresh. One open session per operator, 60 minute cap, optional read-only mode (added, not in WaDesk), owner-only routes refused, both actors audited. The Admin Team Inbox launcher (`platform/inbox/workspaces/:id/impersonate`) starts the same session (writes allowed). Not ported: "Login as user" on the Users row (no user-level start yet).
 - **Priority:** P0 (product unusable without)
 - **Effort:** M
 - **Depends on:** WD-WSP-012
@@ -1158,6 +1159,7 @@ the first workspace), ASHELL (admin console chrome and IP allow-list).
 ### WD-WSP-033 — Impersonation: banner, scoping, effective Owner grant and stop
 
 - **Status:** implemented
+- **Port status:** built (ADR-0020): `GET /v2/auth/impersonation` feeds a non-dismissible amber banner (workspace, owner, reason, time left, read-only badge, Stop) in the workspace app; `POST /v2/auth/impersonation/stop` ends the session at once (Redis tombstone), writes `platform.impersonation.stopped` with duration and per-action counts, and the web route clears the cookie and returns to `/admin/workspaces`. Differences from WaDesk on purpose: the act-as token never edits the operator's session, expires in at most 60 minutes, can be read-only, and is refused password, 2FA, email, sessions, API keys and `/v2/platform/*` (`WSP_IMPERSONATION_FORBIDDEN`). Losing the permission closes the session on the next request (operator must stay active super admin).
 - **Priority:** P0 (product unusable without)
 - **Effort:** M
 - **Depends on:** WD-WSP-032

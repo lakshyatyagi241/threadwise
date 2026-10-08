@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useEffect, useRef, useState } from 'react';
 import { Select, cn } from '@crm/ui';
-import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useOverview } from '../api/hooks';
 import { formatInt, shopLabel } from '../lib/format';
 import { isNoShop } from '../lib/errors';
@@ -129,7 +130,7 @@ export function StoreSidebar() {
   const params = useSearchParams();
   const shopParam = params.get('shop') ?? undefined;
   const overview = useOverview(shopParam);
-  const canStorefront = useCan('store.storefront.read');
+  const unofficial = useUnofficialWhatsapp();
   const active = activeKey(pathname);
 
   if (overview.isPending) {
@@ -169,13 +170,14 @@ export function StoreSidebar() {
     connection.kind === 'official'
       ? (connection.label ?? t('notConnected'))
       : connection.kind === 'device'
-        ? `${t('unofficialApi')} · ${connection.label ?? ''}`.trim()
+        ? // A personal number: while the platform has the unofficial engine off the store reads as not connected.
+          unofficial
+          ? `${t('unofficialApi')} · ${connection.label ?? ''}`.trim()
+          : t('notConnected')
         : connection.kind === 'other_device'
           ? t('deviceConnected')
           : t('notConnected');
-  const entries = visibleEntries(MAIN_ENTRIES, (p) =>
-    p === 'store.storefront.read' ? canStorefront : true,
-  );
+  const entries = visibleEntries(MAIN_ENTRIES, (p) => p in session.permissions);
 
   return (
     <aside aria-label={t('label')} className="space-y-3 lg:sticky lg:top-6 lg:self-start">

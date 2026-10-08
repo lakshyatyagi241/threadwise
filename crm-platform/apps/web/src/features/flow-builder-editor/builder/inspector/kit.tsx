@@ -364,6 +364,7 @@ export function TextArea({
   mono,
   dark,
   noAttr,
+  compact,
 }: {
   value: unknown;
   onChange: (v: string) => void;
@@ -372,6 +373,8 @@ export function TextArea({
   mono?: boolean;
   dark?: boolean;
   noAttr?: boolean;
+  /** Drops the 110px minimum height (the prompt box on a canvas card). */
+  compact?: boolean;
 }) {
   const text = value === null || value === undefined ? '' : String(value);
   const picker = useAttrPicker<HTMLTextAreaElement>(text, onChange, !noAttr);
@@ -385,7 +388,8 @@ export function TextArea({
         {...(noAttr ? {} : { 'data-attr-input': 'true' })}
         className={cn(
           controlClass,
-          'min-h-[110px] resize-y leading-relaxed',
+          compact ? 'min-h-[56px] resize-none' : 'min-h-[110px] resize-y',
+          'leading-relaxed',
           mono && 'font-mono',
           dark && 'bg-[#1E2A33] text-[#7CF3C4]',
         )}
@@ -428,6 +432,29 @@ export function SelectInput({
         </option>
       ))}
     </select>
+  );
+}
+
+/**
+ * Under every "Knowledge base (optional)" picker: where a person who has none yet goes to make one, and the button that
+ * brings it into the list. AI Training opens in a NEW tab so the flow being built (with its unsaved changes) stays open;
+ * Refresh list re-reads the workspace's assistants, so the new one is there when the person comes back.
+ */
+export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
+  return (
+    <div className="mt-1.5 flex items-center justify-between text-[10.5px]">
+      <a
+        href="/ai-training/create"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-semibold text-brand underline"
+      >
+        + Create knowledge base
+      </a>
+      <button type="button" onClick={refresh} className="text-brand underline">
+        Refresh list
+      </button>
+    </div>
   );
 }
 

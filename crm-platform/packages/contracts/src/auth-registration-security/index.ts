@@ -6,3 +6,4 @@ export * from './account';
 export * from './security-policy';
 export * from './platform';
 export * from './otp-senders';
+export * from './billing-currency';

@@ -8,9 +8,11 @@ import { cn } from '@crm/ui';
 import { FaqList } from '../components/faq-list';
 import { PeriodSwitch } from '../components/period-switch';
 import { formatMoney, type Period } from '../lib/format';
+import { PLATFORM_DEFAULT_KEY, groupedPlanLimits } from '../lib/limits';
 
 const NS = 'plans-subscriptions-trials';
-const VOLUME_KEYS = ['devices', 'monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
+/** No `devices` line: it counts personal numbers paired by QR (the unofficial engine, off unless the platform enables it); we do not advertise it. */
+const VOLUME_KEYS = ['monthly_messages', 'users', 'contacts', 'broadcasts'] as const;
 
 /**
  * The public pricing page (WD-PLAN-010): a card per active plan with a Monthly/Yearly switch, volume and feature lists and the plan's call to
@@ -65,7 +67,15 @@ function Card({ plan, period }: { plan: PublicPlanCard; period: Period }) {
   const tl = useTranslations(`${NS}.limits`);
   const tf = useTranslations(`${NS}.features`);
   const tc = useTranslations(`${NS}.common`);
+  const tg = useTranslations(`${NS}.limitGroups`);
   const locale = useLocale();
+  const [allLimits, setAllLimits] = useState(false);
+  const limitText = (k: string, v: number) =>
+    v > 0
+      ? `${new Intl.NumberFormat(locale).format(v)} ${tl(k)}`
+      : k === PLATFORM_DEFAULT_KEY
+        ? `${tl(k)}: ${tc('platformDefault')}`
+        : `${tc('unlimited')} ${tl(k)}`;
 
   const yearly = period === 'yearly' && plan.yearlyAmount !== null;
   const base = plan.price.offerAmount ?? plan.price.amount;
@@ -151,12 +161,36 @@ function Card({ plan, period }: { plan: PublicPlanCard; period: Period }) {
               <span aria-hidden="true" className="text-success">
                 ✓
               </span>
-              {v > 0
-                ? `${new Intl.NumberFormat(locale).format(v)} ${tl(k)}`
-                : `${tc('unlimited')} ${tl(k)}`}
+              {limitText(k, v)}
             </li>
           ))}
         </ul>
+        <button
+          type="button"
+          aria-expanded={allLimits}
+          onClick={() => setAllLimits((v) => !v)}
+          className="text-sm font-medium text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {allLimits ? t('hideAllLimits') : t('showAllLimits')}
+        </button>
+        {allLimits &&
+          groupedPlanLimits(plan).map((g) => (
+            <div key={g.group} data-testid={`public-limits-${plan.slug}-${g.group}`}>
+              <p className="pt-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {tg(g.group)}
+              </p>
+              <ul className="space-y-1">
+                {g.rows.map((r) => (
+                  <li key={r.key} className="flex gap-2">
+                    <span aria-hidden="true" className="text-success">
+                      ✓
+                    </span>
+                    {limitText(r.key, r.value)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         {flags.length > 0 && (
           <>
             <p className="pt-2 font-medium">{t('features')}</p>

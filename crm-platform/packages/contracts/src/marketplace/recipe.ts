@@ -461,12 +461,28 @@ export const emailParseConfigSchema = z
   })
   .strict();
 
+/**
+ * A client: software the member installs elsewhere and signs in to with their own account. Installing the listing records the workspace's
+ * consent and unlocks the per-app permission key; each member then connects from the client itself. Nothing is received or issued here.
+ */
+export const clientConfigSchema = z
+  .object({
+    type: z.literal('client'),
+    /** Where the member gets the client (a store page). Empty until the operator has the real address. */
+    stores: z
+      .array(z.object({ label: text(60), url: marketLinkSchema }).strict())
+      .max(4)
+      .default([]),
+  })
+  .strict();
+
 export const recipeConnectorSchema = z.discriminatedUnion('type', [
   webhookRelayConfigSchema,
   pushConfigSchema,
   pullConfigSchema,
   oauthConfigSchema,
   emailParseConfigSchema,
+  clientConfigSchema,
 ]);
 export type RecipeConnector = z.infer<typeof recipeConnectorSchema>;
 

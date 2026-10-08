@@ -107,11 +107,16 @@ export class SubscriptionsService {
       const ev = await (
         await this.access.evaluator(ctx.orgId)
       )({
+        appId: app.id,
         slug: app.slug,
         uuid: app.uuid,
         pricing: app.pricing,
         sub: app.sub,
+        installed: app.installed,
       });
+      // The plan does not show this paid app and the workspace has nothing of it: it does not exist for it (404), so a direct call
+      // cannot reach the checkout or start a trial of an app its plan keeps out of view.
+      if (ev.availability === 'not_visible') throw this.notFound();
       const now = new Date();
       const view = app.sub ? toSubscriptionView(app.sub, app.pricing, app.status, now) : null;
       const checkout = {
@@ -121,7 +126,7 @@ export class SubscriptionsService {
 
       if (input.startTrial) {
         const offered = cardPricing(
-          { slug: app.slug, uuid: app.uuid, pricing: app.pricing, sub: app.sub },
+          { appId: app.id, slug: app.slug, uuid: app.uuid, pricing: app.pricing, sub: app.sub },
           ev,
         ).trialAvailable;
         if (!offered) throw this.trialUnavailable();

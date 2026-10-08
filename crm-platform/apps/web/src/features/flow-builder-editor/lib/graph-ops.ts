@@ -202,6 +202,61 @@ export function redo(h: History): { history: History; state: CanvasState } | nul
   return { history: { ...h, index }, state: JSON.parse(h.stack[index]!) as CanvasState };
 }
 
+// --- connection focus -----------------------------------------------------------------------------------------------
+
+/**
+ * What a selection is wired to, so the canvas can light it up and fade the rest. `edgeIds` are the wires to highlight
+ * (`outEdgeIds` of them leave the selection, the others enter it), `upstream` nodes lead into the selection and
+ * `downstream` nodes are what it leads to.
+ */
+export interface ConnectionFocus {
+  edgeIds: ReadonlySet<string>;
+  outEdgeIds: ReadonlySet<string>;
+  upstream: ReadonlySet<string>;
+  downstream: ReadonlySet<string>;
+}
+
+type FocusEdge = { id: string; source: string; target: string };
+
+/** A selected node: every wire that touches it and the node on the other end of each. */
+export function connectionFocus(
+  edges: readonly FocusEdge[],
+  selectedId: string | null,
+): ConnectionFocus | null {
+  if (!selectedId) return null;
+  const edgeIds = new Set<string>();
+  const outEdgeIds = new Set<string>();
+  const upstream = new Set<string>();
+  const downstream = new Set<string>();
+  for (const e of edges) {
+    if (e.target === selectedId) {
+      edgeIds.add(e.id);
+      if (e.source !== selectedId) upstream.add(e.source);
+    }
+    if (e.source === selectedId) {
+      edgeIds.add(e.id);
+      outEdgeIds.add(e.id);
+      if (e.target !== selectedId) downstream.add(e.target);
+    }
+  }
+  return { edgeIds, outEdgeIds, upstream, downstream };
+}
+
+/** A clicked wire: that wire, the node it leaves (`upstream`) and the node it enters (`downstream`). */
+export function edgeFocus(
+  edges: readonly FocusEdge[],
+  edgeId: string | null,
+): ConnectionFocus | null {
+  const e = edgeId ? edges.find((x) => x.id === edgeId) : undefined;
+  if (!e) return null;
+  return {
+    edgeIds: new Set([e.id]),
+    outEdgeIds: new Set([e.id]),
+    upstream: new Set([e.source]),
+    downstream: new Set([e.target]),
+  };
+}
+
 // --- geometry -------------------------------------------------------------------------------------------------------
 
 /** The bezier of an edge between two port centres (WaDesk's control-point rule). */

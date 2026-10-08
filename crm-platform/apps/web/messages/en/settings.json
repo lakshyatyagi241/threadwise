@@ -65,6 +65,16 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "unofficial-whatsapp": {
+        "label": "Unofficial WhatsApp API",
+        "description": "Link a personal WhatsApp number by QR code and warm it up for safe sending.",
+        "keywords": "personal whatsapp, qr, pairing code, devices, baileys, warmer, warm up, unofficial"
+      },
+      "warmer": {
+        "label": "Warmer",
+        "description": "Warm up your WhatsApp numbers so scheduled messages go out at a safe pace.",
+        "keywords": "warm up, warming, number, reputation, sending limit, queue, pace, scheduled"
+      },
       "facebook": {
         "label": "Facebook Messenger",
         "description": "Answer messages sent to your Facebook page.",
@@ -123,7 +133,7 @@
       "contact-properties": {
         "label": "Contact properties",
         "description": "Add the fields you want to keep on every contact.",
-        "keywords": "custom fields, fields, required, dropdown, columns"
+        "keywords": "custom fields, fields, required, dropdown, columns, attributes, variables, merge fields"
       },
       "attributes": {
         "label": "Attributes",
@@ -170,11 +180,6 @@
         "description": "Your plan and wallet purchases, with receipts.",
         "keywords": "payments, receipts, invoices, purchases, orders"
       },
-      "bsp-billing-mode": {
-        "label": "Message billing",
-        "description": "Choose who is billed for your WhatsApp messages.",
-        "keywords": "whatsapp, conversation charges, meta billing, bsp, wallet"
-      },
       "account": {
         "label": "Account",
         "description": "Your name, email, password and language.",
@@ -204,6 +209,11 @@
         "label": "AI provider keys",
         "description": "Add your own AI provider key to power AI features.",
         "keywords": "openai, gemini, claude, api key, model, token"
+      },
+      "ai-training": {
+        "label": "AI Training",
+        "description": "Train chat assistants on your own content for flows and the website chat.",
+        "keywords": "knowledge base, assistant, smart agent, faq, train, sources, meta business agent, responder"
       },
       "booking-types": {
         "label": "Booking types",
@@ -250,6 +260,16 @@
         "description": "Switch optional features on or off for your workspace.",
         "keywords": "extensions, modules, plugins, marketplace"
       },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Connect your Shopify store to sync products and orders and message your customers.",
+        "keywords": "shop, store, ecommerce, products, orders, sync, abandoned cart"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Connect your WooCommerce store to sync products and orders and message your customers.",
+        "keywords": "woo, wordpress, shop, store, ecommerce, products, orders, sync"
+      },
       "i18n-translation": {
         "label": "Translation",
         "description": "Languages and automatic translation of messages.",
@@ -279,6 +299,16 @@
         "label": "Saved customers",
         "description": "Pre-set a customer's name and delivery address for WhatsApp orders.",
         "keywords": "customers, address, delivery, order, store"
+      },
+      "geta-publishing": {
+        "label": "Geta publishing",
+        "description": "Push published flows live on the Geta console.",
+        "keywords": "geta, publish, bot, console, go live, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Auto-assignment",
+        "description": "Give new conversations to the right agent automatically, in turn or by rules.",
+        "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
       }
     }
   }

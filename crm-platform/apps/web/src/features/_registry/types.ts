@@ -5,8 +5,9 @@
  * "Platform" and "CRM". A domain picks one for each screen.
  *
  * Configuration is not a menu group: a screen that sets something up (channels, tax rates, API keys, team...) is a tile in
- * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds only the shell's
- * own Settings entry, pinned to the bottom of the menu; `help` (Support, Guidebook) is drawn in the user menu.
+ * the Settings area, declared in `features/<domain>/settings.ts` (see `settings-types.ts`). `settings` holds the entries pinned
+ * to the bottom of the menu: the shell's own Settings entry, with Help (the Help center) directly above it. `help` (Support,
+ * Guidebook) is drawn in the user menu.
  */
 export const NAV_GROUPS = [
   'overview',
@@ -24,11 +25,23 @@ export type NavGroup = (typeof NAV_GROUPS)[number];
 
 export interface NavGates {
   permission?: string;
+  /** A plan feature the screen needs. Missing: the entry stays visible but locked, so it can upsell (WaDesk's rule). */
   planFeature?: string;
   channel?: string;
+  /**
+   * The plan feature key a Marketplace app owns (a first-party listing's `grantsPlanFeatures`, for example Appointments grants
+   * `appointment_booking`). Unlike `planFeature`, a missing app REMOVES the entry and closes its route: an app the workspace has not
+   * bought or been given is found in the Marketplace, not in the menu. The entitlement set already merges what a plan, an
+   * override or a purchased add-on grants, so this follows the one resolver the API gates use. Unknown (null) removes nothing.
+   */
+  app?: string;
 }
 
 /** One entry per screen, declared in `features/<domain>/nav.ts`; the shell never lists domains by hand. */
+/** The live numbers a menu entry can show. Add a key here when a domain starts providing a new one. */
+export const NAV_COUNTER_KEYS = ['inbox-unread'] as const;
+export type NavCounterKey = (typeof NAV_COUNTER_KEYS)[number];
+
 export interface NavItem {
   id: string;
   group: NavGroup;
@@ -40,6 +53,17 @@ export interface NavItem {
   icon?: string;
   /** Small pill next to the label ("New") for screens worth pointing out. */
   badge?: 'new';
+  /**
+   * A live number on the entry (a count pill, capped at "99+", hidden at 0). The domain that owns the number provides it through
+   * `NavCountsContext` (see `components/shell/nav-badges.ts`) under this key; an entry whose number is unknown shows nothing.
+   */
+  counter?: NavCounterKey;
+  /**
+   * `false`: the screen stays registered (its gates, the plan paywall, Help and the command palette still see it) but the sidebar does
+   * not list it, because its own area already links to it (the Store sidebar lists Orders, Coupons...) or a Settings tile does. The
+   * entry that covers its path lights up instead.
+   */
+  inMenu?: boolean;
 }
 
 /** `null` = not known yet (the app-init payload does not exist): show the item and do not lock it. */

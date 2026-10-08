@@ -8,6 +8,7 @@ import {
   whatsappCredentialKeySchema,
   whatsappCredentialModeSchema,
   whatsappOnboardingMethodSchema,
+  whatsappPartnerProgramSchema,
   whatsappProviderCapabilitiesSchema,
   whatsappProviderStatusSchema,
   whatsappSignatureSchemeSchema,
@@ -33,7 +34,7 @@ const labelSchema = z.string().trim().min(1).max(120);
 const apiVersionSchema = z
   .string()
   .trim()
-  .regex(/^v\d{1,2}\.\d{1,2}$/, 'Looks like v24.0');
+  .regex(/^v\d{1,2}(\.\d{1,2})?$/, 'Looks like v24.0 or v3');
 /** A secret as an operator types it: printable ASCII, no spaces or line breaks (it ends up in a header). */
 const secretSchema = (min: number, max: number) =>
   z
@@ -74,6 +75,15 @@ const onboardingFields = {
     .regex(/^\d{5,32}$/, 'Digits only')
     .nullable()
     .optional(),
+  /** The partner onboarding flow after Embedded Signup (`pinnacle`). Needs `partnerSolutionId`; `null` clears both. */
+  partnerProgram: whatsappPartnerProgramSchema.nullable().optional(),
+  /** The partner's solution id (public: it ships in the signup flow). */
+  partnerSolutionId: z
+    .string()
+    .trim()
+    .regex(/^\d{5,32}$/, 'Digits only')
+    .nullable()
+    .optional(),
 };
 
 const signatureHeaderSchema = z
@@ -98,9 +108,26 @@ const consistency = (
     headerTemplates?: Record<string, string>;
     signatureScheme?: string;
     signatureHeaderName?: string | null;
+    partnerProgram?: string | null;
+    partnerSolutionId?: string | null;
+    credentialMode?: string;
   },
   ctx: z.RefinementCtx,
 ) => {
+  if (v.partnerProgram && !v.partnerSolutionId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['partnerSolutionId'],
+      message: 'A partner program needs its solution id',
+    });
+  }
+  if (v.partnerProgram && v.credentialMode !== undefined && v.credentialMode !== 'channel_token') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['credentialMode'],
+      message: 'A partner program gives each number its own token: use channel_token',
+    });
+  }
   if (
     v.authScheme === 'custom_headers' &&
     v.headerTemplates !== undefined &&
@@ -214,6 +241,8 @@ export const whatsappProviderSchema = z.object({
   onboarding: whatsappOnboardingMethodSchema,
   onboardingAppId: z.string().nullable(),
   onboardingConfigId: z.string().nullable(),
+  partnerProgram: whatsappPartnerProgramSchema.nullable(),
+  partnerSolutionId: z.string().nullable(),
   status: whatsappProviderStatusSchema,
   isDefault: z.boolean(),
   /**

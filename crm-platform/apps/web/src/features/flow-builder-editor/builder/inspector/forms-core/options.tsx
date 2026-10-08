@@ -1,11 +1,21 @@
 'use client';
 
+import {
+  FLB_ASK_INPUT_LABELS,
+  FLB_ASK_INPUT_TYPES,
+  FLB_DATE_FORMATS,
+  flbAskInputWrongText,
+  flbCleanAskInputType,
+  flbCleanDateFormat,
+} from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import {
   Check,
   controlClass,
   Field,
   IconButton,
+  NumberInput,
   SelectInput,
   TextArea,
   TextInput,
@@ -23,6 +33,7 @@ import {
   type ListItem,
 } from './helpers';
 import { AddLink, OptionRow, V } from './parts';
+import { ChoiceVariableField, SaveToAttributeField } from './save-to-attribute';
 import { ButtonsPreview, ListPreview, PollPreview } from './previews';
 
 /** Replaces option `i` of a string-options node. */
@@ -49,6 +60,8 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
         ))}
         <AddLink onClick={addOption}>Add button</AddLink>
       </Field>
+      <ChoiceVariableField data={d} set={set} />
+      <SaveToAttributeField data={d} set={set} noun="choice" />
     </>
   );
 }
@@ -69,6 +82,7 @@ function Counter({ len, max }: { len: number; max: number }) {
 const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`;
 
 export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const unofficial = useUnofficialWhatsapp();
   const items = listItems(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
@@ -89,7 +103,11 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
       </Field>
       <Field
         label="Items"
-        hint="Up to 10 items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud); on the Unofficial API the list falls back to plain buttons showing the title only."
+        hint={`Up to 10 items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud).${
+          unofficial
+            ? ' On the Unofficial API the list falls back to plain buttons showing the title only.'
+            : ''
+        }`}
       >
         <datalist id={listId}>
           {sectionNames.map((s) => (
@@ -149,29 +167,89 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
           </div>
         ) : null}
       </Field>
+      <ChoiceVariableField data={d} set={set} />
+      <SaveToAttributeField data={d} set={set} noun="choice" />
     </>
   );
 }
 
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
+  // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
+  const checked =
+    flbCleanAskInputType(d.validate) !== 'text' && options.length === 0 && d.acceptMedia !== true;
   return (
     <>
       <Field label="Question">
         <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
       </Field>
-      <Field label="Validate as">
+      <Field
+        label="Validate as"
+        hint={
+          checked
+            ? 'The answer is checked before the flow goes on; a wrong one gets the message below.'
+            : 'Free text takes any answer.'
+        }
+      >
         <SelectInput
-          value={d.validate}
-          options={[
-            { v: 'text', l: 'Free text' },
-            { v: 'email', l: 'Email' },
-            { v: 'phone', l: 'Phone' },
-            { v: 'number', l: 'Number' },
-          ]}
+          value={flbCleanAskInputType(d.validate)}
+          options={FLB_ASK_INPUT_TYPES.map((v) => ({ v, l: FLB_ASK_INPUT_LABELS[v] }))}
           onChange={(v) => set('validate', v)}
         />
       </Field>
+      {checked ? (
+        <>
+          {flbCleanAskInputType(d.validate) === 'date' ? (
+            <Field
+              label="Date format"
+              hint="How the customer writes the date. It is saved as typed, with an ISO copy in the _iso variable."
+            >
+              <SelectInput
+                value={flbCleanDateFormat(d.dateFormat)}
+                options={FLB_DATE_FORMATS.map((v) => ({ v, l: v.toUpperCase() }))}
+                onChange={(v) => set('dateFormat', v)}
+              />
+            </Field>
+          ) : null}
+          <Field
+            label="Wrong-answer message"
+            hint="Leave blank to use a ready-made one for this type."
+          >
+            <TextArea
+              value={d.wrongReply}
+              rows={2}
+              placeholder={flbAskInputWrongText(flbCleanAskInputType(d.validate), d.dateFormat)}
+              onChange={(v) => set('wrongReply', v)}
+            />
+          </Field>
+          <Field
+            label="Stop after wrong answers"
+            hint="0 keeps asking until the answer is right (the run's idle limit still ends it)."
+          >
+            <NumberInput
+              value={d.retries}
+              min={0}
+              max={10}
+              onChange={(v) =>
+                set('retries', Number.isNaN(v) ? 0 : Math.min(10, Math.max(0, Math.trunc(v))))
+              }
+            />
+          </Field>
+          {Number(d.retries) > 0 ? (
+            <Field label="Then">
+              <SelectInput
+                value={d.onFail === 'end' ? 'end' : 'continue'}
+                options={[
+                  { v: 'continue', l: 'Carry on without an answer' },
+                  { v: 'end', l: 'End the flow' },
+                ]}
+                onChange={(v) => set('onFail', v)}
+              />
+            </Field>
+          ) : null}
+        </>
+      ) : null}
       <Field
         label="Save answer to variable"
         hint={
@@ -185,9 +263,12 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       >
         <TextInput value={d.var} placeholder="answer" onChange={(v) => set('var', v)} />
       </Field>
+      <SaveToAttributeField data={d} set={set} noun="answer" />
       <Field
         label="Accept a file/photo upload"
-        hint="When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp (official & unofficial) and Twilio."
+        hint={`When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp${
+          unofficial ? ' (official & unofficial)' : ''
+        } and Twilio.`}
       >
         <Check checked={!!d.acceptMedia} onChange={(v) => set('acceptMedia', v)}>
           Save an uploaded image / PDF / audio as this variable (a link)

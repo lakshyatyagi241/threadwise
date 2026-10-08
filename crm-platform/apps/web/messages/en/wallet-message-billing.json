@@ -1,9 +1,9 @@
 {
   "wallet-message-billing": {
     "tile": {
-      "label": "Wallet and statement",
-      "description": "Your message balance, top-ups and the full statement.",
-      "keywords": "wallet balance top up add money credits statement billing"
+      "label": "Expenses, wallet and statement",
+      "description": "Track what you spend: your message balance, top-ups, every charge and the full statement.",
+      "keywords": "wallet balance top up add money credits statement billing expenses expense spend spending charges costs usage transactions history ledger"
     },
     "common": {
       "loading": "Loading",
@@ -34,7 +34,8 @@
       "forbidden": "Only super admins can do this.",
       "validation": "Check the highlighted fields.",
       "network": "The server could not be reached. Check your connection and try again.",
-      "generic": "Something went wrong. Try again."
+      "generic": "Something went wrong. Try again.",
+      "currencyUnsupported": "That currency cannot be used yet: import Meta's rate card for it first (Message pricing, Meta rate cards)."
     },
     "types": {
       "topup": "Top-up",
@@ -189,7 +190,7 @@
     "admin": {
       "admin": "Admin",
       "wallet": "Wallet",
-      "workspacesLabel": "Workspace wallets",
+      "workspacesLabel": "Workspaces",
       "breadcrumb": "Breadcrumb",
       "readOnly": "You are signed in as {role}. Only super admins can change wallet settings, prices or balances.",
       "nav": {
@@ -229,6 +230,15 @@
           "balance": "Balance",
           "ledger": "Ledger",
           "difference": "Difference"
+        },
+        "otherCurrencies": "Wallets in other currencies",
+        "otherCurrenciesNote": "Workspaces billed in another currency hold money in that currency. The figures above are {currency} only; each other currency is counted on its own line.",
+        "other": {
+          "currency": "Currency",
+          "float": "Money held",
+          "holding": "Workspaces with a balance",
+          "toppedUp": "Topped up, 30 days",
+          "charged": "Charged, 30 days"
         }
       },
       "pricing": {
@@ -411,6 +421,88 @@
           "confirm": "Yes, change it",
           "savedFixed": "Customers are now priced with fixed prices.",
           "savedMargin": "Customers are now priced with Meta cost plus margin."
+        },
+        "metaCards": {
+          "title": "Meta rate cards",
+          "intro": "Meta publishes one price list for each currency, and changes it only on 1 January, 1 April, 1 July and 1 October. A workspace billed in INR is priced from Meta's INR list and charged to its INR wallet, never from the USD list converted. Import each file as Meta publishes it. Typed prices and the flat price are kept in the platform currency and converted at the exchange rate on file for a workspace billed in another currency.",
+          "none": "No Meta rate card is stored yet. Import the file Meta publishes for your currency.",
+          "view": "View",
+          "hide": "Hide",
+          "usedPricing": "Pricing, margins and the reseller P&L, and workspaces billed in the platform currency",
+          "usedWorkspaces": "Prices workspaces billed in {currency}",
+          "columns": {
+            "currency": "Currency",
+            "effective": "Effective",
+            "checked": "Last imported",
+            "markets": "Markets",
+            "usedFor": "Used for",
+            "status": "Status",
+            "actions": "Actions"
+          },
+          "freshness": {
+            "current": "Up to date",
+            "upcoming": "Check soon",
+            "due": "Check now"
+          },
+          "reminder": {
+            "link": "Open Meta’s pricing page",
+            "current": "Up to date. Meta may next change its prices on {date}.",
+            "dueTitle": "A new quarter began on {date}: Meta may have changed its prices.",
+            "dueBody": "Download the new rate files (one per currency in use) and import them here. Until then, costs and margins use the older card.",
+            "upcomingTitle": "Meta may change its prices on {date} ({days, plural, one {# day} other {# days}} away).",
+            "upcomingBody": "Have the new files ready to import that day.",
+            "missingTitle": "No Meta rate card for {currencies}.",
+            "missingBody": "Workspaces set to that currency have no Meta price list to show. Import the file Meta publishes for it."
+          },
+          "table": {
+            "heading": "Meta’s {currency} card",
+            "note": "List price per delivered message, as Meta publishes it. Countries Meta does not name are priced as Other.",
+            "market": "Market",
+            "everyOther": "Every country not named",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentication",
+              "authentication_international": "Auth. international",
+              "service": "Service"
+            }
+          },
+          "import": {
+            "button": "Import Meta rate card",
+            "title": "Import Meta rate card",
+            "intro": "Choose the file Meta publishes for one currency (an Excel workbook, even where the link says CSV). The currency and effective date are read from the file. You see what would change before anything is saved.",
+            "file": "Meta rate file (.xlsx or .csv)",
+            "hint": "One currency per file. A new file replaces that currency’s card as a whole. At most 2 MB.",
+            "reading": "Reading the file…",
+            "applying": "Importing",
+            "apply": "Import card",
+            "done": "The {currency} card was imported.",
+            "fileProblems": {
+              "wrongType": "Choose the .xlsx file Meta publishes, or a CSV saved from it.",
+              "tooBig": "The file is larger than 2 MB, which is not a Meta rate card.",
+              "unreadable": "The file could not be read."
+            },
+            "summary": {
+              "currency": "Currency",
+              "effective": "Effective",
+              "added": "New rows",
+              "changed": "Changed",
+              "unchanged": "Unchanged",
+              "removed": "Dropped"
+            },
+            "replaces": "Replaces the card effective {date}.",
+            "appliesToPricing": "This is the {currency} card, your platform currency. Importing it also refreshes the Meta cost behind pricing, margins and the reseller P&L ({added} new, {updated} updated). Customer prices are not changed.",
+            "storedOnly": "This is not the platform currency. It is stored and shown, and it prices every workspace billed in {currency}. The Meta cost in the rate grid below stays in the platform currency.",
+            "biggest": "Largest changes",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentication",
+              "authentication_international": "Auth. international",
+              "service": "Service"
+            },
+            "problems": "Rows that were skipped"
+          }
         }
       },
       "workspaces": {
@@ -436,7 +528,8 @@
           "low": "Low",
           "activity": "Last activity",
           "never": "Never"
-        }
+        },
+        "totalFloatIn": "Money held ({currency})"
       },
       "detail": {
         "crumb": "Workspace",
@@ -516,6 +609,25 @@
                 "fixed": "Fixed price"
               }
             }
+          }
+        },
+        "billingCurrency": {
+          "title": "Billing currency",
+          "intro": "Messages are priced from Meta's rate card for this currency and charged to the workspace's wallet in it. Top-ups are entered and credited in it too.",
+          "billedIn": "Billed in",
+          "change": "Change currency",
+          "otherWallets": "Other wallets this workspace holds",
+          "notUsed": "Not used for billing; the money stays here.",
+          "dialog": {
+            "title": "Change billing currency",
+            "currency": "Bill in",
+            "effect": "From now on messages are priced from Meta's {to} card and charged to the {to} wallet. Nothing is converted: the {from} wallet keeps its balance.",
+            "left": "{amount} stays in the {from} wallet and is not used until the workspace is switched back.",
+            "reason": "Reason",
+            "reasonHint": "Shown in the audit trail and the workspace's wallet log. At least 5 characters.",
+            "confirm": "Bill in {currency}",
+            "saving": "Saving",
+            "done": "Now billed in {to} (was {from})."
           }
         }
       },

@@ -52,7 +52,9 @@ function parseRange(header: string | undefined): { start: number; end?: number }
 /**
  * WhatsApp calling from the inbox (CALL, WD-CALL-003 to 016, 019). Placing, answering and reading calls need `call.calls.use`; switching
  * calling on a number needs `call.calling.manage` (WaDesk: the workspace role manager for both). The plan feature `waba_calling`
- * gates every route. Ids are uuids in the caller's workspace, so another workspace's id is a 404.
+ * gates every route (in the services, not by decorator, so one rule covers the worker paths too). The plan feature `calling` is WaDesk's
+ * `access_calling` flag, the AI voice agent: a different product from WhatsApp calling, it has no routes in this tree and is not checked here, so no route carries
+ * two conflicting keys. Ids are uuids in the caller's workspace, so another workspace's id is a 404.
  */
 @ApiTags('calling')
 @ActorKinds('user')

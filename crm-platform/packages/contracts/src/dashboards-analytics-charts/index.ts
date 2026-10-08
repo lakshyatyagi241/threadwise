@@ -5,8 +5,9 @@ import { z } from 'zod';
  * figure is a live aggregate over the message streams of the caller's workspace (WD-DASH-002).
  */
 
-/** Dashboard window (WD-DASH-003). An unknown value falls back to 7d, as WaDesk does. */
-export const DASH_RANGES = ['24h', '7d', '30d', 'qtd'] as const;
+/** Dashboard window (WD-DASH-003). An unknown value falls back to 7d, as WaDesk does; `custom` takes inclusive From/To dates. */
+export const DASH_RANGES = ['24h', '7d', '30d', 'qtd', 'custom'] as const;
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const dashRangeSchema = z.enum(DASH_RANGES);
 export type DashRange = z.infer<typeof dashRangeSchema>;
 
@@ -18,6 +19,8 @@ export const dashSummaryQuerySchema = z.object({
       const p = dashRangeSchema.safeParse(v);
       return p.success ? p.data : '7d';
     }),
+  from: isoDate.optional().catch(undefined),
+  to: isoDate.optional().catch(undefined),
 });
 export type DashSummaryQuery = z.infer<typeof dashSummaryQuerySchema>;
 
@@ -33,6 +36,14 @@ export const dashTotalsSchema = z.object({
   replies: z.number().int(),
   /** Distinct conversations with an inbound message (the "engaged" funnel stage). */
   repliers: z.number().int(),
+  /** Distinct conversations (the contact proxy) with an outbound message in the window. */
+  contactsMessaged: z.number().int(),
+  /** Distinct conversations with an outbound message in the delivered set (delivered, read, sent). */
+  contactsDelivered: z.number().int(),
+  /** Distinct conversations with an inbound message; equals `repliers`. May exceed `contactsMessaged` (replied without being messaged in this window). */
+  contactsReplied: z.number().int(),
+  /** Distinct conversations with at least one flow run that finished (`flow_runs.status = 'completed'`) with `ended_at` in the window. */
+  contactsGoalCompleted: z.number().int(),
   /** Percent, one decimal. */
   deliverability: z.number(),
   readRate: z.number(),
@@ -63,6 +74,24 @@ export const dashFunnelSchema = z.object({
   ),
   /** The last stage's share. */
   endToEnd: z.number(),
+  /** Contact-based funnel (the Engagement funnel card): contacts messaged, delivered to, replied, and goal completed (a flow finished). Percentages are of `messaged`. */
+  contacts: z.object({
+    messaged: z.number().int(),
+    delivered: z.number().int(),
+    replied: z.number().int(),
+    /** Contacts whose flow finished in the window (a completed flow run). */
+    goalCompleted: z.number().int(),
+  }),
+  /** Conversation activity under the funnel; `repliesPerContact` is replies / responding contacts, one decimal, null when nobody replied. */
+  activity: z.object({
+    inbound: z.number().int(),
+    respondingContacts: z.number().int(),
+    repliesPerContact: z.number().nullable(),
+  }),
+  /** Contacts replied / contacts messaged, percent, one decimal, capped at 100. */
+  replyRate: z.number(),
+  /** Reply rate against the previous window; null when that window messaged no contacts. */
+  comparison: z.object({ previousReplyRate: z.number(), replyRatePp: z.number() }).nullable(),
 });
 export type DashFunnel = z.infer<typeof dashFunnelSchema>;
 
@@ -98,7 +127,6 @@ export type DashThroughputResponse = z.infer<typeof dashThroughputResponseSchema
 
 /** Analytics window (WD-DASH-022): 30d is the default and the fallback for anything unknown. */
 export const ANALYTICS_RANGES = ['7d', '30d', '90d', 'custom'] as const;
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const analyticsQuerySchema = z.object({
   range: z
     .string()
@@ -133,6 +161,8 @@ export const analyticsResponseSchema = z.object({
     repliesPct: z.number(),
     /** Percentage points. */
     replyRatePp: z.number(),
+    /** Contact-based reply rate change (contacts replied / contacts messaged) in percentage points, one decimal. */
+    replyRateContactPp: z.number(),
     endToEndPp: z.number(),
   }),
   daily: z.object({
@@ -143,11 +173,12 @@ export const analyticsResponseSchema = z.object({
     queued: z.array(z.number().int()),
   }),
   funnel: dashFunnelSchema,
-  /** Outbound by type; zero buckets omitted. */
+  /** Outbound by type (sent = count, and how many of those were delivered); zero buckets omitted. */
   types: z.array(
     z.object({
       key: z.enum(['text', 'template', 'media', 'interactive', 'location']),
       count: z.number().int(),
+      delivered: z.number().int(),
     }),
   ),
   /** 7 rows (Sunday = 0) of 24 hourly message counts, both directions, in the workspace zone. */

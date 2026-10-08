@@ -7,14 +7,17 @@ import {
   type MarketInstallStatus,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
-import { ID, SECRET, card, installation, request, scopes } from '../test-fixtures';
+import { ID, SECRET, card, installation, paidPricing, request, scopes } from '../test-fixtures';
 import {
   BROWSE_TABS,
   NO_FILTERS,
+  availabilityPatch,
+  availabilityView,
   browseHref,
   categoryItems,
   emptyReason,
   hasActiveFilter,
+  isAddonCard,
   kindForSegment,
   knownCategory,
   listQuery,
@@ -355,6 +358,7 @@ describe('lock and call to action', () => {
       kind: 'install',
       href: '/marketplace/app/webhook/install',
       upgradeHref: null,
+      needsPurchase: false,
     });
     expect(cardCta(card(), { install: false })).toMatchObject({
       kind: 'view',
@@ -375,6 +379,7 @@ describe('lock and call to action', () => {
       kind: 'locked',
       href: '/marketplace/app/webhook',
       upgradeHref: '/account/plans',
+      needsPurchase: false,
     });
     // A lock beats the permission: the person sees why it is locked rather than a button they cannot use.
     expect(
@@ -578,8 +583,11 @@ describe('browse view model', () => {
       category: 'lead-sources',
       q: 'just',
       installed: true,
+      addons: false,
       sort: 'popular',
     });
+    expect(p('addons=true')).toEqual({ ...NO_FILTERS, addons: true });
+    expect(p('addons=true&installed=true')).toEqual({ ...NO_FILTERS, installed: true });
     expect(p('category=Bad Slug&sort=bogus&installed=yes')).toEqual(NO_FILTERS);
     expect(p(`q=${'x'.repeat(200)}`).q).toHaveLength(80);
   });
@@ -1229,5 +1237,28 @@ describe('sync now', () => {
       waitingForFirstLead(portalConnection({ type: 'webhook_relay', lastEventAt: null })),
     ).toBe(false);
     expect(waitingForFirstLead(null)).toBe(false);
+  });
+});
+
+describe('availability chips', () => {
+  it('are exclusive and live in the address', () => {
+    expect(availabilityView(NO_FILTERS)).toBe('all');
+    expect(availabilityView({ ...NO_FILTERS, addons: true })).toBe('addons');
+    expect(availabilityView({ ...NO_FILTERS, installed: true })).toBe('installed');
+    expect(availabilityPatch('addons')).toEqual({ installed: false, addons: true });
+    expect(availabilityPatch('all')).toEqual({ installed: false, addons: false });
+    expect(browseHref('mini_app', { addons: true })).toBe('/marketplace/apps?addons=true');
+    expect(hasActiveFilter({ ...NO_FILTERS, addons: true })).toBe(true);
+    expect(emptyReason({ ...NO_FILTERS, addons: true })).toBe('addons');
+  });
+
+  it('pick add-ons from the loaded cards by availability', () => {
+    expect(isAddonCard(card({ pricing: paidPricing() }))).toBe(true);
+    expect(isAddonCard(card())).toBe(false);
+    expect(
+      isAddonCard(
+        card({ pricing: paidPricing({ access: 'entitled', availability: 'purchased' }) }),
+      ),
+    ).toBe(false);
   });
 });

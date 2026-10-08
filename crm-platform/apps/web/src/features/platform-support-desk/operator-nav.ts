@@ -31,12 +31,6 @@ export const SUPP_OPERATOR_NAV: readonly OperatorNavEntry[] = [
   },
   { id: 'support-sla', href: '/admin/support/sla', labelKey: `${NS}.sla`, groupKey: GROUP },
   {
-    id: 'support-customers',
-    href: '/admin/support/customers',
-    labelKey: `${NS}.customers`,
-    groupKey: GROUP,
-  },
-  {
     id: 'support-playbooks',
     href: '/admin/support/playbooks',
     labelKey: `${NS}.playbooks`,

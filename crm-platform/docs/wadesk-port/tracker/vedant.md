@@ -54,6 +54,18 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WADEV-045 | todo |  |  |
 | WD-WADEV-046 | todo |  |  |
 
+## campaigns (camp) additions: Create broadcast wizard
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-CAMP-029 | done |  | ADDITION (not in WaDesk): Create-broadcast wizard shell, draft, resume. api+web+e2e on akshay/campaigns/broadcast-wizard; not parity-checked against a WaDesk twin (none exists) |
+| WD-CAMP-030 | done |  | ADDITION: audience groups+segments+rules, count, exclusions |
+| WD-CAMP-031 | done |  | ADDITION: credit check, variable mapping, sample messages |
+| WD-CAMP-032 | done |  | ADDITION: test send, logged, charged on delivery; Cloud API delivery reports now reach campaigns (WabaReceiptRegistry) |
+| WD-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
+| WD-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
+| WD-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+
 ## whatsapp-cloud-api-waba (waba)
 
 | Feature | Status | PR | Notes |
@@ -291,23 +303,23 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-TIB2-001 | todo |  |  |
 | WD-TIB2-002 | todo |  |  |
 | WD-TIB2-003 | todo |  |  |
-| WD-TIB2-004 | todo |  |  |
-| WD-TIB2-005 | todo |  |  |
-| WD-TIB2-006 | todo |  |  |
-| WD-TIB2-007 | todo |  |  |
-| WD-TIB2-008 | todo |  |  |
-| WD-TIB2-009 | todo |  |  |
-| WD-TIB2-010 | todo |  |  |
-| WD-TIB2-011 | todo |  |  |
-| WD-TIB2-012 | todo |  |  |
-| WD-TIB2-013 | todo |  |  |
+| WD-TIB2-004 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-005 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-006 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-007 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-008 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-009 | done |  | auto-assignment build: rules API under /v2/inbox/routing, screens under Settings > Automation > Auto-assignment |
+| WD-TIB2-010 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-011 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-012 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
+| WD-TIB2-013 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | WD-TIB2-014 | todo |  |  |
 | WD-TIB2-015 | todo |  |  |
 | WD-TIB2-016 | todo |  |  |
 | WD-TIB2-017 | todo |  |  |
 | WD-TIB2-018 | todo |  |  |
 | WD-TIB2-019 | todo |  |  |
-| WD-TIB2-020 | todo |  |  |
+| WD-TIB2-020 | in-progress |  | assign action only (round_robin, least_busy, specific, contact agent); other actions, sticky, team strategy/capacity not built |
 | WD-TIB2-021 | todo |  |  |
 | WD-TIB2-022 | todo |  |  |
 | WD-TIB2-023 | todo |  |  |
@@ -585,7 +597,7 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLB-067 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | WD-FLB-068 | done |  | owned by FLR (ordering contracts and endpoints there) |
 | WD-FLB-069 | done |  | owned by NODE/FLR: the Node bridge is replaced by the in-process engine |
-| WD-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; FLR compileGraph hook is the FLR owner's one-liner (parity doc, Open runtime items) |
+| WD-FLB-070 | done |  | flbToRuntimeData + FlowReaderService done; compileGraph calls flbToRuntimeData (branch akshay/flr/flb-runtime-hook, authorised on the FLR side), template and AI assistant uuids resolved by org; e2e editor-flows |
 | WD-FLB-071 | done |  | owned by FLR, built there (WD-FLR-052..058) |
 | WD-FLB-072 | done |  | owned by FLR, built there (WD-FLR-052..058) |
 | WD-FLB-073 | done |  | owned by FLR, built there (WD-FLR-052..058) |
@@ -596,6 +608,9 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-FLB-078 | wontfix |  | dead code in WaDesk: table kept, no screen or writer |
 | WD-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | WD-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
+| WD-FLB-081 | done |  | addition beyond WaDesk (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |
+| WD-FLB-082 | done |  | addition beyond WaDesk (owner request): Ask for location with the WhatsApp send-location request. Same coverage; the request payload is unit-tested, never sent to Meta |
+| WD-FLB-083 | done |  | addition beyond WaDesk (owner request): Geta console publishing. Port + HTTP/fixture adapters, sealed per-workspace credentials, outbox event + worker consumer, sync state with retry, editor status and settings screen, en+ar; unit (stub server) + API e2e + RLS integration + web unit. The real console was never called |
 
 ## flow-runtime-engine (flr)
 

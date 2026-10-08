@@ -15,6 +15,11 @@ export { ContactQuotaService } from './contact-quota.service';
 export type { ContactQuota } from './contact-quota.service';
 export {
   contactConditions,
+  whereOf,
   contactScopeCondition,
   type ResolvedContactFilter,
 } from './contact-conditions';
+export { contactSelectionWhere } from './contact-selection-where';
+export { ContactResolverService } from './contact-resolver.service';
+export { missingRequired, requiredPropertiesError, isBlank } from './required-properties';
+export type { RequiredRule } from './required-properties';

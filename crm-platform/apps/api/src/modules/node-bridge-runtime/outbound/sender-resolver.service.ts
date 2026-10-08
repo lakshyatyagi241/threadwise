@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../../auth/unofficial-whatsapp.port';
 import type { SenderRef } from './outbound';
 
 const ENGINES = new Set(['baileys', 'waba', 'twilio']);
@@ -12,7 +16,10 @@ export function senderDigits(countryCode: string | null, phone: string | null): 
   if (local === '') return '';
   if ((phone ?? '').trim().startsWith('+')) return local;
   const cc = digits(countryCode);
-  return cc !== '' && !local.startsWith(cc) ? `${cc}${local}` : local;
+  // The local number already carries its country code only when removing it still leaves a whole number (9 or more digits, WaDesk's own
+  // rule when it stores a number): a 10-digit number that merely begins with the country code (91 9123456789) is NOT one.
+  const carriesCode = local.startsWith(cc) && local.length - cc.length >= 9;
+  return cc !== '' && !carriesCode ? `${cc}${local}` : local;
 }
 
 /**
@@ -22,15 +29,30 @@ export function senderDigits(countryCode: string | null, phone: string | null): 
  */
 @Injectable()
 export class SenderResolver {
-  /** `provider` is the engine the row asked for; blank means the unofficial engine, as in WaDesk. */
+  constructor(
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+  ) {}
+
+  /**
+   * `provider` is the engine the row asked for; blank means the unofficial engine, as in WaDesk, while the platform switch
+   * for it is on AND the workspace is allowed (owner decision 2026-10-06). Otherwise blank means the Cloud API (`waba`), and a row that names `baileys` has no sender: the
+   * caller reports "no sender" and leaves the row untouched (owner decision 2026-10-05).
+   */
   async resolve(
     tx: Tx,
     orgId: number,
     pick: { provider: string | null; deviceId: number | null },
   ): Promise<SenderRef | null> {
-    const engine = pick.provider && ENGINES.has(pick.provider) ? pick.provider : 'baileys';
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
+    const engine =
+      pick.provider && ENGINES.has(pick.provider)
+        ? pick.provider
+        : unofficialOn
+          ? 'baileys'
+          : 'waba';
 
     if (engine === 'baileys') {
+      if (!unofficialOn) return null;
       const res = await tx.execute(sql`
         SELECT id, country_code, phone_number, coalesce(nullif(device_name, ''), phone_number) AS label
         FROM devices

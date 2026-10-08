@@ -13,6 +13,7 @@ import {
 } from '../../../../../infra/providers/flow-runtime-engine/ordering.port';
 import { AiKeysUsageAdminModule } from '../../../../ai-keys-usage-admin';
 import { CatalogProductsModule } from '../../../../catalog-products';
+import { CrmModule } from '../../../../crm';
 import { LocalizationTranslationModule } from '../../../../localization-translation';
 import { AiCallService } from './ai-call.service';
 import { AiNodes } from './ai-nodes';
@@ -20,7 +21,12 @@ import { OrderingFlowService } from './ordering.service';
 
 /** Imports the domains this node group calls (their public modules only); never the flow runtime module (it imports this one). */
 @Module({
-  imports: [AiKeysUsageAdminModule, CatalogProductsModule, LocalizationTranslationModule],
+  imports: [
+    AiKeysUsageAdminModule,
+    CatalogProductsModule,
+    CrmModule,
+    LocalizationTranslationModule,
+  ],
   providers: [
     AiNodes,
     AiCallService,

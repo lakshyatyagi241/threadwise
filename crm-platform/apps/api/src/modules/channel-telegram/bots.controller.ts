@@ -20,10 +20,13 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { BotsService } from './bots.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Telegram bots: connect by token, pause, fix the webhook, payment settings, disconnect (WD-TG-001, 002, 007). */
 @ApiTags('telegram')
 @ActorKinds('user')
+// Telegram setup and broadcasts are entirely the extra-channels feature; the inbound webhook (separate, public controller) stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'telegram/bots', version: '2' })
 export class BotsController {
   constructor(private readonly bots: BotsService) {}

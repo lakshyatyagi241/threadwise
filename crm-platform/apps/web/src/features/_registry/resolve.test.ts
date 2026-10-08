@@ -64,6 +64,52 @@ describe('resolveNav', () => {
   });
 });
 
+describe('app gate (a Marketplace app the workspace may not own)', () => {
+  const appItems: NavItem[] = [
+    { id: 'home', group: 'overview', labelKey: 'a', href: '/dashboard' },
+    {
+      id: 'appointments',
+      group: 'automation',
+      labelKey: 'b',
+      href: '/appointments',
+      gates: { permission: 'record.appointments.read', app: 'appointment_booking' },
+    },
+    {
+      id: 'flows',
+      group: 'automation',
+      labelKey: 'c',
+      href: '/flows',
+      gates: { planFeature: 'automation' },
+    },
+  ];
+  const all = ['record.appointments.read'];
+
+  it('removes the entry, with no upsell lock, when the workspace does not own the app', () => {
+    const r = resolveNav(appItems, caps(all, ['automation'], []));
+    expect(r.map((i) => i.id)).toEqual(['home', 'flows']);
+  });
+
+  it('shows the entry unlocked when the app is owned (bought, comped or on the plan)', () => {
+    const r = resolveNav(appItems, caps(all, ['automation', 'appointment_booking'], []));
+    expect(r.find((i) => i.id === 'appointments')).toMatchObject({ locked: false });
+  });
+
+  it('still removes it for a person without the permission, even when the app is owned', () => {
+    const r = resolveNav(appItems, caps([], ['appointment_booking'], []));
+    expect(r.map((i) => i.id)).not.toContain('appointments');
+  });
+
+  it('removes nothing while the entitlements are unknown (fail open, like every other gate)', () => {
+    const r = resolveNav(appItems, CAPABILITIES_UNKNOWN);
+    expect(r.map((i) => i.id)).toContain('appointments');
+  });
+
+  it('leaves a plain plan feature locked rather than removed (WaDesk keeps the upsell)', () => {
+    const r = resolveNav(appItems, caps(all, [], []));
+    expect(r.find((i) => i.id === 'flows')).toMatchObject({ locked: true });
+  });
+});
+
 describe('account hub panes', () => {
   const panes: NavItem[] = [
     { id: 'account', group: 'settings', labelKey: 'a', href: '/account', order: 90 },

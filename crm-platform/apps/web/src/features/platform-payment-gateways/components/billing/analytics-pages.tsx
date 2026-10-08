@@ -8,6 +8,7 @@ import { Card, EmptyState } from '@crm/ui';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { BILLING_KEYS, billingApi } from '../../billing-api';
+import { FunnelBand } from '@/components/funnel-shape';
 import { downloadText, signedPct, wholeMoney } from '../../lib/billing-format';
 import { useUrlState } from '../../lib/use-url-state';
 import { CHART_COLORS, Donut, Heatmap, MotionBars, TrendChart } from './charts';
@@ -194,7 +195,7 @@ export function BillingAnalyticsPage() {
               <p className="mt-1 text-xs text-muted-foreground">{tb('topPayers.hint')}</p>
             </div>
             <Link
-              href="/admin/workspace-plans"
+              href="/admin/workspaces"
               className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted"
             >
               {tb('topPayers.all')}
@@ -228,7 +229,7 @@ export function BillingAnalyticsPage() {
                       <td className="px-4 py-3 font-semibold">
                         {w.workspace ? (
                           <Link
-                            href={`/admin/workspace-plans?q=${encodeURIComponent(w.workspace.slug)}`}
+                            href={`/admin/workspaces?q=${encodeURIComponent(w.workspace.slug)}`}
                             className="hover:underline"
                           >
                             {w.workspace.name}
@@ -426,19 +427,23 @@ export function OrderAnalyticsPage() {
           )}
         </Section>
         <Section className="lg:col-span-4" kicker={t('funnel.kicker')} title={t('funnel.title')}>
-          <ul className="space-y-3 text-sm">
-            {d.funnel.map((f) => (
-              <li key={f.label}>
-                <div className="mb-1 flex items-center justify-between">
-                  <span>{f.label}</span>
-                  <span className="font-mono text-xs">{f.count.toLocaleString(locale)}</span>
-                </div>
-                <div className="h-2 overflow-hidden rounded-full bg-muted">
-                  <div
-                    className="h-full bg-primary"
-                    style={{ width: `${Math.round((f.count / maxFunnel) * 100)}%` }}
-                  />
-                </div>
+          <ul className="space-y-0.5 text-sm">
+            {d.funnel.map((f, i) => (
+              <li
+                key={f.label}
+                className="grid grid-cols-[minmax(0,1fr)_minmax(0,9rem)] items-center gap-3"
+              >
+                <FunnelBand
+                  topPct={(f.count / maxFunnel) * 100}
+                  bottomPct={((d.funnel[i + 1]?.count ?? f.count * 0.75) / maxFunnel) * 100}
+                  strength={1 - i * 0.14}
+                />
+                <p className="min-w-0 leading-tight">
+                  <span className="block truncate">{f.label}</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {f.count.toLocaleString(locale)}
+                  </span>
+                </p>
               </li>
             ))}
           </ul>

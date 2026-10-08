@@ -11,6 +11,19 @@ import { ERROR_CODES, type Problem } from '@crm/contracts';
 import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
+import { reportServerError } from '../../modules/platform-infrastructure';
+
+/**
+ * A surface whose clients expect their own error body (WaDesk's `/api/v1` answers `{ error: { code, message } }`) registers a renderer for
+ * its path prefix. The problem is still built, logged and reported here; the renderer only decides how it is written. Returns true when
+ * it wrote the response.
+ */
+export type ProblemRenderer = (problem: Problem, request: Request, response: Response) => boolean;
+const problemRenderers: Array<{ prefix: string; render: ProblemRenderer }> = [];
+
+export function registerProblemRenderer(prefix: string, render: ProblemRenderer): void {
+  if (!problemRenderers.some((r) => r.prefix === prefix)) problemRenderers.push({ prefix, render });
+}
 
 /**
  * Single exit point for every error. Emits RFC 9457 problem+json:
@@ -39,11 +52,17 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         { err: exception, path: maskSecretUrl(request.url), requestId },
         `Unhandled error: ${problem.detail}`,
       );
+      reportServerError(exception, { requestId, path: request.url });
     } else {
       this.logger.debug(
         { path: maskSecretUrl(request.url), code: problem.code, requestId },
         problem.title,
       );
+    }
+
+    const path = request.path ?? request.url;
+    for (const { prefix, render } of problemRenderers) {
+      if (path.startsWith(prefix) && render(problem, request, response)) return;
     }
 
     response.status(problem.status).type('application/problem+json').send(problem);

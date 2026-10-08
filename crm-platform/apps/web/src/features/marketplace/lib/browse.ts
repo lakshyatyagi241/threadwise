@@ -2,9 +2,11 @@ import {
   MARKET_APP_KINDS,
   MARKET_APP_SORTS,
   MARKET_SLUG_RE,
+  type MarketAppCard,
   type MarketAppKind,
   type MarketCategory,
 } from '@crm/contracts';
+import { cardAvailability } from './pricing';
 import { mktRoutes } from './routes';
 
 /** Browse: the two tabs, the filters kept in the address (`?category=&q=&installed=true&sort=`) and the category list of a tab. */
@@ -42,6 +44,8 @@ export interface BrowseFilters {
   category: string | null;
   q: string;
   installed: boolean;
+  /** Only the add-ons the plan lists and the workspace has not bought (`?addons=true`); filtered here, over the loaded cards. */
+  addons: boolean;
   sort: BrowseSort;
 }
 
@@ -49,6 +53,7 @@ export const NO_FILTERS: BrowseFilters = {
   category: null,
   q: '',
   installed: false,
+  addons: false,
   sort: DEFAULT_SORT,
 };
 
@@ -67,6 +72,8 @@ export function parseBrowseParams(params: ParamsLike): BrowseFilters {
     category: category && MARKET_SLUG_RE.test(category) ? category : null,
     q: (params.get('q') ?? '').trim().slice(0, SEARCH_MAX),
     installed: params.get('installed') === 'true',
+    // Installed is the server's filter and wins when both are in the address: the two chips are exclusive.
+    addons: params.get('addons') === 'true' && params.get('installed') !== 'true',
     sort: isSort(sort) ? sort : DEFAULT_SORT,
   };
 }
@@ -78,6 +85,7 @@ export function browseHref(kind: MarketAppKind, filters: Partial<BrowseFilters> 
   const q = filters.q?.trim();
   if (q) p.set('q', q.slice(0, SEARCH_MAX));
   if (filters.installed) p.set('installed', 'true');
+  else if (filters.addons) p.set('addons', 'true');
   if (filters.sort && filters.sort !== DEFAULT_SORT) p.set('sort', filters.sort);
   const s = p.toString();
   return `${mktRoutes.browse(kind)}${s ? `?${s}` : ''}`;
@@ -85,7 +93,7 @@ export function browseHref(kind: MarketAppKind, filters: Partial<BrowseFilters> 
 
 /** Whether any filter narrows the list (sort alone does not): shelves are for the unfiltered view only. */
 export function hasActiveFilter(f: BrowseFilters): boolean {
-  return f.category !== null || f.q !== '' || f.installed;
+  return f.category !== null || f.q !== '' || f.installed || f.addons;
 }
 
 export const showShelves = (f: BrowseFilters): boolean => !hasActiveFilter(f);
@@ -124,7 +132,12 @@ export function categoryItems(
   const ordered = [...categories].sort(
     (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name),
   );
-  const rest = { q: filters.q, installed: filters.installed, sort: filters.sort };
+  const rest = {
+    q: filters.q,
+    installed: filters.installed,
+    addons: filters.addons,
+    sort: filters.sort,
+  };
   return [
     {
       slug: null,
@@ -151,10 +164,30 @@ export function knownCategory(
 }
 
 /** Which empty state to show for a list with no rows. */
-export type EmptyReason = 'search' | 'category' | 'installed' | 'none';
+export type EmptyReason = 'search' | 'category' | 'installed' | 'addons' | 'none';
 export function emptyReason(f: BrowseFilters): EmptyReason {
   if (f.q) return 'search';
   if (f.installed) return 'installed';
+  if (f.addons) return 'addons';
   if (f.category) return 'category';
   return 'none';
 }
+
+/** The availability chips above the grid: All, Available add-ons, Installed. Exclusive; Installed is the server's filter. */
+export const AVAILABILITY_VIEWS = ['all', 'addons', 'installed'] as const;
+export type AvailabilityView = (typeof AVAILABILITY_VIEWS)[number];
+
+export const availabilityView = (
+  f: Pick<BrowseFilters, 'installed' | 'addons'>,
+): AvailabilityView => (f.installed ? 'installed' : f.addons ? 'addons' : 'all');
+
+export const availabilityPatch = (
+  v: AvailabilityView,
+): Pick<BrowseFilters, 'installed' | 'addons'> => ({
+  installed: v === 'installed',
+  addons: v === 'addons',
+});
+
+/** Whether a card is an add-on on offer (client-side: the list API has no availability filter). */
+export const isAddonCard = (card: Pick<MarketAppCard, 'pricing'>): boolean =>
+  cardAvailability(card.pricing) === 'visible';

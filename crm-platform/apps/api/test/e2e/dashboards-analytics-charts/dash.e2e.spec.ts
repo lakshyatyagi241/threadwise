@@ -85,6 +85,24 @@ async function seed(t: Tenant, rows: Row[]) {
   );
 }
 
+/** A flow plus one run per row (arranged with the owner connection; the runtime domain owns the table). */
+async function flowRuns(
+  t: Tenant,
+  runs: Array<{ conv: number | null; status: string; endedAgo: string | null }>,
+) {
+  const f = await h.owner.query(
+    `INSERT INTO flows (org_id, flow_name) VALUES ($1, 'goal flow') RETURNING id`,
+    [t.orgId],
+  );
+  for (const [i, r] of runs.entries()) {
+    await h.owner.query(
+      `INSERT INTO flow_runs (org_id, flow_id, conversation_id, peer_key, source, status, graph, max_expires_at, ended_at)
+       VALUES ($1, $2, $3, $4, 'manual', $5, '{}'::jsonb, now() + interval '30 days', now() - $6::interval)`,
+      [t.orgId, f.rows[0].id, r.conv, `goal-peer-${i}-${Math.random()}`, r.status, r.endedAgo],
+    );
+  }
+}
+
 const many = (n: number, r: Row): Row[] => Array.from({ length: n }, () => r);
 
 async function withAnalytics(t: Tenant, on = true) {
@@ -191,6 +209,117 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
       ['engaged', 2],
     ]);
     expect(res.body.funnel.endToEnd).toBe(13.3);
+  });
+
+  it('Engagement funnel (contacts): messaged, delivered, replied, activity, reply rate capped, no comparison without a previous window', async () => {
+    const res = await api.as(t.admin).get('/v2/dashboard/summary?range=7d');
+    // all 15 outbound rows sit in one thread; two other threads only replied (never messaged in this window)
+    expect(res.body.current.contactsMessaged).toBe(1);
+    expect(res.body.current.contactsDelivered).toBe(1);
+    expect(res.body.current.contactsReplied).toBe(2);
+    expect(res.body.funnel.contacts).toEqual({
+      messaged: 1,
+      delivered: 1,
+      replied: 2,
+      goalCompleted: 0,
+    });
+    expect(res.body.funnel.activity).toEqual({
+      inbound: 5,
+      respondingContacts: 2,
+      repliesPerContact: 2.5,
+    });
+    expect(res.body.funnel.replyRate).toBe(100);
+    expect(res.body.funnel.comparison).toBeNull();
+    expect(res.body.previous.contactsMessaged).toBe(0);
+  });
+
+  it('Engagement funnel (contacts): another workspace never leaks into the counts', async () => {
+    const res = await api.as(other.admin).get('/v2/dashboard/summary?range=7d');
+    expect(res.body.funnel.contacts).toEqual({
+      messaged: 1,
+      delivered: 1,
+      replied: 0,
+      goalCompleted: 0,
+    });
+    expect(res.body.funnel.activity.repliesPerContact).toBeNull();
+    expect(res.body.funnel.replyRate).toBe(0);
+  });
+
+  it('Engagement funnel (contacts): goal completed counts contacts whose flow finished in the window, once each, this workspace only', async () => {
+    const p = await api.signup('dgoal');
+    const q = await api.signup('dgoalother');
+    await withAnalytics(p);
+    const [a, b, c, d] = await Promise.all([1, 2, 3, 4].map(() => conversation(p)));
+    const foreign = await conversation(q);
+    await seed(
+      p,
+      [a!, b!, c!, d!].map((conv) => ({ ago: '2 days', conv })),
+    );
+    await seed(q, [{ ago: '2 days', conv: foreign }]);
+    await flowRuns(p, [
+      { conv: a!, status: 'completed', endedAgo: '2 days' }, // counts
+      { conv: a!, status: 'completed', endedAgo: '1 day' }, // same contact, still one
+      { conv: b!, status: 'failed', endedAgo: '1 day' }, // failed never counts
+      { conv: b!, status: 'running', endedAgo: null }, // live run never counts
+      { conv: d!, status: 'cancelled', endedAgo: '1 day' },
+      { conv: null, status: 'completed', endedAgo: '1 day' }, // no conversation, no funnel contact
+      { conv: c!, status: 'completed', endedAgo: '9 days' }, // previous window only
+      { conv: d!, status: 'completed', endedAgo: '30 days' }, // outside both windows
+    ]);
+    await flowRuns(q, [{ conv: foreign, status: 'completed', endedAgo: '1 day' }]);
+    const res = await api.as(p.admin).get('/v2/dashboard/summary?range=7d');
+    expect(res.body.funnel.contacts).toEqual({
+      messaged: 4,
+      delivered: 4,
+      replied: 0,
+      goalCompleted: 1,
+    });
+    expect(res.body.current.contactsGoalCompleted).toBe(1);
+    expect(res.body.previous.contactsGoalCompleted).toBe(1);
+    const an = await api.as(p.admin).get('/v2/analytics/overview?range=7d');
+    expect(an.body.funnel.contacts.goalCompleted).toBe(1);
+    const foreignRes = await api.as(q.admin).get('/v2/dashboard/summary?range=7d');
+    expect(foreignRes.body.funnel.contacts.goalCompleted).toBe(1);
+    const none = await api.signup('dgoalnone');
+    await withAnalytics(none);
+    const empty = await api.as(none.admin).get('/v2/dashboard/summary?range=7d');
+    expect(empty.body.funnel.contacts.goalCompleted).toBe(0);
+  });
+
+  it('Engagement funnel (contacts): the reply rate is compared with the previous window in points', async () => {
+    const p = await api.signup('dfunnelcmp');
+    await withAnalytics(p);
+    const cur = await Promise.all([1, 2, 3, 4].map(() => conversation(p)));
+    const prev = await Promise.all([1, 2].map(() => conversation(p)));
+    await seed(p, [
+      ...cur.map((conv, i) => ({
+        status: i === 3 ? 'failed' : 'delivered',
+        ago: '2 days',
+        conv,
+      })),
+      { dir: 'in' as const, status: 'received', ago: '1 day', conv: cur[0]! },
+      { dir: 'in' as const, status: 'received', ago: '1 day', conv: cur[0]! },
+      ...prev.map((conv) => ({ status: 'delivered', ago: '9 days', conv })),
+      { dir: 'in' as const, status: 'received', ago: '8 days', conv: prev[0]! },
+    ]);
+    const res = await api.as(p.admin).get('/v2/dashboard/summary?range=7d');
+    expect(res.body.funnel.contacts).toEqual({
+      messaged: 4,
+      delivered: 3,
+      replied: 1,
+      goalCompleted: 0,
+    });
+    expect(res.body.funnel.activity).toEqual({
+      inbound: 2,
+      respondingContacts: 1,
+      repliesPerContact: 2,
+    });
+    expect(res.body.funnel.replyRate).toBe(25);
+    expect(res.body.funnel.comparison).toEqual({ previousReplyRate: 50, replyRatePp: -25 });
+    const an = await api.as(p.admin).get('/v2/analytics/overview?range=7d');
+    expect(an.body.funnel.replyRate).toBe(25);
+    expect(an.body.trends.replyRateContactPp).toBe(-25);
+    expect(an.body.funnel.comparison.replyRatePp).toBe(-25);
   });
 
   it('WD-DASH-003/004: nothing in the previous window, so the pill is +100; an unknown range behaves as 7d', async () => {
@@ -380,6 +509,10 @@ describe('analytics (WD-DASH-022..025, 027, 031, 032)', () => {
       res.body.types.map((x: { key: string; count: number }) => [x.key, x.count]),
     );
     expect(m).toEqual({ text: 1006, template: 3, media: 1 });
+    // Delivered per type: never above the type's sent, and the types add up to the window's delivered total.
+    const rows = res.body.types as Array<{ count: number; delivered: number }>;
+    for (const r of rows) expect(r.delivered).toBeLessThanOrEqual(r.count);
+    expect(rows.reduce((a, r) => a + r.delivered, 0)).toBe(res.body.current.delivered);
   });
 
   it('WD-DASH-031: the heatmap is 7 x 24 and counts every message of the window', async () => {

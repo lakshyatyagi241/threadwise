@@ -31,3 +31,23 @@ submission emits `whatsapp.form.submitted` and a payment status `whatsapp.paymen
 Saved customers (`waba.customers.read` for reads, `waba.customers.manage` for changes): `GET /v2/waba/customers?q=&page=` (20 a page, name then phone,
 the search text is literal), `PUT /v2/waba/customers` (`{phone, name?, company?, address?}`; the same form creates or updates by the phone's digits),
 `DELETE /v2/waba/customers/:id` (the profile only; orders are kept; unknown id is 404).
+
+## Groups (`/v2/waba/numbers/:id/groups`, BL-094 phases 1 and 2)
+
+Plan feature `waba_groups` on every route (422 `PLAN_FEATURE_LOCKED`, reads too). Only numbers connected straight to Meta (`WABA_GROUPS_PROVIDER_UNSUPPORTED` otherwise). Meta calls are made outside any transaction; nothing here has run against real Meta.
+
+| Route                                  | Permission            | Notes                                                                                                             |
+| -------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `GET /state?fresh=1`                   | `waba.groups.read`    | `{eligible, reason, provider, officialBusinessAccount}`; a definite answer is cached 1 hour, a failed check never |
+| `GET /?limit&cursor`                   | `waba.groups.read`    | newest first, keyset; `stats` cover the whole number; people waiting to join only with `.manage`                  |
+| `POST /`                               | `waba.groups.create`  | 201; the invite link arrives later on a webhook                                                                   |
+| `POST /:gid/refresh`                   | `waba.groups.read`    |                                                                                                                   |
+| `POST /:gid/invite-link/reset`         | `waba.groups.manage`  |                                                                                                                   |
+| `PATCH /:gid`                          | `waba.groups.manage`  | 202; Meta confirms each field on a webhook                                                                        |
+| `POST /:gid/join-requests`             | `waba.groups.manage`  | `{action, ids}`                                                                                                   |
+| `GET /:gid/participants`               | `waba.groups.manage`  | read from Meta on demand, never stored                                                                            |
+| `DELETE /:gid/participants`            | `waba.groups.manage`  | at most 8                                                                                                         |
+| `DELETE /:gid`                         | `waba.groups.delete`  | 204                                                                                                               |
+| `GET /v2/waba/numbers/:id/group-count` | `waba.numbers.manage` | group records removing the number deletes (not plan gated)                                                        |
+
+Codes: `WABA_GROUPS_NOT_ELIGIBLE`, `WABA_GROUPS_PROVIDER_UNSUPPORTED`, `WABA_GROUP_NOT_FOUND`, `WABA_GROUP_SUSPENDED`, `WABA_GROUP_LIMIT_REACHED`, `WABA_GROUP_RATE_LIMITED` (also the per-number budget of 30 changes a minute), `WABA_GROUP_META_REJECTED` (Meta's code in `details[metaCode]`). Events: `whatsapp.group.created|updated|deleted|join_request|suspended` (no phone numbers or links in payloads).

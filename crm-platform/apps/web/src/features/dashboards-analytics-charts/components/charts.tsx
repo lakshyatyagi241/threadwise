@@ -27,12 +27,15 @@ export function BarChart({
   series,
   label,
   stacked = false,
+  seriesTotals,
 }: {
   labels: string[];
   series: Series[];
   /** The accessible name of the chart. */
   label: string;
   stacked?: boolean;
+  /** One figure per series, in order: the chart's own legend shows it beside the name (one legend, not two). */
+  seriesTotals?: number[];
 }) {
   const t = useTranslations('dashboards-analytics-charts.chart');
   const totals = labels.map((_, i) => series.reduce((a, s) => a + (s.values[i] ?? 0), 0));
@@ -46,8 +49,19 @@ export function BarChart({
   const every = Math.max(1, Math.ceil(labels.length / 8));
   const y = (v: number) => PAD.t + plotH - barLength(v, top, plotH);
 
+  const legendSeries = series.map((s, k) => ({
+    name: s.name,
+    color: s.color,
+    total: seriesTotals?.[k],
+  }));
+
   if (rawMax === 0)
-    return <p className="py-10 text-center text-sm text-muted-foreground">{t('empty')}</p>;
+    return (
+      <div>
+        <p className="py-10 text-center text-sm text-muted-foreground">{t('empty')}</p>
+        {seriesTotals && <Legend series={legendSeries} />}
+      </div>
+    );
 
   return (
     <figure className="m-0">
@@ -117,7 +131,7 @@ export function BarChart({
           );
         })}
       </svg>
-      <Legend series={series} />
+      <Legend series={legendSeries} />
       <table className="sr-only">
         <caption>{label}</caption>
         <thead>
@@ -227,16 +241,19 @@ export function Donut({
       >
         <div className="absolute inset-[22%] rounded-full bg-background" />
       </div>
-      <ul className="space-y-1 text-sm">
+      <ul className="min-w-0 flex-1 space-y-1.5 text-sm">
         {slices.map((s) => (
-          <li key={s.name} className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className="inline-block size-2.5 rounded-sm"
-              style={{ backgroundColor: s.color }}
-            />
-            <span>{s.name}</span>
-            <span className="tabular-nums text-muted-foreground">
+          <li key={s.name} className="grid grid-cols-[1fr_auto_auto] items-center gap-x-4">
+            <span className="flex min-w-0 items-center gap-2">
+              <span
+                aria-hidden
+                className="inline-block size-2.5 shrink-0 rounded-sm"
+                style={{ backgroundColor: s.color }}
+              />
+              <span className="truncate">{s.name}</span>
+            </span>
+            <span className="text-end font-medium tabular-nums">{compact(s.value)}</span>
+            <span className="min-w-12 text-end tabular-nums text-muted-foreground">
               {Math.round((s.value / total) * 1000) / 10}%
             </span>
           </li>

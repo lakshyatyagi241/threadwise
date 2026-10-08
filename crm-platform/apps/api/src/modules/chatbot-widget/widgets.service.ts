@@ -19,6 +19,7 @@ import { buildPage, decodeCursor } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import {
   ASSISTANT_DIRECTORY,
   WIDGET_PLAN_GATE,
@@ -67,6 +68,8 @@ export class WidgetsService {
     private readonly config: ConfigService,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
     @Inject(WIDGET_PLAN_GATE) private readonly planGate: WidgetPlanGate,
+    private readonly planUsage: PlanUsageService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   /** The origin the snippet points at: the widget script and chat page are served by the API host, not the web app. */
@@ -135,6 +138,8 @@ export class WidgetsService {
     input: Pick<CreateWidgetInput, 'mode' | 'assistantId'>,
   ): Promise<number | null> {
     const needs = input.mode === 'ai' || input.mode === 'both';
+    // AI mode attaches an assistant: the plan's `ai_assistants` flag (422 PLAN_FEATURE_LOCKED), before any write.
+    if (needs) await this.entitlements.assertFeature(orgId, 'ai_assistants');
     if (needs && !input.assistantId) {
       throw new AppError(
         ERROR_CODES.WGT_ASSISTANT_REQUIRED,
@@ -204,6 +209,8 @@ export class WidgetsService {
     userId: number | null,
     input: CreateWidgetInput,
   ): Promise<WidgetRow> {
+    // The plan's `chatbot_widgets` cap: every path that adds a widget (create, and the update-with-a-stale-id quirk) passes here.
+    await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
     const assistantId = await this.resolveAssistant(tx, orgId, input);
     const base = slugBase(input.name);
     await this.repo.lockSlugs(tx, orgId);
@@ -258,6 +265,7 @@ export class WidgetsService {
     const row = await this.db.tx(async (tx) => {
       const src = await this.repo.findByUuid(tx, orgId, uuid);
       if (!src) throw AppError.notFound('Widget', uuid);
+      await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
       // WaDesk replicated the row: the copy keeps the ORIGINAL author (`user_id`), and a name at the 120-character limit
       // grows past it (the column here is unbounded text; WaDesk answered a database error).
       const id = await this.repo.insert(

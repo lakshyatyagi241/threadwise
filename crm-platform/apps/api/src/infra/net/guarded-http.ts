@@ -2,30 +2,11 @@ import { lookup as dnsLookup, type LookupAddress } from 'node:dns';
 import { request as httpRequest, type IncomingHttpHeaders } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { isIP } from 'node:net';
+import { isBlockedAddress } from './blocked-address';
 
-/** Loopback, private, link-local, CGNAT, unspecified and their IPv6 / IPv4-mapped counterparts. */
+/** Loopback, private, link-local, CGNAT, unspecified and their IPv6 / IPv4-mapped counterparts (the shared rule, `blocked-address.ts`). */
 export function isPrivateAddress(address: string): boolean {
-  const v = address.toLowerCase();
-  const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(v);
-  if (mapped) return isPrivateAddress(mapped[1]!);
-  if (isIP(v) === 4) {
-    const [a, b] = v.split('.').map(Number) as [number, number];
-    return (
-      a === 0 ||
-      a === 10 ||
-      a === 127 ||
-      (a === 100 && b >= 64 && b <= 127) ||
-      (a === 169 && b === 254) ||
-      (a === 172 && b >= 16 && b <= 31) ||
-      (a === 192 && b === 168)
-    );
-  }
-  if (isIP(v) === 6) {
-    return (
-      v === '::' || v === '::1' || v.startsWith('fc') || v.startsWith('fd') || /^fe[89ab]/.test(v)
-    );
-  }
-  return true; // not an address at all: refuse
+  return isBlockedAddress(address);
 }
 
 export interface GuardedRequest {
@@ -57,7 +38,9 @@ export function guardedRequest(
   }
   const headers = { ...req.headers };
   if (req.body !== undefined) {
-    headers['Content-Type'] = 'application/json';
+    // A caller that names its own content type (any casing) keeps it; the default stays plain JSON.
+    if (!Object.keys(headers).some((k) => k.toLowerCase() === 'content-type'))
+      headers['Content-Type'] = 'application/json';
     headers['Content-Length'] = String(Buffer.byteLength(req.body));
   }
   return new Promise((resolve, reject) => {

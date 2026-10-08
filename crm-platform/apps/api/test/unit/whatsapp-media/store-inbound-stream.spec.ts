@@ -203,8 +203,13 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
   });
 
   it('a source that fails half way leaves nothing behind', async () => {
+    // One chunk, then the failure. `read()` runs again for every chunk the consumer wants, so pushing on each call raced the 1 MB limit
+    // against the timer on a fast machine and failed with "file is larger" instead of the reset.
+    let sent = false;
     const source = new Readable({
       read() {
+        if (sent) return;
+        sent = true;
         this.push(pngBytes(4000));
         setTimeout(() => this.destroy(new Error('connection reset')), 5);
       },
@@ -224,6 +229,7 @@ describe('storeInboundStream: what it refuses, and what it leaves behind when it
     });
     expect(stored.key.startsWith('chat/9/')).toBe(true);
     expect(stored.key).not.toMatch(/boot|\.\.|\\/);
+    // eslint-disable-next-line no-control-regex -- the point is that a NUL byte never survives into the stored name
     expect(stored.name).not.toMatch(/[\\/\u0000]/);
     expect((await keysUnder(9)).length).toBe(1);
   });
@@ -235,7 +241,7 @@ describe('storeInboundStream: a cloud bucket', () => {
     const g = gateway('cloud');
     const stored = await build(g).storeInboundStream({ orgId: 2, stream: Readable.from([bytes]), maxBytes: 1024 * 1024 });
     expect(g.put).toHaveBeenCalledTimes(1);
-    const [key, body, mime] = g.put.mock.calls[0] as unknown as [string, Buffer, string];
+    const [key, body, mime] = vi.mocked(g.put).mock.calls[0] as unknown as [string, Buffer, string];
     expect(key).toBe(stored.key);
     expect(Buffer.isBuffer(body) && body.equals(bytes)).toBe(true);
     expect(mime).toBe('application/pdf');

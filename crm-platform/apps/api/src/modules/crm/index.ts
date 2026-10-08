@@ -10,10 +10,18 @@ export {
   ContactsService,
   ContactsRepository,
   ContactQuotaService,
+  ContactResolverService,
   assertContactScope,
+  contactSelectionWhere,
+  contactScopeCondition,
   toContactResponse,
 } from './contacts';
 export type { ContactRow } from './contacts';
+export { contactConditions, whereOf } from './contacts';
+export { missingRequired, requiredPropertiesError, isBlank } from './contacts';
+export type { RequiredRule } from './contacts';
+export { CompaniesService, CompaniesRepository, normaliseCompanyDomain } from './companies';
+export type { CompanyRow } from './companies';
 export {
   FieldSectionsService,
   FieldSectionsRepository,
@@ -80,16 +88,27 @@ export {
   toContactGroupResponse,
 } from './contact-groups';
 export type { ContactGroupRow } from './contact-groups';
-export { ContactBulkService } from './contact-bulk';
+export { ContactBulkService, csvLine, UTF8_BOM } from './contact-bulk';
 export {
   SegmentsService,
   SegmentsRepository,
   SegmentActionsService,
   toSegmentResponse,
+  compileRules,
+  collectRuleRefs,
+  loadRuleContext,
+  countWithTimeout,
+  segmentContactsWhere,
 } from './segments';
-export type { SegmentRow } from './segments';
+export type { SegmentRow, CompiledRules, CountResult } from './segments';
 export { SegmentsWorkerModule } from './segments/segments-worker.module';
-export { ContactImportEngine, ContactImportProcessor } from './contact-import';
+export {
+  ContactImportEngine,
+  ContactImportProcessor,
+  decodeUpload,
+  parseCsv,
+} from './contact-import';
+export type { UploadedCsv } from './contact-import';
 export { ContactImportWorkerModule } from './contact-import/contact-import-worker.module';
 export type { ContactImportJobData } from './contact-import';
 export { ContactDedupeService } from './contact-dedupe';
@@ -122,9 +141,26 @@ export {
   TaxRatesService,
   InvoiceSettingsService,
   InvoiceConversionService,
+  ExternalOrderBillingService,
+  allocateDiscount,
+  specsOfExternalOrder,
   toInvoiceSummary,
+} from './invoicing';
+export type {
+  ExternalInvoiceOutcome,
+  ExternalOrderInput,
+  ExternalOrderLine,
+  ExternalPaymentInput,
+  ExternalSalesOrderRef,
 } from './invoicing';
 export type { InvoiceRow } from './invoicing';
 export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';
+export { CONTACT_RESOLVER } from './contact-resolver.port';
+export type {
+  ContactLink,
+  ContactResolveInput,
+  ContactResolverPort,
+  ContactSkipReason,
+} from './contact-resolver.port';

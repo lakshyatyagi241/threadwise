@@ -16,9 +16,9 @@ import {
 const ids = (mode: FlowType) => flbPaletteFor(mode).map((d) => d.id);
 
 describe('node catalogue: palette and per-channel availability (WD-FLB-016)', () => {
-  it('a WhatsApp flow lists the 35 nodes WaDesk lists, including Template, List, Sequence, MySQL and the Google nodes', () => {
+  it('a WhatsApp flow lists the 35 nodes WaDesk lists plus the two Ask for file / location additions, including Template, List, Sequence, MySQL and the Google nodes', () => {
     const chat = ids('chat');
-    expect(chat).toHaveLength(35);
+    expect(chat).toHaveLength(37);
     for (const t of [
       'template',
       'list',

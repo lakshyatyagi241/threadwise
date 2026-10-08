@@ -13,6 +13,7 @@ export interface OperatorNavItem {
 
 import { CPN_OPERATOR_NAV } from '../../coupons-credits-referral-currency/operator-nav';
 import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/operator-nav';
+import { WSHUB_OPERATOR_NAV } from '../../workspaces-hub/operator-nav';
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
@@ -62,7 +63,9 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: `${NS}.plans`,
     groupKey: `${NS}.groups.plans`,
   },
-  // per-workspace plans and limits (PLAN domain)
+  // the one Workspaces page: plans, wallets, provider, owner, support in one list (replaces four separate lists)
+  ...WSHUB_OPERATOR_NAV,
+  // plan settings, FAQs and reports (PLAN domain)
   ...PLAN_OPERATOR_NAV,
   // coupons, credit packages and currencies (CPN domain)
   ...CPN_OPERATOR_NAV,
@@ -128,6 +131,13 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     href: '/admin/ai-dashboard',
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
+  },
+  // Webhook forwarding (WFWD, not a WaDesk feature): messages/en/webhook-fanout.json
+  {
+    id: 'webhook-forwarding',
+    href: '/admin/webhook-forwarding',
+    labelKey: 'webhook-fanout.nav.forwarding',
+    groupKey: 'webhook-fanout.nav.group',
   },
   {
     id: 'cms-frontend',
@@ -238,12 +248,6 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'wallet-packages',
     href: '/admin/wallet/packages',
     labelKey: `${WALLET}.packages`,
-    groupKey: `${BSP}.groups.billing`,
-  },
-  {
-    id: 'wallet-workspaces',
-    href: '/admin/wallet/workspaces',
-    labelKey: `${WALLET}.workspaces`,
     groupKey: `${BSP}.groups.billing`,
   },
   {

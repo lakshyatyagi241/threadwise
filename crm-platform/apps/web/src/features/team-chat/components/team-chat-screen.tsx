@@ -45,7 +45,7 @@ import { SidePanel } from './side-panel';
  * `/team-chat`: channels, a members rail and the conversation (WD-TCHAT-001..030). On a phone the channel list is the home
  * screen and the conversation slides over it; the first channel is selected without opening it, so a person lands on the list.
  */
-export function TeamChatScreen() {
+export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string } = {}) {
   const t = useTranslations('team-chat.screen');
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -61,8 +61,10 @@ export function TeamChatScreen() {
   const me = channelsQ.data?.me ?? null;
 
   // The selection is screen state only: a reload goes back to #general (WaDesk did the same).
-  const [selected, setSelected] = useState<string | null>(null);
-  const [mobileThread, setMobileThread] = useState(false);
+  // A notification's link (`?c=<channel>`) opens that channel, and on a phone straight into its conversation. An id the person cannot
+  // see matches no channel, so the default (#general) is selected as usual.
+  const [selected, setSelected] = useState<string | null>(initialChannelId ?? null);
+  const [mobileThread, setMobileThread] = useState(Boolean(initialChannelId));
   const current: TchatChannelResponse | null = useMemo(() => {
     if (!channels?.length) return null;
     return (

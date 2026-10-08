@@ -91,6 +91,11 @@ SEAMS = [
     {"path": "docs/wadesk-port/ownership.json", "policy": "generated from assignment-input.json; changes need all three developers' approval", "reviewer": "lakshya"},
     {"path": "docs/wadesk-port/assignment-input.json", "policy": "the single place to change owners, waves and estimates; needs all three developers' approval", "reviewer": "lakshya"},
     {"path": "docs/wadesk-port/assignments.md", "policy": "generated; do not hand-edit", "reviewer": "lakshya"},
+    {"path": "apps/web/src/features/help-center/**", "policy": "Help center zone: the repo owner; guides are written with the help-docs-sync skill", "reviewer": "lakshya"},
+    {"path": "apps/web/src/app/(app)/(help-center)/**", "policy": "Help center zone: the repo owner", "reviewer": "lakshya"},
+    {"path": "apps/web/messages/*/help-center.json", "policy": "Help center zone: the repo owner", "reviewer": "lakshya"},
+    {"path": "apps/web/e2e/help-center/**", "policy": "Help center zone: the repo owner", "reviewer": "lakshya"},
+    {"path": "apps/web/src/features/*/help/**", "policy": "Help guides, one folder per domain: the first content pass adds new files into every domain; afterwards each domain owner edits their own guides (help-docs-sync)", "reviewer": "lakshya"},
 ]
 
 

@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import { WorkspacesPage } from '@/features/wallet-message-billing/components/admin/workspaces-page';
+import { redirect } from 'next/navigation';
+import { hubRedirectPath } from '@/features/workspaces-hub/lib/redirect';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('wallet-message-billing.admin.nav');
-  return { title: t('workspaces') };
-}
-
-export default function OperatorWorkspacesPageRoute() {
-  return <WorkspacesPage />;
+/** The separate workspace list moved into the Workspaces page (temporary redirect; the detail pages keep their addresses). */
+export default async function MovedToWorkspaces({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  redirect(hubRedirectPath(await searchParams));
 }

@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Store / Orders",
+      "title": "All orders",
+      "subtitle": "Every order from every channel: WhatsApp, storefront, Twilio and manual.",
+      "loading": "Loading orders",
+      "statusTabs": "Order status",
+      "searchLabel": "Search orders",
+      "searchPlaceholder": "Search by phone, name or order number",
+      "sourceLabel": "Source",
+      "allSources": "All sources",
+      "paymentLabel": "Payment",
+      "allPayments": "All payments",
+      "fromLabel": "From",
+      "toLabel": "To",
+      "shopLabel": "Shop",
+      "invertedRange": "The start date is after the end date, so no order can match.",
+      "clearFilters": "Clear filters",
+      "cols": {
+        "order": "Order",
+        "customer": "Customer",
+        "items": "Items",
+        "total": "Total",
+        "payment": "Payment",
+        "status": "Status",
+        "source": "Source",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "itemsCount": "{count, plural, one {# item} other {# items}}",
+      "anonymous": "Anonymous",
+      "openOrder": "Open order #{no}",
+      "changeStatus": "Change status of order #{no}",
+      "deleteOrder": "Delete order #{no}",
+      "deleteTitle": "Delete order #{no}?",
+      "deleteMessage": "The order and its items are removed for good. This cannot be undone.",
+      "deleteConfirm": "Delete order",
+      "deleted": "Order #{no} was deleted.",
+      "statusChanged": "Order #{no} is now {status}.",
+      "buyerNotified": "The buyer was messaged.",
+      "confirmStatusTitle": "Mark order #{no} as {status}?",
+      "confirmStatusMessage": "The buyer is told about the new status. You can still move the order to another status later.",
+      "confirmStatusConfirm": "Update status",
+      "emptyTitle": "No orders yet",
+      "emptyMessage": "When customers order from your storefront or on WhatsApp, they appear here. Share your shop link to get the first one.",
+      "emptyAction": "Open the store overview",
+      "noMatchTitle": "No orders match these filters",
+      "noMatchMessage": "Try a different search, status or date range, or clear the filters to see every order."
+    },
+    "orderDetail": {
+      "back": "Back to orders",
+      "title": "Order #{no}",
+      "placed": "Placed {when}",
+      "loading": "Loading order",
+      "readOnly": "You can view this order but not change it.",
+      "items": {
+        "title": "Items",
+        "empty": "This order has no items.",
+        "qty": "Qty {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} each"
+      },
+      "totals": {
+        "title": "Totals",
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "tax": "Tax",
+        "taxInclusive": "Included in the prices",
+        "discount": "Discount",
+        "discountCoupon": "Discount ({code})",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Customer",
+        "anonymous": "Anonymous",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Shipping address",
+        "noAddress": "No address captured for this order.",
+        "notes": "Notes"
+      },
+      "meta": {
+        "title": "Order details",
+        "orderId": "Order ID",
+        "source": "Source",
+        "shop": "Shop",
+        "paymentMethod": "Payment method",
+        "updated": "Last updated"
+      },
+      "rto": {
+        "title": "Return-to-origin risk",
+        "summary": "{band} ({score})",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "timeline": {
+        "title": "Timeline",
+        "empty": "Nothing has happened on this order yet.",
+        "kind": {
+          "created": "Order placed",
+          "status_changed": "Status changed",
+          "payment_link": "Payment link",
+          "paid": "Payment received",
+          "invoice": "Invoice",
+          "note": "Note",
+          "updated": "Order updated"
+        },
+        "actor": {
+          "user": "By a team member",
+          "system": "Automatic",
+          "customer": "By the customer"
+        }
+      },
+      "payments": {
+        "title": "Payments",
+        "empty": "No payment has been recorded for this order.",
+        "kind": {
+          "gateway": "Online payment",
+          "payment_link": "Payment link",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Cash on delivery",
+          "manual": "Recorded by hand"
+        },
+        "reference": "Reference {ref}",
+        "openLink": "Open link"
+      },
+      "form": {
+        "title": "Update status",
+        "status": "Status",
+        "suggestion": "Usual next step: {status}",
+        "notes": "Notes",
+        "paymentLink": "Payment link",
+        "optional": "optional",
+        "paymentLinkHint": "A new link is sent to the buyer with the update.",
+        "invalidLink": "Enter a web link that starts with http:// or https://.",
+        "save": "Save changes",
+        "saving": "Saving",
+        "saved": "Order #{no} updated.",
+        "notified": "The buyer was messaged.",
+        "notNotified": "The buyer was not messaged.",
+        "reload": "Reload order"
+      },
+      "pay": {
+        "title": "Payment link",
+        "current": "Current payment link",
+        "sendTitle": "Send a link you already have",
+        "sendLabel": "Payment link URL",
+        "sendButton": "Send payment link",
+        "sent": "The payment link was sent to the buyer.",
+        "savedNotSent": "The link was saved, but nothing could send it to the buyer.",
+        "generateTitle": "Generate a checkout link",
+        "generateHint": "Creates a hosted pay link on your payment gateway and sends it to the buyer on WhatsApp.",
+        "gatewayLabel": "Gateway",
+        "generateButton": "Generate link and send",
+        "noGatewayTitle": "No payment gateway set up",
+        "noGatewayMessage": "A payment gateway has to be set up before you can generate a checkout link.",
+        "noGatewayAction": "Set up a gateway",
+        "resultTitle": "Payment link ready",
+        "copyLink": "Copy link",
+        "resultSent": "Sent to the buyer on WhatsApp.",
+        "resultNotSent": "Saved on the order, but nothing could send it to the buyer. Share it yourself."
+      },
+      "invoice": {
+        "title": "Invoice",
+        "description": "Turn this order into an invoice and a sales order in Sales.",
+        "create": "Create invoice",
+        "creating": "Creating",
+        "created": "Invoice {number} created.",
+        "createdNoNumber": "Invoice created.",
+        "existing": "This order is already invoiced.",
+        "viewInvoice": "Invoice",
+        "viewSalesOrder": "Sales order"
+      },
+      "delete": {
+        "title": "Delete order #{no}?",
+        "message": "The order and its items are removed for good. This cannot be undone.",
+        "confirm": "Delete order",
+        "deleted": "Order #{no} was deleted."
+      }
+    }
+  }
+}

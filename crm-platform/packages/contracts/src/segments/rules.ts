@@ -45,6 +45,8 @@ export const SEGMENT_BUILTIN_FIELDS = {
   name: 'text',
   email: 'text',
   phone: 'text',
+  /** The dial code stored on the contact (`+91`): what "country" means for a WhatsApp number. */
+  countryCode: 'text',
   source: 'text',
   leadScore: 'number',
   lifecycleStage: 'option',

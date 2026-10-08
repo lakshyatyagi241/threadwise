@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
  * invisibly and asks Google for a token with the action name when the form is submitted.
  */
 
-export type CaptchaAction = 'login' | 'register' | 'forgot' | 'contact';
+export type CaptchaAction = 'login' | 'register' | 'forgot' | 'contact' | 'form';
 
 /** Google's terms for using reCAPTCHA ask for these two links next to the invisible badge's notice. */
 export const GOOGLE_PRIVACY_URL = 'https://policies.google.com/privacy';

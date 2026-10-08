@@ -17,6 +17,8 @@ const SELF_SERVICE: Readonly<Record<string, string>> = {
   'modules/auth/controllers/registration.controller.ts':
     'verification mail for the caller’s own address',
   'modules/notifications/notifications.controller.ts': 'the caller’s own notification feed',
+  'modules/notifications/push.controller.ts':
+    'the caller’s own browser notification devices (list, add, remove, test), pinned to the caller in the service',
   'infra/providers/chat-conversations/media/media.controller.ts':
     'a short-lived signed token bound to one person and workspace, checked against the conversation’s visibility rule at read time',
   'realtime/ticket/realtime-ticket.controller.ts':
@@ -49,8 +51,9 @@ interface Route {
   gated: boolean;
 }
 
+// `@V1Controller(...)` is the customer REST API's controller decorator: `@Public()` plus the API-key guard, scopes per route.
 const GATE =
-  /@RequirePermission|@Public\(\)|@UseGuards\([^)]*OperatorGuard|@ActorKinds\('(partner_agent|platform_operator|candidate)'/;
+  /@RequirePermission|@Public\(\)|@V1Controller\(|@UseGuards\([^)]*OperatorGuard|@ActorKinds\('(partner_agent|platform_operator|candidate)'/;
 
 function routesOf(path: string): Route[] {
   const src = readFileSync(path, 'utf8');

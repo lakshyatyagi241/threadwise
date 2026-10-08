@@ -83,9 +83,9 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
 | WD-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
 | WD-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
-| WD-WSP-023 | todo |  |  |
+| WD-WSP-023 | todo |  | Backend built (GET /v2/platform/workspaces, e2e green); web screen pending |
 | WD-WSP-024 | todo |  |  |
-| WD-WSP-025 | todo |  |  |
+| WD-WSP-025 | todo |  | Backend built (GET /v2/platform/workspaces/:id, suspend, unsuspend); web screen pending |
 | WD-WSP-026 | todo |  |  |
 | WD-WSP-027 | todo |  |  |
 | WD-WSP-028 | todo |  |  |
@@ -297,6 +297,73 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 | WD-I18N-037 | todo |  |  |
 | WD-I18N-038 | todo |  |  |
 | WD-I18N-039 | todo |  |  |
+
+## platform-infrastructure (infra)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-INFRA-001 | todo |  |  |
+| WD-INFRA-002 | todo |  |  |
+| WD-INFRA-003 | todo |  |  |
+| WD-INFRA-004 | todo |  |  |
+| WD-INFRA-005 | todo |  |  |
+| WD-INFRA-006 | todo |  |  |
+| WD-INFRA-007 | todo |  |  |
+| WD-INFRA-008 | todo |  |  |
+| WD-INFRA-009 | todo |  |  |
+| WD-INFRA-010 | todo |  |  |
+| WD-INFRA-011 | todo |  |  |
+| WD-INFRA-012 | todo |  |  |
+| WD-INFRA-013 | todo |  |  |
+| WD-INFRA-014 | todo |  |  |
+| WD-INFRA-015 | todo |  |  |
+| WD-INFRA-016 | todo |  |  |
+| WD-INFRA-017 | todo |  |  |
+| WD-INFRA-018 | todo |  |  |
+| WD-INFRA-019 | todo |  |  |
+| WD-INFRA-020 | todo |  |  |
+| WD-INFRA-021 | todo |  |  |
+| WD-INFRA-022 | todo |  |  |
+| WD-INFRA-023 | todo |  |  |
+| WD-INFRA-024 | todo |  |  |
+| WD-INFRA-025 | todo |  |  |
+| WD-INFRA-026 | todo |  |  |
+| WD-INFRA-027 | todo |  |  |
+| WD-INFRA-028 | todo |  |  |
+| WD-INFRA-029 | todo |  |  |
+| WD-INFRA-030 | todo |  |  |
+| WD-INFRA-031 | todo |  |  |
+| WD-INFRA-032 | todo |  |  |
+| WD-INFRA-033 | todo |  |  |
+| WD-INFRA-034 | todo |  |  |
+| WD-INFRA-035 | todo |  |  |
+| WD-INFRA-036 | todo |  |  |
+| WD-INFRA-037 | todo |  |  |
+| WD-INFRA-038 | todo |  |  |
+| WD-INFRA-039 | todo |  |  |
+| WD-INFRA-040 | todo |  |  |
+| WD-INFRA-041 | todo |  |  |
+| WD-INFRA-042 | todo |  |  |
+| WD-INFRA-043 | todo |  |  |
+| WD-INFRA-044 | todo |  |  |
+| WD-INFRA-045 | todo |  |  |
+| WD-INFRA-046 | todo |  |  |
+| WD-INFRA-047 | todo |  |  |
+| WD-INFRA-048 | todo |  |  |
+| WD-INFRA-049 | todo |  |  |
+| WD-INFRA-050 | todo |  |  |
+| WD-INFRA-051 | todo |  |  |
+| WD-INFRA-052 | todo |  |  |
+| WD-INFRA-053 | todo |  |  |
+| WD-INFRA-054 | todo |  |  |
+| WD-INFRA-055 | todo |  |  |
+| WD-INFRA-056 | todo |  |  |
+| WD-INFRA-057 | todo |  |  |
+| WD-INFRA-058 | todo |  |  |
+| WD-INFRA-059 | todo |  |  |
+| WD-INFRA-060 | todo |  |  |
+| WD-INFRA-061 | todo |  |  |
+| WD-INFRA-062 | todo |  |  |
 
 ## install-update-licensing (inst)
 
@@ -510,44 +577,134 @@ Update with: `python3 .claude/skills/wadesk-parity-tracker/scripts/tracker.py se
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| WD-CPN-001 | todo |  |  |
-| WD-CPN-002 | todo |  |  |
-| WD-CPN-003 | todo |  |  |
-| WD-CPN-004 | todo |  |  |
-| WD-CPN-005 | todo |  |  |
-| WD-CPN-006 | todo |  |  |
-| WD-CPN-007 | todo |  |  |
-| WD-CPN-008 | todo |  |  |
-| WD-CPN-009 | todo |  |  |
-| WD-CPN-010 | todo |  |  |
-| WD-CPN-011 | todo |  |  |
-| WD-CPN-012 | todo |  |  |
-| WD-CPN-013 | todo |  |  |
-| WD-CPN-014 | todo |  |  |
-| WD-CPN-015 | todo |  |  |
-| WD-CPN-016 | todo |  |  |
-| WD-CPN-017 | todo |  |  |
-| WD-CPN-018 | todo |  |  |
-| WD-CPN-019 | todo |  |  |
-| WD-CPN-020 | todo |  |  |
-| WD-CPN-021 | todo |  |  |
-| WD-CPN-022 | todo |  |  |
-| WD-CPN-023 | todo |  |  |
-| WD-CPN-024 | todo |  |  |
-| WD-CPN-025 | todo |  |  |
-| WD-CPN-026 | todo |  |  |
-| WD-CPN-027 | todo |  |  |
-| WD-CPN-028 | todo |  |  |
-| WD-CPN-029 | todo |  |  |
-| WD-CPN-030 | todo |  |  |
-| WD-CPN-031 | todo |  |  |
-| WD-CPN-032 | todo |  |  |
-| WD-CPN-033 | todo |  |  |
-| WD-CPN-034 | todo |  |  |
-| WD-CPN-035 | todo |  |  |
-| WD-CPN-036 | todo |  |  |
-| WD-CPN-037 | todo |  |  |
-| WD-CPN-038 | todo |  |  |
+| WD-CPN-001 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-002 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-003 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-004 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-005 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| WD-CPN-006 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| WD-CPN-007 | backend-done |  | CouponCheckoutService.quote tested; Apply widget lives in checkout (CHK) |
+| WD-CPN-008 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| WD-CPN-009 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-010 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-011 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-012 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-013 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-014 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-015 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-016 | done |  | moved to wallet-message-billing (WD-WALLET-019); not re-proved here |
+| WD-CPN-017 | wontfix |  | not ported: unauthenticated self-confirm credit grant is a WaDesk defect |
+| WD-CPN-018 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-019 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-020 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-021 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| WD-CPN-022 | done |  | twin run: non-default delete compared; delete/switch-off of the default compared from the inventory only (WaDesk cannot restore it) |
+| WD-CPN-023 | done |  | fetch-rates control compared; live rate fetch not run (public provider call) |
+| WD-CPN-024 | done |  | twin ran ours only; WaDesk default setting not touched (shared instance) |
+| WD-CPN-025 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-026 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-027 | todo |  | resolution lives in platform-settings-branding-storage; no CPN test proves it |
+| WD-CPN-028 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| WD-CPN-029 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-030 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-031 | verified |  | twin run 2026-10-06: web form, cookie and field paths clean; mobile refer_code belongs to MOB |
+| WD-CPN-032 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-033 | done |  | reward on a paid order not compared live (no payment in a parity run); api e2e |
+| WD-CPN-034 | done |  | wallet rules save audited; 100000 cap added; e2e |
+| WD-CPN-035 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-036 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| WD-CPN-037 | verified |  | twin run 2026-10-06: account tab merged into /account/affiliate, clean; reward on paid order not compared live |
+| WD-CPN-038 | wontfix |  | docs-only, not ported; no commission copy shown |
+
+## developer-rest-api-v1 (api)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| WD-API-001 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-002 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-003 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-004 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-005 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-006 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-007 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-008 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-009 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| WD-API-010 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| WD-API-011 | done |  | consumed from AUTH/PLAN (security policy + plan limit); covered by auth.e2e.spec.ts rate-limit test |
+| WD-API-020 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-021 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-022 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-023 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-024 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-025 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-026 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-027 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-028 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-029 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-030 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-031 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-032 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| WD-API-033 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-034 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| WD-API-035 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-036 | backend-done |  | PARTIAL: body variables only; header, media header, buttons and daily cap not carried by the chat facade; answers 202 queued |
+| WD-API-037 | backend-done |  | PARTIAL: upload guard runs; file not stored or used until the chat facade carries template components |
+| WD-API-038 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-039 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-040 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-041 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-042 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-043 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); WaDesk create/update itself is broken (missing helper) |
+| WD-API-044 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-045 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-046 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-047 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-048 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-049 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-050 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-051 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-052 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-053 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-054 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-080 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-081 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-082 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-083 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-084 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-085 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-086 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-087 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-088 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-089 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-090 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-091 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-092 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-093 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-094 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-095 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-110 | backend-done |  | text and media done; PARTIAL: location pin recorded as text (chat facade has no location kind); answers sent or pending after waiting up to 3 s for the worker |
+| WD-API-111 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-112 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-113 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-114 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-115 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-116 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-117 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-118 | backend-done |  | PARTIAL: WhatsApp senders; Twilio-engine sends blocked (no Twilio channel kind) |
+| WD-API-119 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-120 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| WD-API-140 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-141 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-142 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-143 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-144 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-145 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-146 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-147 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-148 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| WD-API-149 | done |  | public page + /docs redirects; docs twin: no defect vs WaDesk (122 same, 8 intended); webhook events card is a coming-soon note |
+| WD-API-150 | backend-done |  | GET /docs/api.json generated from controllers, brand token substitution; e2e auth.e2e.spec.ts |
+| WD-API-151 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
 
 ## addons-extension-registry (add)
 
