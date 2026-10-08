@@ -31,6 +31,7 @@ export interface PushSendReport {
 const HIGH_URGENCY_TYPES = new Set([
   'new_chat',
   'new_message',
+  'chat_waiting',
   'mention',
   'conversation_assigned',
   'teamchat_mention',

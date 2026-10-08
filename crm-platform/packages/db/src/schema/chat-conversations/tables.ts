@@ -155,6 +155,12 @@ export const conversations = pgTable(
     index('idx_conversations_unread')
       .on(t.orgId, t.lastMessageAt.desc())
       .where(sql`unread_count > 0`),
+    // The "waiting for a reply" sweep (BL-098, migration 20261110090000): open, unassigned chats with an unanswered, unread customer message.
+    index('idx_conversations_waiting_nudge')
+      .on(t.lastInboundAt.desc())
+      .where(
+        sql`status = 'open' AND NOT archived AND muted_at IS NULL AND assignee_user_id IS NULL AND assignee_team_id IS NULL AND assignee_agent_id IS NULL AND waiting_since IS NOT NULL AND unread_count > 0`,
+      ),
     index('idx_conversations_snooze_due')
       .on(t.snoozedUntil)
       .where(sql`status = 'snoozed' AND snoozed_until IS NOT NULL`),

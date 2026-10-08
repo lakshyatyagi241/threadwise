@@ -112,6 +112,82 @@ export function recipientsForMention(
   return [...new Set(mentioned)].filter((id) => id !== authorUserId && may.has(id));
 }
 
+/**
+ * Row 5, still waiting for a reply (BL-098): an unassigned chat nobody answered. The same people as the first message of an unassigned
+ * chat (D1): everyone who may read it AND reply to it. A chat that has an owner since is nobody's to nudge about (its owner or team
+ * hears about new messages through row 2), so an assigned record answers an empty list.
+ */
+export function recipientsForWaiting(
+  record: ConversationRecord,
+  readers: readonly ConversationViewer[],
+  repliers: readonly ConversationViewer[],
+): number[] {
+  if (record.assigneeUserId !== null || record.assigneeTeamId !== null) return [];
+  return recipientsForNewChat(record, readers, repliers);
+}
+
+/** What the sweep knows about a candidate chat at the moment it decides. Dates are epoch milliseconds. */
+export interface WaitingFacts {
+  status: string;
+  archived: boolean;
+  muted: boolean;
+  assigneeUserId: number | null;
+  assigneeTeamId: number | null;
+  /** An AI agent owns the chat: it is being answered. */
+  assigneeAgentId: number | null;
+  /** A group thread: one member of many wrote, nobody in particular is waiting. */
+  group: boolean;
+  /** The SLA anchor: set while no human has answered, cleared by the first human reply. */
+  waitingSince: number | null;
+  /** The newest customer message that arrived live (imported history never counts). */
+  lastInboundAt: number | null;
+  /** The thread still has unread customer messages, i.e. nobody has opened it since (the counter is shared by all agents). */
+  unread: boolean;
+  /** The id of that newest customer message; without it there is nothing to key the nudge on. */
+  latestInboundMessageUuid: string | null;
+  /** A nudge was already sent for the current waiting episode (since `waitingSince`). */
+  nudgedThisEpisode: boolean;
+}
+
+export type WaitingSkip =
+  | 'not_open'
+  | 'archived'
+  | 'muted'
+  | 'assigned'
+  | 'group'
+  | 'answered'
+  | 'read'
+  | 'too_recent'
+  | 'too_old'
+  | 'no_message'
+  | 'already_nudged';
+
+/**
+ * Whether a chat deserves the nudge now, or why not. The sweep's SQL already narrows to these rules with an index; this is the same
+ * rule written once as code, so the SQL cannot quietly drift from what is documented and tested, and a chat that changed between the
+ * query and the write is dropped.
+ */
+export function waitingSkipReason(
+  f: WaitingFacts,
+  nowMs: number,
+  waitMinutes: number,
+  lookbackHours: number,
+): WaitingSkip | null {
+  if (f.status !== 'open') return 'not_open';
+  if (f.archived) return 'archived';
+  if (f.muted) return 'muted';
+  if (f.assigneeUserId !== null || f.assigneeTeamId !== null || f.assigneeAgentId !== null)
+    return 'assigned';
+  if (f.group) return 'group';
+  if (f.waitingSince === null) return 'answered';
+  if (!f.unread) return 'read';
+  if (f.lastInboundAt === null || f.latestInboundMessageUuid === null) return 'no_message';
+  if (f.lastInboundAt > nowMs - waitMinutes * 60_000) return 'too_recent';
+  if (f.lastInboundAt < nowMs - lookbackHours * 3_600_000) return 'too_old';
+  if (f.nudgedThisEpisode) return 'already_nudged';
+  return null;
+}
+
 /** The hard cap on people per event, with a stable order (lowest id first) so a truncated set is the same on a redelivery. */
 export function capRecipients(
   userIds: readonly number[],
@@ -131,6 +207,12 @@ export const messageKey = (eventId: string): string => `message.received:${event
 export const collapseKeyFor = (conversationUuid: string): string => `msg:${conversationUuid}`;
 export const assignedKey = (conversationUuid: string, userUuid: string, eventId: string): string =>
   `assigned:${conversationUuid}:${userUuid}:${eventId}`;
+/**
+ * One nudge per conversation and customer message: a redelivered or repeated sweep writes the same key (a no-op), while a new customer
+ * message after someone answered is a new message id and so a new episode.
+ */
+export const waitingKey = (conversationUuid: string, messageUuid: string): string =>
+  `chat_waiting:${conversationUuid}:${messageUuid}`;
 export const mentionKey = (noteUuid: string, userUuid: string): string =>
   `mention:${noteUuid}:${userUuid}`;
 
@@ -157,6 +239,14 @@ export function newMessageCopy(
   const who = name ?? 'a customer';
   return {
     title: count > 1 ? `${count} new messages from ${who}` : `New message from ${who}`,
+    body: preview === '' ? null : clip(preview, 80),
+  };
+}
+
+export function waitingCopy(name: string | null, preview: string): ConversationCopy {
+  const who = name ?? 'a customer';
+  return {
+    title: `No one has answered ${who} yet`,
     body: preview === '' ? null : clip(preview, 80),
   };
 }

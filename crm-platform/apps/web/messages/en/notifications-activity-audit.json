@@ -56,6 +56,12 @@
         "body": "{preview}",
         "bodyNoActor": "{preview}"
       },
+      "chat_waiting": {
+        "title": "No one has answered {name} yet",
+        "titleNoName": "A chat is still waiting for a reply",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
       "conversation_assigned": {
         "title": "{name} was assigned to you",
         "titleNoName": "A chat was assigned to you",
@@ -139,6 +145,7 @@
       "desktop": {
         "new_chat": "New chat",
         "new_message": "New message",
+        "chat_waiting": "Waiting for a reply",
         "conversation_assigned": "Assigned to you",
         "mention": "Mentioned you",
         "fallbackTitle": "New notification",
@@ -183,6 +190,10 @@
         "new_message": {
           "label": "New message on my chat",
           "hint": "A customer writes on a chat assigned to you."
+        },
+        "chat_waiting": {
+          "label": "Chat still waiting for a reply",
+          "hint": "A chat nobody owns has had a customer message unanswered for a few minutes. You hear about it once."
         },
         "conversation_assigned": {
           "label": "Chat assigned to me",
