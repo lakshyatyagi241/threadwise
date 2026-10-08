@@ -570,7 +570,7 @@ export const ecomInvoiceHandoffs = pgTable(
       name: 'ecom_invoice_handoffs_org_id_invoice_id_fkey',
       columns: [t.orgId, t.invoiceId],
       foreignColumns: [invoices.orgId, invoices.id],
-    }),
+    }).onDelete('set null'),
     index('idx_ecom_invoice_handoffs_order').on(t.orgId, t.waOrderId),
   ],
 );
