@@ -125,11 +125,13 @@ describe('notification preferences and retention', () => {
         bell: null,
         toast: false,
         sound: null,
+        push: null,
       });
       expect((await stored(orgB, userB)).get('new_message')).toEqual({
         bell: null,
         toast: null,
         sound: false,
+        push: null,
       });
       // The other workspace's person is invisible from here, even asked for by id.
       expect((await stored(orgA, userB)).size).toBe(0);
@@ -169,12 +171,14 @@ describe('notification preferences and retention', () => {
         bell: null,
         toast: false,
         sound: false,
+        push: null,
       });
       await apply(orgA, userA2, 'mention', { toast: null });
       expect((await stored(orgA, userA2)).get('mention')).toEqual({
         bell: null,
         toast: null,
         sound: false,
+        push: null,
       });
       await apply(orgA, userA2, 'mention', { sound: null });
       expect((await stored(orgA, userA2)).has('mention')).toBe(false);
