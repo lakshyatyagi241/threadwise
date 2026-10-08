@@ -12,12 +12,17 @@ export const FLOW_TRIGGER_EVENTS = [
   'contact.created',
   'contact.tag_added',
   'contact.group_added',
+  'contact.group_removed',
+  'contact.updated',
+  'contact.stage_changed',
   'contact.opt_in',
   'deal.stage_changed',
   'order.placed',
   // The two order events that exist today (the store's checkout and a WhatsApp catalog cart); both become `order.placed` below.
   'store.order_placed',
   'whatsapp.order.received',
+  // A store event the store's webhook pipeline classified (checkout started, abandoned cart, fulfilled, refunded, cancelled, product ordered).
+  'store.flow_event',
 ] as const;
 
 type Rows = { rows: Array<{ id: number | string }> };
@@ -27,6 +32,7 @@ type Rows = { rows: Array<{ id: number | string }> };
  * (a slow tag import held the page); here the event is committed with its cause and a worker reacts, so a failure to launch never
  * touches the tag, the contact or the deal, and delivery is at-least-once (enrolment is idempotent per flow and contact).
  *
+ * - `contact.updated`, field match and segment join: see `FlowTriggerService.onContactChanged`; `contact.group_removed` is the list-leave trigger.
  * - `contact.created`: not for an import (`via: import`): a bulk import does not blast a flow to everyone (TW-FLR-005 rule 3).
  * - `contact.tag_added` / `contact.group_added`: the tag or group the flow is bound to.
  * - `contact.opt_in`: only a person coming back (`optedIn: true`).
@@ -58,17 +64,51 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
       case 'contact.created': {
         if (p.via === 'import') return;
         await this.triggers.onContactCreated(orgId, Number(event.aggregateId));
+        await this.changed(event, false);
+        return;
+      }
+      case 'contact.updated':
+      case 'contact.stage_changed': {
+        await this.changed(event, true);
         return;
       }
       case 'contact.tag_added': {
         const tagId = await this.idOf(orgId, 'tags', str(p.tagId));
         if (tagId !== null) await this.triggers.onTagAdded(orgId, Number(event.aggregateId), tagId);
+        await this.changed(event, false);
         return;
       }
       case 'contact.group_added': {
-        const groupId = await this.idOf(orgId, 'contact_groups', str(p.groupId));
+        // A list a flow filled itself does not start list flows (as the Tag step never did): it would loop.
+        const groupId =
+          p.via === 'flow' ? null : await this.idOf(orgId, 'contact_groups', str(p.groupId));
         if (groupId !== null)
           await this.triggers.onGroupJoin(orgId, Number(event.aggregateId), groupId);
+        await this.changed(event, false);
+        return;
+      }
+      case 'contact.group_removed': {
+        const groupId =
+          p.via === 'flow' ? null : await this.idOf(orgId, 'contact_groups', str(p.groupId));
+        if (groupId !== null)
+          await this.triggers.onGroupLeave(orgId, Number(event.aggregateId), groupId);
+        await this.changed(event, false);
+        return;
+      }
+      case 'store.flow_event': {
+        const kind =
+          p.kind === 'woocommerce' ? 'woocommerce' : p.kind === 'shopify' ? 'shopify' : null;
+        if (!kind || typeof p.event !== 'string') return;
+        await this.triggers.onStoreEvent(orgId, kind, {
+          event: p.event,
+          ref: String(p.ref ?? event.id),
+          phone: str(p.phone),
+          productIds: Array.isArray(p.productIds) ? p.productIds.map(String) : [],
+          variables:
+            p.variables !== null && typeof p.variables === 'object' && !Array.isArray(p.variables)
+              ? (p.variables as Record<string, unknown>)
+              : {},
+        });
         return;
       }
       case 'contact.opt_in': {
@@ -115,6 +155,15 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
         return;
       }
     }
+  }
+
+  /** The change-driven triggers (contact updated, field match, segment join) for the contact an event is about. */
+  private async changed(event: OutboxEvent, updated: boolean): Promise<void> {
+    await this.triggers.onContactChanged(event.orgId, Number(event.aggregateId), {
+      eventId: String(event.id),
+      updated,
+      viaFlow: event.payload.via === 'flow',
+    });
   }
 
   /** The order behind an event, as the trigger wants it; null when it is gone or has no phone to find a contact by. */
