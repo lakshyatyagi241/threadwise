@@ -16,7 +16,7 @@ real Postgres and a stand-in Graph API), `test/integration/bsp-billing-engine/al
 | 6   | Auto-attach (TW-BSP-008)  | Fired on a WABA-saved event                     | Sweep job over connected WABAs of reseller workspaces                                        | Connection module and event not built yet     |
 | 7   | Token                     | Stored in a settings row                        | Encrypted envelope in platform settings; never returned                                      | Secrets rule                                  |
 | 8   | Dashboard month           | Current month only                              | API accepts `month=YYYY-MM`; the screen shows the current month only, as Reference does         | Port note allows the API parameter            |
-| 9   | Customer billing card     | Lives on the WhatsApp devices screen            | Reusable `BillingModeCard` plus its own page `/billing-mode` until the devices screen exists | Devices screen belongs to WADEV, not built    |
+| 9   | Customer billing card     | Lives on the WhatsApp devices screen            | Removed from the workspace side (commit 6ad39bd0); the mode is set by the operator and through the API | Messages are billed from the wallet and subscription |
 
 ## Blocked or not ported (recorded, not dropped)
 
@@ -63,3 +63,7 @@ Round-3 note: the web unit tests (17) pass; the API e2e and integration suites w
 Round-4 verification (Postgres up, crm_bsp migrated, 178 migrations): API unit 39, BSP plus wallet-message-billing e2e 156 (6 files), integration 9, web 17 all pass; arch:check and db:verify-schema clean (0 errors). Remaining typecheck errors (8 in api specs, 1 in web plan-draft.test.ts) are in other domains' files. Screens were still not compared side by side with the running Reference.
 
 Round-5: tier P0/P1/P2 unchanged; screens conformed to the Blade source (see Screens); 013 re-checked and still blocked; 018 to 021 listed under "Not ported on purpose".
+
+Round-6: the two Help guides (`bsp-credit`, `bsp-dashboard`, operator audience) are written under `features/bsp-billing-engine/help/`. The e2e harness no longer assumes the platform policy forces super-admin MFA enrolment (it enrols only when the login says so). Re-run on crm_bsp (277 migrations): API unit 39, BSP + wallet-message-billing e2e 182 (7 files), web 18 files in help-center + bsp (only other domains' coverage gates fail). TW-BSP-013 re-checked on the merged tree: the operator Workspaces hub (`features/workspaces-hub`, `/admin/workspaces`) has only list, detail, plan, provider, suspend and impersonate dialogs, no create/edit form; the toggle would go in a new dialog in `apps/web/src/features/workspaces-hub/components/` plus a workspaces-hub API endpoint, both another domain's zone, so it stays blocked. TW-BSP-018 to 021 remain "not ported on purpose". Live side-by-side with the running Reference was not repeated this round.
+
+Round-7 (verifier): live Reference compared on `/admin/bsp/credit`, `/admin/bsp` and `/admin/bsp/rate-cards`. Fixed: required asterisks on Business ID and token, rates endpoint placeholder, per-workspace table keeps its column headings when empty. Money still prints with the currency symbol (Reference prints bare numbers).
