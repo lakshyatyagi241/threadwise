@@ -80,7 +80,7 @@ export function menuItems(
   return drawable.filter((i) => i.inMenu !== false || !reachable(i));
 }
 
-/** The entries of the user menu's Help block (Support, Guidebook). */
+/** The entries of the user menu's Help block (Support). */
 export function helpItems(items: readonly ResolvedNavItem[]): ResolvedNavItem[] {
   return items.filter((i) => USER_MENU_GROUPS.includes(i.group));
 }

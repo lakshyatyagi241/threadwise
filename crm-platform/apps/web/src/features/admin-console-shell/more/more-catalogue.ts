@@ -253,14 +253,6 @@ export const CATALOGUE: readonly CatalogueCard[] = [
     badge: false,
   },
   {
-    id: 'guidebook',
-    hrefs: ['/guidebook'],
-    cat: 'help',
-    tone: 'neutral',
-    icon: 'book',
-    badge: false,
-  },
-  {
     id: 'channels',
     hrefs: ['/channels/whatsapp', '/devices'],
     cat: 'data',

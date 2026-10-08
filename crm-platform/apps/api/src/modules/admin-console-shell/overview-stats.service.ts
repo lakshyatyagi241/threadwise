@@ -56,7 +56,6 @@ export class OverviewStatsService {
       messageHistory: sql`SELECT count(*) FROM messages WHERE org_id = ${o}`,
       outbound7d: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND ${week}`,
       activity24h: sql`SELECT count(*) FROM audit_log WHERE org_id = ${o} AND at >= now() - interval '24 hours'`,
-      guidebookArticles: sql`SELECT count(*) FROM guidebook_articles WHERE is_published`,
       seats: sql`SELECT count(*) FROM users WHERE org_id = ${o} AND status = 'active'`,
       messagesThisMonth: sql`SELECT count(*) FROM messages WHERE org_id = ${o} AND direction = 'out' AND ${month}`,
       widgetsBuilt: sql`SELECT count(*) FROM chatbot_widgets WHERE org_id = ${o}`,

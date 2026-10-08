@@ -1199,7 +1199,7 @@ export const CMS_REGISTRY: Record<CmsPage, CmsPageDef> = {
             ],
             [
               'Where do I get product help?',
-              'Signed-in customers can open the guidebook or contact support from their workspace.',
+              'Signed-in customers can open the help center or contact support from their workspace.',
             ],
           ],
           'Before you <em>write.</em>',

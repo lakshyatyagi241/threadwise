@@ -126,7 +126,7 @@ describe('html sanitiser (WD-AUTH-044)', () => {
     );
   });
 
-  it('allows the wider set of content tags storefront and guidebook bodies carry', () => {
+  it('allows the wider set of content tags storefront bodies carry', () => {
     const html =
       '<figure><figcaption>cap</figcaption></figure><small>s</small><del>d</del><ins>i</ins><mark>m</mark>' +
       '<dl><dt>t</dt><dd>d</dd></dl><section><article>a</article></section>' +

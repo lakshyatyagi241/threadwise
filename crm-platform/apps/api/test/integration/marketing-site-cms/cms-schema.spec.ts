@@ -19,7 +19,6 @@ describe('marketing-site tables: RLS, constraints, view counter', () => {
     'legal_pages',
     'pricing_faqs',
     'announcements',
-    'guidebook_articles',
   ] as const;
 
   let container: StartedPostgreSqlContainer;
@@ -73,7 +72,6 @@ describe('marketing-site tables: RLS, constraints, view counter', () => {
       INSERT INTO legal_pages (slug, title) VALUES ('terms', 'Terms');
       INSERT INTO pricing_faqs (question, answer) VALUES ('q', 'a');
       INSERT INTO announcements (text) VALUES ('hello');
-      INSERT INTO guidebook_articles (slug, title) VALUES ('start', 'Start');
       INSERT INTO contact_messages (name, email, message) VALUES ('A', 'a@b.co', 'hi');
     `);
   }, 180_000);
@@ -138,11 +136,6 @@ describe('marketing-site tables: RLS, constraints, view counter', () => {
         insert: `INSERT INTO announcements (text) VALUES ('t2')`,
         update: `UPDATE announcements SET text = 'z'`,
         remove: `DELETE FROM announcements`,
-      },
-      guidebook_articles: {
-        insert: `INSERT INTO guidebook_articles (slug, title) VALUES ('s2', 't2')`,
-        update: `UPDATE guidebook_articles SET title = 'z'`,
-        remove: `DELETE FROM guidebook_articles`,
       },
     };
 
