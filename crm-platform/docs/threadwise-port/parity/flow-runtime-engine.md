@@ -79,8 +79,10 @@ exists to host it. Differences in a screen are listed in the web agent's report 
   thread; ordering takes the workspace from the API key, reads an English reply as typed and translates only when unclear; analytics counts launches that failed before a run
   existed, dates are UTC, paging is by cursor, a retry that fails again is a 200 with `outcome: failed`, and "skipped" is an extra outcome.
 - Editor-saved flows: `compileGraph` applies the editor's field mapping (`flbToRuntimeData`) and the Template, AI and AI call nodes resolve the template / assistant uuid the editor
-  saves, scoped by workspace (`flow-refs.ts`); an integer id still works. Proof: `compile-flb-hook.spec.ts`, `flow-refs.spec.ts` and `editor-flows.e2e.spec.ts`. The 23
-  channel-specific types (`cf_*`, `ig_*`, `fb_*`, `tg_payment`) are still without an executor.
+  saves, scoped by workspace (`flow-refs.ts`); an integer id still works. Proof: `compile-flb-hook.spec.ts`, `flow-refs.spec.ts` and `editor-flows.e2e.spec.ts`. Instagram's send,
+  ask, quick replies, link buttons and AI reply run on the shared executors and both WhatsApp hand-offs have a node (deviations: postback buttons of an Instagram button
+  message are not kept; direct mode launches through the outbox and the launch service rather than Reference's enrol call). The 16 types still without an executor:
+  the `cf_*` call flow, `ig_products`, `fb_products`, `fb_gallery`, `ig_lead`, `fb_lead`, `ig_reply_comment`, `fb_reply_comment` and `tg_payment`.
 - Known limits: a Deal step can create two deals if its write loses the compare-and-set and the step re-runs (no idempotency key on deals); Mirror mode copies only what Message and
   Media record; the Code node starts a worker per run and `vm` is not a hard security boundary.
 - Not built, with the reason: see the wiring map (AI agent hand-off, MySQL driver, voice call adapter, Google account store, shop adapter, voice and photo orders, Telegram

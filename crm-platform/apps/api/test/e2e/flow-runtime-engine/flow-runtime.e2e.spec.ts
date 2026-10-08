@@ -684,6 +684,76 @@ describe('domain events start flows', () => {
   });
 });
 
+describe('an Instagram flow hands the chat to a WhatsApp flow (TW-FLR-010 rule 6)', () => {
+  it('direct mode says the intro, then the consumer makes the contact and starts the chosen flow once', async () => {
+    const t = await p.api.signup('flrhandoff');
+    const ch = await openChannel(p, t);
+    const target = await addFlow(p, t, {
+      graph: graph([node('b', 'message', { text: 'Welcome from Instagram' })], []),
+      trigger: { kind: 'keyword', keywords: 'never-typed' },
+    });
+    await addFlow(p, t, {
+      graph: {
+        flowNodes: [
+          node('q', 'ig_ask', { question: 'Your WhatsApp number?', save: 'wa_number' }),
+          node('h', 'ig_to_whatsapp', {
+            mode: 'direct',
+            numberVar: 'wa_number',
+            waFlowId: target.uuid,
+            introText: 'One moment, moving you to WhatsApp',
+          }),
+        ],
+        flowEdges: [edge('q', 'h')],
+        vars: {},
+      },
+      trigger: { kind: 'keyword', keywords: 'handoff' },
+    });
+    const peer = nextPeer();
+    await say(t, ch, peer, 'handoff');
+    await untilSent(p, t, ch, peer, 1);
+    await say(t, ch, peer, '+91 98111 00071');
+    expect(await untilSent(p, t, ch, peer, 2)).toEqual([
+      'Your WhatsApp number?',
+      'One moment, moving you to WhatsApp',
+    ]);
+
+    const ev = await p.h.owner.query(
+      `SELECT id, aggregate_module, aggregate_id, payload FROM event_outbox
+        WHERE org_id = $1 AND event_type = 'flow.whatsapp_handoff_requested'`,
+      [t.orgId],
+    );
+    expect(ev.rows.length).toBe(1);
+    const consumer = p.h.app.get(
+      (
+        await import('../../../src/modules/flow-runtime-engine/runtime/nodes/actions/social-handoff.consumer')
+      ).SocialHandoffConsumer,
+    );
+    const deliver = () =>
+      system(t.orgId, () =>
+        consumer.handle({
+          id: String(ev.rows[0].id),
+          orgId: t.orgId,
+          aggregateModule: ev.rows[0].aggregate_module,
+          aggregateId: String(ev.rows[0].aggregate_id),
+          eventType: 'flow.whatsapp_handoff_requested',
+          payload: ev.rows[0].payload,
+        }),
+      );
+    await deliver();
+    await untilRun(p, t, target.id, 'target started', () => true);
+    const contact = await p.h.owner.query(
+      `SELECT name FROM contacts WHERE org_id = $1 AND normalized_phone = '+919811100071'`,
+      [t.orgId],
+    );
+    expect(contact.rows[0].name).toBe('WhatsApp 919811100071');
+    const runs = await runsOf(p, t, target.id);
+    expect(runs.length).toBe(1);
+    expect(runs[0].source).toBe('handoff');
+    await deliver(); // at-least-once delivery: the same event again starts nothing
+    expect((await runsOf(p, t, target.id)).length).toBe(1);
+  });
+});
+
 describe('the numbers', () => {
   it('count completed, failed and where runs came from, for every launch path', async () => {
     const t = await p.api.signup('flrstat');

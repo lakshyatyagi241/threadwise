@@ -471,7 +471,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-SCHED-025 | backend-done |  | covered by TW-NODE-030: nothing to restore, state is in the database |
 | TW-SCHED-026 | backend-done |  | covered by TW-NODE-036: durable retry of failed one-offs |
 | TW-SCHED-027 | backend-done |  | covered: the broadcast retry policy is shared |
-| TW-SCHED-028 | blocked |  | needs the customer API domain; public-api here is a lead-intake skeleton; ScheduleCreateService is the use case to call |
+| TW-SCHED-028 | backend-done |  | built on main by the customer-API work: POST, GET and DELETE /v1/scheduled over ScheduleCreateService, ScheduleReadService and ScheduleActionsService (V1ScheduledAdapter), behind the public_api plan feature; the schedule keeps the staff form's gates (plan limit, 2-minute lead, halt, content, wallet, warmer budget) |
 | TW-SCHED-029 | blocked |  | needs the mobile domain |
 | TW-SCHED-030 | backend-done |  | ScheduleProducerService: ordinary schedules with source and external_key; a key replaces its old schedule; cancel by key; e2e |
 
@@ -625,7 +625,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-007 | backend-done |  | away and out of hours from the workspace settings; overnight ranges; re-arms after 12 h; unit-tested hours |
 | TW-FLR-008 | frontend-done |  | enroll API plus the Enroll panel on the subscribers page, runs, run detail and analytics screens; not opened in a browser; no Playwright parity run yet |
 | TW-FLR-009 | backend-done |  | GET/POST /public/v1/flows under the API-key guard; counts over every subscriber; not exercised with a real signed key in e2e |
-| TW-FLR-010 | backend-done |  | campaign (CAMPAIGN_FLOW_STARTER bound) and inbox start built; routing trigger_flow, lead webhook and hand-off call FlowLaunchService.start when their domains exist |
+| TW-FLR-010 | backend-done |  | campaign (CAMPAIGN_FLOW_STARTER bound) and inbox start built; routing trigger_flow, lead webhook and hand-off call FlowLaunchService.start when their domains exist; the Instagram and Messenger hand-off to WhatsApp is built too: deep link sends a wa.me link, direct mode makes the contact for the captured number and starts the chosen flow with source handoff (SocialHandoffNode, SocialHandoffConsumer; flow-runtime e2e) |
 | TW-FLR-011 | backend-done |  | FlowLaunchService: one door, run row on every path, failed launch marks the subscriber with the reason; queue instead of HTTP; retry via flow_retry_logs |
 | TW-FLR-012 | backend-done |  | intended: appointment_booked and comment_to_dm are not accepted; forced flowId path dropped |
 | TW-FLR-013 | backend-done |  | compileGraph (pure, unit-tested ports and handles); the editor must save flowNodes and flowEdges; runs keep a graph snapshot |
@@ -657,7 +657,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-039 | backend-done |  | WhatsApp-to-Instagram link node; actions-nodes e2e |
 | TW-FLR-040 | backend-done |  | Book appointment node through the appointments domain; commerce-book e2e |
 | TW-FLR-041 | backend-done |  | Commerce shop node over FlowShopPort; CatalogShopAdapter binds the catalog behind it: WhatsApp Shop stock by retailer id and the native product list through CatalogSendService (card for one product, multi-product list for more); the single-use checkout link and WooCommerce and Shopify stock still answer cannot, because the store domains expose neither; commerce-shop-form spec, catalog-shop-adapter spec |
-| TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e |
+| TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e; a saved customer profile (written by the store at checkout, no company) no longer hides the company the flow's last order kept |
 | TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
 | TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
 | TW-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
@@ -676,8 +676,8 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-058 | frontend-done |  | Bulk retry of up to 50 named runs with a count per outcome; flow-runtime-read e2e |
 | TW-FLR-059 | backend-done |  | Compare-and-set on step_seq, one job id per step, sweeper for lost jobs; flow-runtime e2e |
 | TW-FLR-060 | backend-done |  | One engine for every channel: a channel profile (buttons, list, link, location, templates, pace) says what a kind can show, the rest degrades to numbered text; channel-render.spec |
-| TW-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34) |
-| TW-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34) |
+| TW-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34); the Messenger editor nodes: the WhatsApp hand-off runs; card gallery, products, lead capture and public comment reply have no executor (they need the channel's carousel, comment and lead features) |
+| TW-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34); Instagram editor nodes: send, ask, quick replies, link buttons and AI reply run on the shared executors (postback buttons are not kept in a single-exit node), the WhatsApp hand-off runs; products carousel, lead capture and comment reply have no executor |
 | TW-FLR-063 | backend-done |  | TikTok: text with numbered options through the default profile |
 | TW-FLR-064 | backend-done |  | Telegram: text with numbered options; the payment node is not built (needs the Telegram payment provider) |
 | TW-FLR-065 | backend-done |  | LINE: text with numbered options through the default profile |

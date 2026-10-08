@@ -66,6 +66,14 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   deal: 'Deal',
   trigger: 'Trigger',
   end: 'End',
+  // Instagram and Messenger nodes that are the shared nodes under another name (TW-FLR-061, 062): same executor, the editor's own fields.
+  ig_send_dm: 'Message',
+  ig_ask: 'Question',
+  ig_quick: 'InteractiveButtons',
+  ig_buttons: 'CTA',
+  ig_ai: 'ChatGPT',
+  ig_to_whatsapp: 'SocialHandoff',
+  fb_to_whatsapp: 'SocialHandoff',
 };
 
 /** The handle names that mean a fixed port on a node type (TW-FLR-013 rule 5). The rest are `pN` (option N+1) or `else` (0). */
@@ -123,6 +131,23 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
   const commerce = shapeCommerceNode(type, data);
   if (commerce) return commerce;
   switch (type) {
+    case 'ig_send_dm':
+      return shapeNode('message', data);
+    case 'ig_ask':
+      return shapeNode('ask', { ...data, prompt: data.question, var: data.save });
+    case 'ig_quick':
+      return shapeNode('buttons', { ...data, prompt: data.text, var: 'choice' });
+    case 'ig_buttons':
+      // A link button is a call-to-action; a postback button has no tap to wait for in a single-exit node, so only links are kept.
+      return shapeNode('cta', {
+        valueText: data.text,
+        ctaActions: arr(data.buttons)
+          .map(obj)
+          .filter((b) => str(b.type, 'web_url') === 'web_url' && str(b.url) !== '')
+          .map((b) => ({ type: 'url', label: str(b.title), value: str(b.url) })),
+      });
+    case 'ig_ai':
+      return { data: { ...data, variable: cleanVar(data.save, 'ai_reply') } };
     case 'message':
       return { replies: [{ type: 'Text', data: str(data.text) }] };
     case 'sequence':
