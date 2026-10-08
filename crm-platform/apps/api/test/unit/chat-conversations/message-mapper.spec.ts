@@ -51,7 +51,7 @@ const row = (over: Partial<MessageRow> = {}): MessageRow => ({
   deliveredAt: null,
   readAt: null,
   ...over,
-});
+}) as MessageRow;
 
 describe('toMessageResponse: the wire shape, ids and keys never leak', () => {
   it('an inbound text message matches the contract and carries only uuids', () => {

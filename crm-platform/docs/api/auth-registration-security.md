@@ -95,8 +95,8 @@ password and of the code, never either in clear.
 
 ### `GET /onboarding`, `POST /onboarding/workspace`, `POST /onboarding/complete` (User, gate-exempt)
 
-`GET` → `{ step: "workspace|plan|done", workspace, suggestedName, needsPhone, plans, defaultTimezone }`; `plans` are the plan cards of `GET /plans` (see "Plans" below).
-`POST /onboarding/workspace` (`admin.settings.manage`): `{ name, industry?, sizeRange?, timezone, currency?, phone? }`.
+`GET` → `{ step: "workspace|plan|done", workspace, currencies, suggestedName, needsPhone, plans, defaultTimezone }`; `plans` are the plan cards of `GET /plans` (see "Plans" below). `workspace` carries `country` and `currency`; `currencies` is `{ available, platform }`, the currencies the workspace can be billed in (the platform currency and every currency with a stored Meta rate card) and the platform's own.
+`POST /onboarding/workspace` (`admin.settings.manage`): `{ name, industry?, sizeRange?, timezone, country?, currency?, phone? }`. `country` is ISO 3166-1 alpha-2 (422 on an unknown code). `currency` must be one of `currencies.available` (422 otherwise); left out, it follows the country (India: INR, anywhere else: USD, else the platform currency) through `defaultBillingCurrency` in `@crm/contracts`. Once the workspace has any wallet transaction a different currency is refused (422 on `currency`); saving the same one is fine. Both land in `organizations.settings` (`country`, `currency`), where `BillingCurrencyService.forOrg` reads the currency.
 
 ## Recovery and verification (all Public, neutral answers)
 

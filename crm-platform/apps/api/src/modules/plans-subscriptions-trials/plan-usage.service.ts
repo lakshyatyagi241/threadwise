@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
+  ERROR_CODES,
   PLAN_FEATURE_KEYS,
+  PLAN_UPGRADE_PATH,
   type BillingUsageResponse,
   type PlanLimitKey,
   type UsageMeter,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   PlanEntitlementService,
@@ -123,7 +126,191 @@ const METERS: ReadonlyArray<{
           AND starts_at >= ${from.toISOString()}::timestamptz AND starts_at < ${to.toISOString()}::timestamptz`,
       ),
   },
+  {
+    key: 'scheduled_messages',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM scheduled_messages WHERE org_id = ${orgId}`),
+  },
+  {
+    key: 'saved_replies',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM saved_replies WHERE org_id = ${orgId}`),
+  },
+  {
+    key: 'routing_rules',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM routing_rules WHERE org_id = ${orgId}`),
+  },
+  {
+    // Every install row, whatever its status (the marketplace's own check counts the same set).
+    key: 'installed_apps',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM workspace_app_installations WHERE org_id = ${orgId}`,
+      ),
+  },
+  {
+    key: 'lead_sources',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM lead_sources WHERE org_id = ${orgId}`),
+  },
+  {
+    // The biggest audience among the broadcasts that are not archived: the number a new broadcast is compared with is its own size.
+    key: 'broadcast_recipients',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT coalesce(max(total_recipients), 0)::int AS n FROM broadcasts WHERE org_id = ${orgId} AND NOT archived`,
+      ),
+  },
+  {
+    key: 'segments',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM segments WHERE org_id = ${orgId}`),
+  },
+  {
+    // Custom fields only: the system fields every workspace is born with are not the customer's to be capped.
+    key: 'custom_fields',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM fields WHERE org_id = ${orgId} AND NOT is_system`),
+  },
+  {
+    // Direct messages are rows of the same table but are not channels: they are neither capped nor counted.
+    key: 'team_chat_channels',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM team_chat_channels WHERE org_id = ${orgId} AND type <> 'dm'`,
+      ),
+  },
+  {
+    key: 'sla_policies',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM sla_policies WHERE org_id = ${orgId}`),
+  },
+  {
+    key: 'booking_types',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM booking_types WHERE org_id = ${orgId}`),
+  },
+  {
+    key: 'chatbot_widgets',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM chatbot_widgets WHERE org_id = ${orgId}`),
+  },
+  {
+    key: 'catalog_products',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM wa_products WHERE org_id = ${orgId}`),
+  },
+  {
+    // Created this calendar month, every status: voiding or deleting an invoice does not give the month's allowance back.
+    key: 'invoices_monthly',
+    window: 'month',
+    count: (tx, orgId, from, to) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM invoices
+        WHERE org_id = ${orgId}
+          AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
+      ),
+  },
+  {
+    key: 'recurring_invoices',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(tx, sql`SELECT count(*)::int AS n FROM recurring_invoices WHERE org_id = ${orgId}`),
+  },
+  {
+    // A revoked or expired key frees its place; only `active` ones count.
+    key: 'api_keys',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM api_keys WHERE org_id = ${orgId} AND status = 'active'`,
+      ),
+  },
+  {
+    // The inbox's outbound webhooks and the API webhooks are one allowance to the customer.
+    key: 'webhooks',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT ((SELECT count(*) FROM outbound_webhooks WHERE org_id = ${orgId})
+                  + (SELECT count(*) FROM webhooks WHERE org_id = ${orgId}))::int AS n`,
+      ),
+  },
+  {
+    // Web forms the workspace has: every one that is not archived (an archived form frees its place). The Forms add-on.
+    key: 'forms',
+    window: 'total',
+    count: (tx, orgId) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM web_forms WHERE org_id = ${orgId} AND status <> 'archived'`,
+      ),
+  },
+  {
+    // Accepted submissions this calendar month, spam excluded. The cap never blocks a submission (it is stored `needs_review`), so
+    // this meter is the panel's number and the pipeline's own comparison.
+    key: 'form_submissions_monthly',
+    window: 'month',
+    count: (tx, orgId, from, to) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM web_form_submissions
+        WHERE org_id = ${orgId} AND status <> 'spam' AND NOT (status = 'needs_review' AND reason = 'submissions_cap')
+          AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
+      ),
+  },
+  {
+    // AI form builder generations this calendar month (counted from the builder's phase 2; the counter exists now).
+    key: 'ai_form_generations_monthly',
+    window: 'month',
+    count: (tx, orgId, from) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(ai_generations), 0)::int AS n FROM web_form_usage_monthly
+        WHERE org_id = ${orgId} AND period = ${from.toISOString().slice(0, 10)}::date`,
+      ),
+  },
+  {
+    // Tokens billed to the platform's keys this calendar month: the same sum AiTokenMeter.guard compares with the cap (it enforces; this row is the panel's number).
+    key: 'ai_token_limit_monthly',
+    window: 'month',
+    count: (tx, orgId, from, to) =>
+      n(
+        tx,
+        sql`SELECT coalesce(sum(total_tokens), 0)::bigint AS n FROM ai_token_usage
+        WHERE org_id = ${orgId} AND billed_against = 'admin'
+          AND created_at >= ${from.toISOString()}::timestamptz AND created_at < ${to.toISOString()}::timestamptz`,
+      ),
+  },
 ];
+
+/** Keys whose enforcement is not "live row count < cap": see assertCanAdd. */
+const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
+  'monthly_messages',
+  'total_campaigns',
+  'broadcast_recipients',
+  'ai_token_limit_monthly',
+]);
 
 async function n(tx: Tx, query: ReturnType<typeof sql>): Promise<number> {
   const res = await tx.execute(query);
@@ -158,11 +345,12 @@ export class PlanUsageService {
   /**
    * The one-line guard for a domain that creates a capped thing (devices, flows, templates, auto-replies, ...): counts what the workspace
    * holds with the SAME predicate the usage panel shows, then refuses row N+1 with 422 PLAN_LIMIT_REACHED. Call it before the insert, in the
-   * creating request. Two keys are not live counts and are refused here on purpose: `total_campaigns` is the delete-proof ledger
-   * (PlanQuotaService) and `monthly_messages` is an allowance whose overage bills the wallet instead of blocking.
+   * creating request. Four keys are not live row counts and are refused here on purpose: `total_campaigns` is the delete-proof ledger
+   * (PlanQuotaService), `monthly_messages` is an allowance whose overage bills the wallet instead of blocking, `broadcast_recipients` is
+   * the size of one audience (assertAudienceWithin) and `ai_token_limit_monthly` is enforced by the AI token meter.
    */
   async assertCanAdd(orgId: number, key: PlanLimitKey, now = new Date()): Promise<void> {
-    if (key === 'monthly_messages' || key === 'total_campaigns') {
+    if (NOT_A_ROW_COUNT.has(key)) {
       throw new Error(`assertCanAdd does not apply to ${key}`);
     }
     const cap = await this.entitlements.limit(orgId, key);
@@ -172,6 +360,27 @@ export class PlanUsageService {
       meter.count(tx, orgId, monthStart(now), nextMonthStart(now)),
     );
     await this.entitlements.assertWithinLimit(orgId, key, used);
+  }
+
+  /**
+   * `broadcast_recipients`: the audience of ONE broadcast may not be bigger than the cap (0 = unlimited, override -1 = unlimited). Same 422
+   * shape as the row caps; `used` is the audience size that was asked for.
+   */
+  async assertAudienceWithin(orgId: number, audience: number): Promise<void> {
+    const cap = await this.entitlements.limit(orgId, 'broadcast_recipients');
+    if (cap === 0 || audience <= cap) return;
+    throw new AppError(
+      ERROR_CODES.PLAN_LIMIT_REACHED,
+      `Your plan allows up to ${cap} recipients in one broadcast, and this audience has ${audience}. Narrow the audience or upgrade your plan.`,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [
+        { path: 'limit', message: 'broadcast_recipients' },
+        { path: 'reason', message: 'limit_reached' },
+        { path: 'used', message: String(audience) },
+        { path: 'limitValue', message: String(cap) },
+        { path: 'upgradeUrl', message: PLAN_UPGRADE_PATH },
+      ],
+    );
   }
 
   async meters(e: Entitlements, now = new Date()): Promise<UsageMeter[]> {
@@ -193,6 +402,8 @@ export class PlanUsageService {
       validity: validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now,
       }),
       meters,

@@ -9,6 +9,11 @@ export const INBOX_ERROR_CODES = {
   CONVERSATION_NOTE_NOT_FOUND: 'CONVERSATION_NOTE_NOT_FOUND',
   /** A template send was asked for, and the template library (TPL) is not part of this deployment yet. */
   INBOX_TEMPLATES_UNAVAILABLE: 'INBOX_TEMPLATES_UNAVAILABLE',
+  /**
+   * The template picked cannot be sent into this conversation: it is not approved (or is paused), it belongs to another WhatsApp number,
+   * or it needs something the inbox cannot fill in yet (a media header, a link or header variable). `errors[]` names the reason.
+   */
+  INBOX_TEMPLATE_NOT_SENDABLE: 'INBOX_TEMPLATE_NOT_SENDABLE',
   /** Only the author of a note, or someone who may assign conversations (a manager), deletes it. */
   INBOX_NOTE_NOT_DELETABLE: 'INBOX_NOTE_NOT_DELETABLE',
 } as const;

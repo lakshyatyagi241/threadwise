@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import type { FlowRunEndReason } from '@crm/contracts';
+import { ContactsService } from '../../crm';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { compileGraph } from '../graph/compile-graph';
 import { nodeById } from '../graph/runtime-graph';
@@ -67,6 +68,7 @@ export class FlowEngine {
     @Optional()
     @Inject(FLOW_NODE_EXECUTORS)
     private readonly executors: readonly NodeExecutor[] = [],
+    @Optional() private readonly contacts?: ContactsService,
   ) {}
 
   private deps(): StepDeps {
@@ -114,6 +116,7 @@ export class FlowEngine {
       return saved;
     });
     if (committed === 'lost') return 'lost';
+    this.logStep(state, outcome, 'step');
     if (committed.next) {
       await this.publisher.schedule(orgId, runId, committed.next.seq, committed.next.delayMs);
     }
@@ -178,6 +181,7 @@ export class FlowEngine {
   // --- a reply ---------------------------------------------------------------------------------------------------------------
 
   async deliverReply(orgId: number, runId: number, reply: InboundReply): Promise<ReplyResult> {
+    const saved: { v: { contactId: number; key: string; value: string } | null } = { v: null };
     const result = await this.db.txAs({ orgId }, async (tx) => {
       const state = await this.runs.byId(tx, orgId, runId, true);
       if (!state || state.status !== 'waiting' || !state.wait) return 'not_waiting' as const;
@@ -192,13 +196,74 @@ export class FlowEngine {
         ...(reply.kind === 'external' ? { external: true } : {}),
       };
       const committed = await this.commit(tx, state, outcome, state.stepSeq, 'reply', detail);
+      if (committed !== 'lost' && outcome.saveProperty && state.contactId !== null)
+        saved.v = { contactId: state.contactId, ...outcome.saveProperty };
       return committed;
     });
-    if (result === 'not_waiting' || result === 'ignored') return result;
+    if (result === 'not_waiting' || result === 'ignored') {
+      this.logger.log({ orgId, runId, result }, '[FLR] a reply did not move the run');
+      return result;
+    }
     if (result === 'lost') return 'ignored';
+    this.logger.log(
+      { orgId, runId, next: result.next?.seq ?? null },
+      '[FLR] a reply moved the run',
+    );
+    if (saved.v) await this.saveReplyProperty(orgId, runId, saved.v);
     if (result.next)
       await this.publisher.schedule(orgId, runId, result.next.seq, result.next.delayMs);
     return 'routed';
+  }
+
+  /**
+   * "Also save to a contact attribute" of a List, Quick replies or Ask question: written once the reply is committed, in its own
+   * transaction. It never stops the flow: a missing property, a run without a contact or a failed write is logged and the run goes on.
+   */
+  private async saveReplyProperty(
+    orgId: number,
+    runId: number,
+    save: { contactId: number; key: string; value: string },
+  ): Promise<void> {
+    if (!this.contacts) return;
+    try {
+      const done = await this.contacts.setPropertyFromFlow(
+        orgId,
+        save.contactId,
+        save.key,
+        save.value,
+      );
+      if (!done)
+        this.logger.warn(
+          { orgId, runId, key: save.key },
+          '[FLR] no contact property to save the answer on',
+        );
+    } catch (err) {
+      this.logger.warn(
+        { err, orgId, runId },
+        '[FLR] saving the answer on a contact property failed',
+      );
+    }
+  }
+
+  /** One line per node that ran: which flow, which node, what it decided. No message text or variable values. */
+  private logStep(state: RunState, outcome: StepOutcome, event: 'step'): void {
+    const t = outcome.transition;
+    this.logger.log(
+      {
+        orgId: state.orgId,
+        runId: state.id,
+        flowId: state.flowId,
+        nodeId: outcome.nodeId,
+        nodeType: outcome.nodeType,
+        event,
+        transition: t.t,
+        ...(t.t === 'goto' ? { next: t.nodeId } : {}),
+        ...(t.t === 'wait' ? { waitingOn: t.wait.nodeId } : {}),
+        ...(t.t === 'end' ? { status: t.status, reason: t.reason } : {}),
+        ...(t.t === 'halt' ? { reason: t.reason } : {}),
+      },
+      `[FLR] node ${outcome.nodeType} ran`,
+    );
   }
 
   // --- giving up -------------------------------------------------------------------------------------------------------------

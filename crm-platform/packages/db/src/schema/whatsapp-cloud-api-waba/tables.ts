@@ -5,6 +5,7 @@
 import {
   boolean,
   foreignKey,
+  index,
   integer,
   jsonb,
   pgTable,
@@ -14,8 +15,10 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
-import { organizations } from '../foundation';
+import { contacts } from '../crm';
+import { organizations, users } from '../foundation';
 import { waProviderConfigs } from '../whatsapp-devices-baileys/tables';
 
 export const wabaGroups = pgTable(
@@ -35,6 +38,8 @@ export const wabaGroups = pgTable(
     creationTimestamp: timestamp('creation_timestamp', { withTimezone: true }),
     syncedAt: timestamp('synced_at', { withTimezone: true }),
     metaJson: jsonb('meta_json'),
+    /** Who made the group from here (migration 20261109090000); null for a webhook-mirrored group. */
+    createdByUserId: idColumn('created_by_user_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -53,6 +58,12 @@ export const wabaGroups = pgTable(
       columns: [t.orgId, t.providerConfigId],
       foreignColumns: [waProviderConfigs.orgId, waProviderConfigs.id],
     }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_waba_groups_created_by_user_id',
+      columns: [t.orgId, t.createdByUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_waba_groups_list').on(t.orgId, t.providerConfigId, t.createdAt.desc(), t.id.desc()),
   ],
 );
 
@@ -69,6 +80,8 @@ export const waCustomerProfiles = pgTable(
     name: text('name'),
     company: text('company'),
     address: text('address'),
+    /** The CRM contact behind this phone (migration 20261029090000); null when none could be made. */
+    contactId: idColumn('contact_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -76,6 +89,14 @@ export const waCustomerProfiles = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_wa_customer_profiles_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_wa_customer_profiles_contact_id',
+      columns: [t.orgId, t.contactId],
+      foreignColumns: [contacts.orgId, contacts.id],
+    }).onDelete('set null'),
+    index('idx_wa_customer_profiles_contact_id')
+      .on(t.orgId, t.contactId)
+      .where(sql`contact_id IS NOT NULL`),
     foreignKey({
       name: 'fk_wa_customer_profiles_org',
       columns: [t.orgId],

@@ -1,3 +1,4 @@
+import { SegmentsService } from '../crm';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -12,7 +13,12 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { SendPolicyService } from '../auth';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
+import {
+  UNOFFICIAL_ENGINE,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { splitAudience } from './audience-split';
 import { sanitizeOverrides } from './payload/template-overrides';
 import { toBroadcastResponse } from './broadcasts.mapper';
@@ -63,6 +69,9 @@ export class BroadcastsService {
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(BROADCAST_PLAN_GATE) private readonly planGate: BroadcastPlanGate,
+    private readonly planUsage: PlanUsageService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    private readonly segments: SegmentsService,
   ) {}
 
   /** `body` is validated here, after the plan checks, because Reference answered a plan refusal before a validation error. */
@@ -88,6 +97,11 @@ export class BroadcastsService {
       ]);
     }
 
+    // A sender that names the unofficial engine is a refusal, not a silently dropped key (owner decision 2026-10-05).
+    if (input.senderKeys.some((k) => k.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))) {
+      await this.unofficial.assertEnabledFor(orgId);
+    }
+
     return this.db.tx(async (tx) => {
       const resolved = await this.senders.resolve(tx, orgId, input.senderKeys);
 
@@ -98,6 +112,9 @@ export class BroadcastsService {
           'Select at least one contact or group (opted-out contacts are skipped automatically).',
         );
       }
+
+      // The plan's `broadcast_recipients` cap: the size of this one audience (before it is split across senders), 422 when over.
+      await this.planUsage.assertAudienceWithin(orgId, contactIds.length);
 
       // Emergency halt and content screening once for the batch (the same hook every send path shares), then the wallet.
       await this.sendPolicy.screenBulk(orgId, '', { source: 'broadcast' });
@@ -200,7 +217,7 @@ export class BroadcastsService {
     });
   }
 
-  /** Direct contacts, then group members, then tag members; first occurrence wins; opted-out and archived dropped. */
+  /** Direct contacts, then group, tag and segment members; first occurrence wins; opted-out and archived dropped. */
   private async resolveAudience(
     tx: Parameters<BroadcastsRepository['count']>[0],
     orgId: number,
@@ -210,6 +227,7 @@ export class BroadcastsService {
       ...(await this.repo.contactIdsByUuid(tx, orgId, input.contactIds)),
       ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds)),
       ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds)),
+      ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
     ];
     const unique = [...new Set(merged)];
     if (unique.length === 0) return [];

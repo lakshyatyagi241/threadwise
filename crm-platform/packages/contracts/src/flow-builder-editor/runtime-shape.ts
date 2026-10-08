@@ -1,3 +1,11 @@
+import {
+  FLB_ASK_GIVE_UP_MODES,
+  FLB_ASK_MAX_RETRIES,
+  flbCleanAskFileExtensions,
+  type FlbAskGiveUp,
+} from './ask-media';
+import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
+import { flbSanitizeConditionGroup } from './condition-group';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -166,6 +174,8 @@ const UNIT_SECONDS: Record<string, number> = {
 function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: string }> {
   let raw: unknown[];
   if (Array.isArray(d.actions)) raw = d.actions;
+  else if (Array.isArray(d.ctaActions))
+    raw = d.ctaActions; // already runtime-named (a flow saved before the editor)
   else {
     // The legacy single-kind shape (`kind` + `url` / `phone` / `code`) becomes one action.
     let kind = s(d.kind, 'url').toLowerCase();
@@ -191,10 +201,10 @@ function productItemsOf(d: Bag): Array<Record<string, unknown>> {
   return picked
     .filter(isRecord)
     .map((p) => ({
-      retailer_id: s(p.retailer_id),
+      retailer_id: s(coalesce(p.retailer_id, p.retailerId)),
       name: s(p.name),
       image: s(p.image),
-      price_minor: toInt(p.price_minor),
+      price_minor: toInt(coalesce(p.price_minor, p.priceMinor)),
       currency: s(p.currency),
       url: s(p.url),
     }))
@@ -211,6 +221,22 @@ function shapeFields(d: Bag): string[] {
 }
 
 type Shaper = (d: Bag, o: FlbRuntimeShapeOptions) => Bag;
+
+/** The retry, wrong-reply, skip and timeout settings the Ask-for-file and Ask-for-location nodes share. */
+function askWaitSettings(d: Bag, fallbackReply: string): Bag {
+  const retries = isNil(d.retries) ? 2 : toInt(d.retries);
+  const mode = s(d.onFail, 'continue');
+  const minutes = toInt(d.timeoutMinutes);
+  return {
+    maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
+    wrongReplyText: s(d.wrongReply).trim() === '' ? fallbackReply : s(d.wrongReply),
+    skipKeyword: s(d.skipKeyword).trim(),
+    onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode)
+      ? (mode as FlbAskGiveUp)
+      : 'continue',
+    timeoutMinutes: Math.max(0, minutes),
+  };
+}
 
 const SHAPERS: Record<string, Shaper> = {
   message: (d) => ({ flowReplies: [{ flowReplyType: 'Text', data: s(d.text) }] }),
@@ -243,7 +269,7 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   notify_number: (d, o) => {
-    const kind = s(d.kind, 'text').toLowerCase();
+    const kind = s(coalesce(d.kind, d.mediaKind), 'text').toLowerCase();
     const url = absoluteUrl(s(coalesce(d.url, d.mediaUrl)), o.baseUrl);
     return {
       copyNumber: s(d.copyNumber).replace(/[^0-9{}\w]/g, ''),
@@ -311,7 +337,7 @@ const SHAPERS: Record<string, Shaper> = {
   template: (d) => {
     const id = strictInt(d.tplId);
     return {
-      templateName: s(d.tpl),
+      templateName: s(coalesce(d.tpl, d.templateName)),
       preview: s(d.preview),
       ...(id > 0 ? { templateId: id } : {}),
     };
@@ -331,6 +357,7 @@ const SHAPERS: Record<string, Shaper> = {
       };
     }),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
   buttons: (d) => ({
@@ -342,15 +369,45 @@ const SHAPERS: Record<string, Shaper> = {
         typeof opt === 'string' ? opt : s(isRecord(opt) ? opt.title : undefined, `Option ${i + 1}`),
     })),
     variable: flbCleanVarName(d.var, 'choice'),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
   }),
 
-  ask: (d) => ({
+  ask: (d) => {
+    const retries = isNil(d.retries) ? 0 : toInt(d.retries);
+    const mode = s(d.onFail, 'continue');
+    return {
+      question: s(d.prompt),
+      variable: flbCleanVarName(d.var, 'answer'),
+      acceptMedia: toBool(d.acceptMedia),
+      expectedAnswers: list(coalesce(d.options, d.expected, []))
+        .map((v) => (typeof v === 'string' ? v.trim() : ''))
+        .filter((v) => v !== ''),
+      // The checked answer (not Reference: its Ask saved "Validate as" and never read it). `maxRetries` 0 keeps asking, as the console does.
+      inputType: flbCleanAskInputType(d.validate),
+      dateFormat: flbCleanDateFormat(d.dateFormat),
+      wrongReplyText: s(d.wrongReply).trim(),
+      maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
+      onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
+      savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+    };
+  },
+
+  // Not Reference nodes (TW-FLB-081, 082): the runtime reads `question` / `variable` like Ask, plus the shared wait settings.
+  ask_file: (d) => ({
     question: s(d.prompt),
-    variable: flbCleanVarName(d.var, 'answer'),
-    acceptMedia: toBool(d.acceptMedia),
-    expectedAnswers: list(coalesce(d.options, d.expected, []))
-      .map((v) => (typeof v === 'string' ? v.trim() : ''))
-      .filter((v) => v !== ''),
+    variable: flbCleanVarName(d.var, 'file'),
+    extensions: flbCleanAskFileExtensions(d.extensions),
+    savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
+    ...askWaitSettings(d, 'That is not a file we can accept. Please send it as an attachment.'),
+  }),
+  ask_location: (d) => ({
+    question: s(d.prompt),
+    variable: flbCleanVarName(d.var, 'location'),
+    interactive: isNil(d.interactive) ? true : toBool(d.interactive),
+    ...askWaitSettings(
+      d,
+      'Please share your location with the attachment (+) menu, then Location.',
+    ),
   }),
 
   condition: (d) => {
@@ -365,7 +422,12 @@ const SHAPERS: Record<string, Shaper> = {
         })
       : [{ variable: flbCleanVarName(d.var, ''), operator: s(d.op, 'equals'), value: s(d.value) }];
     const first = conditions[0] ?? { variable: '', operator: 'equals', value: '' };
+    // The optional nested tree (beyond Reference): sanitised, and absent when the node only has the flat chain.
+    const conditionGroup = flbSanitizeConditionGroup(d.conditionGroup, (v) =>
+      flbCleanVarName(v, ''),
+    );
     return {
+      ...(conditionGroup ? { conditionGroup } : {}),
       conditions,
       logicOperators: list(d.operators).map((o) => (s(o).toUpperCase() === 'OR' ? 'OR' : 'AND')),
       variable: first.variable,
@@ -463,8 +525,8 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   location: (d) => ({
-    latitude: toFloat(d.lat),
-    longitude: toFloat(d.lng),
+    latitude: toFloat(coalesce(d.lat, d.latitude)),
+    longitude: toFloat(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
   }),
@@ -472,7 +534,7 @@ const SHAPERS: Record<string, Shaper> = {
   poll: (d) => ({
     question: s(d.question, 'Pick one'),
     options: list(d.options),
-    allowMultiple: toBool(d.multi),
+    allowMultiple: toBool(coalesce(d.multi, d.allowMultiple)),
   }),
 
   chatbot: (d) => {

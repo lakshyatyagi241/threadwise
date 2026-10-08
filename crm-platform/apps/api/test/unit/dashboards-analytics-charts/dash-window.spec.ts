@@ -71,6 +71,46 @@ describe('dashboard windows (TW-DASH-003)', () => {
   });
 });
 
+describe('dashboard custom window', () => {
+  it('custom is a known range and carries From/To', () => {
+    const q = dashSummaryQuerySchema.parse({ range: 'custom', from: '2026-10-01', to: 'nope' });
+    expect(q).toEqual({ range: 'custom', from: '2026-10-01', to: undefined });
+  });
+
+  it('From/To are inclusive days, previous window equal length', () => {
+    const w = resolveDashWindow('custom', 'UTC', NOW, { from: '2026-10-01', to: '2026-10-05' })!;
+    expect(w.days).toBe(5);
+    expect(w.from.toISOString()).toBe('2026-10-01T00:00:00.000Z');
+    expect(w.to.toISOString()).toBe('2026-10-06T00:00:00.000Z');
+    expect(w.prevFrom.toISOString()).toBe('2026-09-26T00:00:00.000Z');
+    expect(w.bucket).toBe('day');
+  });
+
+  it('a reversed pair is swapped, a future To stops at today, no dates means the last 30 days', () => {
+    expect(
+      resolveDashWindow('custom', 'UTC', NOW, { from: '2026-10-05', to: '2026-10-01' })!.days,
+    ).toBe(5);
+    expect(
+      resolveDashWindow('custom', 'UTC', NOW, {
+        from: '2026-10-10',
+        to: '2027-01-01',
+      })!.to.toISOString(),
+    ).toBe('2026-10-15T00:00:00.000Z');
+    expect(resolveDashWindow('custom', 'UTC', NOW)!.days).toBe(31);
+  });
+
+  it('a To far in the future is cut to today, not refused', () => {
+    const w = resolveDashWindow('custom', 'UTC', NOW, { from: '2026-10-01', to: '2099-01-01' })!;
+    expect(w.to.toISOString()).toBe('2026-10-15T00:00:00.000Z');
+  });
+
+  it('over 366 days is refused', () => {
+    expect(
+      resolveDashWindow('custom', 'UTC', NOW, { from: '2024-01-01', to: '2026-10-01' }),
+    ).toBeNull();
+  });
+});
+
 describe('analytics windows (TW-DASH-022)', () => {
   const q = (o: Record<string, string>) => analyticsQuerySchema.parse(o);
 

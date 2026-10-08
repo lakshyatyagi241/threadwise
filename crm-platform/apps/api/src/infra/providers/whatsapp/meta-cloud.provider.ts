@@ -12,7 +12,14 @@ import type {
   WhatsAppProvider,
 } from './whatsapp.port';
 import { OUTBOUND_SEND_GUARD, type OutboundSendGuard } from './send-guard.port';
+import { assertNotGroupPeer } from './group-peer';
 import { buildTemplateMessage } from './meta-template-payload';
+
+/** The digits of an individual's number; a group key (`g:<id>`) is refused instead of being stripped to someone else's number. */
+const individualRecipient = (to: string): string => {
+  assertNotGroupPeer(to);
+  return to.replace(/\D+/g, '');
+};
 
 /** The Graph API normally answers in well under a second; a hung connection must not hold a broadcast worker. */
 const SEND_TIMEOUT_MS = 15_000;
@@ -81,7 +88,7 @@ export class MetaCloudProvider implements WhatsAppProvider {
     return this.post(credentials, {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
-      to: params.to.replace(/\D+/g, ''),
+      to: individualRecipient(params.to),
       type: 'text',
       ...(params.replyToProviderMessageId
         ? { context: { message_id: params.replyToProviderMessageId } }
@@ -102,7 +109,7 @@ export class MetaCloudProvider implements WhatsAppProvider {
     return this.post(credentials, {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
-      to: params.to.replace(/\D+/g, ''),
+      to: individualRecipient(params.to),
       type: params.type,
       ...(params.replyToProviderMessageId
         ? { context: { message_id: params.replyToProviderMessageId } }

@@ -9,6 +9,8 @@ import { CancelRenewal } from './cancel-renewal';
 import { PLANS_PATH, barFor } from '../lib/format';
 
 const NS = 'plans-subscriptions-trials.bar';
+/** "Connect a channel" goes to the official WhatsApp connect flow (Settings > Channels > WhatsApp). Personal numbers by QR are not offered. */
+export const CONNECT_PATH = '/channels/whatsapp';
 
 /**
  * The slim bar across the top of the app (TW-PLAN-013): a free-trial countdown, the "trial ended" notice, or the renewal reminder in the last
@@ -45,21 +47,27 @@ export function TrialBar() {
           ? t('trial', { days: q.data.daysLeft ?? 1 })
           : kind === 'trialEnded'
             ? t('trialEnded')
-            : q.data.subscription
-              ? t('autoRenew', { days: q.data.daysLeft ?? 1, date })
-              : t('renew', { days: q.data.daysLeft ?? 1, date })}
+            : kind === 'grace'
+              ? t('grace', { days: q.data.daysLeft ?? 1 })
+              : q.data.subscription
+                ? t('autoRenew', { days: q.data.daysLeft ?? 1, date })
+                : t('renew', { days: q.data.daysLeft ?? 1, date })}
       </span>
       <span className="flex gap-2">
         {kind === 'trial' && (
           <Link
-            href="/devices"
+            href={CONNECT_PATH}
             className={`${btn} border border-background/40 hover:bg-background/10`}
           >
             {t('connect')}
           </Link>
         )}
         <Link href={PLANS_PATH} className={`${btn} bg-background text-foreground hover:opacity-90`}>
-          {kind === 'renew' ? (q.data.subscription ? t('managePlan') : t('renewNow')) : t('buy')}
+          {kind === 'renew' || kind === 'grace'
+            ? q.data.subscription
+              ? t('managePlan')
+              : t('renewNow')
+            : t('buy')}
         </Link>
         {kind === 'renew' && q.data.subscription && (
           <CancelRenewal

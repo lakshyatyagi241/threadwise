@@ -1,8 +1,8 @@
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ContactFilter } from '@crm/contracts';
 import type { InvalidCondition } from '@crm/contracts';
-import { loadSegmentFilter } from '../segments/segment-filter';
+import { compileAdHocRules, loadSegmentFilter } from '../segments/segment-filter';
 import type { ResolvedContactFilter } from './contact-conditions';
 
 const { contactGroups, tags, users } = schema;
@@ -94,6 +94,20 @@ export async function resolveContactFilter(
     if (!loaded) return { empty: true };
     resolved.segment = loaded.where;
     segment = { id: loaded.uuid, invalidConditions: loaded.invalid };
+  }
+
+  if (input.rules) {
+    // The Hub's own conditions narrow further: ANDed with a chosen segment's rules when both are present.
+    const adHoc = await compileAdHocRules(tx, orgId, input.rules);
+    resolved.segment = resolved.segment
+      ? sql`(${resolved.segment}) AND (${adHoc.where})`
+      : adHoc.where;
+    if (adHoc.invalid.length > 0) {
+      segment = {
+        id: segment?.id ?? '',
+        invalidConditions: [...(segment?.invalidConditions ?? []), ...adHoc.invalid],
+      };
+    }
   }
 
   return { empty: false, filter: resolved, ...(segment ? { segment } : {}) };

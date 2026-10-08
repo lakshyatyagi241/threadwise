@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { microsToMinor } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import {
+  priceInCurrency,
   priceMessageWithMargin,
   type MarginLayers,
   type MarginRule,
@@ -10,6 +11,9 @@ import {
   type RateCardRow,
 } from './wallet-rules';
 import { countryOfPhone } from './phone-country';
+import { CurrencyService } from '../platform-settings-branding-storage';
+import { BillingCurrencyService } from './billing-currency.service';
+import { MetaRateCardService } from './meta-rate-card.service';
 import { WalletSettingsService } from './wallet-settings.service';
 
 const CACHE_MS = 30_000;
@@ -25,7 +29,12 @@ export class RateCardService {
   private cache: { at: number; rows: RateCardRow[] } | null = null;
   private marginCache: { at: number; rows: Array<MarginRule & { planSlug: string }> } | null = null;
 
-  constructor(private readonly settings: WalletSettingsService) {}
+  constructor(
+    private readonly settings: WalletSettingsService,
+    private readonly cards: MetaRateCardService,
+    private readonly billing: BillingCurrencyService,
+    private readonly fx: CurrencyService,
+  ) {}
 
   invalidate(): void {
     this.cache = null;
@@ -105,37 +114,71 @@ export class RateCardService {
     return rows;
   }
 
-  /** What one message to `phone` in `category` costs the customer and Meta. */
+  /** What one message to `phone` in `category` costs the customer and Meta, in the workspace's billing currency. */
   async price(
     tx: Tx,
     orgId: number,
     phone: string | null | undefined,
     category: string | null | undefined,
-  ): Promise<Priced & { country: string | null }> {
+    currency?: string,
+  ): Promise<Priced & { country: string | null; currency: string }> {
     const country = countryOfPhone(phone);
-    return { ...(await this.priceFor(tx, orgId, country, category)), country };
+    return { ...(await this.priceFor(tx, orgId, country, category, currency)), country };
   }
 
-  /** The same, for a known country (the operator's preview and the price panel). */
+  /**
+   * The same, for a known country (the operator's preview and the price panel). `currency` is the workspace's billing currency;
+   * pass it when the caller already resolved it, otherwise it is looked up.
+   *
+   * In the platform currency the grid answers as before, with Meta's published cost behind any country whose row carries none.
+   * In another currency Meta's card for THAT currency is the cost, and a margin is applied to it; a typed or flat price (which
+   * only exists in the platform currency) is converted at the rate on file.
+   */
   async priceFor(
     tx: Tx,
     orgId: number,
     country: string | null,
     category: string | null | undefined,
-  ): Promise<Priced> {
-    const [rows, s] = await Promise.all([this.rows(tx), this.settings.effective()]);
+    currency?: string,
+  ): Promise<Priced & { currency: string }> {
+    const [rows, s, own] = await Promise.all([
+      this.rows(tx),
+      this.settings.effective(),
+      currency ? Promise.resolve(currency) : this.billing.forOrg(tx, orgId),
+    ]);
     // Margins are only read when they can matter: a fixed-price install does no extra query per message.
     const layers =
       s.pricingMode === 'margin'
         ? await this.layersFor(tx, orgId)
         : { workspace: [], plan: [], platform: [] };
-    return priceMessageWithMargin(rows, layers, {
-      country,
-      category,
-      perCountryEnabled: s.perCountryEnabled,
-      flatPriceMinor: s.flatPriceMinor,
-      pricingMode: s.pricingMode,
-    });
+    const cardCost = (await this.cards.lookup(tx, own))(country, category);
+    if (own === s.currency) {
+      return {
+        ...priceMessageWithMargin(rows, layers, {
+          country,
+          category,
+          perCountryEnabled: s.perCountryEnabled,
+          flatPriceMinor: s.flatPriceMinor,
+          pricingMode: s.pricingMode,
+          fallbackCostMicros: cardCost,
+        }),
+        currency: own,
+      };
+    }
+    const [from, to] = await Promise.all([this.fx.find(s.currency), this.fx.find(own)]);
+    return {
+      ...priceInCurrency(rows, layers, {
+        country,
+        category,
+        perCountryEnabled: s.perCountryEnabled,
+        flatPriceMinor: s.flatPriceMinor,
+        pricingMode: s.pricingMode,
+        costMicros: cardCost,
+        fromRate: Number(from?.rate ?? 1),
+        toRate: Number(to?.rate ?? 1),
+      }),
+      currency: own,
+    };
   }
 
   /** The whole-cent figure the reseller P&L reads. */

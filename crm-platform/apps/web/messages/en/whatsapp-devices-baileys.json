@@ -1,0 +1,308 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "Personal WhatsApp"
+    },
+    "area": { "title": "Unofficial WhatsApp API", "numbers": "Numbers", "warmer": "Warmer" },
+    "common": {
+      "dismiss": "Dismiss",
+      "requestId": "Request {id}",
+      "unofficial": "Unofficial",
+      "reminder": "Unofficial connection. WhatsApp can restrict this number.",
+      "readGuide": "Read the guide",
+      "close": "Close",
+      "cancel": "Cancel",
+      "back": "Back"
+    },
+    "list": {
+      "title": "Personal WhatsApp numbers",
+      "subtitle": "Link a WhatsApp number by QR code or pairing code. Chats on it appear in the shared inbox.",
+      "connect": "Connect a number",
+      "capCount": "{used} of {limit} numbers",
+      "capUnlimited": "{used, plural, one {# number} other {# numbers}}",
+      "capFull": "Your workspace can have {limit, plural, one {# number} other {# numbers}} on this engine. Delete one to connect another.",
+      "capLabel": "Numbers in use",
+      "loading": "Loading your numbers...",
+      "retry": "Try again",
+      "searchLabel": "Search by name or number",
+      "searchPlaceholder": "Search name or number",
+      "tabs": {
+        "all": "All",
+        "connected": "Connected",
+        "disconnected": "Disconnected"
+      },
+      "noMatch": "No numbers match. Clear the search or pick another tab.",
+      "empty": {
+        "title": "No personal number is linked yet",
+        "message": "Link the WhatsApp number you already use. It works like WhatsApp Web, so it is not an approved way to automate WhatsApp and WhatsApp can restrict the number. For serious or long-term use, the official WhatsApp Business route is the lower-risk one.",
+        "action": "Connect a number",
+        "noPermission": "Ask a workspace admin to connect a number."
+      },
+      "columns": {
+        "name": "Name",
+        "lastSeen": "Last seen"
+      },
+      "lastSeenNever": "Never",
+      "assignedTo": "Handled by {name}",
+      "noticeChanged": {
+        "title": "Our notice changed",
+        "body": "The risk notice for personal numbers was updated. Your connected numbers keep working. You will be asked to read it again the next time you connect one.",
+        "action": "Read the notice"
+      },
+      "action": {
+        "link": "Connect",
+        "reconnect": "Reconnect",
+        "relink": "Link again",
+        "retry": "Try again",
+        "details": "Details",
+        "disconnect": "Disconnect",
+        "rename": "Rename",
+        "delete": "Delete"
+      },
+      "sendingToggle": "Use {name} for sending",
+      "sendingOn": "Used for sending",
+      "sendingOff": "Not used for sending",
+      "done": {
+        "disconnected": "{name} was disconnected.",
+        "disconnectedNotUnlinked": "{name} was disconnected here. Also remove this device in WhatsApp, under Linked devices.",
+        "deleted": "{name} was deleted. Its chats stay in the inbox.",
+        "renamed": "Renamed to {name}.",
+        "sendingSaved": "Saved."
+      },
+      "workerDown": "The connection service is not running. Numbers cannot connect until it is back."
+    },
+    "state": {
+      "created": "Not linked yet",
+      "awaiting_qr": "Waiting for scan",
+      "awaiting_pairing_code": "Waiting for code",
+      "connecting": "Connecting",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "logged_out": "Link ended by WhatsApp",
+      "error": "Could not connect",
+      "unknown": "Unknown"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp ended the link to this number. This happens when the device is removed in WhatsApp, under Linked devices, and also when WhatsApp restricts a number. Your chats here are kept. You can link it again.",
+      "forbidden": "WhatsApp refused the connection. This can mean the number was restricted. Your chats here are kept.",
+      "qr_timeout": "The code was not scanned in time.",
+      "pair_failed": "WhatsApp could not finish linking this number.",
+      "code_failed": "The pairing code was not accepted.",
+      "mismatch": "The phone that scanned is not the number you entered. Check the number and try again.",
+      "proxy_unreachable": "The proxy did not answer. The number stays offline until it works.",
+      "session_conflict": "The same number is linked somewhere else and the two keep replacing each other. Remove the other link, then connect again.",
+      "device_limit_reached": "WhatsApp allows 4 linked devices. Remove one in WhatsApp, under Linked devices, and try again.",
+      "worker_unavailable": "The connection service is not available. Try again in a few minutes.",
+      "worker_silent": "The connection service stopped answering for this number. It reconnects by itself when the service is back.",
+      "user": "Disconnected from this workspace.",
+      "session_incomplete": "The saved session was not finished. Link the number again."
+    },
+    "notice": {
+      "title": "Before you connect",
+      "intro": "Read this. It is short and it is true.",
+      "listLabel": "Please confirm each point",
+      "notesTitle": "Good to know",
+      "version": "Notice version {version}",
+      "accept": "I accept and continue",
+      "accepting": "Saving...",
+      "mustTick": "Tick all three boxes to continue.",
+      "pageTitle": "Risk notice for personal numbers",
+      "pageIntro": "This is the notice you accept before you connect a personal WhatsApp number.",
+      "acceptedOn": "You accepted version {version} on {date}.",
+      "notAccepted": "You have not accepted the current version yet. You are asked when you connect a number.",
+      "backToList": "Back to the numbers",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "I understand this connects my WhatsApp the way WhatsApp Web does. It is not an approved way to automate WhatsApp and it goes against WhatsApp's terms. WhatsApp can restrict or permanently ban this number at any time, including for normal use, and we cannot prevent it or get the number back.",
+            "own_number_expected_contacts": "I will only connect a number I own or have the owner's permission to connect, and I can afford to lose it. I will only message people who expect to hear from me.",
+            "shared_inbox_disclosure": "I understand that from the moment it is linked, every private chat on this number (not only business chats) appears in this workspace's shared inbox for members who can read the inbox, and messages I type on my phone are copied there too."
+          },
+          "notes": {
+            "official_route_lower_risk": "The official WhatsApp Business route is the lower-risk one for serious or long-term use.",
+            "warm_up": "Warm up the number slowly and keep volumes low.",
+            "no_ban_support": "A restricted or banned number is not covered by support: we do not investigate it, restore it or refund it.",
+            "shared_addresses": "In this pilot, numbers connect from our servers' shared addresses (no proxy), so a restriction on one number can be linked to others.",
+            "disconnect_keeps_chats": "Disconnecting here removes the link and the saved session but does not delete the chats from the inbox."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Connect a number",
+      "relinkTitle": "Link {name}",
+      "stepOf": "Step {step} of {total}",
+      "continue": "Continue",
+      "creating": "Saving...",
+      "number": {
+        "title": "Which number?",
+        "name": "Name",
+        "namePlaceholder": "For example Sales line",
+        "nameHelp": "Only your team sees this name.",
+        "phone": "WhatsApp number",
+        "phoneHelp": "Type the number you will link, with its country. It must be the number of the phone that will scan or enter the code.",
+        "activate": "Use for sending after linking",
+        "activateHelp": "Campaigns, scheduled messages and flows can use this number once it is linked.",
+        "nameError": {
+          "required": "Enter a name.",
+          "short": "The name needs at least 2 characters.",
+          "long": "The name is too long (191 characters at most)."
+        },
+        "phoneError": {
+          "empty": "Enter the number.",
+          "invalid": "This number is not valid for the country chosen."
+        },
+        "openExisting": "Open the existing number"
+      },
+      "link": {
+        "title": "Link the phone",
+        "choose": "How do you want to link it?",
+        "methodLabel": "Linking method",
+        "qr": "Scan a QR code",
+        "qrHelp": "Scan with the phone that has this number.",
+        "code": "Use a pairing code",
+        "codeHelp": "Type an 8-character code on the phone. Good when you cannot scan.",
+        "numberLine": "Number: {phone}",
+        "startQr": "Show the QR code",
+        "startCode": "Get a pairing code",
+        "starting": "Starting...",
+        "needCountryCode": "Add the country code to use a pairing code.",
+        "someoneElse": "Only enter this code on the phone of the number you are connecting. Never share it with anyone else. A pairing code entered on someone else's phone links that person's whole WhatsApp account to this workspace.",
+        "qrSteps": {
+          "one": "Open WhatsApp on the phone.",
+          "two": "Go to Linked devices, then Link a device.",
+          "three": "Point the camera at this code."
+        },
+        "codeSteps": {
+          "one": "Open WhatsApp on the phone.",
+          "two": "Go to Linked devices, then Link a device, then Link with phone number instead.",
+          "three": "Type this code."
+        },
+        "qrAlt": "QR code to link the number",
+        "qrRefresh": "New code in {seconds} s",
+        "qrExpires": "Expires in {time}",
+        "codeValid": "The code is valid for about 3 minutes.",
+        "codeExpires": "Valid for {time}",
+        "codeLabel": "Pairing code",
+        "copy": "Copy code",
+        "copied": "Copied",
+        "copyFailed": "Could not copy. Select the code and copy it.",
+        "strip": {
+          "shown": "Code shown",
+          "scanned": "Scanned",
+          "ready": "Ready"
+        },
+        "stripLabel": "Progress",
+        "linking": "Linking. WhatsApp is syncing, this can take a moment.",
+        "cancelAttempt": "Stop and choose another way",
+        "reading": "Waiting for the first code...",
+        "relinkAction": "Forget the saved session and link again"
+      },
+      "result": {
+        "connectedTitle": "Connected",
+        "connectedBody": "{phone} is linked. Chats on this number now appear in the shared inbox.",
+        "warmer": "Set up warm-up",
+        "inbox": "Open the inbox",
+        "list": "Back to the numbers",
+        "timedOutTitle": "The code was not scanned in time",
+        "timedOutBody": "Nothing was linked. If the phone was offline or locked, bring it online and start again.",
+        "phoneOfflineTitle": "The phone could not be reached",
+        "phoneOfflineBody": "Check that the phone is online, then start again.",
+        "loggedOutTitle": "WhatsApp ended the link",
+        "loggedOutBody": "This happens when the device is removed in WhatsApp, under Linked devices, and also when WhatsApp restricts a number. Your chats here are kept. You can link it again.",
+        "replacedTitle": "Another session replaced this one",
+        "replacedBody": "The same number is linked somewhere else. Remove the other link, then connect again.",
+        "mismatchTitle": "That is not the number you entered",
+        "mismatchBody": "The phone that scanned is not the number you entered. Check the number and try again.",
+        "limitTitle": "The phone has too many linked devices",
+        "limitBody": "WhatsApp allows 4 linked devices. Remove one in WhatsApp, under Linked devices, and try again.",
+        "proxyTitle": "The proxy did not answer",
+        "proxyBody": "The number stays offline until the proxy works.",
+        "serviceTitle": "The connection service is not available",
+        "serviceBody": "Try again in a few minutes.",
+        "failedTitle": "The number could not be linked",
+        "failedBody": "WhatsApp did not finish linking. Nothing was linked. Try again.",
+        "tryAgain": "Try again"
+      },
+      "discard": {
+        "title": "Stop connecting?",
+        "message": "You have not finished. If you leave now, what you typed is lost and a link in progress is dropped.",
+        "stay": "Keep going",
+        "leave": "Leave"
+      }
+    },
+    "detail": {
+      "back": "All numbers",
+      "loading": "Loading the number...",
+      "notFound": "This number does not exist or was deleted.",
+      "status": "Status",
+      "lastSeen": "Last seen",
+      "linkedSince": "In this state since",
+      "number": "Number",
+      "numberLocked": "The number cannot change while a link exists. Disconnect first.",
+      "assignedTo": "Handled by",
+      "createdBy": "Added by",
+      "sending": "Use for sending",
+      "editTitle": "Edit",
+      "name": "Name",
+      "save": "Save",
+      "saving": "Saving...",
+      "saved": "Saved.",
+      "dangerTitle": "Disconnect or delete",
+      "disconnectHelp": "Unlinks the number and removes its saved session. You can link it again later.",
+      "deleteHelp": "Removes the number from this workspace. Chats stay in the inbox.",
+      "warmerLink": "Set up warm-up for this number"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "Disconnect {name}?",
+        "message": "This unlinks the number and removes its saved session. Conversations stay readable but can no longer be answered from this number until you link it again.",
+        "confirm": "Disconnect"
+      },
+      "delete": {
+        "title": "Delete {name}?",
+        "message": "This unlinks the number and removes its saved session. Conversations stay readable in the inbox but can no longer be answered from this number. This cannot be undone.",
+        "confirm": "Delete number"
+      },
+      "rename": {
+        "title": "Rename number",
+        "label": "Name",
+        "confirm": "Save"
+      },
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "FORBIDDEN": "You do not have permission to do this.",
+      "UNAUTHENTICATED": "Your session ended. Sign in again.",
+      "NOT_FOUND": "This number does not exist or was deleted.",
+      "VALIDATION_FAILED": "Some fields need attention.",
+      "ROW_VERSION_CONFLICT": "Someone changed this number. Reload and try again.",
+      "WA_UNOFFICIAL_DISABLED": "This feature is no longer enabled for your workspace.",
+      "PLAN_FEATURE_LOCKED": "Your plan does not include this feature.",
+      "PLAN_LIMIT_REACHED": "Your plan allows {limit, plural, one {# WhatsApp number} other {# WhatsApp numbers}} here. Delete one or upgrade to add another.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Your plan allows no more numbers here. Delete one or upgrade to add another.",
+      "DEVICE_ALREADY_EXISTS": "A device with that phone number already exists in this workspace.",
+      "DEVICE_PHONE_INVALID": "Add the country code to use a pairing code.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Read and accept the notice first.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Too many attempts for this number. Try again later.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Too many attempts for this number. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Someone started a connection a moment ago. Wait for it to finish or end.",
+      "DEVICE_NOT_PAIRABLE": "This number cannot be linked right now. Disconnect it first.",
+      "WA_WORKER_UNAVAILABLE": "The connection service is not available. Try again in a few minutes.",
+      "RATE_LIMITED": "Too many requests. Wait a moment.",
+      "upgrade": "See plans and upgrade",
+      "requestId": "Request {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Your workspace has reached the number of personal WhatsApp numbers allowed during the pilot. Delete one to connect another.",
+      "DEVICE_CREATE_RATE_LIMITED": "Too many numbers were added in the last hour. Try again later.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Too many numbers were added in the last hour. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} started a connection a moment ago. Wait for it to finish.",
+      "DEVICE_NO_PAIRING": "This connection attempt ended. Start again.",
+      "DEVICE_NUMBER_LOCKED": "The number cannot change while a link exists. Disconnect it first.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp did not answer in time. Try again.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "This number is already linked. Disconnect it first, then connect it again.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "This number still has a saved WhatsApp session. Link it again from scratch to forget the saved session and start over.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "A connection is already in progress for this number. Link it again from scratch to start over."
+    }
+  }
+}

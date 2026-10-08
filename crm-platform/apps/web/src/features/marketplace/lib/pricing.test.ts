@@ -15,7 +15,10 @@ import { cardCta, installGate, installationChips } from './install-state';
 import { manageView } from './manage';
 import {
   acquireFor,
+  cardAvailability,
   formatMoney,
+  needsPurchase,
+  priceChip,
   priceLine,
   pricingView,
   resumeBlocked,
@@ -436,6 +439,7 @@ describe('what the card and the app page offer for a paid app', () => {
       kind: 'subscribe',
       href: '/marketplace/app/webhook/install',
       upgradeHref: null,
+      needsPurchase: true,
     });
   });
 
@@ -470,6 +474,7 @@ describe('what the card and the app page offer for a paid app', () => {
     expect(installGate(card({ pricing: paidPricing() }), can)).toEqual({
       kind: 'subscribe',
       href: '/marketplace/app/webhook/install',
+      needsPurchase: true,
     });
     expect(installGate(card({ pricing: paidPricing({ access: 'entitled' }) }), can).kind).toBe(
       'allowed',
@@ -540,5 +545,62 @@ describe('error mapping for paid apps', () => {
     ]) {
       expect(isRetryable(mktError(problem(409, code))), code).toBe(false);
     }
+  });
+});
+
+describe('add-on availability', () => {
+  it('reads the three states from availability, and from access when an older answer has none', () => {
+    expect(cardAvailability(pricing())).toBe('open');
+    expect(cardAvailability(paidPricing())).toBe('visible');
+    expect(cardAvailability(paidPricing({ availability: 'purchased', access: 'entitled' }))).toBe(
+      'purchased',
+    );
+    expect(cardAvailability({ access: 'free' })).toBe('open');
+    expect(cardAvailability({ access: 'included' })).toBe('open');
+    expect(cardAvailability({ access: 'entitled' })).toBe('purchased');
+    expect(cardAvailability({ access: 'subscription_required' })).toBe('visible');
+    // never sent by the API; if it came it can never be installed
+    expect(cardAvailability(paidPricing({ availability: 'not_visible' }))).toBe('visible');
+  });
+
+  it('needs a purchase only while an add-on on offer is not bought and still for sale', () => {
+    expect(needsPurchase(paidPricing())).toBe(true);
+    expect(needsPurchase(paidPricing({ access: 'not_for_sale' }))).toBe(false);
+    expect(needsPurchase(paidPricing({ access: 'entitled', availability: 'purchased' }))).toBe(
+      false,
+    );
+    expect(needsPurchase(pricing())).toBe(false);
+  });
+
+  it('chips an add-on with its price, and nothing else', () => {
+    expect(priceChip(paidPricing(), 'en')).toEqual({ key: 'addOn', price: '$9' });
+    expect(priceChip(paidPricing({ amount: null, currency: null }), 'en')).toEqual({
+      key: 'addOn',
+      price: null,
+    });
+    expect(priceChip(pricing(), 'en')).toBeNull();
+    expect(
+      priceChip(paidPricing({ access: 'entitled', availability: 'purchased' }), 'en'),
+    ).toBeNull();
+  });
+
+  it('never offers Install for an add-on the workspace has not bought', () => {
+    const c = card({ pricing: paidPricing() });
+    expect(cardCta(c, { install: true })).toMatchObject({ kind: 'subscribe', needsPurchase: true });
+    expect(installGate(c, { install: true })).toMatchObject({
+      kind: 'subscribe',
+      needsPurchase: true,
+    });
+    // even if the access said otherwise, a visible add-on is not installable
+    const odd = card({
+      pricing: paidPricing({ access: 'free' as never, availability: 'visible' }),
+    });
+    expect(installGate(odd, { install: true }).kind).toBe('subscribe');
+    // purchased: install as today
+    const bought = card({
+      pricing: paidPricing({ access: 'entitled', availability: 'purchased' }),
+    });
+    expect(cardCta(bought, { install: true }).kind).toBe('install');
+    expect(installGate(bought, { install: true }).kind).toBe('allowed');
   });
 });

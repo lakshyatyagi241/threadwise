@@ -13,6 +13,7 @@ import { TypePill } from '../customer/type-pill';
 import { ErrorState, LoadingBlock } from '../state';
 import { Breadcrumb, ReadOnlyBanner, useCanWrite } from './admin-parts';
 import { AdjustDialog, resultMessageKey } from './adjust-dialog';
+import { BillingCurrencyCard } from './billing-currency-card';
 import { WorkspacePricing } from './workspace-pricing';
 
 /** One workspace's wallet: balance, mode, recent entries with who made them, and the manual adjustment. */
@@ -28,8 +29,7 @@ export function WorkspaceDetailPage({ id }: { id: string }) {
     <div className="space-y-6">
       <Breadcrumb
         items={[
-          { label: tb('wallet'), href: '/admin/wallet' },
-          { label: tb('workspacesLabel'), href: '/admin/wallet/workspaces' },
+          { label: tb('workspacesLabel'), href: '/admin/workspaces' },
           { label: q.data?.workspace.name ?? t('crumb') },
         ]}
       />
@@ -93,6 +93,7 @@ export function DetailBody({ d, canWrite }: { d: PlatformWalletDetail; canWrite:
           </span>
         </div>
       </Card>
+      <BillingCurrencyCard d={d} canWrite={canWrite} />
       <WorkspacePricing workspaceId={d.workspace.id} canWrite={canWrite} />
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('recent')}</h2>

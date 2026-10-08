@@ -69,6 +69,8 @@ export function toProvider(row: ProviderRow, env: WabaEnv, webhookPath: string):
     onboarding: row.onboarding,
     onboardingAppId,
     onboardingConfigId,
+    partnerProgram: row.builtin ? null : (row.partner_program ?? null),
+    partnerSolutionId: row.builtin ? null : (row.partner_solution_id ?? null),
     status: row.status,
     isDefault: row.is_default,
     builtin: row.builtin,

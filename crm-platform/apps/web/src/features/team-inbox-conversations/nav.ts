@@ -9,6 +9,8 @@ export const nav: NavItem[] = [
     href: '/inbox',
     order: 0,
     icon: 'inbox',
+    // The number of conversations with unread messages, live on every page (provided by `InboxNavCounts`, mounted in the app layout).
+    counter: 'inbox-unread',
     gates: { permission: 'inbox.conversation.read' },
   },
 ];

@@ -21,8 +21,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
+import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
+import {
+  LOG_REDACT_PATHS,
+  PlatformInfrastructureModule,
+  ThrottleGuard,
+} from './modules/platform-infrastructure';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
@@ -35,10 +41,12 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
+import { StoreOrdersSalesModule } from './modules/store-orders-sales';
 import { FlowRuntimeEngineModule } from './modules/flow-runtime-engine';
 import { FlowBuilderEditorModule } from './modules/flow-builder-editor';
 import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
@@ -62,17 +70,23 @@ import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
 import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
+import { WebhookFanoutModule } from './modules/webhook-fanout';
+import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
+import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
 import { WhatsAppProviderAdminModule } from './modules/whatsapp-provider-admin';
 import { ChatConversationsModule, MessageMediaAccessPolicy } from './modules/chat-conversations';
 import { TeamInboxConversationsModule } from './modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
+import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
+import { FormsBuilderModule } from './modules/forms-builder';
 import { MarketplaceModule } from './modules/marketplace';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
+import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
@@ -122,15 +136,9 @@ import { HealthModule } from './health/health.module';
               return { ...out, url: maskSecretUrl(out.url) };
             },
           },
+          // Every credential and signature header the API reads (TW-INFRA-028), not just the three that are always there.
           redact: {
-            paths: [
-              'req.headers.authorization',
-              'req.headers.cookie',
-              'req.headers["x-api-key"]',
-              'req.body.password',
-              'req.body.credentials',
-              'res.headers["set-cookie"]',
-            ],
+            paths: LOG_REDACT_PATHS,
             remove: true,
           },
           autoLogging: {
@@ -151,13 +159,16 @@ import { HealthModule } from './health/health.module';
     // Platform
     KernelModule,
     AuthModule,
+    PlatformInfrastructureModule,
     PlansModule,
     PlatformSettingsModule,
     LocalizationTranslationModule,
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
     AiKeysUsageAdminModule,
+    AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
+    WhatsappDevicesBaileysModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
     FlowBuilderEditorModule,
@@ -195,11 +206,15 @@ import { HealthModule } from './health/health.module';
     ShopifyWoocommerceModule,
     CatalogProductsModule,
     StorefrontBuilderModule,
+    StoreOrdersSalesModule,
     ChatbotWidgetModule,
     PartnerModule,
     PublicApiModule,
+    DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     TeamChatModule,
+    WebhookFanoutModule,
+    OutboundWebhooksModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,
@@ -207,7 +222,9 @@ import { HealthModule } from './health/health.module';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
     WorkspacesTeamsTenancyModule,
+    WorkspaceImpersonationModule,
     LeadsModule,
+    FormsBuilderModule,
     MarketplaceModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
@@ -216,6 +233,11 @@ import { HealthModule } from './health/health.module';
     CryptoService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // An operator acting as a workspace owner (TW-WSP-032/033): read-only sessions cannot write, nobody touches the owner's credentials.
+    // Straight after authentication, so it sees the act-as context and runs before anything that reads or writes tenant data.
+    { provide: APP_GUARD, useClass: ImpersonationGuard },
+    // The request throttle (TW-INFRA-010): once the caller is known, before any guard that reads the database.
+    { provide: APP_GUARD, useExisting: ThrottleGuard },
     // After authentication, before permissions: a gated account (suspended,
     // unverified under 'block', MFA or password change required) is refused
     // here with a code the web app maps to the right lock screen.

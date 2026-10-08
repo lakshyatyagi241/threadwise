@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { FLOW_TYPES, MESSAGING_FLOW_TYPES, flbIsFlowType, type FlowType } from './node-catalogue';
 import { FLB_MAX_FLOW_EDGES, FLB_MAX_FLOW_NODES } from './graph';
+import { flowGetaSyncSchema } from './geta-publish';
 
 /**
  * Flows API shapes (TW-FLB-001..029). Identifiers are uuids; the graph is Reference's `{ flowNodes, flowEdges, vars }`.
@@ -157,13 +158,27 @@ export const flowsOverviewSchema = z.object({
   categoryCounts: z.record(z.number().int()),
   featured: flowFeaturedSchema.nullable(),
   templates: z.array(flowTemplateCardSchema),
+  /** The builder this workspace uses: its own override, else the platform default (Admin > Platform settings > Flow builder). */
+  builderMode: z.enum(['simple', 'advanced']).default('advanced'),
+  /** The platform default, shown beside the workspace's override. */
+  platformBuilderMode: z.enum(['simple', 'advanced']).default('advanced'),
+  /** The workspace's own choice; null follows the platform default. */
+  workspaceBuilderMode: z.enum(['simple', 'advanced']).nullable().default(null),
 });
 export type FlowsOverview = z.infer<typeof flowsOverviewSchema>;
+
+/** Flows > Builder: a workspace picks its builder, or `inherit` to follow the platform default again. */
+export const setBuilderModeRequestSchema = z.object({
+  mode: z.enum(['inherit', 'simple', 'advanced']),
+});
+export type SetBuilderModeRequest = z.infer<typeof setBuilderModeRequestSchema>;
 
 // --- detail / save -----------------------------------------------------------------------------------------------
 
 export const flowDetailSchema = flowSummarySchema.extend({
   graph: flowGraphSchema,
+  /** The Geta console push of the last publish (read and publish answer it; the other writes leave it out). */
+  getaSync: flowGetaSyncSchema.optional(),
 });
 export type FlowDetail = z.infer<typeof flowDetailSchema>;
 
@@ -383,7 +398,7 @@ export const flbTestWebhookResponseSchema = z.union([
 ]);
 export type FlbTestWebhookResponse = z.infer<typeof flbTestWebhookResponseSchema>;
 
-export const FLB_AI_PROVIDERS = ['openai', 'anthropic', 'gemini'] as const;
+export const FLB_AI_PROVIDERS = ['openai', 'anthropic', 'gemini', 'openrouter'] as const;
 export const flbAiGenerateRequestSchema = z.object({
   prompt: z.string().trim().min(1).max(2000),
   model: z.string().min(1).max(120),

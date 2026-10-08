@@ -115,6 +115,12 @@ export function CampaignCard({
   const look = LOOK[c.status];
   const Icon = STATUS_ICON[c.status];
   const n = c.counts;
+  /** A draft made by the "Create broadcast" wizard resumes there, not in the classic builder (which cannot show it). */
+  const wizardDraft = c.wizard && c.status === 'draft';
+  const editHref = wizardDraft ? `/campaigns/wizard/${c.id}` : `/campaigns/${c.id}/edit`;
+  const titleHref = wizardDraft ? editHref : `/campaigns/${c.id}`;
+  /** A launched wizard broadcast is not edited in the classic builder either. */
+  const editable = c.wizard ? wizardDraft : can.edit(c.status);
   const metric = (label: string, value: number, tone?: string) => (
     <div className="rounded-[10px] border border-border bg-background px-3 py-2">
       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
@@ -147,10 +153,7 @@ export function CampaignCard({
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href={`/campaigns/${c.id}`}
-              className="truncate text-[15px] font-semibold hover:underline"
-            >
+            <Link href={titleHref} className="truncate text-[15px] font-semibold hover:underline">
               {c.name}
             </Link>
             <span className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
@@ -214,9 +217,9 @@ export function CampaignCard({
               <DownloadIcon className="size-3.5" />
             </button>
           )}
-          {canUpdate && can.edit(c.status) && (
+          {canUpdate && editable && (
             <Link
-              href={`/campaigns/${c.id}/edit`}
+              href={editHref}
               className={cn(ROUND, 'text-foreground')}
               title={t('edit')}
               aria-label={t('edit')}

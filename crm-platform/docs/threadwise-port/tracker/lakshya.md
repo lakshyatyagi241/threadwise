@@ -83,9 +83,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WSP-020 | frontend-done |  | members/teams slice: API + web, e2e + unit; see parity/workspaces-teams-tenancy.md |
 | TW-WSP-021 | wontfix |  | invite token acceptance replaces login-time activation (port note) |
 | TW-WSP-022 | frontend-done |  | teams CRUD done; device scoping picker blocked until channels (devices) domain exists |
-| TW-WSP-023 | todo |  |  |
+| TW-WSP-023 | todo |  | Backend built (GET /v2/platform/workspaces, e2e green); web screen pending |
 | TW-WSP-024 | todo |  |  |
-| TW-WSP-025 | todo |  |  |
+| TW-WSP-025 | todo |  | Backend built (GET /v2/platform/workspaces/:id, suspend, unsuspend); web screen pending |
 | TW-WSP-026 | todo |  |  |
 | TW-WSP-027 | todo |  |  |
 | TW-WSP-028 | todo |  |  |
@@ -297,6 +297,73 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-I18N-037 | todo |  |  |
 | TW-I18N-038 | todo |  |  |
 | TW-I18N-039 | todo |  |  |
+
+## platform-infrastructure (infra)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-INFRA-001 | todo |  |  |
+| TW-INFRA-002 | todo |  |  |
+| TW-INFRA-003 | todo |  |  |
+| TW-INFRA-004 | todo |  |  |
+| TW-INFRA-005 | todo |  |  |
+| TW-INFRA-006 | todo |  |  |
+| TW-INFRA-007 | todo |  |  |
+| TW-INFRA-008 | todo |  |  |
+| TW-INFRA-009 | todo |  |  |
+| TW-INFRA-010 | todo |  |  |
+| TW-INFRA-011 | todo |  |  |
+| TW-INFRA-012 | todo |  |  |
+| TW-INFRA-013 | todo |  |  |
+| TW-INFRA-014 | todo |  |  |
+| TW-INFRA-015 | todo |  |  |
+| TW-INFRA-016 | todo |  |  |
+| TW-INFRA-017 | todo |  |  |
+| TW-INFRA-018 | todo |  |  |
+| TW-INFRA-019 | todo |  |  |
+| TW-INFRA-020 | todo |  |  |
+| TW-INFRA-021 | todo |  |  |
+| TW-INFRA-022 | todo |  |  |
+| TW-INFRA-023 | todo |  |  |
+| TW-INFRA-024 | todo |  |  |
+| TW-INFRA-025 | todo |  |  |
+| TW-INFRA-026 | todo |  |  |
+| TW-INFRA-027 | todo |  |  |
+| TW-INFRA-028 | todo |  |  |
+| TW-INFRA-029 | todo |  |  |
+| TW-INFRA-030 | todo |  |  |
+| TW-INFRA-031 | todo |  |  |
+| TW-INFRA-032 | todo |  |  |
+| TW-INFRA-033 | todo |  |  |
+| TW-INFRA-034 | todo |  |  |
+| TW-INFRA-035 | todo |  |  |
+| TW-INFRA-036 | todo |  |  |
+| TW-INFRA-037 | todo |  |  |
+| TW-INFRA-038 | todo |  |  |
+| TW-INFRA-039 | todo |  |  |
+| TW-INFRA-040 | todo |  |  |
+| TW-INFRA-041 | todo |  |  |
+| TW-INFRA-042 | todo |  |  |
+| TW-INFRA-043 | todo |  |  |
+| TW-INFRA-044 | todo |  |  |
+| TW-INFRA-045 | todo |  |  |
+| TW-INFRA-046 | todo |  |  |
+| TW-INFRA-047 | todo |  |  |
+| TW-INFRA-048 | todo |  |  |
+| TW-INFRA-049 | todo |  |  |
+| TW-INFRA-050 | todo |  |  |
+| TW-INFRA-051 | todo |  |  |
+| TW-INFRA-052 | todo |  |  |
+| TW-INFRA-053 | todo |  |  |
+| TW-INFRA-054 | todo |  |  |
+| TW-INFRA-055 | todo |  |  |
+| TW-INFRA-056 | todo |  |  |
+| TW-INFRA-057 | todo |  |  |
+| TW-INFRA-058 | todo |  |  |
+| TW-INFRA-059 | todo |  |  |
+| TW-INFRA-060 | todo |  |  |
+| TW-INFRA-061 | todo |  |  |
+| TW-INFRA-062 | todo |  |  |
 
 ## install-update-licensing (inst)
 
@@ -510,44 +577,134 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-CPN-001 | todo |  |  |
-| TW-CPN-002 | todo |  |  |
-| TW-CPN-003 | todo |  |  |
-| TW-CPN-004 | todo |  |  |
-| TW-CPN-005 | todo |  |  |
-| TW-CPN-006 | todo |  |  |
-| TW-CPN-007 | todo |  |  |
-| TW-CPN-008 | todo |  |  |
-| TW-CPN-009 | todo |  |  |
-| TW-CPN-010 | todo |  |  |
-| TW-CPN-011 | todo |  |  |
-| TW-CPN-012 | todo |  |  |
-| TW-CPN-013 | todo |  |  |
-| TW-CPN-014 | todo |  |  |
-| TW-CPN-015 | todo |  |  |
-| TW-CPN-016 | todo |  |  |
-| TW-CPN-017 | todo |  |  |
-| TW-CPN-018 | todo |  |  |
-| TW-CPN-019 | todo |  |  |
-| TW-CPN-020 | todo |  |  |
-| TW-CPN-021 | todo |  |  |
-| TW-CPN-022 | todo |  |  |
-| TW-CPN-023 | todo |  |  |
-| TW-CPN-024 | todo |  |  |
-| TW-CPN-025 | todo |  |  |
-| TW-CPN-026 | todo |  |  |
-| TW-CPN-027 | todo |  |  |
-| TW-CPN-028 | todo |  |  |
-| TW-CPN-029 | todo |  |  |
-| TW-CPN-030 | todo |  |  |
-| TW-CPN-031 | todo |  |  |
-| TW-CPN-032 | todo |  |  |
-| TW-CPN-033 | todo |  |  |
-| TW-CPN-034 | todo |  |  |
-| TW-CPN-035 | todo |  |  |
-| TW-CPN-036 | todo |  |  |
-| TW-CPN-037 | todo |  |  |
-| TW-CPN-038 | todo |  |  |
+| TW-CPN-001 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-002 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-003 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-004 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-005 | verified |  | twin run 2026-10-06: coupons clean after one fix round |
+| TW-CPN-006 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| TW-CPN-007 | backend-done |  | CouponCheckoutService.quote tested; Apply widget lives in checkout (CHK) |
+| TW-CPN-008 | done |  | cpn-admin e2e + unit tests; admin web pages |
+| TW-CPN-009 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-010 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-011 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-012 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-013 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-014 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-015 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-016 | done |  | moved to wallet-message-billing (TW-WALLET-019); not re-proved here |
+| TW-CPN-017 | wontfix |  | not ported: unauthenticated self-confirm credit grant is a Reference defect |
+| TW-CPN-018 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-019 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-020 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-021 | verified |  | twin run 2026-10-06: currencies clean after one fix round |
+| TW-CPN-022 | done |  | twin run: non-default delete compared; delete/switch-off of the default compared from the inventory only (Reference cannot restore it) |
+| TW-CPN-023 | done |  | fetch-rates control compared; live rate fetch not run (public provider call) |
+| TW-CPN-024 | done |  | twin ran ours only; Reference default setting not touched (shared instance) |
+| TW-CPN-025 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-026 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-027 | todo |  | resolution lives in platform-settings-branding-storage; no CPN test proves it |
+| TW-CPN-028 | done |  | cpn-admin e2e + currency-engine unit tests; admin web page |
+| TW-CPN-029 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-030 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-031 | verified |  | twin run 2026-10-06: web form, cookie and field paths clean; mobile refer_code belongs to MOB |
+| TW-CPN-032 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-033 | done |  | reward on a paid order not compared live (no payment in a parity run); api e2e |
+| TW-CPN-034 | done |  | wallet rules save audited; 100000 cap added; e2e |
+| TW-CPN-035 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-036 | verified |  | twin run 2026-10-06: referral/affiliate clean after one fix round (reward on paid order not compared live) |
+| TW-CPN-037 | verified |  | twin run 2026-10-06: account tab merged into /account/affiliate, clean; reward on paid order not compared live |
+| TW-CPN-038 | wontfix |  | docs-only, not ported; no commission copy shown |
+
+## developer-rest-api-v1 (api)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-API-001 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| TW-API-002 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| TW-API-003 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| TW-API-004 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| TW-API-005 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| TW-API-006 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| TW-API-007 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| TW-API-008 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| TW-API-009 | backend-done |  | bearer guard, shared rate limit, v1 envelope, scopes, plan gate; e2e auth.e2e.spec.ts; no screen of its own |
+| TW-API-010 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
+| TW-API-011 | done |  | consumed from AUTH/PLAN (security policy + plan limit); covered by auth.e2e.spec.ts rate-limit test |
+| TW-API-020 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-021 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-022 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-023 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-024 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-025 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-026 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-027 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-028 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-029 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-030 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-031 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-032 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| TW-API-033 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-034 | backend-done |  | PARTIAL: no location pin, no carousel; saved as draft (not approved); see parity file |
+| TW-API-035 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-036 | backend-done |  | PARTIAL: body variables only; header, media header, buttons and daily cap not carried by the chat facade; answers 202 queued |
+| TW-API-037 | backend-done |  | PARTIAL: upload guard runs; file not stored or used until the chat facade carries template components |
+| TW-API-038 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-039 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-040 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-041 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-042 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-043 | blocked |  | blocked: auto-reply-keywords has only a schema (no service, contracts or permission keys); Reference create/update itself is broken (missing helper) |
+| TW-API-044 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-045 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-046 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-047 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-048 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-049 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-050 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-051 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-052 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-053 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-054 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-080 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-081 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-082 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-083 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-084 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-085 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-086 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-087 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-088 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-089 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-090 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-091 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-092 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-093 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-094 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-095 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-110 | backend-done |  | text and media done; PARTIAL: location pin recorded as text (chat facade has no location kind); answers sent or pending after waiting up to 3 s for the worker |
+| TW-API-111 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-112 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-113 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-114 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-115 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-116 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-117 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-118 | backend-done |  | PARTIAL: WhatsApp senders; Twilio-engine sends blocked (no Twilio channel kind) |
+| TW-API-119 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-120 | backend-done |  | built under /api/v1, thin controller over the dashboard service; e2e per acceptance criterion |
+| TW-API-140 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-141 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-142 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-143 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-144 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-145 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-146 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-147 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-148 | blocked |  | blocked: integrations-hubspot-slack-trello-google-webhooks (webhooks/webhook_deliveries tables only; no CRUD, event emit or delivery) |
+| TW-API-149 | done |  | public page + /docs redirects; docs twin: no defect vs Reference (122 same, 8 intended); webhook events card is a coming-soon note |
+| TW-API-150 | backend-done |  | GET /docs/api.json generated from controllers, brand token substitution; e2e auth.e2e.spec.ts |
+| TW-API-151 | frontend-done |  | console API (keys, plan cap, audit/outbox) + Developers page; browser run recorded in parity/developer-rest-api-v1.md |
 
 ## addons-extension-registry (add)
 

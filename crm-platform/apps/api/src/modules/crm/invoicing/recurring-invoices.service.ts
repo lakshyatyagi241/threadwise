@@ -24,6 +24,7 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { resolveTimezone, todayIn } from '../deals/deal-calendar';
 import { priceInvoice } from './invoice-content';
 import { InvoiceSettingsService } from './invoice-settings.service';
@@ -94,6 +95,7 @@ export class RecurringInvoicesService {
     private readonly settings: InvoiceSettingsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly planUsage: PlanUsageService,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------------------
@@ -175,6 +177,8 @@ export class RecurringInvoicesService {
     scope: RecordScope,
   ): Promise<RecurringInvoiceResponse> {
     const ctx = RequestContextStore.require();
+    // The plan's `recurring_invoices` cap (live count of schedules).
+    await this.planUsage.assertCanAdd(ctx.orgId, 'recurring_invoices');
     return this.db.tx(async (tx) => {
       const profile = await this.settings.load(tx, ctx.orgId);
       const today = todayIn(resolveTimezone(profile.timezone));

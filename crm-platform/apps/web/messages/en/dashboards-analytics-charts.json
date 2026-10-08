@@ -27,18 +27,31 @@
         "24h": "Last 24 hours",
         "7d": "Last 7 days",
         "30d": "Last 30 days",
-        "qtd": "Quarter to date"
-      }
+        "qtd": "Quarter to date",
+        "custom": "Custom range"
+      },
+      "from": "From date",
+      "to": "To date",
+      "apply": "Apply"
     },
     "funnel": {
+      "listLabel": "Contacts funnel",
+      "stageLabel": "{stage}: {n} contacts, {pct}% of contacts messaged",
       "stage": {
-        "sent": "Outbound messages",
+        "messaged": "Contacts messaged",
         "delivered": "Delivered",
-        "replied": "Inbound replies",
-        "engaged": "Unique repliers"
+        "replied": "Replied",
+        "goalCompleted": "Goal completed"
       },
-      "drop": "−{n}",
-      "endToEnd": "End-to-end conversion"
+      "goalCompletedHint": "Contacts whose flow finished",
+      "activity": {
+        "title": "Conversation activity",
+        "summary": "{inbound, plural, one {# inbound message} other {# inbound messages}} · {contacts, plural, one {# responding contact} other {# responding contacts}} · {perContact} replies/responding contact"
+      },
+      "comparison": {
+        "title": "Compared with previous period",
+        "replyRate": "Reply rate"
+      }
     },
     "error": {
       "locked": "Your plan does not include analytics.",
@@ -64,7 +77,7 @@
         "replyRate": "{rate}% reply rate",
         "readMini": {
           "sent": "Sent",
-          "delivered": "Deliv",
+          "delivered": "Delivered",
           "read": "Read"
         }
       },
@@ -74,7 +87,8 @@
           "24h": "Outbound, delivered and failed, hourly, last 24 hours",
           "7d": "Outbound, delivered and failed, daily, last 7 days",
           "30d": "Outbound, delivered and failed, daily, last 30 days",
-          "qtd": "Outbound, delivered and failed, daily, quarter to date"
+          "qtd": "Outbound, delivered and failed, daily, quarter to date",
+          "custom": "Outbound, delivered and failed, daily, custom range"
         },
         "peak": "Peak hour {when} · {n} messages",
         "sent": "Sent",
@@ -185,7 +199,7 @@
           "delivered": "Delivered",
           "read": "Read",
           "readRate": "Read rate",
-          "performance": "Performance",
+          "performance": "Delivery rate",
           "status": "Status"
         },
         "status": {
@@ -246,6 +260,7 @@
       },
       "quickActions": {
         "title": "Quick actions",
+        "soon": "Soon",
         "broadcast": {
           "label": "New broadcast",
           "hint": "to a contact group"
@@ -281,7 +296,8 @@
         "notConnected": "not connected",
         "connect": "Connect",
         "connectedLabel": "Connected"
-      }
+      },
+      "sublineOfficial": "{date} - {range} showing {sent} outbound, {rate}% deliverability."
     },
     "analytics": {
       "title": "Analytics",
@@ -324,7 +340,11 @@
       },
       "types": {
         "title": "Message types",
-        "subtitle": "Outbound messages by kind",
+        "subtitle": "Outbound distribution",
+        "byType": "Sent and delivered by message type",
+        "kind": "Type",
+        "sent": "Sent",
+        "delivered": "Delivered",
         "text": "Text",
         "template": "Template",
         "media": "Media",

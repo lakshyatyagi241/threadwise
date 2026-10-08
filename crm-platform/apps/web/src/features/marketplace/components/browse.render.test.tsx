@@ -3,7 +3,7 @@ import { NO_FILTERS, listQuery, parseBrowseParams } from '../lib/browse';
 import { ApiError } from '@/lib/api/errors';
 import { mktKeys } from '../api';
 import { READ, onePage, renderMarket } from '../render-test-utils';
-import { ID, card } from '../test-fixtures';
+import { ID, card, paidPricing } from '../test-fixtures';
 
 const nav = vi.hoisted(() => ({ search: '' }));
 vi.mock('next/navigation', () => ({
@@ -288,16 +288,48 @@ describe('browse page', () => {
     );
   });
 
-  it('draws the installed filter as a switch and the sort as a labelled select', () => {
+  it('draws the availability chips with the active one pressed, and the sort as a labelled select', () => {
     nav.search = 'installed=true';
     const filters = parseBrowseParams(new URLSearchParams(nav.search));
     const html = renderMarket(<BrowsePage kind="integration" />, {
       seed: seedBrowse([card({ install: installState() })], filters),
     });
-    expect(html).toContain('role="switch"');
-    expect(html).toContain('aria-checked="true"');
+    expect(html).toContain('data-testid="mkt-availability-all"');
+    expect(html).toContain('Available add-ons');
+    expect(html).toMatch(/aria-pressed="true"[^>]*data-testid="mkt-availability-installed"/);
     expect(html).toContain('for="mkt-sort"');
     expect(html).toContain('Most installed');
+    nav.search = '';
+  });
+
+  for (const locale of LOCALES) {
+    it(`Available add-ons keeps only the cards on offer, equal height, in ${locale}`, () => {
+      nav.search = 'addons=true';
+      const filters = parseBrowseParams(new URLSearchParams(nav.search));
+      const cards = [
+        card(),
+        card({ id: ID(7), slug: 'crm-sync', name: 'CRM Sync', pricing: paidPricing() }),
+      ];
+      const html = renderMarket(<BrowsePage kind="integration" />, {
+        locale,
+        seed: seedBrowse(cards, filters),
+      });
+      expect(html).toContain('data-testid="app-card-crm-sync"');
+      expect(html).not.toContain('data-testid="app-card-webhook"');
+      expect(html).toContain('data-testid="needs-purchase"');
+      expect(html).toMatch(/aria-pressed="true"[^>]*data-testid="mkt-availability-addons"/);
+      expect(html).toContain('h-full');
+      nav.search = '';
+    });
+  }
+
+  it('says there are no add-ons when none is loaded and there is no more', () => {
+    nav.search = 'addons=true';
+    const filters = parseBrowseParams(new URLSearchParams(nav.search));
+    const html = renderMarket(<BrowsePage kind="integration" />, {
+      seed: seedBrowse([card()], filters),
+    });
+    expect(html).toContain('No add-ons to buy here');
     nav.search = '';
   });
 });

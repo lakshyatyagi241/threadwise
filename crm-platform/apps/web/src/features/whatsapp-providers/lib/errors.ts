@@ -61,6 +61,15 @@ export function wapError(err: unknown): WapError {
       return { kind: 'general', key: 'builtin', requestId };
     case ERROR_CODES.WAP_SWITCH_NOTHING_TO_DO:
       return { kind: 'general', key: 'nothingToDo', requestId };
+    case ERROR_CODES.WAP_PARTNER_NOT_CONFIGURED:
+      return { kind: 'general', key: 'partnerNotConfigured', requestId };
+    case ERROR_CODES.WAP_PARTNER_REFUSED:
+      return {
+        kind: 'general',
+        key: err.message ? 'partnerRefused' : 'partnerRefusedPlain',
+        values: { message: err.message },
+        requestId,
+      };
     case ERROR_CODES.PROVIDER_UNAVAILABLE:
       return { kind: 'general', key: 'unavailable', requestId };
     case ERROR_CODES.NOT_FOUND:
@@ -104,6 +113,9 @@ export const WAP_ERROR_KEYS = [
   'isDefault',
   'builtin',
   'nothingToDo',
+  'partnerNotConfigured',
+  'partnerRefused',
+  'partnerRefusedPlain',
   'unavailable',
   'notFound',
   'tooManyNumbers',

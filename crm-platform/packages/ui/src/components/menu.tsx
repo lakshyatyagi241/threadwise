@@ -26,6 +26,11 @@ export interface MenuProps {
   disabled?: boolean;
   /** Which edge of the trigger the panel lines up with (logical, so it flips in RTL). */
   align?: 'start' | 'end';
+  /**
+   * `fixed`: the panel is positioned against the viewport instead of the trigger's box, so it is not clipped by a scrolling
+   * ancestor (a table inside `overflow-x-auto`). It flips above the trigger when there is no room below and closes on scroll or resize.
+   */
+  placement?: 'anchored' | 'fixed';
   /** Extra classes for the trigger button (it already looks like a secondary button). */
   triggerClassName?: string;
   triggerProps?: Omit<
@@ -48,6 +53,7 @@ export function Menu({
   trigger,
   disabled,
   align = 'start',
+  placement = 'anchored',
   triggerClassName,
   triggerProps,
   className,
@@ -59,6 +65,12 @@ export function Menu({
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const id = useId();
+  const [fixedAt, setFixedAt] = useState<{
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  } | null>(null);
 
   const setOpen = useCallback(
     (next: boolean) => {
@@ -75,13 +87,38 @@ export function Menu({
       if (root.current && !root.current.contains(e.target as Node)) close();
     };
     document.addEventListener('pointerdown', onPress);
+    const onMove = placement === 'fixed' ? close : undefined;
+    if (onMove) {
+      window.addEventListener('scroll', onMove, true);
+      window.addEventListener('resize', onMove);
+    }
     // Focus the checked item, else the first one.
     const first =
       panel.current?.querySelector<HTMLElement>(`${ITEM}[aria-checked="true"]`) ??
       panel.current?.querySelector<HTMLElement>(ITEM);
     first?.focus();
-    return () => document.removeEventListener('pointerdown', onPress);
-  }, [open, close]);
+    return () => {
+      document.removeEventListener('pointerdown', onPress);
+      if (onMove) {
+        window.removeEventListener('scroll', onMove, true);
+        window.removeEventListener('resize', onMove);
+      }
+    };
+  }, [open, close, placement, align]);
+
+  /** Where the `fixed` panel goes, measured from the trigger just before it opens (never in an effect). */
+  const measure = () => {
+    if (placement !== 'fixed' || !button.current) return;
+    const r = button.current.getBoundingClientRect();
+    const below = window.innerHeight - r.bottom;
+    const endEdge = (align === 'end') !== (getComputedStyle(button.current).direction === 'rtl');
+    setFixedAt({
+      ...(below < 260 && r.top > below
+        ? { bottom: window.innerHeight - r.top + 4 }
+        : { top: r.bottom + 4 }),
+      ...(endEdge ? { right: window.innerWidth - r.right } : { left: r.left }),
+    });
+  };
 
   const onPanelKey = (e: ReactKeyboardEvent) => {
     const items = [...(panel.current?.querySelectorAll<HTMLElement>(ITEM) ?? [])];
@@ -111,10 +148,14 @@ export function Menu({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? id : undefined}
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          if (!open) measure();
+          setOpen(!open);
+        }}
         onKeyDown={(e) => {
           if (e.key === 'ArrowDown' && !open) {
             e.preventDefault();
+            measure();
             setOpen(true);
           }
         }}
@@ -135,9 +176,12 @@ export function Menu({
           role="menu"
           aria-label={label}
           onKeyDown={onPanelKey}
+          style={placement === 'fixed' ? (fixedAt ?? { visibility: 'hidden' }) : undefined}
           className={cn(
-            'absolute top-full z-40 mt-1 max-h-[min(28rem,70vh)] w-max min-w-full max-w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-border bg-background p-1 text-start shadow-lg',
-            align === 'end' ? 'end-0' : 'start-0',
+            'z-40 max-h-[min(28rem,70vh)] w-max max-w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-border bg-background p-1 text-start shadow-lg',
+            placement === 'fixed'
+              ? 'fixed min-w-48'
+              : cn('absolute top-full mt-1 min-w-full', align === 'end' ? 'end-0' : 'start-0'),
             className,
           )}
         >

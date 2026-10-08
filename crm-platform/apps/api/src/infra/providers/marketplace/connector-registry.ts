@@ -36,6 +36,8 @@ export class ConnectorRegistry {
   }
 
   isImplemented(kind: ConnectorKind): boolean {
+    // A client has nothing to run on our side (no deliveries, no polling), so it needs no connector class and can always be published.
+    if (kind === 'client') return true;
     return this.byKind.get(kind)?.implemented === true;
   }
 }

@@ -16,6 +16,8 @@ export const WALLET_ERROR_CODES = {
   WALLET_IMPORT_FAILED: 'WALLET_IMPORT_FAILED',
   /** Neither the live Meta source nor the bundled card could be read. */
   WALLET_SYNC_FAILED: 'WALLET_SYNC_FAILED',
+  /** A workspace cannot be billed in that currency: Meta's rate card for it has not been imported. */
+  WALLET_CURRENCY_UNSUPPORTED: 'WALLET_CURRENCY_UNSUPPORTED',
   /** A credit package slug or currency that cannot be used. */
   WALLET_PACKAGE_INVALID: 'WALLET_PACKAGE_INVALID',
 } as const;

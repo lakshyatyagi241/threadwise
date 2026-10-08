@@ -12,6 +12,10 @@
     "punya": {
       "name": "Punya",
       "aliases": []
+    },
+    "shubham": {
+      "name": "Shubham",
+      "aliases": ["shubbhampuranik"]
     }
   },
   "clusters": {
@@ -92,7 +96,7 @@
       "cluster": "platform",
       "days": 130,
       "wave": 1,
-      "inventory": "pending",
+      "inventory": "written",
       "routeBase": "infra"
     },
     {
@@ -180,6 +184,7 @@
       "id": "chrome-extension-sheets-addon",
       "code": "ext",
       "cluster": "platform",
+      "owner": "shubham",
       "days": 70,
       "wave": 3,
       "inventory": "pending",

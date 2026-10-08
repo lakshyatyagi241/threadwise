@@ -1,17 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import {
-  Suspense,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from 'react';
-import { railTheme, type ShellConfigResponse } from '@crm/contracts';
+import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { ConnectDeviceSheet } from '@/features/admin-console-shell/connect-device/connect-device-sheet';
@@ -20,21 +10,14 @@ import { InboxBell } from '@/features/admin-console-shell/inbox-bell/inbox-bell'
 import { QuickAccessDrawer } from '@/features/admin-console-shell/quick-access/quick-access-drawer';
 import { FlashHost } from '@/features/admin-console-shell/flash/flash-host';
 import { GuidedTour } from '@/features/admin-console-shell/tour/guided-tour';
+import { PageHelpTip } from '@/features/help-center';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
 import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
-import { CommandPalette } from './command-palette';
 import { NavDrawer, NavRail } from './nav-rail';
 import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
-import { ShellDataProvider } from './shell-data';
-import { useChromeHidden } from './shell-chrome';
 import { TopBar, type WalletChipData } from './top-bar';
-import { TopNav } from './top-nav';
-import { TopStrip, type JumpEntry } from './top-strip';
-import { activeBarKey, resolveTopBar } from './topbar-model';
 import type { ShellUser } from './user-menu';
-
-export const NAV_PINNED_KEY = 'shell:nav:pinned';
 
 interface Props {
   user: ShellUser;
@@ -42,13 +25,6 @@ interface Props {
   /** The Settings area's tiles after the gates (see features/_registry/settings-resolve.ts). */
   settings: ResolvedSettingsTile[];
   theme: 'light' | 'dark';
-  /**
-   * What the platform admin chose for every customer: top bar or sidebar, the rail colours, the bar's entries and whether the
-   * tour runs. Absent (a test, an isolated render) means the sidebar shell with no extras.
-   */
-  shell?: ShellConfigResponse;
-  /** Plan and role for the account menu's chip. */
-  profile?: { plan: string; role: string };
   /** Workspace switcher and similar header content owned by a domain. */
   headerStart?: ReactNode;
   /** Card pinned under the menu (the workspace switcher). It reads `useNavCollapsed()` to shrink with the rail. */
@@ -69,25 +45,15 @@ interface Props {
 /** The screen the top bar's bell points at, found in the menu by id (it stays disabled until the screen exists). */
 const BELL_ID = 'notifications';
 
-const ACCOUNT_JUMPS = [
-  { key: 'account', href: '/account' },
-  { key: 'wallet', href: '/billing/wallet' },
-  { key: 'notifications', href: '/notifications' },
-] as const;
-
 /**
- * The signed-in frame. Two modes, chosen platform-wide by an admin (TW-ASHELL-011): the classic top bar with a More page
- * (Reference's default), or a left rail with every page grouped (a slim icon rail, a labelled panel when pinned open, a drawer
- * on phones) under a slim strip. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
- * A page can hide all chrome (`<HideShellChrome />`) for a full-screen canvas.
+ * The signed-in frame: a dark navigation column (a slim icon rail with a panel per group, a drawer on
+ * phones) beside a top bar and the page. The menu comes entirely from the resolved registry; nothing here names a domain's screens.
  */
 export function AppShell({
   user,
   nav,
   settings,
   theme,
-  shell,
-  profile,
   headerStart,
   navFooter,
   banners,
@@ -98,16 +64,14 @@ export function AppShell({
   children,
 }: Props) {
   const pathname = usePathname();
-  const tNav = useTranslations();
-  const tStrip = useTranslations('admin-console-shell.strip');
   const [drawer, setDrawer] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
-  const chromeHidden = useChromeHidden();
 
-  const mode = shell?.mode ?? 'sidebar';
-  const sections = useMemo(() => toSections(menuItems(nav)), [nav]);
+  const drawn = useMemo(() => menuItems(nav, settings), [nav, settings]);
+  const sections = useMemo(() => toSections(drawn), [drawn]);
   const help = useMemo(() => helpItems(nav), [nav]);
-  const activeId = activeNavId(nav, settings, pathname);
+  // Over what is drawn: a screen the sidebar does not list lights up the entry that covers it (/store/orders lights Store).
+  const activeId = activeNavId(drawn, settings, pathname);
   const closeDrawer = useCallback(() => setDrawer(false), []);
 
   const bell = nav.find((i) => i.id === BELL_ID);
@@ -256,6 +220,7 @@ export function AppShell({
               notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
               notificationCount={notificationCount}
               bell={liveBell}
+              pageHelp={<PageHelpTip />}
               pageSettings={<PageSettingsShortcut tiles={settings} />}
               settingsHref={settingsLink?.href}
               helpItems={help}

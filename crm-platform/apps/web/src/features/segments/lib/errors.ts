@@ -11,6 +11,8 @@ export type SegmentErrorKind =
   | 'notFound'
   | 'nameTaken'
   | 'rulesInvalid'
+  | 'shareEmpty'
+  | 'shareInvalid'
   | 'rateLimited'
   | 'planLimit'
   | 'unavailable'
@@ -37,6 +39,11 @@ export function errorKind(error: unknown): SegmentErrorKind {
       return 'nameTaken';
     case ERROR_CODES.SEG_RULES_INVALID:
       return 'rulesInvalid';
+    case ERROR_CODES.SEG_SHARE_EMPTY:
+      return 'shareEmpty';
+    case ERROR_CODES.SEG_SHARE_USER_NOT_FOUND:
+    case ERROR_CODES.SEG_SHARE_TEAM_NOT_FOUND:
+      return 'shareInvalid';
   }
   if (error.status === 404) return error.code === 'UNKNOWN' ? 'unavailable' : 'notFound';
   if (error.status === 501) return 'unavailable';

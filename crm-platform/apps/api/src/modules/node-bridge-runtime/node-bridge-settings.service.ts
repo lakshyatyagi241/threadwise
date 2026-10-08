@@ -10,11 +10,18 @@ import {
   type NodeMessageSettings,
   type NodePacing,
   type UpdateNodeBridgeInput,
+  type UnofficialWhatsappState,
   type UpdateNodePacingInput,
+  type UpdateUnofficialWhatsappInput,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { NodeBridgeProbe } from '../../infra/providers/node-bridge-runtime/node-bridge.probe';
-import { AuthAuditService, PlatformSettingsService } from '../auth';
+import {
+  AuthAuditService,
+  PlatformSettingsService,
+  UnofficialWhatsappSwitch,
+  UNOFFICIAL_WHATSAPP_KEY,
+} from '../auth';
 import { NODE_BRIDGE_KEY, NODE_BRIDGE_TOKEN_KEY } from '../install-update-licensing';
 
 /** Sender pacing document (TW-NODE-029): the four values the bridge pulls, plus the version the form sends back. */
@@ -50,6 +57,7 @@ export class NodeBridgeSettingsService {
     private readonly audit: AuthAuditService,
     private readonly probe: NodeBridgeProbe,
     private readonly config: ConfigService,
+    private readonly unofficial: UnofficialWhatsappSwitch,
   ) {}
 
   // --- reads ----------------------------------------------------------------------------------
@@ -65,6 +73,8 @@ export class NodeBridgeSettingsService {
       rowVersion: bridge?._rv ?? 0,
       pacing: this.pacingValues(pacing),
       pacingRowVersion: pacing?._rv ?? 0,
+      unofficialEnabled: await this.unofficial.isEnabled(),
+      unofficialWorkspaceCount: await this.unofficial.allowedCount(),
     };
   }
 
@@ -224,6 +234,37 @@ export class NodeBridgeSettingsService {
       });
     });
     return this.read();
+  }
+
+  /**
+   * The platform switch for the unofficial WhatsApp engine (owner decision 2026-10-05). Idempotent: setting the state it
+   * already has still writes an audit row, so an operator's click is always on record. No data is touched either way.
+   */
+  async updateUnofficial(
+    input: UpdateUnofficialWhatsappInput,
+    operatorId: number,
+  ): Promise<UnofficialWhatsappState> {
+    await this.store.inTx(async (tx) => {
+      const found = await tx.execute(
+        sql`SELECT value FROM platform_settings WHERE key = ${UNOFFICIAL_WHATSAPP_KEY} FOR UPDATE`,
+      );
+      const before = (found.rows[0] as { value: unknown } | undefined)?.value === true;
+      const json = JSON.stringify(input.enabled);
+      await tx.execute(sql`
+        INSERT INTO platform_settings (key, value, is_secret, updated_by, updated_at)
+        VALUES (${UNOFFICIAL_WHATSAPP_KEY}, ${json}::jsonb, false, ${operatorId}, now())
+        ON CONFLICT (key) DO UPDATE
+          SET value = EXCLUDED.value, is_secret = false,
+              updated_by = EXCLUDED.updated_by, updated_at = now()`);
+      await this.audit.record(tx, {
+        event: 'platform.whatsapp_unofficial.updated',
+        status: 'info',
+        actorType: 'platform_operator',
+        actorId: operatorId,
+        payload: { before: { enabled: before }, after: { enabled: input.enabled } },
+      });
+    });
+    return { unofficialEnabled: await this.unofficial.isEnabled() };
   }
 
   // --- test -----------------------------------------------------------------------------------

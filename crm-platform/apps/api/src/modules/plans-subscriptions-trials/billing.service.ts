@@ -1,12 +1,13 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   PLAN_FEATURE_KEYS,
+  UNOFFICIAL_WHATSAPP_FEATURE_KEY,
   type BillingPlan,
   type BillingPlansResponse,
   type BillingStatus,
-  type BillingUsageResponse,
+  type BillingUsagePanelResponse,
   type ChangePlanResponse,
   type EntitlementsResponse,
   type PlanFeatureKey,
@@ -16,6 +17,10 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
+import {
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlanCatalogService } from './plan-catalog.service';
 import {
@@ -33,6 +38,7 @@ import {
   type PlanFacts,
 } from './plan-rules';
 import { PlanStore } from './plan-store';
+import { visibleAddonsByPlan, visibleAddonsForApps } from './plan-visible-addons';
 import { PlanUsageService } from './plan-usage.service';
 import { SubscriptionService } from './subscription.service';
 
@@ -55,6 +61,7 @@ export class BillingService {
     private readonly outbox: OutboxService,
     private readonly settings: PlatformSettingsService,
     private readonly subscriptions: SubscriptionService,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
   // --- reads --------------------------------------------------------------------------------------------------------------------
@@ -67,13 +74,30 @@ export class BillingService {
   /** The feature keys the workspace's plan includes: the web app draws locks, crowns and paywalls from this (TW-PLAN-020, 021). */
   async entitlementKeys(): Promise<EntitlementsResponse> {
     const e = await this.mustResolve(RequestContextStore.require().orgId);
-    return { features: PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k)) };
+    const features: string[] = PLAN_FEATURE_KEYS.filter((k) => resolveFeature(e, k));
+    // `unofficial_whatsapp` is not a plan feature: it is present only while the platform switch is on AND a platform super admin
+    // allowed this workspace (owner decision 2026-10-06; platform-owned workspaces get no special treatment), and the web hides
+    // every personal-number surface without it.
+    if (await this.unofficial.isEnabledFor(RequestContextStore.require().orgId))
+      features.push(UNOFFICIAL_WHATSAPP_FEATURE_KEY);
+    return { features };
   }
 
   async plans(canManage: boolean, unlocks?: PlanFeatureKey): Promise<BillingPlansResponse> {
     const orgId = RequestContextStore.require().orgId;
     const e = await this.mustResolve(orgId);
-    const rows = await this.db.txAs({ orgId, userId: null }, (tx) => this.catalog.listPlans(tx));
+    const { rows, perPlan, mine } = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const listed = await this.catalog.listPlans(tx);
+      return {
+        rows: listed,
+        perPlan: await visibleAddonsByPlan(
+          tx,
+          orgId,
+          listed.map((r) => Number(r.id)),
+        ),
+        mine: await visibleAddonsForApps(tx, orgId, e.visibleApps),
+      };
+    });
     const facts = rows.map((r) => ({ row: r, facts: toFacts(r) }));
     const active = facts
       .filter((p) => p.facts.isActive)
@@ -105,6 +129,7 @@ export class BillingService {
         features: fullFeatures(row.features),
         via: viaFor(card.action, f, effective),
         yearly: yearlyOffer(f, pct),
+        visibleAddons: perPlan.get(Number(row.id)) ?? [],
       };
     });
 
@@ -116,10 +141,13 @@ export class BillingService {
       validity: validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now: new Date(),
       }),
       canManage,
       subscription: await this.subscriptions.current(orgId),
+      visibleAddons: mine,
       yearlyToggle: {
         enabled: toggle !== false && data.some((p) => p.yearly !== null),
         discountPct: pct,
@@ -134,6 +162,8 @@ export class BillingService {
       ...validityForState(e.state, {
         trialEndsAt: e.trialEndsAt,
         planEndsAt: e.planEndsAt,
+        autopay: e.autopay,
+        graceDays: e.graceDays,
         now: new Date(),
       }),
       planSlug: e.planSlug,
@@ -143,10 +173,15 @@ export class BillingService {
   }
 
   /** The plan and usage panel (TW-PLAN-014). */
-  async usagePanel(): Promise<BillingUsageResponse> {
-    const res = await this.usage.usage(RequestContextStore.require().orgId);
+  async usagePanel(): Promise<BillingUsagePanelResponse> {
+    const orgId = RequestContextStore.require().orgId;
+    const res = await this.usage.usage(orgId);
     if (!res) throw AppError.notFound('Workspace');
-    return res;
+    const e = await this.mustResolve(orgId);
+    const visibleAddons = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      visibleAddonsForApps(tx, orgId, e.visibleApps),
+    );
+    return { ...res, visibleAddons };
   }
 
   // --- change --------------------------------------------------------------------------------------------------------------------
@@ -280,6 +315,8 @@ export class BillingService {
       validity: validityForState(after.state, {
         trialEndsAt: after.trialEndsAt,
         planEndsAt: after.planEndsAt,
+        autopay: after.autopay,
+        graceDays: after.graceDays,
         now: new Date(),
       }),
       overLimit: meters

@@ -20,10 +20,13 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PostsService } from './posts.service';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 
 /** Facebook posts: compose, schedule, list, retry, delete, and the live grid of the Page's feed (TW-FB-016 to 018). */
 @ApiTags('facebook')
 @ActorKinds('user')
+// Facebook management is entirely the extra-channels feature; the public webhook controller stays open.
+@RequirePlanFeature('extra_channels')
 @Controller({ path: 'facebook', version: '2' })
 export class PostsController {
   constructor(private readonly posts: PostsService) {}

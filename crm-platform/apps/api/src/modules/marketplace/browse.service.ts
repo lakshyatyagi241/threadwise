@@ -21,6 +21,15 @@ import { toSubscriptionView } from './pricing-model';
 
 const SHELF_SIZE = 8;
 
+const pricingFacts = (r: CardRow) => ({
+  appId: r.id,
+  slug: r.slug,
+  uuid: r.uuid,
+  pricing: r.pricing,
+  sub: r.sub,
+  installed: r.inst_uuid !== null,
+});
+
 /**
  * Browse, search, categories, shelves and an app's page, for the calling workspace. Every statement runs in the workspace's tenant
  * transaction; the catalogue's row-level security means a draft, an app in review, and a hidden or killed app the workspace has not
@@ -36,7 +45,9 @@ export class BrowseService {
   ) {}
 
   async categories(q: MarketCategoryListQuery): Promise<MarketCategoryList> {
-    const rows = await this.db.tx((tx) => this.repo.categories(tx, q.kind));
+    const { orgId } = RequestContextStore.require();
+    const vis = await this.pricing.visibility(orgId);
+    const rows = await this.db.tx((tx) => this.repo.categories(tx, orgId, vis, q.kind));
     return {
       data: rows.map((c) => ({
         id: c.uuid,
@@ -53,8 +64,9 @@ export class BrowseService {
 
   async list(q: MarketAppListQuery): Promise<MarketAppList> {
     const { orgId } = RequestContextStore.require();
+    const vis = await this.pricing.visibility(orgId);
     const { page, installedCount } = await this.db.tx(async (tx) => ({
-      page: await this.repo.list(tx, orgId, q),
+      page: await this.repo.list(tx, orgId, q, vis),
       installedCount: await this.repo.installedCount(tx, orgId),
     }));
     if (page.badCursor)
@@ -70,10 +82,11 @@ export class BrowseService {
 
   async shelves(kind: MarketAppKind): Promise<MarketShelves> {
     const { orgId } = RequestContextStore.require();
+    const vis = await this.pricing.visibility(orgId);
     const r = await this.db.tx(async (tx) => ({
-      popular: await this.repo.shelf(tx, orgId, kind, 'popular', SHELF_SIZE),
-      fresh: await this.repo.shelf(tx, orgId, kind, 'new', SHELF_SIZE),
-      featured: await this.repo.shelf(tx, orgId, kind, 'featured', SHELF_SIZE, true),
+      popular: await this.repo.shelf(tx, orgId, kind, 'popular', SHELF_SIZE, vis),
+      fresh: await this.repo.shelf(tx, orgId, kind, 'new', SHELF_SIZE, vis),
+      featured: await this.repo.shelf(tx, orgId, kind, 'featured', SHELF_SIZE, vis, true),
       installedCount: await this.repo.installedCount(tx, orgId),
     }));
     return {
@@ -87,14 +100,15 @@ export class BrowseService {
     const { orgId } = RequestContextStore.require();
     const parsed = parseAppRef(ref);
     if (!parsed) throw this.notFound();
+    const vis = await this.pricing.visibility(orgId);
     const { row, installedCount } = await this.db.tx(async (tx) => ({
-      row: await this.repo.detail(tx, orgId, parsed),
+      row: await this.repo.detail(tx, orgId, parsed, vis),
       installedCount: await this.repo.installedCount(tx, orgId),
     }));
     if (!row) throw this.notFound();
     const evaluate = await this.access.evaluator(orgId, installedCount);
     const lock = await evaluate(this.lockFacts(row));
-    const facts = { slug: row.slug, uuid: row.uuid, pricing: row.pricing, sub: row.sub };
+    const facts = pricingFacts(row);
     const priced = cardPricing(facts, await (await this.pricing.evaluator(orgId))(facts));
     const subscription = row.sub
       ? toSubscriptionView(row.sub, row.pricing, row.status, new Date())
@@ -107,7 +121,7 @@ export class BrowseService {
     const price = await this.pricing.evaluator(orgId);
     const out = [];
     for (const r of rows) {
-      const facts = { slug: r.slug, uuid: r.uuid, pricing: r.pricing, sub: r.sub };
+      const facts = pricingFacts(r);
       out.push(
         toCard(r, await evaluate(this.lockFacts(r)), cardPricing(facts, await price(facts))),
       );

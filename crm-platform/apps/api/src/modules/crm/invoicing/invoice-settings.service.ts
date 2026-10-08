@@ -142,6 +142,14 @@ export class InvoiceSettingsService {
     };
   }
 
+  /** For the store-order bridge: the automatic-invoice trigger of store orders and the tax label (see the repository). */
+  storeOrderPolicy(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ triggerOwn: string; taxLabel: string | null }> {
+    return this.repo.storeOrderPolicy(tx, orgId);
+  }
+
   async get(): Promise<InvoiceProfile> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => toProfileResponse(await this.load(tx, ctx.orgId)));

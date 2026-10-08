@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlanCatalogService } from './plan-catalog.service';
 import { PlanEntitlementService } from './plan-entitlement.service';
+import { PlanStore } from './plan-store';
 import { PlanQuotaService } from './plan-quota.service';
 import { PlanUsageService } from './plan-usage.service';
 
@@ -11,7 +12,19 @@ import { PlanUsageService } from './plan-usage.service';
  * guards lives in PlansModule, which depends on both.
  */
 @Module({
-  providers: [PlanCatalogService, PlanEntitlementService, PlanQuotaService, PlanUsageService],
-  exports: [PlanCatalogService, PlanEntitlementService, PlanQuotaService, PlanUsageService],
+  providers: [
+    PlanStore,
+    PlanCatalogService,
+    PlanEntitlementService,
+    PlanQuotaService,
+    PlanUsageService,
+  ],
+  exports: [
+    PlanStore,
+    PlanCatalogService,
+    PlanEntitlementService,
+    PlanQuotaService,
+    PlanUsageService,
+  ],
 })
 export class PlansCoreModule {}

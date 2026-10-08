@@ -54,6 +54,33 @@ export const messageRates = pgTable(
   ],
 );
 
+/** Meta's published list price per (currency, market, category). Mirrors migrations/20261025090000_wallet_meta_rate_cards.sql. */
+export const metaRateCards = pgTable(
+  'meta_rate_cards',
+  {
+    id: idColumn('id').notNull().primaryKey().generatedByDefaultAsIdentity(),
+    currency: text('currency').notNull(),
+    market: text('market').notNull(),
+    category: text('category').notNull(),
+    costMicros: bigint('cost_micros', { mode: 'number' }).notNull(),
+    effectiveOn: date('effective_on').notNull(),
+    sourceLabel: text('source_label').notNull(),
+    importedAt: timestamp('imported_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    unique('uq_meta_rate_cards_key').on(t.currency, t.market, t.category),
+    check('chk_meta_rate_cards_currency', sql`${t.currency} ~ '^[A-Z]{3}$'`),
+    check(
+      'chk_meta_rate_cards_category',
+      sql`${t.category} in ('marketing', 'utility', 'authentication', 'authentication_international', 'service')`,
+    ),
+    check('chk_meta_rate_cards_cost', sql`${t.costMicros} >= 0`),
+  ],
+);
+
+export type MetaRateCardsRow = typeof metaRateCards.$inferSelect;
+export type NewMetaRateCardsRow = typeof metaRateCards.$inferInsert;
+
 export type MessageRatesRow = typeof messageRates.$inferSelect;
 export type NewMessageRatesRow = typeof messageRates.$inferInsert;
 
@@ -74,6 +101,8 @@ export const walletTransactions = pgTable(
     description: text('description'),
     meta: jsonb('meta'),
     idempotencyKey: text('idempotency_key').notNull(),
+    /** The currency of the wallet this entry moved (a workspace can hold a wallet per currency). */
+    unit: text('unit'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -152,6 +181,8 @@ export const usageCharges = pgTable(
     meta: text('meta'),
     createdAt: createdAt(),
     priceCredits: integer('price_credits').notNull().default(0),
+    /** The currency the message was priced and charged in; null = the platform currency (rows from before per-currency billing). */
+    currency: text('currency'),
     shortfallCredits: integer('shortfall_credits').notNull().default(0),
     billingMode: text('billing_mode').notNull().default('plan'),
     freeReason: text('free_reason'),

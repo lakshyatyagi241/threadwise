@@ -14,6 +14,7 @@ import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { WebhookFanoutService } from '../webhook-fanout';
 import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import {
@@ -49,6 +50,7 @@ export class WabaWebhookService {
     @Inject(WABA_ENV) private readonly env: WabaEnv,
     @Inject(WHATSAPP_PROVIDER) private readonly provider: WhatsAppProvider,
     @InjectQueue(QUEUES.WABA_INGEST) private readonly queue: Queue<WabaIngestJob>,
+    private readonly fanout: WebhookFanoutService,
     private readonly providers: WhatsAppProviderResolver,
   ) {}
 
@@ -78,6 +80,7 @@ export class WabaWebhookService {
   async receive(input: {
     rawBody: Buffer | undefined;
     signatureHeader: string | undefined;
+    contentType?: string | undefined;
     queryKey: string | undefined;
     /** Any request header by lower-case name (a provider of the registry may sign with a header of its own). */
     header?: (name: string) => string | undefined;
@@ -131,6 +134,15 @@ export class WabaWebhookService {
       this.logger.warn({ reason }, 'whatsapp webhook refused');
       throw AppError.unauthenticated('Invalid webhook signature');
     }
+
+    // Forward the raw body to every platform-configured target, unchanged and before our own processing. Authenticated
+    // traffic only, so this cannot be used to spam the targets. Never throws.
+    await this.fanout.forward({
+      rawBody: input.rawBody,
+      signatureHeader: input.signatureHeader,
+      contentType: input.contentType,
+      fields: [...new Set(changes.map((c) => c.field))],
+    });
 
     const actionable = changes.filter((c) => HANDLED_FIELDS.has(c.field));
     if (actionable.length === 0) return { queued: 0 };

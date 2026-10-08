@@ -239,6 +239,10 @@ export function flbPreviewLabel(node: { type: string; data?: Record<string, unkn
       return 'List message';
     case 'ask':
       return limit28(orElse(d.prompt, 'Ask'));
+    case 'ask_file':
+      return limit28(orElse(d.prompt, 'Img/File'));
+    case 'ask_location':
+      return 'Share Location';
     case 'condition':
       return `If ${orElse(d.var, 'value')} ${orElse(d.op, '==')} ${orElse(d.value, '')}`;
     case 'delay':

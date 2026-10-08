@@ -52,6 +52,7 @@ describe('buildPackRequest', () => {
       currency: 'USD',
       billingUnit: 'months',
       billingDuration: 1,
+      billingMode: 'one_time',
       isFree: false,
       isLifetime: false,
       isActive: true,

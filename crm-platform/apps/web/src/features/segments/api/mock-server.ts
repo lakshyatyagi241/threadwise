@@ -91,6 +91,10 @@ export async function mockExport(id: string): Promise<{ blob: Blob; filename: st
   };
 }
 
+/** The mock keeps no people list: it stores the visibility only. */
+const visibilityOf = (v: unknown): Segment['visibility'] =>
+  v === 'shared' || v === 'specific' ? v : 'private';
+
 async function create(
   body: Record<string, unknown>,
   rules: SegmentRules,
@@ -102,7 +106,8 @@ async function create(
     name: String(body.name).trim(),
     description: (body.description as string | null | undefined) ?? null,
     color: (body.color as string | null | undefined) ?? null,
-    visibility: body.visibility === 'shared' ? 'shared' : 'private',
+    visibility: visibilityOf(body.visibility),
+    sharedWith: { users: [], teams: [] },
     ownerId: ME.id,
     ownerName: ME.name,
     rules,
@@ -170,7 +175,7 @@ export async function mockCall<T>(path: string, req: ApiRequest<T> = {}): Promis
       name: String(body.name).trim(),
       description: (body.description as string | null | undefined) ?? null,
       color: (body.color as string | null | undefined) ?? null,
-      visibility: body.visibility === 'shared' ? 'shared' : 'private',
+      visibility: visibilityOf(body.visibility),
       rules,
       memberCount: await counted(rules),
       memberCountAt: new Date().toISOString(),

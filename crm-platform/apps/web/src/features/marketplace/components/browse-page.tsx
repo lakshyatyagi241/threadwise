@@ -6,15 +6,19 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { marketAppCardSchema, type MarketAppKind } from '@crm/contracts';
-import { Alert, Button, EmptyState, Input, Select, Spinner, Switch } from '@crm/ui';
+import { Alert, Button, EmptyState, Input, Select, Spinner, cn } from '@crm/ui';
 import { useCursorList } from '@/lib/api/use-cursor-list';
 import { fetchCategories, mktKeys } from '../api';
 import {
+  AVAILABILITY_VIEWS,
   SEARCH_MAX,
   SORT_OPTIONS,
+  availabilityPatch,
+  availabilityView,
   browseHref,
   emptyReason,
   hasActiveFilter,
+  isAddonCard,
   knownCategory,
   listQuery,
   parseBrowseParams,
@@ -31,7 +35,7 @@ import { ErrorPanel, LoadingBlock, PAGE, TEXT_LINK } from './ui';
 const DEBOUNCE_MS = 300;
 
 /**
- * One tab of the Marketplace (`/marketplace/apps` or `/marketplace/integrations`): category list, search, the Installed filter, the
+ * One tab of the Marketplace (`/marketplace/apps` or `/marketplace/integrations`): category list, search, the availability chips (All, Available add-ons, Installed), the
  * sort, the Popular / New / Featured shelves while nothing narrows the list, the results grid with "Load more" (the API has no
  * total), and the request box. Every filter lives in the address, so a view can be shared and the back button works.
  */
@@ -63,7 +67,7 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
     }, DEBOUNCE_MS);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `filters` is rebuilt from the address on every render; its fields are the dependencies below
-  }, [draft, filters.q, filters.category, filters.installed, filters.sort, kind]);
+  }, [draft, filters.q, filters.category, filters.installed, filters.addons, filters.sort, kind]);
 
   const categories = useQuery({
     queryKey: mktKeys.categories(kind),
@@ -92,6 +96,8 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
   const unknownCategory = categories.isSuccess && !knownCategory(cats, filters.category);
   const filtered = hasActiveFilter(filters);
   const moreError = list.isFetchNextPageError ? list.error : null;
+  // Add-ons are picked from the loaded cards (the list API has no availability filter), so a page with none may still have more.
+  const items = filters.addons ? list.items.filter(isAddonCard) : list.items;
 
   return (
     <div className={PAGE}>
@@ -113,16 +119,27 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
             className="ps-9"
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="mkt-installed-only"
-            label={t('installedOnly')}
-            checked={filters.installed}
-            onCheckedChange={(installed) => go({ installed })}
-          />
-          <label htmlFor="mkt-installed-only" className="text-sm">
-            {t('installedOnly')}
-          </label>
+        <div role="group" aria-label={t('availability.label')} className="flex flex-wrap gap-1.5">
+          {AVAILABILITY_VIEWS.map((v) => {
+            const on = availabilityView(filters) === v;
+            return (
+              <button
+                key={v}
+                type="button"
+                aria-pressed={on}
+                data-testid={`mkt-availability-${v}`}
+                onClick={() => go(availabilityPatch(v))}
+                className={cn(
+                  'h-9 rounded-full border px-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                  on
+                    ? 'border-primary bg-primary/10 font-medium text-foreground'
+                    : 'border-border text-muted-foreground hover:bg-muted hover:text-foreground',
+                )}
+              >
+                {t(`availability.${v}`)}
+              </button>
+            );
+          })}
         </div>
         <div className="flex items-center gap-2">
           <label htmlFor="mkt-sort" className="text-sm text-muted-foreground">
@@ -143,7 +160,7 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
         <div>
           {categories.isPending ? (
             <LoadingBlock />
@@ -171,14 +188,14 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               {filtered ? t('resultsFiltered') : t('resultsAll')}
             </h2>
             <p aria-live="polite" className="sr-only">
-              {list.isSuccess ? t('loadedCount', { count: list.items.length }) : ''}
+              {list.isSuccess ? t('loadedCount', { count: items.length }) : ''}
             </p>
 
             {list.isPending ? (
               <LoadingBlock />
             ) : list.isError ? (
               <ErrorPanel error={list.error} onRetry={() => void list.refetch()} />
-            ) : list.items.length === 0 ? (
+            ) : items.length === 0 && !list.hasNextPage ? (
               <EmptyState
                 title={t(`empty.${emptyReason(filters)}.title`)}
                 message={t(`empty.${emptyReason(filters)}.message`)}
@@ -199,8 +216,8 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               />
             ) : (
               <>
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {list.items.map((card) => (
+                <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                  {items.map((card) => (
                     <AppCard key={card.id} card={card} />
                   ))}
                 </div>

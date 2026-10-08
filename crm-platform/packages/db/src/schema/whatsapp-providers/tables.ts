@@ -79,6 +79,9 @@ export const whatsappProviders = pgTable(
       .default('manual'),
     onboardingAppId: text('onboarding_app_id'),
     onboardingConfigId: text('onboarding_config_id'),
+    /** A partner onboarding flow this provider takes after Embedded Signup (`pinnacle`), and its solution id. */
+    partnerProgram: text('partner_program').$type<'pinnacle'>(),
+    partnerSolutionId: text('partner_solution_id'),
     status: text('status')
       .$type<'active' | 'disabled' | 'archived'>()
       .notNull()
@@ -98,6 +101,14 @@ export const whatsappProviders = pgTable(
     uniqueIndex('uq_whatsapp_providers_default')
       .on(t.isDefault)
       .where(sql`${t.isDefault}`),
+    check(
+      'chk_whatsapp_providers_partner_program',
+      sql`${t.partnerProgram} is null or ${t.partnerProgram} in ('pinnacle')`,
+    ),
+    check(
+      'chk_whatsapp_providers_partner_solution',
+      sql`(${t.partnerProgram} is null and ${t.partnerSolutionId} is null) or (${t.partnerProgram} is not null and ${t.partnerSolutionId} ~ '^[0-9]{5,32}$')`,
+    ),
     check('chk_whatsapp_providers_status', sql`${t.status} in ('active', 'disabled', 'archived')`),
   ],
 );

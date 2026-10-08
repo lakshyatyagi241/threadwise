@@ -18,6 +18,11 @@ import {
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 
+export interface CustomDates {
+  from?: string;
+  to?: string;
+}
+
 export interface AnalyticsParams {
   range: '7d' | '30d' | '90d' | 'custom';
   from?: string;
@@ -26,23 +31,31 @@ export interface AnalyticsParams {
 
 /** Every dashboard call, parsed with the shared contracts. */
 export const dashApi = {
-  summary(range: DashRange, signal?: AbortSignal): Promise<DashSummaryResponse> {
+  summary(
+    range: DashRange,
+    custom: CustomDates,
+    signal?: AbortSignal,
+  ): Promise<DashSummaryResponse> {
     return apiFetch('/dashboard/summary', {
-      query: { range },
+      query: { range, ...(range === 'custom' ? custom : {}) },
       schema: dashSummaryResponseSchema,
       signal,
     });
   },
-  widgets(range: DashRange, signal?: AbortSignal): Promise<DashWidgets> {
+  widgets(range: DashRange, custom: CustomDates, signal?: AbortSignal): Promise<DashWidgets> {
     return apiFetch('/dashboard/widgets', {
-      query: { range },
+      query: { range, ...(range === 'custom' ? custom : {}) },
       schema: dashWidgetsSchema,
       signal,
     });
   },
-  throughput(range: DashRange, signal?: AbortSignal): Promise<DashThroughputResponse> {
+  throughput(
+    range: DashRange,
+    custom: CustomDates,
+    signal?: AbortSignal,
+  ): Promise<DashThroughputResponse> {
     return apiFetch('/dashboard/throughput', {
-      query: { range },
+      query: { range, ...(range === 'custom' ? custom : {}) },
       schema: dashThroughputResponseSchema,
       signal,
     });

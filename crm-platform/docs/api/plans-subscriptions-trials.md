@@ -154,3 +154,10 @@ changed plan clears it unless given) and `overrides.dataRetentionDays` (0..3650 
 - `GET /v2/billing/entitlements` returns `{ features: [...] }`; `GET /v2/billing/plans?unlocks=<feature>` returns only plans that include it.
 - Public API keys are held to the plan's `api_rate_limit_per_minute` (0 = platform default; a workspace override of -1 = unlimited); responses carry `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and a 429 adds `Retry-After`.
 - Super admin only: `GET /v2/platform/plan-analytics?days=30|90|365&package=`, `/plan-analytics/export` (CSV), `/financial?window=7d|30d|90d|1y`, `/premium`. Money is in the platform default currency.
+
+## Grace period (autopay retry)
+
+- `billing.grace_days` (platform setting, 0..30, default 7; edited on the billing settings screen as `graceDays`).
+- A paid plan whose `plan_ends_at` has passed stays active, with the paid plan's limits and flags, for that many days while a live autopay subscription (`status` `active` or `past_due`) exists for it. State `paid_grace`; `GET /v2/billing/status` and `/v2/billing/usage` then carry `graceEndsAt` and `daysLeft` counted to it. After the grace, or with no live subscription or 0 days, it is `paid_lapsed` as before.
+- A recovered charge (`subscription.charged`) moves the period forward and the state back to `paid_active`. The setting is cached for 30 seconds per process.
+- `POST /v2/billing/subscription/cancel` acts on the workspace plan subscription only. `POST /v2/billing/subscription/addons/:id/cancel` (`:id` = the workspace add-on uuid, same permission) stops one add-on from renewing; the paid term keeps running to its end date. 422 `PLAN_NO_SUBSCRIPTION` when none is live.

@@ -11,7 +11,6 @@ import {
   csvSafe,
   formatMinor,
 } from './wallet-rules';
-import { WalletSettingsService } from './wallet-settings.service';
 
 /** Excel needs this at the start of a UTF-8 CSV to read accents and non-Latin names correctly. */
 const BOM = String.fromCharCode(0xfeff);
@@ -19,13 +18,10 @@ const BOM = String.fromCharCode(0xfeff);
 /** The statement as a CSV stream (TW-WALLET-022): oldest first, in chunks, formula-safe, capped. */
 @Injectable()
 export class WalletExportService {
-  constructor(
-    private readonly query: WalletQueryService,
-    private readonly settings: WalletSettingsService,
-  ) {}
+  constructor(private readonly query: WalletQueryService) {}
 
   async stream(query: StatementQuery): Promise<{ stream: Readable; fileName: string }> {
-    const currency = await this.settings.currency();
+    const currency = await this.query.billingCurrency();
     const header = CSV_HEADER.map((h, i) => (i >= 9 ? `${h} (${currency})` : h));
     const rows = this.query.exportRows(query, CSV_MAX_ROWS);
     async function* lines(): AsyncGenerator<string> {

@@ -375,7 +375,7 @@ export const rowTone = (status: string): string =>
 export function WorkspaceLink({ slug, label }: { slug: string; label: string }) {
   return (
     <Link
-      href={`/admin/workspace-plans?q=${encodeURIComponent(slug)}`}
+      href={`/admin/workspaces?q=${encodeURIComponent(slug)}`}
       title={label}
       aria-label={label}
       className="inline-flex size-7 items-center justify-center rounded-full border border-border text-primary hover:border-primary hover:bg-primary/10"

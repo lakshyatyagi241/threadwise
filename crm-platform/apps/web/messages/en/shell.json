@@ -26,6 +26,15 @@
     "soon": "Soon",
     "new": "New",
     "comingSoon": "Coming soon",
+    "appGate": {
+      "title": "{app} isn't part of your workspace",
+      "body": "{app} is an optional app. Add it from the Marketplace and it will appear in your menu.",
+      "bodyNoMarketplace": "{app} is an optional app that this workspace doesn't have. Ask a workspace admin to add it from the Marketplace.",
+      "browse": "Browse the Marketplace",
+      "back": "Back to the dashboard",
+      "unofficialTitle": "{app} isn't available",
+      "unofficialBody": "{app} is only used with personal WhatsApp numbers paired by QR code, which are not enabled for your workspace. WhatsApp connects through the official WhatsApp Business API."
+    },
     "closeMenu": "Close menu",
     "mainMenu": "Main menu",
     "userMenu": "Account menu",
@@ -37,6 +46,7 @@
     },
     "notifications": "Notifications",
     "settings": "Settings",
+    "pinned": "Help and settings",
     "nav": {
       "analytics": "Analytics",
       "notifications": "Notifications",
@@ -67,6 +77,7 @@
       "invoices": "Invoices",
       "payments": "Payments"
     },
-    "help": "Help"
+    "help": "Help",
+    "unreadCount": "{count, plural, one {# unread} other {# unread}}"
   }
 }

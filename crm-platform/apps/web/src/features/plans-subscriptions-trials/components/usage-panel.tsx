@@ -3,16 +3,17 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import type { UsageMeter } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Spinner, cn } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { BILLING_KEYS, fetchBillingUsage } from '../api';
 import { PLANS_PATH } from '../lib/format';
+import { LimitsSection } from './limits-section';
+import { PlanAddons } from './plan-addons';
 import { ValidityBanner } from './validity-banner';
 
 const NS = 'plans-subscriptions-trials';
 
-/** Plan and usage (TW-PLAN-014): the plan, validity, one meter per capped key (this month or in total) and the unlocked features. */
+/** Plan and usage (TW-PLAN-014): the plan, validity, limits grouped with a meter per capped limit and the unlocked features. */
 export function UsagePanel() {
   const t = useTranslations(`${NS}.usage`);
   const tc = useTranslations(`${NS}.common`);
@@ -95,16 +96,7 @@ export function UsagePanel() {
 
       <ValidityBanner validity={u.validity} planName={u.planName} />
 
-      <section aria-labelledby="meters-title" className="space-y-3">
-        <h2 id="meters-title" className="text-lg font-semibold">
-          {t('meters')}
-        </h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {u.meters.map((m) => (
-            <Meter key={m.key} meter={m} />
-          ))}
-        </div>
-      </section>
+      <LimitsSection meters={u.meters} />
 
       <section aria-labelledby="features-title" className="space-y-3">
         <h2 id="features-title" className="text-lg font-semibold">
@@ -137,45 +129,8 @@ export function UsagePanel() {
           </p>
         )}
       </section>
-    </div>
-  );
-}
 
-function Meter({ meter }: { meter: UsageMeter }) {
-  const t = useTranslations(`${NS}.usage`);
-  const tl = useTranslations(`${NS}.limits`);
-  const unlimited = meter.limit === 0;
-  const hot = meter.percent !== null && meter.percent >= 90;
-  return (
-    <Card className="space-y-2 p-4" data-testid={`meter-${meter.key}`}>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-sm font-medium">{tl(meter.key)}</p>
-        <p className="text-xs text-muted-foreground">
-          {t(meter.window === 'month' ? 'month' : 'total')}
-        </p>
-      </div>
-      <div
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={meter.percent ?? 0}
-        aria-label={tl(meter.key)}
-        className="h-2 overflow-hidden rounded-full bg-muted"
-      >
-        <div
-          className={cn(
-            'h-full rounded-full',
-            hot ? 'bg-danger' : 'bg-primary',
-            unlimited && 'opacity-30',
-          )}
-          style={{ width: `${unlimited ? 8 : (meter.percent ?? 0)}%` }}
-        />
-      </div>
-      <p className="text-sm">
-        {unlimited
-          ? t('ofUnlimited', { used: meter.used })
-          : t('ofLimit', { used: meter.used, limit: meter.limit })}
-      </p>
-    </Card>
+      <PlanAddons addons={u.visibleAddons} />
+    </div>
   );
 }

@@ -14,13 +14,24 @@ import {
 } from '@/features/contacts-attributes-tags';
 import { buildCatalog, type Choice, type FieldDef, type Lookups } from '../lib/fields';
 import { fetchAll } from './http';
-import { personSchema } from './schemas';
+import { personSchema, teamOptionSchema } from './schemas';
 
 /** The workspace's people, for the owner picker and the Owner column. */
 export function usePeople(enabled = true) {
   return useQuery({
     queryKey: ['segments', 'people'],
     queryFn: ({ signal }) => fetchAll('/users', personSchema, {}, { signal }),
+    enabled,
+    staleTime: 5 * 60_000,
+    retry: false,
+  });
+}
+
+/** The workspace's teams, for the "Specific people" picker. A person who cannot list teams gets people only. */
+export function useTeams(enabled = true) {
+  return useQuery({
+    queryKey: ['segments', 'teams'],
+    queryFn: ({ signal }) => fetchAll('/workspace/teams', teamOptionSchema, {}, { signal }),
     enabled,
     staleTime: 5 * 60_000,
     retry: false,

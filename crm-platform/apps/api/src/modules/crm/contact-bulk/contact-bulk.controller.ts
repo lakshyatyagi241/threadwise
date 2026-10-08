@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   StreamableFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -14,10 +15,12 @@ import {
   bulkGroupContactsSchema,
   bulkTagContactsSchema,
   exportContactsSchema,
+  exportHistoryQuerySchema,
   type BulkDeleteContactsInput,
   type BulkGroupContactsInput,
   type BulkTagContactsInput,
   type ExportContactsInput,
+  type ExportHistoryQuery,
   type RecordScope,
 } from '@crm/contracts';
 import { ActorKinds, GrantedScope, RequirePermission } from '../../../common/decorators';
@@ -91,6 +94,16 @@ export class ContactBulkController {
     @GrantedScope('record.contacts.update') scope: RecordScope,
   ) {
     return this.bulk.tag(body, scope);
+  }
+
+  @Get('exports')
+  @RequirePermission('record.contacts.export')
+  @ApiOperation({
+    summary: 'Recent exports of contacts: who, when and how many rows',
+    description: 'From the audit trail. The exported file itself is not kept.',
+  })
+  async exports(@Query(zodPipe(exportHistoryQuerySchema)) query: ExportHistoryQuery) {
+    return this.bulk.exportHistory(query);
   }
 
   @Post('export')

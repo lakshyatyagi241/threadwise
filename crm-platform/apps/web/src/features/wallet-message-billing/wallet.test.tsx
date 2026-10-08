@@ -171,13 +171,12 @@ describe('navigation', () => {
     expect(en[settings[0]!.descriptionKey!]).toBeTruthy();
   });
 
-  it('lists the pricing, margins, packages, workspaces and logs pages in the operator Billing group', () => {
+  it('lists the pricing, margins, packages and logs pages in the operator Billing group', () => {
     const mine = OPERATOR_NAV.filter((i) => i.id.startsWith('wallet-'));
     expect(mine.map((i) => [i.href, en[i.labelKey]])).toEqual([
       ['/admin/wallet/pricing', 'Message pricing'],
       ['/admin/wallet/margins', 'Margins'],
       ['/admin/wallet/packages', 'Credit packages'],
-      ['/admin/wallet/workspaces', 'Workspace wallets'],
       ['/admin/wallet/logs', 'Wallet logs'],
     ]);
     const billing = OPERATOR_NAV.find((i) => i.id === 'bsp-income')?.groupKey;
@@ -433,6 +432,7 @@ describe('platform console', () => {
           floatMinor: 5000000,
           workspacesWithBalance: 12,
           lowBalanceWorkspaces: 3,
+          otherCurrencies: [],
           last30d: {
             toppedUpMinor: 200000,
             chargedMinor: 150000,
@@ -507,6 +507,8 @@ describe('platform console', () => {
     const detail: PlatformWalletDetail = {
       workspace: { id: '11111111-1111-4111-8111-111111111111', name: 'Acme', slug: 'acme' },
       currency: 'USD',
+      billableCurrencies: ['INR', 'USD'],
+      wallets: [{ currency: 'USD', balanceMinor: 7500 }],
       balanceMinor: 7500,
       billingMode: 'wallet',
       lowBalanceThresholdMinor: 500,

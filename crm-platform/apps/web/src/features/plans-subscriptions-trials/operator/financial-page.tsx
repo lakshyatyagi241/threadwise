@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { FINANCIAL_WINDOWS, type FinancialWindow } from '@crm/contracts';
-import { BarChart, Donut, Legend } from '@/features/dashboards-analytics-charts/components/charts';
+import { BarChart, Donut } from '@/features/dashboards-analytics-charts/components/charts';
 import { Panel } from '@/features/dashboards-analytics-charts/components/parts';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -72,12 +72,6 @@ export function FinancialPage() {
                   values: q.data.revenueByDay.map((d) => d.refunds),
                   color: colorAt(4),
                 },
-              ]}
-            />
-            <Legend
-              series={[
-                { name: t('kpi.revenue'), color: colorAt(2) },
-                { name: t('kpi.refunds'), color: colorAt(4) },
               ]}
             />
           </Panel>

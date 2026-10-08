@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Alert, Button, ConfirmDialog, EmptyState, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -17,7 +18,7 @@ import {
   useBroadcastLive,
 } from '../api/detail';
 import { formatCreated, parseTab, pillTone, TABS, tiles, type Tab } from '../lib/detail-model';
-import { canDelete, providerLabel, reference, statusLabel } from '../lib/list-model';
+import { canDelete, providerLabel, providerTag, reference, statusLabel } from '../lib/list-model';
 import { ChevronLeftIcon, RefreshIcon, TrashIcon } from './icons';
 import { EventsTab } from './events-tab';
 import { FailuresTab } from './failures-tab';
@@ -85,6 +86,7 @@ function Tile({
  */
 export function BroadcastDetailScreen({ id }: { id: string }) {
   const t = useTranslations('broadcasts.detail');
+  const unofficial = useUnofficialWhatsapp();
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -300,7 +302,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
                 <span>{t('kicker')}</span>
                 {b.provider && providerLabel(b.provider) !== '—' && (
                   <span className="rounded-full border border-border bg-muted px-1.5 py-0.5 text-[9.5px] font-semibold tracking-wider">
-                    {providerLabel(b.provider)}
+                    {providerTag(b.provider, unofficial, t('unofficialDisabled'))}
                   </span>
                 )}
                 <span className="size-1 rounded-full bg-muted-foreground" aria-hidden="true" />

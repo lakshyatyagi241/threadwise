@@ -147,3 +147,65 @@ export const flowTemplates = pgTable(
 
 export type FlowTemplatesRow = typeof flowTemplates.$inferSelect;
 export type NewFlowTemplatesRow = typeof flowTemplates.$inferInsert;
+
+/** Mirrors migrations/20261028090000_flb_geta_publish.sql: the workspace's Geta console credentials (three sealed values). */
+export const flbGetaPublishSettings = pgTable(
+  'flb_geta_publish_settings',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    baseUrl: text('base_url'),
+    origin: text('origin'),
+    authorizationEnc: text('authorization_enc'),
+    getaHostEnc: text('geta_host_enc'),
+    chatbotRecordEnc: text('chatbot_record_enc'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('flb_geta_publish_settings_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('flb_geta_publish_settings_org_id_key').on(t.orgId),
+  ],
+);
+
+export type FlbGetaPublishSettingsRow = typeof flbGetaPublishSettings.$inferSelect;
+export type NewFlbGetaPublishSettingsRow = typeof flbGetaPublishSettings.$inferInsert;
+
+/** The remote state of a flow's last publish on the Geta console, one row per flow. */
+export const flbGetaPublishSyncs = pgTable(
+  'flb_geta_publish_syncs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    flowId: idColumn('flow_id').notNull(),
+    publishVersion: integer('publish_version').notNull().default(0),
+    state: text('state').notNull().default('idle'),
+    step: text('step'),
+    failedStep: text('failed_step'),
+    lastError: text('last_error'),
+    attemptedAt: timestamp('attempted_at', { withTimezone: true }),
+    botId: text('bot_id'),
+    configurationUpdatedVersion: integer('configuration_updated_version').notNull().default(0),
+    chatbotOverrideEnc: text('chatbot_override_enc'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('flb_geta_publish_syncs_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('flb_geta_publish_syncs_org_id_flow_id_key').on(t.orgId, t.flowId),
+    foreignKey({
+      name: 'flb_geta_publish_syncs_org_id_flow_id_fkey',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export type FlbGetaPublishSyncsRow = typeof flbGetaPublishSyncs.$inferSelect;
+export type NewFlbGetaPublishSyncsRow = typeof flbGetaPublishSyncs.$inferInsert;

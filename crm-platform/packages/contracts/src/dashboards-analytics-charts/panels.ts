@@ -6,6 +6,8 @@ export const analyticsPanelsSchema = z.object({
   devices: z.object({
     total: z.number().int(),
     online: z.number().int(),
+    /** True when the platform's unofficial-engine switch is off: no devices are listed. */
+    unofficialDisabled: z.boolean().optional(),
     rows: z.array(
       z.object({
         uuid: z.string().uuid(),

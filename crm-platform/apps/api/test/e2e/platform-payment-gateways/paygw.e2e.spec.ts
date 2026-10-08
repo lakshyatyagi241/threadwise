@@ -1129,4 +1129,68 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
       });
     });
   });
+
+  it('wallet top-up for a workspace billed in INR: entered, charged and credited in rupees, to the INR wallet', async () => {
+    await h.owner.query(
+      `INSERT INTO currencies (name, code, symbol, exchange_rate) VALUES ('Indian Rupee','INR','Rs',83.5)
+       ON CONFLICT (code) DO UPDATE SET is_active = true`,
+    );
+    await h.owner.query(
+      `UPDATE organizations SET settings = jsonb_set(coalesce(settings, '{}'::jsonb), '{currency}', '"INR"') WHERE id = $1`,
+      [buyer.orgId],
+    );
+    try {
+      const quote = await api()
+        .get('/v2/billing/checkout/wallet/quote?amount=100')
+        .set(bearer(buyer.token));
+      // No exchange rate in the way: 100 rupees in, 100 rupees credited (tax on top).
+      expect(quote.body).toMatchObject({
+        kind: 'wallet_topup',
+        currency: 'INR',
+        subtotal: '100.00',
+        tax: '18.00',
+        total: '118.00',
+        walletCreditMinor: 10_000,
+      });
+      const walletsNow = async () =>
+        (
+          await h.owner.query(
+            `SELECT unit, balance::text AS balance FROM wallets WHERE org_id = $1 ORDER BY unit`,
+            [buyer.orgId],
+          )
+        ).rows.map((r) => [r.unit as string, Number(r.balance)] as const);
+      const others = (await walletsNow()).filter(([unit]) => unit !== 'INR');
+      mockProviders();
+      stripeThatPays();
+      const placed = (await placeWallet({ gatewayId: stripeId, amount: '100' })).body;
+      const o = await orderBy(placed.orderNumber);
+      expect(o).toMatchObject({ kind: 'wallet_topup', currency: 'INR', wallet_unit: 'INR' });
+      expect(Number(o.wallet_topup_minor)).toBe(10_000);
+
+      // Changing the workspace's currency after the order was placed must not move the money to another wallet.
+      await h.owner.query(
+        `UPDATE organizations SET settings = settings - 'currency' WHERE id = $1`,
+        [buyer.orgId],
+      );
+      const token = await tokenOf(placed.orderNumber);
+      await Promise.all([
+        api().get(`/v2/payments/return/stripe?o=${token}&session_id=cs_1`).redirects(0),
+        stripeWebhook(placed.orderNumber, 11_800, { currency: 'inr' }).post(),
+      ]);
+      const after = await walletsNow();
+      expect(after.find(([unit]) => unit === 'INR')?.[1]).toBe(100);
+      // wallets in other currencies (the earlier dollar top-up) did not move
+      expect(after.filter(([unit]) => unit !== 'INR')).toEqual(others);
+      const ledger = await h.owner.query(
+        `SELECT unit FROM wallet_transactions WHERE org_id = $1 AND idempotency_key = $2`,
+        [buyer.orgId, `order:${o.uuid}`],
+      );
+      expect(ledger.rows.map((r) => r.unit)).toEqual(['INR']);
+    } finally {
+      await h.owner.query(
+        `UPDATE organizations SET settings = settings - 'currency' WHERE id = $1`,
+        [buyer.orgId],
+      );
+    }
+  });
 });

@@ -79,7 +79,7 @@ export function HeroFeatures({ ctx, def }: P) {
                   'Chatbot Widgets',
                   'WA Forms',
                   'Chat Links',
-                  'Engines · WABA / Unofficial API / Twilio',
+                  'Engines · WABA / Twilio',
                   'Integrations',
                   'WA Calling',
                   'Webhooks · API',

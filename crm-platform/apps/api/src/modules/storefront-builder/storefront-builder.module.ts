@@ -19,7 +19,26 @@ import { RAZORPAY_PORT } from '../../infra/providers/storefront-builder/razorpay
 import { RazorpayFixtureAdapter } from '../../infra/providers/storefront-builder/razorpay-fixture.adapter';
 import { RazorpayLiveAdapter } from '../../infra/providers/storefront-builder/razorpay-live.adapter';
 import { CatalogProductsModule } from '../catalog-products';
+import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
+import { StoreOrdersSalesModule } from '../store-orders-sales';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { StoreCouponsController } from './admin/store-coupons.controller';
+import { StoreCouponsRepository } from './admin/store-coupons.repository';
+import { StoreCouponsService } from './admin/store-coupons.service';
+import { StoreCustomersController } from './admin/store-customers.controller';
+import { StoreCustomersRepository } from './admin/store-customers.repository';
+import { StoreCustomersService } from './admin/store-customers.service';
+import { StoreGroupsController } from './admin/store-groups.controller';
+import { StoreGroupsService } from './admin/store-groups.service';
+import { StoreOrdersController } from './admin/store-orders.controller';
+import { StoreOrdersRepository } from './admin/store-orders.repository';
+import { StoreOrdersService } from './admin/store-orders.service';
+import { StorePaymentsController } from './admin/store-payments.controller';
+import { StorePaymentsService } from './admin/store-payments.service';
+import { StoreOrderSalesInvoiceAdapter } from './admin/store-order-sales-invoice.adapter';
+import { OrderPaymentSettler } from './payments/order-payment-settler';
+import { STORE_ORDER_INVOICE } from './store-order-invoice.port';
 import { EngineRecoveryNudgeSender } from './_shims/engine-recovery-nudge-sender';
 import { SqlCouponDirectory } from './_shims/sql-coupon-directory';
 import { SqlOrdersGateway } from './_shims/sql-orders-gateway';
@@ -57,8 +76,23 @@ import { StorefrontSettingsService } from './shops/storefront-settings.service';
  * Razorpay and DNS sit behind ports (`infra/providers/storefront-builder`), chosen by `STORE_PROVIDER_MODE`.
  */
 @Module({
-  imports: [PlansCoreModule, CatalogProductsModule],
-  controllers: [StoreController, PublicStoreController, PaymentWebhookController],
+  imports: [
+    PlansCoreModule,
+    CatalogProductsModule,
+    CrmModule,
+    CheckoutOrdersMerchantPaymentsModule,
+    StoreOrdersSalesModule,
+  ],
+  controllers: [
+    StoreController,
+    PublicStoreController,
+    PaymentWebhookController,
+    StoreOrdersController,
+    StoreCouponsController,
+    StoreCustomersController,
+    StoreGroupsController,
+    StorePaymentsController,
+  ],
   providers: [
     CryptoService,
     {
@@ -83,6 +117,8 @@ import { StorefrontSettingsService } from './shops/storefront-settings.service';
       inject: [STOREFRONT_ENV],
       useFactory: (env: StorefrontEnv) => new HttpBridgeTextClient(env.bridgeUrl, env.bridgeToken),
     },
+    // "Create invoice" on the order page: the sales bridge (store-orders-sales) does the work behind the port.
+    { provide: STORE_ORDER_INVOICE, useClass: StoreOrderSalesInvoiceAdapter },
     { provide: ORDERS_GATEWAY, useClass: SqlOrdersGateway },
     { provide: COUPON_DIRECTORY, useClass: SqlCouponDirectory },
     { provide: SENDER_DIRECTORY, useClass: SqlSenderDirectory },
@@ -95,6 +131,15 @@ import { StorefrontSettingsService } from './shops/storefront-settings.service';
     StoreOverviewService,
     StorefrontPaymentService,
     PaymentWebhookService,
+    OrderPaymentSettler,
+    StoreOrdersRepository,
+    StoreOrdersService,
+    StoreCouponsRepository,
+    StoreCouponsService,
+    StoreCustomersRepository,
+    StoreCustomersService,
+    StoreGroupsService,
+    StorePaymentsService,
     PublicRateLimiter,
     PublicRateLimitGuard,
     PublicShopLoader,

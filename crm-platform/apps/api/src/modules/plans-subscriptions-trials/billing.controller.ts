@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   billingPlansQuerySchema,
@@ -7,10 +7,11 @@ import {
   type EntitlementsResponse,
   type BillingPlansResponse,
   type BillingStatus,
-  type BillingUsageResponse,
+  type BillingUsagePanelResponse,
   type ChangePlanRequest,
   type CancelSubscriptionResponse,
   type ChangePlanResponse,
+  uuidSchema,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -62,7 +63,7 @@ export class BillingController {
 
   @Get('usage')
   @ApiOperation({ summary: 'Plan, caps, usage this cycle and unlocked features' })
-  usage(): Promise<BillingUsageResponse> {
+  usage(): Promise<BillingUsagePanelResponse> {
     return this.billing.usagePanel();
   }
 
@@ -88,5 +89,17 @@ export class BillingController {
   })
   cancelAutoRenew(): Promise<CancelSubscriptionResponse> {
     return this.subscriptions.cancel();
+  }
+
+  @Post('subscription/addons/:id/cancel')
+  @Idempotent()
+  @RequirePermission('plan.subscription.manage')
+  @ApiOperation({
+    summary: 'Stop one add-on purchase from renewing; its paid term keeps running to its end date',
+  })
+  cancelAddonRenewal(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+  ): Promise<CancelSubscriptionResponse> {
+    return this.subscriptions.cancelAddon(id);
   }
 }

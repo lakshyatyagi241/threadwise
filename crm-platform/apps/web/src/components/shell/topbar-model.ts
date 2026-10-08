@@ -23,6 +23,7 @@ export const BAR_TARGETS: Partial<Record<NavLayoutKey, { nav?: string; tile?: st
   scheduled: { nav: 'scheduled' },
   'message-history': { nav: 'history' },
   'ai-assistants': { nav: 'ai-assistants' },
+  'ai-training': { tile: 'ai-training' },
   'chatbot-widgets': { tile: 'chat-widget' },
   'call-logs': { nav: 'call-logs' },
   support: { nav: 'support' },

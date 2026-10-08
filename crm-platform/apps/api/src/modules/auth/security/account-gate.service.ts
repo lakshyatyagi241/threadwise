@@ -2,15 +2,23 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import type { AccountFlags } from '@crm/contracts';
+import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { SecurityPolicyService } from '../platform/security-policy.service';
 import { toDate, type DateLike } from '../support/dates';
 import { isPasswordStale } from '../support/password-policy';
 import { AuthKeys, Ttl } from '../support/redis-keys';
+import { OrgSuspensionService, isOperatorImpersonation } from './org-suspension.service';
 
 export interface AccountGateState {
+  /** This person's own account is not active. */
   suspended: boolean;
+  /**
+   * The whole workspace is suspended by the platform. Read live (5-second cache), never part of the per-user cached copy, so an
+   * unsuspend does not wait for the 30-second user cache. The API refuses it in AccountGateGuard; here it only feeds the flags.
+   */
+  orgSuspended?: boolean;
   emailUnverified: boolean;
   /** Policy 'block': unverified accounts cannot use the API. */
   emailBlocking: boolean;
@@ -38,9 +46,18 @@ export class AccountGateService {
     private readonly db: DatabaseService,
     private readonly policy: SecurityPolicyService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly orgs: OrgSuspensionService,
   ) {}
 
   async stateFor(orgId: number, userId: number): Promise<AccountGateState> {
+    const own = await this.userState(orgId, userId);
+    const orgSuspended = isOperatorImpersonation(RequestContextStore.peek())
+      ? false
+      : await this.orgs.isSuspended(orgId);
+    return { ...own, orgSuspended };
+  }
+
+  private async userState(orgId: number, userId: number): Promise<AccountGateState> {
     const key = AuthKeys.gate(orgId, userId);
     const cached = await this.redis.get(key).catch(() => null);
     if (cached) return JSON.parse(cached) as AccountGateState;
@@ -75,7 +92,7 @@ export class AccountGateService {
 
   toFlags(state: AccountGateState): AccountFlags {
     return {
-      suspended: state.suspended,
+      suspended: state.suspended || state.orgSuspended === true,
       emailUnverified: state.emailUnverified,
       emailBlocked: state.emailBlocking,
       mfaEnrolmentRequired: state.mfaEnrolmentRequired,

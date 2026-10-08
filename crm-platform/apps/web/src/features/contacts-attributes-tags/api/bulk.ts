@@ -1,11 +1,17 @@
 'use client';
 
+import { z } from 'zod';
 import { BULK_IDS_MAX } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import type { BulkTarget } from '../lib/selection';
 import { contactFilterBody } from './contacts';
-import { bulkSelectionResultSchema, dedupePreviewSchema, dedupeResultSchema } from './schemas';
+import {
+  bulkResultSchema,
+  bulkSelectionResultSchema,
+  dedupePreviewSchema,
+  dedupeResultSchema,
+} from './schemas';
 
 /**
  * Bulk actions over a selection (TW-CON-019..025). A target is explicit ids or the saved filter behind
@@ -16,6 +22,26 @@ import { bulkSelectionResultSchema, dedupePreviewSchema, dedupeResultSchema } fr
 /** The `ids` / `filter` half of every bulk body. */
 export function selectionBody(target: BulkTarget) {
   return target.kind === 'ids' ? { ids: target.ids } : { filter: contactFilterBody(target.filter) };
+}
+
+/**
+ * "Send campaign" from the Hub: a broadcast draft whose audience is this selection (ticked rows open in the wizard's Contacts mode), created so the wizard opens on it. Returns the draft's
+ * id (the wizard resumes at `/campaigns/wizard/<id>`).
+ */
+export async function startCampaignDraft(target: BulkTarget): Promise<string> {
+  const draft = await apiFetch('/broadcast-wizard/drafts', {
+    method: 'POST',
+    body: {
+      // Ticked rows are the wizard's own "contacts" mode (`contactIds`); a whole filtered view has no equivalent there, so it travels as
+      // the `selection` source.
+      audience:
+        target.kind === 'ids'
+          ? { groupIds: [], segmentIds: [], rules: null, contactIds: target.ids }
+          : { groupIds: [], segmentIds: [], rules: null, selection: selectionBody(target) },
+    },
+    schema: z.object({ id: z.string().uuid() }),
+  });
+  return draft.id;
 }
 
 export interface BulkOutcome {
@@ -104,3 +130,37 @@ export const previewDuplicates = (signal?: AbortSignal) =>
 /** Merges up to `maxSets` sets per call; the answer says how many are left, so callers loop until it is 0. */
 export const mergeDuplicates = (maxSets = 1000) =>
   apiFetch('/contacts/dedupe', { method: 'POST', body: { maxSets }, schema: dedupeResultSchema });
+
+/** The fields a bulk update can set; each one left out is left as it is on every contact. */
+export interface BulkUpdateValues {
+  lifecycleStage?: string;
+  status?: string;
+  /** A person's id; `null` clears the owner. */
+  ownerId?: string | null;
+  lostReason?: string | null;
+  otherLostReason?: string | null;
+  /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
+  customFields?: Record<string, unknown>;
+}
+
+/**
+ * Sets the same fields on the selected contacts (`POST /contacts/bulk/update`). Explicit ids only (the API takes at most 500
+ * per call, so a longer list is sent in slices); each row succeeds or fails on its own, so a few bad ones never sink the rest.
+ */
+export async function bulkUpdate(
+  ids: readonly string[],
+  values: BulkUpdateValues,
+): Promise<BulkOutcome> {
+  const total: BulkOutcome = { matched: 0, changed: 0, failed: 0 };
+  for (let i = 0; i < ids.length; i += BULK_IDS_MAX) {
+    const r = await apiFetch('/contacts/bulk/update', {
+      method: 'POST',
+      body: { ids: ids.slice(i, i + BULK_IDS_MAX), values },
+      schema: bulkResultSchema,
+    });
+    total.matched += r.succeeded.length + r.failed.length;
+    total.changed += r.succeeded.length;
+    total.failed += r.failed.length;
+  }
+  return total;
+}

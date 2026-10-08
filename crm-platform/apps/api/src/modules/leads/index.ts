@@ -13,3 +13,6 @@ export { LEAD_INGEST } from './lead-ingest.port';
 export type { LeadIngestPort, LeadIngestResult, NormalisedLead } from './lead-ingest.port';
 export { LEAD_SOURCE_DIRECTORY } from './lead-source-directory.port';
 export type { ConnectorSourceInput, LeadSourceDirectoryPort } from './lead-source-directory.port';
+// Shared rules the Forms add-on reuses so a web form and a lead source dedupe, coerce and rotate owners the same way.
+export { coerceCustomValue, normaliseLeadEmail } from './lead-mapping';
+export { pickOwner } from './lead-assignment';

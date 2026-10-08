@@ -15,6 +15,7 @@ export interface PackDraft {
   currency: string;
   billingUnit: PlanBillingUnit;
   billingDuration: string;
+  billingMode: 'one_time' | 'recurring';
   isLifetime: boolean;
   isActive: boolean;
   sortOrder: string;
@@ -32,6 +33,7 @@ export const newPackDraft = (): PackDraft => ({
   currency: 'USD',
   billingUnit: 'months',
   billingDuration: '1',
+  billingMode: 'one_time',
   isLifetime: false,
   isActive: true,
   sortOrder: '0',
@@ -48,6 +50,7 @@ export const packToDraft = (p: AddonPack): PackDraft => ({
   currency: p.currency,
   billingUnit: p.billingUnit,
   billingDuration: String(p.billingDuration),
+  billingMode: p.billingMode,
   isLifetime: p.isLifetime,
   isActive: p.isActive,
   sortOrder: String(p.sortOrder),
@@ -61,6 +64,7 @@ export type PackField =
   | 'offerAmount'
   | 'currency'
   | 'billingDuration'
+  | 'billingMode'
   | 'sortOrder'
   | 'limits'
   | 'form';
@@ -75,6 +79,7 @@ const FIELDS: readonly PackField[] = [
   'offerAmount',
   'currency',
   'billingDuration',
+  'billingMode',
   'sortOrder',
   'limits',
 ];
@@ -101,6 +106,7 @@ export function buildPackRequest(d: PackDraft): BuildResult {
     currency: d.currency,
     billingUnit: d.billingUnit,
     billingDuration: /^\d+$/.test(d.billingDuration) ? Number(d.billingDuration) : Number.NaN,
+    billingMode: d.isLifetime ? 'one_time' : d.billingMode,
     isLifetime: d.isLifetime,
     isActive: d.isActive,
     sortOrder: /^\d+$/.test(d.sortOrder) ? Number(d.sortOrder) : Number.NaN,

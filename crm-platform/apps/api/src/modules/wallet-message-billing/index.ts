@@ -20,4 +20,7 @@ export {
 } from './message-billing.service';
 export { WalletGateService, type LaunchRequest } from './wallet-gate.service';
 export { WalletSettingsService } from './wallet-settings.service';
+export { countryOfPhone } from './phone-country';
 export { RateCardService } from './rate-card.service';
+export { BillingCurrencyService } from './billing-currency.service';
+export { WalletQueryService } from './wallet-query.service';

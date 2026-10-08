@@ -1,0 +1,74 @@
+---
+id: auto-assignment
+title: Auto-assignment
+summary: Give each new conversation to the right agent automatically, with rules that go in turn, pick the least busy agent or name one person.
+area: settings
+order: 60
+documents: [tile:auto-assignment]
+keywords:
+  [
+    auto assign,
+    auto-assignment,
+    routing,
+    round robin,
+    assign,
+    agents,
+    rules,
+    inbox,
+    distribute,
+    fallback,
+    owner,
+    returning contact,
+  ]
+---
+
+## What it is for
+
+Auto-assignment decides who gets a new conversation, so nobody has to claim it by hand. You write rules; when a customer starts a new conversation, or writes again after a finished one was reopened and nobody holds it, the rules are tried from the top and the first one that matches and finds an available agent takes it.
+
+Rules never take a conversation away from someone. A conversation that already has an agent, a team or an AI assistant is left alone, and so is every later message of a conversation that is already open.
+
+## How to use it
+
+1. Open **Settings**, go to **Automation** and select **Auto-assignment**.
+2. Select **Create rule**. Give it a **Rule name** and, if you like, a **Description** for your team.
+3. Under **When a new conversation arrives**, set the conditions. Every part you fill in must match; a part you leave empty is ignored.
+4. Under **Assign to**, choose **How to choose** and tick the agents or teams.
+5. Select **Save** to keep the rule switched off, or **Save and activate** to start using it at once.
+6. On the list, use the arrows to change the order, the switch to turn a rule on or off, and **Edit**, **Duplicate** or **Delete**.
+
+## The conditions
+
+- **The contact matches**: the same condition builder as segments, over tags, owner, lifecycle stage and other contact details. You can mix AND and OR groups.
+- **Channel**: only conversations that arrive on the channels you tick.
+- **Message words**: words or phrases in the customer's first message, separated by commas. Choose whether any word or every word must appear. Capital letters do not matter.
+- **Customer language**: language codes such as en or ar. It matches only when the language of the customer is known.
+- **Business hours**: only inside or only outside the business hours of your workspace.
+
+A rule needs at least one condition, unless it is the fallback.
+
+## Choosing the agent
+
+- **Round robin** gives the conversations to the chosen agents in turn. The rule remembers whose turn is next, so a restart or a new conversation never makes it start over.
+- **Least busy** gives the conversation to the agent with the fewest open conversations at that moment; agents with the same number take turns.
+- **A specific agent** always picks the same person.
+
+A team in the list stands for its members. Agents who are suspended or removed, who cannot open the inbox, or who are marked offline or busy are skipped. If nobody in the list is available and the rule lists a team, the conversation goes to that team without a person; if there is no team, the rule does not apply and the next rule is tried.
+
+## Order, stop and fallback
+
+Rules are tried from the top of the list. **Stop when this rule matches** (on by default) ends the search at the first rule that assigns the conversation; switched off, a later matching rule can take it over. The **Fallback rule** is used only when no other rule assigned the conversation, and there is only one: choosing a new fallback replaces the old one. A conversation nobody matched stays unassigned.
+
+## Keep returning contacts with their agent
+
+Switch this on to send a returning contact back to the same person first: the contact's owner, or else whoever handled their latest earlier conversation, as long as they are still an active member who can open the inbox. Their availability is not checked. Otherwise the rules above decide. It is off until you turn it on.
+
+## Plan and access
+
+Seeing the rules needs permission to view the inbox settings; creating, changing, ordering and deleting them needs permission to manage routing. Owners and Admins hold both by default. Your plan must include Routing rules and have room under its rule limit; the limit counts rules that are switched off too.
+
+## If something looks wrong
+
+- **A rule never fires.** Check it is switched on, that the rules above it do not match first with **Stop when this rule matches** on, and that at least one chosen agent is active, can open the inbox and is not offline or busy.
+- **"Agents unavailable" on a rule.** A chosen person or team was removed or suspended. Edit the rule and take them off.
+- **A conversation was not assigned.** Only a new conversation, or one reopened with nobody holding it, is routed. One that already has an agent is never changed.

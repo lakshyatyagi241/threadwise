@@ -32,6 +32,16 @@ export class PlatformPlansController {
     return this.plans.list();
   }
 
+  // Declared before ':id': the route parameter is a uuid and would reject this literal.
+  @Get('addon-options')
+  @ApiOperation({
+    summary:
+      'The Marketplace add-on packs a plan may make visible to its workspaces (the plan form’s selector)',
+  })
+  async addonOptions() {
+    return this.plans.addonOptions();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'One plan' })
   async one(@Param('id', zodPipe(uuidSchema)) id: string) {

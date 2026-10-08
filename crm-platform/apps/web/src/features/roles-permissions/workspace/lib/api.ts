@@ -43,7 +43,11 @@ export const fetchRoles = (signal?: AbortSignal) =>
 export const fetchUsers = (signal?: AbortSignal) =>
   fetchAll('/users', userResponseSchema, signal, { order: 'asc' });
 export const fetchPermissions = (signal?: AbortSignal) =>
-  apiFetch('/permissions', { schema: permissionListSchema, signal }).then((r) => r.data);
+  apiFetch('/permissions', {
+    query: { includeLocked: 1 },
+    schema: permissionListSchema,
+    signal,
+  }).then((r) => r.data);
 
 export const createRole = (body: CreateRoleInput) =>
   apiFetch('/roles', { method: 'POST', body, schema: roleResponseSchema });

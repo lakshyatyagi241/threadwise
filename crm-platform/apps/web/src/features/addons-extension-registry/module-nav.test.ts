@@ -20,7 +20,7 @@ const item = (key: string, href: string, label = key) => ({
 });
 
 describe('module navigation in the console rail (TW-ADD-012)', () => {
-  it('appends active modules to the end of the System group with their literal label', () => {
+  it('appends active modules to the end of the Apps & modules section with their literal label', () => {
     const out = withModuleLeaves(base, [item('reports', '/admin/reports', 'Reports')]);
     const group = out[1] as Extract<ConsoleEntry, { children: unknown }>;
     expect(group.children.map((c) => c.id)).toEqual(['system', 'module-reports-reports']);
@@ -35,6 +35,11 @@ describe('module navigation in the console rail (TW-ADD-012)', () => {
   it('adds an app-relative slash, and creates the group when the rail has none', () => {
     const out = withModuleLeaves([base[0]!], [item('x', 'x-page')]);
     expect(out).toHaveLength(2);
+    expect(out[1]).toMatchObject({
+      id: MODULE_NAV_GROUP,
+      labelKey: 'admin-console-shell.nav.sections.apps',
+      icon: 'modules',
+    });
     expect((out[1] as { children: Array<{ href: string }> }).children[0]!.href).toBe('/x-page');
   });
 

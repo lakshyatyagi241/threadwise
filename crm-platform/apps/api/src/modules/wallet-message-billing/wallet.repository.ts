@@ -24,6 +24,13 @@ export interface LedgerRow {
   createdAt: Date;
 }
 
+/**
+ * Narrows a query on `wallet_transactions` to one wallet's entries. A row without a unit predates per-currency billing, when the
+ * only wallet was in the platform currency, so it belongs to that currency's wallet.
+ */
+export const inUnit = (unit: string, platformCurrency: string) =>
+  sql`(unit = ${unit} OR (unit IS NULL AND ${unit} = ${platformCurrency}))`;
+
 /** Hundredths from the database's decimal text ("12.3400" -> 1234). Exact: split on the dot, no float. */
 export function decimalToMinor(text: string | number | null | undefined): number {
   if (text === null || text === undefined) return 0;
@@ -49,15 +56,18 @@ export function minorToDecimal(minor: number): string {
 @Injectable()
 export class WalletRepository {
   /**
-   * The workspace's wallet, created on first use, LOCKED for the rest of the transaction. Every movement takes this lock first, so
-   * concurrent charges to one workspace queue instead of overspending (TW-WALLET-001 acceptance 1) and the quota counter is read
+   * The workspace's wallet IN THIS CURRENCY, created on first use, LOCKED for the rest of the transaction. A workspace can hold a
+   * wallet per currency, so the unit picks the wallet (it used to be the org's only one).
+   *
+   * Every movement takes this lock first, so Every movement takes this lock first, so
+   * concurrent charges to one wallet queue instead of overspending (TW-WALLET-001 acceptance 1) and the quota counter is read
    * under it (TW-WALLET-010 rule 3).
    */
   async lockWallet(tx: Tx, orgId: number, unit: string): Promise<WalletRow> {
     const find = () =>
       tx.execute(sql`
         SELECT id, unit, balance::text AS balance, low_balance_alerted_at
-        FROM wallets WHERE org_id = ${orgId} ORDER BY id LIMIT 1 FOR UPDATE`);
+        FROM wallets WHERE org_id = ${orgId} AND unit = ${unit} FOR UPDATE`);
     let res = await find();
     if (res.rows.length === 0) {
       await tx.execute(sql`
@@ -78,11 +88,11 @@ export class WalletRepository {
     };
   }
 
-  /** A wallet without creating or locking it (reads). */
-  async peekWallet(tx: Tx, orgId: number): Promise<WalletRow | null> {
+  /** The workspace's wallet in `unit`, without creating or locking it (reads). */
+  async peekWallet(tx: Tx, orgId: number, unit: string): Promise<WalletRow | null> {
     const res = await tx.execute(sql`
       SELECT id, unit, balance::text AS balance, low_balance_alerted_at
-      FROM wallets WHERE org_id = ${orgId} ORDER BY id LIMIT 1`);
+      FROM wallets WHERE org_id = ${orgId} AND unit = ${unit}`);
     const r = res.rows[0] as unknown as
       | { id: string | number; unit: string; balance: string; low_balance_alerted_at: Date | null }
       | undefined;
@@ -93,6 +103,26 @@ export class WalletRepository {
       balanceMinor: decimalToMinor(r.balance),
       lowBalanceAlertedAt: r.low_balance_alerted_at ? new Date(r.low_balance_alerted_at) : null,
     };
+  }
+
+  /** Every wallet the workspace holds, one per currency, oldest first. */
+  async wallets(tx: Tx, orgId: number): Promise<WalletRow[]> {
+    const res = await tx.execute(sql`
+      SELECT id, unit, balance::text AS balance, low_balance_alerted_at
+      FROM wallets WHERE org_id = ${orgId} ORDER BY id`);
+    return (
+      res.rows as unknown as Array<{
+        id: string | number;
+        unit: string;
+        balance: string;
+        low_balance_alerted_at: Date | null;
+      }>
+    ).map((r) => ({
+      id: Number(r.id),
+      unit: r.unit,
+      balanceMinor: decimalToMinor(r.balance),
+      lowBalanceAlertedAt: r.low_balance_alerted_at ? new Date(r.low_balance_alerted_at) : null,
+    }));
   }
 
   async setBalance(
@@ -135,6 +165,8 @@ export class WalletRepository {
     v: {
       orgId: number;
       userId: number | null;
+      /** The currency of the wallet this entry moves. */
+      unit: string;
       type: string;
       direction: 'in' | 'out';
       amountMinor: number;
@@ -155,9 +187,9 @@ export class WalletRepository {
     const signed = v.direction === 'out' ? -v.amountMinor : v.amountMinor;
     const res = await tx.execute(sql`
       INSERT INTO wallet_transactions
-        (org_id, user_id, kind, type, direction, amount, balance_after, source, subject_type, subject_id, description, note, meta,
+        (org_id, user_id, unit, kind, type, direction, amount, balance_after, source, subject_type, subject_id, description, note, meta,
          idempotency_key, actor_type, actor_label, operator_id, request_id)
-      VALUES (${v.orgId}, ${v.userId}, 'credit', ${v.type}, ${v.direction}, ${minorToDecimal(signed)}::numeric,
+      VALUES (${v.orgId}, ${v.userId}, ${v.unit}, 'credit', ${v.type}, ${v.direction}, ${minorToDecimal(signed)}::numeric,
               ${minorToDecimal(v.balanceAfterMinor)}::numeric, ${v.source}, ${v.subjectType}, ${v.subjectId}, ${v.description},
               ${v.note}, ${v.meta ? JSON.stringify(v.meta) : null}::jsonb, ${v.idempotencyKey}, ${v.actorType}, ${v.actorLabel},
               ${v.operatorId}, ${v.requestId})

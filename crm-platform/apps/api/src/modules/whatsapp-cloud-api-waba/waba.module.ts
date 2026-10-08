@@ -1,6 +1,7 @@
 import { forwardRef, Global, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { BroadcastsModule } from '../broadcasts';
+import { WebhookFanoutModule } from '../webhook-fanout';
 import { CrmModule } from '../crm';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
@@ -20,6 +21,7 @@ import {
   type WabaCallsSink,
 } from './waba-calls-sink';
 import { WabaPlatformController } from './waba-platform.controller';
+import { PinnacleOnboardingService } from './pinnacle-onboarding.service';
 import { WabaConnectionsController } from './waba-connections.controller';
 import { WabaConnectionsRepository } from './waba-connections.repository';
 import { WABA_CONNECTIONS } from './waba-connections.port';
@@ -31,7 +33,11 @@ import {
   type WabaInboundSink,
 } from './waba-inbound-sink';
 import { WabaIngestService } from './waba-ingest.service';
+import { WabaReceiptRegistry } from './waba-receipt-registry';
 import { WabaTemplateEvents } from './waba-template-events.service';
+import { WabaGroupsController } from './waba-groups.controller';
+import { WabaGroupsAdminService } from './waba-groups-admin.service';
+import { WabaGroupsRepository } from './waba-groups.repository';
 import { WabaGroupsService } from './waba-groups.service';
 import { WabaOrdersService } from './waba-orders.service';
 import { WabaClickSyncService } from './waba-click-sync.service';
@@ -59,10 +65,12 @@ import { WabaWebhookService } from './waba-webhook.service';
     PlatformSettingsModule,
     WhatsAppProviderRegistryModule,
     CrmModule,
+    WebhookFanoutModule,
   ],
   controllers: [
     WabaConnectionsController,
     WabaExtrasController,
+    WabaGroupsController,
     WabaDiagnosticsController,
     WabaPlatformDiagnosticsController,
     WabaWebhookController,
@@ -75,10 +83,12 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaHealthDetailsService,
     WabaConnectionsRepository,
     WabaConnectService,
+    PinnacleOnboardingService,
     WabaExtrasService,
     WabaDiagnosticsService,
     WabaWebhookService,
     WabaIngestService,
+    WabaReceiptRegistry,
     WabaTemplateEvents,
     { provide: WABA_CONNECTIONS, useExisting: WabaConnectService },
     {
@@ -93,6 +103,8 @@ import { WabaWebhookService } from './waba-webhook.service';
       useFactory: (override?: WabaCallsSink): WabaCallsSink => override ?? new LoggingCallsSink(),
     },
     WabaGroupsService,
+    WabaGroupsRepository,
+    WabaGroupsAdminService,
     WabaOrdersService,
     WabaClickSyncService,
     CustomerProfilesService,
@@ -101,6 +113,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaConnectService,
     WabaConnectionsRepository,
     WabaIngestService,
+    WabaReceiptRegistry,
     WabaWebhookService,
     WabaClickSyncService,
     WABA_INBOUND_SINK,

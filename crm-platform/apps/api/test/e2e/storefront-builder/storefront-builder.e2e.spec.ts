@@ -1068,7 +1068,8 @@ describe('store overview', () => {
       reviewsPending: 0,
       payments: 0,
       gateways: 0,
-      customers: 0,
+      // checkout saves a minimal customer profile for the buyer (both orders come from one buyer)
+      customers: 1,
     });
     expect(res.body.connection).toEqual({ kind: 'device', label: '91 9812345678', live: true });
     expect(res.body.salesByDay.labels).toHaveLength(30);
@@ -1198,6 +1199,13 @@ describe('razorpay webhook', () => {
     await h.owner.query(
       `UPDATE wa_storefronts SET payment_config_json = payment_config_json - 'webhook_secret' WHERE uuid=$1`,
       [m.s.id],
+    );
+    // The checkout reads the shared gateway store first, where the settings page mirrors the shop's keys: a secret removed behind
+    // the page's back (no form can do it) must be gone from that copy too.
+    await h.owner.query(
+      `UPDATE wa_merchant_gateways SET meta = meta #- '{legacy,webhook_secret}'
+        WHERE org_id = $1 AND storefront_id = $2 AND slug = 'razorpay'`,
+      [m.t.orgId, shopId],
     );
     expect((await hook(event({ orderNo, shopId }))).status).toBe(400);
     expect(await status(orderNo)).toBe('new');

@@ -7,11 +7,18 @@ import type { NotificationResponse } from '@crm/contracts';
 import { Popover, Spinner, cn } from '@crm/ui';
 import { NavIcon } from '@/components/shell/nav-icons';
 import { useFeed, useMarkRead, useUnreadCount } from '../api/hooks';
-import { badgeText, notificationText, safeLink, type Translator } from '../lib/copy';
+import { notificationHref, typeMeta } from '../lib/catalogue';
+import { badgeText, notificationText, type Translator } from '../lib/copy';
+import { useAlertSettings, type AlertSettings } from '../live/use-alert-settings';
+import { TypeIcon } from './type-icon';
+
+/** Where a person tunes which events reach them (a pane of the account hub). */
+export const PREFERENCES_HREF = '/account/notifications';
 
 /**
- * The header bell (TW-NOTIF-006): an unread badge and a panel with the newest notifications. The badge is polled once a
- * minute; the list is fetched when the panel opens. Clicking a notification marks it read and opens what it is about.
+ * The header bell (TW-NOTIF-006): an unread badge and a panel with the newest notifications. The badge and the list follow the
+ * live socket (see `live/`), and fall back to a one-minute poll when it is down. Clicking a notification marks it read and
+ * opens what it is about (the server tells the other tabs). The panel's footer holds this browser's alert switches.
  */
 export function NotificationBell() {
   const t = useTranslations('notifications');
@@ -19,6 +26,7 @@ export function NotificationBell() {
   const unread = useUnreadCount();
   const feed = useFeed(open);
   const { markRead, markAllRead, markingAll } = useMarkRead();
+  const settings = useAlertSettings();
   const close = useCallback(() => setOpen(false), []);
 
   // While the panel is open its own total is the freshest; otherwise the polled count.
@@ -52,18 +60,10 @@ export function NotificationBell() {
         label={t('bell.title')}
         className="fixed end-2 start-2 top-14 mt-0 w-auto space-y-0 overflow-hidden p-0 sm:absolute sm:start-auto sm:end-0 sm:top-full sm:mt-1 sm:w-96"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold">{t('bell.title')}</h2>
-          <button
-            type="button"
-            disabled={count === 0 || markingAll}
-            onClick={() => markAllRead()}
-            className="rounded-md px-1 text-xs font-medium text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
-          >
-            {t('bell.markAll')}
-          </button>
-        </div>
-        <FeedBody
+        <BellPanel
+          count={count}
+          markingAll={markingAll}
+          onMarkAll={() => markAllRead()}
           loading={feed.isPending}
           failed={feed.isError && !feed.data}
           items={feed.data?.data ?? []}
@@ -72,8 +72,109 @@ export function NotificationBell() {
             if (n.readAt === null) markRead(n.id);
             close();
           }}
+          settings={settings}
+          onNavigate={close}
         />
       </Popover>
+    </div>
+  );
+}
+
+/** Everything inside the open panel; a plain component of props so every state can be shown in a test. */
+export function BellPanel({
+  count,
+  markingAll,
+  onMarkAll,
+  loading,
+  failed,
+  items,
+  onRetry,
+  onOpen,
+  settings,
+  onNavigate,
+}: {
+  count: number;
+  markingAll: boolean;
+  onMarkAll: () => void;
+  loading: boolean;
+  failed: boolean;
+  items: NotificationResponse[];
+  onRetry: () => void;
+  onOpen: (n: NotificationResponse) => void;
+  settings: AlertSettings;
+  /** Called when the footer link is followed, so the panel can close. */
+  onNavigate?: () => void;
+}) {
+  const t = useTranslations('notifications');
+  return (
+    <>
+      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+        <h2 className="text-sm font-semibold">{t('bell.title')}</h2>
+        <button
+          type="button"
+          disabled={count === 0 || markingAll}
+          onClick={onMarkAll}
+          className="rounded-md px-1 text-xs font-medium text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
+        >
+          {t('bell.markAll')}
+        </button>
+      </div>
+      <FeedBody loading={loading} failed={failed} items={items} onRetry={onRetry} onOpen={onOpen} />
+      <AlertSwitches settings={settings} />
+      <div className="border-t border-border px-4 py-2.5">
+        <Link
+          href={PREFERENCES_HREF}
+          onClick={onNavigate}
+          className="rounded-md px-1 py-0.5 text-xs font-medium text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {t('bell.preferences')}
+        </Link>
+      </div>
+    </>
+  );
+}
+
+/** This browser's two switches: the ping, and desktop (OS) alerts, which are only ever requested from the click on "Enable". */
+export function AlertSwitches({ settings }: { settings: AlertSettings }) {
+  const t = useTranslations('notifications');
+  const row =
+    'rounded-md px-1 py-0.5 text-start text-xs font-medium text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary';
+  return (
+    <div
+      role="group"
+      aria-label={t('bell.settings')}
+      className="flex flex-col items-start gap-1 border-t border-border px-4 py-2.5"
+    >
+      <button
+        type="button"
+        role="switch"
+        aria-checked={settings.soundOn}
+        aria-label={t('bell.sound')}
+        onClick={() => settings.setSound(!settings.soundOn)}
+        className={row}
+      >
+        {settings.soundOn ? t('bell.soundOn') : t('bell.soundOff')}
+      </button>
+      {settings.desktop === 'default' && (
+        <button type="button" onClick={() => void settings.enableDesktop()} className={row}>
+          {t('bell.desktopEnable')}
+        </button>
+      )}
+      {settings.desktop === 'granted' && (
+        <button
+          type="button"
+          role="switch"
+          aria-checked={settings.desktopOn}
+          aria-label={t('bell.desktopHint')}
+          onClick={() => settings.setDesktop(!settings.desktopOn)}
+          className={row}
+        >
+          {settings.desktopOn ? t('bell.desktopOn') : t('bell.desktopOff')}
+        </button>
+      )}
+      {settings.desktop === 'denied' && (
+        <p className="px-1 text-xs text-muted-foreground">{t('bell.desktopBlocked')}</p>
+      )}
     </div>
   );
 }
@@ -135,7 +236,8 @@ export function NotificationRow({
   const t = useTranslations('notifications');
   const format = useFormatter();
   const { title, body } = notificationText(t as unknown as Translator, n);
-  const href = safeLink(n.link);
+  const href = notificationHref(n);
+  const meta = typeMeta(n.type);
   const unread = n.readAt === null;
   const cls = cn(
     'flex w-full items-start gap-3 px-4 py-3 text-start outline-none transition hover:bg-muted focus-visible:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
@@ -150,12 +252,18 @@ export function NotificationRow({
           unread ? 'bg-brand' : 'bg-transparent',
         )}
       />
+      <TypeIcon icon={meta.icon} tone={meta.tone} />
       <span className="min-w-0 flex-1">
-        <span className={cn('block truncate text-sm', unread ? 'font-semibold' : 'font-medium')}>
+        <span
+          dir="auto"
+          className={cn('block truncate text-sm', unread ? 'font-semibold' : 'font-medium')}
+        >
           {title}
         </span>
         {body && (
-          <span className="line-clamp-2 break-words text-xs text-muted-foreground">{body}</span>
+          <span dir="auto" className="line-clamp-2 break-words text-xs text-muted-foreground">
+            {body}
+          </span>
         )}
         <span className="mt-0.5 block text-xs text-muted-foreground">
           {format.relativeTime(new Date(n.createdAt), new Date())}

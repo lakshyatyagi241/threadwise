@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import type { OperatorNavItem } from '@/features/auth-registration-security/platform/operator-nav';
+import type { ConsoleHub } from './console-layout';
 import {
   activeLeafId,
+  activeStatusBadge,
+  activeStatusBadgeInfo,
   buildConsoleNav,
+  CONSOLE_NAV_ITEMS,
+  emptySection,
   formatCount,
-  initiallyOpenGroups,
+  groupByHeading,
+  hubHref,
+  hubOf,
+  pageRuns,
   isGroup,
   leaves,
 } from './console-nav';
@@ -22,18 +30,102 @@ const items = [
   item('plans', '/admin/plans', 'g.plans'),
 ];
 
+/** A layout of its own, so these tests do not move when the real menu is reorganised. */
+const layout: ConsoleHub[] = [
+  { id: 'access', icon: 'shield', tabs: ['security', 'security-events'] },
+  { id: 'plans', icon: 'tag', tabs: ['plans', 'not-built-yet'] },
+  { id: 'empty', icon: 'tag', tabs: ['also-not-built'] },
+];
+
 describe('buildConsoleNav', () => {
-  const nav = buildConsoleNav(items);
+  const nav = buildConsoleNav(items, layout);
 
   it('starts with the console overview leaf', () => {
     expect(nav[0]).toMatchObject({ id: 'overview', href: '/admin' });
     expect(isGroup(nav[0]!)).toBe(false);
   });
 
-  it('groups items by heading in first-seen order', () => {
+  it('builds the sections of the layout, in its order, with their icon and heading key', () => {
     const groups = nav.filter(isGroup);
-    expect(groups.map((g) => g.id)).toEqual(['g.security', 'g.plans']);
+    expect(groups.map((g) => g.id)).toEqual(['access', 'plans']);
+    expect(groups[0]).toMatchObject({
+      labelKey: 'admin-console-shell.nav.sections.access',
+      icon: 'shield',
+    });
     expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
+  });
+
+  it('puts the group heading on the first page of the group only', () => {
+    const grouped: ConsoleHub[] = [
+      {
+        id: 'access',
+        icon: 'shield',
+        tabs: ['security', 'security-events', 'plans'],
+        heads: { security: 'security', plans: 'other' },
+      },
+    ];
+    const [hub] = buildConsoleNav(items, grouped).filter(isGroup);
+    expect(hub!.children.map((c) => c.captionKey)).toEqual([
+      'admin-console-shell.nav.captions.security',
+      undefined,
+      'admin-console-shell.nav.captions.other',
+    ]);
+  });
+
+  it('gives the heading to the next page shown when the page that names it is hidden', () => {
+    const grouped: ConsoleHub[] = [
+      {
+        id: 'access',
+        icon: 'shield',
+        tabs: ['security', 'security-events'],
+        heads: { security: 'security' },
+      },
+    ];
+    const [hub] = buildConsoleNav(items, grouped, (id) => id !== 'security').filter(isGroup);
+    expect(hub!.children[0]).toMatchObject({
+      id: 'security-events',
+      captionKey: 'admin-console-shell.nav.captions.security',
+    });
+  });
+
+  it('skips pages that are not in the menu data, and drops a section left with none', () => {
+    expect(leaves(nav).map((l) => l.id)).toEqual([
+      'overview',
+      'security',
+      'security-events',
+      'plans',
+    ]);
+    expect(nav.some((e) => e.id === 'empty')).toBe(false);
+  });
+
+  it('hides the pages `visible` refuses, and a hub left with none disappears', () => {
+    const onlyPlans = buildConsoleNav(items, layout, (id) => id === 'plans');
+    expect(onlyPlans.filter(isGroup).map((g) => g.id)).toEqual(['plans']);
+    const noEvents = buildConsoleNav(items, layout, (id) => id !== 'security');
+    expect(noEvents.filter(isGroup)[0]!.children.map((c) => c.id)).toEqual(['security-events']);
+  });
+
+  it('does not offer a hidden page again under an unplaced heading', () => {
+    const extra = [...items, item('new-page', '/admin/new', 'g.new')];
+    const out = buildConsoleNav(extra, layout, (id) => id !== 'new-page').filter(isGroup);
+    expect(out.map((g) => g.id)).toEqual(['access', 'plans']);
+  });
+
+  it('keeps a page the layout does not place, under its own heading after the sections', () => {
+    const extra = [...items, item('new-page', '/admin/new', 'g.new')];
+    const groups = buildConsoleNav(extra, layout).filter(isGroup);
+    expect(groups.map((g) => g.id)).toEqual(['access', 'plans', 'g.new']);
+    expect(groups[2]).toMatchObject({ labelKey: 'g.new', children: [{ id: 'new-page' }] });
+    expect(groups[2]!.icon).toBeUndefined();
+  });
+
+  it('places a page once even if the layout lists it twice', () => {
+    const twice: ConsoleHub[] = [
+      { id: 'a', icon: 'tag', tabs: ['plans'] },
+      { id: 'b', icon: 'tag', tabs: ['plans', 'security'] },
+    ];
+    const placed = leaves(buildConsoleNav(items, twice)).map((l) => l.id);
+    expect(placed.filter((id) => id === 'plans')).toHaveLength(1);
   });
 
   it('marks only the plans leaf as carrying a count', () => {
@@ -45,8 +137,31 @@ describe('buildConsoleNav', () => {
   });
 });
 
+describe('groupByHeading', () => {
+  it('groups items by the heading they name, in first-seen order', () => {
+    const groups = groupByHeading(items);
+    expect(groups.map((g) => g.id)).toEqual(['g.security', 'g.plans']);
+    expect(groups[0]!.children.map((c) => c.id)).toEqual(['security', 'security-events']);
+  });
+});
+
+describe('emptySection', () => {
+  it('takes the heading key and icon from the layout', () => {
+    expect(emptySection('access', layout)).toEqual({
+      id: 'access',
+      labelKey: 'admin-console-shell.nav.sections.access',
+      icon: 'shield',
+      children: [],
+    });
+  });
+
+  it('still builds a section the layout does not know', () => {
+    expect(emptySection('unknown', layout).icon).toBeUndefined();
+  });
+});
+
 describe('activeLeafId', () => {
-  const nav = buildConsoleNav(items);
+  const nav = buildConsoleNav(items, layout);
 
   it('picks the longest matching prefix, not the shorter parent', () => {
     expect(activeLeafId('/admin/security/events', nav)).toBe('security-events');
@@ -67,16 +182,66 @@ describe('activeLeafId', () => {
   });
 });
 
-describe('initiallyOpenGroups', () => {
-  const nav = buildConsoleNav(items);
+describe('pageRuns', () => {
+  const grouped: ConsoleHub[] = [
+    {
+      id: 'access',
+      icon: 'shield',
+      tabs: ['security', 'security-events', 'plans'],
+      heads: { 'security-events': 'events' },
+    },
+  ];
+  const [hub] = buildConsoleNav(items, grouped).filter(isGroup);
 
-  it('opens only the group that holds the active leaf', () => {
-    expect([...initiallyOpenGroups(nav, 'security-events')]).toEqual(['g.security']);
+  it('splits a hub into the groups its menu draws, the first one without a heading', () => {
+    const runs = pageRuns(hub!);
+    expect(runs.map((r) => r.captionKey)).toEqual([
+      undefined,
+      'admin-console-shell.nav.captions.events',
+    ]);
+    expect(runs.map((r) => r.pages.map((p) => p.id))).toEqual([
+      ['security'],
+      ['security-events', 'plans'],
+    ]);
   });
 
-  it('opens nothing for a top-level leaf or no match', () => {
-    expect(initiallyOpenGroups(nav, 'overview').size).toBe(0);
-    expect(initiallyOpenGroups(nav, null).size).toBe(0);
+  it('is one run with no heading for a hub without groups', () => {
+    const [plain] = buildConsoleNav(items, layout).filter(isGroup);
+    expect(pageRuns(plain!)).toHaveLength(1);
+    expect(pageRuns(plain!)[0]!.captionKey).toBeUndefined();
+  });
+});
+
+describe('hubHref and hubOf', () => {
+  const nav = buildConsoleNav(items, layout);
+  const access = nav.filter(isGroup)[0]!;
+
+  it('sends a hub to its first visible page', () => {
+    expect(hubHref(access)).toBe('/admin/security');
+    const noFirst = buildConsoleNav(items, layout, (id) => id !== 'security').filter(isGroup)[0]!;
+    expect(hubHref(noFirst)).toBe('/admin/security/events');
+  });
+
+  it('finds the hub holding a page, and none for Home or no page', () => {
+    expect(hubOf(nav, 'security-events')?.id).toBe('access');
+    expect(hubOf(nav, 'overview')).toBeNull();
+    expect(hubOf(nav, null)).toBeNull();
+  });
+});
+
+describe('the real label overrides', () => {
+  const real = leaves(buildConsoleNav(CONSOLE_NAV_ITEMS));
+  const label = (id: string) => real.find((l) => l.id === id)?.labelKey;
+
+  it('gives the clashing names one meaning each, from the shell file', () => {
+    expect(label('addon-packs')).toBe('admin-console-shell.nav.labels.addonPacks');
+    expect(label('extensions')).toBe('admin-console-shell.nav.labels.extensions');
+    expect(label('settings-analytics')).toBe('admin-console-shell.nav.labels.trackingCode');
+  });
+
+  it('adds the pages that had no menu entry', () => {
+    expect(label('flow-templates')).toBeDefined();
+    expect(label('wallet-overview')).toBeDefined();
   });
 });
 
@@ -101,5 +266,48 @@ describe('formatCount', () => {
     [12_400_000, '12M'],
   ])('%s -> %s', (input, expected) => {
     expect(formatCount(input as number | null | undefined)).toBe(expected);
+  });
+});
+
+describe('status badges', () => {
+  const leaf = buildConsoleNav(CONSOLE_NAV_ITEMS)
+    .flatMap((e) => ('children' in e ? e.children : [e]))
+    .find((l) => l.id === 'node-bridge');
+
+  it('puts a "Not supported" badge on the Node bridge page, driven by a flag and not a count', () => {
+    expect(leaf?.statusBadge).toEqual({
+      key: 'unofficialOff',
+      labelKey: 'admin-console-shell.nav.badges.notSupported',
+    });
+    expect(leaf?.badgeKey).toBeUndefined();
+  });
+
+  it('shows it only while the platform switch is off', () => {
+    expect(activeStatusBadge(leaf!, { unofficialOff: 1 })).toBe(
+      'admin-console-shell.nav.badges.notSupported',
+    );
+    // switch on, or the settings could not be read: no badge
+    expect(activeStatusBadge(leaf!, {})).toBeNull();
+    expect(activeStatusBadge(leaf!, { unofficialOff: 0 })).toBeNull();
+  });
+
+  it('says "No workspaces" (neutral) when the switch is on and the allow-list is empty; "Not supported" wins while off', () => {
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.noWorkspaces',
+      tone: 'neutral',
+    });
+    expect(activeStatusBadgeInfo(leaf!, { unofficialOff: 1, unofficialNoWorkspaces: 1 })).toEqual({
+      labelKey: 'admin-console-shell.nav.badges.notSupported',
+      tone: 'warning',
+    });
+    expect(activeStatusBadgeInfo(leaf!, {})).toBeNull();
+    expect(activeStatusBadgeInfo(leaf!, { unofficialNoWorkspaces: 0 })).toBeNull();
+  });
+
+  it('leaves every other page without one', () => {
+    const others = buildConsoleNav(CONSOLE_NAV_ITEMS)
+      .flatMap((e) => ('children' in e ? e.children : [e]))
+      .filter((l) => l.id !== 'node-bridge');
+    expect(others.some((l) => l.statusBadge)).toBe(false);
   });
 });

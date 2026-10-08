@@ -307,6 +307,10 @@
             "label": "Require 2FA for admins",
             "hint": "Users with the Admin role in any workspace must set up an authenticator app."
           },
+          "requireMfaForSuperAdmins": {
+            "label": "Require 2FA for super admins",
+            "hint": "Platform super admins sign in with a password alone while this is off. Turning it on makes them enrol and use an authenticator app."
+          },
           "requireMfaForOwners": {
             "label": "Require 2FA for workspace owners",
             "hint": "The owner of each workspace must set up an authenticator app."
@@ -1232,8 +1236,18 @@
           "price": "Price",
           "messages": "Messages",
           "workspaces": "Workspaces",
+          "entitlements": "Included",
+          "features": "Features",
+          "limits": "Limits",
+          "addons": "Add-ons",
           "status": "Status",
           "actions": "Actions"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{count} of {total} features on",
+          "limits": "{count} of {total} limits set",
+          "addons": "{count, plural, one {# add-on visible} other {# add-ons visible}}"
         },
         "badges": {
           "popular": "Popular",
@@ -1299,6 +1313,100 @@
           "discard": "Discard your changes?",
           "failed": "The plan could not be saved. Try again.",
           "unlimited": "Unlimited",
+          "errorsBanner": "Some fields need attention. Tabs marked with a dot have errors.",
+          "tabs": {
+            "label": "Plan sections",
+            "details": "Details and pricing",
+            "features": "Features",
+            "limits": "Limits",
+            "addons": "Add-ons"
+          },
+          "tabSummary": {
+            "features": "{count} of {total} features on",
+            "limits": "{count} of {total} limits set",
+            "addons": "{count} add-ons selected",
+            "error": "Has errors to fix"
+          },
+          "featuresUi": {
+            "intro": "Switch off what this plan does not include. A workspace on the plan cannot open an area whose feature is off.",
+            "search": "Search features",
+            "searchPlaceholder": "Search features",
+            "enableAll": "Enable all",
+            "disableAll": "Disable all",
+            "noMatch": "No features match your search.",
+            "groupCount": "{count} of {total} on"
+          },
+          "limitsUi": {
+            "intro": "A cap stops the action once the workspace reaches it. Tick Unlimited to remove the cap.",
+            "search": "Search limits",
+            "searchPlaceholder": "Search limits",
+            "noMatch": "No limits match your search.",
+            "unlimited": "Unlimited",
+            "platformDefault": "Platform default",
+            "groupCount": "{count} of {total} capped",
+            "valueFor": "Cap for {name}",
+            "unofficialOff": "Only applies when unofficial WhatsApp is enabled by the platform (currently disabled)."
+          },
+          "limitUnits": {
+            "perMonth": "per month",
+            "perBroadcast": "per broadcast",
+            "perMinute": "per minute",
+            "perPlanPeriod": "per plan period",
+            "total": "in total"
+          },
+          "addons": {
+            "intro": "Enabled add-ons are shown to workspaces on this plan in their Marketplace; they can only be used after the workspace buys them.",
+            "search": "Search add-ons",
+            "searchPlaceholder": "Search add-ons or apps",
+            "selectAll": "Select all",
+            "clear": "Clear",
+            "selected": "{count} of {total} selected",
+            "loading": "Loading add-ons",
+            "empty": "No paid add-ons exist yet",
+            "emptyHint": "Add-ons are created in the Marketplace catalogue of the operator console. Once an app has a paid pack it is listed here.",
+            "loadFailed": "The add-ons could not be loaded.",
+            "loadFailedKept": "The add-ons could not be loaded, so the current selection stays as it is unless you change it here.",
+            "retry": "Try again",
+            "noMatch": "No add-ons match your search.",
+            "unknown": "Unknown add-on",
+            "unknownHint": "This add-on no longer exists. Untick it to remove it from the plan.",
+            "notOnSale": "Not on sale",
+            "packInactive": "The add-on pack is switched off, so nobody can buy it.",
+            "appUnpublished": "The app is not published, so workspaces cannot see it yet.",
+            "appLabel": "App: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "The flow builder and automations that reply to and act on conversations.",
+            "ai_assistants": "AI assistants, including AI mode in the website chatbot widget.",
+            "calling": "The calling section: voice calls and call settings.",
+            "woocommerce": "Connect WooCommerce stores for order messages, cart recovery and store broadcasts.",
+            "shopify": "Connect Shopify stores for order messages, cart recovery and store broadcasts.",
+            "analytics": "The analytics dashboards and reports.",
+            "remove_branding": "White-label: the workspace can hide the platform branding in its footer.",
+            "sales_pipeline": "Deals, tasks and pipelines, and the pipeline figures on the dashboard.",
+            "appointment_booking": "Booking types, appointments and the public booking pages. The paid Appointments app owns this switch.",
+            "chatbot_widgets": "The website chatbot widget builder.",
+            "wa_storefront": "The WhatsApp catalog and storefront area.",
+            "inbox_sla": "SLA policies and deadlines in the team inbox.",
+            "inbox_routing": "Routing rules that assign inbox conversations automatically.",
+            "waba_calling": "WhatsApp calling from the inbox: calling numbers, call permissions, placing and answering calls.",
+            "inbox_kanban": "The Kanban board view of the team inbox.",
+            "team_performance": "The team performance reports.",
+            "scheduled_messages": "Scheduling messages to be sent later.",
+            "whatsapp_warmer": "The WhatsApp number warmer.",
+            "marketplace": "The Marketplace of mini apps and integrations.",
+            "lead_sources": "Lead sources: webhook and connector doors that turn ad and portal leads into contacts and deals.",
+            "team_chat": "Internal team chat channels and direct messages.",
+            "public_api": "The public REST API and its API keys.",
+            "outbound_webhooks": "Outbound webhook endpoints that tell other systems about events.",
+            "storefront_builder": "The online storefront builder.",
+            "invoicing": "Invoices, credit notes, payments, sales orders and tax rates.",
+            "forms_and_links": "Lead capture forms and shareable links.",
+            "extra_channels": "The Telegram, Facebook and Instagram channels.",
+            "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
+            "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account."
+          },
           "units": {
             "days": "Days",
             "weeks": "Weeks",
@@ -1399,7 +1507,10 @@
           "limitGroups": {
             "messaging": "Messaging",
             "workspace": "Workspace",
-            "content": "Content"
+            "content": "Content",
+            "sales": "Sales and billing",
+            "integrations": "Integrations",
+            "ai": "AI"
           },
           "limitKeys": {
             "monthly_messages": "Messages per month",
@@ -1419,7 +1530,23 @@
             "api_rate_limit_per_minute": "API requests per minute (0 = platform default)",
             "installed_apps": "Installed Marketplace apps and integrations",
             "scheduled_messages": "Scheduled messages held",
-            "lead_sources": "Lead sources"
+            "lead_sources": "Lead sources",
+            "broadcast_recipients": "Recipients in one broadcast",
+            "segments": "Saved segments",
+            "custom_fields": "Custom fields",
+            "team_chat_channels": "Team chat channels",
+            "sla_policies": "Inbox SLA policies",
+            "booking_types": "Booking types",
+            "chatbot_widgets": "Website chatbot widgets",
+            "catalog_products": "Catalog products",
+            "invoices_monthly": "Invoices per month",
+            "recurring_invoices": "Recurring invoices",
+            "api_keys": "API keys",
+            "webhooks": "Outbound webhooks",
+            "ai_token_limit_monthly": "AI tokens per month (platform keys)",
+            "forms": "Web forms",
+            "form_submissions_monthly": "Form submissions per month",
+            "ai_form_generations_monthly": "AI form builder generations per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1447,7 +1574,16 @@
             "scheduled_messages": "Scheduled messages",
             "whatsapp_warmer": "WhatsApp number warmer",
             "marketplace": "Marketplace (mini apps and integrations)",
-            "lead_sources": "Lead sources (webhook and connector doors that create contacts)"
+            "lead_sources": "Lead sources (webhook and connector doors that create contacts)",
+            "team_chat": "Team chat (internal channels and direct messages)",
+            "public_api": "Public REST API and API keys",
+            "outbound_webhooks": "Outbound webhooks",
+            "storefront_builder": "Storefront and website builder",
+            "invoicing": "Invoicing (invoices, credit notes, recurring invoices)",
+            "forms_and_links": "Forms, click-to-chat links and groups",
+            "extra_channels": "Telegram, Facebook and Instagram channels",
+            "form_builder": "Forms (web form builder)",
+            "waba_groups": "WhatsApp groups (Cloud API)"
           },
           "problems": {
             "required": "This field is required.",
@@ -1456,6 +1592,7 @@
             "range": "Enter a whole number from {min} to {max}.",
             "whole": "Enter a whole number, or leave blank for unlimited.",
             "server": "The server refused this value.",
+            "unknownAddon": "Selected add-ons that no longer exist: {count}. Untick them and save again.",
             "free_needs_zero_price": "A free plan must have a price of 0.",
             "free_no_offer": "A free plan cannot have an offer price.",
             "custom_no_price": "A custom-quote plan shows no price: leave the price and offer empty.",
@@ -1463,6 +1600,42 @@
             "paid_needs_price": "Set a price above 0, or mark the plan as free.",
             "offer_not_lower": "The offer price must be lower than the plan price.",
             "default_needs_active": "The signup default plan must be active."
+          },
+          "limitHints": {
+            "monthly_messages": "Outbound messages sent in the calendar month. Beyond the allowance the wallet is charged.",
+            "broadcasts": "Broadcasts that are not archived.",
+            "scheduled_messages": "Scheduled messages the workspace holds, in any status. Deleting one frees its place.",
+            "total_campaigns": "Campaigns created in the plan period. Deleting a campaign does not give the place back.",
+            "devices": "Connected WhatsApp numbers. Removing one frees its place.",
+            "users": "Team members that are not deactivated.",
+            "contacts": "Contacts in the workspace.",
+            "tags": "Contact tags.",
+            "pipelines": "Sales pipelines.",
+            "appointments": "Appointments booked in the calendar month (pending, confirmed or completed), by their start time.",
+            "saved_replies": "Saved replies (quick replies) of the team inbox.",
+            "routing_rules": "Routing rules of the team inbox.",
+            "templates": "WhatsApp message templates.",
+            "flows": "Flows in the builder.",
+            "autoreplies": "Keyword auto-replies.",
+            "api_rate_limit_per_minute": "Requests per minute for each API key. 0 uses the platform default instead of unlimited.",
+            "installed_apps": "Marketplace apps and integrations installed now. Uninstalling frees a place.",
+            "lead_sources": "Lead sources (webhook and connector doors). Deleting one frees its place.",
+            "broadcast_recipients": "The largest audience one broadcast may be sent to, checked when the broadcast is created or edited.",
+            "segments": "Saved contact segments. Deleting one frees its place.",
+            "custom_fields": "Custom fields added to any module. The built-in system fields are not counted.",
+            "team_chat_channels": "Team chat channels, public and private. Deleting one frees its place.",
+            "sla_policies": "SLA policies of the team inbox.",
+            "booking_types": "Booking types behind the public booking pages.",
+            "chatbot_widgets": "Website chatbot widgets.",
+            "catalog_products": "Products in the WhatsApp catalog. Deleting one frees its place.",
+            "invoices_monthly": "Invoices created in the calendar month, in any status. Voiding or deleting one does not give the month back.",
+            "recurring_invoices": "Recurring invoice schedules, in any status.",
+            "api_keys": "Active API keys. Revoking a key frees its place.",
+            "webhooks": "Outbound webhook endpoints (inbox webhooks and API webhooks together).",
+            "ai_token_limit_monthly": "Tokens the AI assistants use in the calendar month on the platform's keys. Workspaces on their own keys are not capped.",
+            "forms": "Active web forms (Forms app). Archiving a form frees its place. 0 = unlimited.",
+            "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
+            "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited."
           }
         }
       },

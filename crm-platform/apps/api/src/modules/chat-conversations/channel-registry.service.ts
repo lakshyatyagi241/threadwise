@@ -9,6 +9,7 @@ import {
   type CreateSimulatorChannelInput,
   type UpdateChannelInput,
 } from '@crm/contracts';
+import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -26,6 +27,11 @@ import {
   WABA_CONNECTIONS,
   type WabaConnectionsPort,
 } from '../whatsapp-cloud-api-waba/waba-connections.port';
+import {
+  UNOFFICIAL_ENGINE_CHANNEL_KIND,
+  UNOFFICIAL_WHATSAPP_GATE,
+  type UnofficialWhatsappGate,
+} from '../auth/unofficial-whatsapp.port';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { mergeSettings, normalizeSettings } from './channel-settings';
 import { ChannelVault } from './channel-vault';
@@ -67,6 +73,7 @@ export class ChannelRegistryService {
     private readonly outbox: OutboxService,
     private readonly realtime: ChatRealtimePublisher,
     @Inject(WABA_CONNECTIONS) private readonly waba: WabaConnectionsPort,
+    @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     config: ConfigService<Env, true>,
   ) {
     this.publicBaseUrl = config.get('APP_URL', { infer: true }).replace(/\/$/, '');
@@ -77,10 +84,13 @@ export class ChannelRegistryService {
   /** The workspace's channels, oldest first. A row whose kind has no adapter here (a simulator row in production) is left out. */
   async list(): Promise<ChannelListResponse> {
     const orgId = RequestContextStore.orgId();
+    // Personal-number channels are hidden while the platform switch is off; their rows and conversations stay (owner decision 2026-10-05).
+    const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, orgId);
       const data: ChannelResponse[] = [];
       for (const row of rows) {
+        if (!unofficialOn && row.kind === UNOFFICIAL_ENGINE_CHANNEL_KIND) continue;
         const adapter = this.adapters.find(row.kind);
         if (adapter) data.push(toChannelResponse(row, adapter, this.publicBaseUrl));
       }
@@ -194,6 +204,29 @@ export class ChannelRegistryService {
       displayAddress: device.displayAddress,
       connected: device.connected,
     });
+  }
+
+  /**
+   * A personal-number device was deleted (WADEV): its open, pending and snoozed threads are closed (the history stays readable, as in
+   * Reference) and its `whatsapp_qr` channel is switched off. The channel row itself stays: its threads still point at it (RESTRICT), and
+   * a channel that nobody can send through is the honest state. Runs inside the caller's transaction so it commits with the delete.
+   */
+  async retireDeviceChannel(
+    tx: Tx,
+    orgId: number,
+    deviceUuid: string,
+  ): Promise<{ closedConversations: number }> {
+    const closed = await tx.execute(sql`
+      UPDATE conversations c
+         SET status = 'closed', snoozed_until = NULL, resolved_at = coalesce(c.resolved_at, now())
+        FROM channels ch
+       WHERE ch.org_id = ${orgId} AND ch.kind = 'whatsapp_qr' AND ch.external_id = ${deviceUuid}
+         AND c.org_id = ch.org_id AND c.channel_id = ch.id AND c.status IN ('open', 'pending', 'snoozed')
+      RETURNING c.id`);
+    await tx.execute(sql`
+      UPDATE channels SET status = 'disconnected'
+       WHERE org_id = ${orgId} AND kind = 'whatsapp_qr' AND external_id = ${deviceUuid} AND status <> 'disconnected'`);
+    return { closedConversations: closed.rows.length };
   }
 
   /**

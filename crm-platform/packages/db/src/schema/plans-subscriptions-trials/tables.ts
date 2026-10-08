@@ -234,6 +234,9 @@ export const subscriptions = pgTable(
     userId: idColumn('user_id'),
     packageId: idColumn('package_id'),
     planId: text('plan_id'),
+    /** 'plan' renews the workspace plan; 'addon' renews one add-on purchase (`workspaceAddonId`). */
+    kind: text('kind').$type<'plan' | 'addon'>().notNull().default('plan'),
+    workspaceAddonId: idColumn('workspace_addon_id'),
     gateway: text('gateway').notNull(),
     gatewaySubscriptionId: text('gateway_subscription_id'),
     gatewayPlanId: text('gateway_plan_id'),
@@ -276,6 +279,7 @@ export const subscriptions = pgTable(
     index('idx_subscriptions_gateway_subscription_id').on(t.orgId, t.gatewaySubscriptionId),
     index('idx_subscriptions_user_id').on(t.orgId, t.userId),
     index('idx_subscriptions_status').on(t.orgId, t.status),
+    index('idx_subscriptions_org_kind_status').on(t.orgId, t.kind, t.status),
   ],
 );
 

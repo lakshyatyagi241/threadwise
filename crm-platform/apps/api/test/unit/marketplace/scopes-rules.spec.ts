@@ -30,7 +30,7 @@ const seededKeys = (() => {
     .filter((f) => f.endsWith('.sql'))
     .map((f) => readFileSync(resolve(MIGRATIONS, f), 'utf8'))
     .join('\n');
-  return new Set([...text.matchAll(/'([a-z_]+\.[a-z_]+\.[a-z_]+)'/g)].map((m) => m[1]!));
+  return new Set([...text.matchAll(/'([a-z_]+\.[a-z_-]+\.[a-z_]+)'/g)].map((m) => m[1]!));
 })();
 
 describe('scope registry', () => {

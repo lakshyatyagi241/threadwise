@@ -30,6 +30,10 @@ export const QUEUES = {
   BCAST_DISPATCH: 'bcast-dispatch',
   /** WhatsApp Cloud API / Interakt webhook payloads (messages, receipts, template and account events). Acked first, processed here. */
   WABA_INGEST: 'waba-ingest',
+  /** One delayed job per Pinnacle client: shares the Meta credit line a few minutes after its embedded details arrive. Own queue: a slow partner must not hold WhatsApp ingest. */
+  PINNACLE_CREDIT_LINE: 'pinnacle-credit-line',
+  /** One job per (webhook, target): the raw Meta body POSTed unchanged to a platform-configured target. Own queue: a dead target must not delay WhatsApp ingest. */
+  WEBHOOK_FORWARD: 'webhook-forward',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
@@ -56,6 +60,8 @@ export const QUEUES = {
   MKT_PULL: 'mkt-pull',
   /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
   MKT_INBOUND: 'mkt-inbound',
+  /** One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job. */
+  WEB_PUSH: 'web-push',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

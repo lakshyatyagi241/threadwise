@@ -7,10 +7,6 @@ import {
   signS3Request,
   type StorageSettingsInput,
 } from '../../../src/infra/providers/platform-settings-branding-storage/object-storage.probe';
-import {
-  PusherProbe,
-  signPusherRequest,
-} from '../../../src/infra/providers/platform-settings-branding-storage/pusher.probe';
 
 const base = (over: Partial<StorageSettingsInput> = {}): StorageSettingsInput => ({
   provider: 's3',
@@ -174,49 +170,5 @@ describe('ObjectStorageProbe', () => {
     );
     expect(r.ok).toBe(false);
     expect(r.message).toMatch(/^Connection failed: /);
-  });
-});
-
-describe('Pusher probe (TW-SET-041)', () => {
-  const creds = { appId: '123', key: 'abc', secret: 's3cr3t', cluster: 'eu' };
-
-  it('signs the call: md5 of the body, sorted query, HMAC over method, path and query', () => {
-    const a = signPusherRequest(creds, '{"x":1}', 1_700_000_000);
-    expect(a.path).toBe('/apps/123/events');
-    expect(a.query).toMatch(
-      /^auth_key=abc&auth_timestamp=1700000000&auth_version=1\.0&body_md5=[0-9a-f]{32}&auth_signature=[0-9a-f]{64}$/,
-    );
-    expect(signPusherRequest(creds, '{"x":2}', 1_700_000_000).query).not.toBe(a.query);
-    expect(
-      signPusherRequest({ ...creds, secret: 'other' }, '{"x":1}', 1_700_000_000).query,
-    ).not.toBe(a.query);
-  });
-
-  it('needs app id, key and secret', async () => {
-    expect(await new PusherProbe().probe({ ...creds, secret: '' })).toEqual({
-      ok: false,
-      message: 'Fill in App ID, Key and Secret first.',
-    });
-  });
-
-  it('succeeds when Pusher accepts the event and reports the rejection otherwise', async () => {
-    const ok = await stub(() => [200, '{}']);
-    class Local extends PusherProbe {
-      constructor(private readonly origin: string) {
-        super();
-      }
-      override baseUrl(): string {
-        return this.origin;
-      }
-    }
-    const good = await new Local(ok.url).probe(creds);
-    expect(good.ok).toBe(true);
-    expect(ok.seen[0]!.method).toBe('POST');
-    expect(ok.seen[0]!.url).toContain('/apps/123/events?auth_key=abc');
-    await new Promise((r) => server!.close(r));
-    const bad = await stub(() => [401, 'Invalid signature']);
-    const r = await new Local(bad.url).probe(creds);
-    expect(r.ok).toBe(false);
-    expect(r.message).toBe('Pusher rejected the credentials: HTTP 401 Invalid signature');
   });
 });

@@ -147,7 +147,7 @@ export function senderLabel(channel: SenderChannel, kind: unknown): string {
   return `${listen ? 'Listen on' : 'Send from'} ${noun[channel]}`;
 }
 
-export function senderHint(channel: SenderChannel): LinkedCopy {
+export function senderHint(channel: SenderChannel, unofficial = false): LinkedCopy {
   switch (channel) {
     case 'instagram':
       return {
@@ -158,7 +158,7 @@ export function senderHint(channel: SenderChannel): LinkedCopy {
     case 'facebook':
       return {
         before: 'Required — which connected Facebook Page this flow runs on. Connect one on ',
-        href: '/devices',
+        href: '/facebook',
         after: '.',
       };
     case 'line':
@@ -183,16 +183,24 @@ export function senderHint(channel: SenderChannel): LinkedCopy {
       return {
         before:
           'Required — which linked mailbox this flow runs on. Replies are sent from that address. Link one on ',
-        href: '/devices',
+        href: '/settings/channels',
         after: '.',
       };
     default:
-      return {
-        before:
-          'Required — which connected number this flow runs on, across all your engines (Unofficial / WABA / Twilio). Connect one on ',
-        href: '/devices',
-        after: '.',
-      };
+      // Only the official WhatsApp Business API (and Twilio) are offered unless the platform has switched the unofficial engine on.
+      return unofficial
+        ? {
+            before:
+              'Required — which connected number this flow runs on, across all your engines (Unofficial / WABA / Twilio). Connect one on ',
+            href: '/devices',
+            after: '.',
+          }
+        : {
+            before:
+              'Required — which connected number this flow runs on, across your official engines (WhatsApp Business API / Twilio). Connect one on ',
+            href: '/channels/whatsapp',
+            after: '.',
+          };
   }
 }
 
@@ -204,7 +212,7 @@ export function senderPickNoun(channel: SenderChannel): string {
   return 'a number';
 }
 
-export function senderNoneCopy(channel: SenderChannel): LinkedCopy {
+export function senderNoneCopy(channel: SenderChannel, unofficial = false): LinkedCopy {
   switch (channel) {
     case 'instagram':
       return {
@@ -217,21 +225,21 @@ export function senderNoneCopy(channel: SenderChannel): LinkedCopy {
       return {
         before:
           'No Facebook Page is connected to this workspace yet. You can still build and save this flow — connect one on ',
-        href: '/devices',
+        href: '/facebook',
         after: ' and pick it here before publishing.',
       };
     case 'email':
       return {
         before:
           'No mailbox is linked to this workspace yet. You can still build and save this flow — link one on ',
-        href: '/devices',
+        href: '/settings/channels',
         after: ' and pick it here before publishing.',
       };
     default:
       return {
         before:
           "No connected number in this workspace yet — a disconnected phone can't send, so it isn't listed. You can still build and save this flow — reconnect on ",
-        href: '/devices',
+        href: unofficial ? '/devices' : '/channels/whatsapp',
         after: ' and pick it here before publishing.',
       };
   }

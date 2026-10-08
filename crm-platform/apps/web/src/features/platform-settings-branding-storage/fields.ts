@@ -453,21 +453,6 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
-    id: 'realtime',
-    group: 'realtime',
-    slug: 'realtime',
-    test: 'realtime',
-    guide: ['how', 'live', 'poll', 'test'],
-    sections: [
-      { id: 'live', eyebrow: 'broadcasting', fields: [f('enabled', 'toggle')] },
-      {
-        id: 'pusher',
-        eyebrow: 'pusher-app',
-        fields: halves(f('appId'), f('cluster'), f('appKey'), f('appSecret', 'secret')),
-      },
-    ],
-  },
-  {
     id: 'campaigns',
     group: 'campaigns',
     slug: 'campaigns',
@@ -488,6 +473,19 @@ export const GROUP_SPECS: GroupSpec[] = [
           f('autoExpiryEnabled', 'toggle'),
           f('defaultExpiryHours', 'number', { min: 1, max: 720 }),
         ),
+      },
+    ],
+  },
+  {
+    id: 'flowBuilder',
+    group: 'flowBuilder',
+    slug: 'flow-builder',
+    guide: ['modes', 'existing'],
+    sections: [
+      {
+        id: 'mode',
+        eyebrow: 'automation',
+        fields: [f('mode', 'select', { options: ['simple', 'advanced'] })],
       },
     ],
   },
@@ -593,7 +591,7 @@ export const HUB_ORDER = [
   'registration',
   'custom',
   'storage',
-  'realtime',
   'campaigns',
+  'flowBuilder',
   'googleCalendar',
 ] as const;

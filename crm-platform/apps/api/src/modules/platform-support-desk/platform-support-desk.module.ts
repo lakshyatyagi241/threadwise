@@ -43,5 +43,7 @@ import { TicketActions } from './ticket-actions.service';
     SupportMailer,
     SupportStore,
   ],
+  // The operator Workspaces hub (WSP) suspends and lifts through the inbox's own methods.
+  exports: [PlatformInboxService],
 })
 export class PlatformSupportDeskModule {}

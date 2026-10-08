@@ -16,6 +16,12 @@
   "punya": {
    "name": "Punya",
    "aliases": []
+  },
+  "shubham": {
+   "name": "Shubham",
+   "aliases": [
+    "shubbhampuranik"
+   ]
   }
  },
  "clusters": {
@@ -282,7 +288,7 @@
    "cluster": "platform",
    "wave": 1,
    "estDays": 130,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "infra",
    "zone": [
     "apps/api/src/modules/platform-infrastructure/",
@@ -471,7 +477,7 @@
    "cluster": "platform",
    "wave": 3,
    "estDays": 130,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "developer",
    "zone": [
     "apps/api/src/modules/developer-rest-api-v1/",
@@ -488,6 +494,9 @@
     "apps/web/src/app/(admin)/(developer-rest-api-v1)/",
     "apps/web/src/features/developer-rest-api-v1/",
     "apps/web/messages/*/developer-rest-api-v1.json",
+    "apps/web/messages/*/developer-rest-api-v1-docs.json",
+    "apps/web/src/app/(developer-rest-api-v1-docs)/",
+    "apps/web/src/app/docs/",
     "apps/web/e2e/developer-rest-api-v1/",
     "docs/api/developer-rest-api-v1.md",
     "apps/api/src/modules/partner/",
@@ -553,7 +562,7 @@
   },
   "chrome-extension-sheets-addon": {
    "code": "ext",
-   "owner": "lakshya",
+   "owner": "shubham",
    "cluster": "platform",
    "wave": 3,
    "estDays": 70,
@@ -1431,6 +1440,11 @@
    "routeBase": "checkout",
    "zone": [
     "apps/api/src/modules/checkout-orders-merchant-payments/",
+    "apps/api/src/modules/store-orders-sales/",
+    "apps/api/test/unit/store-orders-sales/",
+    "apps/api/test/integration/store-orders-sales/",
+    "apps/api/test/e2e/store-orders-sales/",
+    "docs/threadwise-port/wiring/store-orders-crm.md",
     "apps/api/src/infra/providers/checkout-orders-merchant-payments/",
     "apps/api/src/config/domains/checkout-orders-merchant-payments.env.ts",
     "apps/api/test/unit/checkout-orders-merchant-payments/",
@@ -1965,6 +1979,31 @@
   {
    "path": "docs/threadwise-port/assignments.md",
    "policy": "generated; do not hand-edit",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/features/help-center/**",
+   "policy": "Help center zone: the repo owner; guides are written with the help-docs-sync skill",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/app/(app)/(help-center)/**",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/messages/*/help-center.json",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/e2e/help-center/**",
+   "policy": "Help center zone: the repo owner",
+   "reviewer": "lakshya"
+  },
+  {
+   "path": "apps/web/src/features/*/help/**",
+   "policy": "Help guides, one folder per domain: the first content pass adds new files into every domain; afterwards each domain owner edits their own guides (help-docs-sync)",
    "reviewer": "lakshya"
   }
  ]

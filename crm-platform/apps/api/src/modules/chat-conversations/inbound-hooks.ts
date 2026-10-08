@@ -1,4 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
+import { OrgSuspensionService } from '../auth';
 
 /** A customer's message that was just stored, as a domain that reacts to inbound traffic sees it. Plain data: no row, no provider shape. */
 export interface InboundStoredEvent {
@@ -14,6 +15,8 @@ export interface InboundStoredEvent {
   peerKey: string;
   peerName: string | null;
   createdConversation: boolean;
+  /** The status the thread was reopened from (it was resolved, closed or snoozed), or null/absent when it was already live. */
+  reopenedFrom?: string | null;
   message: {
     kind: 'text' | 'media' | 'location' | 'contact' | 'reaction' | 'interactive' | 'unsupported';
     body: string | null;
@@ -21,6 +24,12 @@ export interface InboundStoredEvent {
     location: { latitude: number; longitude: number; name?: string; address?: string } | null;
     /** The key of the stored file, when the file is already in the media store. */
     mediaKey: string | null;
+    /** What the customer's file is (WhatsApp's own kind, MIME type and file name), for a flow that checks the type it asked for. */
+    media?: {
+      kind: 'image' | 'video' | 'audio' | 'document' | 'sticker';
+      mime: string;
+      name?: string;
+    } | null;
   };
 }
 
@@ -43,12 +52,17 @@ export class InboundMessageHooks {
   private readonly logger = new Logger(InboundMessageHooks.name);
   private readonly listeners: InboundMessageListener[] = [];
 
+  constructor(@Optional() private readonly suspension?: OrgSuspensionService) {}
+
   register(listener: InboundMessageListener): void {
     if (this.listeners.some((l) => l.name === listener.name)) return;
     this.listeners.push(listener);
   }
 
   async run(event: InboundStoredEvent): Promise<{ consumed: boolean }> {
+    // A suspended workspace still receives and stores its messages (no data loss) but nothing answers them: no flow, keyword
+    // reply or AI agent starts. `consumed: true` also stops the auto reply that runs after the listeners (ADR-0019).
+    if (await this.suspension?.isSuspended(event.orgId)) return { consumed: true };
     let consumed = false;
     for (const l of this.listeners) {
       try {

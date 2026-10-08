@@ -6,7 +6,7 @@ import type {
   MarketLock,
   MarketSubscription,
 } from '@crm/contracts';
-import { subscriptionChip } from './pricing';
+import { needsPurchase, subscriptionChip } from './pricing';
 import { mktRoutes, safeInternalPath } from './routes';
 
 /** What the person is told about an installation (chips) and what a card offers (call to action). Pure: the components only draw it. */
@@ -171,6 +171,8 @@ export interface Cta {
   href: string;
   /** Present for `locked`: where the upgrade prompt goes (null when upgrading would not help). */
   upgradeHref: string | null;
+  /** The app is an add-on the workspace has not bought: Install and Open are shown disabled, with the reason. */
+  needsPurchase: boolean;
 }
 
 export function cardCta(
@@ -179,27 +181,41 @@ export function cardCta(
 ): Cta {
   if (card.install) {
     const href = mktRoutes.manage(card.install.installationId);
-    if (card.install.status === 'killed') return { kind: 'killed', href, upgradeHref: null };
-    if (card.install.needsReconsent) return { kind: 'review', href, upgradeHref: null };
-    return { kind: 'manage', href, upgradeHref: null };
+    if (card.install.status === 'killed')
+      return { kind: 'killed', href, upgradeHref: null, needsPurchase: false };
+    if (card.install.needsReconsent)
+      return { kind: 'review', href, upgradeHref: null, needsPurchase: false };
+    return { kind: 'manage', href, upgradeHref: null, needsPurchase: false };
   }
   const detail = mktRoutes.app(card.slug);
   const lock = lockView(card.locked);
-  if (lock) return { kind: 'locked', href: detail, upgradeHref: lock.upgradeHref };
+  if (lock)
+    return { kind: 'locked', href: detail, upgradeHref: lock.upgradeHref, needsPurchase: false };
   // Nothing can be bought of an app the platform stopped selling, and subscribing needs the same permission as installing.
   if (card.pricing.access === 'not_for_sale' || !can.install)
-    return { kind: 'view', href: detail, upgradeHref: null };
+    return {
+      kind: 'view',
+      href: detail,
+      upgradeHref: null,
+      needsPurchase: needsPurchase(card.pricing),
+    };
   const href = mktRoutes.install(card.slug);
-  if (card.pricing.access === 'subscription_required')
-    return { kind: 'subscribe', href, upgradeHref: null };
-  return { kind: 'install', href, upgradeHref: null };
+  // Whatever the access says, an add-on the workspace has not bought is never offered Install (the server refuses it as well).
+  if (card.pricing.access === 'subscription_required' || needsPurchase(card.pricing))
+    return {
+      kind: 'subscribe',
+      href,
+      upgradeHref: null,
+      needsPurchase: needsPurchase(card.pricing),
+    };
+  return { kind: 'install', href, upgradeHref: null, needsPurchase: false };
 }
 
 /** The install button of the app page: whether it is offered, disabled with a reason, or replaced. */
 export type InstallGate =
   | { kind: 'allowed'; href: string }
   /** A paid app with no subscription: Subscribe (and the free trial) stand where Install would. */
-  | { kind: 'subscribe'; href: string }
+  | { kind: 'subscribe'; href: string; needsPurchase: boolean }
   /** A paid app the platform stopped selling to newcomers: a note, no button. */
   | { kind: 'notForSale' }
   | { kind: 'installed'; href: string }
@@ -222,7 +238,7 @@ export function installGate(
   if (card.pricing.access === 'not_for_sale') return { kind: 'notForSale' };
   if (!can.install) return { kind: 'noPermission', permission: 'market.apps.install' };
   const href = mktRoutes.install(card.slug);
-  return card.pricing.access === 'subscription_required'
-    ? { kind: 'subscribe', href }
+  return card.pricing.access === 'subscription_required' || needsPurchase(card.pricing)
+    ? { kind: 'subscribe', href, needsPurchase: needsPurchase(card.pricing) }
     : { kind: 'allowed', href };
 }

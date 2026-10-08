@@ -9,6 +9,8 @@ import {
   type LoginRequest,
   type LoginResponse,
   type MfaLoginRequest,
+  type PasswordLoginResponse,
+  type SelectWorkspaceRequest,
 } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -66,6 +68,12 @@ interface MfaChallenge {
   lockKey?: string;
 }
 
+/** The workspaces a password opened, held while the person picks one. Never leaves the server. */
+interface WorkspaceChoice {
+  remember: boolean;
+  options: Array<{ orgId: number; userId: number; slug: string; lockKey: string }>;
+}
+
 /** Failed sign-ins from one address, across emails, before it is slowed down. */
 const IP_FAILURE_MAX = 40;
 const IP_FAILURE_WINDOW_SECONDS = 300;
@@ -100,12 +108,19 @@ export class LoginService {
 
   // --- password login ---------------------------------------------------------------------
 
-  async login(req: LoginRequest, meta: ClientMeta): Promise<LoginResponse> {
+  async login(req: LoginRequest, meta: ClientMeta): Promise<PasswordLoginResponse> {
     const policy = await this.policy.policy();
     const ip = normalizeIp(meta.ip) ?? 'unknown';
 
-    const slug = req.orgSlug ?? (await this.slugForEmail(req.email));
-    const org = slug ? await this.tenants.findOrgBySlug(slug) : null;
+    let org: OrgRef | null;
+    if (req.orgSlug) {
+      org = await this.tenants.findOrgBySlug(req.orgSlug);
+    } else {
+      const orgs = await this.tenants.activeOrgsForEmail(req.email);
+      // Several workspaces: the password decides which of them to offer.
+      if (orgs.length > 1) return this.loginAcrossWorkspaces(req, orgs, policy, ip, meta);
+      org = orgs[0] ?? null;
+    }
     if (!org || org.status !== 'active') {
       // Same work and same answer as a wrong password: no organization oracle.
       await this.passwords.verifyOrDummy(null, req.password);
@@ -135,23 +150,126 @@ export class LoginService {
     if (!row || !passwordOk) {
       await this.recordFailedSignIn(lockKey, policy);
       await this.countIpFailure('login', ip);
-      await this.audit.recordStandalone({
-        event: 'auth.failed',
-        status: 'failure',
-        orgId: org.id,
-        actorType: 'user',
-        actorId: row?.id ?? null,
-        recordId: row?.id ?? 0,
-        payload: { identifier: req.email.slice(0, 191) },
-      });
+      await this.auditFailedSignIn(org.id, row, req.email);
       throw this.invalid();
     }
 
+    return this.afterPassword(org, row, req.remember && policy.rememberMeEnabled, lockKey, meta);
+  }
+
+  /**
+   * The email is in several workspaces and the request named none. The password is checked against every
+   * one of them: no match is the usual wrong-password answer, one match signs straight in, and several
+   * matches return the cards to pick from. Only workspaces the password opened are listed, so the answer
+   * never reveals a workspace the visitor could not already enter.
+   */
+  private async loginAcrossWorkspaces(
+    req: LoginRequest,
+    orgs: OrgRef[],
+    policy: SecurityPolicy,
+    ip: string,
+    meta: ClientMeta,
+  ): Promise<PasswordLoginResponse> {
+    await this.captcha.assert(req.captchaToken, 'login');
+    await this.assertIpUnderCeiling('login', ip);
+
+    const matches: Array<{ org: OrgRef; row: UserRow; lockKey: string }> = [];
+    const failures: Array<{ org: OrgRef; row: UserRow | undefined; lockKey: string }> = [];
+    let locked: { org: OrgRef; lockKey: string } | null = null;
+    for (const org of orgs) {
+      const lockKey = AuthKeys.lockout(org.id, req.email, ip);
+      if (
+        policy.lockoutAfterFailures > 0 &&
+        (await this.rate.peek(lockKey)).count >= policy.lockoutAfterFailures
+      ) {
+        locked ??= { org, lockKey };
+        continue;
+      }
+      const row = await this.findUser(org.id, req.email);
+      const ok = await this.passwords.verifyOrDummy(row?.password_hash, req.password);
+      if (row && ok) matches.push({ org, row, lockKey });
+      else failures.push({ org, row, lockKey });
+    }
+
+    if (matches.length === 0) {
+      // A wrong password counts against every workspace it was tried on; a right password for one of
+      // them never costs the others anything (people keep different passwords per workspace).
+      for (const f of failures) {
+        await this.recordFailedSignIn(f.lockKey, policy);
+        await this.auditFailedSignIn(f.org.id, f.row, req.email);
+      }
+      if (locked) {
+        await this.assertNotLocked(locked.lockKey, policy, {
+          orgId: locked.org.id,
+          email: req.email,
+        });
+      }
+      await this.countIpFailure('login', ip);
+      throw this.invalid();
+    }
+
+    const remember = req.remember && policy.rememberMeEnabled;
+    const only = matches.length === 1 ? matches[0] : undefined;
+    if (only) return this.afterPassword(only.org, only.row, remember, only.lockKey, meta);
+
+    const details = await this.tenants.workspaceCardDetails(
+      matches.map((m) => ({ orgId: m.org.id, userId: m.row.id })),
+    );
+    const token = randomToken(32);
+    const pending: WorkspaceChoice = {
+      remember,
+      options: matches.map((m) => ({
+        orgId: m.org.id,
+        userId: m.row.id,
+        slug: m.org.slug,
+        lockKey: m.lockKey,
+      })),
+    };
+    await this.redis.setex(
+      AuthKeys.workspaceChoice(token),
+      Ttl.workspaceChoiceSeconds,
+      JSON.stringify(pending),
+    );
+    return {
+      status: 'workspace_required',
+      selectionToken: token,
+      expiresInSeconds: Ttl.workspaceChoiceSeconds,
+      workspaces: matches.map((m) => ({
+        slug: m.org.slug,
+        name: m.org.name,
+        role: details.get(m.org.id)?.role ?? null,
+        memberCount: details.get(m.org.id)?.memberCount ?? 0,
+      })),
+    };
+  }
+
+  /** The card the person picked: the password already matched there, so this goes on to the second factor or the session. */
+  async selectWorkspace(req: SelectWorkspaceRequest, meta: ClientMeta): Promise<LoginResponse> {
+    const key = AuthKeys.workspaceChoice(req.selectionToken);
+    const raw = await this.redis.get(key);
+    if (!raw) throw this.challengeExpired();
+    const pending = JSON.parse(raw) as WorkspaceChoice;
+    const choice = pending.options.find((o) => o.slug.toLowerCase() === req.orgSlug.toLowerCase());
+    // A wrong slug leaves the token alive so the person can pick again; only a used one is spent.
+    if (!choice) throw this.invalid();
+    await this.redis.del(key);
+
+    const loaded = await this.loadOrgAndUser(choice.orgId, choice.userId);
+    if (!loaded || loaded.org.status !== 'active') throw this.invalid();
+    return this.afterPassword(loaded.org, loaded.user, pending.remember, choice.lockKey, meta);
+  }
+
+  /** The password held: ask for the second factor when the account has one, else open the session. */
+  private async afterPassword(
+    org: OrgRef,
+    row: UserRow,
+    remember: boolean,
+    lockKey: string,
+    meta: ClientMeta,
+  ): Promise<LoginResponse> {
     // A suspended person signs in like anyone else and is then held at the
     // suspended screen by the account gate (TW-AUTH-016); refusing them here
     // would hide the reason and the way to sign out.
-    const remember = req.remember && policy.rememberMeEnabled;
-
     if (row.mfa_enabled) {
       return this.issueMfaChallenge({
         orgId: org.id,
@@ -169,6 +287,22 @@ export class LoginService {
       mfaVerified: false,
       method: 'password',
       meta,
+    });
+  }
+
+  private async auditFailedSignIn(
+    orgId: number,
+    row: UserRow | undefined,
+    email: string,
+  ): Promise<void> {
+    await this.audit.recordStandalone({
+      event: 'auth.failed',
+      status: 'failure',
+      orgId,
+      actorType: 'user',
+      actorId: row?.id ?? null,
+      recordId: row?.id ?? 0,
+      payload: { identifier: email.slice(0, 191) },
     });
   }
 
@@ -522,22 +656,6 @@ export class LoginService {
   }
 
   // --- helpers ---------------------------------------------------------------------------------------------
-
-  /**
-   * Sign-in without a workspace: one matching account decides it. Several matches cannot be told
-   * apart before the password is checked, so the client is asked for the workspace (no list is returned).
-   */
-  private async slugForEmail(email: string): Promise<string | null> {
-    const slugs = await this.tenants.activeOrgSlugsForEmail(email);
-    if (slugs.length > 1) {
-      throw new AppError(
-        ERROR_CODES.AUTH_WORKSPACE_REQUIRED,
-        'This email is used in more than one workspace. Enter your workspace to continue.',
-        HttpStatus.CONFLICT,
-      );
-    }
-    return slugs[0] ?? null;
-  }
 
   private invalid(): AppError {
     return new AppError(

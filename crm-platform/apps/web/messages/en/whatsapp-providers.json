@@ -23,6 +23,9 @@
       "isDefault": "This is the default provider. Make another provider the default, or clear the default, first.",
       "builtin": "This is a built-in provider. Its address, version and secrets are edited on Platform settings, WhatsApp.",
       "nothingToDo": "Nothing to switch: every connected number of this workspace is already on that provider.",
+      "partnerNotConfigured": "This provider is missing something its partner program needs: the partner key (provider token), the solution id, or the embedded signup configuration. Check the provider and save.",
+      "partnerRefused": "The partner refused this request: {message}",
+      "partnerRefusedPlain": "The partner refused this request. Try again, or check the provider settings.",
       "unavailable": "This provider is not available. It may be archived or missing a credential.",
       "notFound": "This provider or workspace no longer exists. Go back and reload the list.",
       "tooManyNumbers": "More than 50 numbers would move at once. Pick a source provider to narrow it, then run the switch again for the rest.",
@@ -119,6 +122,14 @@
           "label": "Embedded signup",
           "help": "Workspaces connect through the Meta embedded signup of the platform Meta app."
         }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "None"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
       }
     },
     "gaps": {
@@ -202,7 +213,9 @@
         "mediaUpload": "Media upload supported",
         "onboarding": "Onboarding",
         "onboardingAppId": "Meta app id",
-        "onboardingConfigId": "Embedded signup configuration id"
+        "onboardingConfigId": "Embedded signup configuration id",
+        "partnerProgram": "Partner program",
+        "partnerSolutionId": "Solution ID"
       },
       "hints": {
         "key": "Lower case letters, digits, underscore and hyphen, 2 to 40 characters, starting with a letter. It cannot be changed later.",
@@ -218,7 +231,9 @@
         "verifyToken": "Answers the provider subscription challenge. Optional.",
         "billingMode": "A label that points at the reseller billing engine. It changes no billing behaviour.",
         "mediaUpload": "When off, files go by public link instead of an upload.",
-        "onboardingIds": "Digits only. These are public ids of the platform Meta app."
+        "onboardingIds": "Digits only. These are public ids of the platform Meta app.",
+        "partnerPinnacle": "Pinnacle gives each number its own key. Store the partner key as the provider token, and the Meta app secret as the app secret (inbound webhooks are verified with it).",
+        "partnerSolutionId": "Digits only, 5 to 32. The partner solution id from the Pinnacle dashboard."
       },
       "devLoopback": "Plain http on a loopback address is accepted only in development, behind a server flag. In production this address is refused.",
       "ssrfNote": "The address is checked again by the server: https only, a public host name, default port, and every address it resolves to must be public.",
@@ -269,6 +284,8 @@
         "signatureHeaderRequired": "Name the header that carries the secret.",
         "signatureHeaderFormat": "Letters, digits and hyphens only.",
         "digits": "Digits only, 5 to 32.",
+        "partnerSolutionIdRequired": "Enter the solution ID.",
+        "partnerCredentialMode": "A partner program gives each number its own token: use the channel token mode.",
         "secretCharacters": "No spaces or control characters.",
         "secretLength": "Between {min} and {max} characters."
       }
@@ -410,7 +427,8 @@
         "ok": "Connected",
         "failed": "Failed",
         "never": "Not tested"
-      }
+      },
+      "officialLabel": "Official WhatsApp (supported)"
     },
     "detail": {
       "title": "WhatsApp provider",

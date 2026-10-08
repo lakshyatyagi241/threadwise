@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { CONTACT_RESOLVER, type ContactResolverPort } from '../../crm/contact-resolver.port';
 import {
   CUSTOMER_GROUP,
   type MirrorCustomer,
@@ -25,6 +26,8 @@ const lock = (tx: Tx, key: string) =>
  */
 @Injectable()
 export class SqlStoreMirror implements StoreMirror {
+  constructor(@Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort) {}
+
   async upsertProduct(
     tx: Tx,
     orgId: number,
@@ -77,19 +80,30 @@ export class SqlStoreMirror implements StoreMirror {
     const existing = found.rows[0] as { id: number | string } | undefined;
     const items = JSON.stringify(o.items);
     const meta = JSON.stringify(o.meta);
+    // The buyer is a contact of the workspace, found or created by phone (an order without a usable number stays unlinked).
+    const link = await this.contacts.findOrCreateByPhone(tx, orgId, {
+      phone: o.phone,
+      name: o.name,
+      email: o.email,
+      source: kind,
+      tag: 'Store customer',
+      saveProfile: true,
+    });
+    const contactId = link.outcome === 'skipped' ? null : link.contactId;
     if (existing) {
       await tx.execute(sql`
         UPDATE wa_orders SET source = ${kind}, customer_phone = ${o.phone}, customer_name = ${o.name},
                customer_email = ${o.email}, items_json = ${items}::jsonb, total_minor = ${o.totalMinor},
-               currency_code = ${o.currency}, status = ${o.status}, meta_json = ${meta}::jsonb
+               currency_code = ${o.currency}, status = ${o.status}, meta_json = ${meta}::jsonb,
+               contact_id = coalesce(${contactId}, contact_id)
         WHERE org_id = ${orgId} AND id = ${Number(existing.id)}`);
       return Number(existing.id);
     }
     const made = await tx.execute(sql`
       INSERT INTO wa_orders (org_id, ${col}, source, customer_phone, customer_name, customer_email, items_json, total_minor,
-                             currency_code, status, meta_json)
+                             currency_code, status, meta_json, contact_id)
       VALUES (${orgId}, ${o.storeId}, ${kind}, ${o.phone}, ${o.name}, ${o.email}, ${items}::jsonb, ${o.totalMinor},
-              ${o.currency}, ${o.status}, ${meta}::jsonb)
+              ${o.currency}, ${o.status}, ${meta}::jsonb, ${contactId})
       RETURNING id`);
     return Number((made.rows[0] as { id: number | string }).id);
   }

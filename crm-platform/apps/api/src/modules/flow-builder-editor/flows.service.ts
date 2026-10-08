@@ -18,6 +18,7 @@ import {
   type ListFlowsQuery,
   type ListFlowsResponse,
   type SaveFlowRequest,
+  type SetBuilderModeRequest,
   type ToggleFlowResponse,
   type UpdateFlowRequest,
 } from '@crm/contracts';
@@ -27,8 +28,9 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { BrandingService } from '../platform-settings-branding-storage';
+import { BrandingService, SettingsService } from '../platform-settings-branding-storage';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { GetaPublishSyncService } from './geta-publish/geta-publish-sync.service';
 import { encodeFlowCursor, nameWithSuffix, parseImportPayload, stateOf } from './flow-rules';
 import { flowEventPayload, toFeatured, toFlowDetail, toFlowSummary } from './flows.mapper';
 import {
@@ -94,6 +96,8 @@ export class FlowsService {
     private readonly outbox: OutboxService,
     private readonly plans: PlanEntitlementService,
     private readonly branding: BrandingService,
+    private readonly geta: GetaPublishSyncService,
+    private readonly settings: SettingsService,
   ) {}
 
   // --- reads ---------------------------------------------------------------------------------------------------------
@@ -130,18 +134,66 @@ export class FlowsService {
         this.repo.featured(tx, ctx.orgId),
         this.templateCards(tx),
       ]);
+      const platformBuilderMode = (await this.settings.values('flowBuilder')).mode;
+      const workspaceBuilderMode = await this.workspaceBuilderMode(tx, ctx.orgId);
       return {
         statusCounts,
         categoryCounts,
         featured: featured ? toFeatured(featured) : null,
         templates,
+        builderMode: workspaceBuilderMode ?? platformBuilderMode,
+        platformBuilderMode,
+        workspaceBuilderMode,
       };
     });
   }
 
+  /** The workspace's own builder choice; null when it follows the platform default (or never saved its settings). */
+  private async workspaceBuilderMode(tx: Tx, orgId: number): Promise<'simple' | 'advanced' | null> {
+    const res = await tx.execute(
+      sql`SELECT flow_builder_mode FROM workspace_settings WHERE org_id = ${orgId}`,
+    );
+    const mode = (res.rows[0] as { flow_builder_mode: string | null } | undefined)
+      ?.flow_builder_mode;
+    return mode === 'simple' || mode === 'advanced' ? mode : null;
+  }
+
+  /** Flows > Builder: a workspace picks Simple or Advanced, or `inherit` to follow the platform default again. */
+  async setBuilderMode(input: SetBuilderModeRequest): Promise<FlowsOverview> {
+    const ctx = RequestContextStore.require();
+    const next = input.mode === 'inherit' ? null : input.mode;
+    await this.db.tx(async (tx) => {
+      const before = await this.workspaceBuilderMode(tx, ctx.orgId);
+      if (before === next) return;
+      // A workspace that never saved its settings has no row yet; every other column has a default.
+      const res = await tx.execute(sql`
+        INSERT INTO workspace_settings (org_id, flow_builder_mode) VALUES (${ctx.orgId}, ${next})
+        ON CONFLICT (org_id) DO UPDATE SET flow_builder_mode = EXCLUDED.flow_builder_mode
+        RETURNING id
+      `);
+      const recordId = Number((res.rows[0] as { id: number | string }).id);
+      await this.audit.record(tx, {
+        module: 'flow_builder_settings',
+        recordId,
+        action: 'update',
+        delta: { builderMode: { old: before, new: next } },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: 'flow_builder_settings',
+        aggregateId: recordId,
+        eventType: 'flow_builder_settings.updated',
+        payload: { builderMode: next },
+      });
+    });
+    return this.overview();
+  }
+
   async get(uuid: string): Promise<FlowDetail> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => toFlowDetail(await this.require(tx, ctx.orgId, uuid)));
+    return this.db.tx(async (tx) => {
+      const row = await this.require(tx, ctx.orgId, uuid);
+      return { ...toFlowDetail(row), getaSync: await this.geta.status(tx, ctx.orgId, row) };
+    });
   }
 
   /** The export file (TW-FLB-008): the graph verbatim under Reference's wrapper marker, no workspace or user ids. */
@@ -401,7 +453,10 @@ export class FlowsService {
         eventType: published ? 'flow.published' : 'flow.unpublished',
         payload: flowEventPayload(after),
       });
-      return toFlowDetail(after);
+      // Geta publishing (beyond Reference): only a sync row and an outbox event here; the worker makes the remote calls, so a
+      // console that is down never fails or slows this publish.
+      if (published) await this.geta.onPublished(tx, ctx.orgId, after);
+      return { ...toFlowDetail(after), getaSync: await this.geta.status(tx, ctx.orgId, after) };
     });
   }
 

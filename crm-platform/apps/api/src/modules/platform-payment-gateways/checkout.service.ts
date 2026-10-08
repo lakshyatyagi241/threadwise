@@ -16,11 +16,13 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { BillingCurrencyService } from '../wallet-message-billing';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { AddonEntitlementService } from '../addons-extension-registry';
+import { appVisibleOnPlan, PlanEntitlementService } from '../plans-subscriptions-trials';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { CouponService, type CouponResolution } from './coupon.service';
@@ -52,6 +54,7 @@ interface PlanRow extends PlanPricingFacts {
   offerAmount: string | null;
   currency: string;
   billingDuration: number;
+  billingMode: 'one_time' | 'recurring';
   isActive: boolean;
 }
 
@@ -66,6 +69,8 @@ interface Priced {
   gateways: GatewayRow[];
   parts: Breakdown;
   walletCreditMinor: number | null;
+  /** The wallet a top-up credits (the workspace's billing currency), fixed at order time; null for a plan. */
+  walletUnit: string | null;
   planSlug: string | null;
   /** What a recurring checkout needs to know about the plan (null for wallet top-ups). */
   term: PlanTerm | null;
@@ -82,6 +87,8 @@ interface PlanTerm {
   isCustomQuote: boolean;
   /** The plan's list amount, major units. */
   listAmount: string;
+  /** An add-on sold as a subscription: it always renews by autopay where the gateway can (no checkbox). */
+  recurringAddon: boolean;
 }
 
 const unavailable = (message: string, code: ErrorCode = ERROR_CODES.PAYGW_GATEWAY_UNAVAILABLE) =>
@@ -111,6 +118,8 @@ export class CheckoutService {
     private readonly coupons: CouponService,
     private readonly subscriptions: SubscriptionLifecycleService,
     private readonly entitlements: AddonEntitlementService,
+    private readonly plans: PlanEntitlementService,
+    private readonly billing: BillingCurrencyService,
     private readonly config: ConfigService<Env, true>,
   ) {}
 
@@ -119,7 +128,7 @@ export class CheckoutService {
   private async loadPlan(tx: Tx, slug: string): Promise<PlanRow> {
     const res = await tx.execute(sql`
       SELECT slug, name, subtitle, kind, amount::text AS amount, offer_amount::text AS offer_amount, currency, billing_unit,
-             billing_duration, is_free, is_lifetime, is_custom_quote, is_active
+             billing_duration, billing_mode, is_free, is_lifetime, is_custom_quote, is_active
       FROM plans WHERE slug = ${slug}`);
     const r = res.rows[0] as Record<string, unknown> | undefined;
     if (!r || !r.is_active) throw AppError.notFound('Plan', slug);
@@ -133,6 +142,7 @@ export class CheckoutService {
       currency: r.currency as string,
       billingUnit: r.billing_unit as PlanRow['billingUnit'],
       billingDuration: Number(r.billing_duration),
+      billingMode: r.billing_mode === 'recurring' ? 'recurring' : 'one_time',
       isFree: r.is_free as boolean,
       isLifetime: r.is_lifetime as boolean,
       isCustomQuote: r.is_custom_quote as boolean,
@@ -170,8 +180,15 @@ export class CheckoutService {
       // in the plan, not paid far ahead), and needs no paid plan: it is a subscription of its own, not a boost on top of one.
       const orgId = RequestContextStore.require().orgId;
       if (
-        await assertMarketplacePack(tx, orgId, plan.slug, (key) =>
-          this.entitlements.featureEnabled(orgId, key),
+        await assertMarketplacePack(
+          tx,
+          orgId,
+          plan.slug,
+          (key) => this.entitlements.featureEnabled(orgId, key),
+          async (appId) => {
+            const e = await this.plans.forOrg(orgId);
+            return e === null || appVisibleOnPlan(e, appId);
+          },
         )
       )
         return;
@@ -288,6 +305,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: null,
+      walletUnit: null,
       planSlug: plan.slug,
       term: {
         name: plan.name,
@@ -297,6 +315,7 @@ export class CheckoutService {
         isLifetime: plan.isLifetime,
         isCustomQuote: plan.isCustomQuote,
         listAmount: chargeable,
+        recurringAddon: plan.kind === 'addon' && plan.billingMode === 'recurring',
       },
       subtotalMinor: subtotal,
     };
@@ -307,7 +326,10 @@ export class CheckoutService {
     query: PaygwWalletQuoteQuery,
     s: CheckoutSettings,
   ): Promise<Priced> {
-    const base = s.defaultCurrency;
+    // The wallet being topped up is the one in the workspace's billing currency (USD, INR, ...): the amount is entered in it, the
+    // gateway charges it by default, and exactly that amount is credited. The platform default currency is only the fallback.
+    const walletUnit = await this.billing.forOrg(tx, RequestContextStore.require().orgId);
+    const base = walletUnit;
     const baseMinor = majorToMinor(query.amount, base);
     if (
       baseMinor === null ||
@@ -334,7 +356,7 @@ export class CheckoutService {
       );
     }
     const parts = breakdown(billed, currency, 0n, s.taxEnabled ? s.taxRate : '0');
-    // The grant is the PRE-tax amount in platform-currency minor units (tax is not credited): 1 minor unit = 1 credit.
+    // The grant is the PRE-tax amount in the wallet's own minor units (tax is not credited): 1 minor unit = 1 credit.
     return {
       kind: 'wallet_topup',
       itemName: 'Wallet top-up',
@@ -346,6 +368,7 @@ export class CheckoutService {
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
       parts,
       walletCreditMinor: Number(back),
+      walletUnit,
       planSlug: null,
       term: null,
       subtotalMinor: billed,
@@ -379,7 +402,7 @@ export class CheckoutService {
         description: g.description ?? '',
         mode: g.mode,
         autoRenew:
-          p.kind === 'plan' &&
+          (p.kind === 'plan' || p.term?.recurringAddon === true) &&
           p.term !== null &&
           shouldRecur({
             platformEnabled: s.recurringEnabled,
@@ -529,7 +552,7 @@ export class CheckoutService {
     const t = priced.term;
     const recurring =
       t !== null &&
-      priced.kind === 'plan' &&
+      (priced.kind === 'plan' || t.recurringAddon) &&
       shouldRecur({
         platformEnabled: s.recurringEnabled,
         driverSupports: driver.supportsRecurring?.() === true && !!driver.createSubscription,
@@ -537,7 +560,8 @@ export class CheckoutService {
         isLifetime: t.isLifetime,
         isCustomQuote: t.isCustomQuote,
         planAmount: t.listAmount,
-        autoRenew,
+        // A recurring add-on is a subscription by definition: there is no "buy one cycle" tick for it.
+        autoRenew: t.recurringAddon ? true : autoRenew,
         period: priced.period,
       });
 
@@ -726,6 +750,7 @@ export class CheckoutService {
             billingCountry: b.country ?? null,
             billingTaxId: b.taxId ?? null,
             walletTopupMinor: p.walletCreditMinor,
+            walletUnit: p.walletUnit,
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,

@@ -38,6 +38,23 @@ function postForm(url: string, fields: Record<string, string>): void {
   form.submit();
 }
 
+/**
+ * What the widget returns, as the fields the return endpoint verifies. A one-time order comes back with `razorpay_order_id`, a
+ * subscription with `razorpay_subscription_id` instead; sending both (one empty) made the server read a subscription as an order
+ * and fail it with `missing_razorpay_params`. Only the fields the widget actually returned are posted.
+ */
+export function razorpayResultFields(
+  r: Record<string, string | undefined>,
+): Record<string, string> {
+  const out: Record<string, string> = {
+    razorpay_payment_id: r.razorpay_payment_id ?? '',
+    razorpay_signature: r.razorpay_signature ?? '',
+  };
+  if (r.razorpay_subscription_id) out.razorpay_subscription_id = r.razorpay_subscription_id;
+  else out.razorpay_order_id = r.razorpay_order_id ?? '';
+  return out;
+}
+
 export const cancelledUrl = (returnUrl: string): string =>
   `${returnUrl}${returnUrl.includes('?') ? '&' : '?'}cancelled=1`;
 
@@ -48,12 +65,7 @@ export async function openRazorpay(
   const Razorpay = await loadScript();
   new Razorpay({
     ...options,
-    handler: (r: Record<string, string>) =>
-      postForm(returnUrl, {
-        razorpay_payment_id: r.razorpay_payment_id ?? '',
-        razorpay_order_id: r.razorpay_order_id ?? '',
-        razorpay_signature: r.razorpay_signature ?? '',
-      }),
+    handler: (r: Record<string, string>) => postForm(returnUrl, razorpayResultFields(r)),
     modal: { ondismiss: () => window.location.assign(cancelledUrl(returnUrl)) },
   }).open();
 }

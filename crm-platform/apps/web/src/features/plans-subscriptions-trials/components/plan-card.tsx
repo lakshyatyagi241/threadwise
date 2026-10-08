@@ -5,14 +5,16 @@ import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { BillingPlan } from '@crm/contracts';
 import { Badge, Button, cn } from '@crm/ui';
-import { checkoutPath, featureRows, priceView, SALES_PATH, type Period } from '../lib/format';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
+import { checkoutPath, priceView, SALES_PATH, type Period } from '../lib/format';
+import { PLATFORM_DEFAULT_KEY, cardRows } from '../lib/limits';
 
 const NS = 'plans-subscriptions-trials';
 const VISIBLE = 7;
 
 /**
- * One plan as the workspace's admin sees it (TW-PLAN-011): name, price and period, the feature checklist (first seven, the rest
- * behind "Show all"), and ONE button whose meaning the server decided (`via`): a payment (checkout), an immediate switch, sales, or
+ * One plan as the workspace's admin sees it (TW-PLAN-011): name, price and period, the feature checklist (the headline volumes and
+ * capabilities, the rest behind "Show all"), and ONE button whose meaning the server decided (`via`): a payment (checkout), an immediate switch, sales, or
  * nothing for the current plan.
  */
 export function PlanCard({
@@ -36,8 +38,9 @@ export function PlanCard({
   const titleId = useId();
   const [expanded, setExpanded] = useState(false);
   const price = priceView(plan, locale, period);
-  const rows = featureRows(plan);
-  const shown = expanded ? rows : rows.slice(0, VISIBLE);
+  const unofficial = useUnofficialWhatsapp();
+  const { highlights, all: rows } = cardRows(plan, VISIBLE, unofficial);
+  const shown = expanded ? rows : highlights;
 
   const label =
     plan.action === 'upgrade'
@@ -146,7 +149,9 @@ export function PlanCard({
                   value:
                     row.value > 0
                       ? new Intl.NumberFormat(locale).format(row.value)
-                      : tc('unlimited'),
+                      : row.key === PLATFORM_DEFAULT_KEY
+                        ? tc('platformDefault')
+                        : tc('unlimited'),
                 })}
               </span>
             ) : (
@@ -155,7 +160,7 @@ export function PlanCard({
           </li>
         ))}
       </ul>
-      {rows.length > VISIBLE && (
+      {rows.length > highlights.length && (
         <button
           type="button"
           className="self-start text-sm font-medium text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary"
