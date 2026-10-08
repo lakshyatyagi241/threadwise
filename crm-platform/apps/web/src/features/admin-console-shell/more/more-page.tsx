@@ -615,7 +615,7 @@ function WhatsNew() {
         ))}
       </ul>
       <Link
-        href="/guidebook"
+        href="/help"
         className="mt-3 inline-flex items-center gap-1 text-[11.5px] font-semibold"
       >
         {t('changelog')}

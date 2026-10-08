@@ -1017,12 +1017,6 @@
           "foot": "{count} events · 24h",
           "open": "Open"
         },
-        "guidebook": {
-          "title": "Guidebook",
-          "desc": "Step-by-step playbooks — from first send to advanced segmentation.",
-          "foot": "{count} articles",
-          "open": "Open"
-        },
         "channels": {
           "title": "Channels",
           "desc": "Connect WhatsApp, Instagram, Telegram & more — one inbox, monitor health, rotate senders.",
