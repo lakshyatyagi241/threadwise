@@ -9,6 +9,7 @@ import { MediaFetchRecoveryService } from './media-fetch-recovery.service';
 import { MessageDispatchProcessor } from './message-dispatch.processor';
 import { QueuedMessageRecoveryService } from './queued-message-recovery.service';
 import { WabaChannelSyncConsumer } from './waba-channel-sync.consumer';
+import { WabaGroupRetitleConsumer } from './waba-group-retitle.consumer';
 import { WabaInboxBindingModule } from './waba-inbox-binding.module';
 
 /**
@@ -38,6 +39,7 @@ import { WabaInboxBindingModule } from './waba-inbox-binding.module';
     MediaFetchProcessor,
     MediaFetchRecoveryService,
     WabaChannelSyncConsumer,
+    WabaGroupRetitleConsumer,
   ],
 })
 export class ChatConversationsWorkerModule {}

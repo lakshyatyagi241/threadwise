@@ -9,6 +9,7 @@ import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
+import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
@@ -39,10 +40,13 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   const theme = (await cookies()).get(THEME_COOKIE)?.value === 'dark' ? 'dark' : 'light';
   // The plan's features lock the menu entries that need one and drive the paywall sheet; unknown (null) locks nothing.
   const enabledFeatures = await fetchEnabledFeatures();
+  const permissions = new Set(Object.keys(session.permissions));
   const capabilities = {
     ...CAPABILITIES_UNKNOWN,
-    permissions: new Set(Object.keys(session.permissions)),
+    permissions,
     planFeatures: enabledFeatures,
+    // The connected channels drive `gates.channel` ("Meta Groups" needs a connected WhatsApp Business number); unknown (null) removes nothing.
+    channels: await fetchConnectedChannels(permissions.has('waba.numbers.read')),
   };
   // The docs this person may see in Help (gated like the menu); the page-level tip and every HelpTip read this index.
   const help = helpFor(capabilities, await getLocale());

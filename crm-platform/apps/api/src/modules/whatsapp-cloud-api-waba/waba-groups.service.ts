@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { emitGroupEvents, groupEventsFor } from './waba-group-events';
 import {
   GROUP_FIELDS,
   applyGroupDelivery,
@@ -12,6 +14,9 @@ import {
 } from './waba-group-rules';
 
 interface GroupRow {
+  id: number | string;
+  uuid: string;
+  group_id?: string;
   subject: string | null;
   description: string | null;
   invite_link: string | null;
@@ -34,7 +39,10 @@ export function isGroupField(field: string): field is GroupField {
 export class WabaGroupsService {
   private readonly logger = new Logger(WabaGroupsService.name);
 
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly outbox: OutboxService,
+  ) {}
 
   /**
    * A delivery status of a message sent to a group (`recipient_type=group`) folded into the bubble's `meta.group_delivery`
@@ -104,11 +112,18 @@ export class WabaGroupsService {
       ? (value.groups as Array<Record<string, unknown>>)
       : [];
     let changed = 0;
+    // The number's uuid names it in the events (consumers in other domains never see internal ids).
+    const cfg = entries.length
+      ? await tx.execute(
+          sql`SELECT uuid FROM wa_provider_configs WHERE org_id = ${orgId} AND id = ${configId}`,
+        )
+      : null;
+    const connectionUuid = String((cfg?.rows[0] as { uuid?: string } | undefined)?.uuid ?? '');
     for (const entry of entries) {
       const groupId = String(entry.group_id ?? '');
       if (!groupId) continue;
       const found = await tx.execute(
-        sql`SELECT subject, description, invite_link, join_approval_mode, participant_count, suspended,
+        sql`SELECT id, uuid, subject, description, invite_link, join_approval_mode, participant_count, suspended,
                    creation_timestamp, meta_json
               FROM waba_groups
              WHERE org_id = ${orgId} AND provider_config_id = ${configId} AND group_id = ${groupId}`,
@@ -120,11 +135,21 @@ export class WabaGroupsService {
           sql`DELETE FROM waba_groups
                WHERE org_id = ${orgId} AND provider_config_id = ${configId} AND group_id = ${groupId}`,
         );
+        if (row) {
+          await emitGroupEvents(
+            this.outbox,
+            tx,
+            orgId,
+            { id: Number(row.id), uuid: row.uuid, group_id: groupId, subject: row.subject },
+            connectionUuid,
+            groupEventsFor(field, toFacts(row), null),
+          );
+        }
         changed++;
         continue;
       }
       const n = result.next;
-      await tx.execute(
+      const written = await tx.execute(
         sql`INSERT INTO waba_groups (org_id, provider_config_id, group_id, subject, description, invite_link,
                                      join_approval_mode, participant_count, suspended, creation_timestamp,
                                      synced_at, meta_json)
@@ -135,7 +160,17 @@ export class WabaGroupsService {
               subject = EXCLUDED.subject, description = EXCLUDED.description, invite_link = EXCLUDED.invite_link,
               join_approval_mode = EXCLUDED.join_approval_mode, participant_count = EXCLUDED.participant_count,
               suspended = EXCLUDED.suspended, creation_timestamp = EXCLUDED.creation_timestamp,
-              synced_at = EXCLUDED.synced_at, meta_json = EXCLUDED.meta_json`,
+              synced_at = EXCLUDED.synced_at, meta_json = EXCLUDED.meta_json
+            RETURNING id, uuid`,
+      );
+      const saved = written.rows[0] as unknown as { id: number | string; uuid: string };
+      await emitGroupEvents(
+        this.outbox,
+        tx,
+        orgId,
+        { id: Number(saved.id), uuid: saved.uuid, group_id: groupId, subject: n.subject },
+        connectionUuid,
+        groupEventsFor(field, row ? toFacts(row) : null, n),
       );
       changed++;
     }

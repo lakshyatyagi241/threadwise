@@ -94,7 +94,8 @@ const SAMPLE_PLANS: SeedPlan[] = [
       webhooks: 1,
       ai_token_limit_monthly: 50000,
     },
-    features: FEATURES_OFF,
+    // WhatsApp groups is a paid plan feature (owner decision 2026-10-08, BL-094); the demo plans carry it so local testing works.
+    features: { ...FEATURES_OFF, waba_groups: true },
   },
   {
     slug: 'growth',
@@ -141,6 +142,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       analytics: true,
       woocommerce: true,
       shopify: true,
+      waba_groups: true,
     },
   },
   {
@@ -191,6 +193,7 @@ const SAMPLE_PLANS: SeedPlan[] = [
       analytics: true,
       remove_branding: true,
       sales_pipeline: true,
+      waba_groups: true,
     },
   },
 ];

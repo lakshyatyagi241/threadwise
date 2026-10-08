@@ -35,6 +35,9 @@ import {
 import { WabaIngestService } from './waba-ingest.service';
 import { WabaReceiptRegistry } from './waba-receipt-registry';
 import { WabaTemplateEvents } from './waba-template-events.service';
+import { WabaGroupsController } from './waba-groups.controller';
+import { WabaGroupsAdminService } from './waba-groups-admin.service';
+import { WabaGroupsRepository } from './waba-groups.repository';
 import { WabaGroupsService } from './waba-groups.service';
 import { WabaOrdersService } from './waba-orders.service';
 import { WabaClickSyncService } from './waba-click-sync.service';
@@ -67,6 +70,7 @@ import { WabaWebhookService } from './waba-webhook.service';
   controllers: [
     WabaConnectionsController,
     WabaExtrasController,
+    WabaGroupsController,
     WabaDiagnosticsController,
     WabaPlatformDiagnosticsController,
     WabaWebhookController,
@@ -99,6 +103,8 @@ import { WabaWebhookService } from './waba-webhook.service';
       useFactory: (override?: WabaCallsSink): WabaCallsSink => override ?? new LoggingCallsSink(),
     },
     WabaGroupsService,
+    WabaGroupsRepository,
+    WabaGroupsAdminService,
     WabaOrdersService,
     WabaClickSyncService,
     CustomerProfilesService,

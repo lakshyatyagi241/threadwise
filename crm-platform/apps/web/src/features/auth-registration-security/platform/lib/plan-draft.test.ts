@@ -114,6 +114,7 @@ const stored: PlanAdminItem = {
     forms_and_links: true,
     extra_channels: true,
     form_builder: false,
+    waba_groups: false,
   },
   visibleAddons: [],
   inUse: 2,
