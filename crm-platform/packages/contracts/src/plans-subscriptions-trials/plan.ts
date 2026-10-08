@@ -36,6 +36,9 @@ const moneySchema = z
   .refine(isMoney, 'Enter an amount such as 19 or 19.99.')
   .transform(normaliseMoney);
 
+/** A key an installed module contributes (WD-ADD-013): lowercase letters, digits and underscores. */
+const moduleKeySchema = z.string().regex(/^[a-z][a-z0-9_]{0,63}$/);
+
 const cap = z.number().int().min(0).max(2_000_000_000);
 const flag = z.boolean();
 
@@ -190,6 +193,12 @@ const planFieldsShape = {
   limits: planLimitsSchema.default({}),
   features: planFeaturesSchema.default({}),
   /**
+   * The flags and caps that installed modules add to a plan (WD-ADD-013): keys the registry above does not know, so they travel apart
+   * from `features` and `limits`, which stay registry-only. On an update the keys named here replace the stored ones; others are kept.
+   */
+  moduleFeatures: z.record(moduleKeySchema, flag).default({}),
+  moduleLimits: z.record(moduleKeySchema, cap).default({}),
+  /**
    * The Marketplace add-ons this plan makes VISIBLE to its workspaces: ids (uuid) of add-on packs, as listed by
    * `GET platform/plans/addon-options`. Visible is not usable: a workspace uses a paid app only once it has bought it. On an update the
    * list replaces the stored one; omit it to keep it.
@@ -258,6 +267,9 @@ export const planAdminItemSchema = z.object({
   dataRetentionDays: z.number().int(),
   limits: planLimitsSchema,
   features: planFeaturesSchema,
+  /** Module-contributed flags and caps the plan stores (see `moduleFeatures` on the request). */
+  moduleFeatures: z.record(moduleKeySchema, flag),
+  moduleLimits: z.record(moduleKeySchema, cap),
   /** Ids (uuid) of the Marketplace add-on packs this plan makes visible (see `planAddonOptionSchema`). */
   visibleAddons: z.array(uuidSchema),
   /** Organizations whose plan is this one (the delete guard, WD-PLAN-005). */

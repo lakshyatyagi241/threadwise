@@ -27,7 +27,7 @@ export function AppearanceTab() {
   return (
     <Card className="space-y-4 p-6">
       <div>
-        <h2 className="text-xl font-semibold">{t('title')}</h2>
+        <h2 className="font-serif text-xl">{t('title')}</h2>
         <p className="text-xs text-muted-foreground">{t('note')}</p>
       </div>
       <div role="radiogroup" aria-label={t('title')} className="grid gap-3 sm:grid-cols-2">

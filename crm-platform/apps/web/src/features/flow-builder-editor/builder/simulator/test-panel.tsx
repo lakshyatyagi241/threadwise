@@ -4,6 +4,7 @@ import type { FlowEdge, FlowNode, FlbTemplateButtonRef } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import { flowsApi } from '../../api/flows';
+import { FlowImage } from '../flow-image';
 import { createSimulator, type LogEntry, type SimFile, type Simulator } from './simulator';
 
 /** Files the operator can "send" to an Ask for file / image node: nothing is uploaded, the runtime only reads the name and type. */
@@ -29,6 +30,8 @@ export interface TestPanelProps {
   /** Bump to restart the run (the toolbar Test button). 0 = never started: a panel opened by `?test=1` stays empty until Restart. */
   runNonce: number;
   templateButtons?: (node: FlowNode) => FlbTemplateButtonRef[];
+  /** Whether the Send template node points at a template of this workspace (the real run skips one that does not). */
+  templateExists?: (node: FlowNode) => boolean;
   flowName?: (id: string) => string | undefined;
 }
 
@@ -125,11 +128,10 @@ export function LogBubble({
     <div className="flex max-w-[80%] flex-col gap-1.5 self-start rounded-lg rounded-bl-[4px] border border-border bg-background px-2.5 py-2">
       {media?.url ? (
         media.kind === 'image' ? (
-          <img
+          <FlowImage
             src={media.url}
-            alt={media.filename}
+            where="test chat"
             className="max-h-[200px] w-auto rounded bg-muted object-contain"
-            onError={(e) => void (e.currentTarget.style.display = 'none')}
           />
         ) : media.kind === 'video' ? (
           <video src={media.url} controls className="max-h-[220px] w-full rounded bg-muted" />
@@ -178,6 +180,7 @@ export function TestPanel({
   edges,
   runNonce,
   templateButtons,
+  templateExists,
   flowName,
 }: TestPanelProps): ReactElement | null {
   const [log, setLog] = useState<LogEntry[]>([]);
@@ -190,9 +193,9 @@ export function TestPanel({
   const simRef = useRef<Simulator | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
   // The run reads the graph as it was when it started; keep the latest in refs so Restart picks up edits.
-  const latest = useRef({ nodes, edges, templateButtons, flowName });
+  const latest = useRef({ nodes, edges, templateButtons, templateExists, flowName });
   useEffect(() => {
-    latest.current = { nodes, edges, templateButtons, flowName };
+    latest.current = { nodes, edges, templateButtons, templateExists, flowName };
   });
 
   const restart = useCallback(() => {
@@ -202,6 +205,7 @@ export function TestPanel({
       nodes: g.nodes,
       edges: g.edges,
       templateButtons: g.templateButtons,
+      templateExists: g.templateExists,
       flowName: g.flowName,
       callWebhook: (req) => flowsApi.testWebhook(req),
       onLog: (e) => setLog((prev) => prev.concat(e)),

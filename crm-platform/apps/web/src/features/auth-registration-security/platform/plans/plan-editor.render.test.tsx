@@ -202,6 +202,8 @@ function plan(over: Partial<PlanAdminItem> = {}): PlanAdminItem {
     features: Object.fromEntries(
       PLAN_FEATURE_KEYS.map((k) => [k, k !== 'calling']),
     ) as PlanAdminItem['features'],
+    moduleFeatures: {},
+    moduleLimits: {},
     visibleAddons: [A, B],
     inUse: 0,
     isRegistrationDefault: false,

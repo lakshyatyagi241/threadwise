@@ -179,7 +179,8 @@ export class PlanAdminService {
                 ${body.offerAmount}::numeric, ${body.currency}, ${body.billingUnit}, ${body.billingDuration},
                 ${body.isFree}, ${body.isLifetime}, ${body.isActive}, ${body.isDefault}, ${body.isHighlighted},
                 ${body.isCustomQuote}, ${body.sortOrder}, ${body.ctaLabel}, ${body.dataRetentionDays},
-                ${JSON.stringify(body.limits)}::jsonb, ${JSON.stringify(body.features)}::jsonb)
+                ${JSON.stringify(withStoredUnknownLimits({}, body.limits, body.moduleLimits))}::jsonb,
+                ${JSON.stringify(withStoredUnknownFeatures({}, body.features, body.moduleFeatures))}::jsonb)
         RETURNING ${PLAN_COLUMNS}
       `);
       const row = res.rows[0] as unknown as PlanRow;
@@ -242,8 +243,8 @@ export class PlanAdminService {
           is_default = ${after.isDefault}, is_highlighted = ${after.isHighlighted},
           is_custom_quote = ${after.isCustomQuote}, sort_order = ${after.sortOrder},
           cta_label = ${after.ctaLabel}, data_retention_days = ${after.dataRetentionDays},
-          limits = ${JSON.stringify(withStoredUnknownLimits(stored.limits, after.limits))}::jsonb,
-          features = ${JSON.stringify(withStoredUnknownFeatures(stored.features, after.features))}::jsonb
+          limits = ${JSON.stringify(withStoredUnknownLimits(stored.limits, after.limits, after.moduleLimits))}::jsonb,
+          features = ${JSON.stringify(withStoredUnknownFeatures(stored.features, after.features, after.moduleFeatures))}::jsonb
         WHERE id = ${stored.id}
         RETURNING ${PLAN_COLUMNS}
       `);

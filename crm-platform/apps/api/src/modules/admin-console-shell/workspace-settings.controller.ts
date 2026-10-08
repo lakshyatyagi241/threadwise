@@ -1,17 +1,40 @@
-import { Body, Controller, Delete, Get, Param, Patch, Put, StreamableFile } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Res,
+  StreamableFile,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import { Readable } from 'node:stream';
 import {
+  BRAND_LOGO_MAX_BYTES,
+  BRAND_SLOTS,
   deleteWorkspaceRequestSchema,
+  saveResidencyRequestSchema,
   exportTypeSchema,
   saveNotificationPrefsRequestSchema,
   savePreferencesRequestSchema,
+  updateBrandingFieldsSchema,
   updateWorkspaceSettingsRequestSchema,
   type DeleteWorkspaceRequest,
   type SaveNotificationPrefsRequest,
   type SavePreferencesRequest,
+  type BrandSlot,
+  type SaveResidencyRequest,
+  type UpdateBrandingFields,
   type UpdateWorkspaceSettingsRequest,
 } from '@crm/contracts';
+import { AppError } from '../../common/errors/app-error';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { WorkspaceExportService } from './workspace-export.service';
@@ -80,6 +103,91 @@ export class WorkspaceSettingsController {
       type: 'text/csv; charset=utf-8',
       disposition: `attachment; filename="${type}.csv"`,
     });
+  }
+
+  @Get('integrations')
+  @ApiOperation({ summary: 'Sheets key status and webhook counts (API and webhooks tab)' })
+  integrations() {
+    return this.settings.integrations();
+  }
+
+  @Get('data-residency')
+  @ApiOperation({ summary: 'Which translation providers may receive message text' })
+  residency() {
+    return this.settings.residency();
+  }
+
+  @Put('data-residency')
+  @ApiOperation({ summary: 'Set no restriction, EU only or on-premise only (owner only)' })
+  saveResidency(@Body(zodPipe(saveResidencyRequestSchema)) body: SaveResidencyRequest) {
+    return this.settings.saveResidency(body);
+  }
+
+  @Get('branding')
+  @ApiOperation({ summary: 'Brand colours, logo and favicon (Branding tab)' })
+  branding() {
+    return this.settings.branding();
+  }
+
+  @Post('branding')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'logo', maxCount: 1 },
+        { name: 'favicon', maxCount: 1 },
+      ],
+      // A little above the logo cap so a file just over it still reaches the policy and gets its precise message.
+      { limits: { fileSize: Math.ceil(BRAND_LOGO_MAX_BYTES * 1.2) } },
+    ),
+  )
+  @ApiOperation({
+    summary: 'Save the Branding tab (owner only): three #RRGGBB colours, a logo and a favicon',
+    description: 'Absent fields are untouched; a blank colour clears it.',
+  })
+  saveBranding(
+    @Body() raw: Record<string, unknown>,
+    @UploadedFiles()
+    files: {
+      logo?: Array<{ originalname: string; buffer: Buffer }>;
+      favicon?: Array<{ originalname: string; buffer: Buffer }>;
+    },
+  ) {
+    const parsed = updateBrandingFieldsSchema.safeParse(raw ?? {});
+    if (!parsed.success) {
+      throw AppError.validation(
+        'The brand colours must be #RRGGBB',
+        parsed.error.issues.map((i) => ({ path: i.path.join('.'), message: i.message })),
+      );
+    }
+    const fields: UpdateBrandingFields = parsed.data;
+    return this.settings.saveBranding(fields, {
+      logo: files?.logo?.[0],
+      favicon: files?.favicon?.[0],
+    });
+  }
+
+  @Get('branding/:slot')
+  @ApiExcludeEndpoint()
+  async brandAsset(@Param('slot') slot: string, @Res() res: Response) {
+    const found = (BRAND_SLOTS as readonly string[]).includes(slot)
+      ? await this.settings.readBrandAsset(slot as BrandSlot)
+      : null;
+    if (!found) {
+      res
+        .status(404)
+        .type('application/problem+json')
+        .send({ type: 'about:blank', title: 'Not Found', status: 404, code: 'NOT_FOUND' });
+      return;
+    }
+    res
+      .status(200)
+      .setHeader('content-type', found.mime)
+      .setHeader('etag', `"${found.etag}"`)
+      // The URL carries ?v=<etag>, so it can be cached hard and still change when the file does.
+      .setHeader('cache-control', 'private, max-age=31536000, immutable')
+      .setHeader('x-content-type-options', 'nosniff')
+      .send(found.bytes);
   }
 
   @Delete()

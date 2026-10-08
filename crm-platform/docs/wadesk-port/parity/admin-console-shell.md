@@ -117,3 +117,54 @@ prototype pages (dead code).
 | 8   | New-message pill     | Polled with a fixed interval                        | Backs off after a 429 or error up to 5 minutes, pauses hidden | Keeps load down on a throttled API; the normal interval is the same 15 seconds |
 
 Live visual twin comparison was not repeated in round 2 (WaDesk was shared and slow); layout was matched from the Blade views and recorded above.
+
+## Round 3: conformance pass against the running WaDesk (top bar, sidebar, account menu, flash)
+
+Compared live (WaDesk 1.7.0 at 127.0.0.1:8000 against this app, 1360 px, top bar mode and sidebar mode): dashboard header, notification
+bell, theme menu, account menu, workspace pill, rail, top strip, More hub, tour step 1. Fixed in this round:
+
+- Top bar: round hairline controls in WaDesk's order (search, theme, language, page-settings gear, bell, avatar with chevron); no balance chip (WaDesk
+  keeps balance in the account menu and the rail's wallet card); serif brand; workspace pill (round avatar, name, no plan line); bar labels are WaDesk's
+  ("Unified Inbox", "Channels"); Channels uses the network glyph. The page-settings gear now shows in the top bar and the strip (WD-SET gear).
+- Account menu (WD-ASHELL-019): avatar, name, mono email, green "plan . role" chip, Profile, Wallet with balance, Order history, Settings, Pricing and
+  plans, Help and support, Log out, app-name footer. Language and theme moved out of the menu into the header, as in WaDesk.
+- Sidebar mode: strip is breadcrumb, jump box with the Cmd-K hint, centred greeting and clock, language, theme, bell, name and role. The rail is open by
+  default (WaDesk's rail is always 260 px), brand with the "Console" caption, workspace card on top, collapsible groups remembered in the browser (the
+  group holding the page stays open), accent bar on the active entry, wallet card with Top up at the foot. Group names are WaDesk's.
+- WD-ASHELL-007 flash: `features/admin-console-shell/flash` (store, host, tests) is the shell's flash, with success, info, warning and danger; the
+  dashboard's role bounce (WD-DASH-001) raises "Your role (x) doesn't have access to that page" on it.
+- Quick access: the header and the edge drawer use the shell's `admin-console-shell/quick-access` (WD-ASHELL-022). The dashboard's own tiles
+  (`DASH_QUICK_ACCESS_*` exports, `dashboards-analytics-charts`) are the dashboard card that WaDesk also has; both read the same user list, neither
+  was deleted.
+- WD-SET-016 (menu layout editor) is the same feature as WD-ASHELL-009 and is built there (`admin/settings/menu-order`, API and tests).
+- Announcement bars: the app layout still mounts the shell's `AnnouncementBars`, not the CMS bar.
+
+Intended differences added: theme menu offers light and dark (WaDesk four themes); header stays sticky (WaDesk's scrolls away); "Take the tour" row kept
+in the account menu (WaDesk's own port notes ask for a replay entry); WaDesk quirk not reproduced: saving its Appearance form always forces a dark rail
+(colour input cannot post blank), here no colour means the theme's rail.
+
+Not done in this round, with the reason: the More hub (WD-ASHELL-020) is still a plain tool list. WaDesk's has a four-figure live strip, illustrated tool
+cards with usage footers, and a side column (recent activity, affiliate, plan, tips, what's new); this needs counters from several domains and was not
+rebuilt. Also not compared screen by screen: command palette, quick access editor, tour steps 2 to 11, announcement bars, connect-device sheet, the
+workspace settings tabs. Not rebuilt: 008, 025, 030, 036 (blocked as before), 045.
+
+Tests: web 4116 passed (384 files); `pnpm arch:check` fails on existing chat-conversations and flow-runtime-engine violations, none in this domain.
+
+## Round 4: blocked features re-attempted, More hub, bell, conformance
+
+tier P1 done (round 4): 008 (settings hub tile search), 018 (bell: Inbox eyebrow, serif title, Clear all and View all footer), 020 (More hub rebuilt).
+tier P2 done (round 4): 025 and 036 (workspace Branding tab and white-label shell), 042 (Sheets key status and webhook counts), 045 (data residency).
+
+- 036/025: owner-only Branding tab (`GET/POST /v2/shell/workspace/branding`, multipart). Colours live in `organizations.settings.branding`; logo and favicon bytes in the new tenant table
+  `workspace_brand_assets` (migration `20261025090000_ashell_workspace_brand_assets`, forced RLS). The shell applies colours as CSS variables, the logo in the top bar, and the favicon (WaDesk never applied it).
+  Tests: `apps/api/test/e2e/admin-console-shell/branding.e2e.spec.ts` (owner only, blank clears, absent untouched, #RRGGBB, SVG and fake images refused, one row per slot, tenant isolation) and `brand-css.test.ts`.
+- 045: `GET/PUT /v2/shell/workspace/data-residency` writes `workspace_settings.data_residency`, the column the translation router reads; the form is on Settings > Data (the DPA page, owned by CMS, shows the current mode).
+- 042: `GET /v2/shell/workspace/integrations` (my Sheets key suffix and times, never the hash; outbound and inbound webhook counts).
+- 018: `DELETE /v2/shell/notifications` (my notifications only, audited). The NOTIF module had no delete. ONE edit in `features/notifications-activity-audit/components/notification-bell.tsx`.
+- 008: the hub, KPI strip and quick buttons were already the SET page; added WaDesk's tile search (one edit in `platform-settings-branding-storage/components/settings-hub.tsx`).
+- 020: `GET /v2/shell/overview-stats` (one read per page, one savepoint per figure). The page has the live strip, WaDesk's 40 tool cards (shown only when our screen exists) with live footers, Navigation strip, tabs, and the side column.
+- Compared live with WaDesk (1360 px): More hub, Settings General and Branding. Fixed: rail card with icons and filled active pill, serif card titles, mono "Personal" card, dropzone icons.
+
+Intended differences added: Branding stores bytes in the database (interim, like the avatar) and accepts raster images only (SVG can carry script; WaDesk's `image` rule refused it in practice); colours are sent only when edited, so saving a logo never repaints with the defaults; the page background colour applies to the light theme only; residency form lives in Settings > Data; More hub cards for tools whose page does not exist here (Meta Ads, SMS, LINE, WeChat, Viber, TikTok, Quick Send, Lead Finder, Auto Reply, Message History, Notifications page, Google account, Call Logs, Forms, Link Generator, AI Training, Webhooks, Activity Log) appear automatically when the owning domain adds the screen; Settings tiles are not repeated in the grid; recent activity reads `audit_log` (module and action) because security events are privileged-only; AI Training shows assistants only; Connected counts devices only; Developers / API opens Settings > API and webhooks.
+
+Still blocked: 030 impersonation strip. Nothing mints an impersonation session: `PlatformInboxService.impersonate` (platform-support-desk) answers 501 and no module writes `impersonation_sessions`, so there is no claim for the strip to read. Not compared screen by screen: command palette, quick access editor, tour steps, sidebar mode, announcement bars.

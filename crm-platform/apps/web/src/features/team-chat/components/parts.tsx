@@ -23,7 +23,7 @@ export function Avatar({
       className={cn(
         'flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white',
         avatarColor(id),
-        size === 'sm' ? 'size-7 text-[11px]' : 'size-9 text-xs',
+        size === 'sm' ? 'size-7 text-[10px]' : 'size-8 text-[11px]',
       )}
     >
       {initials(name)}

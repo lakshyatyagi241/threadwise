@@ -48,7 +48,10 @@
         "status": "Status",
         "actions": "Actions"
       },
-      "price": { "free": "Free", "lifetime": "one-time" },
+      "price": {
+        "free": "Free",
+        "lifetime": "one-time"
+      },
       "period": {
         "days": "{count} days",
         "weeks": "{count} weeks",
@@ -61,8 +64,16 @@
         "add": "+{amount} {name}",
         "more": "+{count}"
       },
-      "status": { "active": "Active", "off": "Off" },
-      "actions": { "edit": "Edit", "enable": "Enable", "disable": "Disable", "delete": "Delete" },
+      "status": {
+        "active": "Active",
+        "off": "Off"
+      },
+      "actions": {
+        "edit": "Edit",
+        "enable": "Enable",
+        "disable": "Disable",
+        "delete": "Delete"
+      },
       "toasts": {
         "created": "Add-on created.",
         "updated": "Add-on updated.",
@@ -120,7 +131,12 @@
           "one_time": "One-time (buy again after it ends)",
           "recurring": "Recurring (renews by autopay)"
         },
-        "units": { "days": "Days", "weeks": "Weeks", "months": "Months", "years": "Years" },
+        "units": {
+          "days": "Days",
+          "weeks": "Weeks",
+          "months": "Months",
+          "years": "Years"
+        },
         "problems": {
           "name": "Enter a name.",
           "amount": "Enter an amount such as 19 or 19.99.",
@@ -271,7 +287,12 @@
       "free": "Free",
       "lifetimePrice": "one-time",
       "per": "/ {unit}",
-      "units": { "days": "days", "weeks": "weeks", "months": "months", "years": "years" },
+      "units": {
+        "days": "days",
+        "weeks": "weeks",
+        "months": "months",
+        "years": "years"
+      },
       "buy": "Add to plan",
       "buyAgain": "Buy again",
       "owned": "Owned ×{count} · buying again adds more",
@@ -281,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "The add-ons could not be loaded."
+    },
+    "planFields": {
+      "fromModule": "from an installed module",
+      "unlimited": "Unlimited"
     }
   }
 }
