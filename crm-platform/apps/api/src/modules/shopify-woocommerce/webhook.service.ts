@@ -94,6 +94,7 @@ export class WebhookService {
           storeId,
           eventType,
           data,
+          deliveryId,
           log: { id: log.id, createdAt: log.createdAt.toISOString() },
         },
         {

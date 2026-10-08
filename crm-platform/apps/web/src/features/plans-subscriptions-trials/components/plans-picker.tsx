@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -8,7 +7,7 @@ import { ERROR_CODES, type BillingPlan, type ChangePlanResponse } from '@crm/con
 import { Alert, Button, EmptyState, Modal, Spinner } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { BILLING_KEYS, changePlan, fetchBillingFaqs, fetchBillingPlans } from '../api';
-import { USAGE_PATH, checkoutPath, type Period } from '../lib/format';
+import { PLANS_SECTION_ID, checkoutPath, type Period } from '../lib/format';
 import { AddonsSection } from './addons-section';
 import { CancelRenewal } from './cancel-renewal';
 import { CompareTable } from './compare-table';
@@ -16,12 +15,13 @@ import { FaqList } from './faq-list';
 import { PeriodSwitch } from './period-switch';
 import { PlanAddons } from './plan-addons';
 import { PlanCard } from './plan-card';
-import { ValidityBanner } from './validity-banner';
+import { UsageSection } from './usage-section';
 
 const NS = 'plans-subscriptions-trials';
 
 /**
- * /account/plans (WD-PLAN-011): the validity banner, every active plan for THIS workspace, what choosing each one does, and the
+ * /account/plans (WD-PLAN-011 and 014): one pane. It opens with "Your plan and usage" (`UsageSection`, anchor `#usage`, which owns
+ * the validity banner), then every active plan for THIS workspace, what choosing each one does, and the
  * comparison table. A workspace admin can upgrade (checkout), downgrade or switch (an immediate change with a confirmation); members
  * without `plan.subscription.manage` see the same plans with the buttons off.
  */
@@ -52,69 +52,74 @@ export function PlansPicker() {
         <p className="text-sm text-muted-foreground">{t('description')}</p>
       </header>
 
-      {q.isPending ? (
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Spinner label={tc('loading')} /> {tc('loading')}
-        </p>
-      ) : q.isError ? (
-        <div className="space-y-3">
-          <Alert tone="danger">
-            {q.error instanceof ApiError ? q.error.message : t('errors.generic')}
-          </Alert>
-          <Button variant="secondary" onClick={() => void q.refetch()}>
-            {tc('retry')}
-          </Button>
-        </div>
-      ) : (
-        <>
-          <ValidityBanner validity={q.data.validity} planName={q.data.current?.name ?? null} />
-          {q.data.subscription && (
-            <CancelRenewal subscription={q.data.subscription} canManage={q.data.canManage} />
-          )}
-          {!q.data.canManage && <Alert tone="info">{t('readOnly')}</Alert>}
-          {done && <ChangeResult result={done} />}
+      <UsageSection />
 
-          {q.data.yearlyToggle.enabled && (
-            <PeriodSwitch
-              value={chosen ?? 'yearly'}
-              onChange={setChosen}
-              discountPct={q.data.yearlyToggle.discountPct}
-            />
-          )}
+      <section
+        id={PLANS_SECTION_ID}
+        aria-labelledby="plans-section-title"
+        className="scroll-mt-6 space-y-6"
+        data-testid="plans-section"
+      >
+        <h2 id="plans-section-title" className="text-lg font-semibold">
+          {t('pickerTitle')}
+        </h2>
 
-          {q.data.data.length === 0 ? (
-            <EmptyState title={t('title')} message={t('empty')} />
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-testid="plan-cards">
-              {q.data.data.map((plan) => (
-                <PlanCard
-                  key={plan.slug}
-                  plan={plan}
-                  canManage={q.data.canManage}
-                  busy={false}
-                  period={q.data.yearlyToggle.enabled ? (chosen ?? 'yearly') : 'monthly'}
-                  onSwitch={setPending}
-                />
-              ))}
-            </div>
-          )}
+        {q.isPending ? (
+          <p className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Spinner label={tc('loading')} /> {tc('loading')}
+          </p>
+        ) : q.isError ? (
+          <div className="space-y-3">
+            <Alert tone="danger">
+              {q.error instanceof ApiError ? q.error.message : t('errors.generic')}
+            </Alert>
+            <Button variant="secondary" onClick={() => void q.refetch()}>
+              {tc('retry')}
+            </Button>
+          </div>
+        ) : (
+          <>
+            {q.data.subscription && (
+              <CancelRenewal subscription={q.data.subscription} canManage={q.data.canManage} />
+            )}
+            {!q.data.canManage && <Alert tone="info">{t('readOnly')}</Alert>}
+            {done && <ChangeResult result={done} />}
 
-          <PlanAddons addons={q.data.visibleAddons} />
+            {q.data.yearlyToggle.enabled && (
+              <PeriodSwitch
+                value={chosen ?? 'yearly'}
+                onChange={setChosen}
+                discountPct={q.data.yearlyToggle.discountPct}
+              />
+            )}
 
-          <AddonsSection canManage={q.data.canManage} />
+            {q.data.data.length === 0 ? (
+              <EmptyState title={t('title')} message={t('empty')} />
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-testid="plan-cards">
+                {q.data.data.map((plan) => (
+                  <PlanCard
+                    key={plan.slug}
+                    plan={plan}
+                    canManage={q.data.canManage}
+                    busy={false}
+                    period={q.data.yearlyToggle.enabled ? (chosen ?? 'yearly') : 'monthly'}
+                    onSwitch={setPending}
+                  />
+                ))}
+              </div>
+            )}
 
-          <CompareTable plans={q.data.data} />
+            <PlanAddons addons={q.data.visibleAddons} />
 
-          <FaqList faqs={faqs.data?.data ?? []} />
+            <AddonsSection canManage={q.data.canManage} />
 
-          <Link
-            href={USAGE_PATH}
-            className="inline-flex text-sm font-medium text-primary hover:underline focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            {t('usageLink')}
-          </Link>
-        </>
-      )}
+            <CompareTable plans={q.data.data} />
+
+            <FaqList faqs={faqs.data?.data ?? []} />
+          </>
+        )}
+      </section>
 
       <SwitchDialog
         plan={pending}

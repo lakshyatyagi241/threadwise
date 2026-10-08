@@ -153,7 +153,16 @@
       "dismiss": "إخفاء",
       "noteLabel": "ملاحظة داخلية",
       "unknownAuthor": "أحد الزملاء",
-      "deleteNote": "حذف هذه الملاحظة"
+      "deleteNote": "حذف هذه الملاحظة",
+      "templateHeader": {
+        "image": "صورة",
+        "video": "فيديو",
+        "document": "مستند",
+        "location": "موقع"
+      },
+      "templateCopyCode": "نسخ الرمز",
+      "templateButtonUnnamed": "زر",
+      "templateButtonPrefix": "زر: "
     },
     "media": {
       "openImage": "فتح الصورة {name}",

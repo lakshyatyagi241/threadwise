@@ -106,6 +106,8 @@ export class BroadcastInboxMirrorService {
           source: 'broadcast',
           type: tpl ? 'template' : 'text',
           ...(tpl ? { template_name: tpl.templateName } : {}),
+          // The keys the thread mapper reads (`template_name` above is the older WaDesk-shaped one the rest of the broadcast code uses).
+          ...(tpl ? { templateName: tpl.templateName, templateLanguage: tpl.language } : {}),
           ...(buttons ? { buttons } : {}),
           broadcast_id: b.uuid,
           ...(providerMessageId ? { wa_message_id: providerMessageId } : {}),

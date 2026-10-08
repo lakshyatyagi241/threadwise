@@ -72,9 +72,39 @@ export interface ShopifyStoreApi {
   deleteWebhooks(ids: readonly string[]): Promise<void>;
 }
 
+/** One line of a checkout: a Shopify variant (its numeric id) and how many. */
+export interface CheckoutLine {
+  variantId: string;
+  qty: number;
+}
+
+/**
+ * What a flow's shop node needs from a Shopify store to hand the customer a checkout (WD-ECOM-036): find the variant of a sku, then
+ * make a cart through the Storefront API, or a draft order through the Admin API when the store has no Storefront token. Each call
+ * answers null when the store refused or did not answer; none throws.
+ */
+export interface ShopifyCheckoutApi {
+  /** The numeric id of the variant with this sku, or null when none (or the store did not answer). */
+  variantIdBySku(sku: string): Promise<string | null>;
+  /** The numeric id of the first variant of a product, for a product that has no sku. */
+  firstVariantId(productId: string): Promise<string | null>;
+  /** A Storefront cart carrying `note`; the link is the cart's own `checkoutUrl`. */
+  createStorefrontCart(
+    storefrontToken: string,
+    lines: readonly CheckoutLine[],
+    note: string | null,
+  ): Promise<{ url: string; cartId: string | null } | null>;
+  /** An Admin draft order carrying `note`; the link is its invoice url. */
+  createDraftOrder(
+    lines: readonly CheckoutLine[],
+    note: string | null,
+  ): Promise<{ url: string; draftId: string | null } | null>;
+}
+
 export interface ShopifyFactory {
   app(settings: ShopifySettings): ShopifyAppApi;
   store(shop: string, accessToken: string): ShopifyStoreApi;
+  checkout(shop: string, accessToken: string): ShopifyCheckoutApi;
 }
 export const SHOPIFY = Symbol('ECOM_SHOPIFY');
 

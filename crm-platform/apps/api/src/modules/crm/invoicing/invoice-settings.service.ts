@@ -16,12 +16,14 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { DEFAULT_NUMBERING, numberFormatProblem, type NumberingSettings } from './invoice-rules';
 import {
   InvoiceSettingsRepository,
+  type EcomSource,
   type SettingsPatch,
   type SettingsRow,
 } from './invoice-settings.repository';
 import { InvoicesRepository } from './invoices.repository';
 
 export const INVOICE_SETTINGS_MODULE = 'invoice-settings';
+const ECOM_TRIGGERS = new Set(['on_placed', 'on_paid', 'on_fulfilled']);
 
 const DEFAULTS: Omit<SettingsRow, 'id' | 'rowVersion' | 'updatedAt'> = {
   sellerName: null,
@@ -148,6 +150,48 @@ export class InvoiceSettingsService {
     orgId: number,
   ): Promise<{ triggerOwn: string; taxLabel: string | null }> {
     return this.repo.storeOrderPolicy(tx, orgId);
+  }
+
+  /** For the store hand-off: whether a store's orders are invoiced on their own, on which event, and the tax label. */
+  async ecomPolicy(
+    tx: Tx,
+    orgId: number,
+    source: EcomSource,
+  ): Promise<{ autoSend: boolean; trigger: string; taxLabel: string | null }> {
+    const p = await this.repo.ecomOrderPolicy(tx, orgId, source);
+    return { ...p, trigger: ECOM_TRIGGERS.has(p.trigger) ? p.trigger : 'on_paid' };
+  }
+
+  /** The store's switch and trigger from the store's own screen (Invoices tab), audited like every settings change. */
+  async updateEcomPolicy(
+    source: EcomSource,
+    input: { autoSend?: boolean; trigger?: 'on_placed' | 'on_paid' | 'on_fulfilled' },
+  ): Promise<{ autoSend: boolean; trigger: string; taxLabel: string | null }> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const before = await this.ecomPolicy(tx, ctx.orgId, source);
+      const delta: Record<string, { old: unknown; new: unknown }> = {};
+      if (input.autoSend !== undefined && input.autoSend !== before.autoSend)
+        delta[`autoSend.${source}`] = { old: before.autoSend, new: input.autoSend };
+      if (input.trigger !== undefined && input.trigger !== before.trigger)
+        delta[`trigger.${source}`] = { old: before.trigger, new: input.trigger };
+      if (Object.keys(delta).length === 0) return before;
+      await this.repo.setEcomOrderPolicy(tx, ctx.orgId, source, input);
+      const row = (await this.repo.get(tx, ctx.orgId))!;
+      await this.audit.record(tx, {
+        module: INVOICE_SETTINGS_MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta,
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: INVOICE_SETTINGS_MODULE,
+        aggregateId: row.id,
+        eventType: 'invoice_settings.updated',
+        payload: { changed: Object.keys(delta) },
+      });
+      return this.ecomPolicy(tx, ctx.orgId, source);
+    });
   }
 
   async get(): Promise<InvoiceProfile> {

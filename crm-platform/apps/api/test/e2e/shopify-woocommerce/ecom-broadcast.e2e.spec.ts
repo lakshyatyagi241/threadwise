@@ -216,8 +216,8 @@ describe('win-back (WD-ECOM-015)', () => {
     source = 'shopify',
   ) =>
     h.owner.query(
-      `INSERT INTO wa_orders (org_id, shopify_order_id, source, customer_phone, total_minor, currency_code, status, created_at)
-       VALUES ($1, $2, $3, $4, $5, 'USD', 'paid', now() - make_interval(days => $6))`,
+      `INSERT INTO wa_orders (org_id, shopify_order_id, source, customer_phone, total_minor, currency_code, status, items_json, created_at)
+       VALUES ($1, $2, $3, $4, $5, 'USD', 'paid', '[]'::jsonb, now() - make_interval(days => $6))`,
       [t.orgId, id, source, phone, minor, daysAgo],
     );
 

@@ -224,6 +224,29 @@ export class ProductsRepository {
     return row ? toProductRow(row) : undefined;
   }
 
+  /**
+   * The product an outside list names: the one with this SKU when a SKU is given and matches, else the one with this name (any case).
+   * The oldest wins when several match, so a repeated import keeps updating the same row.
+   */
+  async findBySkuOrName(
+    tx: Tx,
+    orgId: number,
+    key: { sku?: string | null; name: string },
+  ): Promise<ProductRow | undefined> {
+    if (key.sku) {
+      const bySku = await tx.execute(sql`
+        SELECT ${PRODUCT_SELECT} ${FROM}
+        WHERE p.org_id = ${orgId} AND p.sku = ${key.sku} ORDER BY p.id LIMIT 1`);
+      const row = bySku.rows[0] as Raw | undefined;
+      if (row) return toProductRow(row);
+    }
+    const byName = await tx.execute(sql`
+      SELECT ${PRODUCT_SELECT} ${FROM}
+      WHERE p.org_id = ${orgId} AND lower(p.name) = lower(${key.name}) ORDER BY p.id LIMIT 1`);
+    const row = byName.rows[0] as Raw | undefined;
+    return row ? toProductRow(row) : undefined;
+  }
+
   async findById(tx: Tx, orgId: number, id: number): Promise<ProductRow | undefined> {
     const res = await tx.execute(
       sql`SELECT ${PRODUCT_SELECT} ${FROM} WHERE p.org_id = ${orgId} AND p.id = ${id}`,

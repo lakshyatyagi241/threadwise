@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Google Sheets add-on",
+        "description": "Create your key, download the add-on files and sync contacts and products from a spreadsheet.",
+        "keywords": "google sheets, spreadsheet, add-on, apps script, import contacts, sync products, key"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Dismiss",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyFailed": "Could not copy. Select the key and copy it by hand.",
+      "reference": "Reference for support: {id}",
+      "back": "Back to integrations"
+    },
+    "page": {
+      "title": "Google Sheets add-on",
+      "subtitle": "Pull and push contacts and sync products between a spreadsheet and your workspace.",
+      "loading": "Loading the add-on setup",
+      "retry": "Retry",
+      "status": {
+        "connected": "Key active",
+        "noKey": "No key yet",
+        "notInstalled": "Not installed"
+      },
+      "forbidden": {
+        "title": "You cannot use the Google Sheets add-on",
+        "body": "Your role does not include the Google Sheets add-on. Ask an administrator to give your role access."
+      },
+      "loadFailed": {
+        "title": "Could not load the add-on setup.",
+        "notInstalled": "The add-on is not installed in this workspace.",
+        "forbidden": "Your role is not allowed to see this page.",
+        "planLocked": "Your plan does not include the Marketplace.",
+        "suspended": "This account or workspace is suspended.",
+        "rateLimited": "Too many requests. Wait a moment and try again.",
+        "network": "We could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong on our side. Try again."
+      }
+    },
+    "install": {
+      "title": "Install the add-on first",
+      "body": "The Google Sheets add-on is not installed in this workspace, so keys and the add-on do not work yet. An administrator installs it once from the Marketplace.",
+      "marketplace": "Install it from the Marketplace",
+      "google": "Open the Google Workspace Marketplace listing",
+      "keyKept": "You still have a key. You can switch it off below."
+    },
+    "key": {
+      "title": "Your key",
+      "intro": "The add-on uses your personal key to act as you. It sees only what your role allows.",
+      "none": "You have no key yet.",
+      "generate": "Generate key",
+      "rotate": "Generate a new key",
+      "revoke": "Revoke key",
+      "working": "Working...",
+      "active": "Key",
+      "created": "Created {when}",
+      "lastUsed": "Last used {when}",
+      "neverUsed": "Never used",
+      "newTitle": "Your new key",
+      "newWarning": "Copy it now. It is shown only once and cannot be shown again. Anyone with this key can act as you in the add-on.",
+      "rotatedNote": "Your previous key stopped working.",
+      "keyLabel": "New key",
+      "confirmRotate": {
+        "title": "Replace your key?",
+        "message": "The key you use now stops working at once. Paste the new key into the add-on to keep using it.",
+        "confirm": "Replace key"
+      },
+      "confirmRevoke": {
+        "title": "Revoke your key?",
+        "message": "The add-on stops working until you create and paste a new key.",
+        "confirm": "Revoke key"
+      },
+      "cancel": "Cancel",
+      "revoked": "Your key was revoked.",
+      "generated": "Your key was created. Copy it now.",
+      "errors": {
+        "notInstalled": "The add-on is not installed in this workspace. Ask an administrator to install it.",
+        "forbidden": "Your role is not allowed to do this.",
+        "planLocked": "Your plan does not include the Marketplace.",
+        "suspended": "This account or workspace is suspended.",
+        "rateLimited": "Too many requests. Wait a moment and try again.",
+        "network": "We could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong on our side. Try again."
+      }
+    },
+    "can": {
+      "title": "What your key can do",
+      "intro": "This is your role intersected with what the install allows.",
+      "allowed": "Allowed",
+      "notAllowed": "Not allowed",
+      "readContacts": "Pull contacts into a sheet",
+      "writeContacts": "Push contacts from a sheet",
+      "readCatalog": "See shops and products",
+      "writeCatalog": "Sync products to a shop"
+    },
+    "files": {
+      "title": "Add-on files",
+      "intro": "Six files make the Apps Script project. Code.gs already points at this workspace.",
+      "download": "Download",
+      "downloadFile": "Download {name}",
+      "downloaded": "{name} downloaded.",
+      "notAvailable": "Not available on this server yet",
+      "failed": "Could not download {name}. Try again."
+    },
+    "steps": {
+      "title": "Set it up in a spreadsheet",
+      "one": "Open a spreadsheet, then Extensions, then Apps Script.",
+      "two": "Download the six files above. In Project Settings show the appsscript.json file, and paste appsscript.json and Code.gs over the ones in the editor.",
+      "three": "Add three HTML files named Dialog, Settings and Help and paste the downloaded files into them.",
+      "four": "Save and reload the spreadsheet. A CRM menu appears. Allow the three permissions Google asks for.",
+      "five": "Choose CRM, then Settings, paste your key and select Save and check.",
+      "six": "Row 1 of your sheet holds the column names. Then use Pull contacts, Push contacts or Sync products from the CRM menu."
+    },
+    "columns": {
+      "title": "Columns the add-on reads",
+      "contacts": "Contacts",
+      "products": "Products",
+      "contactsHint": "email or phone is required. A column named attr:city fills the custom property city. A blank cell never clears a stored value.",
+      "productsHint": "name and price are required. Products are matched by SKU, then by name. A blank stock means unlimited."
+    },
+    "shops": {
+      "title": "Shops",
+      "empty": "No shops yet. Your first product sync creates one.",
+      "disabled": "Off",
+      "open": "Open {name}",
+      "updated": "Updated {when}"
+    },
+    "products": {
+      "title": "Recent products",
+      "empty": "No products yet. Sync a sheet to add some.",
+      "count": "{count, plural, one {# product in your workspace} other {# products in your workspace}}"
+    }
+  }
+}

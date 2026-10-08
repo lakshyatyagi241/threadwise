@@ -24,7 +24,9 @@ import {
   webhookIdsOf,
   webhookUrl,
 } from './ecom-rules';
+import { BrandingService } from '../platform-settings-branding-storage';
 import { ImportService } from './import.service';
+import { generateWooPlugin, type WooPluginZip } from './plugin/woo-plugin.generator';
 import { EcomSettingsService } from './platform-settings.service';
 import { StoresRepository, type WooRow } from './stores.repository';
 
@@ -52,6 +54,7 @@ export class WoocommerceService {
     private readonly outbox: OutboxService,
     private readonly settings: EcomSettingsService,
     private readonly imports: ImportService,
+    private readonly branding: BrandingService,
     private readonly config: ConfigService<Env, true>,
     @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
     @Inject(ECOM_PLAN_GATE) private readonly plan: EcomPlanGate,
@@ -248,5 +251,25 @@ export class WoocommerceService {
     await this.db.tx((tx) => this.repo.refreshWoo(tx, orgId, row.id, probe.data));
     await this.imports.enqueue({ orgId, kind: 'woocommerce', id: row.id });
     return { ok: true, counts: await api.counts(), importQueued: true };
+  }
+
+  /**
+   * The companion plugin for one store (WD-ECOM-032): a zip with this store's webhook address, its secret, the cart delay and the
+   * brand baked in. The secret leaves only inside the file; the download is audited and nothing here logs it.
+   */
+  async plugin(uuid: string): Promise<WooPluginZip> {
+    const { orgId } = RequestContextStore.require();
+    await this.plan.assertIntegration(orgId, 'woocommerce');
+    const row = await this.db.tx((tx) => this.repo.wooByUuid(tx, orgId, uuid));
+    if (!row) throw AppError.notFound('WooCommerce store', uuid);
+    const out = generateWooPlugin({
+      brandName: await this.branding.name(),
+      webhookUrl: webhookUrl(this.appUrl(), 'woocommerce', row.webhookSecret),
+      webhookSecret: row.webhookSecret,
+    });
+    await this.db.tx((tx) =>
+      this.audit.record(tx, { module: WOO_MODULE_KEY, recordId: row.id, action: 'export' }),
+    );
+    return out;
   }
 }

@@ -10,6 +10,10 @@ Operator routes (`/platform/...`, operator token; reads for every role, writes f
 - `DELETE /platform/addons/:id`: 409 `ADD_PACK_IN_USE` while any workspace owns the pack.
 - `GET /addons`: `{eligible, owned, catalog}`; `catalog` is empty unless the workspace is on an active paid plan.
 
+## Core features cannot be sold as add-ons
+
+A plan feature whose registry default is ON (`coreFeatureDefault(key) === true`: Shopify, WooCommerce, calling from the inbox, the sales pipeline, the Marketplace and lead sources among them) is granted by every plan row that predates it, so an add-on that "grants" it sells what everyone already has. `POST /v2/platform/addons` and `PATCH /v2/platform/addons/:id` refuse it with a 422 that names each flag (`features`). A pack saved before this rule may keep a core flag it already holds (it can be renamed, repriced or deactivated; the flag can be unticked), but no core flag can be added. Optional flags (default off, or contributed by a module) stay sellable. The same rule already kept a Marketplace app off a core flag. `GET /v2/platform/addons/fields` marks each core flag with `core: true` and the add-on form shows it as "in every plan", unavailable. Sell a core feature inside a plan instead (for example Shopify and WooCommerce in a higher plan).
+
 ## Recurring add-ons
 
 - `billingMode`: `one_time` (default) or `recurring` on create, update and in every pack and catalogue card. A free or lifetime pack cannot be `recurring` (422 on `billingMode`).

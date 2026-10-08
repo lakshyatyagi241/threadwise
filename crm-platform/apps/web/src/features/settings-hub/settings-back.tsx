@@ -9,13 +9,14 @@ import { useSettingsTiles } from './settings-context';
 /**
  * "Back to Settings" breadcrumb, shown above any screen a Settings tile points at (Tax rates, Contact stages, Add-ons...),
  * so a moved screen is never a dead end now that it has no menu entry. It needs no edit in the screen: the shell renders it
- * from the same tiles the Settings pages use. Nothing is shown on the Settings pages themselves or on other screens.
+ * from the same tiles the Settings pages use. Nothing is shown on the Settings pages themselves or on other screens. A
+ * standalone page under `/settings/` (Message footer) has no shell breadcrumb, so it draws this one itself with `always`.
  */
-export function SettingsBack() {
+export function SettingsBack({ always = false }: { always?: boolean }) {
   const t = useTranslations();
   const pathname = usePathname();
   const tiles = useSettingsTiles();
-  if (pathname === '/settings' || pathname.startsWith('/settings/')) return null;
+  if (!always && (pathname === '/settings' || pathname.startsWith('/settings/'))) return null;
   const tile = tileForPath(tiles, pathname);
   if (!tile) return null;
 

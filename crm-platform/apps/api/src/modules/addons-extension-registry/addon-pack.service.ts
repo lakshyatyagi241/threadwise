@@ -22,6 +22,7 @@ import {
   readGrants,
   titledKey,
   type AllowedKeys,
+  coreFeaturesIn,
 } from './addon-grants';
 import { ModuleRegistryService } from './module-registry.service';
 
@@ -151,8 +152,15 @@ export class AddonPackService {
           label: titled(d.key),
           group: d.group,
           source: 'core',
+          core: d.default === true,
         })),
-        ...mf.map((f) => ({ key: f.key, label: f.label, group: f.group, source: f.module })),
+        ...mf.map((f) => ({
+          key: f.key,
+          label: f.label,
+          group: f.group,
+          source: f.module,
+          core: false,
+        })),
       ],
       limits: [
         ...PLAN_LIMIT_DEFS.map((d) => ({
@@ -160,6 +168,7 @@ export class AddonPackService {
           label: titled(d.key),
           group: d.group,
           source: 'core',
+          core: false,
           default: null,
           hint: '',
         })),
@@ -168,6 +177,7 @@ export class AddonPackService {
           label: l.label,
           group: l.group,
           source: l.module,
+          core: false,
           default: l.default,
           hint: l.hint,
         })),
@@ -202,9 +212,23 @@ export class AddonPackService {
 
   // --- writes ----------------------------------------------------------------------------------------------------
 
+  /** Core features are part of every plan: an add-on may not sell them (`already` are ones a stored pack held before this rule). */
+  private refuseCore(features: readonly string[], already: readonly string[] = []): void {
+    const core = coreFeaturesIn(features).filter((k) => !already.includes(k));
+    if (core.length === 0) return;
+    throw AppError.validation(
+      'A core feature cannot be sold as an add-on.',
+      core.map((k) => ({
+        path: 'features',
+        message: `${titledKey(k)} is part of every plan. Sell it in a plan, or pick an optional feature.`,
+      })),
+    );
+  }
+
   async create(body: CreateAddonPayload): Promise<AddonPack> {
     const operatorId = this.operatorId();
     const allowed = await this.allowed();
+    this.refuseCore(body.features);
     const grants = normaliseGrants(body, allowed);
 
     return this.tx(async (tx) => {
@@ -278,6 +302,7 @@ export class AddonPackService {
         );
       }
       const after = checked.data;
+      this.refuseCore(after.features, before.grants.features);
       const grants = normaliseGrants(after, allowed);
       const res = await tx.execute(sql`
         UPDATE plans SET

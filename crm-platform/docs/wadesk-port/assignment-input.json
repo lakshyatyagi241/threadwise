@@ -184,7 +184,7 @@
       "id": "chrome-extension-sheets-addon",
       "code": "ext",
       "cluster": "platform",
-      "owner": "shubham",
+      "owner": "lakshya",
       "days": 70,
       "wave": 3,
       "inventory": "pending",

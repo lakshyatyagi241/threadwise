@@ -10,7 +10,7 @@ import type {
 
 export type Kind = 'shopify' | 'woocommerce';
 
-/** The tabs, in WaDesk's order. Invoices is left out until the invoicing domain exports its panel (WD-ECOM-035). */
+/** The tabs, in WaDesk's order (WD-ECOM-004, 035). */
 export const TABS = [
   'overview',
   'orders',
@@ -19,6 +19,7 @@ export const TABS = [
   'customers',
   'events',
   'analytics',
+  'invoices',
   'logs',
   'settings',
 ] as const;
