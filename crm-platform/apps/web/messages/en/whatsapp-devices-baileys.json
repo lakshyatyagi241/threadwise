@@ -3,6 +3,7 @@
     "nav": {
       "devices": "Personal WhatsApp"
     },
+    "area": { "title": "Unofficial WhatsApp API", "numbers": "Numbers", "warmer": "Warmer" },
     "common": {
       "dismiss": "Dismiss",
       "requestId": "Request {id}",
