@@ -1,5 +1,6 @@
 import { FLB_TRIGGER_KINDS, type FlbTriggerKind } from './node-catalogue';
 import type { FlowGraph } from './graph';
+import { flbTriggerConfig, type FlbTriggerConfig } from './trigger-config';
 
 /**
  * Trigger column extraction (WD-FLB-020): the first Trigger node, read into the plain columns enrolment and the inbound
@@ -39,6 +40,8 @@ export interface FlbTriggerExtract {
   engine: FlbSenderEngine | null;
   /** The part after `engine:`; a bare value (legacy flows) has no engine. */
   senderRef: string | null;
+  /** The settings of a kind that needs them (a field match, a schedule, a store event), cleaned; null for the rest. */
+  config: FlbTriggerConfig | null;
   /** True when no Trigger node exists: WaDesk saves `keyword` with no keywords and the flow never fires. */
   hasTrigger: boolean;
 }
@@ -60,6 +63,7 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
       keywords: null,
       engine: null,
       senderRef: null,
+      config: null,
       hasTrigger: false,
     };
   }
@@ -69,6 +73,10 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
   let valueKind: FlbTriggerValueKind = 'none';
   let valueRef: string | null = null;
   switch (kind) {
+    case 'group_leave':
+      valueKind = 'group';
+      valueRef = text(d.groupId) || null;
+      break;
     case 'tag_added':
       valueKind = 'tag';
       valueRef = text(d.tagId) || null;
@@ -87,6 +95,13 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
     case 'away':
     case 'out_of_hours':
     case 'comment_to_dm':
+    case 'segment_join':
+    case 'contact_updated':
+    case 'field_match':
+    case 'date_field_match':
+    case 'schedule':
+    case 'shopify_event':
+    case 'woocommerce_event':
       valueKind = 'zero';
       break;
     default:
@@ -119,7 +134,16 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
     keywords = ids.length ? ids.join(',') : null;
   }
 
-  return { kind, valueKind, valueRef, keywords, engine, senderRef, hasTrigger: true };
+  return {
+    kind,
+    valueKind,
+    valueRef,
+    keywords,
+    engine,
+    senderRef,
+    config: flbTriggerConfig(kind, d),
+    hasTrigger: true,
+  };
 }
 
 /** `keyword_replies.keyword` was VARCHAR(255) in WaDesk; the limit stays so a trigger that long is still refused. */

@@ -22,7 +22,15 @@ export const PROACTIVE_TIMEOUT_SECONDS = 24 * 3600;
 export const AWAY_REARM_MS = 12 * HOUR_MS;
 
 /** Sources whose flows may run again for the same contact (WD-FLR-006 port notes, WD-FLR-007): the reason differs each time. */
-const REENTRY_BY_REF: ReadonlySet<FlowRunSource> = new Set(['order_placed', 'deal_stage_changed']);
+const REENTRY_BY_REF: ReadonlySet<FlowRunSource> = new Set([
+  'order_placed',
+  'deal_stage_changed',
+  'contact_updated',
+  'field_match',
+  'date_field_match',
+  'schedule',
+  'ecom_event',
+]);
 const REENTRY_AFTER_QUIET: ReadonlySet<FlowRunSource> = new Set(['away', 'out_of_hours']);
 
 /** Which channel kinds carry a flow of each engine stamp. Twilio and the other-channel engines have no inbox channel here yet. */

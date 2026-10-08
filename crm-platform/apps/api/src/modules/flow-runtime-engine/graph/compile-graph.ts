@@ -74,6 +74,14 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   ig_ai: 'ChatGPT',
   ig_to_whatsapp: 'SocialHandoff',
   fb_to_whatsapp: 'SocialHandoff',
+  // CRM steps and conditions beyond Tag (WD-FLR-072 to 077): the executor reads the editor's own `data`.
+  update_contact: 'UpdateContact',
+  list_member: 'ListMember',
+  in_list: 'InList',
+  in_segment: 'InSegment',
+  wa_session: 'WaSession',
+  sheet_check: 'SheetCheck',
+  sheet_contact: 'SheetContact',
 };
 
 /** The handle names that mean a fixed port on a node type (WD-FLR-013 rule 5). The rest are `pN` (option N+1) or `else` (0). */
@@ -85,6 +93,10 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   shopify: { purchased: 1, abandoned: 2 },
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
+  in_list: { yes: 1, no: 2 },
+  in_segment: { yes: 1, no: 2 },
+  wa_session: { yes: 1, no: 2 },
+  sheet_check: { yes: 1, no: 2 },
 };
 
 const UNIT_SECONDS: Readonly<Record<string, number>> = {

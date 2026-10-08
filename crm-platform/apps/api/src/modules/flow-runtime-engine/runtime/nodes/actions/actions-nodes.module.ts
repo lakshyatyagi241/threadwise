@@ -7,6 +7,7 @@ import { TeamInboxRoutingSlaModule } from '../../../../team-inbox-routing-sla';
 import { ActionNodes } from './actions-nodes';
 import { AskInputNode } from './ask-input-node';
 import { AskMediaNodes } from './ask-media-nodes';
+import { CrmNodes } from '../crm/crm-nodes';
 import { NumberSender } from './number-sender.service';
 import { SocialHandoffNode } from './social-handoff-node';
 
@@ -18,7 +19,15 @@ import { SocialHandoffNode } from './social-handoff-node';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
   ],
-  providers: [ActionNodes, AskMediaNodes, AskInputNode, SocialHandoffNode, NumberSender, SafeFetch],
-  exports: [ActionNodes, AskMediaNodes, AskInputNode, SocialHandoffNode],
+  providers: [
+    ActionNodes,
+    AskMediaNodes,
+    AskInputNode,
+    SocialHandoffNode,
+    CrmNodes,
+    NumberSender,
+    SafeFetch,
+  ],
+  exports: [ActionNodes, AskMediaNodes, AskInputNode, SocialHandoffNode, CrmNodes],
 })
 export class ActionNodesModule {}

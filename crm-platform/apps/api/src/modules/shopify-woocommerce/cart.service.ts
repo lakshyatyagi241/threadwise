@@ -3,6 +3,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { COMMERCE_SENDER, type CommerceSender } from './_shims/tokens';
 import { CartRepository } from './cart.repository';
@@ -48,6 +49,7 @@ export class CartService {
     private readonly events: EventsRepository,
     private readonly carts: CartRepository,
     private readonly message: EventMessageService,
+    private readonly outbox: OutboxService,
     @Inject(COMMERCE_SENDER) private readonly sender: CommerceSender,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<CartStepJob>,
   ) {}
@@ -142,9 +144,11 @@ export class CartService {
       this.carts.isActive(tx, orgId, kind, recoveryId),
     );
     if (!live) return;
+    const phone = this.phone(kind, data);
+    // The cart is abandoned once its first follow-up comes due with no order: flows hear it whether or not this step has a message.
+    if (phone !== '') await this.announceAbandoned(orgId, kind, storeId, recoveryId, phone, data);
     const cfg = await this.message.config(orgId, kind, storeId, eventType);
     if (!cfg) return;
-    const phone = this.phone(kind, data);
     if (phone === '') return;
     const out = await this.message.send(
       orgId,
@@ -164,5 +168,40 @@ export class CartService {
         error: out.error,
       }),
     );
+  }
+
+  /** `store.flow_event` `abandoned_cart` for the shopper's number; the recovery names it, so a second step does not repeat it. */
+  private async announceAbandoned(
+    orgId: number,
+    kind: StoreKind,
+    storeId: number,
+    recoveryId: number,
+    phone: string,
+    data: Json,
+  ): Promise<void> {
+    try {
+      await this.db.txAs({ orgId }, (tx) =>
+        this.outbox.emit(tx, {
+          orgId,
+          aggregateModule: 'ecom',
+          aggregateId: storeId,
+          eventType: 'store.flow_event',
+          payload: {
+            kind,
+            event: 'abandoned_cart',
+            ref: `cart:${recoveryId}`,
+            phone,
+            productIds: [],
+            variables: {
+              ...(typeof data.abandoned_checkout_url === 'string'
+                ? { checkout_url: data.abandoned_checkout_url }
+                : {}),
+            },
+          },
+        }),
+      );
+    } catch (err) {
+      this.logger.warn({ orgId, kind, recoveryId, err }, '[CART] abandonment not announced');
+    }
   }
 }

@@ -371,6 +371,19 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     save: { action: 'MOVE', value: '12' },
     reads: { action: 'move', dealValue: '12', value: '12' },
   },
+  update_contact: { save: { field: 'city', value: 'x' }, reads: { field: 'city', value: 'x' } },
+  list_member: {
+    save: { action: 'remove', listId: 'g1' },
+    reads: { action: 'remove', listId: 'g1' },
+  },
+  in_list: { save: { listId: 'g1' }, reads: { listId: 'g1' } },
+  in_segment: { save: { segmentId: 's1' }, reads: { segmentId: 's1' } },
+  wa_session: { reads: { hours: 24 } },
+  sheet_check: {
+    save: { checkColumn: 'Status' },
+    reads: { checkColumn: 'Status', operator: 'equals' },
+  },
+  sheet_contact: { save: { matchColumn: 'Phone' }, reads: { matchColumn: 'Phone' } },
   cf_say: { save: { text: 'Hi' }, reads: { text: 'Hi' } },
   cf_listen: { save: { save: 'said' }, reads: { variable: 'said', silenceTimeout: 6 } },
   cf_ai: {
@@ -423,7 +436,7 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
 };
 
 describe('every node type of the catalogue: the field the executor reads is there', () => {
-  it('the table covers exactly the 60 catalogue types (a new node type must be added here)', () => {
+  it('the table covers exactly the catalogue types (a new node type must be added here)', () => {
     expect(Object.keys(EXECUTOR_READS).sort()).toEqual(FLB_NODE_TYPE_LIST.map((d) => d.id).sort());
   });
 

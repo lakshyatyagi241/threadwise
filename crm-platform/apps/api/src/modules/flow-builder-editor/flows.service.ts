@@ -64,6 +64,7 @@ interface TriggerColumns {
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
   triggerChannelId: number | null;
+  triggerConfig: unknown;
   provider: string | null;
 }
 
@@ -574,6 +575,7 @@ export class FlowsService {
       triggerKeywords: t.keywords,
       triggerDeviceId,
       triggerChannelId,
+      triggerConfig: t.config,
       provider: t.engine,
     };
   }
