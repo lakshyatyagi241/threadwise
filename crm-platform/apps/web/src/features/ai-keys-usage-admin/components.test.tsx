@@ -101,11 +101,28 @@ describe('usage charts', () => {
     expect(out).toContain('<th scope="row">2026-10-02</th><td>1500</td>');
   });
 
-  it('marks the pressed window and lists all four', () => {
-    const out = html(<WindowSwitch value="90d" onChange={() => undefined} />);
+  it('marks the pressed window and lists the presets and the custom range', () => {
+    const out = html(
+      <WindowSwitch value={{ window: '90d', from: '', to: '' }} onChange={() => undefined} />,
+    );
     expect(out).toContain('7 days');
     expect(out).toContain('1 year');
     expect(out).toMatch(/aria-pressed="true"[^>]*>90 days/);
+  });
+
+  it('shows the two date pickers only on the custom range', () => {
+    const preset = html(
+      <WindowSwitch value={{ window: '30d', from: '', to: '' }} onChange={() => undefined} />,
+    );
+    expect(preset).not.toContain('type="date"');
+    const custom = html(
+      <WindowSwitch
+        value={{ window: 'custom', from: '2026-09-01', to: '2026-09-10' }}
+        onChange={() => undefined}
+      />,
+    );
+    expect(custom.match(/type="date"/g)).toHaveLength(2);
+    expect(custom).toContain('2026-09-01');
   });
 
   it('says so when there is nothing to chart, and ranks rows otherwise', () => {

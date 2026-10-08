@@ -82,12 +82,6 @@ export function analyticsStateToSearch(s: AnalyticsState): string {
   return out ? `?${out}` : '';
 }
 
-/** The window of the history: custom dates beat the period chip, as in Reference. */
-const windowQuery = (s: AnalyticsState) =>
-  s.from || s.to
-    ? { dateFrom: s.from || undefined, dateTo: s.to || undefined }
-    : { days: s.range === 'all' ? undefined : rangeDays(s.range) };
-
 export const historyQuery = (s: AnalyticsState, cursor?: string) => ({
   flowId: s.flowId || undefined,
   status: s.status === 'all' ? undefined : s.status,
@@ -97,10 +91,19 @@ export const historyQuery = (s: AnalyticsState, cursor?: string) => ({
   cursor,
 });
 
-/** The error logs and the retry records follow the period chip and the flow only (custom dates are the history's own). */
+/** The window of the history: custom dates beat the period chip, as in Reference. */
+export const windowQuery = (s: AnalyticsState) =>
+  s.from || s.to
+    ? { dateFrom: s.from || undefined, dateTo: s.to || undefined }
+    : { days: s.range === 'all' ? undefined : rangeDays(s.range) };
+
+/** True when custom dates (not a period chip) set the window. */
+export const isCustomRange = (s: AnalyticsState): boolean => s.from !== '' || s.to !== '';
+
+/** The error logs and the retry records follow the period (chip or custom dates) and the flow. */
 const periodOnly = (s: AnalyticsState) => ({
   flowId: s.flowId || undefined,
-  days: s.range === 'all' ? undefined : rangeDays(s.range),
+  ...windowQuery(s),
 });
 export const errorsQuery = (s: AnalyticsState) => periodOnly(s);
 export const retriesQuery = (s: AnalyticsState, cursor?: string) => ({

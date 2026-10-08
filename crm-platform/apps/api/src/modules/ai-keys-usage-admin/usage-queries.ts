@@ -23,8 +23,13 @@ export interface LedgerFigures {
 
 const scope = (orgId?: number): SQL => (orgId === undefined ? sql`TRUE` : sql`org_id = ${orgId}`);
 
-export async function readLedger(tx: Tx, from: Date, orgId?: number): Promise<LedgerFigures> {
-  const where = sql`created_at >= ${from} AND ${scope(orgId)}`;
+export async function readLedger(
+  tx: Tx,
+  from: Date,
+  until: Date,
+  orgId?: number,
+): Promise<LedgerFigures> {
+  const where = sql`created_at >= ${from} AND created_at < ${until} AND ${scope(orgId)}`;
 
   const totals = (
     await tx.execute(sql`
@@ -85,13 +90,14 @@ export interface ModelRow {
 export async function readModels(
   tx: Tx,
   from: Date,
+  until: Date,
   limit: number,
   orgId?: number,
 ): Promise<ModelRow[]> {
   const res = await tx.execute(sql`
     SELECT model, provider, sum(total_tokens)::bigint AS tokens, count(*)::bigint AS calls,
            sum(prompt_tokens)::bigint AS prompt_tokens, sum(completion_tokens)::bigint AS completion_tokens
-    FROM ai_token_usage WHERE created_at >= ${from} AND ${scope(orgId)}
+    FROM ai_token_usage WHERE created_at >= ${from} AND created_at < ${until} AND ${scope(orgId)}
     GROUP BY model, provider ORDER BY tokens DESC, provider, model LIMIT ${limit}
   `);
   return (res.rows as Array<Record<string, unknown>>).map((r) => ({

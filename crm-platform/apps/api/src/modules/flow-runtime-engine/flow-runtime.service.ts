@@ -854,7 +854,7 @@ export class FlowRuntimeService {
   async analytics(q: FlowAnalyticsQuery): Promise<FlowAnalytics> {
     const orgId = this.org();
     return this.db.tx(async (tx) => {
-      const { from } = windowOf({ days: q.days });
+      const { from, to } = windowOf(q);
       const flowIdSql = q.flowId
         ? sql`(SELECT id FROM flows WHERE org_id = ${orgId} AND uuid = ${q.flowId}::uuid)`
         : null;
@@ -867,7 +867,9 @@ export class FlowRuntimeService {
         SELECT s.flow_id, s.contact_id, 'failed', s.source, coalesce(s.enrolled_at, s.created_at), s.failed_at,
                s.failure_reason, s.failed_at
         FROM flow_subscribers s WHERE s.org_id = ${orgId} AND s.status = 'failed' AND s.last_run_id IS NULL)`;
-      const since = from ? sql`r.started_at >= ${from}::timestamptz` : sql`true`;
+      const since = sql`${from ? sql`r.started_at >= ${from}::timestamptz` : sql`true`} AND ${
+        to ? sql`r.started_at <= ${to}::timestamptz` : sql`true`
+      }`;
       const totals = rowsOf(
         await tx.execute(sql`
           ${ev}
@@ -918,7 +920,9 @@ export class FlowRuntimeService {
           WHERE ${since} ${flowFilter}
           GROUP BY f.uuid, f.flow_name, f.is_active, f.is_published ORDER BY runs DESC LIMIT 50`),
       );
-      const sinceSub = from ? sql`s.enrolled_at >= ${from}::timestamptz` : sql`true`;
+      const sinceSub = sql`${from ? sql`s.enrolled_at >= ${from}::timestamptz` : sql`true`} AND ${
+        to ? sql`s.enrolled_at <= ${to}::timestamptz` : sql`true`
+      }`;
       const subFlow = flowIdSql ? sql`AND s.flow_id = ${flowIdSql}` : sql``;
       const subs = rowsOf(
         await tx.execute(sql`
@@ -930,6 +934,7 @@ export class FlowRuntimeService {
         await tx.execute(sql`
           SELECT count(*)::int AS n FROM flow_retry_logs l
           WHERE l.org_id = ${orgId} ${from ? sql`AND l.created_at >= ${from}::timestamptz` : sql``}
+            ${to ? sql`AND l.created_at <= ${to}::timestamptz` : sql``}
             ${flowIdSql ? sql`AND l.flow_id = ${flowIdSql}` : sql``}`),
       )[0]!;
       const flows = rowsOf(
