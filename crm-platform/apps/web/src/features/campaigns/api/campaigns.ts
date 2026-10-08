@@ -2,7 +2,9 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
+  aiModelsResponseSchema,
   bulkDeleteCampaignsResponseSchema,
+  campaignAiGenerateResponseSchema,
   campaignActionResponseSchema,
   campaignBuilderSchema,
   campaignConfigSchema,
@@ -11,6 +13,7 @@ import {
   campaignLiveSchema,
   campaignRecipientsResponseSchema,
   resendCampaignResponseSchema,
+  type CampaignAiGenerateInput,
   type CreateCampaignInput,
   type ResendCampaignInput,
   type UpdateCampaignInput,
@@ -44,6 +47,8 @@ export function useCampaignList(state: ListState) {
       }),
     placeholderData: keepPreviousData,
     refetchInterval: POLL_MS,
+    // The list polls anyway, so a failed read shows its error state at once instead of a spinner through the retries.
+    retry: false,
   });
 }
 
@@ -103,6 +108,25 @@ const created = z.object({
 
 export const createCampaign = (body: CreateCampaignInput) =>
   apiFetch('/campaigns', { method: 'POST', body, schema: created });
+
+/** "Build with AI" (TW-CAMP-002): the copy for a campaign from a brief. Nothing is stored. */
+export const aiGenerateCampaign = (body: CampaignAiGenerateInput) =>
+  apiFetch('/campaigns/ai-generate', {
+    method: 'POST',
+    body,
+    schema: campaignAiGenerateResponseSchema,
+  });
+
+/** The text models this workspace may use (the platform's enabled ones and any provider it added its own key for). */
+export function useAiModels(enabled: boolean) {
+  return useQuery({
+    queryKey: ['camp', 'ai-models'] as const,
+    queryFn: ({ signal }) => apiFetch('/ai/models', { schema: aiModelsResponseSchema, signal }),
+    select: (r) => r.data,
+    enabled,
+    staleTime: 60_000,
+  });
+}
 
 export const updateCampaign = (id: string, body: UpdateCampaignInput) =>
   apiFetch(`/campaigns/${id}`, { method: 'PUT', body, schema: created });

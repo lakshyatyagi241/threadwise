@@ -141,3 +141,21 @@ Header media paths: only an absolute URL is turned into a link until the storage
 ## Intended difference: unofficial engine off by default (owner decision 2026-10-05)
 
 A broadcast that names a personal-number (`baileys`) sender is refused with 422 `WA_UNOFFICIAL_DISABLED` unless a platform super admin turned the unofficial engine on; a blank sender or default engine resolves to `waba`; existing rows on that engine are kept, not sent, and resume when it is turned on. Reference always allowed it. Details and the full list of surfaces: [node-bridge-runtime.md](node-bridge-runtime.md#intended-difference-the-unofficial-engine-is-off-behind-a-platform-switch-owner-decision-2026-10-05).
+
+## Playwright twin run: TW-BCAST-004 (the list and the single-page create screen)
+
+Spec `apps/web/e2e/broadcasts/parity/TW-BCAST-004.twin.mjs`, depth full, against the running Reference and this branch. **New broadcast now opens the single-page "Create new broadcast" screen again** (the composer from TW-BCAST-004 to 008, restored from git history and adapted to the shared audience picker with segments and filters); the four-step wizard is still under Campaigns (`/campaigns/wizard`), and the broadcasts it makes are still listed at the top of the Broadcasts screen. The Broadcasts entry points (list button, rail, empty state, chooser) go to `/broadcasts/create`.
+
+| Area                                                                                        | Result                                                                                      |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| List: heading, five tiles, five views, range pills, nine column heads, search, recent, help | same (the column heads now show on an empty list too, as in Reference)                         |
+| List: a search with no match                                                                | "No data found", Reset filters and Create broadcast on both; the rail's empty block matches |
+| Create: setup, device, audience, schedule, preview, "Draft / unsaved", Add Broadcast        | same                                                                                        |
+| Add Broadcast with nothing filled                                                           | stays on the page on both                                                                   |
+| Page probes (load, accessibility, degraded, auth, perf) on both screens                     | same, after the fixes below                                                                 |
+
+Fixed after the first run: the list showed a spinner through the read retries when every request failed (it now shows its error state at once); a second `main` landmark inside the shell's; unlabelled `aside` landmarks; the create title is now a heading (Reference has none). Intended: the one tab stop without a focus ring is the Next.js dev-tools button, which only the dev server renders. The 8 review items are structure counts that differ by design (our shell and left sidebar).
+
+Checked by hand in a browser: with the workspace's Meta "Test Number" the screen shows it as the fixed "Send from device" row, a template fills the "Fill in this send" panel and the phone preview, and "Add Broadcast" with one contact and "Schedule for later" answers 201 `scheduled` and returns to the list (the test broadcast was deleted again).
+
+Not verified: a real send to Meta (no credentials here); the multi-device share weights against Reference live (the local Reference has one device).

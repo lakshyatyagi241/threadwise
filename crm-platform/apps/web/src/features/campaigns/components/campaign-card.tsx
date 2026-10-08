@@ -146,14 +146,17 @@ export function CampaignCard({
           checked={selected}
           onChange={(e) => onSelect(e.target.checked)}
           aria-label={t('select', { name: c.name })}
-          className="mt-2.5 size-4 shrink-0 accent-[var(--primary)]"
+          className="mt-1.5 size-6 shrink-0 accent-[var(--primary)]"
         />
         <span className={cn('grid size-9 shrink-0 place-items-center rounded-full', look.icon)}>
           <Icon className="size-3.5" />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href={titleHref} className="truncate text-[15px] font-semibold hover:underline">
+            <Link
+              href={titleHref}
+              className="min-h-6 min-w-6 truncate text-[15px] font-semibold leading-6 hover:underline"
+            >
               {c.name}
             </Link>
             <span className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">

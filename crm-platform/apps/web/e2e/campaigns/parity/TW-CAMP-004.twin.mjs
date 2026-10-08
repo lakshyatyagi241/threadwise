@@ -1,10 +1,26 @@
-// TW-CAMP-004 twin: the campaign audience step. Reference's create screen is a stepped wizard with its own picker; ours adds
-// segments and contact filters (intended). Page probes run on both apps; the audience scenarios run on ours only.
+// TW-CAMP-004 twin: the campaign audience step. Both create screens are five-step wizards (Setup, Compose, Recipients, Schedule,
+// Review); ours adds segments and contact filters on the Recipients step (intended). Page probes run on both apps; the audience
+// scenarios run on ours only, so they walk Setup and Compose first.
 const CREATE = '/campaigns/create';
 const mine = (c) => c.tag('aud');
 
-const openCreate = async (c) => {
+/** Opens the builder and walks Setup and Compose (a name and a message) to the Recipients step. */
+const openCreate = async (c, name = mine(c)) => {
   await c.goto(CREATE, { ready: 'main' });
+  // Our cookie banner sits over the bottom of the form and would catch the clicks on Next.
+  await c.page
+    .getByRole('button', { name: /^decline$/i })
+    .click({ timeout: 1500 })
+    .catch(() => {});
+  await c.page.getByLabel(/campaign name/i).fill(name);
+  // Like Reference, Next waits for a sender: take the first connected one.
+  const sender = await c.page
+    .locator('#camp-sender option')
+    .evaluateAll((os) => os.map((o) => o.value).find((v) => v !== ''));
+  if (sender) await c.page.locator('#camp-sender').selectOption(sender);
+  await c.page.getByRole('button', { name: /^next$/i }).click();
+  await c.page.locator('#camp-message').fill('Hello');
+  await c.page.getByRole('button', { name: /^next$/i }).click();
   await c.page.getByRole('heading', { name: /who do you want to send it to/i }).waitFor();
 };
 const chip = (c, name) => c.page.locator('label', { hasText: name }).first();
@@ -89,20 +105,18 @@ export default (h) => ({
           c.obs.status('status.segment.create', seg.status);
           const segId = seg.body?.id;
           if (segId) c.onCleanup(() => c.deleteOwned(`/v2/segments/${segId}`, { name }));
-          await openCreate(c);
+          await openCreate(c, name);
           await c.page.reload();
-          await openCreate(c);
+          await openCreate(c, name);
           await chip(c, name).click();
           c.obs.flag('flag.segment.chip-checked', await chip(c, name).locator('input').isChecked());
-          await c.page.getByLabel(/campaign name/i).fill(name);
-          await c.page.locator('#camp-message').fill('Hello');
           const posted = c.page
             .waitForResponse(
               (r) => r.request().method() === 'POST' && /\/campaigns$/.test(r.url()),
               { timeout: 15000 },
             )
             .catch(() => null);
-          await c.page.getByRole('button', { name: /save as draft/i }).click();
+          await c.page.getByRole('button', { name: /^save draft$/i }).click();
           const r = await posted;
           c.obs.status('status.draft.create', r ? r.status() : 0);
           const body = r ? await r.json().catch(() => ({})) : {};
@@ -114,6 +128,13 @@ export default (h) => ({
     },
   ],
   intended: [
+    {
+      scenario: /^(campaigns-list|campaign-builder|campaign-create)\.keyboard$/,
+      key: 'abs.keyboard.focusVisible',
+      quirk: 'the Next.js dev-tools button has no focus ring',
+      reason:
+        'the one tab stop without a ring is the `nextjs-portal` dev-tools button, which only the dev server renders (checked by tabbing the page and reading the focused element); a production build has no such stop',
+    },
     {
       scenario: /^campaign-create\.keyboard$/,
       key: 'abs.keyboard.reachable',
