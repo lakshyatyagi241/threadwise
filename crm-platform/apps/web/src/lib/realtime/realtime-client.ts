@@ -161,6 +161,16 @@ export class RealtimeClient {
     if (this.status === 'connected') this.resyncAll('foreground');
   }
 
+  /**
+   * Tells the server whether this tab is in front (BL-097): a person with a visible tab gets no closed-tab browser push, because the
+   * bell and toast already cover them. Fire and forget, only while connected; the server forgets a silent tab after 35 s, so a visible
+   * tab repeats the report (see `useVisibilityReport`).
+   */
+  reportVisible(visible: boolean): void {
+    if (this.status !== 'connected' || !this.socket?.connected) return;
+    this.socket.emit(REALTIME_CLIENT_EVENTS.visibility, { visible });
+  }
+
   getStatus(): RealtimeStatus {
     return this.status;
   }
