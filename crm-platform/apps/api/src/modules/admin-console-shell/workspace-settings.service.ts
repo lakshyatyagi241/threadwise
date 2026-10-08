@@ -1,20 +1,30 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { createHash } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import {
+  BRAND_FAVICON_MAX_BYTES,
+  BRAND_LOGO_MAX_BYTES,
   ERROR_CODES,
   NOTIFICATION_CATEGORY_KEYS,
   NOTIFICATION_EVENT_KEYS,
   defaultCategoryFlags,
   defaultEventFlags,
   normalizeFlags,
+  type BrandSlot,
   type DeleteWorkspaceRequest,
   type NotificationPrefsResponse,
+  type IntegrationsSummaryResponse,
   type PreferencesResponse,
+  type ResidencyResponse,
+  type SaveResidencyRequest,
   type SaveNotificationPrefsRequest,
   type SavePreferencesRequest,
   type StoredNotificationPrefs,
+  type UpdateBrandingFields,
   type UpdateWorkspaceSettingsRequest,
+  type WorkspaceBrand,
+  type WorkspaceBrandingResponse,
   type WorkspaceSettingsResponse,
 } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
@@ -22,7 +32,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { AuthAuditService, PasswordService, SessionService } from '../auth';
+import { AuthAuditService, PasswordService, SessionService, UploadPolicyService } from '../auth';
 import { SettingsService } from '../platform-settings-branding-storage';
 import { isKnownTimeZone, ownerMay, sameName } from './workspace-settings-rules';
 
@@ -40,7 +50,16 @@ interface StoredOrgSettings {
   timezone?: string;
   currency?: string;
   notificationPrefs?: StoredNotificationPrefs & { slackWebhookEnc?: string };
+  branding?: { primary?: string | null; accent?: string | null; background?: string | null };
 }
+
+interface UploadedImage {
+  originalname: string;
+  buffer: Buffer;
+}
+
+const RASTER = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ASSET_ROUTE = '/api/v2/shell/workspace/branding';
 
 const ONLY_OWNER = 'Only the workspace owner can edit these.';
 
@@ -60,6 +79,7 @@ export class WorkspaceSettingsService {
     private readonly crypto: CryptoService,
     private readonly passwords: PasswordService,
     private readonly sessions: SessionService,
+    private readonly uploads: UploadPolicyService,
   ) {}
 
   private actor(): { orgId: number; userId: number } {
@@ -168,6 +188,223 @@ export class WorkspaceSettingsService {
       });
     });
     return this.get();
+  }
+
+  // --- Branding (TW-ASHELL-036, 025) -----------------------------------------------------------------------------------
+
+  private brandOf(
+    settings: Record<string, unknown>,
+    etags: Partial<Record<BrandSlot, string>>,
+  ): WorkspaceBrand {
+    const b = (settings as StoredOrgSettings).branding ?? {};
+    const url = (slot: BrandSlot) =>
+      etags[slot] ? `${ASSET_ROUTE}/${slot}?v=${etags[slot]}` : null;
+    return {
+      primary: b.primary ?? null,
+      accent: b.accent ?? null,
+      background: b.background ?? null,
+      logoUrl: url('logo'),
+      faviconUrl: url('favicon'),
+    };
+  }
+
+  private async etags(tx: Tx, orgId: number): Promise<Partial<Record<BrandSlot, string>>> {
+    const res = await tx.execute(
+      sql`SELECT slot, etag FROM workspace_brand_assets WHERE org_id = ${orgId}`,
+    );
+    return Object.fromEntries(
+      (res.rows as unknown as Array<{ slot: BrandSlot; etag: string }>).map((r) => [
+        r.slot,
+        r.etag,
+      ]),
+    );
+  }
+
+  /** What the shell applies for this workspace; null when the owner never set a colour or a file (TW-ASHELL-025). */
+  async brand(): Promise<WorkspaceBrand | null> {
+    const { orgId, userId } = this.actor();
+    const brand = await this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      return this.brandOf(row.settings, await this.etags(tx, orgId));
+    });
+    return Object.values(brand).some(Boolean) ? brand : null;
+  }
+
+  async branding(): Promise<WorkspaceBrandingResponse> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      return {
+        ...this.brandOf(row.settings, await this.etags(tx, orgId)),
+        isOwner: ownerMay(row),
+        logoMaxBytes: BRAND_LOGO_MAX_BYTES,
+        faviconMaxBytes: BRAND_FAVICON_MAX_BYTES,
+      };
+    });
+  }
+
+  /**
+   * Owner only. Colours: an absent field is untouched, a blank one clears it. Files replace the stored one (Reference left the old
+   * file behind). SVG is refused by the shared upload policy: it can carry script, and Reference's `image` rule refused it too.
+   */
+  async saveBranding(
+    fields: UpdateBrandingFields,
+    files: { logo?: UploadedImage; favicon?: UploadedImage },
+  ): Promise<WorkspaceBrandingResponse> {
+    const { orgId, userId } = this.actor();
+    const checked = (['logo', 'favicon'] as const).flatMap((slot) => {
+      const f = files[slot];
+      if (!f) return [];
+      const ok = this.uploads.validate({
+        filename: f.originalname,
+        buffer: f.buffer,
+        allow: ['image'],
+        maxBytes: slot === 'logo' ? BRAND_LOGO_MAX_BYTES : BRAND_FAVICON_MAX_BYTES,
+      });
+      if (!RASTER.includes(ok.mime)) {
+        throw AppError.validation('Use a JPG, PNG, WebP or GIF image.', [
+          { path: slot, message: 'Not a supported image.' },
+        ]);
+      }
+      return [{ slot, mime: ok.mime, buffer: f.buffer }];
+    });
+    await this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      this.mustOwn(row);
+      const prior = (row.settings as StoredOrgSettings).branding ?? {};
+      const next = { ...prior };
+      const touched = (['primary', 'accent', 'background'] as const).filter(
+        (k) => fields[k] !== undefined,
+      );
+      for (const k of touched) next[k] = fields[k] === '' ? null : fields[k]!.toLowerCase();
+      await tx.execute(sql`
+        UPDATE organizations
+           SET settings = settings || jsonb_build_object('branding', ${JSON.stringify(next)}::jsonb)
+         WHERE id = ${orgId}
+      `);
+      for (const f of checked) {
+        const etag = createHash('sha1').update(f.buffer).digest('hex').slice(0, 16);
+        await tx.execute(sql`
+          INSERT INTO workspace_brand_assets (org_id, slot, mime, bytes, etag)
+          VALUES (${orgId}, ${f.slot}, ${f.mime}, ${f.buffer}, ${etag})
+          ON CONFLICT (org_id, slot) DO UPDATE
+            SET mime = EXCLUDED.mime, bytes = EXCLUDED.bytes, etag = EXCLUDED.etag, updated_at = now()
+        `);
+      }
+      await this.audit.record(tx, {
+        event: 'workspace.branding_updated',
+        status: 'success',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { colours: touched, files: checked.map((f) => f.slot) },
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: 'organizations',
+        aggregateId: orgId,
+        eventType: 'org.branding.updated',
+        payload: { ...next, files: checked.map((f) => f.slot) },
+      });
+    });
+    return this.branding();
+  }
+
+  async readBrandAsset(
+    slot: BrandSlot,
+  ): Promise<{ mime: string; bytes: Buffer; etag: string } | null> {
+    const { orgId, userId } = this.actor();
+    const res = await this.db.txAs({ orgId, userId }, (tx) =>
+      tx.execute(
+        sql`SELECT mime, bytes, etag FROM workspace_brand_assets WHERE org_id = ${orgId} AND slot = ${slot}`,
+      ),
+    );
+    return (
+      (res.rows[0] as unknown as { mime: string; bytes: Buffer; etag: string } | undefined) ?? null
+    );
+  }
+
+  // --- Data residency (TW-ASHELL-045) ----------------------------------------------------------------------------------
+
+  /**
+   * The mode lives in `workspace_settings.data_residency`, the column the translation router reads at send time. The
+   * translation domain only reads it, so the owner's write is here: a workspace with no settings row gets one.
+   */
+  async residency(): Promise<ResidencyResponse> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      const res = await tx.execute(
+        sql`SELECT data_residency FROM workspace_settings WHERE org_id = ${orgId}`,
+      );
+      const v = (res.rows[0] as { data_residency: string } | undefined)?.data_residency;
+      return {
+        residency: v === 'eu_only' || v === 'local' ? v : 'any',
+        isOwner: ownerMay(row),
+      };
+    });
+  }
+
+  async saveResidency(body: SaveResidencyRequest): Promise<ResidencyResponse> {
+    const { orgId, userId } = this.actor();
+    await this.db.txAs({ orgId, userId }, async (tx) => {
+      this.mustOwn(await this.org(tx, orgId, userId));
+      await tx.execute(sql`
+        INSERT INTO workspace_settings (org_id, data_residency) VALUES (${orgId}, ${body.residency})
+        ON CONFLICT (org_id) DO UPDATE SET data_residency = EXCLUDED.data_residency
+      `);
+      await this.audit.record(tx, {
+        event: 'workspace.data_residency_changed',
+        status: 'info',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { residency: body.residency },
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: 'organizations',
+        aggregateId: orgId,
+        eventType: 'org.data_residency.changed',
+        payload: { residency: body.residency },
+      });
+    });
+    return this.residency();
+  }
+
+  // --- API and webhooks (TW-ASHELL-042) --------------------------------------------------------------------------------
+
+  /**
+   * Read-only counts for the informational tab. The caller's own Sheets key status (suffix and times only) and the number of
+   * outbound and inbound webhook endpoints of this workspace, both under row-level security. Any member reads.
+   */
+  async integrations(): Promise<IntegrationsSummaryResponse> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const key = await tx.execute(sql`
+        SELECT sheets_key_suffix AS suffix, sheets_key_created_at AS created_at, sheets_key_last_used_at AS last_used_at
+          FROM user_settings WHERE org_id = ${orgId} AND user_id = ${userId}
+      `);
+      const counts = await tx.execute(sql`
+        SELECT (SELECT count(*) FROM outbound_webhooks WHERE org_id = ${orgId})::int AS outbound,
+               (SELECT count(*) FROM webhooks WHERE org_id = ${orgId})::int AS inbound
+      `);
+      const k = key.rows[0] as
+        { suffix: string | null; created_at: Date | null; last_used_at: Date | null } | undefined;
+      const c = counts.rows[0] as { outbound: number; inbound: number };
+      return {
+        sheetsKey: k?.suffix
+          ? {
+              suffix: k.suffix,
+              createdAt: k.created_at ? new Date(k.created_at).toISOString() : null,
+              lastUsedAt: k.last_used_at ? new Date(k.last_used_at).toISOString() : null,
+            }
+          : null,
+        webhooks: { outbound: Number(c.outbound), inbound: Number(c.inbound) },
+      };
+    });
   }
 
   // --- Notifications (TW-ASHELL-038) -----------------------------------------------------------------------------------

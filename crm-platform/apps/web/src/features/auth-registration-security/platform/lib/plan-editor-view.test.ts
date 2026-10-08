@@ -1,4 +1,4 @@
-import { PLAN_LIMIT_KEYS, type PlanAddonOption } from '@crm/contracts';
+import { PLAN_LIMIT_KEYS, type PlanAddonOption, type PlanAdminItem } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   LIMIT_UNITS,
@@ -164,7 +164,11 @@ describe('add-on rows', () => {
 describe('planCounts', () => {
   it('counts features on, capped limits (a 0 is unlimited) and visible add-ons', () => {
     const d = newPlanDraft();
-    const features = { ...d.features, automation: false, calling: false };
+    const features = {
+      ...d.features,
+      automation: false,
+      calling: false,
+    } as PlanAdminItem['features'];
     const limits = Object.fromEntries(PLAN_LIMIT_KEYS.map((k) => [k, 0])) as Record<
       (typeof PLAN_LIMIT_KEYS)[number],
       number

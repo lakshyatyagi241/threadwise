@@ -7,6 +7,7 @@ export interface CardDraft {
   sortOrder: string;
   maxTokens: string;
   extraModels: string;
+  textExtra: string;
 }
 
 export const draftFromItem = (item: PlatformAiKeyItem): CardDraft => ({
@@ -15,6 +16,7 @@ export const draftFromItem = (item: PlatformAiKeyItem): CardDraft => ({
   sortOrder: String(item.sortOrder),
   maxTokens: item.maxTokens === null ? '' : String(item.maxTokens),
   extraModels: item.extraModels.join(', '),
+  textExtra: item.textExtra?.value ?? '',
 });
 
 /** "a, b ,, c" as ["a", "b", "c"], dropping blanks and repeats. */
@@ -29,7 +31,7 @@ export function parseModelList(text: string): string[] {
   ];
 }
 
-export type DraftError = 'maxTokens' | 'sortOrder' | 'defaultModel' | 'extraModels';
+export type DraftError = 'maxTokens' | 'sortOrder' | 'defaultModel' | 'extraModels' | 'textExtra';
 
 const wholeNumber = (s: string) => /^\d+$/.test(s.trim());
 
@@ -72,6 +74,11 @@ export function toUpdateBody(
   const models = parseModelList(draft.extraModels);
   if (models.some((m) => m.length > 80) || models.length > 40) return { error: 'extraModels' };
   if (JSON.stringify(models) !== JSON.stringify(item.extraModels)) body.extraModels = models;
+
+  if (item.textExtra && draft.textExtra.trim() !== item.textExtra.value) {
+    if (draft.textExtra.trim().length > 200) return { error: 'textExtra' };
+    body.textExtra = draft.textExtra.trim();
+  }
 
   return { body };
 }

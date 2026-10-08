@@ -6,8 +6,8 @@ import type { Tx } from '@crm/db';
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number => Number(v ?? 0);
 
-/** Integrations counted against the connection tables this stack really has (Reference hard-coded 12 and four checks, two of them dead). */
-export const INTEGRATION_CATALOG_SIZE = 10;
+/** Reference shows "n / 12" (a conceptual total, 12 integrations on its catalog page); we count the ten that have connection tables here. */
+export const INTEGRATION_CATALOG_SIZE = 12;
 
 /**
  * The dashboard cards that read other domains' tables (Instagram band, flow counters, integration status). Read-only, RLS-scoped; each
@@ -81,7 +81,7 @@ export class DashExtrasRepository {
       subscribers: n(c.subscribers),
       recent: (rows.rows as Raw[]).map((r) => ({
         uuid: String(r.uuid),
-        name: String(r.flow_name || 'Untitled flow'),
+        name: String(r.flow_name ?? '').trim() || 'Untitled flow',
         active: Boolean(r.is_active),
         trigger: String(r.trigger_kind || 'keyword'),
         steps: n(r.steps),

@@ -18,6 +18,13 @@ const item = (over: Partial<PlatformAiKeyItem> = {}): PlatformAiKeyItem => ({
   sortOrder: 1,
   maxTokens: 4096,
   supportsMaxTokens: true,
+  keyHint: 'Find at platform.openai.com/api-keys',
+  textExtra: {
+    key: 'organization',
+    label: 'Organization ID',
+    hint: 'Optional. e.g. org-xxxxxxxxxxxx',
+    value: '',
+  },
   extraModels: ['gpt-4o'],
   modelChoices: ['gpt-5.4-mini', 'gpt-4o'],
   rowVersion: 3,
@@ -33,6 +40,18 @@ describe('provider card draft (TW-AIADM-002, 003)', () => {
       sortOrder: '1',
       maxTokens: '4096',
       extraModels: 'gpt-4o',
+      textExtra: '',
+    });
+  });
+
+  it('sends the optional text field (Organization ID) only when it changed, and never on a card without one', () => {
+    const i = item();
+    expect(toUpdateBody(i, { ...draftFromItem(i), textExtra: ' org-1 ' })).toEqual({
+      body: { rowVersion: 3, textExtra: 'org-1' },
+    });
+    const bare = item({ textExtra: null });
+    expect(toUpdateBody(bare, { ...draftFromItem(bare), textExtra: 'x' })).toEqual({
+      body: { rowVersion: 3 },
     });
   });
 

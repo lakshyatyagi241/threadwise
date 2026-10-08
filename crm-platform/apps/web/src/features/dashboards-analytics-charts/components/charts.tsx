@@ -28,6 +28,8 @@ export function BarChart({
   label,
   stacked = false,
   seriesTotals,
+  emptyAxes = false,
+  hideLegend = false,
 }: {
   labels: string[];
   series: Series[];
@@ -36,11 +38,14 @@ export function BarChart({
   stacked?: boolean;
   /** One figure per series, in order: the chart's own legend shows it beside the name (one legend, not two). */
   seriesTotals?: number[];
+  /** Draw the 0..2 axes with no bars when there is no data (Reference's throughput card) instead of the empty text. */
+  emptyAxes?: boolean;
+  hideLegend?: boolean;
 }) {
   const t = useTranslations('dashboards-analytics-charts.chart');
   const totals = labels.map((_, i) => series.reduce((a, s) => a + (s.values[i] ?? 0), 0));
   const rawMax = stacked ? Math.max(...totals, 0) : Math.max(...series.flatMap((s) => s.values), 0);
-  const top = niceMax(rawMax);
+  const top = rawMax === 0 && emptyAxes ? 2 : niceMax(rawMax);
   const plotW = W - PAD.l - PAD.r;
   const plotH = H - PAD.t - PAD.b;
   const slot = plotW / Math.max(labels.length, 1);
@@ -55,11 +60,11 @@ export function BarChart({
     total: seriesTotals?.[k],
   }));
 
-  if (rawMax === 0)
+  if (rawMax === 0 && !emptyAxes)
     return (
       <div>
         <p className="py-10 text-center text-sm text-muted-foreground">{t('empty')}</p>
-        {seriesTotals && <Legend series={legendSeries} />}
+        {seriesTotals && !hideLegend && <Legend series={legendSeries} />}
       </div>
     );
 
@@ -131,7 +136,7 @@ export function BarChart({
           );
         })}
       </svg>
-      <Legend series={legendSeries} />
+      {!hideLegend && <Legend series={legendSeries} />}
       <table className="sr-only">
         <caption>{label}</caption>
         <thead>

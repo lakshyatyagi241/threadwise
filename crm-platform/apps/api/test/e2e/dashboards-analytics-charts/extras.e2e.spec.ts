@@ -87,9 +87,9 @@ beforeAll(async () => {
        VALUES ($1, $2, $3::jsonb, $4, $5, now() - ($6 || ' hours')::interval)`,
       [
         t.orgId,
-        i === 2 ? '' : `flow ${i}`,
+        i === 2 ? ' ' : `flow ${i}`,
         JSON.stringify(i === 1 ? { flowNodes: [{}, {}, {}] } : {}),
-        i === 1 ? 'webhook' : 'keyword',
+        i === 1 ? 'order_placed' : 'keyword',
         i <= 3,
         i,
       ],
@@ -177,7 +177,7 @@ describe('TW-DASH-017 flow counters and list', () => {
     expect(f.recent).toHaveLength(6);
     expect(f.recent[0]).toMatchObject({
       name: 'flow 1',
-      trigger: 'webhook',
+      trigger: 'order_placed',
       steps: 3,
       subscribers: 2,
       active: true,
@@ -206,7 +206,7 @@ describe('TW-DASH-020 integrations status', () => {
       { code: 'meta_catalog', connected: false, events7d: null },
     ]);
     expect(i.connected).toBe(3); // + the Instagram account
-    expect(i.total).toBe(10);
+    expect(i.total).toBe(12);
   });
 
   it('another tenant firing events never marks this one connected', async () => {

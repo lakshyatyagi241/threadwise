@@ -56,6 +56,9 @@
       }
     },
     "shell": {
+      "railCaption": "Console",
+      "wallet": "Wallet",
+      "topUp": "Top up →",
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
       "backToApp": "Back to app",
@@ -337,7 +340,8 @@
       "railLabel": "Settings sections",
       "personal": {
         "title": "Your account",
-        "body": "Profile, password and personal preferences."
+        "body": "Profile, password and personal preferences.",
+        "eyebrow": "Personal"
       },
       "api": {
         "restTitle": "General REST API",
@@ -345,8 +349,20 @@
         "rest2": "Every key is scoped to this workspace and can be revoked at any time.",
         "rest3": "Requests are limited per minute according to your plan.",
         "webhooksTitle": "Webhooks",
-        "webhooksBody": "Send events to your own endpoints and receive events from other tools.",
-        "manage": "Manage integrations"
+        "webhooksBody": "Push delivery, read, and reply events to any HTTPS endpoint.",
+        "manage": "Manage webhooks",
+        "sheetsTitle": "Google Sheets API key",
+        "sheetsBody": "Used by the Sheets add-on to push contacts and message rows into a sheet. The only personal token exposed today.",
+        "manageInAccount": "Manage in account",
+        "active": "Active",
+        "keyTimes": "generated {created} · last used {used}",
+        "never": "never",
+        "noKey": "No Sheets API key generated. Create one in",
+        "noKeyLink": "your account → Sheets add-on",
+        "outboundTitle": "Outbound endpoints",
+        "outboundBody": "Your workspace → your server (CRM hooks, send / reply events).",
+        "inboundTitle": "Inbound webhooks",
+        "inboundBody": "Your server → your workspace (incoming WABA / Unofficial API deliveries)."
       },
       "appearance": {
         "title": "Appearance",
@@ -363,12 +379,91 @@
         },
         "save": "Save",
         "saved": "Appearance updated."
+      },
+      "branding": {
+        "ownerOnly": "Only the workspace owner can change branding.",
+        "loadFailed": "Branding could not be loaded.",
+        "saved": "Branding updated.",
+        "saveFailed": "Branding could not be saved.",
+        "logoTitle": "Logo & favicon",
+        "logoBody": "Used in the header, invoices, emails, and the customer-facing portal.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · max 2 MB · recommended 240×80",
+        "faviconHint": "32×32 PNG · max 512 KB",
+        "click": "Click to upload",
+        "orDrag": "or drag & drop",
+        "currentTag": "Current",
+        "current": {
+          "logo": "Current logo",
+          "favicon": "Current favicon"
+        },
+        "coloursTitle": "Brand colors",
+        "coloursBody": "Applied to dashboard chrome, buttons, and accent strokes. Save to see them on every page.",
+        "colours": {
+          "primary": "Primary",
+          "accent": "Accent",
+          "background": "Background"
+        },
+        "colourInvalid": "Use a #RRGGBB colour, for example #075E54.",
+        "save": "Save branding"
+      },
+      "residency": {
+        "loadFailed": "The data residency setting could not be loaded.",
+        "title": "Restrict cross-border data transfer",
+        "body": "Set a stricter routing mode for this workspace. Auto-reply translation will only route through providers compatible with the selected mode; the rest are silently skipped at runtime.",
+        "ownerOnly": "Only the workspace owner can change this setting.",
+        "saved": "Data residency updated. Translation routing will respect the new setting on the next inbound.",
+        "saveFailed": "The data residency setting could not be saved.",
+        "save": "Save residency setting",
+        "modes": {
+          "any": {
+            "name": "No restriction",
+            "text": "Use whichever active provider the fallback chain picks. Best uptime, no compliance restrictions."
+          },
+          "eu_only": {
+            "name": "EU-only routing",
+            "text": "Only DeepL (Germany) and self-hosted LibreTranslate are allowed. Compatible with GDPR Article 44 cross-border transfer rules."
+          },
+          "local": {
+            "name": "On-premise only",
+            "text": "Only the self-hosted LibreTranslate driver is allowed. Customer message text never leaves your own server. Requires LibreTranslate to be configured."
+          }
+        }
       }
     },
     "topNav": {
       "more": "More",
       "search": "Search",
-      "premium": "Premium feature: upgrade your plan to unlock"
+      "premium": "Premium feature: upgrade your plan to unlock",
+      "labels": {
+        "dashboard": "Dashboard",
+        "team-inbox": "Unified Inbox",
+        "wa-campaigns": "Campaigns",
+        "flows": "Flows",
+        "templates": "Templates",
+        "devices": "Channels",
+        "metaads": "Meta Ads",
+        "broadcasts": "Broadcasts",
+        "contacts": "Contacts",
+        "deals": "Deals",
+        "chat": "Live Chat",
+        "analytics": "Analytics",
+        "auto-reply": "Auto-reply",
+        "scheduled": "Scheduled",
+        "message-history": "History",
+        "ai-assistants": "AI Assistants",
+        "ai-training": "AI Training",
+        "wa-links": "WA Links",
+        "chatbot-widgets": "Chat Widget",
+        "webhooks": "Webhooks",
+        "integrations": "Integrations",
+        "warmer": "Warmer",
+        "call-logs": "Call Logs",
+        "support": "Support",
+        "more": "More"
+      },
+      "workspaceLogo": "Workspace logo"
     },
     "palette": {
       "title": "Search pages",
@@ -408,11 +503,13 @@
       }
     },
     "profileMenu": {
-      "chip": "{plan} plan - {role}",
+      "chip": "{plan} plan · {role}",
       "wallet": "Wallet",
       "orders": "Order history",
-      "plans": "Pricing and plans",
-      "tour": "Take the tour"
+      "plans": "Pricing & plans",
+      "tour": "Take the tour",
+      "profile": "Profile",
+      "help": "Help & support"
     },
     "quickAccess": {
       "title": "Quick access",
@@ -580,7 +677,7 @@
     "more": {
       "titleLead": "More",
       "titleTail": "features",
-      "subtitle": "Every tool in one place.",
+      "subtitle": "Tools that don't need to live in the main header — automations, history, integrations, and the bits that keep your workspace humming in the background.",
       "navigation": "Navigation",
       "allTools": "All tools",
       "noTools": "Nothing here yet.",
@@ -595,27 +692,32 @@
       "wallet": "Wallet",
       "topUp": "Top up",
       "tips": {
-        "title": "Tip",
+        "title": "Pro tip",
         "pager": "Tips",
         "templates": {
-          "title": "Use templates",
-          "body": "Approved templates reach customers outside the 24 hour window."
+          "title": "Save canned replies as templates",
+          "body": "Type \"/\" in the team inbox composer to insert a saved reply in one tap. Cuts handle time by about 30%.",
+          "cta": "Manage templates →"
         },
         "flows": {
-          "title": "Automate replies",
-          "body": "A flow can answer the same question for you every time."
+          "title": "Tag VIP customers automatically",
+          "body": "Add a Tag-contact node to your welcome flow so big spenders auto-tag as VIP, making broadcasts easier later.",
+          "cta": "Open flow builder →"
         },
         "palette": {
-          "title": "Jump anywhere",
-          "body": "Press Ctrl K to search every page."
+          "title": "Use Ctrl K to jump anywhere",
+          "body": "Hit Ctrl K to fuzzy-search every page, contact, and setting from the global search box.",
+          "cta": "Try it now"
         },
         "scheduled": {
-          "title": "Schedule ahead",
-          "body": "Queue a message now and let it go out at the right time."
+          "title": "Schedule sends in the contact's timezone",
+          "body": "Pick recipient timezone when scheduling a campaign so your message arrives at 10am for everyone.",
+          "cta": "New scheduled →"
         },
         "wallet": {
-          "title": "Watch your balance",
-          "body": "Top up before it runs low so sends never stop."
+          "title": "Auto top-up the wallet",
+          "body": "Set a threshold so message credits refill automatically before a broadcast runs out.",
+          "cta": "Configure auto top-up →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,345 @@
             "subtitle": "Write a message template"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Ads",
+          "desc": "Create and manage Click-to-WhatsApp ad campaigns on Facebook & Instagram — every click opens a chat on your connected number.",
+          "foot": "click-to-chat",
+          "open": "Open Meta Ads",
+          "badge": "ADS"
+        },
+        "instagram-posts": {
+          "title": "Instagram Posts",
+          "desc": "Compose and schedule Instagram posts — images, reels, stories and carousels. Publish now or queue them to go out automatically.",
+          "foot": "compose & schedule",
+          "open": "Open composer",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Facebook Posts",
+          "desc": "Compose and schedule Facebook posts — text, links and photos. Publish now or queue them to a connected Page.",
+          "foot": "compose & schedule",
+          "open": "Open composer",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Connect an SMS number (Twilio / MSG91). Texts arrive in the same team inbox as WhatsApp, and campaigns gain an SMS sender.",
+          "foot": "connect & manage",
+          "open": "Open SMS",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Connect a LINE Official Account (Messaging API). Inbound lands in the same team inbox, with broadcasts, rich menus, flows and insights.",
+          "foot": "connect & manage",
+          "open": "Open LINE",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Connect a WeChat Official Account (Service Account). Inbound lands in the same team inbox, with keyword rules, auto-replies and flows.",
+          "foot": "connect & manage",
+          "open": "Open WeChat",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Connect a Viber Public Account (Bot). Inbound lands in the same team inbox, with keyword rules, auto-replies and flows.",
+          "foot": "connect & manage",
+          "open": "Open Viber",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Messenger Setup",
+          "desc": "Configure the Messenger profile — Get Started button, persistent menu, ice breakers and welcome greeting for a connected Page.",
+          "foot": "growth tools",
+          "open": "Open setup",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Connect a TikTok account, track profile & video insights, and send videos to your TikTok inbox. DM inbox is partner-gated & region-limited.",
+          "foot": "connect & post",
+          "open": "Open TikTok",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "TikTok Posts",
+          "desc": "Send videos to your TikTok inbox to finish and publish from the app, and track their status from here.",
+          "foot": "compose & send",
+          "open": "Open posts",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Quick Send",
+          "desc": "Compose a message, pick one or many recipients and a sender, then send now or schedule it — a manual send queue with per-message delivery status.",
+          "foot": "send queue",
+          "open": "Open"
+        },
+        "account": {
+          "title": "Account",
+          "desc": "Profile, photo, password, order history, wallet, affiliate, and support tickets — all in one place.",
+          "foot": "{plan} · {balance}",
+          "open": "Open"
+        },
+        "pricing": {
+          "title": "Pricing & plans",
+          "desc": "Compare Starter, Growth, Pro and Enterprise. Switch any time — we prorate to the day.",
+          "foot": "{plan} plan · upgrade to unlock",
+          "open": "View plans"
+        },
+        "analytics": {
+          "title": "Analytics",
+          "desc": "Delivery, read, and conversion charts across campaigns and devices.",
+          "foot": "{count} msgs · last 7d",
+          "open": "Open"
+        },
+        "attributes": {
+          "title": "Attributes",
+          "desc": "Variables for WhatsApp templates. Built-ins like first_name + your custom ones (order_id, etc.). Type / in any message to insert.",
+          "foot": "{count} saved",
+          "open": "Open"
+        },
+        "contacts": {
+          "title": "Contacts",
+          "desc": "All your contacts and groups in one place. Import from CSV, tag, segment, and search.",
+          "foot": "{people} people / {groups} groups / {tags} tags",
+          "open": "Open"
+        },
+        "broadcasts": {
+          "title": "Broadcasts",
+          "desc": "Template broadcasts to selected contacts with send, delivery, read, failed, and queued tracking.",
+          "foot": "{queued} queued{pct, select, none {} other { / {pct}% delivered}}",
+          "open": "Open"
+        },
+        "auto-reply": {
+          "title": "Auto Reply",
+          "desc": "Trigger replies on keywords, business hours, or when an agent is away.",
+          "foot": "{count} rules{pct, select, none {} other { / {pct}% match}}",
+          "open": "Open"
+        },
+        "warmer": {
+          "title": "WhatsApp Warmer",
+          "desc": "Ramp each number's daily send budget with human-like gaps + active hours to reduce ban risk.",
+          "foot": "Unofficial API",
+          "open": "Open"
+        },
+        "scheduled": {
+          "title": "Scheduled Messages",
+          "desc": "Queue sends for the right moment — by timezone, segment, or trigger.",
+          "foot": "{queued} queued / next {next}",
+          "open": "Open"
+        },
+        "message-history": {
+          "title": "Message History",
+          "desc": "Searchable archive of every message in and out — exportable to CSV.",
+          "foot": "{count} records",
+          "open": "Open"
+        },
+        "notifications": {
+          "title": "Notifications",
+          "desc": "Route alerts to email, Slack, or in-app — set quiet hours per channel.",
+          "foot": "{count} unread",
+          "open": "Open"
+        },
+        "integrations": {
+          "title": "Integrations",
+          "desc": "Connect Shopify, HubSpot, Zapier, and more — sync contacts and orders.",
+          "foot": "{connected} connected / {available} available",
+          "open": "Open"
+        },
+        "google-account": {
+          "title": "Google account",
+          "desc": "Connect once — powers Calendar, Meet links in flows, and the inbox \"Send Meet link\" composer button.",
+          "foot": "Calendar and Meet",
+          "open": "Open"
+        },
+        "appointments": {
+          "title": "Appointments",
+          "desc": "Let customers book your services from chat — day/time picker, questions, deposits, reminders, and Google Calendar sync.",
+          "foot": "{count, plural, =0 {not set up} one {# service} other {# services}}",
+          "open": "Manage"
+        },
+        "ai-assistants": {
+          "title": "AI Call Assistant",
+          "desc": "Voice AI that answers phone calls — Gemini brain, ElevenLabs voice, your own tools mid-call.",
+          "foot": "{configured} configured / {live} live",
+          "open": "Open"
+        },
+        "call-logs": {
+          "title": "Call Logs",
+          "desc": "Transcripts, recordings, and tool-call timelines for every voice call the AI handled.",
+          "foot": "{calls} calls / {minutes} min · 24h",
+          "open": "Open"
+        },
+        "forms": {
+          "title": "Forms",
+          "desc": "Native WhatsApp interactive forms — collect leads, surveys, and bookings inside the chat.",
+          "foot": "{drafted} drafted / {live} live",
+          "open": "Open"
+        },
+        "wa-links": {
+          "title": "WhatsApp Link Generator",
+          "desc": "Mint trackable wa.me short links with a custom slug, pre-typed message, QR code, and click analytics. Drop it on a bio, landing page, or business card.",
+          "foot": "{links} links / {clicks} clicks",
+          "open": "Open"
+        },
+        "chatbot-widgets": {
+          "title": "Chatbot Widget",
+          "desc": "Embed a floating chat bubble on your site. AI replies in-browser, hands off to Unified Inbox when needed.",
+          "foot": "{built} built / {live} active",
+          "open": "Open"
+        },
+        "ai-training": {
+          "title": "AI Training",
+          "desc": "Train chat assistants on your own content — URLs, text snippets, Q&A pairs, plain-text files.",
+          "foot": "{count} assistants",
+          "open": "Open"
+        },
+        "ai-usage": {
+          "title": "AI Usage",
+          "desc": "See where your AI spend goes — tokens by model and provider, plan keys vs your own keys, and monthly cap.",
+          "foot": "{tokens} tokens this month",
+          "open": "View"
+        },
+        "flow-analytics": {
+          "title": "Flow Analytics",
+          "desc": "Every automation run end to end — execution history, the errors that stopped a run, and the retry records for the ones you re-ran.",
+          "foot": "{count} failed runs",
+          "open": "Open"
+        },
+        "lead-finder": {
+          "title": "Lead Finder",
+          "desc": "Find businesses by category & city, grab their WhatsApp & email, and push them into Contacts or a campaign.",
+          "foot": "map prospecting",
+          "open": "Open"
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "desc": "Push delivery, read, and reply events to any HTTPS endpoint in real time.",
+          "foot": "{count} endpoints",
+          "open": "Open"
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Talk to a human, browse known issues, or check service status.",
+          "foot": "{total} tickets / {open} open",
+          "open": "Open"
+        },
+        "activity-log": {
+          "title": "Activity Log",
+          "desc": "Every sign-in, workspace switch, inbox action, and admin change — attributed to user, IP, and time.",
+          "foot": "{count} events · 24h",
+          "open": "Open"
+        },
+        "guidebook": {
+          "title": "Guidebook",
+          "desc": "Step-by-step playbooks — from first send to advanced segmentation.",
+          "foot": "{count} articles",
+          "open": "Open"
+        },
+        "channels": {
+          "title": "Channels",
+          "desc": "Connect WhatsApp, Instagram, Telegram & more — one inbox, monitor health, rotate senders.",
+          "foot": "{active} / {total} live",
+          "open": "Open"
+        },
+        "team-members": {
+          "title": "Team members",
+          "desc": "Invite teammates, assign roles (owner / admin / member), and scope access per workspace.",
+          "foot": "{count, plural, one {# seat} other {# seats}} active",
+          "open": "Open"
+        }
+      },
+      "eyebrow": "workspace",
+      "sortedByUsage": "Sorted by usage",
+      "developers": "Developers / API",
+      "movedOffHeader": "moved off the header",
+      "open": "Open",
+      "navDesc": {
+        "dashboard": "Home & overview",
+        "wa-campaigns": "Bulk campaign sends",
+        "flows": "Automation builder",
+        "templates": "Message templates"
+      },
+      "strip": {
+        "label": "Workspace at a glance",
+        "rules": "Active rules",
+        "thisWeek": "+{count} this week",
+        "noNew": "no new",
+        "rulesCaption": "across all tools",
+        "queued": "Queued",
+        "noUpcoming": "no upcoming runs",
+        "queuedCaption": "scheduled sends",
+        "connected": "Connected",
+        "connectedCaption": "devices live",
+        "health": {
+          "healthy": "healthy",
+          "partial": "partial",
+          "offline": "offline",
+          "none": "no devices"
+        },
+        "notifications": "Notifications",
+        "unread": "unread",
+        "notificationsCaption": "awaiting attention"
+      },
+      "activity": {
+        "title": "Recent activity",
+        "viewAll": "View all",
+        "empty": "No activity found. Changes in your workspace will appear here."
+      },
+      "affiliate": {
+        "badge": "EARN",
+        "title": "Affiliate history",
+        "body": "Track every signup that came through your code, the credits earned, and your share link's performance.",
+        "referrals": "Referrals",
+        "payouts": "Payouts",
+        "payoutsNote": "see your account",
+        "foot": "referrals · credits · payouts"
+      },
+      "quick": {
+        "title": "Quick access",
+        "body": "Less-used tools live here so the main header stays focused on day-to-day work.",
+        "openChat": "Open Chat",
+        "addRule": "Add rule"
+      },
+      "planCard": {
+        "title": "Workspace plan",
+        "seats": "{plan} / {count, plural, one {# seat} other {# seats}}",
+        "messages": "Messages this month",
+        "sent": "{count} sent",
+        "manage": "Manage billing"
+      },
+      "whatsNew": {
+        "title": "What's new",
+        "headline": "Unified Inbox + AI assist",
+        "changelog": "Read changelog",
+        "items": {
+          "inbox": "Shared inbox with assignment & notes",
+          "ai": "ChatGPT / Gemini / Claude in flows",
+          "forecast": "Sales forecast in Shopify dashboard"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Keep new numbers warm",
+          "body": "Start with 50 sends/day and double weekly. Sudden bursts get flagged."
+        },
+        "tag": {
+          "title": "Tag now, segment later",
+          "body": "Add a tag the moment a contact replies — broadcast filters become trivial later."
+        },
+        "templates": {
+          "title": "Templates beat free-text",
+          "body": "Pre-approved templates open the 24h window even when a contact has gone quiet."
+        },
+        "signing": {
+          "title": "Verify HMAC every time",
+          "body": "Always check the signature header before processing — one line of code, lots of safety."
+        }
       }
     },
     "inboxBell": {
@@ -695,6 +1136,10 @@
       "close": "Close",
       "connected": "Number connected"
     },
+    "flash": {
+      "dismiss": "Dismiss",
+      "roleDenied": "Your role ({role}) doesn't have access to that page"
+    },
     "search": {
       "label": "Search the console",
       "trigger": "Search admin…",
@@ -704,6 +1149,15 @@
       "hintMove": "navigate",
       "hintOpen": "open",
       "hintToggle": "toggle"
+    },
+    "hubSearch": {
+      "placeholder": "Search project settings...",
+      "empty": "No settings match your search."
+    },
+    "bell": {
+      "eyebrow": "Inbox",
+      "clearAll": "Clear all",
+      "viewAll": "View all →"
     }
   }
 }

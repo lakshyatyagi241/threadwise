@@ -79,7 +79,7 @@ const RAW: Raw[] = [
   {
     slug: 'stripe',
     name: 'Stripe',
-    description: 'Cards and wallets on Stripe Checkout.',
+    description: 'Global cards + Apple Pay + Google Pay across 46+ countries.',
     regions: ['popular', 'europe', 'us'],
     currencies: CUR.stripe,
     fields: [
@@ -95,7 +95,7 @@ const RAW: Raw[] = [
   {
     slug: 'paypal',
     name: 'PayPal',
-    description: 'PayPal balance and cards through PayPal Checkout.',
+    description: 'Worldwide PayPal balance + cards via PayPal Checkout.',
     regions: ['popular', 'us'],
     currencies: CUR.paypal,
     fields: [
@@ -111,7 +111,7 @@ const RAW: Raw[] = [
   {
     slug: 'razorpay',
     name: 'Razorpay',
-    description: 'UPI, cards, netbanking and wallets in India.',
+    description: 'India — cards, UPI, netbanking, wallets, EMI.',
     regions: ['popular', 'india'],
     currencies: ['INR'],
     fields: [
@@ -123,7 +123,7 @@ const RAW: Raw[] = [
   {
     slug: 'paytm',
     name: 'Paytm',
-    description: 'Paytm wallet, UPI and cards.',
+    description: 'India — Paytm wallet, UPI, cards, netbanking.',
     regions: ['india', 'asia'],
     currencies: ['INR'],
     fields: [
@@ -135,7 +135,7 @@ const RAW: Raw[] = [
   {
     slug: 'mollie',
     name: 'Mollie',
-    description: 'European cards, iDEAL, Bancontact and more.',
+    description: 'European cards, iDEAL, Bancontact, SEPA, Klarna.',
     regions: ['popular', 'europe'],
     currencies: split('EUR USD GBP CHF SEK NOK DKK PLN CZK HUF RON'),
     fields: [p('api_key', 'API key', true, 'Starts with live_ or test_.')],
@@ -143,7 +143,7 @@ const RAW: Raw[] = [
   {
     slug: 'paystack',
     name: 'Paystack',
-    description: 'Cards, bank and mobile money across Africa.',
+    description: 'Nigeria/Ghana/South Africa — cards, bank, USSD, mobile money.',
     regions: ['africa'],
     currencies: split('NGN GHS ZAR USD KES'),
     fields: [t('public_key', 'Public key', true), p('secret_key', 'Secret key', true)],
@@ -151,7 +151,7 @@ const RAW: Raw[] = [
   {
     slug: 'flutterwave',
     name: 'Flutterwave',
-    description: 'Pan-African cards, bank transfer and mobile money.',
+    description: 'Africa-wide — cards, mobile money, USSD, bank transfer.',
     regions: ['africa'],
     currencies: split('NGN USD KES EUR GBP GHS ZAR TZS UGX RWF XOF XAF'),
     fields: [
@@ -164,7 +164,7 @@ const RAW: Raw[] = [
   {
     slug: 'square',
     name: 'Square',
-    description: 'Cards through Square payment links.',
+    description: 'US/CA/UK/AU/JP cards via Square Online Checkout.',
     regions: ['popular', 'us'],
     currencies: split('USD CAD GBP AUD JPY EUR'),
     fields: [
@@ -177,7 +177,7 @@ const RAW: Raw[] = [
   {
     slug: 'braintree',
     name: 'Braintree',
-    description: 'Cards and PayPal through Braintree.',
+    description: 'PayPal-owned: cards, PayPal, Venmo, Apple Pay, Google Pay.',
     regions: ['popular', 'us'],
     currencies: CUR.braintree,
     fields: [
@@ -189,8 +189,8 @@ const RAW: Raw[] = [
   },
   {
     slug: 'twocheckout',
-    name: '2Checkout',
-    description: 'Global cards and wallets through 2Checkout (Verifone).',
+    name: '2Checkout (Verifone)',
+    description: '200+ countries — global cards + local payment methods.',
     regions: ['us'],
     currencies: CUR.twocheckout,
     fields: [
@@ -202,7 +202,7 @@ const RAW: Raw[] = [
   {
     slug: 'coinbase',
     name: 'Coinbase Commerce',
-    description: 'Pay with Bitcoin, Ether and stablecoins.',
+    description: 'Crypto — BTC, ETH, USDC, DAI, LTC, BCH.',
     regions: ['crypto'],
     currencies: split('USD EUR GBP BTC ETH USDC'),
     fields: [p('api_key', 'API key', true), w('webhook_secret', 'Webhook shared secret')],
@@ -210,7 +210,7 @@ const RAW: Raw[] = [
   {
     slug: 'mercadopago',
     name: 'Mercado Pago',
-    description: 'Latin American cards, cash and wallets.',
+    description: 'Latin America — cards, Pix, OXXO, Boleto, wallet.',
     regions: ['latam'],
     currencies: split('BRL ARS MXN CLP COP PEN UYU'),
     fields: [
@@ -222,7 +222,7 @@ const RAW: Raw[] = [
   {
     slug: 'iyzico',
     name: 'iyzico',
-    description: 'Turkish cards and installments.',
+    description: 'Turkey — cards with 3D Secure + installments.',
     regions: ['mena', 'europe'],
     currencies: split('TRY USD EUR GBP'),
     fields: [t('api_key', 'API key', true), p('secret_key', 'Secret key', true)],
@@ -230,7 +230,7 @@ const RAW: Raw[] = [
   {
     slug: 'paddle',
     name: 'Paddle',
-    description: 'Merchant of record: cards and PayPal with tax handled.',
+    description: 'Merchant of record for SaaS — cards + global tax handling.',
     regions: ['popular', 'europe'],
     currencies: CUR.paddle,
     fields: [
@@ -243,7 +243,7 @@ const RAW: Raw[] = [
   {
     slug: 'authorize_net',
     name: 'Authorize.Net',
-    description: 'US and Canadian card processing.',
+    description: 'US/CA cards via Accept Hosted payment page.',
     regions: ['popular', 'us'],
     currencies: split('USD CAD EUR GBP AUD'),
     fields: [
@@ -255,7 +255,7 @@ const RAW: Raw[] = [
   {
     slug: 'sslcommerz',
     name: 'SSLCommerz',
-    description: 'Bangladesh cards, bKash and bank payments.',
+    description: 'Bangladesh — cards, bKash, Nagad, Rocket.',
     regions: ['asia'],
     currencies: ['BDT'],
     fields: [t('store_id', 'Store ID', true), p('store_password', 'Store password', true)],
@@ -263,7 +263,7 @@ const RAW: Raw[] = [
   {
     slug: 'instamojo',
     name: 'Instamojo',
-    description: 'Indian payment links with UPI and cards.',
+    description: 'India — cards, UPI, netbanking, wallets via payment links.',
     regions: ['india'],
     currencies: ['INR'],
     fields: [
@@ -275,7 +275,7 @@ const RAW: Raw[] = [
   {
     slug: 'phonepe',
     name: 'PhonePe',
-    description: 'PhonePe UPI and wallet.',
+    description: 'India — UPI, cards, wallets via PhonePe Business.',
     regions: ['india', 'asia'],
     currencies: ['INR'],
     fields: [
@@ -290,7 +290,7 @@ const RAW: Raw[] = [
   {
     slug: 'cashfree',
     name: 'Cashfree',
-    description: 'Indian cards, UPI and netbanking.',
+    description: 'India — UPI, cards, netbanking, wallets, BNPL.',
     regions: ['india'],
     currencies: ['INR'],
     fields: [t('app_id', 'App ID', true), p('secret_key', 'Secret key', true)],
@@ -298,7 +298,7 @@ const RAW: Raw[] = [
   {
     slug: 'payu',
     name: 'PayU',
-    description: 'Indian cards, UPI and EMI.',
+    description: 'India / LatAm — cards, UPI, netbanking, wallets.',
     regions: ['india'],
     currencies: ['INR'],
     fields: [t('merchant_key', 'Merchant key', true), p('merchant_salt', 'Merchant salt', true)],
@@ -306,7 +306,7 @@ const RAW: Raw[] = [
   {
     slug: 'midtrans',
     name: 'Midtrans',
-    description: 'Indonesian cards, e-wallets and bank transfer.',
+    description: 'Indonesia — cards, GoPay, OVO, ShopeePay, bank transfer.',
     regions: ['asia'],
     currencies: ['IDR'],
     fields: [p('server_key', 'Server key', true), t('client_key', 'Client key', true)],
@@ -314,7 +314,7 @@ const RAW: Raw[] = [
   {
     slug: 'duitku',
     name: 'Duitku',
-    description: 'Indonesian virtual accounts and QRIS.',
+    description: 'Indonesia — VA banks, QRIS, OVO, DANA, ShopeePay, retail (Alfamart/Indomaret), cards.',
     regions: ['asia'],
     currencies: ['IDR'],
     fields: [t('merchant_code', 'Merchant code', true), p('api_key', 'API key', true)],
@@ -322,7 +322,7 @@ const RAW: Raw[] = [
   {
     slug: 'xendit',
     name: 'Xendit',
-    description: 'South-East Asian invoices, cards and e-wallets.',
+    description: 'SE Asia — cards, e-wallets, virtual accounts, OTC retail.',
     regions: ['asia'],
     currencies: split('IDR PHP USD VND MYR THB'),
     fields: [
@@ -334,7 +334,7 @@ const RAW: Raw[] = [
   {
     slug: 'tap',
     name: 'Tap Payments',
-    description: 'Gulf cards, KNET, mada and Benefit.',
+    description: 'Middle East — KNET, mada, Benefit, cards in AED/SAR/KWD.',
     regions: ['asia', 'mena'],
     currencies: split('KWD SAR AED BHD QAR OMR JOD EGP USD EUR GBP'),
     fields: [p('secret_key', 'Secret key', true), t('publishable_key', 'Publishable key', true)],
@@ -342,7 +342,7 @@ const RAW: Raw[] = [
   {
     slug: 'hyperpay',
     name: 'HyperPay',
-    description: 'Middle East cards and local schemes.',
+    description: 'Middle East / Africa — cards (mada, Visa/MC/Amex) + STC Pay.',
     regions: ['asia', 'mena'],
     currencies: split('SAR AED USD EUR GBP BHD KWD QAR OMR JOD EGP'),
     fields: [p('access_token', 'Access token', true), t('entity_id', 'Entity ID', true)],
@@ -350,7 +350,7 @@ const RAW: Raw[] = [
   {
     slug: 'paytr',
     name: 'PayTR',
-    description: 'Turkish cards through an embedded frame.',
+    description: 'Turkey — cards with installments via secure iframe.',
     regions: ['mena', 'europe'],
     currencies: split('TRY USD EUR GBP'),
     fields: [
@@ -362,7 +362,7 @@ const RAW: Raw[] = [
   {
     slug: 'fondy',
     name: 'Fondy',
-    description: 'Eastern European cards and local methods.',
+    description: 'Eastern Europe — cards, Apple Pay, Google Pay, SEPA.',
     regions: ['mena', 'europe'],
     currencies: split('EUR USD GBP UAH PLN CZK RON HUF RUB'),
     fields: [t('merchant_id', 'Merchant ID', true), p('payment_key', 'Payment key', true)],
@@ -370,7 +370,7 @@ const RAW: Raw[] = [
   {
     slug: 'skrill',
     name: 'Skrill',
-    description: 'Skrill wallet and cards.',
+    description: 'Skrill wallet + 100+ local methods worldwide.',
     regions: [],
     currencies: CUR.skrill,
     fields: [t('merchant_id', 'Merchant email', true), p('secret_word', 'Secret word', true)],
@@ -378,7 +378,7 @@ const RAW: Raw[] = [
   {
     slug: 'cinetpay',
     name: 'CinetPay',
-    description: 'West and Central African mobile money and cards.',
+    description: 'Francophone West Africa — Orange Money, MTN, Moov, cards.',
     regions: ['africa'],
     currencies: split('XOF XAF CDF GNF USD'),
     fields: [
@@ -389,8 +389,8 @@ const RAW: Raw[] = [
   },
   {
     slug: 'bank_transfer',
-    name: 'Bank transfer',
-    description: 'The buyer pays into your bank account and uploads proof.',
+    name: 'Bank Transfer',
+    description: 'Show your bank details; mark order paid manually.',
     regions: ['offline'],
     currencies: [],
     fields: [
@@ -404,8 +404,8 @@ const RAW: Raw[] = [
   },
   {
     slug: 'offline',
-    name: 'Offline payment',
-    description: 'Cash, cheque or any other manual arrangement you approve by hand.',
+    name: 'Offline / Cash',
+    description: 'For enterprise quotes paid out-of-band.',
     regions: ['offline'],
     currencies: [],
     fields: [a('instructions', 'Instructions shown to the buyer', true)],
@@ -413,8 +413,8 @@ const RAW: Raw[] = [
   {
     slug: 'lemonsqueezy',
     name: 'Lemon Squeezy',
-    description: 'Merchant of record checkout for software.',
-    regions: ['popular', 'europe'],
+    description: 'Merchant of record for SaaS — hosted checkout, cards, global tax + subscriptions.',
+    regions: ['popular'],
     currencies: [],
     fields: [
       p('api_key', 'API key', true),
@@ -426,8 +426,8 @@ const RAW: Raw[] = [
   {
     slug: 'ligdicash',
     name: 'LigdiCash',
-    description: 'West African mobile money.',
-    regions: ['africa'],
+    description: 'Burkina Faso / West Africa (XOF) — Orange Money, Moov Money, cards.',
+    regions: [],
     currencies: [],
     fields: [
       t('api_key', 'API key', true),

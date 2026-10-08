@@ -9,9 +9,10 @@ import { Button, Card, Input, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
+import { flash } from '@/features/admin-console-shell/flash/flash-store';
 import type { CustomDates } from '../api/service';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
-import { BarChart, Sparkline } from './charts';
+import { BarChart, Sparkline, Legend } from './charts';
 import {
   ActivityCard,
   CampaignsCard,
@@ -112,9 +113,25 @@ export function DashboardScreen() {
   const router = useRouter();
   const bounced = isForbidden(summary.error);
   // Reference sends an agent or viewer to the team inbox rather than showing an error.
+  const role = session.roles[0]?.name ?? 'Member';
   useEffect(() => {
-    if (bounced) router.replace('/inbox');
-  }, [bounced, router]);
+    if (!bounced) return;
+    // Reference's warning flash: "Your role (x) doesn't have access to that page" (rendered by the shell's flash host).
+    flash('roleDenied', 'warning', { role });
+    router.replace('/inbox');
+  }, [bounced, role, router]);
+  const [nowMs, setNowMs] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
+    return () => {
+      clearInterval(id);
+      clearTimeout(t0);
+    };
+  }, []);
+  const syncedAgo = summary.dataUpdatedAt
+    ? Math.max(0, Math.round((nowMs - summary.dataUpdatedAt) / 1000))
+    : null;
   const tz = session.org.timezone ?? 'UTC';
   const name = session.user.displayName ?? session.user.fullName;
 
@@ -152,8 +169,17 @@ export function DashboardScreen() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="space-y-1.5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            {t('kicker')}
+          <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span>{t('kicker')}</span>
+            {syncedAgo !== null && nowMs > 0 && (
+              <>
+                <span aria-hidden className="size-1 rounded-full bg-muted-foreground/50" />
+                <span className="flex items-center gap-1.5" data-testid="live-chip">
+                  <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-success" />
+                  {t('synced', { s: syncedAgo })}
+                </span>
+              </>
+            )}
           </p>
           <h1 className="font-serif text-2xl leading-tight sm:text-4xl">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
@@ -267,9 +293,12 @@ export function DashboardScreen() {
                 <p className="text-sm text-muted-foreground">{t('kpi.readRate')}</p>
                 {s && <Trend delta={s.readRateDeltaPp} unit="pp" />}
               </div>
-              <p className="text-3xl font-semibold leading-none tabular-nums">
-                {s ? `${s.current.readRate}%` : '-'}
-              </p>
+              <div className="flex items-end gap-3">
+                <p className="text-3xl font-semibold leading-none tabular-nums">
+                  {s ? `${s.current.readRate}%` : '-'}
+                </p>
+                {s && <ReadRing pct={s.current.readRate} label={t('kpi.readRate')} />}
+              </div>
               {s && (
                 <dl className="grid grid-cols-3 gap-2 text-center text-xs">
                   <div className="rounded-md border border-border p-1.5">
@@ -302,17 +331,48 @@ export function DashboardScreen() {
               <Panel
                 title={t('throughput.title')}
                 subtitle={t(`throughput.subtitle.${range}`)}
+                titleBadge={
+                  <span className="rounded-full bg-muted px-2.5 py-1 font-mono text-[11px]">
+                    {tzChip(f?.timezone ?? tz)}
+                  </span>
+                }
                 action={
-                  f?.peak ? (
-                    <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
-                      {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
-                    </span>
-                  ) : null
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    {f?.peak && (
+                      <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                        {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
+                      </span>
+                    )}
+                    <RangePicker value={range} onChange={setRange} ranges={DASH_RANGES} />
+                  </div>
                 }
               >
                 {f ? (
                   <>
+                    {s && (
+                      <Legend
+                        series={[
+                          {
+                            name: t('throughput.sent'),
+                            color: 'var(--brand)',
+                            total: s.current.sent,
+                          },
+                          {
+                            name: t('throughput.delivered'),
+                            color: 'var(--success)',
+                            total: s.current.delivered,
+                          },
+                          {
+                            name: t('throughput.failed'),
+                            color: 'var(--danger)',
+                            total: s.current.failed,
+                          },
+                        ]}
+                      />
+                    )}
                     <BarChart
+                      emptyAxes
+                      hideLegend
                       label={t('throughput.title')}
                       labels={f.starts.map(label)}
                       series={[
@@ -410,6 +470,44 @@ export function DashboardScreen() {
       )}
     </div>
   );
+}
+
+/** The small ring beside the read rate (Reference's #kpi-readrate): the share read, centre label to one decimal. */
+function ReadRing({ pct, label }: { pct: number; label: string }) {
+  const p = Math.max(0, Math.min(100, pct));
+  const r = 26;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg viewBox="0 0 64 64" role="img" aria-label={`${label} ${p}%`} className="-mb-1 size-16">
+      <circle cx="32" cy="32" r={r} fill="none" stroke="var(--muted)" strokeWidth="5" />
+      <circle
+        cx="32"
+        cy="32"
+        r={r}
+        fill="none"
+        stroke="var(--success)"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeDasharray={`${(c * p) / 100} ${c}`}
+        transform="rotate(-90 32 32)"
+      />
+      <text x="32" y="35" textAnchor="middle" fontSize="10" fill="var(--muted-foreground)">
+        {p.toFixed(1)}
+      </text>
+    </svg>
+  );
+}
+
+/** "UTC+1" style label of a zone, as Reference's chip. */
+function tzChip(zone: string): string {
+  try {
+    const part = new Intl.DateTimeFormat('en', { timeZone: zone, timeZoneName: 'shortOffset' })
+      .formatToParts(new Date())
+      .find((p) => p.type === 'timeZoneName')?.value;
+    return (part ?? 'UTC').replace('GMT', 'UTC');
+  } catch {
+    return 'UTC';
+  }
 }
 
 function Tile({ label, value }: { label: string; value: string }) {

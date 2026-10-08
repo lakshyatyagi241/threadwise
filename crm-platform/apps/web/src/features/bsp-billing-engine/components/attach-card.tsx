@@ -118,7 +118,7 @@ export function AttachCard({
             if (picked) attach.mutate();
           }}
         >
-          <Field label={t('number')} htmlFor="bsp-number">
+          <Field label={t('number')} htmlFor="bsp-number" hint={t('numberHint')}>
             <Select
               id="bsp-number"
               required
@@ -144,11 +144,7 @@ export function AttachCard({
               })}
             </Select>
           </Field>
-          <Field
-            label={t('currency')}
-            htmlFor="bsp-attach-currency"
-            hint={<span className="text-danger">{t('locked')}</span>}
-          >
+          <Field label={t('currency')} htmlFor="bsp-attach-currency" hint={t('currencyHint')}>
             <Select
               id="bsp-attach-currency"
               required
@@ -163,6 +159,9 @@ export function AttachCard({
               ))}
             </Select>
           </Field>
+          <p className="rounded-md border border-danger/30 bg-danger/5 p-2 text-xs text-muted-foreground sm:col-span-3">
+            <strong className="text-danger">{t('locked')}</strong>
+          </p>
           <Button type="submit" disabled={!enabled || !picked || attach.isPending}>
             {attach.isPending && <Spinner />}
             {t('attach')}

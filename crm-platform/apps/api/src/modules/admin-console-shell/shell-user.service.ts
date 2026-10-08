@@ -7,14 +7,17 @@ import {
   sanitizeQuickAccess,
   type AnnouncementRow,
   type AnnouncementsResponse,
+  type ClearNotificationsResponse,
   type QuickAccessResponse,
   type ShellConfigResponse,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { AuthAuditService } from '../auth';
 import { SettingsService } from '../platform-settings-branding-storage';
 import { NavLayoutService } from './nav-layout.service';
+import { WorkspaceSettingsService } from './workspace-settings.service';
 
 /**
  * What the customer shell asks for on every page: the navigation mode and rail colours (TW-ASHELL-011, 012), the top bar's
@@ -27,6 +30,8 @@ export class ShellUserService {
     private readonly db: DatabaseService,
     private readonly platform: SettingsService,
     private readonly layout: NavLayoutService,
+    private readonly workspace: WorkspaceSettingsService,
+    private readonly audit: AuthAuditService,
   ) {}
 
   private actor(): { orgId: number; userId: number } {
@@ -51,10 +56,11 @@ export class ShellUserService {
   }
 
   async config(): Promise<ShellConfigResponse> {
-    const [branding, nav, mine] = await Promise.all([
+    const [branding, nav, mine, brand] = await Promise.all([
       this.platform.values('branding'),
       this.layout.get(),
       this.myRow(),
+      this.workspace.brand(),
     ]);
     return {
       mode: parseShellMode(branding.dashboardLayout),
@@ -66,7 +72,32 @@ export class ShellUserService {
       bar: nav.bar,
       more: nav.more,
       tour: { run: !mine.has_seen_intro },
+      brand,
     };
+  }
+
+  /**
+   * The bell's "Clear all" (TW-ASHELL-018): deletes the caller's own notifications. The notifications module serves the feed and
+   * mark-read but has no delete, and Reference's bell has this button, so the delete is here; it touches only (org, caller).
+   */
+  async clearNotifications(): Promise<ClearNotificationsResponse> {
+    const { orgId, userId } = this.actor();
+    const cleared = await this.db.txAs({ orgId, userId }, async (tx) => {
+      const res = await tx.execute(sql`
+        DELETE FROM inbox_notifications WHERE org_id = ${orgId} AND user_id = ${userId} RETURNING 1
+      `);
+      await this.audit.record(tx, {
+        event: 'notifications.cleared',
+        status: 'info',
+        orgId,
+        actorType: 'user',
+        actorId: userId,
+        recordId: userId,
+        payload: { count: res.rows.length },
+      });
+      return res.rows.length;
+    });
+    return { cleared };
   }
 
   /** The first call of the tour's lifetime flips the flag; later calls change nothing. */
