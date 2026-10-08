@@ -101,7 +101,16 @@ export function HubScreen() {
         </div>
       </div>
 
-      {accounts.isError && <Alert tone="danger">{t('loadError')}</Alert>}
+      {accounts.isError && (
+        <Alert tone="danger">
+          {accounts.error instanceof ApiError
+            ? t('loadErrorDetail', {
+                status: accounts.error.status,
+                code: accounts.error.code ? ` ${accounts.error.code}` : '',
+              })
+            : t('loadError')}
+        </Alert>
+      )}
       {bridge && !bridge.connected && (
         <Alert tone="info">{t('engineOff', { engine: bridge.brand })}</Alert>
       )}

@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import {
-  AI_USAGE_WINDOW_DAYS,
-  type AiDashboardResponse,
-  type AiUsageQuery,
-  type AiUsageResponse,
-} from '@crm/contracts';
+import { type AiDashboardResponse, type AiUsageQuery, type AiUsageResponse } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformStore } from '../auth';
 import { AiTokenMeter } from './ai-token-meter.service';
-import { capView, estimateCostUsd, fillDaily, windowStart } from './ai-rules';
+import { capView, estimateCostUsd, fillDaily, usageRange } from './ai-rules';
 import { PLATFORM_KEY_COLUMNS, type PlatformKeyRow } from './platform-keys.service';
 import { KeyVault } from './key-vault';
 import { readLedger, readModels } from './usage-queries';
@@ -33,12 +28,11 @@ export class AiUsageService {
 
   async forWorkspace(query: AiUsageQuery, now: Date = new Date()): Promise<AiUsageResponse> {
     const ctx = RequestContextStore.require();
-    const from = windowStart(query.window, now);
-    const days = AI_USAGE_WINDOW_DAYS[query.window];
+    const { from, until, days, window, to } = usageRange(query, now);
 
     const { ledger, models } = await this.db.tx(async (tx) => ({
-      ledger: await readLedger(tx, from, ctx.orgId),
-      models: await readModels(tx, from, 15, ctx.orgId),
+      ledger: await readLedger(tx, from, until, ctx.orgId),
+      models: await readModels(tx, from, until, 15, ctx.orgId),
     }));
     const [used, limit] = await Promise.all([
       this.meter.usedThisMonth(ctx.orgId, now),
@@ -46,8 +40,9 @@ export class AiUsageService {
     ]);
 
     return {
-      window: query.window,
+      window,
       from: from.toISOString(),
+      to,
       kpis: {
         tokens: ledger.tokens,
         calls: ledger.calls,
@@ -66,15 +61,14 @@ export class AiUsageService {
   }
 
   async forPlatform(query: AiUsageQuery, now: Date = new Date()): Promise<AiDashboardResponse> {
-    const from = windowStart(query.window, now);
-    const days = AI_USAGE_WINDOW_DAYS[query.window];
+    const { from, until, days, window, to } = usageRange(query, now);
 
     const { ledger, models, top, keyRows, byok } = await this.platform.tx(async (tx) => {
       const topRes = await tx.execute(sql`
         SELECT o.uuid, o.name, sum(u.total_tokens)::bigint AS tokens, count(*)::bigint AS calls,
                COALESCE(sum(u.total_tokens) FILTER (WHERE u.billed_against = 'workspace'), 0)::bigint AS own_tokens
         FROM ai_token_usage u JOIN organizations o ON o.id = u.org_id
-        WHERE u.created_at >= ${from}
+        WHERE u.created_at >= ${from} AND u.created_at < ${until}
         GROUP BY o.id, o.uuid, o.name ORDER BY tokens DESC, o.id LIMIT 12
       `);
       const keys = await tx.execute(
@@ -88,8 +82,8 @@ export class AiUsageService {
         sql`SELECT count(DISTINCT org_id)::int AS n FROM ai_provider_keys WHERE is_active`,
       );
       return {
-        ledger: await readLedger(tx, from),
-        models: await readModels(tx, from, 10),
+        ledger: await readLedger(tx, from, until),
+        models: await readModels(tx, from, until, 10),
         top: topRes.rows as Array<Record<string, unknown>>,
         keyRows: keys.rows as unknown as PlatformKeyRow[],
         byok: {
@@ -100,8 +94,9 @@ export class AiUsageService {
     });
 
     return {
-      window: query.window,
+      window,
       from: from.toISOString(),
+      to,
       kpis: {
         tokens: ledger.tokens,
         calls: ledger.calls,

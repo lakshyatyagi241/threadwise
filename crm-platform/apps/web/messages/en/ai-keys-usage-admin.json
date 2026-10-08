@@ -34,7 +34,13 @@
       "7d": "7 days",
       "30d": "30 days",
       "90d": "90 days",
-      "1y": "1 year"
+      "1y": "1 year",
+      "custom": "Custom",
+      "from": "From",
+      "to": "To",
+      "pick": "Pick a start and end date.",
+      "invalid": "The end date is before the start date.",
+      "tooLong": "Pick a range of {days} days or fewer."
     },
     "keys": {
       "eyebrow": "Admin · System · AI providers",
