@@ -169,6 +169,7 @@ describe('the push preference', () => {
   const ON = [
     'new_chat',
     'new_message',
+    'chat_waiting',
     'conversation_assigned',
     'mention',
     'task_assigned',

@@ -49,6 +49,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   new_message: { group: 'conversations', toast: true, sound: true, push: true },
   conversation_assigned: { group: 'conversations', toast: true, sound: true, push: true },
   mention: { group: 'conversations', toast: true, sound: true, push: true },
+  // BL-098: a calm follow-up, so no ping by default; the push stays on because the person may be away from the CRM (owner decision).
+  chat_waiting: { group: 'conversations', toast: true, sound: false, push: true },
   task_assigned: { group: 'tasks', toast: true, sound: false, push: true },
   task_due: { group: 'tasks', toast: true, sound: false, push: false },
   task_completed: { group: 'tasks', toast: false, sound: false, push: false },

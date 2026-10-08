@@ -56,6 +56,12 @@
         "body": "{preview}",
         "bodyNoActor": "{preview}"
       },
+      "chat_waiting": {
+        "title": "لم يردّ أحد على {name} بعد",
+        "titleNoName": "هناك محادثة ما زالت تنتظر ردًا",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
       "conversation_assigned": {
         "title": "تم إسناد {name} إليك",
         "titleNoName": "تم إسناد محادثة إليك",
@@ -139,6 +145,7 @@
       "desktop": {
         "new_chat": "محادثة جديدة",
         "new_message": "رسالة جديدة",
+        "chat_waiting": "بانتظار الرد",
         "conversation_assigned": "أُسندت إليك",
         "mention": "أشار إليك أحد",
         "fallbackTitle": "إشعار جديد",
@@ -183,6 +190,10 @@
         "new_message": {
           "label": "رسالة جديدة في محادثتي",
           "hint": "كتب عميل في محادثة مسندة إليك."
+        },
+        "chat_waiting": {
+          "label": "محادثة ما زالت تنتظر ردًا",
+          "hint": "مرّت بضع دقائق على رسالة عميل في محادثة لا يملكها أحد دون ردّ. تُنبَّه مرة واحدة."
         },
         "conversation_assigned": {
           "label": "إسناد محادثة إليّ",

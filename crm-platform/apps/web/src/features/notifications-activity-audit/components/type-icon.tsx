@@ -5,6 +5,7 @@ import type { NotificationIcon, NotificationTone } from '../lib/catalogue';
 /** The shell icon that stands for each kind of notification (the shell's own drawn set, so no second icon library). */
 export const ICON_ART: Readonly<Record<NotificationIcon, string>> = {
   chat: 'chat',
+  waiting: 'clock',
   assign: 'inbox',
   mention: 'reply',
   team_chat: 'team',

@@ -11,6 +11,7 @@ import { NotificationPublisher } from './notification.publisher';
 import { NotificationsRepository } from './notifications.repository';
 import { PushSubscriptionsPruneService } from './push-subscriptions-prune.service';
 import { PushSubscriptionsRepository } from './push-subscriptions.repository';
+import { WaitingNudgeService } from './waiting-nudge.service';
 import { WebPushDeliveryService } from './web-push-delivery.service';
 import { WebPushProcessor } from './web-push.processor';
 import { WebPushSender } from './web-push.sender';
@@ -37,6 +38,7 @@ import { TeamChatNotificationConsumer } from './team-chat-notification.consumer'
     SendOutcomeNotificationConsumer,
     TeamChatNotificationConsumer,
     NotificationRetentionService,
+    WaitingNudgeService,
     PushSubscriptionsRepository,
     PushSubscriptionsPruneService,
     WebPushSender,
