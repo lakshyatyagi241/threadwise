@@ -8,7 +8,8 @@ tier P0 done: WD-SUPP-001, 002, 004, 005, 007, 008, 009, 010, 011, 012 (API e2e 
 tier P1 done: WD-SUPP-003, 013, 014, 015, 016, 017, 018, 026, 027, 029, 030, 031, 033, 037, 038, 039, 040, 041, 042, 043, 044, 046 (API e2e `desk.e2e.spec.ts`).
 tier P2 done: WD-SUPP-020, 021, 022, 023, 024, 028, 032.
 
-Partial: WD-SUPP-045 (impersonation launcher: reason and target validated, session start answers 501 until the workspaces domain provides it).
+Round 3: WD-SUPP-045 done. `PlatformInboxService.impersonate` calls the auth barrel's `ImpersonationService.start` (same act-as session as the Workspaces hub; the route needs `platform.workspace.impersonate` and the super admin role). `desk.e2e.spec.ts` covers start, the audit event `platform.impersonation.started`, redeem of the one-time code, banner data and stop.
+In-app Help guides: one customer guide (`support-customer`, documents `nav:support`) and eight operator guides under `features/platform-support-desk/help/`; the stale `nav:support` pending entry was removed.
 
 ## Not ported on purpose
 
@@ -56,7 +57,7 @@ Intended differences, each on purpose:
   shell and the workspace shell, not to this domain.
 - Agents: the roster is of platform operators ("Operator", "pick an operator"); WaDesk promoted platform users. The WaDesk sentence about
   auto-assignment is dropped because it is docs-only (WD-SUPP-019).
-- Customers subtitle drops "+ impersonate": the impersonation session start belongs to the workspaces domain (WD-SUPP-045).
+- Customers subtitle drops "+ impersonate": the launcher lives in the platform inbox drawer and the Workspaces hub.
 - Customer form hint keeps WaDesk's wording but our thread renders plain text (so does WaDesk; its "Markdown supported" is untrue there).
 - Kanban keeps a keyboard "Move to" menu on every card and a one-line hint (accessibility; drag and drop works as in WaDesk).
 - Customer ticket confirmation banner after sending and the "Reopens when replied" hint on resolved tickets are kept.
@@ -65,12 +66,7 @@ Intended differences, each on purpose:
 
 ## Blocked
 
-WD-SUPP-045 (impersonate): the launcher modal, reason validation (8 to 500 characters) and the target check are built and tested;
-starting the session answers 501. Re-checked on the newest team tip (round 3): no impersonation or support-access session exists. `TokenClaims`
-(auth `token.service.ts`) has no impersonation claim, `SessionService.create` is exported but nothing writes `impersonation_sessions`, and the web shell has no
-banner. Exact missing piece: an auth or WSP `ImpersonationService.start(operatorId, workspaceUuid, reason)` that mints the owner's workspace session carrying an
-`imp` claim, inserts `impersonation_sessions`, audits start and stop, plus a stop endpoint and shell banner. Once exported from the auth or WSP barrel,
-`PlatformInboxService.impersonate` calls it (one line) and the launcher modal already posts to it. A shim in this zone would need to edit auth token code, so it stays blocked.
+None.
 
 ## Not verified
 
