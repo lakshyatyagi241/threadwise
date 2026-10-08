@@ -4,12 +4,6 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
-import { ConnectDeviceSheet } from '@/features/admin-console-shell/connect-device/connect-device-sheet';
-import { EmbedFlag } from '@/features/admin-console-shell/connect-device/embed-flag';
-import { InboxBell } from '@/features/admin-console-shell/inbox-bell/inbox-bell';
-import { QuickAccessDrawer } from '@/features/admin-console-shell/quick-access/quick-access-drawer';
-import { FlashHost } from '@/features/admin-console-shell/flash/flash-host';
-import { GuidedTour } from '@/features/admin-console-shell/tour/guided-tour';
 import { PageHelpTip } from '@/features/help-center';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
@@ -76,161 +70,44 @@ export function AppShell({
 
   const bell = nav.find((i) => i.id === BELL_ID);
   const settingsLink = nav.find((i) => i.id === SETTINGS_NAV_ID);
-  const barItems = useMemo(
-    () => resolveTopBar(shell?.bar ?? [], nav, settings),
-    [shell?.bar, nav, settings],
-  );
-  const rail = shell ? railTheme(shell.rail) : null;
-  const railVars = rail ? (rail.vars as CSSProperties) : undefined;
-
-  const jumpIndex = useMemo<JumpEntry[]>(() => {
-    const groupLabel = (g: string) => tNav(`shell.groups.${g}`);
-    const fromMenu = sections.flatMap((s) =>
-      s.items
-        .filter((i) => !i.comingSoon)
-        .map((i) => ({ label: tNav(i.labelKey), group: groupLabel(s.group), href: i.href })),
-    );
-    const account = ACCOUNT_JUMPS.map((a) => ({
-      label: tStrip(`account.${a.key}`),
-      group: tStrip('account.group'),
-      href: a.href,
-    }));
-    return [...fromMenu, ...account];
-  }, [sections, tNav, tStrip]);
-  const activeItem = nav.find((i) => i.id === activeId);
-
-  const data = useMemo(
-    () => ({
-      nav,
-      tiles: settings,
-      mode,
-      bar: shell?.bar ?? [],
-      walletLabel: wallet?.label,
-      profile: profile ? { ...profile, walletLabel: wallet?.label } : undefined,
-    }),
-    [nav, settings, mode, shell?.bar, wallet?.label, profile],
-  );
-
-  const page = (
-    <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
-      <SettingsTilesProvider tiles={settings}>
-        <Suspense fallback={null}>
-          <EmbedFlag />
-        </Suspense>
-        <SettingsBack />
-        {children}
-        <FlashHost />
-      </SettingsTilesProvider>
-    </main>
-  );
-  const extras = shell ? (
-    <>
-      <CommandPalette nav={nav} tiles={settings} />
-      <QuickAccessDrawer />
-      <ConnectDeviceSheet />
-      <InboxBell />
-      <Suspense fallback={null}>
-        <GuidedTour run={shell.tour.run && mode === 'topbar'} />
-      </Suspense>
-    </>
-  ) : null;
-
-  // A full-screen page: no header, rail or bars (TW-ASHELL-012).
-  if (chromeHidden) {
-    return (
-      <ShellDataProvider value={data}>
-        <div className="flex min-h-dvh flex-col">{page}</div>
-        {extras}
-      </ShellDataProvider>
-    );
-  }
-
-  if (mode === 'topbar') {
-    return (
-      <ShellDataProvider value={data}>
-        <div className="flex min-h-dvh flex-col" data-user-shell="topbar">
-          <NavDrawer
-            open={drawer}
-            onClose={closeDrawer}
-            sections={sections}
-            activeId={activeId}
-            returnFocusTo={menuButton}
-            footer={navFooter}
-          />
-          {banners}
-          <TopNav
-            user={user}
-            theme={theme}
-            items={barItems}
-            activeKey={activeBarKey(barItems, pathname)}
-            onOpenMenu={() => setDrawer(true)}
-            menuButtonRef={menuButton}
-            workspace={navFooter}
-            wallet={wallet}
-            bell={liveBell}
-            pageSettings={<PageSettingsShortcut tiles={settings} />}
-            settingsHref={settingsLink?.href}
-            helpItems={help}
-          />
-          {page}
-        </div>
-        {extras}
-      </ShellDataProvider>
-    );
-  }
 
   return (
-    <ShellDataProvider value={data}>
-      <div className="flex min-h-dvh" data-user-shell="sidebar" style={railVars}>
-        <NavRail sections={sections} activeId={activeId} footer={navFooter} />
-        <NavDrawer
-          open={drawer}
-          onClose={closeDrawer}
-          sections={sections}
-          activeId={activeId}
-          returnFocusTo={menuButton}
-          footer={navFooter}
+    <div className="flex min-h-dvh">
+      <NavRail sections={sections} activeId={activeId} footer={navFooter} />
+      <NavDrawer
+        open={drawer}
+        onClose={closeDrawer}
+        sections={sections}
+        activeId={activeId}
+        returnFocusTo={menuButton}
+        footer={navFooter}
+      />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <TopBar
+          user={user}
+          theme={theme}
+          onOpenMenu={() => setDrawer(true)}
+          menuButtonRef={menuButton}
+          headerStart={headerStart}
+          announcement={announcement}
+          wallet={wallet}
+          notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
+          notificationCount={notificationCount}
+          bell={liveBell}
+          pageHelp={<PageHelpTip />}
+          pageSettings={<PageSettingsShortcut tiles={settings} />}
+          settingsHref={settingsLink?.href}
+          helpItems={help}
         />
-        <div className="flex min-w-0 flex-1 flex-col">
-          {banners}
-          {shell ? (
-            <TopStrip
-              user={user}
-              theme={theme}
-              onOpenMenu={() => setDrawer(true)}
-              menuButtonRef={menuButton}
-              pageTitle={activeItem ? tNav(activeItem.labelKey) : ''}
-              brand={tNav('common.appName')}
-              jumpIndex={jumpIndex}
-              wallet={wallet}
-              bell={liveBell}
-              pageSettings={<PageSettingsShortcut tiles={settings} />}
-              settingsHref={settingsLink?.href}
-              helpItems={help}
-            />
-          ) : (
-            <TopBar
-              user={user}
-              theme={theme}
-              onOpenMenu={() => setDrawer(true)}
-              menuButtonRef={menuButton}
-              headerStart={headerStart}
-              announcement={announcement}
-              wallet={wallet}
-              notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
-              notificationCount={notificationCount}
-              bell={liveBell}
-              pageHelp={<PageHelpTip />}
-              pageSettings={<PageSettingsShortcut tiles={settings} />}
-              settingsHref={settingsLink?.href}
-              helpItems={help}
-            />
-          )}
-          {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page. */}
-          {page}
-        </div>
+        {banners}
+        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page. */}
+        <main className="relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
+          <SettingsTilesProvider tiles={settings}>
+            <SettingsBack />
+            {children}
+          </SettingsTilesProvider>
+        </main>
       </div>
-      {extras}
-    </ShellDataProvider>
+    </div>
   );
 }
