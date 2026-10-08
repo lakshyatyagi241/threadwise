@@ -14,8 +14,13 @@ import { schema, type Tx } from '@crm/db';
 
 const { inboxNotifications, notificationUserPrefs } = schema;
 
-/** A type no catalogue entry knows (another domain's newer type): delivered as before, toast on, no ping. */
-const UNLISTED: NotificationChannelsEffective = { bell: true, toast: true, sound: false };
+/** A type no catalogue entry knows (another domain's newer type): delivered as before, toast on, no ping, no browser push. */
+const UNLISTED: NotificationChannelsEffective = {
+  bell: true,
+  toast: true,
+  sound: false,
+  push: false,
+};
 
 export interface NotificationRow {
   id: number;
@@ -50,6 +55,8 @@ export interface WrittenNotification {
    */
   toast?: boolean;
   sound?: boolean;
+  /** Whether this person's browser push applies to the row (their own choice, else the catalogue default). Absent: the catalogue default. */
+  push?: boolean;
 }
 
 export interface NewNotification {
@@ -223,6 +230,7 @@ export class NotificationsRepository {
         bell: notificationUserPrefs.bell,
         toast: notificationUserPrefs.toast,
         sound: notificationUserPrefs.sound,
+        push: notificationUserPrefs.push,
       })
       .from(notificationUserPrefs)
       .where(
@@ -251,6 +259,7 @@ export class NotificationsRepository {
         bell: notificationUserPrefs.bell,
         toast: notificationUserPrefs.toast,
         sound: notificationUserPrefs.sound,
+        push: notificationUserPrefs.push,
       })
       .from(notificationUserPrefs)
       .where(
@@ -261,7 +270,7 @@ export class NotificationsRepository {
         ),
       );
     for (const r of rows) {
-      out.set(Number(r.userId), { bell: r.bell, toast: r.toast, sound: r.sound });
+      out.set(Number(r.userId), { bell: r.bell, toast: r.toast, sound: r.sound, push: r.push });
     }
     return out;
   }
@@ -274,10 +283,13 @@ export class NotificationsRepository {
         bell: notificationUserPrefs.bell,
         toast: notificationUserPrefs.toast,
         sound: notificationUserPrefs.sound,
+        push: notificationUserPrefs.push,
       })
       .from(notificationUserPrefs)
       .where(and(eq(notificationUserPrefs.orgId, orgId), eq(notificationUserPrefs.userId, userId)));
-    return new Map(rows.map((r) => [r.type, { bell: r.bell, toast: r.toast, sound: r.sound }]));
+    return new Map(
+      rows.map((r) => [r.type, { bell: r.bell, toast: r.toast, sound: r.sound, push: r.push }]),
+    );
   }
 
   /**
@@ -290,26 +302,33 @@ export class NotificationsRepository {
     orgId: number,
     userId: number,
     type: string,
-    patch: { bell?: boolean | null; toast?: boolean | null; sound?: boolean | null },
+    patch: {
+      bell?: boolean | null;
+      toast?: boolean | null;
+      sound?: boolean | null;
+      push?: boolean | null;
+    },
   ): Promise<void> {
     const has = (v: unknown) => v !== undefined;
     const val = (v: boolean | null | undefined) => (v === undefined ? null : v);
     await tx.execute(sql`
-      INSERT INTO notification_user_prefs (org_id, user_id, type, bell, toast, sound)
-      VALUES (${orgId}, ${userId}, ${type}, ${val(patch.bell)}, ${val(patch.toast)}, ${val(patch.sound)})
+      INSERT INTO notification_user_prefs (org_id, user_id, type, bell, toast, sound, push)
+      VALUES (${orgId}, ${userId}, ${type}, ${val(patch.bell)}, ${val(patch.toast)}, ${val(patch.sound)}, ${val(patch.push)})
       ON CONFLICT (org_id, user_id, type) DO UPDATE SET
         bell  = CASE WHEN ${has(patch.bell)}::boolean  THEN EXCLUDED.bell  ELSE notification_user_prefs.bell  END,
         toast = CASE WHEN ${has(patch.toast)}::boolean THEN EXCLUDED.toast ELSE notification_user_prefs.toast END,
-        sound = CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END
+        sound = CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END,
+        push  = CASE WHEN ${has(patch.push)}::boolean  THEN EXCLUDED.push  ELSE notification_user_prefs.push  END
       WHERE (
         CASE WHEN ${has(patch.bell)}::boolean  THEN EXCLUDED.bell  ELSE notification_user_prefs.bell  END,
         CASE WHEN ${has(patch.toast)}::boolean THEN EXCLUDED.toast ELSE notification_user_prefs.toast END,
-        CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END
-      ) IS DISTINCT FROM (notification_user_prefs.bell, notification_user_prefs.toast, notification_user_prefs.sound)`);
+        CASE WHEN ${has(patch.sound)}::boolean THEN EXCLUDED.sound ELSE notification_user_prefs.sound END,
+        CASE WHEN ${has(patch.push)}::boolean  THEN EXCLUDED.push  ELSE notification_user_prefs.push  END
+      ) IS DISTINCT FROM (notification_user_prefs.bell, notification_user_prefs.toast, notification_user_prefs.sound, notification_user_prefs.push)`);
     await tx.execute(sql`
       DELETE FROM notification_user_prefs
        WHERE org_id = ${orgId} AND user_id = ${userId} AND type = ${type}
-         AND bell IS NULL AND toast IS NULL AND sound IS NULL`);
+         AND bell IS NULL AND toast IS NULL AND sound IS NULL AND push IS NULL`);
   }
 
   /**
@@ -352,6 +371,7 @@ export class NotificationsRepository {
       collapsed: false,
       toast: channels.toast,
       sound: channels.sound,
+      push: channels.push,
     };
   }
 
@@ -435,7 +455,23 @@ export class NotificationsRepository {
       collapsed: replaced.length > 0,
       toast: channels.toast,
       sound: channels.sound,
+      push: channels.push,
     };
+  }
+
+  /** What a browser push is built from: the row of one person, or undefined when it is gone (pruned, or another person's). */
+  async findForPush(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    uuid: string,
+  ): Promise<NotificationRow | undefined> {
+    const rows = await tx
+      .select(this.selection())
+      .from(inboxNotifications)
+      .where(and(...this.mine(orgId, userId), eq(inboxNotifications.uuid, uuid)))
+      .limit(1);
+    return rows[0] as NotificationRow | undefined;
   }
 
   /** Marks the caller's unread rows about one subject read. Returns the uuids that changed (empty when nothing was unread). */

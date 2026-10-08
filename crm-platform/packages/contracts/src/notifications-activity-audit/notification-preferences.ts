@@ -12,6 +12,10 @@ import { NOTIFICATION_PREF_TYPES, type NotificationPrefType } from './inbox-noti
  *
  * Only `bell` decides whether a row exists at all; `toast` and `sound` travel on the `notification.created` event (`toast`, `sound`) so a
  * client shows the row and stays quiet. Desktop alerts are a per-browser choice (the browser's own permission), kept in local storage.
+ *
+ * `push` (Web Push, BL-097) is the fourth channel: an OS-level notification on the person's own devices, even with the CRM closed. It rides
+ * on the bell row like the toast does (no row, no push), is on by default only for chat events, assignments and mentions, and needs the
+ * person to have allowed browser notifications on a device (Account, Notifications).
  */
 
 export const NOTIFICATION_GROUPS = [
@@ -32,34 +36,41 @@ export interface NotificationCatalogEntry {
   toast: boolean;
   /** ...and plays the two-tone ping. */
   sound: boolean;
+  /**
+   * ...and a browser (Web Push) notification reaches the person's enabled devices. Default on only where a person is waiting on something:
+   * chats, assignments, mentions, direct team chat messages. Everything else is a quiet default the person can turn on.
+   */
+  push: boolean;
 }
 
 /** The out-of-the-box behaviour of every type (the spec's catalogue columns Toast and Sound). Bell is on for all and not listed. */
 export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCatalogEntry> = {
-  new_chat: { group: 'conversations', toast: true, sound: true },
-  new_message: { group: 'conversations', toast: true, sound: true },
-  conversation_assigned: { group: 'conversations', toast: true, sound: true },
-  mention: { group: 'conversations', toast: true, sound: true },
-  task_assigned: { group: 'tasks', toast: true, sound: false },
-  task_due: { group: 'tasks', toast: true, sound: false },
-  task_completed: { group: 'tasks', toast: false, sound: false },
-  new_lead: { group: 'leads', toast: true, sound: false },
-  form_submission: { group: 'leads', toast: true, sound: false },
-  form_needs_review: { group: 'leads', toast: true, sound: false },
-  sales_doc_decided: { group: 'documents', toast: true, sound: false },
-  wallet_low_balance: { group: 'wallet', toast: true, sound: false },
-  wallet_credited: { group: 'wallet', toast: true, sound: false },
-  device_connected: { group: 'devices', toast: true, sound: false },
-  device_disconnected: { group: 'devices', toast: true, sound: false },
-  device_logged_out: { group: 'devices', toast: true, sound: false },
-  broadcast_completed: { group: 'broadcasts', toast: true, sound: false },
-  broadcast_failed: { group: 'broadcasts', toast: true, sound: false },
-  campaign_completed: { group: 'broadcasts', toast: true, sound: false },
-  campaign_failed: { group: 'broadcasts', toast: true, sound: false },
-  scheduled_completed: { group: 'broadcasts', toast: true, sound: false },
-  scheduled_failed: { group: 'broadcasts', toast: true, sound: false },
-  teamchat_mention: { group: 'team_chat', toast: true, sound: true },
-  teamchat_message: { group: 'team_chat', toast: true, sound: true },
+  new_chat: { group: 'conversations', toast: true, sound: true, push: true },
+  new_message: { group: 'conversations', toast: true, sound: true, push: true },
+  conversation_assigned: { group: 'conversations', toast: true, sound: true, push: true },
+  mention: { group: 'conversations', toast: true, sound: true, push: true },
+  // BL-098: a calm follow-up, so no ping by default; the push stays on because the person may be away from the CRM (owner decision).
+  chat_waiting: { group: 'conversations', toast: true, sound: false, push: true },
+  task_assigned: { group: 'tasks', toast: true, sound: false, push: true },
+  task_due: { group: 'tasks', toast: true, sound: false, push: false },
+  task_completed: { group: 'tasks', toast: false, sound: false, push: false },
+  new_lead: { group: 'leads', toast: true, sound: false, push: false },
+  form_submission: { group: 'leads', toast: true, sound: false, push: false },
+  form_needs_review: { group: 'leads', toast: true, sound: false, push: false },
+  sales_doc_decided: { group: 'documents', toast: true, sound: false, push: false },
+  wallet_low_balance: { group: 'wallet', toast: true, sound: false, push: false },
+  wallet_credited: { group: 'wallet', toast: true, sound: false, push: false },
+  device_connected: { group: 'devices', toast: true, sound: false, push: false },
+  device_disconnected: { group: 'devices', toast: true, sound: false, push: false },
+  device_logged_out: { group: 'devices', toast: true, sound: false, push: false },
+  broadcast_completed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  broadcast_failed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  campaign_completed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  campaign_failed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  scheduled_completed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  scheduled_failed: { group: 'broadcasts', toast: true, sound: false, push: false },
+  teamchat_mention: { group: 'team_chat', toast: true, sound: true, push: true },
+  teamchat_message: { group: 'team_chat', toast: true, sound: true, push: true },
 };
 
 export const notificationPrefTypeSchema = z.enum(NOTIFICATION_PREF_TYPES);
@@ -69,12 +80,14 @@ export interface StoredUserPref {
   bell: boolean | null;
   toast: boolean | null;
   sound: boolean | null;
+  push: boolean | null;
 }
 
 export interface NotificationChannelsEffective {
   bell: boolean;
   toast: boolean;
   sound: boolean;
+  push: boolean;
 }
 
 /**
@@ -91,10 +104,16 @@ export function resolveNotificationChannels(
     bell: stored?.bell ?? workspaceInapp,
     toast: stored?.toast ?? base.toast,
     sound: stored?.sound ?? base.sound,
+    push: stored?.push ?? base.push,
   };
 }
 
-const effectiveSchema = z.object({ bell: z.boolean(), toast: z.boolean(), sound: z.boolean() });
+const effectiveSchema = z.object({
+  bell: z.boolean(),
+  toast: z.boolean(),
+  sound: z.boolean(),
+  push: z.boolean(),
+});
 
 export const notificationPreferenceItemSchema = z.object({
   type: notificationPrefTypeSchema,
@@ -103,6 +122,8 @@ export const notificationPreferenceItemSchema = z.object({
   bell: z.boolean(),
   toast: z.boolean(),
   sound: z.boolean(),
+  /** A browser (Web Push) notification on your enabled devices. Needs the bell row, like the pop-up. */
+  push: z.boolean(),
   /** The catalogue default of the toast and ping, and of the bell when no owner toggle governs the type. */
   defaults: effectiveSchema,
   /** What you chose yourself; null = you never did (inherit). */
@@ -110,6 +131,7 @@ export const notificationPreferenceItemSchema = z.object({
     bell: z.boolean().nullable(),
     toast: z.boolean().nullable(),
     sound: z.boolean().nullable(),
+    push: z.boolean().nullable(),
   }),
   /** The workspace owner's in-app toggle for this type (true when none governs it): the bell value you inherit. */
   workspaceInapp: z.boolean(),
@@ -125,7 +147,7 @@ export type NotificationPreferencesResponse = z.infer<typeof notificationPrefere
 const channelChoice = z.boolean().nullable().optional();
 
 /**
- * `PUT /v2/notifications/preferences`: a partial update. Each item names a type and any of `bell`, `toast`, `sound`: a boolean sets it,
+ * `PUT /v2/notifications/preferences`: a partial update. Each item names a type and any of `bell`, `toast`, `sound`, `push`: a boolean sets it,
  * `null` goes back to inheriting, a missing key stays as it is. Sending the same body twice changes nothing. Returns the full list.
  */
 export const updateNotificationPreferencesRequestSchema = z.object({
@@ -136,6 +158,7 @@ export const updateNotificationPreferencesRequestSchema = z.object({
         bell: channelChoice,
         toast: channelChoice,
         sound: channelChoice,
+        push: channelChoice,
       }),
     )
     .min(1)

@@ -1,9 +1,9 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CAPABILITIES_UNKNOWN, resolveNav } from '../_registry/resolve';
 import type { Capabilities } from '../_registry/types';
+import { resolveSettings } from '../_registry/settings-resolve';
 import { nav } from './nav';
+import { settings } from './settings';
 
 const caps = (permissions: string[], features: string[]): Capabilities => ({
   ...CAPABILITIES_UNKNOWN,
@@ -12,14 +12,23 @@ const caps = (permissions: string[], features: string[]): Capabilities => ({
 });
 
 describe('Personal WhatsApp exists only for workspaces the operator allowed', () => {
-  it('is tagged with the synthetic entitlement and the read key on its menu entry', () => {
+  it('is tagged with the synthetic entitlement and the read key on its route entry', () => {
     expect(nav[0]?.gates?.app).toBe('unofficial_whatsapp');
     expect(nav[0]?.gates?.permission).toBe('wa.devices.read');
-    expect(nav[0]?.inMenu).not.toBe(false);
+    expect(nav[0]?.inMenu).toBe(false);
   });
 
-  it('is a drawn sidebar entry and has no Settings tile', () => {
-    expect(existsSync(join(__dirname, 'settings.ts'))).toBe(false);
+  it('is a Settings > Channels tile (Unofficial WhatsApp API) with the same gates, not a sidebar entry', () => {
+    expect(settings).toHaveLength(1);
+    expect(settings[0]?.section).toBe('channels');
+    expect(settings[0]?.gates).toEqual({
+      permission: 'wa.devices.read',
+      app: 'unofficial_whatsapp',
+    });
+    const off = caps(['wa.devices.read'], ['automation']);
+    expect(resolveSettings(settings, off)).toEqual([]);
+    const on = caps(['wa.devices.read'], ['unofficial_whatsapp']);
+    expect(resolveSettings(settings, on).map((t) => t.id)).toEqual(['unofficial-whatsapp']);
   });
 
   it('is removed from the menu while the entitlement is missing', () => {

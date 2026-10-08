@@ -37,8 +37,9 @@ const item = (
     bell: true,
     toast: true,
     sound: false,
-    defaults: { bell: true, toast: true, sound: false },
-    overrides: { bell: null, toast: null, sound: null },
+    push: false,
+    defaults: { bell: true, toast: true, sound: false, push: false },
+    overrides: { bell: null, toast: null, sound: null, push: null },
     workspaceInapp: true,
     ...over,
   }) as NotificationPreferenceItem;
@@ -50,12 +51,14 @@ const state = (...items: NotificationPreferenceItem[]): PrefsState =>
       : [
           item('new_message', 'conversations', {
             sound: true,
-            defaults: { bell: true, toast: true, sound: true },
+            push: true,
+            defaults: { bell: true, toast: true, sound: true, push: true },
           }),
           item('device_disconnected', 'devices'),
           item('teamchat_message', 'team_chat', {
             sound: true,
-            defaults: { bell: true, toast: true, sound: true },
+            push: true,
+            defaults: { bell: true, toast: true, sound: true, push: true },
           }),
         ],
   });
@@ -119,8 +122,8 @@ describe('the preferences screen (en)', () => {
       item('new_message', 'conversations', {
         toast: false,
         sound: true,
-        defaults: { bell: true, toast: true, sound: true },
-        overrides: { bell: null, toast: false, sound: null },
+        defaults: { bell: true, toast: true, sound: true, push: false },
+        overrides: { bell: null, toast: false, sound: null, push: null },
       }),
     );
     const out = html(view({ state: changed }));
@@ -132,34 +135,73 @@ describe('the preferences screen (en)', () => {
     expect(clean).not.toContain('Reset to default');
   });
 
-  it('explains an event the workspace turned off and disables its switches', () => {
+  it('explains an event the workspace has off, and keeps the personal switches usable', () => {
     const blocked = state(
       item('new_message', 'conversations', {
         bell: false,
         toast: true,
         workspaceInapp: false,
-        defaults: { bell: false, toast: true, sound: true },
+        defaults: { bell: false, toast: true, sound: true, push: true },
       }),
     );
-    const out = html(view({ state: blocked }));
+    const out = html(view({ state: blocked, pushEnabled: true }));
     expect(out).toContain('Turned off by your workspace');
-    expect(out).toContain('Your workspace turned this event off');
-    expect(out).toMatch(/aria-label="New message on my chat: bell"[^>]*disabled=""/);
-    expect(out).toMatch(/aria-label="New message on my chat: sound"[^>]*disabled=""/);
+    expect(out).toContain('Your workspace has this off; your choice still applies to you.');
+    expect(out).not.toContain('Your workspace turned this event off');
+    // The bell switch is live (the person can turn it on for themselves); the rest wait for the bell, as when they turned it off.
+    expect(out).not.toMatch(/aria-label="New message on my chat: bell"[^>]*disabled=""/);
     expect(out).toMatch(/aria-checked="false"[^>]*aria-label="New message on my chat: bell"/);
+    expect(out).toMatch(/aria-label="New message on my chat: pop-up"[^>]*disabled=""/);
+    expect(out).toContain('Turn the bell on to choose a pop-up, sound or push.');
   });
 
-  it('says to turn the bell on when the pop-up and sound are held back by it', () => {
+  it('offers the pop-up, sound and push again once the person turned the bell on despite the workspace', () => {
+    const own = state(
+      item('new_message', 'conversations', {
+        bell: true,
+        workspaceInapp: false,
+        overrides: { bell: true, toast: null, sound: null, push: null },
+        defaults: { bell: false, toast: true, sound: false, push: true },
+      }),
+    );
+    const out = html(view({ state: own, pushEnabled: true }));
+    expect(out).toContain('Your workspace has this off; your choice still applies to you.');
+    expect(out).not.toMatch(/aria-label="New message on my chat: bell"[^>]*disabled=""/);
+    expect(out).not.toMatch(/aria-label="New message on my chat: pop-up"[^>]*disabled=""/);
+    expect(out).not.toMatch(/aria-label="New message on my chat: push"[^>]*disabled=""/);
+  });
+
+  it('says to turn the bell on when the pop-up, sound and push are held back by it', () => {
     const bellOff = state(
       item('new_message', 'conversations', {
         bell: false,
-        overrides: { bell: false, toast: null, sound: null },
+        overrides: { bell: false, toast: null, sound: null, push: null },
       }),
     );
     const out = html(view({ state: bellOff }));
-    expect(out).toContain('Turn the bell on to choose a pop-up or sound.');
+    expect(out).toContain('Turn the bell on to choose a pop-up, sound or push.');
     expect(out).toMatch(/aria-label="New message on my chat: pop-up"[^>]*disabled=""/);
     expect(out).not.toMatch(/aria-label="New message on my chat: bell"[^>]*disabled=""/);
+  });
+
+  it('shows the Push column only where the deployment has browser notifications', () => {
+    const without = html(view());
+    expect(without).not.toContain('aria-label="New message on my chat: push"');
+    expect(without).toContain('Default: bell on, pop-up on, sound on');
+    expect(without).not.toMatch(/>Push</);
+    const withPush = html(view({ pushEnabled: true }));
+    expect(withPush).toContain('aria-label="New message on my chat: push"');
+    expect(withPush).toContain('Default: bell on, pop-up on, sound on, push on');
+    expect(withPush).toContain('Default: bell on, pop-up on, sound off, push off');
+    expect(withPush).toMatch(/>Push</);
+    // A kind of event with no sound still offers push.
+    expect(withPush).toContain('aria-label="Number disconnected: push"');
+  });
+
+  it('renders the browser notifications card slot above the table', () => {
+    const out = html(view({ browserCard: <section data-testid="the-card">card</section> }));
+    expect(out.indexOf('the-card')).toBeGreaterThan(-1);
+    expect(out.indexOf('the-card')).toBeLessThan(out.indexOf('Chats'));
   });
 
   it('shows a loading state, an error with a retry, and an empty list', () => {
@@ -191,6 +233,39 @@ describe('the preferences screen (en)', () => {
   });
 });
 
+describe('the waiting-for-a-reply row (en, ar)', () => {
+  const waiting = () =>
+    state(
+      item('chat_waiting', 'conversations', {
+        push: true,
+        defaults: { bell: true, toast: true, sound: false, push: true },
+      }),
+    );
+
+  it('is listed under Chats with its hint, its default and no sound', () => {
+    const out = html(view({ state: waiting(), pushEnabled: true }));
+    expect(out).toContain('Chats');
+    expect(out).toContain('Chat still waiting for a reply');
+    expect(out).toContain('A chat nobody owns has had a customer message unanswered');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: bell"');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: pop-up"');
+    // Like the other quiet types it has no ping at all, so the sound column says so instead of showing a dead switch.
+    expect(out).toContain('Chat still waiting for a reply: sound: Not available');
+    expect(out).toContain('aria-label="Chat still waiting for a reply: push"');
+    expect(out).toContain('Default: bell on, pop-up on, sound off');
+    expect(out).not.toContain('notifications.prefs');
+  });
+
+  it('is worded in Arabic, with the group and switches named', () => {
+    const out = html(view({ state: waiting(), pushEnabled: true }), 'ar');
+    expect(out).toContain('المحادثات');
+    expect(out).toContain('محادثة ما زالت تنتظر ردًا');
+    expect(out).toContain('aria-label="محادثة ما زالت تنتظر ردًا: الجرس"');
+    expect(out).not.toContain('Chat still waiting');
+    expect(out).not.toContain('notifications.prefs');
+  });
+});
+
 describe('the preferences screen (ar)', () => {
   it('is worded in Arabic, switches included, with no English or key leaking', () => {
     const out = html(view(), 'ar');
@@ -209,8 +284,10 @@ describe('the preferences screen (ar)', () => {
     const blocked = state(
       item('new_message', 'conversations', { bell: false, workspaceInapp: false }),
     );
-    const out = html(view({ state: blocked, saveFailed: true }), 'ar');
+    const out = html(view({ state: blocked, saveFailed: true, pushEnabled: true }), 'ar');
     expect(out).toContain('أوقفته مساحة العمل');
+    expect(out).toContain('اختيارك ما زال ساريًا عليك');
+    expect(out).toContain('إشعار المتصفح');
     expect(out).toContain('تعذّر حفظ هذا التغيير');
     expect(html(view({ state: undefined, failed: true }), 'ar')).toContain('تعذّر تحميل تفضيلاتك.');
   });

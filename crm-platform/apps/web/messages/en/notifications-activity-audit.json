@@ -56,6 +56,12 @@
         "body": "{preview}",
         "bodyNoActor": "{preview}"
       },
+      "chat_waiting": {
+        "title": "No one has answered {name} yet",
+        "titleNoName": "A chat is still waiting for a reply",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
       "conversation_assigned": {
         "title": "{name} was assigned to you",
         "titleNoName": "A chat was assigned to you",
@@ -139,6 +145,7 @@
       "desktop": {
         "new_chat": "New chat",
         "new_message": "New message",
+        "chat_waiting": "Waiting for a reply",
         "conversation_assigned": "Assigned to you",
         "mention": "Mentioned you",
         "fallbackTitle": "New notification",
@@ -157,12 +164,13 @@
     },
     "prefs": {
       "title": "Notification preferences",
-      "description": "Choose how each event reaches you. These choices are yours alone; your workspace sets which events are on at all.",
+      "description": "Choose how each event reaches you. These choices are yours alone; your workspace sets which events start out on.",
       "columns": {
         "event": "Event",
         "bell": "Bell",
         "toast": "Pop-up",
-        "sound": "Sound"
+        "sound": "Sound",
+        "push": "Push"
       },
       "groups": {
         "conversations": "Chats",
@@ -182,6 +190,10 @@
         "new_message": {
           "label": "New message on my chat",
           "hint": "A customer writes on a chat assigned to you."
+        },
+        "chat_waiting": {
+          "label": "Chat still waiting for a reply",
+          "hint": "A chat nobody owns has had a customer message unanswered for a few minutes. You hear about it once."
         },
         "conversation_assigned": {
           "label": "Chat assigned to me",
@@ -286,8 +298,8 @@
       "usingDefault": "Default",
       "toggleLabel": "{event}: {channel}",
       "workspaceOff": "Turned off by your workspace",
-      "workspaceOffHelp": "Your workspace turned this event off, so it never reaches the bell. An administrator can turn it back on in Workspace settings.",
-      "bellOffHelp": "Turn the bell on to choose a pop-up or sound.",
+      "workspaceOffHelp": "Your workspace has this off; your choice still applies to you.",
+      "bellOffHelp": "Turn the bell on to choose a pop-up, sound or push.",
       "notAvailable": "Not available",
       "defaultSummary": "Default: {bell}, {toast}, {sound}",
       "on": "on",
@@ -295,13 +307,62 @@
       "channelNames": {
         "bell": "bell",
         "toast": "pop-up",
-        "sound": "sound"
+        "sound": "sound",
+        "push": "push"
       },
       "browser": {
         "title": "This browser",
         "description": "Sound and desktop alerts are set per browser, not per account."
       },
-      "empty": "There are no notification types to set up yet."
+      "empty": "There are no notification types to set up yet.",
+      "defaultSummaryPush": "Default: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Browser notifications",
+        "description": "Get a notification from your browser for the events that reach your bell, even when the CRM is closed. You choose which events in the Push column below.",
+        "state": {
+          "on": "On for this device",
+          "off": "Off",
+          "blocked": "Blocked",
+          "unavailable": "Not available"
+        },
+        "checking": "Checking this browser",
+        "unsupported": "This browser cannot show notifications while the CRM is closed. Try an up-to-date Chrome, Edge, Firefox or Safari, on a secure (https) page.",
+        "needsInstall": "On iPhone and iPad, browser notifications only work for an app added to your Home Screen.",
+        "needsInstallSteps": "Open this page in Safari, tap Share, choose Add to Home Screen, then open the CRM from the new icon and come back here. Needs iOS or iPadOS 16.4 or later.",
+        "blocked": "Notifications are blocked for this site in your browser.",
+        "blockedHelp": "Only your browser can undo this: open the site settings (the icon next to the address), set Notifications to Allow, then come back to this page.",
+        "offHelp": "Not enabled on this device. Your browser will ask for permission when you press Enable.",
+        "enable": "Enable on this device",
+        "enabling": "Enabling...",
+        "onHelp": "This device gets a browser notification for the events you switched on below, when you are not looking at the CRM.",
+        "howItWorks": "You are not notified while the CRM is open and in front of you (the bell and pop-ups cover that). The notification shows who and what kind of event, never the message text.",
+        "test": "Send a test notification",
+        "testing": "Sending...",
+        "disable": "Turn off on this device",
+        "disabling": "Turning off...",
+        "testResult": {
+          "sent": "Sent. It should appear on your devices in a moment, even if the CRM is closed.",
+          "none_reachable": "Your browser or its push service could not be reached just now. Try again in a moment; a device that is gone is removed automatically.",
+          "no_device": "There is no device to send to. Enable notifications on this device first.",
+          "wait": "A test was just sent. Wait a few seconds before sending another."
+        },
+        "problem": {
+          "enable_failed": "Could not enable notifications on this device. Try again.",
+          "disable_failed": "Could not turn off notifications on this device. Try again.",
+          "remove_failed": "Could not remove that device. Try again.",
+          "test_failed": "Could not send the test. Try again."
+        },
+        "devicesFailed": "Could not load your devices.",
+        "devices": {
+          "title": "Your devices",
+          "thisDevice": "This device",
+          "added": "Added {date}",
+          "lastUsed": "last notified {date}",
+          "neverUsed": "not notified yet",
+          "remove": "Remove",
+          "removeFor": "Remove {device}"
+        }
+      }
     },
     "nav": {
       "preferences": "Notifications"

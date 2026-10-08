@@ -40,7 +40,22 @@ export const REALTIME_SYSTEM_EVENTS = {
 } as const;
 
 /** The client's requests (socket.io events it emits, each with an acknowledgement). */
-export const REALTIME_CLIENT_EVENTS = { join: 'room:join', leave: 'room:leave' } as const;
+export const REALTIME_CLIENT_EVENTS = {
+  join: 'room:join',
+  leave: 'room:leave',
+  /**
+   * "Is this tab in front?" (`{ visible: boolean }`), sent on every change and about every 15 s while visible. The server remembers it for
+   * 35 s and skips the closed-tab browser push for a person who has a visible tab (the bell and toast cover them). No acknowledgement.
+   */
+  visibility: 'presence:visible',
+} as const;
+
+export const realtimeVisibilitySchema = z.object({ visible: z.boolean() });
+export type RealtimeVisibility = z.infer<typeof realtimeVisibilitySchema>;
+
+/** How often a visible tab repeats its report, and how long the server believes the last one. */
+export const REALTIME_VISIBILITY_REPORT_MS = 15_000;
+export const REALTIME_VISIBILITY_TTL_MS = 35_000;
 
 export const REALTIME_EVENT = {
   conversationUpsert: 'inbox.conversation.upsert',
