@@ -100,8 +100,6 @@ export function footValues(
       return need({ total: live?.supportTotal, open: live?.supportOpen }, (v) => v);
     case 'activity-log':
       return need({ count: live?.activity24h }, (v) => v);
-    case 'guidebook':
-      return need({ count: live?.guidebookArticles }, (v) => v);
     case 'channels':
       return need({ active: live?.devicesActive, total: live?.devicesTotal }, (v) => v);
     case 'team-members':

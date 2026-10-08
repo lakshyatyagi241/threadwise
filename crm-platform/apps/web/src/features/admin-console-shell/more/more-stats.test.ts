@@ -29,7 +29,6 @@ const base = (over: Partial<OverviewStatsResponse> = {}): OverviewStatsResponse 
     messageHistory: 12_500,
     outbound7d: 1234,
     activity24h: 8,
-    guidebookArticles: 6,
     seats: 1,
     messagesThisMonth: 10,
     widgetsBuilt: 2,
