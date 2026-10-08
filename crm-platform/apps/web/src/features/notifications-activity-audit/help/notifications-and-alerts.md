@@ -5,7 +5,7 @@ summary: The bell in the header, the pop-up that appears wherever you are, the s
 area: getting-started
 order: 90
 documents: []
-keywords: [notifications, bell, alerts, toast, sound, ping, desktop, tab title, unread, mention, assigned, new chat, new message]
+keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser notifications, push, closed tab, tab title, unread, mention, assigned, new chat, new message]
 ---
 
 ## What it is for
@@ -43,9 +43,13 @@ When this tab is in the background, a desktop alert can tell you a chat arrived.
 
 If the footer says alerts are blocked, allow notifications for this site in your browser settings.
 
+## Browser notifications when the CRM is closed
+
+Desktop alerts only work while the CRM is open in some tab. For new chats, assignments and mentions to reach you when it is closed, turn on **Browser notifications** in **Account**, **Notifications** (when your CRM offers it). You are not sent one while the CRM is open and in front of you, and on a device where it is on, a background tab does not also show a desktop alert for the same event. The notification shows the contact name and the kind of event, never the message. Details and what each state means: [Notification preferences](help:notification-preferences).
+
 ## Choose what reaches you
 
-You decide, event by event, whether it reaches the bell, pops up and plays a sound. Open **Notification settings** at the bottom of the bell panel. See [Notification preferences](help:notification-preferences).
+You decide, event by event, whether it reaches the bell, pops up, plays a sound and sends a browser notification. Open **Notification settings** at the bottom of the bell panel. See [Notification preferences](help:notification-preferences).
 
 ## The browser tab
 

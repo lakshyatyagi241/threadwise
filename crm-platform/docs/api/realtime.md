@@ -113,7 +113,8 @@ Every push is one envelope, and the socket.io event name is `type`:
 | `rt.resync`                 | any                    | `{ reason }`: the server asks the client to refetch that room                | permission changes                |
 
 System events outside a room's stream: `rt.ready` (once per connection: `{ v, rooms: [{ room, seq }], serverTime }`, the baseline for `org` and `user`).
-Client requests: `room:join` and `room:leave`, both acknowledged.
+Client requests: `room:join` and `room:leave`, both acknowledged, and `presence:visible` (`{ visible: boolean }`, no acknowledgement): a tab says whether it is in front, on every change and about every 15 s while visible, so the
+closed-tab browser push (BL-097) can skip a person who can see the app. The server keeps it 35 s in Redis (`rt:vis:<org>:<user>`, `VisibilityPresence`); see [notifications.md](notifications.md).
 
 List-level events are **signals** (an id, a version, what changed, no body): the client refetches the row through REST. `inbox.message.new` carries the
 message because the thread is open and was already authorised.

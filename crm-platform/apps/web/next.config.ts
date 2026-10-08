@@ -64,6 +64,14 @@ const nextConfig: NextConfig = {
           { key: 'Cache-Control', value: 'no-store' },
         ],
       },
+      // The service worker for browser notifications (BL-097): always revalidated, so a fixed worker reaches everyone at once.
+      {
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, max-age=0, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' },
+        ],
+      },
       ...NO_STORE_PAGES.map((source) => ({ source, headers: noStore })),
       // The buyer's page (/q/<token>) holds a customer's name and prices and its address is the credential: never cached,
       // never indexed, never leaked through a Referer header (WD-PROP-018, D-16).

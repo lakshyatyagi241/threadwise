@@ -1,11 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Alert, Badge, Button, Card, Spinner, Switch, cn } from '@crm/ui';
 import { usePreferenceActions, usePreferences } from '../api/prefs-hooks';
 import { typeMeta } from '../lib/catalogue';
 import { useAlertSettings, type AlertSettings } from '../live/use-alert-settings';
+import { usePushDeployment } from '../push/use-browser-push';
 import {
   PREF_CHANNELS,
   customCount,
@@ -15,20 +16,26 @@ import {
   type PrefsState,
   type RowView,
 } from '../prefs/model';
+import { BrowserNotificationsCard } from './browser-notifications-card';
 import { AlertSwitches } from './notification-bell';
 import { TypeIcon } from './type-icon';
 
 /**
  * Account, Notifications: the signed-in person's own choices for each kind of notification: whether it reaches the bell, whether it
- * pops up while they work, whether it plays a sound. The data comes from the server's effective preferences (their choice, else
+ * pops up while they work, whether it plays a sound, whether it reaches their devices as a browser notification (when the deployment has
+ * push). The "Browser notifications" card above the table is where a device is enabled. The data comes from the server's effective preferences (their choice, else
  * the workspace's toggle, else the default); a change shows at once and is undone with a message if saving fails.
  */
 export function PreferencesScreen() {
   const query = usePreferences();
   const actions = usePreferenceActions();
   const alerts = useAlertSettings();
+  // The Push column exists only where the deployment has browser notifications (the card is the same: invisible without keys).
+  const push = usePushDeployment();
   return (
     <PreferencesView
+      pushEnabled={push.configured}
+      browserCard={<BrowserNotificationsCard />}
       state={query.data}
       loading={query.isPending}
       failed={query.isError && !query.data}
@@ -55,7 +62,12 @@ export function PreferencesView({
   onReset,
   onResetAll,
   alerts,
+  pushEnabled = false,
+  browserCard = null,
 }: {
+  pushEnabled?: boolean;
+  /** The "Browser notifications" card, a slot so this view stays free of data hooks and can be rendered in a test. */
+  browserCard?: ReactNode;
   state: PrefsState | undefined;
   loading: boolean;
   failed: boolean;
@@ -76,6 +88,8 @@ export function PreferencesView({
         </h1>
         <p className="text-sm text-muted-foreground">{t('description')}</p>
       </header>
+
+      {browserCard}
 
       {/* Announced when a save fails and the change is undone (role="alert" from the Alert). */}
       {saveFailed && (
@@ -103,7 +117,13 @@ export function PreferencesView({
           </Button>
         </div>
       ) : (
-        <Groups state={state} onChange={onChange} onReset={onReset} onResetAll={onResetAll} />
+        <Groups
+          state={state}
+          pushEnabled={pushEnabled}
+          onChange={onChange}
+          onReset={onReset}
+          onResetAll={onResetAll}
+        />
       )}
 
       <Card className="space-y-2 p-4">
@@ -117,11 +137,13 @@ export function PreferencesView({
 
 function Groups({
   state,
+  pushEnabled,
   onChange,
   onReset,
   onResetAll,
 }: {
   state: PrefsState;
+  pushEnabled: boolean;
   onChange: (type: string, channel: PrefChannel, value: boolean) => void;
   onReset: (type: string) => void;
   onResetAll: () => void;
@@ -145,6 +167,7 @@ function Groups({
           group={group.group}
           rows={group.rows}
           entries={state.entries}
+          pushEnabled={pushEnabled}
           onChange={onChange}
           onReset={onReset}
         />
@@ -155,14 +178,21 @@ function Groups({
 
 const GRID =
   'sm:grid sm:grid-cols-[minmax(0,1fr)_5.5rem_5.5rem_5.5rem_8rem] sm:items-center sm:gap-3';
+const GRID_WITH_PUSH =
+  'sm:grid sm:grid-cols-[minmax(0,1fr)_5rem_5rem_5rem_5rem_8rem] sm:items-center sm:gap-3';
+/** The channels drawn as columns: Push only where the deployment has browser notifications. */
+const channelsShown = (pushEnabled: boolean): readonly PrefChannel[] =>
+  pushEnabled ? PREF_CHANNELS : PREF_CHANNELS.filter((c) => c !== 'push');
 
 function GroupCard({
   group,
   rows,
   entries,
+  pushEnabled,
   onChange,
   onReset,
 }: {
+  pushEnabled: boolean;
   group: string;
   rows: RowView[];
   entries: readonly PrefEntry[];
@@ -173,11 +203,11 @@ function GroupCard({
   const headingId = useId();
   return (
     <Card className="p-0" role="group" aria-labelledby={headingId}>
-      <div className={cn('border-b border-border px-4 py-3', GRID)}>
+      <div className={cn('border-b border-border px-4 py-3', pushEnabled ? GRID_WITH_PUSH : GRID)}>
         <h2 id={headingId} className="text-sm font-semibold">
           {t(`groups.${group}`)}
         </h2>
-        {PREF_CHANNELS.map((channel) => (
+        {channelsShown(pushEnabled).map((channel) => (
           <span
             key={channel}
             aria-hidden="true"
@@ -194,6 +224,7 @@ function GroupCard({
             <PrefRow
               row={row}
               entry={entries.find((e) => e.type === row.type)!}
+              pushEnabled={pushEnabled}
               onChange={onChange}
               onReset={onReset}
             />
@@ -212,9 +243,11 @@ function readable(type: string): string {
 function PrefRow({
   row,
   entry,
+  pushEnabled,
   onChange,
   onReset,
 }: {
+  pushEnabled: boolean;
   row: RowView;
   entry: PrefEntry;
   onChange: (type: string, channel: PrefChannel, value: boolean) => void;
@@ -227,15 +260,26 @@ function PrefRow({
   const meta = typeMeta(row.type);
   const noteId = useId();
   const onOff = (v: boolean) => t(v ? 'on' : 'off');
-  const defaults = t('defaultSummary', {
-    bell: `${t('channelNames.bell')} ${onOff(entry.defaults.bell)}`,
-    toast: `${t('channelNames.toast')} ${onOff(entry.defaults.toast && meta.toast)}`,
-    sound: `${t('channelNames.sound')} ${onOff(entry.defaults.sound && meta.sound)}`,
-  });
-  const anyBellOffNote = !row.blocked && row.cells.toast.reason === 'bell_off';
+  const defaults = pushEnabled
+    ? t('defaultSummaryPush', {
+        bell: `${t('channelNames.bell')} ${onOff(entry.defaults.bell)}`,
+        toast: `${t('channelNames.toast')} ${onOff(entry.defaults.toast && meta.toast)}`,
+        sound: `${t('channelNames.sound')} ${onOff(entry.defaults.sound && meta.sound)}`,
+        push: `${t('channelNames.push')} ${onOff(entry.defaults.push)}`,
+      })
+    : t('defaultSummary', {
+        bell: `${t('channelNames.bell')} ${onOff(entry.defaults.bell)}`,
+        toast: `${t('channelNames.toast')} ${onOff(entry.defaults.toast && meta.toast)}`,
+        sound: `${t('channelNames.sound')} ${onOff(entry.defaults.sound && meta.sound)}`,
+      });
+  const bellOffNote = row.cells.toast.reason === 'bell_off';
 
   return (
-    <div className={cn('space-y-2 px-4 py-3', GRID)} data-type={row.type} data-custom={row.custom}>
+    <div
+      className={cn('space-y-2 px-4 py-3', pushEnabled ? GRID_WITH_PUSH : GRID)}
+      data-type={row.type}
+      data-custom={row.custom}
+    >
       <div className="flex min-w-0 items-start gap-3">
         <TypeIcon icon={meta.icon} tone={meta.tone} />
         <div className="min-w-0">
@@ -246,11 +290,14 @@ function PrefRow({
           </p>
           {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
           <p id={noteId} className="text-xs text-muted-foreground">
-            {row.blocked ? t('workspaceOffHelp') : anyBellOffNote ? t('bellOffHelp') : defaults}
+            {row.blocked ? t('workspaceOffHelp') : bellOffNote ? t('bellOffHelp') : defaults}
           </p>
+          {row.blocked && bellOffNote ? (
+            <p className="text-xs text-muted-foreground">{t('bellOffHelp')}</p>
+          ) : null}
         </div>
       </div>
-      {PREF_CHANNELS.map((channel) => {
+      {channelsShown(pushEnabled).map((channel) => {
         const cell = row.cells[channel];
         const channelName = t(`channelNames.${channel}`);
         return (

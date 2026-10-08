@@ -23,8 +23,9 @@ const item = (type: string, over: Partial<NotificationPreferenceItem> = {}) =>
     bell: true,
     toast: true,
     sound: true,
-    defaults: { bell: true, toast: true, sound: true },
-    overrides: { bell: null, toast: null, sound: null },
+    push: true,
+    defaults: { bell: true, toast: true, sound: true, push: true },
+    overrides: { bell: null, toast: null, sound: null, push: null },
     workspaceInapp: true,
     ...over,
   }) as NotificationPreferenceItem;
@@ -46,7 +47,7 @@ function setup(send: (r: UpdateNotificationPreferencesRequest) => Promise<unknow
     },
   });
   const cache = () => qc.getQueryData<PrefsState>(NOTIFICATION_KEYS.preferences)!;
-  const toggle = (type: string, channel: 'bell' | 'toast' | 'sound', value: boolean) =>
+  const toggle = (type: string, channel: 'bell' | 'toast' | 'sound' | 'push', value: boolean) =>
     saver.run((state) => {
       const next = applyChange(state, type, channel, value);
       return { next, request: changeRequest(next, type, channel) };
@@ -178,8 +179,8 @@ describe('PreferenceSaver', () => {
     await h.saver.idle();
     expect(send).toHaveBeenCalledWith({
       items: [
-        { type: 'new_message', bell: null, toast: null, sound: null },
-        { type: 'mention', bell: null, toast: null, sound: null },
+        { type: 'new_message', bell: null, toast: null, sound: null, push: null },
+        { type: 'mention', bell: null, toast: null, sound: null, push: null },
       ],
     });
   });
