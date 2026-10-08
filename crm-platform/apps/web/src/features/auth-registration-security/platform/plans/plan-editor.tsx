@@ -30,6 +30,7 @@ import { operatorFetch } from '../operator-fetch';
 import { AddonsTab, type AddonOptionsState } from './addons-tab';
 import { FeaturesTab } from './features-tab';
 import { LimitsTab } from './limits-tab';
+import { PlanModuleFields } from '@/features/addons-extension-registry/components/plan-module-fields';
 import { PlanDetailsTab } from './plan-details-tab';
 import { FORM_ID, NS, fieldId, type EditorState } from './plan-editor-shared';
 import { PlanEditorTabs } from './plan-editor-tabs';
@@ -212,8 +213,18 @@ export function PlanEditor({
             errorTabs={errorTabs}
             panels={{
               details: <PlanDetailsTab state={state} toggle={toggle} />,
-              features: <FeaturesTab state={state} />,
-              limits: <LimitsTab state={state} />,
+              features: (
+                <>
+                  <FeaturesTab state={state} />
+                  <PlanModuleFields kind="features" state={state} />
+                </>
+              ),
+              limits: (
+                <>
+                  <LimitsTab state={state} />
+                  <PlanModuleFields kind="limits" state={state} />
+                </>
+              ),
               addons: (
                 <AddonsTab state={state} addons={addons} onTouched={() => setAddonsTouched(true)} />
               ),
