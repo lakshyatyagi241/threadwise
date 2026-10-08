@@ -140,14 +140,14 @@ describe('PinnacleOnboardingService', () => {
       (e) => e,
     );
     expect((refused as AppError).code).toBe('WAP_PARTNER_REFUSED');
-    expect((refused as AppError).status).toBe(422);
+    expect((refused as AppError).getStatus()).toBe(422);
     expect((refused as AppError).message).toContain('WABA already onboarded');
     expect(a.pinnacle.sendEmbeddedDetails).not.toHaveBeenCalled();
 
     const b = setup();
     b.pinnacle.sendEmbeddedDetails.mockRejectedValueOnce(new PinnacleError('maintenance', true));
     const down = await RequestContextStore.run(ctx, () => b.svc.onboard(b.input)).catch((e) => e);
-    expect((down as AppError).status).toBe(502);
+    expect((down as AppError).getStatus()).toBe(502);
   });
 
   it('schedules the credit-line share delayed, once per number', async () => {

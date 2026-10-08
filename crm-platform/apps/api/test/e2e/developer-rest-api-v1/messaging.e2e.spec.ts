@@ -48,7 +48,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 interface Workspace {
   tenant: Tenant;
-  call: ReturnType<typeof tenantWithKey> extends Promise<infer R> ? R['call'] : never;
+  call: Awaited<ReturnType<typeof tenantWithKey>>['call'];
   secret: string;
   keyId: string;
   channel: SimChannel;

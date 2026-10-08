@@ -36,7 +36,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
 
 class FixedEntitlements extends PlanEntitlementService {
   constructor(private readonly fixed: Entitlements) {
-    super(null as never, null as never);
+    super(null as never, null as never, null as never);
   }
   override forOrg(): Promise<Entitlements | null> {
     return Promise.resolve(this.fixed);
