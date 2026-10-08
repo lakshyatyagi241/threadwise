@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
+import type { MessageResponse } from '@crm/contracts';
 import { detail, id, message, note, outbound, summary } from '../lib/fixtures';
 import { DEFAULT_FILTERS, EMPTY_COUNTS, EMPTY_LIST, listReducer } from '../lib/list';
 import { Composer } from './composer';
@@ -439,5 +440,84 @@ describe('ConversationList states', () => {
 describe('detail fixture', () => {
   it('is a valid detail for the window banner tests', () => {
     expect(detail().window.open).toBe(true);
+  });
+});
+
+describe('MessageBubble: a template message', () => {
+  const template = (preview?: NonNullable<MessageResponse['template']>['preview']) =>
+    outbound(7, {
+      kind: 'template',
+      body: 'Hi Ana, order A12 shipped.',
+      template: {
+        templateId: id(9),
+        name: 'order_shipped',
+        language: 'en_US',
+        variables: { '1': 'Ana', '2': 'A12' },
+        ...(preview ? { preview } : {}),
+      },
+    });
+  const draw = (m: MessageResponse) =>
+    html(
+      <ul>
+        <MessageBubble message={m} quoted={null} onRetry={asyncNoop} />
+      </ul>,
+    );
+
+  it('draws the header, the filled body, the footer and each button kind as a row', () => {
+    const out = draw(
+      template({
+        header: { format: 'text', text: 'Order update' },
+        footer: 'Reply STOP to opt out',
+        buttons: [
+          { type: 'quick_reply', text: 'Thanks' },
+          { type: 'url', text: 'Track order' },
+          { type: 'phone', text: 'Call us' },
+          { type: 'copy_code', text: '' },
+        ],
+      }),
+    );
+    expect(out).toContain('Template message: order_shipped');
+    expect(out).toMatch(/font-semibold[^>]*>Order update</);
+    expect(out).toContain('Hi Ana, order A12 shipped.');
+    expect(out).toContain('Reply STOP to opt out');
+    expect(out).toContain('data-button-type="quick_reply"');
+    expect(out).toContain('data-button-type="url"');
+    expect(out).toContain('data-button-type="phone"');
+    expect(out).toContain('data-button-type="copy_code"');
+    expect(out).toContain('Track order');
+    expect(out).toContain('Copy code');
+    // A screen reader hears "Button: <text>" for each row, and the rows are not controls.
+    expect(out.match(/Button: <\/span>/g)).toHaveLength(4);
+    expect(out).not.toContain('<button');
+    // Logical properties only, so the bubble mirrors in a right-to-left page.
+    expect(out).not.toMatch(/\b(ml|mr|pl|pr|left|right)-\d/);
+    // Order: header, body, footer, buttons.
+    const at = (s: string) => out.indexOf(s);
+    expect(at('Order update')).toBeLessThan(at('Hi Ana'));
+    expect(at('Hi Ana')).toBeLessThan(at('Reply STOP'));
+    expect(at('Reply STOP')).toBeLessThan(at('Thanks'));
+  });
+
+  it('marks a media header by its kind, with no file', () => {
+    const out = draw(
+      template({ header: { format: 'video', text: null }, footer: null, buttons: [] }),
+    );
+    expect(out).toContain('data-format="video"');
+    expect(out).toContain('>Video<');
+    expect(out).not.toContain('<img');
+    expect(out).not.toContain('inbox-template-buttons');
+  });
+
+  it('falls back to the name and the stored body when the template is gone', () => {
+    const out = draw(template());
+    expect(out).toContain('Template message: order_shipped');
+    expect(out).toContain('Hi Ana, order A12 shipped.');
+    expect(out).not.toContain('inbox-template-buttons');
+    expect(out).not.toContain('inbox-template-footer');
+  });
+
+  it('shows the values when no body text was stored', () => {
+    const m = template();
+    expect(draw({ ...m, body: null })).toContain('Ana · A12');
   });
 });

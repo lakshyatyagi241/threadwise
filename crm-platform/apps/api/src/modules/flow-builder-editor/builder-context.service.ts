@@ -103,7 +103,7 @@ export class BuilderContextService {
   async context(): Promise<FlbBuilderContext> {
     const ctx = RequestContextStore.require();
     const [fbOn, ttOn, emailOn] = await Promise.all([
-      this.flag('facebook_enabled'),
+      this.flag('facebook_enabled', true),
       this.flag('tiktok_enabled'),
       this.flag('email_enabled'),
     ]);
@@ -430,9 +430,11 @@ export class BuilderContextService {
 
   // --- internals -------------------------------------------------------------------------------------------------------
 
-  private async flag(key: string): Promise<boolean> {
+  /** A platform switch. `fallback` is what an unset switch means: nothing here writes `facebook_enabled`, so unset must not hide a built channel. */
+  private async flag(key: string, fallback = false): Promise<boolean> {
     try {
       const v = await this.settings.get<unknown>(key);
+      if (v === undefined || v === null) return fallback;
       return v === true || v === 1 || v === '1' || v === 'true';
     } catch (err) {
       this.logger.warn(`platform setting ${key} unreadable: ${(err as Error).message}`);

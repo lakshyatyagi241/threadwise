@@ -13,10 +13,10 @@ and each domain has exclusive directories in every layer, so the three of you do
 
 | Person | Cluster | Domains | Features written | Domain est. days | Foundation days | Total |
 |---|---|---|---|---|---|---|
-| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 24 | 705 | 2735 | 48 | 2783 |
+| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 25 | 705 | 2805 | 48 | 2853 |
 | Vedant (`vedant`) | WhatsApp core, inbox and automation | 17 | 591 | 2802 | 55 | 2858 |
 | Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 319 | 2740 | 22 | 2762 |
-| Shubham (`shubham`) | - | 1 | 0 | 70 | 0 | 70 |
+| Shubham (`shubham`) | - | 0 | 0 | 0 | 0 | 0 |
 
 The people are interchangeable: to swap two clusters, change `owner` in `assignment-input.json` `clusters` and regenerate.
 
@@ -73,6 +73,7 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | marketplace | mkt | /marketplace | 3 | 25 | pending |  |
 | mobile-app-api | mob | /mobile | 3 | 140 | pending |  |
 | platform-support-desk | supp | /support | 3 | 122 | written | 46 |
+| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
 
 ## Vedant (`vedant`)
 
@@ -125,9 +126,8 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 
 ## Shubham (`shubham`)
 
-| Domain | Code | Route | Wave | Est. days | Inventory | Features |
-|---|---|---|---|---|---|---|
-| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
+No domains: chrome-extension-sheets-addon moved to Lakshya.
+
 
 ## Handoffs between people
 

@@ -34,7 +34,7 @@ const APP_PATHS = [
   '/inbox',
   '/account',
   '/account/profile',
-  '/account/branding',
+  '/settings/message-footer',
   '/account/security',
   '/account/delete',
 ];

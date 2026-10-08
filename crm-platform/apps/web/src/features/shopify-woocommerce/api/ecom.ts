@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   automationsViewSchema,
   broadcastResultSchema,
+  ecomInvoicePolicySchema,
+  invoicePageResponseSchema,
   shopifyConnectStartSchema,
   shopifyOverviewSchema,
   storeDashboardSchema,
@@ -12,6 +14,7 @@ import {
   woocommerceStoreSchema,
   woocommerceTestResultSchema,
   type ConnectWoocommerceInput,
+  type UpdateEcomInvoicePolicyInput,
   type SaveAutomationsInput,
   type SendOfferInput,
   type SendWinbackInput,
@@ -19,12 +22,15 @@ import {
   type WoocommerceStore,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 import type { Kind } from '../lib/model';
 
 export const KEYS = {
   all: ['ecom'] as const,
   overview: (kind: Kind) => ['ecom', kind, 'overview'] as const,
   dashboard: (kind: Kind, id: string) => ['ecom', kind, id, 'dashboard'] as const,
+  invoices: (kind: Kind) => ['ecom', kind, 'invoices'] as const,
+  invoicePolicy: (kind: Kind, id: string) => ['ecom', kind, id, 'invoice-policy'] as const,
   automations: (kind: Kind, id: string) => ['ecom', kind, id, 'automations'] as const,
 };
 
@@ -99,4 +105,57 @@ export const sendWinback = (kind: Kind, id: string, body: SendWinbackInput) =>
     method: 'POST',
     body,
     schema: broadcastResultSchema,
+  });
+
+/** The WordPress companion plugin of a WooCommerce store as a zip (TW-ECOM-032). Never cached: it carries the store's secret. */
+export async function downloadWooPlugin(
+  id: string,
+  signal?: AbortSignal,
+): Promise<{ blob: Blob; filename: string }> {
+  const res = await fetch(`/api/v2/woocommerce/${id}/plugin`, {
+    headers: { Accept: 'application/zip, application/json', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+    cache: 'no-store',
+    signal,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    let json: unknown;
+    try {
+      json = text ? JSON.parse(text) : undefined;
+    } catch {
+      json = undefined;
+    }
+    throw toApiError(res.status, json, res.headers.get('x-request-id'));
+  }
+  const disposition = res.headers.get('content-disposition') ?? '';
+  const filename = /filename="?([^";]+)"?/.exec(disposition)?.[1] ?? 'woocommerce-plugin.zip';
+  return { blob: await res.blob(), filename };
+}
+
+/** The store's invoices (TW-ECOM-035): the invoicing list filtered to this store type's source, newest first. */
+export const useStoreInvoices = (kind: Kind, enabled: boolean) =>
+  useQuery({
+    queryKey: KEYS.invoices(kind),
+    enabled,
+    queryFn: ({ signal }) =>
+      apiFetch('/invoices', {
+        query: { source: kind, limit: 25, order: 'desc' },
+        schema: invoicePageResponseSchema,
+        signal,
+      }),
+  });
+
+export const useInvoicePolicy = (kind: Kind, id: string) =>
+  useQuery({
+    queryKey: KEYS.invoicePolicy(kind, id),
+    queryFn: ({ signal }) =>
+      apiFetch(`/${kind}/stores/${id}/invoice-policy`, { schema: ecomInvoicePolicySchema, signal }),
+  });
+
+export const saveInvoicePolicy = (kind: Kind, id: string, body: UpdateEcomInvoicePolicyInput) =>
+  apiFetch(`/${kind}/stores/${id}/invoice-policy`, {
+    method: 'PUT',
+    body,
+    schema: ecomInvoicePolicySchema,
   });

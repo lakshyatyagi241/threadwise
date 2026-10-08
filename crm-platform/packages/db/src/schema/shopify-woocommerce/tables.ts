@@ -20,6 +20,8 @@ import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
 import { waTemplates } from '../message-templates/tables';
+import { waOrders } from '../checkout-orders-merchant-payments/tables';
+import { invoices } from '../invoicing/tables';
 
 export const shopifyIntegrations = pgTable(
   'shopify_integrations',
@@ -531,3 +533,47 @@ export const woocommerceCodConfirmations = pgTable(
 
 export type WoocommerceCodConfirmationsRow = typeof woocommerceCodConfirmations.$inferSelect;
 export type NewWoocommerceCodConfirmationsRow = typeof woocommerceCodConfirmations.$inferInsert;
+
+/** One claimed delivery of a paid store order handed to invoicing (TW-ECOM-035): a redelivery finds the claim and does nothing. */
+export const ecomInvoiceHandoffs = pgTable(
+  'ecom_invoice_handoffs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    source: text('source').notNull(),
+    deliveryId: text('delivery_id').notNull(),
+    topic: text('topic'),
+    waOrderId: idColumn('wa_order_id').notNull(),
+    invoiceId: idColumn('invoice_id'),
+    outcome: text('outcome').notNull().default('pending'),
+    reason: text('reason'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('ecom_invoice_handoffs_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_ecom_invoice_handoffs_delivery').on(t.orgId, t.source, t.deliveryId),
+    foreignKey({
+      name: 'ecom_invoice_handoffs_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'ecom_invoice_handoffs_org_id_wa_order_id_fkey',
+      columns: [t.orgId, t.waOrderId],
+      foreignColumns: [waOrders.orgId, waOrders.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'ecom_invoice_handoffs_org_id_invoice_id_fkey',
+      columns: [t.orgId, t.invoiceId],
+      foreignColumns: [invoices.orgId, invoices.id],
+    }),
+    index('idx_ecom_invoice_handoffs_order').on(t.orgId, t.waOrderId),
+  ],
+);
+
+export type EcomInvoiceHandoffsRow = typeof ecomInvoiceHandoffs.$inferSelect;
+export type NewEcomInvoiceHandoffsRow = typeof ecomInvoiceHandoffs.$inferInsert;

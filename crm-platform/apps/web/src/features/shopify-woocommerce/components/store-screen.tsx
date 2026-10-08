@@ -13,6 +13,7 @@ import { StoreShell } from './store-shell';
 import { AnalyticsTab } from './tabs/analytics-tab';
 import { AutomationsTab } from './tabs/automations-tab';
 import { CustomersTab } from './tabs/customers-tab';
+import { InvoicesTab } from './tabs/invoices-tab';
 import { LogsTab } from './tabs/logs-tab';
 import { OffersTab } from './tabs/offers-tab';
 import { OrdersTab } from './tabs/orders-tab';
@@ -99,6 +100,7 @@ export function StoreScreen({ kind }: { kind: Kind }) {
           {tab === 'customers' && <CustomersTab kind={kind} data={d} />}
           {tab === 'events' && <AutomationsTab kind={kind} storeId={store.id} data={d} />}
           {tab === 'analytics' && <AnalyticsTab kind={kind} data={d} />}
+          {tab === 'invoices' && <InvoicesTab kind={kind} storeId={store.id} />}
           {tab === 'logs' && <LogsTab data={d} />}
           {tab === 'settings' && <SettingsTab kind={kind} store={store} />}
         </>

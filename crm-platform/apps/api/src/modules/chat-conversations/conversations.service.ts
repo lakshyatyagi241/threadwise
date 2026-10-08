@@ -169,6 +169,11 @@ export class ConversationsService implements ConversationsFacade {
         }
       }
 
+      const template = input.kind === 'system' ? undefined : input.template;
+      const templateId = template?.templateId
+        ? await this.messages.templateIdByUuid(tx, orgId, template.templateId)
+        : null;
+
       const after = await this.conversations.applyOutboundQueued(tx, orgId, conv.id, {
         messageId: alloc.id,
         arrivedAt: alloc.createdAt,
@@ -182,7 +187,8 @@ export class ConversationsService implements ConversationsFacade {
         conversationId: conv.id,
         seq: after.msgSeq,
         direction: input.direction ?? 'out',
-        kind: input.kind ?? 'text',
+        kind: template ? 'template' : (input.kind ?? 'text'),
+        templateId,
         senderKind:
           input.kind === 'system'
             ? 'system'
@@ -194,7 +200,17 @@ export class ConversationsService implements ConversationsFacade {
         // The provider already took it: the other domain sent it, this only records it in the thread.
         status: input.direction === 'in' ? 'received' : 'sent',
         providerMessageId: input.providerMessageId ?? null,
-        meta: { source: input.source, ...(input.meta ?? {}) },
+        meta: {
+          source: input.source,
+          ...(input.meta ?? {}),
+          ...(template
+            ? {
+                templateName: template.name,
+                templateLanguage: template.language ?? 'en',
+                templateVariables: template.variables ?? {},
+              }
+            : {}),
+        },
         providerTs: new Date(),
         ...(input.direction === 'in' ? {} : { sentAt: new Date() }),
       });

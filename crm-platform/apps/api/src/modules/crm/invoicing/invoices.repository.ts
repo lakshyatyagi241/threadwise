@@ -307,6 +307,7 @@ type FilterInput = Pick<
   InvoiceCountsQuery,
   | 'q'
   | 'docType'
+  | 'source'
   | 'contactId'
   | 'companyId'
   | 'dealId'
@@ -337,6 +338,13 @@ function filterConds(
     conds.push(
       sql`i.doc_type IN (${sql.join(
         f.docType.map((t) => sql`${t}`),
+        sql`, `,
+      )})`,
+    );
+  if (f.source?.length)
+    conds.push(
+      sql`i.source IN (${sql.join(
+        f.source.map((t) => sql`${t}`),
         sql`, `,
       )})`,
     );

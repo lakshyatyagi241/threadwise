@@ -49,12 +49,39 @@ export const messageLocationSchema = z.object({
 });
 export type MessageLocation = z.infer<typeof messageLocationSchema>;
 
+/** What the template's header is. A media header carries only its format: the file is not stored with the message. */
+export const messageTemplateHeaderSchema = z.object({
+  format: z.enum(['text', 'image', 'video', 'document', 'location']),
+  /** The header text of a `text` header; null for the other formats. */
+  text: z.string().nullable().optional(),
+});
+export type MessageTemplateHeader = z.infer<typeof messageTemplateHeaderSchema>;
+
+/** One button of the template as WhatsApp draws it. `other` is any kind the bubble has no icon for (a flow, an OTP...). */
+export const messageTemplateButtonSchema = z.object({
+  type: z.enum(['quick_reply', 'url', 'phone', 'copy_code', 'other']),
+  text: z.string(),
+});
+export type MessageTemplateButton = z.infer<typeof messageTemplateButtonSchema>;
+
+/**
+ * The parts of the template around the body, read from the stored template when the thread is listed, so the bubble can be drawn
+ * as WhatsApp shows it. Absent when the template is gone (deleted since) or the message was read from a realtime event.
+ */
+export const messageTemplatePreviewSchema = z.object({
+  header: messageTemplateHeaderSchema.nullable(),
+  footer: z.string().nullable(),
+  buttons: z.array(messageTemplateButtonSchema),
+});
+export type MessageTemplatePreview = z.infer<typeof messageTemplatePreviewSchema>;
+
 /** A template send. Kept as what was sent (name, language, resolved variables) so the bubble reads after the template is edited. */
 export const messageTemplateSchema = z.object({
   templateId: uuidSchema.nullable(),
   name: z.string(),
   language: z.string().nullable(),
   variables: z.record(z.string()),
+  preview: messageTemplatePreviewSchema.optional(),
 });
 export type MessageTemplate = z.infer<typeof messageTemplateSchema>;
 

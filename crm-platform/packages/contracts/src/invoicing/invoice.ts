@@ -421,6 +421,8 @@ const filterShape = {
   /** Number, buyer name or reference. */
   q: z.string().trim().min(1).max(100).optional(),
   docType: queryList(invoiceDocTypeSchema).optional(),
+  /** Where the invoice came from, comma separated: `source=shopify` is a Shopify store's invoices. */
+  source: queryList(invoiceSourceSchema).optional(),
   contactId: uuidSchema.optional(),
   companyId: uuidSchema.optional(),
   dealId: uuidSchema.optional(),

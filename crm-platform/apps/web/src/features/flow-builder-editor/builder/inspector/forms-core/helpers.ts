@@ -142,7 +142,7 @@ export function senderLabel(channel: SenderChannel, kind: unknown): string {
     // Reference has no dedicated copy for these two and falls back to the WhatsApp wording.
     chat: 'number',
     tiktok: 'number',
-    telegram: 'number',
+    telegram: 'Telegram bot',
   };
   return `${listen ? 'Listen on' : 'Send from'} ${noun[channel]}`;
 }
@@ -161,22 +161,28 @@ export function senderHint(channel: SenderChannel, unofficial = false): LinkedCo
         href: '/facebook',
         after: '.',
       };
+    case 'telegram':
+      return {
+        before: 'Required — which connected Telegram bot this flow runs on. Connect one on ',
+        href: '/telegram',
+        after: '.',
+      };
     case 'line':
       return {
         before: 'Required — which connected LINE channel this flow runs on. Connect one on ',
-        href: '/line',
+        href: '/settings/channels',
         after: '.',
       };
     case 'wechat':
       return {
         before: 'Required — which connected WeChat account this flow runs on. Connect one on ',
-        href: '/wechat',
+        href: '/settings/channels',
         after: '.',
       };
     case 'viber':
       return {
         before: 'Required — which connected Viber account this flow runs on. Connect one on ',
-        href: '/viber',
+        href: '/settings/channels',
         after: '.',
       };
     case 'email':
@@ -209,6 +215,7 @@ export function senderPickNoun(channel: SenderChannel): string {
   if (channel === 'instagram') return 'an Instagram account';
   if (channel === 'facebook') return 'a Facebook Page';
   if (channel === 'email') return 'a mailbox';
+  if (channel === 'telegram') return 'a Telegram bot';
   return 'a number';
 }
 
@@ -226,6 +233,13 @@ export function senderNoneCopy(channel: SenderChannel, unofficial = false): Link
         before:
           'No Facebook Page is connected to this workspace yet. You can still build and save this flow — connect one on ',
         href: '/facebook',
+        after: ' and pick it here before publishing.',
+      };
+    case 'telegram':
+      return {
+        before:
+          'No Telegram bot is connected to this workspace yet. You can still build and save this flow — connect one on ',
+        href: '/telegram',
         after: ' and pick it here before publishing.',
       };
     case 'email':

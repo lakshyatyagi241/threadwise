@@ -7,14 +7,14 @@ import type { NavItem, ResolvedNavItem } from '@/features/_registry/types';
  *
  * A pane lives in one of two places:
  *
- *  - this domain's own (`OWN_TABS`): profile, branding, password and security,
+ *  - this domain's own (`OWN_TABS`): profile, password and security,
  *    delete, plus the plan pane that the plan domain fills in;
  *  - another domain's, declared in THAT domain's `nav.ts` and nowhere here: an
  *    entry whose `href` is `/account/<name>` becomes a menu item of the hub
  *    (`tabsFromNav`). The entry's `order` places it: below 100 it joins the
  *    "Account" group (Reference puts Plan, Orders, Wallet, Add-ons, Affiliate,
  *    Support and Translation there), 100 or more joins "Security". Own panes sit
- *    at 0 (profile), 10 (plan), 70 (branding), 100 (password and security) and
+ *    at 0 (profile), 10 (plan), 100 (password and security) and
  *    110 (delete), so a new pane picks a number between them.
  *
  * The page itself is a normal route (`app/(app)/(<domain>)/account/<name>/page.tsx`)
@@ -25,7 +25,7 @@ import type { NavItem, ResolvedNavItem } from '@/features/_registry/types';
 export type HubGroup = 'account' | 'security';
 export const HUB_GROUPS: readonly HubGroup[] = ['account', 'security'];
 
-export type HubIcon = 'user' | 'plan' | 'brand' | 'key' | 'trash' | 'generic';
+export type HubIcon = 'user' | 'plan' | 'key' | 'trash' | 'generic';
 
 export interface HubTab {
   /** Stable id; the `?tab=` value. */
@@ -72,17 +72,6 @@ export const OWN_TABS: readonly HubTab[] = [
     labelKey: `${HUB}.tabs.plan`,
     icon: 'plan',
     aliases: ['plans'],
-  },
-  {
-    id: 'branding',
-    href: '/account/branding',
-    group: 'account',
-    order: 70,
-    labelKey: `${HUB}.tabs.branding`,
-    titleKey: `${HUB}.pages.branding.title`,
-    descriptionKey: `${HUB}.pages.branding.description`,
-    icon: 'brand',
-    aliases: [],
   },
   {
     id: 'security',
@@ -174,12 +163,22 @@ export function resolveTabParam(
   return tabs.find((t) => t.id.toLowerCase() === name || t.aliases.includes(name)) ?? fallback;
 }
 
+/**
+ * `?tab=` names of panes that moved out of the account hub, with the page they live on now
+ * (Branding is the "Message footer" Settings page).
+ */
+export const MOVED_TABS: Readonly<Record<string, string>> = {
+  branding: '/settings/message-footer',
+};
+
 /** The URL `/account?...` redirects to: the pane's route plus every other query parameter. */
 export function tabRedirect(
   params: Record<string, string | readonly string[] | undefined>,
   tabs: readonly HubTab[],
 ): string {
-  const target = resolveTabParam(params.tab, tabs);
+  const raw = typeof params.tab === 'string' ? params.tab : params.tab?.[0];
+  const moved = typeof raw === 'string' ? MOVED_TABS[raw.trim().toLowerCase()] : undefined;
+  const target = moved ? { href: moved } : resolveTabParam(params.tab, tabs);
   const rest = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (key === 'tab' || value === undefined) continue;

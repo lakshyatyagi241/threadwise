@@ -140,7 +140,11 @@ export function barFor(v: Pick<PlanValidity, 'state' | 'renewalWindow'>): BarKin
 }
 
 export const PLANS_PATH = '/account/plans';
-export const USAGE_PATH = '/account/usage';
+/** The usage section at the top of the Plans pane (the old "Plan and usage" page; `/account/usage` redirects here). */
+export const USAGE_SECTION_ID = 'usage';
+/** The plan picker section further down the same pane; the usage card's Upgrade link scrolls to it. */
+export const PLANS_SECTION_ID = 'plans';
+export const USAGE_PATH = `${PLANS_PATH}#${USAGE_SECTION_ID}`;
 export type Period = 'monthly' | 'yearly';
 /** Checkout for a plan; the yearly choice rides along as `?period=yearly` (TW-PLAN-011 rule 4). */
 export const checkoutPath = (slug: string, period: Period = 'monthly') =>

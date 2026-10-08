@@ -35,7 +35,7 @@ export const TAB_GROUPS: ReadonlyArray<{
  * (Reference swapped panes client-side; each of these now has its own route, as the inventory's port notes ask).
  */
 export const TAB_LINKS: Partial<Record<SettingsTab, string>> = {
-  branding: '/account/branding',
+  branding: '/settings/message-footer',
   team: '/settings/team',
   aikeys: '/ai-keys',
   security: '/account/security',

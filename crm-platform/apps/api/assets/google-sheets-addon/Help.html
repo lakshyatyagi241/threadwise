@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base target="_top" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CRM help</title>
+    <style>
+      body {
+        font:
+          14px/1.5 Arial,
+          sans-serif;
+        color: #1f2933;
+        margin: 0;
+        padding: 16px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 18px 0 4px;
+      }
+      p,
+      li {
+        margin: 4px 0;
+      }
+      code {
+        background: #eef1f4;
+        padding: 1px 4px;
+        border-radius: 3px;
+      }
+      button {
+        font: inherit;
+        margin-top: 16px;
+        padding: 8px 14px;
+        border-radius: 4px;
+        border: 1px solid #1a73e8;
+        background: #fff;
+        color: #1a73e8;
+        cursor: pointer;
+      }
+      button:focus {
+        outline: 2px solid #1a73e8;
+        outline-offset: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CRM add-on help</h1>
+
+    <h2>Connect</h2>
+    <ol>
+      <li>In the CRM open Settings, then Google Sheets add-on, and create your key.</li>
+      <li>
+        Here choose <strong>CRM, Settings</strong>, paste the key and select
+        <strong>Save and check</strong>.
+      </li>
+      <li>
+        The check shows who you are, your workspace and what your role can do. Menu items your role
+        cannot use are hidden.
+      </li>
+    </ol>
+
+    <h2>Pull contacts</h2>
+    <p>
+      Writes your contacts into a sheet named <code>CRM contacts</code>, replacing what that sheet
+      held. Custom properties come as <code>attr:name</code> columns.
+    </p>
+
+    <h2>Push contacts</h2>
+    <p>
+      Reads the active sheet. Row 1 holds the column names: <code>email</code> or
+      <code>phone</code> is required; <code>name</code>, <code>first name</code>,
+      <code>last name</code>, <code>source</code>, <code>country code</code> and
+      <code>unsubscribed</code> are optional. Use <code>attr:city</code> for a custom property
+      called city.
+    </p>
+    <p>
+      A blank cell never clears a stored value. Each row's result is written to the
+      <code>CRM status</code> column: created, updated, unchanged or failed with the reason. Up to
+      500 rows go in each call.
+    </p>
+
+    <h2>Sync products to a shop</h2>
+    <p>
+      Reads the active sheet. Required columns: <code>name</code> and <code>price</code>. Optional:
+      <code>category</code>, <code>description</code>, <code>image url</code>, <code>sku</code>,
+      <code>stock</code> (blank means unlimited) and <code>active</code> (yes or no). Products are
+      matched by SKU, then by name.
+    </p>
+    <p>The shop is remembered in this spreadsheet, so the next sync updates the same shop.</p>
+
+    <h2>If something goes wrong</h2>
+    <ul>
+      <li>
+        <strong>Key not valid:</strong> it was replaced or revoked. Create a new one in the CRM.
+      </li>
+      <li>
+        <strong>Not installed:</strong> ask an admin to install the add-on in the CRM Marketplace.
+      </li>
+      <li><strong>Too many requests:</strong> wait the time shown and try again.</li>
+      <li><strong>Request too large:</strong> send fewer rows.</li>
+    </ul>
+
+    <button type="button" onclick="google.script.host.close()">Close</button>
+  </body>
+</html>

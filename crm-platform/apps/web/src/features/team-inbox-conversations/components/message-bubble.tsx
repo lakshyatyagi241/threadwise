@@ -24,6 +24,7 @@ import {
   VideoMedia,
 } from './media';
 import { Ticks, useErrorText } from './parts';
+import { TemplateMessage } from './template-message';
 
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
 
@@ -52,7 +53,11 @@ function MessageBody({
     // The provider's file is still being fetched, or could not be: say so where the file would be. Retry is the same route as a
     // failed send's (the API tells an inbound file from an outbound message).
     visual = (
-      <MediaStateNote state={view} failureCode={m.mediaFailure?.code ?? null} onRetry={() => onRetry(m.id)} />
+      <MediaStateNote
+        state={view}
+        failureCode={m.mediaFailure?.code ?? null}
+        onRetry={() => onRetry(m.id)}
+      />
     );
   } else if (media) {
     switch (m.kind) {
@@ -87,25 +92,16 @@ function MessageBody({
   }
 
   if (m.kind === 'template' && m.template) {
-    const vars = Object.entries(m.template.variables);
-    return (
-      <div className="space-y-1">
-        <p className="text-xs font-medium text-muted-foreground">
-          {t('template', { name: m.template.name })}
-        </p>
-        {caption && <p dir="auto" className="whitespace-pre-wrap break-words">{caption}</p>}
-        {!caption && vars.length > 0 && (
-          <p className="text-xs text-muted-foreground">{vars.map(([, v]) => v).join(' · ')}</p>
-        )}
-      </div>
-    );
+    return <TemplateMessage template={m.template} text={caption} />;
   }
 
   return (
     <div className="space-y-1.5">
       {visual}
       {caption ? (
-        <p dir="auto" className="whitespace-pre-wrap break-words">{caption}</p>
+        <p dir="auto" className="whitespace-pre-wrap break-words">
+          {caption}
+        </p>
       ) : !visual ? (
         <p className="text-xs italic text-muted-foreground">{t('unavailable')}</p>
       ) : null}
@@ -121,7 +117,11 @@ function MessageBody({
               ? t('sentIn', { lang: (m.detectedLanguage ?? '').toUpperCase() })
               : t('translatedFrom', { lang: (m.detectedLanguage ?? '').toUpperCase() })}
           </button>
-          {showOriginal && <p dir="auto" className="mt-0.5 whitespace-pre-wrap break-words italic">{m.body}</p>}
+          {showOriginal && (
+            <p dir="auto" className="mt-0.5 whitespace-pre-wrap break-words italic">
+              {m.body}
+            </p>
+          )}
         </div>
       )}
       {m.kind === 'document' && media?.sizeBytes != null && !visual && (
@@ -198,7 +198,10 @@ export const MessageBubble = memo(function MessageBubble({
             <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
           )}
           {quoted && (
-            <p dir="auto" className="mb-1 truncate border-s-2 border-primary/50 ps-2 text-xs text-muted-foreground">
+            <p
+              dir="auto"
+              className="mb-1 truncate border-s-2 border-primary/50 ps-2 text-xs text-muted-foreground"
+            >
               {quoted.body ?? t(`kind.${quoted.kind === 'text' ? 'text' : 'attachment'}`)}
             </p>
           )}
@@ -282,11 +285,19 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
               {!failed && progress !== undefined && progress < 100 && <span>{progress}%</span>}
             </div>
           )}
-          {p.body && <p dir="auto" className="whitespace-pre-wrap break-words">{p.body}</p>}
+          {p.body && (
+            <p dir="auto" className="whitespace-pre-wrap break-words">
+              {p.body}
+            </p>
+          )}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
           <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale)}</time>
-          {failed ? <AlertIcon width={12} height={12} className="text-danger" /> : <Ticks status="queued" />}
+          {failed ? (
+            <AlertIcon width={12} height={12} className="text-danger" />
+          ) : (
+            <Ticks status="queued" />
+          )}
           {!failed && <span>{t('sending')}</span>}
         </div>
         {failed && (
@@ -349,7 +360,9 @@ export function NoteBubble({
             </button>
           )}
         </div>
-        <p dir="auto" className="whitespace-pre-wrap break-words">{note.body}</p>
+        <p dir="auto" className="whitespace-pre-wrap break-words">
+          {note.body}
+        </p>
       </div>
     </li>
   );
