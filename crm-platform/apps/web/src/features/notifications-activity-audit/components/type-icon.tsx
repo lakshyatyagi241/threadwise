@@ -9,6 +9,7 @@ export const ICON_ART: Readonly<Record<NotificationIcon, string>> = {
   assign: 'inbox',
   mention: 'reply',
   team_chat: 'team',
+  group: 'groups',
   device_on: 'phone',
   device_off: 'phone',
   broadcast: 'broadcast',
