@@ -12,17 +12,23 @@ import {
 const ok: BuilderForm = {
   ...EMPTY_FORM,
   name: 'Diwali',
+  senderKey: 'baileys:1',
   customMessage: 'Hello {{name}}',
   contactIds: ['c1'],
 };
 
 describe('problems', () => {
+  it('needs a sender, but a draft can be saved without one', () => {
+    expect(problems({ ...ok, senderKey: '' })).toEqual(['sender']);
+    expect(problems({ ...ok, senderKey: '' }, { draft: true })).toEqual([]);
+  });
+
   it('a complete text campaign has none', () => {
     expect(problems(ok)).toEqual([]);
   });
 
   it('lists what is missing in the order the screen shows it', () => {
-    expect(problems({ ...EMPTY_FORM })).toEqual(['name', 'message', 'audience']);
+    expect(problems({ ...EMPTY_FORM })).toEqual(['name', 'sender', 'message', 'audience']);
     expect(problems({ ...ok, type: 'template', customMessage: '' })).toEqual(['template']);
     expect(problems({ ...ok, type: 'flow', customMessage: '' })).toEqual(['flow']);
   });
@@ -59,6 +65,14 @@ describe('problems', () => {
 });
 
 describe('toInput', () => {
+  it('ships a copy-code button with its code', () => {
+    const body = toInput({
+      ...ok,
+      buttons: [{ type: 'copy_code', text: 'Copy', value: 'PROMO50' }],
+    });
+    expect(body.customButtons).toEqual([{ type: 'copy_code', text: 'Copy', value: 'PROMO50' }]);
+  });
+
   it('sends only what the type uses and leaves blanks out', () => {
     const body = toInput({
       ...ok,
