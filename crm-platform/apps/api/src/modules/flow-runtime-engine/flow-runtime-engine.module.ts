@@ -22,6 +22,7 @@ import { ActionNodes } from './runtime/nodes/actions/actions-nodes';
 import { ActionNodesModule } from './runtime/nodes/actions/actions-nodes.module';
 import { AskInputNode } from './runtime/nodes/actions/ask-input-node';
 import { AskMediaNodes } from './runtime/nodes/actions/ask-media-nodes';
+import { CrmNodes } from './runtime/nodes/crm/crm-nodes';
 import { SocialHandoffNode } from './runtime/nodes/actions/social-handoff-node';
 import { AiNodes } from './runtime/nodes/ai/ai-nodes';
 import { AiNodesModule } from './runtime/nodes/ai/ai-nodes.module';
@@ -84,6 +85,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
         AskMediaNodes,
         AskInputNode,
         SocialHandoffNode,
+        CrmNodes,
         AiNodes,
         CommerceNodes,
         IntegrationNodes,

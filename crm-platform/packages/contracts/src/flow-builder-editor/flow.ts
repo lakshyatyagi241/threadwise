@@ -269,6 +269,8 @@ export const flbBuilderContextSchema = z.object({
   }),
   tags: z.array(z.object({ id: uuidSchema, name: z.string(), color: z.string().nullable() })),
   groups: z.array(z.object({ id: uuidSchema, name: z.string() })),
+  /** Segments, for the "is in segment" condition and the segment trigger. */
+  segments: z.array(z.object({ id: uuidSchema, name: z.string() })).default([]),
   keywordRules: z.array(z.object({ id: uuidSchema, keyword: z.string(), active: z.boolean() })),
   teams: z.array(
     z.object({

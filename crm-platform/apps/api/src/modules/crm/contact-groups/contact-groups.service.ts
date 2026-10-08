@@ -1,4 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   type ContactGroupRef,
@@ -266,5 +267,102 @@ export class ContactGroupsService {
       }
       return after.map((r) => ({ id: r.uuid, name: r.name, color: r.color }));
     });
+  }
+
+  // --- flows ---------------------------------------------------------------------------------------------------------------
+
+  /**
+   * The flow "list" step (adds or removes the run's contact): the list is found by uuid, then by name; a list that does not resolve is
+   * `CON_GROUP_NOT_FOUND`. `contact.group_added` / `contact.group_removed` are emitted with `via: 'flow'` so webhooks and the audit
+   * trail hear them, and the flow triggers skip them (a flow that fills its own list must not start itself again, as Tag never did).
+   * Idempotent: `changed` says whether a membership row moved.
+   */
+  async applyFromFlow(
+    orgId: number,
+    contactId: number,
+    action: 'add' | 'remove',
+    ref: { groupId?: string; name?: string },
+  ): Promise<{ groupUuid: string; groupName: string; changed: boolean }> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const group = await this.groupOfFlow(tx, orgId, ref);
+      const res =
+        action === 'add'
+          ? await tx.execute(sql`
+              INSERT INTO contact_group_members (org_id, contact_id, group_id)
+              VALUES (${orgId}, ${contactId}, ${group.id}) ON CONFLICT DO NOTHING RETURNING group_id`)
+          : await tx.execute(sql`
+              DELETE FROM contact_group_members
+               WHERE org_id = ${orgId} AND contact_id = ${contactId} AND group_id = ${group.id} RETURNING group_id`);
+      const changed = res.rows.length > 0;
+      if (changed) {
+        await this.audit.record(tx, {
+          module: 'contacts',
+          recordId: contactId,
+          action: 'update',
+          delta: {
+            groups: {
+              old: action === 'add' ? null : `-${group.name}`,
+              new: action === 'add' ? `+${group.name}` : null,
+            },
+          },
+        });
+        const uuid = await this.contactUuid(tx, orgId, contactId);
+        await this.outbox.emit(tx, {
+          orgId,
+          aggregateModule: 'contacts',
+          aggregateId: contactId,
+          eventType: action === 'add' ? 'contact.group_added' : 'contact.group_removed',
+          payload: { uuid, groupId: group.uuid, via: 'flow' },
+        });
+      }
+      return { groupUuid: group.uuid, groupName: group.name, changed };
+    });
+  }
+
+  /** Whether a contact is in a list (uuid or name), for the flow's "is in list" condition; a list that is gone reads as not in it. */
+  async hasMemberFromFlow(
+    orgId: number,
+    contactId: number,
+    ref: { groupId?: string; name?: string },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      let group: { id: number } | undefined;
+      try {
+        group = await this.groupOfFlow(tx, orgId, ref);
+      } catch {
+        return false;
+      }
+      const res = await tx.execute(sql`
+        SELECT 1 FROM contact_group_members
+         WHERE org_id = ${orgId} AND contact_id = ${contactId} AND group_id = ${group.id} LIMIT 1`);
+      return res.rows.length > 0;
+    });
+  }
+
+  private async groupOfFlow(
+    tx: Parameters<ContactGroupsRepository['findByUuid']>[0],
+    orgId: number,
+    ref: { groupId?: string; name?: string },
+  ) {
+    const uuidShaped = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    let group =
+      ref.groupId && uuidShaped.test(ref.groupId)
+        ? await this.repo.findByUuid(tx, orgId, ref.groupId)
+        : undefined;
+    const name = ref.name?.trim();
+    if (!group && name) group = await this.repo.findByName(tx, orgId, name);
+    if (!group) throw AppError.notFound('Contact group', ref.groupId ?? name ?? '');
+    return group;
+  }
+
+  private async contactUuid(
+    tx: Parameters<ContactGroupsRepository['findByUuid']>[0],
+    orgId: number,
+    contactId: number,
+  ): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+    );
+    return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
   }
 }

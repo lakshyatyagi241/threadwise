@@ -16,9 +16,9 @@ import {
 const ids = (mode: FlowType) => flbPaletteFor(mode).map((d) => d.id);
 
 describe('node catalogue: palette and per-channel availability (WD-FLB-016)', () => {
-  it('a WhatsApp flow lists the 35 nodes WaDesk lists plus the two Ask for file / location additions, including Template, List, Sequence, MySQL and the Google nodes', () => {
+  it('a WhatsApp flow lists the 35 nodes WaDesk lists plus the Ask for file / location additions and the five CRM additions, including Template, List, Sequence, MySQL and the Google nodes', () => {
     const chat = ids('chat');
-    expect(chat).toHaveLength(37);
+    expect(chat).toHaveLength(44);
     for (const t of [
       'template',
       'list',
@@ -49,6 +49,10 @@ describe('node catalogue: palette and per-channel availability (WD-FLB-016)', ()
         'webhook',
         'ai',
         'end',
+        'update_contact',
+        'list_member',
+        'in_list',
+        'in_segment',
         'fb_gallery',
         'fb_products',
         'fb_lead',
@@ -108,7 +112,7 @@ describe('node catalogue: palette and per-channel availability (WD-FLB-016)', ()
     expect(FLB_NODE_TYPES.trigger?.singleton).toBe(true);
   });
 
-  it('searching "sheet" matches only Google Sheets by label, description and group (case-insensitive)', () => {
+  it('searching "sheet" matches only the Google Sheets nodes by label, description and group (case-insensitive)', () => {
     const q = 'sheet';
     const hit = flbPaletteFor('chat').filter(
       (d) =>
@@ -116,7 +120,7 @@ describe('node catalogue: palette and per-channel availability (WD-FLB-016)', ()
         d.desc.toLowerCase().includes(q) ||
         d.group.toLowerCase().includes(q),
     );
-    expect(hit.map((d) => d.id)).toEqual(['google_sheets']);
+    expect(hit.map((d) => d.id)).toEqual(['google_sheets', 'sheet_check', 'sheet_contact']);
   });
 
   it('every type has a unique id and at least one mode', () => {
