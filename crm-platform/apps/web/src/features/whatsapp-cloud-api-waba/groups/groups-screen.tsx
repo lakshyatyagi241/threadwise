@@ -11,6 +11,7 @@ import { useErrorText } from '../components/use-error-text';
 import { CreateGroupForm } from './create-group-form';
 import { GroupNumberRail } from './group-number-rail';
 import { GroupRow } from './group-row';
+import { useGroupsLive } from './use-groups-live';
 import { blockedView, pickAccount, type GroupNotice } from './groups-model';
 import { BlockedState, CheckFailedNote, NoNumberState } from './groups-states';
 
@@ -38,6 +39,8 @@ export function GroupsScreen({ accountId }: { accountId?: string }) {
   const blocked = state.data ? blockedView(state.data.reason) : null;
   const usable = state.data !== undefined && blocked === null;
   const groups = useGroups(number, usable);
+  // A colleague's change or Meta's webhook (a join request, a suspension, a new link) shows without a reload.
+  useGroupsLive(usable ? number : null);
   const items = groups.data?.pages.flatMap((p) => p.items) ?? [];
   const stats = groups.data?.pages[0]?.stats;
 

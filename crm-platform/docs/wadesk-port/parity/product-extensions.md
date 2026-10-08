@@ -302,3 +302,17 @@ tenant isolation, the per-person bell choice, the cap and the index), and web un
 | What the push says                      | n/a                                 | The contact name and "Waiting for a reply", never the message; the bell and toast show the 80-character preview like a new chat                                  | decision |
 | Defaults                                | n/a                                 | Bell on (owner's `new_customer_reply` toggle), pop-up on, sound off, push on (owner decision)                                                                    | decision |
 | Setting N                               | n/a                                 | Environment value, not a workspace setting (nothing asked for one; it would put a settings join in the sweep)                                                    | decision |
+
+## WhatsApp Groups: notifications and live refresh (BL-099): not in WaDesk
+
+WaDesk's `/waba-groups` page has no notification and no live update: it reloads on each action and a join request shows only when someone opens the page. Both
+additions below were built from the owner's spec ([waba-groups-management.md](../../specs/waba-groups-management.md) sections 11 and 14), as improvements, and are
+recorded here as intended differences. Not yet compared in a browser: the Playwright parity run and a real Meta account are still open (BL-099).
+
+| Topic                      | WaDesk                   | Here                                                                                                                                                                                                                         |
+| -------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Join requests              | Visible only on the page | A bell row for everyone holding `waba.groups.manage`: one unread row per group with a count ("10 people want to join Sales club"); closed when the queue is empty. Names the group and the count, never a number or the link |
+| Suspension                 | A red line on the page   | A bell row "<group> was suspended", and "<group> is active again" for those who were told; stale events (cleared before delivery, group deleted) are dropped                                                                 |
+| Browser push               | n/a                      | Off by default for all three (owner may turn on per person); the OS notification shows the group name and the kind of event only                                                                                             |
+| Plan gate                  | None                     | A workspace without the `waba_groups` plan feature gets no notification and no preference rows for them (consistent with the locked screen, an existing intended difference)                                                 |
+| Refresh of the Groups page | Reload per action        | `whatsapp.group.changed` hint (ids and kind) to `waba.groups.read` holders; the list, counters, queue and link refetch within about a second, also for a colleague's change or Meta's webhook; a burst is one refetch        |

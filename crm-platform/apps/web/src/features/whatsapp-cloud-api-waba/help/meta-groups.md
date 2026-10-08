@@ -43,6 +43,12 @@ Every message you send to a group is charged once per person who receives it, as
 
 A suspended group shows a warning. You cannot message it until WhatsApp restores it.
 
+## Staying up to date
+
+The page updates by itself: when someone asks to join, when a colleague creates, edits or deletes a group, or when WhatsApp suspends or restores one, the list, the counters and the waiting requests refresh within a second, without reloading.
+
+People with permission to manage groups also get a notification in the bell: **N people want to join (group name)** (ten requests in a row are one line with the count), **(group) was suspended**, and **(group) is active again** for those who heard about the suspension. The notification names the group and the number of people, never a phone number or the invite link. You choose how each one reaches you under **Notification preferences**, in the **WhatsApp groups** section: bell and pop-up are on, the browser notification is off until you turn it on. That section only appears when your plan includes WhatsApp groups.
+
 ## Plan and access
 
 Groups need a plan that includes WhatsApp groups. Seeing groups and their invite links needs permission to view groups; creating needs the create permission; the link reset, editing, join requests and members each need the manage permission, and deleting needs the delete permission. The phone numbers of people waiting to join and of members are shown only with the manage permission. The page also reads your WhatsApp numbers, so it needs the right to view them.

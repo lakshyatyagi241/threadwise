@@ -175,3 +175,41 @@ describe('types the build has no words for', () => {
     });
   });
 });
+
+describe('WhatsApp group notifications (BL-099)', () => {
+  const GROUP = { groupId: ID, connectionId: ID, groupName: 'Sales club' };
+
+  it('names the group and counts the people who want to join, in English and Arabic', () => {
+    expect(
+      notificationText(en, n('waba_group_join_request', { ...GROUP, count: 1 }, { count: 1 })),
+    ).toEqual({
+      title: 'Someone wants to join Sales club',
+      body: 'Open Groups to approve or reject.',
+    });
+    expect(
+      notificationText(en, n('waba_group_join_request', { ...GROUP, count: 10 }, { count: 10 }))
+        .title,
+    ).toBe('10 people want to join Sales club');
+    const many = notificationText(ar, n('waba_group_join_request', GROUP, { count: 10 })).title;
+    expect(many).toContain('Sales club');
+    expect(many).toContain('10');
+    expect(notificationText(ar, n('waba_group_join_request', GROUP, { count: 2 })).title).toContain(
+      'طلبان',
+    );
+  });
+
+  it('says suspended and active again, with a wording that needs no name', () => {
+    expect(notificationText(en, n('waba_group_suspended', GROUP)).title).toBe(
+      'Sales club was suspended',
+    );
+    expect(notificationText(en, n('waba_group_suspension_cleared', GROUP)).title).toBe(
+      'Sales club is active again',
+    );
+    expect(notificationText(en, n('waba_group_suspended', { groupId: ID })).title).toBe(
+      'A WhatsApp group was suspended',
+    );
+    expect(notificationText(ar, n('waba_group_suspended', GROUP)).title).toBe(
+      'تم تعليق «Sales club»',
+    );
+  });
+});

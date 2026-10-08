@@ -10,7 +10,7 @@ keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser not
 
 ## What it is for
 
-The bell in the header collects what needs your attention: a new chat, new messages on a chat you own, a chat nobody has answered for a few minutes, a chat assigned to you, a note that mentions you, a WhatsApp number that connected, disconnected or was logged out, a broadcast, campaign or scheduled message that finished or failed, a Team chat mention or direct message, and tasks, leads and forms. You do not have to be on the Inbox page to find out about a chat: the bell, a pop-up, a sound and the tab title all update on any page, within a few seconds.
+The bell in the header collects what needs your attention: a new chat, new messages on a chat you own, a chat nobody has answered for a few minutes, a chat assigned to you, a note that mentions you, a WhatsApp number that connected, disconnected or was logged out, a broadcast, campaign or scheduled message that finished or failed, a Team chat mention or direct message, someone asking to join one of your WhatsApp groups or WhatsApp suspending one (for people who manage groups, when your plan includes them), and tasks, leads and forms. You do not have to be on the Inbox page to find out about a chat: the bell, a pop-up, a sound and the tab title all update on any page, within a few seconds.
 
 ## The bell
 
