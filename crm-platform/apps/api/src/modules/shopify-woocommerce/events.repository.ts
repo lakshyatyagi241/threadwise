@@ -193,12 +193,15 @@ export class EventsRepository {
     v: { status: LogStatus; recipient?: string | null; response?: unknown; error?: string | null },
   ): Promise<void> {
     const t = tables(kind);
+    // The log is partitioned by created_at, so the match keeps it; the reference carries milliseconds while the column holds microseconds, hence a one-millisecond window, not equality.
     await tx.execute(sql`
       UPDATE ${t.logs}
       SET status = ${v.status},
           recipient = coalesce(${v.recipient ?? null}, recipient),
           response = coalesce(${v.response === undefined ? null : JSON.stringify(v.response)}::jsonb, response),
           error = ${v.error ?? null}
-      WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt.toISOString()}::timestamptz`);
+      WHERE org_id = ${orgId} AND id = ${ref.id}
+        AND created_at >= ${ref.createdAt.toISOString()}::timestamptz
+        AND created_at < ${ref.createdAt.toISOString()}::timestamptz + interval '1 millisecond'`);
   }
 }

@@ -41,7 +41,7 @@ Look at the small icon beside the time under your message:
 
 ### Refused before it was saved
 
-Some problems are shown at once in the reply box instead of under a message: the 24-hour window is closed, the channel is disconnected, sending is paused for the platform, or "Your plan's monthly message limit has been reached." For the last one, look at [Plan and usage](help:plan-and-usage) and upgrade the plan or wait for the next period. If your connection drops while sending, the message stays with a clock, then shows the error with **Retry** and **Dismiss**.
+Some problems are shown at once in the reply box instead of under a message: the 24-hour window is closed, the channel is disconnected, sending is paused for the platform, or "Your plan's monthly message limit has been reached." For the last one, look at [Plans](help:account-plans) and upgrade the plan or wait for the next period. If your connection drops while sending, the message stays with a clock, then shows the error with **Retry** and **Dismiss**.
 
 ## A broadcast, campaign or scheduled message
 

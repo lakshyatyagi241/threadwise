@@ -35,6 +35,6 @@ Everyone in the workspace can see this list. Inviting, resetting passwords and r
 
 ## If something looks wrong
 
-- **Invite says all seats are in use.** Your plan limits the number of seats. Upgrade the plan from [Plan and usage](/account/usage) to add more people.
+- **Invite says all seats are in use.** Your plan limits the number of seats. Upgrade the plan from [Plans](/account/plans) to add more people.
 - **A row has no actions.** You do not have the permission for that action, or the member ranks above you.
 - **Reset or invite says email was not sent.** Use the one-time link that is shown; it works once and the invite link expires after 7 days.

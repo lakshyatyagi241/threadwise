@@ -105,6 +105,17 @@ export class FlowSender {
         source: 'flow',
         body: threadTextOf(rendered),
         providerMessageId: sent.providerMessageId,
+        // A template node knows the name, language and values it sent (not the template's uuid, so the bubble has no header, footer or
+        // buttons to draw: it shows the name and the text).
+        ...(rendered.kind === 'template'
+          ? {
+              template: {
+                name: rendered.template.name,
+                language: rendered.template.language,
+                variables: rendered.template.variables,
+              },
+            }
+          : {}),
       });
       if (!sent.replayed) await this.dispatcher.scheduleReceipts(runtime, sent);
       // One tick per node that sends, not per message: a Message with five replies counts once (TW-FLR-020 rule 4).

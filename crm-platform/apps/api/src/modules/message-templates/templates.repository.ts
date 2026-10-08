@@ -218,6 +218,18 @@ export class TemplatesRepository {
     return res.rows[0] ? toRow(res.rows[0]) : null;
   }
 
+  /** Several templates by uuid in one query (the thread draws the template of every message of a page); an unknown or foreign uuid is simply absent. */
+  async findManyByUuids(tx: Tx, orgId: number, uuids: readonly string[]): Promise<TemplateRow[]> {
+    if (uuids.length === 0) return [];
+    const res = await tx.execute(sql`
+      SELECT ${SELECT} FROM ${FROM}
+      WHERE t.org_id = ${orgId} AND t.uuid IN (${sql.join(
+        uuids.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      )})`);
+    return res.rows.map(toRow);
+  }
+
   /** A flow node names a template by its name: an approved one wins, then the newest (TW-FLR-026). */
   async findByName(tx: Tx, orgId: number, name: string): Promise<TemplateRow | null> {
     const res = await tx.execute(sql`

@@ -437,7 +437,7 @@ describe('delivered, uninstall and the privacy webhooks (TW-ECOM-018, 021, 022)'
       'shopify',
       s.id,
       'order/delivered',
-      await template(t, 'Hi {{1}}, {{2}} arrived'),
+      await template(t, 'Hi {{1}}, order {{2}} arrived, total {{3}}'),
     );
     await shopifyPost(s.secret, 'orders/create', order);
     await runLogged(t, 'shopify', s.id, 'orders/create', order);

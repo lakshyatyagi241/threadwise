@@ -1099,17 +1099,18 @@ describe('builder context (TW-FLB-014, 026)', () => {
       `INSERT INTO facebook_pages (org_id, page_id, name, status) VALUES ($1,'123','My page','connected')`,
       [o.orgId],
     );
+    // Unset means on for Facebook (a built channel; nothing writes the switch), so a connected Page is offered; an explicit false hides it.
     let res = await api.as(o.admin).get('/v2/flows/builder-context');
-    expect(res.body.channels).toEqual(['chat', 'telegram']);
+    expect(res.body.channels).toEqual(['chat', 'facebook', 'telegram']);
     expect(res.body.senders.telegram[0].label).toBe('Helper bot');
-    expect(res.body.senders.facebook).toEqual([]);
+    expect(res.body.senders.facebook[0].label).toBe('My page');
     await h.owner.query(
-      `INSERT INTO platform_settings (key, value) VALUES ('facebook_enabled','true'::jsonb) ON CONFLICT (key) DO UPDATE SET value = 'true'::jsonb`,
+      `INSERT INTO platform_settings (key, value) VALUES ('facebook_enabled','false'::jsonb) ON CONFLICT (key) DO UPDATE SET value = 'false'::jsonb`,
     );
     await new Promise((r) => setTimeout(r, 5200)); // the settings snapshot lives 5 seconds
     res = await api.as(o.admin).get('/v2/flows/builder-context');
-    expect(res.body.channels).toEqual(['chat', 'facebook', 'telegram']);
-    expect(res.body.senders.facebook[0].label).toBe('My page');
+    expect(res.body.channels).toEqual(['chat', 'telegram']);
+    expect(res.body.senders.facebook).toEqual([]);
     await h.owner.query(`DELETE FROM platform_settings WHERE key = 'facebook_enabled'`);
   });
 

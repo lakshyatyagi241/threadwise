@@ -562,7 +562,7 @@
   },
   "chrome-extension-sheets-addon": {
    "code": "ext",
-   "owner": "shubham",
+   "owner": "lakshya",
    "cluster": "platform",
    "wave": 3,
    "estDays": 70,

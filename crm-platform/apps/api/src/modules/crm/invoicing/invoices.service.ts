@@ -826,6 +826,36 @@ export class InvoicesService {
     });
   }
 
+  /** `send` for the system: no person, no scope. The buyer's phone wins, then the email; an invoice that is not issued is left alone. */
+  async autoSendIn(tx: Tx, orgId: number, invoiceId: number): Promise<'whatsapp' | 'email' | null> {
+    const zone = await this.zone(tx, orgId);
+    const row = await this.repo.findById(tx, orgId, invoiceId, zone, true);
+    if (!row || row.storedStatus !== 'issued') return null;
+    const channel = row.buyerPhone ? 'whatsapp' : row.buyerEmail ? 'email' : null;
+    if (!channel) return null;
+    await this.repo.markSent(tx, orgId, row.id, channel);
+    const after = (await this.repo.findById(tx, orgId, row.id, zone))!;
+    await this.audit.record(tx, {
+      module: INVOICE_MODULE,
+      recordId: row.id,
+      action: 'update',
+      delta: { sentVia: { old: row.deliveryChannel, new: channel } },
+    });
+    await this.repo.log(tx, orgId, row.id, {
+      event: 'sent',
+      detail: channel,
+      actorKind: 'system',
+      actorUserId: null,
+    });
+    await this.outbox.emit(tx, {
+      aggregateModule: INVOICE_MODULE,
+      aggregateId: row.id,
+      eventType: 'invoice.sent',
+      payload: { ...invoiceEventPayload(after), channel, message: null },
+    });
+    return channel;
+  }
+
   async void(uuid: string, input: VoidInvoiceInput, scope: RecordScope): Promise<InvoiceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {

@@ -1,7 +1,6 @@
 {
   "plans-subscriptions-trials": {
     "nav": {
-      "usage": "Plan and usage",
       "workspacePlans": "Workspace plans",
       "group": "Subscriptions",
       "pricingFaqs": "Pricing FAQs",
@@ -144,7 +143,8 @@
     },
     "plans": {
       "title": "Plans",
-      "description": "Every plan is for this workspace only. Pick the one that fits and switch whenever you need to.",
+      "description": "What this workspace is on and what it has used, and every plan you can switch to. A plan applies to the whole workspace.",
+      "pickerTitle": "Choose a plan",
       "empty": "No plans have been set up yet. Ask your platform administrator to create one.",
       "readOnly": "Only workspace owners and admins can change the plan. You can see the plans and what each includes.",
       "mostPopular": "Most popular",
@@ -215,7 +215,6 @@
         "currentPlan": "Your plan",
         "noDifferences": "These plans do not differ."
       },
-      "usageLink": "See usage and limits",
       "period": {
         "label": "Billing period",
         "monthly": "Monthly",
@@ -267,8 +266,7 @@
       "managePlan": "Manage plan"
     },
     "usage": {
-      "title": "Plan and usage",
-      "description": "What this workspace is on, what it has used and what it can still do.",
+      "sectionTitle": "Your plan and usage",
       "currentPlan": "Current plan",
       "upgrade": "Upgrade plan",
       "validUntil": "Valid until {date}",

@@ -357,8 +357,10 @@ function PackForm({ pack }: { pack: AddonPack | null }) {
                     <Checkbox
                       key={f.key}
                       id={`addon-feature-${f.key}`}
-                      label={f.label}
+                      label={f.core ? `${f.label} (${t('coreFeature')})` : f.label}
                       checked={draft.features.includes(f.key)}
+                      // A core flag is in every plan: it can be unticked from a pack that already holds it, never added.
+                      disabled={f.core && !draft.features.includes(f.key)}
                       onChange={(e) => toggleFeature(f.key, e.target.checked)}
                       className="items-center rounded-lg border border-border px-3 py-2 text-[12.5px] hover:bg-muted"
                     />

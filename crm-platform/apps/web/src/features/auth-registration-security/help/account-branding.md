@@ -1,8 +1,8 @@
 ---
 id: account-branding
-title: Branding and message footer
+title: Message footer
 summary: Set the footer line added to the messages your workspace sends, or send them with no footer, on plans that allow it.
-area: account
+area: settings
 order: 30
 documents: [tile:branding]
 keywords: [branding, footer, white label, signature, message footer, remove branding, platform footer]
@@ -10,13 +10,13 @@ keywords: [branding, footer, white label, signature, message footer, remove bran
 
 ## What it is for
 
-The Branding page controls the **message footer**: the line added at the bottom of plain text and interactive messages sent from your automations, scheduled sends and team inbox replies. Approved templates carry their own text and skip the footer.
+The Message footer page controls the **message footer**: the line added at the bottom of plain text and interactive messages sent from your automations, scheduled sends and team inbox replies. Approved templates carry their own text and skip the footer.
 
 On a plan without a custom footer, your messages end with the platform's default footer. On a plan that removes branding, you choose your own line, or no line at all.
 
 ## How to use it
 
-1. Open **Settings**, then **Business and billing**, then **Branding**. You can also pick **Branding** from the list on the Account page.
+1. Open **Settings**, then **Channels**, then **Message footer**. Old links to the Branding page on the Account page lead here too.
 2. Type your line in **Custom footer**. It can be up to 60 characters, and a counter under the box shows how many you have used.
 3. Check the **Preview**. It shows a sample message with your footer under it, in italics.
 4. Select **Save footer**. The page confirms that it applies from the next message you send.

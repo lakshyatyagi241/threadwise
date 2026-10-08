@@ -4,7 +4,7 @@ import { keys } from '../api';
 import { makeSession, renderAccount } from '../render-test-utils';
 
 vi.mock('next/navigation', () => ({
-  usePathname: () => '/account/branding',
+  usePathname: () => '/settings/message-footer',
   useRouter: () => ({ replace: () => undefined, push: () => undefined, refresh: () => undefined }),
 }));
 
@@ -18,6 +18,17 @@ const base = {
 };
 const render = (data: object, opts: Parameters<typeof renderAccount>[1] = {}) =>
   renderAccount(createElement(BrandingView), { ...opts, seed: [[keys.branding, data]] });
+
+describe('BrandingView on the Settings page (no heading of its own)', () => {
+  it('leaves the title and description to the page', () => {
+    const quiet = renderAccount(createElement(BrandingView, { showHeading: false }), {
+      seed: [[keys.branding, { ...base, canEdit: true, effective: null }]],
+    });
+    expect(quiet).not.toContain('<h2');
+    expect(quiet).toContain('<textarea');
+    expect(render({ ...base, canEdit: true, effective: null })).toContain('<h2');
+  });
+});
 
 describe('BrandingView, plan without remove_branding', () => {
   const html = render(base);
