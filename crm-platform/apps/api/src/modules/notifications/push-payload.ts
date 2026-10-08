@@ -64,6 +64,34 @@ const TEXT_BEARING = new Set([
   'teamchat_message',
 ]);
 
+/**
+ * The WhatsApp Groups types (BL-099): the push title is the group's name and nothing else; the body is only the kind of event (and the
+ * number of requests). No member number, no invite link, none of the row's longer sentence.
+ */
+const GROUP_TYPES = new Set([
+  'waba_group_join_request',
+  'waba_group_suspended',
+  'waba_group_suspension_cleared',
+]);
+
+function groupPushText(row: Pick<NotificationRow, 'type' | 'title' | 'data' | 'eventCount'>): {
+  title: string;
+  body: string;
+} {
+  const data = (row.data ?? {}) as Record<string, unknown>;
+  const name = str(data.groupName);
+  const count = row.eventCount > 1 ? row.eventCount : 0;
+  const body =
+    row.type === 'waba_group_join_request'
+      ? count
+        ? `${count} join requests`
+        : 'Join request'
+      : row.type === 'waba_group_suspended'
+        ? 'Group suspended'
+        : 'Group active again';
+  return { title: clip(name ?? 'WhatsApp group'), body };
+}
+
 /** Title and body of the OS notification for a bell row. */
 export function pushText(
   row: Pick<NotificationRow, 'type' | 'title' | 'body' | 'data' | 'eventCount'>,
@@ -71,6 +99,7 @@ export function pushText(
   title: string;
   body: string;
 } {
+  if (GROUP_TYPES.has(row.type)) return groupPushText(row);
   const data = (row.data ?? {}) as Record<string, unknown>;
   if (CONTACT_TITLED.has(row.type)) {
     // "Title = contact name": who wrote, then what kind of event it is.

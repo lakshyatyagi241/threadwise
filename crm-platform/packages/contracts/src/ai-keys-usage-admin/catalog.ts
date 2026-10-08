@@ -201,6 +201,10 @@ export const AI_USAGE_WINDOW_DAYS: Record<AiUsageWindow, number> = {
   '1y': 365,
 };
 export const aiUsageWindowSchema = z.enum(AI_USAGE_WINDOWS).default('30d');
+/** What a response reports: a preset, or `custom` when the caller sent its own from/to dates. */
+export const aiUsageResultWindowSchema = z.enum([...AI_USAGE_WINDOWS, 'custom']);
+/** The longest custom range, in days (the same ceiling as the 1 year preset). */
+export const AI_USAGE_MAX_CUSTOM_DAYS = 366;
 
 /** Which side pays for a call's tokens (the ledger's `billed_against`, or `none` when no key resolves). */
 export const AI_KEY_SOURCES = ['workspace', 'admin', 'none'] as const;

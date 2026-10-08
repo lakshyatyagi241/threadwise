@@ -12,6 +12,7 @@ import {
   monthlyTokenLimit,
   parseExtras,
   pickSource,
+  usageRange,
   windowStart,
   type EntitlementFacts,
 } from '../../../src/modules/ai-keys-usage-admin/ai-rules';
@@ -153,6 +154,17 @@ describe('windows and figures (WD-AIADM-019, 020, 025)', () => {
     expect(windowStart('7d', now).toISOString()).toBe('2026-09-26T00:00:00.000Z');
     expect(windowStart('30d', now).toISOString()).toBe('2026-09-03T00:00:00.000Z');
     expect(windowStart('1y', now).toISOString()).toBe('2025-10-03T00:00:00.000Z');
+  });
+
+  it('resolves a custom range to inclusive UTC days, and a preset to a window ending today', () => {
+    const r = usageRange({ window: '30d', from: '2026-09-01', to: '2026-09-10' }, now);
+    expect(r.window).toBe('custom');
+    expect(r.days).toBe(10);
+    expect(r.from.toISOString()).toBe('2026-09-01T00:00:00.000Z');
+    expect(r.until.toISOString()).toBe('2026-09-11T00:00:00.000Z');
+    const p = usageRange({ window: '7d' }, now);
+    expect([p.window, p.days, p.to]).toEqual(['7d', 7, '2026-10-02']);
+    expect(p.until.toISOString()).toBe('2026-10-03T00:00:00.000Z');
   });
 
   it('starts the cap month at the first of the month', () => {

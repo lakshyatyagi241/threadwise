@@ -149,7 +149,7 @@ describe('the audience of the four modes', () => {
   });
 
   it('the table filter alone is not an audience, and an audience from the older shape still parses', () => {
-    const filter = { type: 'group', combinator: 'and', children: [] } as const;
+    const filter = { type: 'group' as const, combinator: 'and' as const, children: [] };
     expect(wizardAudienceHasSource({ ...EMPTY_WIZARD_AUDIENCE, rules: filter })).toBe(false);
     expect(
       wizardDraftSchema.parse({ audience: { groupIds: [U], segmentIds: [], rules: null } })

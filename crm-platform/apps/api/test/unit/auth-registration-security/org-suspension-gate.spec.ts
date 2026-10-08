@@ -108,7 +108,19 @@ describe('suspended workspace gate', () => {
   it('lets an operator impersonation session through', async () => {
     const { run } = guardFor({ suspended: true });
     await expect(
-      run('/v2/contacts', 'GET', ctx({ impersonation: { operatorId: 3 } })),
+      run(
+        '/v2/contacts',
+        'GET',
+        ctx({
+          impersonation: {
+            sessionId: '00000000-0000-4000-8000-000000000001',
+            operatorId: 3,
+            operatorUuid: '00000000-0000-4000-8000-000000000002',
+            readOnly: false,
+            expiresAt: new Date('2099-01-01T00:00:00Z'),
+          },
+        }),
+      ),
     ).resolves.toBe(true);
   });
 });

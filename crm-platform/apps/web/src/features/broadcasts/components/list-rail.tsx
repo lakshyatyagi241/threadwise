@@ -33,7 +33,7 @@ export function ListRail({
   const kicker =
     'px-3 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground';
   return (
-    <aside className="space-y-3 self-start lg:sticky lg:top-6">
+    <aside aria-label={t('railLabel')} className="space-y-3 self-start lg:sticky lg:top-6">
       <div className="rounded-2xl border border-border bg-muted/60 p-3 text-xs leading-relaxed">
         <div className="mb-1 flex items-center gap-1.5 font-semibold">
           <span className="size-2 rounded-full bg-primary" aria-hidden="true" />
@@ -77,7 +77,18 @@ export function ListRail({
       <div className="rounded-xl border border-border bg-background p-2 shadow-sm">
         <div className={kicker}>{t('recent')}</div>
         {recent.length === 0 ? (
-          <p className="px-3 py-2 text-xs text-muted-foreground">{t('recentEmpty')}</p>
+          <div className="m-1 rounded-xl border border-dashed border-border px-3 py-5 text-center">
+            <div className="text-xl">{t('noData')}</div>
+            <p className="mt-1 text-xs text-muted-foreground">{t('recentEmpty')}</p>
+            {canCreate && (
+              <Link
+                href="/broadcasts/create"
+                className="mt-3 inline-flex h-9 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
+              >
+                {t('createBroadcast')}
+              </Link>
+            )}
+          </div>
         ) : (
           recent.map((b) => (
             <Link
@@ -105,7 +116,7 @@ export function ListRail({
           <div className="text-2xl leading-tight">{t('createBroadcast')}</div>
           <p className="mt-2 text-xs leading-relaxed opacity-80">{t('getStartedBody')}</p>
           <Link
-            href="/campaigns/wizard"
+            href="/broadcasts/create"
             className="mt-3 inline-flex items-center gap-2 rounded-full bg-background px-3.5 py-1.5 text-xs font-semibold text-brand"
           >
             {t('newBroadcast')}

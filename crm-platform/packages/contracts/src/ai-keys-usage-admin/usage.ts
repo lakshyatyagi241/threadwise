@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
-import { aiUsageWindowSchema } from './catalog';
+import {
+  AI_USAGE_MAX_CUSTOM_DAYS,
+  aiUsageResultWindowSchema,
+  aiUsageWindowSchema,
+} from './catalog';
 
 /**
  * The AI usage screens (WD-AIADM-017, 019..027): one for a workspace (its own ledger rows) and one for the
@@ -8,7 +12,39 @@ import { aiUsageWindowSchema } from './catalog';
  * ESTIMATE from blended per-provider rates, never a bill.
  */
 
-export const aiUsageQuerySchema = z.object({ window: aiUsageWindowSchema });
+const isoDay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
+const dayMs = (d: string): number => Date.parse(`${d}T00:00:00Z`);
+
+/**
+ * A preset `window`, or a custom range: `from` and `to` (inclusive UTC days) sent together override the preset.
+ */
+export const aiUsageQuerySchema = z
+  .object({ window: aiUsageWindowSchema, from: isoDay.optional(), to: isoDay.optional() })
+  .superRefine((q, ctx) => {
+    if (q.from === undefined && q.to === undefined) return;
+    if (q.from === undefined || q.to === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: [q.from === undefined ? 'from' : 'to'],
+        message: 'Send both from and to',
+      });
+      return;
+    }
+    const a = dayMs(q.from);
+    const b = dayMs(q.to);
+    if (Number.isNaN(a))
+      ctx.addIssue({ code: 'custom', path: ['from'], message: 'Not a valid date' });
+    else if (Number.isNaN(b))
+      ctx.addIssue({ code: 'custom', path: ['to'], message: 'Not a valid date' });
+    else if (a > b)
+      ctx.addIssue({ code: 'custom', path: ['to'], message: 'End date is before the start date' });
+    else if ((b - a) / 86_400_000 + 1 > AI_USAGE_MAX_CUSTOM_DAYS)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['to'],
+        message: `Range is longer than ${AI_USAGE_MAX_CUSTOM_DAYS} days`,
+      });
+  });
 export type AiUsageQuery = z.infer<typeof aiUsageQuerySchema>;
 
 const count = z.number().int();
@@ -23,8 +59,10 @@ const modelRow = z.object({
 const sourceSplit = z.object({ admin: count, workspace: count });
 
 export const aiUsageResponseSchema = z.object({
-  window: aiUsageQuerySchema.shape.window,
+  window: aiUsageResultWindowSchema,
   from: z.string(),
+  /** The last day covered (inclusive, `YYYY-MM-DD`). */
+  to: z.string(),
   kpis: z.object({
     tokens: count,
     calls: count,
@@ -52,8 +90,10 @@ export const aiUsageResponseSchema = z.object({
 export type AiUsageResponse = z.infer<typeof aiUsageResponseSchema>;
 
 export const aiDashboardResponseSchema = z.object({
-  window: aiUsageQuerySchema.shape.window,
+  window: aiUsageResultWindowSchema,
   from: z.string(),
+  /** The last day covered (inclusive, `YYYY-MM-DD`). */
+  to: z.string(),
   kpis: z.object({
     tokens: count,
     calls: count,

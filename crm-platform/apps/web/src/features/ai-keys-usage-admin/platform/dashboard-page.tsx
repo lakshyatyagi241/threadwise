@@ -4,13 +4,22 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { aiDashboardResponseSchema, type AiUsageWindow } from '@crm/contracts';
+import { aiDashboardResponseSchema } from '@crm/contracts';
 import { Badge, Card, StatTile } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { compactNumber, dollars } from '../lib/format';
 import { ErrorBlock, LoadingBlock } from '../shared/state';
-import { DailyBars, ShareBars, SourceSplit, WindowSwitch } from '../shared/usage-view';
+import {
+  DEFAULT_USAGE_RANGE,
+  DailyBars,
+  ShareBars,
+  SourceSplit,
+  WindowSwitch,
+  usageRangeQuery,
+  usageRangeReady,
+  type UsageRangeValue,
+} from '../shared/usage-view';
 import { DASHBOARD_QUERY_KEY } from './queries';
 
 const NS = 'ai-keys-usage-admin.dashboard';
@@ -20,16 +29,17 @@ export function DashboardPage() {
   const t = useTranslations(NS);
   const tc = useTranslations('ai-keys-usage-admin.common');
   const locale = useLocale();
-  const [window, setWindow] = useState<AiUsageWindow>('30d');
+  const [range, setRange] = useState<UsageRangeValue>(DEFAULT_USAGE_RANGE);
   const q = useQuery({
-    queryKey: [...DASHBOARD_QUERY_KEY, window],
+    queryKey: [...DASHBOARD_QUERY_KEY, range],
     queryFn: ({ signal }) =>
       operatorFetch('/ai-dashboard', {
-        query: { window },
+        query: usageRangeQuery(range),
         schema: aiDashboardResponseSchema,
         signal,
       }),
     placeholderData: keepPreviousData,
+    enabled: usageRangeReady(range),
     refetchOnWindowFocus: false,
   });
   const num = (n: number) => new Intl.NumberFormat(locale).format(n);
@@ -40,7 +50,7 @@ export function DashboardPage() {
         eyebrow={t('eyebrow')}
         title={t('title')}
         description={t('description')}
-        actions={<WindowSwitch value={window} onChange={setWindow} />}
+        actions={<WindowSwitch value={range} onChange={setRange} />}
       />
       {q.isPending ? (
         <LoadingBlock />
