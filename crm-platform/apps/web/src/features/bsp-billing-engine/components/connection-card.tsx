@@ -79,7 +79,15 @@ export function ConnectionCard({
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label={t('businessId')}
+            label={
+              <>
+                {t('businessId')}
+                <span aria-hidden className="text-danger">
+                  {' '}
+                  *
+                </span>
+              </>
+            }
             htmlFor="bsp-business"
             hint={t('businessIdHint')}
             error={invalidText('businessId')}
@@ -95,7 +103,19 @@ export function ConnectionCard({
               onChange={(e) => set('businessId', e.target.value)}
             />
           </Field>
-          <Field label={t('token')} htmlFor="bsp-token" hint={t('tokenHint')}>
+          <Field
+            label={
+              <>
+                {t('token')}
+                <span aria-hidden className="text-danger">
+                  {' '}
+                  *
+                </span>
+              </>
+            }
+            htmlFor="bsp-token"
+            hint={t('tokenHint')}
+          >
             <PasswordInput
               id="bsp-token"
               autoComplete="off"
@@ -153,7 +173,7 @@ export function ConnectionCard({
               type="url"
               autoComplete="off"
               value={draft.ratesEndpoint}
-              placeholder="https://"
+              placeholder="https://graph.facebook.com/v26.0/…/pricing"
               disabled={!canEdit}
               invalid={bad('ratesEndpoint')}
               onChange={(e) => set('ratesEndpoint', e.target.value)}

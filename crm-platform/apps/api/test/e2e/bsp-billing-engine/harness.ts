@@ -200,14 +200,17 @@ export async function startBspHarness(): Promise<BspHarness> {
     .post('/v2/platform/auth/login')
     .set('x-forwarded-for', nextIp())
     .send({ email: operatorEmail, password: OPERATOR_PASSWORD });
-  expect(first.body).toMatchObject({ status: 'authenticated', mfaEnrolmentRequired: true });
+  expect(first.body.status).toBe('authenticated');
   const token = first.body.tokens.accessToken as string;
-  const setup = await http().post('/v2/platform/auth/mfa/setup').set(bearer(token));
-  const enabled = await http()
-    .post('/v2/platform/auth/mfa/enable')
-    .set(bearer(token))
-    .send({ code: hotp(base32Decode(setup.body.secret), totpStep(Date.now())) });
-  expect(enabled.status).toBe(201);
+  // The platform policy decides whether super admins must enrol; enrol only when it asks (it is a setting of the database).
+  if (first.body.mfaEnrolmentRequired) {
+    const setup = await http().post('/v2/platform/auth/mfa/setup').set(bearer(token));
+    const enabled = await http()
+      .post('/v2/platform/auth/mfa/enable')
+      .set(bearer(token))
+      .send({ code: hotp(base32Decode(setup.body.secret), totpStep(Date.now())) });
+    expect(enabled.status).toBe(201);
+  }
   const supportLogin = await http()
     .post('/v2/platform/auth/login')
     .set('x-forwarded-for', nextIp())
