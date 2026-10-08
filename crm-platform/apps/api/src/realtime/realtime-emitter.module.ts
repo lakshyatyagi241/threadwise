@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { AudienceResolver } from './audience/audience.resolver';
 import { MemberDirectory } from './audience/member-directory.service';
 import { RealtimeEmitter } from './realtime-emitter.service';
+import { VisibilityPresence } from './visibility-presence.service';
 
 /**
  * Publishing side of realtime, with no sockets in it: imported by the HTTP app (through `RealtimeModule`) AND by the worker, so
@@ -10,7 +11,7 @@ import { RealtimeEmitter } from './realtime-emitter.service';
  */
 @Global()
 @Module({
-  providers: [RealtimeEmitter, MemberDirectory, AudienceResolver],
-  exports: [RealtimeEmitter, MemberDirectory, AudienceResolver],
+  providers: [RealtimeEmitter, MemberDirectory, AudienceResolver, VisibilityPresence],
+  exports: [RealtimeEmitter, MemberDirectory, AudienceResolver, VisibilityPresence],
 })
 export class RealtimeEmitterModule {}

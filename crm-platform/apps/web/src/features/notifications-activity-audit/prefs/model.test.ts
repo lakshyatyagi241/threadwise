@@ -9,6 +9,7 @@ import {
   groupRows,
   isCustom,
   mayAlert,
+  mayPush,
   resetAll,
   resetEntry,
   resetRequest,
@@ -24,8 +25,9 @@ const item = (
   bell: true,
   toast: true,
   sound: false,
-  defaults: { bell: true, toast: true, sound: false },
-  overrides: { bell: null, toast: null, sound: null },
+  push: false,
+  defaults: { bell: true, toast: true, sound: false, push: false },
+  overrides: { bell: null, toast: null, sound: null, push: null },
   workspaceInapp: true,
   ...over,
 });
@@ -34,14 +36,15 @@ const MESSAGE = item({
   type: 'new_message',
   group: 'conversations',
   sound: true,
-  defaults: { bell: true, toast: true, sound: true },
+  push: true,
+  defaults: { bell: true, toast: true, sound: true, push: true },
 });
 const DEVICE = item({ type: 'device_disconnected', group: 'devices' });
 const TASK_DONE = item({
   type: 'task_completed',
   group: 'tasks',
   toast: false,
-  defaults: { bell: true, toast: false, sound: false },
+  defaults: { bell: true, toast: false, sound: false, push: false },
 });
 const state = (...items: NotificationPreferenceItem[]): PrefsState =>
   stateFromResponse({ items: items.length ? items : [MESSAGE, DEVICE, TASK_DONE] });
@@ -54,13 +57,13 @@ describe('reading the server list', () => {
         type: 'new_message',
         group: 'conversations',
         toast: false,
-        overrides: { bell: null, toast: false, sound: null },
-        defaults: { bell: true, toast: true, sound: true },
+        overrides: { bell: null, toast: false, sound: null, push: null },
+        defaults: { bell: true, toast: true, sound: true, push: true },
       }),
     );
-    expect(e.flags).toEqual({ bell: true, toast: false, sound: false });
-    expect(e.defaults).toEqual({ bell: true, toast: true, sound: true });
-    expect(e.overrides).toEqual({ bell: null, toast: false, sound: null });
+    expect(e.flags).toEqual({ bell: true, toast: false, sound: false, push: false });
+    expect(e.defaults).toEqual({ bell: true, toast: true, sound: true, push: true });
+    expect(e.overrides).toEqual({ bell: null, toast: false, sound: null, push: null });
     expect(e.workspaceEnabled).toBe(true);
     expect(isCustom(e)).toBe(true);
   });
@@ -82,18 +85,42 @@ describe('how a row reads (disabled states)', () => {
     expect(v.cells.bell).toEqual({ on: true, disabled: false, reason: null });
     expect(v.cells.toast).toEqual({ on: true, disabled: false, reason: null });
     expect(v.cells.sound).toEqual({ on: true, disabled: false, reason: null });
+    expect(v.cells.push).toEqual({ on: true, disabled: false, reason: null });
   });
 
-  it('disables everything, shown off, when the workspace turned the event off', () => {
+  it('keeps the bell switch usable when the workspace has the event off (the server lets the personal choice win)', () => {
     const v = rowView(
       entryFromItem(
         item({ type: 'new_message', group: 'conversations', workspaceInapp: false, bell: false }),
       ),
     );
+    // The note on the row is driven by `blocked`; nothing is disabled because of the workspace.
     expect(v.blocked).toBe(true);
-    for (const c of Object.values(v.cells)) {
-      expect(c).toEqual({ on: false, disabled: true, reason: 'workspace' });
+    expect(v.cells.bell).toEqual({ on: false, disabled: false, reason: null });
+    // The extras need the bell, exactly as when the person turned it off themselves.
+    for (const c of [v.cells.toast, v.cells.sound, v.cells.push]) {
+      expect(c).toEqual({ on: false, disabled: true, reason: 'bell_off' });
     }
+  });
+
+  it('lets a person turn an event on for themselves although the workspace has it off, and then offers the rest', () => {
+    const workspaceOff = state(
+      item({ type: 'new_message', group: 'conversations', workspaceInapp: false, bell: false }),
+    );
+    const on = applyChange(workspaceOff, 'new_message', 'bell', true);
+    const e = find(on, 'new_message');
+    expect(e.flags.bell).toBe(true);
+    // Different from the workspace default, so it is a choice of their own and is sent.
+    expect(e.overrides.bell).toBe(true);
+    expect(changeRequest(on, 'new_message', 'bell')).toEqual({
+      items: [{ type: 'new_message', bell: true }],
+    });
+    const v = rowView(e);
+    expect(v.blocked).toBe(true);
+    expect(v.cells.toast.disabled).toBe(false);
+    expect(v.cells.push.disabled).toBe(false);
+    // Resetting returns to following the workspace.
+    expect(find(resetEntry(on, 'new_message'), 'new_message').flags.bell).toBe(false);
   });
 
   it('disables the pop-up and sound while the bell is off, but keeps the bell switch live', () => {
@@ -103,19 +130,22 @@ describe('how a row reads (disabled states)', () => {
           type: 'new_message',
           group: 'conversations',
           bell: false,
-          overrides: { bell: false, toast: null, sound: null },
+          overrides: { bell: false, toast: null, sound: null, push: null },
         }),
       ),
     );
     expect(v.cells.bell).toEqual({ on: false, disabled: false, reason: null });
     expect(v.cells.toast).toEqual({ on: false, disabled: true, reason: 'bell_off' });
     expect(v.cells.sound).toEqual({ on: false, disabled: true, reason: 'bell_off' });
+    expect(v.cells.push).toEqual({ on: false, disabled: true, reason: 'bell_off' });
   });
 
   it('marks a switch the kind of event does not offer (no ping for a device)', () => {
     const v = rowView(find(state(), 'device_disconnected'));
     expect(v.cells.sound).toEqual({ on: false, disabled: true, reason: 'not_available' });
     expect(v.cells.toast.disabled).toBe(false);
+    // Every kind of event can be pushed to a device.
+    expect(v.cells.push.reason).not.toBe('not_available');
     const done = rowView(find(state(), 'task_completed'));
     expect(done.cells.toast.reason).toBe('not_available');
   });
@@ -151,7 +181,7 @@ describe('optimistic changes', () => {
     const next = applyChange(state(), 'new_message', 'toast', false);
     const e = find(next, 'new_message');
     expect(e.flags.toast).toBe(false);
-    expect(e.overrides).toEqual({ bell: null, toast: false, sound: null });
+    expect(e.overrides).toEqual({ bell: null, toast: false, sound: null, push: null });
     expect(isCustom(e)).toBe(true);
     expect(customCount(next)).toBe(1);
   });
@@ -175,10 +205,6 @@ describe('optimistic changes', () => {
     expect(applyChange(s, 'new_message', 'bell', true)).toBe(s);
     expect(applyChange(s, 'nope', 'bell', false)).toBe(s);
     expect(applyChange(s, 'device_disconnected', 'sound', true)).toBe(s);
-    const blocked = state(
-      item({ type: 'new_message', group: 'conversations', workspaceInapp: false, bell: false }),
-    );
-    expect(applyChange(blocked, 'new_message', 'bell', true)).toBe(blocked);
     const bellOff = applyChange(s, 'new_message', 'bell', false);
     expect(applyChange(bellOff, 'new_message', 'toast', false)).toBe(bellOff);
   });
@@ -191,8 +217,21 @@ describe('optimistic changes', () => {
       bell: null,
       toast: null,
       sound: false,
+      push: null,
     });
     expect(find(bellOn, 'new_message').flags.sound).toBe(false);
+  });
+
+  it('records a push choice like any other channel, and goes back to the default when put back', () => {
+    const off = applyChange(state(), 'new_message', 'push', false);
+    expect(find(off, 'new_message').overrides.push).toBe(false);
+    expect(changeRequest(off, 'new_message', 'push')).toEqual({
+      items: [{ type: 'new_message', push: false }],
+    });
+    const on = applyChange(state(), 'device_disconnected', 'push', true);
+    expect(find(on, 'device_disconnected').overrides.push).toBe(true);
+    const back = applyChange(off, 'new_message', 'push', true);
+    expect(find(back, 'new_message').overrides.push).toBeNull();
   });
 });
 
@@ -209,11 +248,11 @@ describe('requests', () => {
     expect(changeRequest(off, 'nope', 'toast')).toBeNull();
   });
 
-  it('resets types by sending null for all three channels, and sends nothing for no types', () => {
+  it('resets types by sending null for all four channels, and sends nothing for no types', () => {
     expect(resetRequest(['new_message', 'task_completed'])).toEqual({
       items: [
-        { type: 'new_message', bell: null, toast: null, sound: null },
-        { type: 'task_completed', bell: null, toast: null, sound: null },
+        { type: 'new_message', bell: null, toast: null, sound: null, push: null },
+        { type: 'task_completed', bell: null, toast: null, sound: null, push: null },
       ],
     });
     expect(resetRequest([])).toBeNull();
@@ -269,10 +308,30 @@ describe('mayAlert (what the live alerts ask)', () => {
     const blocked = state(
       item({ type: 'new_message', group: 'conversations', workspaceInapp: false, bell: false }),
     );
+    // Off by the workspace and never chosen: no row, so nothing to pop up.
     expect(mayAlert(blocked.entries, 'new_message', 'toast')).toBe(false);
+    // The person turned it on for themselves: their alerts work although the workspace has it off.
+    const ownChoice = applyChange(blocked, 'new_message', 'bell', true);
+    expect(mayAlert(ownChoice.entries, 'new_message', 'toast')).toBe(true);
   });
 
   it('keeps the type default for a type missing from the list', () => {
     expect(mayAlert(state(DEVICE).entries, 'new_message', 'toast')).toBe(true);
+  });
+});
+
+describe('mayPush (does a browser push already cover this event?)', () => {
+  it('uses the catalogue default with no preferences loaded: on for a chat event, off for a quiet one', () => {
+    expect(mayPush(undefined, 'new_message')).toBe(true);
+    expect(mayPush(undefined, 'wallet_credited')).toBe(false);
+    expect(mayPush(undefined, 'never_heard_of_it')).toBe(false);
+  });
+
+  it('follows the personal push choice, and needs the bell', () => {
+    const off = applyChange(state(), 'new_message', 'push', false);
+    expect(mayPush(off.entries, 'new_message')).toBe(false);
+    const noBell = applyChange(state(), 'new_message', 'bell', false);
+    expect(mayPush(noBell.entries, 'new_message')).toBe(false);
+    expect(mayPush(state().entries, 'new_message')).toBe(true);
   });
 });

@@ -6,7 +6,13 @@ export {
   useRealtimeClient,
   type RealtimeProviderProps,
 } from './realtime-provider';
-export { useRealtimeStatus, useRoom, useRealtimeEvent, useResync } from './hooks';
+export {
+  useRealtimeStatus,
+  useRoom,
+  useRealtimeEvent,
+  useResync,
+  useVisibilityReport,
+} from './hooks';
 export {
   RealtimeClient,
   type RealtimeStatus,
