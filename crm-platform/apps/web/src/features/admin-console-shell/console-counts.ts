@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import {
   announcementListResponseSchema,
   couponListResponseSchema,
-  guidebookAdminListResponseSchema,
   planAdminListResponseSchema,
   nodeBridgeResponseSchema,
   platformRoleListResponseSchema,
@@ -70,25 +69,15 @@ export async function getConsoleCounts(): Promise<ConsoleCounts> {
     // network failure: the coupons badge stays blank
   }
 
-  // Marketing: announcements switched on (whatever their window) and published guidebook articles, as WaDesk's badges.
+  // Marketing: announcements switched on (whatever their window), as WaDesk's badge.
   try {
-    const [a, g] = await Promise.all([
-      fetch(`${apiBase()}/v2/platform/cms/announcements?limit=1`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      }),
-      fetch(`${apiBase()}/v2/platform/cms/guidebook?limit=1`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      }),
-    ]);
+    const a = await fetch(`${apiBase()}/v2/platform/cms/announcements?limit=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
     if (a.ok) {
       const parsed = announcementListResponseSchema.safeParse(await a.json());
       if (parsed.success) counts.announcements = parsed.data.summary.switchedOn;
-    }
-    if (g.ok) {
-      const parsed = guidebookAdminListResponseSchema.safeParse(await g.json());
-      if (parsed.success) counts.guidebook = parsed.data.summary.published;
     }
   } catch {
     // network failure: the marketing badges stay blank

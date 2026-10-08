@@ -99,7 +99,7 @@ export function UserMenu({
   theme?: 'light' | 'dark';
   /** Opens the Settings area. */
   settingsHref?: string;
-  /** Support and Guidebook: Help and support opens the Support entry. */
+  /** Support: a screen that is not built yet shows disabled with a "Soon" mark. */
   helpItems?: readonly ResolvedNavItem[];
   /** The rich profile block (WD-ASHELL-019): plan and role chip, wallet, orders, plans and the tour replay. */
   profile?: ProfileMenuData;
