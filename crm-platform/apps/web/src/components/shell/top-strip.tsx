@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import {
@@ -18,6 +17,7 @@ import type { ResolvedNavItem } from '@/features/_registry/types';
 import { jumpSearch } from './command-palette-model';
 import { MenuIcon, NavIcon } from './nav-icons';
 import type { WalletChipData } from './top-bar';
+import { HeaderTools, RoundFrame } from './header-controls';
 import { UserMenu, type ShellUser } from './user-menu';
 
 // --- A clock that ticks every 20 seconds, empty on the server so hydration matches --------------------------------------
@@ -67,7 +67,11 @@ function JumpBox({ index }: { index: readonly JumpEntry[] }) {
     router.push(e.href);
   };
   return (
-    <div className="relative hidden w-72 md:block">
+    <div className="relative ms-4 hidden max-w-[520px] flex-1 md:block">
+      <NavIcon
+        name="search"
+        className="pointer-events-none absolute start-3.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
+      />
       <input
         ref={ref}
         id="ts-search"
@@ -98,8 +102,11 @@ function JumpBox({ index }: { index: readonly JumpEntry[] }) {
             setOpen(false);
           }
         }}
-        className="h-9 w-full rounded-full border border-border bg-muted/50 px-4 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        className="w-full rounded-full border border-border bg-muted/50 py-2 pe-12 ps-10 text-[12.5px] outline-none transition focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-primary"
       />
+      <kbd className="pointer-events-none absolute end-3 top-1/2 hidden -translate-y-1/2 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:block">
+        ⌘K
+      </kbd>
       {open && results.length > 0 && (
         <ul
           id={listId}
@@ -150,18 +157,29 @@ function Greeting({ name }: { name: string }) {
   const t = useTranslations('admin-console-shell.strip.greeting');
   const locale = useLocale();
   const now = useNow();
-  if (!now) return <div className="hidden h-9 w-40 lg:block" aria-hidden="true" />;
-  const d = new Date(now);
+  const d = new Date(now || 0);
   const who = firstName(name);
   return (
-    <div className="hidden text-end leading-tight lg:block" data-testid="greeting">
-      <div className="text-sm font-medium">
-        {t(greetingKey(d.getHours()))}
-        {who ? `, ${who}` : ''}
-      </div>
-      <div className="text-xs text-muted-foreground">
-        {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(d)}
-      </div>
+    <div className="hidden min-w-0 flex-1 items-center justify-center px-4 lg:flex">
+      {now ? (
+        <div className="select-none text-center leading-tight" data-testid="greeting">
+          <div className="text-[12.5px] font-semibold">
+            {t(greetingKey(d.getHours()))}
+            {who ? `, ${who}` : ''}
+          </div>
+          <div className="mt-0.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground">
+            {new Intl.DateTimeFormat(locale, {
+              weekday: 'short',
+              day: 'numeric',
+              month: 'short',
+            }).format(d)}
+            {' · '}
+            {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(d)}
+          </div>
+        </div>
+      ) : (
+        <div className="h-9 w-40" aria-hidden="true" />
+      )}
     </div>
   );
 }
@@ -177,6 +195,8 @@ export interface TopStripProps {
   jumpIndex: readonly JumpEntry[];
   wallet?: WalletChipData;
   bell?: ReactNode;
+  /** The gear for the settings behind the current screen (`PageSettingsShortcut`). */
+  pageSettings?: ReactNode;
   settingsHref?: string;
   helpItems?: readonly ResolvedNavItem[];
 }
@@ -193,8 +213,8 @@ export function TopStrip({
   pageTitle,
   brand,
   jumpIndex,
-  wallet,
   bell,
+  pageSettings,
   settingsHref,
   helpItems,
 }: TopStripProps) {
@@ -213,27 +233,27 @@ export function TopStrip({
       >
         <MenuIcon />
       </button>
-      <nav aria-label="breadcrumb" className="flex min-w-0 items-center gap-1.5 text-sm">
-        <span className="hidden text-muted-foreground sm:inline">{brand}</span>
-        <span aria-hidden="true" className="hidden text-muted-foreground sm:inline">
-          ›
-        </span>
-        <span className="truncate font-medium">{pageTitle}</span>
+      <nav
+        aria-label="breadcrumb"
+        className="flex min-w-0 items-center gap-2.5 font-mono text-[11.5px] uppercase tracking-widest text-muted-foreground"
+      >
+        <span className="hidden sm:inline">{brand}</span>
+        <NavIcon name="chevron-right" className="hidden size-3 sm:block" />
+        <span className="truncate text-foreground">{pageTitle}</span>
       </nav>
-      <div className="ms-auto flex items-center gap-3">
-        <JumpBox index={jumpIndex} />
-        <Greeting name={user.fullName} />
-        {wallet && (
-          <Link
-            href={wallet.href ?? '/billing/wallet'}
-            className="hidden items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary xl:inline-flex"
-          >
-            <NavIcon name="payment" className="size-4" />
-            <span className="tabular-nums">{wallet.label}</span>
-          </Link>
-        )}
-        {bell}
-        <UserMenu user={user} theme={theme} settingsHref={settingsHref} helpItems={helpItems} />
+      <JumpBox index={jumpIndex} />
+      <Greeting name={user.fullName} />
+      <div className="ms-auto flex shrink-0 items-center gap-2 lg:ms-0">
+        <HeaderTools theme={theme} />
+        <RoundFrame>{pageSettings}</RoundFrame>
+        <RoundFrame>{bell}</RoundFrame>
+        <UserMenu
+          user={user}
+          theme={theme}
+          settingsHref={settingsHref}
+          helpItems={helpItems}
+          variant="strip"
+        />
       </div>
     </header>
   );

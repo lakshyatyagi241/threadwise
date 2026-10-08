@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, EmptyState, Select, Spinner, StatTile } from '@crm/ui';
+import { Alert, Button, Card, Select, Spinner, StatTile } from '@crm/ui';
 import type { BspDashboard } from '@crm/contracts';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -14,12 +14,19 @@ import { formatMoney, formatRange } from '../lib/format';
 const COLUMNS = ['workspace', 'messages', 'revenue', 'metaCost', 'margin', 'wallet'] as const;
 
 /** The reseller's income page: this month's revenue, Meta cost and margin, and the same per workspace. */
+const walletRulesLink = (chunks: ReactNode) => (
+  <Link href="/admin/wallet/pricing" className="font-medium text-primary hover:underline">
+    {chunks}
+  </Link>
+);
+
 export function DashboardPage() {
   const t = useTranslations('bsp-billing-engine.dashboard');
   const tc = useTranslations('bsp-billing-engine.common');
   const locale = useLocale();
   // A P&L is one currency: workspaces billed in rupees are not added to those billed in dollars.
   const [currency, setCurrency] = useState<string | undefined>(undefined);
+  const [now] = useState(() => Date.now());
   const q = useQuery({
     queryKey: KEYS.dashboard(undefined, currency),
     queryFn: ({ signal }) => operatorApi.dashboard(undefined, currency, signal),
@@ -30,9 +37,17 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={t('eyebrow')}
+        eyebrow={
+          q.data
+            ? `${t('eyebrow')} · ${formatRange(
+                q.data.from,
+                new Date(Math.min(Date.parse(q.data.to), now)).toISOString(), // WaDesk shows the current month up to today
+                locale,
+              )}`
+            : t('eyebrow')
+        }
         title={t('title')}
-        description={q.data ? formatRange(q.data.from, q.data.to, locale) : undefined}
+        description={t.rich('intro', { link: walletRulesLink })}
         actions={
           <div className="flex flex-wrap items-center gap-2">
             {q.data && q.data.currencies.length > 1 && (
@@ -49,6 +64,14 @@ export function DashboardPage() {
                 ))}
               </Select>
             )}
+            <Button size="sm" aria-current="page">
+              {t('linkPnl')}
+            </Button>
+            <Link href="/admin/wallet/pricing">
+              <Button variant="secondary" size="sm">
+                {t('linkRates')}
+              </Button>
+            </Link>
             <Link href="/admin/bsp/credit">
               <Button variant="secondary" size="sm">
                 {t('linkConnect')}
@@ -79,19 +102,11 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
   const x = d.totals;
   return (
     <>
-      <p className="max-w-3xl text-sm text-muted-foreground">{t('intro')}</p>
-      {x.unpricedMessages > 0 && (
-        <Alert tone="warning">{t('unpricedBanner', { count: x.unpricedMessages })}</Alert>
-      )}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatTile label={t('revenue')} value={money(x.revenue)} />
         <StatTile label={t('metaCost')} value={money(x.metaCost)} />
         <StatTile label={t('margin')} value={money(x.margin)} tone="accent" />
-        <StatTile
-          label={t('walletFloat')}
-          value={money(x.walletFloat)}
-          hint={t('walletFloatHint')}
-        />
+        <StatTile label={t('walletFloat')} value={money(x.walletFloat)} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:max-w-xl">
         <StatTile label={t('billed')} value={num.format(x.billedMessages)} />
@@ -101,41 +116,52 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
           tone={x.unpricedMessages > 0 ? 'warning' : 'default'}
         />
       </div>
+      {x.unpricedMessages > 0 && (
+        <Alert tone="warning">
+          {t.rich('unpricedBanner', { count: x.unpricedMessages, link: walletRulesLink })}
+        </Alert>
+      )}
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('perWorkspace')}</h2>
-        {d.workspaces.length === 0 ? (
-          <EmptyState title={t('empty')} />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
-              <thead>
-                <tr className="border-b border-border text-xs text-muted-foreground">
-                  {COLUMNS.map((c) => (
-                    <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
-                      {t(`columns.${c}`)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {d.workspaces.map((w) => (
-                  <tr key={w.workspaceId} className="border-b border-border last:border-0">
-                    <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
-                    <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
-                    <td className="px-2 py-2 tabular-nums text-muted-foreground">
-                      {money(w.metaCost)}
-                    </td>
-                    <td className="px-2 py-2 font-medium tabular-nums text-success">
-                      {money(w.margin)}
-                    </td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
-                  </tr>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
+            <thead>
+              <tr className="border-b border-border text-xs text-muted-foreground">
+                {COLUMNS.map((c) => (
+                  <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
+                    {t(`columns.${c}`)}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              </tr>
+            </thead>
+            <tbody>
+              {d.workspaces.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={COLUMNS.length}
+                    className="px-2 py-8 text-center text-muted-foreground"
+                  >
+                    {t('empty')}
+                  </td>
+                </tr>
+              )}
+              {d.workspaces.map((w) => (
+                <tr key={w.workspaceId} className="border-b border-border last:border-0">
+                  <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
+                  <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
+                  <td className="px-2 py-2 tabular-nums text-muted-foreground">
+                    {money(w.metaCost)}
+                  </td>
+                  <td className="px-2 py-2 font-medium tabular-nums text-success">
+                    {money(w.margin)}
+                  </td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {d.hasMoreWorkspaces && <p className="text-xs text-muted-foreground">{t('more')}</p>}
       </Card>
     </>

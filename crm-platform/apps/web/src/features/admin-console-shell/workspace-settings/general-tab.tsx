@@ -44,7 +44,7 @@ function GeneralForm({ data }: { data: WorkspaceSettingsResponse }) {
             save.mutate({ name, timezone, currency }, { onSuccess: () => setSaved(true) });
           }}
         >
-          <h2 className="text-xl font-semibold">{t('workspace')}</h2>
+          <h2 className="font-serif text-xl">{t('workspace')}</h2>
           {locked && <p className="text-xs italic text-muted-foreground">{t('ownerOnly')}</p>}
           {saved && <Alert tone="success">{t('saved')}</Alert>}
           {save.isError && <Alert tone="danger">{t('saveFailed')}</Alert>}
@@ -117,7 +117,7 @@ function WorkingHours() {
   ] as const;
   return (
     <Card className="space-y-3 p-6">
-      <h2 className="text-xl font-semibold">{t('title')}</h2>
+      <h2 className="font-serif text-xl">{t('title')}</h2>
       <p className="text-xs text-muted-foreground">{t('note')}</p>
       <div className="space-y-2">
         {rows.map((r) => (
@@ -159,7 +159,7 @@ function PreferencesForm({ initial }: { initial: boolean }) {
         }}
       >
         <div className="max-w-xl space-y-1">
-          <h2 className="text-xl font-semibold">{t('title')}</h2>
+          <h2 className="font-serif text-xl">{t('title')}</h2>
           <p className="text-xs text-muted-foreground">{t('note')}</p>
           {saved && <p className="text-xs text-success">{t('saved')}</p>}
           {save.isError && <p className="text-xs text-danger">{t('saveFailed')}</p>}

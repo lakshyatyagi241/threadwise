@@ -186,7 +186,7 @@ export function Composer(props: ComposerProps) {
       </p>
 
       {props.replyTo && (
-        <div className="flex items-start gap-2 rounded-md border-s-2 border-primary bg-muted px-3 py-1.5 text-xs">
+        <div className="flex items-center gap-2 rounded-md bg-success/10 px-2.5 py-1.5 text-[11.5px]">
           <div className="min-w-0 flex-1">
             <div className="font-medium">{t('replyingTo', { name: props.replyTo.authorName })}</div>
             <div className="truncate text-muted-foreground">
@@ -270,14 +270,6 @@ export function Composer(props: ComposerProps) {
             e.target.value = '';
           }}
         />
-        <Button
-          variant="secondary"
-          className="size-10 shrink-0 px-0"
-          aria-label={t('attach')}
-          onClick={() => input.current?.click()}
-        >
-          <PaperclipIcon />
-        </Button>
         <textarea
           ref={area}
           value={text}
@@ -298,14 +290,37 @@ export function Composer(props: ComposerProps) {
               takeFile(f);
             }
           }}
-          className="max-h-45 min-h-10 flex-1 resize-none rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="max-h-45 min-h-9 flex-1 resize-none rounded-md border border-border bg-muted/40 px-3 py-2 text-[13px] outline-none focus:border-primary focus:bg-background"
         />
-        <Button type="submit" className="shrink-0" disabled={!canSend}>
+        <Button
+          variant="ghost"
+          className="size-9 shrink-0 rounded-full px-0 text-muted-foreground"
+          aria-label={t('attach')}
+          onClick={() => input.current?.click()}
+        >
+          <PaperclipIcon />
+        </Button>
+        <Button
+          type="submit"
+          className="h-9 shrink-0 rounded-full px-4 text-[12.5px]"
+          disabled={!canSend}
+        >
           <SendIcon />
           {t('send')}
         </Button>
       </div>
-      <p className="hidden text-[11px] text-muted-foreground sm:block">{t('hint')}</p>
+      <p className="hidden font-mono text-[10px] text-muted-foreground sm:block">
+        <kbd className="rounded border border-border bg-muted/40 px-1 py-0.5">↵</kbd>{' '}
+        {t('hintSend')}
+        {' · '}
+        <kbd className="rounded border border-border bg-muted/40 px-1 py-0.5">
+          {t('hintShift')}
+        </kbd>{' '}
+        {t('hintNewLine')}
+        {' · '}
+        <kbd className="rounded border border-border bg-muted/40 px-1 py-0.5">@</kbd>{' '}
+        {t('hintMention')}
+      </p>
     </form>
   );
 }

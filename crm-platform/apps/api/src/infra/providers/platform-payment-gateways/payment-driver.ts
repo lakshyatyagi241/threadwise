@@ -1,5 +1,8 @@
 import { createHash, createHmac, timingSafeEqual } from 'node:crypto';
+import { request as httpsRequest } from 'node:https';
+import { isIP } from 'node:net';
 import { currencyExponent } from '@crm/contracts';
+import { isBlockedAddress } from '../../net/blocked-address';
 
 /**
  * The port every gateway driver implements (WD-PAYGW-008, 048). It knows nothing about plans, workspaces or wallets: a
@@ -185,6 +188,117 @@ export const defaultHttp: HttpFetch = async (url, init) => {
   return { status: res.status, json, text };
 };
 
+/** One HTTPS call to a fixed IP address while the TLS name and the Host header stay the real host name. */
+export type PinnedFetch = (
+  ip: string,
+  url: string,
+  init: { method: string; headers?: Record<string, string>; body?: string },
+) => Promise<HttpResponse>;
+
+export const defaultPinnedHttp: PinnedFetch = (ip, url, init) =>
+  new Promise((resolve, reject) => {
+    const u = new URL(url);
+    const req = httpsRequest(
+      {
+        host: ip,
+        servername: u.hostname,
+        port: u.port || 443,
+        path: `${u.pathname}${u.search}`,
+        method: init.method,
+        headers: { ...init.headers, Host: u.host },
+        timeout: HTTP_TIMEOUT_MS,
+      },
+      (res) => {
+        const chunks: Buffer[] = [];
+        res.on('data', (c: Buffer) => chunks.push(c));
+        res.on('end', () => {
+          const text = Buffer.concat(chunks).toString('utf8');
+          let json: unknown = null;
+          try {
+            json = text ? JSON.parse(text) : null;
+          } catch {
+            json = null;
+          }
+          resolve({ status: res.statusCode ?? 0, json, text });
+        });
+      },
+    );
+    req.on('timeout', () => req.destroy(new Error('pinned_request_timeout')));
+    req.on('error', reject);
+    if (init.body) req.write(init.body);
+    req.end();
+  });
+
+/** True when a failed call was a name-resolution failure (Node reports it on the error or on its cause). */
+export function isDnsError(e: unknown): boolean {
+  const code = (x: unknown): string => String((x as { code?: unknown } | null)?.code ?? '');
+  const c = [code(e), code((e as { cause?: unknown } | null)?.cause)];
+  return c.some((v) => v === 'ENOTFOUND' || v === 'EAI_AGAIN' || v === 'ENODATA');
+}
+
+export class DnsMissingError extends Error {
+  constructor(host: string) {
+    super(`${host} DNS is missing (NXDOMAIN)`);
+  }
+}
+
+/**
+ * Resolves a host through DNS-over-HTTPS, Cloudflare first then Google (WD-PAYGW-025 rule 1). Returns a public IPv4 address,
+ * or null when neither resolver answers; throws DnsMissingError when a resolver says the name does not exist (Status 3).
+ * An answer that is not a public address is ignored, so a poisoned answer cannot point a payment call at the internal network.
+ */
+export async function resolveViaDoh(host: string, doh: HttpFetch): Promise<string | null> {
+  const urls = [
+    `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(host)}&type=A`,
+    `https://dns.google/resolve?name=${encodeURIComponent(host)}&type=A`,
+  ];
+  let nx = false;
+  for (const u of urls) {
+    try {
+      const r = asRecord(
+        (await doh(u, { method: 'GET', headers: { Accept: 'application/dns-json' } })).json,
+      );
+      if (r.Status === 3) nx = true;
+      const answers = Array.isArray(r.Answer) ? r.Answer : [];
+      for (const a of answers) {
+        const rec = asRecord(a);
+        const ip = typeof rec.data === 'string' ? rec.data : '';
+        if (rec.type === 1 && isIP(ip) === 4 && !isBlockedAddress(ip)) return ip;
+      }
+    } catch {
+      // try the next resolver
+    }
+  }
+  if (nx) throw new DnsMissingError(host);
+  return null;
+}
+
+/**
+ * Wraps one HTTP call with the CinetPay behaviour: up to two attempts; on a name-resolution failure the host is resolved through
+ * DoH and the call is made against that IP (TLS name unchanged). Everything behind the driver port, injectable for tests.
+ */
+export function withDnsFallback(
+  primary: HttpFetch,
+  doh: HttpFetch = defaultHttp,
+  pinned: PinnedFetch = defaultPinnedHttp,
+): HttpFetch {
+  return async (url, init) => {
+    let last: unknown;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        return await primary(url, init);
+      } catch (e) {
+        last = e;
+        if (!isDnsError(e)) continue;
+        const host = new URL(url).hostname;
+        const ip = await resolveViaDoh(host, doh);
+        if (ip) return pinned(ip, url, init);
+      }
+    }
+    throw last;
+  };
+}
+
 /** What identifies a provider plan: the same account, price and cadence is the same plan, so it is created once and reused. */
 export interface ProviderPlanKey {
   /** Opaque, stable per provider account (a hash of the key id), so a test key and a live key never share a plan. */
@@ -205,6 +319,9 @@ export interface DriverContext {
   credentials: Record<string, string>;
   mode: 'sandbox' | 'live';
   http: HttpFetch;
+  /** DNS-over-HTTPS lookups and the pinned-IP call used by the DNS fallback (CinetPay); tests inject fixtures. */
+  dohHttp?: HttpFetch;
+  pinnedHttp?: PinnedFetch;
   /** The URL a provider posts notifications to (Square signs it into its notification signature). */
   webhookUrl?: string;
   planCache?: ProviderPlanCache;

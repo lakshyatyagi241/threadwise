@@ -27,6 +27,7 @@ export function ConsolePage() {
   return (
     <div className="space-y-6">
       <PageHeader
+        eyebrow={t('eyebrow')}
         title={t('title')}
         description={t('subtitle')}
         actions={

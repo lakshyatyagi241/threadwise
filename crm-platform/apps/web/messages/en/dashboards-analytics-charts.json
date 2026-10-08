@@ -66,6 +66,7 @@
         "evening": "Good evening, {name}."
       },
       "subline": "{date} - {range} showing {sent} outbound, {rate}% deliverability across {devices, plural, one {# connected device} other {# connected devices}}.",
+      "synced": "Live · synced {s}s ago",
       "kpis": "Key numbers",
       "kpi": {
         "sent": "Messages sent · {range}",
@@ -183,7 +184,9 @@
         "unzoned": "unzoned",
         "per24h": "{n}/24h",
         "deliv": "deliv",
-        "free": "{n, plural, one {# device slot available} other {# device slots available}}"
+        "free": "{n, plural, one {# device slot available} other {# device slots available}}",
+        "freeHint": "Add WABA",
+        "connectDeviceShort": "Connect device"
       },
       "templates": {
         "title": "Top performing templates",
