@@ -4,13 +4,10 @@ import type {
   SegmentRules,
   SegmentSharedWith,
 } from '@crm/contracts';
-import type { SegmentRow } from './segments.repository';
+import type { SegmentRow, SegmentShareView } from './segments.repository';
 
 /** The people and teams of one segment as the repository reads them. */
-export interface SegmentShareView {
-  users: Array<{ uuid: string; name: string; email: string }>;
-  teams: Array<{ uuid: string; name: string; memberCount: number }>;
-}
+export type { SegmentShareView } from './segments.repository';
 
 export const NO_SHARES: SegmentShareView = { users: [], teams: [] };
 
