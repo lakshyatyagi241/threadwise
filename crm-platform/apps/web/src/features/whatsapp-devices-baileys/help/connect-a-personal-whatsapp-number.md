@@ -4,7 +4,7 @@ title: Connect a personal WhatsApp number
 summary: Link a WhatsApp number by QR code or pairing code, see its status, and disconnect or delete it. Unofficial: WhatsApp can restrict the number.
 area: inbox
 order: 40
-documents: [nav:devices]
+documents: [nav:devices, tile:unofficial-whatsapp]
 keywords: [personal number, qr code, pairing code, linked devices, unofficial, ban risk, disconnect, whatsapp web]
 ---
 
@@ -18,7 +18,7 @@ Every private chat on a linked number, not only business chats, appears in this 
 
 ## How to connect a number
 
-1. Open **Personal WhatsApp** in the menu, under Inbox & Chat.
+1. Open **Settings**, then **Channels**, and select **Unofficial WhatsApp API**. The **Numbers** tab lists your linked numbers.
 2. Select **Connect a number**.
 3. Read **Before you connect** and tick all three boxes. Each person who connects a number accepts the notice for themselves. If the notice changes, you are asked again.
 4. Select **I accept and continue**.
@@ -59,7 +59,7 @@ You need permission to see the numbers (**wa.devices.read**), and separate permi
 
 ## If something looks wrong
 
-- **The Personal WhatsApp entry is missing.** Your workspace is not allowed to use personal numbers, or your role cannot see them. Ask a workspace admin, or the platform operator if the workspace is not allowed.
+- **The Unofficial WhatsApp API tile is missing.** Your workspace is not allowed to use personal numbers, or your role cannot see them. Ask a workspace admin, or the platform operator if the workspace is not allowed.
 - **The page says the feature is no longer enabled.** The operator turned it off for your workspace. Your numbers and chats are kept.
 - **The connection service is not available.** Try again in a few minutes.
 - **The QR code expired.** Select **Try again** to get a new one.
