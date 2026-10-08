@@ -34,13 +34,13 @@ every screen that is built today.
 
 **Out of (v1):**
 
-| Not in scope                                                                                      | Why                                                                                                                                                                                                                                                         |
-| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| The operator console (`(admin)` shell)                                                            | A different audience and shell. Docs carry an `audience` field (`workspace` default, `operator` reserved) so it can be added without reshaping anything.                                                                                                    |
-| Reference's **Guidebook** (operator-authored articles in a `guidebook_articles` table, `/guidebook`) | It is a separate Reference feature on the port list (rule 1: nothing merged, renamed or replaced). The `guidebook` and `support` entries stay in the user menu as planned. Help center is additional; a later change may surface Guidebook articles inside it. |
-| Per-workspace or third-party (Marketplace mini app) documentation                                 | Needs authoring UI and review; v1 docs are repo content.                                                                                                                                                                                                    |
-| Docs stored in the database / edited in the browser                                               | Repo files are reviewed in PRs, versioned with the feature, and are what Claude drafts.                                                                                                                                                                     |
-| Translating bodies into Arabic                                                                    | Supported by the format (section 4.1); chrome strings are translated now, bodies fall back to English.                                                                                                                                                      |
+| Not in scope                                                                                      | Why                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The operator console (`(admin)` shell)                                                            | A different audience and shell. Docs carry an `audience` field (`workspace` default, `operator` reserved) so it can be added without reshaping anything.                                   |
+| Reference's **Guidebook** (operator-authored articles in a `guidebook_articles` table, `/guidebook`) | Retired on 2026-10-06 (owner decision): `/guidebook`, its admin editor and its tables are gone and `/guidebook` redirects to `/help`. The useful topics were rewritten as built-in guides. |
+| Per-workspace or third-party (Marketplace mini app) documentation                                 | Needs authoring UI and review; v1 docs are repo content.                                                                                                                                   |
+| Docs stored in the database / edited in the browser                                               | Repo files are reviewed in PRs, versioned with the feature, and are what Claude drafts.                                                                                                    |
+| Translating bodies into Arabic                                                                    | Supported by the format (section 4.1); chrome strings are translated now, bodies fall back to English.                                                                                     |
 
 ## 3. Terms
 
@@ -144,7 +144,7 @@ and no horizontal scroll at phone width.
 The rail already pins every `settings`-group item under the scrolling list, ordered, so Help renders directly above Settings
 in both the slim rail and the mobile drawer. The one change to `nav-rail.tsx` is the label of that pinned `<nav>` landmark, from
 "Settings" to "Help and settings" (`shell.pinned`), because it now holds both. `types.ts`'s comment on the `settings` group is
-updated to say "pinned to the bottom" (it no longer holds only Settings). The user menu's Support and Guidebook block is
+updated to say "pinned to the bottom" (it no longer holds only Settings). The user menu's Support block is
 untouched. The `help` icon exists in `nav-icons.tsx`. Active state: `/help` and `/help/*`.
 
 ### 4.6 Tooltips
@@ -254,7 +254,7 @@ I review a sample of each domain's output against the running screens before it 
 | Component                                     | `HelpTip` renders nothing when hidden, summary vs anchored text, keyboard open/close/focus return, RTL placement                                                                                                                                                      |
 | E2E (Playwright, `apps/web/e2e/help-center/`) | Help icon sits above Settings (rail and drawer); `/help` lists visible docs and search filters; a doc gated on a plan feature the seeded plan lacks is absent from the list, search and direct URL (404); the page tooltip opens and its link lands on the doc anchor |
 
-**Parity.** The Help center has no Reference counterpart (Guidebook is untouched). The `threadwise-playwright-parity` skill is still
+**Parity.** The Help center has no Reference counterpart (the Guidebook it replaced is retired, see parity/help-center.md HC-5). The `threadwise-playwright-parity` skill is still
 run and records "no comparable surface" itself; the Help entry in the rail and the plan-aware docs are recorded as intended
 differences in `docs/threadwise-port/parity/help-center.md`. No `skipped --user-approved` stamp is used (the owner did not give that
 word).

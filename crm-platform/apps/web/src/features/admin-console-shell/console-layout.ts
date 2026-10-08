@@ -82,7 +82,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'website',
     icon: 'globe',
-    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements', 'cms-guidebook'],
+    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements'],
   },
   {
     id: 'whatsapp',
@@ -189,8 +189,6 @@ export const NOT_IN_MENU: Readonly<Record<string, string>> = {
   'announcements/[id]': 'opened from Announcements',
   'blog/new': 'opened from Blog',
   'blog/[id]': 'opened from Blog',
-  'guidebook/new': 'opened from Guidebook',
-  'guidebook/[id]': 'opened from Guidebook',
   'legal-pages/[slug]': 'opened from Legal pages',
   'coupons/new': 'opened from Coupons',
   'coupons/[id]/edit': 'opened from Coupons',
