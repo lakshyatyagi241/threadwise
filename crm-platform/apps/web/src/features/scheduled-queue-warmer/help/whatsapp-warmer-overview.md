@@ -4,7 +4,7 @@ title: WhatsApp warmer
 summary: Warm up a WhatsApp number by raising its daily send limit step by step, with human-like gaps and active hours.
 area: campaigns
 order: 50
-documents: [nav:warmer, tile:warmer]
+documents: [nav:warmer]
 gates:
   planFeature: whatsapp_warmer
 keywords: [warm up, warming, ban risk, daily limit, budget, health, gap, spintax, unofficial api]
@@ -18,7 +18,7 @@ A new or quiet WhatsApp number that suddenly sends a lot is more likely to be bl
 
 ## How to use it
 
-1. Open **Settings**, then **Channels**, and select **Warmer**. Each connected number has a card showing its engine, a health score, its connection status and a **Warming** switch.
+1. Open **Settings**, then **Channels**, select **Unofficial WhatsApp API** and open the **Warmer** tab. Each connected number has a card showing its engine, a health score, its connection status and a **Warming** switch.
 2. Turn on **Warming** for the number.
 3. Set the ramp: **Start budget/day**, **Ramp +% / step** and **Ramp every (days)**, and the ceiling, **Max budget/day**.
 4. Set the pacing: **Min gap (sec)** and **Max gap (sec)** between two messages, and the hours, **Active from (hr)** and **Active to (hr)**, on a 24-hour clock.

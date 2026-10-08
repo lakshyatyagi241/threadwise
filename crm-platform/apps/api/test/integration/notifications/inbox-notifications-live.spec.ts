@@ -16,7 +16,12 @@ import { NotificationsRepository } from '../../../src/modules/notifications/noti
  */
 const MIGRATIONS = resolve(__dirname, '../../../../../packages/db/migrations');
 const NEW_MIGRATION = '20261106090000_notif_live_columns.sql';
-const NEW_MIGRATIONS = [NEW_MIGRATION, '20261106090100_notif_collapse_latest_index.sql'];
+// Later migrations that depend on the new columns (an index on subject_uuid) are held back with it, then applied with the rest.
+const NEW_MIGRATIONS = [
+  NEW_MIGRATION,
+  '20261106090100_notif_collapse_latest_index.sql',
+  '20261110090100_inbox_notifications_chat_waiting_idx.sql',
+];
 
 describe('inbox_notifications live columns', () => {
   let container: StartedPostgreSqlContainer;
