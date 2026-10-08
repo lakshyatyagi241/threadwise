@@ -10,6 +10,7 @@ import { NavCollapsedContext } from './nav-context';
 import { SEARCH_EVENT } from './command-palette-model';
 import type { WalletChipData } from './top-bar';
 import { HeaderTools, RoundFrame, SearchButton } from './header-controls';
+import { useOptionalShellData } from './shell-data';
 import { UserMenu, type ShellUser } from './user-menu';
 import type { BarItem } from './topbar-model';
 
@@ -97,6 +98,7 @@ export function TopNav({
 }: TopNavProps) {
   const tAll = useTranslations();
   const tn = useTranslations('admin-console-shell.topNav');
+  const brandLogoUrl = useOptionalShellData()?.brandLogoUrl ?? null;
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background" data-shell="topbar">
       <div className="flex h-16 items-center gap-3 px-3 sm:px-4">
@@ -113,10 +115,21 @@ export function TopNav({
           href="/dashboard"
           className="flex shrink-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <BrandMark className="size-8" />
-          <span className="hidden font-serif text-2xl font-normal tracking-tight sm:inline">
-            {tAll('common.appName')}
-          </span>
+          {brandLogoUrl ? (
+            <img
+              src={brandLogoUrl}
+              alt={tn('workspaceLogo')}
+              data-ws-logo
+              className="h-8 max-w-[160px] object-contain"
+            />
+          ) : (
+            <>
+              <BrandMark className="size-8" />
+              <span className="hidden font-serif text-2xl font-normal tracking-tight sm:inline">
+                {tAll('common.appName')}
+              </span>
+            </>
+          )}
         </Link>
         {workspace && (
           <NavCollapsedContext.Provider value={false}>

@@ -7,6 +7,7 @@ import { Alert, Button, Card, ConfirmDialog, Field, Input, PasswordInput, Spinne
 import { ApiError } from '@/lib/api/errors';
 import { useDeleteWorkspace, useExportCounts, useWorkspaceSettings } from './api';
 import { canSubmitDelete } from './logic';
+import { ResidencyCard } from './residency-card';
 
 const NS = 'admin-console-shell.workspaceSettings.data';
 
@@ -20,7 +21,7 @@ export function DataTab() {
   return (
     <div className="space-y-5">
       <Card className="space-y-3 p-6">
-        <h2 className="text-xl font-semibold">{t('exportTitle')}</h2>
+        <h2 className="font-serif text-xl">{t('exportTitle')}</h2>
         <p className="text-xs text-muted-foreground">{t('exportNote')}</p>
         {!c.isOwner && (
           <p className="text-xs italic text-muted-foreground">{t('exportOwnerOnly')}</p>
@@ -52,6 +53,7 @@ export function DataTab() {
           })}
         </div>
       </Card>
+      <ResidencyCard />
       <DeleteCard />
     </div>
   );
