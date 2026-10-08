@@ -742,6 +742,9 @@ function BuilderInner({
         edges={state.edges}
         runNonce={runNonce}
         templateButtons={(node) => templateQuickReplies(ctx.templates, node)}
+        templateExists={(node) =>
+          ctx.templates.some((tpl) => tpl.name === String(node.data?.tpl ?? '').trim())
+        }
         flowName={(id) => ctx.flows.find((f) => f.id === id)?.name}
       />
       {toastMsg ? (
