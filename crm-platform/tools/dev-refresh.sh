@@ -80,7 +80,8 @@ if [ "$BUILD" = 1 ]; then
   step "Installing dependencies"
   pnpm install --frozen-lockfile
 
-  step "Building contracts and db"
+  step "Building tax, contracts and db"
+  pnpm --filter @crm/tax build
   pnpm --filter @crm/contracts build
   pnpm --filter @crm/db build
 
