@@ -43,7 +43,7 @@ import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
-import { NodeBridgeRuntimeModule } from './modules/node-bridge-runtime';
+import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
 import { CatalogProductsModule } from './modules/catalog-products';
 import { StorefrontBuilderModule } from './modules/storefront-builder';
 import { StoreOrdersSalesModule } from './modules/store-orders-sales';
@@ -170,6 +170,7 @@ import { HealthModule } from './health/health.module';
     AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
     WhatsappDevicesBaileysModule,
+    NodeCatalogBridgeModule,
     ScheduledQueueWarmerModule,
     FlowRuntimeEngineModule,
     FlowBuilderEditorModule,

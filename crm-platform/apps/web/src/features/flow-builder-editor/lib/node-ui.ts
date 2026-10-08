@@ -106,6 +106,17 @@ export const NODE_LOOK: Record<string, NodeLook> = {
   google_docs: l('#E8F0FE', '#1A73E8', 'M3 2h7l3 3v9H3zM10 2v3h3M5 8h6M5 10h6M5 12h4'),
   google_form: l('#F3E8FD', '#7B2CBF', 'M3 2h10v12H3zM5 5h2M5 8h2M5 11h2M9 5h2M9 8h2M9 11h2'),
   deal: l('#DFF1ED', DEEP, 'M2 12V8l6-5 6 5v4M2 12h12M6 12V9h4v3'),
+  update_contact: l(
+    '#D9E5F2',
+    '#13478A',
+    'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 14c0-3 2.5-5 5.5-5M10 12l1.5 1.5L14.5 10',
+  ),
+  list_member: l('#D9E5F2', '#13478A', 'M3 4h7M3 8h7M3 12h4M12 9v5M9.5 11.5h5'),
+  in_list: l('#F3E9FF', PLUM, 'M3 4h5M3 8h5M3 12h3M10.5 9.5l1.5 1.5 3-3'),
+  in_segment: l('#F3E9FF', PLUM, 'M2 3h12l-4.5 5.5V13l-3-1.5V8.5z'),
+  wa_session: l('#FFF4E0', '#7B5A14', 'M8 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM8 5v3.5l2.5 1.5'),
+  sheet_check: l('#E6F4EA', '#137333', 'M3 2h10v12H3zM3 5h10M3 8h10M3 11h10M6.5 5v9M9.5 5v9'),
+  sheet_contact: l('#E6F4EA', '#137333', 'M3 2h10v12H3zM3 5h10M3 8h10M6.5 5v9'),
 
   cf_say: l('#EAF6FF', '#0B5FA5', 'M3 6h6l3-3v10l-3-3H3zM13 6.5a2 2 0 0 1 0 3'),
   cf_listen: l('#FBE9E7', '#A1431F', 'M5 8a3 3 0 0 1 6 0v3a3 3 0 0 1-6 0zM3 8v3M13 8v3M8 14v1'),

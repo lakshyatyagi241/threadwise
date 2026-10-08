@@ -143,6 +143,44 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('google_docs', 'Google Docs', 'Integrations', 'Generate from a template'),
   def('google_form', 'Google Form', 'Integrations', 'Send link, capture answers'),
   def('deal', 'Create / move deal', 'CRM', 'Create or advance a CRM deal'),
+  // Beyond Reference (the team's workflow gap list): CRM steps and conditions over contacts, lists and segments (TW-FLR-072 to 076).
+  def('update_contact', 'Update contact field', 'CRM', 'Set a contact field', SOCIAL_AND_CHAT),
+  def(
+    'list_member',
+    'Add / remove list',
+    'CRM',
+    'Put the contact in a list or take them out',
+    SOCIAL_AND_CHAT,
+  ),
+  def('in_list', 'Is in list', 'Logic', 'Yes / no: the contact is in a list', SOCIAL_AND_CHAT),
+  def(
+    'in_segment',
+    'Is in segment',
+    'Logic',
+    'Yes / no: the contact is in a segment',
+    SOCIAL_AND_CHAT,
+  ),
+  def(
+    'sheet_check',
+    'Check Google Sheet cell',
+    'Integrations',
+    'Yes / no: a cell of the matching row',
+    CHAT,
+  ),
+  def(
+    'sheet_contact',
+    'Save contact from Sheet',
+    'Integrations',
+    'Copy a sheet row into the contact',
+    CHAT,
+  ),
+  def(
+    'wa_session',
+    'WhatsApp session active',
+    'Logic',
+    'Yes / no: the customer wrote in the last 24 hours',
+    CHAT,
+  ),
 
   // Call flow (AI voice IVR): only when flow_type = call.
   def('cf_say', 'Say', 'Voice', 'Speak a line (text-to-speech)', CALL),
@@ -585,6 +623,34 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         saveAs: 'google_form',
         expiresInSec: 86400,
       };
+    case 'update_contact':
+      return { field: '', value: '' };
+    case 'list_member':
+      return { action: 'add', list: '', listId: '' };
+    case 'in_list':
+      return { list: '', listId: '' };
+    case 'in_segment':
+      return { segmentId: '' };
+    case 'wa_session':
+      return { hours: 24 };
+    case 'sheet_check':
+      return {
+        sheetId: '',
+        tabName: '',
+        matchColumn: '',
+        matchValue: '{{phone}}',
+        checkColumn: '',
+        operator: 'equals',
+        value: '',
+      };
+    case 'sheet_contact':
+      return {
+        sheetId: '',
+        tabName: '',
+        matchColumn: '',
+        matchValue: '{{phone}}',
+        map: [{ column: '', field: 'name' }],
+      };
     case 'deal':
       return {
         action: 'create',
@@ -601,7 +667,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
 
 // --- trigger kinds ----------------------------------------------------------------------------------------------------
 
-/** The twelve kinds the server accepts (TW-FLB-020). `appointment_booked` is allowed but the builder never offers it. */
+/** The kinds the server accepts (TW-FLB-020; the last eight are the team's workflow additions). `appointment_booked` is allowed but the builder never offers it. */
 export const FLB_TRIGGER_KINDS = [
   'keyword',
   'tag_added',
@@ -615,6 +681,14 @@ export const FLB_TRIGGER_KINDS = [
   'away',
   'out_of_hours',
   'comment_to_dm',
+  'group_leave',
+  'segment_join',
+  'contact_updated',
+  'field_match',
+  'date_field_match',
+  'schedule',
+  'shopify_event',
+  'woocommerce_event',
 ] as const;
 export type FlbTriggerKind = (typeof FLB_TRIGGER_KINDS)[number];
 
@@ -631,6 +705,14 @@ export const FLB_TRIGGER_PORT_LABELS: Record<string, string> = {
   away: 'while away',
   out_of_hours: 'after hours',
   manual_enroll: 'on enroll',
+  group_leave: 'on list leave',
+  segment_join: 'on segment join',
+  contact_updated: 'on contact update',
+  field_match: 'on field match',
+  date_field_match: 'on date match',
+  schedule: 'on schedule',
+  shopify_event: 'on Shopify event',
+  woocommerce_event: 'on WooCommerce event',
 };
 
 // --- ports ------------------------------------------------------------------------------------------------------------
@@ -695,10 +777,19 @@ export function flbPortsFor(
     case 'sequence':
     case 'tag':
     case 'assign':
+    case 'update_contact':
+    case 'list_member':
     case 'cta':
     case 'location':
     case 'chatbot':
       return out('next');
+    case 'sheet_contact':
+      return out('next');
+    case 'in_list':
+    case 'in_segment':
+    case 'wa_session':
+    case 'sheet_check':
+      return yesNo(['yes', 'yes'], ['no', 'no']);
     case 'template': {
       const qr = ctx.templateButtons?.({ data: d }) ?? [];
       if (qr.length === 0) return out('next');
@@ -854,6 +945,10 @@ const HANDLE_PORT: Record<string, Record<string, number>> = {
   shopify: { purchased: 1, abandoned: 2 },
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
+  in_list: { yes: 1, no: 2 },
+  in_segment: { yes: 1, no: 2 },
+  wa_session: { yes: 1, no: 2 },
+  sheet_check: { yes: 1, no: 2 },
 };
 
 /**

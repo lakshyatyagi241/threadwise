@@ -19,6 +19,7 @@ export const EMPTY_CONTEXT: FlbBuilderContext = {
   },
   tags: [],
   groups: [],
+  segments: [],
   keywordRules: [],
   teams: [],
   agents: [],

@@ -169,7 +169,7 @@ describe('the Book appointment node (TW-FLR-040)', () => {
     // The pinned id is unknown here, so the workspace's own single service is offered: its day list, never "Theirs".
     const sent = await untilSent(p, t5, ch5, peer, 1);
     expect(sent[0]).toContain('Pick a day:');
-    await tapRow(p, t5, ch5, peer, 'bk_day_0');
+    await tapRow(p, t5, ch5, peer, 'bk_day_1');
     await untilSent(p, t5, ch5, peer, 2);
     await tapRow(p, t5, ch5, peer, 'bk_slot_5');
     await untilSent(p, t5, ch5, peer, 4);

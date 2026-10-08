@@ -145,3 +145,17 @@ export type RejectCallInput = z.infer<typeof rejectCallInputSchema>;
 
 export const recordingResultSchema = z.object({ url: z.string() });
 export type RecordingResult = z.infer<typeof recordingResultSchema>;
+
+// --- ICE servers (TW-CALL-009 rule 1) -------------------------------------------------------------------------------------------
+
+/** One STUN or TURN server as the browser's peer connection takes it. */
+export const iceServerSchema = z.object({
+  urls: z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]),
+  username: z.string().optional(),
+  credential: z.string().optional(),
+});
+export type IceServer = z.infer<typeof iceServerSchema>;
+
+/** `GET /v2/calling/ice-servers`: the operator's list (TURN included); empty means the browser uses the four public STUN servers. */
+export const iceServersResponseSchema = z.object({ servers: z.array(iceServerSchema) });
+export type IceServersResponse = z.infer<typeof iceServersResponseSchema>;

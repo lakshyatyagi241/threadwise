@@ -27,7 +27,9 @@ import {
   type StoreKind,
 } from './mirror-rules';
 import { MirrorRepository } from './mirror.repository';
+import { storeFlowEvents } from './flow-events';
 import { EcomOrderHooks, flowRefOf } from './order-hooks';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { StoresRepository } from './stores.repository';
 
 type Json = Record<string, unknown>;
@@ -64,6 +66,7 @@ export class WebhookPipelineService {
     private readonly stockService: StockService,
     private readonly cartService: CartService,
     private readonly orderHooks: EcomOrderHooks,
+    private readonly outbox: OutboxService,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
     @Inject(PAID_ORDER_HOOK) private readonly paidOrders: PaidOrderHook,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
@@ -86,6 +89,7 @@ export class WebhookPipelineService {
     await this.guarded(job, 'cod', () => this.cod(job));
     await this.guarded(job, 'cart', () => this.cart(job));
     await this.guarded(job, 'flow', () => this.flowOrder(job));
+    await this.guarded(job, 'flowEvent', () => this.flowEvents(job));
     if (job.kind === 'shopify') {
       if (job.eventType === 'fulfillments/update')
         await this.guarded(job, 'delivered', () => this.delivered(job));
@@ -163,6 +167,41 @@ export class WebhookPipelineService {
         : job.eventType === 'order.created' || job.eventType === 'order.updated'
     )
       await this.cartService.cancelOnOrder(job.orgId, job.kind, job.data);
+  }
+
+  /**
+   * The delivery as flow triggers (checkout started, ordered product, fulfilled, refunded, cancelled): announced through the outbox
+   * as `store.flow_event`, so a failure to start a flow never touches the delivery. A Shopify refund carries only its order's id, so
+   * the customer's number comes from the mirrored order.
+   */
+  private async flowEvents(job: WebhookJob): Promise<void> {
+    const events = storeFlowEvents(job.kind, job.eventType, job.data);
+    if (events.length === 0) return;
+    await this.db.txAs({ orgId: job.orgId }, async (tx) => {
+      for (const e of events) {
+        let phone = e.phone;
+        if (phone === null && e.orderId) {
+          phone =
+            (await this.mirrorRepo.orderByStoreId(tx, job.orgId, job.kind, e.orderId))?.phone ??
+            null;
+        }
+        if (!phone) continue;
+        await this.outbox.emit(tx, {
+          orgId: job.orgId,
+          aggregateModule: 'ecom',
+          aggregateId: job.storeId,
+          eventType: 'store.flow_event',
+          payload: {
+            kind: job.kind,
+            event: e.event,
+            ref: e.ref,
+            phone,
+            productIds: e.productIds,
+            variables: e.variables,
+          },
+        });
+      }
+    });
   }
 
   /**

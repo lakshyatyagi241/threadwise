@@ -66,6 +66,22 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   deal: 'Deal',
   trigger: 'Trigger',
   end: 'End',
+  // Instagram and Messenger nodes that are the shared nodes under another name (TW-FLR-061, 062): same executor, the editor's own fields.
+  ig_send_dm: 'Message',
+  ig_ask: 'Question',
+  ig_quick: 'InteractiveButtons',
+  ig_buttons: 'CTA',
+  ig_ai: 'ChatGPT',
+  ig_to_whatsapp: 'SocialHandoff',
+  fb_to_whatsapp: 'SocialHandoff',
+  // CRM steps and conditions beyond Tag (TW-FLR-072 to 077): the executor reads the editor's own `data`.
+  update_contact: 'UpdateContact',
+  list_member: 'ListMember',
+  in_list: 'InList',
+  in_segment: 'InSegment',
+  wa_session: 'WaSession',
+  sheet_check: 'SheetCheck',
+  sheet_contact: 'SheetContact',
 };
 
 /** The handle names that mean a fixed port on a node type (TW-FLR-013 rule 5). The rest are `pN` (option N+1) or `else` (0). */
@@ -77,6 +93,10 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   shopify: { purchased: 1, abandoned: 2 },
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
+  in_list: { yes: 1, no: 2 },
+  in_segment: { yes: 1, no: 2 },
+  wa_session: { yes: 1, no: 2 },
+  sheet_check: { yes: 1, no: 2 },
 };
 
 const UNIT_SECONDS: Readonly<Record<string, number>> = {
@@ -123,6 +143,23 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
   const commerce = shapeCommerceNode(type, data);
   if (commerce) return commerce;
   switch (type) {
+    case 'ig_send_dm':
+      return shapeNode('message', data);
+    case 'ig_ask':
+      return shapeNode('ask', { ...data, prompt: data.question, var: data.save });
+    case 'ig_quick':
+      return shapeNode('buttons', { ...data, prompt: data.text, var: 'choice' });
+    case 'ig_buttons':
+      // A link button is a call-to-action; a postback button has no tap to wait for in a single-exit node, so only links are kept.
+      return shapeNode('cta', {
+        valueText: data.text,
+        ctaActions: arr(data.buttons)
+          .map(obj)
+          .filter((b) => str(b.type, 'web_url') === 'web_url' && str(b.url) !== '')
+          .map((b) => ({ type: 'url', label: str(b.title), value: str(b.url) })),
+      });
+    case 'ig_ai':
+      return { data: { ...data, variable: cleanVar(data.save, 'ai_reply') } };
     case 'message':
       return { replies: [{ type: 'Text', data: str(data.text) }] };
     case 'sequence':
