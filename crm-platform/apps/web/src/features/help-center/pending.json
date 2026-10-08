@@ -16,11 +16,6 @@
       "reason": "The workspace settings screens were added on main without a guide; it is written once the tab layout settles."
     },
     {
-      "unit": "feature:team_chat",
-      "owner": "lakshya",
-      "reason": "Plan feature added with the plan limits work. Team chat is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
       "unit": "feature:storefront_builder",
       "owner": "lakshya",
       "reason": "Plan feature added with the plan limits work. The storefront builder is now gated by this key; the plan guide is written once the plan editor copy for it settles."
