@@ -5,6 +5,7 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type {
+  ComposeSender,
   ComposeTemplate,
   ContactGroupResponse,
   ContactResponse,
@@ -27,6 +28,15 @@ const html = (el: ReactElement) =>
     </NextIntlClientProvider>,
   );
 
+const sender = (over: Partial<ComposeSender> = {}): ComposeSender => ({
+  key: 'waba:1',
+  label: 'Cloud',
+  phone: '+919800000001',
+  engine: 'waba',
+  engineLabel: 'Meta',
+  isDefault: true,
+  ...over,
+});
 const none = () => undefined;
 
 describe('sender picker', () => {
