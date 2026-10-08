@@ -5,21 +5,7 @@ summary: Give each new conversation to the right agent automatically, with rules
 area: settings
 order: 60
 documents: [tile:auto-assignment]
-keywords:
-  [
-    auto assign,
-    auto-assignment,
-    routing,
-    round robin,
-    assign,
-    agents,
-    rules,
-    inbox,
-    distribute,
-    fallback,
-    owner,
-    returning contact,
-  ]
+keywords: [auto assign, auto-assignment, routing, round robin, assign, agents, rules, inbox, distribute, fallback, owner, returning contact]
 ---
 
 ## What it is for
