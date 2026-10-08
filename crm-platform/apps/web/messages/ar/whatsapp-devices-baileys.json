@@ -3,6 +3,7 @@
     "nav": {
       "devices": "واتساب الشخصي"
     },
+    "area": { "title": "واجهة واتساب غير الرسمية", "numbers": "الأرقام", "warmer": "التسخين" },
     "common": {
       "dismiss": "إغلاق",
       "requestId": "الطلب {id}",
