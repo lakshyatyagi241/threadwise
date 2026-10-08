@@ -52,8 +52,8 @@ export function makeSearchEntry(
 }
 
 /**
- * Every page of the rail as a search entry, in menu order. A page keeps the block heading of the block it
- * belongs to (only the first page of a block carries the key), and module pages added at run time are included.
+ * Every page of the console as a search entry, in menu order, labelled with the hub it sits in and the group inside it
+ * (`Settings > Branding`; a page keeps the heading of the group it follows). Module pages added at run time are included.
  */
 export function buildSearchIndex(
   entries: readonly ConsoleEntry[],

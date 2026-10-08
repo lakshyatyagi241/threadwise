@@ -2,7 +2,7 @@ import {
   OPERATOR_NAV,
   type OperatorNavItem,
 } from '@/features/auth-registration-security/platform/operator-nav';
-import { CONSOLE_LAYOUT, type ConsoleSection } from './console-layout';
+import { CONSOLE_LAYOUT, type ConsoleHub } from './console-layout';
 
 /** One link in the console rail. `badgeKey` names a count the layout may supply; no count means no badge. */
 export interface ConsoleLeaf {
@@ -18,13 +18,13 @@ export interface ConsoleLeaf {
    * counts is set (greater than zero). `labelKey` is the full next-intl key of the word.
    */
   statusBadge?: { key: string; labelKey: string };
+  /** Full next-intl key of the small heading drawn above this link: it opens a group of related pages in the hub's menu. */
+  captionKey?: string;
   /** The same idea with several words in priority order and a tone each (the Node bridge says "Not supported", then "No workspaces"). */
   statusBadges?: readonly StatusBadge[];
-  /** Full next-intl key of the small heading drawn above this link: it opens a block of related pages. */
-  captionKey?: string;
 }
 
-/** A collapsible section of leaves. */
+/** A hub: one block on Home and one icon in the collapsed rail; its pages are the menu on the left. */
 export interface ConsoleGroup {
   id: string;
   /** Full next-intl key of the heading. */
@@ -50,7 +50,32 @@ const ASHELL_ITEMS: readonly OperatorNavItem[] = [
     labelKey: `${NS}.menuOrder`,
     groupKey: `${NS}.groups.shell`,
   },
+  // Built pages that had no menu entry (the wallet overview, and Reference's "Flow templates" admin page).
+  {
+    id: 'wallet-overview',
+    href: '/admin/wallet',
+    labelKey: `${NS}.labels.walletOverview`,
+    groupKey: `${NS}.groups.shell`,
+  },
+  {
+    id: 'flow-templates',
+    href: '/admin/flow-templates',
+    labelKey: `${NS}.labels.flowTemplates`,
+    groupKey: `${NS}.groups.shell`,
+  },
 ];
+
+/**
+ * Names that clashed across hubs, said once here so no other domain's message file is touched: "Add-ons" meant two different
+ * things, "Analytics" meant a report and a tracking-code page, and two "settings" pages read alike.
+ */
+const LABEL_OVERRIDES: Readonly<Record<string, string>> = {
+  'addon-packs': `${NS}.labels.addonPacks`,
+  extensions: `${NS}.labels.extensions`,
+  'settings-analytics': `${NS}.labels.trackingCode`,
+  'plan-settings': `${NS}.labels.planPricingSettings`,
+  'checkout-settings': `${NS}.labels.checkoutSettings`,
+};
 
 /** Everything the rail lists. */
 export const CONSOLE_NAV_ITEMS: readonly OperatorNavItem[] = [...OPERATOR_NAV, ...ASHELL_ITEMS];
@@ -111,11 +136,11 @@ const toLeaf = (item: OperatorNavItem, captionKey?: string): ConsoleLeaf => {
   return {
     id: item.id,
     href: item.href,
-    labelKey: item.labelKey,
+    labelKey: LABEL_OVERRIDES[item.id] ?? item.labelKey,
     ...(badgeKey ? { badgeKey } : {}),
     ...(statusBadge ? { statusBadge } : {}),
-    ...(statusBadges ? { statusBadges } : {}),
     ...(captionKey ? { captionKey } : {}),
+    ...(statusBadges ? { statusBadges } : {}),
   };
 };
 
@@ -131,52 +156,91 @@ export function groupByHeading(items: readonly OperatorNavItem[]): ConsoleGroup[
 }
 
 /**
- * The rail: the console's own Overview leaf, then the sections of `layout` in order, each holding the
- * pages it names (a section with no page present is left out). Domains still add pages through the
- * operator nav data; a page the layout does not place is appended under its own heading, so it can
+ * The rail: the console's own Home leaf, then one hub per entry of `layout`, in order, each holding the pages it names (a hub with
+ * no page present is left out). `visible` hides the pages an operator cannot open, so a hub with none left disappears. Domains
+ * still add pages through the operator nav data; a page the layout does not place is appended under its own heading, so it can
  * never go missing from the menu.
  */
 export function buildConsoleNav(
   items: readonly OperatorNavItem[],
-  layout: readonly ConsoleSection[] = CONSOLE_LAYOUT,
+  layout: readonly ConsoleHub[] = CONSOLE_LAYOUT,
+  visible: (id: string) => boolean = () => true,
 ): ConsoleEntry[] {
   const byId = new Map(items.map((item) => [item.id, item]));
   const placed = new Set<string>();
   const entries: ConsoleEntry[] = [
     { id: 'overview', href: CONSOLE_HOME, labelKey: `${NS}.overview` },
   ];
-  for (const section of layout) {
+  for (const hub of layout) {
     const children: ConsoleLeaf[] = [];
-    for (const block of section.blocks) {
-      let captionKey = block.caption ? captionLabelKey(block.caption) : undefined;
-      for (const id of block.items) {
-        const item = byId.get(id);
-        if (!item || placed.has(id)) continue;
-        placed.add(id);
-        children.push(toLeaf(item, captionKey));
-        captionKey = undefined;
-      }
+    // A heading belongs to the first page of its group that is shown, even when the page that names it is hidden or missing.
+    let caption: string | undefined;
+    for (const id of hub.tabs) {
+      const head = hub.heads?.[id];
+      if (head) caption = captionLabelKey(head);
+      const item = byId.get(id);
+      if (!item || placed.has(id)) continue;
+      placed.add(id);
+      if (!visible(id)) continue;
+      children.push(toLeaf(item, caption));
+      caption = undefined;
     }
     if (children.length > 0) {
       entries.push({
-        id: section.id,
-        labelKey: sectionLabelKey(section.id),
-        icon: section.icon,
+        id: hub.id,
+        labelKey: sectionLabelKey(hub.id),
+        icon: hub.icon,
         children,
       });
     }
   }
-  entries.push(...groupByHeading(items.filter((item) => !placed.has(item.id))));
+  entries.push(...groupByHeading(items.filter((item) => !placed.has(item.id) && visible(item.id))));
   return entries;
 }
 
-/** A section with no pages yet, for code that has to create one the rail lacks (module pages). */
+/** A hub with no pages yet, for code that has to create one the rail lacks (module pages). */
 export function emptySection(
   id: string,
-  layout: readonly ConsoleSection[] = CONSOLE_LAYOUT,
+  layout: readonly ConsoleHub[] = CONSOLE_LAYOUT,
 ): ConsoleGroup {
-  const icon = layout.find((s) => s.id === id)?.icon;
-  return { id, labelKey: sectionLabelKey(id), ...(icon ? { icon } : {}), children: [] };
+  const hub = layout.find((s) => s.id === id);
+  return {
+    id,
+    labelKey: sectionLabelKey(id),
+    ...(hub ? { icon: hub.icon } : {}),
+    children: [],
+  };
+}
+
+/** Where a hub's block and rail icon go: its first page the operator may open. */
+export const hubHref = (hub: ConsoleGroup): string => hub.children[0]?.href ?? CONSOLE_HOME;
+
+/** The hub holding a page, or null (Home, and pages outside the menu). */
+export function hubOf(
+  entries: readonly ConsoleEntry[],
+  leafId: string | null,
+): ConsoleGroup | null {
+  if (!leafId) return null;
+  for (const e of entries) if (isGroup(e) && e.children.some((c) => c.id === leafId)) return e;
+  return null;
+}
+
+/** A run of pages under one small heading in a hub's menu; the first run has none when the hub starts ungrouped. */
+export interface PageRun {
+  captionKey?: string;
+  pages: ConsoleLeaf[];
+}
+
+/** The hub's pages split into the groups its menu draws, in order. */
+export function pageRuns(hub: ConsoleGroup): PageRun[] {
+  const runs: PageRun[] = [];
+  for (const leaf of hub.children) {
+    const last = runs[runs.length - 1];
+    if (leaf.captionKey || !last) {
+      runs.push({ ...(leaf.captionKey ? { captionKey: leaf.captionKey } : {}), pages: [leaf] });
+    } else last.pages.push(leaf);
+  }
+  return runs;
 }
 
 /** Every leaf, in rail order. */
@@ -198,18 +262,6 @@ export function activeLeafId(pathname: string, entries: readonly ConsoleEntry[])
     if (hit && (!best || leaf.href.length > best.href.length)) best = leaf;
   }
   return best?.id ?? null;
-}
-
-/** The group holding the active leaf is the only one open on first paint. */
-export function initiallyOpenGroups(
-  entries: readonly ConsoleEntry[],
-  activeId: string | null,
-): Set<string> {
-  const open = new Set<string>();
-  for (const e of entries) {
-    if (isGroup(e) && e.children.some((c) => c.id === activeId)) open.add(e.id);
-  }
-  return open;
 }
 
 const fixed = (value: number, maxDecimals: number) =>

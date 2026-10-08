@@ -1,10 +1,15 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import type { Queue } from 'bullmq';
 import type { Redis } from 'ioredis';
-import { REALTIME_EVENT } from '@crm/contracts';
+import { NOTIFICATION_CATALOG, REALTIME_EVENT, type NotificationPrefType } from '@crm/contracts';
 import { notifyConfig } from '../../config/domains/notifications.env';
+import { webPushConfig } from '../../config/domains/web-push.env';
 import { DatabaseService } from '../../infra/db/database.service';
+import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { RealtimeEmitter } from '../../realtime';
+import type { WebPushJob } from './web-push-delivery.service';
 import { NotificationsRepository, type WrittenNotification } from './notifications.repository';
 
 export interface CreatedOptions {
@@ -39,6 +44,8 @@ export class NotificationPublisher {
     private readonly repo: NotificationsRepository,
     private readonly emitter: RealtimeEmitter,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    // The queue module is global, so every module that provides this publisher resolves it. Optional: a unit test needs none.
+    @InjectQueue(QUEUES.WEB_PUSH) @Optional() private readonly pushQueue?: Queue<WebPushJob>,
   ) {}
 
   /** A bell row was written for `row.userId`. */
@@ -47,9 +54,13 @@ export class NotificationPublisher {
     row: WrittenNotification,
     options: CreatedOptions = {},
   ): Promise<void> {
+    let silent = options.silent === true;
     try {
-      const silent = options.silent === true || (await this.throttled(orgId, row.userId, options));
+      silent = silent || (await this.throttled(orgId, row.userId, options));
       const unread = options.unread ?? (await this.unread(orgId, row.userId));
+      // The person's own toast and ping choice was resolved when the row was written; a hand-built row falls back to the type's default.
+      const base = NOTIFICATION_CATALOG[row.type as NotificationPrefType] as
+        (typeof NOTIFICATION_CATALOG)[NotificationPrefType] | undefined;
       await this.emitter.emitToUsers(orgId, [row.userId], REALTIME_EVENT.notificationCreated, {
         notificationId: row.uuid,
         type: row.type,
@@ -58,12 +69,43 @@ export class NotificationPublisher {
         subjectId: row.subjectUuid,
         collapsed: row.collapsed,
         silent,
+        toast: row.toast ?? base?.toast ?? true,
+        sound: row.sound ?? base?.sound ?? false,
       });
     } catch (err) {
       this.logger.warn(
         { err, orgId, userId: row.userId },
         'could not publish notification.created',
       );
+    }
+    // After the live event, and never because of it: a closed-tab browser push is its own best-effort leg.
+    if (!silent) await this.enqueuePush(orgId, row);
+  }
+
+  /**
+   * Hands a bell row to the browser-push queue when the person's `push` choice for the type is on (their own, else the catalogue
+   * default, resolved when the row was written), so the outbox consumer never waits for a push service. A silent row (a burst inside
+   * the throttle window, a team-wide assignment) sends no push. Does nothing at all when the deployment has no VAPID keys. Never throws.
+   * One job per row: a redelivered event is the same job id.
+   */
+  private async enqueuePush(orgId: number, row: WrittenNotification): Promise<void> {
+    if (!this.pushQueue || !webPushConfig().enabled) return;
+    const catalog = NOTIFICATION_CATALOG[row.type as NotificationPrefType] as
+      (typeof NOTIFICATION_CATALOG)[NotificationPrefType] | undefined;
+    if (!(row.push ?? catalog?.push ?? false)) return;
+    try {
+      await this.pushQueue.add(
+        'push',
+        { orgId, userId: row.userId, notificationUuid: row.uuid },
+        {
+          jobId: `push-${orgId}-${row.uuid}`,
+          // A late push for a stale event is worse than none: a few quick attempts, then drop.
+          attempts: 4,
+          backoff: { type: 'exponential', delay: 5_000 },
+        },
+      );
+    } catch (err) {
+      this.logger.warn({ err, orgId, userId: row.userId }, 'could not queue a browser push');
     }
   }
 

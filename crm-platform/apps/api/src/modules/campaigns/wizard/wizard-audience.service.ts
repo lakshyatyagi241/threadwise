@@ -15,6 +15,7 @@ import {
   compileRules,
   contactConditions,
   loadRuleContext,
+  ContactQuotaService,
   contactSelectionWhere,
   segmentContactsWhere,
   whereOf,
@@ -82,6 +83,7 @@ export class WizardAudienceService {
     private readonly segmentsRepo: SegmentsRepository,
     private readonly csv: WizardCsvService,
     private readonly resolver: ContactResolverService,
+    private readonly quota: ContactQuotaService,
   ) {}
 
   async where(tx: Tx, orgId: number, audience: WizardAudience): Promise<AudienceWhere> {
@@ -253,7 +255,16 @@ export class WizardAudienceService {
         SELECT left(r.digits, ${COUNTRY_PREFIX_DIGITS}) AS prefix, count(*)::int AS n
         FROM camp_wizard_csv_rows r WHERE ${csvNewRowsWhere(orgId, uploadId)} GROUP BY 1`)
     ).rows as Array<{ prefix: string; n: number }>;
-    return { total: rows.reduce((n, r) => n + Number(r.n), 0), byPrefix: rows };
+    // The plan's contact cap refuses the numbers beyond it at launch, so they are neither messaged nor paid for: count only what fits.
+    let room = (await this.quota.usage(tx, orgId)).remaining;
+    const byPrefix = rows.map((r) => {
+      const n = Number(r.n);
+      if (room === null) return { prefix: r.prefix, n };
+      const fits = Math.min(n, room);
+      room -= fits;
+      return { prefix: r.prefix, n: fits };
+    });
+    return { total: byPrefix.reduce((n, r) => n + r.n, 0), byPrefix };
   }
 
   /** Numbers of the CSV that are not contacts yet, for the wallet's per-country estimate. */

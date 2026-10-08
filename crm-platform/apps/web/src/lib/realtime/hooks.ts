@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { useRealtimeClient } from './realtime-provider';
 import type { RealtimeStatus, ResyncRequest, RoomState } from './realtime-client';
+import { startVisibilityReport } from './visibility-report';
 
 const noopSubscribe = () => () => undefined;
 
@@ -96,5 +97,17 @@ export function useResync(
       if (filter.current && !filter.current.includes(request.room)) return;
       latest.current(request);
     });
+  }, [client]);
+}
+
+/**
+ * Reports to the server whether this tab is in front, for as long as the component is mounted (the closed-tab browser push skips a
+ * person who can see the app). Mount it once for the whole session, next to the live notifications.
+ */
+export function useVisibilityReport(): void {
+  const client = useRealtimeClient();
+  useEffect(() => {
+    if (!client) return;
+    return startVisibilityReport(client, document, window);
   }, [client]);
 }

@@ -12,6 +12,7 @@ import { ChannelVault } from './channel-vault';
 import { ChannelWebhooksController } from './channel-webhooks.controller';
 import { ChannelWebhooksService } from './channel-webhooks.service';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { WabaGroupThreadTitleService } from './waba-group-thread-title.service';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { CONVERSATIONS_FACADE } from './conversations.facade';
 import { ConversationsRepository } from './conversations.repository';
@@ -67,6 +68,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChannelDispatcher,
     ChannelWebhooksService,
     WabaChannelLinkService,
+    WabaGroupThreadTitleService,
     SimulatorService,
     ChannelsFacade,
     ConversationsRepository,
@@ -96,6 +98,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ExternalChannelIngest,
     CONVERSATIONS_FACADE,
     WabaChannelLinkService,
+    WabaGroupThreadTitleService,
     // Where the flow runtime (and any later reader of inbound traffic) listens.
     InboundMessageHooks,
     // The pipelines the workers drive.

@@ -157,6 +157,12 @@ export function useThread(
       void sync();
       return;
     }
+    // A template message is drawn from its stored template, which only a thread read carries: show it now, then read the page.
+    if (parsed.data.kind === 'template' && !parsed.data.template?.preview) {
+      dispatch({ type: 'merge', messages: [parsed.data] });
+      void sync();
+      return;
+    }
     if (hasGap(latest.current.state.messages, parsed.data.seq)) {
       dispatch({ type: 'merge', messages: [parsed.data] });
       void sync();

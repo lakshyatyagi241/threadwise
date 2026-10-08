@@ -2,7 +2,7 @@
   "name": "@crm/api",
   "version": "0.1.0",
   "private": true,
-  "description": "CRM platform API \u2014 HTTP, WebSocket and BullMQ worker in one deployable",
+  "description": "CRM platform API — HTTP, WebSocket and BullMQ worker in one deployable",
   "main": "dist/src/main.js",
   "scripts": {
     "dev": "nest start --watch -b swc",
@@ -65,7 +65,7 @@
     "sanitize-html": "^2.18.0",
     "socket.io": "^4.8.4",
     "socks-proxy-agent": "8.0.5",
-    "unpdf": "^1.8.1",
+    "web-push": "^3.6.7",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -81,6 +81,7 @@
     "@types/pg": "^8.11.10",
     "@types/sanitize-html": "^2.16.2",
     "@types/supertest": "^7.2.1",
+    "@types/web-push": "^3.6.4",
     "@vitest/coverage-v8": "^2.1.8",
     "cross-env": "^10.1.0",
     "dependency-cruiser": "^16.9.0",

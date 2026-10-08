@@ -54,13 +54,12 @@ describe('tabsFromNav', () => {
 });
 
 describe('buildHubTabs', () => {
-  it('orders the rail like Reference: profile, plan, other panes, branding, then the Security group', () => {
+  it('orders the rail like Reference: profile, plan, other panes, then the Security group', () => {
     const tabs = buildHubTabs(tabsFromNav([wallet, apiKeys]));
     expect(tabs.map((t) => t.id)).toEqual([
       'profile',
       'plan',
       'wallet',
-      'branding',
       'security',
       'api-keys',
       'delete',
@@ -90,7 +89,6 @@ describe('resolveTabParam', () => {
   it('maps Reference tab names, including the password alias', () => {
     expect(resolveTabParam('password', tabs).href).toBe('/account/security');
     expect(resolveTabParam('delete', tabs).href).toBe('/account/delete');
-    expect(resolveTabParam('branding', tabs).href).toBe('/account/branding');
     expect(resolveTabParam('profile', tabs).href).toBe('/account/profile');
     expect(resolveTabParam('plan', tabs).href).toBe('/account/plans');
   });
@@ -107,7 +105,7 @@ describe('resolveTabParam', () => {
     expect(resolveTabParam(null, tabs).id).toBe('profile');
   });
   it('takes the first of a repeated parameter', () => {
-    expect(resolveTabParam(['delete', 'branding'], tabs).id).toBe('delete');
+    expect(resolveTabParam(['delete', 'password'], tabs).id).toBe('delete');
   });
 });
 
@@ -122,6 +120,16 @@ describe('tabRedirect', () => {
   it('lands on the profile without a usable tab', () => {
     expect(tabRedirect({}, tabs)).toBe('/account/profile');
     expect(tabRedirect({ tab: 'zzz' }, tabs)).toBe('/account/profile');
+  });
+  it('sends the old Branding tab to the Message footer Settings page', () => {
+    expect(tabRedirect({ tab: 'branding' }, tabs)).toBe('/settings/message-footer');
+    expect(tabRedirect({ tab: ' Branding ', x: '1' }, tabs)).toBe('/settings/message-footer?x=1');
+  });
+  it('the rail no longer lists Branding or Plan and usage', () => {
+    const ids = buildHubTabs(tabsFromNav([])).map((t) => t.id);
+    expect(ids).not.toContain('branding');
+    expect(ids).not.toContain('plan-usage');
+    expect(OWN_TABS.map((t) => t.href)).not.toContain('/account/branding');
   });
   it('every own pane is reachable by its own id', () => {
     for (const tab of OWN_TABS) {

@@ -62,7 +62,7 @@ const row = (over: Partial<NotificationResponse> = {}): NotificationResponse => 
 });
 const alert = (over: Partial<NotificationResponse> = {}): LiveAlert => {
   const r = row(over);
-  return { notificationId: r.id, subject: CONV, type: r.type, row: r, href: r.link };
+  return { notificationId: r.id, sound: true, subject: CONV, type: r.type, row: r, href: r.link };
 };
 
 const settings = (over: Partial<AlertSettings> = {}): AlertSettings => ({
@@ -347,7 +347,28 @@ describe('words for the announcement and the desktop alert', () => {
       title: 'New message',
       body: '',
     });
-    expect(desktopText(en, alert({ type: 'task_due' })).title).toBe('Ada Lovelace');
+    // Only a conversation names the contact; anything else is named by what happened.
+    expect(desktopText(en, alert({ type: 'task_due' })).title).toBe('New notification');
+  });
+
+  it('the waiting nudge toasts with the contact and the preview, and its desktop alert says only that it is waiting', () => {
+    const en = translator('en');
+    const nudge = alert({
+      type: 'chat_waiting',
+      title: 'server words',
+      data: { conversationId: CONV, contactName: 'Ada Lovelace', preview: 'Can you call me back?' },
+    });
+    expect(alertText(en, nudge)).toEqual({
+      title: 'No one has answered Ada Lovelace yet',
+      body: 'Can you call me back?',
+    });
+    const desktop = desktopText(en, nudge);
+    expect(desktop).toEqual({ title: 'Ada Lovelace', body: 'Waiting for a reply' });
+    expect(JSON.stringify(desktop)).not.toContain('call me back');
+    expect(desktopText(translator('ar'), nudge)).toEqual({
+      title: 'Ada Lovelace',
+      body: 'بانتظار الرد',
+    });
   });
 
   it('cuts a long preview to 80 characters in the toast text', () => {

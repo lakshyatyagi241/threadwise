@@ -65,6 +65,11 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "unofficial-whatsapp": {
+        "label": "Unofficial WhatsApp API",
+        "description": "Link a personal WhatsApp number by QR code and warm it up for safe sending.",
+        "keywords": "personal whatsapp, qr, pairing code, devices, baileys, warmer, warm up, unofficial"
+      },
       "warmer": {
         "label": "Warmer",
         "description": "Warm up your WhatsApp numbers so scheduled messages go out at a safe pace.",
@@ -161,9 +166,9 @@
         "keywords": "vat, gst, sales tax, percent, rates, country"
       },
       "plans": {
-        "label": "Plan and usage",
-        "description": "See your plan, what it includes and upgrade.",
-        "keywords": "subscription, upgrade, limits, pricing, trial"
+        "label": "Plans",
+        "description": "See your plan and usage, what it includes, and upgrade.",
+        "keywords": "subscription, upgrade, limits, pricing, trial, usage, plan and usage, meters"
       },
       "wallet": {
         "label": "Wallet",
@@ -181,9 +186,9 @@
         "keywords": "profile, me, avatar, email, password, preferences"
       },
       "branding": {
-        "label": "Branding",
-        "description": "Your logo and colours across the workspace.",
-        "keywords": "logo, colors, colours, theme, appearance, white label"
+        "label": "Message footer",
+        "description": "The line added at the bottom of messages sent from automations, scheduled sends and team inbox replies.",
+        "keywords": "branding, footer, signature, white label, remove branding, sent via"
       },
       "team-members": {
         "label": "Team members",
@@ -299,6 +304,11 @@
         "label": "Geta publishing",
         "description": "Push published flows live on the Geta console.",
         "keywords": "geta, publish, bot, console, go live, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Auto-assignment",
+        "description": "Give new conversations to the right agent automatically, in turn or by rules.",
+        "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
       }
     }
   }

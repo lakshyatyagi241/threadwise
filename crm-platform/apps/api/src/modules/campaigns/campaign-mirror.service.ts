@@ -103,6 +103,17 @@ export class CampaignMirrorService {
               source: 'campaign',
               body,
               providerMessageId: providerMessageId ?? key,
+              // The body above is already filled in for this contact, so the thread keeps it as the text the customer read and the
+              // bubble draws the rest (header, footer, buttons) from the template.
+              ...(tpl
+                ? {
+                    template: {
+                      templateId: tpl.uuid,
+                      name: tpl.templateName,
+                      language: tpl.language,
+                    },
+                  }
+                : {}),
             });
             return Boolean(done.messageId);
           },

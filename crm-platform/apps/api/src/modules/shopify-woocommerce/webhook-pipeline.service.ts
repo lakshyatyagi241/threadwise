@@ -5,7 +5,12 @@ import type { Redis } from 'ioredis';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { STORE_MIRROR, type StoreMirror } from './_shims/tokens';
+import {
+  PAID_ORDER_HOOK,
+  STORE_MIRROR,
+  type PaidOrderHook,
+  type StoreMirror,
+} from './_shims/tokens';
 import { CartService } from './cart.service';
 import { CodService } from './cod.service';
 import { StockService } from './stock.service';
@@ -33,6 +38,8 @@ export interface WebhookJob {
   storeId: number;
   eventType: string;
   data: Json;
+  /** The store's delivery id (`X-Shopify-Webhook-Id`, `X-WC-Webhook-Delivery-ID`): the hand-off to invoicing is claimed on it. */
+  deliveryId?: string;
   /** The delivery's log row, so the outcome lands on it. */
   log: { id: number; createdAt: string };
 }
@@ -58,6 +65,7 @@ export class WebhookPipelineService {
     private readonly cartService: CartService,
     private readonly orderHooks: EcomOrderHooks,
     @Inject(STORE_MIRROR) private readonly mirror: StoreMirror,
+    @Inject(PAID_ORDER_HOOK) private readonly paidOrders: PaidOrderHook,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
   ) {}
@@ -74,6 +82,7 @@ export class WebhookPipelineService {
         this.stockService.onProductUpdate(job.orgId, job.kind, job.storeId, job.data),
       );
     await this.guarded(job, 'mirror', () => this.upkeep(job));
+    await this.guarded(job, 'invoice', () => this.invoice(job));
     await this.guarded(job, 'cod', () => this.cod(job));
     await this.guarded(job, 'cart', () => this.cart(job));
     await this.guarded(job, 'flow', () => this.flowOrder(job));
@@ -178,6 +187,26 @@ export class WebhookPipelineService {
       total: String((shopify ? d.total_price : d.total) ?? ''),
       currency: String(d.currency ?? ''),
     });
+  }
+
+  /**
+   * The order the mirror now holds goes to invoicing (TW-ECOM-035). Its own guard: a failing hand-off is logged and never fails the
+   * delivery. A job queued before deliveries carried their id falls back to the job's log row, unique per delivery.
+   */
+  private async invoice(job: WebhookJob): Promise<void> {
+    const out = await this.paidOrders.handOff({
+      orgId: job.orgId,
+      kind: job.kind,
+      storeId: job.storeId,
+      topic: job.eventType,
+      deliveryId: job.deliveryId || `log-${job.log.id}`,
+      data: job.data,
+    });
+    if (out.outcome === 'invoiced')
+      this.logger.log(
+        { orgId: job.orgId, kind: job.kind, invoice: out.invoiceId },
+        '[ECOM] store order invoiced',
+      );
   }
 
   /** A new cash-on-delivery order: risk score (WooCommerce), the confirmation, the prepaid nudge, then the risk log. */

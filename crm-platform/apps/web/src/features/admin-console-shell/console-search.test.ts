@@ -45,9 +45,9 @@ describe('buildSearchIndex', () => {
     expect(index[0]).toMatchObject({ label: 'T(k.overview)', section: '', caption: '' });
   });
 
-  it('gives each page its section and the heading of the block it belongs to', () => {
+  it('gives each page its hub and the heading of the group it belongs to', () => {
     expect(index[1]).toMatchObject({ section: 'T(k.billing)', caption: 'T(k.cap)' });
-    // Only the first page of a block carries the heading key; the rest keep the block they follow.
+    // Only the first page of a group carries the heading key; the rest keep the group they follow.
     expect(index[2]).toMatchObject({ caption: 'T(k.cap)' });
   });
 

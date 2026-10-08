@@ -369,6 +369,8 @@ export const workspaceSettings = pgTable(
     waCopilotEnabled: boolean('wa_copilot_enabled').notNull().default(false),
     dataWipedAt: timestamp('data_wiped_at', { withTimezone: true }),
     inboxAway: boolean('inbox_away').notNull().default(false),
+    /** TIB2: a new or reopened conversation of a contact who already has an agent goes to that agent first (routing rules run otherwise). */
+    routingKeepContactAgent: boolean('routing_keep_contact_agent').notNull().default(false),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

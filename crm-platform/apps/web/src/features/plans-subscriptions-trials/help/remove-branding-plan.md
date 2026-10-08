@@ -15,13 +15,13 @@ Remove branding hides the product's own branding on pages that customers see, su
 
 ## How to use it
 
-1. Open the branding settings under Settings.
-2. Turn off the product branding option and save.
-3. Open a public page to check that the branding is gone.
+1. Open **Settings**, then **Channels**, then **Message footer**.
+2. Type your own footer line, or leave it blank for no footer, and save.
+3. Send a message from an automation to check that the platform's line is gone.
 
 ## Plan and access
 
-Removing branding is included in plans that list it. On a plan without it, the option is locked in the branding settings.
+Removing branding is included in plans that list it. On a plan without it, the footer is read-only on the Message footer page.
 
 ## If something looks wrong
 

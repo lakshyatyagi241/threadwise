@@ -35,7 +35,6 @@
         },
         "tabs": {
           "profile": "Profile",
-          "branding": "Branding",
           "security": "Password & security",
           "delete": "Delete account",
           "plan": "Plans"
@@ -44,10 +43,6 @@
           "profile": {
             "title": "Profile",
             "description": "Update your photo, name and contact details."
-          },
-          "branding": {
-            "title": "Branding",
-            "description": "The line that ends the messages your workspace sends."
           },
           "security": {
             "title": "Password & security",
@@ -152,6 +147,12 @@
           "passwordRequired": "Enter your current password.",
           "passwordWrong": "That password is not correct."
         }
+      },
+      "messageFooterPage": {
+        "title": "Message footer",
+        "titleLead": "Message",
+        "titleAccent": "footer",
+        "description": "The line that ends the messages your workspace sends from automations, scheduled sends and team inbox replies."
       },
       "branding": {
         "title": "Message footer",
@@ -544,7 +545,8 @@
             "invoicing": "Invoicing",
             "forms_and_links": "Forms and links",
             "extra_channels": "Telegram, Facebook and Instagram",
-            "form_builder": "Forms"
+            "form_builder": "Forms",
+            "waba_groups": "WhatsApp groups"
           },
           "cta": {
             "continueFree": "Continue free",

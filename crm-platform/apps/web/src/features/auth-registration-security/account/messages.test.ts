@@ -111,7 +111,7 @@ describe('translation keys used by the components', () => {
   const dynamic: Array<[string, string[]]> = [
     ['delete.blocked', ['sole_member', 'sole_admin']],
     ['hub.groups', ['account', 'security']],
-    ['hub.tabs', ['profile', 'plan', 'branding', 'security', 'delete']],
+    ['hub.tabs', ['profile', 'plan', 'security', 'delete']],
     [
       'avatar.errors',
       [
@@ -168,7 +168,7 @@ describe('translation keys used by the components', () => {
     expect(en[short], `en ${short}`).toBeTypeOf('string');
     expect(ar[short], `ar ${short}`).toBeTypeOf('string');
   });
-  it.each(['profile', 'branding', 'security', 'delete'])('hub page copy for %s exists', (tab) => {
+  it.each(['profile', 'security', 'delete'])('hub page copy for %s exists', (tab) => {
     expect(en[`hub.pages.${tab}.title`]).toBeTypeOf('string');
     expect(en[`hub.pages.${tab}.description`]).toBeTypeOf('string');
   });

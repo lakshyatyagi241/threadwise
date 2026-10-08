@@ -26,8 +26,49 @@ export const NOTIFICATION_TYPES = [
   'conversation_assigned',
   /** Someone mentioned me in a conversation note. */
   'mention',
+  /**
+   * An unassigned, open chat has had a customer message nobody answered for N minutes (BL-098): told once per waiting episode to the people
+   * who may read and reply, by the worker's sweep (not by an outbox event).
+   */
+  'chat_waiting',
+  // --- Phase 2 (BL-096): device, broadcast / campaign / scheduled outcomes, team chat ---------------------------------------
+  /** A personal WhatsApp number came online. */
+  'device_connected',
+  /** A personal WhatsApp number dropped (network, WhatsApp, a silent worker). */
+  'device_disconnected',
+  /** WhatsApp ended the linked session: the number must be scanned again. */
+  'device_logged_out',
+  'broadcast_completed',
+  'broadcast_failed',
+  'campaign_completed',
+  'campaign_failed',
+  'scheduled_completed',
+  'scheduled_failed',
+  /** Someone @mentioned me in a team chat channel. */
+  'teamchat_mention',
+  /** A team chat direct message to me. */
+  'teamchat_message',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
+
+/**
+ * Types other domains already wrote before this list existed (their wording lives in the row's English `title` / `body`): they are not
+ * in `NOTIFICATION_TYPES`, so a client without their own copy falls back to the server text, but a person can still tune them.
+ */
+export const NOTIFICATION_LEGACY_TYPES = [
+  'wallet_low_balance',
+  'wallet_credited',
+  'form_submission',
+  'form_needs_review',
+  'sales_doc_decided',
+] as const;
+
+/** Every type a person can set preferences for. */
+export const NOTIFICATION_PREF_TYPES = [
+  ...NOTIFICATION_TYPES,
+  ...NOTIFICATION_LEGACY_TYPES,
+] as const;
+export type NotificationPrefType = (typeof NOTIFICATION_PREF_TYPES)[number];
 
 /** The types that collapse into one unread row per chat. */
 export const COLLAPSING_NOTIFICATION_TYPES = [
@@ -38,15 +79,36 @@ export const COLLAPSING_NOTIFICATION_TYPES = [
  * Which of the workspace owner's notification toggles (Settings, Notifications) gates a type. Only the conversation types are gated
  * (decision D3); a type that is absent here is delivered whatever the toggles say. `inapp=false` suppresses both the row and the live push.
  */
-export const NOTIFICATION_TYPE_PREF_KEY: Partial<Record<NotificationType, NotificationEventKey>> = {
+export const NOTIFICATION_TYPE_PREF_KEY: Partial<
+  Record<NotificationPrefType, NotificationEventKey>
+> = {
   new_chat: 'new_customer_reply',
   new_message: 'new_customer_reply',
   conversation_assigned: 'conversation_assigned',
   mention: 'mention_in_inbox',
+  // The nudge is a follow-up to a customer's message the owner already governs with the same toggle (BL-098).
+  chat_waiting: 'new_customer_reply',
+  // Phase 2 (decision D3: the owner's toggles start to work for the new types and for the wallet alert).
+  device_connected: 'device_connected',
+  device_disconnected: 'device_disconnected',
+  device_logged_out: 'device_disconnected',
+  broadcast_completed: 'broadcast_completed',
+  broadcast_failed: 'campaign_failed',
+  campaign_completed: 'campaign_completed',
+  campaign_failed: 'campaign_failed',
+  teamchat_mention: 'mention_in_inbox',
+  wallet_low_balance: 'wallet_low_balance',
 };
 
 /** What a row is about: lets a client mark rows read by subject and open the right screen. */
-export const NOTIFICATION_SUBJECT_KINDS = ['conversation'] as const;
+export const NOTIFICATION_SUBJECT_KINDS = [
+  'conversation',
+  'device',
+  'broadcast',
+  'campaign',
+  'scheduled_message',
+  'team_chat_channel',
+] as const;
 export const notificationSubjectKindSchema = z.enum(NOTIFICATION_SUBJECT_KINDS);
 export type NotificationSubjectKind = z.infer<typeof notificationSubjectKindSchema>;
 
@@ -58,7 +120,7 @@ export const notificationSubjectSchema = z.object({
 export type NotificationSubject = z.infer<typeof notificationSubjectSchema>;
 
 /**
- * The `data` of the conversation types (`new_chat`, `new_message`, `conversation_assigned`, `mention`). Every field is optional for a
+ * The `data` of the conversation types (`new_chat`, `new_message`, `chat_waiting`, `conversation_assigned`, `mention`). Every field is optional for a
  * reader: a row written by an older server lacks the newer ones. `preview` is at most 80 characters of the customer's words and is
  * rendered as text, never HTML.
  */

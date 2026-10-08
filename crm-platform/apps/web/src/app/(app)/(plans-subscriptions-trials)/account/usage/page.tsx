@@ -1,18 +1,7 @@
-import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import { AccountFrame } from '@/features/auth-registration-security/shared/account-hub';
-import { UsagePanel } from '@/features/plans-subscriptions-trials/components/usage-panel';
+import { redirect } from 'next/navigation';
+import { USAGE_PATH } from '@/features/plans-subscriptions-trials/lib/format';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('plans-subscriptions-trials.usage');
-  return { title: t('title') };
-}
-
-/** Plan and usage (TW-PLAN-014): a pane of the account hub, drawn inside the shared frame. */
+/** "Plan and usage" now lives on the Plans pane; old links, bookmarks and help text land on its usage section. */
 export default function UsagePage() {
-  return (
-    <AccountFrame>
-      <UsagePanel />
-    </AccountFrame>
-  );
+  redirect(USAGE_PATH);
 }

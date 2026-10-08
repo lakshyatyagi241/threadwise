@@ -45,12 +45,16 @@ export interface Pipeline {
 /** What the helpers below need: the flow runtime's pipeline has no socket url and reuses them. */
 export type PipelineCore = Pick<Pipeline, 'h' | 'api'>;
 
-export async function startPipeline(): Promise<Pipeline> {
+export async function startPipeline(
+  /** More worker-side modules to load next to the message pipeline's (a domain whose listener reacts to inbound messages). */
+  extraModules?: () => Promise<unknown[]>,
+): Promise<Pipeline> {
   process.env.CHANNEL_SIMULATOR_ENABLED = 'true';
   const h = await startHarness({
     loadModules: async () => [
       (await import('../../../src/modules/chat-conversations/chat-conversations-worker.module'))
         .ChatConversationsWorkerModule,
+      ...(extraModules ? await extraModules() : []),
     ],
     configureApp: (app) => {
       const adapter = new TestRedisIoAdapter(app);

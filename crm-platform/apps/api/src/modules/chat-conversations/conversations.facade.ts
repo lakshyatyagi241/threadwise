@@ -41,6 +41,20 @@ export interface RecordOutboundInput {
   meta?: Record<string, unknown>;
   /** The person who sent it, when one did (the thread then shows their name instead of the source). */
   senderUserId?: number | null;
+  /**
+   * Set when the message the other domain sent is a WhatsApp template: the thread then stores a `template` message (the template's
+   * name, language and values in the meta, the link to the template) exactly as an inbox send does, and `body` stays the text the
+   * customer read. Ignored on a `system` line. Without it the line is plain text, as before.
+   */
+  template?: RecordOutboundTemplate;
+}
+
+export interface RecordOutboundTemplate {
+  /** The template's uuid; an unknown one is stored without the link (the bubble then shows the name and the body). */
+  templateId?: string;
+  name: string;
+  language?: string;
+  variables?: Record<string, string>;
 }
 
 // --- sending from the inbox ---------------------------------------------------------------------------------------------

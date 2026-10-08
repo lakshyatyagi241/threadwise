@@ -18,7 +18,8 @@
       "desktopOn": "Desktop alerts: on",
       "desktopOff": "Desktop alerts: off",
       "desktopBlocked": "Desktop alerts are blocked in your browser settings.",
-      "desktopHint": "Shows the contact name only when this tab is in the background."
+      "desktopHint": "Shows the contact name only when this tab is in the background.",
+      "preferences": "Notification settings"
     },
     "types": {
       "task_assigned": {
@@ -55,6 +56,12 @@
         "body": "{preview}",
         "bodyNoActor": "{preview}"
       },
+      "chat_waiting": {
+        "title": "No one has answered {name} yet",
+        "titleNoName": "A chat is still waiting for a reply",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
       "conversation_assigned": {
         "title": "{name} was assigned to you",
         "titleNoName": "A chat was assigned to you",
@@ -68,6 +75,65 @@
         "titleNoName": "You were mentioned in a note",
         "body": "{name}: {preview}",
         "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} is connected",
+        "titleNoName": "Your WhatsApp number is connected"
+      },
+      "device_disconnected": {
+        "title": "{name} disconnected",
+        "titleNoName": "A WhatsApp number disconnected",
+        "body": "Open the device to reconnect."
+      },
+      "device_logged_out": {
+        "title": "{name} was logged out",
+        "titleNoName": "A WhatsApp number was logged out",
+        "body": "Scan the QR code again to reconnect."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast “{name}” finished",
+        "titleNoName": "A broadcast finished",
+        "bodySent": "{sent, plural, one {# message sent} other {# messages sent}}",
+        "bodySentFailed": "{sent, plural, one {# message sent} other {# messages sent}}, {failed, plural, one {# failed} other {# failed}}"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast “{name}” failed",
+        "titleNoName": "A broadcast failed",
+        "body": "{reason}",
+        "bodyNoReason": "Open it to see what went wrong."
+      },
+      "campaign_completed": {
+        "title": "Campaign “{name}” finished",
+        "titleNoName": "A campaign finished",
+        "bodySent": "{sent, plural, one {# message sent} other {# messages sent}}",
+        "bodySentFailed": "{sent, plural, one {# message sent} other {# messages sent}}, {failed, plural, one {# failed} other {# failed}}"
+      },
+      "campaign_failed": {
+        "title": "Campaign “{name}” failed",
+        "titleNoName": "A campaign failed",
+        "body": "{reason}",
+        "bodyNoReason": "Open it to see what went wrong."
+      },
+      "scheduled_completed": {
+        "title": "Scheduled send “{name}” went out",
+        "titleNoName": "A scheduled send went out",
+        "bodySent": "{sent, plural, one {# message sent} other {# messages sent}}",
+        "bodySentFailed": "{sent, plural, one {# message sent} other {# messages sent}}, {failed, plural, one {# failed} other {# failed}}"
+      },
+      "scheduled_failed": {
+        "title": "Scheduled send “{name}” failed",
+        "titleNoName": "A scheduled send failed",
+        "body": "{reason}",
+        "bodyNoReason": "Open it to see what went wrong."
+      },
+      "teamchat_mention": {
+        "title": "{author} mentioned you in {channel}",
+        "titleNoChannel": "{author} mentioned you in Team chat",
+        "titleNoName": "You were mentioned in Team chat"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {New message from {author}} other {# new messages from {author}}}",
+        "titleNoName": "{count, plural, one {New direct message} other {# new direct messages}}"
       }
     },
     "live": {
@@ -79,10 +145,227 @@
       "desktop": {
         "new_chat": "New chat",
         "new_message": "New message",
+        "chat_waiting": "Waiting for a reply",
         "conversation_assigned": "Assigned to you",
         "mention": "Mentioned you",
-        "fallbackTitle": "New notification"
+        "fallbackTitle": "New notification",
+        "device_connected": "WhatsApp number connected",
+        "device_disconnected": "WhatsApp number disconnected",
+        "device_logged_out": "WhatsApp number logged out",
+        "broadcast_completed": "Broadcast finished",
+        "broadcast_failed": "Broadcast failed",
+        "campaign_completed": "Campaign finished",
+        "campaign_failed": "Campaign failed",
+        "scheduled_completed": "Scheduled send went out",
+        "scheduled_failed": "Scheduled send failed",
+        "teamchat_mention": "Mentioned you in Team chat",
+        "teamchat_message": "New direct message"
       }
+    },
+    "prefs": {
+      "title": "Notification preferences",
+      "description": "Choose how each event reaches you. These choices are yours alone; your workspace sets which events start out on.",
+      "columns": {
+        "event": "Event",
+        "bell": "Bell",
+        "toast": "Pop-up",
+        "sound": "Sound",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Chats",
+        "tasks": "Tasks",
+        "leads": "Leads and forms",
+        "documents": "Sales documents",
+        "wallet": "Wallet",
+        "devices": "WhatsApp numbers",
+        "broadcasts": "Broadcasts and campaigns",
+        "team_chat": "Team chat"
+      },
+      "types": {
+        "new_chat": {
+          "label": "New chat",
+          "hint": "A conversation nobody owns yet gets its first message."
+        },
+        "new_message": {
+          "label": "New message on my chat",
+          "hint": "A customer writes on a chat assigned to you."
+        },
+        "chat_waiting": {
+          "label": "Chat still waiting for a reply",
+          "hint": "A chat nobody owns has had a customer message unanswered for a few minutes. You hear about it once."
+        },
+        "conversation_assigned": {
+          "label": "Chat assigned to me",
+          "hint": "A chat is assigned to you or to your team."
+        },
+        "mention": {
+          "label": "Mentioned in a note",
+          "hint": "A colleague mentions you in a conversation note."
+        },
+        "teamchat_mention": {
+          "label": "Mentioned in Team chat",
+          "hint": "A colleague mentions you in a team chat channel."
+        },
+        "teamchat_message": {
+          "label": "Direct message",
+          "hint": "A colleague writes to you in Team chat."
+        },
+        "device_connected": {
+          "label": "Number connected",
+          "hint": "A personal WhatsApp number finished connecting."
+        },
+        "device_disconnected": {
+          "label": "Number disconnected",
+          "hint": "A personal WhatsApp number lost its connection."
+        },
+        "device_logged_out": {
+          "label": "Number logged out",
+          "hint": "A personal WhatsApp number was logged out from the phone."
+        },
+        "broadcast_completed": {
+          "label": "Broadcast finished",
+          "hint": "A broadcast you started has gone out."
+        },
+        "broadcast_failed": {
+          "label": "Broadcast failed",
+          "hint": "A broadcast you started failed."
+        },
+        "campaign_completed": {
+          "label": "Campaign finished",
+          "hint": "A campaign you started has gone out."
+        },
+        "campaign_failed": {
+          "label": "Campaign failed",
+          "hint": "A campaign you started failed."
+        },
+        "scheduled_completed": {
+          "label": "Scheduled send went out",
+          "hint": "A scheduled send you set up was sent."
+        },
+        "scheduled_failed": {
+          "label": "Scheduled send failed",
+          "hint": "A scheduled send you set up failed."
+        },
+        "task_assigned": {
+          "label": "Task assigned to me",
+          "hint": "A task is assigned to you."
+        },
+        "task_due": {
+          "label": "Task due",
+          "hint": "A task of yours is due."
+        },
+        "task_completed": {
+          "label": "Task completed",
+          "hint": "A task you created was completed."
+        },
+        "new_lead": {
+          "label": "New lead",
+          "hint": "A lead arrived from a lead source."
+        },
+        "form_submission": {
+          "label": "Form submitted",
+          "hint": "Someone submitted one of your forms."
+        },
+        "form_needs_review": {
+          "label": "Form needs review",
+          "hint": "A submission needs a look."
+        },
+        "wallet_low_balance": {
+          "label": "Wallet balance low",
+          "hint": "The workspace wallet is running low."
+        },
+        "sales_doc_decided": {
+          "label": "Sales document decided",
+          "hint": "A quote or invoice was accepted or declined."
+        },
+        "wallet_credited": {
+          "label": "Wallet topped up",
+          "hint": "The workspace wallet was credited."
+        }
+      },
+      "loading": "Loading your preferences",
+      "failed": "Could not load your preferences.",
+      "retry": "Try again",
+      "saveFailed": "Could not save that change. It was undone.",
+      "saved": "Saved",
+      "dismiss": "Dismiss",
+      "resetRow": "Reset to default",
+      "resetRowFor": "Reset {event} to default",
+      "resetAll": "Reset everything to default",
+      "resetAllDone": "All preferences are back to the defaults.",
+      "customised": "Changed",
+      "usingDefault": "Default",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Turned off by your workspace",
+      "workspaceOffHelp": "Your workspace has this off; your choice still applies to you.",
+      "bellOffHelp": "Turn the bell on to choose a pop-up, sound or push.",
+      "notAvailable": "Not available",
+      "defaultSummary": "Default: {bell}, {toast}, {sound}",
+      "on": "on",
+      "off": "off",
+      "channelNames": {
+        "bell": "bell",
+        "toast": "pop-up",
+        "sound": "sound",
+        "push": "push"
+      },
+      "browser": {
+        "title": "This browser",
+        "description": "Sound and desktop alerts are set per browser, not per account."
+      },
+      "empty": "There are no notification types to set up yet.",
+      "defaultSummaryPush": "Default: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Browser notifications",
+        "description": "Get a notification from your browser for the events that reach your bell, even when the CRM is closed. You choose which events in the Push column below.",
+        "state": {
+          "on": "On for this device",
+          "off": "Off",
+          "blocked": "Blocked",
+          "unavailable": "Not available"
+        },
+        "checking": "Checking this browser",
+        "unsupported": "This browser cannot show notifications while the CRM is closed. Try an up-to-date Chrome, Edge, Firefox or Safari, on a secure (https) page.",
+        "needsInstall": "On iPhone and iPad, browser notifications only work for an app added to your Home Screen.",
+        "needsInstallSteps": "Open this page in Safari, tap Share, choose Add to Home Screen, then open the CRM from the new icon and come back here. Needs iOS or iPadOS 16.4 or later.",
+        "blocked": "Notifications are blocked for this site in your browser.",
+        "blockedHelp": "Only your browser can undo this: open the site settings (the icon next to the address), set Notifications to Allow, then come back to this page.",
+        "offHelp": "Not enabled on this device. Your browser will ask for permission when you press Enable.",
+        "enable": "Enable on this device",
+        "enabling": "Enabling...",
+        "onHelp": "This device gets a browser notification for the events you switched on below, when you are not looking at the CRM.",
+        "howItWorks": "You are not notified while the CRM is open and in front of you (the bell and pop-ups cover that). The notification shows who and what kind of event, never the message text.",
+        "test": "Send a test notification",
+        "testing": "Sending...",
+        "disable": "Turn off on this device",
+        "disabling": "Turning off...",
+        "testResult": {
+          "sent": "Sent. It should appear on your devices in a moment, even if the CRM is closed.",
+          "none_reachable": "Your browser or its push service could not be reached just now. Try again in a moment; a device that is gone is removed automatically.",
+          "no_device": "There is no device to send to. Enable notifications on this device first.",
+          "wait": "A test was just sent. Wait a few seconds before sending another."
+        },
+        "problem": {
+          "enable_failed": "Could not enable notifications on this device. Try again.",
+          "disable_failed": "Could not turn off notifications on this device. Try again.",
+          "remove_failed": "Could not remove that device. Try again.",
+          "test_failed": "Could not send the test. Try again."
+        },
+        "devicesFailed": "Could not load your devices.",
+        "devices": {
+          "title": "Your devices",
+          "thisDevice": "This device",
+          "added": "Added {date}",
+          "lastUsed": "last notified {date}",
+          "neverUsed": "not notified yet",
+          "remove": "Remove",
+          "removeFor": "Remove {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Notifications"
     }
   }
 }

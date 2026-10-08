@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import type { KeyboardEvent } from 'react';
 import { cn } from '@crm/ui';
+import type { NotificationIcon, NotificationTone } from '../lib/catalogue';
+import { TypeIcon } from '../components/type-icon';
 
 export interface LiveToastView {
   id: number;
@@ -12,6 +14,9 @@ export interface LiveToastView {
   href: string | null;
   /** The bell row the toast stands for, marked read when the person opens it. */
   rowId?: string;
+  /** What the notification is about; a problem (`danger`) reads in the danger colour and stays longer. */
+  icon?: NotificationIcon;
+  tone?: NotificationTone;
 }
 
 interface ToastLabels {
@@ -70,8 +75,13 @@ export function LiveToastItem({
     <div
       onKeyDown={onKeyDown}
       data-testid="live-toast"
-      className="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-md border border-border bg-background px-4 py-2.5 text-sm shadow-lg"
+      data-tone={toast.tone ?? 'info'}
+      className={cn(
+        'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-md border bg-background px-4 py-2.5 text-sm shadow-lg',
+        toast.tone === 'danger' ? 'border-danger/50' : 'border-border',
+      )}
     >
+      {toast.icon && <TypeIcon icon={toast.icon} tone={toast.tone ?? 'info'} className="mt-0.5" />}
       <div className="min-w-0 flex-1">
         <span dir="auto" className="block break-words font-medium text-foreground">
           {toast.title}

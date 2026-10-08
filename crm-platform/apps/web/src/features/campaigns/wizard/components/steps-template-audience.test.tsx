@@ -8,8 +8,10 @@ import {
   html,
   pending,
   ready,
+  sender,
   sources,
   templates,
+  template,
   uuid,
 } from '../testing';
 import { audienceTally, tallyIsEmpty } from '../lib/audience';
@@ -26,6 +28,7 @@ import { CountPanel } from './count-panel';
 import { CsvUpload } from './csv-upload';
 import { StepAudience } from './step-audience';
 import { StepTemplate } from './step-template';
+import { TemplatePicker } from './template-picker';
 import { SourcePicker } from './source-picker';
 import { Stepper } from './stepper';
 import { WizardFooter } from './wizard-footer';
@@ -128,37 +131,45 @@ describe('step 1: name and template', () => {
       <StepTemplate
         name=""
         templateId={null}
-        noSender={false}
+        senderKey={null}
+        senders={[sender()]}
         templates={tplQuery}
         issues={[]}
         onName={none}
         onTemplate={none}
+        onSender={none}
         {...over}
       />,
     );
 
-  it('shows no Send from field: the default number is used, and a notice when there is none', () => {
-    const out = step();
-    expect(out).not.toContain('Send from');
-    expect(out).not.toContain('wizard-sender');
-    expect(step({ noSender: true })).toContain('No WhatsApp number is connected');
-    expect(step({ issues: [{ path: 'senderKey', code: 'sender_required' }] })).toContain(
-      'Pick the WhatsApp number to send from.',
-    );
+  it('has a required Send from number next to the name, and says so when none is connected', () => {
+    const one = step({ senderKey: sender().key });
+    expect(one).toContain('Send from');
+    expect(one).toContain('Acme Support (+919000000001) - Meta');
+    expect(step({ senders: [] })).toContain('No WhatsApp number is connected');
+    expect(
+      step({ issues: [{ path: 'senderKey', code: 'sender_required' }], senders: [sender()] }),
+    ).toContain('Pick the WhatsApp number to send from.');
   });
 
-  it('offers the approved templates in one dropdown below the name', () => {
+  it('lists the approved templates as radio cards with language, category and sender', () => {
     const out = step();
-    expect(out).toContain('for="wizard-template"');
-    expect(out).not.toContain('role="radiogroup"');
-    expect(out.indexOf('wizard-name')).toBeLessThan(out.indexOf('wizard-template'));
+    expect(out).toContain('role="radiogroup"');
+    expect(out.match(/type="radio"/g)).toHaveLength(3);
     for (const name of ['order_update', 'summer_sale', 'otp_code']) expect(out).toContain(name);
-    expect(out).toContain('order_update (en_US)');
-    expect(out).toContain('Choose an approved template');
+    expect(out).toContain('en_US');
+    expect(out).toContain('Utility');
+    expect(out).toContain('Marketing');
+    expect(out).toContain('Sent from +91 98000 00001');
+    expect(out).toContain('Showing 3 of 3 templates');
   });
 
-  it('keeps the preview on the right half of the page', () => {
-    expect(step()).toContain('lg:grid-cols-2');
+  it('has a search box and language and category filters built from the data', () => {
+    const out = step();
+    expect(out).toContain('aria-label="Search templates"');
+    expect(out).toContain('aria-label="Filter by language"');
+    expect(out).toContain('<option value="hi">hi</option>');
+    expect(out).toContain('<option value="authentication">Authentication</option>');
   });
 
   it('the name is required, limited to 191 characters and labelled', () => {
@@ -187,14 +198,12 @@ describe('step 1: name and template', () => {
     expect(out).toContain('bg-success/15');
     expect(out).toContain('Reply STOP to opt out');
     expect(out).toContain('Track order');
-    expect(out).toContain('selected=""');
+    expect(out).toMatch(/checked=""/);
     expect(out).toContain('2 variables are filled in the next steps.');
   });
 
   it('asks for a choice while nothing is selected', () => {
-    const out = step();
-    expect(out).toContain('Choose a template to see how the message looks.');
-    expect(out).toContain('data-testid="phone-preview-empty"');
+    expect(step()).toContain('Choose a template to see how the message looks.');
   });
 
   it('shows a loading state, an error with retry, and an empty state that links to /templates', () => {
@@ -206,6 +215,47 @@ describe('step 1: name and template', () => {
     const empty = step({ templates: ready({ data: [] }) });
     expect(empty).toContain('No approved templates yet');
     expect(empty).toContain('href="/templates"');
+  });
+});
+
+describe('template picker filters', () => {
+  const picker = (initialFilters: Parameters<typeof TemplatePicker>[0]['initialFilters']) =>
+    html(
+      <TemplatePicker
+        templates={tplQuery}
+        selectedId={null}
+        onSelect={none}
+        initialFilters={initialFilters}
+      />,
+    );
+
+  it('narrows by text, language and category', () => {
+    const byText = picker({ q: 'summer', language: '', category: '' });
+    expect(byText).toContain('summer_sale');
+    expect(byText).not.toContain('order_update');
+    expect(byText).toContain('Showing 1 of 3 templates');
+    expect(picker({ q: '', language: 'hi', category: '' })).not.toContain('otp_code');
+    expect(picker({ q: '', language: '', category: 'authentication' })).not.toContain(
+      'summer_sale',
+    );
+  });
+
+  it('says nothing matches and offers to clear the filters', () => {
+    const out = picker({ q: 'zzz', language: '', category: '' });
+    expect(out).toContain('No template matches');
+    expect(out).toContain('Clear filters');
+    expect(out).not.toContain('type="radio"');
+  });
+
+  it('works for a template with no sender', () => {
+    const out = html(
+      <TemplatePicker
+        templates={ready({ data: [template({ senderLabel: null })] })}
+        selectedId={null}
+        onSelect={none}
+      />,
+    );
+    expect(out).not.toContain('Sent from');
   });
 });
 

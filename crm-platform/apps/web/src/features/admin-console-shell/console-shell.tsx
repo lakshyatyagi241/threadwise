@@ -3,15 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import {
-  Fragment,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-  type ReactNode,
-} from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react';
 import type { OperatorSessionResponse } from '@crm/contracts';
 import { Alert, Badge, Spinner, cn } from '@crm/ui';
 import { setLocale, setTheme } from '@/components/shell/actions';
@@ -38,13 +30,12 @@ import {
   activeLeafId,
   buildConsoleNav,
   CONSOLE_NAV_ITEMS,
-  activeStatusBadgeInfo,
-  formatCount,
-  initiallyOpenGroups,
-  isGroup,
-  type ConsoleGroup,
-  type ConsoleLeaf,
+  hubOf,
 } from './console-nav';
+import { CONSOLE_LAYOUT } from './console-layout';
+import { pageVisibleTo } from './console-access';
+import { AreaLinks, HubMenu } from './hub-menu';
+import { HIDE_WHEN_COLLAPSED, RailLink } from './rail-link';
 import type { ConsoleCounts } from './console-counts';
 import { ConsoleIcon } from './console-icons';
 import { ConsolePalette, useIsApple } from './console-palette';
@@ -62,19 +53,6 @@ const PLATFORM = 'auth-registration-security.platform';
 const MAIN_CLASS =
   'min-w-0 flex-1 p-4 outline-none md:p-6 [&_.sr-only]:start-0 [&_nav_a]:inline-flex [&_nav_a]:min-h-6 [&_nav_a]:items-center';
 const ROLE_TONE = { super_admin: 'success', support: 'neutral', auditor: 'neutral' } as const;
-
-const Chevron = ({ open }: { open: boolean }) => (
-  <svg
-    aria-hidden="true"
-    viewBox="0 0 20 20"
-    className={cn('size-4 shrink-0 transition-transform', open && 'rotate-180')}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 const PanelIcon = ({ collapsed }: { collapsed: boolean }) => (
   <svg
@@ -119,12 +97,8 @@ export function ConsoleShell({
   const [, start] = useTransition();
   const [signingOut, setSigningOut] = useState(false);
   const [collapsed, setCollapsed] = useState(initialSidebar === 'collapsed');
-  // Drawer and group toggles belong to the page they were made on, so navigating resets them without an effect.
+  // The drawer belongs to the page it was opened on, so navigating closes it without an effect.
   const [openAt, setOpenAt] = useState<string | null>(null);
-  const [flipped, setFlipped] = useState<{ path: string; ids: string[] }>({
-    path: pathname,
-    ids: [],
-  });
   const menuButton = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
@@ -134,6 +108,7 @@ export function ConsoleShell({
   const { operator } = session;
   const gated = session.mfaEnrolmentRequired;
   const onAccountPage = pathname === OPERATOR_ACCOUNT_PATH;
+  const onHome = pathname === CONSOLE_HOME;
   const blocked = gated && !onAccountPage;
   // The API refused this address (operator IP allowlist, TW-AUTH-038): say so instead of showing empty screens.
   const ipBlock = useIpBlock();
@@ -141,29 +116,17 @@ export function ConsoleShell({
   // Active modules append their own entries (add-ons domain, TW-ADD-012).
   const moduleNav = useModuleNav(!gated);
   const entries = useMemo(
-    () => withModuleLeaves(buildConsoleNav(CONSOLE_NAV_ITEMS), moduleNav),
-    [moduleNav],
+    () =>
+      withModuleLeaves(
+        buildConsoleNav(CONSOLE_NAV_ITEMS, CONSOLE_LAYOUT, (id) =>
+          pageVisibleTo(session.operator.role, id),
+        ),
+        moduleNav,
+      ),
+    [moduleNav, session.operator.role],
   );
   const activeId = activeLeafId(pathname, entries);
-  const defaultOpen = useMemo(() => initiallyOpenGroups(entries, activeId), [entries, activeId]);
-  const flippedIds = flipped.path === pathname ? flipped.ids : [];
-  const isGroupOpen = (id: string) => defaultOpen.has(id) !== flippedIds.includes(id);
-  const toggleGroup = (id: string) =>
-    setFlipped({
-      path: pathname,
-      ids: flippedIds.includes(id) ? flippedIds.filter((x) => x !== id) : [...flippedIds, id],
-    });
-
-  // An icon-only rail has no room for pages, so choosing a section opens the rail on it. Phones always show the full drawer.
-  const chooseSection = (id: string) => {
-    if (collapsed && window.matchMedia('(min-width: 768px)').matches) {
-      setCollapsed(false);
-      saveSidebarState('expanded');
-      if (!isGroupOpen(id)) toggleGroup(id);
-      return;
-    }
-    toggleGroup(id);
-  };
+  const activeHub = hubOf(entries, activeId);
 
   // Console search (Ctrl+K): every page of the rail plus Your account. Off while the menu is disabled (two-factor enrolment pending).
   const apple = useIsApple();
@@ -270,154 +233,7 @@ export function ConsoleShell({
     </button>
   );
 
-  // Labels and headings vanish only on desktop and only when collapsed; the phone drawer is always full.
-  const hideWhenCollapsed = 'md:group-data-[collapsed=true]/rail:hidden';
-
-  /** A link that stands on its own in the rail (Overview, Your account): an icon, which is all the collapsed rail shows. */
-  const topLink = (opts: {
-    id: string;
-    href: string;
-    icon: string;
-    label: string;
-    active: boolean;
-    disabled?: boolean;
-  }) => {
-    const body = (
-      <>
-        <ConsoleIcon name={opts.icon} />
-        <span className={cn('min-w-0 flex-1 truncate', hideWhenCollapsed)}>{opts.label}</span>
-      </>
-    );
-    const cls = cn(
-      'flex items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
-      'md:group-data-[collapsed=true]/rail:justify-center',
-    );
-    return opts.disabled ? (
-      <span key={opts.id} aria-disabled="true" className={cn(cls, 'opacity-40')}>
-        {body}
-      </span>
-    ) : (
-      <Link
-        key={opts.id}
-        href={opts.href}
-        title={opts.label}
-        aria-current={opts.active ? 'page' : undefined}
-        className={cn(
-          cls,
-          'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-          opts.active && 'bg-sidebar-active text-white',
-        )}
-      >
-        {body}
-      </Link>
-    );
-  };
-
-  /** One page inside a section: text only, with the small heading of its block above it when it opens one. */
-  const leafLink = (leaf: ConsoleLeaf) => {
-    const label = leaf.label ?? tAll(leaf.labelKey);
-    const badge = formatCount(leaf.badgeKey ? counts[leaf.badgeKey] : null);
-    const status = activeStatusBadgeInfo(leaf, counts);
-    const active = leaf.id === activeId;
-    const body = (
-      <>
-        <span className="min-w-0 flex-1 truncate">{label}</span>
-        {badge && (
-          <span
-            data-testid={`count-${leaf.id}`}
-            className="rounded-full bg-white/15 px-1.5 text-xs tabular-nums"
-          >
-            {badge}
-          </span>
-        )}
-        {status && (
-          <span
-            data-testid={`status-${leaf.id}`}
-            data-tone={status.tone}
-            className={cn(
-              'rounded-full px-1.5 text-[0.6875rem] font-medium leading-4',
-              status.tone === 'neutral' ? 'bg-white/15' : 'bg-warning/25',
-            )}
-          >
-            {tAll(status.labelKey)}
-          </span>
-        )}
-      </>
-    );
-    const cls = 'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm';
-    return (
-      <Fragment key={leaf.id}>
-        {leaf.captionKey && (
-          <div className="px-2 pb-0.5 pt-2.5 text-[0.6875rem] font-semibold uppercase tracking-wider opacity-60">
-            {tAll(leaf.captionKey)}
-          </div>
-        )}
-        {gated ? (
-          <span aria-disabled="true" className={cn(cls, 'opacity-40')}>
-            {body}
-          </span>
-        ) : (
-          <Link
-            href={leaf.href}
-            title={label}
-            aria-current={active ? 'page' : undefined}
-            className={cn(
-              cls,
-              'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-              active && 'bg-sidebar-active text-white',
-            )}
-          >
-            {body}
-          </Link>
-        )}
-      </Fragment>
-    );
-  };
-
-  /** A collapsible section: icon and name on one row, its pages (with block headings) below. Icon only when the rail is collapsed. */
-  const section = (entry: ConsoleGroup) => {
-    const label = tAll(entry.labelKey);
-    const expanded = isGroupOpen(entry.id);
-    const holdsActive = entry.children.some((leaf) => leaf.id === activeId);
-    return (
-      <div key={entry.id}>
-        <button
-          type="button"
-          data-testid={`group-${entry.id}`}
-          aria-expanded={expanded}
-          aria-controls={`console-group-${entry.id}`}
-          aria-label={tc('toggleGroup', { group: label })}
-          title={label}
-          onClick={() => chooseSection(entry.id)}
-          className={cn(
-            'flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium',
-            'hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary',
-            'md:group-data-[collapsed=true]/rail:justify-center',
-            holdsActive && 'text-white md:group-data-[collapsed=true]/rail:bg-sidebar-active',
-          )}
-        >
-          <ConsoleIcon name={entry.icon} />
-          <span className={cn('min-w-0 flex-1 truncate text-start', hideWhenCollapsed)}>
-            {label}
-          </span>
-          <span className={hideWhenCollapsed}>
-            <Chevron open={expanded} />
-          </span>
-        </button>
-        {/* An icon-only rail has no room for pages: they come back when the rail is expanded. */}
-        <div
-          id={`console-group-${entry.id}`}
-          className={cn(
-            'ms-4 space-y-0.5 border-s border-white/10 pb-1 ps-2',
-            !expanded && 'hidden',
-            hideWhenCollapsed,
-          )}
-        >
-          {entry.children.map(leafLink)}
-        </div>
-      </div>
-    );
-  };
+  const hideWhenCollapsed = HIDE_WHEN_COLLAPSED;
 
   return (
     <OperatorProvider session={session}>
@@ -446,6 +262,8 @@ export function ConsoleShell({
             className={cn(
               'group/rail z-40 flex shrink-0 flex-col bg-sidebar p-3 text-sidebar-foreground',
               'w-64 md:sticky md:top-0 md:h-dvh md:overflow-hidden md:data-[collapsed=true]:w-16',
+              // Home is a grid of area blocks, so the desktop page has no rail; the phone drawer still lists the areas.
+              onHome && 'md:hidden',
               'max-md:fixed max-md:inset-y-0 max-md:start-0 max-md:overflow-hidden',
               open ? 'max-md:flex' : 'max-md:hidden',
             )}
@@ -491,28 +309,45 @@ export function ConsoleShell({
 
             {/* Only the list scrolls: the brand row above and the account row below stay in view. Padding keeps the focus ring from being clipped. */}
             <nav className="-mx-1 mt-2 min-h-0 flex-1 space-y-0.5 overflow-y-auto px-1 [scrollbar-color:rgb(255_255_255/0.25)_transparent] [scrollbar-width:thin]">
-              {entries.map((entry) =>
-                isGroup(entry)
-                  ? section(entry)
-                  : topLink({
-                      id: entry.id,
-                      href: entry.href,
-                      icon: 'dashboard',
-                      label: entry.label ?? tAll(entry.labelKey),
-                      active: entry.id === activeId,
-                      disabled: gated,
-                    }),
+              {activeHub ? (
+                <>
+                  <div className={hideWhenCollapsed}>
+                    <HubMenu
+                      hub={activeHub}
+                      entries={entries}
+                      activeId={activeId}
+                      counts={counts}
+                      gated={gated}
+                    />
+                  </div>
+                  {/* An icon-only rail has no room for page names: it shows one icon per area instead. */}
+                  <div className="hidden space-y-0.5 md:group-data-[collapsed=true]/rail:block">
+                    <AreaLinks
+                      entries={entries}
+                      activeHubId={activeHub.id}
+                      homeActive={false}
+                      gated={gated}
+                    />
+                  </div>
+                </>
+              ) : (
+                <AreaLinks
+                  entries={entries}
+                  activeHubId={null}
+                  homeActive={pathname === CONSOLE_HOME}
+                  gated={gated}
+                />
               )}
             </nav>
 
             <div className="mt-3 border-t border-white/10 pt-2">
-              {topLink({
-                id: 'account',
-                href: OPERATOR_ACCOUNT_PATH,
-                icon: 'user',
-                label: tn('account'),
-                active: onAccountPage,
-              })}
+              <RailLink
+                href={OPERATOR_ACCOUNT_PATH}
+                icon="user"
+                label={tn('account')}
+                active={onAccountPage}
+                testId="rail-account"
+              />
             </div>
 
             <div className="mt-2 border-t border-white/10 pt-3 sm:hidden">

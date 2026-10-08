@@ -13,6 +13,7 @@ export {
   ContactResolverService,
   assertContactScope,
   contactSelectionWhere,
+  contactScopeCondition,
   toContactResponse,
 } from './contacts';
 export type { ContactRow } from './contacts';

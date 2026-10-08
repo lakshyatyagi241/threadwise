@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from 'react';
-import { BrushIcon, KeyIcon, TrashIcon, UserIcon } from '../../shared/icons';
+import { KeyIcon, TrashIcon, UserIcon } from '../../shared/icons';
 import type { HubIcon } from './hub-tabs';
 
 type IconProps = SVGProps<SVGSVGElement>;
@@ -47,7 +47,6 @@ const LockIcon = (p: IconProps) => (
 export const HUB_ICONS: Record<HubIcon, ComponentType<IconProps>> = {
   user: UserIcon,
   plan: PlanIcon,
-  brand: BrushIcon,
   key: KeyIcon,
   trash: TrashIcon,
   generic: GenericIcon,

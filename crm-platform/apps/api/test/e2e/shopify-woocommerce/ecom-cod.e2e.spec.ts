@@ -341,8 +341,8 @@ describe('WooCommerce COD, risk and the real order (TW-ECOM-016, 017, 030)', () 
     const t = await api.signup('ecod11');
     const w = await store(t, 'woocommerce');
     await h.owner.query(
-      `INSERT INTO wa_orders (org_id, woo_order_id, source, customer_phone, total_minor, currency_code, status)
-       VALUES ($1, 'p1', 'woocommerce', '2348012345678', 4000, 'USD', 'cancelled'), ($1, 'p2', 'woocommerce', '2348012345678', 4000, 'USD', 'shipped')`,
+      `INSERT INTO wa_orders (org_id, woo_order_id, source, customer_phone, total_minor, currency_code, status, items_json)
+       VALUES ($1, 'p1', 'woocommerce', '2348012345678', 4000, 'USD', 'cancelled', '[]'::jsonb), ($1, 'p2', 'woocommerce', '2348012345678', 4000, 'USD', 'shipped', '[]'::jsonb)`,
       [t.orgId],
     );
     const risk = await cod.risk(t.orgId, wOrder);

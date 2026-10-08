@@ -9,5 +9,58 @@ For other domains: assign only through `AssignmentService` (barrel `modules/team
 inside your transaction (lock the conversation first with `ConversationsRepository.lockByUuid` from the team-inbox-conversations barrel) and returns an
 `AssignmentChange`; call `afterCommit(orgId, change)` once the transaction has committed. The actor is a person or `system`, `bot` or `flow`.
 
-Not built yet (Phase 3 onward): the strategies round robin, least loaded and sticky, agent availability changes and capacity, routing rules, business
-hours, SLA policies and sweeps, escalation, snooze. The contract already carries the picker's `availability` and each team's `assignmentStrategy`.
+Not built yet: sticky and team-strategy assignment, agent availability changes and capacity, the routing actions other than assign (priority, tag,
+spam, SLA, AI agent, auto-reply, flow, escalation), business hours settings, SLA policies and sweeps, escalation, snooze. The contract already carries the
+picker's `availability` and each team's `assignmentStrategy`. Routing rules and auto-assignment are below.
+
+## Auto-assignment: routing rules (TW-TIB2-004 to 011, 020, assign action only)
+
+Contracts: `packages/contracts/src/team-inbox-routing-sla/routing-rules.ts`. Code: `routing-rules.{controller,service,repository,mapper}.ts`,
+`routing-engine.service.ts`, `routing-matcher.ts`, `agent-picker.ts`, `routing-inbound.listener.ts` (worker only) in
+`apps/api/src/modules/team-inbox-routing-sla/`. Web: Settings > Automation > Auto-assignment (`/auto-assignment`).
+
+### Routes (`/v2/inbox/routing`, plan feature `inbox_routing` on every route, reads included)
+
+| Route                      | Permission             | What                                                                                                                                        |
+| -------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET rules?q&limit&cursor` | `inbox.settings.read`  | rules in priority order, search by name, cursor pages; `total` and plan `limit`                                                             |
+| `POST rules`               | `inbox.routing.manage` | create; goes last, switched off unless `isActive`; 422 `PLAN_LIMIT_REACHED` at the plan's `routing_rules` limit (counts switched-off rules) |
+| `GET rules/:id`            | `inbox.settings.read`  | one rule                                                                                                                                    |
+| `PATCH rules/:id`          | `inbox.routing.manage` | any subset + `rowVersion` (409 `ROW_VERSION_CONFLICT`); `{rowVersion, isActive}` is the list's switch                                       |
+| `DELETE rules/:id`         | `inbox.routing.manage` | 204                                                                                                                                         |
+| `POST rules/:id/duplicate` | `inbox.routing.manage` | copy, last, off, not fallback, counters 0; counts against the limit                                                                         |
+| `POST rules/reorder`       | `inbox.routing.manage` | `{ids}`: the listed rules take the priority slots they hold now, in that order                                                              |
+| `GET/PUT settings`         | read / manage          | `{keepContactAgent}`                                                                                                                        |
+
+Mutations accept `Idempotency-Key`; errors are problem+json; every write is audited (module `routing_rules`, `routing_settings`) and emits
+`routing_rule.created|updated|deleted|reordered` / `routing_settings.updated` in the same transaction.
+
+### Where things are stored (no new table)
+
+- `routing_rules.conditions` = `RoutingConditions`: `contact` (the segments rule tree, evaluated with the segments compiler against the contact),
+  `channelKinds`, `keywords {mode, words}`, `languages`, `businessHours`. A set part must hold (AND); no condition is a catch-all and only the fallback may be one.
+- `routing_rules.actions` = list of action dicts: `{type:'assign', strategy, userIds, teamIds, rrCursor}` and optionally `{type:'note', description}`
+  (the rule's **description**; unknown action types are ignored, as in Reference). `rrCursor` is the **round robin cursor**: the internal id of the person who
+  took the last turn, saved under a row lock on the rule when it fires; never sent to clients; kept through an edit that leaves the same people and teams.
+- **Priority** is `routing_rules.sort` (list shows `position`, 1 = first); new rules take `max(sort)+1`.
+- `fired_count` / `last_fired_at` are bumped by the engine.
+- One migration: `workspace_settings.routing_keep_contact_agent boolean default false` (the "keep returning contacts with their agent" switch).
+
+### The engine (`RoutingEngine`)
+
+`RoutingInboundListener` registers with `InboundMessageHooks` in the worker (`TeamInboxRoutingSlaWorkerModule`, imported by `WorkersModule`), so it runs after the
+message committed and never in a request. It reacts to the first message of a new conversation and to the one that reopens a finished one
+(`InboundStoredEvent.reopenedFrom`, added); later messages of a live thread are ignored. In one transaction under the conversation's row lock:
+
+1. Skip when the plan lacks `inbox_routing`, the conversation is archived or already held by a person, a team or an AI agent, or `routing_meta.routedMessage` equals this message
+   (idempotency: a redelivered message is a ledger duplicate and never reaches the hooks; the stamp covers a retried job).
+2. If the setting is on and the conversation has a contact: the **contact's owner (`contacts.owner_id`)**, else the person who held the contact's **most recent other conversation
+   (`conversations.assignee_user_id`, latest `last_message_at`)**, if an active member who can open the inbox (availability is not checked). Strategy recorded: `contact_agent`.
+3. Active rules by `sort, id`. A rule matches by its conditions and _fires_ when it also finds a person: people = listed users + members of listed teams, active, able to open the
+   inbox (`inbox.conversation.read`), and not `offline`/`busy` in `agent_statuses` (no row = available; nobody writes a status yet). `round_robin` = next id after the cursor, wrapping;
+   `least_busy` = fewest open/pending, ties by the rotation; `specific` = the one person. Nobody available: the first listed team's queue (no person); no team: the rule does not fire.
+   A person drawn through a team brings that team. `stop_on_match` (default on) ends evaluation; off, a later firing rule takes over (reassigns).
+4. No primary rule fired: the fallback rule (its conditions, if any, apply). Otherwise the conversation stays unassigned.
+
+The write goes through `AssignmentService.assignInTx` (actor `system`, strategy `round_robin|least_busy|specific|contact_agent`, `ruleId`/`ruleName` in the timeline and outbox
+payload), then `afterCommit`, so the timeline, audit, `conversation.assigned` outbox event, realtime signals and mine/unassigned counters are those of a manual assignment.

@@ -42,6 +42,23 @@ describe('merging by seq', () => {
     expect(merged.map((m) => m.seq)).toEqual([1, 2, 3]);
   });
 
+  it('keeps the template preview a realtime copy of the message does not carry', () => {
+    const tpl = (preview?: { header: null; footer: string; buttons: [] }) =>
+      outbound(1, {
+        kind: 'template',
+        template: {
+          templateId: null,
+          name: 'n',
+          language: null,
+          variables: {},
+          ...(preview ? { preview } : {}),
+        },
+      });
+    const held = tpl({ header: null, footer: 'F', buttons: [] });
+    const [merged] = mergeMessages([held], [tpl()]);
+    expect(merged!.template!.preview).toEqual({ header: null, footer: 'F', buttons: [] });
+  });
+
   it('never moves a tick backwards', () => {
     const read = outbound(1, { status: 'read', readAt: '2026-10-02T10:05:00.000Z' });
     const stale = outbound(1, { status: 'sent' });

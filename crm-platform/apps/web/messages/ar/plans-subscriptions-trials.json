@@ -64,7 +64,8 @@
       "invoicing": "الفواتير",
       "forms_and_links": "النماذج والروابط",
       "extra_channels": "تيليجرام وفيسبوك وإنستجرام",
-      "form_builder": "النماذج"
+      "form_builder": "النماذج",
+      "waba_groups": "مجموعات واتساب"
     },
     "limitGroups": {
       "messaging": "المراسلة",
@@ -128,6 +129,7 @@
       "platformDefault": "الافتراضي للمنصة"
     },
     "usage": {
+      "sectionTitle": "باقتك والاستهلاك",
       "unlimited": "غير محدود",
       "platformDefault": "المعدل الافتراضي للمنصة",
       "noUsageTracked": "لا يوجد استهلاك مرصود",
@@ -138,6 +140,7 @@
       "groupHidden": "{count, plural, one {هناك حد آخر غير محدود وهو مخفي.} two {هناك حدان آخران غير محدودين وهما مخفيان.} few {هناك # حدود أخرى غير محدودة وهي مخفية.} many {هناك # حدًا آخر غير محدود وهي مخفية.} other {هناك # حد آخر غير محدود وهي مخفية.}}"
     },
     "plans": {
+      "pickerTitle": "اختر باقة",
       "compare": {
         "addonsGroup": "الإضافات",
         "onlyDifferences": "إظهار الفروقات فقط",

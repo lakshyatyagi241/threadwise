@@ -1,55 +1,75 @@
 {
   "admin-console-shell": {
     "nav": {
-      "overview": "Overview",
+      "overview": "Home",
       "menuOrder": "Menu order",
       "groups": {
         "shell": "Interface"
       },
       "sections": {
-        "insights": "Insights",
+        "reports": "Reports",
         "plans": "Workspaces & plans",
-        "billing": "Billing & revenue",
-        "support": "Support & website",
-        "channels": "Channels & messaging",
-        "apps": "Apps & modules",
-        "access": "Access & security",
-        "settings": "Platform settings",
-        "system": "System & localization"
-      },
-      "captions": {
-        "orders": "Orders and invoices",
-        "payments": "Payments",
-        "messaging": "Messaging and wallets",
+        "billing": "Billing",
+        "messaging": "Messaging billing",
         "support": "Support",
         "website": "Website",
         "whatsapp": "WhatsApp",
-        "marketplace": "Marketplace",
-        "modules": "Modules",
-        "roles": "Roles",
-        "security": "Security",
-        "signin": "Sign-in and sign-up",
-        "branding": "Branding and interface",
-        "integrations": "Integrations",
-        "privacy": "Privacy and tracking",
-        "infrastructure": "Infrastructure",
-        "localization": "Localization"
+        "apps": "Apps",
+        "team": "Team & security",
+        "settings": "Settings",
+        "system": "System"
       },
       "badges": {
         "notSupported": "Not supported",
         "noWorkspaces": "No workspaces"
+      },
+      "labels": {
+        "addonPacks": "Add-on packs",
+        "extensions": "Extensions",
+        "trackingCode": "Tracking code",
+        "planPricingSettings": "Plan pricing settings",
+        "checkoutSettings": "Checkout settings",
+        "walletOverview": "Wallet overview",
+        "flowTemplates": "Flow templates"
+      },
+      "hubNotes": {
+        "reports": "Revenue, plan, AI and system reports.",
+        "plans": "Workspaces, plans, add-on packs, coupons and the pricing page.",
+        "billing": "Orders, invoices, payments and checkout settings.",
+        "messaging": "Message pricing, margins, credit packages and Meta reseller income.",
+        "support": "Tickets, the team and platform inboxes, agents, SLA, playbooks and contact messages.",
+        "website": "The site editor, blog, legal pages, announcements and the guidebook.",
+        "whatsapp": "Providers, the number switch, Node bridge, webhooks, WABA and catalog settings.",
+        "apps": "The marketplace, extensions and flow templates.",
+        "team": "Roles, permissions, security and sign-in rules.",
+        "settings": "Branding, mail, integrations, privacy, storage and more.",
+        "system": "Updates, languages, currencies and translation."
+      },
+      "captions": {
+        "branding": "Branding and interface",
+        "integrations": "Integrations",
+        "privacy": "Privacy and tracking",
+        "infrastructure": "Infrastructure",
+        "roles": "Roles",
+        "security": "Security",
+        "signin": "Sign-in and sign-up"
       }
     },
     "shell": {
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
-      "toggleGroup": "Show or hide {group}",
-      "backToApp": "Back to app"
+      "backToApp": "Back to app",
+      "allAreas": "All areas",
+      "switchArea": "Switch area, now in {area}"
     },
     "overview": {
       "title": "Platform console",
-      "note": "Everything an operator manages lives in the menu. Each card opens one area.",
-      "open": "Open"
+      "note": "Pick an area. Each one opens with its pages in a menu on the left, and Ctrl+K finds any page by name.",
+      "open": "Open",
+      "attentionTitle": "Needs attention",
+      "attentionAll": "{count, plural, one {# unread notification} other {# unread notifications}}",
+      "attentionEmpty": "Nothing needs attention right now.",
+      "pages": "{count, plural, one {# page} other {# pages}}"
     },
     "menuOrder": {
       "title": "Menu order",

@@ -123,8 +123,8 @@ export class SqlStoreMirror implements StoreMirror {
     }
     const g = CUSTOMER_GROUP[kind];
     const made = await tx.execute(sql`
-      INSERT INTO contact_groups (org_id, user_id, user_group, status, color)
-      VALUES (${orgId}, ${userId}, ${g.name}, true, ${g.color}) RETURNING id`);
+      INSERT INTO contact_groups (org_id, created_by, name, color)
+      VALUES (${orgId}, ${userId}, ${g.name}, ${g.color}) RETURNING id`);
     return Number((made.rows[0] as { id: number | string }).id);
   }
 
@@ -146,6 +146,17 @@ export class SqlStoreMirror implements StoreMirror {
     let created = false;
     if (existing) {
       contactId = Number(existing.id);
+      // The order that brought the customer may have made the contact first, with no email and no store keys: fill an empty email and
+      // add the store's keys, never replace anything the contact already holds.
+      await tx.execute(sql`
+        UPDATE contacts
+        SET email = coalesce(email, ${c.email || null}),
+            data = ${JSON.stringify({
+              [CUSTOMER_KEY[kind]]: c.storeId,
+              orders_count: c.ordersCount,
+              total_spent: c.totalSpent,
+            })}::jsonb || coalesce(data, '{}'::jsonb)
+        WHERE org_id = ${orgId} AND id = ${contactId}`);
     } else {
       const made = await tx.execute(sql`
         INSERT INTO contacts (org_id, name, email, phone, owner_id, data)

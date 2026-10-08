@@ -28,7 +28,8 @@ The WooCommerce screen connects your WordPress store to this workspace. After co
 - **Automations** turns on order, cash-on-delivery, cart and stock messages. Each one needs an approved template, and you choose which connected number sends them.
 - **Send Offer** sends a product offer or a win-back message to a contact group, with an optional coupon.
 - **Activity** shows webhook deliveries and their results.
-- **Settings** shows the store address, the WooCommerce version and the number of registered webhooks. **Disconnect** removes the registered webhooks.
+- **Settings** shows the store address, the WooCommerce version and the number of registered webhooks. It also has a **WordPress plugin** card: download the zip made for this store, upload it in WordPress under Plugins, Add New, Upload Plugin, and activate it. The plugin recovers abandoned carts before an order exists and passes on failed subscription payments and custom order statuses. The file holds the store's secret key, so keep it private. **Disconnect** removes the registered webhooks.
+- **Invoices** lists the invoices made from this store's orders. Turn on **Invoice this store's orders automatically** and choose when: placed, paid (the default) or fulfilled. Each order is invoiced once, even if the store sends the event again, and the buyer's copy is queued on WhatsApp, or by email without a phone number. It needs the invoicing feature on your plan.
 
 ## Plan and access
 

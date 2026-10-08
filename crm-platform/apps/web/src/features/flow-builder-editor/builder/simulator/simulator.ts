@@ -20,7 +20,21 @@ import {
  */
 
 export type LogMedia = { kind: string; url: string; filename: string };
-export type LogEntry = { kind: 'system' | 'user' | 'bot'; text: string; media?: LogMedia };
+/** The tap targets of a Quick replies / List / Poll message: the panel draws them as buttons under the bubble, as WhatsApp does. */
+export type LogChoices = {
+  kind: 'buttons' | 'list' | 'poll';
+  /** The message body without the numbered fallback lines. */
+  prompt: string;
+  labels: string[];
+  /** The list's opener label ("Choose below"). */
+  button?: string;
+};
+export type LogEntry = {
+  kind: 'system' | 'user' | 'bot';
+  text: string;
+  media?: LogMedia;
+  choices?: LogChoices;
+};
 
 /** Pause between two simulated steps, ms. */
 export const STEP_DELAY_MS = 220;
@@ -136,10 +150,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   /** Wrong replies given to the Ask for file / location node the run is parked on. */
   let askAttempts = 0;
 
-  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia) =>
-    opts.onLog(media ? { kind, text, media } : { kind, text });
+  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia, choices?: LogChoices) =>
+    opts.onLog({ kind, text, ...(media ? { media } : {}), ...(choices ? { choices } : {}) });
   const sys = (t: string) => log('system', t);
-  const bot = (t: string, media?: LogMedia) => log('bot', t, media);
+  const bot = (t: string, media?: LogMedia, choices?: LogChoices) => log('bot', t, media, choices);
 
   const findNode = (id: string) => nodes.find((n) => n.id === id) ?? null;
   const stop = () => {
@@ -244,7 +258,21 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
             return `  ${i + 1}. ${it.title}${it.description ? ` — ${it.description}` : ''}${it.section ? `   [${it.section}]` : ''}`;
           })
           .join('\n');
-        bot(`${interp(d.prompt || d.question, v)}\n${lines}`);
+        const prompt = interp(d.prompt || d.question, v);
+        const labels = arr(d.options).map((o, i) =>
+          typeof o === 'string' ? o : flbListOption(o, i).title,
+        );
+        const header = rec(d.header);
+        const headerMedia =
+          node.type === 'buttons' && str(header.type) === 'image' && str(header.link)
+            ? { kind: 'image', url: str(header.link), filename: '' }
+            : undefined;
+        bot(`${prompt}\n${lines}`, headerMedia, {
+          kind: node.type as 'buttons' | 'list' | 'poll',
+          prompt,
+          labels,
+          ...(node.type === 'list' ? { button: str(d.button) || undefined } : {}),
+        });
         opts.onAwaiting(true);
         return;
       }

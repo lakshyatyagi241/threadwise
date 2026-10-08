@@ -50,6 +50,7 @@ describe('Settings tab shell (TW-ASHELL-032)', () => {
     expect(SETTINGS_TABS).toHaveLength(9);
     expect(TAB_GROUPS.flatMap((g) => g.tabs).sort()).toEqual([...SETTINGS_TABS].sort());
     expect(TAB_GROUPS[0]?.tabs).toEqual(['general', 'branding', 'team', 'notifications', 'aikeys']);
+    expect(TAB_LINKS.branding).toBe('/settings/message-footer');
     expect(Object.keys(TAB_LINKS).sort()).toEqual(['aikeys', 'branding', 'security', 'team']);
   });
 });

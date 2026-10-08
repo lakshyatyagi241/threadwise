@@ -11,6 +11,7 @@ import {
   type ListFilters,
   type ListState,
 } from '../lib/list';
+import { usePublishCounts } from './counts';
 import { inboxApi } from './service';
 import type { ConversationSummary } from '@crm/contracts';
 
@@ -40,6 +41,8 @@ export interface ConversationList {
  */
 export function useConversationList(filters: ListFilters, meId: string | null): ConversationList {
   const [state, dispatch] = useReducer(listReducer, EMPTY_LIST);
+  // The menu's Inbox badge reads the same numbers the tabs show.
+  usePublishCounts(state.counts);
   const key = filtersKey(filters);
   const latest = useRef({ state, filters, meId });
   const generation = useRef(0);
@@ -182,9 +185,9 @@ export function useConversationList(filters: ListFilters, meId: string | null): 
     [],
   );
   const setUnread = useCallback((id: string, unread: number) => {
-    dispatch({ type: 'unread', id, unread });
-    // The tab badges follow: the server recounts after the read.
-    refreshCounts();
+      dispatch({ type: 'unread', id, unread });
+      // The tab badges follow: the server recounts after the read.
+      refreshCounts();
   }, [refreshCounts]);
 
   return {

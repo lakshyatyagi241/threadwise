@@ -75,6 +75,14 @@ the conversation row (`status`, `assign`).
 `afterSeq` for newer ones, oldest first (gap filling after a reconnect). `before` with `afterSeq` is a validation error. `page.hasMoreBefore` and
 `hasMoreAfter` say whether either end has more. `seq` is contiguous per conversation, so a client can detect a gap by comparing numbers.
 
+A `template` message carries `template: { templateId, name, language, variables, preview? }` and its `body` is the text rendered with the values at
+send time. `preview` is read from the stored template when a page is listed (and on the answer to a send or a retry), for the whole page in one
+tenant-scoped query: `header` (`{ format: text | image | video | document | location, text }`; a media header is only its format, never a file or
+a link), `footer`, and `buttons` (`{ type: quick_reply | url | phone | copy_code | other, text }`, in order; a copy-code button has an empty `text`).
+`preview` is absent when the template was deleted or the message has no template link, and on a realtime `inbox.message.new` copy; the client then
+draws the name and the body and reads the page again to get it. Other senders (campaigns, broadcasts, flows) record a template through
+`ConversationsFacade.recordOutbound({ template })`, which stores the same `template` message.
+
 Media come as `media.url`: an authenticated link minted for the caller, valid for minutes, **only after the visibility check** (a hidden
 conversation is a 404 before any link exists). The storage key is never in a response.
 
@@ -90,8 +98,8 @@ conversation is a 404 before any link exists). The storage key is never in a res
   `CHANNEL_DISCONNECTED`, `CHANNEL_CAPABILITY_UNSUPPORTED`, `PLAN_LIMIT_REACHED` (monthly cap on a metered channel; the simulator is never
   metered), `MESSAGE_MEDIA_NOT_FOUND` (an attachment that is not the caller's, has expired, was used, or does not exist). The emergency halt and
   the content screen are checked at send time by the worker, so a halt also stops what is already queued (the message ends `failed`).
-- `kind: 'template'` is accepted by the contract and answers `422 INBOX_TEMPLATES_UNAVAILABLE` until the template library exists (blocked on
-  TPL; tracker TW-TIB1-018).
+- `kind: 'template'` sends an approved template of the conversation's WhatsApp number with the agent's values (`422 INBOX_TEMPLATE_NOT_SENDABLE`
+  for one the inbox cannot send, with the reason; `422 VALIDATION_FAILED` for a missing value).
 - The message pipeline (the row, the ledger, the dispatch queue, the worker, receipts, the realtime events `inbox.message.new`, `inbox.message.status`,
   `inbox.unread`) belongs to the conversation core and is reached through `ConversationsFacade`; this domain proves first that the caller may see
   the conversation (404) and may reply to it (403).

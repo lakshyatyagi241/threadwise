@@ -13,6 +13,7 @@ export const SECRET_HEADERS = [
   'x-workspace-token',
   'x-node-token',
   'x-shopify-access-token',
+  'x-shopify-storefront-access-token',
   // shared secrets
   'x-webhook-secret',
   'x-instaflow-secret',

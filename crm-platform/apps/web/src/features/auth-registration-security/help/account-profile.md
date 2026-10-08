@@ -31,11 +31,11 @@ The **Timezone** box belongs to the workspace, not to you, and says so with a **
 
 ## Other account pages
 
-The list on the left has two groups. **Account** holds Profile, Plans, Plan and usage and Branding. **Security** holds Password & security and **Delete account**. Deleting your account is permanent. It asks for a confirmation phrase and your password, and is refused if you are the only member or the only administrator.
+The list on the left has two groups. **Account** holds Profile and Plans, with your plan and usage at the top of Plans. **Security** holds Password & security and **Delete account**. Deleting your account is permanent. It asks for a confirmation phrase and your password, and is refused if you are the only member or the only administrator.
 
 ## Plan and access
 
-Every signed-in member can open their own account. For the other pages, see [Plans](help:account-plans), [Message footer](help:account-branding) and [Password and two-step sign-in](help:account-sign-in-security).
+Every signed-in member can open their own account. For the other pages, see [Plans](help:account-plans) and [Password and two-step sign-in](help:account-sign-in-security). The message footer is no longer on this page: it is under Settings, [Message footer](help:account-branding).
 
 ## If something looks wrong
 
