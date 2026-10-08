@@ -85,7 +85,7 @@ function MatrixForm({ data }: { data: NotificationPrefsResponse }) {
     >
       <Card className="flex flex-wrap items-start justify-between gap-4 p-6">
         <div className="max-w-xl space-y-1">
-          <h2 className="text-xl font-semibold">{t('title')}</h2>
+          <h2 className="font-serif text-xl">{t('title')}</h2>
           <p className="text-xs text-muted-foreground">{t('note')}</p>
           {locked && <p className="text-xs italic text-muted-foreground">{t('readOnly')}</p>}
         </div>

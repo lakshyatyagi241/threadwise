@@ -327,6 +327,39 @@ describe('what modules add to navigation and to the plan catalogue (TW-ADD-012, 
     expect(Array.isArray(fields.currencies)).toBe(true);
   });
 
+  it('the plan form stores a module flag and cap, shows them back, and keeps them through an unrelated edit (TW-ADD-013)', async () => {
+    const created = await ops('post', '/plans').send({
+      name: 'Module plan',
+      amount: '9',
+      currency: 'USD',
+      moduleFeatures: { access_reports: true },
+      moduleLimits: { report_exports: 4 },
+    });
+    expect(created.status, JSON.stringify(created.body)).toBe(201);
+    expect(created.body.moduleFeatures).toEqual({ access_reports: true });
+    expect(created.body.moduleLimits).toEqual({ report_exports: 4 });
+    expect(created.body.features).not.toHaveProperty('access_reports');
+
+    const renamed = await ops('patch', `/plans/${created.body.id}`).send({ name: 'Module plan 2' });
+    expect(renamed.status, JSON.stringify(renamed.body)).toBe(200);
+    expect(renamed.body.moduleFeatures).toEqual({ access_reports: true });
+    expect(renamed.body.moduleLimits).toEqual({ report_exports: 4 });
+
+    const off = await ops('patch', `/plans/${created.body.id}`).send({
+      moduleFeatures: { access_reports: false },
+    });
+    expect(off.body.moduleFeatures).toEqual({ access_reports: false });
+    expect(off.body.moduleLimits).toEqual({ report_exports: 4 });
+
+    const bad = await ops('post', '/plans').send({
+      name: 'Bad key',
+      amount: '9',
+      currency: 'USD',
+      moduleFeatures: { 'Not A Key': true },
+    });
+    expect(bad.status).toBe(422);
+  });
+
   it('a pack can grant the module flag; switching the module off removes it at once, and an unlisted key is dropped', async () => {
     const make = (features: string[]) =>
       ops('post', '/addons').send({

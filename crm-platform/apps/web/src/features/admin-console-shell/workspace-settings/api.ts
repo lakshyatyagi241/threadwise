@@ -3,12 +3,17 @@ import {
   exportCountsResponseSchema,
   notificationPrefsResponseSchema,
   preferencesResponseSchema,
+  integrationsSummaryResponseSchema,
+  residencyResponseSchema,
+  workspaceBrandingResponseSchema,
   workspaceSettingsResponseSchema,
+  type DataResidency,
   type DeleteWorkspaceRequest,
   type SaveNotificationPrefsRequest,
   type UpdateWorkspaceSettingsRequest,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 
 const GENERAL = ['shell', 'workspace'] as const;
 const NOTIFS = ['shell', 'workspace', 'notifications'] as const;
@@ -89,4 +94,92 @@ export const useDeleteWorkspace = () =>
   useMutation({
     mutationFn: (body: DeleteWorkspaceRequest) =>
       apiFetch('/shell/workspace', { method: 'DELETE', body }),
+  });
+
+const BRANDING = ['shell', 'workspace', 'branding'] as const;
+
+export const useBranding = () =>
+  useQuery({
+    queryKey: BRANDING,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/branding', { schema: workspaceBrandingResponseSchema, signal }),
+  });
+
+/** `apiFetch` only speaks JSON, so the multipart save follows its conventions by hand (as the avatar upload does). */
+export function useSaveBranding() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: {
+      fields: Partial<Record<'primary' | 'accent' | 'background', string>>;
+      files: { logo?: File; favicon?: File };
+    }) => {
+      const form = new FormData();
+      for (const [k, v] of Object.entries(input.fields)) form.append(k, v);
+      if (input.files.logo) form.append('logo', input.files.logo);
+      if (input.files.favicon) form.append('favicon', input.files.favicon);
+      const res = await fetch('/api/v2/shell/workspace/branding', {
+        method: 'POST',
+        body: form,
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'X-Request-Id': crypto.randomUUID(),
+          'Idempotency-Key': crypto.randomUUID(),
+        },
+      });
+      const text = await res.text();
+      let json: unknown;
+      try {
+        json = text ? JSON.parse(text) : undefined;
+      } catch {
+        json = undefined;
+      }
+      if (!res.ok) {
+        throw toApiError(
+          res.status,
+          json,
+          res.headers.get('x-request-id'),
+          res.headers.get('retry-after'),
+        );
+      }
+      return workspaceBrandingResponseSchema.parse(json);
+    },
+    onSuccess: (data) => {
+      qc.setQueryData(BRANDING, data);
+      // The shell reads the brand from the server on each navigation; reload so the header and colours show at once.
+      if (typeof window !== 'undefined') window.location.reload();
+    },
+  });
+}
+
+const RESIDENCY = ['shell', 'workspace', 'data-residency'] as const;
+
+export const useResidency = () =>
+  useQuery({
+    queryKey: RESIDENCY,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/data-residency', { schema: residencyResponseSchema, signal }),
+  });
+
+export function useSaveResidency() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (residency: DataResidency) =>
+      apiFetch('/shell/workspace/data-residency', {
+        method: 'PUT',
+        body: { residency },
+        schema: residencyResponseSchema,
+      }),
+    onSuccess: (data) => qc.setQueryData(RESIDENCY, data),
+  });
+}
+
+export const useIntegrationsSummary = () =>
+  useQuery({
+    queryKey: ['shell', 'workspace', 'integrations'] as const,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/integrations', {
+        schema: integrationsSummaryResponseSchema,
+        signal,
+      }),
   });

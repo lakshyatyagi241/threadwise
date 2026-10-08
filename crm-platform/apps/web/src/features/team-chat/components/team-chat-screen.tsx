@@ -1,9 +1,10 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo, useState } from 'react';
-import { Badge, Button, ConfirmDialog, cn, useToast } from '@crm/ui';
+import { Button, ConfirmDialog, cn, useToast } from '@crm/ui';
 import type { TchatChannelResponse, TchatMember, TchatMessageResponse } from '@crm/contracts';
 import {
   refreshChannels,
@@ -14,6 +15,7 @@ import {
   useRoster,
   useThread,
 } from '../api/hooks';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { chatApi } from '../api/service';
 import { mentionToken } from '../lib/mention';
 import { Composer } from './composer';
@@ -23,7 +25,16 @@ import {
   InvitationsDialog,
   InviteDialog,
 } from './dialogs';
-import { BackIcon, HashIcon, LockIcon, PinIcon, SearchIcon, TrashIcon, UsersIcon } from './icons';
+import {
+  ArrowLeftIcon,
+  BackIcon,
+  ChannelGlyphIcon,
+  LockIcon,
+  PinIcon,
+  SearchIcon,
+  TrashIcon,
+  UsersIcon,
+} from './icons';
 import { MembersRail } from './members-rail';
 import { MessageStream } from './message-stream';
 import { useErrorText, useNow } from './parts';
@@ -40,6 +51,7 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
   const { toast } = useToast();
   const errorText = useErrorText();
   const now = useNow();
+  const { org } = useSession();
   usePresencePing();
 
   const channelsQ = useChannels();
@@ -156,7 +168,7 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
       >
         <div
           className={cn(
-            'w-full shrink-0 border-border lg:flex lg:w-60 lg:border-e',
+            'w-full shrink-0 border-border lg:flex lg:w-[200px] lg:border-e',
             mobileThread ? 'hidden' : 'flex',
           )}
         >
@@ -166,7 +178,7 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
               activeId={channelId}
               loading={channelsQ.isPending}
               failed={channelsQ.isError}
-              canCreate={me?.canManageChannels ?? false}
+              workspaceName={org.name}
               pendingCount={pendingCount}
               onSelect={open}
               onCreate={() => setCreateOpen(true)}
@@ -176,7 +188,7 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
           </div>
         </div>
 
-        <div className="hidden w-60 shrink-0 border-e border-border lg:block">
+        <div className="hidden w-[290px] shrink-0 border-e border-border lg:block">
           <MembersRail
             members={roster}
             meId={me?.id ?? ''}
@@ -192,7 +204,7 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
         >
           {current && me ? (
             <>
-              <header className="flex items-center gap-2 border-b border-border px-3 py-2">
+              <header className="flex shrink-0 items-center gap-2 border-b border-border px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3">
                 <button
                   type="button"
                   aria-label={t('back')}
@@ -201,19 +213,26 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
                 >
                   <BackIcon />
                 </button>
-                <span className="hidden text-muted-foreground sm:block">
-                  {current.type === 'private' ? <LockIcon /> : <HashIcon />}
+                <span className="hidden size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground sm:grid">
+                  {current.type === 'private' ? <LockIcon /> : <ChannelGlyphIcon />}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <h2 className="truncate text-base font-semibold" data-testid="tchat-title">
-                      {current.type === 'dm' ? (current.peer?.name ?? current.name) : current.name}
+                  <div className="flex min-w-0 items-center gap-2">
+                    <h2
+                      className="truncate font-serif text-[17px] leading-tight"
+                      data-testid="tchat-title"
+                    >
+                      {current.type === 'dm'
+                        ? (current.peer?.name ?? current.name)
+                        : `#${current.name}`}
                     </h2>
-                    <Badge className="hidden sm:inline-flex">{t(`type.${current.type}`)}</Badge>
+                    <span className="hidden shrink-0 rounded-full bg-success/15 px-2 py-0.5 font-mono text-[9.5px] font-bold uppercase tracking-wider text-success sm:inline-flex">
+                      {t(`type.${current.type}`)}
+                    </span>
                   </div>
-                  {current.description && (
-                    <p className="truncate text-xs text-muted-foreground">{current.description}</p>
-                  )}
+                  <p className="truncate text-[11.5px] text-muted-foreground">
+                    {current.description || t('defaultDescription')}
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -253,6 +272,14 @@ export function TeamChatScreen({ initialChannelId }: { initialChannelId?: string
                     <TrashIcon />
                   </button>
                 )}
+                <Link
+                  href="/inbox"
+                  aria-label={t('customerChats')}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-muted sm:px-3"
+                >
+                  <ArrowLeftIcon className="size-3" />
+                  <span className="hidden sm:inline">{t('customerChats')}</span>
+                </Link>
               </header>
 
               {panel && (
