@@ -391,13 +391,27 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
   cf_search: { save: { save: 's' }, reads: { variable: 's', query: '{{caller_said}}' } },
   cf_transfer: { save: { number: '+1555' }, reads: { number: '+1555' } },
   cf_hangup: { save: { goodbye: 'Bye' }, reads: { goodbye: 'Bye' } },
-  ig_send_dm: { reads: 'raw-data-untouched' },
-  ig_quick: { reads: 'raw-data-untouched' },
-  ig_buttons: { reads: 'raw-data-untouched' },
+  ig_send_dm: { save: { text: 'Hi' }, reads: { replies: [{ type: 'Text', data: 'Hi' }] } },
+  ig_quick: {
+    reads: {
+      bodyText: 'What can I help you with?',
+      buttons: [
+        { id: 'p0', title: 'Pricing' },
+        { id: 'p1', title: 'Support' },
+      ],
+    },
+  },
+  // only the link buttons survive: a postback has no tap to wait for in a node with one exit
+  ig_buttons: {
+    reads: {
+      bodyText: 'Tap a button below:',
+      actions: [{ type: 'url', label: 'Visit site', value: 'https://' }],
+    },
+  },
   ig_reply_comment: { reads: 'raw-data-untouched' },
-  ig_ai: { reads: 'raw-data-untouched' },
+  ig_ai: { save: { save: 'r' }, reads: { variable: 'r', model: 'gpt-4o-mini' } },
   ig_products: { reads: 'raw-data-untouched' },
-  ig_ask: { reads: 'raw-data-untouched' },
+  ig_ask: { save: { question: 'Name?', save: 'n' }, reads: { question: 'Name?', variable: 'n' } },
   ig_lead: { reads: 'raw-data-untouched' },
   ig_to_whatsapp: { reads: 'raw-data-untouched' },
   fb_gallery: { reads: 'raw-data-untouched' },

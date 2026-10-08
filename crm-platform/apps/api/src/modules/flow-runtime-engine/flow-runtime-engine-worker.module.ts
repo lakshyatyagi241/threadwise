@@ -1,6 +1,7 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { CampaignsModule, CAMPAIGN_FLOW_STARTER, NoFlowStarter } from '../campaigns';
 import { ChatConversationsModule } from '../chat-conversations';
+import { CrmModule } from '../crm';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
 import { FlowRuntimeEngineModule } from './flow-runtime-engine.module';
 import { CampaignFlowStarterImpl } from './runtime/campaign-flow-starter';
@@ -8,6 +9,7 @@ import { CatalogProductsModule } from '../catalog-products';
 import { CatalogConciergeListener } from './runtime/nodes/commerce/catalog-concierge.listener';
 import { CatalogCartResume, CommerceResume } from './runtime/nodes/commerce/commerce-resume';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
+import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.consumer';
 import { FlowRunProcessor } from './runtime/flow-run.processor';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { FlowInboundService } from './triggers/inbound.service';
@@ -25,6 +27,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     CampaignsModule,
     CatalogProductsModule,
     CommerceNodesModule,
+    CrmModule,
     ShopifyWoocommerceModule,
   ],
   providers: [
@@ -35,6 +38,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     CommerceResume,
     CatalogCartResume,
     CatalogConciergeListener,
+    SocialHandoffConsumer,
   ],
 })
 export class FlowRuntimeEngineWorkerModule implements OnModuleInit {
