@@ -67,7 +67,7 @@ export function SettingsHubPage() {
         description={tn('description')}
         actions={
           <>
-            <Link href="/admin/addons" className={linkButton}>
+            <Link href="/admin/extensions" className={linkButton}>
               {tn('actions.addons')}
             </Link>
             <Link href="/admin/system" className={linkButton}>

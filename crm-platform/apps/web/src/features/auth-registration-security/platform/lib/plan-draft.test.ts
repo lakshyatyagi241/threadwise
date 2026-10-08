@@ -116,6 +116,8 @@ const stored: PlanAdminItem = {
     form_builder: false,
     waba_groups: false,
   },
+  moduleFeatures: {},
+  moduleLimits: {},
   visibleAddons: [],
   inUse: 2,
   isRegistrationDefault: false,
@@ -467,5 +469,37 @@ describe('server errors', () => {
       problemsFromServer([{ path: 'visibleAddons', message: 'List each add-on once.' }])
         .visibleAddons,
     ).toEqual({ code: 'server', message: 'List each add-on once.' });
+  });
+});
+
+describe('module-contributed plan keys (WD-ADD-013)', () => {
+  it('come from the stored plan, can be edited, and travel apart from the registry keys', () => {
+    const d = planToDraft({
+      ...stored,
+      moduleFeatures: { ig_automation: true },
+      moduleLimits: { ig_accounts: 3 },
+    });
+    expect(d.features.ig_automation).toBe(true);
+    expect(d.limits.ig_accounts).toBe('3');
+    const built = buildPlanRequest({ ...d, limits: { ...d.limits, ig_accounts: '5' } });
+    expect(built.problems).toBeUndefined();
+    expect(built.body).toMatchObject({
+      moduleFeatures: { ig_automation: true },
+      moduleLimits: { ig_accounts: 5 },
+    });
+    expect(built.body?.features).not.toHaveProperty('ig_automation');
+    expect(built.body?.limits).not.toHaveProperty('ig_accounts');
+    const parsed = createPlanRequestSchema.parse(built.body);
+    expect(parsed.moduleLimits.ig_accounts).toBe(5);
+  });
+
+  it('a blank module cap is 0 and a bad one is a problem on that field', () => {
+    const d = filled();
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, x_cap: '' } }).body?.moduleLimits,
+    ).toEqual({ x_cap: 0 });
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, x_cap: 'abc' } }).problems,
+    ).toHaveProperty(['limits.x_cap']);
   });
 });

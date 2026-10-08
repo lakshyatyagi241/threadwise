@@ -8,7 +8,6 @@ import {
   type CreatePlanRequest,
   type PlanAdminItem,
   type PlanBillingUnit,
-  type PlanFeatureKey,
   type PlanLimitKey,
   type PlanRuleCode,
 } from '@crm/contracts';
@@ -50,8 +49,8 @@ export interface PlanDraft {
   /** Days after a paid plan lapses before the workspace's data is wiped; 0 = never (WD-PLAN-023). */
   dataRetentionDays: string;
   /** Blank = unlimited (stored as 0). */
-  limits: Record<PlanLimitKey, string>;
-  features: Record<PlanFeatureKey, boolean>;
+  limits: Record<string, string>;
+  features: Record<string, boolean>;
   /** Ids (uuid) of the Marketplace add-on packs the plan makes visible to its workspaces. */
   visibleAddons: string[];
 }
@@ -69,7 +68,7 @@ export type PlanScalarField =
   | 'dataRetentionDays'
   | 'isFree'
   | 'isDefault';
-export type PlanField = PlanScalarField | 'visibleAddons' | `limits.${PlanLimitKey}`;
+export type PlanField = PlanScalarField | 'visibleAddons' | `limits.${string}`;
 
 export type PlanProblemCode =
   'required' | 'tooLong' | 'money' | 'range' | 'whole' | 'server' | PlanRuleCode;
@@ -130,10 +129,12 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
     sortOrder: String(p.sortOrder),
     ctaLabel: p.ctaLabel,
     dataRetentionDays: String(p.dataRetentionDays),
-    limits: Object.fromEntries(
-      PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
-    ) as PlanDraft['limits'],
-    features: { ...p.features },
+    // Registry keys first, then the caps an installed module contributed (WD-ADD-013).
+    limits: Object.fromEntries([
+      ...PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
+      ...Object.entries(p.moduleLimits).map(([k, v]) => [k, v > 0 ? String(v) : '']),
+    ]),
+    features: { ...p.moduleFeatures, ...p.features },
     visibleAddons: [...p.visibleAddons],
   };
 }
@@ -160,6 +161,9 @@ export function withToggle(draft: PlanDraft, key: Toggle, on: boolean): PlanDraf
   }
   return next;
 }
+
+const isRegistryLimit = (k: string) => (PLAN_LIMIT_KEYS as readonly string[]).includes(k);
+const isRegistryFeature = (k: string) => (PLAN_FEATURE_KEYS as readonly string[]).includes(k);
 
 const wholeNumber = (raw: string): number | null =>
   /^\d+$/.test(raw.trim()) ? Number(raw.trim()) : null;
@@ -225,16 +229,20 @@ export function buildPlanRequest(
     problems.dataRetentionDays = { code: 'range', min: 0, max: RETENTION_MAX };
 
   const limits: Record<string, number> = {};
-  for (const key of PLAN_LIMIT_KEYS) {
-    const raw = draft.limits[key].trim();
+  const moduleLimits: Record<string, number> = {};
+  for (const key of Object.keys(draft.limits)) {
+    const raw = (draft.limits[key] ?? '').trim();
+    // Registry caps and the caps installed modules add travel apart (WD-ADD-013).
+    const target = isRegistryLimit(key) ? limits : moduleLimits;
     if (!raw) {
-      limits[key] = 0;
+      target[key] = 0;
       continue;
     }
     const n = wholeNumber(raw);
-    if (n === null) problems[`limits.${key}`] = { code: 'whole' };
-    else if (n > CAP_MAX) problems[`limits.${key}`] = { code: 'range', min: 0, max: CAP_MAX };
-    else limits[key] = n;
+    if (n === null) problems[`limits.${key}` as PlanField] = { code: 'whole' };
+    else if (n > CAP_MAX)
+      problems[`limits.${key}` as PlanField] = { code: 'range', min: 0, max: CAP_MAX };
+    else target[key] = n;
   }
 
   // The cross-field rules, shared with the API. A field already known to be malformed keeps its own
@@ -273,7 +281,13 @@ export function buildPlanRequest(
       ctaLabel: cta,
       dataRetentionDays: retention!,
       limits,
-      features: { ...draft.features },
+      features: Object.fromEntries(
+        Object.entries(draft.features).filter(([k]) => isRegistryFeature(k)),
+      ),
+      moduleLimits,
+      moduleFeatures: Object.fromEntries(
+        Object.entries(draft.features).filter(([k]) => !isRegistryFeature(k)),
+      ),
       ...(includeAddons ? { visibleAddons: [...new Set(draft.visibleAddons)] } : {}),
     },
   };
@@ -355,15 +369,15 @@ export function setLimitUnlimited(
 /** How many of the given limits (default: all) carry a cap. */
 export function countLimitsSet(
   limits: PlanDraft['limits'],
-  keys: readonly PlanLimitKey[] = PLAN_LIMIT_KEYS,
+  keys: readonly string[] = PLAN_LIMIT_KEYS,
 ): number {
-  return keys.filter((k) => !limitIsUnlimited(limits[k])).length;
+  return keys.filter((k) => !limitIsUnlimited(limits[k] ?? '')).length;
 }
 
 /** How many of the given features (default: all) are on. */
 export function countFeaturesOn(
   features: PlanDraft['features'],
-  keys: readonly PlanFeatureKey[] = PLAN_FEATURE_KEYS,
+  keys: readonly string[] = PLAN_FEATURE_KEYS,
 ): number {
   return keys.filter((k) => features[k]).length;
 }
@@ -371,7 +385,7 @@ export function countFeaturesOn(
 /** Switch the given features (a group's visible rows) on or off, leaving the rest. */
 export function toggleFeatures(
   features: PlanDraft['features'],
-  keys: readonly PlanFeatureKey[],
+  keys: readonly string[],
   on: boolean,
 ): PlanDraft['features'] {
   const next = { ...features };
