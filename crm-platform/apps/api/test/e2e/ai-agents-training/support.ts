@@ -1,5 +1,6 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import type { Response } from 'supertest';
 import { expect } from 'vitest';
 import {
   Api,
@@ -92,7 +93,7 @@ export class TrainingApi extends Api {
     assistantId: string,
     file: { name: string; data: Buffer },
     label: string | null = 'A file',
-  ) {
+  ): Promise<Response> {
     let req = this.as(token)
       .post(`/v2/ai-training/assistants/${assistantId}/sources/file`)
       .attach('file', file.data, file.name);

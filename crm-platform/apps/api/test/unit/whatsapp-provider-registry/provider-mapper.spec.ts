@@ -29,6 +29,8 @@ const row = (over: Partial<ProviderRow> = {}): ProviderRow => ({
   onboarding: 'embedded_signup',
   onboarding_app_id: '123456',
   onboarding_config_id: '654321',
+  partner_program: null,
+  partner_solution_id: null,
   status: 'active',
   is_default: false,
   notes: null,
