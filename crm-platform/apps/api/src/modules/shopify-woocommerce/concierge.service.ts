@@ -11,6 +11,7 @@ import {
   type EcomTemplates,
 } from './_shims/tokens';
 import { accountSummary, applyVarMap, conciergeIntent, isPositiveRating } from './event-rules';
+import { CheckoutLinkService } from './checkout-link.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { MirrorRepository } from './mirror.repository';
@@ -42,6 +43,7 @@ export class ConciergeService {
     private readonly stores: StoresRepository,
     private readonly events: EventsRepository,
     private readonly mirror: MirrorRepository,
+    private readonly checkout: CheckoutLinkService,
     private readonly message: EventMessageService,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
     @Inject(COMMERCE_SENDER) private readonly sender: CommerceSender,
@@ -189,12 +191,12 @@ export class ConciergeService {
       .map((i) => ({ reference: i.sku, qty: i.qty }));
     if (items.length === 0) return false;
     try {
-      const link = await this.api(store).createPendingOrder(items, null);
+      const link = await this.checkout.wooLink(orgId, store, items, null);
       if (!link) return false;
       await this.sender.sendText(orgId, {
         to: phone,
         body: `Here's your re-order — same items as last time. Tap to checkout:\n${link.url}`,
-        reference: `ecom-reorder-${store.id}-${link.orderId}`,
+        reference: `ecom-reorder-${store.id}-${link.ref ?? ''}`,
       });
       await this.log(orgId, store, 'reorder', 'sent', phone, { order: last.name });
       return true;

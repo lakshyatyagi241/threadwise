@@ -34,5 +34,5 @@ The Settings page is open to every signed-in member, but each tile appears only 
 
 - **A setting is missing.** Your role does not include it. Ask a workspace Owner or Admin if you need it.
 - **Search finds nothing.** Try a shorter or broader word, or open the section and browse.
-- **A tile shows Upgrade.** Your plan does not include that feature. See [Plan and usage](/account/usage) to compare plans.
+- **A tile shows Upgrade.** Your plan does not include that feature. See [Plans](/account/plans) to compare plans.
 - **New to the workspace?** Read [Getting started](help:getting-started) first.

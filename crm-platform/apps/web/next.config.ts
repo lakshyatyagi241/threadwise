@@ -49,8 +49,16 @@ const nextConfig: NextConfig = {
       { key: 'Pragma', value: 'no-cache' },
     ];
     return [
-      // Framing is refused everywhere except the embeddable chat widget and the Forms pages, which customers put on their own sites.
-      { source: '/((?!widget(?:/|$)|f/).*)', headers: security },
+      // Framing is refused everywhere except the embeddable chat widget, the Forms pages (which customers put on their own sites) and
+      // the `/shopify` pages, whose policy `proxy.ts` sets (Shopify's admin may frame them when the request carries `host` and `shop`).
+      { source: '/((?!widget(?:/|$)|f/|shopify(?:/embedded)?/?$).*)', headers: security },
+      // The other security headers still apply to the `/shopify` pages; only the frame policy is left to `proxy.ts`.
+      {
+        source: '/shopify/:path(embedded)?',
+        headers: security.filter(
+          (h) => h.key !== 'X-Frame-Options' && h.key !== 'Content-Security-Policy',
+        ),
+      },
       // A form page (/f/<key>): never indexed and never leaking its address. Its frame policy is per form (the allow-list the owner
       // set), so `proxy.ts` sets it on every request to the page and fails closed ('none') on any doubt. No frame header is declared
       // here on purpose: a static X-Frame-Options would still be sent next to the policy `proxy.ts` sets and would block the embed.
@@ -102,6 +110,7 @@ const nextConfig: NextConfig = {
       { source: '/register/verify', destination: '/verify-otp', permanent: false },
       { source: '/register/workspace', destination: '/onboarding', permanent: false },
       { source: '/register/plan', destination: '/onboarding', permanent: false },
+      { source: '/account/branding', destination: '/settings/message-footer', permanent: false },
       { source: '/account/suspended', destination: '/suspended', permanent: false },
       { source: '/account/verify-email', destination: '/verify-email-required', permanent: false },
       {

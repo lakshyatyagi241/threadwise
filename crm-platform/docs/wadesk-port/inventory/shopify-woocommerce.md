@@ -35,46 +35,46 @@ the domain named; the port builds everything it can and puts the rest behind int
 
 ## Feature index
 
-| Id          | Feature                                                                             | Status  | Priority | Effort | Depends on                 |
-| ----------- | ----------------------------------------------------------------------------------- | ------- | -------- | ------ | -------------------------- |
-| WD-ECOM-001 | Admin settings: Shopify app (switch, client id, secret, scopes, redirect)           | pending | P0       | S      | platform-settings          |
-| WD-ECOM-002 | Admin settings: WooCommerce switch                                                  | pending | P0       | S      | platform-settings          |
-| WD-ECOM-003 | Plan gates and permission keys                                                      | partial | P0       | S      | plans-subscriptions-trials |
-| WD-ECOM-004 | Shopify connect screen and store dashboard shell                                    | pending | P0       | M      | WD-ECOM-005                |
-| WD-ECOM-005 | Shopify OAuth start: domain check, state, authorize address                         | pending | P0       | S      | WD-ECOM-001                |
-| WD-ECOM-006 | Shopify OAuth callback: signature, state, token, shop, store, webhooks, import      | pending | P0       | L      | WD-ECOM-005                |
-| WD-ECOM-007 | Shopify webhooks: register the 12 topics, tear down                                 | pending | P0       | S      | WD-ECOM-006                |
-| WD-ECOM-008 | Shopify webhook receiver: signature, log, event dispatch, side effects in order     | pending | P0       | L      | WD-ECOM-007, 010           |
-| WD-ECOM-009 | Automations: map each event to a template, recipients, variables, delay (both)      | pending | P0       | M      | message-templates          |
-| WD-ECOM-010 | Event message: variables, recipients, engine-aware send, log (both)                 | pending | P0       | L      | WD-ECOM-009                |
-| WD-ECOM-011 | Import: products, orders and customers into the mirror (both)                       | pending | P0       | L      | catalog, checkout schema   |
-| WD-ECOM-012 | Keep the mirror in step from webhooks; auto-invoice hand-off (both)                 | pending | P1       | M      | WD-ECOM-011                |
-| WD-ECOM-013 | Sync now and disconnect (both)                                                      | pending | P0       | S      | WD-ECOM-011                |
-| WD-ECOM-014 | Send offer: one template to a contact group with a product and a coupon (both)      | pending | P1       | M      | WD-ECOM-010                |
-| WD-ECOM-015 | Win-back: smart segment from order history (both)                                   | pending | P1       | M      | WD-ECOM-010                |
-| WD-ECOM-016 | COD double confirmation: ask, track, Yes/No reply flips the order (both)            | pending | P0       | L      | WD-ECOM-010                |
-| WD-ECOM-017 | COD to prepaid nudge (both)                                                         | pending | P1       | S      | WD-ECOM-010                |
-| WD-ECOM-018 | Delivered automation from the courier status (Shopify)                              | pending | P1       | S      | WD-ECOM-010                |
-| WD-ECOM-019 | Abandoned-cart recovery: three steps, scheduled, cancelled on purchase (both)       | pending | P1       | L      | scheduler                  |
-| WD-ECOM-020 | Back-in-stock waitlist: opt in by message, notify on restock (both)                 | pending | P1       | M      | WD-ECOM-010                |
-| WD-ECOM-021 | App uninstalled cleanup (Shopify)                                                   | pending | P1       | S      | WD-ECOM-008                |
-| WD-ECOM-022 | Shopify mandatory GDPR webhooks                                                     | pending | P0       | S      | WD-ECOM-001                |
-| WD-ECOM-023 | Store dashboard tabs: overview, orders, products, customers, analytics, activity    | pending | P0       | XL     | WD-ECOM-011                |
-| WD-ECOM-024 | Settings tab: store facts and registered webhooks                                   | pending | P2       | S      | WD-ECOM-023                |
-| WD-ECOM-025 | WooCommerce connect: test credentials, save, webhooks, import                       | pending | P0       | L      | WD-ECOM-002                |
-| WD-ECOM-026 | WooCommerce webhooks: register the 7 topics, signature, tear down                   | pending | P0       | S      | WD-ECOM-025                |
-| WD-ECOM-027 | WooCommerce webhook receiver: status automations, mirror, COD risk, cart, flow      | pending | P0       | L      | WD-ECOM-026, 010           |
-| WD-ECOM-028 | WooCommerce phone normalisation to E.164                                            | pending | P0       | S      | countries list             |
-| WD-ECOM-029 | WooCommerce order context: tracking, invoice link, pay link                         | pending | P1       | M      | WD-ECOM-010                |
-| WD-ECOM-030 | COD risk score on a WooCommerce order                                               | pending | P1       | S      | WD-ECOM-016                |
-| WD-ECOM-031 | Concierge on WhatsApp: reorder, points, review reward, change address (WooCommerce) | pending | P1       | L      | WD-ECOM-010                |
-| WD-ECOM-032 | WooCommerce companion plugin download                                               | blocked | P1       | M      | decision (see entry)       |
-| WD-ECOM-033 | "Send from" sender chosen per WooCommerce integration                               | pending | P1       | S      | WD-ECOM-009                |
-| WD-ECOM-034 | Inbound chokepoints: COD reply, stock opt-in, concierge, in WaDesk's order          | partial | P0       | M      | team-inbox-conversations   |
-| WD-ECOM-035 | Invoices tab and auto-invoice on a paid order                                       | blocked | P1       | M      | invoicing                  |
-| WD-ECOM-036 | Checkout links for the flow commerce node (Shopify cart, WooCommerce order)         | blocked | P1       | M      | flow-runtime-engine        |
-| WD-ECOM-037 | Flow resume on a purchase (purchased port)                                          | blocked | P1       | S      | flow-runtime-engine        |
-| WD-ECOM-038 | Shopify embedded-app session cookie                                                 | blocked | P2       | S      | decision (see entry)       |
+| Id          | Feature                                                                             | Status                | Priority | Effort | Depends on                 |
+| ----------- | ----------------------------------------------------------------------------------- | --------------------- | -------- | ------ | -------------------------- |
+| WD-ECOM-001 | Admin settings: Shopify app (switch, client id, secret, scopes, redirect)           | pending               | P0       | S      | platform-settings          |
+| WD-ECOM-002 | Admin settings: WooCommerce switch                                                  | pending               | P0       | S      | platform-settings          |
+| WD-ECOM-003 | Plan gates and permission keys                                                      | partial               | P0       | S      | plans-subscriptions-trials |
+| WD-ECOM-004 | Shopify connect screen and store dashboard shell                                    | pending               | P0       | M      | WD-ECOM-005                |
+| WD-ECOM-005 | Shopify OAuth start: domain check, state, authorize address                         | pending               | P0       | S      | WD-ECOM-001                |
+| WD-ECOM-006 | Shopify OAuth callback: signature, state, token, shop, store, webhooks, import      | pending               | P0       | L      | WD-ECOM-005                |
+| WD-ECOM-007 | Shopify webhooks: register the 12 topics, tear down                                 | pending               | P0       | S      | WD-ECOM-006                |
+| WD-ECOM-008 | Shopify webhook receiver: signature, log, event dispatch, side effects in order     | pending               | P0       | L      | WD-ECOM-007, 010           |
+| WD-ECOM-009 | Automations: map each event to a template, recipients, variables, delay (both)      | pending               | P0       | M      | message-templates          |
+| WD-ECOM-010 | Event message: variables, recipients, engine-aware send, log (both)                 | pending               | P0       | L      | WD-ECOM-009                |
+| WD-ECOM-011 | Import: products, orders and customers into the mirror (both)                       | pending               | P0       | L      | catalog, checkout schema   |
+| WD-ECOM-012 | Keep the mirror in step from webhooks; auto-invoice hand-off (both)                 | pending               | P1       | M      | WD-ECOM-011                |
+| WD-ECOM-013 | Sync now and disconnect (both)                                                      | pending               | P0       | S      | WD-ECOM-011                |
+| WD-ECOM-014 | Send offer: one template to a contact group with a product and a coupon (both)      | pending               | P1       | M      | WD-ECOM-010                |
+| WD-ECOM-015 | Win-back: smart segment from order history (both)                                   | pending               | P1       | M      | WD-ECOM-010                |
+| WD-ECOM-016 | COD double confirmation: ask, track, Yes/No reply flips the order (both)            | pending               | P0       | L      | WD-ECOM-010                |
+| WD-ECOM-017 | COD to prepaid nudge (both)                                                         | pending               | P1       | S      | WD-ECOM-010                |
+| WD-ECOM-018 | Delivered automation from the courier status (Shopify)                              | pending               | P1       | S      | WD-ECOM-010                |
+| WD-ECOM-019 | Abandoned-cart recovery: three steps, scheduled, cancelled on purchase (both)       | pending               | P1       | L      | scheduler                  |
+| WD-ECOM-020 | Back-in-stock waitlist: opt in by message, notify on restock (both)                 | pending               | P1       | M      | WD-ECOM-010                |
+| WD-ECOM-021 | App uninstalled cleanup (Shopify)                                                   | pending               | P1       | S      | WD-ECOM-008                |
+| WD-ECOM-022 | Shopify mandatory GDPR webhooks                                                     | pending               | P0       | S      | WD-ECOM-001                |
+| WD-ECOM-023 | Store dashboard tabs: overview, orders, products, customers, analytics, activity    | pending               | P0       | XL     | WD-ECOM-011                |
+| WD-ECOM-024 | Settings tab: store facts and registered webhooks                                   | pending               | P2       | S      | WD-ECOM-023                |
+| WD-ECOM-025 | WooCommerce connect: test credentials, save, webhooks, import                       | pending               | P0       | L      | WD-ECOM-002                |
+| WD-ECOM-026 | WooCommerce webhooks: register the 7 topics, signature, tear down                   | pending               | P0       | S      | WD-ECOM-025                |
+| WD-ECOM-027 | WooCommerce webhook receiver: status automations, mirror, COD risk, cart, flow      | pending               | P0       | L      | WD-ECOM-026, 010           |
+| WD-ECOM-028 | WooCommerce phone normalisation to E.164                                            | pending               | P0       | S      | countries list             |
+| WD-ECOM-029 | WooCommerce order context: tracking, invoice link, pay link                         | pending               | P1       | M      | WD-ECOM-010                |
+| WD-ECOM-030 | COD risk score on a WooCommerce order                                               | pending               | P1       | S      | WD-ECOM-016                |
+| WD-ECOM-031 | Concierge on WhatsApp: reorder, points, review reward, change address (WooCommerce) | pending               | P1       | L      | WD-ECOM-010                |
+| WD-ECOM-032 | WooCommerce companion plugin download                                               | done                  | P1       | M      | none                       |
+| WD-ECOM-033 | "Send from" sender chosen per WooCommerce integration                               | pending               | P1       | S      | WD-ECOM-009                |
+| WD-ECOM-034 | Inbound chokepoints: COD reply, stock opt-in, concierge, in WaDesk's order          | partial               | P0       | M      | team-inbox-conversations   |
+| WD-ECOM-035 | Invoices tab and auto-invoice on a paid order                                       | done                  | P1       | M      | invoicing                  |
+| WD-ECOM-036 | Checkout links for the flow commerce node (Shopify cart, WooCommerce order)         | done                  | P1       | M      | flow-runtime-engine        |
+| WD-ECOM-037 | Flow resume on a purchase (purchased port)                                          | done                  | P1       | S      | flow-runtime-engine        |
+| WD-ECOM-038 | Shopify embedded-app session cookie                                                 | built (fixtures only) | P2       | S      | not tested on real Shopify |
 
 ## Features
 
@@ -165,7 +165,7 @@ the domain named; the port builds everything it can and puts the rest behind int
 
 ### WD-ECOM-012 — Keep the mirror in step; auto-invoice hand-off (both)
 
-- **Status:** pending. **Priority:** P1. **Effort:** M.
+- **Status:** pending (the paid-order hand-off is built, WD-ECOM-035). **Priority:** P1. **Effort:** M.
 - **Summary:** From webhooks: `products/update` (Woo `product.created`, `product.updated`) upserts the product; order topics (Shopify `orders/create|updated|paid|fulfilled|cancelled`, Woo `order.created|updated`) upsert the order. A paid order (Shopify `orders/paid` or `financial_status = paid`; Woo status `processing` or `completed` or a `date_paid`) is handed to the invoicing domain with the raw payload and the delivery id for replay protection (WD-ECOM-035).
 - **Source refs:** the webhook receivers, `InvoiceService::handleWebhookOrder`.
 
@@ -295,9 +295,9 @@ the domain named; the port builds everything it can and puts the rest behind int
 
 ### WD-ECOM-032 — WooCommerce companion plugin download
 
-- **Status:** blocked (decision). **Priority:** P1. **Effort:** M.
+- **Status:** done (owner decision: ship our own original plugin). **Priority:** P1. **Effort:** M.
 - **Summary:** `GET /woocommerce/{id}/plugin` downloads a ZIP with a WordPress plugin generated from `resources/stubs/wadesk-woocommerce.php.stub` (209 lines of PHP), with the store's webhook address, its secret, a 30 minute cart delay and the brand name filled in; the file names use the brand slug. The plugin captures the checkout phone before an order exists (abandoned-cart steps), forwards subscription payment failures and custom statuses to the webhook, and sweeps pending carts every five minutes.
-- **Decision needed:** the plugin is PHP that runs on the merchant's WordPress, not our app, but the porting rules say no PHP is pasted into `crm-platform/`. The port can ship it as a read-only asset template (a stub text file generated into a ZIP) if the owner allows a WordPress plugin in the repo; otherwise the abandoned-cart and dunning events for WooCommerce cannot work. Recorded in the parity file; nothing is built until answered.
+- **Decision (made):** our own original plugin, written from this spec, ships as a text template in `apps/api/src/modules/shopify-woocommerce/plugin/` and is zipped per store. Earlier question: the plugin is PHP that runs on the merchant's WordPress, not our app, but the porting rules say no PHP is pasted into `crm-platform/`. The port can ship it as a read-only asset template (a stub text file generated into a ZIP) if the owner allows a WordPress plugin in the repo; otherwise the abandoned-cart and dunning events for WooCommerce cannot work. Recorded in the parity file; nothing is built until answered.
 - **Source refs:** `WoocommerceController::downloadPlugin`, `resources/stubs/wadesk-woocommerce.php.stub`.
 
 ### WD-ECOM-033 — "Send from" sender per WooCommerce integration
@@ -313,36 +313,39 @@ the domain named; the port builds everything it can and puts the rest behind int
 - **Port notes:** exported `EcomInboundService.handleInbound(orgId, phone, text)` for the inbox; it runs the handlers in WaDesk's order and returns which acted.
 - **Source refs:** `WaInboundController` (lines 736 to 800).
 
-### WD-ECOM-035 — Invoices tab and auto-invoice (blocked)
+### WD-ECOM-035 — Invoices tab and auto-invoice (done)
 
-- **Status:** blocked (invoicing). **Priority:** P1. **Effort:** M.
+- **Status:** done (hand-off, tab and settings built and tested; the delivery of the queued invoice to the buyer belongs to the invoicing delivery adapter). **Priority:** P1. **Effort:** M.
 - **Summary:** The Invoices tab embeds the invoicing domain's panel for the source (`shopify` or `woocommerce`). A paid order is handed to `InvoiceService::handleWebhookOrder` with the raw payload, the delivery id (`X-Shopify-Webhook-Id`, `X-WC-Webhook-Delivery-ID`) and the topic; it keeps a replay table, the per-source `auto_send_*` and `trigger_*` settings, and the Shopify and Woo mappers.
-- **Port notes:** a `PaidOrderHook` shim called after the mirror upsert; the tab shows the invoicing panel when that domain exports it.
+- **Port notes:** built. `PaidOrderHook` (`_shims/tokens.ts`) is bound to `InvoicingPaidOrderHook`, called by the pipeline's own guarded `invoice` step after the mirror upsert; it maps the RAW body (true minor units, tax, shipping, discount) and bills through `ExternalOrderBillingService` in one transaction. Settings are the workspace's `invoice_settings` `auto_send_<source>` (the switch, off by default) and `trigger_<source>` (`on_placed`, `on_paid` default, `on_fulfilled`), edited from the tab. The replay table is tenant data (`ecom_invoice_handoffs`, unique per org, source and delivery id). The tab lists `GET /v2/invoices?source=<kind>`. Tests: `test/e2e/shopify-woocommerce/ecom-invoicing.e2e.spec.ts`, `test/unit/shopify-woocommerce/invoice-order-rules.spec.ts`.
 
-### WD-ECOM-036 — Checkout links for the flow commerce node (blocked)
+### WD-ECOM-036 — Checkout links for the flow commerce node
 
-- **Status:** blocked (flow-runtime-engine). **Priority:** P1. **Effort:** M.
+- **Status:** done. **Priority:** P1. **Effort:** M.
 - **Summary:** The flow builder's commerce node turns picked products (by sku) into a checkout link: Shopify resolves variant ids from the admin API and creates a Storefront cart (the flow session id goes in the cart `note` as `wadesk-flow:<id>`; a store with no Storefront token uses a draft order), WooCommerce mints an order via its Store API (tagged `_wa_flow_session`). The WooCommerce concierge reorder (WD-ECOM-031) uses the same builder.
+- **Port notes:** `EcomFlowShop` (exported from the module) answers the flow runtime's `FlowShopPort`: stock from the mirrored products, no native list, and the link from `CheckoutLinkService`, which the concierge reorder also uses. The flow runtime binds it to `FlowShopGate` in `ShopGateBinder` at start. Differences: see parity 40 to 43.
 - **Source refs:** `Services/Commerce/ShopifyCheckoutLinkBuilder`, `WoocommerceCheckoutLinkBuilder`, `FlowsCommerceController`.
 
-### WD-ECOM-037 — Flow resume on a purchase (blocked)
+### WD-ECOM-037 — Flow resume on a purchase
 
-- **Status:** blocked (flow-runtime-engine). **Priority:** P1. **Effort:** S.
+- **Status:** done. **Priority:** P1. **Effort:** S.
 - **Summary:** On `orders/create` and `orders/paid` (Woo `order.created`, `order.updated`) the flow session id is read back from the cart note or order meta and the paused flow is advanced through its `purchased` port.
+- **Port notes:** `flowRefOf` (order-hooks) reads the reference, the webhook pipeline announces it on `EcomOrderHooks`, and the flow runtime's `CommerceResume` delivers it to the waiting run; covered end to end by `ecom-flow-shop.e2e.spec.ts`.
 - **Source refs:** `Services/Commerce/FlowSessionResolver`.
 
 ### WD-ECOM-038 — Shopify embedded-app session cookie
 
 - **Status:** blocked (decision). **Priority:** P2. **Effort:** S.
 - **Summary:** WaDesk is also an embedded Shopify app: the session cookie is relaxed to `SameSite=None; Secure` only on the `/shopify` pages, requests carrying Shopify's `host` and `shop`, and the login handshake while a marker cookie is present, so the login form works inside Shopify's iframe. The port authenticates through a same-origin proxy and bearer tokens, not a PHP session; whether the app is listed in Shopify's app store and loaded in the admin iframe is a product decision.
-- **Decision needed:** is the embedded Shopify admin experience in scope? If yes it needs the auth domain's cookie and framing policy; if no this is dropped by the owner's word.
+- **Decision (made by the owner):** the embedded Shopify admin experience is in scope and is built in its smallest form: Shopify's admin may frame `/shopify` (only when the request carries `host` and `shop`), and the page reads the store's connection status with a verified App Bridge session token. No user session is minted and the auth domain is untouched (the cookie relaxation in WaDesk is not needed: the port has no PHP session).
+- **Status now:** built and tested with signed fixtures only (unit tests for the verifier, an API e2e on a real Postgres, header-policy tests). **Never run against a real Shopify partner app or App Bridge.** Left for production: create the Shopify partner app with App URL `{WEB_APP_URL}/shopify` and the redirect URL, enable "Embed app in Shopify admin", set the client id and secret in the platform settings, and the app listing.
 - **Source refs:** `app/Http/Middleware/EmbeddedShopifySession.php`, `SecurityHeaders`, `bootstrap/app.php`.
 
 ## Wiring
 
 - **Public routes (no session):** `POST /shopify/webhook/{secret}`, `POST /shopify/compliance`, `POST /woocommerce/webhook/{secret}`. The OAuth callback needs a session in WaDesk; the port carries the user in the sealed state.
 - **Inbox:** the three inbound handlers (WD-ECOM-034).
-- **Invoicing:** the paid-order hand-off and the panel (WD-ECOM-035).
+- **Invoicing:** the paid-order hand-off and the Invoices tab (WD-ECOM-035, built: `ExternalOrderBillingService`, `InvoiceSettingsService`, the invoice list's `source` filter).
 - **Flows:** the commerce node's links and the purchased port (WD-ECOM-036, 037); the node inspectors read the integrations.
 - **Catalog and checkout:** `wa_products` and `wa_orders` are written here and read there (catalog send, orders list); the Meta catalog auto-sync is paused during a bulk import.
 - **Dashboards:** the integrations panel reads whether a store is connected.

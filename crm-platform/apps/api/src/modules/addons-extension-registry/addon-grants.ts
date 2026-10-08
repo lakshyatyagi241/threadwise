@@ -1,4 +1,4 @@
-import type { AddonBullet, AddonGrants } from '@crm/contracts';
+import { coreFeatureDefault, type AddonBullet, type AddonGrants } from '@crm/contracts';
 
 /**
  * The pure rules of add-on grants (WD-ADD-028 rules 2 and 3, WD-ADD-031, WD-ADD-033). No database, no clock, no
@@ -33,6 +33,14 @@ export function normaliseGrants(
   }
   return { features, limits };
 }
+
+/**
+ * The submitted features that are core: a flag whose registry default is ON is granted by every plan row that predates it, so an
+ * add-on "selling" it sells what everyone already has. Only an optional flag (default off, or contributed by a module) can be an
+ * add-on; the same rule keeps a Marketplace app off a core flag (`planFeatureOwnableByApp`).
+ */
+export const coreFeaturesIn = (features: readonly string[]): string[] =>
+  [...new Set(features)].filter((k) => coreFeatureDefault(k) === true).sort();
 
 /** Grants as stored on a plan row (`features` {key: true}, `limits` {key: delta}); anything malformed is "no grant". */
 export function readGrants(features: unknown, limits: unknown): AddonGrants {

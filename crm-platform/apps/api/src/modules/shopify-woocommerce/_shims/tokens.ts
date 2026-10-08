@@ -98,3 +98,41 @@ export interface CommerceSender {
   ): Promise<{ providerMessageId: string | null }>;
 }
 export const COMMERCE_SENDER = Symbol('ECOM_COMMERCE_SENDER');
+
+/** A store delivery that may need an invoice (WD-ECOM-035): the paid-order hand-off to the invoicing domain. */
+export interface PaidStoreOrder {
+  orgId: number;
+  kind: StoreKind;
+  storeId: number;
+  /** The webhook topic (`orders/paid`, `order.updated`). */
+  topic: string;
+  /** `X-Shopify-Webhook-Id` / `X-WC-Webhook-Delivery-ID`: one delivery is handled once. */
+  deliveryId: string;
+  /** The raw order body the store sent. */
+  data: Record<string, unknown>;
+}
+
+export type HandOffOutcome =
+  | { outcome: 'invoiced' | 'existing'; invoiceId: number }
+  | {
+      outcome: 'ignored';
+      reason:
+        | 'not_an_order'
+        | 'auto_invoice_off'
+        | 'trigger_not_met'
+        | 'replay'
+        | 'plan_has_no_invoicing'
+        | 'no_mirrored_order'
+        | 'plan_limit_reached'
+        | 'nothing_to_invoice';
+    };
+
+/**
+ * Where a paid store order goes to be billed. The pipeline calls it once per delivery, after the mirror holds the order, inside its own
+ * guard: it may throw, the delivery is never failed by it. Bound to `InvoicingPaidOrderHook` (ecom calls the invoicing module's
+ * `ExternalOrderBillingService`); the token is the seam.
+ */
+export interface PaidOrderHook {
+  handOff(order: PaidStoreOrder): Promise<HandOffOutcome>;
+}
+export const PAID_ORDER_HOOK = Symbol('ECOM_PAID_ORDER_HOOK');

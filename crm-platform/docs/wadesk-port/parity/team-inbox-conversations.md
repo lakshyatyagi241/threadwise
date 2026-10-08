@@ -27,7 +27,9 @@ verification note applies (no signed-in reference session; behaviour here is fro
 
 ## Not built here, recorded
 
-Template send (TPL) answers `INBOX_TEMPLATES_UNAVAILABLE`; snooze, spam, priority, labels, bulk, archive and pin routes, saved replies, saved views,
+Template send is built (picker, `kind: 'template'`), and the thread draws a template message as WhatsApp shows it (WD-TIB1-011): header text or a
+media/location marker, the body with the values filled in, the footer, and the buttons as rows (quick reply, URL, call, copy code), from `template.preview`
+(see `docs/api/team-inbox-conversations.md`). A media header shows only its kind: the file is not stored with the message. Snooze, spam, priority, labels, bulk, archive and pin routes, saved replies, saved views,
 mention notifications, presence and typing, the AI takeover on human reply (nothing can attach an AI agent yet), and the sweep of expired uploads are later
 phases (plan 5). The plan cap (`PLAN_LIMIT_REACHED`) is enforced by the core's dispatcher for metered channels; the simulator is never metered, so it is not
 exercised by this domain's tests.

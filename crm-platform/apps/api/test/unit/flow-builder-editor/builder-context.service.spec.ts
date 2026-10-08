@@ -62,7 +62,10 @@ describe('BuilderContextService.context (WD-FLB-026)', () => {
       [/FROM workspace_email_accounts/, [{ id: 1, uuid: 'em-1', email: 'a@b.test' }]],
       [/FROM telegram_bots/, [{ id: 1, uuid: 'tg-1', bot_name: 'Bot' }]],
     ];
-    const off = await run(() => service(rows).svc.context());
+    // Facebook is a built channel: unset means on (nothing writes the switch), only an explicit false hides it. TikTok and Email are not built: unset means off.
+    const unset = await run(() => service(rows).svc.context());
+    expect(unset.channels).toEqual(['chat', 'facebook', 'telegram']);
+    const off = await run(() => service(rows, { facebook_enabled: false }).svc.context());
     expect(off.channels).toEqual(['chat', 'telegram']);
     expect(off.senders.facebook).toEqual([]);
 

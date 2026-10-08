@@ -407,6 +407,15 @@ export class MessagesRepository {
     return rowsOf(res).length > 0;
   }
 
+  /** The internal id of a template by its uuid, inside this workspace; null when there is none (a deleted or foreign template). */
+  async templateIdByUuid(tx: Tx, orgId: number, uuid: string): Promise<number | null> {
+    const res = await tx.execute(
+      sql`SELECT id FROM wa_templates WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    const id = rowsOf(res)[0]?.id;
+    return id === undefined || id === null ? null : Number(id);
+  }
+
   /** The category a template is billed under (Meta's pricing category, else the template's own); null without a template. */
   async templateCategory(tx: Tx, orgId: number, templateId: number | null): Promise<string | null> {
     if (templateId === null) return null;

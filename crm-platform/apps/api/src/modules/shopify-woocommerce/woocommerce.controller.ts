@@ -8,8 +8,11 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import { connectWoocommerceSchema, type ConnectWoocommerceInput } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -80,5 +83,23 @@ export class WoocommerceController {
   })
   sync(@Param('id', ParseUUIDPipe) id: string) {
     return this.woo.sync(id);
+  }
+
+  @Get(':id/plugin')
+  @RequirePermission('ecom.connect')
+  @ApiOperation({
+    summary: 'Download the WordPress companion plugin for this store as a zip',
+    description:
+      'Generated per store with its webhook address, secret, cart delay (30 minutes) and the brand baked in; file names use the brand slug. 404 for another workspace’s store.',
+  })
+  async plugin(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const { filename, zip } = await this.woo.plugin(id);
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Cache-Control', 'no-store');
+    return new StreamableFile(zip);
   }
 }

@@ -3,11 +3,13 @@ import {
   MAX_PAGES,
   SHOP_DOMAIN,
   type EcomResult,
+  type CheckoutLine,
   type ShopInfo,
   type StoreCounts,
   type StoreRead,
   type StoreRecord,
   type ShopifyAppApi,
+  type ShopifyCheckoutApi,
   type ShopifyFactory,
   type ShopifySettings,
   type ShopifyStoreApi,
@@ -36,10 +38,11 @@ export function nextLink(header: string | null): string | null {
 async function call(
   method: 'GET' | 'POST' | 'DELETE',
   url: string,
-  o: { token?: string; json?: Json } = {},
+  o: { token?: string; storefrontToken?: string; json?: Json } = {},
 ): Promise<{ status: number; json: Json; next: string | null } | null> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (o.token) headers['X-Shopify-Access-Token'] = o.token;
+  if (o.storefrontToken) headers['X-Shopify-Storefront-Access-Token'] = o.storefrontToken;
   if (o.json) headers['Content-Type'] = 'application/json';
   try {
     const res = await fetch(url, {
@@ -207,6 +210,107 @@ class ShopifyStore implements ShopifyStoreApi {
   }
 }
 
+const variantGid = (id: string): string => `gid://shopify/ProductVariant/${id}`;
+
+/** The checkout calls of a flow's shop node (WD-ECOM-036). Every address is built on the validated shop host. */
+class ShopifyCheckout implements ShopifyCheckoutApi {
+  constructor(
+    private readonly shopDomain: string,
+    private readonly token: string,
+  ) {}
+
+  private get ok(): boolean {
+    return SHOP_DOMAIN.test(this.shopDomain);
+  }
+
+  async variantIdBySku(sku: string): Promise<string | null> {
+    const clean = sku.replace(/["\\]/g, '').trim();
+    if (!this.ok || clean === '') return null;
+    const r = await call('POST', `${adminBase(this.shopDomain)}/graphql.json`, {
+      token: this.token,
+      json: {
+        query: 'query($q: String!) { productVariants(first: 1, query: $q) { nodes { id sku } } }',
+        variables: { q: `sku:"${clean}"` },
+      },
+    });
+    if (!r || r.status < 200 || r.status >= 300) return null;
+    const nodes = obj(obj(r.json.data).productVariants).nodes;
+    const first = Array.isArray(nodes) ? obj(nodes[0]) : {};
+    // The search is a prefix match on some stores: only the exact sku counts.
+    if (text(first.sku) !== clean) return null;
+    const m = /(\d+)$/.exec(text(first.id) ?? '');
+    return m ? m[1]! : null;
+  }
+
+  async firstVariantId(productId: string): Promise<string | null> {
+    if (!this.ok || !/^\d+$/.test(productId)) return null;
+    const r = await call(
+      'GET',
+      `${adminBase(this.shopDomain)}/products/${productId}.json?fields=id,variants`,
+      { token: this.token },
+    );
+    if (!r || r.status < 200 || r.status >= 300) return null;
+    const variants = obj(r.json.product).variants;
+    return Array.isArray(variants) ? text(obj(variants[0]).id) : null;
+  }
+
+  async createStorefrontCart(
+    storefrontToken: string,
+    lines: readonly CheckoutLine[],
+    note: string | null,
+  ): Promise<{ url: string; cartId: string | null } | null> {
+    if (!this.ok || storefrontToken === '' || lines.length === 0) return null;
+    // A note is only attached when there is one: a null would land in the order as the word "null" and break the order's lookup.
+    const input: Json = {
+      lines: lines.map((l) => ({
+        merchandiseId: variantGid(l.variantId),
+        quantity: Math.max(1, l.qty),
+      })),
+      ...(note ? { note } : {}),
+    };
+    const r = await call(
+      'POST',
+      `https://${this.shopDomain}/api/${SHOPIFY_API_VERSION}/graphql.json`,
+      {
+        storefrontToken,
+        json: {
+          query:
+            'mutation($input: CartInput!) { cartCreate(input: $input) { cart { id checkoutUrl } userErrors { message } } }',
+          variables: { input },
+        },
+      },
+    );
+    if (!r || r.status < 200 || r.status >= 300) return null;
+    const cart = obj(obj(obj(r.json.data).cartCreate).cart);
+    const url = text(cart.checkoutUrl);
+    return url ? { url, cartId: text(cart.id) } : null;
+  }
+
+  async createDraftOrder(
+    lines: readonly CheckoutLine[],
+    note: string | null,
+  ): Promise<{ url: string; draftId: string | null } | null> {
+    if (!this.ok || lines.length === 0) return null;
+    const r = await call('POST', `${adminBase(this.shopDomain)}/draft_orders.json`, {
+      token: this.token,
+      json: {
+        draft_order: {
+          line_items: lines.map((l) => ({
+            variant_id: Number(l.variantId),
+            quantity: Math.max(1, l.qty),
+          })),
+          tags: 'wadesk-flow',
+          ...(note ? { note } : {}),
+        },
+      },
+    });
+    if (!r || r.status < 200 || r.status >= 300) return null;
+    const draft = obj(r.json.draft_order);
+    const url = text(draft.invoice_url);
+    return url ? { url, draftId: text(draft.id) } : null;
+  }
+}
+
 @Injectable()
 export class HttpShopifyFactory implements ShopifyFactory {
   app(settings: ShopifySettings): ShopifyAppApi {
@@ -215,5 +319,9 @@ export class HttpShopifyFactory implements ShopifyFactory {
 
   store(shop: string, accessToken: string): ShopifyStoreApi {
     return new ShopifyStore(shop, accessToken);
+  }
+
+  checkout(shop: string, accessToken: string): ShopifyCheckoutApi {
+    return new ShopifyCheckout(shop, accessToken);
   }
 }

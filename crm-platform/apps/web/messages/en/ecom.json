@@ -121,6 +121,7 @@
         "customers": "Customers",
         "events": "Automations",
         "analytics": "Analytics",
+        "invoices": "Invoices",
         "logs": "Activity",
         "settings": "Settings"
       },
@@ -135,7 +136,8 @@
           "events": "Marketing automations — toggle one on, pick a template, and it fires on the matching store event.",
           "analytics": "Revenue, order trend and message performance for this store.",
           "logs": "Webhook delivery log for this store.",
-          "settings": "Manage the connection — re-sync, view scopes, or disconnect."
+          "settings": "Manage the connection — re-sync, view scopes, or disconnect.",
+          "invoices": "Invoices issued for your Shopify orders."
         },
         "woocommerce": {
           "overview": "Live snapshot pulled from your WooCommerce REST API.",
@@ -146,7 +148,8 @@
           "events": "Turn order, COD, cart & stock automations on or off.",
           "analytics": "Revenue, message volume & COD impact for this store.",
           "logs": "Webhook delivery log for this store.",
-          "settings": "Connection details — re-verify or disconnect."
+          "settings": "Connection details — re-verify or disconnect.",
+          "invoices": "Invoices issued for your WooCommerce orders."
         }
       },
       "loading": "Loading the store…",
@@ -504,7 +507,68 @@
       "registered": "Registered webhooks",
       "registeredCount": "{count, plural, one {# active subscription} other {# active subscriptions}}",
       "copy": "Copy",
-      "copied": "Copied"
+      "copied": "Copied",
+      "plugin": {
+        "title": "WordPress plugin",
+        "body": "Install this small plugin on your store to recover abandoned carts before an order exists, and to pass on failed subscription payments and custom order statuses.",
+        "step1": "Download the plugin below. It is made for this store.",
+        "step2": "In WordPress, open Plugins, Add New, Upload Plugin, choose the zip and activate it.",
+        "step3": "Make sure WP-Cron runs on your site. The plugin checks for idle carts every 5 minutes.",
+        "download": "Download plugin (.zip)",
+        "preparing": "Preparing the plugin…",
+        "started": "Plugin downloaded.",
+        "secretNote": "The file holds this store's secret key. Keep it private.",
+        "forbidden": "You do not have permission to download the plugin.",
+        "failed": "The plugin could not be downloaded. Try again."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "store": "Store",
+      "plan": "Shopify plan",
+      "lastVerified": "Last verified",
+      "openApp": "Open the app",
+      "openToConnect": "Open the app to connect",
+      "invalid": "The Shopify session is not valid. Reload the app from your Shopify admin.",
+      "off": "The Shopify integration is not enabled on this install. Contact support.",
+      "error": "Something went wrong. Reload the app from your Shopify admin."
+    },
+    "invoices": {
+      "policyTitle": "Automatic invoices",
+      "autoInvoice": "Invoice this store's orders automatically",
+      "autoInvoiceHint": "Each invoice is queued to the buyer on WhatsApp, or by email when there is no phone number. Off until you turn it on.",
+      "trigger": "Invoice when the order is",
+      "on_placed": "Placed",
+      "on_paid": "Paid",
+      "on_fulfilled": "Fulfilled",
+      "saved": "Invoice settings saved.",
+      "saveFailed": "Could not save the invoice settings.",
+      "policyLoadFailed": "Could not load the invoice settings.",
+      "listTitle": "Invoices from this store",
+      "number": "Number",
+      "buyer": "Buyer",
+      "type": "Type",
+      "status": "Status",
+      "total": "Total",
+      "issued": "Issued",
+      "draft": "Draft",
+      "tax_invoice": "Tax invoice",
+      "receipt": "Receipt",
+      "proforma": "Proforma",
+      "status_draft": "Draft",
+      "status_issued": "Issued",
+      "status_partially_paid": "Partly paid",
+      "status_paid": "Paid",
+      "status_overdue": "Overdue",
+      "status_void": "Void",
+      "loading": "Loading invoices…",
+      "none": "No invoices from this store yet. Turn on automatic invoices above and the next paid order gets one.",
+      "error": "Could not load the invoices.",
+      "retry": "Try again",
+      "forbidden": "You do not have access to invoices.",
+      "viewAll": "Open all invoices"
     }
   }
 }

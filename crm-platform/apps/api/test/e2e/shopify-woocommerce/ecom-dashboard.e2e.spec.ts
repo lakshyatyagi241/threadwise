@@ -95,9 +95,9 @@ describe('the Shopify dashboard', () => {
       );
     }
     await h.owner.query(
-      `INSERT INTO wa_orders (org_id, shopify_order_id, source, customer_name, total_minor, currency_code, status, meta_json)
-       VALUES ($1, '1', 'shopify', 'Ada', 10000, 'USD', 'paid', '{"name":"#1001","financial_status":"paid"}'::jsonb),
-              ($1, 'w', 'woocommerce', 'Other', 99900, 'USD', 'paid', '{}'::jsonb)`,
+      `INSERT INTO wa_orders (org_id, shopify_order_id, source, customer_name, total_minor, currency_code, status, items_json, meta_json)
+       VALUES ($1, '1', 'shopify', 'Ada', 10000, 'USD', 'paid', '[]'::jsonb, '{"name":"#1001","financial_status":"paid"}'::jsonb),
+              ($1, 'w', 'woocommerce', 'Other', 99900, 'USD', 'paid', '[]'::jsonb, '{}'::jsonb)`,
       [t.orgId],
     );
     await h.owner.query(
@@ -161,7 +161,7 @@ describe('the WooCommerce dashboard', () => {
       report: { total_sales: '1234.50', total_orders: 20, total_customers: 4, total_items: 55 },
     };
     await h.owner.query(
-      `INSERT INTO wa_orders (org_id, woo_order_id, source, total_minor, currency_code, status) VALUES ($1, 'o1', 'woocommerce', 2000, 'USD', 'paid')`,
+      `INSERT INTO wa_orders (org_id, woo_order_id, source, total_minor, currency_code, status, items_json) VALUES ($1, 'o1', 'woocommerce', 2000, 'USD', 'paid', '[]'::jsonb)`,
       [t.orgId],
     );
     const d = (await get(t, 'woocommerce', id)).body;

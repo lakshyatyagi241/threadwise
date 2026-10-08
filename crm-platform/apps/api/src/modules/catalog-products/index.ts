@@ -19,3 +19,6 @@ export { metaCatalogPrice, parseMetaPriceMinor } from './catalog-money';
 export { matchProduct, type MatchResult } from './product-matcher';
 // Sending a catalog message to given numbers (the inbox conversation's Catalog picker calls it for one number, WD-CAT-031).
 export { CatalogSendService } from './catalog-send.service';
+// A product list that comes from outside (the Sheets add-on) is written through the form's own create and update (WD-EXT-010).
+export { ProductsService, type IntegrationProductInput } from './products.service';
+export { ProductsRepository } from './products.repository';

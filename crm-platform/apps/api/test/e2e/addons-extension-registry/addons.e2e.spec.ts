@@ -74,6 +74,49 @@ describe('billing add-on packs', () => {
     expect(ev.rowCount).toBeGreaterThan(0);
   });
 
+  it('refuses a core feature (on for every plan) as an add-on, naming it, and stores nothing', async () => {
+    const before = await h.owner.query(`SELECT count(*)::int AS n FROM plans WHERE kind = 'addon'`);
+    const res = await ops('post', '/addons').send({
+      ...body,
+      name: 'Shop Pack',
+      features: ['analytics', 'shopify', 'woocommerce'],
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(422);
+    const text = JSON.stringify(res.body);
+    expect(text).toContain('features');
+    expect(text).toContain('Shopify');
+    expect(text).toContain('Woocommerce');
+    expect(text).not.toContain('Analytics is part of every plan');
+    const after = await h.owner.query(`SELECT count(*)::int AS n FROM plans WHERE kind = 'addon'`);
+    expect(after.rows[0].n).toBe(before.rows[0].n);
+  });
+
+  it('refuses adding a core feature on update, but lets a pack that already holds one be edited', async () => {
+    const created = (
+      await ops('post', '/addons').send({ ...body, name: 'Legacy Pack', features: ['analytics'] })
+    ).body;
+    const add = await ops('patch', `/addons/${created.id}`).send({
+      features: ['analytics', 'sales_pipeline'],
+      rowVersion: created.rowVersion,
+    });
+    expect(add.status, JSON.stringify(add.body)).toBe(422);
+    expect(JSON.stringify(add.body)).toContain('Sales pipeline');
+
+    // A pack saved before the rule: the core flag is in its stored grants; renaming it must not be blocked.
+    await h.owner.query(
+      `UPDATE plans SET features = features || '{"sales_pipeline": true}'::jsonb WHERE slug = $1`,
+      [created.slug],
+    );
+    const fresh = (await ops('get', `/addons/${created.id}`)).body;
+    const rename = await ops('patch', `/addons/${created.id}`).send({
+      name: 'Legacy Renamed',
+      features: fresh.grants.features,
+      rowVersion: fresh.rowVersion,
+    });
+    expect(rename.status, JSON.stringify(rename.body)).toBe(200);
+    expect(rename.body.name).toBe('Legacy Renamed');
+  });
+
   it('rejects an offer at or above the price, with the field named', async () => {
     const res = await ops('post', '/addons').send({ ...body, name: 'Bad', offerAmount: '9' });
     expect(res.status).toBe(422);

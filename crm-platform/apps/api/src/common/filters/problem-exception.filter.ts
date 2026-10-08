@@ -22,7 +22,11 @@ export type ProblemRenderer = (problem: Problem, request: Request, response: Res
 const problemRenderers: Array<{ prefix: string; render: ProblemRenderer }> = [];
 
 export function registerProblemRenderer(prefix: string, render: ProblemRenderer): void {
-  if (!problemRenderers.some((r) => r.prefix === prefix)) problemRenderers.push({ prefix, render });
+  if (problemRenderers.some((r) => r.prefix === prefix)) return;
+  problemRenderers.push({ prefix, render });
+  // The longest prefix answers first, so a client with its own envelope under another's path (`/api/v1/sheets-addon` inside `/api/v1`)
+  // is not decided by which module happened to start first.
+  problemRenderers.sort((a, b) => b.prefix.length - a.prefix.length);
 }
 
 /**
