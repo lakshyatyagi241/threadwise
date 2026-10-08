@@ -3,9 +3,8 @@
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { EmptyState, Input, StatTile } from '@crm/ui';
+import { EmptyState, Input } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
-import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
 import { GATEWAYS_KEY, fetchGateways } from '../api';
 import {
@@ -16,6 +15,7 @@ import {
   type RegionTab,
 } from '../lib/gateway-filter';
 import { GatewayCard } from './gateway-card';
+import { BillingHeader, Crumb, Kpi, TwoToneTitle } from './billing/parts';
 
 const NS = 'platform-payment-gateways.admin';
 
@@ -48,13 +48,24 @@ export function GatewaysPage() {
   const summary = q.data.summary;
   return (
     <div className="space-y-6">
-      <PageHeader title={t('title')} description={t('description', { count: summary.total })} />
+      <Crumb items={[{ label: t('title') }]} />
+      <BillingHeader
+        eyebrow={t('eyebrow')}
+        title={<TwoToneTitle first={t('titleFirst')} second={t('titleSecond')} />}
+        description={t('description', { count: summary.total })}
+      />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile label={t('kpi.total')} value={summary.total} />
-        <StatTile label={t('kpi.active')} value={summary.active} tone="accent" />
-        <StatTile label={t('kpi.india')} value={summary.india} />
-        <StatTile label={t('kpi.crypto')} value={summary.crypto} />
+        <Kpi label={t('kpi.total')} value={summary.total} hint={t('kpi.totalHint')} />
+        <Kpi
+          label={t('kpi.active')}
+          value={summary.active}
+          hint={t('kpi.activeHint')}
+          hintTone="accent"
+          tone="accent"
+        />
+        <Kpi label={t('kpi.india')} value={summary.india} hint={t('kpi.indiaHint')} />
+        <Kpi label={t('kpi.crypto')} value={summary.crypto} hint={t('kpi.cryptoHint')} />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
