@@ -998,6 +998,22 @@ describe('platform inbox (WD-SUPP-037..046)', () => {
     expect(started.status).toBe(201);
     expect(started.body.workspaceId).toBe(a.orgUuid);
     expect(started.body.handoffUrl).toMatch(/\/impersonate\?code=[\w-]{20,}$/);
+    // Start is audited, the one-time code opens the owner's workspace session, and the banner data names the reason.
+    const startedEvent = await h.owner.query(
+      `SELECT 1 FROM security_events WHERE event = 'platform.impersonation.started' AND payload ->> 'sessionId' = $1`,
+      [started.body.sessionId],
+    );
+    expect(startedEvent.rows).toHaveLength(1);
+    const code = new URL(started.body.handoffUrl).searchParams.get('code')!;
+    const redeemed = await api().post('/v2/auth/impersonation/redeem').send({ code });
+    expect(redeemed.status).toBe(200);
+    const banner = await api()
+      .get('/v2/auth/impersonation')
+      .set({ authorization: `Bearer ${redeemed.body.accessToken}` });
+    expect(banner.body).toMatchObject({ active: true, reason: 'long enough reason' });
+    await api()
+      .post('/v2/auth/impersonation/stop')
+      .set({ authorization: `Bearer ${redeemed.body.accessToken}` });
     expect(
       (
         await inbox(auditorToken, 'post', `workspaces/${a.orgUuid}/impersonate`).send({
