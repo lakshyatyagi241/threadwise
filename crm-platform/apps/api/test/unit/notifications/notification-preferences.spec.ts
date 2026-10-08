@@ -56,6 +56,22 @@ describe('the catalogue', () => {
     expect(NOTIFICATION_TYPE_PREF_KEY.new_lead).toBeUndefined();
   });
 
+  it('the waiting nudge (BL-098): bell, pop-up and push on, sound off, gated by the new-customer-reply toggle', () => {
+    expect(NOTIFICATION_CATALOG.chat_waiting).toEqual({
+      group: 'conversations',
+      toast: true,
+      sound: false,
+      push: true,
+    });
+    expect(NOTIFICATION_TYPE_PREF_KEY.chat_waiting).toBe('new_customer_reply');
+    expect(resolveNotificationChannels('chat_waiting', null)).toEqual({
+      bell: true,
+      toast: true,
+      sound: false,
+      push: true,
+    });
+  });
+
   it('keeps the chat types loud and the housekeeping types quiet (the spec columns Toast and Sound)', () => {
     for (const t of [
       'new_chat',

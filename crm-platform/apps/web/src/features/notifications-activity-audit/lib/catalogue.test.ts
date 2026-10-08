@@ -51,6 +51,19 @@ describe('the type catalogue', () => {
     expect(typeMeta('new_message').tone).toBe('info');
   });
 
+  it('gives the waiting nudge its own clock icon, the chat group and a quiet-but-pushed default (BL-098)', () => {
+    expect(typeMeta('chat_waiting')).toMatchObject({
+      group: 'conversations',
+      icon: 'waiting',
+      tone: 'info',
+      toast: true,
+      sound: false,
+      push: true,
+      subject: 'conversation',
+    });
+    expect(typesOfGroup('conversations')).toContain('chat_waiting');
+  });
+
   it('gives each phase 2 type its icon', () => {
     expect(typeMeta('device_connected').icon).toBe('device_on');
     expect(typeMeta('device_disconnected').icon).toBe('device_off');
@@ -125,6 +138,13 @@ describe('where a notification opens', () => {
     expect(link('teamchat_mention', { channelId: ID(5) })).toBe(`/team-chat?c=${ID(5)}`);
     expect(link('teamchat_message', { channelId: ID(5), direct: true })).toBe(
       `/team-chat?c=${ID(5)}`,
+    );
+  });
+
+  it('opens a waiting nudge in the Inbox with the thread open', () => {
+    expect(link('chat_waiting', { conversationId: ID(6) })).toBe(`/inbox?c=${ID(6)}`);
+    expect(link('chat_waiting', null, { subject: { kind: 'conversation', id: ID(7) } })).toBe(
+      `/inbox?c=${ID(7)}`,
     );
   });
 

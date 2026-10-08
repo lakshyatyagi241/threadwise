@@ -78,6 +78,10 @@ export const inboxNotifications = pgTable(
     index('idx_inbox_notifications_subject_unread')
       .on(t.orgId, t.userId, t.subjectKind, t.subjectUuid)
       .where(sql`read_at IS NULL AND subject_uuid IS NOT NULL`),
+    // "Was this waiting episode already nudged?" for one conversation (BL-098, migration 20261110090100).
+    index('idx_inbox_notifications_chat_waiting')
+      .on(t.orgId, t.subjectUuid, t.createdAt.desc())
+      .where(sql`type = 'chat_waiting'`),
     // The retention job's batch deletes: oldest first, read and unread rows apart.
     index('idx_inbox_notifications_prune_read')
       .on(t.createdAt)
