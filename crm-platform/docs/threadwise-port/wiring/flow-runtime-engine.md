@@ -114,3 +114,22 @@ Before this, the storefront emitted `store.order_placed` and nothing turned it i
   (an outbox consumer) finds the customer's live run on the number's channel and calls `CommerceResume.catalogCart`.
 - The catalog concierge answers a free-text product question after the flows had their turn: `CatalogConciergeListener` is an inbound listener marked `after`, and the inbound hooks now
   run those last and tell them through `prior.consumed` whether a flow already took the message.
+
+## Workflow additions (TW-FLR-072 to 082, beyond Reference)
+
+The team's gap list against the older workflow product. Each row below is in the tracker (`vedant.md`).
+
+| Gap                                                                  | Id             | Where it lives                                                                                                                                        |
+| -------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Update contact field                                                 | TW-FLR-072     | node `update_contact` -> `CrmNodes` -> `ContactsService.setFieldFromFlow`                                                                             |
+| Add to list / remove from list                                       | TW-FLR-073     | node `list_member` -> `ContactGroupsService.applyFromFlow` (events carry `via: 'flow'`)                                                               |
+| Is in list, Is in segment, WhatsApp session                          | TW-FLR-074-076 | nodes `in_list`, `in_segment`, `wa_session` (yes port 1, no port 2) -> `hasMemberFromFlow`, `SegmentsService.containsContactFromFlow`, thread         |
+| Remove from list, segment join, contact updated, contact field match | TW-FLR-077     | trigger kinds `group_leave`, `segment_join`, `contact_updated`, `field_match` -> `FlowTriggerEventsConsumer` -> `FlowTriggerService.onContactChanged` |
+| Date and time schedule, date field match                             | TW-FLR-078     | trigger kinds `schedule`, `date_field_match` -> `FlowScheduleSweeper` (every minute, claim on `flows.trigger_last_occurrence`)                        |
+| Shopify and WooCommerce events                                       | TW-FLR-079     | trigger kinds `shopify_event`, `woocommerce_event` <- `store.flow_event` (webhook pipeline `flowEvents`, cart recovery `announceAbandoned`)           |
+| Check Google Sheet cell, Save contact from Sheet                     | TW-FLR-080     | nodes `sheet_check`, `sheet_contact` -> `IntegrationNodes` over `GoogleWorkspacePort`                                                                 |
+| Inbound webhook trigger                                              | TW-FLR-082     | `POST /public/v1/flows/:id/enroll`; lead webhooks emit `contact.created` / `contact.updated`                                                          |
+
+Trigger settings that do not fit `trigger_value` (a field and value, a schedule, a store event) are kept as JSON in `flows.trigger_config`,
+written by the editor's save (`flbTriggerConfig` in `packages/contracts`) and read by the runtime. Not built: Google Sheet events (TW-FLR-081),
+"added to cart" and "product viewed" store events (the stores do not report them).

@@ -87,3 +87,12 @@ exists to host it. Differences in a screen are listed in the web agent's report 
   Media record; the Code node starts a worker per run and `vm` is not a hard security boundary.
 - Not built, with the reason: see the wiring map (AI agent hand-off, MySQL driver, voice call adapter, Google account store, shop adapter, voice and photo orders, Telegram
   payment, the call flow).
+
+## Workflow additions (beyond Reference)
+
+Not Reference features: the team's gap list against the older workflow product, built as TW-FLR-072 to 082. Deviations from a plain port are
+deliberate: a list, field or update made by a flow never starts list or update flows (Reference's Tag step never did either, and it stops
+loops); a field-match flow runs once per value a contact takes; a schedule starts at most 5,000 people per occurrence; an abandoned cart is
+announced when the store's first cart follow-up is due; date matches read custom contact fields only. Evidence: `crm-nodes`,
+`schedule-rules`, `sheet-nodes`, `flow-events` unit specs and the `flow-workflow-gaps` e2e. No Playwright run and no real Google, Shopify or
+WooCommerce delivery.

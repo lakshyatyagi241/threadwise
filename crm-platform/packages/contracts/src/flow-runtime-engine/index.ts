@@ -26,6 +26,14 @@ export const FLOW_TRIGGER_KINDS = [
   'deal_stage_changed',
   'away',
   'out_of_hours',
+  'group_leave',
+  'segment_join',
+  'contact_updated',
+  'field_match',
+  'date_field_match',
+  'schedule',
+  'shopify_event',
+  'woocommerce_event',
 ] as const;
 export type FlowTriggerKind = (typeof FLOW_TRIGGER_KINDS)[number];
 
@@ -33,6 +41,7 @@ export type FlowTriggerKind = (typeof FLOW_TRIGGER_KINDS)[number];
 export const FLOW_VALUE_TRIGGERS: readonly FlowTriggerKind[] = [
   'tag_added',
   'group_join',
+  'group_leave',
   'deal_stage_changed',
 ];
 
@@ -51,6 +60,13 @@ export const FLOW_RUN_SOURCES = [
   'deal_stage_changed',
   'away',
   'out_of_hours',
+  'group_leave',
+  'segment_join',
+  'contact_updated',
+  'field_match',
+  'date_field_match',
+  'schedule',
+  'ecom_event',
   'manual',
   'api',
   'routing',

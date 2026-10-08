@@ -548,6 +548,43 @@ export class SegmentsService {
     return ids;
   }
 
+  /**
+   * Whether one contact is in a segment now, for the flow condition and the segment trigger. No access check (a flow runs as the
+   * workspace, long after anyone clicked); a segment that is gone, or rules that point at deleted things, read as "not in it".
+   */
+  async containsContactFromFlow(
+    orgId: number,
+    segmentUuid: string,
+    contactId: number,
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const row = await this.repo.findByUuid(tx, orgId, segmentUuid);
+      if (!row) return false;
+      const compiled = await this.compile(tx, orgId, row);
+      const res = await tx.execute(sql`
+        SELECT 1 FROM contacts
+        WHERE ${segmentContactsWhere(orgId, compiled.where)} AND contacts.id = ${contactId}::bigint
+        LIMIT 1
+      `);
+      return res.rows.length > 0;
+    });
+  }
+
+  /** The contact ids of a segment now (at most `cap`), for a scheduled flow; no access check, a gone segment is empty. */
+  async memberIdsFromFlow(orgId: number, segmentUuid: string, cap: number): Promise<number[]> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const row = await this.repo.findByUuid(tx, orgId, segmentUuid);
+      if (!row) return [];
+      const compiled = await this.compile(tx, orgId, row);
+      const res = await tx.execute(sql`
+        SELECT contacts.id FROM contacts
+        WHERE ${segmentContactsWhere(orgId, compiled.where)}
+        ORDER BY contacts.id LIMIT ${cap}
+      `);
+      return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
+    });
+  }
+
   /** How many contacts are in a segment now, with the 3 second ceiling (see countWithTimeout). */
   async countMembers(
     segmentUuid: string,
