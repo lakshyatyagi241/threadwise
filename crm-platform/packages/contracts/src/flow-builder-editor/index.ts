@@ -6,6 +6,7 @@ export * from './node-catalogue';
 export * from './graph';
 export * from './validation';
 export * from './trigger';
+export * from './trigger-config';
 export * from './flow';
 export * from './runtime-shape';
 export * from './condition-group';

@@ -82,6 +82,8 @@ export const REALTIME_EVENT = {
    * the invite link or the subject; the screen refetches over REST.
    */
   wabaGroupChanged: 'whatsapp.group.changed',
+  /** A WhatsApp call rang, was answered, declined or ended: the incoming-call toast refetches (a signal, never the caller's details). */
+  callChanged: 'call.changed',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -167,6 +169,7 @@ export const realtimeEventSchemas = {
     /** The outbox event it stands for, without the `whatsapp.group.` prefix. */
     kind: z.enum(['created', 'updated', 'deleted', 'join_request', 'suspended']),
   }),
+  [REALTIME_EVENT.callChanged]: z.object({ callId: uuidSchema }),
 } as const;
 
 export type RealtimeEventType = keyof typeof realtimeEventSchemas;

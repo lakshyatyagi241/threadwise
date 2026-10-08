@@ -137,6 +137,8 @@ export interface NewFlow {
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
   triggerChannelId: number | null;
+  /** The trigger node's own settings (a field match, a schedule, a store event); null for a kind with none. */
+  triggerConfig?: unknown;
   provider: string | null;
   /** Only a duplicate sets it (WaDesk's replicate() kept the source's pause switch); everything else starts active. */
   isActive?: boolean;
@@ -153,6 +155,7 @@ export interface FlowUpdate {
   triggerKeywords: string | null;
   triggerDeviceId: number | null;
   triggerChannelId: number | null;
+  triggerConfig?: unknown;
   /** Only changes when the trigger names a valid engine prefix. */
   provider: string | null;
 }
@@ -258,10 +261,10 @@ export class FlowsRepository {
   async insert(tx: Tx, orgId: number, f: NewFlow): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO flows (org_id, user_id, flow_name, flow_data, category, flow_type, trigger_kind, trigger_value,
-        trigger_keywords, trigger_device_id, trigger_channel_id, provider, is_published, is_active)
+        trigger_keywords, trigger_device_id, trigger_channel_id, trigger_config, provider, is_published, is_active)
       VALUES (${orgId}, ${f.userId}, ${f.name}, ${JSON.stringify(f.graph)}::jsonb, ${f.category}, ${f.flowType},
         ${f.triggerKind}, ${f.triggerValue}, ${f.triggerKeywords}, ${f.triggerDeviceId}, ${f.triggerChannelId},
-        coalesce(${f.provider}, 'baileys'), false, ${f.isActive ?? true})
+        ${f.triggerConfig == null ? null : JSON.stringify(f.triggerConfig)}::jsonb, coalesce(${f.provider}, 'baileys'), false, ${f.isActive ?? true})
       RETURNING id
     `);
     return Number((res.rows[0] as Raw).id);
@@ -275,11 +278,14 @@ export class FlowsRepository {
     expectedVersion: number,
     f: FlowUpdate,
   ): Promise<boolean> {
+    const cfg = f.triggerConfig == null ? null : JSON.stringify(f.triggerConfig);
     const res = await tx.execute(sql`
       UPDATE flows SET flow_name = ${f.name}, flow_data = ${JSON.stringify(f.graph)}::jsonb,
         category = coalesce(${f.category}, category), flow_type = ${f.flowType}, trigger_kind = ${f.triggerKind},
         trigger_value = ${f.triggerValue}, trigger_keywords = ${f.triggerKeywords},
-        trigger_device_id = ${f.triggerDeviceId}, trigger_channel_id = ${f.triggerChannelId}, provider = coalesce(${f.provider}, provider)
+        trigger_device_id = ${f.triggerDeviceId}, trigger_channel_id = ${f.triggerChannelId}, provider = coalesce(${f.provider}, provider),
+        trigger_last_occurrence = CASE WHEN trigger_config IS NOT DISTINCT FROM ${cfg}::jsonb THEN trigger_last_occurrence ELSE NULL END,
+        trigger_config = ${cfg}::jsonb
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${expectedVersion}
       RETURNING id
     `);

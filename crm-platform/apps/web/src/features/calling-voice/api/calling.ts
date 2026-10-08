@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   callEligibilitySchema,
+  iceServersResponseSchema,
   callingNumberListSchema,
   dialProgressSchema,
   dialResultSchema,
@@ -27,6 +28,8 @@ export const KEYS = {
 
 /** How often the incoming-call poll runs while the tab is visible (WD-CALL-012). */
 export const PENDING_POLL_MS = 4000;
+/** While the realtime socket is connected a push says when a call changed, so the poll only has to catch a missed one. */
+export const PENDING_POLL_PUSHED_MS = 30_000;
 
 // --- the peer's view of the API ------------------------------------------------------------------------------------------
 
@@ -71,6 +74,18 @@ export const requestPermission = (input: RequestPermissionInput) =>
   });
 
 // --- screens -------------------------------------------------------------------------------------------------------------
+
+/** The operator's ICE list (TURN included). Cached for the session: it changes with a deploy, not with a call. */
+export function useIceServers(enabled: boolean) {
+  return useQuery({
+    queryKey: ['call', 'ice-servers'] as const,
+    enabled,
+    queryFn: ({ signal }) =>
+      apiFetch(`${BASE}/ice-servers`, { schema: iceServersResponseSchema, signal }),
+    retry: false,
+    staleTime: 3_600_000,
+  });
+}
 
 export function useCallingNumbers() {
   return useQuery({
@@ -117,14 +132,15 @@ const refused = (e: unknown) =>
  * Ringing inbound calls (WD-CALL-012). react-query does not run the 4 s timer in a background tab and refetches when the tab
  * comes back; a transient failure is retried on the next tick, a refusal stops the poll.
  */
-export function usePendingCalls(enabled: boolean) {
+export function usePendingCalls(enabled: boolean, pushed = false) {
   return useQuery({
     queryKey: KEYS.pending,
     enabled,
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/calls/pending`, { schema: pendingCallListSchema, signal }),
     retry: false,
-    refetchInterval: (q) => (refused(q.state.error) ? false : PENDING_POLL_MS),
+    refetchInterval: (q) =>
+      refused(q.state.error) ? false : pushed ? PENDING_POLL_PUSHED_MS : PENDING_POLL_MS,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
     staleTime: 0,

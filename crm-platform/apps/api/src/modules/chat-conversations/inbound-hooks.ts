@@ -39,7 +39,15 @@ export interface InboundStoredEvent {
  */
 export interface InboundMessageListener {
   readonly name: string;
-  onStored(event: InboundStoredEvent): Promise<{ consumed: boolean } | void>;
+  /**
+   * Runs after the listeners that do not set this (flows take a message first, then an auto answer like the catalog's concierge), and
+   * learns through `prior.consumed` whether one of them already took the message, so the customer is never answered twice.
+   */
+  readonly after?: true;
+  onStored(
+    event: InboundStoredEvent,
+    prior: { consumed: boolean },
+  ): Promise<{ consumed: boolean } | void>;
 }
 
 /**
@@ -64,9 +72,13 @@ export class InboundMessageHooks {
     // reply or AI agent starts. `consumed: true` also stops the auto reply that runs after the listeners (ADR-0019).
     if (await this.suspension?.isSuspended(event.orgId)) return { consumed: true };
     let consumed = false;
-    for (const l of this.listeners) {
+    const ordered = [
+      ...this.listeners.filter((l) => !l.after),
+      ...this.listeners.filter((l) => l.after),
+    ];
+    for (const l of ordered) {
       try {
-        const r = await l.onStored(event);
+        const r = await l.onStored(event, { consumed });
         if (r && r.consumed) consumed = true;
       } catch (err) {
         this.logger.error({ listener: l.name, orgId: event.orgId, err }, 'inbound listener failed');

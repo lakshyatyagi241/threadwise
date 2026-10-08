@@ -1,5 +1,6 @@
 import type { GoogleWorkspacePort } from '../../../../../infra/providers/flow-runtime-engine/google-workspace.port';
 import type { CustomDecision, InboundReply, NodeContext, NodeResult } from '../../types';
+import { evalRule } from '../../condition';
 import { asText, resolveVariable } from '../../variables';
 import { dataOf, str } from './webhook-node';
 
@@ -330,4 +331,96 @@ export async function onGoogleFormReply(
     setVars[`${root}.${k}`] = Array.isArray(v) ? v.join(', ') : String(v ?? '');
   }
   return { action: 'route', port: 1, setVars };
+}
+
+const YES: NodeResult = { kind: 'advance', port: 1, branch: true };
+const NO: NodeResult = { kind: 'advance', port: 2, branch: true };
+
+/** The first sheet row where `matchColumn` equals the (rendered) match value, or null with the reason in the run log. */
+async function sheetRowOf(
+  ctx: NodeContext,
+  google: GoogleWorkspacePort,
+  d: Record<string, unknown>,
+): Promise<Record<string, string> | null> {
+  const sheetId = str(d.sheetId).trim();
+  if (sheetId === '') {
+    ctx.note('google sheets has no sheet: skipped');
+    return null;
+  }
+  const matchColumn = str(d.matchColumn);
+  const matchValue = subst(ctx, d.matchValue);
+  try {
+    const rows = await google.readSheetRows(ctx.run.orgId, {
+      sheetId,
+      tabName: str(d.tabName).trim(),
+      matchColumn,
+      matchValue,
+      limit: 1,
+    });
+    if (!rows[0]) ctx.note(`google sheets: no row where ${matchColumn} = ${matchValue}`);
+    return rows[0] ?? null;
+  } catch (e) {
+    ctx.note(`google sheets read failed: ${failure(e)}`);
+    return null;
+  }
+}
+
+/**
+ * "Check Google Sheet field": yes (port 1) when the cell in `checkColumn` of the matching row meets the operator and value (the
+ * Condition node's operators), no (port 2) when it does not, when there is no matching row, or when Google cannot be read.
+ */
+export async function runSheetCheck(
+  ctx: NodeContext,
+  google: GoogleWorkspacePort,
+): Promise<NodeResult> {
+  const d = dataOf(ctx);
+  const column = str(d.checkColumn).trim();
+  const row = column === '' ? null : await sheetRowOf(ctx, google, d);
+  if (!row) return NO;
+  const met = evalRule(
+    { cell: row[column] ?? '' },
+    { variable: 'cell', operator: d.operator, value: subst(ctx, d.value) },
+  );
+  ctx.note(met ? 'sheet cell condition true' : 'sheet cell condition false');
+  return met ? YES : NO;
+}
+
+/**
+ * "Save contact from Google Sheet": the matching row's cells go into the run's contact, one `{ column, field }` pair each (a contact
+ * column or a custom property). The run's variables follow, so a Condition after it sees them. It updates the contact the run belongs
+ * to; it does not create contacts from new rows (that needs a sheet-row trigger, which needs a Google account store).
+ */
+export async function runSheetContact(
+  ctx: NodeContext,
+  google: GoogleWorkspacePort,
+  save: (field: string, value: string) => Promise<boolean>,
+): Promise<NodeResult> {
+  const d = dataOf(ctx);
+  const pairs = (Array.isArray(d.map) ? d.map : [])
+    .filter(isRecord)
+    .map((m) => ({ column: str(m.column).trim(), field: str(m.field).trim() }))
+    .filter((m) => m.column !== '' && m.field !== '');
+  if (pairs.length === 0) {
+    ctx.note('save contact from sheet has no columns chosen: skipped');
+    return ADVANCE;
+  }
+  if (ctx.run.contactId === null) {
+    ctx.note('this run has no contact to save the row to: skipped');
+    return ADVANCE;
+  }
+  const row = await sheetRowOf(ctx, google, d);
+  if (!row) return ADVANCE;
+  let saved = 0;
+  for (const m of pairs) {
+    const value = row[m.column];
+    if (value === undefined) continue;
+    if (await save(m.field, value)) {
+      ctx.run.vars[m.field] = value;
+      saved++;
+    } else {
+      ctx.note(`field "${m.field}" could not be set`);
+    }
+  }
+  ctx.note(`${saved} contact field${saved === 1 ? '' : 's'} saved from the sheet`);
+  return ADVANCE;
 }

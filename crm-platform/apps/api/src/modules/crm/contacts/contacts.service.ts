@@ -41,6 +41,17 @@ import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
 const MODULE_KEY = 'contacts';
+
+/** The contact's own text columns a flow may set by key (the key is the contact form's and the run variable's; the value is the column). */
+export const FLOW_CONTACT_COLUMNS: Readonly<Record<string, string>> = {
+  name: 'name',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  email: 'email',
+  title: 'title',
+  language: 'language',
+  address: 'address',
+};
 const DISPLAY_PREFIX = 'CON';
 
 /** What an inbound message knows about its sender (`ContactsService.resolveOrCreateByIdentity`). */
@@ -490,6 +501,83 @@ export class ContactsService {
         });
       }
       return done;
+    });
+  }
+
+  /**
+   * The flow "Update contact field" step: one field of the contact the run belongs to. A field is either one of the contact's own text
+   * columns (`FLOW_CONTACT_COLUMNS`) or an active custom property of this workspace by key; anything else is refused (`false`), so a
+   * key typed by hand cannot write where it should not (the phone and the dedupe keys are never writable here). A blank value clears
+   * a column except the name. `contact.updated` is emitted with `via: 'flow'` so webhooks hear it and the flow triggers skip it.
+   * Returns the value as stored, or null when nothing could be written.
+   */
+  async setFieldFromFlow(
+    orgId: number,
+    contactId: number,
+    key: string,
+    value: string,
+  ): Promise<{ stored: string } | null> {
+    const clean = key.trim();
+    if (clean === '') return null;
+    const column = FLOW_CONTACT_COLUMNS[clean];
+    return this.db.txAs({ orgId }, async (tx) => {
+      const found = await tx.execute(
+        sql`SELECT uuid, ${sql.raw(column ?? 'name')} AS current, data FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const row = found.rows[0] as
+        { uuid: string; current: string | null; data: Record<string, unknown> | null } | undefined;
+      if (!row) return null;
+      let stored = value.trim();
+      let delta: Record<string, { old: unknown; new: unknown }>;
+      if (column) {
+        if (clean === 'name' && stored === '') return null;
+        if (clean === 'email') stored = stored.toLowerCase();
+        const next = stored === '' ? null : stored;
+        await tx.execute(
+          sql`UPDATE contacts SET ${sql.raw(column)} = ${next} WHERE org_id = ${orgId} AND id = ${contactId}`,
+        );
+        delta = { [clean]: { old: row.current ?? null, new: next } };
+      } else {
+        const field = await tx.execute(
+          sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+        );
+        if (field.rows.length === 0) return null;
+        const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
+          data: { ...(row.data ?? {}), [clean]: stored },
+        });
+        if (!done) return null;
+        delta = { [clean]: { old: (row.data ?? {})[clean] ?? null, new: stored } };
+      }
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: contactId,
+        action: 'update',
+        delta,
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: contactId,
+        eventType: 'contact.updated',
+        payload: { uuid: row.uuid, via: 'flow', fieldKeys: [clean] },
+      });
+      return { stored };
+    });
+  }
+
+  /** One field of a contact as text, for the flow triggers and conditions: an own column or a custom property; null when it is blank. */
+  async readFieldForFlow(orgId: number, contactId: number, key: string): Promise<string | null> {
+    const clean = key.trim();
+    if (clean === '') return null;
+    return this.db.txAs({ orgId }, async (tx) => {
+      const column = FLOW_CONTACT_COLUMNS[clean];
+      const res = await tx.execute(
+        column
+          ? sql`SELECT ${sql.raw(column)}::text AS v FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`
+          : sql`SELECT data ->> ${clean} AS v FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const v = (res.rows[0] as { v: string | null } | undefined)?.v;
+      return v === null || v === undefined || v.trim() === '' ? null : v;
     });
   }
 
