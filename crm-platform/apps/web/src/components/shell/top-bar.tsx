@@ -102,7 +102,7 @@ export interface TopBarProps {
   pageSettings?: ReactNode;
   /** The Settings area; the user menu links to it (the gear that used to sit here is the menu's Settings entry now). */
   settingsHref?: string;
-  /** Support and Guidebook, shown in the user menu's Help block. */
+  /** Support, shown in the user menu's Help block. */
   helpItems?: readonly ResolvedNavItem[];
 }
 

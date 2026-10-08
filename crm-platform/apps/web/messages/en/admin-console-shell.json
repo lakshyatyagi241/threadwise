@@ -38,7 +38,7 @@
         "billing": "Orders, invoices, payments and checkout settings.",
         "messaging": "Message pricing, margins, credit packages and Meta reseller income.",
         "support": "Tickets, the team and platform inboxes, agents, SLA, playbooks and contact messages.",
-        "website": "The site editor, blog, legal pages, announcements and the guidebook.",
+        "website": "The site editor, blog, legal pages and announcements.",
         "whatsapp": "Providers, the number switch, Node bridge, webhooks, WABA and catalog settings.",
         "apps": "The marketplace, extensions and flow templates.",
         "team": "Roles, permissions, security and sign-in rules.",
@@ -1015,12 +1015,6 @@
           "title": "Activity Log",
           "desc": "Every sign-in, workspace switch, inbox action, and admin change — attributed to user, IP, and time.",
           "foot": "{count} events · 24h",
-          "open": "Open"
-        },
-        "guidebook": {
-          "title": "Guidebook",
-          "desc": "Step-by-step playbooks — from first send to advanced segmentation.",
-          "foot": "{count} articles",
           "open": "Open"
         },
         "channels": {

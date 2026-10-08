@@ -53,7 +53,6 @@ export const overviewStatsResponseSchema = z.object({
   messageHistory: count,
   outbound7d: count,
   activity24h: count,
-  guidebookArticles: count,
   seats: count,
   messagesThisMonth: count,
   widgetsBuilt: count,

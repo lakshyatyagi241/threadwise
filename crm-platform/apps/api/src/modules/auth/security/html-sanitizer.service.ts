@@ -5,7 +5,7 @@ import sanitizeHtml from 'sanitize-html';
  * Rich-text sanitiser (TW-AUTH-044). Reference's was a deny-list of tags that let
  * unknown elements through despite its "allow-list" docblock; this is a real
  * allow-list, applied at write time and again at render time by consumers
- * (storefront product bodies, guidebook articles, announcements).
+ * (storefront product bodies, announcements).
  */
 const OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
@@ -46,7 +46,7 @@ const OPTIONS: sanitizeHtml.IOptions = {
     'tr',
     'th',
     'td',
-    // Text-level and block elements that storefront and guidebook bodies carry.
+    // Text-level and block elements that storefront bodies carry.
     'figure',
     'figcaption',
     'small',

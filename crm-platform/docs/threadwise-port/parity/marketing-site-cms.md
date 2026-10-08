@@ -1,5 +1,14 @@
 # Parity: marketing-site-cms (CMS)
 
+> **Guidebook retired (owner decision, 2026-10-06).** TW-CMS-044 to 050 (admin article list and editor, publish toggle and delete, in-app
+> browse and article pages, helpfulness vote, seed articles) are no longer part of this build, and every guidebook row, test and note below
+> is history. `/help` is the one help centre: guides written in the repo, gated by plan and role, with the guidebook's layout
+> (see parity/help-center.md HC-5). Removed: `/guidebook`, `/guidebook/<slug>` (both redirect to `/help`), `/admin/guidebook*`, the
+> `/v2/cms/guidebook*` and `/v2/platform/cms/guidebook*` endpoints, the `guidebook_articles` and `guidebook_votes` tables
+> (migration `20261101090000_cms_retire_guidebook`), the 32 sample articles and the Website menu entry. Why: Reference's articles are
+> sample text that describes pages this product does not have, and two help screens split the reader. What operators lose: writing
+> help articles in the browser. The tracker rows stay `todo` until their owner marks them `wontfix`.
+
 **Twin run against the live Reference (round 2): done for the public site and the workspace guidebook, partial for the operator screens.**
 Public pages were compared one by one with the running Reference (`/`, `/features`, `/pricing`, `/about`, `/contact`, `/blog`, a blog post,
 `/legal/terms`, the workspace guidebook list and article): same structure, same components, same spacing rhythm; what still differs is

@@ -4,7 +4,6 @@ import { BlogService } from './blog.service';
 import { CmsStore } from './cms-store';
 import { ContactService } from './contact.service';
 import { CmsContentService } from './content.service';
-import { GuidebookService } from './guidebook.service';
 import { LegalService } from './legal.service';
 import {
   OperatorBlogController,
@@ -14,16 +13,10 @@ import {
 import { OperatorContentController } from './operator-content.controller';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { PricingService } from './pricing.service';
-import {
-  OperatorAnnouncementsController,
-  OperatorGuidebookController,
-} from './operator-site.controller';
+import { OperatorAnnouncementsController } from './operator-site.controller';
 import { PublicCmsController } from './public-cms.controller';
 import { CmsUploadService } from './upload.service';
-import {
-  WorkspaceAnnouncementsController,
-  WorkspaceGuidebookController,
-} from './workspace-cms.controller';
+import { WorkspaceAnnouncementsController } from './workspace-cms.controller';
 
 /**
  * The marketing site, its page editor, blog, legal pages and contact inbox (domain CMS). The auth module is global
@@ -39,9 +32,7 @@ import {
     OperatorBlogController,
     OperatorContactController,
     OperatorAnnouncementsController,
-    OperatorGuidebookController,
     WorkspaceAnnouncementsController,
-    WorkspaceGuidebookController,
   ],
   providers: [
     CmsStore,
@@ -51,7 +42,6 @@ import {
     ContactService,
     PricingService,
     AnnouncementService,
-    GuidebookService,
     CmsUploadService,
   ],
 })
