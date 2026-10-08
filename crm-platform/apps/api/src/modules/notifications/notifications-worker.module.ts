@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port';
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationNotificationConsumer } from './conversation-notification.consumer';
 import { ConversationReadState } from './conversation-read-state';
 import { DeviceNotificationConsumer } from './device-notification.consumer';
@@ -19,12 +20,14 @@ import { SalesDocNotificationConsumer } from './salesdoc-notification.consumer';
 import { SendOutcomeNotificationConsumer } from './send-outcome-notification.consumer';
 import { TaskNotificationConsumer } from './task-notification.consumer';
 import { TeamChatNotificationConsumer } from './team-chat-notification.consumer';
+import { WabaGroupNotificationConsumer } from './waba-group-notification.consumer';
 
 /**
  * The outbox consumers that write notifications. Imported ONLY by WorkersModule (the worker process): a consumer
  * registers itself with the kernel's OutboxSubscriberRegistry, which the drain loop in that process fans events out to.
  */
 @Module({
+  imports: [PlansCoreModule],
   providers: [
     NotificationsRepository,
     NotificationPublisher,
@@ -37,6 +40,7 @@ import { TeamChatNotificationConsumer } from './team-chat-notification.consumer'
     DeviceNotificationConsumer,
     SendOutcomeNotificationConsumer,
     TeamChatNotificationConsumer,
+    WabaGroupNotificationConsumer,
     NotificationRetentionService,
     WaitingNudgeService,
     PushSubscriptionsRepository,

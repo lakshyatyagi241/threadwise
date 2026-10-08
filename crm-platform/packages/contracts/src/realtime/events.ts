@@ -76,6 +76,12 @@ export const REALTIME_EVENT = {
   notificationCreated: 'notification.created',
   /** The person's unread rows were marked read (here or on another tab or device): every open tab converges. Room `user`. */
   notificationRead: 'notification.read',
+  /**
+   * A WhatsApp group of the business number changed (BL-099): created, edited, deleted, a join request arrived or left, suspended or
+   * restored. Room `user`, to the people who may open the Groups screen. A hint: ids and the kind of change, never a member's number,
+   * the invite link or the subject; the screen refetches over REST.
+   */
+  wabaGroupChanged: 'whatsapp.group.changed',
 } as const;
 
 const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'failed']);
@@ -154,6 +160,12 @@ export const realtimeEventSchemas = {
     unread: z.number().int().nonnegative(),
     /** The rows that were marked read, or `all`. */
     notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
+  }),
+  [REALTIME_EVENT.wabaGroupChanged]: z.object({
+    groupId: uuidSchema,
+    connectionId: uuidSchema,
+    /** The outbox event it stands for, without the `whatsapp.group.` prefix. */
+    kind: z.enum(['created', 'updated', 'deleted', 'join_request', 'suspended']),
   }),
 } as const;
 

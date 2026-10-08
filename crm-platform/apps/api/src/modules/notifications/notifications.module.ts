@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port';
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationReadState } from './conversation-read-state';
 import { NotificationPreferencesService } from './notification-preferences.service';
 import { NotificationPrefsResolver } from './notification-prefs.resolver';
@@ -15,6 +16,7 @@ import { NotificationsService } from './notifications.service';
 
 /** The in-app notification feed: the header bell's API. The consumers that fill it live in NotificationsWorkerModule. */
 @Module({
+  imports: [PlansCoreModule],
   controllers: [NotificationsController, PushController],
   providers: [
     NotificationsService,

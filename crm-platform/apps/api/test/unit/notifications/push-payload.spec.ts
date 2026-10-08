@@ -25,6 +25,48 @@ const row = (over: Record<string, unknown> = {}) => ({
   ...over,
 });
 
+describe('the push payload of a WhatsApp group row (BL-099)', () => {
+  const GROUP = '33333333-3333-4333-8333-333333333333';
+  const groupRow = (over: Record<string, unknown> = {}) =>
+    row({
+      type: 'waba_group_join_request',
+      title: '5 people want to join Sales club',
+      body: 'Open Groups to approve or reject them.',
+      data: { groupId: GROUP, groupName: 'Sales club', count: 5 },
+      eventCount: 5,
+      link: '/waba-groups?account=44444444-4444-4444-8444-444444444444',
+      subjectKind: 'waba_group',
+      subjectUuid: GROUP,
+      ...over,
+    });
+
+  it('titles the push with the group name only and the body with the kind of event and the number of requests', () => {
+    const p = buildPushPayload(groupRow());
+    expect(p.title).toBe('Sales club');
+    expect(p.body).toBe('5 join requests');
+    expect(p.tag).toBe(`waba_group:${GROUP}`);
+    expect(pushPayloadSchema.safeParse(p).success).toBe(true);
+    expect(buildPushPayload(groupRow({ eventCount: 1 })).body).toBe('Join request');
+  });
+
+  it('says suspended or active again, falls back to a generic title, and never carries the longer sentence', () => {
+    const suspended = buildPushPayload(
+      groupRow({ type: 'waba_group_suspended', eventCount: 1, title: 'Sales club was suspended' }),
+    );
+    expect(suspended).toMatchObject({ title: 'Sales club', body: 'Group suspended' });
+    const back = buildPushPayload(
+      groupRow({ type: 'waba_group_suspension_cleared', eventCount: 1, data: {} }),
+    );
+    expect(back).toMatchObject({ title: 'WhatsApp group', body: 'Group active again' });
+    expect(JSON.stringify(suspended)).not.toContain('cannot message');
+  });
+
+  it('cuts a long group name to 80 characters and keeps a number-like name as the title text only', () => {
+    const p = buildPushPayload(groupRow({ data: { groupName: 'x'.repeat(200) } }));
+    expect(p.title.length).toBeLessThanOrEqual(80);
+  });
+});
+
 describe('the push payload of a bell row', () => {
   it('titles a chat message with the contact name and says what kind of event it is, never the text (D4)', () => {
     const p = buildPushPayload(row());
