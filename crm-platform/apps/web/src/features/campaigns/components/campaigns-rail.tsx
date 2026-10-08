@@ -26,7 +26,7 @@ const COUNT_KEY: Record<StatusView, keyof CampaignListResponse['statusCounts']> 
 };
 const TYPES: CampaignTypeFilter[] = ['all', 'text', 'template', 'flow'];
 
-/** Left rail of `/campaigns`: the status views and the message types with their counts, the delivery and queue health cards. */
+/** Left rail of `/campaigns`: a tip, the status views and the message types with their counts, and the delivery health card. */
 export function CampaignsRail({
   list,
   status,
@@ -43,18 +43,26 @@ export function CampaignsRail({
   onType: (t: CampaignTypeFilter) => void;
 }) {
   const t = useTranslations('campaigns.list.rail');
+  const listT = useTranslations('campaigns.list');
   const kicker =
     'px-3 pb-1.5 pt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground';
   const row = (active: boolean) =>
     cn(
-      'flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-start text-[12.5px] transition hover:bg-muted',
+      'flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-start text-[12.5px] transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
       active && 'bg-muted font-semibold',
     );
   const health = list?.deliveryHealth;
-  const queue = list?.queueHealth;
 
   return (
-    <aside className="space-y-3 self-start lg:sticky lg:top-6">
+    <aside aria-label={t('label')} className="space-y-3 self-start lg:sticky lg:top-6">
+      <div className="rounded-2xl border border-success/30 bg-success/10 p-3 text-xs leading-relaxed">
+        <div className="mb-1 flex items-center gap-1.5 font-semibold">
+          <span className="size-2 rounded-full bg-success" aria-hidden="true" />
+          {t('tipTitle')}
+        </div>
+        {t('tip')}
+      </div>
+
       <nav
         aria-label={t('status')}
         className="rounded-xl border border-border bg-background p-2 shadow-sm"
@@ -100,7 +108,7 @@ export function CampaignsRail({
           'rounded-2xl border p-3 text-xs leading-relaxed',
           health?.status === 'warning'
             ? 'border-warning/40 bg-warning/10'
-            : 'border-border bg-muted/60',
+            : 'border-success/30 bg-success/10',
         )}
       >
         <div className="mb-1 flex items-center gap-1.5 font-semibold">
@@ -111,45 +119,20 @@ export function CampaignsRail({
             )}
             aria-hidden="true"
           />
-          {t('health')}
+          {health?.status === 'warning' ? t('attentionTitle') : t('healthyTitle')}
         </div>
-        {health?.status === 'warning'
-          ? t('healthWarning', { count: health.failingCampaigns })
-          : t('healthy', { rate: health?.avgDeliveryRate ?? 0 })}
-      </div>
-
-      <div className="rounded-xl border border-border bg-background p-3 text-xs shadow-sm">
-        <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-          {t('queue')}
-        </div>
-        <dl className="space-y-1.5">
-          <div className="flex justify-between gap-2">
-            <dt className="text-muted-foreground">{t('templates')}</dt>
-            <dd className="font-mono">
-              {queue?.templateApprovalRate == null ? '—' : `${queue.templateApprovalRate}%`}
-              {queue && queue.templateTotal > 0
-                ? ` (${queue.templateApproved}/${queue.templateTotal})`
-                : ''}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-2">
-            <dt className="text-muted-foreground">{t('devices')}</dt>
-            <dd className="font-mono">{queue?.devicesReady ?? '—'}</dd>
-          </div>
-          <div className="flex justify-between gap-2">
-            <dt className="text-muted-foreground">{t('retry')}</dt>
-            <dd className="font-mono">{(queue?.retryBacklog ?? 0).toLocaleString()}</dd>
-          </div>
-        </dl>
+        {t('healthLine', {
+          rate: (health?.avgDeliveryRate ?? 0).toFixed(1),
+          count: health?.failingCampaigns ?? 0,
+        })}
       </div>
 
       {canCreate && (
         <Link
-          href="/campaigns/create"
-          className="block rounded-2xl border border-dashed border-border bg-background p-4 text-center text-xs hover:bg-muted"
+          href="/campaigns/wizard"
+          className="block rounded-xl px-3 py-2 text-center text-xs font-semibold text-brand hover:bg-muted"
         >
-          <div className="text-sm font-semibold">{t('createTitle')}</div>
-          <div className="mt-1 text-muted-foreground">{t('createBody')}</div>
+          {listT('createBroadcast')} →
         </Link>
       )}
     </aside>

@@ -5,7 +5,7 @@ summary: Message a chosen audience with a text, a rich message, a template or a 
 area: campaigns
 order: 10
 documents: [nav:campaigns]
-keywords: [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, delivery, replies, clicks]
+keywords: [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, delivery, replies, clicks, ai, wizard]
 ---
 
 ## What it is for
@@ -14,18 +14,22 @@ A campaign sends one message to an audience of contacts, groups, tags or phone n
 
 ## How to use it
 
-1. Open **Campaigns** and select **New campaign**.
-2. Under **Campaign setup**, enter a name and choose **Send from**. Left on **Default sender**, the campaign goes out on your workspace's main engine.
-3. Under **Message**, pick **Text**, **Rich message**, **Template** or **Flow** and fill it in. Use `{{name}}` or `{{first_name}}` to personalise. For a template or flow, pick one from the list.
-4. Under **Audience**, pick tags, groups or contacts, type numbers (one per line or comma separated), or upload a CSV with the columns name, country_code and phone. Any other column becomes a variable you can use in the message. **Download a sample** shows the layout.
-5. Under **When to send**, choose **Send now**, **Schedule** (one date and time) or **Recurring** (every day, week or month, optionally until a date).
-6. Check the live preview on the right, then select **Launch campaign**, **Schedule campaign** or **Save recurring campaign**. **Save as draft** keeps it for later.
+1. Open **Campaigns** and select **New WA campaign**. The builder has five steps along the top: **Setup**, **Compose**, **Recipients**, **Schedule** and **Review**. **Next** only moves on when the current step has what it needs, and a list under the buttons names what is missing.
+2. **Setup:** enter a campaign name and choose the sender. Pick the kind: **Custom message**, **Use template** or **Flow builder**. Turn on **Enable A/B test** to split the audience between two versions.
+3. **Compose:** for a custom message, fill in the optional **Header**, the **Body** (use `{{name}}` or `{{first_name}}` to personalise), an optional **Attachment** (image, video or document), an optional **Footer** and up to three **Buttons** (call to action, quick reply or a mix). For a template or flow, pick one from the list; a template shows its variables to fill in for this send.
+4. **Recipients:** choose one way to pick the audience. **Contact groups** uses saved groups, tags, segments and individual contacts. **Upload CSV** takes a file with the columns name, country_code and phone, and any other column becomes a variable. **Manual numbers** takes one number per line.
+5. **Schedule:** choose **Send now**, **Schedule later** (one date and time) or **Recurring** (every day, week or month, optionally until a date). Under **Smart delivery** you can pace the sending.
+6. **Review:** check the summary, the validation checklist and the recipient counts, then select **Launch campaign**, **Schedule campaign** or **Save recurring campaign**. **Save draft** at the top keeps it for later without sending.
+
+The panel on the right shows a live preview of the message and the recipients, schedule, type and A/B choices as you fill them in.
+
+**Build with AI** (top right) opens a short brief: the AI model, your business name, product, goal, tone, call to action, audience and offer. It writes a name, message, footer, link button and up to three quick replies into the Compose step for you to review and edit. It needs an AI provider that your workspace or the platform has switched on; the model list is empty otherwise.
 
 > **Create broadcast** is a shorter four-step way to send an approved template, with a credit check, a test message, scheduling and retries. See [Create a broadcast](help:campaigns-create-broadcast).
 
 ## Options and settings
 
-- **A/B test this campaign** sends a second version to part of the audience. You set the split, and the results appear per version on the campaign page.
+- **Enable A/B test** sends a second version to part of the audience. You set the split in Setup and write the second message, template or flow in Compose; the results appear per version on the campaign page.
 - **Smart Delivery** paces sending: gaps between messages, batches, a daily limit and sending hours. Blank fields use the platform default.
 - **Auto-end date** stops the campaign at that moment. **Track link clicks** records clicks on links.
 - The list filters by status and message type. Each card offers the actions its status allows, and you can tick several cards to delete them together.
@@ -37,6 +41,7 @@ You need the right to view campaigns to open the screen. Creating, editing, cont
 
 ## If something looks wrong
 
-- **The form will not submit.** A list under the preview names what is missing, such as a name, a message, an audience or a send date.
+- **Next does not move on.** A list under the buttons names what is missing, such as a name, a message, an audience or a send date.
+- **Build with AI says no provider is enabled.** An admin has to switch on an AI provider for the platform, or your workspace has to add its own key.
 - **Messages failed.** Open the **Failures** tab for the most common reasons, then use the button there to resend to the recipients that failed.
 - **A template is not listed.** Some sending engines accept only templates that WhatsApp has approved. See [Message templates](help:message-templates-overview).

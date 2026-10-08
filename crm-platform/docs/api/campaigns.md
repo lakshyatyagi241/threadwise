@@ -46,7 +46,8 @@ updatedAt, rowVersion }`. `clicks` is the greater of our click count and Meta's,
 `POST /campaigns` (201, `{ campaign, message }`) and `PUT /campaigns/:id` (`{ campaign, message }`). The form:
 
 - `name`, `type` (`text`, `template`, `button`, `flow`, `media`, `custom`), `senderKey` (`engine:uuid`; none leaves the workspace's default engine).
-- `customMessage` (required for text, custom, button and media), `customMessageB`, `customHeader`, `customFooter`, `customButtons`,
+- `customMessage` (required for text, custom, button and media), `customMessageB`, `customHeader`, `customFooter`, `customButtons`
+  (`url`, `copy_code`, `phone_number` or `quick_reply`, up to three from the builder),
   `customQuickReplies`, `variableMap`, `mediaUrl` (an image jpg, jpeg or png, a video mp4, or a document pdf, doc or docx; uploading waits on the storage service).
 - `templateId`, `templateIdA`, `templateIdB`, `templateOverrides`, `templateOverridesB`, `flowId`, `flowIdB`, `useAttributes`, `trackingEnabled`.
 - `abTesting`, `abSplit` (percent to A, 0 to 100).
@@ -70,6 +71,25 @@ variant B ownership, then the write (the campaign and every recipient in one tra
 
 Events: `campaign.created`, `campaign.status_updated`, `campaign.contact_status_updated`, `campaign.contact_replied`,
 `campaign.deleted`, `contact.opt_in` (`optedIn: false`, from a STOP).
+
+## Build with AI
+
+`POST /campaigns/ai-generate` (200, needs `camp.campaigns.create`): a brief in, the copy for a campaign out. Nothing is stored; the builder pastes the
+answer into its own fields. The model list the picker shows is `GET /v2/ai/models`.
+
+Request: `model`, `provider` (`openai`, `anthropic` or `gemini`), `businessName` (required, up to 191), and optional `product`, `goal`, `audience`,
+`offer`, `ctaLabel`, `ctaUrl`, `tone` and `customPrompt` (up to 2,000).
+
+Response: `{ campaign: { campaignName, message, footer, buttonText, buttonUrl, quickReplies[] }, model }`. Every field is cut to what the builder
+accepts on submit: the name 60, the message 1,024, the footer 60, the button label 25, the address 1,024, three quick replies of 25.
+
+The key is the workspace's own when its plan allows one, else the platform's. A call on the platform's key counts against the monthly token allowance, and
+the tokens are written to the usage ledger either way. The key is never returned.
+
+- 422 `CAMP_AI_NO_KEY`: neither the workspace nor the platform has an active key for the vendor.
+- 422 `CAMP_AI_LIMIT_REACHED`: the monthly allowance on the platform's key is used up.
+- 502 `CAMP_AI_PROVIDER_FAILED`: the vendor errored, timed out or answered nothing.
+- 422 `CAMP_AI_BAD_JSON`: the answer was not a JSON object (a code fence around it is tolerated); `errors[0].message` carries the first 600 characters.
 
 ## Run
 
