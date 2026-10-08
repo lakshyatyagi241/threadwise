@@ -142,6 +142,9 @@ export const PLAN_FEATURE_DEFS = [
   // key (`grants_plan_features`), so no plan row grants it and a default-on feature would be refused at publish. NOT `forms_and_links`, which
   // is WaDesk's WhatsApp Flows forms and stays on by default.
   { key: 'form_builder', group: 'advanced', default: false },
+  // WhatsApp Groups on a Cloud API number (BL-094, docs/specs/waba-groups-management.md 13). WaDesk had NO plan gate on its Groups page; the
+  // owner decided (2026-10-08) it is a plan feature and not in every plan, so it defaults to FALSE and a plan must be given it.
+  { key: 'waba_groups', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -176,6 +179,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   forms_and_links: 'Forms and links',
   extra_channels: 'Telegram, Facebook and Instagram channels',
   form_builder: 'Forms',
+  waba_groups: 'WhatsApp groups',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -213,6 +217,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'forms_and_links',
   'extra_channels',
   'form_builder',
+  'waba_groups',
 ];
 export const PLAN_CHIP_MAX = 3;
 

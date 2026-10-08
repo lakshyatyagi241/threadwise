@@ -19,6 +19,7 @@ import {
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { WabaExtrasService } from './waba-extras.service';
+import { WabaGroupsAdminService } from './waba-groups-admin.service';
 
 /**
  * What a connected number can do beyond connecting (WD-WABA-025, 027, 028): its business username, click-to-chat QR codes and the
@@ -28,7 +29,19 @@ import { WabaExtrasService } from './waba-extras.service';
 @ActorKinds('user')
 @Controller({ path: 'waba/numbers/:id', version: '2' })
 export class WabaExtrasController {
-  constructor(private readonly extras: WabaExtrasService) {}
+  constructor(
+    private readonly extras: WabaExtrasService,
+    private readonly groups: WabaGroupsAdminService,
+  ) {}
+
+  @Get('group-count')
+  @RequirePermission('waba.numbers.manage')
+  @ApiOperation({
+    summary: 'How many group records removing this number deletes (for the remove warning)',
+  })
+  groupCount(@Param('id', ParseUUIDPipe) id: string) {
+    return this.groups.countFor(id);
+  }
 
   @Get('username')
   @RequirePermission('waba.numbers.read')

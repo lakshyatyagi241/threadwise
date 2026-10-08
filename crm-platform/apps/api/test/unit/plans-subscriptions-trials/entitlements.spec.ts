@@ -80,6 +80,7 @@ describe('registry', () => {
       'forms_and_links',
       'extra_channels',
       'form_builder',
+      'waba_groups',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });
