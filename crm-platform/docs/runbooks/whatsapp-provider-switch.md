@@ -133,7 +133,7 @@ nothing is stored. A provider missing its partner key, solution id or signup con
 {
   "key": "pinnacle",
   "label": "Pinnacle",
-  "baseUrl": "https://partnersv1.pinbot.ai",
+  "baseUrl": "https://<your white-label subdomain>",
   "apiVersion": "v3",
   "authScheme": "custom_headers",
   "headerTemplates": { "apikey": "{{channelToken}}" },
@@ -155,6 +155,11 @@ nothing is stored. A provider missing its partner key, solution id or signup con
   sends with.
 - `appSecret` must be the secret of the Meta app the WABAs are onboarded through: inbound webhooks for Pinnacle numbers are verified with it,
   and a delivery with no secret stored is refused (fail closed).
+- **Two addresses.** The provider's `baseUrl` is where **messages are sent** (`/v3/{phone}/messages`): Pinnacle white-labels it as a
+  subdomain of yours (a CNAME to their load balancer plus a certificate they map for that name). The three partner-key endpoints
+  (`create-user-account`, `client-embedded-detail-receiver`, `share-creditline-api`) get no white-label address: they stay on
+  Pinnacle's own host, set by `PINNACLE_PARTNER_API_URL` (default `https://partnersv1.pinbot.ai`), and Pinnacle must allow the
+  platform's egress IP for them.
 - `apiVersion` is `v3` here (a version with no minor is accepted).
 - Activate, make it the default or assign a workspace as in sections 1 and 2.
 - The Embedded Signup popup uses the platform's Meta app and configuration (the console WhatsApp page), so those must be the same app and

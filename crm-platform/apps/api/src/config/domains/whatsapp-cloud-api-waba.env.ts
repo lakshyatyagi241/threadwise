@@ -58,6 +58,15 @@ export const wabaEnvSchema = z.object({
   INTERAKT_SOLUTION_ID: optionalString(64),
   /** Shared tech-partner key: `x-access-token` on every Interakt call, `Authorization` on `tp-signup`. */
   INTERAKT_PARTNER_AUTH_KEY: optionalString(512),
+  /**
+   * Pinnacle's partner-key API (`create-user-account`, `client-embedded-detail-receiver`, `share-creditline-api`). Pinnacle offers no
+   * white-label address for these, so they stay on its own host, apart from the provider's `baseUrl` (where messages are sent, which
+   * is the white-label subdomain).
+   */
+  PINNACLE_PARTNER_API_URL: z.preprocess(
+    blankToUndefined,
+    urlString.default('https://partnersv1.pinbot.ai'),
+  ),
   /** Platform system user: authorises the token exchange and is assigned to each WABA (`MANAGE`). */
   META_SYSTEM_USER_ID: optionalString(64),
   META_SYSTEM_USER_TOKEN: optionalString(1024),
