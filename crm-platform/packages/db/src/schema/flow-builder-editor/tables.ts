@@ -35,6 +35,9 @@ export const flows = pgTable(
     triggerKind: text('trigger_kind').notNull().default('keyword'),
     triggerValue: bigint('trigger_value', { mode: 'number' }),
     triggerKeywords: text('trigger_keywords'),
+    // 20261111100000_flr_trigger_config.sql: the trigger node's own settings (field, value, time, event) and the schedule's bookmark.
+    triggerConfig: jsonb('trigger_config'),
+    triggerLastOccurrence: text('trigger_last_occurrence'),
     triggerDeviceId: idColumn('trigger_device_id'),
     // 20261019090000_flr_runtime.sql: the channel a flow listens on and sends through (replaces the polymorphic trigger_device_id).
     triggerChannelId: idColumn('trigger_channel_id'),

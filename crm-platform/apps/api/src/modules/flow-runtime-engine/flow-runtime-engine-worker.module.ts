@@ -13,6 +13,7 @@ import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.co
 import { FlowRunProcessor } from './runtime/flow-run.processor';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { FlowInboundService } from './triggers/inbound.service';
+import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
 import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
 
 /**
@@ -35,6 +36,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowSweeperService,
     FlowInboundService,
     FlowTriggerEventsConsumer,
+    FlowScheduleSweeper,
     CommerceResume,
     CatalogCartResume,
     CatalogConciergeListener,
