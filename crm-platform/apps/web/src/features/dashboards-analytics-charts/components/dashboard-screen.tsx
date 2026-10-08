@@ -12,7 +12,7 @@ import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import { flash } from '@/features/admin-console-shell/flash/flash-store';
 import type { CustomDates } from '../api/service';
 import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
-import { BarChart, Sparkline } from './charts';
+import { BarChart, Sparkline, Legend } from './charts';
 import {
   ActivityCard,
   CampaignsCard,
