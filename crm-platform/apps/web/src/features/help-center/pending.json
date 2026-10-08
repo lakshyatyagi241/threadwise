@@ -1,11 +1,6 @@
 {
   "pending": [
     {
-      "unit": "nav:guidebook",
-      "owner": "lakshya",
-      "reason": "The in-app guidebook comes from the site CMS; its guide waits for the owner."
-    },
-    {
       "unit": "tile:workspace-settings",
       "owner": "lakshya",
       "reason": "The workspace settings screens were added on main without a guide; it is written once the tab layout settles."
