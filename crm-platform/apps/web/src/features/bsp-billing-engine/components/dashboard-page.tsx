@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Alert, Button, Card, EmptyState, Select, Spinner, StatTile } from '@crm/ui';
+import { Alert, Button, Card, Select, Spinner, StatTile } from '@crm/ui';
 import type { BspDashboard } from '@crm/contracts';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { ErrorBlock } from '@/features/auth-registration-security/platform/ui/state';
@@ -123,39 +123,45 @@ export function DashboardReport({ d }: { d: BspDashboard }) {
       )}
       <Card className="space-y-3">
         <h2 className="text-base font-semibold">{t('perWorkspace')}</h2>
-        {d.workspaces.length === 0 ? (
-          <EmptyState title={t('empty')} />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
-              <thead>
-                <tr className="border-b border-border text-xs text-muted-foreground">
-                  {COLUMNS.map((c) => (
-                    <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
-                      {t(`columns.${c}`)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {d.workspaces.map((w) => (
-                  <tr key={w.workspaceId} className="border-b border-border last:border-0">
-                    <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
-                    <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
-                    <td className="px-2 py-2 tabular-nums text-muted-foreground">
-                      {money(w.metaCost)}
-                    </td>
-                    <td className="px-2 py-2 font-medium tabular-nums text-success">
-                      {money(w.margin)}
-                    </td>
-                    <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
-                  </tr>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[40rem] text-sm" aria-label={t('perWorkspace')}>
+            <thead>
+              <tr className="border-b border-border text-xs text-muted-foreground">
+                {COLUMNS.map((c) => (
+                  <th key={c} scope="col" className="px-2 py-2 text-start font-medium">
+                    {t(`columns.${c}`)}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              </tr>
+            </thead>
+            <tbody>
+              {d.workspaces.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={COLUMNS.length}
+                    className="px-2 py-8 text-center text-muted-foreground"
+                  >
+                    {t('empty')}
+                  </td>
+                </tr>
+              )}
+              {d.workspaces.map((w) => (
+                <tr key={w.workspaceId} className="border-b border-border last:border-0">
+                  <td className="px-2 py-2 font-medium">{w.workspaceName}</td>
+                  <td className="px-2 py-2 tabular-nums">{num.format(w.billedMessages)}</td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.revenue)}</td>
+                  <td className="px-2 py-2 tabular-nums text-muted-foreground">
+                    {money(w.metaCost)}
+                  </td>
+                  <td className="px-2 py-2 font-medium tabular-nums text-success">
+                    {money(w.margin)}
+                  </td>
+                  <td className="px-2 py-2 tabular-nums">{money(w.walletBalance)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {d.hasMoreWorkspaces && <p className="text-xs text-muted-foreground">{t('more')}</p>}
       </Card>
     </>
