@@ -1,6 +1,7 @@
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { UnrecoverableError, type Job } from 'bullmq';
+import { WABA_ENV, type WabaEnv } from '../../config/domains/whatsapp-cloud-api-waba.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   PinnacleError,
@@ -21,6 +22,7 @@ export class PinnacleCreditLineProcessor extends WorkerHost {
     private readonly repo: WabaConnectionsRepository,
     private readonly routes: WabaRegistryRoutes,
     private readonly pinnacle: PinnaclePartnerClient,
+    @Inject(WABA_ENV) private readonly env: WabaEnv,
   ) {
     super();
   }
@@ -28,7 +30,7 @@ export class PinnacleCreditLineProcessor extends WorkerHost {
   async process(job: Job<PinnacleCreditLineJob>): Promise<{ shared: boolean }> {
     const { orgId, rowId, providerKey, wabaId, businessId } = job.data;
     const registry = this.routes.get(providerKey);
-    const route = registry ? pinnacleRouteOf(registry) : null;
+    const route = registry ? pinnacleRouteOf(registry, this.env.PINNACLE_PARTNER_API_URL) : null;
     if (!route) {
       // The provider is gone or lost its partner key: retrying cannot help until an operator fixes it.
       await this.record(orgId, rowId, { credit_line_error: 'Pinnacle provider is not available' });
