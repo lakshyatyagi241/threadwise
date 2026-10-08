@@ -6,7 +6,6 @@ import type { ReactNode, RefObject } from 'react';
 import { cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
-import { HeaderTools } from './header-controls';
 import { UserMenu, type ShellUser } from './user-menu';
 
 export interface WalletChipData {
@@ -166,7 +165,6 @@ export function TopBar({
             </span>
           ))}
         {pageHelp}
-        <HeaderTools theme={theme} />
         {pageSettings}
         {bell ?? (
           <IconLink

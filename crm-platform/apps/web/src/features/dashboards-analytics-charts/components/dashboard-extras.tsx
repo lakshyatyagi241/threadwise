@@ -248,7 +248,7 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
                   <span className="block truncate font-medium leading-tight">{f.name}</span>
                   <span className="mt-0.5 block truncate font-mono text-[10px] text-muted-foreground">
                     {t('meta', {
-                      trigger: f.trigger.charAt(0).toUpperCase() + f.trigger.slice(1),
+                      trigger: f.trigger.charAt(0).toUpperCase() + f.trigger.slice(1).replaceAll('_', ' '),
                       steps: f.steps,
                       subs: f.subscribers,
                     })}
