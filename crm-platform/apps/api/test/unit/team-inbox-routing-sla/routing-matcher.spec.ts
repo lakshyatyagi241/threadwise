@@ -24,12 +24,12 @@ const cond = (over: Partial<RoutingConditions>): RoutingConditions =>
 
 describe('keywords', () => {
   it('matches any of the words, case-insensitively, as a substring', () => {
-    const k = { mode: 'any', words: ['refund', 'invoice'] } as const;
+    const k = { mode: 'any' as const, words: ['refund', 'invoice'] };
     expect(keywordsMatch(k, 'I want my Refund')).toBe(true);
     expect(keywordsMatch(k, 'pricing?')).toBe(false);
   });
   it('"all" needs every word, and a message without text matches nothing', () => {
-    const k = { mode: 'all', words: ['refund', 'order'] } as const;
+    const k = { mode: 'all' as const, words: ['refund', 'order'] };
     expect(keywordsMatch(k, 'refund for my order')).toBe(true);
     expect(keywordsMatch(k, 'refund please')).toBe(false);
     expect(keywordsMatch(k, null)).toBe(false);
