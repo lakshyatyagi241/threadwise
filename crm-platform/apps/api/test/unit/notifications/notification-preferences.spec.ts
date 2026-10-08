@@ -5,6 +5,7 @@ import {
   NOTIFICATION_LEGACY_TYPES,
   NOTIFICATION_PREF_TYPES,
   NOTIFICATION_TYPES,
+  NOTIFICATION_TYPE_PLAN_FEATURE,
   NOTIFICATION_TYPE_PREF_KEY,
   NOTIFICATION_EVENT_KEYS,
   realtimeEventSchemas,
@@ -370,6 +371,7 @@ describe('NotificationPreferencesService', () => {
       { bell: boolean | null; toast: boolean | null; sound: boolean | null; push: boolean | null }
     >,
     ws = true,
+    features: Record<string, boolean> = { waba_groups: true },
   ) {
     const applied: Array<[string, unknown]> = [];
     const audits: unknown[] = [];
@@ -390,6 +392,7 @@ describe('NotificationPreferencesService', () => {
       repo as never,
       { inappAllowed: async () => ws, forget: () => undefined } as never,
       { record: async (_tx: unknown, input: unknown) => void audits.push(input) } as never,
+      { featureEnabled: async (_org: number, key: string) => features[key] === true } as never,
     );
     return { svc, applied, audits };
   }
@@ -412,6 +415,27 @@ describe('NotificationPreferencesService', () => {
       overrides: { bell: null, toast: false, sound: null, push: null },
       workspaceInapp: true,
     });
+  });
+
+  it('leaves the WhatsApp Groups types out of the list when the plan lacks waba_groups (BL-099)', async () => {
+    const off = service(new Map(), true, { waba_groups: false });
+    const without = await RequestContextStore.run(ctx as never, () => off.svc.get());
+    const gated = Object.keys(NOTIFICATION_TYPE_PLAN_FEATURE);
+    expect(gated.length).toBe(3);
+    for (const type of gated) expect(without.items.map((i) => i.type)).not.toContain(type);
+    expect(without.items.length).toBe(NOTIFICATION_PREF_TYPES.length - gated.length);
+
+    const on = service(new Map());
+    const withIt = await RequestContextStore.run(ctx as never, () => on.svc.get());
+    for (const type of gated) {
+      expect(withIt.items.find((i) => i.type === type)).toMatchObject({
+        group: 'whatsapp_groups',
+        bell: true,
+        toast: true,
+        sound: false,
+        push: false,
+      });
+    }
   });
 
   it("shows the owner's toggle as the bell the person inherits", async () => {

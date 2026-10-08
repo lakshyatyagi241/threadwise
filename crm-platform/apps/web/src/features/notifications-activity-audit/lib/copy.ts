@@ -30,6 +30,7 @@ export function notificationText(
   if (group === 'devices') return deviceText(t, n);
   if (group === 'broadcasts') return sendingText(t, n);
   if (group === 'team_chat') return teamChatText(t, n);
+  if (group === 'whatsapp_groups') return groupText(t, n);
   const task = text(n.data?.taskTitle);
   const actor = text(n.data?.actorName);
   const body = actor
@@ -166,6 +167,26 @@ function sendingText(
     body = t(`${base}.bodySent`, { sent });
   }
   return { title: name ? t(`${base}.title`, { name }) : t(`${base}.titleNoName`), body };
+}
+
+/**
+ * A WhatsApp group of the business number: people asking to join (named by the group and, when collapsed, how many), or Meta suspending
+ * or restoring it. The words carry the group's name and a count only: no member's number, no invite link.
+ */
+function groupText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'data' | 'count'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const name = firstText(d, 'groupName');
+  const rawCount = n.count ?? d.count;
+  const count = typeof rawCount === 'number' && rawCount >= 1 ? Math.floor(rawCount) : 1;
+  const base = `types.${n.type}`;
+  const body = t.has(`${base}.body`) ? t(`${base}.body`) : null;
+  return {
+    title: name ? t(`${base}.title`, { name, count }) : t(`${base}.titleNoName`, { count }),
+    body,
+  };
 }
 
 /** Team chat: a colleague mentioned me in a channel, or wrote to me directly (collapsed rows carry a count). */
