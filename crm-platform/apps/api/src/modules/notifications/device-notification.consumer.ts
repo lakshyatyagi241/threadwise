@@ -152,12 +152,14 @@ export class DeviceNotificationConsumer implements OutboxSubscriber, OnModuleIni
   }
 }
 
-interface ClearedRows {
+export interface ClearedRows {
   userId: number;
   uuids: string[];
 }
 
-function groupCleared(rows: Array<{ user_id: string | number; uuid: string }>): ClearedRows[] {
+export function groupCleared(
+  rows: Array<{ user_id: string | number; uuid: string }>,
+): ClearedRows[] {
   const by = new Map<number, string[]>();
   for (const r of rows) {
     const id = Number(r.user_id);
