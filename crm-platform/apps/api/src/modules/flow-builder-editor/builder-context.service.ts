@@ -204,6 +204,7 @@ export class BuilderContextService {
       const [
         tags,
         groups,
+        segments,
         keywordRules,
         teams,
         agents,
@@ -222,6 +223,9 @@ export class BuilderContextService {
         ),
         tx.execute(
           sql`SELECT uuid, name FROM contact_groups WHERE org_id = ${o} ORDER BY lower(name), id`,
+        ),
+        tx.execute(
+          sql`SELECT uuid, name FROM segments WHERE org_id = ${o} ORDER BY lower(name), id`,
         ),
         tx.execute(
           sql`SELECT uuid, keyword, status FROM keyword_replies WHERE org_id = ${o} AND provider = 'instagram' AND ig_trigger = 'comment_to_dm' ORDER BY keyword, id`,
@@ -307,6 +311,7 @@ export class BuilderContextService {
           color: (r.color as string | null) ?? null,
         })),
         groups: rows(groups).map((r) => ({ id: s(r.uuid), name: s(r.name) })),
+        segments: rows(segments).map((r) => ({ id: s(r.uuid), name: s(r.name) })),
         keywordRules: rows(keywordRules).map((r) => ({
           id: s(r.uuid),
           keyword: s(r.keyword),

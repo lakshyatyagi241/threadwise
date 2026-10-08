@@ -11,6 +11,7 @@ import {
   MYSQL_QUERY,
   type MysqlQueryPort,
 } from '../../../../../infra/providers/flow-runtime-engine/mysql-query.port';
+import { ContactsService } from '../../../../crm';
 import { SafeFetch } from '../../../../../infra/providers/node-bridge-runtime/safe-fetch';
 import type {
   CustomDecision,
@@ -27,6 +28,8 @@ import {
   runDocs,
   runForm,
   runMeet,
+  runSheetCheck,
+  runSheetContact,
   runSheets,
 } from './google-nodes';
 import { runWebhook } from './webhook-node';
@@ -47,6 +50,8 @@ export class IntegrationNodes implements NodeExecutor {
     'GoogleForm',
     'GoogleMeet',
     'AiCall',
+    'SheetCheck',
+    'SheetContact',
   ];
 
   constructor(
@@ -55,6 +60,7 @@ export class IntegrationNodes implements NodeExecutor {
     @Inject(GOOGLE_WORKSPACE) private readonly google: GoogleWorkspacePort,
     @Inject(AI_CALL) private readonly calls: AiCallPort,
     private readonly refs: FlowRefResolver,
+    private readonly contacts: ContactsService,
   ) {}
 
   async execute(ctx: NodeContext): Promise<NodeResult> {
@@ -75,6 +81,18 @@ export class IntegrationNodes implements NodeExecutor {
         return runForm(ctx, this.google);
       case 'AiCall':
         return runAiCall(ctx, this.calls, this.refs);
+      case 'SheetCheck':
+        return runSheetCheck(ctx, this.google);
+      case 'SheetContact':
+        return runSheetContact(ctx, this.google, async (field, value) => {
+          const done = await this.contacts.setFieldFromFlow(
+            ctx.run.orgId,
+            ctx.run.contactId!,
+            field,
+            value,
+          );
+          return done !== null;
+        });
       default:
         return { kind: 'advance', port: 1 };
     }
