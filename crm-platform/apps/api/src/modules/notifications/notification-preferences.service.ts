@@ -16,11 +16,11 @@ import { NotificationPrefsResolver } from './notification-prefs.resolver';
 import { NotificationsRepository } from './notifications.repository';
 
 const MODULE = 'notifications';
-const CHANNELS = ['bell', 'toast', 'sound'] as const;
-const NONE: StoredUserPref = { bell: null, toast: null, sound: null };
+const CHANNELS = ['bell', 'toast', 'sound', 'push'] as const;
+const NONE: StoredUserPref = { bell: null, toast: null, sound: null, push: null };
 
 /**
- * The caller's own notification preferences (BL-096 phase 2): which notification types reach their bell, pop a toast and play the ping.
+ * The caller's own notification preferences (BL-096 phase 2): which notification types reach their bell, pop a toast, play the ping and send a browser (Web Push) notification.
  * Staff only and pinned to the caller, like the rest of the bell, so there is no permission key and nobody can read or change someone
  * else's. The stored document is sparse (a channel left unset inherits the owner's toggle, then the catalogue default), and the
  * producers read it through `NotificationsRepository.channelsFor`, so what this screen shows is exactly what the producers do.
@@ -62,6 +62,7 @@ export class NotificationPreferencesService {
           ...(item.bell !== undefined ? { bell: item.bell } : {}),
           ...(item.toast !== undefined ? { toast: item.toast } : {}),
           ...(item.sound !== undefined ? { sound: item.sound } : {}),
+          ...(item.push !== undefined ? { push: item.push } : {}),
         };
         for (const channel of CHANNELS) {
           const next = patch[channel];
@@ -96,8 +97,8 @@ export class NotificationPreferencesService {
         type,
         group: base.group,
         ...resolveNotificationChannels(type, own, workspaceInapp),
-        defaults: { bell: true, toast: base.toast, sound: base.sound },
-        overrides: { bell: own.bell, toast: own.toast, sound: own.sound },
+        defaults: { bell: true, toast: base.toast, sound: base.sound, push: base.push },
+        overrides: { bell: own.bell, toast: own.toast, sound: own.sound, push: own.push },
         workspaceInapp,
       });
     }

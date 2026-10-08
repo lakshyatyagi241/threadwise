@@ -16,13 +16,16 @@ import {
  * disabled and why), how a change or a reset alters it, and the one question the live alerts ask ("may this type pop up or ping?").
  * No React, no network, so every rule is tested without a browser.
  *
- * A preference has three channels, all about THIS person: the bell (the row exists and the badge counts it), the pop-up (a toast
- * while the tab is in front) and the sound (the ping). The pop-up and the sound ride on the bell row, so they are off whenever the
- * bell is off. The workspace owner's own toggle for an event (Settings, Notifications) sits above all three: when the workspace
- * turned the event off nothing reaches anybody, so the person's switches are shown off and cannot be changed.
+ * A preference has four channels, all about THIS person: the bell (the row exists and the badge counts it), the pop-up (a toast
+ * while the tab is in front), the sound (the ping) and the push (an OS notification on their enabled devices, even with the CRM
+ * closed). The pop-up, the sound and the push ride on the bell row, so they are off whenever the bell is off.
+ *
+ * The workspace owner's toggle for an event (Settings, Notifications) is only the DEFAULT of the bell: the server rule is that the
+ * person's own choice wins (`resolveNotificationChannels`). So when the workspace has an event off the person's switches stay usable
+ * (the bell shows off until they turn it on for themselves) and the row carries a small note saying so.
  */
 
-export const PREF_CHANNELS = ['bell', 'toast', 'sound'] as const;
+export const PREF_CHANNELS = ['bell', 'toast', 'sound', 'push'] as const;
 export type PrefChannel = (typeof PREF_CHANNELS)[number];
 export type PrefFlags = Record<PrefChannel, boolean>;
 
@@ -39,7 +42,7 @@ export interface PrefEntry {
   defaults: PrefFlags;
   /** The person's own choices; `null` follows the default. */
   overrides: PrefOverrides;
-  /** False when the workspace owner turned the event off for everybody. */
+  /** False when the workspace owner has the event off by default. The person's own choice still applies to them. */
   workspaceEnabled: boolean;
 }
 
@@ -48,8 +51,13 @@ export function entryFromItem(item: NotificationPreferenceItem): PrefEntry {
   return {
     type: item.type,
     group: item.group,
-    flags: { bell: item.bell, toast: item.toast, sound: item.sound },
-    defaults: { bell: item.workspaceInapp, toast: item.defaults.toast, sound: item.defaults.sound },
+    flags: { bell: item.bell, toast: item.toast, sound: item.sound, push: item.push },
+    defaults: {
+      bell: item.workspaceInapp,
+      toast: item.defaults.toast,
+      sound: item.defaults.sound,
+      push: item.defaults.push,
+    },
     overrides: { ...item.overrides },
     workspaceEnabled: item.workspaceInapp,
   };
@@ -60,9 +68,7 @@ export function stateFromResponse(res: NotificationPreferencesResponse): PrefsSt
 }
 
 export type CellReason =
-  /** The workspace turned the event off. */
-  | 'workspace'
-  /** The bell is off, and the pop-up and sound need it. */
+  /** The bell is off, and the pop-up, sound and push need it. */
   | 'bell_off'
   /** This kind of notification has no pop-up or no sound at all. */
   | 'not_available';
@@ -79,7 +85,7 @@ export interface RowView {
   group: NotificationGroup;
   /** The person changed at least one switch away from the default. */
   custom: boolean;
-  /** The workspace turned the event off. */
+  /** The workspace has the event off by default: the row shows a note, and the switches stay usable. */
   blocked: boolean;
   cells: Record<PrefChannel, Cell>;
 }
@@ -89,16 +95,15 @@ export function isCustom(entry: PrefEntry): boolean {
   return PREF_CHANNELS.some((c) => entry.overrides[c] !== null);
 }
 
-/** How one entry reads on screen. */
+/**
+ * How one entry reads on screen. A workspace that has the event off does NOT disable the person's switches (the server lets their
+ * choice win): the bell simply shows off until they turn it on for themselves, and `blocked` drives the note on the row.
+ */
 export function rowView(entry: PrefEntry): RowView {
   const meta = typeMeta(entry.type);
-  const blocked = !entry.workspaceEnabled;
   const off = (reason: CellReason): Cell => ({ on: false, disabled: true, reason });
-  const bell: Cell = blocked
-    ? off('workspace')
-    : { on: entry.flags.bell, disabled: false, reason: null };
-  const dependent = (channel: 'toast' | 'sound', available: boolean): Cell => {
-    if (blocked) return off('workspace');
+  const bell: Cell = { on: entry.flags.bell, disabled: false, reason: null };
+  const dependent = (channel: 'toast' | 'sound' | 'push', available: boolean): Cell => {
     if (!available) return off('not_available');
     if (!entry.flags.bell) return off('bell_off');
     return { on: entry.flags[channel], disabled: false, reason: null };
@@ -107,8 +112,13 @@ export function rowView(entry: PrefEntry): RowView {
     type: entry.type,
     group: entry.group,
     custom: isCustom(entry),
-    blocked,
-    cells: { bell, toast: dependent('toast', meta.toast), sound: dependent('sound', meta.sound) },
+    blocked: !entry.workspaceEnabled,
+    cells: {
+      bell,
+      toast: dependent('toast', meta.toast),
+      sound: dependent('sound', meta.sound),
+      push: dependent('push', true),
+    },
   };
 }
 
@@ -169,7 +179,7 @@ export function applyChange(
 const resetOne = (e: PrefEntry): PrefEntry => ({
   ...e,
   flags: { ...e.defaults },
-  overrides: { bell: null, toast: null, sound: null },
+  overrides: { bell: null, toast: null, sound: null, push: null },
 });
 
 /** One type back to the default. The same state object comes back when nothing changes. */
@@ -208,7 +218,9 @@ export function resetRequest(
 ): UpdateNotificationPreferencesRequest | null {
   if (types.length === 0) return null;
   return {
-    items: types.map((type) => ({ type, bell: null, toast: null, sound: null }) as UpdateItem),
+    items: types.map(
+      (type) => ({ type, bell: null, toast: null, sound: null, push: null }) as UpdateItem,
+    ),
   };
 }
 
@@ -221,8 +233,9 @@ export function customTypes(state: PrefsState): string[] {
 
 /**
  * Whether a notification of `type` may pop up (`toast`) or ping (`sound`) for this person. With no preferences loaded (offline, an
- * older server, still loading) the type's own default applies, so alerts keep working. The workspace's off switch and the
- * person's bell switch both silence the extras: the bell row is the thing a pop-up or ping is about.
+ * older server, still loading) the type's own default applies, so alerts keep working. The person's bell switch silences the extras:
+ * the bell row is the thing a pop-up or ping is about. (The workspace's toggle only sets the bell's default; a person who turned the
+ * bell on for themselves keeps their alerts.)
  */
 export function mayAlert(
   entries: readonly PrefEntry[] | undefined,
@@ -233,5 +246,16 @@ export function mayAlert(
   if (!meta[channel]) return false;
   const entry = entries?.find((e) => e.type === type);
   if (!entry) return true;
-  return entry.workspaceEnabled && entry.flags.bell && entry.flags[channel];
+  return entry.flags.bell && entry.flags[channel];
+}
+
+/**
+ * Whether a browser push (an OS notification on this person's devices) is on for `type`. Used to avoid showing the same event twice:
+ * when this browser has push enabled and it is on for the type, the in-page desktop alert for a background tab is left to the push.
+ * With no preferences loaded the catalogue default applies (a chat event: on).
+ */
+export function mayPush(entries: readonly PrefEntry[] | undefined, type: string): boolean {
+  const entry = entries?.find((e) => e.type === type);
+  if (!entry) return isKnownType(type) ? typeMeta(type).push : false;
+  return entry.flags.bell && entry.flags.push;
 }

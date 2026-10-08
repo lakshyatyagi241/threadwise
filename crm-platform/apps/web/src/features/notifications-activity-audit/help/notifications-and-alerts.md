@@ -5,12 +5,12 @@ summary: The bell in the header, the pop-up that appears wherever you are, the s
 area: getting-started
 order: 90
 documents: []
-keywords: [notifications, bell, alerts, toast, sound, ping, desktop, tab title, unread, mention, assigned, new chat, new message]
+keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser notifications, push, closed tab, tab title, unread, mention, assigned, new chat, new message]
 ---
 
 ## What it is for
 
-The bell in the header collects what needs your attention: a new chat, new messages on a chat you own, a chat assigned to you, a note that mentions you, a WhatsApp number that connected, disconnected or was logged out, a broadcast, campaign or scheduled message that finished or failed, a Team chat mention or direct message, and tasks, leads and forms. You do not have to be on the Inbox page to find out about a chat: the bell, a pop-up, a sound and the tab title all update on any page, within a few seconds.
+The bell in the header collects what needs your attention: a new chat, new messages on a chat you own, a chat nobody has answered for a few minutes, a chat assigned to you, a note that mentions you, a WhatsApp number that connected, disconnected or was logged out, a broadcast, campaign or scheduled message that finished or failed, a Team chat mention or direct message, and tasks, leads and forms. You do not have to be on the Inbox page to find out about a chat: the bell, a pop-up, a sound and the tab title all update on any page, within a few seconds.
 
 ## The bell
 
@@ -20,6 +20,10 @@ The bell in the header collects what needs your attention: a new chat, new messa
 4. Choose **Mark all read** to clear the number.
 
 The bell stays in step across your browser tabs and devices: reading something in one place clears it in the others.
+
+## A chat nobody has answered
+
+When a chat has no owner, everyone who can answer it hears about it once when it starts. If it is still unanswered a few minutes later (5 by default), you get one more notification, "No one has answered Ada yet", with the first words of the message. Select it to open the chat. You hear about it once: the nudge stops mattering as soon as someone is assigned, replies, opens the chat or resolves it, and it does not repeat while the chat stays unanswered. You can turn it off, or turn the pop-up and the browser notification off, in your [notification preferences](help:notification-preferences).
 
 ## The pop-up
 
@@ -43,9 +47,13 @@ When this tab is in the background, a desktop alert can tell you a chat arrived.
 
 If the footer says alerts are blocked, allow notifications for this site in your browser settings.
 
+## Browser notifications when the CRM is closed
+
+Desktop alerts only work while the CRM is open in some tab. For new chats, assignments and mentions to reach you when it is closed, turn on **Browser notifications** in **Account**, **Notifications** (when your CRM offers it). You are not sent one while the CRM is open and in front of you, and on a device where it is on, a background tab does not also show a desktop alert for the same event. The notification shows the contact name and the kind of event, never the message. Details and what each state means: [Notification preferences](help:notification-preferences).
+
 ## Choose what reaches you
 
-You decide, event by event, whether it reaches the bell, pops up and plays a sound. Open **Notification settings** at the bottom of the bell panel. See [Notification preferences](help:notification-preferences).
+You decide, event by event, whether it reaches the bell, pops up, plays a sound and sends a browser notification. Open **Notification settings** at the bottom of the bell panel. See [Notification preferences](help:notification-preferences).
 
 ## The browser tab
 
@@ -55,4 +63,4 @@ The tab title shows the number of unread notifications in front of the page name
 
 - No pop-ups or sound but the number changes after a minute: the live connection is not working, so the bell checks once a minute instead. Reload the page; if it persists, tell your administrator.
 - No sound: click once anywhere on the page, then check that the sound is on in the bell footer and that the browser is not muting the tab.
-- Notifications for new chats and assignments can be switched off for the whole workspace by an administrator in the notification settings.
+- Notifications for new chats, waiting chats and assignments can be switched off for the whole workspace by an administrator in the notification settings.

@@ -46,6 +46,7 @@ export function notificationText(
 export const CHAT_NOTIFICATION_TYPES = [
   'new_chat',
   'new_message',
+  'chat_waiting',
   'conversation_assigned',
   'mention',
 ] as const;

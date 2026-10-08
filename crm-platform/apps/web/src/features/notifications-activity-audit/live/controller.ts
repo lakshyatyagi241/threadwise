@@ -58,6 +58,11 @@ export interface LivePresenter {
 export interface LiveSettings {
   soundOn(): boolean;
   desktopOn(): boolean;
+  /**
+   * True when a browser push (an OS notification from the service worker) already covers a background tab for this type on this
+   * device, so the in-page desktop alert is left out: otherwise a hidden tab would show the same event twice.
+   */
+  pushCovers?(type: string): boolean;
 }
 
 export interface LiveOptions {
@@ -273,7 +278,7 @@ export class LiveNotificationsController {
         pinged = true;
         presenter.ping();
       }
-      if (!visible && settings.desktopOn()) presenter.desktop(a);
+      if (!visible && settings.desktopOn() && !settings.pushCovers?.(a.type)) presenter.desktop(a);
     });
 
     // A hidden tab gets the title badge (always) and the desktop alert (if allowed), not a toast nobody can see.

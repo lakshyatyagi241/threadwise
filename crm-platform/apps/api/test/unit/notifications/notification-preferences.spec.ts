@@ -56,6 +56,22 @@ describe('the catalogue', () => {
     expect(NOTIFICATION_TYPE_PREF_KEY.new_lead).toBeUndefined();
   });
 
+  it('the waiting nudge (BL-098): bell, pop-up and push on, sound off, gated by the new-customer-reply toggle', () => {
+    expect(NOTIFICATION_CATALOG.chat_waiting).toEqual({
+      group: 'conversations',
+      toast: true,
+      sound: false,
+      push: true,
+    });
+    expect(NOTIFICATION_TYPE_PREF_KEY.chat_waiting).toBe('new_customer_reply');
+    expect(resolveNotificationChannels('chat_waiting', null)).toEqual({
+      bell: true,
+      toast: true,
+      sound: false,
+      push: true,
+    });
+  });
+
   it('keeps the chat types loud and the housekeeping types quiet (the spec columns Toast and Sound)', () => {
     for (const t of [
       'new_chat',
@@ -77,37 +93,56 @@ describe('resolveNotificationChannels: person, then owner, then default', () => 
       bell: true,
       toast: true,
       sound: true,
+      push: true,
     });
     expect(resolveNotificationChannels('task_due', undefined)).toEqual({
       bell: true,
       toast: true,
       sound: false,
+      push: false,
     });
   });
 
   it("lets the owner's toggle set the bell when the person never chose", () => {
     expect(resolveNotificationChannels('mention', null, false).bell).toBe(false);
     expect(
-      resolveNotificationChannels('mention', { bell: null, toast: null, sound: null }, false).bell,
+      resolveNotificationChannels(
+        'mention',
+        { bell: null, toast: null, sound: null, push: null },
+        false,
+      ).bell,
     ).toBe(false);
   });
 
   it("lets the person's own choice beat the owner either way", () => {
     expect(
-      resolveNotificationChannels('mention', { bell: true, toast: null, sound: null }, false).bell,
+      resolveNotificationChannels(
+        'mention',
+        { bell: true, toast: null, sound: null, push: null },
+        false,
+      ).bell,
     ).toBe(true);
     expect(
-      resolveNotificationChannels('mention', { bell: false, toast: null, sound: null }, true).bell,
+      resolveNotificationChannels(
+        'mention',
+        { bell: false, toast: null, sound: null, push: null },
+        true,
+      ).bell,
     ).toBe(false);
   });
 
   it('resolves toast and sound independently of the bell and of each other', () => {
     expect(
-      resolveNotificationChannels('new_message', { bell: null, toast: false, sound: null }),
-    ).toEqual({ bell: true, toast: false, sound: true });
+      resolveNotificationChannels('new_message', {
+        bell: null,
+        toast: false,
+        sound: null,
+        push: null,
+      }),
+    ).toEqual({ bell: true, toast: false, sound: true, push: true });
     expect(
-      resolveNotificationChannels('task_due', { bell: null, toast: null, sound: true }),
-    ).toEqual({ bell: true, toast: true, sound: true });
+      resolveNotificationChannels('task_due', { bell: null, toast: null, sound: true, push: null }),
+    ).toEqual({ bell: true, toast: true, sound: true, push: false });
   });
 });
 
@@ -218,7 +253,7 @@ describe('NotificationPublisher puts the resolved flags on the event', () => {
 describe("NotificationFanout honours each recipient's preferences", () => {
   const stored = new Map<
     number,
-    { bell: boolean | null; toast: boolean | null; sound: boolean | null }
+    { bell: boolean | null; toast: boolean | null; sound: boolean | null; push: boolean | null }
   >();
   function build(workspaceInapp = true) {
     stored.clear();
@@ -287,7 +322,7 @@ describe("NotificationFanout honours each recipient's preferences", () => {
 
   it('writes no row for a person whose bell is off, but still one for the others', async () => {
     const { fanout, tx, inserted } = build();
-    stored.set(2, { bell: false, toast: null, sound: null });
+    stored.set(2, { bell: false, toast: null, sound: null, push: null });
     const out = await fanout.write(tx, 1, 'device_disconnected', [1, 2, 3], draft);
     expect(out.map((p) => p.row.userId)).toEqual([1, 3]);
     expect(inserted).toHaveLength(2);
@@ -295,7 +330,7 @@ describe("NotificationFanout honours each recipient's preferences", () => {
 
   it('writes the row but with toast off when only the toast is off', async () => {
     const { fanout, tx } = build();
-    stored.set(1, { bell: null, toast: false, sound: null });
+    stored.set(1, { bell: null, toast: false, sound: null, push: null });
     const out = await fanout.write(tx, 1, 'broadcast_completed', [1, 2], draft);
     expect(out.map((p) => [p.row.userId, p.row.toast])).toEqual([
       [1, false],
@@ -305,7 +340,7 @@ describe("NotificationFanout honours each recipient's preferences", () => {
 
   it("the owner's toggle off removes the row for everyone except a person who turned it on themselves", async () => {
     const { fanout, tx } = build(false);
-    stored.set(2, { bell: true, toast: null, sound: null });
+    stored.set(2, { bell: true, toast: null, sound: null, push: null });
     const out = await fanout.write(tx, 1, 'broadcast_completed', [1, 2], draft);
     expect(out.map((p) => p.row.userId)).toEqual([2]);
   });
@@ -330,7 +365,10 @@ describe('NotificationPreferencesService', () => {
   const ctx = { requestId: 'r', orgId: 1, actorType: 'user' as const, actorId: 9, userId: 9 };
 
   function service(
-    stored: Map<string, { bell: boolean | null; toast: boolean | null; sound: boolean | null }>,
+    stored: Map<
+      string,
+      { bell: boolean | null; toast: boolean | null; sound: boolean | null; push: boolean | null }
+    >,
     ws = true,
   ) {
     const applied: Array<[string, unknown]> = [];
@@ -357,7 +395,9 @@ describe('NotificationPreferencesService', () => {
   }
 
   it('lists every tunable type in catalogue order with the values in force', async () => {
-    const stored = new Map([['new_message', { bell: null, toast: false, sound: null }]]);
+    const stored = new Map([
+      ['new_message', { bell: null, toast: false, sound: null, push: null }],
+    ]);
     const { svc } = service(stored);
     const res = await RequestContextStore.run(ctx as never, () => svc.get());
     expect(res.items.map((i) => i.type)).toEqual([...NOTIFICATION_PREF_TYPES]);
@@ -367,8 +407,9 @@ describe('NotificationPreferencesService', () => {
       bell: true,
       toast: false,
       sound: true,
-      defaults: { bell: true, toast: true, sound: true },
-      overrides: { bell: null, toast: false, sound: null },
+      push: true,
+      defaults: { bell: true, toast: true, sound: true, push: true },
+      overrides: { bell: null, toast: false, sound: null, push: null },
       workspaceInapp: true,
     });
   });
@@ -384,7 +425,7 @@ describe('NotificationPreferencesService', () => {
   });
 
   it('applies each named item, audits only real changes, and sends nothing for an unchanged value', async () => {
-    const stored = new Map([['mention', { bell: null, toast: false, sound: null }]]);
+    const stored = new Map([['mention', { bell: null, toast: false, sound: null, push: null }]]);
     const { svc, applied, audits } = service(stored);
     await RequestContextStore.run(ctx as never, () =>
       svc.update({
@@ -409,7 +450,7 @@ describe('NotificationPreferencesService', () => {
   });
 
   it('writes no audit row when nothing changes', async () => {
-    const stored = new Map([['mention', { bell: false, toast: null, sound: null }]]);
+    const stored = new Map([['mention', { bell: false, toast: null, sound: null, push: null }]]);
     const { svc, audits } = service(stored);
     await RequestContextStore.run(ctx as never, () =>
       svc.update({ items: [{ type: 'mention', bell: false }] }),

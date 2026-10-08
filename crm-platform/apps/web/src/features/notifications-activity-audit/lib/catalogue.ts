@@ -20,6 +20,7 @@ export { NOTIFICATION_GROUPS, type NotificationGroup };
 
 export const NOTIFICATION_ICONS = [
   'chat',
+  'waiting',
   'assign',
   'mention',
   'team_chat',
@@ -48,6 +49,8 @@ export interface TypeMeta {
   toast: boolean;
   /** May play the ping (same refinement). */
   sound: boolean;
+  /** A browser (Web Push) notification is on by default (chats, assignments, mentions). */
+  push: boolean;
   /** The kind of record the row is about, used to build a link when the server sent none. */
   subject?:
     | 'conversation'
@@ -77,6 +80,7 @@ const look = (
 const LOOK: Record<NotificationPrefType, Look> = {
   new_chat: look('chat', 'info', 'conversation'),
   new_message: look('chat', 'info', 'conversation'),
+  chat_waiting: look('waiting', 'info', 'conversation'),
   conversation_assigned: look('assign', 'info', 'conversation'),
   mention: look('mention', 'info', 'conversation'),
   task_assigned: look('task', 'info'),
@@ -109,6 +113,7 @@ export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEnt
       group: NOTIFICATION_CATALOG[type].group,
       toast: NOTIFICATION_CATALOG[type].toast,
       sound: NOTIFICATION_CATALOG[type].sound,
+      push: NOTIFICATION_CATALOG[type].push,
     } satisfies TypeMeta,
   ]),
 );
@@ -119,6 +124,7 @@ export const FALLBACK_META: TypeMeta = {
   tone: 'info',
   toast: false,
   sound: false,
+  push: false,
 };
 
 /** True for a type this build can word in the viewer's language. */

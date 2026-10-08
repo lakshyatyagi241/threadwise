@@ -32,7 +32,7 @@ import { NotificationPrefsResolver } from './notification-prefs.resolver';
 import { NotificationPublisher } from './notification.publisher';
 import { NotificationsRepository, type WrittenNotification } from './notifications.repository';
 
-const PERM_CONVERSATION_REPLY = 'inbox.conversation.reply';
+export const PERM_CONVERSATION_REPLY = 'inbox.conversation.reply';
 export const CONVERSATION_NOTIFY_EVENTS = [
   MESSAGE_RECEIVED_EVENT,
   'conversation.assigned',

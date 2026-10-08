@@ -5,6 +5,7 @@
 export { RealtimeEmitterModule } from './realtime-emitter.module';
 export { RealtimeEmitter, type EmitReport } from './realtime-emitter.service';
 export { AudienceResolver, type AudienceOptions } from './audience/audience.resolver';
+export { VisibilityPresence } from './visibility-presence.service';
 export { MemberDirectory } from './audience/member-directory.service';
 export {
   PERM_CONVERSATION_READ,
