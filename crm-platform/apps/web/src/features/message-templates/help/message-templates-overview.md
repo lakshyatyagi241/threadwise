@@ -5,20 +5,7 @@ summary: Write WhatsApp message templates, submit them to Meta for review, and t
 area: campaigns
 order: 30
 documents: [nav:templates]
-keywords:
-  [
-    whatsapp template,
-    meta approval,
-    review,
-    header,
-    body,
-    footer,
-    buttons,
-    variables,
-    sync,
-    category,
-    quality,
-  ]
+keywords: [whatsapp template, meta approval, review, buttons, variables, sync, quality]
 ---
 
 ## What it is for
