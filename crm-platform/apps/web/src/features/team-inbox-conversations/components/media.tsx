@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import type { MessageLocation, MessageMedia } from '@crm/contracts';
 import { humanSize } from '../lib/time';
 import { ExternalIcon, FileIcon, PinIcon } from './icons';
@@ -12,6 +13,8 @@ import { ExternalIcon, FileIcon, PinIcon } from './icons';
 
 export function ImageMedia({ media, alt }: { media: MessageMedia; alt: string }) {
   const t = useTranslations('team-inbox-conversations.media');
+  const [broken, setBroken] = useState(false);
+  if (broken) return <DocumentMedia media={{ ...media, name: media.name ?? alt }} />;
   return (
     <a
       href={media.url}
@@ -26,6 +29,7 @@ export function ImageMedia({ media, alt }: { media: MessageMedia; alt: string })
         alt={alt}
         loading="lazy"
         decoding="async"
+        onError={() => setBroken(true)}
         className="max-h-72 w-full max-w-xs rounded-md bg-muted object-cover"
       />
     </a>
@@ -33,7 +37,17 @@ export function ImageMedia({ media, alt }: { media: MessageMedia; alt: string })
 }
 
 export function StickerMedia({ media, alt }: { media: MessageMedia; alt: string }) {
-  return <img src={media.url} alt={alt} loading="lazy" className="size-28 object-contain" />;
+  const [broken, setBroken] = useState(false);
+  if (broken) return <DocumentMedia media={{ ...media, name: media.name ?? alt }} />;
+  return (
+    <img
+      src={media.url}
+      alt={alt}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      className="size-28 object-contain"
+    />
+  );
 }
 
 export function VideoMedia({ media }: { media: MessageMedia }) {
@@ -46,6 +60,9 @@ export function VideoMedia({ media }: { media: MessageMedia }) {
       className="max-h-72 w-full max-w-xs rounded-md bg-black"
     >
       <source src={media.url} type={media.mime} />
+      <a href={media.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+        {media.name ?? t('video')}
+      </a>
     </video>
   );
 }
@@ -60,6 +77,9 @@ export function AudioMedia({ media, voice }: { media: MessageMedia; voice: boole
       className="h-10 w-64 max-w-full"
     >
       <source src={media.url} type={media.mime} />
+      <a href={media.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+        {media.name ?? t('audio')}
+      </a>
     </audio>
   );
 }
@@ -93,8 +113,9 @@ export function DocumentMedia({ media }: { media: MessageMedia }) {
 /** Coordinates are formatted with a fixed number of digits; the link opens the point on OpenStreetMap in a new tab. */
 export function LocationCard({ location }: { location: MessageLocation }) {
   const t = useTranslations('team-inbox-conversations.media');
-  const lat = location.latitude;
-  const lon = location.longitude;
+  const lat = Number(location.latitude);
+  const lon = Number(location.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
   const href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;
   return (
     <a

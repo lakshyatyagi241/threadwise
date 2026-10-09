@@ -219,7 +219,7 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
         ...base,
         kind: 'contact',
         // Reference's bubble text is the first formatted name; the cards themselves are in the meta.
-        body: cards.find((c) => c.name)?.name ?? undefined,
+        body: cards.find((c) => c.name)?.name ?? (cards.length ? undefined : '[Contact message]'),
         ...withMeta({ contacts: cards }),
       };
     }
@@ -287,8 +287,32 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
         return {
           ...base,
           kind: 'interactive',
-          body: clip(r.body, 1000) ?? 'Form submitted',
+          body: flowSummary(r.response_json) ?? clip(r.body, 1000) ?? 'Form submitted',
           ...withMeta({ flowName: clip(r.name, 200) ?? null, flowResponse: clip(r.response_json, 4000) ?? null }),
+        };
+      }
+      if (kind === 'call_permission_reply') {
+        // The customer answered our request to call them: a readable chip, not a placeholder.
+        const r = dict(i.call_permission_reply);
+        const response = str(r.response);
+        const title =
+          response === 'accept'
+            ? 'Allowed calls'
+            : response === 'reject'
+              ? 'Declined calls'
+              : 'Call permission reply';
+        return {
+          ...base,
+          kind: 'interactive',
+          body: title,
+          ...withMeta({
+            interactive: { type: 'button_reply', id: null, title, description: r.is_permanent === true ? 'Permanent' : null },
+            callPermission: {
+              response: response ?? null,
+              permanent: r.is_permanent === true,
+              expiresAt: typeof r.expiration_timestamp === 'number' ? r.expiration_timestamp : null,
+            },
+          }),
         };
       }
       return unsupported('interactive', `[Interactive · ${kind ?? 'message'}]`, { interactiveType: kind ?? null });
@@ -296,11 +320,19 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
 
     case 'order': {
       const o = dict(m.order);
-      const items = arr(o.product_items);
-      return unsupported('order', clip(o.text, 1000) ?? `Order · ${items.length} item(s)`, {
+      const items = arr(o.product_items).map(dict);
+      const lines = items
+        .slice(0, 20)
+        .map((i) => `${Number(i.quantity) || 1} x ${str(i.product_retailer_id) ?? 'item'}`);
+      const text = [clip(o.text, 1000), `Order · ${items.length} item(s)`, ...lines].filter(Boolean).join('\n');
+      return unsupported('order', text, {
         order: { catalogId: str(o.catalog_id) ?? null, items: items.length },
       });
     }
+
+    // The customer opened the chat for the first time (a button tap in a click-to-chat flow): an event, not a message to read.
+    case 'request_welcome':
+      return { ignored: 'request_welcome' };
 
     case 'unsupported':
       return unsupported('unsupported', UNSUPPORTED_131051);
@@ -310,7 +342,26 @@ function mapMessage(m: Dict, names: Map<string, string>, ownNumber: string): Nor
   }
 }
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = (s: string): string => {
+  const t = s.replace(/_/g, ' ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+
+/** A Flow answer (`response_json`) as readable `Label: value` lines; anything that is not a flat object is shown as it came. */
+function flowSummary(raw: unknown): string | undefined {
+  const text = str(raw);
+  if (!text) return undefined;
+  try {
+    const parsed: unknown = JSON.parse(text);
+    if (!isDict(parsed)) return undefined;
+    const lines = Object.entries(parsed)
+      .filter(([k, v]) => k !== 'flow_token' && v !== null && v !== undefined && v !== '')
+      .map(([k, v]) => `${k.replace(/_/g, ' ')}: ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`);
+    return lines.length ? lines.join('\n').slice(0, 1000) : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 function mapStatus(s: Dict): NormalisedReceipt | Skip {
   const id = str(s.id);
