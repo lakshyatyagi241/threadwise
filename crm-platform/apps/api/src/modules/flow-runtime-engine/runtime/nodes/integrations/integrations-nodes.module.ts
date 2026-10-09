@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ApiLibraryModule } from '../../../../api-library';
 import { CrmModule } from '../../../../crm';
 import {
   AI_CALL,
@@ -17,6 +18,7 @@ import {
 } from '../../../../../infra/providers/flow-runtime-engine/mysql-query.port';
 import { SafeFetch } from '../../../../../infra/providers/node-bridge-runtime/safe-fetch';
 import { FlowRefResolver } from '../flow-refs';
+import { ApiLibraryNodes } from './api-library-node';
 import { IntegrationNodes } from './integrations-nodes';
 
 /**
@@ -27,11 +29,12 @@ import { IntegrationNodes } from './integrations-nodes';
  * calling domain is not wired to flows: those two defaults fail with a stated reason. Rebind the tokens to go live.
  */
 @Module({
-  imports: [CrmModule],
+  imports: [CrmModule, ApiLibraryModule],
   providers: [
     SafeFetch,
     FlowRefResolver,
     IntegrationNodes,
+    ApiLibraryNodes,
     { provide: MYSQL_QUERY, useClass: MysqlDriverUnavailable },
     { provide: AI_CALL, useClass: AiCallUnavailable },
     { provide: GOOGLE_ACCESS_TOKENS, useClass: NoGoogleAccount },
@@ -41,6 +44,6 @@ import { IntegrationNodes } from './integrations-nodes';
       inject: [GOOGLE_ACCESS_TOKENS],
     },
   ],
-  exports: [IntegrationNodes, GOOGLE_ACCESS_TOKENS, MYSQL_QUERY, AI_CALL],
+  exports: [IntegrationNodes, ApiLibraryNodes, GOOGLE_ACCESS_TOKENS, MYSQL_QUERY, AI_CALL],
 })
 export class IntegrationNodesModule {}

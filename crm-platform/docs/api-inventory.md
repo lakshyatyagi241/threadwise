@@ -509,18 +509,22 @@ endpoints once broken out.
 
 ## Api Library
 
-| API Group   | API Name                       | Route | Status |
-| ----------- | ------------------------------ | ----- | ------ |
-| Api Library | getApiList                     | —     | ⬜     |
-| Api Library | CreateApi                      | —     | ⬜     |
-| Api Library | GetApiDetails                  | —     | ⬜     |
-| Api Library | EditApi                        | —     | ⬜     |
-| Api Library | DeleteApi                      | —     | ⬜     |
-| Api Library | RunTestAPI                     | —     | ⬜     |
-| Api Library | getApiListOption               | —     | ⬜     |
-| Api Library | getApiLibraryLogsList          | —     | ⬜     |
-| Api Library | fetchApiLogs                   | —     | ⬜     |
-| Api Library | API Logs Endpoint (additional) | —     | ⬜     |
+Owner-requested feature carried from the old console (not a Reference port). Spec: [api/api-library.md](api/api-library.md).
+
+| API Group   | API Name                       | Route                                                           | Status |
+| ----------- | ------------------------------ | --------------------------------------------------------------- | ------ |
+| Api Library | getApiList                     | `GET /v2/api-library/apis`                                      | ✅     |
+| Api Library | CreateApi                      | `POST /v2/api-library/apis`                                     | ✅     |
+| Api Library | GetApiDetails                  | `GET /v2/api-library/apis/:id`                                  | ✅     |
+| Api Library | EditApi                        | `PATCH /v2/api-library/apis/:id`                                | ✅     |
+| Api Library | DeleteApi                      | `DELETE /v2/api-library/apis/:id` (`?force=true`)               | ✅     |
+| Api Library | RunTestAPI                     | `POST /v2/api-library/apis/test`, `POST .../apis/test-function` | ✅     |
+| Api Library | getApiListOption               | `GET /v2/api-library/apis/options`                              | ✅     |
+| Api Library | getApiLibraryLogsList          | `GET /v2/api-library/logs`                                      | ✅     |
+| Api Library | fetchApiLogs                   | `GET /v2/api-library/apis/:id/logs`                             | ✅     |
+| Api Library | API Logs Endpoint (additional) | `GET /v2/api-library/logs/:id`                                  | ✅     |
+| Api Library | getContactProperties           | `GET /v2/api-library/contact-properties`                        | ✅     |
+| Api Library | (new) usage                    | `GET /v2/api-library/apis/:id/usage`                            | ✅     |
 
 ## Webhook
 
@@ -794,7 +798,7 @@ endpoints once broken out.
 | Deals                     | 16                                    | 0                            |
 | Tasks                     | 9                                     | 0                            |
 | Forms                     | 20                                    | 0                            |
-| Api Library               | 10                                    | 0                            |
+| Api Library               | 12                                    | 12                           |
 | Webhook                   | 9                                     | 0                            |
 | File Manager              | 9                                     | 0                            |
 | Subscription              | 30                                    | 0                            |
