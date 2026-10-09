@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "جلسة WhatsApp نشطة",
           "description": "نعم / لا: كتب العميل خلال آخر 24 ساعة"
+        },
+        "api_library": {
+          "label": "واجهة API (من المكتبة)",
+          "description": "استدعاء واجهة API محفوظة من مكتبة واجهات API"
         }
       },
       "groups": {
