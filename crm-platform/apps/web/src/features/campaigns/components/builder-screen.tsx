@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Alert, Button, Spinner, useToast } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, Spinner, useToast } from '@crm/ui';
 import type { CampaignConfig } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -65,7 +65,22 @@ import { Stepper } from './builder/stepper';
  * `/campaigns/create` and `/campaigns/:id/edit` (TW-CAMP-002 to 010): the builder, as Reference's five steps (Setup, Compose, Recipients,
  * Schedule, Review) with a live preview beside them.
  */
-export function BuilderScreen({ id }: { id?: string }) {
+export function BuilderScreen({
+  id,
+  initialSenderKey,
+  initialName,
+  guidedKeys,
+  onGuided,
+}: {
+  id?: string;
+  /** The number the create screen opened on (a new campaign only). */
+  initialSenderKey?: string;
+  /** A name typed before the switch from the guided flow comes along. */
+  initialName?: string;
+  /** Numbers the guided flow can send from (verified Meta numbers). With `onGuided`, picking one reshapes the sections for that flow. */
+  guidedKeys?: ReadonlySet<string>;
+  onGuided?: (senderKey: string, name: string) => void;
+}) {
   const t = useTranslations('campaigns.builder');
   const config = useCampaignConfig(id);
   const builder = useBuilder();
@@ -86,7 +101,19 @@ export function BuilderScreen({ id }: { id?: string }) {
       </div>
     );
   }
-  return <Builder key={id ?? 'new'} id={id} config={config.data} builder={builder} zone={zone} />;
+  return (
+    <Builder
+      key={id ?? 'new'}
+      id={id}
+      config={config.data}
+      builder={builder}
+      zone={zone}
+      initialSenderKey={initialSenderKey}
+      initialName={initialName}
+      guidedKeys={guidedKeys}
+      onGuided={onGuided}
+    />
+  );
 }
 
 function Builder({
@@ -94,11 +121,19 @@ function Builder({
   config,
   builder,
   zone,
+  initialSenderKey,
+  initialName,
+  guidedKeys,
+  onGuided,
 }: {
   id?: string;
   config: CampaignConfig | undefined;
   builder: ReturnType<typeof useBuilder>;
   zone: string;
+  initialSenderKey: string | undefined;
+  initialName: string | undefined;
+  guidedKeys: ReadonlySet<string> | undefined;
+  onGuided: ((senderKey: string, name: string) => void) | undefined;
 }) {
   const t = useTranslations('campaigns.builder');
   // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
@@ -120,7 +155,14 @@ function Builder({
   const [stored, setForm] = useState<BuilderForm>(() =>
     config
       ? fromConfig(config, zone)
-      : { ...EMPTY_FORM, type: 'custom', timezone: zone, ...defaultSchedule(new Date(), zone) },
+      : {
+          ...EMPTY_FORM,
+          type: 'custom',
+          name: initialName ?? '',
+          senderKey: initialSenderKey ?? '',
+          timezone: zone,
+          ...defaultSchedule(new Date(), zone),
+        },
   );
   const [step, setStep] = useState<WizardStep>('setup');
   const [mode, setMode] = useState<RecipientMode>(() => initialRecipientMode(stored));
@@ -133,6 +175,17 @@ function Builder({
     setForm((f) => ({ ...f, ...p }));
   };
   const editing = Boolean(id);
+  // A new campaign sent from a verified Meta number gets the guided sections, which start fresh (the name comes along). Ask first only
+  // when something besides the name and the number was filled in, since this form is not saved.
+  const [switchTo, setSwitchTo] = useState<string | null>(null);
+  const [pristine] = useState(() => JSON.stringify({ ...stored, name: '', senderKey: '' }));
+  const pickSender = (key: string) => {
+    if (!editing && onGuided && guidedKeys?.has(key)) {
+      if (JSON.stringify({ ...stored, name: '', senderKey: '' }) === pristine)
+        onGuided(key, stored.name);
+      else setSwitchTo(key);
+    } else patch({ senderKey: key });
+  };
   const minDate = useMemo(
     () => defaultSchedule(new Date(), stored.timezone).sendDate,
     [stored.timezone],
@@ -145,6 +198,9 @@ function Builder({
   );
   const sender = senderOf(stored.senderKey, senders);
   const engine = engineOf(stored.senderKey);
+  // A Meta number that the guided flow cannot use yet (not verified) stays here, with the reason shown next to the select.
+  const notVerified =
+    !editing && guidedKeys !== undefined && engine === 'waba' && !guidedKeys.has(stored.senderKey);
   const usable = useMemo(
     () => templatesFor(data?.templates ?? [], engine, sender),
     [data?.templates, engine, sender],
@@ -264,7 +320,14 @@ function Builder({
               }}
             >
               {step === 'setup' && (
-                <StepSetup form={form} patch={patch} senders={senders} engine={engine} />
+                <StepSetup
+                  form={form}
+                  patch={patch}
+                  senders={senders}
+                  engine={engine}
+                  onSender={pickSender}
+                  notVerified={notVerified}
+                />
               )}
               {step === 'compose' && (
                 <StepCompose
@@ -373,6 +436,17 @@ function Builder({
           setForm((f) => applyAiCopy(f, copy));
           setStep('compose');
           toast(t('ai.applied'), 'success');
+        }}
+      />
+      <ConfirmDialog
+        open={switchTo !== null}
+        title={t('switch.title')}
+        message={t('switch.body')}
+        confirmLabel={t('switch.confirm')}
+        cancelLabel={t('switch.cancel')}
+        onClose={() => setSwitchTo(null)}
+        onConfirm={() => {
+          if (switchTo) onGuided?.(switchTo, stored.name);
         }}
       />
     </div>

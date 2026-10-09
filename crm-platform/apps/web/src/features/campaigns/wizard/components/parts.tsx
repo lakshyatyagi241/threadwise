@@ -1,9 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
 import { errorKind, requestIdOf } from '../lib/errors';
+
+/**
+ * The wizard's cards (credit, variables, summary, schedule, retries, count) take the look of the screen they sit in. On Campaigns,
+ * Create the builder provides `builder`: the same cards, in the builder's rounder frame and smaller titles.
+ */
+export const CardStyle = createContext<'wizard' | 'builder'>('wizard');
 
 /** A titled card: the building block of the steps. */
 export function WizardCard({
@@ -21,15 +27,23 @@ export function WizardCard({
   className?: string;
   id?: string;
 }) {
+  const builder = useContext(CardStyle) === 'builder';
   return (
     <section
       id={id}
-      className={cn('rounded-xl border border-border bg-background', className)}
+      className={cn(
+        'border border-border bg-background',
+        builder ? 'rounded-2xl' : 'rounded-xl',
+        className,
+      )}
       aria-labelledby={id ? `${id}-title` : undefined}
     >
       <header className="flex flex-wrap items-start justify-between gap-2 border-b border-border px-4 py-3">
         <div className="min-w-0">
-          <h2 id={id ? `${id}-title` : undefined} className="text-base font-semibold">
+          <h2
+            id={id ? `${id}-title` : undefined}
+            className={builder ? 'text-[14px] font-semibold' : 'text-base font-semibold'}
+          >
             {title}
           </h2>
           {hint && <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>}

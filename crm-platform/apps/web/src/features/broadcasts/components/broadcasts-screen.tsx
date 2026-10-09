@@ -31,7 +31,7 @@ import { ListRail } from './list-rail';
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
 
 /**
- * `/broadcasts` (TW-BCAST-001, 002): the status views, the six tiles, and the broadcast table with its range, search and pages.
+ * `/campaigns/history/legacy` (was `/broadcasts`, TW-BCAST-001, 002): the status views, the six tiles, and the broadcast table with its range, search and pages.
  * The filters and the page live in the address; the counters follow the worker every 15 seconds while the tab is visible.
  */
 export function BroadcastsScreen() {
@@ -220,7 +220,7 @@ export function BroadcastsScreen() {
                         </Button>
                         {canCreate && (
                           <Link
-                            href="/broadcasts/create"
+                            href="/campaigns/create"
                             className="inline-flex h-10 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
                           >
                             {t('createBroadcast')}

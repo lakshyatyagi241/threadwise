@@ -1,13 +1,16 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useContactFields, isUsableProperty } from '@/features/contacts-attributes-tags';
+import { offerSenders } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useUnsavedGuard } from '@/features/segments/components/use-unsaved-guard';
 import { Alert, Button, ConfirmDialog, EmptyState } from '@crm/ui';
-import type { WizardDraftResponse } from '@crm/contracts';
+import type { WizardDraftResponse, WizardSender } from '@crm/contracts';
 import {
   useAudienceCount,
   useAudienceSources,
@@ -16,6 +19,7 @@ import {
   useWizardSenders,
   useWizardTemplates,
 } from '../api/wizard';
+import { createPath } from '../../lib/create-flow';
 import { countableAudience } from '../lib/audience';
 import { decideNext, launchPreflight, previousStep } from '../lib/flow';
 import { stepIssues, type IssueCode, type StepIssue } from '../lib/issues';
@@ -43,8 +47,20 @@ const STATE_ISSUES: readonly IssueCode[] = [
   'balance_unavailable',
 ];
 
-/** `/campaigns/wizard` and `/campaigns/wizard/[id]`: the four-step "Create broadcast" wizard. */
-export function WizardScreen({ draftId }: { draftId?: string }) {
+/**
+ * The four-step guided flow, shown in place on Campaigns, Create (`/campaigns/create`) when the picked number is a verified Meta
+ * (WhatsApp Cloud API) number. `preferredSenderKey` is that number; step 1 starts on it and it can still be changed. Picking a number
+ * that the guided flow cannot send from calls `onClassic` (the create screen then shows the classic builder).
+ */
+export function WizardScreen({
+  draftId,
+  preferredSenderKey,
+  onClassic,
+}: {
+  draftId?: string;
+  preferredSenderKey?: string;
+  onClassic?: (senderKey: string) => void;
+}) {
   const t = useTranslations('campaigns.wizard');
   const canCreate = useCan('camp.campaigns.create');
   const draft = useWizardDraft(draftId);
@@ -77,9 +93,11 @@ export function WizardScreen({ draftId }: { draftId?: string }) {
           <LaunchedNotice id={draft.data.id} />
         </Frame>
       );
-    return <WizardBody key={draft.data.id} initial={draft.data} />;
+    return <WizardBody key={draft.data.id} initial={draft.data} onClassic={onClassic} />;
   }
-  return <WizardBody initial={null} />;
+  return (
+    <WizardBody initial={null} preferredSenderKey={preferredSenderKey} onClassic={onClassic} />
+  );
 }
 
 function Frame({ children }: { children: ReactNode }) {
@@ -114,7 +132,15 @@ export function LaunchedNotice({ id }: { id: string }) {
   );
 }
 
-function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
+function WizardBody({
+  initial,
+  preferredSenderKey,
+  onClassic,
+}: {
+  initial: WizardDraftResponse | null;
+  preferredSenderKey?: string | undefined;
+  onClassic?: ((senderKey: string) => void) | undefined;
+}) {
   const t = useTranslations('campaigns.wizard');
   const ti = useTranslations('campaigns.wizard.issues');
   const ts = useTranslations('campaigns.wizard.steps');
@@ -136,14 +162,43 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
   );
 
   // The number defaults to the workspace's default engine's first one; a draft whose number is gone gets the default again.
-  const sendersList = senders.data?.data;
+  const unofficial = useUnofficialWhatsapp();
+  const allSenders = senders.data?.data;
+  const sendersList = useMemo(
+    () => (allSenders ? offerSenders(allSenders, unofficial) : undefined),
+    [allSenders, unofficial],
+  );
   const dispatch = w.dispatch;
   useEffect(() => {
     if (!sendersList || sendersList.length === 0) return;
     if (draft.senderKey && sendersList.some((x) => x.key === draft.senderKey)) return;
-    const pick = sendersList.find((x) => x.isDefault) ?? sendersList[0]!;
-    dispatch({ type: 'sender', senderKey: pick.key });
-  }, [sendersList, draft.senderKey, dispatch]);
+    const guided = sendersList.filter((x) => x.guided);
+    const pick =
+      guided.find((x) => x.key === preferredSenderKey) ??
+      guided.find((x) => x.isDefault) ??
+      guided[0];
+    if (pick) dispatch({ type: 'sender', senderKey: pick.key });
+  }, [sendersList, draft.senderKey, preferredSenderKey, dispatch]);
+
+  // A number the guided flow cannot send from is sent from the classic builder, which starts fresh: ask first, and keep this draft saved.
+  const router = useRouter();
+  const [switchTo, setSwitchTo] = useState<WizardSender | null>(null);
+  const [switching, setSwitching] = useState(false);
+  const pickSender = (key: string) => {
+    const picked = sendersList?.find((x) => x.key === key);
+    if (picked?.guided) return w.dispatch({ type: 'sender', senderKey: key });
+    setSwitchTo(picked ?? null);
+  };
+  const confirmSwitch = async () => {
+    if (!switchTo) return;
+    setSwitching(true);
+    const saved = await w.flush();
+    setSwitching(false);
+    if (!saved) return setSwitchTo(null);
+    guard.release();
+    if (onClassic) onClassic(switchTo.key);
+    else router.push(createPath({ sender: switchTo.key }));
+  };
 
   const countable = countableAudience(draft.audience);
   const settled = useSettled(countable, 500);
@@ -291,7 +346,7 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
             issues={visible}
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
-            onSender={(senderKey) => w.dispatch({ type: 'sender', senderKey })}
+            onSender={pickSender}
           />
         )}
         {view === 2 && (
@@ -358,6 +413,19 @@ function WizardBody({ initial }: { initial: WizardDraftResponse | null }) {
         skipped={skipped}
         onConfirm={() => void launch.confirm(t('launchFailed'))}
         onClose={launch.close}
+      />
+      <ConfirmDialog
+        open={switchTo !== null}
+        title={t('switch.title')}
+        message={t('switch.body', {
+          number: switchTo?.label ?? '',
+          engine: switchTo?.engineLabel ?? '',
+        })}
+        confirmLabel={t('switch.confirm')}
+        cancelLabel={t('switch.cancel')}
+        busy={switching}
+        onClose={() => setSwitchTo(null)}
+        onConfirm={() => void confirmSwitch()}
       />
       <ConfirmDialog
         open={guard.pending !== null}

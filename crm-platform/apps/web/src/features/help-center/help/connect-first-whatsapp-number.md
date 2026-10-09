@@ -37,7 +37,7 @@ Nothing can be sent or received on WhatsApp until a number is connected. This gu
 
 1. From a different phone, send a WhatsApp message to the number you connected.
 2. Open **Inbox**. The conversation appears in the list. Open it, type a reply and press Enter. You can reply freely for 24 hours after the customer's last message. After that only an approved template can be sent. See [Team inbox](help:team-inbox-overview).
-3. To start a conversation yourself, you need an approved template. Create one under [Message templates](help:message-templates-overview), then send it with a [broadcast](help:broadcasts-overview) to a contact that holds your own number.
+3. To start a conversation yourself, you need an approved template. Create one under [Message templates](help:message-templates-overview), then send it with a [campaign](help:campaigns-create) to a contact that holds your own number.
 
 ## Plan and access
 

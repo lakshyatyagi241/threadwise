@@ -10,7 +10,7 @@ keywords: [whatsapp template, meta approval, review, header, body, footer, butto
 
 ## What it is for
 
-WhatsApp only lets a business start a conversation with an approved template. The Templates screen is your library: write templates, send them to Meta for review, and follow each status. Approved templates can then be used in [Broadcasts](help:broadcasts-overview) and [Campaigns](help:campaigns-overview).
+WhatsApp only lets a business start a conversation with an approved template. The Templates screen is your library: write templates, send them to Meta for review, and follow each status. Approved templates can then be used in [Campaigns](help:campaigns-overview).
 
 ## How to use it
 

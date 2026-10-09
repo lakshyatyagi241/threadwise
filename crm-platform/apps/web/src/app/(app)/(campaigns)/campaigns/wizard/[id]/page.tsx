@@ -1,10 +1,10 @@
-import { notFound } from 'next/navigation';
-import { WizardScreen } from '@/features/campaigns/wizard/components/wizard-screen';
+import { notFound, redirect } from 'next/navigation';
+import { createPath, draftParam } from '@/features/campaigns/lib/create-flow';
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-export default async function ResumeBroadcastPage({ params }: { params: Promise<{ id: string }> }) {
+/** A guided draft resumes on Campaigns, Create now; the old address keeps working. */
+export default async function OldResumePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!UUID.test(id)) notFound();
-  return <WizardScreen draftId={id} />;
+  const draft = draftParam(id);
+  if (!draft) notFound();
+  redirect(createPath({ draft }));
 }

@@ -92,14 +92,14 @@ describe('footer and save indicator', () => {
   });
 
   it('the last step names the launch by the schedule mode', () => {
-    expect(footer({ step: 4, launch: 'now' })).toContain('Broadcast now');
+    expect(footer({ step: 4, launch: 'now' })).toContain('Send now');
     expect(footer({ step: 4, launch: 'schedule' })).toContain('>Schedule<');
     expect(footer({ step: 4, launch: 'recurring' })).toContain('Start recurring');
   });
 
   it('says why Next is blocked, and keeps the button reachable', () => {
-    const out = footer({ blocked: ['Enter a name for the broadcast.', 'Choose a template.'] });
-    expect(out).toContain('Enter a name for the broadcast.');
+    const out = footer({ blocked: ['Enter a name for the campaign.', 'Choose a template.'] });
+    expect(out).toContain('Enter a name for the campaign.');
     expect(out).toContain('(+1 more)');
     expect(out).toContain('aria-disabled="true"');
     expect(out).toContain('aria-describedby="wizard-blocked"');
@@ -107,7 +107,7 @@ describe('footer and save indicator', () => {
 
   it('warns when the person cannot launch', () => {
     expect(footer({ step: 4, canLaunch: false })).toContain(
-      'do not have permission to start broadcasts',
+      'do not have permission to start campaigns',
     );
   });
 
@@ -186,7 +186,7 @@ describe('step 1: name and template', () => {
         { path: 'templateId', code: 'template_required' },
       ],
     });
-    expect(out).toContain('Enter a name for the broadcast.');
+    expect(out).toContain('Enter a name for the campaign.');
     expect(out).toContain('Choose a template.');
     expect(out).toContain('aria-invalid="true"');
   });
@@ -322,14 +322,14 @@ describe('step 2: audience', () => {
       />,
     );
 
-  it('shows the four broadcast actions as pills, one active, and the rule that joins them', () => {
+  it('shows the four campaign actions as pills, one active, and the rule that joins them', () => {
     const out = step();
-    expect(out).toContain('Broadcast action');
+    expect(out).toContain('Send to');
     for (const label of [
-      'Broadcast to contacts',
-      'Broadcast to groups',
-      'Broadcast to segments',
-      'Broadcast via CSV',
+      'Send to contacts',
+      'Send to groups',
+      'Send to segments',
+      'Send via CSV',
     ]) {
       expect(out).toContain(label);
     }

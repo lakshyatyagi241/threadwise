@@ -292,6 +292,32 @@ export function estimateCost(
   return { subtotals, totalMinor: subtotals.reduce((n, v) => n + v, 0) };
 }
 
+/** Phone states at Meta that stop a number from carrying a guided campaign. */
+const BLOCKED_PHONE_STATUS = new Set(['BANNED', 'RESTRICTED', 'DELETED', 'MIGRATED', 'PENDING']);
+
+/**
+ * Whether the guided (four-step) flow may send from a number: a Meta (`waba`) number that is connected and verified. What Meta
+ * reported at connect and in the health checks (`meta_json`) is read when present; a field that is not there blocks nothing, since
+ * only a number that passed the connect checks is `connected` at all.
+ */
+export function senderGuided(o: {
+  engine: string;
+  status: string | null;
+  meta: Record<string, unknown> | null;
+}): boolean {
+  if (o.engine !== 'waba' || o.status !== 'connected') return false;
+  const m = o.meta ?? {};
+  const up = (v: unknown) => (typeof v === 'string' ? v.toUpperCase() : '');
+  // Meta keeps `code_verification_status` at NOT_VERIFIED for numbers that never went through the SMS/voice code step (its own test number,
+  // numbers added by embedded signup), and those send fine once `phone_status` is CONNECTED: that field decides. EXPIRED always blocks.
+  const code = up(m.code_verification_status);
+  if (code === 'EXPIRED') return false;
+  if (code === 'NOT_VERIFIED' && up(m.phone_status) !== 'CONNECTED') return false;
+  if (['DECLINED'].includes(up(m.name_status))) return false;
+  if (BLOCKED_PHONE_STATUS.has(up(m.phone_status))) return false;
+  return true;
+}
+
 /** Messages the wallet pays for: all of them in wallet mode; beyond the plan's remaining allowance in plan mode (a limit of 0 is unlimited). */
 export function chargeableMessages(o: {
   mode: 'plan' | 'wallet';

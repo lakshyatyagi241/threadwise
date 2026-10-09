@@ -43,7 +43,7 @@ describe('credit check', () => {
   it('shows balance, estimated cost and the breakdown by country', () => {
     const out = card(ready(credit()));
     expect(out).toContain('Credit check');
-    expect(out).toContain('Your balance covers this broadcast.');
+    expect(out).toContain('Your balance covers this campaign.');
     expect(out).toContain('$500.00');
     expect(out).toContain('$95.00');
     expect(out).toContain('India');
@@ -75,7 +75,7 @@ describe('credit check', () => {
     expect(card(pending)).toContain('Checking your wallet');
     const bad = card(failed());
     expect(bad).toContain('Could not reach the server');
-    expect(bad).toContain('checked again when you start the broadcast');
+    expect(bad).toContain('checked again when you start the campaign');
   });
 });
 
@@ -360,9 +360,9 @@ describe('when to send', () => {
   it('offers three radios and the explainer with its three bullets', () => {
     const out = sched({ mode: 'now' });
     expect(out.match(/type="radio"/g)).toHaveLength(3);
-    for (const l of ['Broadcast now', 'Schedule Broadcast', 'Recurring Broadcast'])
+    for (const l of ['Send now', 'Schedule campaign', 'Recurring campaign'])
       expect(out).toContain(l);
-    expect(out).toContain('What is the difference between now, schedule and recurring broadcast?');
+    expect(out).toContain('What is the difference between now, schedule and recurring campaign?');
     expect(out).toContain('Now: sent right away, once.');
     expect(out).toContain('Schedule: sent once at the date and time you pick.');
     expect(out).toContain(
@@ -566,16 +566,16 @@ describe('step 4 and the launch dialog', () => {
       />,
     );
 
-  it('summarises the broadcast for each mode with Confirm and Cancel', () => {
+  it('summarises the campaign for each mode with Confirm and Cancel', () => {
     const now = dialog(draft({ name: 'October offer' }));
-    expect(now).toContain('Broadcast now?');
+    expect(now).toContain('Send now?');
     expect(now).toContain('October offer');
     expect(now).toContain('order_update (en_US)');
     expect(now).toContain('950');
     expect(now).toContain('$95.00');
     expect(now).toContain('Sent right away, once.');
     expect(now).toContain('>Cancel<');
-    expect(now).toContain('>Broadcast now<');
+    expect(now).toContain('>Send now<');
     const sch = dialog(
       draft({
         schedule: {
@@ -586,10 +586,10 @@ describe('step 4 and the launch dialog', () => {
         },
       }),
     );
-    expect(sch).toContain('Schedule this broadcast?');
+    expect(sch).toContain('Schedule this campaign?');
     expect(sch).toContain('Sent once on Oct 9, 2026 at 10:30 (Asia/Kolkata).');
     const rec = dialog(draft({ schedule: { mode: 'recurring', rule } }));
-    expect(rec).toContain('Start this recurring broadcast?');
+    expect(rec).toContain('Start this recurring campaign?');
     expect(rec).toContain('Repeats every week on Monday');
     expect(rec).toContain('Each run goes to the audience as it is at that time');
   });
@@ -597,10 +597,10 @@ describe('step 4 and the launch dialog', () => {
   it('shows the retry rule and an error when the launch failed', () => {
     const out = dialog(
       draft({ retries: { enabled: true, endDate: '2026-10-20', timezone: null } }),
-      'The broadcast could not be started. Try again.',
+      'The campaign could not be started. Try again.',
     );
     expect(out).toContain('On, until Oct 20, 2026');
-    expect(out).toContain('The broadcast could not be started.');
+    expect(out).toContain('The campaign could not be started.');
     expect(dialog(draft())).toContain('>Off<');
   });
 });

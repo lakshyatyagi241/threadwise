@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { CampaignOptionColumns } from './wizard-blank';
 
 /** The SQL of the broadcast wizard: templates, audience sources, the wizard columns of a campaign, series, retries and test sends. */
 
@@ -419,10 +420,17 @@ export class WizardRepository {
       occurrenceNo: number | null;
       retryEnabled: boolean;
       retryUntil: Date | null;
+      options: CampaignOptionColumns;
     },
   ): Promise<void> {
+    const o = v.options;
     await tx.execute(sql`
       UPDATE wpcampaigns SET wizard = ${json(v.wizard)}::jsonb, provider = ${v.provider}, device_id = ${v.deviceId},
+        ab_testing = ${o.abTesting}, ab_split = ${o.abSplit}, template_id_b = ${o.templateIdB},
+        tracking_enabled = ${o.trackingEnabled}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
+        throttle_min_sec = ${o.throttleMinSec}, throttle_max_sec = ${o.throttleMaxSec}, batch_size = ${o.batchSize},
+        batch_pause_min = ${o.batchPauseMin}, daily_limit = ${o.dailyLimit}, window_start = ${o.windowStart},
+        window_end = ${o.windowEnd},
         series_id = ${v.seriesId}::bigint, occurrence_no = ${v.occurrenceNo}::int,
         schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date, send_time = ${v.sendTime}::time,
         timezone = ${v.timezone}, status = ${v.status}, total_recipients = ${v.total},

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   WIZARD_TEMPLATE_CATEGORIES,
   type WizardAudience,
@@ -17,7 +18,7 @@ import {
   type TemplateDirectory,
 } from '../../broadcasts';
 import { WizardAudienceService } from './wizard-audience.service';
-import { templateSlots } from './wizard-rules';
+import { senderGuided, templateSlots } from './wizard-rules';
 import { WizardRepository, type TemplateListRow } from './wizard.repository';
 
 const CATEGORIES = new Set<string>(WIZARD_TEMPLATE_CATEGORIES);
@@ -108,15 +109,44 @@ export class WizardReadService {
   /** The connected WhatsApp numbers a broadcast can be sent from (the composer's own list), default engine first. */
   async listSenders(): Promise<WizardSendersResponse> {
     const { senders } = await this.compose.compose();
+    const { orgId } = RequestContextStore.require();
+    const wabaIds = senders
+      .filter((x) => x.engine === 'waba')
+      .map((x) => x.key.slice('waba:'.length));
+    const configs = new Map<string, { status: string; meta: Record<string, unknown> | null }>();
+    if (wabaIds.length > 0) {
+      const rows = await this.db.tx((tx) =>
+        tx.execute(sql`
+          SELECT uuid::text AS uuid, status, meta_json FROM wa_provider_configs
+          WHERE org_id = ${orgId} AND provider = 'waba' AND uuid::text IN (${sql.join(
+            wabaIds.map((id) => sql`${id}`),
+            sql`, `,
+          )})`),
+      );
+      for (const r of rows.rows as Array<{
+        uuid: string;
+        status: string;
+        meta_json: Record<string, unknown> | null;
+      }>)
+        configs.set(r.uuid, { status: r.status, meta: r.meta_json });
+    }
     return {
-      data: senders.map((x) => ({
-        key: x.key,
-        label: x.label,
-        phone: x.phone,
-        engine: x.engine,
-        engineLabel: x.engineLabel,
-        isDefault: x.isDefault,
-      })),
+      data: senders.map((x) => {
+        const c = configs.get(x.key.slice(x.engine.length + 1));
+        return {
+          key: x.key,
+          label: x.label,
+          phone: x.phone,
+          engine: x.engine,
+          engineLabel: x.engineLabel,
+          isDefault: x.isDefault,
+          guided: senderGuided({
+            engine: x.engine,
+            status: c?.status ?? null,
+            meta: c?.meta ?? null,
+          }),
+        };
+      }),
     };
   }
 }

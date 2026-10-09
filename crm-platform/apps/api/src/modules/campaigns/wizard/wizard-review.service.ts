@@ -97,6 +97,11 @@ export class WizardReviewService {
       planActive: summary.plan.active,
     });
     const cost = estimateCost(lines, chargeable);
+    // The full price of every message, for display only: the wallet's rules above still decide what is charged and whether it may start.
+    const full = estimateCost(
+      lines,
+      lines.reduce((n, l) => n + l.messages, 0),
+    );
 
     let sufficient = true;
     try {
@@ -117,7 +122,12 @@ export class WizardReviewService {
       recipients: prepared.count.recipients,
       chargeableMessages: chargeable,
       estimatedCostMinor: cost.totalMinor,
-      lines: lines.map((l, i) => ({ ...l, subtotalMinor: cost.subtotals[i]! })),
+      fullCostMinor: full.totalMinor,
+      lines: lines.map((l, i) => ({
+        ...l,
+        subtotalMinor: cost.subtotals[i]!,
+        fullSubtotalMinor: full.subtotals[i]!,
+      })),
       sufficient,
       shortfallMinor: sufficient ? 0 : Math.max(0, cost.totalMinor - summary.balanceMinor),
       topupUrl: summary.topupUrl,

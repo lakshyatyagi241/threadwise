@@ -15,7 +15,7 @@ Three screens in the Campaigns area can message many contacts at once, and they 
 ## Which one to use
 
 - **Campaigns** is the most flexible. The message can be plain text, a rich message with a header, footer, media and buttons, an approved template, or a flow. The audience can be tags, groups, contacts, typed numbers or an uploaded CSV. It can go out now, once later or on repeat, supports an A/B test, and has per-campaign pacing. See [Campaigns](help:campaigns-overview).
-- **Broadcasts** sends one approved template to tags, groups or contacts, now or at a time and timezone you choose. It can share the send across several numbers by weight. See [Broadcasts](help:broadcasts-overview).
+- **Campaigns with a Meta number** (the guided four-step flow) sends one approved template to contacts, groups, segments or a CSV of numbers, now, at a time and time zone you choose, or on repeat. See [Create a campaign](help:campaigns-create).
 - **Scheduled messages** queues a message for later or on a repeat, as plain text, a template, media or a location. It has a **Send a test first** option and lets you pause, resume or run a schedule by hand. It needs the Scheduled messages feature on your plan. See [Scheduled messages](help:scheduled-messages-overview).
 
 A simple rule: if you want to send an approved template to a list once, use Broadcasts. If you want to write a different kind of message, compare two versions, or upload a list of numbers, use Campaigns. If the point is a repeating, pausable schedule, use Scheduled messages.

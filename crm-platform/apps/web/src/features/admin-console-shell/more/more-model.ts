@@ -179,7 +179,7 @@ export const SHORTCUT_PRESETS: Record<string, { href: string; icon: string }> = 
   'test-webhook': { href: '/webhooks', icon: 'webhook' },
   'export-history': { href: '/message-history', icon: 'history' },
   'contact-support': { href: '/support', icon: 'help' },
-  'new-broadcast': { href: '/broadcasts', icon: 'broadcast' },
+  'new-broadcast': { href: '/campaigns/create', icon: 'broadcast' },
   'open-contacts': { href: '/contacts', icon: 'contacts' },
   'pair-device': { href: '/channels/whatsapp', icon: 'phone' },
   'team-inbox': { href: '/inbox', icon: 'inbox' },
