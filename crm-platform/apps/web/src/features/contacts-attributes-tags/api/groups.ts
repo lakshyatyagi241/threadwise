@@ -53,4 +53,4 @@ export const setContactGroups = (contactId: string, groupIds: readonly string[])
     schema: contactGroupsSchema,
   });
 
-export const GROUP_DOT_FALLBACK = '#0f766e';
+export const GROUP_DOT_FALLBACK = '#3214db';

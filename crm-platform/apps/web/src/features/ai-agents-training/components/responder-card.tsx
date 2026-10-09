@@ -98,7 +98,7 @@ function Form({
             checked={meta}
             disabled={!canManage}
             onChange={(e) => setMeta(e.target.checked)}
-            className="size-4 rounded border-border accent-[var(--color-brand,#075e54)]"
+            className="size-4 rounded border-border accent-[var(--color-brand,#3214db)]"
           />
           {t('metaCheck')}
         </label>
@@ -125,7 +125,7 @@ function Form({
                   value={key}
                   checked={mode === key}
                   onChange={() => setMode(key)}
-                  className="accent-[var(--color-brand,#075e54)]"
+                  className="accent-[var(--color-brand,#3214db)]"
                 />
                 <span className="text-[13px] font-semibold">{t(`mode.${key}.label`)}</span>
               </span>
