@@ -54,10 +54,7 @@ export function CampaignsRail({
   const health = list?.deliveryHealth;
 
   return (
-    <aside
-      aria-label={t('label')}
-      className="space-y-3 self-start lg:sticky lg:top-[4.5rem] lg:max-h-[calc(100vh-5.5rem)] lg:overflow-y-auto lg:pb-2"
-    >
+    <aside aria-label={t('label')} className="space-y-3 self-start lg:sticky lg:top-[4.5rem]">
       <div className="rounded-2xl border border-success/30 bg-success/10 p-3 text-xs leading-relaxed">
         <div className="mb-1 flex items-center gap-1.5 font-semibold">
           <span className="size-2 rounded-full bg-success" aria-hidden="true" />
