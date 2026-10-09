@@ -1,12 +1,6 @@
-import { BroadcastHistoryScreen } from '@/features/campaigns/history/components/history-screen';
-import { highlightOf } from '@/features/campaigns/history/lib';
+import { redirect } from 'next/navigation';
 
-/** `?new=<id>` marks the broadcast the wizard just launched. */
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ new?: string | string[] }>;
-}) {
-  const { new: created } = await searchParams;
-  return <BroadcastHistoryScreen highlight={highlightOf(created)} />;
+/** The separate history page is gone from the menu: the Campaigns list shows every campaign and its state. */
+export default function Page(): never {
+  redirect('/campaigns');
 }
