@@ -60,7 +60,7 @@ export function makeConfig(over: Record<string, unknown> = {}) {
     defaultCountryIso: null,
     authPages: {
       variant: 1,
-      login: { accent: '#25d366' },
+      login: { accent: '#a78bfa' },
       register: {},
       forgot: {},
       defaulted: { login: [], register: [], forgot: [] },
