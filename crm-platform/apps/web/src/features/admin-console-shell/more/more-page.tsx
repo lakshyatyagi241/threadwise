@@ -67,7 +67,7 @@ const TONES: Record<Tone, string> = {
   amber2: 'bg-[#FEF3E2] text-[#7B5A14] dark:bg-[#7B5A14]/25 dark:text-[#F3D9A4]',
   violet: 'bg-[#F3E9FF] text-[#5B3D8A] dark:bg-[#5B3D8A]/30 dark:text-[#D9C4F5]',
   sky: 'bg-[#D9E5F2] text-[#13478A] dark:bg-[#13478A]/30 dark:text-[#BBD3EE]',
-  bubble: 'bg-[#DCF8C6] text-primary dark:bg-primary/20',
+  bubble: 'bg-[#e4e2ff] text-primary dark:bg-primary/20',
   neutral: 'bg-muted text-foreground',
   green: 'bg-[#E8F5E9] text-primary dark:bg-primary/15',
   google: 'bg-[#E8F0FE] text-[#1A73E8] dark:bg-[#1A73E8]/25',
@@ -445,7 +445,7 @@ function AffiliateCard({ s }: { s: OverviewStatsResponse | undefined }) {
   return (
     <div className="relative flex min-h-[320px] flex-col overflow-hidden rounded-[14px] bg-brand p-5 text-brand-foreground shadow-md">
       <span className="absolute end-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 font-mono text-[10px]">
-        <span className="size-1.5 animate-pulse rounded-full bg-[#25D366]" />
+        <span className="size-1.5 animate-pulse rounded-full bg-[#7c3aed]" />
         {t('badge')}
       </span>
       <span className="relative z-10 grid size-12 place-items-center rounded-xl bg-white/15">
@@ -471,9 +471,9 @@ function AffiliateCard({ s }: { s: OverviewStatsResponse | undefined }) {
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-2 -end-2 h-32 w-48 opacity-10"
       >
-        <rect x="10" y="40" width="80" height="22" rx="11" fill="#FBFAF6" />
-        <rect x="100" y="68" width="80" height="22" rx="11" fill="#FBFAF6" />
-        <rect x="40" y="96" width="60" height="14" rx="7" fill="#FBFAF6" />
+        <rect x="10" y="40" width="80" height="22" rx="11" fill="#ffffff" />
+        <rect x="100" y="68" width="80" height="22" rx="11" fill="#ffffff" />
+        <rect x="40" y="96" width="60" height="14" rx="7" fill="#ffffff" />
       </svg>
     </div>
   );
@@ -609,7 +609,7 @@ function WhatsNew() {
       <ul className="mt-2.5 space-y-1.5 text-[11.5px] opacity-90">
         {(['inbox', 'ai', 'forecast'] as const).map((k) => (
           <li key={k} className="flex items-center gap-2">
-            <NavIcon name="check" className="size-3 shrink-0 text-[#25D366]" />
+            <NavIcon name="check" className="size-3 shrink-0 text-[#7c3aed]" />
             {t(`items.${k}`)}
           </li>
         ))}

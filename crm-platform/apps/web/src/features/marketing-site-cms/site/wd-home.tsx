@@ -23,25 +23,25 @@ export function HeroHome({ ctx, def, children }: P & { children?: ReactNode }) {
 
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[4%] left-[2%] opacity-30 rotate-[-8deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">🌷 Order shipped</div>
               <div className="text-[9px] text-wa-deep/60 mono text-right">14:08 ✓✓</div>
             </div>
           </div>
           <div className="absolute top-[93%] left-[2%] opacity-25 rotate-[5deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Out for delivery</div>
               <div className="text-[9px] text-ink-500 mono text-right">14:09</div>
             </div>
           </div>
           <div className="absolute top-[4%] right-[2%] opacity-30 rotate-[7deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Track order →</div>
               <div className="text-[9px] text-ink-500 mono text-right">14:10</div>
             </div>
           </div>
           <div className="absolute top-[93%] right-[2%] opacity-25 rotate-[-6deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">+10% off coupon 🎁</div>
               <div className="text-[9px] text-wa-deep/60 mono text-right">14:11 ✓✓</div>
             </div>
@@ -140,16 +140,16 @@ export function TwoDeviceStage({ ctx, def }: P) {
         >
           <defs>
             <linearGradient id="arcg" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stopColor="#075E54" stopOpacity=".0" />
-              <stop offset=".18" stopColor="#075E54" stopOpacity=".5" />
-              <stop offset=".5" stopColor="#25D366" stopOpacity="1" />
-              <stop offset=".82" stopColor="#075E54" stopOpacity=".5" />
-              <stop offset="1" stopColor="#075E54" stopOpacity=".0" />
+              <stop offset="0" stopColor="#3214db" stopOpacity=".0" />
+              <stop offset=".18" stopColor="#3214db" stopOpacity=".5" />
+              <stop offset=".5" stopColor="#7c3aed" stopOpacity="1" />
+              <stop offset=".82" stopColor="#3214db" stopOpacity=".5" />
+              <stop offset="1" stopColor="#3214db" stopOpacity=".0" />
             </linearGradient>
           </defs>
           <path
             d="M 340 360 Q 600 -40, 860 320"
-            stroke="#25D366"
+            stroke="#7c3aed"
             strokeOpacity=".18"
             strokeWidth="10"
             fill="none"
@@ -203,7 +203,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
             <div
               className="hairline rounded-3xl bg-white shadow-2xl overflow-hidden float-y"
               style={{
-                boxShadow: '0 30px 80px -30px rgba(7,94,84,.35), 0 0 0 1px rgba(7,94,84,.05)',
+                boxShadow: '0 30px 80px -30px rgba(50,20,219,.35), 0 0 0 1px rgba(50,20,219,.05)',
               }}
             >
               <div className="flex items-center gap-2 px-4 py-3 hairline-b bg-paper-50">
@@ -379,7 +379,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
               <div
                 className="hairline rounded-2xl overflow-hidden shadow-2xl bg-white"
                 style={{
-                  boxShadow: '0 30px 80px -30px rgba(7,94,84,.45), 0 0 0 1px rgba(7,94,84,.05)',
+                  boxShadow: '0 30px 80px -30px rgba(50,20,219,.45), 0 0 0 1px rgba(50,20,219,.05)',
                 }}
               >
                 <div className="bg-wa-deep text-paper-0 px-4 py-3 flex items-center gap-3">
@@ -523,7 +523,7 @@ export function LiveStream({ ctx, def }: P) {
   void k;
   return (
     <>
-      <div className="mt-20 hairline rounded-3xl lg:rounded-full bg-white relative overflow-hidden px-6 py-3.5 flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-x-5 gap-y-3 shadow-[0_18px_40px_-25px_rgba(7,94,84,0.25)]">
+      <div className="mt-20 hairline rounded-3xl lg:rounded-full bg-white relative overflow-hidden px-6 py-3.5 flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-x-5 gap-y-3 shadow-[0_18px_40px_-25px_rgba(50,20,219,0.25)]">
         <div className="flex items-center gap-2 shrink-0">
           <span className="relative flex w-2.5 h-2.5">
             <span className="absolute inset-0 rounded-full bg-wa-green opacity-60 spark-dot"></span>

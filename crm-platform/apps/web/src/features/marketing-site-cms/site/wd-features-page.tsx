@@ -22,19 +22,19 @@ export function HeroFeatures({ ctx, def }: P) {
 
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[18%] left-[3%] opacity-30 rotate-[-8deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">🌷 Order shipped</div>
               <div className="text-[9px] text-wa-deep/60 mono text-right">14:08 ✓✓</div>
             </div>
           </div>
           <div className="absolute top-[72%] left-[5%] opacity-25 rotate-[5deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Track order →</div>
               <div className="text-[9px] text-ink-500 mono text-right">14:10</div>
             </div>
           </div>
           <div className="absolute top-[20%] right-[4%] opacity-30 rotate-[7deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(7,94,84,0.3)]">
+            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">+10% off coupon 🎁</div>
               <div className="text-[9px] text-ink-500 mono text-right">14:11</div>
             </div>
@@ -709,7 +709,7 @@ export function FeatureBento({ ctx, def }: P) {
                   >
                     <path d="M5 4l4 4-4 4" />
                   </svg>
-                  <span className="brand-tile w-8 h-8 rounded-lg bg-[#25D366] text-white flex items-center justify-center p-1.5">
+                  <span className="brand-tile w-8 h-8 rounded-lg bg-[#7c3aed] text-white flex items-center justify-center p-1.5">
                     <svg viewBox="0 0 24 24" className="w-full h-full" fill="currentColor">
                       <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z" />
                     </svg>
@@ -1214,7 +1214,7 @@ export function FeatureBento({ ctx, def }: P) {
               <div className="feat-mock mt-5 grid grid-cols-3 gap-2">
                 <div className="hairline rounded-xl bg-paper-50 p-2.5 text-center relative">
                   <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full blink-green"></div>
-                  <span className="brand-tile w-9 h-9 rounded-lg bg-[#25D366] text-white flex items-center justify-center mx-auto float-y">
+                  <span className="brand-tile w-9 h-9 rounded-lg bg-[#7c3aed] text-white flex items-center justify-center mx-auto float-y">
                     <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                       <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z" />
                     </svg>

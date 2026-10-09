@@ -4,25 +4,25 @@
 
 /* The public marketing site's palette (WD-CMS-021): colour utilities (bg-ink-950, text-wa-deep, border-paper-200) that follow the editable --site-* tokens set on .cms-site. */
 @theme inline {
-  --color-wa-deep: var(--site-wa-deep, #075e54);
-  --color-wa-teal: var(--site-wa-teal, #128c7e);
-  --color-wa-green: var(--site-wa-green, #25d366);
-  --color-wa-mint: var(--site-wa-mint, #dcf8c6);
-  --color-wa-bubble: var(--site-wa-bubble, #e7ffdb);
+  --color-wa-deep: var(--site-wa-deep, #3214db);
+  --color-wa-teal: var(--site-wa-teal, #5b3fe8);
+  --color-wa-green: var(--site-wa-green, #7c3aed);
+  --color-wa-mint: var(--site-wa-mint, #e4e2ff);
+  --color-wa-bubble: var(--site-wa-bubble, #ede9fe);
   --color-wa-chat: var(--site-wa-chat, #ece5dd);
-  --color-ink-950: var(--site-ink-950, #070d0c);
-  --color-ink-900: var(--site-ink-900, #0b1f1c);
-  --color-ink-800: var(--site-ink-800, #13312d);
-  --color-ink-700: var(--site-ink-700, #1f4540);
-  --color-ink-600: var(--site-ink-600, #3a5a55);
-  --color-ink-500: var(--site-ink-500, #6b807c);
-  --color-ink-400: var(--site-ink-400, #9aa8a4);
-  --color-ink-300: var(--site-ink-300, #c3ccc9);
-  --color-paper-0: var(--site-paper-0, #fbfaf6);
-  --color-paper-50: var(--site-paper-50, #f5f3ec);
-  --color-paper-100: var(--site-paper-100, #efebe0);
-  --color-paper-200: var(--site-paper-200, #e5dfd0);
-  --color-paper-300: var(--site-paper-300, #d4ccb6);
+  --color-ink-950: var(--site-ink-950, #05041a);
+  --color-ink-900: var(--site-ink-900, #0d0b2e);
+  --color-ink-800: var(--site-ink-800, #1e1b4b);
+  --color-ink-700: var(--site-ink-700, #2e2a6b);
+  --color-ink-600: var(--site-ink-600, #4a477f);
+  --color-ink-500: var(--site-ink-500, #6b6a8f);
+  --color-ink-400: var(--site-ink-400, #9a99b8);
+  --color-ink-300: var(--site-ink-300, #c7c6dc);
+  --color-paper-0: var(--site-paper-0, #ffffff);
+  --color-paper-50: var(--site-paper-50, #f7f6ff);
+  --color-paper-100: var(--site-paper-100, #f0efff);
+  --color-paper-200: var(--site-paper-200, #e2e0fa);
+  --color-paper-300: var(--site-paper-300, #cfccf0);
   --color-accent-coral: var(--site-accent-coral, #e87a5d);
   --color-accent-amber: var(--site-accent-amber, #e5a04e);
   --color-accent-sand: var(--site-accent-sand, #d9c9a3);
