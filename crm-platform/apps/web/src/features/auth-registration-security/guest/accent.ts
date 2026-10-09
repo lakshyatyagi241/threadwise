@@ -1,6 +1,6 @@
 /** Brand accent handling for the guest pages (TW-AUTH-021). Pure, so the editor preview and the real pages agree. */
 
-export const DEFAULT_ACCENT = '#25d366';
+export const DEFAULT_ACCENT = '#a78bfa';
 const HEX = /^#[0-9a-fA-F]{6}$/;
 
 /** The configured accent when it is a #rrggbb colour, otherwise the product default. */
@@ -44,7 +44,7 @@ function mixWithWhite(hex: string, t: number): string {
 }
 
 /** The dark of the showcase panels, the background an accent word has to stand out from. */
-const ART_DARK = '#0b1f1c';
+const ART_DARK = '#0d0b2e';
 
 /**
  * The accent as it is drawn on the dark showcase panels. A dark brand colour (a deep teal, say) would sink into

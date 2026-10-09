@@ -17,24 +17,24 @@ describe('accent colour', () => {
     expect(luminance('#ffffff')).toBeCloseTo(1, 5);
   });
 
-  it('defaults to the bright brand green', () => {
-    expect(DEFAULT_ACCENT).toBe('#25d366');
+  it('defaults to the bright brand violet', () => {
+    expect(DEFAULT_ACCENT).toBe('#a78bfa');
   });
   it('keeps a bright accent as is on the dark panels', () => {
-    expect(accentOnDark('#25d366')).toBe('#25d366');
+    expect(accentOnDark('#a78bfa')).toBe('#a78bfa');
     expect(accentOnDark('#facc15')).toBe('#facc15');
   });
   it('lightens a dark accent until it can be read on the dark panels', () => {
     for (const dark of ['#0f766e', '#1e3a8a', '#7f1d1d', '#000000']) {
       const lifted = accentOnDark(dark);
       expect(lifted).not.toBe(dark);
-      // WCAG AA for normal text against the panel colour (#0b1f1c).
+      // WCAG AA for normal text against the panel colour (#0d0b2e).
       const l = luminance(lifted);
-      const bg = luminance('#0b1f1c');
+      const bg = luminance('#0d0b2e');
       expect((l + 0.05) / (bg + 0.05)).toBeGreaterThanOrEqual(4.5);
     }
   });
   it('falls back to the default for an invalid colour', () => {
-    expect(accentOnDark('red')).toBe('#25d366');
+    expect(accentOnDark('red')).toBe('#a78bfa');
   });
 });
