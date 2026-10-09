@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Boutique / Paiements",
+      "title": "Paiements",
+      "subtitle": "Le côté financier des commandes de votre boutique : ce qui est payé, ce qui est en attente et ce qui est en paiement à la livraison.",
+      "listTitle": "Liste des paiements",
+      "loading": "Chargement des paiements",
+      "emptyFilteredTitle": "Aucun paiement ne correspond",
+      "emptyFilteredMessage": "Modifiez les filtres ou réinitialisez-les pour voir tous les paiements.",
+      "resetFilters": "Réinitialiser les filtres",
+      "emptyTitle": "Aucun paiement pour l’instant",
+      "emptyMessage": "Un paiement apparaît ici dès qu’une commande de la boutique est passée. Ouvrez Commandes pour voir vos commandes ou en ajouter une manuellement.",
+      "goToOrders": "Aller aux commandes",
+      "summary": {
+        "loading": "Chargement des totaux des paiements",
+        "orders": "commandes",
+        "collected": "Encaissé",
+        "collectedNone": "Rien d’encaissé pour l’instant."
+      },
+      "filters": {
+        "search": "Rechercher",
+        "searchPlaceholder": "Numéro de commande, client ou référence",
+        "status": "Statut",
+        "allStatuses": "Tous les statuts",
+        "method": "Méthode",
+        "allMethods": "Toutes les méthodes",
+        "prepaid": "Prépayé",
+        "cod": "Paiement à la livraison",
+        "gatewayOption": "Une passerelle...",
+        "gatewayCode": "Code de la passerelle",
+        "gatewayCodePlaceholder": "p. ex. razorpay",
+        "from": "Du",
+        "to": "Au",
+        "rangeInverted": "La date de début est postérieure à la date de fin ; la plage de dates est donc ignorée.",
+        "reset": "Réinitialiser les filtres"
+      },
+      "table": {
+        "caption": "Paiements des commandes de la boutique, du plus récent au plus ancien",
+        "order": "Commande",
+        "customer": "Client",
+        "status": "Statut",
+        "method": "Méthode",
+        "paidVia": "Payé via",
+        "reference": "Référence",
+        "amount": "Montant",
+        "shop": "Boutique",
+        "date": "Date",
+        "methodPrepaid": "Prépayé",
+        "methodCod": "Paiement à la livraison",
+        "via": {
+          "razorpay_link": "Lien Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay dans le chat",
+        "intro": "Permettez aux acheteurs de payer une commande sans quitter WhatsApp (UPI, cartes, banque en ligne, portefeuilles) et encaissez l’argent sur votre propre compte Razorpay, PayU, BillDesk ou Zaakpay.",
+        "indiaOnly": "L’Inde est le seul marché pris en charge pour l’instant : le pays et la devise sont fixés sur l’Inde et l’INR.",
+        "viewOnly": "Vous pouvez voir les configurations WhatsApp Pay mais pas les modifier. Demandez à un administrateur de l’espace de travail l’autorisation de gérer les paiements.",
+        "howTitle": "Comment le configurer",
+        "how1": "Dans WhatsApp Manager, sous Paiements pour l’Inde, créez une méthode de paiement directe et associez votre compte de passerelle.",
+        "how2": "Donnez-lui un nom et copiez ce nom ici. Elle ne peut pas être créée depuis cette application, c’est une étape côté Meta.",
+        "how3": "Enregistrez la configuration, puis ouvrez Commandes et demandez le paiement sur WhatsApp pour n’importe quelle commande.",
+        "how4": "L’acheteur touche Vérifier et payer, paie dans le chat, et la commande est marquée comme payée dès que Meta le confirme.",
+        "listTitle": "Vos configurations",
+        "loading": "Chargement des configurations",
+        "emptyTitle": "Aucune configuration de paiement pour l’instant",
+        "emptyMessage": "Ajoutez-en une sur cette page pour commencer à encaisser dans le chat.",
+        "emptyMessageReadOnly": "Personne n’en a encore ajouté.",
+        "market": "Inde · INR",
+        "autoChargeOn": "Prélèvement auto activé",
+        "active": "Active",
+        "off": "Désactivée",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Configuration enregistrée",
+          "removed": "Configuration supprimée"
+        },
+        "addTitle": "Ajouter une configuration de paiement",
+        "editTitle": "Modifier {name}",
+        "name": "Nom de la configuration",
+        "nameLocked": "Le nom identifie la configuration. Pour la renommer, supprimez-la puis ajoutez-la à nouveau.",
+        "updatesExisting": "Une configuration portant ce nom existe : l’enregistrement la met à jour.",
+        "nameHint": "Doit correspondre exactement au nom de la méthode de paiement directe dans WhatsApp Manager (Paiements, Inde).",
+        "nameInvalid": "Saisissez un nom de 1 à {max} caractères.",
+        "namePlaceholder": "p. ex. mon-razorpay-pay",
+        "gateway": "Passerelle",
+        "activeLabel": "Active",
+        "autoCharge": "Prélever automatiquement les nouvelles commandes",
+        "autoChargeHint": "Envoyer automatiquement la demande de paiement dans le chat dès qu’une commande est passée.",
+        "save": "Enregistrer la configuration",
+        "cancelEdit": "Annuler la modification",
+        "removeTitle": "Supprimer {name} ?",
+        "removeMessage": "Les commandes ne pourront plus être facturées dans le chat avec cette configuration. La méthode de paiement directe dans WhatsApp Manager n’est pas modifiée.",
+        "removeConfirm": "Supprimer la configuration"
+      }
+    }
+  }
+}

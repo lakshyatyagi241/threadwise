@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "提交记录",
+      "backToForm": "返回 {name}",
+      "formFallback": "表单",
+      "count": "{count, plural, =0 {没有提交记录} other {已加载 # 条提交记录}}",
+      "moreAvailable": "还有更多可加载",
+      "tabsLabel": "提交分组",
+      "tabs": {
+        "all": "全部",
+        "needs_attention": "需要处理",
+        "spam": "垃圾内容"
+      },
+      "filters": {
+        "search": "搜索",
+        "searchPlaceholder": "姓名、电子邮件或电话",
+        "status": "状态",
+        "allStatuses": "任何状态",
+        "from": "起始",
+        "to": "结束",
+        "clear": "清除筛选"
+      },
+      "status": {
+        "received": "接收时间",
+        "created": "已创建联系人",
+        "updated": "已更新联系人",
+        "needs_review": "待审核",
+        "awaiting_payment": "等待付款",
+        "paid": "已付款",
+        "failed": "失败",
+        "spam": "垃圾内容"
+      },
+      "reason": {
+        "label": "原因",
+        "todo": "如何处理",
+        "no_contact_point": {
+          "what": "访客未提供可用的电子邮件或电话，因此无法创建联系人。",
+          "todo": "请打开回答，手动为联系人补充缺失信息，或修正表单的字段映射后重试。"
+        },
+        "invalid_phone": {
+          "what": "无法将电话号码识别为有效号码。",
+          "todo": "请打开回答并检查号码，然后在表单接受后重试，或手动添加联系人。"
+        },
+        "plan_limit_reached": {
+          "what": "已达到套餐的联系人上限，因此未创建新联系人。",
+          "todo": "请释放部分联系人或升级套餐，然后重试。"
+        },
+        "submissions_cap": {
+          "what": "已达到套餐的每月提交上限，因此此提交已保存以待审核。",
+          "todo": "请升级套餐或等待下个月，然后重试。"
+        },
+        "spam_score": {
+          "what": "此提交看起来像垃圾内容，已被搁置。",
+          "todo": "如果是真实用户，请打开并手动将其添加为联系人。"
+        },
+        "too_fast": {
+          "what": "提交速度快于真人填写表单的速度，因此已被视为垃圾内容并搁置。",
+          "todo": "如果是真实用户，请打开并手动将其添加为联系人。"
+        },
+        "internal_error": {
+          "what": "处理时我方出现错误。回答已保留。",
+          "todo": "请重试。如果仍然失败，请联系支持并提供提交时间。"
+        },
+        "unknown": {
+          "what": "此提交因当前版本应用无法识别的原因被搁置。",
+          "todo": "请打开查看详情，然后重试或手动处理。"
+        }
+      },
+      "table": {
+        "received": "接收时间",
+        "visitor": "访客",
+        "status": "状态",
+        "contact": "联系人",
+        "company": "公司",
+        "version": "版本",
+        "open": "打开来自 {who} 的提交"
+      },
+      "anonymous": "未提供姓名",
+      "answersRemovedShort": "回答已删除",
+      "versionShort": "v{n}",
+      "noLink": "无",
+      "unnamedContact": "打开联系人",
+      "unnamedCompany": "打开公司",
+      "drawer": {
+        "title": "来自 {who} 的提交",
+        "close": "关闭",
+        "loading": "正在打开提交",
+        "errorTitle": "无法打开此提交。",
+        "errorBody": "请检查网络连接后重试。",
+        "retryLoad": "重试",
+        "auditNote": "打开提交的回答会记录在审计日志中。",
+        "answers": "回答",
+        "noAnswers": "此提交没有回答。",
+        "emptyAnswer": "无回答",
+        "yes": "是",
+        "no": "否",
+        "removedTitle": "回答已删除",
+        "removedBody": "回答已被删除或清除。仅保留此记录，联系人已保留。",
+        "summary": "摘要",
+        "receivedAt": "接收时间",
+        "formVersion": "表单版本",
+        "spamScore": "垃圾内容评分",
+        "error": "错误",
+        "attribution": "来源",
+        "noAttribution": "未捕获来源详情。",
+        "utm": "营销活动标签",
+        "referrer": "来源页（Referrer）",
+        "pageUrl": "页面",
+        "userAgent": "浏览器",
+        "consent": "同意",
+        "consentGiven": "已给予同意",
+        "consentText": "访客看到的文字",
+        "consentVersion": "文字版本",
+        "consentAt": "同意时间",
+        "noConsent": "此表单未请求同意。",
+        "links": "记录",
+        "actions": "操作"
+      },
+      "actions": {
+        "retry": "重试",
+        "retrying": "正在重试",
+        "delete": "删除回答",
+        "deleting": "正在删除",
+        "export": "导出 CSV",
+        "exporting": "正在导出",
+        "exportHintAttention": "请在此分组中选择单一状态进行导出，或选择“全部”。",
+        "exportHintSearch": "导出时忽略搜索文本。",
+        "notSpam": "不是垃圾内容：进行处理"
+      },
+      "confirmDelete": {
+        "title": "删除这些回答？",
+        "message": "这将永久删除此提交的回答。列表中会保留一条记录表明该提交曾经发生，联系人永远不会被删除。",
+        "confirm": "删除回答",
+        "cancel": "取消"
+      },
+      "toast": {
+        "retried": "已重试。提交状态现为：{status}。",
+        "notRetryable": "只有需要审核或失败的提交才能重试。",
+        "purged": "回答已被删除，无需重试。",
+        "retryFailed": "重试未成功，请再试一次。",
+        "deleted": "回答已删除。联系人已保留。",
+        "deleteFailed": "无法删除回答，请重试。",
+        "exported": "CSV 已下载。",
+        "exportTruncated": "导出已截断为最新的 {max} 行。请缩小日期范围以获取其余数据。",
+        "exportFailed": "无法导出，请重试。"
+      },
+      "state": {
+        "loading": "正在加载提交记录",
+        "errorTitle": "无法加载提交记录。",
+        "errorBody": "请检查网络连接后重试。",
+        "retry": "重试",
+        "lockedTitle": "您的套餐不包含表单功能",
+        "lockedBody": "将“表单”应用添加到您的工作区，即可收集和查看提交记录。",
+        "upgrade": "查看套餐",
+        "emptyTitle": "还没有提交记录",
+        "emptyBody": "分享表单链接或将其嵌入您的网站。只要有人提交，每条记录都会显示在这里。",
+        "emptyShare": "分享此表单",
+        "emptyFilteredTitle": "没有匹配的提交记录",
+        "emptyFilteredBody": "没有符合这些筛选条件的内容。清除筛选即可查看全部。",
+        "loadMore": "加载更多",
+        "loadingMore": "正在加载更多"
+      },
+      "cap": {
+        "notice": "由于已达到套餐的每月提交上限，部分提交已保存以待审核。",
+        "upgrade": "升级套餐"
+      }
+    }
+  }
+}

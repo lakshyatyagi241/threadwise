@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Faturalama ve planlar",
+      "coupons": "Kuponlar",
+      "currencies": "Para birimleri",
+      "currenciesGroup": "Yerelleştirme",
+      "affiliate": "Ortaklık programı"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "cancel": "İptal",
+      "dismiss": "Kapat",
+      "admin": "Yönetici",
+      "readOnly": "Bu sayfayı görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
+      "requestId": "İstek kimliği",
+      "errors": {
+        "forbidden": "Bu sayfaya erişiminiz yok.",
+        "request": "İstek tamamlanamadı.",
+        "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin."
+      },
+      "pager": {
+        "label": "Sayfalama",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "page": "Sayfa {n}"
+      }
+    },
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
+      "forbidden": "Bunu yalnızca süper yönetici değiştirebilir.",
+      "notFound": "Bu öğe artık mevcut değil. Silinmiş olabilir.",
+      "conflict": "Bunu az önce başka biri değiştirdi. Sayfayı yenileyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
+      "codeTaken": "Başka bir kupon zaten bu kodu kullanıyor.",
+      "planUnknown": "Seçilen planlardan bir veya daha fazlası artık mevcut değil.",
+      "currencyUnknown": "Etkin para birimlerinden birini seçin.",
+      "currencyTaken": "Bu koda sahip bir para birimi zaten var.",
+      "defaultProtected": "Bu, sistem varsayılan para birimidir. Önce başka bir varsayılan seçin.",
+      "inUse": "Bu para birimi hâlâ {used} tarafından kullanılıyor. Bunun yerine devre dışı bırakın.",
+      "ratesFailed": "Kur sağlayıcısına ulaşılamadı veya kur döndürmedi. Hiçbir kur değiştirilmedi."
+    },
+    "coupons": {
+      "title": "İndirim kuponları",
+      "titleLead": "İndirim",
+      "titleAccent": "kuponları",
+      "crumbHere": "Kuponlar",
+      "eyebrow": "Yönetici · Faturalama · Kupon kodları",
+      "description": "Müşterilerin ödeme sırasında girdiği promosyon kodları. Yüzde veya sabit tutar seçin, geçerlilik aralığı belirleyin, belirli planlarla sınırlayın ve toplam kullanımı sınırlayın.",
+      "new": "Yeni kupon",
+      "kpi": {
+        "total": "Toplam kupon",
+        "totalHint": "katalogda",
+        "active": "Etkin",
+        "activeHint": "kullanım kabul ediyor",
+        "expired": "Süresi dolmuş",
+        "expiredHint": "son kullanma tarihi geçmiş",
+        "redeemed": "Toplam kullanım",
+        "redeemedHint": "tüm zamanların kullanımı"
+      },
+      "filters": {
+        "label": "Kuponları filtrele",
+        "all": "Tümü",
+        "active": "Etkin",
+        "disabled": "Devre dışı",
+        "expired": "Süresi dolmuş",
+        "search": "Koda veya açıklamaya göre bul…",
+        "searchLabel": "Kupon ara"
+      },
+      "table": {
+        "label": "Kuponlar",
+        "code": "Kod",
+        "discount": "İndirim",
+        "uses": "Kullanım",
+        "validity": "Geçerlilik",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "validity": {
+        "forever": "süresiz",
+        "now": "şimdi",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Eşleşen kupon yok.",
+        "hint": "Filtreleri ayarlayın veya sıfırlayın ya da",
+        "create": "ilkini oluşturun"
+      },
+      "footer": "{total} kuponun {from}–{to} arası gösteriliyor",
+      "pager": {
+        "label": "Sayfalama",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "page": "Sayfa {n}"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "menu": "İşlemler",
+        "toggle": "{code} kuponunu aç veya kapat"
+      },
+      "toasts": {
+        "created": "Kupon oluşturuldu.",
+        "updated": "Kupon güncellendi.",
+        "activated": "Etkinleştirildi.",
+        "deactivated": "Devre dışı bırakıldı.",
+        "deleted": "Kupon kaldırıldı."
+      },
+      "delete": {
+        "title": "Kuponu sil",
+        "body": "{code} kuponu silinsin mi? Kuponu daha önce kullanan çalışma alanları indirimlerini korur.",
+        "confirm": "Evet, sil"
+      },
+      "editor": {
+        "notFoundTitle": "Kupon bulunamadı",
+        "notFoundBody": "Bu adreste kupon yok. Silinmiş olabilir veya bağlantı yanlış olabilir.",
+        "backToList": "Kuponlara dön",
+        "crumbNew": "Yeni",
+        "eyebrowNew": "Yönetici · Faturalama · Kupon kodları · Oluştur",
+        "eyebrowEdit": "Yönetici · Faturalama · Kupon kodları · Değiştir",
+        "titleLead": "Yeni",
+        "titleAccent": "kupon",
+        "descriptionNew": "/checkout sırasında kullanılan promosyon kodları. Yüzde veya sabit tutar seçin, bir plana veya tüm planlara bağlayın ve isteğe bağlı olarak geçerlilik aralığı verin.",
+        "redeemed": "{used}{max} kez kullanıldı",
+        "redeemedMax": " / {max}",
+        "expires": "{when} tarihinde sona erer",
+        "active": "Etkin",
+        "disabled": "Devre dışı",
+        "create": "Kupon oluştur",
+        "saveChanges": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor",
+        "cancel": "İptal",
+        "problemsTitle": "Bazı alanlar dikkat gerektiriyor:",
+        "problems": {
+          "code": "Kod: en fazla 64 karakterlik bir kod girin.",
+          "description": "Açıklama: en fazla 255 karakter.",
+          "adminNote": "Yönetici notu: en fazla 1000 karakter.",
+          "type": "Tür: yüzde veya sabit tutar seçin.",
+          "amount": "Tutar: 10 veya 12.5 gibi bir sayı girin.",
+          "maxDiscountAmount": "Azami indirim sınırı: bir sayı girin veya boş bırakın.",
+          "currencyCode": "Para birimi kilidi: en fazla 8 karakter.",
+          "minOrderAmount": "Asgari sipariş tutarı: bir sayı girin veya boş bırakın.",
+          "applicablePlans": "Geçerli planlar: listeden plan seçin.",
+          "startsAt": "Başlangıç: geçerli bir tarih ve saat girin.",
+          "expiresAt": "Bitiş: başlangıçtan önce olmayan geçerli bir tarih ve saat girin.",
+          "maxUses": "Azami toplam kullanım: 1 veya daha büyük bir tam sayı ya da boş.",
+          "perUserLimit": "Kullanıcı başına sınır: 1 veya daha büyük bir tam sayı ya da boş."
+        },
+        "sections": {
+          "identity": "Kimlik",
+          "discount": "İndirim",
+          "eligibility": "Uygunluk",
+          "limits": "Sınırlar ve davranış"
+        },
+        "fields": {
+          "code": "Kod",
+          "codeHint": "Büyük harfle kaydedilir. Müşteriler ödeme yaparken bu kodu aynen girer.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Açıklama",
+          "descriptionNote": "(müşteriye gösterilir)",
+          "descriptionPlaceholder": "Hoş geldin teklifi: ilk aya %10 indirim",
+          "adminNote": "Yönetici notu",
+          "adminNoteNote": "(dahili, gösterilmez)",
+          "adminNotePlaceholder": "Tatil indirimi grubu · Slack #marketing · kampanyayla biter",
+          "activeTitle": "Etkin",
+          "activeHint": "Müşteriler ödeme sırasında uygulayabilir",
+          "type": "Tür",
+          "typePercent": "Yüzde (%)",
+          "typeFixed": "Sabit tutar",
+          "amount": "Tutar",
+          "amountHint": "Yüzde kuponlarında 10, %10 demektir. Sabit kuponlarda 10, 10 para birimi demektir.",
+          "maxDiscount": "Azami indirim sınırı",
+          "maxDiscountNote": "(yalnızca yüzde türü)",
+          "maxDiscountPlaceholder": "boş = sınır yok",
+          "maxDiscountHint": "Örneğin, 50 $ üst sınırıyla %20 indirim.",
+          "currency": "Para birimi kilidi",
+          "currencyAny": "Herhangi bir para birimi",
+          "currencyHint": "Kullanımı tek bir para birimiyle sınırlayın (sabit tutarlı kuponlar için geçerlidir).",
+          "minOrder": "Asgari sipariş tutarı",
+          "minOrderPlaceholder": "0 = asgari yok",
+          "plans": "Geçerli planlar",
+          "plansNote": "(boş = herhangi bir plan)",
+          "plansPlaceholder": "Bir veya daha fazla plan seçin (boş = herhangi bir plan)...",
+          "plansHint": "Listeyi daraltmak için yazmaya başlayın, eklemek için seçin, birini çıkarmak için etiketteki × simgesini kullanın.",
+          "plansEmpty": "Seçilecek başka plan yok.",
+          "plansRemove": "{name} öğesini kaldır",
+          "plansClear": "Tüm planları kaldır",
+          "startsAt": "Başlangıç",
+          "startsAtHint": "Boş = hemen kullanılabilir.",
+          "expiresAt": "Bitiş",
+          "expiresAtHint": "Boş = süresiz.",
+          "maxUses": "Azami toplam kullanım",
+          "unlimitedPlaceholder": "boş = sınırsız",
+          "maxUsesHint": "Tüm müşteriler genelinde.",
+          "perUser": "Kullanıcı başına sınır",
+          "perUserHint": "Her müşteri için izin verilen kullanım sayısı.",
+          "firstPurchaseTitle": "Yalnızca ilk satın alma",
+          "firstPurchaseHint": "Yalnızca ücretli sipariş vermemiş çalışma alanları",
+          "stackableTitle": "Diğer kuponlarla birleştirilebilir",
+          "stackableHint": "Müşterilerin ödeme sırasında başka bir etkin kodla birlikte kullanmasına izin verir"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Platform para birimleri",
+      "titleLead": "Platform",
+      "titleAccent": "para birimleri",
+      "crumbGroup": "Sistem",
+      "crumbGroup2": "Yerelleştirme",
+      "crumbHere": "Para birimleri",
+      "eyebrow": "Yönetici · Platform · Yerelleştirme",
+      "description": "Çalışma alanlarının seçebileceği para birimlerini yönetin. Döviz kurları USD'ye göre saklanır. Varsayılanı değiştirmek her kullanıcı panosuna, faturaya ve cüzdan görünümüne yansır.",
+      "fetchRates": "Canlı kurları getir",
+      "fetching": "Getiriliyor",
+      "add": "Para birimi ekle",
+      "kpi": {
+        "total": "Toplam",
+        "totalHint": "para birimi yapılandırıldı",
+        "active": "Etkin",
+        "activeHint": "çalışma alanlarına görünür",
+        "default": "Sistem varsayılanı",
+        "defaultHint": "yeni oluşturulan çalışma alanları için kullanılır",
+        "inactive": "Etkin değil",
+        "inactiveHint": "çalışma alanı ayarlarında sunulmaz"
+      },
+      "defaultCard": {
+        "eyebrow": "Sistem varsayılanı",
+        "title": "Tüm platform için yedek para birimi",
+        "body": "Para birimi seçmemiş her çalışma alanı bunu kullanır. Kaydetmek önbelleği hemen temizler, böylece değişiklik uygulamanın her yerinde bir sonraki sayfa yüklemesinde görünür.",
+        "select": "Varsayılan para birimi",
+        "set": "Varsayılan yap",
+        "setting": "Kaydediliyor"
+      },
+      "search": "Kod, ad veya simge…",
+      "searchLabel": "Para birimi ara",
+      "searchButton": "Ara",
+      "table": {
+        "label": "Para birimleri",
+        "code": "Kod",
+        "name": "Ad",
+        "symbol": "Simge",
+        "rate": "Kur (1 USD →)",
+        "decimals": "Ondalık",
+        "active": "Etkin",
+        "actions": "İşlemler"
+      },
+      "defaultBadge": "Varsayılan",
+      "rate": "1 USD → {rate}",
+      "on": "Açık",
+      "off": "Kapalı",
+      "empty": {
+        "none": "Henüz para birimi yok.",
+        "noMatch": "\"{q}\" için eşleşme yok."
+      },
+      "footer": "{total} para biriminin {from}–{to} arası gösteriliyor",
+      "actions": {
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "toggle": "{code} para birimini aç veya kapat"
+      },
+      "toasts": {
+        "added": "Para birimi eklendi.",
+        "updated": "Para birimi güncellendi.",
+        "activated": "Etkinleştirildi.",
+        "deactivated": "Devre dışı bırakıldı.",
+        "deleted": "Para birimi kaldırıldı.",
+        "defaultSet": "Varsayılan para birimi {code} olarak ayarlandı.",
+        "ratesUpdated": "{provider} kaynağından {count} para birimi güncellendi."
+      },
+      "delete": {
+        "title": "Para birimini sil",
+        "body": "{code} silinsin mi? Bu para biriminde kayıtlı fiyatlar sahipsiz kalır.",
+        "confirm": "Evet, sil"
+      },
+      "form": {
+        "addTitle": "Para birimi ekle",
+        "editTitle": "{code} öğesini düzenle",
+        "name": "Ad *",
+        "namePlaceholder": "İsviçre Frangı",
+        "code": "ISO kodu *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Para birimi oluşturulduktan sonra kod asla değişmez.",
+        "symbol": "Simge",
+        "symbolPlaceholder": "Fr",
+        "precision": "Ondalık *",
+        "rate": "Dönüşüm kuru (1 USD = ?) *",
+        "active": "Hemen etkin",
+        "save": "Para birimi ekle",
+        "saveChanges": "Değişiklikleri kaydet",
+        "cancel": "İptal",
+        "problemsTitle": "Bazı alanlar dikkat gerektiriyor:",
+        "problems": {
+          "name": "Ad: en fazla 120 karakterlik bir ad girin.",
+          "code": "ISO kodu: CHF gibi üç harf.",
+          "symbol": "Simge: en fazla 20 karakter.",
+          "precision": "Ondalık: 0 ile 6 arasında bir tam sayı.",
+          "exchangeRate": "Döviz kuru: en az 0.000001 olan bir sayı."
+        },
+        "eyebrow": "Yeni kayıt",
+        "rateHint": "Değerleri open.er-api.com'dan önceden doldurmak için yukarıdaki \"Canlı kurları getir\" seçeneğini kullanın.",
+        "editEyebrow": "Kaydı düzenle"
+      },
+      "catalog": {
+        "eyebrow": "Katalog",
+        "title": "Tüm para birimleri"
+      }
+    },
+    "affiliate": {
+      "title": "Ortaklık programı",
+      "subtitle": "Bağlantınızı paylaşın ve getirdiğiniz çalışma alanlarını takip edin.",
+      "common": {
+        "dismiss": "Kapat"
+      },
+      "states": {
+        "loading": "Ortaklık verileriniz yükleniyor"
+      },
+      "header": {
+        "codeLabel": "Yönlendirme kodunuz",
+        "noCode": "Henüz kod yok",
+        "linkLabel": "Yönlendirme bağlantınız",
+        "copyLink": "Bağlantıyı kopyala",
+        "copied": "Bağlantı kopyalandı.",
+        "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın.",
+        "reward": "İlk ödemesini yapan her yönlendirilen çalışma alanı size {amount} kazandırır.",
+        "rewardMessages": "Bu, {count, plural, one {# mesajı} other {# mesajı}} kapsar.",
+        "rewardNone": "Program şu anda yeni yönlendirmeler için ödeme yapmıyor. Kodunuz ve geçmişiniz burada kalır."
+      },
+      "filters": {
+        "label": "Aralık ve dışa aktarma",
+        "range": "Aralık",
+        "ranges": {
+          "7d": "Son 7 gün",
+          "30d": "Son 30 gün",
+          "90d": "Son 90 gün",
+          "all": "Tüm zamanlar"
+        },
+        "search": "Yönlendirmeleri ara",
+        "searchPlaceholder": "Ad, e-posta veya kod",
+        "reset": "Sıfırla",
+        "export": "CSV dışa aktar",
+        "exporting": "Dosya hazırlanıyor",
+        "exported": "{fileName} indirildi."
+      },
+      "kpi": {
+        "inRange": "Aralıktaki yönlendirmeler",
+        "vsPrevious": "önceki döneme göre {delta}",
+        "earned": "Kazanılan, toplam",
+        "last30": "Yönlendirmeler, son 30 gün",
+        "last30Earned": "Son 30 günde {amount} kazanıldı",
+        "average": "Yönlendirme başına ortalama"
+      },
+      "chart": {
+        "title": "Zamana göre yönlendirmeler",
+        "label": "Yönlendirmeler çubuk, kazanılan krediler çizgi olarak, döneme göre",
+        "buckets": {
+          "daily": "Günlük",
+          "weekly": "Haftalık",
+          "monthly": "Aylık"
+        },
+        "signups": "Yönlendirmeler",
+        "credits": "Kazanılan krediler",
+        "bucket": "Dönem",
+        "empty": "Bu aralıkta henüz yönlendirme yok."
+      },
+      "topCodes": {
+        "title": "En çok kullanılan kodlar",
+        "referrals": "{count, plural, one {# yönlendirme} other {# yönlendirme}}",
+        "empty": "Bu aralıkta hiçbir kod kullanılmadı."
+      },
+      "payouts": {
+        "title": "Son ödemeler",
+        "balanceAfter": "{amount} sonrası bakiye",
+        "empty": "Henüz ödeme yok. Yönlendirilen bir çalışma alanı ilk ödemesini yaptığında ödül cüzdanınıza eklenir."
+      },
+      "table": {
+        "title": "Yönlendirmeler",
+        "label": "Seçilen aralıktaki yönlendirmeler",
+        "when": "Zaman",
+        "referee": "Yönlendirilen",
+        "code": "Kullanılan kod",
+        "credits": "Kazanılan krediler",
+        "status": "Durum",
+        "transaction": "Cüzdan işlemi",
+        "noName": "Adsız kullanıcı",
+        "paid": "Ödendi",
+        "pending": "Beklemede",
+        "noTransaction": "Cüzdan işlemi yok",
+        "pagination": "Yönlendirme sayfaları",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "showing": "{total} kayıttan {from}-{to} arası gösteriliyor"
+      },
+      "empty": {
+        "noneTitle": "Henüz yönlendirme yok",
+        "noneBody": "Bağlantınızı paylaşın. Bağlantınızla kaydolanlar burada görünür.",
+        "filteredTitle": "Eşleşen yönlendirme yok",
+        "filteredBody": "Başka bir aralık deneyin veya aramayı temizleyin."
+      },
+      "errors": {
+        "unauthenticated": "Oturumunuz sona erdi. Ortaklık verilerinizi görmek için yeniden giriş yapın.",
+        "forbidden": "Bu sayfaya erişiminiz yok.",
+        "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+        "validation": "Bu filtreler uygulanamadı. Sıfırlayıp tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "generic": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
+        "requestId": "İstek kimliği",
+        "retry": "Tekrar dene"
+      }
+    }
+  }
+}

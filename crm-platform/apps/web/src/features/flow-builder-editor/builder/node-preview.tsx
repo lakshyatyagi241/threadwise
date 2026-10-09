@@ -1,13 +1,15 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import {
-  flbCondSummary,
   flbSanitizeConditionGroup,
   type FlbBuilderContext,
   type FlowNode,
   type FlbNodeData,
 } from '@crm/contracts';
+import { condSummary } from '../lib/contract-text';
+import { useFlb } from '../lib/msg';
 import { findTemplate } from '../lib/templates';
 import { FlowImage } from './flow-image';
 
@@ -56,7 +58,6 @@ const COND_OP: Record<string, string> = {
   not_contains: '⊄',
   gt: '>',
   lt: '<',
-  exists: 'is set',
 };
 
 const CHIP: Record<string, string> = {
@@ -69,16 +70,18 @@ const CHIP: Record<string, string> = {
 
 /** What a node card shows under its header: a read-only summary of the node's data (never executes anything). */
 export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderContext }): ReactNode {
+  const tp = useTranslations('flb.builder.shell.nodePreview');
+  const tf = useFlb();
   const d: FlbNodeData = node.data ?? {};
   switch (node.type) {
     case 'trigger':
       return (
         <div className="px-3 pt-2 pb-2 text-[11.5px] text-[var(--flb-ink-700)]">
-          <Muted>When </Muted>
+          <Muted>{tp('when')} </Muted>
           <span className="font-mono">{str(d.kind) || 'manual'}</span>
           {d.kind === 'keyword' ? (
             <div className="mt-0.5 truncate font-mono text-[11px] text-foreground">
-              {d.keywordMode === 'any' ? '— any message —' : str(d.keywords) || '⚠ no keywords set'}
+              {d.keywordMode === 'any' ? tp('anyMessage') : str(d.keywords) || tp('noKeywords')}
             </div>
           ) : null}
         </div>
@@ -87,24 +90,24 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <Box>
           <div className="bubble wa whitespace-pre-wrap break-words">
-            {trunc(str(d.text) || 'Type a message…', 140)}
+            {trunc(str(d.text) || tp('typeMessage'), 140)}
           </div>
         </Box>
       );
     case 'template': {
       const t = findTemplate(ctx.templates, d.tpl);
-      const first = t ? str(t.body).split('\n')[0] : 'pick a template…';
+      const first = t ? str(t.body).split('\n')[0] : tp('pickTemplateHint');
       return (
         <Box>
           <div className="bubble">
             <div className="mb-0.5 font-mono text-[10.5px] text-muted-foreground">
-              {str(d.tpl) || 'pick template'}
+              {str(d.tpl) || tp('pickTemplate')}
             </div>
             {t?.header ? <div className="text-[11.5px] font-semibold">{t.header}</div> : null}
             <div className="truncate">{first}</div>
             {t && t.buttons.length ? (
               <div className="mt-1 text-[10px] text-muted-foreground">
-                {t.buttons.length} button(s)
+                {tp('buttonCount', { count: t.buttons.length })}
               </div>
             ) : null}
           </div>
@@ -115,7 +118,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const kind = str(d.kind) || 'image';
       const url = str(d.url);
       const hasFile = !!(url || str(d.filename).trim());
-      const name = str(d.filename) || (url ? lastSeg(url) : '') || 'no file selected';
+      const name = str(d.filename) || (url ? lastSeg(url) : '') || tp('noFile');
       if (kind === 'image' && url) {
         return (
           <Box>
@@ -176,7 +179,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       if (replies.length === 0) {
         return (
           <div className="px-3 pt-2 pb-2 text-[11.5px] italic text-muted-foreground">
-            No replies yet — open inspector to add
+            {tp('noReplies')}
           </div>
         );
       }
@@ -186,7 +189,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             const type = str(r.type) || 'text';
             const lbl =
               type === 'text'
-                ? cut(str(r.text), 38) || 'empty text'
+                ? cut(str(r.text), 38) || tp('emptyText')
                 : str(r.filename) || (r.url ? lastSeg(str(r.url)) : type);
             return (
               <div
@@ -201,7 +204,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           })}
           {replies.length > 5 ? (
             <div className="px-2 text-[10.5px] italic text-muted-foreground">
-              + {replies.length - 5} more…
+              {tp('moreReplies', { count: replies.length - 5 })}
             </div>
           ) : null}
         </div>
@@ -210,14 +213,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     case 'buttons':
       return (
         <Box pb="pb-1">
-          <div className="bubble wa">{str(d.prompt) || 'Prompt…'}</div>
+          <div className="bubble wa">{str(d.prompt) || tp('prompt')}</div>
         </Box>
       );
     case 'list': {
       const n = asArr(d.options).length;
       return (
         <Box>
-          <div className="bubble wa">{str(d.prompt) || 'Prompt…'}</div>
+          <div className="bubble wa">{str(d.prompt) || tp('prompt')}</div>
           <div className="mt-1 inline-flex items-center gap-1 rounded border border-border bg-background px-2 py-1 text-[11px] text-brand">
             <svg
               viewBox="0 0 16 16"
@@ -228,11 +231,11 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             >
               <path d="M2.5 4h11M2.5 8h11M2.5 12h11" />
             </svg>
-            <span className="font-semibold">{str(d.button) || 'View options'}</span>
+            <span className="font-semibold">{str(d.button) || tp('viewOptions')}</span>
           </div>
           {n ? (
             <div className="mt-1 text-[10px] text-muted-foreground">
-              {n} item(s) — shown after tap
+              {tp('itemsAfterTap', { count: n })}
             </div>
           ) : null}
         </Box>
@@ -242,11 +245,9 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const exp = asArr(d.options);
       return (
         <div className={`px-3 pt-2.5 ${exp.length ? 'pb-1' : 'pb-2'}`}>
-          <div className="bubble wa">{str(d.prompt) || "What's your name?"}</div>
+          <div className="bubble wa">{str(d.prompt) || tp('askDefault')}</div>
           {exp.length === 0 ? (
-            <div className="mt-1.5 text-[10.5px] text-muted-foreground">
-              customer&apos;s reply → next node
-            </div>
+            <div className="mt-1.5 text-[10.5px] text-muted-foreground">{tp('customerReply')}</div>
           ) : null}
         </div>
       );
@@ -255,14 +256,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       // A nested tree (beyond WaDesk) wins: one parenthesised line, cut so the card stays small.
       const tree = flbSanitizeConditionGroup(d.conditionGroup);
       if (tree) {
-        const line = flbCondSummary(tree);
+        const line = condSummary(tf, tree);
         return (
           <div
             title={line}
             className="px-3 pt-2 pb-1.5 text-[11px] leading-snug text-[var(--flb-ink-700)]"
           >
-            <span className="font-mono text-[10px] text-muted-foreground">IF </span>
-            <Mono>{tree.items.length === 0 ? 'No conditions set' : condCardText(line)}</Mono>
+            <span className="font-mono text-[10px] text-muted-foreground">{tp('if')} </span>
+            <Mono>{tree.items.length === 0 ? tp('noConditions') : condCardText(line)}</Mono>
           </div>
         );
       }
@@ -271,12 +272,12 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       if (conds.length === 0)
         return (
           <div className="px-3 pt-2 pb-1.5 text-[11.5px] italic text-muted-foreground">
-            No conditions set
+            {tp('noConditions')}
           </div>
         );
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11px] leading-snug text-[var(--flb-ink-700)]">
-          <span className="font-mono text-[10px] text-muted-foreground">IF </span>
+          <span className="font-mono text-[10px] text-muted-foreground">{tp('if')} </span>
           {conds.map((c, i) => (
             <span key={i}>
               {i > 0 ? (
@@ -288,7 +289,9 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               ) : null}
               <Mono>{`{{${str(c.variable) || '?'}}}`}</Mono>
               <span className="mx-1 text-muted-foreground">
-                {COND_OP[str(c.operator) || 'equals'] ?? str(c.operator)}
+                {str(c.operator) === 'exists'
+                  ? tp('opExists')
+                  : (COND_OP[str(c.operator) || 'equals'] ?? str(c.operator))}
               </span>
               <Mono>{str(c.value) || '?'}</Mono>{' '}
             </span>
@@ -299,7 +302,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     case 'delay':
       return (
         <Line>
-          <Muted>Wait </Muted>
+          <Muted>{tp('wait')} </Muted>
           <Mono cls="text-[13px]">
             {str(d.amount ?? 5)} {str(d.unit) || 'min'}
           </Mono>
@@ -322,7 +325,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           <span className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase text-[var(--flb-ink-700)]">
             JS
           </span>
-          <Muted>save →</Muted>
+          <Muted>{tp('saveTo')}</Muted>
           <Mono cls="text-[11px]">{`{{${str(d.save) || 'result'}}}`}</Mono>
         </div>
       );
@@ -331,7 +334,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         <Box>
           <div className="bubble">🤖 {str(d.model) || 'gpt-4o-mini'}</div>
           <div className="mt-1.5 line-clamp-2 text-[10.5px] text-muted-foreground">
-            {str(d.prompt) || 'You are a friendly support assistant…'}
+            {str(d.prompt) || tp('aiPromptDefault')}
           </div>
         </Box>
       );
@@ -357,27 +360,32 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             {name}
           </span>
           {!cached && d.tag ? (
-            <span className="text-[10px] italic text-muted-foreground">new</span>
+            <span className="text-[10px] italic text-muted-foreground">{tp('tagNew')}</span>
           ) : null}
         </div>
       );
     }
     case 'assign': {
       const team = ctx.teams.find((t) => t.id === str(d.team));
-      const teamLabel = team ? team.name : d.team ? `Team #${str(d.team)}` : '— pick team —';
+      const teamLabel = team
+        ? team.name
+        : d.team
+          ? tp('teamNumber', { id: str(d.team) })
+          : tp('pickTeam');
       const agent =
         d.userId && team
-          ? (team.members.find((m) => m.id === str(d.userId))?.name ?? `agent #${str(d.userId)}`)
+          ? (team.members.find((m) => m.id === str(d.userId))?.name ??
+            tp('agentNumber', { id: str(d.userId) }))
           : null;
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="flex items-center gap-2">
-            <Muted>Team</Muted>
+            <Muted>{tp('team')}</Muted>
             <Mono cls="truncate">{teamLabel}</Mono>
           </div>
           {agent ? (
             <div className="mt-0.5 flex items-center gap-2">
-              <Muted>Agent</Muted>
+              <Muted>{tp('agent')}</Muted>
               <Mono cls="truncate">{agent}</Mono>
             </div>
           ) : null}
@@ -391,10 +399,10 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     }
     case 'subflow': {
       const sub = d.flow ? ctx.flows.find((f) => f.id === str(d.flow)) : null;
-      const lbl = d.flow ? (sub?.name ?? `Flow #${str(d.flow)}`) : 'pick flow…';
+      const lbl = d.flow ? (sub?.name ?? tp('flowNumber', { id: str(d.flow) })) : tp('pickFlow');
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <Muted>▶ run </Muted>
+          <Muted>{tp('run')} </Muted>
           <Mono cls="truncate">{lbl}</Mono>
         </div>
       );
@@ -432,7 +440,11 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
                 </svg>
                 <span className="flex-1 truncate font-medium">
                   {str(a.label) ||
-                    (t === 'copy' ? 'Copy' : t === 'phone' || t === 'call_now' ? 'Call' : 'Visit')}
+                    (t === 'copy'
+                      ? tp('ctaCopy')
+                      : t === 'phone' || t === 'call_now'
+                        ? tp('ctaCall')
+                        : tp('ctaVisit'))}
                 </span>
                 <span className="font-mono text-[9.5px] uppercase opacity-70">{t}</span>
               </div>
@@ -453,7 +465,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               >
                 <path d="M8 1.5C5.5 1.5 3.5 3.4 3.5 5.7c0 3 4.5 8.8 4.5 8.8s4.5-5.8 4.5-8.8C12.5 3.4 10.5 1.5 8 1.5zM8 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
               </svg>
-              <span className="font-medium">{str(d.title) || 'Location'}</span>
+              <span className="font-medium">{str(d.title) || tp('location')}</span>
             </div>
             <div className="truncate text-[10.5px] text-muted-foreground">
               {str(d.address) || '—'}
@@ -464,12 +476,16 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     case 'poll':
       return (
         <Box pb="pb-1">
-          <div className="bubble">📊 {str(d.question) || 'Poll question'}</div>
+          <div className="bubble">📊 {str(d.question) || tp('pollQuestion')}</div>
         </Box>
       );
     case 'chatbot': {
       const agent = ctx.agents.find((a) => a.id === str(d.bot));
-      const lbl = agent ? agent.name : d.bot ? `Agent #${str(d.bot)}` : 'pick agent…';
+      const lbl = agent
+        ? agent.name
+        : d.bot
+          ? tp('chatAgentNumber', { id: str(d.bot) })
+          : tp('pickAgent');
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="flex items-center gap-1.5">
@@ -497,7 +513,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       if (items.length === 0)
         return (
           <div className="px-3 pt-2 pb-2 text-[11.5px] italic text-muted-foreground">
-            No products picked — open inspector
+            {tp('noProducts')}
           </div>
         );
       return (
@@ -524,17 +540,17 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               <span className="ml-1 text-[10.5px] text-muted-foreground">+{items.length - 3}</span>
             ) : null}
           </div>
-          <Count>{items.length} product(s)</Count>
+          <Count>{tp('productCount', { count: items.length })}</Count>
         </div>
       );
     }
     case 'book_appointment':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <Muted>offer </Muted>
-          <Mono>{str(d.slotCount) || 5} slot(s)</Mono>
+          <Muted>{tp('offer')} </Muted>
+          <Mono>{tp('slotCount', { count: str(d.slotCount) || 5 })}</Mono>
           <div className="truncate text-[10.5px] text-muted-foreground">
-            {cut(str(d.prompt) || 'Pick a time…', 40)}
+            {cut(str(d.prompt) || tp('pickTime'), 40)}
           </div>
         </div>
       );
@@ -542,18 +558,39 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <Count>
-            {str(d.durationMinutes) || 30} min · lead {str(d.leadMinutes) || 5} min
+            {tp('meetTiming', {
+              duration: str(d.durationMinutes) || 30,
+              lead: str(d.leadMinutes) || 5,
+            })}
           </Count>
-          <div className="truncate text-[12px] text-foreground">{str(d.title) || 'Meeting'}</div>
+          <div className="truncate text-[12px] text-foreground">
+            {str(d.title) || tp('meeting')}
+          </div>
         </div>
       );
     case 'wa_form': {
       const form = ctx.forms.find((f) => f.id === str(d.formId));
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <Count>{form ? form.title : `form #${str(d.formId) || '?'}`}</Count>
+          <Count>{form ? form.title : tp('formNumber', { id: str(d.formId) || '?' })}</Count>
           <div className="truncate text-[12px] text-foreground">
-            {str(d.bodyText) || 'Tap to open form'}
+            {str(d.bodyText) || tp('tapToOpenForm')}
+          </div>
+        </div>
+      );
+    }
+    case 'api_library': {
+      const api = str(d.apiName);
+      const overrides = asArr(d.inputs).length;
+      return (
+        <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
+          <Count>
+            {api ? api : '(pick an API)'}
+            {overrides > 0 ? ` · ${overrides} input${overrides === 1 ? '' : 's'}` : ''}
+          </Count>
+          <div className="truncate text-[12px] text-foreground">
+            <Muted>save →</Muted>{' '}
+            <Mono cls="text-[11px]">{`{{${str(d.save) || 'api_response'}}}`}</Mono>
           </div>
         </div>
       );
@@ -563,12 +600,15 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <Count>
             {(str(d.mode) || 'write').toUpperCase()} ·{' '}
-            {d.sheetId ? `${str(d.sheetId).slice(0, 10)}…` : '(pick sheet)'}
+            {d.sheetId ? `${str(d.sheetId).slice(0, 10)}…` : tp('pickSheet')}
           </Count>
           <div className="truncate text-[12px] text-foreground">
             {d.mode === 'read'
-              ? `lookup ${str(d.matchColumn) || '?'} = ${str(d.matchValue) || '?'}`
-              : `append ${asArr(d.columns).length} col(s)`}
+              ? tp('lookup', {
+                  column: str(d.matchColumn) || '?',
+                  value: str(d.matchValue) || '?',
+                })
+              : tp('append', { count: asArr(d.columns).length })}
           </div>
         </div>
       );
@@ -576,19 +616,23 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <Count>
-            {d.templateId ? `template ${str(d.templateId).slice(0, 10)}…` : '(pick template)'}
+            {d.templateId
+              ? tp('templateRef', { id: str(d.templateId).slice(0, 10) })
+              : tp('pickTemplateParen')}
           </Count>
           <div className="truncate text-[12px] text-foreground">
-            {str(d.newTitle) || 'Document'}
+            {str(d.newTitle) || tp('document')}
           </div>
         </div>
       );
     case 'google_form':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <Count>{d.formId ? `form ${str(d.formId).slice(0, 10)}…` : '(pick form)'}</Count>
+          <Count>
+            {d.formId ? tp('formRef', { id: str(d.formId).slice(0, 10) }) : tp('pickForm')}
+          </Count>
           <div className="truncate text-[12px] text-foreground">
-            {str(d.bodyText) || 'Send form link'}
+            {str(d.bodyText) || tp('sendFormLink')}
           </div>
         </div>
       );
@@ -597,11 +641,15 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <Count>
-            {d.action === 'move' ? 'MOVE' : 'CREATE'} ·{' '}
-            {stage ? stage.name : d.stageId ? `stage ${str(d.stageId)}` : '(pick stage)'}
+            {d.action === 'move' ? tp('dealMove') : tp('dealCreate')} ·{' '}
+            {stage
+              ? stage.name
+              : d.stageId
+                ? tp('stageRef', { id: str(d.stageId) })
+                : tp('pickStage')}
           </Count>
           <div className="truncate text-[12px] text-foreground">
-            {str(d.dealName) || 'New deal'}
+            {str(d.dealName) || tp('newDeal')}
           </div>
         </div>
       );
@@ -611,14 +659,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <Box>
           <div className="bubble wa whitespace-pre-wrap break-words">
-            {cut(str(d.text) || 'Say something…', 120)}
+            {cut(str(d.text) || tp('saySomething'), 120)}
           </div>
         </Box>
       );
     case 'cf_listen':
       return (
         <Line>
-          <Muted>listen → </Muted>
+          <Muted>{tp('listen')} </Muted>
           <Mono>{`{{${str(d.save) || 'caller_said'}}}`}</Mono>
         </Line>
       );
@@ -626,11 +674,11 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="font-mono text-[10px] text-muted-foreground">
-            {str(d.model) || 'AI'}
+            {str(d.model) || tp('aiLabel')}
             {d.assistant ? ' · KB' : ''}
           </div>
           <div className="truncate text-[12px] text-foreground">
-            {cut(str(d.prompt) || 'AI answers…', 46)}
+            {cut(str(d.prompt) || tp('aiAnswers'), 46)}
           </div>
         </div>
       );
@@ -638,9 +686,13 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const a = ctx.callAssistants.find((x) => x.id === str(d.assistant));
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <div className="font-mono text-[10px] text-muted-foreground">voice agent</div>
+          <div className="font-mono text-[10px] text-muted-foreground">{tp('voiceAgent')}</div>
           <div className="truncate text-[12px] text-foreground">
-            {a ? a.name : d.assistant ? `Assistant #${str(d.assistant)}` : '— pick an assistant —'}
+            {a
+              ? a.name
+              : d.assistant
+                ? tp('assistantNumber', { id: str(d.assistant) })
+                : tp('pickAssistant')}
           </div>
         </div>
       );
@@ -648,35 +700,35 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
     case 'cf_menu':
       return (
         <Line>
-          <Muted>route by {str(d.mode) || 'intent'} · </Muted>
-          <Mono>{asArr(d.options).length} branch(es)</Mono>
+          <Muted>{tp('routeBy', { mode: str(d.mode) || 'intent' })}</Muted>
+          <Mono>{tp('branchCount', { count: asArr(d.options).length })}</Mono>
         </Line>
       );
     case 'cf_search':
       return (
         <Line>
-          <Muted>search → </Muted>
+          <Muted>{tp('search')} </Muted>
           <Mono>{`{{${str(d.save) || 'search'}}}`}</Mono>
         </Line>
       );
     case 'cf_transfer':
       return (
         <Line>
-          <Muted>transfer → </Muted>
-          <Mono>{str(d.number) || '(set number)'}</Mono>
+          <Muted>{tp('transfer')} </Muted>
+          <Mono>{str(d.number) || tp('setNumber')}</Mono>
         </Line>
       );
     case 'cf_hangup':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px] italic text-muted-foreground">
-          {cut(str(d.goodbye) || 'End the call', 40)}
+          {cut(str(d.goodbye) || tp('endCall'), 40)}
         </div>
       );
     case 'ig_send_dm':
       return (
         <Box>
           <div className="bubble wa whitespace-pre-wrap break-words">
-            {cut(str(d.text) || 'Send a DM…', 120)}
+            {cut(str(d.text) || tp('sendDm'), 120)}
           </div>
         </Box>
       );
@@ -684,24 +736,24 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {cut(str(d.text) || 'Pick one…', 80)}
+            {cut(str(d.text) || tp('pickOne'), 80)}
           </div>
-          <Count>{asArr(d.options).length} quick reply(s)</Count>
+          <Count>{tp('quickReplyCount', { count: asArr(d.options).length })}</Count>
         </div>
       );
     case 'ig_buttons':
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {cut(str(d.text) || 'Buttons…', 80)}
+            {cut(str(d.text) || tp('buttonsDots'), 80)}
           </div>
-          <Count>{asArr(d.buttons).length} button(s)</Count>
+          <Count>{tp('buttonCount', { count: asArr(d.buttons).length })}</Count>
         </div>
       );
     case 'ig_reply_comment':
       return (
         <Line>
-          <Muted>public reply · </Muted>
+          <Muted>{tp('publicReply')}</Muted>
           <span className="text-foreground">{cut(str(d.message) || '…', 40)}</span>
         </Line>
       );
@@ -709,22 +761,24 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="font-mono text-[10px] text-muted-foreground">
-            {str(d.model) || 'AI'}
+            {str(d.model) || tp('aiLabel')}
             {d.assistant ? ' · KB' : ''}
           </div>
           <div className="truncate text-[12px] text-foreground">
-            {cut(str(d.prompt) || 'AI answers…', 46)}
+            {cut(str(d.prompt) || tp('aiAnswers'), 46)}
           </div>
         </div>
       );
     case 'ig_products':
       return (
         <div className="px-3 pt-2 pb-1.5">
-          <div className="text-[11.5px] font-medium text-foreground">Product carousel</div>
+          <div className="text-[11.5px] font-medium text-foreground">{tp('productCarousel')}</div>
           <Count>
             {d.selection === 'all'
-              ? `first ${str(d.limit) || 5} synced`
-              : `${Array.isArray(d.productIds) ? d.productIds.length : 0} product(s)`}
+              ? tp('firstSynced', { count: str(d.limit) || 5 })
+              : tp('productCount', {
+                  count: Array.isArray(d.productIds) ? d.productIds.length : 0,
+                })}
           </Count>
         </div>
       );
@@ -732,37 +786,37 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="bubble wa mb-1 whitespace-pre-wrap break-words">
-            {cut(str(d.question) || 'Ask something…', 80)}
+            {cut(str(d.question) || tp('askSomething'), 80)}
           </div>
-          <Count>{`answer → {{${str(d.save) || 'answer'}}}`}</Count>
+          <Count>{tp('answerTo', { variable: `{{${str(d.save) || 'answer'}}}` })}</Count>
         </div>
       );
     case 'ig_lead':
     case 'fb_lead':
       return (
         <div className="px-3 pt-2 pb-1.5">
-          <div className="text-[11.5px] font-medium text-foreground">Capture lead</div>
-          <Count>{d.createDeal !== false ? '+ pipeline deal' : 'lead only'}</Count>
+          <div className="text-[11.5px] font-medium text-foreground">{tp('captureLead')}</div>
+          <Count>{d.createDeal !== false ? tp('withDeal') : tp('leadOnly')}</Count>
         </div>
       );
     case 'fb_gallery':
       return (
         <div className="px-3 pt-2 pb-1.5">
-          <div className="text-[11.5px] font-medium text-foreground">Card gallery</div>
-          <Count>{asArr(d.cards).length} card(s)</Count>
+          <div className="text-[11.5px] font-medium text-foreground">{tp('cardGallery')}</div>
+          <Count>{tp('cardCount', { count: asArr(d.cards).length })}</Count>
         </div>
       );
     case 'fb_products':
       return (
         <div className="px-3 pt-2 pb-1.5">
-          <div className="text-[11.5px] font-medium text-foreground">Product carousel</div>
-          <Count>{asArr(d.products).length} product(s)</Count>
+          <div className="text-[11.5px] font-medium text-foreground">{tp('productCarousel')}</div>
+          <Count>{tp('productCount', { count: asArr(d.products).length })}</Count>
         </div>
       );
     case 'fb_reply_comment':
       return (
         <Line>
-          <Muted>public reply · </Muted>
+          <Muted>{tp('publicReply')}</Muted>
           <span className="text-foreground">{cut(str(d.text) || '…', 40)}</span>
         </Line>
       );
@@ -770,7 +824,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       return (
         <div className="px-3 pt-2 pb-1.5">
           <div className="text-[11.5px] font-medium text-foreground">
-            {d.mode === 'paylink' ? 'Pay link' : 'Invoice'}
+            {d.mode === 'paylink' ? tp('payLink') : tp('invoice')}
           </div>
           <Count>
             {str(d.currency) || 'USD'} {str(d.amount) || '0'}

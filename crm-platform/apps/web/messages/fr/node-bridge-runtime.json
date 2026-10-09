@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Canaux",
+      "item": "Passerelle Node"
+    },
+    "page": {
+      "title": "URL et jeton de la passerelle Node",
+      "eyebrow": "global · passerelle Node",
+      "description": "La passerelle Node partagée à laquelle chaque moteur se connecte : l’API non officielle y envoie ses messages, et le rythme d’envoi y est appliqué. Définie une seule fois, elle s’applique à toute la plateforme.",
+      "superOnly": "Seul un super administrateur peut modifier la passerelle Node. Vous pouvez voir les valeurs enregistrées."
+    },
+    "bridge": {
+      "tokenSet": "Jeton défini",
+      "noToken": "Aucun jeton",
+      "serverUrl": "URL du serveur",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Saisissez d’abord une URL de serveur valide (http:// ou https://).",
+      "serverUrlHint": "Adresse à laquelle votre passerelle Node est accessible. Les webhooks entrants et de statut sont gérés automatiquement : la passerelle récupère notre URL depuis sa variable d’environnement APP_DOMAIN_NAME.",
+      "token": "Jeton webhook Node (X-Node-Token)",
+      "tokenPlaceholder": "secret X-Node-Token partagé",
+      "tokenSavedPlaceholder": "••• enregistré, laissez vide pour le conserver",
+      "tokenHint": "Secret partagé envoyé par la passerelle Node sous forme de X-Node-Token. Il doit correspondre au jeton de la configuration de votre passerelle Node. Masqué après l’enregistrement ; ne le recollez que pour le renouveler.",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "test": "Tester la connexion",
+      "testing": "Test en cours…",
+      "saved": "Passerelle Node enregistrée."
+    },
+    "pacing": {
+      "eyebrow": "rythme",
+      "title": "Rythme et regroupement des envois",
+      "msgGap": "Intervalle entre messages (s)",
+      "msgGapHint": "Secondes entre deux envois consécutifs.",
+      "batchesGap": "Taille des lots",
+      "batchesGapHint": "Destinataires par lot.",
+      "bwMsgGap": "Entre les lots (min)",
+      "bwMsgGapHint": "Minutes entre les lots.",
+      "enableBatches": "Activer les lots",
+      "update": "Mettre à jour le rythme",
+      "updating": "Enregistrement…",
+      "saved": "Rythme d’envoi mis à jour.",
+      "tipTitle": "Conseil de rythme",
+      "tip": "Ne réduisez l’intervalle entre messages qu’après une période de test de 24 h : Meta limite les expéditeurs agressifs. 3 secondes est la valeur par défaut sûre."
+    },
+    "errors": {
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "conflict": "Quelqu’un d’autre a modifié ces paramètres. La page a été actualisée ; réessayez.",
+      "validation": "Vérifiez les valeurs et réessayez.",
+      "request": "Cette demande n’a pas pu être traitée.",
+      "unexpected": "Une erreur s’est produite de notre côté. Réessayez dans un instant.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion."
+    },
+    "loading": "Chargement",
+    "retry": "Réessayer",
+    "unofficial": {
+      "eyebrow": "interrupteur de la plateforme",
+      "title": "WhatsApp non officiel (numéros personnels via QR)",
+      "status": {
+        "disabled": "Désactivé / non pris en charge",
+        "enabled": "Activé (non pris en charge)"
+      },
+      "explanation": "Nous ne prenons en charge que l’API officielle WhatsApp Business. Il s’agit de l’interrupteur global de la plateforme pour les numéros personnels : ce n’est pas pris en charge et des numéros peuvent être bannis. Même activé, seuls les espaces de travail autorisés ci-dessous peuvent l’utiliser.",
+      "state": {
+        "disabled": "Désactivé. Aucun espace de travail ne peut voir ni connecter de numéros personnels, quelle que soit la liste ci-dessous : le parcours de connexion QR, le Warmer et les expéditeurs de numéros personnels sont masqués, et les envois par leur intermédiaire sont refusés.",
+        "enabled": "Activé, pour les seuls espaces de travail autorisés. Un espace de travail absent de la liste ci-dessous n’en voit rien. Ce n’est pas pris en charge : WhatsApp peut bannir ces numéros."
+      },
+      "enable": "Activer WhatsApp non officiel",
+      "disable": "Désactiver WhatsApp non officiel",
+      "cancel": "Annuler",
+      "enableDialog": {
+        "title": "Activer WhatsApp non officiel ?",
+        "body": "Ce n’est pas pris en charge. Les numéros connectés de cette façon peuvent être bannis par WhatsApp, et les messages envoyés par leur intermédiaire ne bénéficient d’aucune garantie de livraison. Activer l’interrupteur ne donne accès à personne à lui seul : seuls les espaces de travail de la liste d’autorisation peuvent l’utiliser.",
+        "typeLabel": "Saisissez {word} pour confirmer",
+        "confirm": "Activer"
+      },
+      "disableDialog": {
+        "title": "Désactiver WhatsApp non officiel ?",
+        "body": "Chaque espace de travail cessera de voir les numéros personnels, le Warmer et le parcours de connexion QR, et les envois via les numéros personnels seront refusés. Les données enregistrées et la liste d’autorisation sont conservées.",
+        "confirm": "Désactiver"
+      },
+      "enabledToast": "WhatsApp non officiel est maintenant activé.",
+      "disabledToast": "WhatsApp non officiel est maintenant désactivé.",
+      "dimNote": "Les paramètres ci-dessous ne s’appliquent qu’aux numéros personnels et ne sont pas utilisés tant que WhatsApp non officiel est désactivé.",
+      "errors": {
+        "forbidden": "Seul un super administrateur peut modifier cet interrupteur.",
+        "conflict": "Quelqu’un d’autre a modifié ces paramètres. La page a été actualisée ; réessayez.",
+        "validation": "Vérifiez les valeurs et réessayez.",
+        "request": "Cette demande n’a pas pu être traitée.",
+        "unexpected": "Une erreur s’est produite de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion."
+      },
+      "allowedCount": "{count, plural, =0 {Aucun espace de travail autorisé} one {# espace de travail autorisé} other {# espaces de travail autorisés}}"
+    },
+    "workspaces": {
+      "eyebrow": "liste d’autorisation",
+      "title": "Espaces de travail avec WhatsApp non officiel",
+      "description": "Désactivé pour tout le monde par défaut. Seuls les espaces de travail listés ici peuvent utiliser WhatsApp avec numéro personnel, et seulement lorsque le moteur ci-dessus est activé.",
+      "count": "{count, plural, =0 {Aucun espace de travail autorisé} one {# espace de travail autorisé} other {# espaces de travail autorisés}}",
+      "engineOff": "Le moteur est désactivé : ces espaces de travail ne peuvent pas encore l’utiliser.",
+      "engineOffAction": "Aller à l’interrupteur",
+      "readOnly": "Seul un super administrateur peut ajouter ou retirer des espaces de travail. Vous pouvez voir la liste.",
+      "search": {
+        "label": "Ajouter un espace de travail",
+        "placeholder": "Rechercher par nom d’espace de travail, slug ou e-mail du propriétaire",
+        "hint": "Saisissez au moins 2 caractères.",
+        "searching": "Recherche en cours",
+        "none": "Aucun espace de travail ne correspond à « {q} ».",
+        "add": "Ajouter",
+        "alreadyAdded": "Déjà autorisé",
+        "owner": "Propriétaire : {email}",
+        "noPlan": "Aucun forfait",
+        "results": "Résultats de recherche"
+      },
+      "table": {
+        "caption": "Espaces de travail autorisés à utiliser WhatsApp non officiel",
+        "workspace": "Espace de travail",
+        "plan": "Forfait",
+        "devices": "Appareils",
+        "since": "Activé depuis",
+        "by": "Activé par",
+        "note": "Note",
+        "actions": "Actions",
+        "devicesValue": "{active} actif(s) sur {total}",
+        "noPlan": "Aucun forfait",
+        "system": "Inconnu",
+        "noNote": "Aucun",
+        "remove": "Retirer"
+      },
+      "empty": {
+        "title": "Aucun espace de travail autorisé pour l’instant",
+        "message": "Personne ne peut utiliser WhatsApp avec numéro personnel, même moteur activé. Recherchez ci-dessus pour ajouter le premier espace de travail."
+      },
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement",
+      "addDialog": {
+        "title": "Autoriser {name} ?",
+        "body": "{name} ({slug}) pourra connecter des numéros WhatsApp personnels par code QR tant que le moteur est activé. Ce n’est pas pris en charge et des numéros peuvent être bannis par WhatsApp.",
+        "noteLabel": "Note (facultative)",
+        "notePlaceholder": "Pourquoi cet espace de travail, qui l’a demandé",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "La note ne peut pas dépasser {max} caractères.",
+        "confirm": "Autoriser l’espace de travail"
+      },
+      "removeDialog": {
+        "title": "Retirer {name} ?",
+        "body": "{name} ne pourra plus utiliser WhatsApp avec numéro personnel. Ses connexions s’arrêtent sous 20 secondes. Les sessions enregistrées sont conservées : réautoriser l’espace de travail les rétablit.",
+        "confirm": "Retirer"
+      },
+      "cancel": "Annuler",
+      "addedToast": "{name} peut maintenant utiliser WhatsApp non officiel.",
+      "removedToast": "{name} a été retiré de la liste.",
+      "errors": {
+        "forbidden": "Seul un super administrateur peut modifier cette liste.",
+        "conflict": "La liste a entre-temps changé. Elle a été actualisée ; réessayez.",
+        "validation": "Vérifiez les valeurs et réessayez.",
+        "request": "Cette demande n’a pas pu être traitée.",
+        "unexpected": "Une erreur s’est produite de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion."
+      },
+      "retry": "Réessayer"
+    }
+  }
+}

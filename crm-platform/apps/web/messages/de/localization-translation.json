@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Sprachen",
+      "providers": "Übersetzungsanbieter",
+      "usage": "Übersetzungsnutzung",
+      "group": "Lokalisierung"
+    },
+    "errors": {
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "conflict": "Jemand anderes hat dies geändert. Die Liste wurde neu geladen; prüfen Sie sie und versuchen Sie es erneut.",
+      "languageIsDefault": "Die Standardsprache kann nicht deaktiviert oder gelöscht werden. Legen Sie zuerst eine andere Sprache als Standard fest.",
+      "languageInactive": "Aktivieren Sie die Sprache zuerst, bevor Sie sie als Standard festlegen.",
+      "credentialsMissing": "Geben Sie zuerst die erforderlichen Zugangsdaten ein.",
+      "providerInactive": "Nur ein aktiver Anbieter kann der Standard sein.",
+      "lockdownNoOfficial": "Aktivieren und konfigurieren Sie mindestens einen offiziellen kostenpflichtigen Anbieter (DeepL oder Google Cloud), bevor Sie den Compliance-Lockdown aktivieren.",
+      "planGate": "Ihr Tarif enthält keine Übersetzung."
+    },
+    "switcher": {
+      "label": "Sprache ändern",
+      "menu": "Sprachen",
+      "failed": "Die Sprache konnte nicht geändert werden. Versuchen Sie es erneut."
+    },
+    "languages": {
+      "kicker": "Admin · System · Sprachen",
+      "titleLead": "Plattform",
+      "titleEm": "Sprachen",
+      "description": "Verwalten Sie, welche Sprachen neue Nutzer und Arbeitsbereiche wählen können. Die „Standard“-Sprache dient als Fallback für jedes neu angelegte Konto.",
+      "loading": "Sprachen werden geladen",
+      "stats": {
+        "total": "Gesamt",
+        "totalHint": "konfiguriert",
+        "active": "Aktiv",
+        "activeHint": "für Nutzer sichtbar",
+        "default": "Standard",
+        "defaultHint": "Fallback für neue Konten"
+      },
+      "catalog": "Katalog",
+      "allLanguages": "Alle Sprachen",
+      "columns": {
+        "name": "Name",
+        "code": "Code",
+        "dir": "Richtung",
+        "active": "Aktiv",
+        "default": "Standard",
+        "actions": "Aktionen"
+      },
+      "on": "An",
+      "off": "Aus",
+      "defaultBadge": "Standard",
+      "set": "Festlegen",
+      "toggleLabel": "{name} ein- oder ausschalten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "empty": "Noch keine Sprachen.",
+      "flash": {
+        "activated": "{name} aktiviert.",
+        "disabled": "{name} deaktiviert.",
+        "nowDefault": "{name} ist jetzt die Standardsprache.",
+        "removed": "Sprache entfernt."
+      },
+      "confirmDelete": {
+        "title": "Sprache löschen",
+        "message": "{name} entfernen?"
+      },
+      "pack": {
+        "kicker": "Sprachpaket",
+        "title": "Auf {count} Sprachen festgelegt",
+        "body": "Jede aktive Sprache wird durch eine mit der Plattform ausgelieferte Übersetzungsdatei unterstützt. Neue Sprachplätze erscheinen hier, sobald das Übersetzungspaket erweitert wird.",
+        "note": "Sie können weiterhin den Aktivstatus umschalten, den nativen Namen und die Richtung bearbeiten sowie in der Tabelle links die Plattform-Standardsprache wählen."
+      },
+      "usedFor": {
+        "title": "So wird es verwendet",
+        "body": "Aktive Sprachen erscheinen im Sprachumschalter im Nutzerprofil sowie in den Auswahlen für Vorlagen und automatische Antworten. Der Standard gilt für neue Konten, die noch keine Sprache gewählt haben."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · System",
+      "title": "Übersetzungsanbieter",
+      "description": "Die mehrsprachige automatische Antwort nutzt einen dieser Anbieter, um eingehende Nachrichten zu übersetzen und Antworten in der Sprache des Kunden zu formulieren. MyMemory ist ab Werk aktiv (kostenlos, ohne Schlüssel). Verbinden Sie DeepL, Google Cloud oder LibreTranslate für höhere Qualität oder selbst gehostete Privatsphäre.",
+      "loading": "Anbieter werden geladen",
+      "on": "An",
+      "off": "Aus",
+      "cancel": "Abbrechen",
+      "lockdown": {
+        "title": "Compliance-Lockdown",
+        "description": "Wenn eingeschaltet, überspringt die Fallback-Kette <mono>{slugs}</mono> und leitet die Übersetzung automatischer Antworten nur über offizielle kostenpflichtige APIs (DeepL, Google Cloud). Einige Unternehmensrichtlinien verlangen dies, weil sie inoffizielle Drittanbieter-Endpunkte verbieten.",
+        "enable": "Lockdown aktivieren",
+        "disable": "Lockdown deaktivieren",
+        "confirmOn": "Lockdown EINSCHALTEN? Kostenlose Treiber werden übersprungen; nur kostenpflichtige APIs übersetzen dann.",
+        "confirmOff": "Lockdown AUSSCHALTEN? Kostenlose Treiber kehren in die Fallback-Kette zurück."
+      },
+      "flash": {
+        "activated": "{name} aktiviert.",
+        "disabled": "{name} deaktiviert.",
+        "nowDefault": "{name} ist jetzt der Standardanbieter.",
+        "saved": "{name} gespeichert.",
+        "lockdownOn": "Der Compliance-Lockdown ist aktiv.",
+        "lockdownOff": "Der Compliance-Lockdown ist aus."
+      },
+      "empty": {
+        "title": "Keine Übersetzungsanbieter konfiguriert",
+        "body": "Führen Sie das Seed für Übersetzungsanbieter aus, um diese Liste zu füllen."
+      },
+      "active": "Aktiv",
+      "disabled": "Deaktiviert",
+      "defaultBadge": "Standard",
+      "skipped": "Lockdown · übersprungen",
+      "skippedTitle": "Übersprungen, weil der Compliance-Lockdown aktiv ist.",
+      "slug": "Slug: {slug}",
+      "makeDefault": "Als Standard festlegen",
+      "activate": "Aktivieren",
+      "disable": "Deaktivieren",
+      "keepSecret": "••••••• (leer lassen, um beizubehalten)",
+      "noCredentials": "Keine Zugangsdaten erforderlich: Dieser Anbieter funktioniert sofort.",
+      "sortOrder": "Sortierreihenfolge",
+      "sortOrderHint": "Niedriger = höhere Priorität in der Fallback-Kette.",
+      "save": "{name} speichern"
+    },
+    "usage": {
+      "kicker": "Admin · System",
+      "title": "Übersetzungsnutzung",
+      "description": "Umfang und geschätzte Kosten jeder Übersetzung automatischer Antworten. Treffer im mitgelieferten Wörterbuch und 24-Stunden-Cache-Treffer sind nicht abrechenbar und erscheinen hier nicht; dies sind die tatsächlichen API-Aufrufe.",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Anwenden",
+      "badRange": "Das Startdatum darf nicht nach dem Enddatum liegen.",
+      "loading": "Nutzung wird geladen",
+      "failed": "Nutzung konnte nicht geladen werden.",
+      "totals": {
+        "calls": "API-Aufrufe",
+        "chars": "Übersetzte Zeichen",
+        "charsOut": "aus: {count}",
+        "cost": "Geschätzte Kosten",
+        "costHint": "basierend auf veröffentlichten Preisen pro Zeichen",
+        "fallbackHits": "Fallback-Treffer",
+        "fallbackHint": "primärer Treiber fehlgeschlagen, Kette hat aufgefangen"
+      },
+      "byProvider": "Nach Anbieter",
+      "emptyProvider": "Keine Übersetzungsaufrufe in diesem Zeitraum. Senden Sie eine nicht englische Nachricht an ein Gerät mit automatischer Antwort und aktualisieren Sie dann.",
+      "free": "kostenlos",
+      "last30": "Letzte 30 Tage",
+      "timelineHint": "Fahren Sie über jeden Balken für Datum / Zeichen / Kosten",
+      "topWorkspaces": "Arbeitsbereiche mit den höchsten Ausgaben",
+      "emptyWorkspaces": "Keine kostenpflichtigen Übersetzungen in diesem Zeitraum.",
+      "cols": {
+        "provider": "Anbieter",
+        "workspace": "Arbeitsbereich",
+        "calls": "Aufrufe",
+        "charsIn": "Zeichen ein",
+        "chars": "Zeichen",
+        "cost": "Kosten",
+        "rate": "Preis / 1 Mio. Zeichen"
+      }
+    },
+    "settings": {
+      "title": "Echtzeit-Übersetzung",
+      "description": "Chatten Sie mit Kunden in jeder Sprache. Jede Seite liest in der eigenen Sprache – automatisch.",
+      "loading": "Übersetzungseinstellungen werden geladen",
+      "failed": "Übersetzungseinstellungen konnten nicht geladen werden.",
+      "saved": "Übersetzungseinstellungen gespeichert.",
+      "steps": {
+        "1": {
+          "title": "Nachrichten der Kunden (jede Sprache)",
+          "body": "Ihre Nachricht wird automatisch in die Teamsprache übersetzt und dem Agenten angezeigt; das Original ist mit einem Klick erreichbar."
+        },
+        "2": {
+          "title": "Antworten der Agenten (Ihre Sprache)",
+          "body": "Ihre Antwort wird direkt vor dem Senden über WhatsApp in die Sprache des Kunden übersetzt."
+        },
+        "3": {
+          "title": "Auch KI und Widget",
+          "body": "Der KI-Agent und das Website-Chat-Widget antworten nativ in der Sprache des Kunden."
+        }
+      },
+      "engine": {
+        "kicker": "Übersetzungs-Engine",
+        "free": "MyMemory (kostenlos)",
+        "body": "Hier geben Sie KEINE API-Schlüssel ein – die Übersetzung wird einmal plattformweit konfiguriert und funktioniert automatisch sofort. Eine kostenlose Engine ist standardmäßig aktiviert; die Plattform kann für höhere Qualität auf DeepL oder Google Translate umgestellt werden."
+      },
+      "usage": {
+        "kicker": "Diesen Monat",
+        "line": "übersetzte Zeichen · {count} Nachrichten"
+      },
+      "enabled": {
+        "title": "Konversationen automatisch übersetzen",
+        "hint": "Schalten Sie dies für diesen Arbeitsbereich ganz ein oder aus."
+      },
+      "teamLanguage": {
+        "label": "Ihre Teamsprache",
+        "hint": "Die Sprache, in der IHRE Agenten lesen und schreiben. Kundennachrichten werden in diese übersetzt; Ihre Antworten daraus."
+      },
+      "save": "Übersetzungseinstellungen speichern",
+      "upgrade": {
+        "title": "Upgraden Sie, um Echtzeit-Übersetzung freizuschalten.",
+        "body": "WhatsApp-Konversationen automatisch zwischen der Sprache Ihres Teams und den Sprachen Ihrer Kunden übersetzen.",
+        "link": "Tarife ansehen →"
+      }
+    }
+  }
+}

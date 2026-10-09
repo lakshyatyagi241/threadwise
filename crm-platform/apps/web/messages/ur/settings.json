@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "ترتیبات",
+    "breadcrumb": "breadcrumb راستہ",
+    "backToSettings": "ترتیبات پر واپس",
+    "sectionsLabel": "ترتیبات کے حصے",
+    "searchLabel": "ترتیبات تلاش کریں",
+    "searchPlaceholder": "ترتیبات تلاش کریں",
+    "searchHint": "نام یا کلیدی لفظ سے ہر ترتیب فلٹر کرنے کے لیے ٹائپ کریں۔ صاف کرنے کے لیے Escape دبائیں، نتائج پر جانے کے لیے نیچے کا تیر دبائیں۔",
+    "clearSearch": "تلاش صاف کریں",
+    "results": {
+      "title": "{count, plural, one {# ترتیب “{query}” سے میل کھاتی ہے} other {# ترتیبات “{query}” سے میل کھاتی ہیں}}",
+      "status": "{count, plural, =0 {کوئی نتیجہ نہیں} one {# نتیجہ} other {# نتائج}}"
+    },
+    "noResults": {
+      "title": "“{query}” سے کوئی ترتیب میل نہیں کھاتی",
+      "message": "ہجے چیک کریں یا کوئی وسیع لفظ آزمائیں، جیسے “tax”، “team” یا “WhatsApp”۔"
+    },
+    "emptySection": {
+      "title": "یہاں ترتیب دینے کے لیے کچھ نہیں ہے",
+      "message": "اس سیکشن کی کوئی بھی ترتیب آپ کے کردار کے لیے دستیاب نہیں ہے۔"
+    },
+    "inSection": "{section} میں",
+    "soon": "جلد",
+    "upgrade": "اپ گریڈ کریں",
+    "comingSoon": "جلد آ رہا ہے",
+    "sections": {
+      "channels": {
+        "title": "چینلز",
+        "description": "وہ جگہیں جوڑیں جہاں سے آپ کے صارفین آپ کو پیغام بھیجتے ہیں۔"
+      },
+      "data": {
+        "title": "ڈیٹا اور حسبِ ضرورت ترتیب",
+        "description": "طے کریں کہ رابطوں، ڈیلز اور گفتگو کو کس طرح بیان کیا جائے۔"
+      },
+      "business": {
+        "title": "کاروبار اور بلنگ",
+        "description": "آپ کی کمپنی کی تفصیلات، ٹیکس، پلان اور ادائیگیاں۔"
+      },
+      "people": {
+        "title": "ٹیم اور اجازتیں",
+        "description": "آپ کے ورک اسپیس میں کون کیا کر سکتا ہے۔"
+      },
+      "automation": {
+        "title": "خودکاری اور AI",
+        "description": "جوابات، بکنگز، ویب سائٹ ویجٹ اور AI۔"
+      },
+      "integrations": {
+        "title": "انٹیگریشنز اور ڈیولپر",
+        "description": "دوسرے ٹولز جوڑیں اور پروڈکٹ کو وسعت دیں۔"
+      },
+      "security": {
+        "title": "ڈیٹا اور سیکیورٹی",
+        "description": "سائن اِن، رازداری، ایکسپورٹ اور آڈٹ ٹریل۔"
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "تمام چینلز",
+        "description": "اپنے جڑے ہوئے تمام چینلز دیکھیں اور نیا چینل شامل کریں۔",
+        "keywords": "کنکشنز، ان باکسز، نمبرز، اکاؤنٹس"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "صارفین سے بات چیت کے لیے اپنا WhatsApp Business نمبر جوڑیں۔",
+        "keywords": "wa، whatsapp business، cloud api، نمبر، qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "غیر سرکاری WhatsApp API",
+        "description": "ذاتی WhatsApp نمبر کو QR کوڈ سے جوڑیں اور محفوظ ارسال کے لیے اسے گرم کریں۔",
+        "keywords": "personal whatsapp، qr، pairing code، ڈیوائسز، baileys، warmer، warm up، unofficial"
+      },
+      "warmer": {
+        "label": "وارمر",
+        "description": "اپنے WhatsApp نمبرز کو گرم کریں تاکہ شیڈول پیغامات محفوظ رفتار سے بھیجے جائیں۔",
+        "keywords": "warm up، warming، نمبر، ساکھ، ارسال کی حد، قطار، رفتار، شیڈول"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "اپنے Facebook پیج پر بھیجے گئے پیغامات کا جواب دیں۔",
+        "keywords": "meta، messenger، پیج، fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "اپنے Instagram اکاؤنٹ پر بھیجے گئے ڈائریکٹ پیغامات کا جواب دیں۔",
+        "keywords": "meta، dm، insta، ڈائریکٹ پیغامات"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "صارفین سے بات چیت کے لیے Telegram بوٹ جوڑیں۔",
+        "keywords": "bot، botfather، tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "اپنے TikTok بزنس اکاؤنٹ پر بھیجے گئے پیغامات کا جواب دیں۔",
+        "keywords": "tik tok، dm، ویڈیو"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "اپنے بھیجنے والے نام یا نمبر سے ٹیکسٹ پیغامات بھیجیں اور وصول کریں۔",
+        "keywords": "ٹیکسٹ پیغام، sender id، dlt، twilio، موبائل"
+      },
+      "email": {
+        "label": "ای میل",
+        "description": "ان باکس میں ای میل بھیجنے اور وصول کرنے کے لیے میل باکس جوڑیں۔",
+        "keywords": "میل باکس، smtp، imap، gmail، outlook، بھیجنے والا"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "اپنا LINE آفیشل اکاؤنٹ جوڑیں۔",
+        "keywords": "line آفیشل اکاؤنٹ، پیغام رسانی"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "اپنا Viber بزنس اکاؤنٹ جوڑیں۔",
+        "keywords": "viber بوٹ، پیغام رسانی"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "اپنا WeChat آفیشل اکاؤنٹ جوڑیں۔",
+        "keywords": "weixin، آفیشل اکاؤنٹ"
+      },
+      "wa-links": {
+        "label": "WhatsApp لنکس",
+        "description": "کلک ٹو چیٹ لنکس اور QR کوڈز بنائیں جو WhatsApp چیٹ کھولیں۔",
+        "keywords": "click to chat، qr کوڈ، مختصر لنک، wa.me"
+      },
+      "contact-stages": {
+        "label": "رابطے کے مراحل",
+        "description": "وہ مراحل اور حیثیتیں طے کریں جن سے کوئی رابطہ گزرتا ہے۔",
+        "keywords": "لائف سائیکل، حیثیت، lead، کسٹمر، won، lost، funnel"
+      },
+      "contact-properties": {
+        "label": "رابطے کی خصوصیات",
+        "description": "ہر رابطے پر رکھنا چاہیں ایسے فیلڈز شامل کریں۔",
+        "keywords": "حسبِ ضرورت فیلڈز، فیلڈز، لازمی، ڈراپ ڈاؤن، کالمز، صفات، متغیرات، merge fields"
+      },
+      "attributes": {
+        "label": "صفات",
+        "description": "ٹیگز اور وہ دیگر لیبلز جو آپ رابطوں پر لگاتے ہیں۔",
+        "keywords": "ٹیگز، لیبلز، ذرائع، حسبِ ضرورت صفات"
+      },
+      "deal-pipelines": {
+        "label": "پائپ لائنز اور مراحل",
+        "description": "اپنی ڈیل پائپ لائنز، مراحل اور ناکامی کی وجوہات میں ترمیم کریں۔",
+        "keywords": "ڈیلز، سیلز مراحل، بورڈ، ناکامی کی وجہ، funnel"
+      },
+      "tags": {
+        "label": "ٹیگز",
+        "description": "رابطوں اور چیٹس میں استعمال ہونے والے ٹیگز بنائیں اور منظم کریں۔",
+        "keywords": "لیبلز، رنگ، color"
+      },
+      "saved-replies": {
+        "label": "محفوظ شدہ جوابات",
+        "description": "دوبارہ استعمال ہونے والے جوابات لکھیں جنہیں آپ کی ٹیم ایک کلک میں بھیج سکے۔",
+        "keywords": "تیار جوابات، شارٹ کٹس، snippets، ٹیمپلیٹس"
+      },
+      "business-profile": {
+        "label": "کاروباری پروفائل",
+        "description": "دستاویزات کے لیے آپ کی کمپنی کا نام، پتہ، ٹیکس نمبر اور لوگو۔",
+        "keywords": "کمپنی، پتہ، gst، vat، ٹیکس آئی ڈی، لوگو، انوائس ہیڈر"
+      },
+      "tax-rates": {
+        "label": "ٹیکس کی شرحیں",
+        "description": "اپنی انوائسز اور تخمینوں میں شامل ہونے والے ٹیکس طے کریں۔",
+        "keywords": "vat، gst، سیلز ٹیکس، فیصد، شرحیں، ملک"
+      },
+      "plans": {
+        "label": "پلانز",
+        "description": "اپنا پلان اور استعمال دیکھیں، اس میں کیا شامل ہے، اور اپ گریڈ کریں۔",
+        "keywords": "سبسکرپشن، اپ گریڈ، حدیں، قیمت، ٹرائل، استعمال، پلان اور استعمال، میٹرز"
+      },
+      "wallet": {
+        "label": "والیٹ",
+        "description": "وہ بیلنس ٹاپ اپ کریں جو پیغامات کی ادائیگی کرتا ہے۔",
+        "keywords": "کریڈٹ، بیلنس، ٹاپ اپ، ری چارج، فنڈز"
+      },
+      "billing-orders": {
+        "label": "آرڈر کی تاریخ",
+        "description": "آپ کی پلان اور والیٹ خریداریاں، رسیدوں کے ساتھ۔",
+        "keywords": "ادائیگیاں، رسیدیں، انوائسز، خریداریاں، آرڈرز"
+      },
+      "account": {
+        "label": "اکاؤنٹ",
+        "description": "آپ کا نام، ای میل، پاس ورڈ اور زبان۔",
+        "keywords": "پروفائل، me، avatar، ای میل، پاس ورڈ، ترجیحات"
+      },
+      "branding": {
+        "label": "پیغام کا فوٹر",
+        "description": "خودکار عمل، شیڈول ارسال اور ٹیم ان باکس کے جوابات سے بھیجے گئے پیغامات کے نیچے شامل ہونے والی لائن۔",
+        "keywords": "برانڈنگ، فوٹر، دستخط، white label، برانڈنگ ہٹائیں، بھیجا گیا بذریعہ"
+      },
+      "team-members": {
+        "label": "ٹیم کے ارکان",
+        "description": "لوگوں کو مدعو کریں اور منظم کریں کہ آپ کے ورک اسپیس میں کون ہے۔",
+        "keywords": "صارفین، عملہ، دعوت، ایجنٹس، ملازمین، نشستیں"
+      },
+      "roles": {
+        "label": "کردار اور اجازتیں",
+        "description": "طے کریں کہ ہر کردار کیا دیکھ اور کر سکتا ہے۔",
+        "keywords": "رسائی، ایڈمن، مینیجر، ایجنٹ، rbac، اجازتیں"
+      },
+      "teams": {
+        "label": "ٹیمیں",
+        "description": "روٹنگ اور رپورٹنگ کے لیے لوگوں کو ٹیموں میں گروپ کریں۔",
+        "keywords": "گروپس، شعبے، تفویض، روٹنگ"
+      },
+      "ai-keys": {
+        "label": "AI فراہم کنندہ کیز",
+        "description": "AI خصوصیات چلانے کے لیے اپنی AI فراہم کنندہ کی کی شامل کریں۔",
+        "keywords": "openai، gemini، claude، api key، ماڈل، ٹوکن"
+      },
+      "ai-training": {
+        "label": "AI ٹریننگ",
+        "description": "فلوز اور ویب سائٹ چیٹ کے لیے چیٹ اسسٹنٹس کو اپنے مواد پر تربیت دیں۔",
+        "keywords": "نالج بیس، اسسٹنٹ، smart agent، faq، تربیت، ذرائع، meta business agent، responder"
+      },
+      "booking-types": {
+        "label": "بکنگ کی اقسام",
+        "description": "وہ سروسز جو صارفین بک کر سکتے ہیں، اوقات اور قواعد کے ساتھ۔",
+        "keywords": "اپائنٹمنٹس، سروسز، دستیابی، سلاٹس، شیڈول، کیلنڈر"
+      },
+      "appointment-settings": {
+        "label": "اپائنٹمنٹ کی ترتیبات",
+        "description": "بکنگ کے قواعد، یاد دہانیاں اور عوامی بکنگ صفحہ۔",
+        "keywords": "بکنگ صفحہ، یاد دہانیاں، بفر، نوٹس، منسوخی"
+      },
+      "google-calendar": {
+        "label": "Google Calendar",
+        "description": "اپنا کیلنڈر جوڑیں تاکہ بکنگز اور مصروف اوقات ہم آہنگ رہیں۔",
+        "keywords": "google، calendar، meet، sync، مصروف، اپائنٹمنٹس"
+      },
+      "chat-widget": {
+        "label": "چیٹ ویجٹ",
+        "description": "اپنی ویب سائٹ پر چیٹ ببل شامل کریں، جسے ویب چیٹ بھی کہا جاتا ہے۔",
+        "keywords": "ویب چیٹ، ویب سائٹ چیٹ، لائیو چیٹ، ویجٹ، embed، bubble"
+      },
+      "auto-reply": {
+        "label": "خودکار جواب",
+        "description": "صارفین کا استقبال کریں اور آپ کی غیر موجودگی میں جواب دیں۔",
+        "keywords": "غیر موجودگی کا پیغام، خوش آمدید، سلام، دفتر سے باہر، کی ورڈز"
+      },
+      "lead-sources": {
+        "label": "سوشل لیڈز",
+        "description": "ویب ہک کے ذریعے اشتہارات اور لینڈنگ پیجز سے لیڈز لائیں۔",
+        "keywords": "lead ads، facebook leads، meta، linkedin، tiktok، google ads، ویب ہک، zapier، capture، فارمز"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "پروڈکٹ پر تعمیر کے لیے کیز اور دستاویزات۔",
+        "keywords": "api keys، ڈیولپرز، ٹوکنز، docs، openapi"
+      },
+      "webhooks": {
+        "label": "ویب ہکس",
+        "description": "ایونٹس ہوتے ہی انہیں اپنے سسٹمز کو بھیجیں۔",
+        "keywords": "callbacks، ایونٹس، http، endpoint، اطلاع"
+      },
+      "addons": {
+        "label": "ایڈ آنز",
+        "description": "اپنے ورک اسپیس کے لیے اختیاری خصوصیات آن یا آف کریں۔",
+        "keywords": "توسیعات، ماڈیولز، پلگ انز، مارکیٹ پلیس"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "مصنوعات اور آرڈرز ہم آہنگ کرنے اور صارفین کو پیغام بھیجنے کے لیے اپنا Shopify اسٹور جوڑیں۔",
+        "keywords": "shop، store، ecommerce، مصنوعات، آرڈرز، sync، چھوڑی گئی ٹوکری"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "مصنوعات اور آرڈرز ہم آہنگ کرنے اور صارفین کو پیغام بھیجنے کے لیے اپنا WooCommerce اسٹور جوڑیں۔",
+        "keywords": "woo، wordpress، shop، store، ecommerce، مصنوعات، آرڈرز، sync"
+      },
+      "i18n-translation": {
+        "label": "ترجمہ",
+        "description": "زبانیں اور پیغامات کا خودکار ترجمہ۔",
+        "keywords": "زبان، زبانیں، locale، ترجمہ، خودکار ترجمہ"
+      },
+      "account-security": {
+        "label": "پاس ورڈ اور دو مرحلہ سائن اِن",
+        "description": "اپنا پاس ورڈ تبدیل کریں اور دوسرے مرحلے سے سائن اِن محفوظ بنائیں۔",
+        "keywords": "mfa، 2fa، authenticator، سیشنز، ڈیوائسز، سائن اِن، login"
+      },
+      "import-export": {
+        "label": "درآمد اور برآمد",
+        "description": "فائل سے ڈیٹا لائیں یا اس کی کاپی نکالیں۔",
+        "keywords": "csv، excel، ڈاؤن لوڈ، بیک اپ، اپ لوڈ، منتقل"
+      },
+      "activity-log": {
+        "label": "آڈٹ لاگ",
+        "description": "ریکارڈ کہ کس نے کیا تبدیل کیا اور کب۔",
+        "keywords": "سرگرمی، تاریخ، تبدیلیاں، آڈٹ ٹریل، سیکیورٹی لاگ"
+      },
+      "privacy": {
+        "label": "رازداری اور ڈیٹا",
+        "description": "رضامندی، ڈیٹا محفوظ رکھنا اور ڈیٹا حذف کرنے کی درخواستیں۔",
+        "keywords": "gdpr، رضامندی، retention، ڈیٹا حذف کریں، dpa، ذاتی ڈیٹا"
+      },
+      "whatsapp-customers": {
+        "label": "محفوظ شدہ صارفین",
+        "description": "WhatsApp آرڈرز کے لیے صارف کا نام اور ترسیل کا پتہ پہلے سے طے کریں۔",
+        "keywords": "صارفین، پتہ، ترسیل، آرڈر، اسٹور"
+      },
+      "geta-publishing": {
+        "label": "Geta پبلشنگ",
+        "description": "شائع شدہ فلوز کو Geta کنسول پر براہ راست بھیجیں۔",
+        "keywords": "geta، publish، بوٹ، کنسول، لائیو ہونا، chatbot"
+      },
+      "auto-assignment": {
+        "label": "خودکار تفویض",
+        "description": "نئی گفتگوئیں خودکار طور پر درست ایجنٹ کو دیں، باری باری یا قواعد کے مطابق۔",
+        "keywords": "روٹنگ، round robin، تفویض، ایجنٹس، ان باکس قواعد، تقسیم، مالک"
+      }
+    }
+  }
+}

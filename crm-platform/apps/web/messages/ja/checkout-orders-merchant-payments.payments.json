@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "ストア / 支払い",
+      "title": "支払い",
+      "subtitle": "ストア注文のお金の流れです。支払い済み、支払い待ち、代金引換の状況を確認できます。",
+      "listTitle": "支払い一覧",
+      "loading": "支払いを読み込み中",
+      "emptyFilteredTitle": "一致する支払いがありません",
+      "emptyFilteredMessage": "フィルターを変更するかリセットして、すべての支払いを表示してください。",
+      "resetFilters": "フィルターをリセット",
+      "emptyTitle": "支払いはまだありません",
+      "emptyMessage": "ストアの注文が入ると、支払いがここに表示されます。「注文」を開いて注文を確認するか、手動で追加してください。",
+      "goToOrders": "注文へ移動",
+      "summary": {
+        "loading": "支払い合計を読み込み中",
+        "orders": "件の注文",
+        "collected": "回収済み",
+        "collectedNone": "まだ回収されたものはありません。"
+      },
+      "filters": {
+        "search": "検索",
+        "searchPlaceholder": "注文番号、顧客、参照番号",
+        "status": "ステータス",
+        "allStatuses": "すべてのステータス",
+        "method": "支払い方法",
+        "allMethods": "すべての支払い方法",
+        "prepaid": "前払い",
+        "cod": "代金引換",
+        "gatewayOption": "ゲートウェイ...",
+        "gatewayCode": "ゲートウェイコード",
+        "gatewayCodePlaceholder": "例: razorpay",
+        "from": "開始",
+        "to": "終了",
+        "rangeInverted": "開始日が終了日より後のため、期間の指定は無視されます。",
+        "reset": "フィルターをリセット"
+      },
+      "table": {
+        "caption": "ストア注文の支払い(新しい順)",
+        "order": "注文",
+        "customer": "顧客",
+        "status": "ステータス",
+        "method": "支払い方法",
+        "paidVia": "支払い経路",
+        "reference": "参照番号",
+        "amount": "金額",
+        "shop": "ショップ",
+        "date": "日付",
+        "methodPrepaid": "前払い",
+        "methodCod": "代金引換",
+        "via": {
+          "razorpay_link": "Razorpayリンク",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "チャット内のWhatsApp Pay",
+        "intro": "購入者がWhatsAppを離れずに注文の支払い(UPI、カード、ネットバンキング、ウォレット)を行え、代金はご自身のRazorpay、PayU、BillDesk、Zaakpayアカウントに入金されます。",
+        "indiaOnly": "現時点で対応しているのはインドのみです。国と通貨はインドとINRに固定されています。",
+        "viewOnly": "WhatsApp Payの設定は確認できますが、変更はできません。支払いの管理権限については、ワークスペース管理者に依頼してください。",
+        "howTitle": "設定方法",
+        "how1": "WhatsApp Managerの「インドの支払い」で、ダイレクト決済方法を作成し、ゲートウェイアカウントを紐付けます。",
+        "how2": "名前を付けて、その名前をここにコピーします。このアプリからは作成できません。Meta側の手順です。",
+        "how3": "設定を保存してから「注文」を開き、任意の注文でWhatsAppでの支払いをリクエストします。",
+        "how4": "購入者が「確認して支払う」をタップしてチャット内で支払うと、Metaが確認した時点で注文が支払い済みになります。",
+        "listTitle": "あなたの設定",
+        "loading": "設定を読み込み中",
+        "emptyTitle": "支払い設定はまだありません",
+        "emptyMessage": "このページで追加すると、チャット内で支払いを回収できるようになります。",
+        "emptyMessageReadOnly": "まだ誰も追加していません。",
+        "market": "インド · INR",
+        "autoChargeOn": "自動請求オン",
+        "active": "有効",
+        "off": "オフ",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "設定を保存しました",
+          "removed": "設定を削除しました"
+        },
+        "addTitle": "支払い設定を追加",
+        "editTitle": "{name}を編集",
+        "name": "設定名",
+        "nameLocked": "名前は設定の識別に使われます。名前を変更するには、削除して追加し直してください。",
+        "updatesExisting": "この名前の設定がすでにあります。保存すると更新されます。",
+        "nameHint": "WhatsApp Managerの「支払い」(インド)にあるダイレクト決済方法の名前と完全に一致させてください。",
+        "nameInvalid": "1〜{max}文字の名前を入力してください。",
+        "namePlaceholder": "例: my-razorpay-pay",
+        "gateway": "ゲートウェイ",
+        "activeLabel": "有効",
+        "autoCharge": "新規注文を自動請求",
+        "autoChargeHint": "注文が入った瞬間に、チャット内の支払いリクエストを自動的に送信します。",
+        "save": "設定を保存",
+        "cancelEdit": "編集をキャンセル",
+        "removeTitle": "{name}を削除しますか?",
+        "removeMessage": "この設定では、チャット内で注文の請求ができなくなります。WhatsApp Manager上のダイレクト決済方法には影響しません。",
+        "removeConfirm": "設定を削除"
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "チャンネル",
+      "item": "Nodeブリッジ"
+    },
+    "page": {
+      "title": "NodeブリッジのURLとトークン",
+      "eyebrow": "グローバル · Nodeブリッジ",
+      "description": "すべてのエンジンが共通で利用するNodeブリッジです。非公式APIはこれを経由して送信し、送信ペースもここで調整されます。一度設定すると、プラットフォーム全体に適用されます。",
+      "superOnly": "Nodeブリッジを変更できるのはスーパー管理者のみです。保存済みの値は閲覧できます。"
+    },
+    "bridge": {
+      "tokenSet": "トークン設定済み",
+      "noToken": "トークンなし",
+      "serverUrl": "サーバーURL",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "先に有効なサーバーURL（http:// または https://）を入力してください。",
+      "serverUrlHint": "Nodeブリッジにアクセスできる場所です。受信およびステータスのWebhookは自動的に処理されます。ブリッジは環境変数 APP_DOMAIN_NAME からこのURLを取得します。",
+      "token": "NodeのWebhookトークン（X-Node-Token）",
+      "tokenPlaceholder": "共有 X-Node-Token シークレット",
+      "tokenSavedPlaceholder": "••• 保存済み。そのままにする場合は空欄のままにしてください",
+      "tokenHint": "Nodeブリッジが X-Node-Token として送信する共有シークレットです。Nodeブリッジの設定にあるトークンと一致させてください。保存後は非表示になります。変更する場合のみ再入力してください。",
+      "save": "保存",
+      "saving": "保存中…",
+      "test": "接続テスト",
+      "testing": "テスト中…",
+      "saved": "Nodeブリッジを保存しました。"
+    },
+    "pacing": {
+      "eyebrow": "ペース調整",
+      "title": "送信ペースとバッチ処理",
+      "msgGap": "メッセージ間隔（秒）",
+      "msgGapHint": "連続する送信の間隔（秒）です。",
+      "batchesGap": "バッチサイズ",
+      "batchesGapHint": "1バッチあたりの受信者数です。",
+      "bwMsgGap": "バッチ間隔（分）",
+      "bwMsgGapHint": "バッチ間の間隔（分）です。",
+      "enableBatches": "バッチを有効化",
+      "update": "タイミングを更新",
+      "updating": "保存中…",
+      "saved": "送信タイミングを更新しました。",
+      "tipTitle": "ペース調整のヒント",
+      "tip": "24時間の試運転の後にのみ、メッセージ間隔を短くしてください。Metaは過度な送信を制限します。3秒が安全な初期値です。"
+    },
+    "errors": {
+      "forbidden": "その操作を行う権限がありません。",
+      "conflict": "別のユーザーがこれらの設定を変更しました。ページを更新したので、再度お試しください。",
+      "validation": "値を確認して、再度お試しください。",
+      "request": "リクエストを完了できませんでした。",
+      "unexpected": "サーバー側でエラーが発生しました。しばらくしてから再度お試しください。",
+      "network": "サーバーに接続できませんでした。接続を確認してください。"
+    },
+    "loading": "読み込み中",
+    "retry": "再試行",
+    "unofficial": {
+      "eyebrow": "プラットフォームのスイッチ",
+      "title": "非公式WhatsApp（QRコード経由の個人番号）",
+      "status": {
+        "disabled": "無効 / 未サポート",
+        "enabled": "有効（未サポート）"
+      },
+      "explanation": "当社がサポートしているのは公式のWhatsApp Business APIのみです。これは個人番号向けのプラットフォーム全体のスイッチです。未サポートであり、番号が停止される可能性があります。オンにしても、下で許可されたワークスペースのみが利用できます。",
+      "state": {
+        "disabled": "オフ。下のリストに関係なく、どのワークスペースも個人番号を表示または連携できません。QR連携フロー、Warmer、個人番号の送信機能は非表示になり、それらを経由した送信は拒否されます。",
+        "enabled": "許可されたワークスペースのみオンです。下のリストにないワークスペースには何も表示されません。未サポートであり、これらの番号はWhatsAppにより停止される可能性があります。"
+      },
+      "enable": "非公式WhatsAppを有効にする",
+      "disable": "非公式WhatsAppを無効にする",
+      "cancel": "キャンセル",
+      "enableDialog": {
+        "title": "非公式WhatsAppを有効にしますか？",
+        "body": "これは未サポートです。この方法で連携された番号はWhatsAppにより停止される可能性があり、これを経由して送信されたメッセージは配信保証の対象外です。スイッチをオンにしただけでは誰にも提供されません。許可リストに含まれるワークスペースのみが利用できます。",
+        "typeLabel": "確認のため {word} と入力してください",
+        "confirm": "有効化"
+      },
+      "disableDialog": {
+        "title": "非公式WhatsAppを無効にしますか？",
+        "body": "すべてのワークスペースで個人番号、Warmer、QR連携フローが表示されなくなり、個人番号を経由した送信は拒否されます。保存済みのデータと許可リストは保持されます。",
+        "confirm": "無効化"
+      },
+      "enabledToast": "非公式WhatsAppが有効になりました。",
+      "disabledToast": "非公式WhatsAppが無効になりました。",
+      "dimNote": "以下の設定は個人番号にのみ適用され、非公式WhatsAppが無効の間は使用されません。",
+      "errors": {
+        "forbidden": "このスイッチを変更できるのはスーパー管理者のみです。",
+        "conflict": "別のユーザーがこれらの設定を変更しました。ページを更新したので、再度お試しください。",
+        "validation": "値を確認して、再度お試しください。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "サーバー側でエラーが発生しました。しばらくしてから再度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してください。"
+      },
+      "allowedCount": "{count, plural, =0 {許可されたワークスペースはありません} other {# 件のワークスペースを許可}}"
+    },
+    "workspaces": {
+      "eyebrow": "許可リスト",
+      "title": "非公式WhatsAppを利用するワークスペース",
+      "description": "初期状態では全員にオフです。ここに記載されたワークスペースのみ、上のエンジンがオンの間に限り、個人番号のWhatsAppを利用できます。",
+      "count": "{count, plural, =0 {許可されたワークスペースはありません} other {# 件のワークスペースを許可}}",
+      "engineOff": "エンジンがオフのため、これらのワークスペースはまだ利用できません。",
+      "engineOffAction": "スイッチへ移動",
+      "readOnly": "ワークスペースの追加や削除ができるのはスーパー管理者のみです。一覧は閲覧できます。",
+      "search": {
+        "label": "ワークスペースを追加",
+        "placeholder": "ワークスペース名、スラッグ、またはオーナーのメールアドレスで検索",
+        "hint": "2文字以上入力してください。",
+        "searching": "検索中",
+        "none": "「{q}」に一致するワークスペースはありません。",
+        "add": "追加",
+        "alreadyAdded": "許可済み",
+        "owner": "オーナー：{email}",
+        "noPlan": "プランなし",
+        "results": "検索結果"
+      },
+      "table": {
+        "caption": "非公式WhatsAppの利用を許可されたワークスペース",
+        "workspace": "ワークスペース",
+        "plan": "プラン",
+        "devices": "デバイス",
+        "since": "有効化日",
+        "by": "有効化した人",
+        "note": "メモ",
+        "actions": "操作",
+        "devicesValue": "{total}件中 {active}件が有効",
+        "noPlan": "プランなし",
+        "system": "不明",
+        "noNote": "なし",
+        "remove": "削除"
+      },
+      "empty": {
+        "title": "許可されたワークスペースはまだありません",
+        "message": "エンジンがオンでも、個人番号のWhatsAppを利用できる人はいません。上で検索して、最初のワークスペースを追加してください。"
+      },
+      "loadMore": "もっと読み込む",
+      "loadingMore": "読み込み中",
+      "addDialog": {
+        "title": "{name}を許可しますか？",
+        "body": "エンジンがオンの間、{name}（{slug}）はQRコードで個人のWhatsApp番号を連携できるようになります。未サポートであり、番号がWhatsAppにより停止される可能性があります。",
+        "noteLabel": "メモ（任意）",
+        "notePlaceholder": "このワークスペースを許可する理由、依頼者",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "メモは{max}文字以内で入力してください。",
+        "confirm": "ワークスペースを許可"
+      },
+      "removeDialog": {
+        "title": "{name}を削除しますか？",
+        "body": "{name}は個人番号のWhatsAppを利用できなくなります。接続は20秒以内に停止します。保存済みのセッションは保持されるため、再度許可すると復元されます。",
+        "confirm": "削除"
+      },
+      "cancel": "キャンセル",
+      "addedToast": "{name}は非公式WhatsAppを利用できるようになりました。",
+      "removedToast": "{name}を一覧から削除しました。",
+      "errors": {
+        "forbidden": "この一覧を変更できるのはスーパー管理者のみです。",
+        "conflict": "その間に一覧が変更されました。更新しましたので、再度お試しください。",
+        "validation": "値を確認して、再度お試しください。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "サーバー側でエラーが発生しました。しばらくしてから再度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してください。"
+      },
+      "retry": "再試行"
+    }
+  }
+}

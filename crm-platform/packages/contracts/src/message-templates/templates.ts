@@ -45,6 +45,15 @@ export type TplVariableMap = z.infer<typeof tplVariableMapSchema>;
 
 export const tplAttachmentTypeSchema = z.enum(['none', 'image', 'video', 'document', 'location']);
 
+/** The map pin of a `location` header: WhatsApp renders 0,0 for a value out of range, so the range is enforced here. */
+export const tplHeaderLocationSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  name: z.string().trim().max(100).nullish(),
+  address: z.string().trim().max(200).nullish(),
+});
+export type TplHeaderLocation = z.infer<typeof tplHeaderLocationSchema>;
+
 export const tplLintIssueSchema = z.object({
   code: z.string(),
   severity: z.enum(['error', 'warning']),
@@ -63,6 +72,8 @@ export const templateSummarySchema = z.object({
   metaStatus: z.string().nullable(),
   qualityScore: z.string().nullable(),
   rejectionReason: z.string().nullable(),
+  /** Meta's reason code (`INVALID_FORMAT`, `PROMOTIONAL`...), when it sent one; `NONE` is not reported. */
+  rejectionReasonCode: z.string().nullable(),
   metaTemplateId: z.string().nullable(),
   /** The WhatsApp number it is submitted through (uuid of the connection). */
   connectionId: uuidSchema.nullable(),
@@ -71,13 +82,7 @@ export const templateSummarySchema = z.object({
   submittedAt: z.string().datetime().nullable(),
   lastSyncedAt: z.string().datetime().nullable(),
   bodyPreview: z.string(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-});
-export type TemplateSummary = z.infer<typeof templateSummarySchema>;
-
-export const templateDetailSchema = templateSummarySchema.extend({
+  /** What the library card draws: the whole message, so the card matches the detail page. */
   header: z.string().nullable(),
   attachmentType: tplAttachmentTypeSchema,
   /** Public URL of the header example media, when one was uploaded. */
@@ -85,6 +90,15 @@ export const templateDetailSchema = templateSummarySchema.extend({
   body: z.string(),
   footer: z.string().nullable(),
   buttons: z.array(tplButtonSchema),
+  rowVersion: z.number().int(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+export type TemplateSummary = z.infer<typeof templateSummarySchema>;
+
+export const templateDetailSchema = templateSummarySchema.extend({
+  /** The pin of a `location` header. */
+  headerLocation: tplHeaderLocationSchema.nullable(),
   variableMap: tplVariableMapSchema,
   codeExpirationMinutes: z.number().int().nullable(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']),
@@ -94,10 +108,22 @@ export const templateDetailSchema = templateSummarySchema.extend({
 });
 export type TemplateDetail = z.infer<typeof templateDetailSchema>;
 
+/**
+ * The library's three status tabs (WaDesk's "effective status"): approved; in review (pending and drafts); rejected (rejected,
+ * paused, disabled). A row Meta no longer lists (`deleted`) is only found under All.
+ */
+export const tplStatusGroupSchema = z.enum(['approved', 'pending', 'rejected']);
+export type TplStatusGroup = z.infer<typeof tplStatusGroupSchema>;
+
+export const tplSortSchema = z.enum(['newest', 'oldest', 'name-asc', 'name-desc']);
+export type TplSort = z.infer<typeof tplSortSchema>;
+
 export const listTemplatesQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(30),
   cursor: z.string().min(1).max(512).optional(),
   status: tplStatusSchema.optional(),
+  statusGroup: tplStatusGroupSchema.optional(),
+  sort: tplSortSchema.default('newest'),
   category: tplMetaCategorySchema.optional(),
   connectionId: uuidSchema.optional(),
   q: z.string().trim().max(100).optional(),
@@ -119,6 +145,8 @@ const templateFields = {
   /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
   headerHandle: z.string().max(2000).nullish(),
   headerSampleUrl: z.string().max(2000).nullish(),
+  /** Required with a `location` attachment. */
+  headerLocation: tplHeaderLocationSchema.nullish(),
   body: z.string().max(TPL_BODY_MAX),
   footer: z.string().trim().max(60).nullish(),
   buttons: z.array(tplButtonSchema).max(10).default([]),
@@ -168,6 +196,29 @@ export const templateSubmitResultSchema = z.object({
   metaError: z.string().nullable(),
 });
 export type TemplateSubmitResult = z.infer<typeof templateSubmitResultSchema>;
+
+/** `GET /v2/templates/counts`: the numbers on the library's tabs. Tab counts ignore the filters (WaDesk counts the whole library). */
+export const templateCountsQuerySchema = listTemplatesQuerySchema.pick({
+  status: true,
+  statusGroup: true,
+  category: true,
+  connectionId: true,
+  q: true,
+});
+export type TemplateCountsQuery = z.infer<typeof templateCountsQuerySchema>;
+export const templateCountsSchema = z.object({
+  /** Every template, by Meta category (key `all` = the total). */
+  categories: z.record(z.number().int()),
+  /** Every template, by status tab: `all`, `approved`, `pending`, `rejected`. */
+  statuses: z.record(z.number().int()),
+  /** Templates matching the current filters ("Showing 8 of N"). */
+  filtered: z.number().int(),
+});
+export type TemplateCounts = z.infer<typeof templateCountsSchema>;
+
+/** `POST /v2/templates/:id/submit`: send (or send again) on another number when the account has several. */
+export const submitTemplateInputSchema = z.object({ connectionId: uuidSchema.optional() });
+export type SubmitTemplateInput = z.infer<typeof submitTemplateInputSchema>;
 
 export const syncTemplatesInputSchema = z.object({ connectionId: uuidSchema });
 export type SyncTemplatesInput = z.infer<typeof syncTemplatesInputSchema>;

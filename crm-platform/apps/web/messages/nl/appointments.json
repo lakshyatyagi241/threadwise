@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Afspraken"
+    },
+    "common": {
+      "dismiss": "Negeren",
+      "loading": "Laden",
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "close": "Sluiten",
+      "back": "Terug",
+      "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+      "minShort": "{count} min",
+      "hoursMinutes": "{hours} u {minutes} min",
+      "hours": "{hours} u"
+    },
+    "status": {
+      "pending": "In behandeling",
+      "confirmed": "Bevestigd",
+      "cancelled": "Geannuleerd",
+      "completed": "Voltooid",
+      "no_show": "Niet verschenen",
+      "declined": "Afgewezen"
+    },
+    "errors": {
+      "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "signedOut": "Je sessie is beëindigd. Meld je opnieuw aan om door te gaan.",
+      "conflict": "Dit is door iemand anders gewijzigd. Laad opnieuw om de nieuwste versie te zien.",
+      "validation": "Een deel van de informatie is ongeldig. Controleer de gemarkeerde velden.",
+      "unavailable": "Afspraken zijn nog niet beschikbaar op deze server.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Dat is niet gevonden. Het is mogelijk verwijderd.",
+      "planDisabled": "Afspraken zijn niet inbegrepen in je abonnement.",
+      "slotTaken": "Dat tijdstip is zojuist bezet. Kies een ander.",
+      "gone": "Deze boeking kan niet meer worden gewijzigd.",
+      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen",
+      "invalidTransition": "Die boeking heeft niet de status waarin dit kan. Laad opnieuw om te zien waar ze staat.",
+      "notStarted": "Dit kan pas nadat de boeking is begonnen.",
+      "alreadyStarted": "Deze boeking is al begonnen en kan dus niet meer worden gewijzigd.",
+      "bookingOff": "Boeken is voor deze dienst momenteel niet beschikbaar.",
+      "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn."
+    },
+    "picker": {
+      "timeZone": "Tijdzone",
+      "previousMonth": "Vorige maand",
+      "nextMonth": "Volgende maand",
+      "pickDay": "Kies een dag",
+      "times": "Beschikbare tijden",
+      "timesAvailable": "{count, plural, one {# tijdstip beschikbaar} other {# tijdstippen beschikbaar}}",
+      "seatsLeft": "{count} over",
+      "noTimes": "Geen open tijdstippen in de komende dagen.",
+      "noTimesDay": "Geen tijdstippen op deze dag. Kies een andere dag.",
+      "loading": "Tijdstippen laden",
+      "loadFailed": "De tijdstippen konden niet worden geladen.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "retry": "Opnieuw proberen",
+      "typeZone": "Deze dienst draait in {zone}."
+    },
+    "hours": {
+      "openDay": "Open op {day}",
+      "daySummary": "{hours} u {minutes} min",
+      "closed": "Gesloten",
+      "from": "{day}, interval {n}, starttijd",
+      "to": "{day}, interval {n}, eindtijd",
+      "removeInterval": "Interval {n} op {day} verwijderen",
+      "addInterval": "Interval toevoegen",
+      "copyTo": "Uren van {day} kopiëren naar andere dagen",
+      "copyDay": "Kopiëren naar",
+      "copyWeekdays": "Maandag tot vrijdag",
+      "copyAll": "Alle dagen",
+      "problems": {
+        "incomplete": "Vul beide tijden in.",
+        "order": "Het einde moet na het begin liggen.",
+        "overlap": "Dit overlapt een ander interval."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Kruimelpad",
+      "integrations": "Integraties",
+      "appointments": "Afspraken",
+      "title": "Je boekingen",
+      "subtitle": "Laat klanten afspraken boeken binnen de chat. Maak een boekingstype met je diensten, uren en herinneringen, en klanten kiezen een tijdslot en worden automatisch bevestigd.",
+      "newType": "Nieuw boekingstype",
+      "types": "Boekingstypen",
+      "settings": "Instellingen",
+      "weekTitle": "Week",
+      "monthTitle": "Maand",
+      "inRange": "{count, plural, =0 {Geen boekingen} one {# boeking} other {# boekingen}} in beeld",
+      "tableLabel": "Boekingen",
+      "loading": "Boekingen laden",
+      "useSampleData": "Voorbeeldgegevens gebruiken (ontwikkeling)",
+      "empty": {
+        "upcoming": {
+          "title": "Geen aankomende boekingen",
+          "message": "Maak een boekingstype met je diensten en uren en plaats dan een knooppunt „Afspraak boeken” in een flow. Bevestigde boekingen verschijnen hier."
+        },
+        "past": {
+          "title": "Geen eerdere boekingen",
+          "message": "Boekingen die al hebben plaatsgevonden verschijnen hier, met hun uitkomst."
+        },
+        "filtered": {
+          "title": "Geen boekingen gevonden",
+          "message": "Niets komt overeen met de zoekopdracht en filters. Wis ze om alle boekingen te zien."
+        }
+      },
+      "resetFilters": "Filters wissen",
+      "truncated": "De eerste {count} boekingen van dit bereik worden getoond. Verfijn de filters om de rest te zien.",
+      "showing": "{count, plural, one {# boeking weergegeven} other {# boekingen weergegeven}}",
+      "loadMore": "Meer laden",
+      "endOfList": "Einde van de lijst",
+      "cancelTitle": "Deze afspraak annuleren?",
+      "cancelMessage": "De boeking wordt geannuleerd en het tijdstip komt weer vrij. De klant wordt op de hoogte gesteld en de herinneringen worden verwijderd.",
+      "cancelConfirm": "Afspraak annuleren",
+      "keep": "Behouden",
+      "declineTitle": "Dit verzoek afwijzen?",
+      "declineMessage": "De klant krijgt te horen dat het verzoek is afgewezen en het tijdstip komt weer vrij.",
+      "declineConfirm": "Verzoek afwijzen"
+    },
+    "tabs": {
+      "label": "Boekingslijsten",
+      "upcoming": "Aankomend",
+      "past": "Verleden",
+      "count": "{count, plural, one {# boeking} other {# boekingen}}"
+    },
+    "toolbar": {
+      "label": "Filters en weergaven",
+      "search": "Zoek op klant, telefoon, e-mail of dienst",
+      "status": "Status",
+      "allStatuses": "Alle statussen",
+      "type": "Boekingstype",
+      "allTypes": "Alle boekingstypen",
+      "clear": "Wissen",
+      "navigate": "Kalendernavigatie",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "today": "Vandaag",
+      "refresh": "Vernieuwen",
+      "view": "Weergave",
+      "views": {
+        "list": "Lijst",
+        "week": "Week",
+        "month": "Maand"
+      }
+    },
+    "table": {
+      "when": "Wanneer",
+      "customer": "Klant",
+      "service": "Dienst",
+      "status": "Status",
+      "actions": "Acties",
+      "today": "Vandaag",
+      "tomorrow": "Morgen",
+      "yesterday": "Gisteren",
+      "rowLabel": "Boeking openen: {title}",
+      "noName": "Geen naam",
+      "needsReview": "Beoordeling nodig"
+    },
+    "row": {
+      "moreFor": "Meer acties voor {title}",
+      "open": "Openen",
+      "confirm": "Bevestigen",
+      "complete": "Markeren als voltooid",
+      "noShow": "Markeren als niet verschenen",
+      "reschedule": "Opnieuw plannen",
+      "copyLink": "Beheerlink kopiëren",
+      "cancel": "Annuleren",
+      "decline": "Afwijzen"
+    },
+    "calendar": {
+      "emptyWeek": "Geen boekingen deze week.",
+      "monthGrid": "Maandkalender",
+      "more": "+{count} meer",
+      "dayAgenda": "Boekingen van de geselecteerde dag",
+      "emptyDay": "Geen boekingen op deze dag."
+    },
+    "drawer": {
+      "loading": "Boeking laden",
+      "close": "Sluiten",
+      "noType": "Verwijderd boekingstype",
+      "pendingHint": "Wacht op bevestiging",
+      "minutes": "{count} min",
+      "customerTime": "Voor de klant: {time} ({zone})",
+      "confirm": "Bevestigen",
+      "complete": "Markeren als voltooid",
+      "noShow": "Niet verschenen",
+      "reschedule": "Opnieuw plannen",
+      "cancel": "Annuleren",
+      "customer": "Klant",
+      "openContact": "Contact openen",
+      "linkedContact": "Gekoppeld contact",
+      "noName": "Geen naam opgegeven",
+      "where": "Waar",
+      "joinCall": "Deelnemen aan videogesprek",
+      "answers": "Antwoorden op de boekingsvragen",
+      "noAnswers": "Deze dienst stelde geen vragen, of de klant heeft er geen beantwoord.",
+      "payment": "Betaling",
+      "depositPaid": "{amount} betaald",
+      "notes": "Notities",
+      "notesPlaceholder": "Privénotities over deze boeking",
+      "saveNotes": "Notities opslaan",
+      "reminders": "Herinneringen",
+      "noReminders": "Voor deze dienst zijn geen herinneringen ingesteld.",
+      "before": "{count, plural, one {# minuut ervoor} other {# minuten ervoor}}",
+      "reminder": {
+        "scheduled": "Gepland",
+        "skipped": "Niet verzonden",
+        "due": "Tijd bereikt"
+      },
+      "manageLink": "Beheerlink",
+      "manageHint": "Deel deze link met de klant, zodat die zelf kan verzetten of annuleren.",
+      "copy": "Kopiëren",
+      "openLink": "De beheerpagina openen",
+      "noManageLink": "Deze boeking heeft geen beheerlink.",
+      "source": "Geboekt via",
+      "bookedOn": "Geboekt op",
+      "cancelTitle": "Deze afspraak annuleren?",
+      "cancelMessage": "De boeking wordt geannuleerd en het tijdstip komt weer vrij. De klant wordt op de hoogte gesteld en de herinneringen worden verwijderd.",
+      "cancelConfirm": "Afspraak annuleren",
+      "keep": "Behouden",
+      "decline": "Afwijzen",
+      "host": "Host",
+      "needsReview": "Afgelopen, nog niet gemarkeerd",
+      "needsReviewHint": "Deze boeking is afgelopen en niemand heeft haar als voltooid of niet verschenen gemarkeerd.",
+      "cancelledBy": "{who} heeft deze boeking geannuleerd",
+      "cancelledByStaff": "Medewerker",
+      "cancelledByInvitee": "De klant",
+      "cancelledBySystem": "Het systeem",
+      "cancelReason": "Reden",
+      "declineTitle": "Dit verzoek afwijzen?",
+      "declineMessage": "De klant krijgt te horen dat het verzoek is afgewezen en het tijdstip komt weer vrij.",
+      "declineConfirm": "Verzoek afwijzen",
+      "remindersNote": "Herinneringen volgen het boekingstype. De bezorging wordt niet per herinnering bijgehouden."
+    },
+    "source": {
+      "chat": "Een chatflow",
+      "manual": "Medewerker",
+      "api": "De API",
+      "link": "De boekingspagina"
+    },
+    "payment": {
+      "none": "Geen betaling",
+      "pending": "Betaling in behandeling",
+      "paid": "Betaald",
+      "refunded": "Terugbetaald",
+      "partial": "Deels betaald"
+    },
+    "reschedule": {
+      "eyebrow": "Opnieuw plannen",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "confirm": "Nieuw tijdstip bevestigen",
+      "current": "Nu: {day}, {time} {zone}",
+      "noType": "Het boekingstype van deze boeking is verwijderd, dus er zijn geen open tijdstippen om naartoe te verplaatsen.",
+      "taken": "Dat tijdstip is zojuist bezet. Kies een ander.",
+      "newTime": "Nieuw tijdstip: {day}, {time}",
+      "notify": "Informeer de klant over het nieuwe tijdstip"
+    },
+    "toast": {
+      "conflict": "Deze boeking is door iemand anders gewijzigd. Ze is opnieuw geladen.",
+      "failed": "Dat is niet gelukt.",
+      "confirmed": "Boeking bevestigd.",
+      "cancelled": "Afspraak geannuleerd.",
+      "completed": "Gemarkeerd als voltooid.",
+      "noShow": "Gemarkeerd als niet verschenen.",
+      "notesSaved": "Notities opgeslagen.",
+      "rescheduled": "Boeking verplaatst naar het nieuwe tijdstip.",
+      "linkCopied": "Beheerlink gekopieerd.",
+      "copyFailed": "De link kon niet worden gekopieerd.",
+      "declined": "Verzoek afgewezen."
+    },
+    "typesList": {
+      "breadcrumb": "Kruimelpad",
+      "appointments": "Afspraken",
+      "services": "Diensten",
+      "title": "Boekingstypen",
+      "subtitle": "Elke dienst heeft zijn eigen duur, beschikbaarheid, prijs, vragenlijst en herinneringen. Klanten boeken hem via de chat of via zijn eigen boekingspagina.",
+      "newType": "Nieuw boekingstype",
+      "allBookings": "Alle boekingen",
+      "settings": "Instellingen",
+      "toolbar": "Filters",
+      "search": "Boekingstypen zoeken",
+      "statusFilter": "Status",
+      "allStatuses": "Alle statussen",
+      "active": "Actief",
+      "pausedLabel": "Gepauzeerd",
+      "clear": "Wissen",
+      "tableLabel": "Boekingstypen",
+      "loading": "Boekingstypen laden",
+      "useSampleData": "Voorbeeldgegevens gebruiken (ontwikkeling)",
+      "emptyFilteredTitle": "Geen boekingstypen gevonden",
+      "emptyFiltered": "Niets komt overeen met de zoekopdracht en het filter.",
+      "emptyTitle": "Nog geen boekingstypen",
+      "emptyMessage": "Maak je eerste dienst aan. Stel de duur, uren en prijs in en klanten kunnen hem via de chat boeken.",
+      "name": "Naam",
+      "details": "Details",
+      "price": "Prijs",
+      "booked": "Geboekt",
+      "status": "Status",
+      "actions": "Acties",
+      "minutes": "{count} min",
+      "location": {
+        "address": "Op locatie",
+        "virtual": "Virtueel",
+        "phone": "Telefoongesprek",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, one {# plek} other {# plekken}} per tijdslot",
+      "approval": "Goedkeuring nodig",
+      "free": "Gratis",
+      "toggle": "Actief: {name}",
+      "moreFor": "Meer acties voor {name}",
+      "edit": "Bewerken",
+      "copyLink": "Openbare link kopiëren",
+      "openPage": "Boekingspagina openen",
+      "duplicate": "Dupliceren",
+      "delete": "Verwijderen",
+      "showing": "{count, plural, one {# boekingstype} other {# boekingstypen}}",
+      "deleteTitle": "„{name}” verwijderen?",
+      "deleteMessage": "Dit boekingstype verwijderen? Bestaande boekingen blijven behouden.",
+      "deleteConfirm": "Boekingstype verwijderen",
+      "keep": "Behouden",
+      "activated": "„{name}” is actief.",
+      "paused": "„{name}” is gepauzeerd.",
+      "duplicated": "„{name}” aangemaakt (gepauzeerd).",
+      "deleted": "„{name}” verwijderd.",
+      "failed": "Dat is niet gelukt.",
+      "linkCopied": "Openbare link gekopieerd.",
+      "copyFailed": "De link kon niet worden gekopieerd.",
+      "copyLinkFor": "De openbare link van {name} kopiëren",
+      "copyLinkPaused": "Activeer dit boekingstype om een openbare link te krijgen"
+    },
+    "editor": {
+      "forbidden": "Je hebt geen toestemming om boekingstypen aan te maken of te bewerken.",
+      "notFoundTitle": "Boekingstype niet gevonden",
+      "notFound": "Dat boekingstype kon niet worden gevonden. Het is mogelijk verwijderd.",
+      "loading": "Boekingstype laden",
+      "header": {
+        "back": "Terug naar boekingstypen",
+        "kickerNew": "Afspraken / Nieuw",
+        "kickerEdit": "Afspraken / Bewerken",
+        "titleNew": "Een boekingstype maken",
+        "titleEdit": "Boekingstype bewerken",
+        "draft": "Concept / niet opgeslagen",
+        "unsaved": "Niet-opgeslagen wijzigingen"
+      },
+      "steps": {
+        "label": "Stappen",
+        "service": "Dienst",
+        "timing": "Timing",
+        "availability": "Beschikbaarheid",
+        "pricing": "Prijzen",
+        "messaging": "Berichten",
+        "hasProblem": "vereist aandacht",
+        "stepOf": "Stap {n} van {total}: {name}"
+      },
+      "nav": {
+        "back": "Terug",
+        "cancel": "Annuleren",
+        "next": "Volgende",
+        "create": "Boekingstype aanmaken",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan"
+      },
+      "toast": {
+        "created": "Boekingstype „{name}” aangemaakt.",
+        "updated": "Boekingstype „{name}” bijgewerkt."
+      },
+      "saveError": {
+        "conflict": "Dit boekingstype is door iemand anders gewijzigd terwijl jij het bewerkte. Laad opnieuw om hun versie te zien. Je niet-opgeslagen wijzigingen hier gaan verloren.",
+        "reload": "De nieuwste versie laden"
+      },
+      "leave": {
+        "title": "Je wijzigingen negeren?",
+        "message": "Je hebt wijzigingen die niet zijn opgeslagen. Als je nu weggaat, gaan ze verloren.",
+        "discard": "Wijzigingen negeren",
+        "keep": "Doorgaan met bewerken"
+      },
+      "problems": {
+        "nameRequired": "Voer een naam in voor dit boekingstype.",
+        "nameTooLong": "De naam mag maximaal {nameMax} tekens bevatten.",
+        "slugInvalid": "Gebruik kleine letters, cijfers en enkele koppeltekens, tot {slugMax} tekens.",
+        "durationInvalid": "De duur moet een geheel getal van {durationMin} tot {durationMax} minuten zijn.",
+        "incrementInvalid": "De startstap moet een geheel getal van {incrementMin} tot {incrementMax} minuten zijn.",
+        "bufferInvalid": "Voer een geheel aantal minuten van 0 tot {bufferMax} in.",
+        "minNoticeInvalid": "Voer een geheel aantal minuten van 0 tot {minNoticeMax} in.",
+        "maxAdvanceInvalid": "Voer een geheel aantal dagen van {maxAdvanceMin} tot {maxAdvanceMax} in.",
+        "maxPerDayInvalid": "Laat dit leeg voor geen limiet, of voer een getal van 1 tot {maxPerDayMax} in.",
+        "capacityInvalid": "De capaciteit moet een geheel getal van 1 tot {capacityMax} zijn.",
+        "timezoneInvalid": "Kies een geldige tijdzone.",
+        "colorInvalid": "Gebruik een hexkleur zoals #075E54.",
+        "feeInvalid": "Voer een bedrag in zoals 150,00.",
+        "taxInvalid": "Voer een percentage van 0 tot 100 in met maximaal twee decimalen.",
+        "depositInvalid": "Voer een aanbetalingsbedrag groter dan 0 in.",
+        "depositTooHigh": "De aanbetaling mag niet hoger zijn dan het totaal (tarief plus btw).",
+        "cancelFeeInvalid": "Voer een bedrag in zoals 25,00.",
+        "cancelWindowInvalid": "Voer een geheel aantal minuten van 0 tot {cancelWindowMax} in.",
+        "reminderInvalid": "Voer hele minuten vóór het begin in, van 1 tot {reminderMax}.",
+        "remindersDuplicate": "Elke herinnering heeft een ander tijdstip nodig.",
+        "remindersTooMany": "Een boekingstype kan maximaal {reminders} herinneringen hebben.",
+        "questionLabelRequired": "Geef de vraag een label (maximaal {questionLabelMax} tekens).",
+        "questionsTooMany": "Een boekingstype kan maximaal {questions} vragen hebben.",
+        "questionOptionsRequired": "Voeg minstens één keuze toe, één per regel.",
+        "hoursInvalid": "Corrigeer de hieronder gemarkeerde weekuren.",
+        "overridesInvalid": "Corrigeer de gemarkeerde datums in de lijst met datumuitzonderingen.",
+        "descriptionTooLong": "De beschrijving mag maximaal {descriptionMax} tekens bevatten.",
+        "locationTooLong": "De locatie mag maximaal {locationMax} tekens bevatten.",
+        "server": "De server heeft deze waarde niet geaccepteerd. Controleer hem en probeer het opnieuw."
+      },
+      "service": {
+        "title": "Dienstdetails",
+        "hint": "Geef de dienst een naam en bepaal waar die plaatsvindt.",
+        "name": "Naam",
+        "namePlaceholder": "Demo van 30 min",
+        "description": "Beschrijving",
+        "descriptionPlaceholder": "Wat de persoon boekt, getoond op de boekingspagina.",
+        "locationType": "Locatietype",
+        "locationTypes": {
+          "address": "Op locatie (adres)",
+          "virtual": "Virtueel (video)",
+          "phone": "Telefoongesprek",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Locatie / adres",
+        "locationPlaceholders": {
+          "address": "Straatadres",
+          "virtual": "Videolink (optioneel)",
+          "phone": "Telefoonnummer om te bellen (optioneel)",
+          "whatsapp": "WhatsApp-nummer (optioneel)"
+        },
+        "appearanceTitle": "Kleur",
+        "appearanceHint": "Markeert deze dienst in de kalender en op de boekingspagina.",
+        "color": "Kleur",
+        "colorSwatches": "Kies een kleur",
+        "linkTitle": "Openbare link",
+        "linkHint": "Bezoekers boeken op dit adres. Het werkt zodra het boekingstype is opgeslagen en actief is.",
+        "slug": "Linknaam",
+        "slugHint": "Afgeleid van de naam totdat je het wijzigt. Kleine letters, cijfers en koppeltekens.",
+        "slugPlaceholder": "kennismakingsgesprek",
+        "publicUrl": "Openbare pagina",
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd.",
+        "copyFailed": "De link kon niet worden gekopieerd. Selecteer hem en kopieer hem handmatig.",
+        "rulesTitle": "Boekingsregels",
+        "requiresApproval": "Goedkeuring vereisen",
+        "requiresApprovalHint": "Nieuwe boekingen wachten als In behandeling totdat iemand van je team ze bevestigt.",
+        "isActive": "Actief",
+        "isActiveHint": "Schakel dit uit om de dienst te pauzeren: de openbare pagina neemt dan geen boekingen meer aan."
+      },
+      "timing": {
+        "title": "Timing",
+        "hint": "Hoe lang elke boeking duurt en hoe ver vooruit mensen kunnen boeken.",
+        "duration": "Duur (min)",
+        "durationHint": "Hoe lang één boeking duurt. 60 = 1 uur.",
+        "increment": "Startstap (min)",
+        "incrementHint": "Tussenruimte tussen aangeboden starttijden. 30 biedt 9:00, 9:30, 10:00.",
+        "capacity": "Capaciteit (per tijdslot)",
+        "capacityHint": "Aantal personen dat één tijdstip kan delen. 1 voor één-op-één.",
+        "bufferBefore": "Buffer ervoor (min)",
+        "bufferAfter": "Buffer erna (min)",
+        "bufferHint": "Vrije tijd rondom elke boeking.",
+        "minNotice": "Min. vooraankondiging (min)",
+        "minNoticeHint": "Hoe kort voor het begin mensen nog kunnen boeken. 240 = 4 uur.",
+        "maxAdvance": "Boeken tot (dagen)",
+        "maxAdvanceHint": "Hoe ver vooruit mensen kunnen boeken. 30 = een maand.",
+        "maxPerDay": "Max. per dag",
+        "maxPerDayHint": "Maximaal aantal boekingen op één dag. Laat leeg voor geen limiet.",
+        "noLimit": "Geen limiet",
+        "zoneTitle": "Tijdzone",
+        "zoneHint": "Weekuren en datums worden in deze zone gelezen. Bezoekers zien tijden in hun eigen zone.",
+        "zone": "Tijdzone van deze dienst",
+        "zoneSearch": "Zones zoeken",
+        "zonePick": "Selecteer een tijdzone",
+        "zoneNone": "Geen zone komt overeen met die zoekopdracht."
+      },
+      "availability": {
+        "title": "Weekuren",
+        "hint": "Voeg de tijden toe waarop je elke dag boekingen aanneemt. Het rechterpaneel toont een voorbeeld van de echt boekbare tijdslots.",
+        "empty": "Er zijn geen uren ingesteld, dus er kan nog niets worden geboekt.",
+        "total": "{hours} u {minutes} min boekbare tijd per week."
+      },
+      "overrides": {
+        "title": "Datumuitzonderingen en feestdagen",
+        "hint": "Sluit een dag voor een feestdag, of geef één datum eigen uren. Al het andere volgt de weekuren.",
+        "previousMonth": "Vorige maand",
+        "nextMonth": "Volgende maand",
+        "legend": "Legenda",
+        "status": {
+          "closed": "Gesloten",
+          "custom": "Aangepaste uren",
+          "open": "Open (weekuren)",
+          "off": "Gesloten (weekuren)"
+        },
+        "clickHint": "Klik op een dag om hem te sluiten. Klik opnieuw op een gemarkeerde dag om hem zijn weekuren terug te geven.",
+        "rangeTitle": "Een reeks sluiten",
+        "rangeHint": "Sluit meerdere dagen tegelijk, zoals een vakantieweek. Dagen die al een uitzondering hebben, behouden die.",
+        "rangeFrom": "Van",
+        "rangeTo": "Tot (optioneel)",
+        "reason": "Reden",
+        "reasonPlaceholder": "Reden (optioneel)",
+        "rangeProblems": {
+          "invalid": "Kies een begindatum en een einddatum die niet ervoor ligt.",
+          "tooLong": "Een reeks kan maximaal een jaar beslaan.",
+          "full": "De limiet voor datumuitzonderingen is bereikt."
+        },
+        "closeRange": "Deze dagen sluiten",
+        "listTitle": "Uitzonderingen",
+        "count": "{count, plural, =0 {Geen datums} one {# datum} other {# datums}}",
+        "limit": "Je hebt de limiet van {max} datums bereikt. Verwijder er enkele om meer toe te voegen.",
+        "empty": "Nog geen datums. Klik op een dag in de kalender om hem te sluiten.",
+        "remove": "De uitzondering op {date} verwijderen",
+        "mode": "{date}: gesloten of aangepaste uren",
+        "modeClosed": "De hele dag gesloten",
+        "modeCustom": "Aangepaste uren",
+        "from": "{date}, starttijd",
+        "to": "{date}, eindtijd",
+        "reasonOf": "{date}, reden",
+        "problems": {
+          "incomplete": "Vul beide tijden in.",
+          "order": "Het einde moet na het begin liggen.",
+          "dayClosedHours": "Een gesloten dag heeft geen uren."
+        }
+      },
+      "pricing": {
+        "title": "Prijzen (optioneel)",
+        "hint": "Laat het tarief op 0 staan voor gratis boekingen.",
+        "currency": "Valuta",
+        "currencyHint": "Standaard de valuta van je workspace.",
+        "fee": "Tarief ({currency})",
+        "feeHint": "Schrijf het bedrag, bijv. {example}.",
+        "tax": "Btw %",
+        "taxHint": "Bovenop het tarief toegevoegd.",
+        "deposit": "Aanbetaling",
+        "depositModes": {
+          "none": "Geen vooruitbetaling",
+          "partial": "Gedeeltelijke aanbetaling",
+          "full": "Volledig bedrag"
+        },
+        "depositAmount": "Aanbetalingsbedrag ({currency})",
+        "paymentNote": "Online betalingen innen is nog niet verbonden. De aanbetaling wordt bij elke boeking vastgelegd, maar er wordt niets in rekening gebracht.",
+        "cancelFee": "Annuleringskosten ({currency})",
+        "noShowFee": "Kosten bij niet verschijnen ({currency})",
+        "cancelWindow": "Annuleringstermijn (min)",
+        "cancelWindowHint": "Hoe lang voor het begin een boeking gratis mag worden geannuleerd. 1440 = 24 uur.",
+        "recordedOnly": "Annulerings- en no-showkosten en de annuleringstermijn worden alleen vastgelegd.",
+        "totalsLabel": "Wat een boeking kost",
+        "totalFee": "Tarief",
+        "totalTax": "Btw",
+        "totalSum": "Totaal",
+        "totalDue": "Nu te betalen"
+      },
+      "calendar": {
+        "title": "Google Agenda (optioneel)",
+        "hint": "Boekingen werken ook zonder dit. Verbind Google Agenda in Afspraken, Instellingen om vrij/bezet-tijden te synchroniseren en Meet-links toe te voegen.",
+        "unavailable": "Google Agenda is nog niet ingesteld voor dit platform. Deze instellingen worden bij het boekingstype bewaard voor wanneer het zover is.",
+        "calendarId": "Agenda",
+        "calendarPlaceholder": "primair",
+        "spreadsheetId": "Toevoegen aan spreadsheet (optioneel)",
+        "spreadsheetPlaceholder": "Spreadsheet-ID",
+        "createMeet": "Maak voor elke boeking een Google Meet-link",
+        "calendarDefault": "De workspaceagenda"
+      },
+      "messages": {
+        "title": "Levenscyclusberichten",
+        "hint": "Wat de klant ontvangt wanneer een boeking wordt bevestigd, herinnerd, geannuleerd of verplaatst. Laat een vak leeg om de standaard van de workspace te gebruiken.",
+        "placeholdersTitle": "Plaatshouders die je kunt gebruiken",
+        "placeholdersHint": "Klik op een plaatshouder om hem in te voegen waar de cursor staat in het bericht dat je bewerkte ({event}).",
+        "placeholderMeaning": {
+          "type": "de naam van het boekingstype",
+          "slot": "de datum en tijd van de boeking",
+          "name": "de naam van de klant",
+          "manage_link": "de link om de boeking te beheren"
+        },
+        "events": {
+          "confirmation": "Bevestiging",
+          "reminder": "Herinnering",
+          "cancellation": "Annulering",
+          "reschedule": "Verplaatsing"
+        },
+        "placeholders": {
+          "confirmation": "Hoi {name}, je {type} is geboekt voor {slot}. Beheer het hier: {manage_link}",
+          "reminder": "Hoi {name}, een herinnering: je {type} is op {slot}.",
+          "cancellation": "Hoi {name}, je {type} op {slot} is geannuleerd.",
+          "reschedule": "Hoi {name}, je {type} is verplaatst naar {slot}. Details: {manage_link}"
+        },
+        "templatesNote": "Goedgekeurde WhatsApp-sjablonen kunnen nog niet worden gekozen. Berichten worden verzonden als de platte tekst hierboven."
+      },
+      "reminders": {
+        "title": "Herinneringen",
+        "hint": "Tijden moeten verschillend zijn (1440 = 24 u ervoor, 180 = 3 u ervoor). Maximaal {max}.",
+        "add": "Herinnering toevoegen",
+        "quickAdd": "Snel toevoegen",
+        "quick": {
+          "h24": "24 u",
+          "h3": "3 u",
+          "h1": "1 u",
+          "m15": "15 min"
+        },
+        "empty": "Geen herinneringen. Klanten krijgen alleen de bevestiging.",
+        "offsetOf": "Herinnering {n}, minuten voor het begin",
+        "minBefore": "min ervoor",
+        "labelPlaceholder": "24u",
+        "labelOf": "Herinnering {n}, label",
+        "remove": "Herinnering {n} verwijderen",
+        "count": "{count} van {max} herinneringen"
+      },
+      "questions": {
+        "title": "Vragenlijst",
+        "hint": "Vragen die worden gesteld wanneer iemand boekt. Maximaal {max}.",
+        "add": "Vraag toevoegen",
+        "intro": "Introductiebericht",
+        "introHint": "Getoond boven de vragen.",
+        "empty": "Geen vragen. Mensen geven alleen hun naam, e-mailadres en telefoonnummer.",
+        "labelPlaceholder": "Vraaglabel",
+        "labelOf": "Vraag {n}, label",
+        "typeOf": "Vraag {n}, antwoordtype",
+        "types": {
+          "text": "Tekst",
+          "textarea": "Lange tekst",
+          "select": "Keuze",
+          "number": "Getal",
+          "email": "E-mail",
+          "phone": "Telefoon",
+          "date": "Datum"
+        },
+        "optionsOf": "Vraag {n}, keuzes",
+        "optionsPlaceholder": "Eén keuze per regel",
+        "optionsHint": "Maximaal {max} keuzes.",
+        "map": "Het antwoord opslaan in",
+        "mapOf": "Vraag {n}, contactveld",
+        "mapNone": "Niets",
+        "mapFields": {
+          "email": "E-mail",
+          "name": "Naam",
+          "mobile": "Mobiel"
+        },
+        "required": "Verplicht",
+        "moveUp": "Vraag {n} omhoog verplaatsen",
+        "moveDown": "Vraag {n} omlaag verplaatsen",
+        "remove": "Vraag {n} verwijderen",
+        "count": "{count} van {max} vragen"
+      },
+      "rail": {
+        "title": "Live samenvatting",
+        "viewPublic": "Openbare pagina bekijken",
+        "cardLabel": "Voorbeeld van de boekingskaart",
+        "newService": "Nieuwe dienst",
+        "needsApproval": "Boekingen wachten op je goedkeuring.",
+        "fee": "Tarief",
+        "free": "Gratis",
+        "tax": "Btw",
+        "total": "Totaal",
+        "dueNow": "Nu te betalen",
+        "slotsTitle": "Voorbeeld van tijdslots",
+        "refresh": "Vernieuwen",
+        "loading": "Laden",
+        "slotsIdle": "Stel je weekuren, duur en tijdzone in om een voorbeeld van echt boekbare tijden te zien.",
+        "slotsFailed": "Voorbeeld mislukt.",
+        "slotsNone": "Geen boekbare tijden voor deze configuratie in de komende {days} dagen.",
+        "slotsSummary": "{count, plural, one {# tijdslot} other {# tijdslots}} · tijden in {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "Online boeken",
+      "brandName": "CRM",
+      "poweredBy": "Mogelijk gemaakt door {brand}",
+      "language": "Taal",
+      "loading": "Laden",
+      "problem": {
+        "retry": "Opnieuw proberen",
+        "back": "Alle diensten bekijken",
+        "notFoundOrg": {
+          "title": "We konden deze boekingspagina niet vinden",
+          "message": "Het adres is mogelijk verkeerd getypt, of dit bedrijf neemt geen online boekingen aan. Vraag hen om de link."
+        },
+        "notFoundService": {
+          "title": "Deze dienst is niet beschikbaar",
+          "message": "Hij is mogelijk gepauzeerd of wordt niet meer aangeboden. Je kunt de andere diensten van dit bedrijf bekijken."
+        },
+        "notFoundLink": {
+          "title": "Deze link is ongeldig",
+          "message": "De boeking is mogelijk verwijderd, of de link is onvolledig. Gebruik de link uit je bevestiging, of vraag het bedrijf om een nieuwe."
+        },
+        "paused": {
+          "title": "Deze dienst is gepauzeerd",
+          "message": "Hij neemt op dit moment geen boekingen aan. Probeer het later opnieuw, of bekijk de andere diensten van dit bedrijf."
+        },
+        "closed": {
+          "title": "Deze boeking kan niet meer worden gewijzigd",
+          "message": "Ze is al geannuleerd of voltooid. Neem contact op met het bedrijf als je nog iets nodig hebt."
+        },
+        "rateLimited": {
+          "title": "Te veel verzoeken",
+          "message": "Wacht even en probeer het opnieuw."
+        },
+        "unavailable": {
+          "title": "Online boeken is momenteel niet beschikbaar",
+          "message": "De boekingsservice kon niet worden bereikt. Probeer het over een paar minuten opnieuw."
+        },
+        "network": {
+          "title": "We konden deze pagina niet laden",
+          "message": "Controleer je verbinding en probeer het opnieuw. Als het blijft gebeuren, neem dan contact op met het bedrijf."
+        }
+      },
+      "directory": {
+        "title": "Een afspraak boeken",
+        "subtitle": "Kies een dienst om de open tijden bij {name} te zien.",
+        "services": "Diensten",
+        "choose": "Kies een tijd",
+        "empty": {
+          "title": "Op dit moment niets te boeken",
+          "message": "Dit bedrijf heeft momenteel geen diensten open voor online boeken. Kom later terug."
+        }
+      },
+      "location": {
+        "address": "Op locatie",
+        "virtual": "Videogesprek",
+        "phone": "Telefoongesprek",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "Alle diensten",
+        "approvalNote": "Het bedrijf bevestigt elke boeking. Je krijgt eerst een aanvraag en daarna de bevestiging."
+      },
+      "step": {
+        "time": "Kies een dag en een tijd",
+        "pickHint": "Kies een dag en daarna een tijd om door te gaan.",
+        "continue": "Doorgaan",
+        "changeTime": "De tijd wijzigen",
+        "details": "Je gegevens"
+      },
+      "when": {
+        "atService": "Waar de dienst gevestigd is: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Deelnemen aan videogesprek",
+        "videoLater": "Videogesprek",
+        "phone": "Telefoongesprek op"
+      },
+      "form": {
+        "name": "Je naam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "optional": "(optioneel)",
+        "choose": "Kies een optie",
+        "required": "Dit veld is verplicht.",
+        "tooLong": "Dit is te lang.",
+        "serverInvalid": "Dit kon niet worden geaccepteerd. Controleer het en probeer het opnieuw.",
+        "invalid": {
+          "text": "Controleer deze waarde.",
+          "textarea": "Controleer deze waarde.",
+          "email": "Voer een geldig e-mailadres in.",
+          "phone": "Voer een geldig telefoonnummer in, met landcode als het niet lokaal is.",
+          "number": "Voer een getal in.",
+          "date": "Kies een geldige datum.",
+          "select": "Kies een van de opties."
+        }
+      },
+      "price": {
+        "title": "Prijs",
+        "inclTax": "incl. {pct}% btw",
+        "fee": "Tarief",
+        "tax": "Btw ({pct}%)",
+        "total": "Totaal",
+        "dueNow": "Te betalen bij boeking",
+        "notCollected": "Op deze pagina wordt niets in rekening gebracht. Online betalen is nog niet beschikbaar."
+      },
+      "book": {
+        "confirm": "Boeking bevestigen",
+        "request": "Boeking aanvragen",
+        "sending": "Je boeking wordt verzonden",
+        "slotTaken": "Dat tijdstip is zojuist bezet. Kies een ander.",
+        "slotTakenHint": "Je gegevens blijven bewaard. De onderstaande tijden zijn up-to-date.",
+        "notice": {
+          "validation": {
+            "title": "Een deel van de informatie kon niet worden geaccepteerd",
+            "message": "Controleer de gemarkeerde velden en probeer het opnieuw."
+          },
+          "rateLimited": {
+            "title": "Te veel verzoeken",
+            "message": "Wacht even en druk opnieuw op de knop."
+          },
+          "network": {
+            "title": "De boeking kon niet worden verzonden",
+            "message": "Controleer je verbinding en druk opnieuw op de knop. Je wordt niet twee keer geboekt."
+          },
+          "unavailable": {
+            "title": "Deze dienst is niet meer beschikbaar",
+            "message": "Hij is mogelijk gepauzeerd. Ga terug naar de lijst met diensten en probeer een andere."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Je boeking is bevestigd",
+        "confirmedMessage": "{name} heeft je boeking ontvangen. Bewaar de onderstaande link om haar te wijzigen of te annuleren.",
+        "pendingTitle": "Aanvraag ontvangen, wacht op bevestiging",
+        "pendingMessage": "{name} bevestigt je boeking. Bewaar de onderstaande link om de status te bekijken, haar te wijzigen of te annuleren.",
+        "pendingNote": "Totdat de boeking is bevestigd, wordt het tijdstip voor je vastgehouden, maar het kan nog veranderen.",
+        "manage": "Boeking beheren",
+        "bookAnother": "Nog een dienst boeken"
+      },
+      "calendar": {
+        "title": "Toevoegen aan agenda",
+        "download": ".ics-bestand downloaden",
+        "google": "Google Agenda",
+        "opensNewTab": "(opent in een nieuw tabblad)"
+      },
+      "manageLink": {
+        "title": "Je boekingslink",
+        "hint": "Bewaar deze link. Het is de enige manier om je boeking te wijzigen of te annuleren, en iedereen die hem heeft kan dat doen.",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd"
+      },
+      "manage": {
+        "title": "Je boeking",
+        "reschedule": "Opnieuw plannen",
+        "cancel": "Annuleren",
+        "flash": {
+          "rescheduled": "Je boeking is verplaatst.",
+          "cancelled": "Je boeking is geannuleerd."
+        },
+        "failure": {
+          "closed": "Deze boeking kan niet meer worden gewijzigd.",
+          "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+          "network": "De boeking kon niet worden gewijzigd. Controleer je verbinding en probeer het opnieuw."
+        },
+        "confirmCancel": {
+          "title": "Deze boeking annuleren?",
+          "message": "Je boeking voor {what} wordt geannuleerd en het tijdstip wordt vrijgegeven. Dit kan niet ongedaan worden gemaakt.",
+          "confirm": "Ja, boeking annuleren",
+          "keep": "Boeking behouden"
+        },
+        "state": {
+          "pending": {
+            "title": "Wacht op bevestiging",
+            "message": "Het bedrijf heeft deze boeking nog niet bevestigd."
+          },
+          "cancelled": {
+            "title": "Deze boeking is geannuleerd",
+            "message": "Ze kan niet meer worden gewijzigd."
+          },
+          "no_show": {
+            "title": "Deze boeking is als gemist gemarkeerd",
+            "message": "Ze kan niet meer worden gewijzigd. Neem contact op met het bedrijf als dit een vergissing is."
+          },
+          "completed": {
+            "title": "Deze afspraak is voltooid",
+            "message": "Ze kan niet meer worden gewijzigd."
+          },
+          "passed": {
+            "title": "Deze afspraak is al begonnen",
+            "message": "Ze kan niet meer online worden gewijzigd. Neem indien nodig contact op met het bedrijf."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Opnieuw plannen",
+        "back": "Terug naar je boeking",
+        "backToBooking": "Terug naar je boeking",
+        "current": "Huidige tijd",
+        "saving": "Het nieuwe tijdstip wordt opgeslagen",
+        "confirm": "Nieuw tijdstip bevestigen · {when}",
+        "failure": {
+          "slotTaken": "Dat tijdstip is zojuist bezet — kies een ander.",
+          "closed": "Deze boeking kan niet meer worden gewijzigd.",
+          "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+          "validation": "Dat tijdstip kon niet worden geaccepteerd. Kies een ander.",
+          "network": "Het nieuwe tijdstip kon niet worden opgeslagen. Controleer je verbinding en probeer het opnieuw."
+        },
+        "closed": {
+          "closed": {
+            "title": "Deze boeking kan niet meer worden gewijzigd",
+            "message": "Ze is al geannuleerd of voltooid, dus er is geen tijdstip om te verplaatsen."
+          },
+          "passed": {
+            "title": "Deze afspraak is al begonnen",
+            "message": "Een boeking kan niet meer worden verplaatst nadat ze is begonnen. Neem indien nodig contact op met het bedrijf."
+          }
+        }
+      },
+      "meta": {
+        "book": "Een afspraak boeken",
+        "manage": "Je boeking",
+        "reschedule": "Boeking opnieuw plannen"
+      }
+    },
+    "settings": {
+      "title": "Boekingsinstellingen",
+      "subtitle": "Standaardwaarden, kantooruren en berichten voor boekingen in deze workspace.",
+      "breadcrumb": {
+        "label": "Kruimelpad",
+        "integrations": "Integraties",
+        "appointments": "Afspraken",
+        "settings": "Instellingen"
+      },
+      "back": "Terug naar boekingen",
+      "save": "Instellingen opslaan",
+      "saving": "Opslaan...",
+      "saved": "Boekingsinstellingen opgeslagen.",
+      "discard": "Wijzigingen negeren",
+      "unsaved": "Je hebt niet-opgeslagen wijzigingen.",
+      "allSaved": "Alle wijzigingen opgeslagen.",
+      "loading": "Instellingen laden",
+      "forbidden": "Je hebt geen toestemming om boekingsinstellingen te bekijken.",
+      "readOnly": "Je kunt deze instellingen bekijken maar niet wijzigen.",
+      "fixFirst": "Corrigeer eerst de gemarkeerde velden.",
+      "issues": "{count, plural, one {# veld vereist aandacht voordat dit kan worden opgeslagen.} other {# velden vereisen aandacht voordat dit kan worden opgeslagen.}}",
+      "conflict": {
+        "message": "Deze instellingen zijn elders gewijzigd sinds je ze opende. Laad opnieuw voor de nieuwste versie; je bewerkingen hier worden vervangen.",
+        "reload": "Nieuwste laden"
+      },
+      "leave": {
+        "title": "Verlaten zonder op te slaan?",
+        "message": "Je wijzigingen in de boekingsinstellingen zijn niet opgeslagen.",
+        "leave": "Verlaten",
+        "stay": "Doorgaan met bewerken"
+      },
+      "calendar": {
+        "title": "Agendakoppeling",
+        "description": "Verbind een agenda zodat boekingen en je bezette tijden gelijk blijven lopen.",
+        "provider": "Google Agenda",
+        "providerSub": "Afspraken boeken",
+        "status": {
+          "unavailable": "Niet beschikbaar",
+          "disconnected": "Niet verbonden",
+          "connected": "Verbonden",
+          "needs_reconnect": "Opnieuw verbinden vereist"
+        },
+        "loading": "De verbinding controleren",
+        "unavailableTitle": "Google Agenda is nog niet ingesteld voor dit platform",
+        "unavailableBody": "Je platformbeheerder moet de Google OAuth-client toevoegen (Beheer, Instellingen, Google Agenda) voordat een workspace kan verbinden. Je boekingen worden hierdoor niet beïnvloed.",
+        "disconnectedBody": "Niet verbonden. Bij het verbinden open je Google, waar je het account kiest en akkoord gaat met het delen van agendatoegang.",
+        "disconnectedReadOnly": "Niet verbonden. Vraag een workspacebeheerder om te verbinden.",
+        "reconnectTitle": "Google accepteert de verbinding niet meer",
+        "reconnectBody": "De toegang is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Verbind opnieuw om te hervatten.",
+        "reconnectBodyAccount": "De toegang voor {account} is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Verbind opnieuw om te hervatten.",
+        "account": "Google-account",
+        "calendar": "Agenda",
+        "primaryCalendar": "Je hoofdagenda",
+        "connectedAgo": "Verbonden {when}",
+        "errors": {
+          "notConfigured": "Google Agenda is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Google OAuth-client toe te voegen.",
+          "notConnected": "Er is geen Google Agenda verbonden. Laad de pagina opnieuw en verbind opnieuw.",
+          "providerFailed": "Google reageerde niet. Probeer het zo meteen opnieuw."
+        },
+        "loadingCalendars": "Je agenda's laden",
+        "chooseLabel": "Boekingen schrijven naar",
+        "chooseHint": "Alleen agenda's die dit account kan bewerken worden weergegeven. Reeds geschreven afspraken blijven waar ze zijn.",
+        "choosePlaceholder": "Kies een agenda",
+        "chooseOptionPrimary": "{name} (hoofdagenda)",
+        "chooseSave": "Deze agenda gebruiken",
+        "chooseCancel": "Annuleren",
+        "saving": "Opslaan",
+        "connect": "Google Agenda verbinden",
+        "reconnect": "Google opnieuw verbinden",
+        "redirecting": "Google openen",
+        "choose": "Agenda kiezen",
+        "disconnect": "Verbinding verbreken",
+        "disconnected": "Google Agenda losgekoppeld.",
+        "calendarSaved": "Agenda opgeslagen.",
+        "confirmOff": {
+          "title": "Google Agenda loskoppelen?",
+          "message": "Nieuwe boekingen gaan niet meer naar je agenda en de bezette tijden ervan worden niet meer gelezen. Afspraken die al in je agenda staan, blijven daar en Google krijgt de melding om deze toegang in te trekken.",
+          "confirm": "Loskoppelen",
+          "cancel": "Behouden"
+        },
+        "outcome": {
+          "connected": "Google Agenda verbonden. Bevestigde boekingen gaan nu naar je agenda.",
+          "denied": "Er is geen toegang verleend op Google, dus er is niets verbonden.",
+          "failed": "Het verbinden is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag je platformbeheerder om de Google-configuratie te controleren.",
+          "expired": "Die poging duurde te lang. Druk op Verbinden om opnieuw te beginnen.",
+          "not_configured": "Google Agenda is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Google OAuth-client toe te voegen.",
+          "missing_scope": "Google heeft niet alle benodigde agendarechten verleend. Verbind opnieuw en laat alle vakjes aangevinkt."
+        },
+        "whatTitle": "Wat dit doet",
+        "what": {
+          "freeBusy": "Leest vrije en bezette tijden uit je agenda.",
+          "nextSlots": "Biedt klanten de eerstvolgende vrije tijdslots aan.",
+          "writeBack": "Schrijft bevestigde boekingen als afspraken naar je agenda, met een Meet-link wanneer de dienst daarom vraagt."
+        },
+        "hint": "Boekingen werken ook zonder. Open tijden komen uit je kantooruren en de boekingsregels hieronder."
+      },
+      "timezone": {
+        "title": "Tijdzone",
+        "description": "De zone waarin je kantooruren en boekingstijden worden gelezen.",
+        "label": "Tijdzone van de workspace",
+        "hint": "Klanten zien tijden in hun eigen zone; die van jou worden in deze zone getoond."
+      },
+      "hours": {
+        "title": "Kantooruren",
+        "description": "Wanneer klanten kunnen boeken. Schakel een dag uit om hem te sluiten, of voeg intervallen toe voor een pauze.",
+        "noHours": "Geen enkele dag is open, dus niemand kan boeken."
+      },
+      "defaults": {
+        "title": "Boekingsregels",
+        "description": "De standaardwaarden voor boekingen in deze workspace.",
+        "fields": {
+          "slotDurationMinutes": "Duur van tijdslot (minuten)",
+          "maxPerDay": "Max. boekingen per dag",
+          "bufferBeforeMinutes": "Buffer ervoor (minuten)",
+          "bufferAfterMinutes": "Buffer erna (minuten)",
+          "advanceDays": "Vooruitboekvenster (dagen)",
+          "reminderMinutesBefore": "Herinnering (minuten ervoor)",
+          "defaultLocation": "Standaardlocatie (optioneel)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min} tot {max} minuten.",
+          "maxPerDay": "{min} tot {max} boekingen.",
+          "bufferBeforeMinutes": "{min} tot {max} minuten.",
+          "bufferAfterMinutes": "{min} tot {max} minuten.",
+          "advanceDays": "{min} tot {max} dagen vooruit.",
+          "reminderMinutesBefore": "{min} tot {max} minuten. 0 schakelt herinneringen uit."
+        },
+        "locationHint": "Maximaal 191 tekens.",
+        "locationPlaceholder": "bijv. Hoofdstraat 12, Amsterdam"
+      },
+      "templates": {
+        "title": "Berichtsjablonen",
+        "description": "De platte-tekstberichten die klanten ontvangen. Plaatshouders worden voor elke boeking ingevuld.",
+        "placeholders": "Plaatshouders",
+        "placeholder": {
+          "type": "De naam van het boekingstype",
+          "slot": "De datum en tijd",
+          "name": "De naam van de klant",
+          "manage_link": "De link om de boeking te beheren"
+        },
+        "events": {
+          "confirmation": "Bevestiging",
+          "reminder": "Herinnering",
+          "cancellation": "Annulering",
+          "reschedule": "Verplaatsing"
+        },
+        "reset": "Terugzetten naar standaard",
+        "unknown": "Geen bekende plaatshouder, wordt verzonden zoals geschreven: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "Dit is verplicht.",
+        "notInteger": "Voer een geheel getal in.",
+        "tooSmall": "Moet minstens {min} zijn.",
+        "tooLarge": "Mag hoogstens {max} zijn.",
+        "tooLong": "Mag hoogstens {max} tekens bevatten.",
+        "badZone": "Kies een tijdzone uit de lijst.",
+        "badHours": "Corrigeer de gemarkeerde tijden in de kantooruren."
+      },
+      "notAvailable": "Workspacebrede boekingsinstellingen zijn niet beschikbaar op deze server. Elk boekingstype heeft in plaats daarvan zijn eigen uren, tijdzone, herinneringen en berichten.",
+      "openTypes": "Boekingstypen openen"
+    },
+    "linked": {
+      "title": "Afspraken",
+      "openBookings": "Boekingen openen",
+      "showPast": "Verleden tonen",
+      "hidePast": "Verleden verbergen",
+      "empty": "Geen aankomende afspraken.",
+      "emptyBoth": "Nog geen afspraken.",
+      "loading": "Afspraken laden",
+      "unavailable": "Afspraken zijn nog niet beschikbaar op deze server.",
+      "loadMore": "Meer laden",
+      "loadMorePast": "Meer eerdere laden",
+      "noType": "Afspraak"
+    }
+  }
+}

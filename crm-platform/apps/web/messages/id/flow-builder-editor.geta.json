@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Sedang dipublikasikan…",
+        "live": "Aktif",
+        "liveTitle": "Aktif di Geta",
+        "push": "Dorong ke aktif",
+        "pushHint": "Diterbitkan di sini; kirim ke Geta sekarang",
+        "failed": "Gagal",
+        "failedConfiguration": "Gagal saat pembaruan konfigurasi",
+        "failedPublish": "Gagal saat publikasi",
+        "retry": "Coba lagi",
+        "retrying": "Mencoba lagi…",
+        "reasonLabel": "Alasan",
+        "failedNote": "Alur tetap diterbitkan di sini. Percobaan ulang dilanjutkan dari langkah yang gagal.",
+        "notConfigured": "Diterbitkan di sini; atur publikasi Geta di pengaturan untuk mengirimkannya ke aktif.",
+        "openSettings": "Buka pengaturan",
+        "dismiss": "Tutup"
+      },
+      "settings": {
+        "title": "Publikasi Geta",
+        "intro": "Saat Anda menekan Terbitkan di pembuat alur, bot Anda juga dikirim langsung ke konsol Geta. Masukkan detail koneksi sekali untuk ruang kerja ini. Rahasia disimpan terenkripsi dan tidak akan ditampilkan lagi.",
+        "viewOnly": "Anda dapat melihat status pengaturan ini tetapi tidak dapat mengubahnya.",
+        "loading": "Memuat…",
+        "loadFailed": "Pengaturan tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "fixtureNotice": "Server ini dalam mode fixture: publikasi disimulasikan dan tidak ada yang dikirim ke Geta.",
+        "ready": "Siap",
+        "incomplete": "Belum lengkap",
+        "readyNote": "Menerbitkan alur juga akan mengaktifkan bot Anda di Geta.",
+        "incompleteNote": "Isi setiap kolom di bawah untuk mengaktifkan alur yang diterbitkan di Geta.",
+        "baseUrl": {
+          "label": "URL dasar",
+          "hint": "Alamat Geta API, misalnya https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Origin konsol (opsional)",
+          "hint": "Dikirim sebagai origin dan referer setiap permintaan. Kosongkan untuk tidak mengirim keduanya."
+        },
+        "authorization": {
+          "label": "Token otorisasi",
+          "hint": "Dikirim persis seperti yang Anda masukkan, tanpa tambahan \"Bearer \"."
+        },
+        "getaHost": {
+          "label": "Token geta-host",
+          "hint": "Dikirim di header geta-host."
+        },
+        "secretKept": "Tersimpan. Biarkan kosong untuk mempertahankannya, atau ketik nilai baru untuk menggantinya.",
+        "secretPlaceholder": "Tersimpan (tersembunyi)",
+        "show": "Tampilkan",
+        "hide": "Sembunyikan",
+        "remove": "Hapus",
+        "record": {
+          "label": "Catatan chatbot Geta",
+          "paste": "Tempel catatan chatbot (JSON)",
+          "replace": "Ganti catatan chatbot (JSON)",
+          "hint": "Objek chatbot persis seperti yang harus dikirim ke Geta, atau seluruh isi permintaan dengan kunci chatbot. Setidaknya perlu id dan bot_id. Hanya modified_time yang diperbarui saat dikirim.",
+          "keepPlaceholder": "Biarkan kosong untuk mempertahankan catatan yang tersimpan",
+          "id": "ID chatbot",
+          "name": "Nama",
+          "botId": "ID bot",
+          "remove": "Hapus catatan yang tersimpan"
+        },
+        "saved": "Tersimpan",
+        "notSet": "Belum diatur",
+        "save": "Simpan",
+        "saving": "Menyimpan…",
+        "saveFailed": "Tidak dapat menyimpan.",
+        "removed": "Dihapus.",
+        "clear": "Hapus semua",
+        "cleared": "Pengaturan publikasi Geta dihapus.",
+        "clearConfirm": {
+          "title": "Hapus publikasi Geta?",
+          "message": "Ini menghapus URL dasar, kedua token, dan catatan chatbot. Alur yang diterbitkan tetap diterbitkan di sini tetapi tidak akan lagi dikirim ke Geta.",
+          "confirm": "Hapus semua",
+          "cancel": "Batal"
+        }
+      }
+    }
+  }
+}

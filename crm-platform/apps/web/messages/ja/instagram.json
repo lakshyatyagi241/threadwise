@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram ブロードキャスト"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "hub": {
+      "kicker": "チャネル · Instagram",
+      "title": "Instagram",
+      "titleAccent": "アカウント",
+      "intro": "Instagram ビジネスアカウントまたはクリエイターアカウントを一度連携すると、そのメッセージがチームの受信トレイに届きます。ここから返信、フローの実行、既にメッセージを送ってきた相手への送信ができます。",
+      "teamInbox": "チーム受信トレイ",
+      "broadcasts": "返信専用ブロードキャスト",
+      "loadError": "連携済みの Instagram アカウントを読み込めませんでした。もう一度お試しください。",
+      "loadErrorDetail": "連携済みの Instagram アカウントを読み込めませんでした (エラー {status}{code})。もう一度お試しください。",
+      "engineOff": "{engine} が接続されていません。Instagram アカウントを連携する前に、管理者が「管理 → アドオン」で接続する必要があります。",
+      "connectedCount": "{count, plural, other {# 件のアカウントを連携済み}}",
+      "notConnected": "未接続",
+      "cardTitle": "Instagram アカウントを追加",
+      "cardBody": "ビジネスアカウントまたはクリエイターアカウントを接続します。Instagram は一度接続すればここに表示され、会話、フロー、自動返信がすべてこのワークスペースから利用できます。",
+      "add": "Instagram アカウントを追加",
+      "linkedAccounts": "連携済みアカウント",
+      "linked": "Instagram アカウントを連携しました。",
+      "linkFailed": "そのアカウントを連携できませんでした。"
+    },
+    "dialog": {
+      "close": "閉じる",
+      "kicker": "Instagram",
+      "title": "Instagram アカウントを追加",
+      "note": "Instagram は {engine} を通じて一度接続されます (ログインと Webhook を保持します)。このワークスペースはそれに連携し、受信トレイ、フロー、広告をここに表示します。アカウントは常に 1 つです。",
+      "connect": "Instagram を接続",
+      "checking": "確認中…",
+      "hint": "{engine} で既に接続済みの場合はすぐに連携されます。そうでない場合は、サインイン用のポップアップが開きます。",
+      "pick": "連携するアカウントを選択",
+      "link": "連携",
+      "connectDifferent": "別のアカウントを接続",
+      "linkFailed": "そのアカウントを連携できませんでした。",
+      "startFailed": "Instagram の接続を開始できませんでした。"
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "接続済み",
+      "needsReauth": "再認証が必要",
+      "live": "稼働中",
+      "manage": "{engine} で管理",
+      "refresh": "{engine} からプロフィールを更新",
+      "unlink": "連携解除",
+      "unlinkConfirm": "この Instagram アカウントの接続を解除しますか?会話と受信トレイのデータは削除され、アカウントを再度接続するまで、ダッシュボード、受信トレイ、フロー、テンプレート、自動返信から Instagram が消えます。アカウント自体は {engine} に残るため、後で再度連携できます。",
+      "cancel": "キャンセル",
+      "updated": "Instagram アカウント {handle} を更新しました。",
+      "unlinked": "Instagram アカウントの接続を解除し、データを削除しました。",
+      "failed": "うまくいきませんでした。もう一度お試しください。"
+    },
+    "broadcast": {
+      "kicker": "Instagram · 返信専用",
+      "title": "Instagram",
+      "titleAccent": "ブロードキャスト",
+      "intro": "Instagram では、既にメッセージを送ってきた相手にのみ送信できるため、既存の会話から選択してください。各メッセージの送信時に、Instagram の 24 時間ルールが適用されます。",
+      "accounts": "Instagram アカウント",
+      "loadError": "会話を読み込めませんでした。もう一度お試しください。",
+      "failed": "うまくいきませんでした。もう一度お試しください。",
+      "noAccounts": "連携および接続済みの Instagram アカウントはまだありません。",
+      "name": "ブロードキャスト名",
+      "namePlaceholder": "秋のキャンペーン",
+      "account": "Instagram アカウント",
+      "template": "テンプレート",
+      "templateHint": "任意。メッセージが空の場合に入力されます。",
+      "templateNone": "テンプレートなし",
+      "message": "メッセージ",
+      "messageHint": "相手の名前には {token} を使用します。{max} 文字まで入力できます。",
+      "messagePlaceholder": "{token} 様、…",
+      "send": "{count, plural, =0 {送信} other {# 件の会話に送信}}",
+      "sending": "送信中…",
+      "recipients": "送信先",
+      "windowOpenCount": "24 時間以内の会話: {total} 件中 {open} 件",
+      "search": "会話を検索",
+      "selectAll": "すべて選択",
+      "clear": "クリア",
+      "capNote": "1 回の送信で届く会話は最大 {max} 件です。「すべて選択」では先頭の {max} 件が選ばれます。",
+      "empty": "会話はまだありません。相手がアカウントにメッセージを送ると、ここに表示されます。",
+      "inWindow": "期間内",
+      "outsideWindow": "24 時間外",
+      "selected": "{count, plural, other {# 件選択中}}",
+      "sent": "Instagram ブロードキャストを送信しました。{sent} 件配信済み{failed, plural, =0 {} other {、# 件失敗}}。",
+      "sentNone": "どの送信先にも送信できませんでした。Instagram の接続を確認してください。"
+    }
+  }
+}

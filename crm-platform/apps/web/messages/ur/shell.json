@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "پلیٹ فارم",
+      "inbox": "ان باکس اور چیٹ",
+      "audience": "CRM",
+      "sales": "سیلز",
+      "campaigns": "مہمات",
+      "automation": "خودکاری",
+      "store": "اسٹور",
+      "apps": "مارکیٹ پلیس",
+      "help": "سپورٹ اور مدد",
+      "settings": "ترتیبات"
+    },
+    "locked": "اپ گریڈ کریں",
+    "language": "زبان",
+    "theme": "تھیم",
+    "themeLight": "لائٹ",
+    "themeDark": "ڈارک",
+    "logout": "لاگ آؤٹ",
+    "openMenu": "مینو کھولیں",
+    "admin": {
+      "title": "پلیٹ فارم کنسول",
+      "note": "سپر ایڈمن اداکار موجود ہونے کے بعد پلیٹ فارم ایڈمن اسکرینیں یہاں ظاہر ہوں گی۔"
+    },
+    "soon": "جلد",
+    "new": "نیا",
+    "comingSoon": "جلد آ رہا ہے",
+    "appGate": {
+      "title": "{app} آپ کے ورک اسپیس کا حصہ نہیں ہے",
+      "body": "{app} ایک اختیاری ایپ ہے۔ اسے مارکیٹ پلیس سے شامل کریں، پھر یہ آپ کے مینو میں ظاہر ہوگی۔",
+      "bodyNoMarketplace": "{app} ایک اختیاری ایپ ہے جو اس ورک اسپیس میں موجود نہیں۔ ورک اسپیس ایڈمن سے کہیں کہ اسے مارکیٹ پلیس سے شامل کرے۔",
+      "browse": "مارکیٹ پلیس دیکھیں",
+      "back": "ڈیش بورڈ پر واپس جائیں",
+      "unofficialTitle": "{app} دستیاب نہیں ہے",
+      "unofficialBody": "{app} صرف QR کوڈ سے جوڑے گئے ذاتی WhatsApp نمبرز کے ساتھ استعمال ہوتی ہے، جو آپ کے ورک اسپیس کے لیے فعال نہیں ہیں۔ WhatsApp آفیشل WhatsApp Business API کے ذریعے جڑتا ہے۔"
+    },
+    "closeMenu": "مینو بند کریں",
+    "mainMenu": "مرکزی مینو",
+    "userMenu": "اکاؤنٹ مینو",
+    "account": "اکاؤنٹ",
+    "balance": "بیلنس",
+    "pageSettings": {
+      "label": "اس صفحے کی ترتیبات",
+      "hint": "یہ ترتیبات صرف اس لیے دکھائی جا رہی ہیں کہ آپ کا کردار انہیں تبدیل کرنے کی اجازت دیتا ہے۔"
+    },
+    "notifications": "اطلاعات",
+    "settings": "ترتیبات",
+    "pinned": "مدد اور ترتیبات",
+    "nav": {
+      "analytics": "تجزیات",
+      "notifications": "اطلاعات",
+      "inbox": "ان باکس",
+      "quickChat": "فوری چیٹ",
+      "callLogs": "کال لاگز",
+      "teamChat": "ٹیم چیٹ",
+      "leadFinder": "لیڈ تلاش کنندہ",
+      "campaigns": "مہمات",
+      "broadcasts": "براڈکاسٹس",
+      "scheduled": "شیڈول شدہ",
+      "templates": "ٹیمپلیٹس",
+      "history": "تاریخ",
+      "flows": "فلوز",
+      "aiAssistants": "AI اسسٹنٹس",
+      "appointments": "اپائنٹمنٹس",
+      "crmDashboard": "CRM ڈیش بورڈ",
+      "store": "اسٹور",
+      "catalog": "کیٹلاگ",
+      "support": "سپورٹ",
+      "guidebook": "گائیڈ بک",
+      "pipelines": "پائپ لائنز",
+      "tasks": "ٹاسکس",
+      "companies": "کمپنیاں",
+      "emailTemplates": "ای میل ٹیمپلیٹس",
+      "proposals": "تجاویز",
+      "estimates": "تخمینے",
+      "invoices": "انوائسز",
+      "payments": "ادائیگیاں"
+    },
+    "help": "مدد",
+    "unreadCount": "{count, plural, one {# غیر پڑھا} other {# غیر پڑھے}}"
+  }
+}

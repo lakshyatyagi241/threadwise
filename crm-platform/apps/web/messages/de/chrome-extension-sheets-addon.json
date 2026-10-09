@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Google-Sheets-Add-on",
+        "description": "Erstellen Sie Ihren Schlüssel, laden Sie die Add-on-Dateien herunter und synchronisieren Sie Kontakte und Produkte aus einer Tabelle.",
+        "keywords": "google sheets, Tabelle, Add-on, apps script, Kontakte importieren, Produkte synchronisieren, Schlüssel"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Ausblenden",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Kopieren nicht möglich. Markieren Sie den Schlüssel und kopieren Sie ihn manuell.",
+      "reference": "Referenz für den Support: {id}",
+      "back": "Zurück zu den Integrationen"
+    },
+    "page": {
+      "title": "Google-Sheets-Add-on",
+      "subtitle": "Rufen Sie Kontakte ab und übertragen Sie sie, und synchronisieren Sie Produkte zwischen einer Tabelle und Ihrem Workspace.",
+      "loading": "Add-on-Einrichtung wird geladen",
+      "retry": "Wiederholen",
+      "status": {
+        "connected": "Schlüssel aktiv",
+        "noKey": "Noch kein Schlüssel",
+        "notInstalled": "Nicht installiert"
+      },
+      "forbidden": {
+        "title": "Sie können das Google-Sheets-Add-on nicht verwenden",
+        "body": "Ihre Rolle enthält das Google-Sheets-Add-on nicht. Bitten Sie einen Administrator, Ihrer Rolle Zugriff zu geben."
+      },
+      "loadFailed": {
+        "title": "Die Add-on-Einrichtung konnte nicht geladen werden.",
+        "notInstalled": "Das Add-on ist in diesem Workspace nicht installiert.",
+        "forbidden": "Ihre Rolle darf diese Seite nicht sehen.",
+        "planLocked": "Ihr Tarif enthält den Marketplace nicht.",
+        "suspended": "Dieses Konto oder dieser Workspace ist gesperrt.",
+        "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+        "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "unexpected": "Bei uns ist etwas schiefgelaufen. Versuchen Sie es erneut."
+      }
+    },
+    "install": {
+      "title": "Installieren Sie zuerst das Add-on",
+      "body": "Das Google-Sheets-Add-on ist in diesem Workspace nicht installiert, daher funktionieren Schlüssel und Add-on noch nicht. Ein Administrator installiert es einmalig über den Marketplace.",
+      "marketplace": "Über den Marketplace installieren",
+      "google": "Eintrag im Google Workspace Marketplace öffnen",
+      "keyKept": "Sie haben noch einen Schlüssel. Sie können ihn unten ausschalten."
+    },
+    "key": {
+      "title": "Ihr Schlüssel",
+      "intro": "Das Add-on verwendet Ihren persönlichen Schlüssel, um in Ihrem Namen zu handeln. Es sieht nur, was Ihre Rolle erlaubt.",
+      "none": "Sie haben noch keinen Schlüssel.",
+      "generate": "Schlüssel erzeugen",
+      "rotate": "Neuen Schlüssel erzeugen",
+      "revoke": "Schlüssel widerrufen",
+      "working": "Wird bearbeitet...",
+      "active": "Schlüssel",
+      "created": "Erstellt {when}",
+      "lastUsed": "Zuletzt verwendet {when}",
+      "neverUsed": "Nie verwendet",
+      "newTitle": "Ihr neuer Schlüssel",
+      "newWarning": "Kopieren Sie ihn jetzt. Er wird nur einmal angezeigt und kann nicht erneut angezeigt werden. Jeder mit diesem Schlüssel kann im Add-on in Ihrem Namen handeln.",
+      "rotatedNote": "Ihr vorheriger Schlüssel funktioniert nicht mehr.",
+      "keyLabel": "Neuer Schlüssel",
+      "confirmRotate": {
+        "title": "Schlüssel ersetzen?",
+        "message": "Der Schlüssel, den Sie jetzt verwenden, funktioniert sofort nicht mehr. Fügen Sie den neuen Schlüssel in das Add-on ein, um es weiter zu nutzen.",
+        "confirm": "Schlüssel ersetzen"
+      },
+      "confirmRevoke": {
+        "title": "Schlüssel widerrufen?",
+        "message": "Das Add-on funktioniert nicht mehr, bis Sie einen neuen Schlüssel erstellen und einfügen.",
+        "confirm": "Schlüssel widerrufen"
+      },
+      "cancel": "Abbrechen",
+      "revoked": "Ihr Schlüssel wurde widerrufen.",
+      "generated": "Ihr Schlüssel wurde erstellt. Kopieren Sie ihn jetzt.",
+      "errors": {
+        "notInstalled": "Das Add-on ist in diesem Workspace nicht installiert. Bitten Sie einen Administrator, es zu installieren.",
+        "forbidden": "Ihre Rolle darf dies nicht tun.",
+        "planLocked": "Ihr Tarif enthält den Marketplace nicht.",
+        "suspended": "Dieses Konto oder dieser Workspace ist gesperrt.",
+        "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+        "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "unexpected": "Bei uns ist etwas schiefgelaufen. Versuchen Sie es erneut."
+      }
+    },
+    "can": {
+      "title": "Was Ihr Schlüssel kann",
+      "intro": "Das ist die Schnittmenge aus Ihrer Rolle und dem, was die Installation erlaubt.",
+      "allowed": "Erlaubt",
+      "notAllowed": "Nicht erlaubt",
+      "readContacts": "Kontakte in eine Tabelle abrufen",
+      "writeContacts": "Kontakte aus einer Tabelle übertragen",
+      "readCatalog": "Shops und Produkte ansehen",
+      "writeCatalog": "Produkte mit einem Shop synchronisieren"
+    },
+    "files": {
+      "title": "Add-on-Dateien",
+      "intro": "Sechs Dateien bilden das Apps-Script-Projekt. Code.gs verweist bereits auf diesen Workspace.",
+      "download": "Herunterladen",
+      "downloadFile": "{name} herunterladen",
+      "downloaded": "{name} heruntergeladen.",
+      "notAvailable": "Auf diesem Server noch nicht verfügbar",
+      "failed": "{name} konnte nicht heruntergeladen werden. Versuchen Sie es erneut."
+    },
+    "steps": {
+      "title": "In einer Tabelle einrichten",
+      "one": "Öffnen Sie eine Tabelle, dann Erweiterungen, dann Apps Script.",
+      "two": "Laden Sie die sechs obigen Dateien herunter. Blenden Sie in den Projekteinstellungen die Datei appsscript.json ein und fügen Sie appsscript.json und Code.gs anstelle der Dateien im Editor ein.",
+      "three": "Fügen Sie drei HTML-Dateien mit den Namen Dialog, Settings und Help hinzu und fügen Sie die heruntergeladenen Dateien darin ein.",
+      "four": "Speichern Sie und laden Sie die Tabelle neu. Ein Menü CRM erscheint. Erlauben Sie die drei Berechtigungen, nach denen Google fragt.",
+      "five": "Wählen Sie CRM, dann Settings, fügen Sie Ihren Schlüssel ein und wählen Sie Speichern und prüfen.",
+      "six": "Zeile 1 Ihrer Tabelle enthält die Spaltennamen. Verwenden Sie dann im CRM-Menü Kontakte abrufen, Kontakte übertragen oder Produkte synchronisieren."
+    },
+    "columns": {
+      "title": "Spalten, die das Add-on liest",
+      "contacts": "Kontakte",
+      "products": "Produkte",
+      "contactsHint": "E-Mail oder Telefon ist erforderlich. Eine Spalte namens attr:city füllt die benutzerdefinierte Eigenschaft city. Eine leere Zelle löscht nie einen gespeicherten Wert.",
+      "productsHint": "name und price sind erforderlich. Produkte werden zuerst über die SKU, dann über den Namen zugeordnet. Ein leerer Bestand bedeutet unbegrenzt."
+    },
+    "shops": {
+      "title": "Shops",
+      "empty": "Noch keine Shops. Ihre erste Produktsynchronisierung erstellt einen.",
+      "disabled": "Aus",
+      "open": "{name} öffnen",
+      "updated": "Aktualisiert {when}"
+    },
+    "products": {
+      "title": "Neueste Produkte",
+      "empty": "Noch keine Produkte. Synchronisieren Sie eine Tabelle, um welche hinzuzufügen.",
+      "count": "{count, plural, one {# Produkt in Ihrem Workspace} other {# Produkte in Ihrem Workspace}}"
+    }
+  }
+}

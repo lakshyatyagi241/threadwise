@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Trening AI"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "Trening AI nie jest w Twoim planie",
+      "body": "Twój plan nie obejmuje asystentów AI. Ulepsz plan, aby odblokować tę funkcję.",
+      "upgrade": "Zobacz plany"
+    },
+    "responder": {
+      "title": "Kto odpowiada na Twoim WhatsApp?",
+      "body": "Jeśli włączysz własnego Business Agenta Meta, nasza AI i autoodpowiedzi na słowa kluczowe wycofują się w tej przestrzeni roboczej, więc klient nigdy nie dostanie dwóch odpowiedzi na tę samą wiadomość.",
+      "metaCheck": "Używam Meta Business Agent",
+      "mode": {
+        "wadesk_only": {
+          "label": "Odpowiada nasza AI",
+          "desc": "Nasza AI i autoodpowiedzi na słowa kluczowe obsługują czaty (domyślnie)."
+        },
+        "meta_agent_only": {
+          "label": "Odpowiada agent Meta",
+          "desc": "Odpowiada Business Agent Meta. Tylko rejestrujemy wątek, nasza AI milczy."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Agent Meta, potem przekazanie",
+          "desc": "Meta obsługuje pierwsze pytania. Gdy eskaluje, czat trafia do Twojej skrzynki zespołu do obsługi przez człowieka. Nasza automatyczna AI milczy."
+        }
+      },
+      "save": "Zapisz",
+      "hint": "Agent Meta wymaga numeru WhatsApp Business (Cloud API). Numery na nieoficjalnym silniku zawsze używają naszej AI.",
+      "readOnly": "Widzisz to ustawienie, ale nie możesz go zmienić.",
+      "saved": "Tryb odpowiadania AI zapisany.",
+      "saveFailed": "Nie udało się zapisać trybu odpowiadania.",
+      "loadError": "Nie udało się załadować trybu odpowiadania.",
+      "retry": "Spróbuj ponownie",
+      "loading": "Ładowanie trybu odpowiadania"
+    },
+    "list": {
+      "tip": "Wskazówka",
+      "tipBody": "Inteligentni agenci zasilają Twoje <link>widżety chatbota</link> i krok AI w przepływach. Pięciokrokowy kreator przeprowadzi Cię przez tożsamość, personę, mózg, bezpieczeństwo i wiedzę.",
+      "statusViews": "Status agenta",
+      "view": {
+        "all": "Wszyscy agenci",
+        "active": "Aktywni",
+        "paused": "Wstrzymani"
+      },
+      "status": {
+        "all": "Wszyscy",
+        "active": "Aktywni",
+        "paused": "Wstrzymani"
+      },
+      "knowledgeTip": "Wskazówka dotycząca wiedzy",
+      "knowledgeTipBody": "Często wystarczy jedno pytanie z odpowiedzią z FAQ. Kilka adresów stron pomocy pokrywa większość pytań do wsparcia, więc nie trzeba ładować całej witryny.",
+      "workspace": "Przestrzeń robocza",
+      "title": "Trening",
+      "titleAccent": "AI",
+      "intro": "Twórz inteligentnych agentów mówiących głosem Twojej marki. Trenuj ich na adresach URL, tekście, parach pytanie-odpowiedź i plikach.",
+      "activePill": "Aktywni: {count}",
+      "newAgent": "Nowy inteligentny agent",
+      "card": {
+        "total": "Wszyscy agenci",
+        "knowledge": "Wpisy wiedzy",
+        "avg": "Śr. / agent",
+        "health": "Kondycja",
+        "activeHint": "Aktywni: {count}",
+        "indexedHint": "Zaindeksowane: {count}",
+        "entriesUnit": "wpisy"
+      },
+      "health": {
+        "healthy": "w porządku",
+        "empty": "pusty",
+        "attention": "wymaga uwagi"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Dostawca",
+        "knowledge": "Wiedza",
+        "tone": "Ton",
+        "updated": "Zaktualizowano",
+        "actions": "Akcje"
+      },
+      "search": "Szukaj po nazwie lub slugu…",
+      "loading": "Ładowanie agentów",
+      "loadError": "Nie udało się załadować agentów",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak inteligentnych agentów",
+      "emptyBody": "Zbuduj pierwszego agenta. Pięciokrokowy kreator przeprowadzi Cię przez tożsamość, personę, mózg, bezpieczeństwo i wiedzę, jaką ma mieć.",
+      "buildAgent": "Zbuduj inteligentnego agenta",
+      "noMatch": "Żaden agent nie pasuje do wyszukiwania ani widoku statusu.",
+      "entries": "{count, plural, one {# wpis} few {# wpisy} many {# wpisów} other {# wpisu}}",
+      "edit": "Edytuj agenta",
+      "editNamed": "Edytuj {name}",
+      "duplicate": "Duplikuj agenta",
+      "duplicateNamed": "Duplikuj {name}",
+      "deleteAgent": "Usuń agenta",
+      "deleteNamed": "Usuń {name}",
+      "deleteTitle": "Usunąć „{name}”?",
+      "deleteBody": "Agent i jego wpisy wiedzy zostaną usunięte. Widżety i przepływy, które go używają, przestaną odpowiadać tym agentem, dopóki nie wybierzesz innego.",
+      "delete": "Usuń agenta",
+      "keep": "Zachowaj",
+      "deleted": "Agent usunięty.",
+      "deleteFailed": "Usuwanie nie powiodło się: {reason}",
+      "duplicateFailed": "Nie udało się zduplikować agenta.",
+      "networkError": "błąd sieci",
+      "showing": "Wyświetlono",
+      "of": "z",
+      "agentsCount": "{count, plural, one {# agent} few {# agentów} many {# agentów} other {# agenta}}",
+      "loadMore": "Załaduj więcej"
+    },
+    "builder": {
+      "back": "Wróć do Treningu AI",
+      "crumb": "Trening AI",
+      "crumbNew": "Nowy",
+      "crumbEdit": "Edycja",
+      "titleNew": "Zbuduj inteligentnego",
+      "titleEdit": "Edytuj inteligentnego",
+      "titleAccent": "agenta",
+      "stateSaved": "Zapisano",
+      "stateDraft": "Wersja robocza / niezapisane",
+      "saveDraft": "Zapisz wersję roboczą",
+      "stepper": "Kroki kreatora",
+      "steps": {
+        "identity": "Tożsamość",
+        "persona": "Persona",
+        "brain": "Mózg",
+        "safety": "Bezpieczeństwo",
+        "knowledge": "Wiedza"
+      },
+      "stepOf": "Krok {n} z {total}",
+      "previous": "Wstecz",
+      "next": "Dalej",
+      "finish": "Zakończ i zamknij",
+      "loading": "Ładowanie agenta",
+      "loadError": "Nie udało się załadować agenta",
+      "notFoundTitle": "Nie znaleziono agenta",
+      "notFoundBody": "Ten agent nie istnieje w Twojej przestrzeni roboczej lub został usunięty.",
+      "backToList": "Wróć do Treningu AI",
+      "saved": "Agent zapisany.",
+      "saveFailed": "Zapis nie powiódł się. Sprawdź pola i spróbuj ponownie.",
+      "conflict": "Ten agent został zmieniony w innym miejscu. Odśwież stronę, aby pobrać najnowszą wersję, a potem zapisz ponownie.",
+      "problem": {
+        "name": "Nazwij swojego asystenta.",
+        "greeting": "Napisz zdanie otwierające.",
+        "model": "Wybierz model.",
+        "tokens": "Długość odpowiedzi musi wynosić 50–4000 tokenów.",
+        "temperature": "Kreatywność musi mieścić się między 0 a 2."
+      },
+      "identity": {
+        "title": "Tożsamość agenta",
+        "required": "wymagane",
+        "name": "Wyświetlana nazwa agenta",
+        "namePlaceholder": "np. Konsultant cennika",
+        "nameHint": "Do Twojej wiadomości. Odwiedzający nie widzą tej etykiety.",
+        "status": "Status wdrożenia",
+        "statusActive": "Aktywny: wybierz tego agenta w widżetach i przepływach",
+        "statusPaused": "Wstrzymany: ukryj w selektorach",
+        "statusHint": "Wstrzymani agenci pozostają na liście, ale nie można ich dołączyć do nowych widżetów.",
+        "language": "Preferowany język",
+        "languageHint": "Kod ISO 639-1. Dopasowuje się do języka odwiedzającego, gdy jest inny.",
+        "tone": "Ton rozmowy",
+        "toneHint": "Ustawia styl pisania, niezależnie od opisu persony.",
+        "tones": {
+          "helpful": "Pomocny · spokojny i rzeczowy",
+          "friendly": "Przyjazny · ciepły i swobodny",
+          "formal": "Formalny · neutralny i precyzyjny",
+          "playful": "Żartobliwy · lekki i dowcipny"
+        }
+      },
+      "persona": {
+        "title": "Persona i zdanie otwierające",
+        "tag": "treść",
+        "greeting": "Zdanie otwierające",
+        "greetingPlaceholder": "Cześć! Jestem tu, by pomóc. Zapytaj mnie o ceny lub plany.",
+        "greetingHint": "Widoczne dla odwiedzających. Pokazywane jako pierwsza bańka po otwarciu czatu.",
+        "brief": "Opis charakteru (instrukcje systemowe)",
+        "briefPlaceholder": "Jesteś przyjaznym agentem wsparcia firmy Acme Inc. Zawsze odpowiadaj krótkimi zdaniami i przekazuj sprawy dotyczące zwrotów człowiekowi.",
+        "briefHint": "Wewnętrzne, nigdy niepokazywane odwiedzającym. Uwzględnij, co robić, czego nie robić, i zasady eskalacji."
+      },
+      "brain": {
+        "title": "Model i kontrola odpowiedzi",
+        "tag": "mózg",
+        "provider": "Dostawca modelu",
+        "providerHint": "Twój administrator konfiguruje klucze dostawców. Dostawcy, dla których dodano własny klucz, też są widoczni, w planach, które na to pozwalają.",
+        "notEnabled": "{name} (niewłączony)",
+        "model": "Nazwa modelu",
+        "modelHint": "Wybierz jeden z włączonych dla Ciebie modeli lub wpisz inny identyfikator modelu.",
+        "noModels": "Dla Twojej przestrzeni roboczej nie włączono jeszcze żadnego modelu AI. Poproś administratora o włączenie albo dodaj własny klucz w Ustawieniach, Klucze AI.",
+        "tokens": "Budżet długości odpowiedzi (tokeny)",
+        "tokensHint": "Około 1 token to 4 znaki. 400 mieści akapit.",
+        "temperature": "Kreatywność (0 = ściśle, 2 = swobodnie)",
+        "temperatureHint": "Niższa daje spójność i fakty. Wyższa daje bardziej zróżnicowane sformułowania."
+      },
+      "safety": {
+        "title": "Odpowiedź zastępcza i przekazanie człowiekowi",
+        "tag": "bezpieczeństwo",
+        "fallback": "Odpowiedź zastępcza (używana, gdy model zwróci błąd)",
+        "fallbackPlaceholder": "Ktoś z zespołu wkrótce się odezwie. Dziękujemy za cierpliwość.",
+        "fallbackHint": "Wysyłana bez zmian, jeśli model nic nie zwróci lub wywołanie się nie powiedzie.",
+        "handoff": "Włącz przekazanie człowiekowi",
+        "handoffHint": "Odwiedzający wpisuje frazę wyzwalającą, agent przestaje odpowiadać, a skrzynka zespołu się zapala.",
+        "keyword": "Fraza wyzwalająca",
+        "keywordPlaceholder": "porozmawiać z człowiekiem",
+        "keywordHint": "Gdy odwiedzający wpisze to w dowolnym miejscu wiadomości, następuje przekazanie.",
+        "ack": "Potwierdzenie przekazania",
+        "ackPlaceholder": "Jasne, już wołam kogoś z zespołu. Zostań na linii.",
+        "ackHint": "Ostatnia wiadomość, zanim agent zamilknie."
+      }
+    },
+    "knowledge": {
+      "title": "Trenuj agenta",
+      "tag": "wiedza",
+      "saveFirst": "Najpierw zapisz agenta. Wpisy wiedzy są dołączane do zapisanego agenta.",
+      "addLabel": "Dodaj wiedzę",
+      "add": {
+        "url": {
+          "title": "Aktywny URL",
+          "body": "Pobierz publiczną stronę i zachowaj jej tekst."
+        },
+        "text": {
+          "title": "Dowolny tekst",
+          "body": "Wklej fragment pomocy lub zasady."
+        },
+        "qa": {
+          "title": "Para pytanie-odpowiedź",
+          "body": "Jedno pytanie z jego wzorcową odpowiedzią."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT i inne",
+          "body": "Prześlij plik. Tekst zostanie wyodrębniony automatycznie."
+        }
+      },
+      "panel": {
+        "url": "Pobierz publiczny adres URL",
+        "text": "Wklej zwykły tekst",
+        "qa": "Pojedyncze pytanie i odpowiedź",
+        "file": "Prześlij plik wiedzy"
+      },
+      "label": "Etykieta",
+      "url": "URL",
+      "content": "Tekst",
+      "question": "Pytanie",
+      "answer": "Odpowiedź",
+      "file": "Plik",
+      "placeholder": {
+        "label": {
+          "url": "Etykieta (np. Strona z cennikiem)",
+          "text": "Etykieta (np. Podsumowanie zasad zwrotów)",
+          "qa": "Etykieta (np. Czas zwrotu)",
+          "file": "Etykieta (np. Podręcznik produktu)"
+        },
+        "content": "Wklej dowolny tekst, który agent powinien znać…",
+        "question": "Pytanie, np. Jak długo trwają zwroty?",
+        "answer": "Odpowiedź, np. Zwroty są realizowane w ciągu 3 do 5 dni roboczych."
+      },
+      "urlHint": "Odczytywane są tylko publiczne strony http i https. Strona jest pobierana w tle, więc wpis przez chwilę będzie miał stan Przetwarzanie.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV lub HTML, do 10 MB. Tekst jest wyodrębniany automatycznie.",
+      "uploading": "Postęp przesyłania",
+      "submit": {
+        "url": "Pobierz i trenuj",
+        "text": "Zapisz tekst",
+        "qa": "Zapisz parę",
+        "file": "Prześlij"
+      },
+      "cancel": "Anuluj",
+      "added": "Wiedza dodana.",
+      "addFailed": "Nie udało się dodać wpisu.",
+      "problem": {
+        "label": "Dodaj etykietę, aby później znaleźć ten wpis.",
+        "url": "Dodaj adres strony.",
+        "content": "Najpierw wklej jakiś tekst.",
+        "question": "Dodaj pytanie.",
+        "answer": "Dodaj odpowiedź.",
+        "file": "Wybierz plik (PDF, DOCX, TXT, Markdown, CSV lub HTML).",
+        "file_type": "Akceptowane typy plików: TXT, Markdown, CSV, HTML, PDF, DOCX. W innych przypadkach wklej tekst do wpisu Tekst.",
+        "file_legacyDoc": "Starsze pliki .doc nie są obsługiwane. Zapisz ponownie jako .docx (lub wyeksportuj do .pdf) i prześlij jeszcze raz.",
+        "file_size": "Ten plik przekracza 10 MB.",
+        "file_empty": "Ten plik jest pusty.",
+        "tooLarge": "To za dużo tekstu na jedno wklejenie. Prześlij go zamiast tego jako plik."
+      },
+      "col": {
+        "kind": "Rodzaj",
+        "label": "Etykieta",
+        "state": "Stan",
+        "actions": "Akcje"
+      },
+      "kind": {
+        "url": "url",
+        "text": "tekst",
+        "qa": "pytania i odpowiedzi",
+        "file": "plik"
+      },
+      "state": {
+        "ready": "gotowe",
+        "processing": "przetwarzanie",
+        "failed": "niepowodzenie"
+      },
+      "tokens": "około {count} tokenów",
+      "workspaceWide": "w całej przestrzeni roboczej",
+      "loading": "Ładowanie wpisów",
+      "loadError": "Nie udało się załadować wpisów.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Brak wiedzy. Wybierz rodzaj powyżej, aby dodać pierwszy wpis.",
+      "remove": "Usuń",
+      "removeNamed": "Usuń {label}",
+      "removeTitle": "Usunąć ten wpis wiedzy?",
+      "removeBody": "Agent przestanie go używać w nowych odpowiedziach. Starsze rozmowy pozostaną bez zmian.",
+      "keep": "Zachowaj",
+      "removed": "Usunięto.",
+      "removeFailed": "Usuwanie nie powiodło się."
+    }
+  }
+}

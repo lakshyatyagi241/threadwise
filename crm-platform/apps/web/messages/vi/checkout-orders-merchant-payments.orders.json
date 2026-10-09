@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Cửa hàng / Đơn hàng",
+      "title": "Tất cả đơn hàng",
+      "subtitle": "Mọi đơn hàng từ mọi kênh: WhatsApp, cửa hàng trực tuyến, Twilio và thủ công.",
+      "loading": "Đang tải đơn hàng",
+      "statusTabs": "Trạng thái đơn hàng",
+      "searchLabel": "Tìm đơn hàng",
+      "searchPlaceholder": "Tìm theo số điện thoại, tên hoặc mã đơn hàng",
+      "sourceLabel": "Nguồn",
+      "allSources": "Tất cả nguồn",
+      "paymentLabel": "Thanh toán",
+      "allPayments": "Tất cả thanh toán",
+      "fromLabel": "Từ",
+      "toLabel": "Đến",
+      "shopLabel": "Cửa hàng",
+      "invertedRange": "Ngày bắt đầu sau ngày kết thúc nên không có đơn hàng nào khớp.",
+      "clearFilters": "Xóa bộ lọc",
+      "cols": {
+        "order": "Đơn hàng",
+        "customer": "Khách hàng",
+        "items": "Mặt hàng",
+        "total": "Tổng",
+        "payment": "Thanh toán",
+        "status": "Trạng thái",
+        "source": "Nguồn",
+        "created": "Ngày tạo",
+        "actions": "Thao tác"
+      },
+      "itemsCount": "{count, plural, other {# mặt hàng}}",
+      "anonymous": "Ẩn danh",
+      "openOrder": "Mở đơn hàng #{no}",
+      "changeStatus": "Đổi trạng thái đơn hàng #{no}",
+      "deleteOrder": "Xóa đơn hàng #{no}",
+      "deleteTitle": "Xóa đơn hàng #{no}?",
+      "deleteMessage": "Đơn hàng và các mặt hàng của nó sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+      "deleteConfirm": "Xóa đơn hàng",
+      "deleted": "Đã xóa đơn hàng #{no}.",
+      "statusChanged": "Đơn hàng #{no} hiện là {status}.",
+      "buyerNotified": "Đã nhắn tin cho người mua.",
+      "confirmStatusTitle": "Đánh dấu đơn hàng #{no} là {status}?",
+      "confirmStatusMessage": "Người mua sẽ được thông báo về trạng thái mới. Bạn vẫn có thể chuyển đơn hàng sang trạng thái khác sau.",
+      "confirmStatusConfirm": "Cập nhật trạng thái",
+      "emptyTitle": "Chưa có đơn hàng",
+      "emptyMessage": "Khi khách hàng đặt hàng từ cửa hàng trực tuyến hoặc trên WhatsApp, đơn hàng sẽ xuất hiện tại đây. Hãy chia sẻ liên kết cửa hàng để có đơn đầu tiên.",
+      "emptyAction": "Mở tổng quan cửa hàng",
+      "noMatchTitle": "Không có đơn hàng nào khớp với các bộ lọc này",
+      "noMatchMessage": "Hãy thử tìm kiếm, trạng thái hoặc khoảng ngày khác, hoặc xóa bộ lọc để xem mọi đơn hàng."
+    },
+    "orderDetail": {
+      "back": "Quay lại đơn hàng",
+      "title": "Đơn hàng #{no}",
+      "placed": "Đặt {when}",
+      "loading": "Đang tải đơn hàng",
+      "readOnly": "Bạn có thể xem đơn hàng này nhưng không thể thay đổi.",
+      "items": {
+        "title": "Mặt hàng",
+        "empty": "Đơn hàng này không có mặt hàng.",
+        "qty": "SL {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} mỗi cái"
+      },
+      "totals": {
+        "title": "Tổng cộng",
+        "subtotal": "Tạm tính",
+        "shipping": "Vận chuyển",
+        "tax": "Thuế",
+        "taxInclusive": "Đã bao gồm trong giá",
+        "discount": "Giảm giá",
+        "discountCoupon": "Giảm giá ({code})",
+        "total": "Tổng"
+      },
+      "customer": {
+        "title": "Khách hàng",
+        "anonymous": "Ẩn danh",
+        "phone": "Điện thoại",
+        "email": "Email",
+        "address": "Địa chỉ giao hàng",
+        "noAddress": "Chưa ghi nhận địa chỉ cho đơn hàng này.",
+        "notes": "Ghi chú"
+      },
+      "meta": {
+        "title": "Chi tiết đơn hàng",
+        "orderId": "Mã đơn hàng",
+        "source": "Nguồn",
+        "shop": "Cửa hàng",
+        "paymentMethod": "Phương thức thanh toán",
+        "updated": "Cập nhật lần cuối"
+      },
+      "rto": {
+        "title": "Rủi ro hoàn hàng",
+        "summary": "{band} ({score})",
+        "low": "Thấp",
+        "medium": "Trung bình",
+        "high": "Cao"
+      },
+      "timeline": {
+        "title": "Dòng thời gian",
+        "empty": "Chưa có hoạt động nào trên đơn hàng này.",
+        "kind": {
+          "created": "Đã đặt đơn hàng",
+          "status_changed": "Đã đổi trạng thái",
+          "payment_link": "Liên kết thanh toán",
+          "paid": "Đã nhận thanh toán",
+          "invoice": "Hóa đơn",
+          "note": "Ghi chú",
+          "updated": "Đã cập nhật đơn hàng"
+        },
+        "actor": {
+          "user": "Bởi một thành viên nhóm",
+          "system": "Tự động",
+          "customer": "Bởi khách hàng"
+        }
+      },
+      "payments": {
+        "title": "Thanh toán",
+        "empty": "Chưa ghi nhận thanh toán nào cho đơn hàng này.",
+        "kind": {
+          "gateway": "Thanh toán trực tuyến",
+          "payment_link": "Liên kết thanh toán",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Thanh toán khi nhận hàng",
+          "manual": "Ghi nhận thủ công"
+        },
+        "reference": "Tham chiếu {ref}",
+        "openLink": "Mở liên kết"
+      },
+      "form": {
+        "title": "Cập nhật trạng thái",
+        "status": "Trạng thái",
+        "suggestion": "Bước tiếp theo thường gặp: {status}",
+        "notes": "Ghi chú",
+        "paymentLink": "Liên kết thanh toán",
+        "optional": "tùy chọn",
+        "paymentLinkHint": "Một liên kết mới sẽ được gửi cho người mua cùng với bản cập nhật.",
+        "invalidLink": "Hãy nhập liên kết web bắt đầu bằng http:// hoặc https://.",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu",
+        "saved": "Đã cập nhật đơn hàng #{no}.",
+        "notified": "Đã nhắn tin cho người mua.",
+        "notNotified": "Chưa nhắn tin cho người mua.",
+        "reload": "Tải lại đơn hàng"
+      },
+      "pay": {
+        "title": "Liên kết thanh toán",
+        "current": "Liên kết thanh toán hiện tại",
+        "sendTitle": "Gửi liên kết bạn đã có",
+        "sendLabel": "URL liên kết thanh toán",
+        "sendButton": "Gửi liên kết thanh toán",
+        "sent": "Đã gửi liên kết thanh toán cho người mua.",
+        "savedNotSent": "Đã lưu liên kết, nhưng không thể gửi cho người mua.",
+        "generateTitle": "Tạo liên kết thanh toán",
+        "generateHint": "Tạo liên kết thanh toán được lưu trữ trên cổng thanh toán của bạn và gửi cho người mua qua WhatsApp.",
+        "gatewayLabel": "Cổng thanh toán",
+        "generateButton": "Tạo liên kết và gửi",
+        "noGatewayTitle": "Chưa thiết lập cổng thanh toán",
+        "noGatewayMessage": "Cần thiết lập cổng thanh toán trước khi bạn có thể tạo liên kết thanh toán.",
+        "noGatewayAction": "Thiết lập cổng thanh toán",
+        "resultTitle": "Liên kết thanh toán đã sẵn sàng",
+        "copyLink": "Sao chép liên kết",
+        "resultSent": "Đã gửi cho người mua qua WhatsApp.",
+        "resultNotSent": "Đã lưu vào đơn hàng, nhưng không thể gửi cho người mua. Hãy tự chia sẻ."
+      },
+      "invoice": {
+        "title": "Hóa đơn",
+        "description": "Chuyển đơn hàng này thành hóa đơn và đơn bán hàng trong Bán hàng.",
+        "create": "Tạo hóa đơn",
+        "creating": "Đang tạo",
+        "created": "Đã tạo hóa đơn {number}.",
+        "createdNoNumber": "Đã tạo hóa đơn.",
+        "existing": "Đơn hàng này đã có hóa đơn.",
+        "viewInvoice": "Hóa đơn",
+        "viewSalesOrder": "Đơn bán hàng"
+      },
+      "delete": {
+        "title": "Xóa đơn hàng #{no}?",
+        "message": "Đơn hàng và các mặt hàng của nó sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+        "confirm": "Xóa đơn hàng",
+        "deleted": "Đã xóa đơn hàng #{no}."
+      }
+    }
+  }
+}

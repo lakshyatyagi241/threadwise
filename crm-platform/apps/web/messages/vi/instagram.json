@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Gửi hàng loạt Instagram"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "hub": {
+      "kicker": "Kênh · Instagram",
+      "title": "Instagram",
+      "titleAccent": "tài khoản",
+      "intro": "Liên kết tài khoản Instagram Business hoặc Creator một lần. Sau đó tin nhắn sẽ đến hộp thư nhóm, và từ đây bạn có thể trả lời, chạy luồng và gửi tin cho những người đã nhắn tin cho bạn.",
+      "teamInbox": "Hộp thư nhóm",
+      "broadcasts": "Gửi hàng loạt chỉ trả lời",
+      "loadError": "Không tải được các tài khoản Instagram đã liên kết. Hãy thử lại.",
+      "loadErrorDetail": "Không tải được các tài khoản Instagram đã liên kết (lỗi {status}{code}). Hãy thử lại.",
+      "engineOff": "{engine} chưa được kết nối. Quản trị viên cần kết nối trong Admin → Tiện ích bổ sung trước khi có thể liên kết tài khoản Instagram.",
+      "connectedCount": "{count, plural, other {# tài khoản đã liên kết}}",
+      "notConnected": "Chưa kết nối",
+      "cardTitle": "Thêm tài khoản Instagram",
+      "cardBody": "Kết nối tài khoản Business/Creator. Instagram chỉ cần kết nối một lần và sẽ hiện ở đây — trò chuyện, luồng và trả lời tự động đều hoạt động từ không gian làm việc này.",
+      "add": "Thêm tài khoản Instagram",
+      "linkedAccounts": "Tài khoản đã liên kết",
+      "linked": "Đã liên kết tài khoản Instagram.",
+      "linkFailed": "Không liên kết được tài khoản đó."
+    },
+    "dialog": {
+      "close": "Đóng",
+      "kicker": "Instagram",
+      "title": "Thêm tài khoản Instagram",
+      "note": "Instagram của bạn được kết nối một lần qua {engine} (nơi lưu đăng nhập và webhook). Không gian làm việc này liên kết với tài khoản đó và hiển thị hộp thư, luồng và quảng cáo tại đây — luôn là một tài khoản, không phải hai.",
+      "connect": "Kết nối Instagram",
+      "checking": "Đang kiểm tra…",
+      "hint": "Liên kết ngay nếu bạn đã kết nối trên {engine} — nếu không, cửa sổ đăng nhập nhanh sẽ mở ra.",
+      "pick": "Chọn tài khoản để liên kết",
+      "link": "Liên kết",
+      "connectDifferent": "Kết nối tài khoản khác",
+      "linkFailed": "Không liên kết được tài khoản đó.",
+      "startFailed": "Không thể bắt đầu kết nối Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Đã kết nối",
+      "needsReauth": "Cần xác thực lại",
+      "live": "trực tiếp",
+      "manage": "Quản lý trên {engine}",
+      "refresh": "Làm mới hồ sơ từ {engine}",
+      "unlink": "Hủy liên kết",
+      "unlinkConfirm": "Ngắt kết nối tài khoản Instagram này? Các cuộc trò chuyện và dữ liệu hộp thư sẽ bị xóa, Instagram sẽ biến mất khỏi bảng điều khiển, hộp thư, luồng, mẫu và trả lời tự động cho đến khi bạn kết nối lại một tài khoản. Bản thân tài khoản vẫn còn trên {engine} — bạn có thể liên kết lại sau.",
+      "cancel": "Hủy",
+      "updated": "Đã cập nhật tài khoản Instagram {handle}.",
+      "unlinked": "Đã ngắt kết nối tài khoản Instagram — dữ liệu của tài khoản đã được xóa.",
+      "failed": "Thao tác không thành công. Hãy thử lại."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Chỉ trả lời",
+      "title": "Instagram",
+      "titleAccent": "gửi hàng loạt",
+      "intro": "Instagram chỉ cho phép nhắn tin cho những người đã nhắn tin cho bạn, nên hãy chọn từ các cuộc trò chuyện hiện có. Instagram áp dụng cửa sổ 24 giờ khi mỗi tin nhắn được gửi.",
+      "accounts": "Tài khoản Instagram",
+      "loadError": "Không tải được các cuộc trò chuyện. Hãy thử lại.",
+      "failed": "Thao tác không thành công. Hãy thử lại.",
+      "noAccounts": "Chưa có tài khoản Instagram nào được liên kết và kết nối.",
+      "name": "Tên gửi hàng loạt",
+      "namePlaceholder": "Ưu đãi mùa thu",
+      "account": "Tài khoản Instagram",
+      "template": "Mẫu",
+      "templateHint": "Không bắt buộc. Điền nội dung tin nhắn khi tin nhắn đang trống.",
+      "templateNone": "Không dùng mẫu",
+      "message": "Tin nhắn",
+      "messageHint": "Dùng {token} để thay bằng tên người nhận. Tối đa {max} ký tự.",
+      "messagePlaceholder": "Xin chào {token}, …",
+      "send": "{count, plural, =0 {Gửi} other {Gửi đến # cuộc trò chuyện}}",
+      "sending": "Đang gửi…",
+      "recipients": "Người nhận",
+      "windowOpenCount": "{open} trên {total} trong cửa sổ 24 giờ",
+      "search": "Tìm cuộc trò chuyện",
+      "selectAll": "Chọn tất cả",
+      "clear": "Xóa",
+      "capNote": "Mỗi lần gửi tiếp cận tối đa {max} cuộc trò chuyện; chọn tất cả sẽ lấy {max} cuộc đầu tiên.",
+      "empty": "Chưa có cuộc trò chuyện nào. Người dùng sẽ hiện ở đây sau khi nhắn tin cho tài khoản của bạn.",
+      "inWindow": "Trong cửa sổ",
+      "outsideWindow": "Ngoài 24 giờ",
+      "selected": "{count, plural, other {# đã chọn}}",
+      "sent": "Đã gửi hàng loạt Instagram — {sent} đã gửi{failed, plural, =0 {} other {, # thất bại}}.",
+      "sentNone": "Không gửi được tới người nhận nào. Hãy kiểm tra kết nối Instagram."
+    }
+  }
+}

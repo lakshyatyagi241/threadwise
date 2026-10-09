@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Muat lebih banyak",
+    "loading": "Memuat",
+    "empty": "Belum ada apa-apa di sini",
+    "retry": "Coba lagi",
+    "requestId": "ID permintaan",
+    "search": "Cari",
+    "unexpected": "Terjadi kesalahan",
+    "fatal": {
+      "title": "Terjadi kesalahan",
+      "body": "Halaman gagal dimuat. Kejadian ini telah dilaporkan. Coba lagi, dan jika terus terjadi hubungi dukungan.",
+      "bodyWithDigest": "Halaman gagal dimuat. Kejadian ini telah dilaporkan. Coba lagi, dan jika terus terjadi hubungi dukungan dan sebutkan {digest}.",
+      "home": "Kembali ke awal"
+    }
+  }
+}

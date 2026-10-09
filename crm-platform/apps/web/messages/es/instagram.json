@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Difusión de Instagram"
+    },
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "hub": {
+      "kicker": "Canal · Instagram",
+      "title": "Cuentas de",
+      "titleAccent": "Instagram",
+      "intro": "Vincula una sola vez tu cuenta de empresa o de creador de Instagram. Sus mensajes llegan entonces a tu bandeja de equipo, y desde aquí respondes, ejecutas flujos y envías a las personas que ya te escribieron.",
+      "teamInbox": "Bandeja de equipo",
+      "broadcasts": "Difusión solo de respuesta",
+      "loadError": "No se pudieron cargar las cuentas de Instagram vinculadas. Inténtalo de nuevo.",
+      "loadErrorDetail": "No se pudieron cargar las cuentas de Instagram vinculadas (error {status}{code}). Inténtalo de nuevo.",
+      "engineOff": "{engine} no está conectado. Un administrador debe conectarlo en Admin → Complementos antes de poder vincular una cuenta de Instagram.",
+      "connectedCount": "{count, plural, one {# cuenta vinculada} other {# cuentas vinculadas}}",
+      "notConnected": "No conectado",
+      "cardTitle": "Añadir una cuenta de Instagram",
+      "cardBody": "Conecta una cuenta de empresa o de creador. Tu Instagram se conecta una sola vez y aparece aquí: conversaciones, flujos y respuestas automáticas funcionan desde este espacio de trabajo.",
+      "add": "Añadir una cuenta de Instagram",
+      "linkedAccounts": "Cuentas vinculadas",
+      "linked": "Cuenta de Instagram vinculada.",
+      "linkFailed": "No se pudo vincular esa cuenta."
+    },
+    "dialog": {
+      "close": "Cerrar",
+      "kicker": "Instagram",
+      "title": "Añadir una cuenta de Instagram",
+      "note": "Tu Instagram se conecta una sola vez a través de {engine} (que guarda el inicio de sesión y el webhook). Este espacio de trabajo se vincula a él y muestra aquí su bandeja, sus flujos y sus anuncios: siempre es una sola cuenta, no dos.",
+      "connect": "Conectar Instagram",
+      "checking": "Comprobando…",
+      "hint": "Se vincula al instante si ya lo conectaste en {engine}; si no, se abre una ventana rápida de inicio de sesión.",
+      "pick": "Elige una cuenta que vincular",
+      "link": "Vincular",
+      "connectDifferent": "Conectar otra cuenta",
+      "linkFailed": "No se pudo vincular esa cuenta.",
+      "startFailed": "No se pudo iniciar la conexión con Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Conectado",
+      "needsReauth": "Requiere volver a autenticarse",
+      "live": "activo",
+      "manage": "Gestionar en {engine}",
+      "refresh": "Actualizar perfil desde {engine}",
+      "unlink": "Desvincular",
+      "unlinkConfirm": "¿Desconectar esta cuenta de Instagram? Se eliminarán sus conversaciones y los datos de su bandeja, y Instagram desaparecerá de tu panel, bandeja, flujos, plantillas y respuestas automáticas hasta que vuelvas a conectar una cuenta. La cuenta en sí permanece en {engine}: puedes volver a vincularla más tarde.",
+      "cancel": "Cancelar",
+      "updated": "Cuenta de Instagram {handle} actualizada.",
+      "unlinked": "Cuenta de Instagram desconectada: se eliminaron sus datos.",
+      "failed": "No funcionó. Inténtalo de nuevo."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Solo respuesta",
+      "title": "Difusión de",
+      "titleAccent": "Instagram",
+      "intro": "Instagram solo te deja escribir a personas que ya te han escrito, así que elige entre tus conversaciones existentes. Instagram aplica su ventana de 24 horas cuando se envía cada mensaje.",
+      "accounts": "Cuentas de Instagram",
+      "loadError": "No se pudieron cargar las conversaciones. Inténtalo de nuevo.",
+      "failed": "No funcionó. Inténtalo de nuevo.",
+      "noAccounts": "Aún no hay ninguna cuenta de Instagram vinculada y conectada.",
+      "name": "Nombre de la difusión",
+      "namePlaceholder": "Oferta de otoño",
+      "account": "Cuenta de Instagram",
+      "template": "Plantilla",
+      "templateHint": "Opcional. Rellena el mensaje cuando está vacío.",
+      "templateNone": "Sin plantilla",
+      "message": "Mensaje",
+      "messageHint": "Usa {token} para el nombre de la persona. Hasta {max} caracteres.",
+      "messagePlaceholder": "Hola {token}, …",
+      "send": "{count, plural, =0 {Enviar} one {Enviar a # conversación} other {Enviar a # conversaciones}}",
+      "sending": "Enviando…",
+      "recipients": "Destinatarios",
+      "windowOpenCount": "{open} de {total} dentro de la ventana de 24 horas",
+      "search": "Buscar conversaciones",
+      "selectAll": "Seleccionar todo",
+      "clear": "Borrar",
+      "capNote": "Un envío llega como máximo a {max} conversaciones; seleccionar todo elige las primeras {max}.",
+      "empty": "Aún no hay conversaciones. Las personas aparecen aquí después de escribir a tu cuenta.",
+      "inWindow": "En ventana",
+      "outsideWindow": "Fuera de 24 h",
+      "selected": "{count, plural, one {# seleccionada} other {# seleccionadas}}",
+      "sent": "Difusión de Instagram enviada: {sent} entregados{failed, plural, =0 {} one {, # fallido} other {, # fallidos}}.",
+      "sentNone": "No se pudo enviar a ningún destinatario. Comprueba la conexión con Instagram."
+    }
+  }
+}

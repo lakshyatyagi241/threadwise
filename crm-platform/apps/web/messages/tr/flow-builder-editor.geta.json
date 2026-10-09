@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Yayına alınıyor…",
+        "live": "Canlı",
+        "liveTitle": "Geta'da canlı",
+        "push": "Canlıya al",
+        "pushHint": "Burada yayınlandı; şimdi Geta'ya canlıya gönder",
+        "failed": "Başarısız",
+        "failedConfiguration": "Yapılandırma güncellemesinde başarısız",
+        "failedPublish": "Yayınlamada başarısız",
+        "retry": "Yeniden dene",
+        "retrying": "Yeniden deneniyor…",
+        "reasonLabel": "Neden",
+        "failedNote": "Akış burada hâlâ yayında. Yeniden deneme, başarısız olan adımdan devam eder.",
+        "notConfigured": "Burada yayınlandı; canlıya almak için ayarlarda Geta yayınlamayı kurun.",
+        "openSettings": "Ayarları aç",
+        "dismiss": "Kapat"
+      },
+      "settings": {
+        "title": "Geta yayınlama",
+        "intro": "Akış oluşturucuda Yayınla'ya bastığınızda botunuz ayrıca Geta konsolunda canlıya alınır. Bağlantı ayrıntılarını bu çalışma alanı için bir kez girin. Gizli bilgiler şifreli saklanır ve bir daha gösterilmez.",
+        "viewOnly": "Bu ayarların durumunu görebilirsiniz ancak değiştiremezsiniz.",
+        "loading": "Yükleniyor…",
+        "loadFailed": "Ayarlar yüklenemedi.",
+        "retry": "Tekrar dene",
+        "fixtureNotice": "Bu sunucu test verisi modunda: yayınlama simüle edilir ve Geta'ya hiçbir şey gönderilmez.",
+        "ready": "Hazır",
+        "incomplete": "Tamamlanmadı",
+        "readyNote": "Bir akışı yayınlamak botunuzu ayrıca Geta'da canlıya alır.",
+        "incompleteNote": "Yayınlanan akışların Geta'da canlıya alınması için aşağıdaki tüm alanları doldurun.",
+        "baseUrl": {
+          "label": "Temel URL",
+          "hint": "Geta API adresi, örneğin https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Konsol kaynağı (isteğe bağlı)",
+          "hint": "Her isteğin origin ve referer değeri olarak gönderilir. Hiçbirini göndermemek için boş bırakın."
+        },
+        "authorization": {
+          "label": "Yetkilendirme anahtarı",
+          "hint": "Girdiğiniz gibi, başına “Bearer ” eklenmeden gönderilir."
+        },
+        "getaHost": {
+          "label": "geta-host anahtarı",
+          "hint": "geta-host başlığında gönderilir."
+        },
+        "secretKept": "Kaydedildi. Olduğu gibi kalması için kutuyu boş bırakın ya da değiştirmek için yeni bir değer yazın.",
+        "secretPlaceholder": "Kaydedildi (gizli)",
+        "show": "Göster",
+        "hide": "Gizle",
+        "remove": "Kaldır",
+        "record": {
+          "label": "Geta sohbet botu kaydı",
+          "paste": "Sohbet botu kaydını (JSON) yapıştırın",
+          "replace": "Sohbet botu kaydını (JSON) değiştirin",
+          "hint": "Geta'ya gönderilmesi gereken sohbet botu nesnesi veya chatbot anahtarı içeren tüm istek gövdesi. En azından id ve bot_id gerekir. Gönderildiğinde yalnızca modified_time yenilenir.",
+          "keepPlaceholder": "Kayıtlı kaydı tutmak için boş bırakın",
+          "id": "Sohbet botu kimliği",
+          "name": "Ad",
+          "botId": "Bot kimliği",
+          "remove": "Kayıtlı kaydı kaldır"
+        },
+        "saved": "Kaydedildi",
+        "notSet": "Ayarlanmadı",
+        "save": "Kaydet",
+        "saving": "Kaydediliyor…",
+        "saveFailed": "Kaydedilemedi.",
+        "removed": "Kaldırıldı.",
+        "clear": "Tümünü temizle",
+        "cleared": "Geta yayınlama ayarları temizlendi.",
+        "clearConfirm": {
+          "title": "Geta yayınlama temizlensin mi?",
+          "message": "Bu, temel URL'yi, iki anahtarı ve sohbet botu kaydını kaldırır. Yayınlanan akışlar burada yayında kalır ancak artık Geta'ya gönderilmez.",
+          "confirm": "Tümünü temizle",
+          "cancel": "İptal"
+        }
+      }
+    }
+  }
+}

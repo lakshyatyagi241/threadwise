@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Webhook-doorstuur"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Je hebt geen toestemming om dit te doen.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw.",
+        "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit doel gewijzigd. De lijst is opnieuw geladen: pas je wijziging opnieuw toe.",
+        "validation": "Sommige waarden zijn niet geldig. Controleer de gemarkeerde velden.",
+        "notFound": "Dat item bestaat niet meer.",
+        "urlRejected": "Deze URL is niet toegestaan. Gebruik een https-adres dat via internet bereikbaar is."
+      }
+    },
+    "page": {
+      "eyebrow": "Beheer / Systeem / Webhooks",
+      "title": "Webhook-doorstuur",
+      "description": "De lijst van de platformbeheerder met diensten die een kopie van elke Meta-webhook ontvangen.",
+      "banner": "Meta staat één callback-URL toe. Wij ontvangen die één keer, verifiëren hem en sturen de ruwe body ongewijzigd door (met de oorspronkelijke handtekening) naar elk actief doel.",
+      "superOnly": "Alleen een superbeheerder kan webhook-doorsturen beheren.",
+      "add": "Doel toevoegen",
+      "tabs": {
+        "targets": "Doelen",
+        "failures": "Mislukte leveringen"
+      }
+    },
+    "targets": {
+      "empty": "Nog geen doorstuurdoelen",
+      "emptyBody": "Voeg een doel toe om Meta-webhooks naar een andere dienst door te sturen.",
+      "columns": {
+        "target": "Doel",
+        "active": "Actief",
+        "fields": "Velden",
+        "deliveries": "Leveringen",
+        "last": "Laatste levering",
+        "actions": "Acties"
+      },
+      "allFields": "Alle velden",
+      "success": "{count, number} geslaagd",
+      "failure": "{count, number} mislukt",
+      "pending": "{count, number} in behandeling",
+      "pendingLabel": "{count, number} mislukte leveringen wachten op opnieuw afspelen",
+      "neverDelivered": "Nog niets geleverd",
+      "lastStatus": "Status {status}",
+      "lastError": "Fout: {error}",
+      "lastAt": "om {time}",
+      "activeSwitch": "Doorsturen naar {name}",
+      "on": "Doel aan",
+      "off": "Doel uit",
+      "edit": "Bewerken",
+      "test": "Testen",
+      "testing": "Testen",
+      "testOk": "Test geslaagd: status {status} in {ms, number} ms",
+      "testFailed": "Test mislukt: {reason} ({ms, number} ms)",
+      "testNoStatus": "geen antwoord",
+      "testStatus": "status {status}",
+      "delete": "Verwijderen",
+      "deleteTitle": "{name} verwijderen?",
+      "deleteBody": "Het doel ontvangt geen webhooks meer en de bewaarde mislukte leveringen worden verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "deleteConfirm": "Doel verwijderen",
+      "cancel": "Annuleren",
+      "toasts": {
+        "created": "{name} toegevoegd",
+        "saved": "{name} opgeslagen",
+        "on": "{name} staat aan",
+        "off": "{name} staat uit",
+        "deleted": "{name} verwijderd"
+      }
+    },
+    "dialog": {
+      "createTitle": "Doorstuurdoel toevoegen",
+      "editTitle": "{name} bewerken",
+      "close": "Sluiten",
+      "name": "Naam",
+      "namePlaceholder": "Analysedienst",
+      "url": "URL",
+      "urlHint": "Alleen https. Adressen op privénetwerken worden geweigerd.",
+      "headerName": "Headernaam (optioneel)",
+      "headerNameHint": "Wordt bij elke levering meegestuurd, bijvoorbeeld Authorization.",
+      "headerValue": "Headerwaarde",
+      "headerValueSaved": "Opgeslagen, eindigt op ••••{last4}. Laat leeg om te behouden.",
+      "headerValueSavedNoLast4": "Opgeslagen. Laat leeg om te behouden.",
+      "headerValueHint": "Alleen schrijven: na opslaan wordt het nooit meer getoond.",
+      "removeHeader": "De opgeslagen header verwijderen",
+      "fieldFilter": "Veldfilter",
+      "fieldFilterHint": "Laat leeg om elk veld door te sturen. Typ een veld en druk op Enter, bijvoorbeeld messages of message_template_status_update.",
+      "fieldFilterPlaceholder": "Een veld toevoegen",
+      "fieldRemove": "{field} verwijderen",
+      "timeout": "Time-out (seconden)",
+      "timeoutHint": "1 tot 30",
+      "maxAttempts": "Max. pogingen",
+      "maxAttemptsHint": "1 tot 10",
+      "active": "Doorsturen naar dit doel",
+      "save": "Opslaan",
+      "saving": "Opslaan",
+      "cancel": "Annuleren",
+      "errors": {
+        "nameRequired": "Voer een naam in.",
+        "urlRequired": "Voer de URL in.",
+        "urlHttps": "De URL moet beginnen met https://.",
+        "headerNameInvalid": "Gebruik alleen letters, cijfers en streepjes.",
+        "headerValueRequired": "Een header heeft zowel een naam als een waarde nodig.",
+        "headerNameRequired": "Voer ook de headernaam in.",
+        "timeout": "Voer een geheel getal van 1 tot 30 in.",
+        "maxAttempts": "Voer een geheel getal van 1 tot 10 in."
+      }
+    },
+    "failures": {
+      "empty": "Geen mislukte leveringen",
+      "emptyBody": "Leveringen die alle pogingen hebben opgebruikt, worden hier 14 dagen bewaard zodat je ze opnieuw kunt versturen.",
+      "filterAll": "Alle doelen",
+      "filterLabel": "Doel",
+      "columns": {
+        "target": "Doel",
+        "when": "Mislukt op",
+        "attempts": "Pogingen",
+        "reason": "Reden",
+        "size": "Grootte",
+        "actions": "Actie"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} bytes",
+      "replay": "Opnieuw afspelen",
+      "replaying": "Opnieuw afspelen",
+      "replayed": "Opnieuw afgespeeld {time}",
+      "replayOk": "Geleverd: status {status} in {ms, number} ms",
+      "replayFailed": "Niet geleverd: {reason} ({ms, number} ms)",
+      "reasonStatus": "status {status}",
+      "reasonNone": "geen antwoord"
+    }
+  }
+}

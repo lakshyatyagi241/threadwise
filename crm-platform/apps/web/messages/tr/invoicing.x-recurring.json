@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Bu takvim sona erdi; değiştirilecek veya çalıştırılacak bir şey kalmadı.",
+        "REC_NOT_ACTIVE": "Bu takvim etkin değil. Önce devam ettirin.",
+        "REC_START_TOO_OLD": "Başlangıç tarihi çok eski. En fazla 12 geçmiş dönem oluşturulur, bu yüzden daha yakın bir tarihten başlayın.",
+        "INV_RECURRING_INVALID": "Şablon, fatura oluşturmak için kullanılamadı. Alıcıyı, kalemleri ve vergiyi kontrol edip yeniden kaydedin."
+      }
+    },
+    "recurring": {
+      "title": "Tekrarlayan faturalar",
+      "subtitle": "Belirlediğiniz tarihlerde kendiliğinden fatura oluşturan takvimler.",
+      "new": "Yeni takvim",
+      "invoices": "Faturalar",
+      "tabsLabel": "Takvim durumu",
+      "tabs": {
+        "all": "Tümü",
+        "active": "Aktif",
+        "paused": "Duraklatıldı",
+        "ended": "Sona erdi"
+      },
+      "search": "Yüklenen takvimlerde ara",
+      "refresh": "Yenile",
+      "tableLabel": "Tekrarlayan fatura takvimleri",
+      "scrollArea": "Takvim tablosu, yatay kaydırılır",
+      "loading": "Takvimler yükleniyor",
+      "empty": {
+        "all": {
+          "title": "Henüz tekrarlayan fatura yok",
+          "message": "Bir kez takvim ayarlayın; fatura her hafta, ay veya yıl sizin için oluşturulsun."
+        },
+        "active": {
+          "title": "Çalışan bir şey yok",
+          "message": "Bir sonraki faturasını zamanında oluşturacak aktif takvimler burada görünür."
+        },
+        "paused": {
+          "title": "Duraklatılmış takvim yok",
+          "message": "Duraklattığınız takvim, devam ettirene kadar fatura oluşturmaz."
+        },
+        "ended": {
+          "title": "Sona ermiş takvim yok",
+          "message": "Bir takvim, son çalıştırmasından veya bitiş tarihinden sonra sona erer."
+        }
+      },
+      "emptySearchTitle": "Eşleşen takvim yok",
+      "emptySearch": "Yüklenen satırlarda eşleşen bir şey yok. Aramayı temizleyin veya daha fazla yükleyin.",
+      "clearSearch": "Aramayı temizle",
+      "showing": "{count, plural, other {# takvim gösteriliyor}}",
+      "showingMatches": "Yüklenen {loaded} takvimden {count} tanesi eşleşiyor",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Tüm takvimler yüklendi",
+      "searchLoadedOnly": "Arama yalnızca yüklenmiş takvimlere bakar. Daha ileride aramak için daha fazla yükleyin.",
+      "columns": {
+        "name": "Takvim",
+        "buyer": "Alıcı",
+        "every": "Tekrar",
+        "next": "Sonraki çalıştırma",
+        "last": "Son çalıştırma",
+        "runs": "Çalıştırmalar",
+        "failures": "Hatalar",
+        "amount": "Fatura başına",
+        "mode": "Her fatura",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "lineCount": "{count, plural, other {# kalem}}",
+      "onHold": "Beklemede",
+      "runsOf": "{done} / {max}",
+      "failuresTitle": "{count, plural, other {# dönem başarısız oldu. Geçmişi açın.}}",
+      "channel": {
+        "link": "Bağlantı",
+        "email": "E-posta",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "{name} için diğer işlemler",
+      "open": "Aç",
+      "edit": "Düzenle",
+      "pause": "Duraklat",
+      "resume": "Devam ettir",
+      "cancel": "Vazgeç",
+      "runNow": {
+        "action": "Şimdi çalıştır",
+        "title": "{name} şimdi çalıştırılsın mı?",
+        "confirm": "Şimdi çalıştır",
+        "message": {
+          "draft": "Bu işlem, {date} tarihli faturayı şimdi taslak olarak oluşturur; inceleyebilirsiniz. Takvim bir sonraki döneme geçer.",
+          "issue": "Bu işlem, {date} tarihli faturayı şimdi oluşturup düzenler (hemen bir numara alır). Takvim bir sonraki döneme geçer.",
+          "issue_send": "Bu işlem, {date} tarihli faturayı şimdi oluşturur, düzenler ve alıcıya gönderir. Takvim bir sonraki döneme geçer."
+        }
+      },
+      "delete": {
+        "action": "Sil",
+        "title": "{name} silinsin mi?",
+        "message": "{name} fatura oluşturmayı durdurur. Daha önce oluşturduğu faturalar listenizde kalır.",
+        "confirm": "Takvimi sil",
+        "keep": "Vazgeç"
+      },
+      "toast": {
+        "paused": "{name} duraklatıldı.",
+        "resumed": "{name} yeniden çalışıyor. Sonraki fatura: {date}.",
+        "resumedEnded": "{name} için dönem kalmadı, bu yüzden sona erdi.",
+        "ran": "{name} takviminden bir fatura oluşturuldu.",
+        "runFailed": "{name} için çalıştırma başarısız oldu ve kaydedildi. Nedenini görmek için geçmişi açın.",
+        "deleted": "{name} silindi."
+      },
+      "every": {
+        "day": "{interval, plural, other {Her # günde bir}}",
+        "week": "{interval, plural, other {Her # haftada bir}}",
+        "month": "{interval, plural, other {Her # ayda bir}}",
+        "year": "{interval, plural, other {Her # yılda bir}}"
+      },
+      "status": {
+        "active": "Aktif",
+        "paused": "Duraklatıldı",
+        "ended": "Sona erdi"
+      },
+      "runStatus": {
+        "created": "Oluşturuldu",
+        "failed": "Başarısız"
+      },
+      "modeShort": {
+        "draft": "Taslak",
+        "issue": "Düzenlendi",
+        "issue_send": "Düzenlendi ve gönderildi"
+      },
+      "modeSent": {
+        "email": "Düzenlendi ve e-postayla gönderildi",
+        "link": "Düzenlendi, bağlantıyla paylaşıldı",
+        "whatsapp": "Düzenlendi ve WhatsApp ile gönderildi"
+      },
+      "frequency": {
+        "day": "Gün",
+        "week": "Hafta",
+        "month": "Ay",
+        "year": "Yıl"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Taslak olarak bırak",
+          "hint": "Her fatura, düzenlenmeden önce sizin incelemenizi bekler."
+        },
+        "issue": {
+          "title": "Düzenle",
+          "hint": "Her fatura numaralandırılır ve düzenlenmiş olarak hazır olur."
+        },
+        "issue_send": {
+          "title": "Düzenle ve gönder",
+          "hint": "Her fatura kendiliğinden düzenlenir ve alıcıya gönderilir."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Şablonda alıcının e-posta adresi yok, bu nedenle e-posta gönderimi başarısız olur. Bir e-posta ekleyin veya bağlantıyla gönderin."
+      },
+      "preview": {
+        "title": "Sonraki çalıştırmalar",
+        "incomplete": "Faturaların ne zaman oluşturulacağını görmek için takvimi doldurun.",
+        "sentence": "{every}, {start} tarihinden itibaren{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, other {# fatura}}} end {, {end} tarihine kadar} both {, {count, plural, other {# fatura}}, {end} tarihine kadar} other {}}",
+        "outcome": {
+          "draft": "Her fatura, incelemeniz için taslak olarak bırakılır.",
+          "issue": "Her fatura otomatik olarak düzenlenir.",
+          "issue_email": "Her fatura düzenlenir ve alıcıya e-postayla gönderilir.",
+          "issue_link": "Her fatura düzenlenir ve bağlantıyla paylaşıldı olarak kaydedilir.",
+          "issue_whatsapp": "Her fatura düzenlenir ve WhatsApp ile gönderilir."
+        },
+        "eachInvoice": "Her faturanın tutarı yaklaşık",
+        "lastDay": "Ayın son günü",
+        "noRuns": "Bu takvimin içine düşen çalıştırma yok.",
+        "endsMaxRuns": "{count, plural, other {# faturadan sonra durur.}}",
+        "endsEndDate": "{count, plural, other {{date} tarihinden sonra çalıştırma yok: toplam # fatura.}}",
+        "moreBounded": "{count, plural, other {Toplam # fatura. Kalanlar aynı düzeni izler.}}",
+        "moreForever": "Siz duraklatana veya silene kadar devam eder.",
+        "clampNote": "Bu takvim {day}. günde başlar. {day}. günü olmayan bir ayda son günde çalışır; sonraki ay yeniden {day}. güne döner.",
+        "catchUp": "{count, plural, other {# dönem zaten geçmişte kaldı: faturaları hemen oluşturulur, her dönem için bir tane.}}",
+        "catchUpTooOld": "{count} dönem zaten geçmişte kaldı ve en fazla {max} tanesi oluşturulur. Daha ileri bir tarihten başlayın."
+      },
+      "builder": {
+        "loading": "Yükleniyor",
+        "endedNoEdit": "Bu takvim sona erdi, bu yüzden artık düzenlenemez.",
+        "openSchedule": "Takvimi aç",
+        "back": "Geri",
+        "newTitle": "Yeni tekrarlayan fatura",
+        "editTitle": "{name} düzenle",
+        "newSubtitle": "Tekrar düzenini ve oluşturacağı faturayı ayarlayın. Sonraki çalıştırmalar yanda gösterilir.",
+        "editSubtitle": "Bundan sonraki dönemler için düzeni veya faturayı değiştirin.",
+        "cancel": "Vazgeç",
+        "save": "Değişiklikleri kaydet",
+        "create": "Takvim oluştur",
+        "conflict": "Siz düzenlerken bu takvimi başka biri değiştirdi. Onların sürümünü görmek için yenileyin. Buradaki düzenlemeleriniz kaybolur.",
+        "reload": "Yenile",
+        "fixProblems": "Önce vurgulanan alanları düzeltin.",
+        "nothingToSave": "Hiçbir şey değiştirilmedi.",
+        "saved": "Takvim kaydedildi.",
+        "created": "{name} artık takvime göre fatura oluşturacak.",
+        "schedule": "Takvim",
+        "name": "Ad",
+        "nameHint": "Yalnızca siz görürsünüz, örneğin Aylık sabit ücret.",
+        "every": "Şu sıklıkla tekrarla",
+        "frequency": "Birim",
+        "startDate": "İlk fatura tarihi",
+        "startFixed": "Başlangıç tarihi değiştirilemez. Başka bir tarihten başlamak için yeni bir takvim oluşturun.",
+        "startHint": "Geçmiş bir tarih, vadesi gelmiş dönemleri (en fazla 12) hemen oluşturur.",
+        "endDate": "Şu tarihten sonra durdur (isteğe bağlı)",
+        "endHint": "Bu tarihten sonra fatura oluşturulmaz.",
+        "maxRuns": "Fatura sayısı (isteğe bağlı)",
+        "maxRunsHint": "Takvim bu kadar fatura oluşturduktan sonra sona erer.",
+        "noLimit": "Sınır yok",
+        "scheduleEditNote": "Değiştirilen düzen bugünden itibaren devam eder ve daha önce çalışmış bir dönemi asla tekrarlamaz.",
+        "mode": "Her faturaya ne olacak",
+        "sendChannel": "Gönderim yöntemi",
+        "sendChannelHint": "Bağlantı seçeneği, bağlantıyı kendiniz paylaştığınızı kaydeder. E-posta ve WhatsApp sizin yerinize gönderir.",
+        "templateTitle": "Fatura şablonu",
+        "templateFuture": "Yeni şablon, bundan sonra oluşturulacak faturalara uygulanır. Daha önce oluşturulmuş faturalar değişmez.",
+        "replaceTemplate": "Şablonu değiştir",
+        "keepTemplate": "Mevcut şablonu koru"
+      },
+      "template": {
+        "title": "Fatura şablonu",
+        "hint": "Her dönem için bu şablondan, o döneme tarihlenmiş yeni bir fatura oluşturulur.",
+        "hintEdit": "Yeni şablonu burada oluşturun. Gelecekteki faturalar için mevcut şablonun yerini alır.",
+        "sourceLabel": "Şablonun kaynağı",
+        "source": {
+          "invoice": {
+            "title": "Bir faturayı kopyala",
+            "hint": "Daha önce oluşturduğunuz bir faturanın alıcısını ve kalemlerini kullanın."
+          },
+          "build": {
+            "title": "Şablon oluştur",
+            "hint": "Alıcıyı ve kalemleri burada doldurun."
+          }
+        },
+        "draftInvoice": "Taslak fatura",
+        "copyOf": "Bu faturanın kopyası, toplamı",
+        "change": "Değiştir",
+        "choose": "Bir fatura seçin",
+        "copyNote": "Alıcı, kalemler, vergi ve notlar kaydettiğinizde kopyalanır. Orijinalde sonra yapılan değişiklikler takvime yansımaz.",
+        "startFromInvoice": "Bir faturadan başla",
+        "startFromInvoiceHint": "Düzenleyebilmeniz için alıcısını ve kalemlerini buraya yükler.",
+        "billTo": "Fatura alıcısı",
+        "contact": "Kişi",
+        "contactHint": "Her faturayı bir kişiye bağlamak için kişi seçin veya alıcıyı aşağıya yazın.",
+        "buyerName": "Faturadaki ad",
+        "buyerEmail": "E-posta",
+        "buyerPhone": "Telefon",
+        "buyerCountry": "Ülke",
+        "buyerCountryHint": "IN veya DE gibi iki harf.",
+        "buyerTaxId": "Vergi numarası",
+        "buyerAddress": "Fatura adresi",
+        "details": "Para birimi ve vergi",
+        "currency": "Para birimi",
+        "docType": "Belge",
+        "docTypes": {
+          "tax_invoice": "Vergi faturası",
+          "proforma": "Proforma fatura"
+        },
+        "taxMode": "Vergi",
+        "taxModes": {
+          "rates": "Vergi oranına göre",
+          "auto": "Otomatik"
+        },
+        "taxModeAutoHint": "Vergileri, satıcı ve alıcı ülkelerine göre vergi motoru belirler.",
+        "supplyType": "Teslim türü",
+        "supply": {
+          "goods": "Mal",
+          "services": "Hizmet",
+          "digital": "Dijital hizmetler"
+        },
+        "paymentTerms": "Ödeme koşulları",
+        "paymentTermsHint": "Her faturanın düzenlendiği günden itibaren sayılır.",
+        "termsDefault": "Çalışma alanı varsayılanı",
+        "termsOnReceipt": "Tahsilatta vade",
+        "termsNet": "{days} gün net",
+        "lines": "Kalemler",
+        "adjustments": "İndirim ve kargo",
+        "discountKind": "Tüm fatura üzerinde indirim",
+        "discountNone": "İndirim yok",
+        "discountPercent": "Yüzde",
+        "discountAmount": "Sabit tutar ({currency})",
+        "discountValue": "İndirim değeri",
+        "shipping": "Kargo ({currency})",
+        "notes": "Müşteriye not",
+        "notesHint": "Her faturada yazdırılır.",
+        "termsText": "Şartlar ve koşullar",
+        "termsTextHint": "Her faturanın altında yazdırılır.",
+        "kept": "{count, plural, other {Şablonda # kalem var, alıcıya kesilecek:}}"
+      },
+      "problems": {
+        "generic": "Bu alanı kontrol edin.",
+        "nameRequired": "Takvime bir ad verin.",
+        "nameTooLong": "En fazla 120 karakter kullanın.",
+        "intervalInvalid": "1 ile 365 arasında tam bir sayı girin.",
+        "startInvalid": "Geçerli bir başlangıç tarihi girin.",
+        "startTooOld": "Bu başlangıç tarihi {count} dönem geride ve en fazla {max} geçmiş dönem oluşturulur. Daha ileri bir tarih seçin.",
+        "endInvalid": "Geçerli bir bitiş tarihi girin.",
+        "endBeforeStart": "Bitiş tarihi, başlangıç tarihinden önce.",
+        "maxRunsInvalid": "1 ile 1000 arasında tam bir sayı girin veya boş bırakın.",
+        "invoiceRequired": "Kopyalanacak faturayı seçin.",
+        "termsInvalid": "0 ile 365 gün arasında girin.",
+        "descriptionRequired": "Bu kalemi açıklayın.",
+        "qtyInvalid": "Sıfırdan büyük bir miktar girin.",
+        "priceInvalid": "Geçerli bir fiyat girin.",
+        "lineDiscountInvalid": "0 ile 100 arasında bir yüzde girin.",
+        "hsnRequired": "HSN veya SAC kodunu girin.",
+        "hsnInvalid": "HSN veya SAC kodu 2 ile 12 harf veya rakamdan oluşur.",
+        "taxRateRemoved": "Bu vergi oranı artık yok. Başka bir oran seçin.",
+        "currencyInvalid": "Üç harfli bir para birimi kodu girin.",
+        "noLines": "En az bir kalem ekleyin.",
+        "discountInvalid": "Geçerli bir indirim girin.",
+        "shippingInvalid": "Geçerli bir tutar girin.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "amountZero": "Fatura toplamı sıfırdan büyük olmalı.",
+        "amountInvalid": "Bu tutar geçerli değil.",
+        "contactRequired": "Bir kişi seçin veya alıcı adını yazın. Kendiliğinden düzenlenen faturaların bir alıcısı olmalıdır.",
+        "countryInvalid": "İki harfli bir ülke kodu kullanın.",
+        "regionInvalid": "Geçerli bir eyalet veya bölge kodu girin.",
+        "autoNeedsSellerCountry": "Otomatik vergi için fatura ayarlarında ülkenizin belirtilmesi gerekir."
+      },
+      "detail": {
+        "loading": "Takvim yükleniyor",
+        "backToList": "Tekrarlayan faturalara dön",
+        "back": "Tekrarlayan faturalara dön",
+        "failures": "{count, plural, other {# dönem faturasını oluşturamadı.}}",
+        "seeHistory": "Nedenine bak",
+        "pausedNote": "Bu takvim duraklatıldı. Duraklatılmış süre içine düşen dönemler atlanır; devam ettirdiğinizde bir sonraki fatura bugün veya daha sonrası için olur.",
+        "endedNote": "Bu takvim sona erdi. Artık fatura oluşturulmayacak ve düzenlenemeyecek.",
+        "nextRun": "Sonraki çalıştırma",
+        "lastRun": "Son çalıştırma",
+        "runs": "Oluşturulan faturalar",
+        "failedCount": "{count, plural, other {# hata}}",
+        "amount": "Fatura başına",
+        "amountNote": "Şablonun bugünkü tutarı",
+        "upcoming": "Yaklaşan tarihler",
+        "noUpcoming": "Başka çalıştırma planlanmadı.",
+        "template": "Şablon",
+        "buyer": "Alıcı",
+        "lines": "Kalemler",
+        "currency": "Para birimi",
+        "mode": "Her fatura",
+        "starts": "Başlangıç",
+        "ends": "Bitiş",
+        "never": "Bitiş tarihi yok",
+        "limit": "Sınır",
+        "noLimit": "Sınır yok",
+        "invoicesCount": "{count, plural, other {# fatura}}",
+        "templateNote": "Şablonu düzenlemek yalnızca bundan sonraki faturaları değiştirir, daha önce oluşturulanları asla değiştirmez."
+      },
+      "runs": {
+        "title": "Çalıştırma geçmişi",
+        "subtitle": "Her dönem için bir satır, en yeniden eskiye.",
+        "loading": "Geçmiş yükleniyor",
+        "scrollArea": "Çalıştırma geçmişi tablosu, yatay kaydırılır",
+        "emptyTitle": "Henüz çalıştırma yok",
+        "emptyMessage": "İlk fatura, bir sonraki çalıştırma tarihinde oluşturulur.",
+        "period": "Dönem {n}",
+        "draftInvoice": "Taslak",
+        "showing": "{count, plural, other {# çalıştırma gösteriliyor}}",
+        "loadMore": "Daha fazla yükle",
+        "allLoaded": "Tüm geçmiş gösteriliyor",
+        "columns": {
+          "period": "Dönem tarihi",
+          "status": "Sonuç",
+          "invoice": "Fatura",
+          "error": "Neden başarısız oldu",
+          "at": "Oluşturulma zamanı"
+        }
+      }
+    }
+  }
+}

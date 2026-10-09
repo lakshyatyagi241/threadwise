@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Appels",
+      "description": "Activez ou désactivez les appels WhatsApp pour chaque numéro.",
+      "keywords": "appel, appels, voix, téléphone, appels whatsapp, bouton d’appel"
+    },
+    "common": {
+      "dismiss": "Fermer"
+    },
+    "button": {
+      "label": "Appeler",
+      "tooltip": "Démarrer un appel WhatsApp",
+      "working": "En cours..."
+    },
+    "confirm": {
+      "title": "Aucune autorisation d’appel confirmée",
+      "body": "Nous n’avons aucune autorisation d’appel confirmée enregistrée pour ce contact.",
+      "callAnyway": "Appeler quand même",
+      "callAnywayHint": "Fonctionne s’il a déjà appuyé sur « Autoriser » dans WhatsApp.",
+      "askPermission": "Demander l’autorisation",
+      "askPermissionHint": "Lui envoie une demande d’autorisation à la place. Aucun appel n’est passé.",
+      "close": "Fermer"
+    },
+    "toast": {
+      "noPhone": "Aucun numéro de téléphone pour ce contact.",
+      "noNumber": "Les appels ne sont activés sur aucun numéro WABA.",
+      "alreadyPermitted": "Ce contact autorise déjà les appels : démarrage de l’appel...",
+      "permissionSent": "Demande d’autorisation envoyée. Il verra Accepter/Refuser dans WhatsApp : réessayez d’appeler après sa réponse.",
+      "permissionFailed": "Impossible d’envoyer la demande d’autorisation : {message}",
+      "startFailed": "Impossible de démarrer l’appel : {message}",
+      "acceptInvalid": "Impossible d’accepter l’appel : données d’appel WhatsApp invalides. Réessayez.",
+      "acceptFailed": "Impossible d’accepter l’appel : {message}",
+      "alreadyAccepted": "Appel déjà accepté par un autre coéquipier.",
+      "recordingStarted": "Enregistrement démarré : il sera sauvegardé dans le journal des appels au raccrochage.",
+      "recordingSaved": "Enregistrement de l’appel sauvegardé dans le journal des appels.",
+      "recordUnsupported": "L’enregistrement n’est pas pris en charge par ce navigateur.",
+      "noActiveCall": "Aucun appel actif à enregistrer."
+    },
+    "incoming": {
+      "title": "Appel WhatsApp entrant",
+      "caller": "Appelant +{digits}",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "aiHandling": "L’IA gère cet appel..."
+    },
+    "panel": {
+      "label": "Appel en cours",
+      "title": "En appel",
+      "ringing": "sonnerie...",
+      "connected": "connecté",
+      "timer": "Durée de l’appel",
+      "mute": "Couper le micro",
+      "muted": "Micro coupé",
+      "end": "Terminer",
+      "record": "Enregistrer",
+      "recording": "Enregistrement",
+      "recordTooltip": "Enregistrer cet appel",
+      "recordingTooltip": "Enregistrement de cet appel",
+      "recordingNotice": "Cet appel est enregistré"
+    },
+    "failures": {
+      "REJECTED": "Le client a refusé l’appel.",
+      "BUSY": "Le client est déjà en communication.",
+      "NO_ANSWER": "Sans réponse : le client n’a pas décroché.",
+      "MISSED": "Le client a manqué l’appel.",
+      "CANCELLED": "L’appel a été annulé.",
+      "MIC_BLOCKED": "Accès au microphone bloqué : l’appelant ne vous entendra pas. Autorisez le micro dans votre navigateur et réessayez.",
+      "BUSY_SLOT": "Un autre appel est déjà actif dans cet onglet.",
+      "INVALID_SDP": "Offre SDP invalide : ligne v=0 ou média manquante",
+      "LOCAL_SDP_EMPTY": "SDP local vide : échec de la collecte ICE",
+      "ENDED_EARLY": "L’appel s’est terminé avant d’être connecté.",
+      "ANSWER_FAILED": "Échec de l’application de la réponse WhatsApp"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Ce numéro n’est plus dans votre espace de travail. Actualisez la page et réessayez.",
+      "CALL_NOT_FOUND": "Cet appel est introuvable. Il est peut-être déjà terminé.",
+      "CALL_NOT_WABA": "Les appels ne fonctionnent que sur les numéros WhatsApp Cloud API. Ce numéro est connecté d’une autre manière.",
+      "CALL_NUMBER_NOT_CONNECTED": "Ce numéro n’est pas connecté à WhatsApp Cloud API pour le moment. Reconnectez-le dans Canaux, puis réessayez.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Un numéro également utilisé dans l’application WhatsApp Business ne peut pas recevoir d’appels.",
+      "CALL_NOT_ENABLED": "Les appels sont désactivés pour ce numéro. Activez-les d’abord dans Appels.",
+      "CALL_META_REFUSED": "WhatsApp a refusé la demande. Réessayez dans un instant.",
+      "CALL_PERMISSION_REQUESTED": "Demande d’autorisation envoyée. Il verra Accepter/Refuser dans WhatsApp : réessayez d’appeler après sa réponse.",
+      "CALL_STATE_CONFLICT": "Appel déjà accepté par un autre coéquipier.",
+      "CALL_RECORDING_FAILED": "L’enregistrement n’a pas pu être sauvegardé.",
+      "FORBIDDEN": "Vous n’avez pas l’autorisation d’utiliser les appels.",
+      "PLAN_FEATURE_LOCKED": "Votre forfait n’inclut pas les appels WhatsApp.",
+      "NETWORK": "Erreur réseau : veuillez réessayer.",
+      "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer."
+    },
+    "settings": {
+      "title": "Appels",
+      "intro": "Activez les appels WhatsApp pour un numéro afin d’afficher le bouton Appeler vert sur ses conversations dans la boîte de réception.",
+      "cardTitle": "Appels WhatsApp",
+      "numberFallback": "Numéro WhatsApp",
+      "connection": "Connexion : {status}",
+      "enabledStatus": "Activé : le bouton Appeler vert s’affiche désormais sur les conversations de ce numéro dans la boîte de réception.",
+      "enabledSince": "Activé le {date}",
+      "offStatus": "Désactivé : activez-le pour que le bouton Appeler apparaisse sur les conversations avec ce numéro.",
+      "enable": "Activer les appels",
+      "disable": "Désactiver les appels",
+      "asking": "Demande à WhatsApp...",
+      "enabledDone": "Les appels sont maintenant activés pour ce numéro.",
+      "disabledDone": "Les appels sont maintenant désactivés pour ce numéro.",
+      "loading": "Chargement des numéros",
+      "loadFailed": "Impossible de charger vos numéros.",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucun numéro WhatsApp pour le moment",
+      "emptyMessage": "Connectez un numéro WhatsApp Cloud API dans Canaux, puis revenez activer les appels.",
+      "viewOnly": "Vous pouvez voir l’état des appels de chaque numéro. Les activer ou les désactiver nécessite l’autorisation de gestion des appels."
+    }
+  }
+}

@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "予約"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "loading": "読み込み中",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "close": "閉じる",
+      "back": "戻る",
+      "minutes": "{count, plural, other {# 分}}",
+      "minShort": "{count}分",
+      "hoursMinutes": "{hours}時間{minutes}分",
+      "hours": "{hours}時間"
+    },
+    "status": {
+      "pending": "保留中",
+      "confirmed": "確定",
+      "cancelled": "キャンセル済み",
+      "completed": "完了",
+      "no_show": "無断キャンセル",
+      "declined": "辞退"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。続行するには再度サインインしてください。",
+      "conflict": "他のユーザーによって変更されました。再読み込みして最新版を確認してください。",
+      "validation": "一部の情報が無効です。強調表示されている項目を確認してください。",
+      "unavailable": "このサーバーでは予約機能はまだ利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+      "notFound": "見つかりませんでした。削除された可能性があります。",
+      "planDisabled": "予約機能はご利用のプランに含まれていません。",
+      "slotTaken": "その時間はたった今埋まりました。別の時間を選択してください。",
+      "gone": "この予約はもう変更できません。",
+      "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。",
+      "requestId": "リクエストID",
+      "retry": "再試行",
+      "invalidTransition": "その予約は、この操作を行える状態ではありません。再読み込みして現在の状態を確認してください。",
+      "notStarted": "この操作は予約が開始した後にのみ行えます。",
+      "alreadyStarted": "この予約はすでに開始しているため、変更できません。",
+      "bookingOff": "現在、このサービスは予約を受け付けていません。",
+      "notDeletable": "今後の予約が残っている間は削除できません。"
+    },
+    "picker": {
+      "timeZone": "タイムゾーン",
+      "previousMonth": "前の月",
+      "nextMonth": "次の月",
+      "pickDay": "日付を選択",
+      "times": "空いている時間",
+      "timesAvailable": "{count, plural, other {空き # 枠}}",
+      "seatsLeft": "残り{count}",
+      "noTimes": "今後数日間に空いている時間はありません。",
+      "noTimesDay": "この日は空き時間がありません。別の日を選択してください。",
+      "loading": "時間を読み込み中",
+      "loadFailed": "時間を読み込めませんでした。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+      "retry": "再試行",
+      "typeZone": "このサービスは{zone}で運営されています。"
+    },
+    "hours": {
+      "openDay": "{day}は営業",
+      "daySummary": "{hours}時間{minutes}分",
+      "closed": "休業",
+      "from": "{day}、時間帯{n}、開始時刻",
+      "to": "{day}、時間帯{n}、終了時刻",
+      "removeInterval": "{day}の時間帯{n}を削除",
+      "addInterval": "時間帯を追加",
+      "copyTo": "{day}の時間を他の曜日にコピー",
+      "copyDay": "コピー先",
+      "copyWeekdays": "月曜日から金曜日",
+      "copyAll": "すべての曜日",
+      "problems": {
+        "incomplete": "両方の時刻を入力してください。",
+        "order": "終了は開始より後にしてください。",
+        "overlap": "別の時間帯と重なっています。"
+      }
+    },
+    "hub": {
+      "breadcrumb": "パンくずリスト",
+      "integrations": "連携",
+      "appointments": "予約",
+      "title": "あなたの予約",
+      "subtitle": "お客様がチャット内で予約できるようにします。サービス、営業時間、リマインダーを設定した予約タイプを作成すると、お客様が枠を選ぶだけで自動的に確定します。",
+      "newType": "新規予約タイプ",
+      "types": "予約タイプ",
+      "settings": "設定",
+      "weekTitle": "週",
+      "monthTitle": "月",
+      "inRange": "{count, plural, =0 {表示中の予約はありません} other {表示中の予約 # 件}}",
+      "tableLabel": "予約",
+      "loading": "予約を読み込み中",
+      "useSampleData": "サンプルデータを使用(開発用)",
+      "empty": {
+        "upcoming": {
+          "title": "今後の予約はありません",
+          "message": "サービスと営業時間を設定した予約タイプを作成し、任意のフローに「予約する」ノードを追加してください。確定した予約はここに表示されます。"
+        },
+        "past": {
+          "title": "過去の予約はありません",
+          "message": "すでに実施された予約が結果とともにここに表示されます。"
+        },
+        "filtered": {
+          "title": "一致する予約はありません",
+          "message": "検索条件とフィルターに一致するものはありません。クリアするとすべての予約が表示されます。"
+        }
+      },
+      "resetFilters": "フィルターをクリア",
+      "truncated": "この範囲の最初の{count}件の予約を表示しています。残りを見るにはフィルターで絞り込んでください。",
+      "showing": "{count, plural, other {予約 # 件を表示中}}",
+      "loadMore": "さらに読み込む",
+      "endOfList": "リストの終わり",
+      "cancelTitle": "この予約をキャンセルしますか?",
+      "cancelMessage": "予約はキャンセルされ、その時間は再び空きになります。お客様に通知され、リマインダーは削除されます。",
+      "cancelConfirm": "予約をキャンセル",
+      "keep": "そのままにする",
+      "declineTitle": "このリクエストを辞退しますか?",
+      "declineMessage": "リクエストが辞退されたことがお客様に通知され、その時間は再び空きになります。",
+      "declineConfirm": "リクエストを辞退"
+    },
+    "tabs": {
+      "label": "予約リスト",
+      "upcoming": "今後",
+      "past": "過去",
+      "count": "{count, plural, other {予約 # 件}}"
+    },
+    "toolbar": {
+      "label": "フィルターとビュー",
+      "search": "お客様名、電話番号、メール、サービスで検索",
+      "status": "ステータス",
+      "allStatuses": "すべてのステータス",
+      "type": "予約タイプ",
+      "allTypes": "すべての予約タイプ",
+      "clear": "クリア",
+      "navigate": "カレンダーナビゲーション",
+      "previous": "前へ",
+      "next": "次へ",
+      "today": "今日",
+      "refresh": "更新",
+      "view": "表示",
+      "views": {
+        "list": "リスト",
+        "week": "週",
+        "month": "月"
+      }
+    },
+    "table": {
+      "when": "日時",
+      "customer": "お客様",
+      "service": "サービス",
+      "status": "ステータス",
+      "actions": "操作",
+      "today": "今日",
+      "tomorrow": "明日",
+      "yesterday": "昨日",
+      "rowLabel": "予約を開く: {title}",
+      "noName": "名前なし",
+      "needsReview": "要確認"
+    },
+    "row": {
+      "moreFor": "{title}のその他の操作",
+      "open": "開く",
+      "confirm": "確定",
+      "complete": "完了にする",
+      "noShow": "無断キャンセルにする",
+      "reschedule": "日時を変更",
+      "copyLink": "管理リンクをコピー",
+      "cancel": "キャンセル",
+      "decline": "辞退"
+    },
+    "calendar": {
+      "emptyWeek": "今週の予約はありません。",
+      "monthGrid": "月間カレンダー",
+      "more": "ほか{count}件",
+      "dayAgenda": "選択した日の予約",
+      "emptyDay": "この日の予約はありません。"
+    },
+    "drawer": {
+      "loading": "予約を読み込み中",
+      "close": "閉じる",
+      "noType": "削除された予約タイプ",
+      "pendingHint": "確認待ち",
+      "minutes": "{count}分",
+      "customerTime": "お客様向け: {time}({zone})",
+      "confirm": "確定",
+      "complete": "完了にする",
+      "noShow": "無断キャンセル",
+      "reschedule": "日時を変更",
+      "cancel": "キャンセル",
+      "customer": "お客様",
+      "openContact": "コンタクトを開く",
+      "linkedContact": "リンクされたコンタクト",
+      "noName": "名前未入力",
+      "where": "場所",
+      "joinCall": "ビデオ通話に参加",
+      "answers": "予約の質問への回答",
+      "noAnswers": "このサービスには質問がないか、お客様が回答していません。",
+      "payment": "支払い",
+      "depositPaid": "{amount}支払い済み",
+      "notes": "メモ",
+      "notesPlaceholder": "この予約に関する非公開メモ",
+      "saveNotes": "メモを保存",
+      "reminders": "リマインダー",
+      "noReminders": "このサービスにはリマインダーが設定されていません。",
+      "before": "{count, plural, other {# 分前}}",
+      "reminder": {
+        "scheduled": "予約済み",
+        "skipped": "未送信",
+        "due": "時刻に到達"
+      },
+      "manageLink": "管理リンク",
+      "manageHint": "このリンクをお客様と共有すると、お客様自身で日時の変更やキャンセルができます。",
+      "copy": "コピー",
+      "openLink": "管理ページを開く",
+      "noManageLink": "この予約には管理リンクがありません。",
+      "source": "予約元",
+      "bookedOn": "予約日",
+      "cancelTitle": "この予約をキャンセルしますか?",
+      "cancelMessage": "予約はキャンセルされ、その時間は再び空きになります。お客様に通知され、リマインダーは削除されます。",
+      "cancelConfirm": "予約をキャンセル",
+      "keep": "そのままにする",
+      "decline": "辞退",
+      "host": "ホスト",
+      "needsReview": "終了済み(未マーク)",
+      "needsReviewHint": "この予約は終了しましたが、完了または無断キャンセルとしてマークされていません。",
+      "cancelledBy": "{who}がこの予約をキャンセルしました",
+      "cancelledByStaff": "スタッフ",
+      "cancelledByInvitee": "お客様",
+      "cancelledBySystem": "システム",
+      "cancelReason": "理由",
+      "declineTitle": "このリクエストを辞退しますか?",
+      "declineMessage": "リクエストが辞退されたことがお客様に通知され、その時間は再び空きになります。",
+      "declineConfirm": "リクエストを辞退",
+      "remindersNote": "リマインダーは予約タイプに従います。配信状況はリマインダーごとには追跡されません。"
+    },
+    "source": {
+      "chat": "チャットフロー",
+      "manual": "スタッフ",
+      "api": "API",
+      "link": "予約ページ"
+    },
+    "payment": {
+      "none": "支払いなし",
+      "pending": "支払い保留中",
+      "paid": "支払い済み",
+      "refunded": "返金済み",
+      "partial": "一部支払い済み"
+    },
+    "reschedule": {
+      "eyebrow": "日時を変更",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "confirm": "新しい日時を確定",
+      "current": "現在: {day} {time} {zone}",
+      "noType": "この予約の予約タイプは削除されたため、移動できる空き時間がありません。",
+      "taken": "その時間はたった今埋まりました。別の時間を選択してください。",
+      "newTime": "新しい日時: {day} {time}",
+      "notify": "新しい日時をお客様に通知"
+    },
+    "toast": {
+      "conflict": "この予約は他のユーザーによって変更されました。再読み込みしました。",
+      "failed": "うまくいきませんでした。",
+      "confirmed": "予約を確定しました。",
+      "cancelled": "予約をキャンセルしました。",
+      "completed": "完了にしました。",
+      "noShow": "無断キャンセルにしました。",
+      "notesSaved": "メモを保存しました。",
+      "rescheduled": "予約を新しい日時に移動しました。",
+      "linkCopied": "管理リンクをコピーしました。",
+      "copyFailed": "リンクをコピーできませんでした。",
+      "declined": "リクエストを辞退しました。"
+    },
+    "typesList": {
+      "breadcrumb": "パンくずリスト",
+      "appointments": "予約",
+      "services": "サービス",
+      "title": "予約タイプ",
+      "subtitle": "各サービスには、所要時間、空き状況、料金、アンケート、リマインダーがそれぞれ設定されます。お客様はチャットまたは専用の予約ページから予約できます。",
+      "newType": "新規予約タイプ",
+      "allBookings": "すべての予約",
+      "settings": "設定",
+      "toolbar": "フィルター",
+      "search": "予約タイプを検索",
+      "statusFilter": "ステータス",
+      "allStatuses": "すべてのステータス",
+      "active": "有効",
+      "pausedLabel": "一時停止中",
+      "clear": "クリア",
+      "tableLabel": "予約タイプ",
+      "loading": "予約タイプを読み込み中",
+      "useSampleData": "サンプルデータを使用(開発用)",
+      "emptyFilteredTitle": "一致する予約タイプはありません",
+      "emptyFiltered": "検索条件とフィルターに一致するものはありません。",
+      "emptyTitle": "予約タイプはまだありません",
+      "emptyMessage": "最初のサービスを作成しましょう。所要時間、営業時間、料金を設定すると、お客様がチャットから予約できます。",
+      "name": "名前",
+      "details": "詳細",
+      "price": "料金",
+      "booked": "予約数",
+      "status": "ステータス",
+      "actions": "操作",
+      "minutes": "{count}分",
+      "location": {
+        "address": "対面",
+        "virtual": "オンライン",
+        "phone": "電話",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, other {1枠あたり # 席}}",
+      "approval": "承認が必要",
+      "free": "無料",
+      "toggle": "有効: {name}",
+      "moreFor": "{name}のその他の操作",
+      "edit": "編集",
+      "copyLink": "公開リンクをコピー",
+      "openPage": "予約ページを開く",
+      "duplicate": "複製",
+      "delete": "削除",
+      "showing": "{count, plural, other {予約タイプ # 件}}",
+      "deleteTitle": "「{name}」を削除しますか?",
+      "deleteMessage": "この予約タイプを削除しますか?既存の予約は残ります。",
+      "deleteConfirm": "予約タイプを削除",
+      "keep": "そのままにする",
+      "activated": "「{name}」は有効です。",
+      "paused": "「{name}」は一時停止中です。",
+      "duplicated": "「{name}」を作成しました(一時停止中)。",
+      "deleted": "「{name}」を削除しました。",
+      "failed": "うまくいきませんでした。",
+      "linkCopied": "公開リンクをコピーしました。",
+      "copyFailed": "リンクをコピーできませんでした。",
+      "copyLinkFor": "{name}の公開リンクをコピー",
+      "copyLinkPaused": "公開リンクを取得するには、この予約タイプを有効にしてください"
+    },
+    "editor": {
+      "forbidden": "予約タイプを作成または編集する権限がありません。",
+      "notFoundTitle": "予約タイプが見つかりません",
+      "notFound": "その予約タイプが見つかりませんでした。削除された可能性があります。",
+      "loading": "予約タイプを読み込み中",
+      "header": {
+        "back": "予約タイプに戻る",
+        "kickerNew": "予約 / 新規",
+        "kickerEdit": "予約 / 編集",
+        "titleNew": "予約タイプを作成",
+        "titleEdit": "予約タイプを編集",
+        "draft": "下書き / 未保存",
+        "unsaved": "未保存の変更"
+      },
+      "steps": {
+        "label": "ステップ",
+        "service": "サービス",
+        "timing": "所要時間",
+        "availability": "空き状況",
+        "pricing": "料金",
+        "messaging": "メッセージ",
+        "hasProblem": "要確認",
+        "stepOf": "ステップ {n} / {total}: {name}"
+      },
+      "nav": {
+        "back": "戻る",
+        "cancel": "キャンセル",
+        "next": "次へ",
+        "create": "予約タイプを作成",
+        "save": "変更を保存",
+        "saving": "保存中"
+      },
+      "toast": {
+        "created": "予約タイプ「{name}」を作成しました。",
+        "updated": "予約タイプ「{name}」を更新しました。"
+      },
+      "saveError": {
+        "conflict": "編集中にこの予約タイプが他のユーザーによって変更されました。再読み込みして最新版を確認してください。ここでの未保存の編集は失われます。",
+        "reload": "最新バージョンを再読み込み"
+      },
+      "leave": {
+        "title": "変更を破棄しますか?",
+        "message": "保存されていない変更があります。このまま離れると失われます。",
+        "discard": "変更を破棄",
+        "keep": "編集を続ける"
+      },
+      "problems": {
+        "nameRequired": "この予約タイプの名前を入力してください。",
+        "nameTooLong": "名前は{nameMax}文字以内にしてください。",
+        "slugInvalid": "小文字、数字、単一のハイフンを使用し、{slugMax}文字以内にしてください。",
+        "durationInvalid": "所要時間は{durationMin}〜{durationMax}分の整数にしてください。",
+        "incrementInvalid": "開始間隔は{incrementMin}〜{incrementMax}分の整数にしてください。",
+        "bufferInvalid": "0〜{bufferMax}分の整数を入力してください。",
+        "minNoticeInvalid": "0〜{minNoticeMax}分の整数を入力してください。",
+        "maxAdvanceInvalid": "{maxAdvanceMin}〜{maxAdvanceMax}日の整数を入力してください。",
+        "maxPerDayInvalid": "上限なしの場合は空欄にするか、1〜{maxPerDayMax}の数値を入力してください。",
+        "capacityInvalid": "定員は1〜{capacityMax}の整数にしてください。",
+        "timezoneInvalid": "有効なタイムゾーンを選択してください。",
+        "colorInvalid": "#075E54 のような16進カラーコードを使用してください。",
+        "feeInvalid": "150.00 のような金額を入力してください。",
+        "taxInvalid": "小数第2位までの0〜100のパーセンテージを入力してください。",
+        "depositInvalid": "0より大きい手付金額を入力してください。",
+        "depositTooHigh": "手付金は合計(料金と税)を超えることはできません。",
+        "cancelFeeInvalid": "25.00 のような金額を入力してください。",
+        "cancelWindowInvalid": "0〜{cancelWindowMax}分の整数を入力してください。",
+        "reminderInvalid": "開始前の分数を1〜{reminderMax}の整数で入力してください。",
+        "remindersDuplicate": "各リマインダーには異なる時間が必要です。",
+        "remindersTooMany": "1つの予約タイプに設定できるリマインダーは最大{reminders}件です。",
+        "questionLabelRequired": "質問にラベルを付けてください({questionLabelMax}文字以内)。",
+        "questionsTooMany": "1つの予約タイプに設定できる質問は最大{questions}件です。",
+        "questionOptionsRequired": "選択肢を1行に1つずつ、少なくとも1つ追加してください。",
+        "hoursInvalid": "下で示されている週間の営業時間を修正してください。",
+        "overridesInvalid": "日付の例外リストでマークされている日付を修正してください。",
+        "descriptionTooLong": "説明は{descriptionMax}文字以内にしてください。",
+        "locationTooLong": "場所は{locationMax}文字以内にしてください。",
+        "server": "サーバーがこの値を受け付けませんでした。確認してもう一度お試しください。"
+      },
+      "service": {
+        "title": "サービスの詳細",
+        "hint": "サービス名と実施場所を設定します。",
+        "name": "名前",
+        "namePlaceholder": "30分デモ",
+        "description": "説明",
+        "descriptionPlaceholder": "予約する内容。予約ページに表示されます。",
+        "locationType": "場所の種類",
+        "locationTypes": {
+          "address": "対面(住所)",
+          "virtual": "オンライン(ビデオ)",
+          "phone": "電話",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "場所 / 住所",
+        "locationPlaceholders": {
+          "address": "住所",
+          "virtual": "ビデオリンク(任意)",
+          "phone": "発信先の電話番号(任意)",
+          "whatsapp": "WhatsApp番号(任意)"
+        },
+        "appearanceTitle": "色",
+        "appearanceHint": "カレンダーと予約ページでこのサービスを区別します。",
+        "color": "色",
+        "colorSwatches": "色を選択",
+        "linkTitle": "公開リンク",
+        "linkHint": "訪問者はこのアドレスから予約します。予約タイプを保存して有効にすると利用できます。",
+        "slug": "リンク名",
+        "slugHint": "変更するまで名前から自動生成されます。小文字、数字、ハイフンが使えます。",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "公開ページ",
+        "copy": "リンクをコピー",
+        "copied": "リンクをコピーしました。",
+        "copyFailed": "リンクをコピーできませんでした。選択して手動でコピーしてください。",
+        "rulesTitle": "予約ルール",
+        "requiresApproval": "承認を必須にする",
+        "requiresApprovalHint": "新しい予約は、チームの誰かが確定するまで「保留中」のままになります。",
+        "isActive": "有効",
+        "isActiveHint": "オフにするとサービスが一時停止し、公開ページでの予約受付が止まります。"
+      },
+      "timing": {
+        "title": "所要時間",
+        "hint": "各予約の長さと、どのくらい先まで予約できるかを設定します。",
+        "duration": "所要時間(分)",
+        "durationHint": "1件の予約の長さ。60 = 1時間。",
+        "increment": "開始間隔(分)",
+        "incrementHint": "提示する開始時刻の間隔。30なら9:00、9:30、10:00と提示されます。",
+        "capacity": "定員(1枠あたり)",
+        "capacityHint": "同じ時間を共有できる人数。1対1なら1。",
+        "bufferBefore": "前の余裕時間(分)",
+        "bufferAfter": "後の余裕時間(分)",
+        "bufferHint": "各予約の前後に確保する空き時間。",
+        "minNotice": "最短予約時間(分)",
+        "minNoticeHint": "開始の何分前まで予約できるか。240 = 4時間。",
+        "maxAdvance": "予約可能期間(日)",
+        "maxAdvanceHint": "どのくらい先まで予約できるか。30 = 1か月。",
+        "maxPerDay": "1日の最大数",
+        "maxPerDayHint": "1日あたりの最大予約数。上限なしの場合は空欄にしてください。",
+        "noLimit": "上限なし",
+        "zoneTitle": "タイムゾーン",
+        "zoneHint": "週間の営業時間と日付はこのタイムゾーンで解釈されます。訪問者には各自のタイムゾーンで表示されます。",
+        "zone": "このサービスのタイムゾーン",
+        "zoneSearch": "タイムゾーンを検索",
+        "zonePick": "タイムゾーンを選択",
+        "zoneNone": "その検索に一致するタイムゾーンはありません。"
+      },
+      "availability": {
+        "title": "週間の営業時間",
+        "hint": "毎日の予約受付時間を追加してください。右のパネルで実際に予約可能な枠をプレビューできます。",
+        "empty": "営業時間が設定されていないため、まだ予約できません。",
+        "total": "1週間で予約可能な時間は{hours}時間{minutes}分です。"
+      },
+      "overrides": {
+        "title": "日付の例外と休日",
+        "hint": "休日として日を休業にしたり、特定の日だけ別の営業時間を設定したりできます。それ以外は週間の営業時間に従います。",
+        "previousMonth": "前の月",
+        "nextMonth": "次の月",
+        "legend": "凡例",
+        "status": {
+          "closed": "休業",
+          "custom": "カスタム時間",
+          "open": "営業(週間の営業時間)",
+          "off": "休業(週間の営業時間)"
+        },
+        "clickHint": "日をクリックすると休業にします。マークされた日をもう一度クリックすると週間の営業時間に戻ります。",
+        "rangeTitle": "期間を休業にする",
+        "rangeHint": "休日の週など、複数の日をまとめて休業にします。すでに例外が設定されている日はそのまま維持されます。",
+        "rangeFrom": "開始",
+        "rangeTo": "終了(任意)",
+        "reason": "理由",
+        "reasonPlaceholder": "理由(任意)",
+        "rangeProblems": {
+          "invalid": "開始日と、それより前でない終了日を選択してください。",
+          "tooLong": "期間は最長1年です。",
+          "full": "日付の例外の上限に達しました。"
+        },
+        "closeRange": "これらの日を休業にする",
+        "listTitle": "例外",
+        "count": "{count, plural, =0 {日付なし} other {# 日}}",
+        "limit": "{max}日の上限に達しました。追加するには一部を削除してください。",
+        "empty": "日付はまだありません。カレンダーの日をクリックすると休業にできます。",
+        "remove": "{date}の例外を削除",
+        "mode": "{date}: 休業またはカスタム時間",
+        "modeClosed": "終日休業",
+        "modeCustom": "カスタム時間",
+        "from": "{date}、開始時刻",
+        "to": "{date}、終了時刻",
+        "reasonOf": "{date}、理由",
+        "problems": {
+          "incomplete": "両方の時刻を入力してください。",
+          "order": "終了は開始より後にしてください。",
+          "dayClosedHours": "休業日には営業時間がありません。"
+        }
+      },
+      "pricing": {
+        "title": "料金(任意)",
+        "hint": "無料の予約にする場合は料金を0のままにしてください。",
+        "currency": "通貨",
+        "currencyHint": "デフォルトはワークスペースの通貨です。",
+        "fee": "料金({currency})",
+        "feeHint": "金額を入力してください(例: {example})。",
+        "tax": "税率 %",
+        "taxHint": "料金に上乗せされます。",
+        "deposit": "手付金",
+        "depositModes": {
+          "none": "前払いなし",
+          "partial": "一部手付金",
+          "full": "全額"
+        },
+        "depositAmount": "手付金額({currency})",
+        "paymentNote": "オンライン決済の受付はまだ接続されていません。手付金は各予約に記録されますが、請求は行われません。",
+        "cancelFee": "キャンセル料({currency})",
+        "noShowFee": "無断キャンセル料({currency})",
+        "cancelWindow": "キャンセル期限(分)",
+        "cancelWindowHint": "開始の何分前までなら無料でキャンセルできるか。1440 = 24時間。",
+        "recordedOnly": "キャンセル料、無断キャンセル料、キャンセル期限は記録のみです。",
+        "totalsLabel": "予約にかかる費用",
+        "totalFee": "料金",
+        "totalTax": "税",
+        "totalSum": "合計",
+        "totalDue": "今回のお支払い"
+      },
+      "calendar": {
+        "title": "Googleカレンダー(任意)",
+        "hint": "これがなくても予約は利用できます。予約の設定でGoogleカレンダーを接続すると、空き時間の同期やMeetリンクの追加ができます。",
+        "unavailable": "このプラットフォームではGoogleカレンダーがまだ設定されていません。設定が整ったときのために、これらの設定は予約タイプとともに保持されます。",
+        "calendarId": "カレンダー",
+        "calendarPlaceholder": "プライマリ",
+        "spreadsheetId": "スプレッドシートへの追記(任意)",
+        "spreadsheetPlaceholder": "スプレッドシートID",
+        "createMeet": "予約ごとにGoogle Meetリンクを作成",
+        "calendarDefault": "ワークスペースのカレンダー"
+      },
+      "messages": {
+        "title": "ライフサイクルメッセージ",
+        "hint": "予約の確定、リマインド、キャンセル、変更時にお客様へ送信される内容です。空欄の場合はワークスペースのデフォルトが使用されます。",
+        "placeholdersTitle": "使用できるプレースホルダー",
+        "placeholdersHint": "クリックすると、編集中のメッセージのカーソル位置に挿入されます({event})。",
+        "placeholderMeaning": {
+          "type": "予約タイプの名前",
+          "slot": "予約の日時",
+          "name": "お客様の名前",
+          "manage_link": "予約を管理するためのリンク"
+        },
+        "events": {
+          "confirmation": "確定",
+          "reminder": "リマインダー",
+          "cancellation": "キャンセル",
+          "reschedule": "日時変更"
+        },
+        "placeholders": {
+          "confirmation": "{name}様、{type}のご予約が{slot}で確定しました。こちらから管理できます: {manage_link}",
+          "reminder": "{name}様、リマインダーです。{type}は{slot}です。",
+          "cancellation": "{name}様、{slot}の{type}はキャンセルされました。",
+          "reschedule": "{name}様、{type}が{slot}に変更されました。詳細: {manage_link}"
+        },
+        "templatesNote": "承認済みのWhatsAppテンプレートはまだ選択できません。メッセージは上のプレーンテキストとして送信されます。"
+      },
+      "reminders": {
+        "title": "リマインダー",
+        "hint": "時間は重複しないようにしてください(1440 = 24時間前、180 = 3時間前)。最大{max}件。",
+        "add": "リマインダーを追加",
+        "quickAdd": "クイック追加",
+        "quick": {
+          "h24": "24時間",
+          "h3": "3時間",
+          "h1": "1時間",
+          "m15": "15分"
+        },
+        "empty": "リマインダーなし。お客様には確定通知のみ届きます。",
+        "offsetOf": "リマインダー{n}、開始の何分前か",
+        "minBefore": "分前",
+        "labelPlaceholder": "24時間",
+        "labelOf": "リマインダー{n}、ラベル",
+        "remove": "リマインダー{n}を削除",
+        "count": "リマインダー {count} / {max} 件"
+      },
+      "questions": {
+        "title": "アンケート",
+        "hint": "予約時に尋ねる質問です。最大{max}件。",
+        "add": "質問を追加",
+        "intro": "案内メッセージ",
+        "introHint": "質問の上に表示されます。",
+        "empty": "質問なし。名前、メール、電話番号のみ入力してもらいます。",
+        "labelPlaceholder": "質問のラベル",
+        "labelOf": "質問{n}、ラベル",
+        "typeOf": "質問{n}、回答の種類",
+        "types": {
+          "text": "テキスト",
+          "textarea": "長文テキスト",
+          "select": "選択肢",
+          "number": "数値",
+          "email": "メール",
+          "phone": "電話",
+          "date": "日付"
+        },
+        "optionsOf": "質問{n}、選択肢",
+        "optionsPlaceholder": "1行に1つの選択肢",
+        "optionsHint": "選択肢は最大{max}個までです。",
+        "map": "回答の保存先",
+        "mapOf": "質問{n}、コンタクトのフィールド",
+        "mapNone": "なし",
+        "mapFields": {
+          "email": "メール",
+          "name": "名前",
+          "mobile": "携帯電話"
+        },
+        "required": "必須",
+        "moveUp": "質問{n}を上へ移動",
+        "moveDown": "質問{n}を下へ移動",
+        "remove": "質問{n}を削除",
+        "count": "質問 {count} / {max} 件"
+      },
+      "rail": {
+        "title": "ライブサマリー",
+        "viewPublic": "公開ページを表示",
+        "cardLabel": "予約カードのプレビュー",
+        "newService": "新規サービス",
+        "needsApproval": "予約はあなたの承認を待ちます。",
+        "fee": "料金",
+        "free": "無料",
+        "tax": "税",
+        "total": "合計",
+        "dueNow": "今回のお支払い",
+        "slotsTitle": "枠のプレビュー",
+        "refresh": "更新",
+        "loading": "読み込み中",
+        "slotsIdle": "週間の営業時間、所要時間、タイムゾーンを設定すると、実際に予約可能な時間をプレビューできます。",
+        "slotsFailed": "プレビューに失敗しました。",
+        "slotsNone": "この設定では、今後{days}日間に予約可能な時間がありません。",
+        "slotsSummary": "{count, plural, other {# 枠}} · 時間は{zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "オンライン予約",
+      "brandName": "CRM",
+      "poweredBy": "提供: {brand}",
+      "language": "言語",
+      "loading": "読み込み中",
+      "problem": {
+        "retry": "再試行",
+        "back": "すべてのサービスを見る",
+        "notFoundOrg": {
+          "title": "この予約ページが見つかりませんでした",
+          "message": "アドレスが間違っているか、このビジネスがオンライン予約を受け付けていない可能性があります。リンクをビジネスにお問い合わせください。"
+        },
+        "notFoundService": {
+          "title": "このサービスは利用できません",
+          "message": "一時停止中か、提供が終了した可能性があります。このビジネスの他のサービスをご覧いただけます。"
+        },
+        "notFoundLink": {
+          "title": "このリンクは無効です",
+          "message": "予約が削除されたか、リンクが不完全な可能性があります。確認メールのリンクを使うか、ビジネスに新しいリンクをお問い合わせください。"
+        },
+        "paused": {
+          "title": "このサービスは一時停止中です",
+          "message": "現在、予約を受け付けていません。後でもう一度お試しいただくか、このビジネスの他のサービスをご覧ください。"
+        },
+        "closed": {
+          "title": "この予約はもう変更できません",
+          "message": "すでにキャンセルまたは完了しています。その他のご用件はビジネスにお問い合わせください。"
+        },
+        "rateLimited": {
+          "title": "リクエストが多すぎます",
+          "message": "しばらく待ってからもう一度お試しください。"
+        },
+        "unavailable": {
+          "title": "現在オンライン予約は利用できません",
+          "message": "予約サービスに接続できませんでした。数分後にもう一度お試しください。"
+        },
+        "network": {
+          "title": "このページを読み込めませんでした",
+          "message": "接続を確認してもう一度お試しください。引き続き発生する場合は、ビジネスにお問い合わせください。"
+        }
+      },
+      "directory": {
+        "title": "予約する",
+        "subtitle": "サービスを選択すると、{name}の空き時間が表示されます。",
+        "services": "サービス",
+        "choose": "時間を選択",
+        "empty": {
+          "title": "現在予約できるものはありません",
+          "message": "このビジネスには、現在オンライン予約を受け付けているサービスがありません。後でもう一度ご確認ください。"
+        }
+      },
+      "location": {
+        "address": "対面",
+        "virtual": "ビデオ通話",
+        "phone": "電話",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "すべてのサービス",
+        "approvalNote": "ビジネスが各予約を確定します。最初にリクエストが届き、その後に確定通知が届きます。"
+      },
+      "step": {
+        "time": "日付と時間を選択",
+        "pickHint": "続行するには、日付、次に時間を選択してください。",
+        "continue": "続行",
+        "changeTime": "時間を変更",
+        "details": "お客様情報"
+      },
+      "when": {
+        "atService": "サービス提供地の時間: {day}、{range}({zone})"
+      },
+      "where": {
+        "join": "ビデオ通話に参加",
+        "videoLater": "ビデオ通話",
+        "phone": "電話番号"
+      },
+      "form": {
+        "name": "お名前",
+        "email": "メール",
+        "phone": "電話",
+        "optional": "(任意)",
+        "choose": "オプションを選択",
+        "required": "この項目は必須です。",
+        "tooLong": "長すぎます。",
+        "serverInvalid": "受け付けられませんでした。確認してもう一度お試しください。",
+        "invalid": {
+          "text": "この値を確認してください。",
+          "textarea": "この値を確認してください。",
+          "email": "有効なメールアドレスを入力してください。",
+          "phone": "有効な電話番号を入力してください。国内以外の番号は国番号も含めてください。",
+          "number": "数値を入力してください。",
+          "date": "有効な日付を選択してください。",
+          "select": "オプションのいずれかを選択してください。"
+        }
+      },
+      "price": {
+        "title": "料金",
+        "inclTax": "税{pct}%込み",
+        "fee": "料金",
+        "tax": "税({pct}%)",
+        "total": "合計",
+        "dueNow": "予約時のお支払い",
+        "notCollected": "このページでは請求は行われません。オンライン決済はまだ利用できません。"
+      },
+      "book": {
+        "confirm": "予約を確定",
+        "request": "予約をリクエスト",
+        "sending": "予約を送信中",
+        "slotTaken": "その時間はたった今埋まりました。別の時間を選択してください。",
+        "slotTakenHint": "入力内容は保持されています。下の時間は最新の状態です。",
+        "notice": {
+          "validation": {
+            "title": "一部の情報が受け付けられませんでした",
+            "message": "強調表示されている項目を確認してもう一度お試しください。"
+          },
+          "rateLimited": {
+            "title": "リクエストが多すぎます",
+            "message": "しばらく待ってから、もう一度ボタンを押してください。"
+          },
+          "network": {
+            "title": "予約を送信できませんでした",
+            "message": "接続を確認してもう一度ボタンを押してください。二重に予約されることはありません。"
+          },
+          "unavailable": {
+            "title": "このサービスは利用できなくなりました",
+            "message": "一時停止された可能性があります。サービス一覧に戻って別のものをお試しください。"
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "予約が確定しました",
+        "confirmedMessage": "{name}でご予約を承りました。変更やキャンセルのために、下のリンクを保管してください。",
+        "pendingTitle": "リクエストを受け付けました。確定をお待ちください",
+        "pendingMessage": "{name}がご予約を確定します。状況の確認、変更、キャンセルのために、下のリンクを保管してください。",
+        "pendingNote": "確定するまでは時間が確保されますが、変更される場合があります。",
+        "manage": "予約を管理",
+        "bookAnother": "別のサービスを予約"
+      },
+      "calendar": {
+        "title": "カレンダーに追加",
+        "download": ".icsファイルをダウンロード",
+        "google": "Googleカレンダー",
+        "opensNewTab": "(新しいタブで開きます)"
+      },
+      "manageLink": {
+        "title": "予約リンク",
+        "hint": "このリンクを保存してください。予約の変更やキャンセルができるのはこのリンクだけで、リンクを知っている人なら誰でも操作できます。",
+        "copy": "コピー",
+        "copied": "コピーしました"
+      },
+      "manage": {
+        "title": "あなたの予約",
+        "reschedule": "日時を変更",
+        "cancel": "キャンセル",
+        "flash": {
+          "rescheduled": "予約の日時を変更しました。",
+          "cancelled": "予約をキャンセルしました。"
+        },
+        "failure": {
+          "closed": "この予約はもう変更できません。",
+          "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+          "network": "予約を変更できませんでした。接続を確認してもう一度お試しください。"
+        },
+        "confirmCancel": {
+          "title": "この予約をキャンセルしますか?",
+          "message": "{what}のご予約はキャンセルされ、その時間は解放されます。この操作は元に戻せません。",
+          "confirm": "はい、予約をキャンセルする",
+          "keep": "予約を維持"
+        },
+        "state": {
+          "pending": {
+            "title": "確認待ち",
+            "message": "ビジネスはまだこの予約を確定していません。"
+          },
+          "cancelled": {
+            "title": "この予約はキャンセルされました",
+            "message": "これ以上変更できません。"
+          },
+          "no_show": {
+            "title": "この予約は欠席として記録されました",
+            "message": "これ以上変更できません。間違いの場合はビジネスにお問い合わせください。"
+          },
+          "completed": {
+            "title": "この予約は完了しました",
+            "message": "これ以上変更できません。"
+          },
+          "passed": {
+            "title": "この予約はすでに開始しています",
+            "message": "オンラインではこれ以上変更できません。必要な場合はビジネスにお問い合わせください。"
+          }
+        }
+      },
+      "reschedule": {
+        "title": "日時を変更",
+        "back": "予約に戻る",
+        "backToBooking": "予約に戻る",
+        "current": "現在の日時",
+        "saving": "新しい日時を保存中",
+        "confirm": "新しい日時を確定 · {when}",
+        "failure": {
+          "slotTaken": "その時間はたった今埋まりました。別の時間を選択してください。",
+          "closed": "この予約はもう変更できません。",
+          "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+          "validation": "その時間は受け付けられませんでした。別の時間を選択してください。",
+          "network": "新しい日時を保存できませんでした。接続を確認してもう一度お試しください。"
+        },
+        "closed": {
+          "closed": {
+            "title": "この予約はもう変更できません",
+            "message": "すでにキャンセルまたは完了しているため、移動する時間がありません。"
+          },
+          "passed": {
+            "title": "この予約はすでに開始しています",
+            "message": "開始後の予約は移動できません。必要な場合はビジネスにお問い合わせください。"
+          }
+        }
+      },
+      "meta": {
+        "book": "予約する",
+        "manage": "あなたの予約",
+        "reschedule": "予約の日時を変更"
+      }
+    },
+    "settings": {
+      "title": "予約設定",
+      "subtitle": "このワークスペースの予約に関するデフォルト、営業時間、メッセージを設定します。",
+      "breadcrumb": {
+        "label": "パンくずリスト",
+        "integrations": "連携",
+        "appointments": "予約",
+        "settings": "設定"
+      },
+      "back": "予約に戻る",
+      "save": "設定を保存",
+      "saving": "保存中...",
+      "saved": "予約設定を保存しました。",
+      "discard": "変更を破棄",
+      "unsaved": "未保存の変更があります。",
+      "allSaved": "すべての変更を保存しました。",
+      "loading": "設定を読み込み中",
+      "forbidden": "予約設定を表示する権限がありません。",
+      "readOnly": "この設定は表示のみで、変更できません。",
+      "fixFirst": "先に強調表示されている項目を修正してください。",
+      "issues": "{count, plural, other {保存する前に # 件の項目を確認してください。}}",
+      "conflict": {
+        "message": "これらの設定は、開いた後に別の場所で変更されました。再読み込みして最新版を確認してください。ここでの編集内容は置き換えられます。",
+        "reload": "最新版を再読み込み"
+      },
+      "leave": {
+        "title": "保存せずに移動しますか?",
+        "message": "予約設定の変更は保存されていません。",
+        "leave": "移動する",
+        "stay": "編集を続ける"
+      },
+      "calendar": {
+        "title": "カレンダー連携",
+        "description": "カレンダーを接続すると、予約とご自身の予定が同期されます。",
+        "provider": "Googleカレンダー",
+        "providerSub": "予約機能",
+        "status": {
+          "unavailable": "利用不可",
+          "disconnected": "未接続",
+          "connected": "接続済み",
+          "needs_reconnect": "再接続が必要"
+        },
+        "loading": "接続を確認中",
+        "unavailableTitle": "このプラットフォームではGoogleカレンダーがまだ設定されていません",
+        "unavailableBody": "ワークスペースが接続するには、プラットフォーム管理者がGoogle OAuthクライアントを追加する必要があります(管理、設定、Googleカレンダー)。予約には影響しません。",
+        "disconnectedBody": "未接続です。接続するとGoogleが開き、アカウントを選択してカレンダーへのアクセス共有に同意します。",
+        "disconnectedReadOnly": "未接続です。ワークスペース管理者に接続を依頼してください。",
+        "reconnectTitle": "Googleが接続を受け付けなくなりました",
+        "reconnectBody": "アクセスが取り消されたか期限切れのため、予約がカレンダーに書き込まれず、予定も読み取られません。再接続すると再開します。",
+        "reconnectBodyAccount": "{account}のアクセスが取り消されたか期限切れのため、予約がカレンダーに書き込まれず、予定も読み取られません。再接続すると再開します。",
+        "account": "Googleアカウント",
+        "calendar": "カレンダー",
+        "primaryCalendar": "メインカレンダー",
+        "connectedAgo": "{when}に接続",
+        "errors": {
+          "notConfigured": "このプラットフォームではGoogleカレンダーが設定されていません。プラットフォーム管理者にGoogle OAuthクライアントの追加を依頼してください。",
+          "notConnected": "Googleカレンダーが接続されていません。ページを再読み込みしてもう一度接続してください。",
+          "providerFailed": "Googleから応答がありませんでした。しばらくしてからもう一度お試しください。"
+        },
+        "loadingCalendars": "カレンダーを読み込み中",
+        "chooseLabel": "予約の書き込み先",
+        "chooseHint": "このアカウントで編集できるカレンダーのみ表示されます。すでに書き込まれた予定はそのまま残ります。",
+        "choosePlaceholder": "カレンダーを選択",
+        "chooseOptionPrimary": "{name}(メインカレンダー)",
+        "chooseSave": "このカレンダーを使用",
+        "chooseCancel": "キャンセル",
+        "saving": "保存中",
+        "connect": "Googleカレンダーを接続",
+        "reconnect": "Googleを再接続",
+        "redirecting": "Googleを開いています",
+        "choose": "カレンダーを選択",
+        "disconnect": "切断",
+        "disconnected": "Googleカレンダーを切断しました。",
+        "calendarSaved": "カレンダーを保存しました。",
+        "confirmOff": {
+          "title": "Googleカレンダーを切断しますか?",
+          "message": "新しい予約はカレンダーに書き込まれなくなり、予定も読み取られなくなります。カレンダーにすでにある予定は残り、このアクセスの取り消しがGoogleに通知されます。",
+          "confirm": "切断",
+          "cancel": "そのままにする"
+        },
+        "outcome": {
+          "connected": "Googleカレンダーを接続しました。確定した予約がカレンダーに反映されます。",
+          "denied": "Googleでアクセスが許可されなかったため、接続されませんでした。",
+          "failed": "接続が完了しませんでした。もう一度お試しください。繰り返し失敗する場合は、プラットフォーム管理者にGoogleの設定確認を依頼してください。",
+          "expired": "試行に時間がかかりすぎました。「接続」を押してやり直してください。",
+          "not_configured": "このプラットフォームではGoogleカレンダーが設定されていません。プラットフォーム管理者にGoogle OAuthクライアントの追加を依頼してください。",
+          "missing_scope": "必要なカレンダー権限がすべては付与されませんでした。もう一度接続し、すべてのチェックボックスをオンのままにしてください。"
+        },
+        "whatTitle": "この機能でできること",
+        "what": {
+          "freeBusy": "カレンダーから空き時間と予定のある時間を読み取ります。",
+          "nextSlots": "次の空き枠をお客様に提示します。",
+          "writeBack": "確定した予約をイベントとしてカレンダーに書き込みます。サービスで必要な場合はMeetリンクも付きます。"
+        },
+        "hint": "これがなくても予約は利用できます。空き時間は、下の営業時間と予約ルールに基づきます。"
+      },
+      "timezone": {
+        "title": "タイムゾーン",
+        "description": "営業時間と予約時間が解釈されるタイムゾーンです。",
+        "label": "ワークスペースのタイムゾーン",
+        "hint": "お客様には各自のタイムゾーンで表示され、あなたにはこのタイムゾーンで表示されます。"
+      },
+      "hours": {
+        "title": "営業時間",
+        "description": "お客様が予約できる時間帯です。日をオフにすると休業になり、休憩を設けるには時間帯を追加します。",
+        "noHours": "営業日がないため、誰も予約できません。"
+      },
+      "defaults": {
+        "title": "予約ルール",
+        "description": "このワークスペースの予約に対するデフォルトです。",
+        "fields": {
+          "slotDurationMinutes": "1枠の長さ(分)",
+          "maxPerDay": "1日の最大予約数",
+          "bufferBeforeMinutes": "前の余裕時間(分)",
+          "bufferAfterMinutes": "後の余裕時間(分)",
+          "advanceDays": "事前予約の期間(日)",
+          "reminderMinutesBefore": "リマインダー(何分前)",
+          "defaultLocation": "デフォルトの場所(任意)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min}〜{max}分。",
+          "maxPerDay": "{min}〜{max}件。",
+          "bufferBeforeMinutes": "{min}〜{max}分。",
+          "bufferAfterMinutes": "{min}〜{max}分。",
+          "advanceDays": "{min}〜{max}日先まで。",
+          "reminderMinutesBefore": "{min}〜{max}分。0でリマインダーがオフになります。"
+        },
+        "locationHint": "191文字以内。",
+        "locationPlaceholder": "例: 東京都千代田区丸の内1-1-1"
+      },
+      "templates": {
+        "title": "メッセージテンプレート",
+        "description": "お客様に届くプレーンテキストのメッセージです。プレースホルダーは予約ごとに置き換えられます。",
+        "placeholders": "プレースホルダー",
+        "placeholder": {
+          "type": "予約タイプの名前",
+          "slot": "日付と時間",
+          "name": "お客様の名前",
+          "manage_link": "予約を管理するためのリンク"
+        },
+        "events": {
+          "confirmation": "確定",
+          "reminder": "リマインダー",
+          "cancellation": "キャンセル",
+          "reschedule": "日時変更"
+        },
+        "reset": "デフォルトに戻す",
+        "unknown": "不明なプレースホルダーのため、書かれたまま送信されます: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "必須です。",
+        "notInteger": "整数を入力してください。",
+        "tooSmall": "{min}以上にしてください。",
+        "tooLarge": "{max}以下にしてください。",
+        "tooLong": "{max}文字以内にしてください。",
+        "badZone": "リストからタイムゾーンを選択してください。",
+        "badHours": "営業時間の強調表示されている時刻を修正してください。"
+      },
+      "notAvailable": "このサーバーではワークスペース全体の予約設定は利用できません。代わりに、各予約タイプに営業時間、タイムゾーン、リマインダー、メッセージがそれぞれ設定されます。",
+      "openTypes": "予約タイプを開く"
+    },
+    "linked": {
+      "title": "予約",
+      "openBookings": "予約を開く",
+      "showPast": "過去を表示",
+      "hidePast": "過去を非表示",
+      "empty": "今後の予約はありません。",
+      "emptyBoth": "予約はまだありません。",
+      "loading": "予約を読み込み中",
+      "unavailable": "このサーバーでは予約機能はまだ利用できません。",
+      "loadMore": "さらに読み込む",
+      "loadMorePast": "過去をさらに読み込む",
+      "noType": "予約"
+    }
+  }
+}

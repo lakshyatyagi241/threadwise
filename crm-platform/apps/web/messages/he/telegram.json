@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "סגור"
+    },
+    "connect": {
+      "title": "חבר בוט Telegram",
+      "close": "סגור",
+      "cancel": "ביטול",
+      "submit": "חבר בוט",
+      "intro": "הזן את אסימון הבוט של HTTP API כדי להגדיר את ה-webhook ולהתחיל לטפל בצ׳אטים של Telegram.",
+      "tokenLabel": "אסימון הבוט *",
+      "tokenPlaceholder": "לדוגמה: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "זה לא נראה כמו אסימון של BotFather.",
+      "connected": "בוט Telegram חובר.",
+      "savedNeedsAttention": "הבוט נשמר, אך Telegram לא קיבל את ה-webhook.",
+      "failed": "לא ניתן לחבר את הבוט. נסה שוב.",
+      "howTitle": "איך מקבלים אסימון לבוט?",
+      "how1a": "פתח את Telegram וחפש את",
+      "how1b": "החשבון המאומת.",
+      "how2a": "שלח",
+      "how2b": "ובחר שם תצוגה ושם משתמש.",
+      "how3": "העתק את אסימון ה-HTTP API שנוצר והדבק אותו למעלה."
+    },
+    "bot": {
+      "failed": "זה לא עבד. נסה שוב.",
+      "webhookFixed": "קבלת ההודעות פעילה שוב.",
+      "live": "פעיל",
+      "paused": "מושהה",
+      "needsAttention": "דורש תשומת לב",
+      "lastMessage": "הודעה אחרונה {when}",
+      "payments": "תשלומים",
+      "on": "פעיל",
+      "paymentsSaved": "הגדרות התשלום נשמרו.",
+      "paymentsHint": "הדבק אסימון של ספק תשלומים מ-@BotFather (/mybots → Payments) כדי להפעיל את צומת תהליך התשלום — חשבוניות מקוריות בתוך הצ׳אט.",
+      "paymentsSavedPlaceholder": "•••••••• (נשמר — השאר ריק כדי להשאיר)",
+      "paymentsToken": "אסימון ספק תשלומים",
+      "removeToken": "הסר אסימון",
+      "save": "שמור",
+      "webhook": "Webhook",
+      "fixInbound": "תקן קבלה (רשום מחדש את ה-webhook)",
+      "pause": "השהה",
+      "resume": "המשך",
+      "pausedDone": "הבוט הושהה.",
+      "resumedDone": "הבוט חודש.",
+      "disconnect": "נתק",
+      "disconnectConfirm": "לנתק את בוט Telegram הזה? שרשורי תיבת ההודעות יישארו, אך הוא יפסיק לשלוח ולקבל הודעות.",
+      "cancel": "ביטול",
+      "disconnected": "הבוט נותק."
+    },
+    "hub": {
+      "kicker": "ערוץ · Telegram",
+      "title": "Telegram",
+      "titleAccent": "חבר",
+      "intro": "הפעל בוט Telegram כדי לאוטומט תהליכי הודעות, לטפל בתמיכת לקוחות ולשדר עדכונים לכל המנויים שלך בעולם.",
+      "teamInbox": "תיבת הודעות צוות",
+      "flows": "תהליכים",
+      "broadcasts": "שידורים",
+      "telegramBroadcasts": "שידורי Telegram",
+      "loadError": "לא ניתן לטעון את בוטי Telegram שלך.",
+      "connectedCount": "{count} מחוברים",
+      "notConnected": "לא מחובר",
+      "botCardTitle": "חיבור בוט Telegram",
+      "botCardBody": "הדבק אסימון בוט מ-@BotFather כדי לאוטומט הודעות, לטפל בתמיכה ולשדר למנויים שלך.",
+      "connectAnother": "חבר בוט נוסף",
+      "connectBot": "חבר בוט",
+      "accountCardTitle": "חיבור חשבון Telegram",
+      "accountCardBody": "קשר את חשבון Telegram שלך כדי ליצור בוטים כאן — סרוק קוד QR או השתמש במספר הטלפון שלך, בדיוק כמו ב-WhatsApp.",
+      "connectAccount": "חבר חשבון",
+      "accountUnavailable": "עדיין לא זמין: נדרש שירות חשבון Telegram, שאינו מוגדר בסביבת עבודה זו.",
+      "connectedBots": "בוטים מחוברים",
+      "guideTitle": "מדריך הגדרת בוט Telegram",
+      "guideBody": "בצע את השלבים הבאים כדי לקשר את ערוץ Telegram שלך ולהפעיל תהליכים אוטומטיים.",
+      "prerequisites": "דרישות מוקדמות",
+      "pre": {
+        "account": "חשבון Telegram פעיל",
+        "name": "שם ייחודי לבוט שלך",
+        "app": "גישה ל-Telegram Web/האפליקציה"
+      },
+      "stepsTitle": "שלבי חיבור",
+      "step": "שלב {n}",
+      "steps": {
+        "locate": {
+          "title": "מצא את BotFather",
+          "body": "פתח את Telegram וחפש את החשבון הרשמי @BotFather (חפש את סימן האימות)."
+        },
+        "create": {
+          "title": "צור בוט חדש",
+          "body": "שלח /newbot ל-@BotFather ועקוב אחר ההוראות כדי לתת שם לבוט ולבחור שם משתמש."
+        },
+        "token": {
+          "title": "אחזר אסימון API",
+          "body": "BotFather יוצר אסימון HTTP API (לדוגמה 123456789:ABC…). העתק אותו בזהירות."
+        },
+        "connect": {
+          "title": "חבר את הבוט כאן",
+          "body": "לחץ על \"חבר בוט\", הדבק את האסימון בתיבה ושלח כדי לסיים את החיבור."
+        }
+      },
+      "unlockedTitle": "מה נפתח?",
+      "unlocked": {
+        "support": {
+          "title": "אוטומציה של תמיכה",
+          "body": "תן לבוטי AI לטפל בשאלות נפוצות ולנתב שיחות 24/7."
+        },
+        "broadcast": {
+          "title": "קמפיינים לשידור",
+          "body": "שלח מבצעים, התראות וניוזלטרים לכל המנויים בבת אחת."
+        },
+        "media": {
+          "title": "מדיה אינטראקטיבית עשירה",
+          "body": "שפר את המעורבות עם כפתורים, תפריטים, חשבוניות ותמונות."
+        }
+      },
+      "tipTitle": "טיפ הגדרה",
+      "tipBody": "לעולם אל תשתף את אסימון ה-API של הבוט שלך באופן ציבורי. אם הוא נחשף, שלח הודעה ל-@BotFather והפעל /revoke כדי ליצור אסימון חדש מיד. ב-localhost, הכתובת של מנהרה משתנה בכל הפעלה מחדש — לחץ על \"תקן קבלה\" כדי לרשום מחדש."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · שידורים",
+      "title": "Telegram",
+      "titleAccent": "שידורים",
+      "intro": "שלח הודעה לכל מי ששוחח עם הבוט שלך, ועקוב אחר נשלחו, נכשלו וחסומים לכל שידור.",
+      "bots": "בוטים",
+      "newBroadcast": "שידור חדש",
+      "connectFirst": "חבר תחילה בוט Telegram.",
+      "connectBot": "חבר בוט",
+      "tile": {
+        "sent": "נשלחו",
+        "audience": "קהל",
+        "failed": "נכשלו",
+        "blocked": "חסומים",
+        "sending": "שולח",
+        "broadcasts": "{count} שידורים",
+        "audienceHint": "סך הנמענים",
+        "failedHint": "שגיאות מסירה",
+        "blockedHint": "בוט נחסם על ידי המשתמש",
+        "sendingHint": "בדרך"
+      },
+      "listKicker": "רשימת שידורים",
+      "listTitle": "שידורים אחרונים",
+      "col": {
+        "broadcast": "שידור",
+        "bot": "בוט",
+        "recipients": "נמענים",
+        "progress": "התקדמות",
+        "status": "סטטוס",
+        "actions": "פעולות"
+      },
+      "counts": "{sent} נשלחו · {failed} נכשלו · {blocked} חסומים",
+      "status": {
+        "draft": "טיוטה",
+        "sending": "שולח",
+        "done": "הושלם",
+        "failed": "נכשל"
+      },
+      "start": "התחל",
+      "pause": "השהה",
+      "retry": "נסה שוב",
+      "delete": "מחק",
+      "deleteConfirm": "למחוק שידור זה?",
+      "cancel": "ביטול",
+      "empty": "אין שידורים עדיין.",
+      "createFirst": "צור את הראשון",
+      "failed": "זה לא עבד. נסה שוב.",
+      "started": "השליחה החלה.",
+      "paused": "הושהה. שיחות שלא נשלחו נשארות ממתינות.",
+      "retried": "{count} שיחות שנכשלו מוכנות לשליחה מחדש. לחץ על התחל.",
+      "deleted": "השידור נמחק."
+    },
+    "compose": {
+      "kicker": "Telegram · שידור חדש",
+      "title": "צור",
+      "titleAccent": "שידור",
+      "back": "חזרה",
+      "loadError": "לא ניתן לטעון את הבוטים והתבניות.",
+      "noPermission": "אפשר לצפות בעמוד זה, אך אין לך הרשאה ליצור שידורים.",
+      "setup": "הגדרת שידור",
+      "name": "שם השידור",
+      "namePlaceholder": "לדוגמה: מבצע סוף שבוע",
+      "bot": "בוט",
+      "template": "תבנית (אופציונלי)",
+      "templateHint": "ממלא מראש את ההודעה ושולח את הכפתורים של התבנית.",
+      "templateNone": "— ללא (כתוב בעצמך) —",
+      "buttonCount": "{count} כפתורים",
+      "message": "הודעה",
+      "messageHint": "השתמש ב-'{name}' להתאמה אישית.",
+      "messagePlaceholder": "שלום '{name}'! …",
+      "attachment": "קובץ מצורף (אופציונלי)",
+      "attachmentHint": "כתובת ציבורית לתמונה, וידאו, קובץ שמע או מסמך. העלאת קובץ דורשת את שירות האחסון.",
+      "attachmentInvalid": "הזן כתובת מלאה המתחילה ב-http:// או https://.",
+      "recipients": "נמענים",
+      "selectAll": "בחר הכול",
+      "clearAll": "נקה הכול",
+      "noChats": "עדיין אף אחד לא שוחח עם הבוט הזה.",
+      "type": {
+        "private": "פרטי",
+        "group": "קבוצה",
+        "channel": "ערוץ"
+      },
+      "selected": "נבחרו {count}",
+      "submit": "צור שידור",
+      "preview": "תצוגה מקדימה",
+      "previewEmpty": "תצוגה מקדימה של ההודעה שלך…",
+      "previewNote": "כך ייראה השידור שלך בצ׳אט של כל נמען.",
+      "created": "השידור נוצר עם {count} נמענים. לחץ על התחל שליחה כשתהיה מוכן.",
+      "failed": "לא ניתן ליצור את השידור. נסה שוב."
+    }
+  }
+}

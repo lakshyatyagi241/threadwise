@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "Proveedores de WhatsApp",
+      "providers": "Proveedores",
+      "assignments": "Asignaciones del espacio de trabajo",
+      "switch": "Cambiar de proveedor"
+    },
+    "common": {
+      "loading": "Cargando...",
+      "retry": "Reintentar",
+      "requestId": "ID de la solicitud"
+    },
+    "errors": {
+      "conflict": "Otra persona cambió este proveedor mientras lo editabas. Se cargó la versión más reciente; revísala y aplica tu cambio de nuevo.",
+      "noAccess": "No tienes el permiso de plataforma que necesita esto ({permission}). Pide a un superadministrador que lo conceda en Roles.",
+      "keyTaken": "Ya existe un proveedor con esta clave. Elige otra clave.",
+      "baseUrlRefused": "Esta dirección está rechazada: {detail}.",
+      "baseUrlRefusedPlain": "Esta dirección está rechazada. Usa una dirección https en un nombre de host público.",
+      "inUse": "Todavía hay números o espacios de trabajo que usan este proveedor. Cámbialos primero a otro proveedor (el modo de credencial no puede cambiar mientras haya números conectados a través de él).",
+      "disabled": "El proveedor debe estar activo para esto. Actívalo primero.",
+      "credentialsMissing": "El proveedor aún no tiene un token guardado. Añade su token, guarda y luego actívalo.",
+      "isDefault": "Este es el proveedor predeterminado. Haz que otro proveedor sea el predeterminado, o quita el predeterminado, primero.",
+      "builtin": "Este es un proveedor integrado. Su dirección, versión y secretos se editan en Ajustes de la plataforma, WhatsApp.",
+      "nothingToDo": "Nada que cambiar: todos los números conectados de este espacio de trabajo ya están en ese proveedor.",
+      "partnerNotConfigured": "A este proveedor le falta algo que necesita su programa de socios: la clave de socio (token del proveedor), el ID de la solución o la configuración de registro integrado. Revisa el proveedor y guarda.",
+      "partnerRefused": "El socio rechazó esta solicitud: {message}",
+      "partnerRefusedPlain": "El socio rechazó esta solicitud. Inténtalo de nuevo o revisa los ajustes del proveedor.",
+      "unavailable": "Este proveedor no está disponible. Puede estar archivado o le falta una credencial.",
+      "notFound": "Este proveedor o espacio de trabajo ya no existe. Vuelve atrás y recarga la lista.",
+      "tooManyNumbers": "Se moverían más de 50 números a la vez. Elige un proveedor de origen para reducir la selección y vuelve a ejecutar el cambio para el resto.",
+      "validationField": "{message}",
+      "validation": "Algunos valores no se aceptaron. Revisa el formulario e inténtalo de nuevo.",
+      "request": "La solicitud fue rechazada. Revisa los valores e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento."
+    },
+    "status": {
+      "active": "Activo",
+      "disabled": "Desactivado",
+      "archived": "Archivado",
+      "default": "Predeterminado",
+      "builtin": "Integrado"
+    },
+    "secret": {
+      "show": "Mostrar el valor que escribiste",
+      "hide": "Ocultar el valor que escribiste",
+      "placeholderKeep": "Déjalo vacío para mantener el valor guardado",
+      "placeholderNew": "Pega el valor",
+      "undoClear": "Mantenerlo",
+      "clear": "Quitar el valor guardado",
+      "setWithHint": "Definido, termina en {last4}",
+      "set": "Definido",
+      "notSet": "No definido",
+      "willClear": "Se quitará al guardar",
+      "willReplace": "Reemplazará el valor guardado al guardar"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Token de portador",
+          "help": "Envía Authorization: Bearer con el token del modo de credencial."
+        },
+        "custom_headers": {
+          "label": "Encabezados personalizados",
+          "help": "Envía los encabezados que definas, con el token, el ID de WABA y el ID del número de teléfono completados en cada llamada."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Token de la plataforma",
+          "help": "Un token de la plataforma en el proveedor (un token de socio). Los clientes no tienen ninguno."
+        },
+        "channel_token": {
+          "label": "Token del número",
+          "help": "Cada número conectado tiene su propio token de acceso."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Callback a nivel de aplicación",
+          "help": "La plataforma solo suscribe la WABA. El callback se configura una vez en la app de Meta."
+        },
+        "number_level_override": {
+          "label": "Callback por número",
+          "help": "Tras suscribirse, la plataforma configura el callback de cada número a través del proveedor."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Firma de Meta (secreto de la app)",
+          "help": "Las entregas incluyen X-Hub-Signature-256, que se verifica con el secreto de la app del proveedor."
+        },
+        "shared_secret_header": {
+          "label": "Secreto compartido en un encabezado",
+          "help": "Un encabezado que tú nombras lleva el propio secreto del webhook del proveedor."
+        },
+        "none": {
+          "label": "Sin firma",
+          "help": "El proveedor no firma nada. Solo el secreto de la URL de callback autentica las entregas."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Línea de crédito del proveedor",
+          "help": "El proveedor factura a la plataforma desde su propia línea de crédito."
+        },
+        "customer_direct": {
+          "label": "El cliente paga a Meta directamente",
+          "help": "El método de pago del cliente está en Meta (modo de motor de revendedor meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Línea de crédito de revendedor de Meta",
+          "help": "La línea de crédito de Meta de la plataforma se comparte con la WABA del cliente (modo de motor de revendedor reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Manual",
+          "help": "Los espacios de trabajo pegan sus IDs de WABA y de número de teléfono."
+        },
+        "embedded_signup": {
+          "label": "Registro integrado",
+          "help": "Los espacios de trabajo se conectan mediante el registro integrado de Meta de la app de Meta de la plataforma."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Ninguno"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "El token del proveedor no está guardado. Activar este proveedor lo necesita.",
+      "appSecret": "El secreto de la app no está guardado. Se rechaza cada entrega de webhook de este proveedor hasta que se guarde.",
+      "webhookSecret": "El secreto del webhook no está guardado. Se rechaza cada entrega de webhook de este proveedor hasta que se guarde."
+    },
+    "headers": {
+      "intro": "Encabezados enviados en cada llamada a este proveedor. Un encabezado cuyo valor no se conoce en una llamada se omite, nunca se envía como un marcador literal.",
+      "listLabel": "Plantillas de encabezado",
+      "name": "Nombre del encabezado",
+      "value": "Valor",
+      "insertFor": "Insertar un marcador en el encabezado {n}",
+      "insert": "Insertar marcador",
+      "removeFor": "Quitar el encabezado {n}",
+      "remove": "Quitar",
+      "add": "Añadir un encabezado",
+      "placeholdersTitle": "Marcadores y reglas",
+      "leftOut": "Un encabezado que usa un marcador sin valor en esa llamada se omite. Los encabezados de salto a salto y de encuadre (host, content-length, transfer-encoding y similares) no se pueden definir.",
+      "channelTokenNeverKnown": "Este proveedor usa el token de la plataforma, así que los clientes no tienen token de número: un encabezado que use el marcador del token del número siempre se omitirá.",
+      "problems": {
+        "tooMany": "Se permiten como máximo {max} encabezados.",
+        "nameInvalid": "Los nombres de encabezado usan solo letras, dígitos y guiones.",
+        "nameDenied": "El encabezado {name} lo gestiona la conexión y no se puede definir.",
+        "nameDuplicate": "El encabezado {name} aparece dos veces.",
+        "valueEmpty": "El encabezado {name} necesita un valor.",
+        "valueTooLong": "El valor de {name} supera los {max} caracteres.",
+        "valueCharacters": "El valor de {name} contiene un carácter de control o no ASCII.",
+        "placeholderUnknown": "El encabezado {name} usa un marcador desconocido: {names}.",
+        "strayBrace": "El encabezado {name} tiene una llave suelta. Los marcadores se escriben con dobles llaves alrededor del nombre.",
+        "credentialNotCarried": "Un encabezado debe contener el marcador {placeholder}, que es como la credencial llega al proveedor."
+      },
+      "placeholders": {
+        "providerToken": "El token de la plataforma en el proveedor.",
+        "channelToken": "El token de acceso del número al que va dirigida la llamada.",
+        "wabaId": "El ID de la cuenta de WhatsApp Business del número.",
+        "phoneNumberId": "El ID del número de teléfono."
+      },
+      "preview": {
+        "title": "Vista previa de una llamada",
+        "urlPending": "(introduce una dirección válida)",
+        "note": "Se muestran valores de ejemplo. Los tokens y los IDs reales se completan en cada llamada y nunca se muestran aquí."
+      }
+    },
+    "form": {
+      "wizardLabel": "Añadir un proveedor de WhatsApp",
+      "editLabel": "Cambiar el proveedor de WhatsApp",
+      "stepsLabel": "Pasos",
+      "steps": {
+        "basics": "Datos básicos",
+        "connection": "Conexión",
+        "credentials": "Credenciales",
+        "webhooks": "Webhooks",
+        "billing": "Facturación e incorporación",
+        "review": "Revisión"
+      },
+      "stepHelp": {
+        "basics": "Una clave estable, un nombre que los operadores reconozcan y notas opcionales.",
+        "connection": "Dónde responde el proveedor y cómo se autentica la plataforma ante él.",
+        "credentials": "De quién es la credencial que hace el trabajo, y el token del proveedor.",
+        "webhooks": "Cómo entrega el proveedor los mensajes entrantes y demuestra que son auténticos.",
+        "billing": "Quién paga a Meta, si se pueden subir archivos y cómo se incorporan los espacios de trabajo.",
+        "review": "Revisa todo. No se envía nada hasta que crees el proveedor."
+      },
+      "fields": {
+        "key": "Clave",
+        "label": "Nombre",
+        "notes": "Notas",
+        "baseUrl": "URL base",
+        "apiVersion": "Versión de la API",
+        "authScheme": "Autenticación",
+        "credentialMode": "Modo de credencial",
+        "providerToken": "Token del proveedor",
+        "webhookMode": "Modo de webhook",
+        "signatureScheme": "Firma del webhook",
+        "appSecret": "Secreto de la app",
+        "webhookSecret": "Secreto del webhook",
+        "verifyToken": "Token de verificación",
+        "signatureHeaderName": "Nombre del encabezado de firma",
+        "billingMode": "Modo de facturación",
+        "mediaUpload": "Admite subida de archivos",
+        "onboarding": "Incorporación",
+        "onboardingAppId": "ID de la app de Meta",
+        "onboardingConfigId": "ID de la configuración del registro integrado",
+        "partnerProgram": "Programa de socios",
+        "partnerSolutionId": "ID de la solución"
+      },
+      "hints": {
+        "key": "Minúsculas, dígitos, guion bajo y guion, de 2 a 40 caracteres, empezando por una letra. No se puede cambiar después.",
+        "keyFixed": "La clave no se puede cambiar.",
+        "notes": "Solo lo ven los operadores.",
+        "baseUrl": "https://host o https://host/prefijo. La plataforma solo llama a hosts https públicos.",
+        "credentialModeLocked": "{count, plural, one {# número está conectado} other {# números están conectados}} a través de este proveedor, así que el modo de credencial no puede cambiar. Cámbialos primero.",
+        "providerTokenNeeded": "Obligatorio antes de poder activar este proveedor.",
+        "providerTokenOptional": "Opcional aquí: cada número aporta su propio token.",
+        "appSecret": "Comprueba el X-Hub-Signature-256 de cada entrega. Sin él, se rechaza cada entrega de este proveedor.",
+        "webhookSecret": "El valor que el proveedor pone en el encabezado de firma. Sin él, se rechaza cada entrega.",
+        "signatureHeaderName": "Letras, dígitos y guiones, por ejemplo x-bsp-secret.",
+        "verifyToken": "Responde al desafío de suscripción del proveedor. Opcional.",
+        "billingMode": "Una etiqueta que apunta al motor de facturación de revendedor. No cambia ningún comportamiento de facturación.",
+        "mediaUpload": "Si está desactivado, los archivos se envían por enlace público en lugar de subirlos.",
+        "onboardingIds": "Solo dígitos. Son IDs públicos de la app de Meta de la plataforma.",
+        "partnerPinnacle": "Pinnacle da a cada número su propia clave. Guarda la clave de socio como token del proveedor y el secreto de la app de Meta como secreto de la app (los webhooks entrantes se verifican con él).",
+        "partnerSolutionId": "Solo dígitos, de 5 a 32. El ID de solución de socio del panel de Pinnacle."
+      },
+      "devLoopback": "El http sin cifrar en una dirección de loopback solo se acepta en desarrollo, con un indicador del servidor. En producción esta dirección se rechaza.",
+      "ssrfNote": "El servidor vuelve a comprobar la dirección: solo https, un nombre de host público, puerto predeterminado, y todas las direcciones a las que resuelve deben ser públicas.",
+      "secretsNote": "Los secretos son solo de escritura. Tras guardarlos solo se muestra que están definidos, con los últimos cuatro caracteres.",
+      "signatureNoneNote": "Sin firma, solo el secreto de la URL de callback autentica las entregas. Úsalo solo si el proveedor no puede firmar.",
+      "builtinNotice": "Este es un proveedor integrado. Su dirección, versión y secretos están en Ajustes de la plataforma, WhatsApp. Aquí solo se pueden cambiar el nombre, las notas y el modo de facturación.",
+      "openConsoleSettings": "Abrir Ajustes de la plataforma, WhatsApp",
+      "conflictHint": "Tus cambios no se guardaron. El formulario muestra los valores más recientes.",
+      "fixProblems": "{count, plural, one {# valor necesita atención.} other {# valores necesitan atención.}} Corrige los campos marcados.",
+      "save": "Guardar cambios",
+      "nothingToSave": "Sin cambios todavía",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "cancel": "Cancelar",
+      "create": "Crear proveedor",
+      "saved": "{name} guardado.",
+      "created": "{name} creado. Empieza desactivado: pruébalo y luego actívalo.",
+      "review": {
+        "headers": "Encabezados",
+        "yes": "Sí",
+        "no": "No",
+        "secrets": "Secretos que guardar",
+        "noSecrets": "Ninguno",
+        "gapsTitle": "Todavía falta antes de que este proveedor funcione",
+        "startsDisabled": "Un proveedor nuevo empieza desactivado. Después de crearlo, ejecuta Probar conexión y actívalo."
+      },
+      "problems": {
+        "labelRequired": "Introduce un nombre.",
+        "labelLength": "El nombre tiene como máximo {max} caracteres.",
+        "notesLength": "Las notas tienen como máximo {max} caracteres.",
+        "keyRequired": "Introduce una clave.",
+        "keyBuiltin": "meta e interakt son proveedores integrados. Elige otra clave.",
+        "keyFormat": "Empieza con una letra; después, letras, dígitos, guion bajo o guion; de 2 a 40 caracteres en total.",
+        "baseUrl": {
+          "empty": "Introduce la URL base del proveedor.",
+          "length": "La dirección debe tener entre 1 y 200 caracteres.",
+          "characters": "La dirección no debe contener espacios ni caracteres de control.",
+          "invalid": "Esta URL no es válida.",
+          "credentials": "La dirección no debe contener un nombre de usuario ni una contraseña.",
+          "queryOrFragment": "La dirección no debe contener una consulta ni un fragmento.",
+          "notHttps": "La dirección debe empezar por https://.",
+          "port": "Solo se permite el puerto https predeterminado.",
+          "host": "Usa un nombre de host público, no una dirección IP ni un nombre de una sola etiqueta.",
+          "internal": "Usa un nombre de host público, no uno interno."
+        },
+        "apiVersion": "Usa una versión como v25.0.",
+        "headers": "{count, plural, one {# problema con los encabezados.} other {# problemas con los encabezados.}} Consulta la lista de arriba.",
+        "signatureHeaderRequired": "Indica el nombre del encabezado que lleva el secreto.",
+        "signatureHeaderFormat": "Solo letras, dígitos y guiones.",
+        "digits": "Solo dígitos, de 5 a 32.",
+        "partnerSolutionIdRequired": "Introduce el ID de la solución.",
+        "partnerCredentialMode": "Un programa de socios da a cada número su propio token: usa el modo de token de canal.",
+        "secretCharacters": "Sin espacios ni caracteres de control.",
+        "secretLength": "Entre {min} y {max} caracteres."
+      }
+    },
+    "actions": {
+      "activate": "Activar",
+      "makeDefault": "Hacer predeterminado",
+      "clearDefault": "Quitar predeterminado",
+      "disable": "Desactivar",
+      "archive": "Archivar",
+      "cancel": "Cancelar",
+      "menu": "Acciones",
+      "menuLabel": "Acciones para {name}",
+      "manage": "Gestionar",
+      "open": "Abrir",
+      "switchTo": "Cambiar números aquí",
+      "blocked": {
+        "default": "es el predeterminado",
+        "builtin": "integrado",
+        "inUse": "en uso"
+      },
+      "done": {
+        "activate": "{name} está activo.",
+        "disable": "{name} está desactivado. Los números que ya lo usan siguen enviando.",
+        "archive": "{name} está archivado.",
+        "default": "{name} es ahora el predeterminado para los números nuevos.",
+        "clearDefault": "Se quitó el predeterminado. Los números nuevos siguen el ajuste de WhatsApp de la consola."
+      },
+      "confirm": {
+        "disable": {
+          "title": "¿Desactivar {name}?",
+          "body": "Ya no se ofrecerá para números nuevos ni asignaciones. Los números que ya lo usan siguen enviando, así que no es una caída del servicio.",
+          "inUse": "{count, plural, one {# número sigue} other {# números siguen}} en este proveedor. Cámbialos cuando te venga bien.",
+          "action": "Desactivar"
+        },
+        "archive": {
+          "title": "¿Archivar {name}?",
+          "body": "Un proveedor archivado queda retirado. Se rechaza mientras algún número o anulación de espacio de trabajo lo use. Puedes volver a activarlo más adelante.",
+          "action": "Archivar"
+        },
+        "default": {
+          "title": "¿Hacer de {name} el predeterminado?",
+          "body": "Los espacios de trabajo sin anulación conectarán números NUEVOS a través de este proveedor. Los números ya conectados no se mueven.",
+          "action": "Hacer predeterminado"
+        },
+        "clearDefault": {
+          "title": "¿Quitar el predeterminado?",
+          "body": "Los números nuevos volverán a seguir el ajuste de WhatsApp de la consola. Los números ya conectados no se mueven.",
+          "action": "Quitar predeterminado"
+        }
+      }
+    },
+    "test": {
+      "title": "Probar conexión",
+      "description": "Hace una lectura autenticada al proveedor con su credencial guardada. No se cambia nada en el proveedor.",
+      "path": "Ruta a leer",
+      "pathHint": "Empieza con una barra. Por defecto es /me.",
+      "willCall": "Se llamará a {url}",
+      "pathInvalid": "Empieza con / y usa solo letras, dígitos y . _ / -.",
+      "wabaId": "ID de WABA (opcional)",
+      "idsHint": "Solo rellena los marcadores de encabezado para esta llamada. No se guarda.",
+      "idInvalid": "Solo letras, dígitos y . _ : -.",
+      "phoneNumberId": "ID del número de teléfono (opcional)",
+      "channelToken": "Token del número de prueba (opcional)",
+      "channelTokenHint": "Para proveedores donde cada número tiene su propio token. Se usa solo para esta llamada y luego se borra de este formulario.",
+      "tokenInvalid": "Al menos 8 caracteres imprimibles, sin espacios.",
+      "show": "Mostrar el valor que escribiste",
+      "hide": "Ocultar el valor que escribiste",
+      "run": "Ejecutar prueba",
+      "running": "Probando...",
+      "forgotten": "Los IDs y tokens escritos aquí se usan para una sola llamada y después se olvidan.",
+      "needManage": "Puedes ver el último resultado. Ejecutar una prueba requiere el permiso de gestión.",
+      "ok": "Conectado",
+      "failed": "Fallido",
+      "justNow": "Justo ahora",
+      "lastTest": "Última prueba",
+      "httpStatus": "Código HTTP",
+      "noResponse": "Sin respuesta",
+      "latency": "Latencia",
+      "ms": "{ms} ms",
+      "errorCode": "Código de error",
+      "message": "Lo que dijo el proveedor",
+      "redactedNote": "El servidor reemplaza cada secreto por [redacted] antes de responder.",
+      "never": "Este proveedor aún no se ha probado.",
+      "hints": {
+        "ok": "El proveedor respondió a una lectura autenticada. Es seguro activarlo.",
+        "addressRefused": "La dirección fue rechazada (no es https, no es un nombre público o resuelve a una dirección privada). Corrige la URL base.",
+        "credentialsMissing": "El proveedor no tiene un token guardado. Añade su token del proveedor y guarda.",
+        "unauthorized": "El proveedor rechazó la credencial. Revisa el token y los nombres y valores de los encabezados.",
+        "notFound": "No se encontró la ruta. Prueba una lectura que el proveedor admita, o revisa la URL base y la versión de la API.",
+        "rateLimited": "El proveedor está limitando las solicitudes. Espera un momento y vuelve a probar.",
+        "providerError": "El proveedor respondió con un error de servidor. Inténtalo más tarde.",
+        "unreachable": "Sin respuesta: el host no respondió o la conexión falló. Revisa la dirección.",
+        "other": "El proveedor respondió con un estado inesperado. Consulta lo que dijo arriba."
+      }
+    },
+    "list": {
+      "title": "Proveedores de WhatsApp",
+      "description": "Elige a qué Proveedor de Soluciones de WhatsApp Business envía la plataforma, añade proveedores y mueve espacios de trabajo entre ellos.",
+      "consoleSettings": "Credenciales de la app de Meta e Interakt",
+      "switchWorkspace": "Cambiar un espacio de trabajo",
+      "add": "Añadir proveedor",
+      "kpi": {
+        "providers": "Proveedores",
+        "active": "Activo",
+        "numbers": "Números conectados",
+        "overrides": "Anulaciones de espacio de trabajo"
+      },
+      "defaultIs": "Los números nuevos se conectan a través de {name}, salvo que un espacio de trabajo tenga su propia anulación.",
+      "noDefault": "No hay un predeterminado del registro. Los números nuevos siguen el ajuste de WhatsApp de la consola.",
+      "defaultHelp": "Cambiar el predeterminado o una anulación nunca mueve un número ya conectado. Para eso usa Cambiar.",
+      "filterLabel": "Filtrar por estado",
+      "filters": {
+        "all": "Todos",
+        "active": "Activo",
+        "disabled": "Desactivado",
+        "archived": "Archivado"
+      },
+      "search": "Filtrar por nombre o clave",
+      "emptyTitle": "Todavía no hay proveedores",
+      "emptyMessage": "Añade un proveedor para enrutar WhatsApp a través de otro BSP. Las rutas integradas de Meta e Interakt siempre funcionan.",
+      "noMatchTitle": "Ningún proveedor coincide",
+      "noMatchMessage": "Nada coincide con este estado y esta búsqueda. Prueba otro filtro o borra la búsqueda.",
+      "tableCaption": "Proveedores de WhatsApp",
+      "cols": {
+        "provider": "Proveedor",
+        "status": "Estado",
+        "billing": "Modo de facturación",
+        "credentials": "Modo de credencial",
+        "usage": "En uso",
+        "lastTest": "Última prueba",
+        "actions": "Acciones"
+      },
+      "usage": {
+        "numbers": "{count, plural, one {# número} other {# números}}",
+        "workspaces": "{count, plural, one {# espacio de trabajo} other {# espacios de trabajo}}"
+      },
+      "test": {
+        "ok": "Conectado",
+        "failed": "Fallido",
+        "never": "Sin probar"
+      },
+      "officialLabel": "WhatsApp oficial (compatible)"
+    },
+    "detail": {
+      "title": "Proveedor de WhatsApp",
+      "back": "Volver a proveedores",
+      "gapsTitle": "Todavía falta antes de que este proveedor funcione",
+      "lifecycle": {
+        "title": "Estado y predeterminado",
+        "description": "Activarlo hace que el proveedor se pueda seleccionar para números nuevos y asignaciones. Desactivarlo nunca detiene los números que ya lo usan."
+      },
+      "edit": {
+        "title": "Editar",
+        "readOnly": "Puedes ver este proveedor. Para cambiarlo se necesita el permiso de gestión."
+      },
+      "overview": {
+        "title": "Resumen",
+        "headers": "Nombres de encabezado",
+        "none": "ninguno",
+        "engineMode": "Modo de motor de revendedor: {mode}",
+        "yes": "Sí",
+        "no": "No",
+        "usage": "En uso",
+        "numbers": "{count, plural, one {# número} other {# números}}",
+        "workspaces": "{count, plural, one {# anulación de espacio de trabajo} other {# anulaciones de espacio de trabajo}}",
+        "updated": "Último cambio",
+        "builtinNote": "Este es un proveedor integrado. Su dirección, versión y secretos se leen en vivo desde Ajustes de la plataforma, WhatsApp.",
+        "openConsoleSettings": "Abrir Ajustes de la plataforma, WhatsApp",
+        "credentialsTitle": "Secretos guardados",
+        "credentialsNote": "Los secretos son solo de escritura. Nunca se vuelven a mostrar tras guardarlos; solo se indica si cada uno está definido y sus últimos cuatro caracteres.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Registra en el proveedor tu dirección pública de la API más esta ruta. Una sola URL sirve a todos los proveedores y todos los espacios de trabajo."
+      }
+    },
+    "new": {
+      "title": "Añadir un proveedor de WhatsApp",
+      "back": "Volver a proveedores",
+      "description": "Registra un BSP compatible con Graph. Empieza desactivado; pruébalo y luego actívalo."
+    },
+    "assignments": {
+      "title": "Asignaciones de espacio de trabajo",
+      "description": "El proveedor por el que cada espacio de trabajo conecta números NUEVOS. Un espacio de trabajo sin anulación sigue el predeterminado.",
+      "defaultIs": "Predeterminado del registro: {name}.",
+      "noDefault": "No hay predeterminado del registro. Los espacios de trabajo sin anulación siguen el ajuste de WhatsApp de la consola.",
+      "existingNote": "Los números existentes no se mueven al cambiar una anulación. Usa Cambiar para moverlos.",
+      "search": "Buscar espacios de trabajo",
+      "overrideOnly": "Solo espacios de trabajo con anulación",
+      "noMatchTitle": "Ningún espacio de trabajo coincide",
+      "noMatchMessage": "Prueba otra búsqueda o borra el filtro.",
+      "emptyTitle": "Todavía no hay espacios de trabajo",
+      "emptyMessage": "Los espacios de trabajo aparecen aquí en cuanto existen.",
+      "loadMore": "Cargar más",
+      "tableCaption": "Asignaciones de proveedor por espacio de trabajo",
+      "cols": {
+        "workspace": "Espacio de trabajo",
+        "override": "Anulación",
+        "effective": "Los números nuevos pasan por",
+        "numbers": "Números",
+        "actions": "Acciones"
+      },
+      "followsDefault": "Sigue el predeterminado",
+      "source": {
+        "override": "Anulación del espacio de trabajo",
+        "default": "Predeterminado del registro",
+        "platform_setting": "Ajuste de WhatsApp de la consola"
+      },
+      "numberCount": "{count, plural, one {# número} other {# números}}",
+      "onOther": "{count} en otro proveedor",
+      "change": "Cambiar",
+      "setOverride": "Definir anulación",
+      "clear": "Quitar anulación",
+      "switch": "Cambiar números",
+      "common": {
+        "close": "Cerrar",
+        "cancel": "Cancelar"
+      },
+      "set": {
+        "title": "Anulación para {name}",
+        "help": "Los números nuevos de este espacio de trabajo se conectarán a través del proveedor que elijas. Los números ya conectados se quedan donde están.",
+        "noActive": "No hay ningún proveedor activo. Activa uno primero.",
+        "provider": "Proveedor",
+        "note": "Nota (opcional)",
+        "noteHint": "Por qué este espacio de trabajo tiene su propio proveedor. Hasta 500 caracteres.",
+        "save": "Guardar anulación",
+        "done": "{workspace} ahora conecta los números nuevos a través de {provider}."
+      },
+      "clearDialog": {
+        "title": "¿Quitar la anulación de {name}?",
+        "body": "{name} volverá a seguir el predeterminado. Los números ya conectados a través de {provider} no se mueven.",
+        "action": "Quitar anulación",
+        "done": "{workspace} vuelve a seguir el predeterminado."
+      }
+    },
+    "switch": {
+      "title": "Cambiar proveedor",
+      "description": "Mueve los números de WhatsApp conectados de un espacio de trabajo a otro proveedor. Haz primero una simulación: no cambia nada ni llama a ningún proveedor.",
+      "choose": {
+        "title": "Espacio de trabajo y destino",
+        "description": "Elige el espacio de trabajo y el proveedor al que deben pasar sus números.",
+        "target": "Mover a",
+        "targetHint": "Solo se pueden elegir proveedores activos como destino.",
+        "pick": "Elige un proveedor",
+        "from": "Solo números que estén en",
+        "fromHint": "Opcional. Déjalo en cualquier proveedor para mover todos los números que no estén ya en el destino.",
+        "anyProvider": "Cualquier proveedor",
+        "setOverride": "Hacer también la anulación de este espacio de trabajo",
+        "setOverrideHint": "Los números que el espacio de trabajo conecte después seguirán este proveedor. Se aplica solo al ejecutar el cambio, no en la simulación.",
+        "reason": "Motivo (opcional)",
+        "reasonHint": "Queda en el registro de auditoría. Hasta 500 caracteres.",
+        "targetNotActive": "Este proveedor no está activo. El cambio se rechazará hasta que se active.",
+        "dryRun": "Ver qué cambiaría",
+        "dryRunNote": "Simulación: no se cambia nada y no se llama a ningún proveedor."
+      },
+      "workspace": {
+        "selected": "Espacio de trabajo",
+        "unnamed": "Espacio de trabajo seleccionado",
+        "change": "Cambiar espacio de trabajo",
+        "label": "Espacio de trabajo",
+        "search": "Buscar espacios de trabajo",
+        "none": "Ningún espacio de trabajo coincide.",
+        "numbers": "{count, plural, one {# número} other {# números}}",
+        "onOther": "{count} en otro proveedor",
+        "narrow": "Hay más espacios de trabajo. Acota la búsqueda."
+      },
+      "plan": {
+        "stale": "Cambiaste las opciones después de la simulación. Vuelve a ejecutar la comprobación antes de aplicar.",
+        "title": "Qué cambiaría",
+        "description": "Marca los números que quieres mover. Un número bloqueado no se toca.",
+        "nothingReady": "Todavía no se puede mover ningún número. Resuelve lo que aparece y vuelve a ejecutar la comprobación.",
+        "headline": "{total, plural, one {# número evaluado} other {# números evaluados}}, {ready} puede pasar a {provider}.",
+        "ready": "{count} listos",
+        "blocked": "{count} bloqueados",
+        "failed": "{count} no se pudieron evaluar",
+        "reconnect": "{count} desconectados"
+      },
+      "requirements": {
+        "title": "Qué necesita atención de una persona",
+        "blocks": "Bloquea el cambio",
+        "advice": "Necesita seguimiento",
+        "numberToken": {
+          "label": "Hace falta el token de acceso del número",
+          "help": "El destino usa el token propio de cada número y este número no tiene ninguno. Pide al espacio de trabajo que pegue uno en la página de salud del número, o que lo reconecte, y vuelve a ejecutar la comprobación."
+        },
+        "providerToken": {
+          "label": "Hace falta el token del proveedor",
+          "help": "El proveedor de destino no tiene un token de socio guardado. Añádelo antes en la página del proveedor."
+        },
+        "idsMissing": {
+          "label": "Falta el ID de WABA o del número de teléfono",
+          "help": "La conexión no tiene registrado un ID de WABA ni un ID de número de teléfono. Reconéctala."
+        },
+        "reconnect": {
+          "label": "El número está desconectado",
+          "help": "Solo se reapunta, no se reactiva. El espacio de trabajo debe reconectarlo antes de poder enviar."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Números evaluados por la simulación",
+        "captionResult": "Resultado por número del cambio",
+        "cols": {
+          "move": "Mover",
+          "number": "Número",
+          "from": "Ahora en",
+          "state": "Estado",
+          "details": "Detalles"
+        },
+        "moveNumber": "Mover {name}",
+        "unknownProvider": "Desconocido",
+        "state": {
+          "ready": "Listo",
+          "blocked": "Bloqueado",
+          "switched": "Cambiado",
+          "repointed": "Reapuntado",
+          "failed": "Fallido"
+        },
+        "willResubscribe": "El webhook se volverá a suscribir primero a través del nuevo proveedor.",
+        "willRepoint": "Solo se reapuntará.",
+        "inboundNotWired": "El proveedor no aceptó un callback por número. Configura el callback en el proveedor o en la app de Meta con el webhook de la plataforma.",
+        "inboundWired": "Callback de entrada configurado."
+      },
+      "apply": {
+        "title": "Aplicar el cambio",
+        "summary": "{count, plural, one {# número pasará} other {# números pasarán}} a {provider}.",
+        "understood": "Entiendo que esto reapunta los números activos del espacio de trabajo y vuelve a suscribir sus webhooks.",
+        "action": "Aplicar cambio",
+        "tickOne": "Marca al menos un número."
+      },
+      "confirm": {
+        "title": "¿Mover los números?",
+        "body": "{count, plural, one {# número de} other {# números de}} {workspace} pasará a {provider}. Cada número se vuelve a suscribir primero y solo se reapunta si eso funciona.",
+        "rollback": "Para deshacerlo, cambia otra vez. El historial de mensajes, los IDs de mensaje y los recibos no se ven afectados.",
+        "action": "Mover números",
+        "cancel": "Cancelar"
+      },
+      "errorHints": {
+        "nothingToDo": "Elige otro destino u otro proveedor de origen.",
+        "tooMany": "Elige un proveedor de origen para acotar el conjunto.",
+        "disabled": "Activa el proveedor de destino en su página e inténtalo de nuevo."
+      },
+      "result": {
+        "title": "Resultado",
+        "allMoved": "{count, plural, one {# número está ahora} other {# números están ahora}} en {provider}.",
+        "noneMoved": "No se movió ningún número. Consulta los detalles abajo.",
+        "partial": "{moved} de {total} números movidos. Consulta los detalles abajo.",
+        "switched": "{count} cambiados",
+        "repointed": "{count} reapuntados",
+        "failed": "{count} fallidos",
+        "blocked": "{count} bloqueados",
+        "overrideSet": "{provider} es ahora la anulación de este espacio de trabajo.",
+        "repointedNote": "Los números desconectados solo se reapuntaron. El espacio de trabajo debe reconectarlos antes de poder enviar.",
+        "inboundNote": "{count, plural, one {# número se movió, pero su callback por número} other {# números se movieron, pero sus callbacks por número}} no fue aceptado. Configura el callback en el proveedor o en la app de Meta con el webhook de la plataforma.",
+        "rollback": {
+          "title": "Revertir",
+          "description": "Revertir es volver a cambiar. Los números conservan todas las credenciales que tenían; una ruta con token de número no necesita nada nuevo, y una ruta con token de plataforma necesita que su token esté guardado.",
+          "action": "Preparar un cambio de vuelta a {provider}",
+          "unknown": "No se conoce el proveedor anterior de estos números, así que no se puede preparar una reversión desde aquí."
+        },
+        "another": "Cambiar otro espacio de trabajo",
+        "toAssignments": "Volver a asignaciones"
+      }
+    },
+    "workspaceNote": {
+      "title": "Tu proveedor de WhatsApp",
+      "newNumbers": "Los números nuevos se conectan a través de {provider}.",
+      "ownToken": "Cada número usa su propio token de acceso.",
+      "platformToken": "La plataforma guarda la credencial; tú conectas solo con IDs.",
+      "mediaYes": "Se admite la subida de archivos.",
+      "mediaNo": "No se admite la subida de archivos: los archivos se envían por enlace público.",
+      "none": "No hay ningún proveedor disponible para conectar un número nuevo ahora mismo. Contacta con el administrador de la plataforma.",
+      "numberOn": "{name} está en {provider}.",
+      "numberNoMedia": "No se admite la subida de archivos."
+    }
+  }
+}

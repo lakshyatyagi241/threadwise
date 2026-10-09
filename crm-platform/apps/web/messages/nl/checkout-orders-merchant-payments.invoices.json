@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Winkel / Facturen",
+      "title": "Facturen",
+      "subtitle": "Facturen die zijn gemaakt uit winkelbestellingen. Beheer ze in Sales.",
+      "allInvoices": "Alle facturen",
+      "loading": "Facturen laden",
+      "searching": "Meer winkelfacturen zoeken...",
+      "search": {
+        "label": "Facturen zoeken",
+        "placeholder": "Zoeken op nummer, koper of referentie..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "Alle statussen"
+      },
+      "columns": {
+        "number": "Factuur",
+        "buyer": "Koper",
+        "status": "Status",
+        "total": "Totaal",
+        "issued": "Uitgegeven",
+        "due": "Vervaldatum",
+        "actions": "Acties"
+      },
+      "row": {
+        "draft": "Concept",
+        "openInSales": "Openen in Sales",
+        "openAria": "Factuur {number} openen in Sales"
+      },
+      "empty": {
+        "title": "Nog geen facturen van winkelbestellingen",
+        "message": "Open een bestelling en kies Factuur maken.",
+        "action": "Naar bestellingen"
+      },
+      "noMatch": {
+        "title": "Geen winkelfacturen gevonden",
+        "message": "Wijzig de zoekopdracht of de status om meer te zien."
+      },
+      "capped": {
+        "title": "Geen gevonden in de nieuwste facturen",
+        "message": "De meest recente facturen in Sales zijn gecontroleerd en geen ervan kwam van een winkelbestelling. Laad meer om verder terug te zoeken.",
+        "note": "Alleen de meest recente facturen zijn gecontroleerd. Laad meer om verder terug te zoeken."
+      }
+    }
+  }
+}

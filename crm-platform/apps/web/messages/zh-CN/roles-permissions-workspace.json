@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "团队成员",
+      "roles": "角色"
+    },
+    "common": {
+      "settings": "设置",
+      "breadcrumb": "面包屑导航",
+      "loading": "加载中…",
+      "retry": "重试",
+      "requestId": "请求 ID",
+      "cancel": "取消",
+      "close": "关闭",
+      "dismiss": "忽略",
+      "required": "此字段为必填项。",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "noAccess": {
+        "title": "您没有访问权限",
+        "body": "您的角色不包含此页面所需的权限。请让工作区所有者或管理员为您授予该权限。",
+        "bodyWithKey": "此页面需要权限 {permission}。请让工作区所有者或管理员将其添加到您的某个角色中。",
+        "back": "返回工作区"
+      }
+    },
+    "blurb": {
+      "owner": "所有者：拥有全部权限，包括账单。",
+      "admin": "管理员：拥有工作区全部权限，不含账单。",
+      "manager": "经理：可查看全部内容，并可分配和解决工单。",
+      "agent": "客服：处理分配给自己的会话。",
+      "viewer": "查看者：仅可查看。"
+    },
+    "errors": {
+      "unexpected": "系统出现问题。请重试；如果问题持续，请提供请求 ID。",
+      "request": "无法完成此请求。",
+      "validation": "请检查表单后重试。",
+      "passwordPolicy": "此密码不符合工作区密码策略：",
+      "validationField": "请检查此字段后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "conflict": "您编辑期间其他人修改了此内容。请重新加载查看最新版本，然后重新应用您的更改。",
+      "grantRole": "您无法执行此操作：该角色（或成员当前的角色）高于您的角色。只有所有者才能授予、更改或停用所有者和管理员。",
+      "grantPermission": "您无法授予 {permission}：您自己并不拥有该权限。",
+      "selfRoleChange": "您无法更改自己的角色。",
+      "lastOwner": "工作区必须至少保留一名所有者。请先将其他人设为所有者。",
+      "selfDeactivate": "您无法停用自己的账户。",
+      "presetRole": "所有者、管理员、经理、客服和查看者是预设角色，无法重命名或删除。",
+      "roleInUse": "仍有成员持有此角色。请先将他们移至其他角色，然后再删除。",
+      "nameTaken": "已存在同名角色。",
+      "nameRequired": "角色名称为必填项。",
+      "nameTooLong": "角色名称最多 {max} 个字符。",
+      "notFound": "此项目已不存在，可能已被删除。"
+    },
+    "team": {
+      "crumb": "团队成员",
+      "eyebrow": "设置 · 团队",
+      "titleLead": "团队",
+      "titleAccent": "名成员",
+      "description": "将人员添加到此工作区，设定每人可执行的操作，成员离开时关闭其访问权限。",
+      "addMember": "添加成员",
+      "reload": "重新加载",
+      "you": "您",
+      "noRole": "无角色",
+      "changeRoleAction": "更改角色",
+      "reactivate": "重新启用",
+      "selfRoleHint": "您无法更改自己的角色。",
+      "roleLockedHint": "您无法更改此成员的角色：该角色高于您的权限，或您无权分配角色。",
+      "selfDeactivateHint": "您无法停用自己的账户。",
+      "rolesUnavailable": "无法为您加载角色，因此无法添加成员或更改角色。角色标签根据所显示的成员生成。",
+      "footer": "显示 {shown} / {total}",
+      "status": {
+        "active": "活跃",
+        "inactive": "未激活"
+      },
+      "filter": {
+        "label": "按角色筛选成员",
+        "all": "全部",
+        "preset": {
+          "owner": "所有者",
+          "admin": "管理员",
+          "manager": "经理",
+          "agent": "客服",
+          "viewer": "查看者"
+        }
+      },
+      "search": {
+        "label": "搜索成员",
+        "placeholder": "搜索姓名或邮箱…"
+      },
+      "table": {
+        "caption": "工作区成员",
+        "member": "成员",
+        "roles": "角色",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "empty": {
+        "none": "暂无成员。",
+        "noMatch": "没有符合此筛选条件的成员。",
+        "clear": "清除筛选"
+      },
+      "toasts": {
+        "added": "{name} 已添加到工作区。",
+        "rolesUpdated": "已更新 {name} 的角色。",
+        "deactivated": "{name} 已停用。",
+        "reactivated": "{name} 已重新启用。"
+      },
+      "deactivate": {
+        "action": "停用",
+        "title": "停用成员",
+        "message": "{name} 将无法再登录。您可随时重新启用此成员。",
+        "confirm": "停用",
+        "cancel": "取消"
+      },
+      "add": {
+        "eyebrow": "团队",
+        "title": "添加成员",
+        "fullName": "全名",
+        "email": "邮箱",
+        "emailInvalid": "请输入有效的邮箱地址。",
+        "password": "密码",
+        "passwordHint": "至少 8 个字符。请将密码告知该成员，其可在登录后自行修改。",
+        "passwordGenerated": "已生成密码：请点击眼睛按钮显示，并在保存前复制。",
+        "passwordShort": "密码至少需要 8 个字符。",
+        "generate": "生成",
+        "role": "角色",
+        "submit": "添加成员"
+      },
+      "changeRole": {
+        "title": "更改 {name} 的角色",
+        "legend": "角色",
+        "keptRole": "{name} 将保留：您无法授予或移除该角色。",
+        "atLeastOne": "请至少选择一个角色。",
+        "save": "保存角色",
+        "reload": "重新加载"
+      }
+    },
+    "list": {
+      "crumb": "角色",
+      "eyebrow": "设置 · 团队 · 角色",
+      "titleLead": "角色与",
+      "titleAccent": "权限",
+      "description": "角色决定成员可执行的操作。您可选择预设角色，或在权限矩阵中自定义角色。",
+      "teamLink": "团队成员",
+      "addRole": "添加角色",
+      "empty": "暂无角色。",
+      "preset": "预设",
+      "custom": "自定义",
+      "locked": "已锁定",
+      "footer": "{count} 个角色",
+      "membersLink": "{count} 名成员持有 {name}",
+      "table": {
+        "caption": "工作区角色",
+        "name": "角色",
+        "type": "类型",
+        "members": "成员",
+        "permissions": "权限",
+        "lastEdited": "最后编辑",
+        "actions": "操作"
+      },
+      "row": {
+        "menu": "{name} 的操作",
+        "edit": "编辑角色",
+        "view": "查看角色",
+        "delete": "删除角色"
+      },
+      "toasts": {
+        "deleted": "已删除角色“{name}”。"
+      }
+    },
+    "editor": {
+      "crumbRoles": "角色",
+      "crumbNew": "新建角色",
+      "eyebrowNew": "设置 · 角色 · 新建",
+      "eyebrowEdit": "设置 · 角色 · 编辑",
+      "titleLead": "创建",
+      "titleAccent": "角色",
+      "description": "为角色命名，并选择其可执行的操作。",
+      "summary": "{count, plural, =0 {没有成员持有此角色。} other {# 名成员持有此角色。}}",
+      "notFoundTitle": "未找到角色",
+      "notFoundBody": "此角色已不存在，可能已被删除。",
+      "backToRoles": "返回角色列表",
+      "back": "返回",
+      "save": "保存更改",
+      "create": "创建角色",
+      "saving": "保存中…",
+      "reload": "重新加载",
+      "discard": "您有未保存的更改。确定要离开而不保存吗？",
+      "lockedNotice": "所有者角色拥有全部权限，无法更改或删除",
+      "adminNotice": "只有所有者才能更改管理员角色的权限。",
+      "readOnlyNotice": "您无法更改此角色的权限。",
+      "details": "角色详情",
+      "name": "角色名称",
+      "namePlaceholder": "例如：支持主管",
+      "presetNameHint": "预设角色保留其名称。",
+      "template": "基于角色创建",
+      "templateHint": "将另一角色的权限复制到下方的权限矩阵中。",
+      "templateBlank": "空白（无权限）",
+      "templateOption": "{name}（{count} 项权限）",
+      "danger": {
+        "title": "删除此角色",
+        "hint": "没有人持有此角色，可以删除。",
+        "inUse": "{count, plural, other {# 名成员仍持有此角色。}} 请先将其移至其他角色。",
+        "action": "删除角色"
+      },
+      "toasts": {
+        "created": "已创建角色“{name}”。",
+        "updated": "已更新角色“{name}”。",
+        "deleted": "已删除角色“{name}”。"
+      }
+    },
+    "matrix": {
+      "title": "权限",
+      "counter": "已选择 {count} / {total}",
+      "deniedCount": "已拒绝 {count} 项",
+      "selectAll": "全选",
+      "selectAllCategory": "全选",
+      "selectAllOf": "全选 {category} 中的权限",
+      "search": "搜索权限…",
+      "searchLabel": "搜索权限",
+      "denyHint": "拒绝优先于允许：即使成员的其他角色允许某项权限，被拒绝的权限仍会被拒绝。",
+      "emptyCatalogue": "暂无可用权限。",
+      "noMatch": "没有与“{query}”匹配的权限。",
+      "allow": "允许",
+      "deny": "拒绝",
+      "effectLabel": "允许或拒绝：{label}",
+      "scopeLabel": "记录范围：{label}",
+      "needsPlan": "需要 {feature} 套餐",
+      "needsApp": "需要安装应用 {app}",
+      "lockedHint": "此工作区暂不可使用该权限。待套餐功能开启或应用安装后即可解锁。",
+      "scope": {
+        "all": "全部记录",
+        "team": "团队记录",
+        "own": "个人记录"
+      }
+    },
+    "delete": {
+      "title": "删除角色",
+      "message": "删除角色“{name}”？此操作无法撤销。",
+      "confirm": "删除角色",
+      "cancel": "取消",
+      "inUseTitle": "“{name}”仍在使用中",
+      "inUse": "{count, plural, =0 {没有成员持有此角色。} other {# 名成员仍持有此角色。}} 请先将其移至其他角色，然后再删除。",
+      "viewMembers": "查看持有此角色的成员"
+    }
+  }
+}

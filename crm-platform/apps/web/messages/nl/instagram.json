@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram-broadcast"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "hub": {
+      "kicker": "Kanaal · Instagram",
+      "title": "Instagram",
+      "titleAccent": "accounts",
+      "intro": "Koppel één keer je Instagram Business- of Creator-account. De berichten komen dan in je team-inbox, en vanaf hier beantwoord je ze, draai je flows en stuur je berichten naar mensen die je al hebben geschreven.",
+      "teamInbox": "Team-inbox",
+      "broadcasts": "Broadcast alleen-antwoord",
+      "loadError": "De gekoppelde Instagram-accounts konden niet worden geladen. Probeer het opnieuw.",
+      "loadErrorDetail": "De gekoppelde Instagram-accounts konden niet worden geladen (fout {status}{code}). Probeer het opnieuw.",
+      "engineOff": "{engine} is niet verbonden. Een beheerder moet het verbinden onder Admin → Add-ons voordat een Instagram-account kan worden gekoppeld.",
+      "connectedCount": "{count, plural, one {# account gekoppeld} other {# accounts gekoppeld}}",
+      "notConnected": "Niet verbonden",
+      "cardTitle": "Een Instagram-account toevoegen",
+      "cardBody": "Verbind een Business- of Creator-account. Je Instagram wordt één keer verbonden en verschijnt hier — gesprekken, flows en automatische antwoorden werken allemaal vanuit deze workspace.",
+      "add": "Een Instagram-account toevoegen",
+      "linkedAccounts": "Gekoppelde accounts",
+      "linked": "Instagram-account gekoppeld.",
+      "linkFailed": "Dat account kon niet worden gekoppeld."
+    },
+    "dialog": {
+      "close": "Sluiten",
+      "kicker": "Instagram",
+      "title": "Een Instagram-account toevoegen",
+      "note": "Je Instagram wordt één keer verbonden via {engine} (daar staan de login en de webhook). Deze workspace koppelt daaraan en toont hier de inbox, flows en advertenties. Het blijft altijd één account, niet twee.",
+      "connect": "Instagram verbinden",
+      "checking": "Controleren…",
+      "hint": "Koppelt direct als je het al op {engine} hebt verbonden — anders opent een snel inlogvenster.",
+      "pick": "Kies een account om te koppelen",
+      "link": "Koppelen",
+      "connectDifferent": "Een ander account verbinden",
+      "linkFailed": "Dat account kon niet worden gekoppeld.",
+      "startFailed": "Instagram-verbinding kon niet worden gestart."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Verbonden",
+      "needsReauth": "Opnieuw inloggen nodig",
+      "live": "live",
+      "manage": "Beheren op {engine}",
+      "refresh": "Profiel vernieuwen vanuit {engine}",
+      "unlink": "Ontkoppelen",
+      "unlinkConfirm": "Dit Instagram-account loskoppelen? De gesprekken en inboxgegevens worden verwijderd, en Instagram verdwijnt uit je dashboard, inbox, flows, sjablonen en automatische antwoorden totdat je weer een account verbindt. Het account zelf blijft op {engine} staan — je kunt het later opnieuw koppelen.",
+      "cancel": "Annuleren",
+      "updated": "Instagram-account {handle} bijgewerkt.",
+      "unlinked": "Instagram-account losgekoppeld — de gegevens zijn verwijderd.",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Alleen-antwoord",
+      "title": "Instagram",
+      "titleAccent": "broadcast",
+      "intro": "Instagram laat je alleen mensen berichten sturen die je al hebben geschreven, dus kies uit je bestaande gesprekken. Instagram past het 24-uursvenster toe wanneer elk bericht wordt verstuurd.",
+      "accounts": "Instagram-accounts",
+      "loadError": "De gesprekken konden niet worden geladen. Probeer het opnieuw.",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+      "noAccounts": "Er is nog geen Instagram-account gekoppeld en verbonden.",
+      "name": "Naam broadcast",
+      "namePlaceholder": "Herfstaanbieding",
+      "account": "Instagram-account",
+      "template": "Sjabloon",
+      "templateHint": "Optioneel. Vult het bericht in als dat leeg is.",
+      "templateNone": "Geen sjabloon",
+      "message": "Bericht",
+      "messageHint": "Gebruik {token} voor de naam van de persoon. Maximaal {max} tekens.",
+      "messagePlaceholder": "Hoi {token}, …",
+      "send": "{count, plural, =0 {Verzenden} one {Verzenden naar # gesprek} other {Verzenden naar # gesprekken}}",
+      "sending": "Verzenden…",
+      "recipients": "Ontvangers",
+      "windowOpenCount": "{open} van {total} binnen het 24-uursvenster",
+      "search": "Gesprekken zoeken",
+      "selectAll": "Alles selecteren",
+      "clear": "Wissen",
+      "capNote": "Eén verzending bereikt maximaal {max} gesprekken; alles selecteren kiest de eerste {max}.",
+      "empty": "Nog geen gesprekken. Mensen verschijnen hier nadat ze je account hebben bericht.",
+      "inWindow": "Binnen venster",
+      "outsideWindow": "Buiten 24u",
+      "selected": "{count, plural, one {# geselecteerd} other {# geselecteerd}}",
+      "sent": "Instagram-broadcast verzonden — {sent} afgeleverd{failed, plural, =0 {} other {, # mislukt}}.",
+      "sentNone": "Kon niet naar een ontvanger verzenden. Controleer de Instagram-verbinding."
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Wiadomość masowa Instagram"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "hub": {
+      "kicker": "Kanał · Instagram",
+      "title": "Instagram",
+      "titleAccent": "konta",
+      "intro": "Połącz raz swoje konto Instagram Business lub Creator. Jego wiadomości trafią wtedy do skrzynki odbiorczej zespołu, a stąd odpowiesz, uruchomisz przepływy i wyślesz wiadomości do osób, które już do Ciebie napisały.",
+      "teamInbox": "Skrzynka zespołu",
+      "broadcasts": "Wiadomość masowa tylko z odpowiedziami",
+      "loadError": "Nie udało się wczytać połączonych kont Instagram. Spróbuj ponownie.",
+      "loadErrorDetail": "Nie udało się wczytać połączonych kont Instagram (błąd {status}{code}). Spróbuj ponownie.",
+      "engineOff": "{engine} nie jest połączony. Administrator musi go połączyć w sekcji Admin → Dodatki, zanim będzie można powiązać konto Instagram.",
+      "connectedCount": "{count, plural, one {# konto powiązane} few {# konta powiązane} many {# kont powiązanych} other {# konta powiązane}}",
+      "notConnected": "Niepołączony",
+      "cardTitle": "Dodaj konto Instagram",
+      "cardBody": "Połącz konto Business/Creator. Twój Instagram łączy się raz i pojawia się tutaj — rozmowy, przepływy i automatyczne odpowiedzi działają z tej przestrzeni roboczej.",
+      "add": "Dodaj konto Instagram",
+      "linkedAccounts": "Powiązane konta",
+      "linked": "Konto Instagram zostało powiązane.",
+      "linkFailed": "Nie udało się powiązać tego konta."
+    },
+    "dialog": {
+      "close": "Zamknij",
+      "kicker": "Instagram",
+      "title": "Dodaj konto Instagram",
+      "note": "Twój Instagram łączy się raz przez {engine} (tam są dane logowania i webhook). Ta przestrzeń robocza łączy się z nim i pokazuje tutaj jego skrzynkę, przepływy i reklamy — to zawsze jedno konto, nie dwa.",
+      "connect": "Połącz Instagram",
+      "checking": "Sprawdzanie…",
+      "hint": "Powiązanie następuje od razu, jeśli już połączyłeś konto w {engine} — w przeciwnym razie otworzy się szybkie okno logowania.",
+      "pick": "Wybierz konto do powiązania",
+      "link": "Powiąż",
+      "connectDifferent": "Połącz inne konto",
+      "linkFailed": "Nie udało się powiązać tego konta.",
+      "startFailed": "Nie udało się rozpocząć łączenia z Instagramem."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Połączono",
+      "needsReauth": "Wymaga ponownej autoryzacji",
+      "live": "aktywne",
+      "manage": "Zarządzaj w {engine}",
+      "refresh": "Odśwież profil z {engine}",
+      "unlink": "Odłącz",
+      "unlinkConfirm": "Odłączyć to konto Instagram? Jego rozmowy i dane skrzynki zostaną usunięte, a Instagram zniknie z pulpitu, skrzynki, przepływów, szablonów i automatycznych odpowiedzi, dopóki nie połączysz konta ponownie. Samo konto pozostaje w {engine} — możesz je później powiązać ponownie.",
+      "cancel": "Anuluj",
+      "updated": "Zaktualizowano konto Instagram {handle}.",
+      "unlinked": "Konto Instagram odłączone — jego dane zostały usunięte.",
+      "failed": "Nie udało się. Spróbuj ponownie."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Tylko odpowiedzi",
+      "title": "Instagram",
+      "titleAccent": "wiadomość masowa",
+      "intro": "Instagram pozwala pisać tylko do osób, które już do Ciebie napisały, dlatego wybierz z istniejących rozmów. Instagram stosuje swoje 24-godzinne okno przy wysyłaniu każdej wiadomości.",
+      "accounts": "Konta Instagram",
+      "loadError": "Nie udało się wczytać rozmów. Spróbuj ponownie.",
+      "failed": "Nie udało się. Spróbuj ponownie.",
+      "noAccounts": "Żadne konto Instagram nie jest jeszcze powiązane i połączone.",
+      "name": "Nazwa wiadomości masowej",
+      "namePlaceholder": "Jesienna oferta",
+      "account": "Konto Instagram",
+      "template": "Szablon",
+      "templateHint": "Opcjonalnie. Wypełnia wiadomość, gdy jest pusta.",
+      "templateNone": "Bez szablonu",
+      "message": "Wiadomość",
+      "messageHint": "Użyj {token} dla imienia osoby. Maksymalnie {max} znaków.",
+      "messagePlaceholder": "Cześć {token}, …",
+      "send": "{count, plural, =0 {Wyślij} one {Wyślij do # rozmowy} few {Wyślij do # rozmów} many {Wyślij do # rozmów} other {Wyślij do # rozmowy}}",
+      "sending": "Wysyłanie…",
+      "recipients": "Odbiorcy",
+      "windowOpenCount": "{open} z {total} w 24-godzinnym oknie",
+      "search": "Szukaj rozmów",
+      "selectAll": "Zaznacz wszystkie",
+      "clear": "Wyczyść",
+      "capNote": "Jedno wysłanie trafi najwyżej do {max} rozmów; zaznaczenie wszystkich wybiera pierwsze {max}.",
+      "empty": "Brak rozmów. Osoby pojawią się tutaj po napisaniu do Twojego konta.",
+      "inWindow": "W oknie",
+      "outsideWindow": "Poza 24 h",
+      "selected": "{count, plural, one {Zaznaczono: #} few {Zaznaczono: #} many {Zaznaczono: #} other {Zaznaczono: #}}",
+      "sent": "Wysłano wiadomość masową Instagram — dostarczono: {sent}{failed, plural, =0 {} one {, nieudana: #} few {, nieudane: #} many {, nieudanych: #} other {, nieudanych: #}}.",
+      "sentNone": "Nie udało się wysłać do żadnego odbiorcy. Sprawdź połączenie z Instagramem."
+    }
+  }
+}

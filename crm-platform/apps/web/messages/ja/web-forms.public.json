@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "次へ",
+      "back": "戻る",
+      "sending": "送信中...",
+      "optional": "任意",
+      "selectPlaceholder": "選択してください",
+      "stepOf": "ステップ {n} / {total}",
+      "summaryTitle": "{count, plural, other {# 個のフィールドを修正してください}}",
+      "successTitle": "ありがとうございました",
+      "continue": "続ける",
+      "previewNotice": "プレビューです。ここから送信されることはありません。",
+      "honeypot": "このフィールドは空欄のままにしてください",
+      "privacyPolicy": "プライバシーポリシー",
+      "poweredBy": "提供: {brand}",
+      "brandName": "フォーム",
+      "captchaNeeded": "送信する前に、下のチェックを完了してください。",
+      "rateLimited": "試行回数が多すぎます。少し待ってからもう一度お試しください。",
+      "closed": "このフォームは現在回答を受け付けていません。",
+      "genericError": "問題が発生したため、回答は送信されませんでした。もう一度お試しください。",
+      "notAvailableTitle": "このフォームは利用できません",
+      "notAvailableBody": "リンクが間違っているか、フォームが終了している可能性があります。",
+      "errors": {
+        "required": "この項目は必須です。",
+        "consent_required": "続けるにはこのチェックボックスをオンにしてください。",
+        "invalid_email": "有効なメールアドレスを入力してください。",
+        "invalid_phone": "電話番号を入力してください。可能であれば国番号も含めてください。",
+        "invalid_number": "有効な番号を入力してください。",
+        "invalid_date": "有効な日付を入力してください。",
+        "too_small": "{min} 以上の値を入力してください。",
+        "too_large": "{max} 以下の値を入力してください。",
+        "too_short": "{min} 文字以上で入力してください。",
+        "too_long": "{max} 文字以内で入力してください。",
+        "pattern": "想定されている形式と一致しません。",
+        "invalid_option": "一覧から選択肢を 1 つ選んでください。"
+      },
+      "closedTitle": "このフォームは受付終了です"
+    }
+  }
+}

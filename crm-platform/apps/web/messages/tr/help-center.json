@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Yardım merkezi",
+    "searchLabel": "Yardımda ara",
+    "searchPlaceholder": "Kılavuzlarda ara",
+    "resultsStatus": "{count, plural, =0 {Kılavuz bulunamadı} other {# kılavuz}}",
+    "none": {
+      "title": "Henüz kılavuz yok",
+      "message": "Planınızdaki özelliklerin kılavuzları burada görünecek."
+    },
+    "noResults": {
+      "title": "Aramanızla eşleşen kılavuz yok",
+      "message": "Farklı kelimeler deneyin ya da tüm kılavuzları görmek için aramayı temizleyin."
+    },
+    "areas": {
+      "overview": "Platform",
+      "inbox": "Gelen kutusu ve Sohbet",
+      "audience": "CRM",
+      "sales": "Satış",
+      "campaigns": "Kampanyalar",
+      "automation": "Otomasyon",
+      "store": "Mağaza",
+      "apps": "Pazar yeri",
+      "settings": "Ayarlar",
+      "account": "Hesap",
+      "getting-started": "Başlarken",
+      "troubleshooting": "Sorun giderme"
+    },
+    "allHelp": "Yardıma dön",
+    "onThisPage": "Bu sayfada",
+    "openScreen": "Bu ekranı aç",
+    "shownInEnglish": "Bu kılavuz henüz dilinize çevrilmedi, bu yüzden İngilizce gösteriliyor.",
+    "tip": {
+      "label": "Yardım: {title}",
+      "readMore": "Kılavuzu oku"
+    },
+    "guideCount": "{count, plural, =0 {Kılavuz yok} other {# kılavuz}}",
+    "crumb": "Daha fazla / Yardım",
+    "heading": "Yardım",
+    "headingRest": "ve kılavuzlar",
+    "back": "Geri",
+    "askSupport": "Bulamadınız mı? Destek ekibine sorun",
+    "askSupportShort": "Destek",
+    "categories": "Kategoriler",
+    "allGuides": "Tüm kılavuzlar",
+    "needHuman": "Bir insanla mı görüşmek istiyorsunuz?",
+    "contactSupport": "Destekle iletişime geçin",
+    "popular": "Popüler",
+    "searchResults": "Arama sonuçları",
+    "read": "Kılavuzu oku",
+    "readMinutes": "{count, plural, other {# dk okuma}}",
+    "moreInArea": "{area} bölümünde daha fazlası"
+  }
+}

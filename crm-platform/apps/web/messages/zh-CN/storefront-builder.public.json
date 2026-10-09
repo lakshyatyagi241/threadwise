@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "关闭",
+      "ok": "好的",
+      "done": "完成",
+      "skip": "跳至正文"
+    },
+    "strip": "通过 WhatsApp 下单 · 支持货到付款 · 免费咨询，快速回复",
+    "header": {
+      "navLabel": "店铺板块",
+      "shop": "店铺",
+      "categories": "分类",
+      "about": "关于",
+      "searchPlaceholder": "搜索商品…",
+      "searchLabel": "搜索商品",
+      "wishlist": "心愿单",
+      "compare": "对比",
+      "cart": "购物车",
+      "withCount": "{label}，{count, plural, other {# 件商品}}"
+    },
+    "hero": {
+      "welcome": "欢迎光临{shop}。",
+      "sub": "精选商品。直接在 WhatsApp 中下单任意商品——无需填写结账表单，无需安装应用。",
+      "trust": {
+        "cod": "货到付款",
+        "chat": "免费聊天支持",
+        "returns": "便捷退货"
+      }
+    },
+    "catalog": {
+      "label": "商品",
+      "emptyTitle": "暂无商品",
+      "emptyBody": "店主仍在设置中——请稍后再来。",
+      "count": "{count, plural, other {# 件商品}}",
+      "sort": {
+        "label": "商品排序",
+        "featured": "排序 · 推荐",
+        "priceAsc": "价格 · 从低到高",
+        "priceDesc": "价格 · 从高到低",
+        "nameAsc": "名称 · A → Z",
+        "nameDesc": "名称 · Z → A"
+      },
+      "view": {
+        "label": "布局",
+        "grid": "网格视图",
+        "list": "列表视图"
+      },
+      "filters": {
+        "title": "筛选",
+        "category": "分类",
+        "price": "价格",
+        "min": "最低",
+        "max": "最高",
+        "range": "范围：{min} — {max}",
+        "availability": "库存状态",
+        "inStock": "仅显示有货",
+        "onSale": "特价",
+        "reset": "重置筛选",
+        "clear": "清除筛选"
+      },
+      "noMatch": "没有符合这些筛选条件的商品",
+      "showMore": "显示更多商品",
+      "loading": "加载中…",
+      "retry": "重试",
+      "showing": "显示 {shown} / {total} 件商品"
+    },
+    "card": {
+      "new": "新品",
+      "soldOut": "已售罄",
+      "soldOutNamed": "{name}：已售罄",
+      "addToCart": "加入购物车",
+      "addToCartNamed": "将 {name} 加入购物车",
+      "addWish": "将 {name} 加入心愿单",
+      "removeWish": "将 {name} 移出心愿单",
+      "quickView": "{name} 快速预览",
+      "quickViewTitle": "快速预览",
+      "was": "原价"
+    },
+    "quick": {
+      "details": "查看详情 →"
+    },
+    "product": {
+      "gallery": "商品图片",
+      "showImage": "显示第 {n} 张图片",
+      "breadcrumb": "您在这里",
+      "save": "省 {percent}%",
+      "onlyLeft": "仅剩 {count} 件",
+      "inStock": "有货 · 可立即发货",
+      "quantity": "数量",
+      "addCompare": "加入对比",
+      "removeCompare": "移出对比",
+      "share": "分享此商品",
+      "shareTitle": "分享此商品",
+      "ask": "在 WhatsApp 上咨询",
+      "sku": "SKU",
+      "category": "分类",
+      "weight": "重量",
+      "grams": "{count} 克",
+      "delivery": "配送",
+      "deliveryTime": "2–5 个工作日",
+      "tags": "标签",
+      "tabs": {
+        "label": "商品信息",
+        "desc": "描述",
+        "ship": "运费与退货",
+        "reviews": "评价"
+      },
+      "noDescription": "暂无描述——请通过 WhatsApp 联系卖家了解更多。",
+      "shippingHeading": "运费。",
+      "shippingBody": "订单将在 1–2 个工作日内发出。配送时间取决于您所在的地区，通常为 2–5 个工作日。",
+      "freeAbove": "订单满 {amount} 即免运费。",
+      "returnsHeading": "退货。",
+      "returnsBody": "未使用的商品可在收货后 7 天内退回。请通过 WhatsApp 联系我们发起退货，我们将安排取件。",
+      "reviewCount": "{count, plural, other {# 条评价}}",
+      "anonymous": "匿名",
+      "ratingOf": "{rating} / 5 分",
+      "noReviews": "暂无评价——快来抢先评价此商品吧。",
+      "related": "您可能还喜欢"
+    },
+    "review": {
+      "write": "撰写评价",
+      "name": "您的姓名",
+      "rating": "评分",
+      "ratings": {
+        "1": "很差",
+        "2": "较差",
+        "3": "一般",
+        "4": "好",
+        "5": "很棒"
+      },
+      "bodyLabel": "您的评价",
+      "body": "分享您的体验（可选）",
+      "submit": "提交评价",
+      "nameRequired": "请填写您的姓名。",
+      "thanks": "感谢您的评价！",
+      "network": "网络错误，请重试。",
+      "failed": "无法提交您的评价。"
+    },
+    "cart": {
+      "title": "您的购物车",
+      "subtotal": "小计",
+      "shipping": "运费",
+      "free": "免费 ✓",
+      "total": "总计",
+      "addForFree": "再买 {amount} 即可免运费",
+      "order": "通过 WhatsApp 下单 →",
+      "payVia": "通过 {method} 付款 · 货到付款",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "银行卡",
+        "paypal": "PayPal",
+        "bank": "银行转账"
+      },
+      "codOnly": "货到付款 · 在聊天中确认",
+      "emptyTitle": "您的购物车是空的",
+      "emptyBody": "浏览商品目录，添加几件心仪的商品。",
+      "keepBrowsing": "继续浏览",
+      "quantityOf": "{name} 的数量",
+      "decrease": "减少数量",
+      "increase": "增加数量",
+      "remove": "将 {name} 移出购物车",
+      "fullTitle": "您的购物车已满",
+      "fullBody": "购物车最多可容纳 100 种不同的商品。请先下单这些商品，然后再开始新的购物车。"
+    },
+    "wish": {
+      "title": "心愿单",
+      "emptyTitle": "暂无收藏",
+      "emptyBody": "点击任意商品上的心形图标即可收藏，以便稍后查看。",
+      "remove": "将 {name} 移出心愿单"
+    },
+    "compare": {
+      "title": "商品对比",
+      "emptyTitle": "没有可对比的商品",
+      "emptyBody": "在任意两件商品上点击“对比”，即可并排查看。",
+      "attribute": "属性",
+      "rows": {
+        "image": "图片",
+        "name": "名称",
+        "price": "价格",
+        "sku": "SKU",
+        "category": "分类",
+        "description": "描述"
+      },
+      "remove": "将 {name} 移出对比",
+      "bar": "待对比商品",
+      "open": "对比 →",
+      "fullTitle": "对比已满",
+      "fullBody": "最多可同时对比 {count} 件商品。请从对比栏中移除一件后再添加新商品。"
+    },
+    "stock": {
+      "title": "仅剩 {count} 件库存",
+      "soldOut": "此商品已售罄。我们将尽快补货——请通过 WhatsApp 联系我们以获取通知。",
+      "limit": "{count, plural, other {可售数量仅剩 # 件，而您的购物车中已包含全部库存。}}",
+      "maxTitle": "已达到上限",
+      "maxBody": "每次最多可订购单个商品 {count} 件。"
+    },
+    "toast": {
+      "added": "{name} · 已加入购物车",
+      "wishAdded": "已加入心愿单 ♡",
+      "wishRemoved": "已移出心愿单",
+      "compareAdded": "已加入对比",
+      "compareRemoved": "已移出对比"
+    },
+    "checkout": {
+      "title": "结账",
+      "summary": "{count, plural, other {# 件商品}} · {total}",
+      "name": "您的姓名",
+      "phone": "WhatsApp 号码",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "收货地址",
+      "note": "备注（可选）",
+      "coupon": "优惠码",
+      "apply": "应用",
+      "payment": "付款",
+      "prepaid": "在线付款 / 货到付款详情",
+      "cod": "货到付款",
+      "place": "提交订单",
+      "placing": "正在提交订单…",
+      "opening": "订单已提交！正在打开 WhatsApp…",
+      "nameRequired": "请输入您的姓名。",
+      "phoneInvalid": "请输入有效的 WhatsApp 号码。",
+      "cartEmpty": "您的购物车是空的。",
+      "emptyTitle": "您的购物车是空的",
+      "emptyBody": "结账前请先浏览商品目录并添加商品。",
+      "failed": "无法提交订单，请重试。",
+      "network": "网络错误，请重试。",
+      "couponSave": "您节省了 {discount} · 新总额 {total}",
+      "couponFree": "已应用免运费 · 新总额 {total}",
+      "couponInvalid": "此优惠码不适用于该购物车。",
+      "couponNetwork": "无法验证该优惠码。",
+      "couponFallback": "优惠码无效。"
+    },
+    "errors": {
+      "itemsUnavailable": "这些商品已不可购买。请刷新后重试。",
+      "notAvailable": "此店铺不可用。",
+      "rateLimited": "请求过于频繁，请稍候片刻后重试。"
+    },
+    "placed": {
+      "title": "订单已提交",
+      "track": "追踪订单 #{orderNo} →"
+    },
+    "share": {
+      "title": "分享",
+      "url": "分享链接",
+      "copy": "复制",
+      "copied": "已复制 ✓",
+      "copyFailed": "无法复制链接",
+      "linkCopied": "链接已复制",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "发送到聊天",
+      "email": "电子邮件",
+      "emailHint": "打开邮件应用",
+      "telegram": "Telegram",
+      "telegramHint": "分享到聊天",
+      "more": "更多…",
+      "moreHint": "手机分享菜单",
+      "showQr": "显示二维码 →",
+      "qrTitle": "链接的二维码",
+      "scan": "扫描以打开店铺"
+    },
+    "info": {
+      "freeAbove": "满 {amount} 即免运费。",
+      "shipping": {
+        "title": "运费与配送",
+        "body": "订单通过 WhatsApp 确认。配送时间取决于您所在的地区，通常为 2–5 个工作日。"
+      },
+      "returns": {
+        "title": "退货",
+        "body": "未使用的商品可在 7 天内退回。请通过 WhatsApp 联系我们发起退货。"
+      },
+      "howToOrder": {
+        "title": "下单方式",
+        "body": "浏览商品目录，加入购物车，然后点击“通过 WhatsApp 下单”。我们将在聊天中确认订单并安排配送。"
+      },
+      "privacy": {
+        "title": "隐私",
+        "body": "我们仅收集您在聊天中提供的信息，用于完成订单。我们绝不出售您的数据。"
+      }
+    },
+    "footer": {
+      "blurb": "精选商品，像打电话一样在 WhatsApp 上下单。无需安装应用——只需与我们聊天即可购买。",
+      "paymentsLabel": "付款方式",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "货到付款",
+        "bank": "银行转账"
+      },
+      "shopHeading": "店铺",
+      "allProducts": "全部商品",
+      "helpHeading": "帮助",
+      "help": {
+        "shipping": "运费",
+        "returns": "退货",
+        "howToOrder": "下单方式",
+        "privacy": "隐私"
+      },
+      "contactHeading": "联系我们",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "周一至周日 · 上午 9 点至晚上 9 点",
+      "hoursToast": "营业时间：上午 9 点至晚上 9 点",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "订单 #{orderNo}",
+      "progress": "订单进度",
+      "cancelled": "此订单已取消。如有疑问，请与我们联系。",
+      "steps": {
+        "placed": "已下单",
+        "confirmed": "已确认",
+        "paid": "已付款",
+        "shipped": "已发货"
+      },
+      "stepDone": "已完成",
+      "stepTodo": "尚未",
+      "items": "商品",
+      "qty": "数量 {qty} · {price}",
+      "free": "免费",
+      "deliveryTo": "配送至",
+      "payNow": "立即付款",
+      "message": "就此订单联系我们"
+    },
+    "notFound": {
+      "kicker": "工作区中找不到页面",
+      "title": "此页面走错了路。",
+      "body": "未找到您要查找的内容。链接可能已失效、页面可能已被移动，或者该页面从未存在。",
+      "back": "返回",
+      "signIn": "登录",
+      "help": "需要帮助？",
+      "support": "联系支持",
+      "metaTitle": "页面不存在"
+    }
+  }
+}

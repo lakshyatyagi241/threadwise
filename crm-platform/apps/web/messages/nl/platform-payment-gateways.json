@@ -1,0 +1,716 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Betaalproviders",
+      "group": "Facturatie",
+      "orders": "Bestelgeschiedenis",
+      "billingHistory": "Factureringsgeschiedenis",
+      "invoices": "Facturen",
+      "billingSettings": "Factureringsinstellingen"
+    },
+    "admin": {
+      "title": "Betaalproviders",
+      "description": "{count} betaalproviders. Inloggegevens worden versleuteld opgeslagen en na opslaan nooit meer getoond.",
+      "kpi": {
+        "total": "Betaalproviders",
+        "active": "Actief",
+        "india": "India",
+        "crypto": "Crypto",
+        "totalHint": "beschikbare drivers",
+        "activeHint": "accepteert betalingen",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "on-chain afwikkeling"
+      },
+      "tabsLabel": "Filteren op regio",
+      "all": "Alle",
+      "search": "Filteren op naam of slug",
+      "emptyTitle": "Geen betaalproviders hier",
+      "emptyMessage": "Niets komt overeen met deze regio en zoekopdracht. Probeer een ander tabblad of wis de zoekopdracht.",
+      "regions": {
+        "popular": "Populair",
+        "india": "India",
+        "asia": "Azië",
+        "mena": "MENA",
+        "europe": "Europa",
+        "us": "VS en Canada",
+        "africa": "Afrika",
+        "latam": "Latijns-Amerika",
+        "crypto": "Crypto",
+        "offline": "Offline",
+        "other": "Overig"
+      },
+      "card": {
+        "active": "Actief",
+        "disabled": "Uitgeschakeld",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Live"
+        },
+        "keysSaved": "Sleutels opgeslagen",
+        "noDriverBadge": "Driver nog niet beschikbaar",
+        "activate": "Activeren",
+        "disable": "Uitschakelen",
+        "savedPlaceholder": "Opgeslagen. Laat leeg om te behouden.",
+        "clear": "Opgeslagen waarde verwijderen",
+        "undoClear": "Opgeslagen waarde behouden",
+        "modeLabel": "Modus",
+        "sortOrder": "Sorteervolgorde",
+        "currencies": "Ondersteunde valuta",
+        "currenciesAll": "Niets geselecteerd: elke valuta wordt geaccepteerd",
+        "currenciesSelected": "{count, plural, one {# geselecteerd} other {# geselecteerd}}",
+        "currenciesHint": "Kopers zien deze betaalprovider alleen in de valuta's die je aanvinkt. Laat alles uitgevinkt om elke valuta te accepteren.",
+        "webhookUrl": "Webhook-URL",
+        "webhookHint": "Plak dit in het dashboard van de provider zodat die ons over betalingen kan informeren.",
+        "saving": "Opslaan",
+        "readOnly": "Alleen een superbeheerder kan betaalproviders wijzigen.",
+        "saved": "Instellingen van {name} opgeslagen.",
+        "activated": "{name} geactiveerd.",
+        "deactivated": "{name} gedeactiveerd.",
+        "noCredentials": "Geen inloggegevens nodig — de gateway gebruikt handmatige of out-of-band bevestiging.",
+        "save": "{name} opslaan"
+      },
+      "errors": {
+        "conflict": "Iemand anders heeft deze betaalprovider gewijzigd. Hij is opnieuw geladen; controleer hem en sla opnieuw op.",
+        "notConfigured": "Vul eerst de verplichte velden in: {fields}",
+        "noDriver": "Deze betaalprovider heeft in deze release nog geen driver, dus hij kan wel worden ingesteld maar niet worden geactiveerd.",
+        "forbidden": "Alleen een superbeheerder kan betaalproviders wijzigen.",
+        "generic": "Er ging iets mis. Probeer het opnieuw."
+      },
+      "eyebrow": "Beheer · Facturatie · Gateways",
+      "titleFirst": "Betaling",
+      "titleSecond": "gateways"
+    },
+    "checkout": {
+      "title": "Rond je bestelling af",
+      "walletTitle": "Geld aan je wallet toevoegen",
+      "subtitle": "Controleer de prijs, vertel ons wie betaalt en kies hoe.",
+      "loading": "Checkout laden",
+      "account": "Account",
+      "name": "Volledige naam",
+      "email": "E-mail",
+      "billingAddress": "Factuuradres",
+      "company": "Bedrijf",
+      "taxId": "Belastingnummer",
+      "taxIdHint": "GSTIN, btw-nummer of EIN, indien van toepassing.",
+      "address": "Adres",
+      "city": "Plaats",
+      "postal": "Postcode",
+      "country": "Land",
+      "currency": "Valuta",
+      "period": "Factureringsperiode",
+      "periods": {
+        "monthly": "Maandelijks",
+        "yearly": "Jaarlijks"
+      },
+      "paymentMethod": "Betaalmethode",
+      "noGateway": "Er is nog geen betaalprovider ingesteld voor {currency}. Vraag je beheerder er een te activeren.",
+      "noGatewayButton": "Geen betaalprovider ingesteld",
+      "sandbox": "sandbox",
+      "pay": "Betaal {amount}",
+      "processing": "Betaling starten",
+      "summary": "Besteloverzicht",
+      "billed": {
+        "monthly": "Gefactureerd voor één periode",
+        "yearly": "Gefactureerd voor 12 maanden"
+      },
+      "subtotal": "Subtotaal",
+      "tax": "{label} ({rate}%)",
+      "total": "Totaal vandaag",
+      "updating": "Prijs bijwerken",
+      "errors": {
+        "gatewayUnavailable": "Die betaalprovider is op dit moment niet beschikbaar.",
+        "currencyUnsupported": "Die betaalprovider accepteert deze valuta niet. Kies een andere betaalprovider of valuta.",
+        "providerError": "Fout bij de betaalprovider. Probeer het opnieuw of kies een andere betaalprovider.",
+        "notPurchasable": "Dit abonnement kan niet online worden gekocht.",
+        "downgrade": "Downgrades zijn niet online beschikbaar. Neem contact op met support om naar een lager abonnement over te stappen.",
+        "amountTooLow": "Voer een groter bedrag in om aan je wallet toe te voegen.",
+        "couponUnavailable": "Kortingscodes zijn nog niet beschikbaar.",
+        "forbidden": "Je hebt geen toestemming om te kopen.",
+        "notFound": "We konden dat abonnement niet vinden.",
+        "widgetBlocked": "Het betaalvenster kon niet worden geopend. Controleer of je browser dit toestaat en probeer het opnieuw.",
+        "generic": "Er ging iets mis. Probeer het opnieuw.",
+        "couponRejected": "Deze kortingscode kan niet worden gebruikt."
+      },
+      "coupon": "Kortingscode",
+      "couponApply": "Toepassen",
+      "couponApplied": "Kortingscode {code} toegepast: {amount} korting.",
+      "couponRemove": "Verwijderen",
+      "couponDiscount": "Korting ({code})",
+      "refundGuarantee": "{days}-daagse geld-terugkomgarantie",
+      "countryPlaceholder": "Kies een land",
+      "autoRenew": "Verleng automatisch per periode. Je kunt altijd annuleren.",
+      "addonRenews": "Deze add-on wordt automatisch per periode verlengd. Je kunt hem altijd annuleren en behoud je hem tot het einde van de betaalde termijn.",
+      "cardTitle": "Betalen met kaart",
+      "payNow": "Nu betalen",
+      "titleFirst": "Rond je",
+      "titleSecond": "bestelling af",
+      "subtitleRefund": "{days}-daagse geld-terug-garantie. Altijd opzegbaar. Creditcards, UPI, internetbankieren en wallets worden geaccepteerd.",
+      "steps": {
+        "plan": "Abonnement kiezen",
+        "checkout": "Afrekenen",
+        "confirmation": "Bevestiging"
+      },
+      "step": "Stap {n}",
+      "taxIdPlaceholder": "GSTIN / btw-nummer / EIN",
+      "addressPlaceholder": "Straat + huisnummer",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Betaal in je valuta",
+      "currencyHint": "Prijzen worden direct omgerekend. Alleen valuta's die je beschikbare betaalmethoden accepteren, worden getoond.",
+      "couponPlaceholder": "Heb je een couponcode?",
+      "live": "live",
+      "tlsNote": "Betalingen worden verwerkt via een 256-bit TLS-verbinding. Wij zien je kaartgegevens nooit.",
+      "change": "Wijzigen",
+      "terms": "Door te betalen ga je akkoord met onze <terms>Voorwaarden</terms> en <privacy>Privacyverklaring</privacy>.",
+      "refundNote": "Niet tevreden? Mail ons binnen de eerste {days} dagen en we betalen het volledige bedrag terug — zonder vragen, zonder formulieren.",
+      "autoRenewTitle": "Dit abonnement automatisch verlengen"
+    },
+    "orders": {
+      "title": "Bestelgeschiedenis",
+      "lifetime": "Totale uitgaven: {total}",
+      "loading": "Bestellingen laden",
+      "loadFailed": "Je bestellingen konden niet worden geladen. Laad de pagina opnieuw om het nog eens te proberen.",
+      "emptyTitle": "Nog geen bestellingen",
+      "emptyMessage": "Je aankopen verschijnen hier.",
+      "browsePlans": "Abonnementen bekijken",
+      "loadMore": "Meer laden",
+      "outcome": {
+        "success": "Betaling ontvangen. Bedankt.",
+        "failed": "Betaling is niet voltooid. Probeer het opnieuw of kies een andere betaalprovider.",
+        "cancelled": "Je hebt de betaling geannuleerd.",
+        "pending": "We wachten op de bevestiging van de betaling door de betaalprovider. Deze pagina wordt bijgewerkt zodra dat gebeurt.",
+        "notfound": "We konden die bestelling niet vinden.",
+        "proof": "Betalingsbewijs ingediend. We controleren het en activeren je abonnement binnenkort."
+      },
+      "col": {
+        "order": "Bestelling",
+        "item": "Artikel",
+        "date": "Datum",
+        "amount": "Bedrag",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "status": {
+        "pending": "In behandeling",
+        "awaiting_approval": "Wacht op goedkeuring",
+        "paid": "Betaald",
+        "failed": "Mislukt",
+        "cancelled": "Geannuleerd",
+        "refunded": "Terugbetaald"
+      },
+      "uploadProof": "Betalingsbewijs",
+      "invoice": "Factuur"
+    },
+    "billing": {
+      "common": {
+        "admin": "Beheer",
+        "breadcrumb": "Kruimelpad",
+        "billingHistory": "Factureringsgeschiedenis",
+        "analytics": "Analyse",
+        "exportCsv": "CSV exporteren",
+        "exportTruncated": "De export is gestopt bij {rows} rijen. Beperk de filters om de rest te exporteren.",
+        "exportFailed": "De export kon niet worden aangemaakt. Probeer het opnieuw.",
+        "actionFailed": "Dat is niet gelukt. Laad de pagina opnieuw en probeer het nog eens.",
+        "cancel": "Annuleren",
+        "back": "Behouden",
+        "close": "Sluiten",
+        "openWorkspace": "Workspace openen",
+        "showing": "{from}–{to} van {total} {noun}",
+        "pager": "Pagina's",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "chartEmpty": "Geen gegevens in deze periode.",
+        "periods": {
+          "monthly": "maandelijks",
+          "yearly": "jaarlijks"
+        },
+        "status": {
+          "pending": "in behandeling",
+          "awaiting_approval": "wacht op goedkeuring",
+          "paid": "betaald",
+          "failed": "mislukt",
+          "cancelled": "geannuleerd",
+          "refunded": "terugbetaald"
+        },
+        "windows": {
+          "7d": "Laatste 7 dagen",
+          "30d": "Laatste 30 dagen",
+          "90d": "Laatste 90 dagen",
+          "1y": "Afgelopen jaar",
+          "all": "Alle tijd"
+        }
+      },
+      "orders": {
+        "title": "Bestelgeschiedenis",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Bestelgeschiedenis",
+        "titleFirst": "Bestelling",
+        "titleSecond": "geschiedenis",
+        "description": "Abonnementsbestellingen, upgrades en downgrades van abonnementen, add-onaankopen en eenmalige opwaarderingen: elke commerciële beslissing die een workspace heeft genomen.",
+        "window": "Tijdvenster",
+        "windows": {
+          "90d": "Laatste 90 dagen",
+          "this_year": "Dit jaar",
+          "all": "Alle tijd"
+        },
+        "kpi": {
+          "total": "Totaal bestellingen",
+          "vsPrevious": "t.o.v. vorige periode",
+          "upgrades": "Upgrades",
+          "mrrAdded": "+{amount} MRR toegevoegd",
+          "downgrades": "Downgrades",
+          "mrrLowered": "{amount} op lagere abonnementen",
+          "addons": "Add-onpakketten",
+          "attached": "{amount} gekoppeld",
+          "cancellations": "Opzeggingen",
+          "mrrLost": "-{amount} MRR verloren"
+        },
+        "typeFilter": "Filteren op ordertype",
+        "types": {
+          "all": "Alle",
+          "new": "Nieuw abonnement",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "cancel": "Annuleren"
+        },
+        "rowTypes": {
+          "new": "Nieuw",
+          "renewal": "Verlenging",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "wallet_topup": "Wallet-opwaardering",
+          "manual": "Handmatig"
+        },
+        "search": "Zoeken op bestelnr., workspace, abonnement…",
+        "noun": "bestellingen",
+        "col": {
+          "order": "Bestelnr.",
+          "date": "Datum",
+          "workspace": "Workspace",
+          "type": "Type",
+          "item": "Abonnement / artikel",
+          "mrr": "MRR Δ",
+          "total": "Totaal",
+          "status": "Status"
+        },
+        "empty": "Geen bestellingen in deze periode.",
+        "awaitingApproval": "wacht op goedkeuring",
+        "actions": {
+          "markPaid": "Markeren als betaald",
+          "cancelOrder": "Annuleren",
+          "approve": "Goedkeuren",
+          "reject": "Afwijzen"
+        },
+        "confirm": {
+          "approveTitle": "Deze bestelling als betaald markeren?",
+          "approve": "Deze bestelling als betaald markeren en het abonnement activeren?",
+          "cancelTitle": "Deze bestelling annuleren?",
+          "cancel": "Deze openstaande bestelling annuleren? Hij wordt als geannuleerd gemarkeerd en valt uit het openstaande bedrag."
+        },
+        "reject": {
+          "title": "{order} afwijzen",
+          "reason": "Reden (optioneel)"
+        },
+        "awaiting": {
+          "title": "Wacht op goedkeuring",
+          "ref": "Ref.:",
+          "proofAttached": "Betalingsbewijs toegevoegd"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Bestelanalyse",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Bestelanalyse",
+        "titleFirst": "Bestelling",
+        "titleSecond": "analyse",
+        "description": "Abonnementen, upgrades, downgrades, add-ons en opzeggingen: wat de netto omzetbeweging op het platform bepaalt.",
+        "window": "Tijdvenster",
+        "viewLedger": "Journaal bekijken",
+        "kpi": {
+          "total": "Totaal bestellingen",
+          "newMrr": "Netto nieuwe MRR",
+          "paid": "{count} betaald",
+          "lostMrr": "Verloren MRR",
+          "cancels": "{count} opzeggingen",
+          "aov": "Gem. orderwaarde",
+          "paidOrders": "betaalde bestellingen",
+          "attach": "Add-on-koppeling",
+          "attachLabel": "{addons} add-ons / {total}",
+          "conversion": "Conversiepercentage",
+          "conversionHint": "betaalde bestellingen op {signups} aanmeldingen"
+        },
+        "motion": {
+          "kicker": "Bestelbeweging",
+          "title": "Betaalde bestellingen en opzeggingen",
+          "paid": "Betaald",
+          "cancelled": "Geannuleerd of mislukt"
+        },
+        "typeMix": {
+          "kicker": "Verdeling ordertypes",
+          "title": "Per type"
+        },
+        "addons": {
+          "kicker": "Verkochte add-ons",
+          "title": "Beste presteerders",
+          "empty": "Geen add-onbestellingen in deze periode."
+        },
+        "funnel": {
+          "kicker": "Conversietrechter",
+          "title": "Van aanmelding naar betaald",
+          "note": "Alleen meegetelde fasen worden getoond."
+        },
+        "countries": {
+          "kicker": "Per land",
+          "title": "Belangrijkste markten",
+          "empty": "Er is nog geen factureringsland ingevoerd."
+        },
+        "cohorts": {
+          "kicker": "Cohortretentie",
+          "title": "% van de workspaces dat N maanden later nog actief is",
+          "last": "laatste 6 cohorten",
+          "emptyTitle": "Nog geen workspace-aanmeldingen",
+          "empty": "Cohorten verschijnen zodra workspaces zich hebben aangemeld."
+        }
+      },
+      "history": {
+        "title": "Factureringsgeschiedenis",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Factureringsgeschiedenis",
+        "titleFirst": "Facturatie",
+        "titleSecond": "geschiedenis",
+        "description": "Elke betalingsgebeurtenis die het platform heeft verwerkt: afschrijvingen, terugbetalingen en nieuwe pogingen voor elke workspace.",
+        "window": "Tijdvenster",
+        "kpi": {
+          "gross": "Bruto omzet",
+          "vsPrev": "t.o.v. vorige periode",
+          "charges": "Geslaagde afschrijvingen",
+          "successRate": "{pct}% slagingspercentage",
+          "failed": "Mislukt",
+          "dunning": "om opnieuw te proberen / incasso",
+          "refunds": "Uitgegeven terugbetalingen",
+          "refundsTotal": "{amount} totaal",
+          "chargebacks": "Chargebacks",
+          "disputed": "{amount} betwist"
+        },
+        "trend": {
+          "kicker": "Trend",
+          "title": "Dagelijkse afschrijvingen en terugbetalingen",
+          "charges": "Afschrijvingen",
+          "refunds": "Terugbetalingen"
+        },
+        "statusFilter": "Filteren op betaalstatus",
+        "statuses": {
+          "all": "Alle",
+          "paid": "Geslaagd",
+          "failed": "Mislukt",
+          "refunded": "Terugbetaald",
+          "pending": "In behandeling"
+        },
+        "gateway": "Betaalprovider",
+        "allGateways": "Alle betaalproviders",
+        "search": "Zoeken op bestelnr., workspace, klant…",
+        "noun": "gebeurtenissen",
+        "col": {
+          "date": "Datum",
+          "order": "Bestelnr.",
+          "workspace": "Workspace",
+          "gateway": "Betaalprovider",
+          "plan": "Abonnement",
+          "amount": "Bedrag",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "empty": "Geen betalingsgebeurtenissen gevonden."
+      },
+      "billingAnalytics": {
+        "title": "Factureringsanalyse",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Factureringsanalyse",
+        "titleFirst": "Facturatie",
+        "titleSecond": "analyse",
+        "description": "Kasstroom, betalingssucces, verdeling over betaalproviders en trends in terugbetalingen op het platform.",
+        "window": "Tijdvenster",
+        "viewLedger": "Journaal bekijken",
+        "kpi": {
+          "gross": "Bruto omzet",
+          "net": "Netto omzet",
+          "netPct": "{pct}% netto",
+          "success": "Succes autorisaties",
+          "failed": "Mislukt",
+          "events": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
+          "refunds": "Terugbetalingen",
+          "chargebacks": "Chargebacks",
+          "disputes": "{count, plural, one {# betwisting} other {# betwistingen}}"
+        },
+        "cashFlow": {
+          "kicker": "Kasstroom",
+          "title": "Afschrijvingen, terugbetalingen & mislukkingen",
+          "charges": "Afschrijvingen",
+          "refunds": "Terugbetalingen",
+          "failed": "Mislukt"
+        },
+        "gatewayShare": {
+          "title": "Aandeel betaalproviders",
+          "hint": "Betaalde omzet verdeeld per provider"
+        },
+        "topPayers": {
+          "title": "Workspaces met de meeste betalingen",
+          "hint": "Hoogste uitgaven in periode",
+          "all": "Alle workspaces",
+          "workspace": "Workspace",
+          "orders": "Bestellingen",
+          "total": "Totaal",
+          "empty": "Nog geen betaalde orders in deze periode.",
+          "unknown": "Verwijderde workspace"
+        },
+        "statusMix": {
+          "title": "Verdeling orderstatus",
+          "hint": "Aantal per levenscyclusstatus"
+        }
+      },
+      "invoices": {
+        "title": "Facturen",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Facturen",
+        "titleFirst": "Alle",
+        "titleSecond": "facturen",
+        "description": "Elke bestelling als factuur. Filter op status, open en print een factuur, markeer er een als betaald, maak hem ongeldig of geef een handmatige uit.",
+        "window": "Tijdvenster",
+        "windows": {
+          "all": "Alle tijd",
+          "this_month": "Deze maand",
+          "last_month": "Vorige maand",
+          "this_quarter": "Dit kwartaal",
+          "this_year": "Dit jaar"
+        },
+        "kpi": {
+          "total": "Totaal facturen",
+          "allTime": "alle tijd",
+          "paid": "Betaald",
+          "outstanding": "Openstaand",
+          "due": "{amount} openstaand",
+          "overdue": "Achterstallig",
+          "overdueHint": ">15 dagen te laat",
+          "thisMonth": "Deze maand",
+          "mom": "m/m"
+        },
+        "statusFilter": "Filteren op factuurstatus",
+        "statuses": {
+          "all": "Alle",
+          "paid": "Betaald",
+          "outstanding": "Openstaand",
+          "overdue": "Achterstallig",
+          "refunded": "Terugbetaald",
+          "void": "Ongeldig"
+        },
+        "badges": {
+          "paid": "betaald",
+          "outstanding": "openstaand",
+          "overdue": "achterstallig",
+          "refunded": "terugbetaald",
+          "void": "ongeldig"
+        },
+        "search": "Zoeken op factuurnr., workspace, eigenaar…",
+        "noun": "facturen",
+        "col": {
+          "number": "Factuurnr.",
+          "issued": "Factuurdatum",
+          "due": "Vervaldatum",
+          "workspace": "Workspace",
+          "item": "Artikel",
+          "amount": "Bedrag",
+          "status": "Status",
+          "view": "Bekijken",
+          "actions": "Acties"
+        },
+        "daysLate": "{days}d te laat",
+        "refunded": "terugbetaald",
+        "viewInvoice": "Factuur bekijken",
+        "rowMenu": "Acties voor {number}",
+        "empty": "Geen facturen in deze periode.",
+        "actions": {
+          "view": "Bekijken",
+          "markPaid": "Markeren als betaald",
+          "void": "Ongeldig maken",
+          "delete": "Verwijderen"
+        },
+        "confirm": {
+          "markPaidTitle": "Deze factuur als betaald markeren?",
+          "markPaid": "Deze factuur als betaald markeren? Het abonnement, de add-on of het wallet-tegoed waarvoor hij is gekocht, wordt ook toegepast.",
+          "markPaidManual": "Deze handmatige factuur als betaald markeren? Alleen de betaling wordt vastgelegd.",
+          "voidTitle": "Deze factuur ongeldig maken?",
+          "void": "Deze factuur ongeldig maken? Hij blijft in de administratie staan maar wordt geannuleerd.",
+          "deleteTitle": "Deze factuur verwijderen?",
+          "delete": "Deze factuur definitief verwijderen? Dit kan niet ongedaan worden gemaakt."
+        },
+        "manual": {
+          "tag": "handmatig",
+          "open": "Handmatige factuur",
+          "eyebrow": "Facturen",
+          "title": "Handmatige factuur",
+          "workspace": "Workspace",
+          "chooseWorkspace": "Kies een workspace",
+          "customerName": "Naam klant",
+          "customerNameHint": "Standaard de naam van de workspace.",
+          "customerEmail": "E-mail klant",
+          "description": "Omschrijving",
+          "amount": "Bedrag",
+          "currency": "Valuta",
+          "status": "Status",
+          "statuses": {
+            "pending": "In behandeling",
+            "paid": "Betaald"
+          },
+          "issuedAt": "Factuurdatum",
+          "issuedAtHint": "Laat leeg voor vandaag. Een datum in het verleden dateert de factuur terug.",
+          "submit": "Factuur aanmaken",
+          "created": "Handmatige factuur {number} aangemaakt."
+        }
+      },
+      "invoice": {
+        "title": "Factuur",
+        "print": "Afdrukken",
+        "downloadPdf": "PDF downloaden",
+        "banner": {
+          "invoice": "Factuur #{number}",
+          "issued": "Uitgegeven {date}",
+          "settled": "afgehandeld {date}",
+          "paidInFull": "volledig betaald"
+        },
+        "taxInvoice": "Belastingfactuur",
+        "invoiceWord": "FACTUUR",
+        "taxIdLabel": "GSTIN/btw",
+        "number": "Factuurnr.",
+        "issueDate": "Factuurdatum",
+        "paidDate": "Betaaldatum",
+        "status": "Status",
+        "billTo": "Factuur aan",
+        "payment": "Betaling",
+        "method": "Methode",
+        "txn": "Transactie-ID",
+        "captured": "Vastgelegd op",
+        "currency": "Valuta",
+        "coupon": "Kortingscode",
+        "description": "Omschrijving",
+        "qty": "Aantal",
+        "unit": "Stuksprijs",
+        "total": "Totaal",
+        "discount": "Korting",
+        "code": "code",
+        "subtotal": "Subtotaal",
+        "amountPaid": "Betaald bedrag",
+        "balanceDue": "Nog te betalen",
+        "notes": "Opmerkingen",
+        "notesText": "Bedankt voor je vertrouwen. Deze factuur betreft de hierboven vermelde bestelling. Vermeld het factuurnummer bij vragen over de facturatie.",
+        "help": "Hulp nodig?",
+        "helpFallback": "Neem contact op met de platformbeheerder.",
+        "refundNote": "Voor support of terugbetalingen kun je ons binnen {days} dagen na de betaling schrijven.",
+        "regNo": "Reg.nr.",
+        "computerGenerated": "Dit is een computergegenereerde factuur, geen handtekening vereist."
+      },
+      "settings": {
+        "title": "Factureringsinstellingen",
+        "eyebrow": "Beheer · Facturatie & abonnementen · Instellingen",
+        "titleFirst": "Facturatie",
+        "titleSecond": "instellingen",
+        "description": "Alles wat de prijs- en checkoutpagina's lezen: belasting, terugbetalingstermijn, jaarkorting, automatisch verlengen, je factuuridentiteit en de landenlijst. Wijzigingen gelden bij het volgende laden van de pagina.",
+        "previewPlans": "Abonnementenpagina bekijken",
+        "readOnly": "Alleen een superbeheerder kan de factureringsinstellingen wijzigen.",
+        "conflict": "Iemand anders heeft deze instellingen gewijzigd. Ze zijn opnieuw geladen; controleer ze en sla opnieuw op.",
+        "saved": "Factureringsinstellingen opgeslagen.",
+        "save": "Instellingen opslaan",
+        "tax": {
+          "title": "Belasting",
+          "hint": "Wordt op elk checkoutsubtotaal toegepast. Schakel uit als de getoonde prijzen belasting inbegrepen zijn.",
+          "rate": "Tarief (%)",
+          "label": "Label",
+          "labelPlaceholder": "GST / btw / verkoopbelasting"
+        },
+        "company": {
+          "title": "Bedrijfs- en factureringsgegevens",
+          "hint": "Je juridische gegevens. Deze worden op elke factuur afgedrukt: het blok \"factuur van\", het belastingnummer en de voettekst.",
+          "name": "Wettelijke bedrijfsnaam",
+          "taxId": "Belastingnummer (GSTIN / btw)",
+          "address": "Geregistreerd adres",
+          "regNo": "Registratie- / CIN-nr.",
+          "email": "Factureringse-mail",
+          "phone": "Supporttelefoon"
+        },
+        "logo": {
+          "title": "Factuurlogo",
+          "hint": "Wordt bovenaan elke factuur en bon getoond. PNG, JPG, SVG of WebP, tot {kb} KB. Laat leeg om je sitelogo te gebruiken.",
+          "none": "Geen logo",
+          "choose": "Kies een logobestand",
+          "remove": "Huidig logo verwijderen (terugvallen op sitelogo)",
+          "fallback": "Momenteel wordt het sitelogo als terugvaloptie gebruikt.",
+          "tooBig": "Het logo mag maximaal {kb} KB zijn."
+        },
+        "refund": {
+          "title": "Geld-terugkomgarantie",
+          "hint": "Wanneer ingeschakeld, toont de checkout de garantietermijn onder het besteloverzicht. Schakel uit om deze overal te verbergen.",
+          "days": "Termijn (dagen)"
+        },
+        "yearly": {
+          "title": "Schakelaar jaarlijkse facturering",
+          "hint": "Toont de schakelaar Maandelijks / Jaarlijks op de prijspagina. Verberg hem volledig als elk abonnement alleen maandelijks is.",
+          "discount": "Jaarkorting (%)",
+          "formula": "Jaarprijs = maandprijs × 12 × (1 − korting%)."
+        },
+        "recurring": {
+          "title": "Automatisch verlengende abonnementen",
+          "hint": "Wanneer ingeschakeld, worden betaalde abonnementen met een looptijd (maandelijks of jaarlijks) automatisch verlengd: de betaalprovider belast de kaart elke cyclus en de geldigheid van het abonnement wordt vanzelf verlengd. Gratis, levenslange en offerte-abonnementen worden nooit verlengd, en een betaalprovider zonder ondersteuning voor terugkerende betalingen blijft een eenmalige betaling. Schakel dit uit om elke aankoop eenmalig te factureren.",
+          "graceDays": "Coulanceperiode (dagen)",
+          "graceHint": "Wanneer een automatische verlenging mislukt, blijft het abonnement of de add-on dit aantal dagen na het einde van de periode actief terwijl de betaalprovider het opnieuw probeert. 0 schakelt de coulanceperiode uit.",
+          "gateways": "Betaalproviders die automatisch verlengen ondersteunen",
+          "note": "Braintree verlengt pas automatisch wanneer je een Plan-ID instelt in de inloggegevens van de betaalprovider. Square factureert elke cyclus door de klant een factuur per e-mail te sturen (geen stille kaartafschrijving). Elke verlenging heeft de webhook-URL van de betaalprovider nodig, ingesteld in het dashboard van de provider."
+        },
+        "countries": {
+          "title": "Landenlijst checkout",
+          "hint": "De opties in de landenkiezer van het factureringsformulier van de checkout, gebruikt voor het factuuradres. Één land per regel; de volgorde blijft behouden."
+        },
+        "links": {
+          "coupons": "Kortingscodes",
+          "couponsTitle": "Kortingscodes beheren",
+          "couponsHint": "Voeg kortingscodes toe, bewerk ze of schakel ze uit.",
+          "faqs": "FAQ's",
+          "faqsTitle": "Prijspagina-FAQ's bewerken",
+          "faqsHint": "Accordionitems die onder de abonnementen worden getoond.",
+          "configured": "{count} ingesteld."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Checkout / bankoverschrijving",
+        "offline": "Afrekenen / offline"
+      },
+      "title": {
+        "bank_transfer": "Betaling overmaken",
+        "offline": "Neem contact met ons op om deze bestelling af te ronden"
+      },
+      "intro": {
+        "bank_transfer": "Stuur <strong>{amount}</strong> naar onderstaande rekening. Gebruik <mono>{ref}</mono> als referentie, zodat we de betaling aan je bestelling kunnen koppelen.",
+        "offline": "Bestelling <mono>{ref}</mono> · <strong>{amount}</strong> · gefactureerd in {currency}"
+      },
+      "instructions": "Instructies",
+      "referenceNote": "<strong>Referentie:</strong> vermeld <mono>{ref}</mono> bij de overboeking en dien daarna hieronder je betalingsbewijs in. Je abonnement wordt geactiveerd zodra ons team de betaling heeft geverifieerd.",
+      "proofTitle": "Betalingsbewijs indienen",
+      "proofHelp": "Al betaald? Upload je bon en referentie, zodat we de betaling kunnen verifiëren en je abonnement kunnen activeren.",
+      "later": {
+        "bank_transfer": "Ik heb de betaling verstuurd, bewijs later indienen",
+        "offline": "Begrepen, ik dien het bewijs later in"
+      }
+    },
+    "proof": {
+      "file": "Screenshot / bon van betaling",
+      "fileHint": "JPG, PNG, WEBP of PDF · maximaal 4 MB",
+      "reference": "Referentie- / UTR-nummer",
+      "referencePlaceholder": "bijv. UTR / transactie-id",
+      "note": "Notitie (optioneel)",
+      "notePlaceholder": "Alles wat we over deze betaling moeten weten",
+      "submit": "Betalingsbewijs indienen",
+      "sending": "Uploaden",
+      "chooseFile": "Kies een bon om te uploaden.",
+      "tooLarge": "Dit bestand is groter dan 4 MB.",
+      "rejected": "Dit bestandstype is niet toegestaan. Gebruik een JPG, PNG, WEBP of PDF.",
+      "closed": "Voor deze bestelling kan geen betalingsbewijs meer worden ingediend.",
+      "failed": "Het bestand kon niet worden geüpload. Probeer het opnieuw."
+    }
+  }
+}

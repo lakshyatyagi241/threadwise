@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Roller ve izinler",
+      "roles": "Roller",
+      "permissions": "İzinler",
+      "staff": "Personel rolleri"
+    },
+    "common": {
+      "admin": "Yönetici",
+      "breadcrumb": "Gezinti yolu",
+      "loading": "Yükleniyor…",
+      "retry": "Tekrar dene",
+      "requestId": "İstek kimliği",
+      "cancel": "İptal",
+      "noAccess": {
+        "title": "Bu ekrana erişiminiz yok",
+        "body": "Rolleriniz bu ekranın ihtiyaç duyduğu platform iznini içermiyor. Bir Süper Yöneticiden bu izni vermesini isteyin.",
+        "bodyWithKey": "Bu ekran {permission} platform iznini gerektiriyor. Bir Süper Yöneticiden bu izni rollerinizden birine eklemesini isteyin.",
+        "back": "Konsola dön"
+      },
+      "errors": {
+        "unexpected": "Tarafımızda bir sorun oluştu. Tekrar deneyin; sorun devam ederse istek kimliğini belirtin.",
+        "request": "İstek tamamlanamadı.",
+        "validation": "Formu kontrol edip tekrar deneyin.",
+        "validationField": "{message}",
+        "conflict": "Siz düzenlerken başka biri bu rolü değiştirdi. Onun sürümünü görmek için yeniden yükleyin, ardından değişikliklerinizi yeniden uygulayın.",
+        "noAccess": "Bunun için {permission} platform iznine ihtiyacınız var.",
+        "nameTaken": "Bu ad zaten kullanılıyor.",
+        "nameRequired": "Rol adı zorunludur.",
+        "permissionNameRequired": "İzin adı zorunludur.",
+        "permissionNameFormat": "Küçük harf, rakam ve alt çizgi kullanın; bölümler arasına nokta koyun.",
+        "locked": "Süper Yönetici sistem tarafından kilitlidir: adı değiştirilemez, izinleri alınamaz veya silinemez.",
+        "lockedDelete": "Süper Yönetici rolü sistem tarafından kilitlidir ve silinemez.",
+        "permissionSystem": "Bu izin platform tarafından denetlenir ve silinemez.",
+        "permissionUnknown": "Bu izinler kataloğda yok: {names}.",
+        "reassignSame": "Kullanıcıları taşıyacağınız farklı bir rol seçin.",
+        "lastSuperAdmin": "En az bir etkin Süper Yönetici olmalıdır.",
+        "privilegedRole": "Süper Yönetici rolünü yalnızca bir Süper Yönetici verebilir veya geri alabilir.",
+        "notFound": "Bu öğe artık mevcut değil. Silinmiş olabilir."
+      }
+    },
+    "list": {
+      "crumb": "Roller",
+      "eyebrow": "Yönetici · Kullanıcılar ve erişim · Roller",
+      "titleLead": "Roller ve",
+      "titleAccent": "izinler",
+      "description": "Her rolün platform genelinde neler yapabileceğini tanımlayın. Her kullanıcıya bir rol atanır; izinler role göre gruplanır.",
+      "managePermissions": "İzinleri yönet",
+      "addRole": "Rol ekle",
+      "kpi": {
+        "label": "Rol toplamları",
+        "total": "Toplam rol",
+        "totalHint": "{system} sistem · {custom} özel",
+        "permissions": "Toplam izin",
+        "permissionsHint": "modüller genelinde",
+        "users": "Role sahip kullanıcılar",
+        "usersHint": "tüm roller genelinde",
+        "noUsers": "Kullanıcısı olmayan roller",
+        "noUsersHint": "arşivlemeyi düşünün"
+      },
+      "filter": {
+        "label": "Rolleri türe göre filtrele",
+        "all": "Tümü",
+        "system": "Sistem",
+        "custom": "Özel",
+        "search": "Rollerde ara…",
+        "searchLabel": "Rollerde ara"
+      },
+      "table": {
+        "caption": "Platform rolleri",
+        "index": "#",
+        "name": "Rol adı",
+        "type": "Tür",
+        "users": "Kullanıcılar",
+        "permissions": "İzinler",
+        "lastEdited": "Son düzenleme",
+        "actions": "İşlemler"
+      },
+      "systemRole": "Sistem rolü",
+      "customRole": "Özel rol",
+      "systemBadge": "Sistem",
+      "customBadge": "Özel",
+      "row": {
+        "menu": "{name} için işlemler",
+        "edit": "Rolü düzenle",
+        "delete": "Sil"
+      },
+      "footer": {
+        "showing": "{total} rolden {shown} gösteriliyor",
+        "add": "+ Rol ekle"
+      },
+      "empty": {
+        "none": "Henüz rol tanımlanmadı. <link>İlk rolü oluşturun</link>.",
+        "noMatch": "Filtrelerinizle eşleşen rol yok.",
+        "clear": "Filtreleri temizle"
+      },
+      "delete": {
+        "title": "Rolü sil",
+        "message": "{name} rolü silinsin mi? Bu role atanmış kullanıcılar tüm izinlerini kaybeder. Bu işlem geri alınamaz.",
+        "confirm": "Evet, sil",
+        "cancel": "İptal"
+      },
+      "toasts": {
+        "deleted": "“{name}” rolü silindi."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Roller",
+      "crumbNew": "Yeni",
+      "eyebrowNew": "Yönetici · Roller · Yeni",
+      "eyebrowEdit": "Yönetici · Rol düzenleniyor",
+      "titleLead": "Yeni bir",
+      "titleAccent": "rol oluşturun",
+      "description": "Bir ad seçin, ardından bu rolün belirli modüllere erişmesi için kutuları işaretleyin. Bunu istediğiniz zaman düzenleyebilirsiniz.",
+      "summary": "{count} / {total} izin · son düzenleme {date}.",
+      "userChip": "{count, plural, other {# kullanıcı}}",
+      "save": "Değişiklikleri kaydet",
+      "create": "Rol oluştur",
+      "saving": "Kaydediliyor…",
+      "reload": "Rolü yeniden yükle",
+      "discard": "Kaydedilmemiş değişiklikleriniz var. Kaydetmeden ayrılmak istiyor musunuz?",
+      "duplicatedBanner": "Rol “{name}” adıyla çoğaltıldı. Aşağıdaki kopyayı düzenleyin.",
+      "lockedNotice": "{name} sistem tarafından kilitlidir: adı değiştirilemez, izinleri alınamaz veya silinemez.",
+      "details": "Rol ayrıntıları",
+      "name": "Rol adı",
+      "namePlaceholder": "örn. Satış lideri",
+      "template": "Şablondan başla",
+      "templateBlank": "Boş · izin yok",
+      "templateOption": "{name} · {count, plural, other {# izin}}",
+      "templateBusy": "Şablon yükleniyor…",
+      "descriptionLabel": "Açıklama",
+      "descriptionPlaceholder": "Bu rol ne yapar? Yöneticiler tarafından görülebilir.",
+      "toasts": {
+        "created": "“{name}” rolü oluşturuldu.",
+        "updated": "“{name}” rolü güncellendi."
+      }
+    },
+    "matrix": {
+      "title": "İzin ata",
+      "counter": "{count, number} / {total, number} seçildi",
+      "selectAll": "Tüm izinleri seç",
+      "module": "Modül",
+      "selectAllColumn": "Tümünü seç",
+      "available": "Kullanılabilir izinler",
+      "selectAllModule": "Tümünü seç",
+      "selectAllOf": "Tüm {module} izinlerini seç",
+      "empty": "Henüz izin tanımlanmadı. <link>Bir tane oluşturun</link>.",
+      "emptyPlain": "Henüz izin tanımlanmadı."
+    },
+    "dangerZone": {
+      "title": "Tehlikeli bölge",
+      "irreversible": "geri alınamaz",
+      "duplicate": {
+        "title": "Rolü çoğalt",
+        "hint": "Aynı izinlerle bir kopya oluşturun",
+        "action": "Çoğalt",
+        "busy": "Çoğaltılıyor…"
+      },
+      "reassign": {
+        "title": "Tüm kullanıcıları yeniden ata",
+        "hint": "{count, plural, other {# kullanıcıyı}} başka bir role taşıyın",
+        "targetLabel": "Kullanıcıları şuraya taşı",
+        "placeholder": "Hedef…",
+        "action": "Taşı",
+        "busy": "Taşınıyor…"
+      },
+      "moved": "{count} kullanıcı “{from}” rolünden “{to}” rolüne taşındı.",
+      "delete": {
+        "title": "Rolü sil",
+        "hint": "Rolü kaldırır ve tüm kullanıcıların bağlantısını koparır.",
+        "action": "Sil",
+        "dialogTitle": "Rolü sil",
+        "dialogMessage": "{name} rolü silinsin mi? Bu role atanmış kullanıcılar tüm izinlerini kaybeder. Bu işlem geri alınamaz.",
+        "confirm": "Evet, sil",
+        "cancel": "İptal"
+      },
+      "deleted": "“{name}” rolü silindi."
+    },
+    "permissions": {
+      "crumb": "İzinler",
+      "eyebrow": "Yönetici · Kullanıcılar ve erişim · İzinler",
+      "titleLead": "Tümü",
+      "titleAccent": "izin",
+      "description": "Platformun tanıdığı tüm izin işaretleri modüllere göre gruplanır. Buraya yeni bir işaret ekleyin, ardından rol düzenleyicide rollere bağlayın.",
+      "backToRoles": "Rollere dön",
+      "add": "İzin ekle",
+      "kpi": {
+        "label": "İzin toplamları",
+        "total": "Toplam izin",
+        "totalHint": "{modules, plural, other {# modül}} genelinde",
+        "used": "Rollerde kullanılan",
+        "usedHint": "en az 1 role bağlı",
+        "orphans": "Sahipsiz izinler",
+        "orphansHint": "hiçbir role bağlı değil",
+        "last": "Son eklenen"
+      },
+      "filter": {
+        "search": "İzin adında ara…",
+        "searchLabel": "İzin adında ara",
+        "moduleLabel": "Modül",
+        "allModules": "Tüm modüller",
+        "count": "{modules, plural, other {# modülde}} {count, plural, other {# izin}}"
+      },
+      "groupsLabel": "Modüle göre izinler",
+      "groupCount": "{count, plural, other {# izin}}",
+      "orphan": "sahipsiz",
+      "system": "sistem",
+      "systemHint": "Platform tarafından denetlendiği için silinemez.",
+      "inRoles": "{count, plural, other {# rolde}}",
+      "deleteName": "{name} iznini sil",
+      "empty": {
+        "none": "Henüz izin tanımlanmadı. <link>İlkini oluşturun</link>.",
+        "noMatch": "Aramanızla eşleşen izin yok."
+      },
+      "delete": {
+        "action": "Sil",
+        "title": "İzni sil",
+        "message": "{name} izni silinsin mi? Bunu kullanan roller bu yetkiyi hemen kaybeder.",
+        "confirm": "Evet, sil",
+        "cancel": "İptal"
+      },
+      "toasts": {
+        "deleted": "“{name}” izni silindi."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "İzinler",
+      "crumbNew": "Yeni",
+      "eyebrow": "Yönetici · İzinler · Yeni",
+      "titleLead": "Yeni bir",
+      "titleAccent": "izin oluşturun",
+      "description": "Ayrıntılı bir yetki işareti ekleyin. Oluşturduktan sonra rol düzenleyicide bir veya daha fazla role bağlayın.",
+      "create": "İzin oluştur",
+      "creating": "Oluşturuluyor…",
+      "details": "İzin ayrıntıları",
+      "module": "Modül",
+      "modulePlaceholder": "Bir modül seçin",
+      "moduleHint": "İzinler rol düzenleyicide modüle göre gruplanır.",
+      "action": "Eylem",
+      "actionHint": "Küçük harf, boşluk yok. Şu biçimde birleştirilir:",
+      "actionPlaceholder": "örn. export · refund · approve",
+      "name": "İzin adı",
+      "namePlaceholder": "modül.eylem — yukarıdan otomatik doldurulur",
+      "nameHint": "Modül ve eylemden otomatik doldurulur. Yalnızca özel bir metin gerekiyorsa düzenleyin.",
+      "tip": "<b>Adlandırma kuralı:</b> küçük harflerle <code>modül.eylem</code> kullanın. Örnekler: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "İzin önizlemesi",
+        "appearsUnder": "Rol düzenleyicide <b>{module}</b> altında görünecek.",
+        "selectedModule": "seçilen modül"
+      },
+      "code": {
+        "title": "Kod başvurusu",
+        "hint": "Bu izni zorunlu kılmak için bir platform rotasında <code>@PlatformPermission()</code> kullanın."
+      },
+      "tipCard": "<b>İpucu:</b> <code>modül.eylem</code> biçiminde adlandırılan izinler rol düzenleyicide otomatik olarak birlikte gruplanır.",
+      "toasts": {
+        "created": "“{name}” izni oluşturuldu."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Roller",
+      "crumb": "Personel rolleri",
+      "eyebrow": "Yönetici · Kullanıcılar ve erişim · Personel rolleri",
+      "titleLead": "Personel",
+      "titleAccent": "rol",
+      "description": "Bu konsolun her operatörüne, neler yapabileceğini belirleyen platform rollerini verin. Kaydetmek, operatörün rollerini yalnızca işaretlenenlerle değiştirir.",
+      "backToRoles": "Rollere dön",
+      "caption": "Operatörler ve platform rolleri",
+      "table": {
+        "operator": "Operatör",
+        "tier": "Konsol erişimi",
+        "status": "Durum",
+        "roles": "Platform rolleri",
+        "actions": "İşlemler"
+      },
+      "tier": {
+        "super_admin": "Süper yönetici",
+        "support": "Destek",
+        "auditor": "Denetçi"
+      },
+      "status": {
+        "active": "Etkin",
+        "suspended": "Askıda"
+      },
+      "noRoles": "Rol yok",
+      "rolesOf": "{name} kişisinin rolleri",
+      "assign": "Rol ata",
+      "assignFor": "{name} kişisine rol ata",
+      "empty": "Henüz operatör yok.",
+      "dialog": {
+        "title": "{name} kişisine rol ata",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "save": "Rolleri kaydet",
+        "saving": "Kaydediliyor…",
+        "hint": "Bu operatörün sahip olması gereken tüm rolleri işaretleyin.",
+        "superOnly": "Bu rolü yalnızca bir Süper Yönetici verebilir veya geri alabilir.",
+        "count": "{count, plural, =0 {Rol seçilmedi} other {# rol seçildi}}"
+      },
+      "toasts": {
+        "saved": "“{name}” için roller güncellendi."
+      }
+    }
+  }
+}

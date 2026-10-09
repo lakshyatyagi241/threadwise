@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "הזמנות",
+      "coupons": "קופונים"
+    },
+    "settingsTile": {
+      "label": "שערי תשלום",
+      "description": "שער התשלום האחד שהקופה של החנות וחשבוניות המכירות שלך משתמשים בו לקבלת תשלומים אונליין.",
+      "keywords": "שער תשלום, razorpay, stripe, קופה, קישור תשלום, תשלום אונליין, כרטיס, upi"
+    },
+    "common": {
+      "noAccessTitle": "אין לך גישה לעמוד זה",
+      "noAccessMessage": "בקש ממנהל סביבת העבודה לתת לתפקיד שלך את ההרשאה לכך.",
+      "loading": "טוען",
+      "loadMore": "טען עוד",
+      "cancel": "ביטול",
+      "close": "סגור",
+      "save": "שמור",
+      "saving": "שומר",
+      "edit": "עריכה",
+      "delete": "מחק",
+      "remove": "הסר",
+      "open": "פתח",
+      "view": "הצג",
+      "search": "חיפוש",
+      "clear": "נקה",
+      "all": "הכול",
+      "no": "לא",
+      "none": "ללא",
+      "actions": "פעולות",
+      "retry": "נסה שוב",
+      "dismiss": "סגור",
+      "copy": "העתק",
+      "copied": "הועתק",
+      "viewContact": "הצג איש קשר",
+      "allShops": "כל החנויות",
+      "shop": "חנות"
+    },
+    "status": {
+      "new": "חדש",
+      "pending": "ממתין",
+      "confirmed": "אושר",
+      "paid": "שולם",
+      "processing": "בעיבוד",
+      "completed": "הושלם",
+      "shipped": "נשלח",
+      "cancelled": "בוטל"
+    },
+    "paymentStatus": {
+      "paid": "שולם",
+      "awaiting": "ממתין לתשלום",
+      "cod": "מזומן במשלוח",
+      "unpaid": "לא שולם"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "חזית חנות",
+      "twilio": "Twilio",
+      "manual": "ידני",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "מזהה בקשה",
+      "retry": "נסה שוב",
+      "network": {
+        "title": "לא ניתן להגיע לשרת",
+        "message": "בדוק את החיבור ונסה שוב."
+      },
+      "forbidden": {
+        "title": "אסור",
+        "message": "התפקיד שלך אינו מאפשר זאת."
+      },
+      "signedOut": {
+        "title": "התנתקת",
+        "message": "התחבר שוב כדי להמשיך."
+      },
+      "conflict": {
+        "title": "שונה על ידי מישהו אחר",
+        "message": "רשומה זו השתנתה בזמן שהיא הייתה פתוחה אצלך. טען אותה מחדש ונסה שוב."
+      },
+      "validation": {
+        "title": "בדוק את הטופס",
+        "message": "חלק מהערכים אינם תקינים. בדוק את השדות המסומנים."
+      },
+      "unavailable": {
+        "title": "עדיין לא זמין",
+        "message": "חלק זה של החנות עדיין אינו זמין בשרת זה."
+      },
+      "rateLimited": {
+        "title": "יותר מדי בקשות",
+        "message": "המתן רגע ונסה שוב."
+      },
+      "notFound": {
+        "title": "לא נמצא",
+        "message": "הוא הוסר או שמעולם לא היה קיים."
+      },
+      "planLocked": {
+        "title": "לא בחבילה שלך",
+        "message": "החבילה שלך אינה כוללת את החנות. שדרג כדי להשתמש בה."
+      },
+      "couponCodeTaken": {
+        "title": "הקוד כבר בשימוש",
+        "message": "קופון אחר כבר משתמש בקוד זה. בחר קוד אחר."
+      },
+      "groupCodeTaken": {
+        "title": "הקוד כבר בשימוש",
+        "message": "קבוצה אחרת כבר משתמשת בקוד הזמנה זה."
+      },
+      "orderNoPhone": {
+        "title": "אין מספר טלפון",
+        "message": "להזמנה זו אין מספר טלפון של הקונה, ולכן לא ניתן לשלוח דבר."
+      },
+      "gatewayNotConfigured": {
+        "title": "לא הוגדר שער תשלום",
+        "message": "הגדר קודם שער תשלום. המפתחות שלו חסרים או שהוא כבוי."
+      },
+      "gatewayUnavailable": {
+        "title": "שער התשלום אינו זמין",
+        "message": "שער זה אינו יכול ליצור קישור תשלום שקונה יכול לפתוח."
+      },
+      "paymentLinkFailed": {
+        "title": "שער התשלום דחה את הקישור",
+        "message": "בדוק את המפתחות ושהסכום גבוה ממינימום השער."
+      },
+      "unexpected": {
+        "title": "משהו השתבש",
+        "message": "נסה שוב. אם זה ממשיך לקרות, שתף את מזהה הבקשה עם התמיכה."
+      }
+    }
+  }
+}

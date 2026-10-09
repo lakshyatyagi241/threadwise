@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Harcamalar, cüzdan ve ekstre",
+      "description": "Ne harcadığınızı takip edin: mesaj bakiyeniz, yüklemeleriniz, her ücret ve tam ekstreniz.",
+      "keywords": "cüzdan bakiye yükle para ekle kredi ekstre fatura harcama gider harcamalar ücretler maliyet kullanım işlemler geçmiş defter"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Yeniden dene",
+      "requestId": "İstek kimliği",
+      "cancel": "İptal",
+      "back": "Geri",
+      "close": "Kapat",
+      "dismiss": "Kapat",
+      "on": "Açık",
+      "off": "Kapalı",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "pagination": "Sayfalama",
+      "pageN": "Sayfa {page}",
+      "deniedTitle": "Buna erişiminiz yok",
+      "deniedBody": "Çalışma alanı yöneticisinden \"{permission}\" iznini isteyin."
+    },
+    "errors": {
+      "noteRequired": "En az 5 karakterlik bir neden gerekli.",
+      "amountInvalid": "Bu tutar kabul edilmiyor. En fazla 2 ondalık basamaklı pozitif bir tutar kullanın.",
+      "insufficient": "Bu işlem için bakiye yetersiz.",
+      "notFound": "Bu çalışma alanının cüzdanı yok.",
+      "rateInvalid": "Ücret kaydedilemedi. Ülke, kategori ve tutarları kontrol edin.",
+      "importFailed": "Ücret tablosu okunamadı veya kullanılabilir satırı yok.",
+      "syncFailed": "Meta fiyat listesi okunamadı ve birlikte gelen bir tablo da yok.",
+      "conflict": "Bunu başka biri değiştirdi. Yenileyip yeniden deneyin.",
+      "forbidden": "Bunu yalnızca süper yöneticiler yapabilir.",
+      "validation": "Vurgulanan alanları kontrol edin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "generic": "Bir sorun oluştu. Yeniden deneyin.",
+      "currencyUnsupported": "Bu para birimi henüz kullanılamaz: Önce bunun için Meta ücret tablosunu içe aktarın (Mesaj fiyatlandırması, Meta ücret tabloları)."
+    },
+    "types": {
+      "topup": "Yükleme",
+      "earn": "Kazanç",
+      "refund": "İade",
+      "spend": "Mesaj ücreti",
+      "admin_adjust": "Düzeltme"
+    },
+    "categories": {
+      "marketing": "Pazarlama",
+      "utility": "Hizmet",
+      "authentication": "Kimlik doğrulama",
+      "service": "Hizmet"
+    },
+    "modes": {
+      "wallet": "Mesaj başına ödeme",
+      "plan": "Plan"
+    },
+    "chip": {
+      "balance": "Bakiye",
+      "low": "Bakiyeniz düşük"
+    },
+    "wallet": {
+      "title": "Cüzdan",
+      "subtitle": "Mesaj bakiyeniz, son 30 günde harcadığınız ve kazandığınız tutarlar ve para ekleme yolları.",
+      "fullStatement": "Tam ekstre",
+      "lowBalanceTitle": "Bakiyeniz azalıyor",
+      "lowBalanceBody": "{threshold} seviyesinde veya altında. Kampanyalarınızın ve yanıtlarınızın gönderilmeye devam etmesi için para ekleyin.",
+      "kpi": {
+        "balance": "Bakiye",
+        "available": "Şu anda kullanılabilir",
+        "approx": "yaklaşık {count, plural, other {# mesaj}}",
+        "spent": "Harcanan",
+        "earned": "Kazanılan",
+        "last30": "Son 30 gün"
+      },
+      "add": {
+        "title": "Para ekle",
+        "amount": "Tutar",
+        "hint": "Yalnızca tam tutarlar, en az 1.",
+        "invalid": "1 veya daha büyük bir tam tutar girin.",
+        "submit": "Para ekle",
+        "quick": "Hızlı tutarlar"
+      },
+      "how": {
+        "title": "Faturalandırma nasıl işler",
+        "wallet": {
+          "body": "Teslim edilen her mesaj, ülke ve kategorisine göre belirlenen fiyatla cüzdanınızdan ücretlendirilir. Başarısız mesajlardan ücret alınmaz.",
+          "funded": "Bakiye bittiğinde, para ekleyene kadar toplu gönderimler duraklatılır."
+        },
+        "plan": {
+          "allowance": "Planınız her ay {limit} mesaj içerir.",
+          "used": "Bu ay {used} kullanıldı.",
+          "ends": "Planınız {date} tarihinde sona erer.",
+          "extra": "Aylık kotayı aşan mesajlar cüzdanınızdan ücretlendirilir.",
+          "ended": "Planınız sona erdi; yenilenene kadar gönderim duraklatıldı."
+        },
+        "generic": "Mesajlarınız planınız kapsamındadır. Planın kapsamadığı her şey cüzdanınızdan ödenir."
+      },
+      "activity": {
+        "title": "Son etkinlik",
+        "fullStatement": "Tam ekstreyi aç",
+        "emptyTitle": "Henüz etkinlik yok",
+        "emptyBody": "Yüklemeler, mesaj ücretleri ve iadeler burada görünür."
+      }
+    },
+    "activity": {
+      "description": "Açıklama",
+      "type": "Tür",
+      "date": "Tarih",
+      "amount": "Tutar",
+      "balance": "Bakiye",
+      "noDescription": "Cüzdan hareketi",
+      "reason": "Neden"
+    },
+    "pricingPanel": {
+      "title": "Mesaj fiyatlandırması",
+      "badge": "Mesaj başına",
+      "free": "Ücretsiz",
+      "noCharge": "Ücret yok",
+      "perMessage": "mesaj başına",
+      "footer": "Mesaj teslim edildiğinde ücretlendirilir. Fiyat, alıcının ülkesine ve mesaj kategorisine göre değişir."
+    },
+    "statement": {
+      "title": "Cüzdan ekstresi",
+      "subtitle": "Cüzdanınızdaki tüm hareketler. Toplamlar yalnızca bu sayfayı değil, filtrelerle eşleşen tüm kayıtları kapsar.",
+      "back": "Cüzdana dön",
+      "breadcrumbLabel": "Gezinti yolu",
+      "breadcrumbWallet": "Cüzdan",
+      "breadcrumbStatement": "Hesap özeti",
+      "export": "CSV olarak dışa aktar",
+      "exporting": "Dışa aktarılıyor",
+      "exported": "{fileName} kaydedildi",
+      "emptyTitle": "İşlem yok",
+      "emptyFiltered": "Bu filtrelerle eşleşen kayıt yok. Filtreleri değiştirin veya sıfırlayın.",
+      "emptyNone": "Cüzdanınızdaki hareketler burada listelenecek.",
+      "filters": {
+        "type": "Tür",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "rangeInverted": "Bitiş tarihi, başlangıç tarihinden önce.",
+        "search": "Ara",
+        "searchPlaceholder": "Açıklama veya neden",
+        "apply": "Uygula",
+        "reset": "Sıfırla"
+      },
+      "typeFilter": {
+        "all": "Tümü",
+        "topup": "Bakiye yüklemeleri",
+        "earn": "Kazançlar",
+        "spend": "Mesaj ücretleri",
+        "refund": "İadeler",
+        "admin_adjust": "Düzeltmeler"
+      },
+      "summary": {
+        "balance": "Mevcut bakiye",
+        "in": "Gelen tutar",
+        "out": "Çıkan tutar",
+        "net": "Net hareket",
+        "count": "{count, plural, other {# işlem}}"
+      },
+      "columns": {
+        "label": "Cüzdan hesap özeti",
+        "date": "Tarih",
+        "description": "Açıklama",
+        "type": "Tür",
+        "in": "Gelen tutar",
+        "out": "Çıkan tutar",
+        "balance": "Bakiye",
+        "none": "Yok"
+      },
+      "context": {
+        "reason": "Neden",
+        "to": "Alıcı",
+        "template": "Şablon"
+      },
+      "channels": {
+        "campaign": "Kampanya",
+        "broadcast": "Toplu gönderim",
+        "flow": "Akış",
+        "scheduled": "Zamanlanmış",
+        "auto_reply": "Otomatik yanıt",
+        "chat": "Sohbet",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Yönetici",
+      "wallet": "Cüzdan",
+      "workspacesLabel": "Çalışma alanları",
+      "breadcrumb": "Gezinti yolu",
+      "readOnly": "{role} olarak oturum açtınız. Cüzdan ayarlarını, fiyatları veya bakiyeleri yalnızca süper yöneticiler değiştirebilir.",
+      "nav": {
+        "overview": "Cüzdan",
+        "pricing": "Mesaj fiyatlandırması",
+        "workspaces": "Çalışma alanı cüzdanları",
+        "logs": "Cüzdan günlükleri",
+        "margins": "Marjlar",
+        "packages": "Kredi paketleri"
+      },
+      "overview": {
+        "title": "Cüzdan genel bakış",
+        "subtitle": "Çalışma alanı cüzdanlarında tutulan para ve son 30 günün hareketleri.",
+        "linkWorkspaces": "Çalışma alanı cüzdanları",
+        "linkPricing": "Mesaj fiyatlandırması",
+        "linkLogs": "Cüzdan günlükleri",
+        "float": "Cüzdan bakiyesi toplamı",
+        "floatHint": "Tüm çalışma alanlarında tutulan",
+        "holding": "Bakiyesi olan çalışma alanları",
+        "low": "Düşük bakiye",
+        "last30": "Son 30 gün",
+        "toppedUp": "Bakiye yüklendi",
+        "charged": "Ücretlendirildi",
+        "refunded": "İade edildi",
+        "adjustedIn": "Elle eklendi",
+        "adjustedOut": "Elle düşüldü",
+        "chargedMessages": "Ücretli mesajlar",
+        "freeMessages": "Ücretsiz mesajlar",
+        "reconcile": {
+          "title": "Bakiyeleri defterlerle karşılaştır",
+          "body": "Her cüzdanı defterinden yeniden hesaplar ve defterle eşleşmeyen bakiyeleri listeler.",
+          "button": "Bakiyeleri defterlerle karşılaştır",
+          "running": "Kontrol ediliyor",
+          "ok": "{count, plural, other {# cüzdanın tamamı defteriyle eşleşiyor.}}",
+          "mismatches": "{checked} cüzdandan {count} tanesi defteriyle eşleşmiyor.",
+          "workspace": "Çalışma alanı",
+          "balance": "Bakiye",
+          "ledger": "Defter",
+          "difference": "Fark"
+        },
+        "otherCurrencies": "Diğer para birimlerindeki cüzdanlar",
+        "otherCurrenciesNote": "Başka bir para biriminde faturalandırılan çalışma alanları o para birimindeki tutarı tutar. Yukarıdaki rakamlar yalnızca {currency} içindir; diğer her para birimi kendi satırında sayılır.",
+        "other": {
+          "currency": "Para birimi",
+          "float": "Tutulan tutar",
+          "holding": "Bakiyesi olan çalışma alanları",
+          "toppedUp": "Bakiye yüklendi, 30 gün",
+          "charged": "Ücretlendirildi, 30 gün"
+        }
+      },
+      "pricing": {
+        "title": "Mesaj fiyatlandırması",
+        "crumb": "Mesaj fiyatlandırması",
+        "subtitle": "Bir mesajın müşterilerinize maliyeti, yeni cüzdanların nasıl korunduğu ve ülke bazında fiyat tablosu.",
+        "kpi": {
+          "signup": "Referans ödülü",
+          "cost": "Mesaj başına maliyet",
+          "costHint": "Ülke bazlı fiyatlandırma kapalıyken sabit fiyat",
+          "spending": "Gerçek harcama",
+          "spendingHint": "{amount} tutarının sabit fiyatla karşılayacağı mesajlar",
+          "lowBalance": "Düşük bakiye uyarısı"
+        },
+        "economics": {
+          "title": "Ekonomi",
+          "liveKeys": "Hemen geçerli olur",
+          "flatPrice": "Mesaj başına sabit fiyat",
+          "flatPriceHint": "En az 0,01. Ücretsiz mesajlar için fiyat tablosunu kullanın.",
+          "referralSignup": "Referans ödülü",
+          "referralSignupHint": "Davet edenin, davet edilenin ilk ücretli siparişinde kazandığı ödül.",
+          "lowBalance": "Düşük bakiye uyarı eşiği",
+          "lowBalanceHint": "Bu bakiyeye eşit veya bu bakiyenin altındaki çalışma alanları uyarılır.",
+          "coverage": "Başlatma kapsamı",
+          "coverageHint": "Toplu gönderim, cüzdanın tahmini maliyetinin bu oranını karşılamadıkça reddedilir. 0 yalnızca boş cüzdanı reddeder.",
+          "rewardSentence": "{reward} tutarındaki ödül, sabit fiyatla {count, plural, other {# mesajın}} bedelini öder.",
+          "save": "Ekonomi ayarlarını kaydet",
+          "saving": "Kaydediliyor",
+          "saved": "Ekonomi ayarları kaydedildi.",
+          "problems": {
+            "invalid": "En fazla 2 ondalık basamaklı bir tutar girin.",
+            "flatZero": "Sabit fiyat 0 olamaz.",
+            "percent": "0 ile 100 arasında bir tam sayı girin."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Ülke bazlı fiyatlandırma",
+            "on": "Açık: her mesaj, fiyat tablosundaki alıcının ülkesine ve kategorisine göre ücretlendirilir.",
+            "off": "Kapalı: her mesaj sabit fiyatla ücretlendirilir.",
+            "save": "Kaydet",
+            "confirmTitle": "Ülke bazlı fiyatlandırma değiştirilsin mi?",
+            "confirmOn": "Mesajlar, bir sonraki gönderimden itibaren ülke ve kategoriye göre ücretlendirilecek.",
+            "confirmOff": "Mesajlar, bir sonraki gönderimden itibaren sabit fiyatla ücretlendirilecek.",
+            "confirm": "Evet, değiştir",
+            "savedOn": "Ülke bazlı fiyatlandırma açık.",
+            "savedOff": "Ülke bazlı fiyatlandırma kapalı."
+          },
+          "payPerMessage": {
+            "label": "Mesaj başına ücretlendirme",
+            "on": "Açık: plan kotası olmayan çalışma alanları, iletilen her mesaj için cüzdanlarından ödeme yapar.",
+            "off": "Kapalı: mesajlar cüzdanlardan ücretlendirilmez.",
+            "save": "Kaydet",
+            "confirmTitle": "Mesaj başına ücretlendirme değiştirilsin mi?",
+            "confirmOn": "İletilen mesajlar bundan sonra cüzdanlardan ücretlendirilecek.",
+            "confirmOff": "Cüzdanlar artık mesajlar için ücretlendirilmeyecek. Bu, tüm çalışma alanlarını etkiler.",
+            "confirm": "Evet, değiştir",
+            "savedOn": "Mesaj başına ücretlendirme açık.",
+            "savedOff": "Mesaj başına ücretlendirme kapalı."
+          }
+        },
+        "grid": {
+          "title": "Fiyat tablosu",
+          "modeOn": "Ülke bazlı fiyatlandırma açık: bu fiyatlar kullanılıyor.",
+          "modeOff": "Ülke bazlı fiyatlandırma kapalı: bu fiyatlar kaydedildi ancak sabit fiyat ücretlendiriliyor.",
+          "empty": "Henüz fiyat yok. Satır ekleyin, bir fiyat tablosu içe aktarın veya başlangıç tablosunu yeniden yükleyin.",
+          "country": "Ülke",
+          "category": "Kategori",
+          "charge": "Sizden alınan",
+          "metaCost": "Meta'nın sizden aldığı",
+          "margin": "Marj",
+          "marginUnknown": "Bilinmiyor",
+          "actions": "İşlemler",
+          "anyCountry": "Tüm ülkeler",
+          "anyCategory": "Tüm kategoriler",
+          "serviceFree": "Hizmet (ücretsiz)",
+          "addRow": "Satır ekle",
+          "remove": "Kaldır",
+          "cancel": "Vazgeç",
+          "removeTitle": "Bu fiyat kaldırılsın mı?",
+          "removeBody": "{country} için fiyat silinecek. Mesajlar bir sonraki eşleşen fiyatla ücretlendirilecek.",
+          "removed": "Fiyat kaldırıldı.",
+          "save": "Fiyatları kaydet",
+          "saving": "Kaydediliyor",
+          "saved": "{count, plural, other {# fiyat kaydedildi.}}",
+          "savedSome": "{saved} kaydedildi, {skipped} atlandı. Atlanan her satırda nedene bakın.",
+          "unsaved": "{count, plural, other {# kaydedilmemiş satır}}",
+          "tooMany": "Tek kaydetmede çok fazla satır değiştirildi. Daha küçük gruplar halinde kaydedin.",
+          "problems": {
+            "price": "En fazla 2 ondalık basamaklı bir fiyat girin.",
+            "metaCost": "En fazla 6 ondalık basamaklı bir maliyet girin.",
+            "country": "2 harfli bir ülke kodu kullanın veya tüm ülkeler için boş bırakın.",
+            "empty": "Bir fiyat veya Meta maliyeti girin.",
+            "duplicate": "Bu ülke ve kategori için zaten bir satır var."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Meta maliyetlerini eşitle",
+            "title": "Meta maliyetlerini eşitle",
+            "loading": "Meta'nın fiyat listesi okunuyor",
+            "source": "Kaynak",
+            "version": "Sürüm",
+            "noVersion": "Yok",
+            "currency": "Para birimi",
+            "added": "Eklenecek satırlar",
+            "updated": "Güncellenecek satırlar",
+            "untouched": "Fiyatlarınız değişmez. Yalnızca Meta'nın sizden aldığı maliyet güncellenir.",
+            "bundledNote": "Bağlı canlı bir Meta fiyat listesi yok, bu nedenle paketle gelen fiyat tablosu kullanılıyor.",
+            "apply": "Uygula",
+            "applying": "Uygulanıyor",
+            "done": "Meta maliyetleri eşitlendi: {added} eklendi, {updated} güncellendi."
+          },
+          "import": {
+            "button": "Fiyat tablosunu içe aktar",
+            "title": "Fiyat tablosunu içe aktar",
+            "intro": "Bir CSV fiyat tablosu yükleyin. Hiçbir şey kaydedilmeden önce hangi değişikliklerin yapılacağını görürsünüz.",
+            "file": "CSV dosyası",
+            "limit": "En fazla 4 MB.",
+            "reading": "Dosya okunuyor",
+            "shape": "Düzen",
+            "shapes": {
+              "wide": "Kategori başına bir sütun",
+              "long": "Kategori başına bir satır"
+            },
+            "added": "Eklenecek",
+            "updated": "Güncellenecek",
+            "skipped": "Atlanan",
+            "currencyNote": "Fiyatlar {currency} para biriminde okunur.",
+            "problems": "Atlanacak satırlar",
+            "line": "Satır {line}:",
+            "fileProblems": {
+              "notCsv": "Bir .csv dosyası seçin.",
+              "tooBig": "Dosya 4 MB'tan büyük.",
+              "unreadable": "Dosya okunamadı."
+            },
+            "apply": "İçe aktarımı uygula",
+            "applying": "İçe aktarılıyor",
+            "done": "Fiyat tablosu içe aktarıldı: {added} eklendi, {updated} güncellendi, {skipped} atlandı."
+          },
+          "seed": {
+            "button": "Başlangıç fiyat tablosunu yeniden yükle",
+            "title": "Başlangıç fiyat tablosu yeniden yüklensin mi?",
+            "warning": "Bu işlem, paketle gelen başlangıç fiyatlarını aynı ülke ve kategorideki mevcut satırların üzerine yazar. Bu satırlar için elle girdiğiniz fiyatlar değiştirilir.",
+            "confirm": "Yeniden yükle",
+            "done": "Başlangıç tablosundan {count, plural, other {# fiyat}} yazıldı."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Sınır ötesi gönderimler",
+            "body": "Fiyat, çalışma alanının değil alıcının ülkesini izler. Gönderim yaptığınız her ülke için bir satır ekleyin."
+          },
+          "how": {
+            "title": "Fiyat nasıl bulunur",
+            "body": "Cüzdan, alıcının ülkesini ve mesaj kategorisini bu tabloda arar. Boş kategori veya ülke her şeyle eşleşir."
+          },
+          "order": {
+            "title": "Hangi satır geçerli olur",
+            "body": "Önce ülke ve kategori tam eşleşen satır kullanılır, ardından tüm kategorilerdeki ülke, sonra tüm ülkeler, en son sabit fiyat."
+          }
+        },
+        "mode": {
+          "title": "Müşterilere fiyat nasıl belirlenir",
+          "current": "Geçerli: {mode}",
+          "intro": "Müşterilerinize bir mesajın maliyetini seçin. Bu, tüm çalışma alanları için geçerlidir ve ayrıca kaydedilir.",
+          "fixed": {
+            "label": "Sabit fiyatlar",
+            "body": "Aşağıdaki fiyat tablosunda her ülke ve kategori için bir fiyat girersiniz. Marjlar kaydedilir ancak kullanılmaz."
+          },
+          "margin": {
+            "label": "Meta maliyeti + marj",
+            "body": "Müşteri, Meta'nın maliyetini ve ülke ve kategori bazında belirlediğiniz marjı öder. Meta maliyeti bilinmeyen durumlarda girilen sabit fiyat ücretlendirilir."
+          },
+          "save": "Fiyatlandırma modunu kaydet",
+          "manage": "Marjları ayarla",
+          "confirmTitle": "Müşterilere fiyat belirleme yöntemi değiştirilsin mi?",
+          "confirmFixed": "Her çalışma alanından, bir sonraki mesajdan itibaren fiyat tablosundaki sabit fiyatlar alınacak. Marjlar kaydedilmeye devam eder ancak uygulanmaz.",
+          "confirmMargin": "Her çalışma alanından, bir sonraki mesajdan itibaren Meta maliyeti ile o çalışma alanına uygulanan marj (önce çalışma alanı geçersiz kılması, sonra planı, sonra platform varsayılanı) alınacak. Meta maliyeti bilinmeyen durumlarda sabit fiyat yine ücretlendirilir.",
+          "confirm": "Evet, değiştir",
+          "savedFixed": "Müşteriler artık sabit fiyatla fiyatlandırılıyor.",
+          "savedMargin": "Müşteriler artık Meta maliyeti artı marj ile fiyatlandırılıyor."
+        },
+        "metaCards": {
+          "title": "Meta fiyat tabloları",
+          "intro": "Meta her para birimi için tek bir fiyat listesi yayımlar ve bunu yalnızca 1 Ocak, 1 Nisan, 1 Temmuz ve 1 Ekim tarihlerinde değiştirir. INR ile faturalandırılan bir çalışma alanının fiyatı Meta'nın INR listesinden belirlenir ve INR cüzdanından ücretlendirilir; USD listesinden çevrilerek belirlenmez. Her dosyayı Meta'nın yayımladığı şekliyle içe aktarın. Elle girilen fiyatlar ve sabit fiyat platform para biriminde tutulur ve başka para biriminde faturalandırılan bir çalışma alanı için o çalışma alanına ait kurla dönüştürülür.",
+          "none": "Henüz kayıtlı bir Meta fiyat tablosu yok. Para biriminiz için Meta'nın yayımladığı dosyayı içe aktarın.",
+          "view": "Görüntüle",
+          "hide": "Gizle",
+          "usedPricing": "Fiyatlandırma, marjlar ve bayi kâr-zarar durumu ile platform para biriminde faturalandırılan çalışma alanları",
+          "usedWorkspaces": "{currency} ile faturalandırılan çalışma alanlarının fiyatları",
+          "columns": {
+            "currency": "Para birimi",
+            "effective": "Geçerlilik",
+            "checked": "Son içe aktarma",
+            "markets": "Pazarlar",
+            "usedFor": "Kullanım alanı",
+            "status": "Durum",
+            "actions": "İşlemler"
+          },
+          "freshness": {
+            "current": "Güncel",
+            "upcoming": "Yakında kontrol edin",
+            "due": "Şimdi kontrol et"
+          },
+          "reminder": {
+            "link": "Meta’nın fiyatlandırma sayfasını aç",
+            "current": "Güncel. Meta fiyatlarını bir sonraki kez {date} tarihinde değiştirebilir.",
+            "dueTitle": "{date} tarihinde yeni bir dönem başladı: Meta fiyatlarını değiştirmiş olabilir.",
+            "dueBody": "Yeni fiyat dosyalarını indirin (kullanılan her para birimi için bir tane) ve buraya içe aktarın. O zamana kadar maliyetler ve marjlar eski tabloyu kullanır.",
+            "upcomingTitle": "Meta fiyatlarını {date} tarihinde değiştirebilir ({days, plural, other {# gün}} kaldı).",
+            "upcomingBody": "Yeni dosyaları o gün içe aktarmaya hazır tutun.",
+            "missingTitle": "{currencies} için Meta fiyat tablosu yok.",
+            "missingBody": "Bu para birimine ayarlı çalışma alanları için gösterilecek bir Meta fiyat listesi yok. Bunun için Meta'nın yayımladığı dosyayı içe aktarın."
+          },
+          "table": {
+            "heading": "Meta’nın {currency} tablosu",
+            "note": "Meta'nın yayımladığı, iletilen mesaj başına liste fiyatı. Meta'nın adını vermediği ülkeler Diğer olarak fiyatlandırılır.",
+            "market": "Pazar",
+            "everyOther": "Adı verilmeyen tüm ülkeler",
+            "categories": {
+              "marketing": "Pazarlama",
+              "utility": "Hizmet",
+              "authentication": "Kimlik doğrulama",
+              "authentication_international": "Kimlik doğrulama (uluslararası)",
+              "service": "Müşteri hizmeti"
+            }
+          },
+          "import": {
+            "button": "Meta fiyat tablosunu içe aktar",
+            "title": "Meta fiyat tablosunu içe aktar",
+            "intro": "Bir para birimi için Meta'nın yayımladığı dosyayı seçin (bağlantı CSV dese bile bu bir Excel çalışma kitabıdır). Para birimi ve geçerlilik tarihi dosyadan okunur. Hiçbir şey kaydedilmeden önce hangi değişikliklerin yapılacağını görürsünüz.",
+            "file": "Meta fiyat dosyası (.xlsx veya .csv)",
+            "hint": "Dosya başına bir para birimi. Yeni bir dosya o para biriminin tablosunu tamamen değiştirir. En fazla 2 MB.",
+            "reading": "Dosya okunuyor…",
+            "applying": "İçe aktarılıyor",
+            "apply": "Tabloyu içe aktar",
+            "done": "{currency} tablosu içe aktarıldı.",
+            "fileProblems": {
+              "wrongType": "Meta'nın yayımladığı .xlsx dosyasını veya bundan kaydedilmiş bir CSV dosyasını seçin.",
+              "tooBig": "Dosya 2 MB'tan büyük, bu bir Meta fiyat tablosu olamaz.",
+              "unreadable": "Dosya okunamadı."
+            },
+            "summary": {
+              "currency": "Para birimi",
+              "effective": "Geçerlilik",
+              "added": "Yeni satırlar",
+              "changed": "Değişen",
+              "unchanged": "Değişmeyen",
+              "removed": "Kaldırılan"
+            },
+            "replaces": "{date} tarihinde geçerli tabloyu değiştirir.",
+            "appliesToPricing": "Bu, platform para biriminiz olan {currency} tablosu. İçe aktarmak ayrıca fiyatlandırma, marjlar ve bayi kâr-zararının arkasındaki Meta maliyetini de günceller ({added} yeni, {updated} güncellendi). Müşteri fiyatları değişmez.",
+            "storedOnly": "Bu platform para birimi değil. Kaydedilir ve gösterilir; {currency} ile faturalandırılan her çalışma alanının fiyatını belirler. Aşağıdaki fiyat tablosundaki Meta maliyeti platform para biriminde kalır.",
+            "biggest": "En büyük değişiklikler",
+            "categories": {
+              "marketing": "Pazarlama",
+              "utility": "Hizmet",
+              "authentication": "Kimlik doğrulama",
+              "authentication_international": "Kimlik doğrulama (uluslararası)",
+              "service": "Müşteri hizmeti"
+            },
+            "problems": "Atlanan satırlar"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Çalışma alanı cüzdanları",
+        "crumb": "Çalışma alanı cüzdanları",
+        "subtitle": "Her çalışma alanı bakiyesiyle birlikte. Girişlerini görmek veya bakiyeyi düzeltmek için birini açın.",
+        "search": "Ara",
+        "searchPlaceholder": "Çalışma alanı adı veya kısa ad",
+        "lowOnly": "Yalnızca düşük bakiyeler",
+        "apply": "Uygula",
+        "totalWorkspaces": "Çalışma alanları",
+        "totalFloat": "Toplam tutar",
+        "totalLow": "Düşük bakiye",
+        "emptyTitle": "Çalışma alanı bulunamadı",
+        "emptyBody": "Aramayı değiştirin veya düşük bakiye filtresini temizleyin.",
+        "loadMore": "Daha fazla yükle",
+        "loadingMore": "Daha fazla yükleniyor",
+        "columns": {
+          "label": "Çalışma alanı cüzdanları",
+          "workspace": "Çalışma alanı",
+          "mode": "Faturalandırma",
+          "balance": "Bakiye",
+          "low": "Düşük",
+          "activity": "Son etkinlik",
+          "never": "Hiç"
+        },
+        "totalFloatIn": "Tutulan tutar ({currency})"
+      },
+      "detail": {
+        "crumb": "Çalışma alanı",
+        "adjust": "Bakiyeyi düzelt",
+        "balance": "Bakiye",
+        "lowBalance": "Düşük bakiye",
+        "threshold": "{amount} bakiyesinde uyar",
+        "recent": "Son girişler",
+        "emptyTitle": "Henüz giriş yok",
+        "emptyBody": "Bu cüzdandaki hareketler burada listelenecek.",
+        "columns": {
+          "label": "Son cüzdan girişleri",
+          "date": "Tarih",
+          "type": "Tür",
+          "amount": "Tutar",
+          "balanceAfter": "Sonraki bakiye",
+          "who": "Yapan",
+          "reason": "Neden",
+          "customer": "Müşteri",
+          "operator": "Operatör",
+          "system": "Sistem"
+        },
+        "result": {
+          "appliedAdd": "{applied} eklendi. Bakiye artık {balance}.",
+          "appliedDeduct": "{applied} düşüldü. Bakiye artık {balance}.",
+          "partial": "Bakiye 0'ın altına düşemeyeceği için {requested} tutarının yalnızca {applied} kısmı uygulandı. Bakiye artık {balance}.",
+          "replayed": "(Bu istek zaten uygulanmıştı.)"
+        },
+        "pricing": {
+          "title": "Bu çalışma alanının fiyatlandırması",
+          "subtitle": "Marj geçersiz kılmaları yalnızca bu çalışma alanı için, çalışma alanının planının ve platform varsayılanının önüne geçer.",
+          "plan": "Plan",
+          "planLoading": "Plan yükleniyor",
+          "planUnknown": "Okunamadı",
+          "noPlan": "Plan yok",
+          "overrides": "Marj geçersiz kılmaları",
+          "overridesHint": "Yalnızca burada listelenen satırlar geçersiz kılınır. Diğer her şey plana ve platform varsayılanına uyar.",
+          "empty": "Geçersiz kılma yok. Bu çalışma alanı planına ve platform varsayılanına uyar.",
+          "reason": {
+            "label": "Neden (denetim günlüğünde saklanır)",
+            "hint": "Her değişiklik veya silme için gerekli, 5 ila 500 karakter.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Nedeni en az 5 karakterle yazın.",
+              "long": "Nedeni 500 karakter veya daha az tutun."
+            }
+          },
+          "save": "Geçersiz kılmaları kaydet",
+          "saving": "Kaydediliyor",
+          "saveHint": "Kaydetmek için vurgulanan satırları düzeltin ve bir neden yazın.",
+          "saved": "{saved} kaydedildi, {removed} kaldırıldı.",
+          "savedSome": "{saved} kaydedildi, {skipped} atlandı. Atlanan her satırdaki nedene bakın.",
+          "preview": {
+            "title": "Fiyat önizlemesi",
+            "hint": "Bu çalışma alanına gönderilen bir mesajın nasıl fiyatlandırılacağını ve hangi katmanın bunu belirlediğini görün.",
+            "country": "Ülke",
+            "category": "Kategori",
+            "run": "Önizleme fiyatı",
+            "running": "Fiyat hesaplanıyor",
+            "result": {
+              "label": "Fiyat önizleme sonucu",
+              "metaCost": "Meta maliyeti",
+              "unknownCost": "Bilinmiyor",
+              "margin": "Marj",
+              "noMargin": "Yok",
+              "layer": "Belirleyen",
+              "noLayer": "Eşleşen marj yok",
+              "layers": {
+                "workspace": "Çalışma alanı geçersiz kılması",
+                "plan": "Plan marjı",
+                "platform": "Platform varsayılanı"
+              },
+              "price": "Müşteri fiyatı",
+              "basis": "Dayanak",
+              "bases": {
+                "margin": "Meta maliyeti + marj",
+                "fixed": "Sabit fiyat"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Faturalandırma para birimi",
+          "intro": "Mesajlar bu para birimi için Meta'nın fiyat tablosundan fiyatlandırılır ve çalışma alanının bu para birimindeki cüzdanından ücretlendirilir. Bakiye yüklemeleri de bu para biriminde girilir ve yazılır.",
+          "billedIn": "Faturalandırılan para birimi",
+          "change": "Para birimini değiştir",
+          "otherWallets": "Bu çalışma alanının sahip olduğu diğer cüzdanlar",
+          "notUsed": "Faturalandırmada kullanılmaz; para burada kalır.",
+          "dialog": {
+            "title": "Faturalandırma para birimini değiştir",
+            "currency": "Şununla faturalandır",
+            "effect": "Bundan sonra mesajlar Meta'nın {to} tablosundan fiyatlandırılır ve {to} cüzdanından ücretlendirilir. Hiçbir tutar dönüştürülmez: {from} cüzdanı bakiyesini korur.",
+            "left": "{amount} {from} cüzdanında kalır ve çalışma alanı geri alınana kadar kullanılmaz.",
+            "reason": "Neden",
+            "reasonHint": "Denetim izinde ve çalışma alanının cüzdan günlüğünde gösterilir. En az 5 karakter.",
+            "confirm": "{currency} ile faturalandır",
+            "saving": "Kaydediliyor",
+            "done": "Artık {to} ile faturalandırılıyor ({from} idi)."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Bakiyeyi düzelt",
+        "current": "Mevcut bakiye",
+        "direction": "İşlem",
+        "add": "Para ekle",
+        "deduct": "Düş",
+        "amount": "Tutar",
+        "amountHint": "En fazla 2 ondalık basamak.",
+        "reason": "Neden",
+        "reasonHint": "Zorunlu, 5 ila 500 karakter. Çalışma alanı bu nedeni hesap özetinde görür.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Bu, {balance} olan bakiyeden fazla. Yalnızca mevcut tutar düşülür; bakiye 0'da durur.",
+        "review": "İncele",
+        "confirmAdd": "Para ekle",
+        "confirmDeduct": "Düş",
+        "posting": "Kaydediliyor",
+        "summaryAdd": "{workspace} çalışma alanına {amount} ekle.",
+        "summaryDeduct": "{workspace} çalışma alanından {amount} düş.",
+        "newBalance": "Yeni bakiye: {balance}",
+        "summaryReason": "Neden: {reason}",
+        "visibleNote": "Neden çalışma alanına gösterilir ve denetim günlüğünde saklanır.",
+        "problems": {
+          "amount": {
+            "required": "Bir tutar girin.",
+            "invalid": "En fazla 2 ondalık basamaklı pozitif bir tutar girin.",
+            "zero": "Tutar 0'dan büyük olmalı.",
+            "tooLarge": "Bu, tek bir düzeltme için izin verilen sınırın üzerinde."
+          },
+          "note": {
+            "short": "Nedeni en az {min} karakterle yazın.",
+            "long": "Nedeni {max} karakterden kısa tutun."
+          }
+        }
+      },
+      "logs": {
+        "title": "Cüzdan günlükleri",
+        "crumb": "Cüzdan günlükleri",
+        "subtitle": "Cüzdanlara ne olduğu ve yöneticilerin neleri değiştirdiği.",
+        "scope": "Kapsam",
+        "scopes": {
+          "all": "Tümü",
+          "workspace": "Çalışma alanı olayları",
+          "platform": "Platform değişiklikleri"
+        },
+        "event": "Olay",
+        "anyEvent": "Herhangi bir olay",
+        "severity": "Önem derecesi",
+        "anySeverity": "Herhangi bir önem derecesi",
+        "severities": {
+          "info": "Bilgi",
+          "warning": "Uyarı",
+          "error": "Hata"
+        },
+        "workspaceId": "Çalışma alanı kimliği",
+        "workspaceIdInvalid": "Bir çalışma alanı kimliği (UUID) girin.",
+        "search": "Ara",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "apply": "Uygula",
+        "reset": "Sıfırla",
+        "emptyTitle": "Günlük kaydı yok",
+        "emptyBody": "Bu filtrelerle eşleşen bir şey yok.",
+        "loadMore": "Daha fazla yükle",
+        "loadingMore": "Daha fazla yükleniyor",
+        "platform": "Platform",
+        "showDetails": "Ayrıntıları göster",
+        "hideDetails": "Ayrıntıları gizle",
+        "requestId": "İstek kimliği",
+        "columns": {
+          "time": "Zaman",
+          "severity": "Önem derecesi",
+          "event": "Olay",
+          "workspace": "Çalışma alanı",
+          "actor": "Aktör",
+          "message": "İleti"
+        },
+        "actors": {
+          "operator": "Operatör",
+          "customer": "Müşteri",
+          "system": "Sistem"
+        }
+      },
+      "margins": {
+        "title": "Marjlar",
+        "crumb": "Marjlar",
+        "subtitle": "Müşterilerin Meta maliyetinin üzerine, ülke ve mesaj kategorisine göre ödediği tutar.",
+        "retry": "Yeniden dene",
+        "ratesFailed": "Meta maliyetleri yüklenemedi, bu nedenle yeni satırların fiyatları gösterilemiyor.",
+        "mode": {
+          "current": "Müşteriler şu yöntemle fiyatlandırılır:",
+          "inactive": "Fiyatlandırma modu Sabit fiyatlar olduğu için bu marjlar henüz geçerli değil. Kaydedildi ve Meta maliyeti + marj moduna geçtiğinizde uygulanacak.",
+          "switchLink": "Fiyatlandırma modu anahtarına git"
+        },
+        "scope": {
+          "label": "Şunun marjları:",
+          "hint": "Platform varsayılanı her plan için geçerlidir. Bir planın kendi marjı bunun önüne geçer.",
+          "platform": "Platform varsayılanı (tüm planlar için geçerli)"
+        },
+        "grid": {
+          "country": "Ülke",
+          "searchCountry": "Ülke ara",
+          "category": "Kategori",
+          "margin": "Marj %",
+          "metaCost": "Meta maliyeti",
+          "price": "Müşteri fiyatı",
+          "note": "Neden",
+          "setBy": "Belirleyen",
+          "actions": "İşlemler",
+          "anyCountry": "Tüm ülkeler",
+          "anyCategory": "Tüm kategoriler",
+          "unknownCost": "Meta'nın maliyeti burada bilinmiyor, bu nedenle girilen sabit fiyat uygulanır.",
+          "priceInvalid": "-100 ile 1000 arasında, en fazla 2 ondalık basamaklı bir marj girin.",
+          "removedPending": "Kaydettiğinizde kaldırılacak.",
+          "addRow": "Satır ekle",
+          "remove": "Kaldır",
+          "undo": "Geri al",
+          "cancel": "Vazgeç",
+          "empty": "Henüz marj yok. Bir marj belirlemek için satır ekleyin.",
+          "removeTitle": "Bu marj kaldırılsın mı?",
+          "removeBody": "{country} için marj silinecek. Fiyatlar bir sonraki eşleşen marja döner.",
+          "removed": "Marj kaldırıldı.",
+          "save": "Marjları kaydet",
+          "saving": "Kaydediliyor",
+          "saved": "{count, plural, other {# marj kaydedildi.}}",
+          "savedSome": "{saved} kaydedildi, {skipped} atlandı. Atlanan her satırdaki nedene bakın.",
+          "unsaved": "{count, plural, other {# kaydedilmemiş satır}}",
+          "tooMany": "Tek kaydetmede çok fazla satır değiştirildi. Daha küçük gruplar halinde kaydedin.",
+          "problems": {
+            "margin": "-100 ile 1000 arasında, en fazla 2 ondalık basamaklı bir yüzde girin. -100, ücretsiz anlamına gelir.",
+            "duplicate": "Bu ülke ve kategori için zaten bir satır var."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Hangi marj geçerli olur",
+            "body": "Çalışma alanı geçersiz kılması planın marjının önüne geçer; plan marjı da platform varsayılanının önüne geçer. Bir katman tamamen okunur, ardından bir sonrakine geçilir."
+          },
+          "specific": {
+            "title": "Önce en özgül olan",
+            "body": "Bir katman içinde önce ülke ve kategori, sonra tüm kategorilerdeki ülke, sonra tüm ülkelerdeki kategori, en son varsayılan satır kullanılır."
+          },
+          "unknown": {
+            "title": "Meta maliyeti bilinmediğinde",
+            "body": "Fiyat, Meta maliyeti artı marjdır; en yakın 0,01'e yuvarlanır ve marj -%100 (ücretsiz) değilse en az 0,01 olur. Meta maliyeti bilinmediğinde bunun yerine girilen sabit fiyat uygulanır."
+          }
+        }
+      },
+      "packages": {
+        "title": "Kredi paketleri",
+        "crumb": "Kredi paketleri",
+        "subtitle": "İsteğe bağlı teklifler: bu kadar öde, bu kadar cüzdan kredisi al. Fiyatın üzerindeki kredi bir bakiye yükleme bonusudur.",
+        "new": "Yeni paket",
+        "edit": "Düzenle",
+        "enable": "Etkinleştir",
+        "disable": "Devre dışı bırak",
+        "delete": "Sil",
+        "cancel": "Vazgeç",
+        "enabled": "{name} etkinleştirildi.",
+        "disabled": "{name} devre dışı bırakıldı.",
+        "deleted": "Paket silindi.",
+        "deleteTitle": "Paket silinsin mi?",
+        "deleteBody": "Bu paket silinsin mi? Mevcut satın almalar defter kayıtlarını korur.",
+        "bonus": "%{percent} bonus",
+        "status": {
+          "active": "Etkin",
+          "inactive": "Etkin değil",
+          "featured": "Öne çıkan"
+        },
+        "empty": {
+          "title": "Henüz kredi paketi yok",
+          "body": "Hiç paket oluşturulmadı.",
+          "bodyWrite": "Bonuslu bir cüzdan bakiye yüklemesi sunmak için ilk paketi oluşturun."
+        },
+        "columns": {
+          "label": "Kredi paketleri",
+          "name": "Ad",
+          "slug": "Kısa ad",
+          "price": "Fiyat",
+          "credit": "Cüzdan kredisi",
+          "badge": "Rozet",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "form": {
+          "newTitle": "Yeni kredi paketi",
+          "editTitle": "Kredi paketini düzenle",
+          "newCrumb": "Yeni paket",
+          "editCrumb": "Paketi düzenle",
+          "notFound": "Bu paket artık mevcut değil.",
+          "back": "Kredi paketlerine dön",
+          "sections": {
+            "identity": "Kimlik",
+            "pricing": "Fiyatlandırma",
+            "display": "Görünüm"
+          },
+          "name": "Ad",
+          "slug": "Kısa ad (isteğe bağlı)",
+          "slugHint": "Harfler, rakamlar, tire ve alt çizgi. Boş bırakırsanız addan oluşturulur.",
+          "description": "Açıklama",
+          "price": "Fiyat",
+          "priceHint": "Müşterinin ödeyeceği tutar.",
+          "currency": "Para birimi",
+          "walletCredit": "Cüzdan kredisi",
+          "walletCreditHint": "Cüzdana yatacak tutar.",
+          "bonusLine": "%{percent} bonus: müşteri {price} öder ve {credit} alır.",
+          "badge": "Rozet",
+          "badgeHint": "Kısa bir etiket, örneğin En iyi değer.",
+          "sortOrder": "Sıralama",
+          "sortOrderHint": "En düşük önce.",
+          "active": "Etkin",
+          "featured": "Öne çıkan",
+          "create": "Paketi oluştur",
+          "save": "Değişiklikleri kaydet",
+          "saving": "Kaydediliyor",
+          "created": "{name} oluşturuldu.",
+          "saved": "{name} kaydedildi.",
+          "stale": {
+            "title": "Bu paket başka biri tarafından değiştirildi",
+            "body": "Düzenlemeleriniz kaydedilmedi, bu nedenle hiçbir şey üzerine yazılmadı. En son sürümü yeniden yükleyin, ardından değişikliğinizi tekrar yapın.",
+            "reload": "En son sürümü yeniden yükle"
+          },
+          "problems": {
+            "name": "En fazla 96 karakterlik bir ad girin.",
+            "slug": "Yalnızca harf, rakam, tire ve alt çizgi kullanın.",
+            "description": "Açıklamayı 500 karakter veya daha az tutun.",
+            "price": "En fazla 2 ondalık basamaklı bir tutar girin.",
+            "currency": "Listelenen para birimlerinden birini seçin.",
+            "walletCredit": "0'dan büyük, en fazla 2 ondalık basamaklı bir tutar girin.",
+            "badge": "Rozeti 32 karakter veya daha az tutun.",
+            "sortOrder": "0 ile 9999 arasında bir tam sayı girin."
+          }
+        }
+      }
+    }
+  }
+}

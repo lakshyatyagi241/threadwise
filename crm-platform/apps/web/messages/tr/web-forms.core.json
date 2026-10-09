@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "nav": {
+      "forms": "Formlar"
+    },
+    "kinds": {
+      "short_text": "Kısa metin",
+      "long_text": "Uzun metin",
+      "email": "E-posta",
+      "phone": "Telefon numarası",
+      "number": "Sayı",
+      "currency": "Tutar",
+      "date": "Tarih",
+      "dropdown": "Açılır liste",
+      "radio": "Tek seçim",
+      "checkbox_group": "Çoklu seçim",
+      "checkbox": "Onay kutusu",
+      "rating": "Puanlama",
+      "hidden": "Gizli alan"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmaya yetkiniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için yeniden oturum açın.",
+      "conflict": "Bu formu başka biri değiştirdi. En son sürümü görmek için sayfayı yenileyin.",
+      "nameTaken": "Başka bir form zaten bu adı kullanıyor. Farklı bir ad seçin.",
+      "stateInvalid": "Bu, formun mevcut durumunda mümkün değil.",
+      "definitionInvalid": "Form henüz geçerli değil. Alanları kontrol edip tekrar deneyin.",
+      "publishInvalid": "Form henüz yayımlanamaz. Listelenen sorunları düzeltip tekrar deneyin.",
+      "planLimit": "Planınızın sınırına ulaşıldı.",
+      "planLimitForms": "Planınızın izin verdiği form sayısına ulaştınız. Artık kullanmadığınız bir formu arşivleyin veya planınızı yükseltin.",
+      "planLocked": "Formlar çalışma alanınızın bir parçası değil.",
+      "notFound": "Bu form bulunamadı. Silinmiş olabilir.",
+      "rateLimited": "Çok fazla istek. Bir süre bekleyip tekrar deneyin.",
+      "unexpected": "Bir sorun oluştu. Biraz sonra tekrar deneyin.",
+      "upgrade": "Planları gör"
+    }
+  }
+}

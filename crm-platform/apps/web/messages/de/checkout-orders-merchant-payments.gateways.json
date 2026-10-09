@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Storefront / Zahlungs-Gateways",
+      "title": "Zahlungs-Gateways",
+      "subtitle": "Fügen Sie Ihre eigenen Gateway-Schlüssel hinzu, damit Zahlungen auf Ihrem Konto eingehen. Fügen Sie die Schlüssel ein, die das Gateway in seinem Dashboard nennt.",
+      "banner": "Eine Gateway-Einrichtung wird für den Checkout Ihres Shops und für Sales-Rechnungen verwendet.",
+      "viewOnly": "Sie können die Gateway-Einrichtung sehen, aber nicht ändern. Bitten Sie einen Workspace-Admin um die Berechtigung zur Verwaltung von Gateways.",
+      "scope": {
+        "label": "Wo diese Einstellungen gelten",
+        "workspace": "Workspace (alle Shops)",
+        "workspaceHint": "Wird von jedem Shop und von Sales-Rechnungen verwendet, sofern ein Shop keine eigene Überschreibung hat.",
+        "store": "Nur dieser Shop (Überschreibung)",
+        "storeHint": "Wird nur im Checkout von {shop} verwendet. Hat Vorrang vor der Workspace-Einrichtung.",
+        "storeNamed": "Shop: {shop}",
+        "noShop": "Erstellen Sie zuerst einen Shop, um eine Überschreibung einzurichten.",
+        "shop": "Shop"
+      },
+      "resolved": {
+        "used": "Aktuell verwendet: {name} (Quelle: {source})",
+        "none": "Noch kein Gateway eingerichtet",
+        "noneHint": "Richten Sie unten ein Gateway ein und schalten Sie es ein. Bis dahin können Käufer nicht online bezahlen, und Rechnungen haben keine Zahlen-Schaltfläche.",
+        "source": {
+          "store_override": "Shop-Überschreibung",
+          "workspace_default": "Workspace-Standard",
+          "legacy_storefront": "Shop-Schlüssel"
+        }
+      },
+      "mode": {
+        "live": "Live",
+        "test": "Test"
+      },
+      "catalogue": {
+        "title": "Gateways",
+        "count": "{count, plural, one {# Gateway} other {# Gateways}}",
+        "search": "Gateways suchen",
+        "searchPlaceholder": "Nach Name, Land oder Währung suchen",
+        "loading": "Gateways werden geladen",
+        "noDriversTitle": "Keine Gateways verfügbar",
+        "noDriversMessage": "Dieser Server hat noch keine einrichtbaren Zahlungs-Gateways.",
+        "noMatchTitle": "Kein passendes Gateway",
+        "noMatchMessage": "Versuchen Sie einen anderen Namen, ein anderes Land oder einen anderen Währungscode.",
+        "clearSearch": "Suche zurücksetzen"
+      },
+      "card": {
+        "available": "Verfügbar",
+        "unavailable": "Noch nicht verfügbar",
+        "paymentLinks": "Zahlungslinks",
+        "unavailableNote": "Dieses Gateway ist aufgeführt, kann in dieser Version aber noch keine Zahlungen annehmen.",
+        "active": "Aktiv",
+        "off": "Aus",
+        "incomplete": "Schlüssel unvollständig",
+        "default": "Standard",
+        "migrated": "Aus Ihren Storefront-Schlüsseln übernommen. Speichern Sie hier einmal, um sie in der neuen Einrichtung zu behalten.",
+        "webhookMissing": "Webhook-Geheimnis fehlt: Zahlungsbenachrichtigungen dieses Gateways werden abgelehnt, bis Sie eines hinzufügen.",
+        "notSetUp": "Für diesen Geltungsbereich noch nicht eingerichtet.",
+        "configure": "Konfigurieren",
+        "edit": "Bearbeiten",
+        "test": "Verbindung testen",
+        "testing": "Wird getestet",
+        "setDefault": "Als Standard festlegen",
+        "activeSwitch": "{name} ist eingeschaltet",
+        "remove": "Entfernen",
+        "removeTitle": "{name} entfernen?",
+        "removeMessage": "Die gespeicherten Schlüssel werden für diesen Geltungsbereich ({scope}) gelöscht. Käufer können darüber nicht mehr bezahlen, und laufende Zahlungen werden möglicherweise nicht bestätigt.",
+        "removeConfirm": "Gateway entfernen"
+      },
+      "toast": {
+        "saved": "Gateway gespeichert",
+        "switchedOn": "{name} eingeschaltet",
+        "switchedOff": "{name} ausgeschaltet",
+        "defaultSet": "{name} ist jetzt der Standard",
+        "removed": "{name} entfernt"
+      },
+      "test": {
+        "verified": "Der Anbieter hat die Schlüssel akzeptiert.",
+        "fieldsTitle": "Pflichtfelder sind ausgefüllt",
+        "fieldsOnly": "Es wurden nur die Pflichtfelder geprüft: Dieses Gateway hat keinen einfachen Prüfaufruf, daher ist eine Zahlung der eigentliche Test.",
+        "missingTitle": "Schlüssel sind unvollständig",
+        "missing": "Diese Pflichtfelder sind leer: {fields}.",
+        "rejected": "Der Anbieter hat die Schlüssel nicht akzeptiert.",
+        "providerSaid": "Der Anbieter meldet: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Gateway konfigurieren",
+        "save": "Gateway speichern",
+        "appliesTo": "Gilt für: {scope}",
+        "credentials": "Zugangsdaten",
+        "noFields": "Dieses Gateway benötigt keine Schlüssel.",
+        "secretsNote": "Gespeicherte Schlüssel werden nie wieder angezeigt. Zur Erinnerung wird nur das Ende jedes Schlüssels angezeigt.",
+        "requiredField": "{field} ist erforderlich.",
+        "invalidOption": "Wählen Sie für {field} eine der aufgeführten Optionen.",
+        "mode": "Modus",
+        "modeHint": "Verwenden Sie Test, solange Sie das Gateway mit seinen Testschlüsseln ausprobieren, und Live, um echte Zahlungen anzunehmen.",
+        "active": "Aktiv",
+        "activeHint": "Ein ausgeschaltetes Gateway wird weder vom Checkout noch von Rechnungen verwendet.",
+        "webhookTitle": "Webhook-Adresse",
+        "webhookHint": "Fügen Sie dies in Ihr {name}-Dashboard ein, damit Zahlungen automatisch bestätigt werden.",
+        "webhookAfterSave": "Die Webhook-Adresse erscheint hier nach dem ersten Speichern.",
+        "willClear": "Der gespeicherte Wert wird beim Speichern entfernt.",
+        "keepBlank": "Leer lassen, um den gespeicherten Wert beizubehalten.",
+        "requiredMark": "(erforderlich)",
+        "stored": "Gespeichert: {mask}",
+        "keepOption": "Gespeicherten Wert beibehalten",
+        "chooseOption": "Option wählen",
+        "clear": "Gespeicherten Wert löschen",
+        "show": "Wert anzeigen",
+        "hide": "Wert verbergen"
+      }
+    }
+  }
+}

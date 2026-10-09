@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Pedidos",
+      "coupons": "Cupons"
+    },
+    "settingsTile": {
+      "label": "Gateways de pagamento",
+      "description": "O gateway único que o checkout da sua loja e as faturas de Vendas usam para receber pagamentos online.",
+      "keywords": "gateway de pagamento, razorpay, stripe, checkout, link de pagamento, pagamento online, cartão, upi"
+    },
+    "common": {
+      "noAccessTitle": "Você não tem acesso a esta página",
+      "noAccessMessage": "Peça a um administrador do espaço de trabalho para dar ao seu perfil a permissão necessária.",
+      "loading": "Carregando",
+      "loadMore": "Carregar mais",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "save": "Salvar",
+      "saving": "Salvando",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "remove": "Remover",
+      "open": "Abrir",
+      "view": "Ver",
+      "search": "Buscar",
+      "clear": "Limpar",
+      "all": "Todos",
+      "no": "Não",
+      "none": "Nenhum",
+      "actions": "Ações",
+      "retry": "Tentar novamente",
+      "dismiss": "Dispensar",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "viewContact": "Ver contato",
+      "allShops": "Todas as lojas",
+      "shop": "Loja"
+    },
+    "status": {
+      "new": "Novo",
+      "pending": "Pendente",
+      "confirmed": "Confirmado",
+      "paid": "Pago",
+      "processing": "Em processamento",
+      "completed": "Concluído",
+      "shipped": "Enviado",
+      "cancelled": "Cancelado"
+    },
+    "paymentStatus": {
+      "paid": "Pago",
+      "awaiting": "Aguardando pagamento",
+      "cod": "Pagamento na entrega",
+      "unpaid": "Não pago"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Vitrine",
+      "twilio": "Twilio",
+      "manual": "Manual",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "IA do WhatsApp"
+    },
+    "errors": {
+      "requestId": "ID da solicitação",
+      "retry": "Tentar novamente",
+      "network": {
+        "title": "Não foi possível acessar o servidor",
+        "message": "Verifique sua conexão e tente novamente."
+      },
+      "forbidden": {
+        "title": "Não permitido",
+        "message": "Seu perfil não permite isto."
+      },
+      "signedOut": {
+        "title": "Você saiu da conta",
+        "message": "Entre novamente para continuar."
+      },
+      "conflict": {
+        "title": "Alterado por outra pessoa",
+        "message": "Este registro mudou enquanto você o mantinha aberto. Recarregue e tente novamente."
+      },
+      "validation": {
+        "title": "Verifique o formulário",
+        "message": "Alguns valores não são válidos. Verifique os campos destacados."
+      },
+      "unavailable": {
+        "title": "Ainda não disponível",
+        "message": "Esta parte da loja ainda não está disponível neste servidor."
+      },
+      "rateLimited": {
+        "title": "Muitas requisições",
+        "message": "Aguarde um momento e tente novamente."
+      },
+      "notFound": {
+        "title": "Não encontrado",
+        "message": "Foi removido ou nunca existiu."
+      },
+      "planLocked": {
+        "title": "Não está no seu plano",
+        "message": "Seu plano não inclui a loja. Faça upgrade para usá-la."
+      },
+      "couponCodeTaken": {
+        "title": "Código já utilizado",
+        "message": "Outro cupom já usa este código. Escolha um diferente."
+      },
+      "groupCodeTaken": {
+        "title": "Código já utilizado",
+        "message": "Outro grupo já usa este código de pedido."
+      },
+      "orderNoPhone": {
+        "title": "Sem número de telefone",
+        "message": "Este pedido não tem número de telefone do comprador, então nada pode ser enviado."
+      },
+      "gatewayNotConfigured": {
+        "title": "Nenhum gateway de pagamento configurado",
+        "message": "Configure primeiro um gateway de pagamento. As chaves dele estão ausentes ou ele está desativado."
+      },
+      "gatewayUnavailable": {
+        "title": "Gateway indisponível",
+        "message": "Este gateway não consegue gerar um link de pagamento que o comprador possa abrir."
+      },
+      "paymentLinkFailed": {
+        "title": "O gateway recusou o link",
+        "message": "Verifique as chaves e se o valor está acima do mínimo do gateway."
+      },
+      "unexpected": {
+        "title": "Algo deu errado",
+        "message": "Tente novamente. Se continuar acontecendo, informe o ID da solicitação ao suporte."
+      }
+    }
+  }
+}

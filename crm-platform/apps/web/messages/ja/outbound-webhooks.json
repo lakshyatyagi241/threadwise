@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "events": {
+      "contact_created": "連絡先を作成",
+      "contact_updated": "連絡先を更新",
+      "contact_deleted": "連絡先を削除",
+      "contact_tag_added": "連絡先にタグを追加",
+      "contact_opted_in": "連絡先がオプトイン",
+      "deal_stage_changed": "案件が別のステージに移動",
+      "task_created": "タスクを作成",
+      "task_assigned": "タスクを割り当て",
+      "template_status_changed": "テンプレートのステータスが変更",
+      "device_status_changed": "デバイスのステータスが変更",
+      "conversation_reopened": "会話を再開"
+    },
+    "page": {
+      "title": "Webhook",
+      "subtitle": "このワークスペースのイベントを、発生と同時にご自身のシステムに送信します。各配信は署名付きのJSON POSTで、サーバーが応答しない場合は再送されます。",
+      "back": "連携と開発者",
+      "add": "Webhookを追加",
+      "list": "Webhook",
+      "emptyTitle": "Webhookはまだありません",
+      "empty": "新しい連絡先や案件のステージ変更などのイベントを受け取るエンドポイントを追加してください。",
+      "noAccess": "Webhookへのアクセス権がありません。",
+      "loadFailed": "Webhookを読み込めませんでした。",
+      "retry": "再試行",
+      "allEvents": "すべてのイベント",
+      "signed": "署名あり",
+      "health": {
+        "off": "オフ",
+        "failing": "失敗中",
+        "healthy": "正常",
+        "idle": "配信はまだありません"
+      },
+      "activeFor": "有効：{name}",
+      "lastDelivery": "最終配信 {when}、応答 {status}",
+      "noDeliveries": "まだ配信されていません",
+      "noAnswer": "応答なし",
+      "counts": "{ok} 件成功、{failed} 件失敗",
+      "lastError": "最後のエラー：{error}",
+      "deliveries": "配信",
+      "test": "テスト送信",
+      "edit": "編集",
+      "delete": "削除",
+      "cancel": "キャンセル",
+      "deleteTitle": "このWebhookを削除しますか？",
+      "deleteMessage": "{name}はイベントを受信しなくなり、配信ログも削除されます。この操作は取り消せません。",
+      "created": "Webhookを追加しました。",
+      "saved": "Webhookを保存しました。",
+      "deleted": "Webhookを削除しました。",
+      "deleteFailed": "Webhookを削除できませんでした。再度お試しください。",
+      "toggleFailed": "変更を保存できませんでした。再度お試しください。",
+      "testOk": "テストを配信しました（応答 {status}）。",
+      "testFailed": "テストが失敗しました：{reason}",
+      "testError": "テストを送信できませんでした。再度お試しください。"
+    },
+    "dialog": {
+      "addTitle": "Webhookを追加",
+      "editTitle": "Webhookを編集",
+      "close": "閉じる",
+      "name": "名前",
+      "nameHint": "任意：受信するシステムなど、ご自身が識別するためのラベルです。",
+      "url": "エンドポイントURL",
+      "urlHint": "インターネットからアクセス可能なhttpsアドレスです。プライベートおよび内部アドレスは拒否されます。",
+      "urlProblem": {
+        "empty": "エンドポイントURLを入力してください。",
+        "tooLong": "URLが長すぎます。",
+        "notHttps": "URLは https:// で始めてください。",
+        "invalid": "有効なURLではありません。"
+      },
+      "secret": "署名シークレット",
+      "secretHint": "任意。設定すると、各配信にサーバーで検証可能な署名が付与されます。一度保存すると再表示されません。",
+      "secretSetHint": "シークレットは設定済みです。そのままにする場合は空欄のままにし、置き換える場合は新しい値を入力してください。",
+      "secretKeep": "変更なし",
+      "removeSecret": "署名シークレットを削除（配信には署名されなくなります）",
+      "events": "イベント",
+      "allEvents": "すべてのイベント",
+      "pickEvents": "少なくとも1つのイベントを選択するか、すべてのイベントを選んでください。",
+      "active": "有効",
+      "cancel": "キャンセル",
+      "create": "Webhookを追加",
+      "save": "変更を保存",
+      "failed": "Webhookを保存できませんでした。もう一度お試しください。"
+    },
+    "deliveries": {
+      "title": "配信: {name}",
+      "close": "閉じる",
+      "empty": "まだ配信はありません。「テスト送信」を使うと配信を作成できます。",
+      "failed": "配信履歴を読み込めませんでした。",
+      "when": "日時",
+      "event": "イベント",
+      "result": "応答内容",
+      "time": "応答時間",
+      "attempt": "試行",
+      "test": "テスト",
+      "noAnswer": "応答なし"
+    }
+  }
+}

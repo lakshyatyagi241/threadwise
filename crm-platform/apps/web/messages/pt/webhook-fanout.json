@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Encaminhamento de webhooks"
+    },
+    "common": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "requestId": "ID da solicitação",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Você não tem permissão para fazer isto.",
+        "request": "Não foi possível concluir essa solicitação.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+        "conflict": "Outra pessoa alterou este destino. A lista foi recarregada: aplique sua alteração novamente.",
+        "validation": "Alguns valores não são válidos. Verifique os campos destacados.",
+        "notFound": "Este item não existe mais.",
+        "urlRejected": "Esta URL não é permitida. Use um endereço https acessível pela internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistema / Webhooks",
+      "title": "Encaminhamento de webhooks",
+      "description": "Lista do operador da plataforma com os serviços que recebem uma cópia de cada webhook da Meta.",
+      "banner": "A Meta permite uma única URL de callback. Nós a recebemos uma vez, a verificamos e encaminhamos o corpo bruto sem alterações (com a assinatura original) para cada destino ativo.",
+      "superOnly": "Somente um super administrador pode gerenciar o encaminhamento de webhooks.",
+      "add": "Adicionar destino",
+      "tabs": {
+        "targets": "Destinos",
+        "failures": "Entregas com falha"
+      }
+    },
+    "targets": {
+      "empty": "Ainda não há destinos de encaminhamento",
+      "emptyBody": "Adicione um destino para começar a encaminhar webhooks da Meta para outro serviço.",
+      "columns": {
+        "target": "Destino",
+        "active": "Ativo",
+        "fields": "Campos",
+        "deliveries": "Entregas",
+        "last": "Última entrega",
+        "actions": "Ações"
+      },
+      "allFields": "Todos os campos",
+      "success": "{count, number} com sucesso",
+      "failure": "{count, number} com falha",
+      "pending": "{count, number} pendentes",
+      "pendingLabel": "{count, number} entregas com falha aguardando reenvio",
+      "neverDelivered": "Nada foi entregue ainda",
+      "lastStatus": "Status {status}",
+      "lastError": "Erro: {error}",
+      "lastAt": "em {time}",
+      "activeSwitch": "Encaminhar para {name}",
+      "on": "Destino ativado",
+      "off": "Destino desativado",
+      "edit": "Editar",
+      "test": "Testar",
+      "testing": "Testando",
+      "testOk": "Teste aprovado: status {status} em {ms, number} ms",
+      "testFailed": "Teste falhou: {reason} ({ms, number} ms)",
+      "testNoStatus": "sem resposta",
+      "testStatus": "status {status}",
+      "delete": "Excluir",
+      "deleteTitle": "Excluir {name}?",
+      "deleteBody": "O destino deixa de receber webhooks e as entregas com falha mantidas são excluídas. Isto não pode ser desfeito.",
+      "deleteConfirm": "Excluir destino",
+      "cancel": "Cancelar",
+      "toasts": {
+        "created": "{name} adicionado",
+        "saved": "{name} salvo",
+        "on": "{name} está ativo",
+        "off": "{name} está inativo",
+        "deleted": "{name} excluído"
+      }
+    },
+    "dialog": {
+      "createTitle": "Adicionar destino de encaminhamento",
+      "editTitle": "Editar {name}",
+      "close": "Fechar",
+      "name": "Nome",
+      "namePlaceholder": "Serviço de analytics",
+      "url": "URL",
+      "urlHint": "Somente https. Endereços em redes privadas são recusados.",
+      "headerName": "Nome do cabeçalho (opcional)",
+      "headerNameHint": "Enviado com cada entrega, por exemplo Authorization.",
+      "headerValue": "Valor do cabeçalho",
+      "headerValueSaved": "Salvo, termina em ••••{last4}. Deixe em branco para manter.",
+      "headerValueSavedNoLast4": "Salvo. Deixe em branco para manter.",
+      "headerValueHint": "Somente gravação: não é mostrado novamente após salvar.",
+      "removeHeader": "Remover o cabeçalho salvo",
+      "fieldFilter": "Filtro de campos",
+      "fieldFilterHint": "Deixe vazio para encaminhar todos os campos. Digite um campo e pressione Enter, por exemplo messages ou message_template_status_update.",
+      "fieldFilterPlaceholder": "Adicionar um campo",
+      "fieldRemove": "Remover {field}",
+      "timeout": "Tempo limite (segundos)",
+      "timeoutHint": "De 1 a 30",
+      "maxAttempts": "Máximo de tentativas",
+      "maxAttemptsHint": "De 1 a 10",
+      "active": "Encaminhar para este destino",
+      "save": "Salvar",
+      "saving": "Salvando",
+      "cancel": "Cancelar",
+      "errors": {
+        "nameRequired": "Informe um nome.",
+        "urlRequired": "Informe a URL.",
+        "urlHttps": "A URL deve começar com https://.",
+        "headerNameInvalid": "Use somente letras, dígitos e hífens.",
+        "headerValueRequired": "Um cabeçalho precisa de nome e valor.",
+        "headerNameRequired": "Informe também o nome do cabeçalho.",
+        "timeout": "Informe um número inteiro de 1 a 30.",
+        "maxAttempts": "Informe um número inteiro de 1 a 10."
+      }
+    },
+    "failures": {
+      "empty": "Nenhuma entrega com falha",
+      "emptyBody": "As entregas que esgotam as tentativas ficam guardadas aqui por 14 dias para que você possa enviá-las novamente.",
+      "filterAll": "Todos os destinos",
+      "filterLabel": "Destino",
+      "columns": {
+        "target": "Destino",
+        "when": "Falhou em",
+        "attempts": "Tentativas",
+        "reason": "Motivo",
+        "size": "Tamanho",
+        "actions": "Ação"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} bytes",
+      "replay": "Reenviar",
+      "replaying": "Reenviando",
+      "replayed": "Reenviado em {time}",
+      "replayOk": "Entregue: status {status} em {ms, number} ms",
+      "replayFailed": "Não entregue: {reason} ({ms, number} ms)",
+      "reasonStatus": "status {status}",
+      "reasonNone": "sem resposta"
+    }
+  }
+}

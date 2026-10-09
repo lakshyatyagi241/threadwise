@@ -392,10 +392,14 @@ describe('edit (WD-TPL-018, 019)', () => {
     );
   });
 
-  it('an approved template cannot be edited', async () => {
+  it('a disabled template cannot be edited', async () => {
     const t = await api.signup('tna');
     const conn = await seedConnection(t);
-    const row = await seedTemplate(t, conn, { meta_template_id: 'M9' });
+    const row = await seedTemplate(t, conn, {
+      status: 'disabled',
+      meta_status: 'DISABLED',
+      meta_template_id: 'M9',
+    });
     const res = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
       ...form(conn.uuid),
       connectionId: undefined,
@@ -404,6 +408,235 @@ describe('edit (WD-TPL-018, 019)', () => {
     expect(res.status).toBe(409);
     expect(res.body.code).toBe('TPL_NOT_EDITABLE');
     expect(calls).toHaveLength(0);
+  });
+
+  it('edits an approved template in place on Meta: the edit endpoint, no delete, back to review', async () => {
+    const t = await api.signup('tin');
+    const conn = await seedConnection(t);
+    const row = await seedTemplate(t, conn, {
+      meta_template_id: 'M9',
+      template_name: 'order_update',
+    });
+    const detail = await api.as(t.admin).get(`/v2/templates/${row.uuid}`);
+    meta = (c) =>
+      c.method === 'POST' && new URL(c.url).pathname.endsWith('/M9')
+        ? { status: 200, body: { success: true } }
+        : { status: 404, body: { error: { message: 'unstubbed', code: 1 } } };
+
+    const ok = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
+      ...form(conn.uuid, { body: 'Hi {{1}}, your order {{2}} has shipped.' }),
+      connectionId: undefined,
+      rowVersion: detail.body.rowVersion,
+    });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+    expect(ok.body.metaError).toBeNull();
+    expect(ok.body.template).toMatchObject({
+      status: 'pending',
+      metaStatus: 'PENDING',
+      metaTemplateId: 'M9',
+    });
+    expect(ok.body.template.body).toContain('has shipped');
+    expect(calls.map((c) => c.method)).toEqual(['POST']);
+    const sent = calls[0]!.json as {
+      components: Array<{ type: string; text?: string }>;
+      category: string;
+    };
+    expect(sent.category).toBe('UTILITY');
+    expect(sent.components.find((c) => c.type === 'BODY')?.text).toContain('has shipped');
+  });
+
+  it('keeps an approved template live and says why when Meta refuses its edit', async () => {
+    const t = await api.signup('tir');
+    const conn = await seedConnection(t);
+    const row = await seedTemplate(t, conn, {
+      meta_template_id: 'M9',
+      template_name: 'order_update',
+    });
+    const detail = await api.as(t.admin).get(`/v2/templates/${row.uuid}`);
+    meta = () => ({
+      status: 400,
+      body: {
+        error: { message: 'Invalid parameter', code: 100, error_user_msg: 'Edit limit reached.' },
+      },
+    });
+    const res = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
+      ...form(conn.uuid),
+      connectionId: undefined,
+      rowVersion: detail.body.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.metaError).toContain('Edit limit reached');
+    expect(res.body.template.status).toBe('approved');
+  });
+
+  it('refuses to rename or re-language a template that is live on Meta', async () => {
+    const t = await api.signup('tirn');
+    const conn = await seedConnection(t);
+    const row = await seedTemplate(t, conn, {
+      meta_template_id: 'M9',
+      template_name: 'order_update',
+    });
+    const detail = await api.as(t.admin).get(`/v2/templates/${row.uuid}`);
+    const res = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
+      ...form(conn.uuid, { name: 'another_name' }),
+      connectionId: undefined,
+      rowVersion: detail.body.rowVersion,
+    });
+    expect(res.status).toBe(422);
+    expect(calls).toHaveLength(0);
+  });
+});
+
+describe('the library: sort, status tabs and counts', () => {
+  it('sorts by name both ways with a keyset cursor, and by age', async () => {
+    const t = await api.signup('tls');
+    const conn = await seedConnection(t);
+    for (const name of ['bravo', 'Alpha', 'charlie'])
+      await seedTemplate(t, conn, { template_name: name });
+    const names = async (q: string) => {
+      const out: string[] = [];
+      let cursor: string | undefined;
+      for (let i = 0; i < 5; i++) {
+        const res = await api
+          .as(t.admin)
+          .get(
+            `/v2/templates?limit=1&${q}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`,
+          );
+        expect(res.status, JSON.stringify(res.body)).toBe(200);
+        out.push(...res.body.data.map((x: { name: string }) => x.name));
+        cursor = res.body.page.nextCursor ?? undefined;
+        if (!cursor) break;
+      }
+      return out;
+    };
+    expect(await names('sort=name-asc')).toEqual(['Alpha', 'bravo', 'charlie']);
+    expect(await names('sort=name-desc')).toEqual(['charlie', 'bravo', 'Alpha']);
+    expect(await names('sort=oldest')).toEqual(['bravo', 'Alpha', 'charlie']);
+    expect(await names('sort=newest')).toEqual(['charlie', 'Alpha', 'bravo']);
+  });
+
+  it('groups statuses as the reference tabs do and counts them', async () => {
+    const t = await api.signup('tlc');
+    const conn = await seedConnection(t);
+    await seedTemplate(t, conn, { template_name: 'a_ok' });
+    await seedTemplate(t, conn, {
+      template_name: 'b_wait',
+      status: 'pending',
+      meta_status: 'PENDING',
+    });
+    await seedTemplate(t, conn, { template_name: 'c_draft', status: 'draft', meta_status: null });
+    await seedTemplate(t, conn, {
+      template_name: 'd_no',
+      status: 'rejected',
+      meta_status: 'REJECTED',
+    });
+    await seedTemplate(t, conn, {
+      template_name: 'e_paused',
+      status: 'paused',
+      meta_status: 'PAUSED',
+      meta_category: 'MARKETING',
+    });
+
+    const group = async (g: string) =>
+      (await api.as(t.admin).get(`/v2/templates?statusGroup=${g}&sort=name-asc`)).body.data.map(
+        (x: { name: string }) => x.name,
+      );
+    expect(await group('approved')).toEqual(['a_ok']);
+    expect(await group('pending')).toEqual(['b_wait', 'c_draft']);
+    expect(await group('rejected')).toEqual(['d_no', 'e_paused']);
+
+    const counts = await api.as(t.admin).get('/v2/templates/counts?statusGroup=pending');
+    expect(counts.status, JSON.stringify(counts.body)).toBe(200);
+    expect(counts.body).toEqual({
+      categories: { all: 5, UTILITY: 4, MARKETING: 1 },
+      statuses: { all: 5, approved: 1, pending: 2, rejected: 2 },
+      filtered: 2,
+    });
+  });
+
+  it('counts only this organization', async () => {
+    const a = await api.signup('tcoa');
+    const b = await api.signup('tcob');
+    await seedTemplate(a, await seedConnection(a));
+    const res = await api.as(b.admin).get('/v2/templates/counts');
+    expect(res.body.statuses.all).toBe(0);
+  });
+});
+
+describe('header location and rejection code', () => {
+  it('stores the pin of a location header and reads it back', async () => {
+    const t = await api.signup('tloc');
+    const conn = await seedConnection(t);
+    const res = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        submit: false,
+        attachmentType: 'location',
+        headerLocation: { latitude: 19.076, longitude: 72.8777, name: 'HQ', address: 'Mumbai' },
+      }),
+    );
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.template.headerLocation).toEqual({
+      latitude: 19.076,
+      longitude: 72.8777,
+      name: 'HQ',
+      address: 'Mumbai',
+    });
+  });
+
+  it('a pin out of range is refused', async () => {
+    const t = await api.signup('tlo2');
+    const conn = await seedConnection(t);
+    const bad = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        submit: false,
+        attachmentType: 'location',
+        headerLocation: { latitude: 120, longitude: 10 },
+      }),
+    );
+    expect(bad.status).toBe(422);
+  });
+
+  it('reports the rejection code Meta sent, and hides NONE', async () => {
+    const t = await api.signup('trc');
+    const conn = await seedConnection(t);
+    const row = await seedTemplate(t, conn, { status: 'rejected', meta_status: 'REJECTED' });
+    await h.owner.query(
+      `UPDATE wa_templates SET rejection_reason_code = 'INVALID_FORMAT' WHERE id = $1`,
+      [row.id],
+    );
+    expect((await api.as(t.admin).get(`/v2/templates/${row.uuid}`)).body.rejectionReasonCode).toBe(
+      'INVALID_FORMAT',
+    );
+    await h.owner.query(`UPDATE wa_templates SET rejection_reason_code = 'NONE' WHERE id = $1`, [
+      row.id,
+    ]);
+    expect(
+      (await api.as(t.admin).get(`/v2/templates/${row.uuid}`)).body.rejectionReasonCode,
+    ).toBeNull();
+  });
+});
+
+describe('submit on a chosen number', () => {
+  it('sends a never-submitted template through the number the author picks', async () => {
+    const t = await api.signup('tsn');
+    const first = await seedConnection(t);
+    const draft = await send(t.admin, 'post', '/v2/templates', form(first.uuid, { submit: false }));
+    expect(draft.status).toBe(201);
+    const second = await seedConnection(t);
+    // seedConnection marks every number primary; the second belongs to its own WABA id.
+    const res = await send(t.admin, 'post', `/v2/templates/${draft.body.template.id}/submit`, {
+      connectionId: second.uuid,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.template.connectionId).toBe(second.uuid);
+    expect(res.body.template.status).toBe('pending');
+    expect(new URL(calls.find((c) => c.method === 'POST')!.url).pathname).toContain(second.waba);
   });
 });
 

@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Store"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Sluiten"
+      },
+      "errors": {
+        "requestId": "Aanvraag-ID",
+        "retry": "Opnieuw proberen",
+        "network": {
+          "title": "Geen verbinding met de server",
+          "message": "Controleer je verbinding en probeer het opnieuw."
+        },
+        "forbidden": {
+          "title": "Geen toegang",
+          "message": "Je rol staat dit niet toe."
+        },
+        "signedOut": {
+          "title": "Je bent uitgelogd",
+          "message": "Log opnieuw in om door te gaan."
+        },
+        "conflict": {
+          "title": "Elders gewijzigd",
+          "message": "Iemand anders heeft dit gewijzigd terwijl je bewerkte. Laad opnieuw om de laatste versie te zien."
+        },
+        "validation": {
+          "title": "Controleer het formulier",
+          "message": "Sommige velden vragen om aandacht."
+        },
+        "unavailable": {
+          "title": "Nog niet beschikbaar",
+          "message": "De store-service is niet beschikbaar op deze server."
+        },
+        "rateLimited": {
+          "title": "Te veel verzoeken",
+          "message": "Wacht even en probeer het opnieuw."
+        },
+        "notFound": {
+          "title": "Niet gevonden",
+          "message": "Die winkel bestaat niet in deze workspace."
+        },
+        "noShop": {
+          "title": "Nog geen winkel",
+          "message": "Stel eerst je store in."
+        },
+        "slugTaken": {
+          "title": "Adres al in gebruik",
+          "message": "Dat winkeladres is al in gebruik."
+        },
+        "deviceInvalid": {
+          "title": "Kies een verbonden apparaat",
+          "message": "Kies een van je verbonden apparaten."
+        },
+        "noSender": {
+          "title": "Verbind eerst WhatsApp",
+          "message": "Een winkel heeft een verbonden WhatsApp-nummer nodig. Verbind er een en probeer het opnieuw."
+        },
+        "resetNotConfirmed": {
+          "title": "Niet bevestigd",
+          "message": "Reset niet bevestigd."
+        },
+        "domainNotSet": {
+          "title": "Geen eigen domein",
+          "message": "Er is geen eigen domein ingesteld."
+        },
+        "unexpected": {
+          "title": "Er is iets misgegaan",
+          "message": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+        }
+      },
+      "sidebar": {
+        "label": "Store",
+        "navLabel": "Store-onderdelen",
+        "section": "Store",
+        "settings": "Instellingen",
+        "items": {
+          "overview": "Overzicht",
+          "orders": "Bestellingen",
+          "products": "Producten",
+          "groups": "Groepen",
+          "storefront": "Storefront",
+          "coupons": "Kortingscodes",
+          "reviews": "Reviews",
+          "payments": "Betalingen",
+          "gateways": "Afrekengateways",
+          "customers": "Klanten",
+          "invoices": "Facturen",
+          "connection": "Verbinding"
+        },
+        "comingSoon": "Binnenkort beschikbaar",
+        "comingSoonHint": "Binnenkort beschikbaar",
+        "noShopTitle": "Nog geen winkel",
+        "noShopMessage": "Maak je eerste winkel aan om de store-tools te gebruiken.",
+        "noShopAction": "Stel je store in",
+        "live": "Live",
+        "setup": "Instellen",
+        "yourStore": "Je store",
+        "notConnected": "Niet verbonden",
+        "unofficialApi": "Onofficiële API",
+        "deviceConnected": "Apparaat verbonden · /channels",
+        "switchShop": "Winkel wisselen",
+        "shopFallback": "Winkel",
+        "manageShops": "Beheer alle winkels →",
+        "publicUrl": "Openbare URL",
+        "open": "Openen",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd!",
+        "providerLive": "Provider live",
+        "sendingFrom": "Verzenden vanaf",
+        "noDevice": "Geen apparaat verbonden.",
+        "connectOne": "Verbind er een",
+        "thenBind": "koppel het daarna aan deze store via de",
+        "connectWizard": "verbindingswizard"
+      },
+      "dashboard": {
+        "eyebrow": "Store / Overzicht",
+        "title": "Verkoopoverzicht",
+        "subtitle": "Afgelopen 30 dagen. Bestellingen worden samengevoegd van alle kanalen — WABA, storefront, Twilio.",
+        "addProduct": "Product toevoegen",
+        "loading": "Store-overzicht laden",
+        "kpi": {
+          "revenue": "Omzet (30d)",
+          "orders": "Bestellingen (30d)",
+          "aov": "Gem. bestelling",
+          "products": "Producten",
+          "visits": "Bezoeken (30d)"
+        },
+        "trend": {
+          "eyebrow": "Verkooptrend",
+          "title": "Omzet in de tijd"
+        },
+        "legendRevenue": "Omzet ({symbol})",
+        "legendOrders": "Bestellingen",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# bestelling} other {# bestellingen}}",
+        "chartLabel": "Omzet en bestellingen per dag, afgelopen 30 dagen",
+        "tableDay": "Dag",
+        "tableRevenue": "Omzet ({symbol})",
+        "tableOrders": "Bestellingen",
+        "top": {
+          "eyebrow": "Topproducten (30d)",
+          "title": "Bestsellers",
+          "empty": "Nog geen verkopen — deel je storelink."
+        },
+        "recent": {
+          "title": "Recente bestellingen",
+          "viewAll": "Alles bekijken",
+          "open": "Openen",
+          "columns": {
+            "when": "Wanneer",
+            "customer": "Klant",
+            "source": "Bron",
+            "items": "Artikelen",
+            "total": "Totaal",
+            "status": "Status",
+            "open": "Openen"
+          },
+          "itemsCount": "{count, plural, one {# artikel} other {# artikelen}}",
+          "emptyTitle": "Nog geen bestellingen",
+          "emptyMessage": "Zodra klanten via je storefront of WhatsApp bestellen, verschijnen ze hier."
+        }
+      },
+      "settings": {
+        "eyebrow": "Store / Storefront",
+        "title": "Storefront-ontwerp",
+        "viewLive": "Bekijk live",
+        "noAccess": "Je rol heeft geen toegang tot de storefront-instellingen.",
+        "loading": "Storefront-instellingen laden",
+        "saved": "Storefront bijgewerkt.",
+        "conflict": "Deze storefront is elders gewijzigd terwijl je bewerkte. Laad opnieuw om de laatste instellingen te krijgen en doe daarna je wijzigingen opnieuw.",
+        "reload": "Opnieuw laden",
+        "fixErrors": "Los de gemarkeerde velden op en sla opnieuw op.",
+        "optional": "(optioneel)",
+        "save": "Opslaan",
+        "readOnly": "Je kunt deze instellingen bekijken maar niet wijzigen.",
+        "live": "Storefront live (uitvinken haalt hem offline)",
+        "theme": {
+          "title": "Thema"
+        },
+        "slug": {
+          "label": "Storefront-slug",
+          "hint": "Je store komt op"
+        },
+        "domain": {
+          "label": "Eigen domein",
+          "placeholder": "shop.jouwbedrijf.nl",
+          "verifiedLive": "Geverifieerd — je domein is live",
+          "addCname": "Voeg deze CNAME toe bij je DNS-provider:",
+          "cname": "CNAME",
+          "verify": "Nu verifiëren",
+          "verified": "Domein geverifieerd ✓",
+          "notPointing": "CNAME wijst niet naar {expected}",
+          "notSet": "Er is geen eigen domein ingesteld.",
+          "verifyFailed": "Het domein kon niet worden gecontroleerd. Probeer het opnieuw."
+        },
+        "brand": {
+          "logoUrl": "Logo-URL",
+          "color": "Merkkleur (hex)",
+          "colorPicker": "Kies de merkkleur",
+          "heroText": "Hero-tekst",
+          "heroPlaceholder": "Welkom in onze store",
+          "footerText": "Voettekst",
+          "footerPlaceholder": "© 2026 Jouw store"
+        },
+        "currency": {
+          "title": "Valuta",
+          "label": "Valuta",
+          "hint": "Standaard voor nieuwe producten + het symbool in het winkelwagenpaneel."
+        },
+        "shipping": {
+          "title": "Verzending",
+          "flat": "Vast verzendtarief",
+          "flatHint": "Wordt aan elke bestelling toegevoegd. Leeg of 0 = gratis.",
+          "freeAbove": "Gratis verzending vanaf",
+          "freeAboveHint": "Winkelwagens boven dit bedrag worden gratis verzonden.",
+          "note": "Verzendnotitie",
+          "noteHint": "Wordt getoond in het winkelwagen en op de productpagina.",
+          "notePlaceholder": "2–5 werkdagen · Gevolgd"
+        },
+        "payment": {
+          "title": "Betaallink",
+          "intro": "Kies een betaalprovider en wij voegen de betaallink toe aan elk WhatsApp-bestelbericht. De koper betaalt via de link en jij bevestigt in de chat. Er zit geen ingebouwd afrekenproces in de storefront.",
+          "provider": "Provider",
+          "providers": {
+            "none": "Geen · betaling bij levering",
+            "upi": "UPI (India) — VPA + naam",
+            "razorpay_link": "Razorpay-betaallink (statische link plakken)",
+            "razorpay_api": "Razorpay (links automatisch genereren + automatisch bevestigen)",
+            "stripe_link": "Stripe-betaallink",
+            "paypal_me": "PayPal.me-handle",
+            "bank_transfer": "Instructies voor bankoverschrijving"
+          },
+          "handle": "Betaalgegevens",
+          "handleHint": "UPI-VPA, betaallink-URL, PayPal.me-handle of bankrekening.",
+          "handlePlaceholder": "bijv. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay-API (automatische links)",
+            "keyId": "Sleutel-ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Sleutelgeheim",
+            "webhookSecret": "Webhook-geheim",
+            "stored": "opgeslagen — leeg laten om te behouden",
+            "show": "Geheim tonen",
+            "hide": "Geheim verbergen",
+            "webhookHelp": "Stel in het Razorpay-dashboard de webhook-URL in op",
+            "webhookEvent": "voor de gebeurtenis payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Herstel van verlaten winkelwagen",
+          "enable": "Stuur een WhatsApp-herinnering naar klanten die afrekenen maar niet afronden",
+          "enableHint": "Legt het telefoonnummer vast bij het afrekenen; de herinnering wordt automatisch geannuleerd als ze bestellen. Vereist een verbonden apparaat.",
+          "delay": "Vertraging (minuten)",
+          "message": "Bericht",
+          "messageHint": "(leeg = standaard; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Hoi '{name}'! Je hebt artikelen in je winkelwagen bij '{shop}' laten staan. Rond hier af: '{url}'"
+        },
+        "problems": {
+          "required": "Dit veld is verplicht.",
+          "tooLong": "Maximaal {max} tekens.",
+          "slugPattern": "Gebruik alleen kleine letters, cijfers en streepjes.",
+          "domainInvalid": "Dat lijkt geen geldig domein (bijv. shop.jouwbedrijf.nl).",
+          "urlInvalid": "Voer een volledig adres in dat begint met http:// of https://.",
+          "colorInvalid": "Gebruik een hexkleur zoals #075E54.",
+          "amountInvalid": "Voer een getal in, nul of meer.",
+          "amountTooBig": "Maximaal {max}.",
+          "delayRange": "Voer een geheel getal in van {min} tot {max}.",
+          "themeInvalid": "Kies een van de thema's.",
+          "currencyInvalid": "Kies een van de valuta in de lijst.",
+          "providerInvalid": "Kies een van de providers in de lijst.",
+          "slugTaken": "Die slug is al in gebruik. Kies een andere."
+        }
+      },
+      "share": {
+        "message": "Bekijk mijn winkel: {name}",
+        "subject": "Bekijk mijn winkel · {name}",
+        "eyebrow": "Deel je winkel",
+        "fallbackName": "Mijn winkel",
+        "close": "Sluiten",
+        "link": "Winkellink",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd ✓",
+        "copiedShort": "Gekopieerd",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Naar een chat sturen",
+        "email": "E-mail",
+        "emailHint": "Mailapp openen",
+        "telegram": "Telegram",
+        "telegramHint": "Delen naar kanaal",
+        "more": "Meer…",
+        "moreHint": "Deelmenu van telefoon",
+        "nativeUnsupported": "Niet ondersteund in deze browser",
+        "showQr": "QR-code tonen",
+        "qrAlt": "QR-code",
+        "qrCaption": "Scan om de winkel te openen"
+      },
+      "wizard": {
+        "loading": "Je winkels laden",
+        "back": "Terug",
+        "breadcrumb": "Verbinden / WhatsApp-store",
+        "manageConnections": "Beheer alle verbindingen →",
+        "titles": {
+          "list": "Je winkels",
+          "add": "Stel je store in",
+          "edit": "{name} bewerken",
+          "shopFallback": "winkel"
+        },
+        "gate": {
+          "step": "Stap 1 van 3",
+          "title": "Verbind eerst WhatsApp",
+          "message": "Je store heeft een verbonden WhatsApp-nummer nodig om orderbevestigingen te versturen en klanten te laten chatten. Ga naar je kanalen om er een te koppelen — het duurt 30 seconden.",
+          "action": "Ga naar apparaten"
+        },
+        "list": {
+          "headline": "{count, plural, one {# winkel} other {# winkels}} in {workspace}",
+          "intro": "Elke winkel heeft een eigen openbare URL, thema en verzendapparaat. Voeg er zoveel toe als je nodig hebt — voor verschillende merken, talen of regio's.",
+          "add": "Winkel toevoegen",
+          "addAnother": "Nog een winkel toevoegen",
+          "addAnotherHint": "Draai een aparte storefront met een eigen URL, thema en WhatsApp-nummer."
+        },
+        "share": {
+          "fallbackName": "Mijn winkel"
+        },
+        "noAccess": {
+          "title": "Je kunt winkels niet wijzigen",
+          "message": "Je rol kan winkels bekijken maar niet aanmaken of bewerken.",
+          "action": "Terug naar winkels"
+        },
+        "delete": {
+          "title": "{name} verwijderen?",
+          "message": "Dit verwijdert de storefront en de bestellingen definitief. Producten in je workspace worden niet beïnvloed. Dit kan niet ongedaan worden gemaakt.",
+          "confirm": "Ja, verwijderen",
+          "cancel": "Annuleren",
+          "done": "Winkel verwijderd.",
+          "thisShop": "deze winkel"
+        },
+        "reset": {
+          "open": "Alle store-gegevens wissen",
+          "title": "Alle store-gegevens wissen?",
+          "message": "Dit verwijdert definitief elke winkel, bestelling en product van deze workspace. Dit kan niet ongedaan worden gemaakt.",
+          "confirm": "Ja, alles wissen",
+          "done": "Alle store-gegevens voor deze workspace zijn gewist.",
+          "notConfirmed": "Reset niet bevestigd."
+        },
+        "card": {
+          "live": "Live",
+          "disabled": "Uitgeschakeld",
+          "theme": "{theme}-thema",
+          "untitled": "Naamloze winkel",
+          "sendingFrom": "Verzenden vanaf",
+          "noDevice": "Geen apparaat",
+          "domain": "Domein",
+          "pending": "in behandeling",
+          "builtIn": "Ingebouwde URL",
+          "manage": "Beheren",
+          "manageTitle": "Admin-dashboard openen",
+          "preview": "Voorbeeld",
+          "previewTitle": "Openbare storefront openen in een nieuw tabblad",
+          "edit": "Bewerken",
+          "editTitle": "Winkelinstellingen bewerken",
+          "share": "Delen",
+          "shareAria": "{name} delen",
+          "delete": "Winkel verwijderen",
+          "deleteAria": "{name} verwijderen"
+        },
+        "form": {
+          "backToShops": "Terug naar winkels",
+          "creatingShop": "Winkel #{n} aanmaken",
+          "progress": "Stappen",
+          "steps": {
+            "details": "Winkelgegevens",
+            "url": "Openbare URL",
+            "device": "Verzendapparaat"
+          },
+          "optional": "(optioneel)",
+          "details": {
+            "title": "Winkelgegevens",
+            "hint": "Naam voor klanten + de URL-slug waaronder producten komen te staan.",
+            "name": "Winkelnaam",
+            "nameHint": "Wordt getoond in de storefront-kop en op orderbevestigingen.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "bijv. {workspace} · Mumbai",
+            "slug": "Storefront-slug",
+            "auto": "(automatisch)",
+            "slugLocked": "Vergrendeld zodra de winkel live is, zodat gedeelde links blijven werken.",
+            "slugAuto": "Gegenereerd uit je winkelnaam — definitief bij opslaan."
+          },
+          "url": {
+            "title": "Openbare URL",
+            "hint": "Kies hoe kopers je winkel bereiken — de ingebouwde URL is gratis, een eigen domein oogt professioneler.",
+            "builtIn": "Ingebouwde URL · gratis",
+            "pathMode": "Werkt zodra je opslaat. URL op basis van pad omdat er geen openbare storefront-host is ingesteld.",
+            "subdomainMode": "Werkt zodra je opslaat. Gehost op het storefront-domein van het platform.",
+            "domain": "Eigen domein",
+            "domainHint": "Je voegt na het opslaan een CNAME toe bij je DNS-provider en verifieert dit op de storefront-instellingenpagina. Laat leeg om de ingebouwde URL te gebruiken.",
+            "domainPlaceholder": "shop.jouwbedrijf.nl",
+            "verified": "{domain} is geverifieerd.",
+            "pending": "{domain} wacht op DNS-verificatie."
+          },
+          "device": {
+            "title": "Verzendapparaat",
+            "hint": "Welk WhatsApp-nummer orderbevestigingen en antwoorden naar kopers stuurt.",
+            "none": "Geen verbonden apparaten op dit account.",
+            "pair": "Koppel er een in je kanalen →",
+            "official": "Officiële API · Meta (WABA)",
+            "officialDetail": "WhatsApp Business-nummer van de workspace",
+            "fallback": "Apparaat",
+            "noNumber": "Geen nummer",
+            "connected": "verbonden"
+          },
+          "cancel": "Annuleren",
+          "deleteThis": "Deze winkel verwijderen",
+          "saveChanges": "Wijzigingen opslaan",
+          "create": "Winkel aanmaken →",
+          "created": "Winkel \"{name}\" aangemaakt.",
+          "updated": "Winkel \"{name}\" bijgewerkt.",
+          "problems": {
+            "nameRequired": "Voer een winkelnaam in.",
+            "nameTooLong": "Maximaal 191 tekens.",
+            "domainInvalid": "Dat lijkt geen geldig domein (bijv. shop.jouwbedrijf.nl).",
+            "domainTooLong": "Maximaal 191 tekens.",
+            "deviceInvalid": "Kies een van je verbonden apparaten.",
+            "slugTaken": "Die winkelnaam geeft een adres dat al in gebruik is. Pas de naam iets aan."
+          },
+          "live": {
+            "eyebrow": "Deze winkel is live",
+            "fallbackName": "Je winkel",
+            "hint": "Voeg producten toe, kies een thema, bekijk bestellingen en deel je link.",
+            "view": "Winkel bekijken",
+            "share": "Winkel delen",
+            "dashboard": "Dashboard openen"
+          }
+        }
+      }
+    }
+  }
+}

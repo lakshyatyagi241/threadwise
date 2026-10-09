@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Platforma",
+      "inbox": "Skrzynka i czat",
+      "audience": "CRM",
+      "sales": "Sprzedaż",
+      "campaigns": "Kampanie",
+      "automation": "Automatyzacja",
+      "store": "Sklep",
+      "apps": "Marketplace",
+      "help": "Wsparcie i pomoc",
+      "settings": "Ustawienia"
+    },
+    "locked": "Ulepsz",
+    "language": "Język",
+    "theme": "Motyw",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "logout": "Wyloguj się",
+    "openMenu": "Otwórz menu",
+    "admin": {
+      "title": "Konsola platformy",
+      "note": "Ekrany administratora platformy pojawią się tutaj, gdy istnieje już konto superadministratora."
+    },
+    "soon": "Wkrótce",
+    "new": "Nowe",
+    "comingSoon": "Wkrótce dostępne",
+    "appGate": {
+      "title": "{app} nie należy do Twojej przestrzeni roboczej",
+      "body": "{app} to opcjonalna aplikacja. Dodaj ją z Marketplace, a pojawi się w Twoim menu.",
+      "bodyNoMarketplace": "{app} to opcjonalna aplikacja, której nie ma w tej przestrzeni roboczej. Poproś administratora przestrzeni roboczej o dodanie jej z Marketplace.",
+      "browse": "Przeglądaj Marketplace",
+      "back": "Wróć do pulpitu",
+      "unofficialTitle": "{app} jest niedostępna",
+      "unofficialBody": "{app} jest używana tylko z osobistymi numerami WhatsApp połączonymi kodem QR, które nie są włączone w Twojej przestrzeni roboczej. WhatsApp łączy się przez oficjalne API WhatsApp Business."
+    },
+    "closeMenu": "Zamknij menu",
+    "mainMenu": "Menu główne",
+    "userMenu": "Menu konta",
+    "account": "Konto",
+    "balance": "Saldo",
+    "pageSettings": {
+      "label": "Ustawienia tej strony",
+      "hint": "Te ustawienia są widoczne, ponieważ Twoja rola pozwala je zmieniać."
+    },
+    "notifications": "Powiadomienia",
+    "settings": "Ustawienia",
+    "pinned": "Pomoc i ustawienia",
+    "nav": {
+      "analytics": "Analityka",
+      "notifications": "Powiadomienia",
+      "inbox": "Skrzynka odbiorcza",
+      "quickChat": "Szybki czat",
+      "callLogs": "Dziennik połączeń",
+      "teamChat": "Czat zespołu",
+      "leadFinder": "Wyszukiwarka leadów",
+      "campaigns": "Kampanie",
+      "broadcasts": "Wiadomości masowe",
+      "scheduled": "Zaplanowane",
+      "templates": "Szablony",
+      "history": "Historia",
+      "flows": "Przepływy",
+      "aiAssistants": "Asystenci AI",
+      "appointments": "Wizyty",
+      "crmDashboard": "Pulpit CRM",
+      "store": "Sklep",
+      "catalog": "Katalog",
+      "support": "Wsparcie",
+      "guidebook": "Przewodnik",
+      "pipelines": "Lejki",
+      "tasks": "Zadania",
+      "companies": "Firmy",
+      "emailTemplates": "Szablony e-maili",
+      "proposals": "Oferty",
+      "estimates": "Wyceny",
+      "invoices": "Faktury",
+      "payments": "Płatności"
+    },
+    "help": "Pomoc",
+    "unreadCount": "{count, plural, one {# nieprzeczytana} few {# nieprzeczytane} many {# nieprzeczytanych} other {# nieprzeczytanych}}"
+  }
+}

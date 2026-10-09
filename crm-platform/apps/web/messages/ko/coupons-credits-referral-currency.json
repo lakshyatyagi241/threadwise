@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "결제 및 요금제",
+      "coupons": "쿠폰",
+      "currencies": "통화",
+      "currenciesGroup": "현지화",
+      "affiliate": "제휴"
+    },
+    "common": {
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "cancel": "취소",
+      "dismiss": "닫기",
+      "admin": "관리자",
+      "readOnly": "이 페이지는 볼 수 있지만 슈퍼 관리자만 변경할 수 있습니다.",
+      "requestId": "요청 ID",
+      "errors": {
+        "forbidden": "이 페이지에 접근할 권한이 없습니다.",
+        "request": "요청을 완료하지 못했습니다.",
+        "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요."
+      },
+      "pager": {
+        "label": "페이지 이동",
+        "previous": "이전",
+        "next": "다음",
+        "page": "{n}페이지"
+      }
+    },
+    "errors": {
+      "generic": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "forbidden": "슈퍼 관리자만 변경할 수 있습니다.",
+      "notFound": "이 항목은 더 이상 존재하지 않습니다. 삭제되었을 수 있습니다.",
+      "conflict": "방금 다른 사용자가 변경했습니다. 페이지를 새로 고치고 다시 시도하세요.",
+      "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
+      "codeTaken": "다른 쿠폰에서 이미 이 코드를 사용 중입니다.",
+      "planUnknown": "선택한 요금제 중 하나 이상이 더 이상 존재하지 않습니다.",
+      "currencyUnknown": "활성 통화 중 하나를 선택하세요.",
+      "currencyTaken": "이 코드의 통화가 이미 있습니다.",
+      "defaultProtected": "시스템 기본 통화입니다. 먼저 다른 기본값을 선택하세요.",
+      "inUse": "이 통화는 아직 {used}에서 사용 중입니다. 대신 비활성화하세요.",
+      "ratesFailed": "환율 제공처에 연결할 수 없거나 환율이 반환되지 않았습니다. 변경된 환율은 없습니다."
+    },
+    "coupons": {
+      "title": "할인 쿠폰",
+      "titleLead": "할인",
+      "titleAccent": "쿠폰",
+      "crumbHere": "쿠폰",
+      "eyebrow": "관리자 · 결제 · 쿠폰 코드",
+      "description": "고객이 결제 시 입력하는 프로모션 코드입니다. 퍼센트 또는 정액을 선택하고, 유효 기간을 설정하고, 특정 요금제로 제한하고, 총 사용 횟수를 제한하세요.",
+      "new": "새 쿠폰",
+      "kpi": {
+        "total": "전체 쿠폰",
+        "totalHint": "카탈로그 내",
+        "active": "활성",
+        "activeHint": "사용 가능",
+        "expired": "만료됨",
+        "expiredHint": "만료일 경과",
+        "redeemed": "총 사용 횟수",
+        "redeemedHint": "누적 사용"
+      },
+      "filters": {
+        "label": "쿠폰 필터",
+        "all": "전체",
+        "active": "활성",
+        "disabled": "비활성화됨",
+        "expired": "만료됨",
+        "search": "코드 또는 설명으로 찾기…",
+        "searchLabel": "쿠폰 검색"
+      },
+      "table": {
+        "label": "쿠폰",
+        "code": "코드",
+        "discount": "할인",
+        "uses": "사용 횟수",
+        "validity": "유효 기간",
+        "status": "상태",
+        "actions": "작업"
+      },
+      "validity": {
+        "forever": "무기한",
+        "now": "지금",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "일치하는 쿠폰이 없습니다.",
+        "hint": "필터를 조정하거나 초기화하거나,",
+        "create": "첫 쿠폰 만들기"
+      },
+      "footer": "쿠폰 {total}개 중 {from}–{to} 표시",
+      "pager": {
+        "label": "페이지 이동",
+        "previous": "이전",
+        "next": "다음",
+        "page": "{n}페이지"
+      },
+      "actions": {
+        "edit": "수정",
+        "delete": "삭제",
+        "menu": "작업",
+        "toggle": "{code} 켜기/끄기"
+      },
+      "toasts": {
+        "created": "쿠폰이 생성되었습니다.",
+        "updated": "쿠폰이 업데이트되었습니다.",
+        "activated": "활성화되었습니다.",
+        "deactivated": "비활성화되었습니다.",
+        "deleted": "쿠폰이 제거되었습니다."
+      },
+      "delete": {
+        "title": "쿠폰 삭제",
+        "body": "쿠폰 {code}을(를) 삭제할까요? 이미 사용한 워크스페이스는 할인이 유지됩니다.",
+        "confirm": "예, 삭제"
+      },
+      "editor": {
+        "notFoundTitle": "쿠폰을 찾을 수 없음",
+        "notFoundBody": "이 주소의 쿠폰이 없습니다. 삭제되었거나 링크가 잘못되었을 수 있습니다.",
+        "backToList": "쿠폰으로 돌아가기",
+        "crumbNew": "새",
+        "eyebrowNew": "관리자 · 결제 · 쿠폰 코드 · 만들기",
+        "eyebrowEdit": "관리자 · 결제 · 쿠폰 코드 · 수정",
+        "titleLead": "새",
+        "titleAccent": "쿠폰",
+        "descriptionNew": "/checkout 중에 사용하는 프로모션 코드입니다. 퍼센트 또는 정액을 선택하고, 하나의 요금제 또는 모든 요금제에 연결하고, 필요하면 유효 기간을 설정하세요.",
+        "redeemed": "{used}{max}회 사용됨",
+        "redeemedMax": " / {max}",
+        "expires": "{when} 만료",
+        "active": "활성",
+        "disabled": "비활성화됨",
+        "create": "쿠폰 만들기",
+        "saveChanges": "변경 사항 저장",
+        "saving": "저장 중",
+        "cancel": "취소",
+        "problemsTitle": "확인이 필요한 필드가 있습니다:",
+        "problems": {
+          "code": "코드: 64자 이내로 코드를 입력하세요.",
+          "description": "설명: 255자 이내로 입력하세요.",
+          "adminNote": "관리자 메모: 1000자 이내로 입력하세요.",
+          "type": "유형: 퍼센트 또는 정액을 선택하세요.",
+          "amount": "금액: 10 또는 12.5와 같은 숫자를 입력하세요.",
+          "maxDiscountAmount": "최대 할인 한도: 숫자를 입력하거나 비워 두세요.",
+          "currencyCode": "통화 고정: 8자 이내로 입력하세요.",
+          "minOrderAmount": "최소 주문 금액: 숫자를 입력하거나 비워 두세요.",
+          "applicablePlans": "적용 요금제: 목록에서 요금제를 선택하세요.",
+          "startsAt": "시작 일시: 올바른 날짜와 시간을 입력하세요.",
+          "expiresAt": "만료 일시: 시작 이후의 올바른 날짜와 시간을 입력하세요.",
+          "maxUses": "최대 총 사용 횟수: 1 이상의 정수 또는 빈칸.",
+          "perUserLimit": "사용자당 한도: 1 이상의 정수 또는 빈칸."
+        },
+        "sections": {
+          "identity": "식별 정보",
+          "discount": "할인",
+          "eligibility": "적용 대상",
+          "limits": "한도 및 동작"
+        },
+        "fields": {
+          "code": "코드",
+          "codeHint": "대문자로 저장됩니다. 고객은 결제 시 이 코드를 정확히 입력해야 합니다.",
+          "codePlaceholder": "WELCOME10",
+          "description": "설명",
+          "descriptionNote": "(고객에게 표시)",
+          "descriptionPlaceholder": "웰컴 혜택: 첫 달 10% 할인",
+          "adminNote": "관리자 메모",
+          "adminNoteNote": "(내부용, 표시되지 않음)",
+          "adminNotePlaceholder": "휴일 세일 배치 · Slack #marketing · 캠페인 종료 시 종료",
+          "activeTitle": "활성",
+          "activeHint": "고객이 결제 시 적용할 수 있습니다",
+          "type": "유형",
+          "typePercent": "퍼센트 (%)",
+          "typeFixed": "정액",
+          "amount": "금액",
+          "amountHint": "퍼센트 쿠폰에서 10은 10%를 의미합니다. 정액 쿠폰에서 10은 통화 단위 10을 의미합니다.",
+          "maxDiscount": "최대 할인 한도",
+          "maxDiscountNote": "(% 유형만 해당)",
+          "maxDiscountPlaceholder": "비움 = 한도 없음",
+          "maxDiscountHint": "예: 20% 할인, 최대 $50.",
+          "currency": "통화 고정",
+          "currencyAny": "모든 통화",
+          "currencyHint": "사용을 단일 통화로 제한합니다 (정액 쿠폰에 적용).",
+          "minOrder": "최소 주문 금액",
+          "minOrderPlaceholder": "0 = 최소 금액 없음",
+          "plans": "적용 요금제",
+          "plansNote": "(비움 = 모든 요금제)",
+          "plansPlaceholder": "요금제를 하나 이상 선택하세요 (비움 = 모든 요금제)...",
+          "plansHint": "입력하여 목록을 좁히고, 선택하여 추가하며, 칩의 ×로 제거하세요.",
+          "plansEmpty": "선택할 수 있는 요금제가 더 없습니다.",
+          "plansRemove": "{name} 제거",
+          "plansClear": "모든 요금제 제거",
+          "startsAt": "시작 일시",
+          "startsAtHint": "비움 = 즉시 사용 가능.",
+          "expiresAt": "만료 일시",
+          "expiresAtHint": "비움 = 만료되지 않음.",
+          "maxUses": "최대 총 사용 횟수",
+          "unlimitedPlaceholder": "비움 = 무제한",
+          "maxUsesHint": "모든 고객 합산입니다.",
+          "perUser": "사용자당 한도",
+          "perUserHint": "고객 한 명당 허용되는 사용 횟수입니다.",
+          "firstPurchaseTitle": "첫 구매에만 적용",
+          "firstPurchaseHint": "유료 주문 이력이 없는 워크스페이스만 해당",
+          "stackableTitle": "다른 쿠폰과 함께 사용 가능",
+          "stackableHint": "고객이 결제 시 다른 활성 코드와 함께 사용할 수 있습니다"
+        }
+      }
+    },
+    "currencies": {
+      "title": "플랫폼 통화",
+      "titleLead": "플랫폼",
+      "titleAccent": "통화",
+      "crumbGroup": "시스템",
+      "crumbGroup2": "현지화",
+      "crumbHere": "통화",
+      "eyebrow": "관리자 · 플랫폼 · 현지화",
+      "description": "워크스페이스에서 선택할 수 있는 통화를 관리합니다. 환율은 USD 기준으로 저장됩니다. 기본값을 변경하면 모든 사용자 대시보드, 청구서, 지갑 표시에 반영됩니다.",
+      "fetchRates": "실시간 환율 가져오기",
+      "fetching": "가져오는 중",
+      "add": "통화 추가",
+      "kpi": {
+        "total": "전체",
+        "totalHint": "설정된 통화",
+        "active": "활성",
+        "activeHint": "워크스페이스에 표시됨",
+        "default": "시스템 기본값",
+        "defaultHint": "새로 만든 워크스페이스에 사용됨",
+        "inactive": "비활성",
+        "inactiveHint": "워크스페이스 설정에서 제공되지 않음"
+      },
+      "defaultCard": {
+        "eyebrow": "시스템 기본값",
+        "title": "플랫폼 전체의 대체 통화",
+        "body": "통화를 선택하지 않은 워크스페이스는 이 통화를 사용합니다. 저장하면 캐시가 즉시 지워져 앱 전체에서 다음 페이지 로드부터 변경 사항이 반영됩니다.",
+        "select": "기본 통화",
+        "set": "기본값으로 설정",
+        "setting": "저장 중"
+      },
+      "search": "코드, 이름 또는 기호…",
+      "searchLabel": "통화 검색",
+      "searchButton": "검색",
+      "table": {
+        "label": "통화",
+        "code": "코드",
+        "name": "이름",
+        "symbol": "기호",
+        "rate": "환율 (1 USD →)",
+        "decimals": "소수 자릿수",
+        "active": "활성",
+        "actions": "작업"
+      },
+      "defaultBadge": "기본",
+      "rate": "1 USD → {rate}",
+      "on": "켜짐",
+      "off": "꺼짐",
+      "empty": {
+        "none": "통화가 아직 없습니다.",
+        "noMatch": "\"{q}\"과(와) 일치하는 항목이 없습니다."
+      },
+      "footer": "통화 {total}개 중 {from}–{to} 표시",
+      "actions": {
+        "edit": "수정",
+        "delete": "삭제",
+        "toggle": "{code} 켜기/끄기"
+      },
+      "toasts": {
+        "added": "통화가 추가되었습니다.",
+        "updated": "통화가 업데이트되었습니다.",
+        "activated": "활성화되었습니다.",
+        "deactivated": "비활성화되었습니다.",
+        "deleted": "통화가 제거되었습니다.",
+        "defaultSet": "기본 통화가 {code}(으)로 설정되었습니다.",
+        "ratesUpdated": "{provider}에서 통화 {count}개를 업데이트했습니다."
+      },
+      "delete": {
+        "title": "통화 삭제",
+        "body": "{code}을(를) 삭제할까요? 이 통화로 저장된 가격은 연결이 끊어집니다.",
+        "confirm": "예, 삭제"
+      },
+      "form": {
+        "addTitle": "통화 추가",
+        "editTitle": "{code} 수정",
+        "name": "이름 *",
+        "namePlaceholder": "스위스 프랑",
+        "code": "ISO 코드 *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "통화가 생성된 후에는 코드를 변경할 수 없습니다.",
+        "symbol": "기호",
+        "symbolPlaceholder": "Fr",
+        "precision": "소수 자릿수 *",
+        "rate": "환산율 (1 USD = ?) *",
+        "active": "즉시 활성화",
+        "save": "통화 추가",
+        "saveChanges": "변경 사항 저장",
+        "cancel": "취소",
+        "problemsTitle": "확인이 필요한 필드가 있습니다:",
+        "problems": {
+          "name": "이름: 120자 이내로 이름을 입력하세요.",
+          "code": "ISO 코드: CHF와 같은 세 글자.",
+          "symbol": "기호: 20자 이내.",
+          "precision": "소수 자릿수: 0에서 6 사이의 정수.",
+          "exchangeRate": "환율: 0.000001 이상의 숫자."
+        },
+        "eyebrow": "새 항목",
+        "rateHint": "위의 \"실시간 환율 가져오기\"를 사용하면 open.er-api.com에서 값을 미리 채울 수 있습니다.",
+        "editEyebrow": "항목 수정"
+      },
+      "catalog": {
+        "eyebrow": "카탈로그",
+        "title": "모든 통화"
+      }
+    },
+    "affiliate": {
+      "title": "제휴",
+      "subtitle": "링크를 공유하고 소개한 워크스페이스를 확인하세요.",
+      "common": {
+        "dismiss": "닫기"
+      },
+      "states": {
+        "loading": "제휴 데이터 불러오는 중"
+      },
+      "header": {
+        "codeLabel": "내 추천 코드",
+        "noCode": "아직 코드 없음",
+        "linkLabel": "내 추천 링크",
+        "copyLink": "링크 복사",
+        "copied": "링크가 복사되었습니다.",
+        "copyFailed": "링크를 복사하지 못했습니다. 직접 선택하여 복사하세요.",
+        "reward": "추천받은 워크스페이스가 첫 결제를 할 때마다 {amount}을(를) 받습니다.",
+        "rewardMessages": "{count, plural, other {메시지 #건}}에 해당합니다.",
+        "rewardNone": "현재 프로그램은 신규 추천에 대해 지급하지 않습니다. 코드와 내역은 여기에 유지됩니다."
+      },
+      "filters": {
+        "label": "기간 및 내보내기",
+        "range": "기간",
+        "ranges": {
+          "7d": "최근 7일",
+          "30d": "최근 30일",
+          "90d": "최근 90일",
+          "all": "전체 기간"
+        },
+        "search": "추천 검색",
+        "searchPlaceholder": "이름, 이메일 또는 코드",
+        "reset": "초기화",
+        "export": "CSV 내보내기",
+        "exporting": "파일 준비 중",
+        "exported": "{fileName}을(를) 다운로드했습니다."
+      },
+      "kpi": {
+        "inRange": "기간 내 추천",
+        "vsPrevious": "이전 기간 대비 {delta}",
+        "earned": "누적 수익",
+        "last30": "최근 30일 추천",
+        "last30Earned": "최근 30일간 {amount} 적립",
+        "average": "추천당 평균"
+      },
+      "chart": {
+        "title": "기간별 추천",
+        "label": "기간별 추천은 막대, 적립 크레딧은 선으로 표시",
+        "buckets": {
+          "daily": "일별",
+          "weekly": "주별",
+          "monthly": "월별"
+        },
+        "signups": "추천",
+        "credits": "적립 크레딧",
+        "bucket": "기간",
+        "empty": "이 기간에는 추천이 아직 없습니다."
+      },
+      "topCodes": {
+        "title": "상위 코드",
+        "referrals": "{count, plural, other {추천 #건}}",
+        "empty": "이 기간에 사용된 코드가 없습니다."
+      },
+      "payouts": {
+        "title": "최근 지급",
+        "balanceAfter": "{amount} 후 잔액",
+        "empty": "지급 내역이 아직 없습니다. 추천받은 워크스페이스가 첫 결제를 하면 보상이 지갑에 들어옵니다."
+      },
+      "table": {
+        "title": "추천",
+        "label": "선택한 기간의 추천",
+        "when": "일시",
+        "referee": "추천받은 사용자",
+        "code": "사용한 코드",
+        "credits": "적립 크레딧",
+        "status": "상태",
+        "transaction": "지갑 거래",
+        "noName": "이름 없는 사용자",
+        "paid": "지급됨",
+        "pending": "대기 중",
+        "noTransaction": "지갑 거래 없음",
+        "pagination": "추천 페이지",
+        "previous": "이전",
+        "next": "다음",
+        "showing": "{total}개 중 {from}-{to} 표시"
+      },
+      "empty": {
+        "noneTitle": "추천이 아직 없습니다",
+        "noneBody": "링크를 공유하세요. 링크로 가입한 사람이 여기에 표시됩니다.",
+        "filteredTitle": "일치하는 추천이 없습니다",
+        "filteredBody": "다른 기간을 선택하거나 검색을 지우세요."
+      },
+      "errors": {
+        "unauthenticated": "세션이 종료되었습니다. 제휴 데이터를 보려면 다시 로그인하세요.",
+        "forbidden": "이 페이지에 접근할 권한이 없습니다.",
+        "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+        "validation": "해당 필터를 적용할 수 없습니다. 초기화한 후 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+        "generic": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "requestId": "요청 ID",
+        "retry": "다시 시도"
+      }
+    }
+  }
+}

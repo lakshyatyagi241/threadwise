@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useGoogleFiles } from '../../../api/hooks';
 import { Check, Field, Notice, SelectInput, TextInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
@@ -20,31 +21,21 @@ import {
 
 type Kind = 'sheets' | 'docs' | 'forms';
 
-const COPY: Record<Kind, { pick: string; empty: string; saved: string; noun: string }> = {
-  sheets: {
-    pick: '— pick a sheet —',
-    empty: 'No spreadsheets found — paste a URL/ID below',
-    saved: 'Sheet',
-    noun: 'sheets',
-  },
-  docs: { pick: '— pick a template doc —', empty: 'No docs found', saved: 'Doc', noun: 'docs' },
-  forms: { pick: '— pick a form —', empty: 'No forms found', saved: 'Form', noun: 'forms' },
-};
+const NS = 'flb.builder.formsChannels.google';
 
 /**
  * Dropdown over the connected Google account's files. While the Google integration is not connected the list request
  * fails; the field then becomes a plain text input for the id (never a made-up list) with an amber note.
  */
 function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; dataKey: string }) {
+  const t = useTranslations(NS);
   const files = useGoogleFiles(kind);
   const value = p.data[dataKey];
-  const copy = COPY[kind];
   if (files.isError) {
     return (
       <>
         <Notice tone="warn" className="mb-2">
-          Google isn&apos;t connected for this workspace, so your {copy.noun} can&apos;t be listed.
-          Paste the {copy.saved.toLowerCase()} id or link instead.
+          {t(`kinds.${kind}.notConnected`)}
         </Notice>
         <TextInput
           value={value}
@@ -52,7 +43,7 @@ function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; data
           placeholder={
             kind === 'sheets'
               ? 'https://docs.google.com/spreadsheets/d/<ID>/edit'
-              : `${copy.saved} id`
+              : t(`kinds.${kind}.idPlaceholder`)
           }
           onChange={(v) => p.set(dataKey, extractGoogleId(v))}
         />
@@ -60,16 +51,21 @@ function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; data
     );
   }
   const list = files.data?.data ?? [];
-  const first = files.isPending ? `Loading ${copy.noun}…` : list.length ? copy.pick : copy.empty;
+  const first = files.isPending
+    ? t(`kinds.${kind}.loading`)
+    : list.length
+      ? t(`kinds.${kind}.pick`)
+      : t(`kinds.${kind}.empty`);
   const opts = withSavedOption(
     [{ v: '', l: first }, ...list.map((f) => ({ v: f.id, l: f.name }))],
     value,
-    (id) => `${copy.saved} ${id.slice(0, 12)}… (not loaded)`,
+    (id) => t(`kinds.${kind}.saved`, { id: id.slice(0, 12) }),
   );
   return <SelectInput value={value} onChange={(v) => p.set(dataKey, v)} options={opts} />;
 }
 
 export const GoogleSheetsForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const read = p.data.mode === 'read';
   const cols = readRows(p.data.columns);
   const byHeader = !!p.data.matchByHeader;
@@ -81,35 +77,32 @@ export const GoogleSheetsForm: FormComponent = (p) => {
   return (
     <>
       <Intro>
-        Append a row to a Google Sheet (write mode) or look up a row by a key column (read mode).
-        Uses the workspace&apos;s connected Google account at{' '}
-        <ExtLink href="/google-account">/google-account</ExtLink>.
+        {t.rich('sheetsIntro', { link: (c) => <ExtLink href="/google-account">{c}</ExtLink> })}
       </Intro>
-      <Field label="Mode">
+      <Field label={t('mode')}>
         {Sel(p, 'mode', [
-          { v: 'write', l: 'Write — append a row' },
-          { v: 'read', l: 'Read — look up a row' },
+          { v: 'write', l: t('modeWrite') },
+          { v: 'read', l: t('modeRead') },
         ])}
       </Field>
-      <Field label="Spreadsheet">
+      <Field label={t('spreadsheet')}>
         <GoogleFilePicker p={p} kind="sheets" dataKey="sheetId" />
       </Field>
       <PasteSheetField p={p} />
-      <Field label="Tab name (blank = first tab)">{Txt(p, 'tabName', 'Sheet1')}</Field>
+      <Field label={t('tabName')}>{Txt(p, 'tabName', 'Sheet1')}</Field>
       {read ? (
         <>
-          <Field label="Lookup column (header)">{Txt(p, 'matchColumn', 'Phone')}</Field>
-          <Field label="Lookup value" hint="Use a flow variable like {{phone}} or {{email}}.">
+          <Field label={t('lookupColumn')}>{Txt(p, 'matchColumn', 'Phone')}</Field>
+          <Field label={t('lookupValue')} hint={t('lookupValueHint')}>
             {Txt(p, 'matchValue', '{{phone}}')}
           </Field>
           <Field
-            label="Save row under variable"
-            hint={
-              <>
-                Cells become <Mono>{'{{saveAs.Name}}'}</Mono>, <Mono>{'{{saveAs.Phone}}'}</Mono>{' '}
-                etc.
-              </>
-            }
+            label={t('saveRow')}
+            hint={t.rich('saveRowHint', {
+              nameToken: '{{saveAs.Name}}',
+              phoneToken: '{{saveAs.Phone}}',
+              mono: (c) => <Mono>{c}</Mono>,
+            })}
           >
             {Txt(p, 'saveAs', 'sheet_row')}
           </Field>
@@ -117,14 +110,8 @@ export const GoogleSheetsForm: FormComponent = (p) => {
       ) : (
         <>
           <Field
-            label={
-              byHeader ? 'Columns (matched by header name)' : 'Columns to append (in sheet order)'
-            }
-            hint={
-              byHeader
-                ? 'Each value is written under the sheet column whose header matches the Header field — any order. Values support {{merge_tags}}.'
-                : 'Header is informational (the row is appended left-to-right by position). Values support {{merge_tags}}.'
-            }
+            label={byHeader ? t('columnsByHeader') : t('columnsByPosition')}
+            hint={byHeader ? t('columnsByHeaderHint') : t('columnsByPositionHint')}
           >
             <div className="space-y-2">
               {cols.map((c, i) => (
@@ -132,7 +119,7 @@ export const GoogleSheetsForm: FormComponent = (p) => {
                   <RowInput
                     value={c.header}
                     onChange={(v) => setCol(i, 'header', v)}
-                    placeholder="Header"
+                    placeholder={t('header')}
                     className="w-1/3"
                   />
                   <RowInput
@@ -155,18 +142,15 @@ export const GoogleSheetsForm: FormComponent = (p) => {
                 plain
                 onClick={() => p.set('columns', cols.concat([{ header: '', value: '' }]))}
               >
-                Add column
+                {t('addColumn')}
               </AddLink>
             </div>
           </Field>
           <div className="mb-2 px-1">
             <Check checked={byHeader} onChange={(v) => p.set('matchByHeader', v)}>
-              Match columns by header name
+              {t('matchByHeader')}
             </Check>
-            <div className="ml-6 text-[10.5px] text-muted-foreground">
-              Write each value into the sheet column with that header (any order). Leave off to
-              append left-to-right by position — the default.
-            </div>
+            <div className="ml-6 text-[10.5px] text-muted-foreground">{t('matchByHeaderHint')}</div>
           </div>
         </>
       )}
@@ -176,13 +160,11 @@ export const GoogleSheetsForm: FormComponent = (p) => {
 
 /** The "paste a link" box next to the picker; only shown while the picker works (otherwise the picker is already a text box). */
 function PasteSheetField({ p }: { p: FormProps }) {
+  const t = useTranslations(NS);
   const files = useGoogleFiles('sheets');
   if (files.isError) return null;
   return (
-    <Field
-      label="…or paste a Spreadsheet URL / ID"
-      hint="Works even if the picker is empty — paste the sheet link and we extract its ID."
-    >
+    <Field label={t('pasteLabel')} hint={t('pasteHint')}>
       <TextInput
         mono
         value={p.data.sheetId}
@@ -194,6 +176,7 @@ function PasteSheetField({ p }: { p: FormProps }) {
 }
 
 export const GoogleDocsForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const phs = readRows(p.data.placeholders);
   const shareable = p.data.shareable !== false;
   const setPh = (i: number, k: string, v: string) =>
@@ -204,22 +187,19 @@ export const GoogleDocsForm: FormComponent = (p) => {
   return (
     <>
       <Intro>
-        Copy a template doc, fill <Mono>{'{{placeholders}}'}</Mono>, share anyone-with-link, send
-        the URL to the customer. Place <Mono>{'{{key}}'}</Mono> in your template where the value
-        should go.
+        {t.rich('docsIntro', {
+          placeholders: '{{placeholders}}',
+          key: '{{key}}',
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
       </Intro>
-      <Field label="Template document">
+      <Field label={t('templateDocument')}>
         <GoogleFilePicker p={p} kind="docs" dataKey="templateId" />
       </Field>
-      <Field label="New copy title">{Txt(p, 'newTitle', 'Document for {{name}}')}</Field>
+      <Field label={t('newCopyTitle')}>{Txt(p, 'newTitle', t('newCopyTitlePlaceholder'))}</Field>
       <Field
-        label="Placeholders to fill"
-        hint={
-          <>
-            Every flow variable is also auto-injected — so <Mono>{'{{name}}'}</Mono> works in the
-            template without listing it here.
-          </>
-        }
+        label={t('placeholdersToFill')}
+        hint={t.rich('placeholdersHint', { token: '{{name}}', mono: (c) => <Mono>{c}</Mono> })}
       >
         <div className="space-y-2">
           {phs.map((c, i) => (
@@ -251,86 +231,73 @@ export const GoogleDocsForm: FormComponent = (p) => {
             plain
             onClick={() => p.set('placeholders', phs.concat([{ key: '', value: '' }]))}
           >
-            Add placeholder
+            {t('addPlaceholder')}
           </AddLink>
         </div>
       </Field>
-      <Field label="Make link viewable by anyone">
+      <Field label={t('makeViewable')}>
         <Check checked={shareable} onChange={(v) => p.set('shareable', v)}>
-          {shareable ? 'On — anyone with link can view' : 'Off — must be granted manually'}
+          {shareable ? t('viewableOn') : t('viewableOff')}
         </Check>
       </Field>
       <Field
-        label="Message template"
-        hint={
-          <>
-            The bot bubble sent to the customer. <Mono>{'{{doc_url}}'}</Mono> gets the share link.
-          </>
-        }
+        label={t('messageTemplate')}
+        hint={t.rich('messageTemplateHint', {
+          token: '{{doc_url}}',
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
       >
-        {Ta(p, 'messageTemplate', "Here's your document:\n{{doc_url}}", 4)}
+        {Ta(p, 'messageTemplate', t('messageTemplatePlaceholder'), 4)}
       </Field>
-      <Field label="Save URL under variable">{Txt(p, 'saveAs', 'doc_url')}</Field>
+      <Field label={t('saveUrl')}>{Txt(p, 'saveAs', 'doc_url')}</Field>
     </>
   );
 };
 
-export const GoogleFormForm: FormComponent = (p) => (
-  <>
-    <Intro>
-      Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when
-      the customer fills it. Answers become flow variables.
-    </Intro>
-    <Field label="Google Form">
-      <GoogleFilePicker p={p} kind="forms" dataKey="formId" />
-    </Field>
-    <Field label="Body bubble (sent above the link)">
-      {Ta(p, 'bodyText', 'Please fill out this short form:', 3)}
-    </Field>
-    <Field
-      label="Save responses under variable"
-      hint={
-        <>
-          Individual answers also land as <Mono>{'{{saveAs.Question title}}'}</Mono>.
-        </>
-      }
-    >
-      {Txt(p, 'saveAs', 'google_form')}
-    </Field>
-    <Field
-      label="Expire after (seconds)"
-      hint="How long to wait for a submission before timing out. 86400 = 24h."
-    >
-      {Num(p, 'expiresInSec', '86400')}
-    </Field>
-    {p.data.formId ? (
-      <div className="mt-3 rounded-lg border border-border bg-muted p-3">
-        <div className="mb-1 text-[12px] font-semibold">
-          One-time setup — paste this into your Form&apos;s Script editor
+export const GoogleFormForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <>
+      <Intro>{t.rich('formIntro', { b: (c) => <b>{c}</b> })}</Intro>
+      <Field label={t('googleForm')}>
+        <GoogleFilePicker p={p} kind="forms" dataKey="formId" />
+      </Field>
+      <Field label={t('bodyBubble')}>{Ta(p, 'bodyText', t('bodyBubblePlaceholder'), 3)}</Field>
+      <Field
+        label={t('saveResponses')}
+        hint={t.rich('saveResponsesHint', {
+          token: '{{saveAs.Question title}}',
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
+      >
+        {Txt(p, 'saveAs', 'google_form')}
+      </Field>
+      <Field label={t('expireAfter')} hint={t('expireAfterHint')}>
+        {Num(p, 'expiresInSec', '86400')}
+      </Field>
+      {p.data.formId ? (
+        <div className="mt-3 rounded-lg border border-border bg-muted p-3">
+          <div className="mb-1 text-[12px] font-semibold">{t('setupTitle')}</div>
+          <ol className="mb-2 list-inside list-decimal space-y-0.5 text-[11.5px] text-foreground/80">
+            <li>{t.rich('setupOpen', { mono: (c) => <Mono>{c}</Mono> })}</li>
+            <li>
+              {t.rich('setupDownload', {
+                link: (c) => (
+                  <a
+                    href={appsScriptHref(String(p.data.formId))}
+                    download
+                    className="text-brand underline"
+                  >
+                    {c}
+                  </a>
+                ),
+              })}
+            </li>
+            <li>{t.rich('setupTrigger', { mono: (c) => <Mono>{c}</Mono> })}</li>
+          </ol>
+          <div className="font-mono text-[10.5px] text-muted-foreground">{t('setupWarning')}</div>
         </div>
-        <ol className="mb-2 list-inside list-decimal space-y-0.5 text-[11.5px] text-foreground/80">
-          <li>
-            Open your form → <Mono>⋮ menu</Mono> → <Mono>Script editor</Mono>
-          </li>
-          <li>
-            <a
-              href={appsScriptHref(String(p.data.formId))}
-              download
-              className="text-brand underline"
-            >
-              Download the script (.gs)
-            </a>{' '}
-            and paste it
-          </li>
-          <li>
-            Add a trigger: <Mono>onFormSubmit</Mono> · From form · On form submit
-          </li>
-        </ol>
-        <div className="font-mono text-[10.5px] text-muted-foreground">
-          Without this script the form will still record answers in Google Forms, but the flow
-          won&apos;t resume.
-        </div>
-      </div>
-    ) : null}
-  </>
-);
+      ) : null}
+    </>
+  );
+};

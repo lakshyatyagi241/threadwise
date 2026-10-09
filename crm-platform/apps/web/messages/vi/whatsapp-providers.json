@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "Nhà cung cấp WhatsApp",
+      "providers": "Nhà cung cấp",
+      "assignments": "Phân bổ không gian làm việc",
+      "switch": "Chuyển nhà cung cấp"
+    },
+    "common": {
+      "loading": "Đang tải...",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu"
+    },
+    "errors": {
+      "conflict": "Có người khác đã thay đổi nhà cung cấp này trong lúc bạn đang chỉnh sửa. Phiên bản mới nhất đã được tải; hãy xem lại và áp dụng thay đổi của bạn một lần nữa.",
+      "noAccess": "Bạn không có quyền nền tảng cần thiết ({permission}). Hãy nhờ quản trị viên cấp cao cấp quyền này trong mục Vai trò.",
+      "keyTaken": "Đã có nhà cung cấp với khóa này. Hãy chọn khóa khác.",
+      "baseUrlRefused": "Địa chỉ này bị từ chối: {detail}.",
+      "baseUrlRefusedPlain": "Địa chỉ này bị từ chối. Hãy dùng địa chỉ https trên tên máy chủ công khai.",
+      "inUse": "Vẫn còn số hoặc không gian làm việc dùng nhà cung cấp này. Hãy chuyển chúng sang nhà cung cấp khác trước (không thể đổi chế độ thông tin xác thực khi đang có số kết nối qua nhà cung cấp này).",
+      "disabled": "Nhà cung cấp phải đang hoạt động để thực hiện việc này. Hãy kích hoạt trước.",
+      "credentialsMissing": "Nhà cung cấp chưa có token được lưu. Thêm token của nhà cung cấp, lưu, rồi kích hoạt.",
+      "isDefault": "Đây là nhà cung cấp mặc định. Hãy đặt nhà cung cấp khác làm mặc định, hoặc bỏ mặc định trước.",
+      "builtin": "Đây là nhà cung cấp tích hợp sẵn. Địa chỉ, phiên bản và thông tin bí mật của nhà cung cấp được chỉnh sửa trong Cài đặt nền tảng, WhatsApp.",
+      "nothingToDo": "Không có gì để chuyển: mọi số đã kết nối của không gian làm việc này đều đang dùng nhà cung cấp đó.",
+      "partnerNotConfigured": "Nhà cung cấp này thiếu thông tin mà chương trình đối tác yêu cầu: khóa đối tác (token nhà cung cấp), mã giải pháp hoặc cấu hình đăng ký nhúng. Hãy kiểm tra nhà cung cấp và lưu.",
+      "partnerRefused": "Đối tác đã từ chối yêu cầu này: {message}",
+      "partnerRefusedPlain": "Đối tác đã từ chối yêu cầu này. Thử lại hoặc kiểm tra cài đặt nhà cung cấp.",
+      "unavailable": "Nhà cung cấp này không khả dụng. Có thể đã được lưu trữ hoặc thiếu thông tin xác thực.",
+      "notFound": "Nhà cung cấp hoặc không gian làm việc này không còn tồn tại. Quay lại và tải lại danh sách.",
+      "tooManyNumbers": "Có hơn 50 số sẽ được chuyển cùng lúc. Chọn nhà cung cấp nguồn để thu hẹp phạm vi, rồi chạy lại việc chuyển cho các số còn lại.",
+      "validationField": "{message}",
+      "validation": "Một số giá trị không được chấp nhận. Kiểm tra biểu mẫu và thử lại.",
+      "request": "Yêu cầu bị từ chối. Kiểm tra các giá trị và thử lại.",
+      "unexpected": "Đã xảy ra lỗi phía hệ thống. Thử lại sau ít phút."
+    },
+    "status": {
+      "active": "Đang hoạt động",
+      "disabled": "Đã tắt",
+      "archived": "Đã lưu trữ",
+      "default": "Mặc định",
+      "builtin": "Tích hợp sẵn"
+    },
+    "secret": {
+      "show": "Hiện giá trị bạn đã nhập",
+      "hide": "Ẩn giá trị bạn đã nhập",
+      "placeholderKeep": "Để trống để giữ giá trị đã lưu",
+      "placeholderNew": "Dán giá trị",
+      "undoClear": "Giữ nguyên",
+      "clear": "Xóa giá trị đã lưu",
+      "setWithHint": "Đã đặt, kết thúc bằng {last4}",
+      "set": "Đã đặt",
+      "notSet": "Chưa đặt",
+      "willClear": "Sẽ bị xóa khi bạn lưu",
+      "willReplace": "Sẽ thay thế giá trị đã lưu khi bạn lưu"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Token Bearer",
+          "help": "Gửi Authorization: Bearer kèm token của chế độ thông tin xác thực."
+        },
+        "custom_headers": {
+          "label": "Tiêu đề tùy chỉnh",
+          "help": "Gửi các tiêu đề bạn đã định nghĩa, với token, mã WABA và mã số điện thoại được điền cho từng lệnh gọi."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Token nền tảng",
+          "help": "Một token của nền tảng tại nhà cung cấp (token đối tác). Khách hàng không giữ token nào."
+        },
+        "channel_token": {
+          "label": "Token số",
+          "help": "Mỗi số đã kết nối giữ token truy cập riêng."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Callback cấp ứng dụng",
+          "help": "Nền tảng chỉ đăng ký WABA. Callback được đặt một lần trên ứng dụng Meta."
+        },
+        "number_level_override": {
+          "label": "Callback theo từng số",
+          "help": "Sau khi đăng ký, nền tảng đặt callback cho từng số qua nhà cung cấp."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Chữ ký Meta (app secret)",
+          "help": "Các lần gửi có X-Hub-Signature-256, được kiểm tra bằng app secret của nhà cung cấp."
+        },
+        "shared_secret_header": {
+          "label": "Khóa bí mật chung trong tiêu đề",
+          "help": "Một tiêu đề do bạn đặt tên sẽ chứa chính khóa bí mật webhook của nhà cung cấp."
+        },
+        "none": {
+          "label": "Không có chữ ký",
+          "help": "Nhà cung cấp không ký gì cả. Chỉ khóa bí mật trong URL callback mới xác thực các lần gửi."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Hạn mức tín dụng của nhà cung cấp",
+          "help": "Nhà cung cấp thanh toán cho nền tảng từ hạn mức tín dụng riêng."
+        },
+        "customer_direct": {
+          "label": "Khách hàng trả trực tiếp cho Meta",
+          "help": "Phương thức thanh toán của khách hàng nằm trên Meta (chế độ engine reseller meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Hạn mức tín dụng reseller của Meta",
+          "help": "Hạn mức tín dụng Meta của nền tảng được chia sẻ sang WABA của khách hàng (chế độ engine reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Thủ công",
+          "help": "Không gian làm việc dán mã WABA và mã số điện thoại của họ."
+        },
+        "embedded_signup": {
+          "label": "Đăng ký nhúng",
+          "help": "Không gian làm việc kết nối qua đăng ký nhúng của ứng dụng Meta của nền tảng."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Không có"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "Token nhà cung cấp chưa được lưu. Kích hoạt nhà cung cấp này cần token đó.",
+      "appSecret": "App secret chưa được lưu. Mọi lần gửi webhook của nhà cung cấp này sẽ bị từ chối cho đến khi được lưu.",
+      "webhookSecret": "Khóa bí mật webhook chưa được lưu. Mọi lần gửi webhook của nhà cung cấp này sẽ bị từ chối cho đến khi được lưu."
+    },
+    "headers": {
+      "intro": "Các tiêu đề gửi kèm mọi lệnh gọi tới nhà cung cấp này. Tiêu đề có giá trị không xác định trong một lệnh gọi sẽ bị bỏ qua, không bao giờ gửi dưới dạng chỗ giữ chỗ nguyên văn.",
+      "listLabel": "Mẫu tiêu đề",
+      "name": "Tên tiêu đề",
+      "value": "Giá trị",
+      "insertFor": "Chèn chỗ giữ chỗ vào tiêu đề {n}",
+      "insert": "Chèn chỗ giữ chỗ",
+      "removeFor": "Xóa tiêu đề {n}",
+      "remove": "Xóa",
+      "add": "Thêm tiêu đề",
+      "placeholdersTitle": "Chỗ giữ chỗ và quy tắc",
+      "leftOut": "Tiêu đề dùng chỗ giữ chỗ không có giá trị trong lệnh gọi đó sẽ bị bỏ qua. Không thể đặt các tiêu đề hop-by-hop và tiêu đề khung (host, content-length, transfer-encoding và tương tự).",
+      "channelTokenNeverKnown": "Nhà cung cấp này dùng token nền tảng nên khách hàng không giữ token số: tiêu đề dùng chỗ giữ chỗ token số sẽ luôn bị bỏ qua.",
+      "problems": {
+        "tooMany": "Chỉ được phép tối đa {max} tiêu đề.",
+        "nameInvalid": "Tên tiêu đề chỉ dùng chữ cái, chữ số và dấu gạch ngang.",
+        "nameDenied": "Tiêu đề {name} do kết nối quản lý và không thể đặt.",
+        "nameDuplicate": "Tiêu đề {name} xuất hiện hai lần.",
+        "valueEmpty": "Tiêu đề {name} cần có giá trị.",
+        "valueTooLong": "Giá trị của {name} dài hơn {max} ký tự.",
+        "valueCharacters": "Giá trị của {name} chứa ký tự điều khiển hoặc ký tự không thuộc ASCII.",
+        "placeholderUnknown": "Tiêu đề {name} dùng chỗ giữ chỗ không xác định: {names}.",
+        "strayBrace": "Tiêu đề {name} có dấu ngoặc nhọn thừa. Chỗ giữ chỗ được viết với hai dấu ngoặc nhọn bao quanh tên.",
+        "credentialNotCarried": "Phải có một tiêu đề chứa chỗ giữ chỗ {placeholder}, đây là cách thông tin xác thực được gửi tới nhà cung cấp."
+      },
+      "placeholders": {
+        "providerToken": "Token của nền tảng tại nhà cung cấp.",
+        "channelToken": "Token truy cập của số mà lệnh gọi dành cho.",
+        "wabaId": "Mã WhatsApp Business Account của số.",
+        "phoneNumberId": "Mã số điện thoại của số."
+      },
+      "preview": {
+        "title": "Xem trước một lệnh gọi",
+        "urlPending": "(nhập địa chỉ hợp lệ)",
+        "note": "Hiển thị giá trị thay thế. Token và mã thật được điền cho từng lệnh gọi và không bao giờ hiển thị ở đây."
+      }
+    },
+    "form": {
+      "wizardLabel": "Thêm nhà cung cấp WhatsApp",
+      "editLabel": "Đổi nhà cung cấp WhatsApp",
+      "stepsLabel": "Các bước",
+      "steps": {
+        "basics": "Thông tin cơ bản",
+        "connection": "Kết nối",
+        "credentials": "Thông tin xác thực",
+        "webhooks": "Webhook",
+        "billing": "Thanh toán và đăng ký",
+        "review": "Xem lại"
+      },
+      "stepHelp": {
+        "basics": "Một khóa ổn định, tên dễ nhận biết đối với người vận hành và ghi chú tùy chọn.",
+        "connection": "Nơi nhà cung cấp phản hồi và cách nền tảng xác thực với nhà cung cấp đó.",
+        "credentials": "Thông tin xác thực của ai được dùng, và token nhà cung cấp.",
+        "webhooks": "Cách nhà cung cấp gửi tin nhắn đến và xác minh tin nhắn là chính hãng.",
+        "billing": "Ai trả tiền cho Meta, có được tải tệp lên hay không và cách không gian làm việc đăng ký.",
+        "review": "Kiểm tra mọi thứ. Chưa có gì được gửi cho đến khi bạn tạo nhà cung cấp."
+      },
+      "fields": {
+        "key": "Khóa",
+        "label": "Tên",
+        "notes": "Ghi chú",
+        "baseUrl": "URL gốc",
+        "apiVersion": "Phiên bản API",
+        "authScheme": "Xác thực",
+        "credentialMode": "Chế độ thông tin xác thực",
+        "providerToken": "Token nhà cung cấp",
+        "webhookMode": "Chế độ webhook",
+        "signatureScheme": "Chữ ký webhook",
+        "appSecret": "App secret",
+        "webhookSecret": "Khóa bí mật webhook",
+        "verifyToken": "Token xác minh",
+        "signatureHeaderName": "Tên tiêu đề chữ ký",
+        "billingMode": "Chế độ thanh toán",
+        "mediaUpload": "Hỗ trợ tải lên phương tiện",
+        "onboarding": "Đăng ký",
+        "onboardingAppId": "Mã ứng dụng Meta",
+        "onboardingConfigId": "Mã cấu hình đăng ký nhúng",
+        "partnerProgram": "Chương trình đối tác",
+        "partnerSolutionId": "Mã giải pháp"
+      },
+      "hints": {
+        "key": "Chữ thường, chữ số, dấu gạch dưới và gạch ngang, từ 2 đến 40 ký tự, bắt đầu bằng một chữ cái. Sau này không thể thay đổi.",
+        "keyFixed": "Không thể thay đổi khóa.",
+        "notes": "Chỉ người vận hành mới thấy các mục này.",
+        "baseUrl": "https://host hoặc https://host/tiền-tố. Nền tảng chỉ gọi các máy chủ https công khai.",
+        "credentialModeLocked": "{count, plural, other {# số đang}} được kết nối qua nhà cung cấp này nên không thể đổi chế độ thông tin xác thực. Hãy chuyển các số này đi trước.",
+        "providerTokenNeeded": "Bắt buộc phải có trước khi kích hoạt nhà cung cấp này.",
+        "providerTokenOptional": "Không bắt buộc ở đây: mỗi số tự cung cấp token riêng.",
+        "appSecret": "Kiểm tra X-Hub-Signature-256 của mọi lần gửi. Nếu không có, mọi lần gửi của nhà cung cấp này sẽ bị từ chối.",
+        "webhookSecret": "Giá trị nhà cung cấp đặt trong tiêu đề chữ ký. Nếu không có, mọi lần gửi đều bị từ chối.",
+        "signatureHeaderName": "Chữ cái, chữ số và dấu gạch ngang, ví dụ x-bsp-secret.",
+        "verifyToken": "Trả lời thử thách đăng ký của nhà cung cấp. Không bắt buộc.",
+        "billingMode": "Nhãn trỏ tới engine thanh toán reseller. Không thay đổi hành vi thanh toán nào.",
+        "mediaUpload": "Khi tắt, tệp được gửi qua liên kết công khai thay vì tải lên.",
+        "onboardingIds": "Chỉ chữ số. Đây là mã công khai của ứng dụng Meta của nền tảng.",
+        "partnerPinnacle": "Pinnacle cấp cho mỗi số một khóa riêng. Lưu khóa đối tác làm token nhà cung cấp, và app secret Meta làm app secret (các webhook đến được xác minh bằng khóa này).",
+        "partnerSolutionId": "Chỉ chữ số, từ 5 đến 32. Mã giải pháp đối tác lấy từ bảng điều khiển Pinnacle."
+      },
+      "devLoopback": "http thường trên địa chỉ loopback chỉ được chấp nhận khi phát triển, sau một cờ máy chủ. Trên môi trường thực tế, địa chỉ này bị từ chối.",
+      "ssrfNote": "Máy chủ kiểm tra lại địa chỉ: chỉ https, tên máy chủ công khai, cổng mặc định, và mọi địa chỉ nó phân giải đều phải là công khai.",
+      "secretsNote": "Thông tin bí mật chỉ được ghi. Sau khi lưu, chỉ hiển thị là đã đặt, cùng bốn ký tự cuối.",
+      "signatureNoneNote": "Khi không có chữ ký, chỉ khóa bí mật trong URL callback xác thực các lần gửi. Chỉ dùng khi nhà cung cấp không thể ký.",
+      "builtinNotice": "Đây là nhà cung cấp tích hợp sẵn. Địa chỉ, phiên bản và thông tin bí mật được lưu trong Cài đặt nền tảng, WhatsApp. Chỉ tên, ghi chú và chế độ thanh toán là có thể thay đổi ở đây.",
+      "openConsoleSettings": "Mở Cài đặt nền tảng, WhatsApp",
+      "conflictHint": "Các chỉnh sửa của bạn chưa được lưu. Biểu mẫu hiển thị các giá trị mới nhất.",
+      "fixProblems": "{count, plural, other {# giá trị cần được kiểm tra.}} Hãy sửa các trường được đánh dấu.",
+      "save": "Lưu thay đổi",
+      "nothingToSave": "Chưa có thay đổi",
+      "back": "Quay lại",
+      "next": "Tiếp theo",
+      "cancel": "Hủy",
+      "create": "Tạo nhà cung cấp",
+      "saved": "Đã lưu {name}.",
+      "created": "Đã tạo {name}. Nhà cung cấp bắt đầu ở trạng thái tắt: hãy kiểm tra, rồi kích hoạt.",
+      "review": {
+        "headers": "Tiêu đề",
+        "yes": "Có",
+        "no": "Không",
+        "secrets": "Thông tin bí mật cần lưu",
+        "noSecrets": "Không có",
+        "gapsTitle": "Vẫn còn thiếu trước khi nhà cung cấp này hoạt động",
+        "startsDisabled": "Nhà cung cấp mới bắt đầu ở trạng thái tắt. Sau khi tạo, chạy Kiểm tra kết nối rồi kích hoạt."
+      },
+      "problems": {
+        "labelRequired": "Nhập tên.",
+        "labelLength": "Tên tối đa {max} ký tự.",
+        "notesLength": "Ghi chú tối đa {max} ký tự.",
+        "keyRequired": "Nhập khóa.",
+        "keyBuiltin": "meta và interakt là nhà cung cấp tích hợp sẵn. Hãy chọn khóa khác.",
+        "keyFormat": "Bắt đầu bằng một chữ cái, sau đó là chữ cái, chữ số, dấu gạch dưới hoặc gạch ngang, tổng cộng từ 2 đến 40 ký tự.",
+        "baseUrl": {
+          "empty": "Nhập URL gốc của nhà cung cấp.",
+          "length": "Địa chỉ phải có từ 1 đến 200 ký tự.",
+          "characters": "Địa chỉ không được chứa khoảng trắng hoặc ký tự điều khiển.",
+          "invalid": "Đây không phải URL hợp lệ.",
+          "credentials": "Địa chỉ không được chứa tên người dùng hoặc mật khẩu.",
+          "queryOrFragment": "Địa chỉ không được chứa chuỗi truy vấn hoặc phần đoạn (fragment).",
+          "notHttps": "Địa chỉ phải bắt đầu bằng https://.",
+          "port": "Chỉ cho phép cổng https mặc định.",
+          "host": "Hãy dùng tên máy chủ công khai, không phải địa chỉ IP hoặc tên một nhãn.",
+          "internal": "Hãy dùng tên máy chủ công khai, không phải tên nội bộ."
+        },
+        "apiVersion": "Hãy dùng phiên bản dạng v25.0.",
+        "headers": "{count, plural, other {# vấn đề về tiêu đề.}} Xem danh sách bên trên.",
+        "signatureHeaderRequired": "Đặt tên cho tiêu đề chứa thông tin bí mật.",
+        "signatureHeaderFormat": "Chỉ chữ cái, chữ số và dấu gạch ngang.",
+        "digits": "Chỉ chữ số, từ 5 đến 32.",
+        "partnerSolutionIdRequired": "Nhập mã giải pháp.",
+        "partnerCredentialMode": "Chương trình đối tác cấp cho mỗi số một token riêng: hãy dùng chế độ token kênh.",
+        "secretCharacters": "Không có khoảng trắng hoặc ký tự điều khiển.",
+        "secretLength": "Từ {min} đến {max} ký tự."
+      }
+    },
+    "actions": {
+      "activate": "Kích hoạt",
+      "makeDefault": "Đặt làm mặc định",
+      "clearDefault": "Bỏ mặc định",
+      "disable": "Tắt",
+      "archive": "Lưu trữ",
+      "cancel": "Hủy",
+      "menu": "Thao tác",
+      "menuLabel": "Thao tác cho {name}",
+      "manage": "Quản lý",
+      "open": "Mở",
+      "switchTo": "Chuyển số tại đây",
+      "blocked": {
+        "default": "đây là mặc định",
+        "builtin": "tích hợp sẵn",
+        "inUse": "đang sử dụng"
+      },
+      "done": {
+        "activate": "{name} đang hoạt động.",
+        "disable": "{name} đã bị tắt. Các số đang dùng vẫn tiếp tục gửi tin.",
+        "archive": "{name} đã được lưu trữ.",
+        "default": "{name} giờ là mặc định cho số mới.",
+        "clearDefault": "Đã bỏ mặc định. Số mới sẽ theo cài đặt WhatsApp của bảng điều khiển."
+      },
+      "confirm": {
+        "disable": {
+          "title": "Tắt {name}?",
+          "body": "Nhà cung cấp này sẽ không còn được đề xuất cho số mới hoặc phân bổ. Các số đang dùng vẫn tiếp tục gửi tin, nên đây không phải là sự cố gián đoạn.",
+          "inUse": "{count, plural, other {# số vẫn}} đang dùng nhà cung cấp này. Hãy chuyển chúng đi khi bạn sẵn sàng.",
+          "action": "Tắt"
+        },
+        "archive": {
+          "title": "Lưu trữ {name}?",
+          "body": "Nhà cung cấp đã lưu trữ sẽ ngừng sử dụng. Thao tác này bị từ chối khi còn số hoặc ghi đè không gian làm việc nào đang dùng nó. Bạn có thể kích hoạt lại sau.",
+          "action": "Lưu trữ"
+        },
+        "default": {
+          "title": "Đặt {name} làm mặc định?",
+          "body": "Các không gian làm việc không có ghi đè sẽ kết nối số MỚI qua nhà cung cấp này. Các số đã kết nối không bị chuyển.",
+          "action": "Đặt làm mặc định"
+        },
+        "clearDefault": {
+          "title": "Bỏ mặc định?",
+          "body": "Số mới sẽ lại theo cài đặt WhatsApp của bảng điều khiển. Các số đã kết nối không bị chuyển.",
+          "action": "Bỏ mặc định"
+        }
+      }
+    },
+    "test": {
+      "title": "Kiểm tra kết nối",
+      "description": "Thực hiện một lần đọc đã xác thực tới nhà cung cấp bằng thông tin xác thực đã lưu. Không có gì thay đổi tại nhà cung cấp.",
+      "path": "Đường dẫn cần đọc",
+      "pathHint": "Bắt đầu bằng dấu gạch chéo. Mặc định là /me.",
+      "willCall": "Sẽ gọi {url}",
+      "pathInvalid": "Bắt đầu bằng / và chỉ dùng chữ cái, chữ số và . _ / -.",
+      "wabaId": "Mã WABA (không bắt buộc)",
+      "idsHint": "Chỉ điền chỗ giữ chỗ tiêu đề cho lệnh gọi này. Không được lưu.",
+      "idInvalid": "Chỉ chữ cái, chữ số và . _ : -.",
+      "phoneNumberId": "Mã số điện thoại (không bắt buộc)",
+      "channelToken": "Token số kiểm thử (không bắt buộc)",
+      "channelTokenHint": "Dành cho nhà cung cấp mà mỗi số có token riêng. Chỉ dùng cho lệnh gọi này, sau đó được xóa khỏi biểu mẫu.",
+      "tokenInvalid": "Ít nhất 8 ký tự in được, không có khoảng trắng.",
+      "show": "Hiện giá trị bạn đã nhập",
+      "hide": "Ẩn giá trị bạn đã nhập",
+      "run": "Chạy kiểm tra",
+      "running": "Đang kiểm tra...",
+      "forgotten": "Mã và token nhập ở đây chỉ dùng cho một lệnh gọi rồi bị quên.",
+      "needManage": "Bạn có thể xem kết quả gần nhất. Chạy kiểm tra cần quyền quản lý.",
+      "ok": "Đã kết nối",
+      "failed": "Thất bại",
+      "justNow": "Vừa xong",
+      "lastTest": "Lần kiểm tra gần nhất",
+      "httpStatus": "Mã trạng thái HTTP",
+      "noResponse": "Không có phản hồi",
+      "latency": "Độ trễ",
+      "ms": "{ms} ms",
+      "errorCode": "Mã lỗi",
+      "message": "Nhà cung cấp đã phản hồi",
+      "redactedNote": "Máy chủ thay mọi thông tin bí mật bằng [redacted] trước khi trả lời.",
+      "never": "Nhà cung cấp này chưa được kiểm tra.",
+      "hints": {
+        "ok": "Nhà cung cấp đã trả lời một lần đọc đã xác thực. Có thể kích hoạt an toàn.",
+        "addressRefused": "Địa chỉ bị từ chối (không phải https, không phải tên công khai, hoặc phân giải ra địa chỉ riêng). Hãy sửa URL gốc.",
+        "credentialsMissing": "Nhà cung cấp chưa có token được lưu. Thêm token nhà cung cấp và lưu.",
+        "unauthorized": "Nhà cung cấp từ chối thông tin xác thực. Kiểm tra token cùng tên và giá trị tiêu đề.",
+        "notFound": "Không tìm thấy đường dẫn. Thử một lần đọc mà nhà cung cấp hỗ trợ, hoặc kiểm tra URL gốc và phiên bản API.",
+        "rateLimited": "Nhà cung cấp đang giới hạn tần suất. Đợi một lát rồi kiểm tra lại.",
+        "providerError": "Nhà cung cấp trả về lỗi máy chủ. Thử lại sau.",
+        "unreachable": "Không có phản hồi: máy chủ không trả lời hoặc kết nối thất bại. Kiểm tra địa chỉ.",
+        "other": "Nhà cung cấp trả về trạng thái không mong đợi. Xem nội dung phản hồi bên trên."
+      }
+    },
+    "list": {
+      "title": "Nhà cung cấp WhatsApp",
+      "description": "Chọn nhà cung cấp giải pháp WhatsApp Business (BSP) mà nền tảng gửi tin qua, thêm nhà cung cấp và chuyển không gian làm việc giữa họ.",
+      "consoleSettings": "Thông tin xác thực ứng dụng Meta và Interakt",
+      "switchWorkspace": "Chuyển một không gian làm việc",
+      "add": "Thêm nhà cung cấp",
+      "kpi": {
+        "providers": "Nhà cung cấp",
+        "active": "Đang hoạt động",
+        "numbers": "Số đã kết nối",
+        "overrides": "Ghi đè không gian làm việc"
+      },
+      "defaultIs": "Số mới kết nối qua {name}, trừ khi không gian làm việc có ghi đè riêng.",
+      "noDefault": "Chưa đặt mặc định trong danh mục. Số mới theo cài đặt WhatsApp của bảng điều khiển.",
+      "defaultHelp": "Đổi mặc định hoặc ghi đè không bao giờ chuyển số đã kết nối. Hãy dùng Chuyển cho việc đó.",
+      "filterLabel": "Lọc theo trạng thái",
+      "filters": {
+        "all": "Tất cả",
+        "active": "Đang hoạt động",
+        "disabled": "Đã tắt",
+        "archived": "Đã lưu trữ"
+      },
+      "search": "Lọc theo tên hoặc khóa",
+      "emptyTitle": "Chưa có nhà cung cấp nào",
+      "emptyMessage": "Thêm nhà cung cấp để định tuyến WhatsApp qua BSP khác. Các tuyến Meta và Interakt tích hợp sẵn luôn hoạt động.",
+      "noMatchTitle": "Không có nhà cung cấp phù hợp",
+      "noMatchMessage": "Không có gì khớp với trạng thái và từ khóa này. Thử bộ lọc khác hoặc xóa tìm kiếm.",
+      "tableCaption": "Nhà cung cấp WhatsApp",
+      "cols": {
+        "provider": "Nhà cung cấp",
+        "status": "Trạng thái",
+        "billing": "Chế độ thanh toán",
+        "credentials": "Chế độ thông tin xác thực",
+        "usage": "Đang sử dụng",
+        "lastTest": "Lần kiểm tra gần nhất",
+        "actions": "Thao tác"
+      },
+      "usage": {
+        "numbers": "{count, plural, other {# số}}",
+        "workspaces": "{count, plural, other {# không gian làm việc}}"
+      },
+      "test": {
+        "ok": "Đã kết nối",
+        "failed": "Thất bại",
+        "never": "Chưa kiểm tra"
+      },
+      "officialLabel": "WhatsApp chính thức (được hỗ trợ)"
+    },
+    "detail": {
+      "title": "Nhà cung cấp WhatsApp",
+      "back": "Quay lại danh sách nhà cung cấp",
+      "gapsTitle": "Vẫn còn thiếu trước khi nhà cung cấp này hoạt động",
+      "lifecycle": {
+        "title": "Trạng thái và mặc định",
+        "description": "Kích hoạt sẽ cho phép chọn nhà cung cấp này cho số mới và phân bổ. Tắt không bao giờ dừng các số đang dùng nó."
+      },
+      "edit": {
+        "title": "Chỉnh sửa",
+        "readOnly": "Bạn có thể xem nhà cung cấp này. Thay đổi cần quyền quản lý."
+      },
+      "overview": {
+        "title": "Tổng quan",
+        "headers": "Tên tiêu đề",
+        "none": "không có",
+        "engineMode": "Chế độ engine reseller: {mode}",
+        "yes": "Có",
+        "no": "Không",
+        "usage": "Đang sử dụng",
+        "numbers": "{count, plural, other {# số}}",
+        "workspaces": "{count, plural, other {# ghi đè không gian làm việc}}",
+        "updated": "Thay đổi gần nhất",
+        "builtinNote": "Đây là nhà cung cấp tích hợp sẵn. Địa chỉ, phiên bản và thông tin bí mật được đọc trực tiếp từ Cài đặt nền tảng, WhatsApp.",
+        "openConsoleSettings": "Mở Cài đặt nền tảng, WhatsApp",
+        "credentialsTitle": "Thông tin bí mật đã lưu",
+        "credentialsNote": "Thông tin bí mật chỉ được ghi. Sau khi lưu, không bao giờ hiển thị lại; chỉ hiển thị đã đặt hay chưa và bốn ký tự cuối.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Đăng ký địa chỉ API công khai của bạn cộng với đường dẫn này với nhà cung cấp. Một URL phục vụ mọi nhà cung cấp và mọi không gian làm việc."
+      }
+    },
+    "new": {
+      "title": "Thêm nhà cung cấp WhatsApp",
+      "back": "Quay lại danh sách nhà cung cấp",
+      "description": "Đăng ký BSP tương thích Graph API. Nhà cung cấp bắt đầu ở trạng thái tắt; hãy kiểm tra rồi kích hoạt."
+    },
+    "assignments": {
+      "title": "Phân bổ không gian làm việc",
+      "description": "Nhà cung cấp mà mỗi không gian làm việc dùng để kết nối số MỚI. Không gian làm việc không có ghi đè sẽ theo mặc định.",
+      "defaultIs": "Mặc định danh mục: {name}.",
+      "noDefault": "Chưa có mặc định danh mục. Không gian làm việc không có ghi đè sẽ theo cài đặt WhatsApp của bảng điều khiển.",
+      "existingNote": "Số hiện có không bị chuyển khi bạn đổi ghi đè. Hãy dùng Chuyển để chuyển các số đó.",
+      "search": "Tìm không gian làm việc",
+      "overrideOnly": "Chỉ không gian làm việc có ghi đè",
+      "noMatchTitle": "Không có không gian làm việc phù hợp",
+      "noMatchMessage": "Thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "emptyTitle": "Chưa có không gian làm việc nào",
+      "emptyMessage": "Không gian làm việc sẽ xuất hiện ở đây khi đã được tạo.",
+      "loadMore": "Tải thêm",
+      "tableCaption": "Phân bổ nhà cung cấp cho không gian làm việc",
+      "cols": {
+        "workspace": "Không gian làm việc",
+        "override": "Ghi đè",
+        "effective": "Số mới đi qua",
+        "numbers": "Số",
+        "actions": "Thao tác"
+      },
+      "followsDefault": "Theo mặc định",
+      "source": {
+        "override": "Ghi đè không gian làm việc",
+        "default": "Mặc định danh mục",
+        "platform_setting": "Cài đặt WhatsApp của bảng điều khiển"
+      },
+      "numberCount": "{count, plural, other {# số}}",
+      "onOther": "{count} số dùng nhà cung cấp khác",
+      "change": "Đổi",
+      "setOverride": "Đặt ghi đè",
+      "clear": "Xóa ghi đè",
+      "switch": "Chuyển số",
+      "common": {
+        "close": "Đóng",
+        "cancel": "Hủy"
+      },
+      "set": {
+        "title": "Ghi đè cho {name}",
+        "help": "Số mới của không gian làm việc này sẽ kết nối qua nhà cung cấp bạn chọn. Số đã kết nối vẫn giữ nguyên.",
+        "noActive": "Chưa có nhà cung cấp nào hoạt động. Hãy kích hoạt một nhà cung cấp trước.",
+        "provider": "Nhà cung cấp",
+        "note": "Ghi chú (không bắt buộc)",
+        "noteHint": "Lý do không gian làm việc này có nhà cung cấp riêng. Tối đa 500 ký tự.",
+        "save": "Lưu ghi đè",
+        "done": "{workspace} giờ kết nối số mới qua {provider}."
+      },
+      "clearDialog": {
+        "title": "Xóa ghi đè cho {name}?",
+        "body": "{name} sẽ lại theo mặc định. Các số đã kết nối qua {provider} không bị chuyển.",
+        "action": "Xóa ghi đè",
+        "done": "{workspace} lại theo mặc định."
+      }
+    },
+    "switch": {
+      "title": "Chuyển nhà cung cấp",
+      "description": "Chuyển các số WhatsApp đã kết nối của một không gian làm việc sang nhà cung cấp khác. Hãy chạy thử trước: thao tác này không thay đổi gì và không gọi nhà cung cấp nào.",
+      "choose": {
+        "title": "Không gian làm việc và đích",
+        "description": "Chọn không gian làm việc và nhà cung cấp mà các số của nó sẽ chuyển tới.",
+        "target": "Chuyển tới",
+        "targetHint": "Chỉ nhà cung cấp đang hoạt động mới có thể làm đích.",
+        "pick": "Chọn nhà cung cấp",
+        "from": "Chỉ các số đang dùng",
+        "fromHint": "Không bắt buộc. Để là bất kỳ nhà cung cấp nào để chuyển mọi số chưa ở đích.",
+        "anyProvider": "Bất kỳ nhà cung cấp nào",
+        "setOverride": "Đồng thời đặt làm ghi đè của không gian làm việc này",
+        "setOverrideHint": "Các số mà không gian làm việc kết nối sau này sẽ theo. Chỉ áp dụng khi bạn thực hiện chuyển, không áp dụng khi chạy thử.",
+        "reason": "Lý do (không bắt buộc)",
+        "reasonHint": "Được ghi vào nhật ký kiểm tra. Tối đa 500 ký tự.",
+        "targetNotActive": "Nhà cung cấp này không hoạt động. Việc chuyển sẽ bị từ chối cho đến khi được kích hoạt.",
+        "dryRun": "Kiểm tra những gì sẽ thay đổi",
+        "dryRunNote": "Chạy thử: không có gì thay đổi và không gọi nhà cung cấp nào."
+      },
+      "workspace": {
+        "selected": "Không gian làm việc",
+        "unnamed": "Không gian làm việc đã chọn",
+        "change": "Đổi không gian làm việc",
+        "label": "Không gian làm việc",
+        "search": "Tìm không gian làm việc",
+        "none": "Không có không gian làm việc phù hợp.",
+        "numbers": "{count, plural, other {# số}}",
+        "onOther": "{count} số dùng nhà cung cấp khác",
+        "narrow": "Còn nhiều không gian làm việc khác. Hãy thu hẹp tìm kiếm."
+      },
+      "plan": {
+        "stale": "Bạn đã đổi lựa chọn sau khi chạy thử. Hãy kiểm tra lại trước khi áp dụng.",
+        "title": "Những gì sẽ thay đổi",
+        "description": "Chọn các số cần chuyển. Số bị chặn sẽ không bị tác động.",
+        "nothingReady": "Chưa có số nào có thể chuyển. Hãy xử lý các mục được liệt kê, rồi kiểm tra lại.",
+        "headline": "Đã đánh giá {total, plural, other {# số}}, {ready} số có thể chuyển sang {provider}.",
+        "ready": "{count} sẵn sàng",
+        "blocked": "{count} bị chặn",
+        "failed": "{count} không thể đánh giá",
+        "reconnect": "{count} đã ngắt kết nối"
+      },
+      "requirements": {
+        "title": "Những việc cần người xử lý",
+        "blocks": "Chặn việc chuyển",
+        "advice": "Cần theo dõi thêm",
+        "numberToken": {
+          "label": "Cần token truy cập của số",
+          "help": "Đích dùng token riêng của từng số và số này không có token nào. Yêu cầu không gian làm việc dán token trên trang tình trạng số, hoặc kết nối lại số, rồi kiểm tra lại."
+        },
+        "providerToken": {
+          "label": "Cần token nhà cung cấp",
+          "help": "Nhà cung cấp đích chưa có token đối tác được lưu. Hãy thêm trên trang nhà cung cấp trước."
+        },
+        "idsMissing": {
+          "label": "Thiếu mã WABA hoặc mã số điện thoại",
+          "help": "Kết nối không có mã WABA hoặc mã số điện thoại trong hồ sơ. Hãy kết nối lại."
+        },
+        "reconnect": {
+          "label": "Số đã bị ngắt kết nối",
+          "help": "Số chỉ được trỏ lại, không được kích hoạt lại. Không gian làm việc phải kết nối lại trước khi có thể gửi tin."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Các số được đánh giá khi chạy thử",
+        "captionResult": "Kết quả chuyển theo từng số",
+        "cols": {
+          "move": "Chuyển",
+          "number": "Số",
+          "from": "Hiện đang dùng",
+          "state": "Trạng thái",
+          "details": "Chi tiết"
+        },
+        "moveNumber": "Chuyển {name}",
+        "unknownProvider": "Không rõ",
+        "state": {
+          "ready": "Sẵn sàng",
+          "blocked": "Bị chặn",
+          "switched": "Đã chuyển",
+          "repointed": "Đã trỏ lại",
+          "failed": "Thất bại"
+        },
+        "willResubscribe": "Webhook sẽ được đăng ký lại qua nhà cung cấp mới trước.",
+        "willRepoint": "Sẽ chỉ được trỏ lại.",
+        "inboundNotWired": "Nhà cung cấp không chấp nhận callback theo số. Hãy đặt callback trên nhà cung cấp hoặc ứng dụng Meta thành webhook của nền tảng.",
+        "inboundWired": "Đã đặt callback đến."
+      },
+      "apply": {
+        "title": "Áp dụng việc chuyển",
+        "summary": "{count, plural, other {# số}} sẽ chuyển sang {provider}.",
+        "understood": "Tôi hiểu việc này sẽ trỏ lại các số đang hoạt động của không gian làm việc và đăng ký lại webhook của chúng.",
+        "action": "Áp dụng chuyển",
+        "tickOne": "Chọn ít nhất một số."
+      },
+      "confirm": {
+        "title": "Chuyển các số?",
+        "body": "{count, plural, other {# số của}} {workspace} sẽ chuyển sang {provider}. Mỗi số được đăng ký lại trước và chỉ được trỏ lại khi việc đó thành công.",
+        "rollback": "Để hoàn tác, hãy chuyển ngược lại. Lịch sử tin nhắn, mã tin nhắn và biên nhận không bị ảnh hưởng.",
+        "action": "Chuyển số",
+        "cancel": "Hủy"
+      },
+      "errorHints": {
+        "nothingToDo": "Chọn đích khác hoặc nhà cung cấp nguồn khác.",
+        "tooMany": "Chọn nhà cung cấp nguồn để thu hẹp tập số.",
+        "disabled": "Kích hoạt nhà cung cấp đích trên trang của nó, rồi thử lại."
+      },
+      "result": {
+        "title": "Kết quả",
+        "allMoved": "Tất cả {count, plural, other {# số}} hiện đã dùng {provider}.",
+        "noneMoved": "Chưa có số nào được chuyển. Xem chi tiết bên dưới.",
+        "partial": "Đã chuyển {moved} trên tổng {total} số. Xem chi tiết bên dưới.",
+        "switched": "{count} đã chuyển",
+        "repointed": "{count} đã trỏ lại",
+        "failed": "{count} thất bại",
+        "blocked": "{count} bị chặn",
+        "overrideSet": "{provider} giờ là ghi đè của không gian làm việc này.",
+        "repointedNote": "Các số đã ngắt kết nối chỉ được trỏ lại. Không gian làm việc phải kết nối lại trước khi chúng có thể gửi tin.",
+        "inboundNote": "{count, plural, other {# số đã chuyển nhưng callback theo số của chúng}} không được chấp nhận. Hãy đặt callback trên nhà cung cấp hoặc ứng dụng Meta thành webhook của nền tảng.",
+        "rollback": {
+          "title": "Hoàn tác",
+          "description": "Hoàn tác là chuyển ngược lại. Các số giữ nguyên mọi thông tin xác thực đã có, nên tuyến token số không cần gì mới; tuyến token nền tảng cần token được lưu sẵn.",
+          "action": "Chuẩn bị chuyển ngược lại {provider}",
+          "unknown": "Không biết nhà cung cấp trước đó của các số này, nên không thể chuẩn bị hoàn tác từ đây."
+        },
+        "another": "Chuyển không gian làm việc khác",
+        "toAssignments": "Quay lại phân bổ"
+      }
+    },
+    "workspaceNote": {
+      "title": "Nhà cung cấp WhatsApp của bạn",
+      "newNumbers": "Số mới kết nối qua {provider}.",
+      "ownToken": "Mỗi số dùng token truy cập riêng.",
+      "platformToken": "Nền tảng giữ thông tin xác thực; bạn chỉ kết nối bằng mã.",
+      "mediaYes": "Hỗ trợ tải tệp lên.",
+      "mediaNo": "Không hỗ trợ tải tệp lên: tệp được gửi qua liên kết công khai.",
+      "none": "Hiện không có nhà cung cấp nào để kết nối số mới. Hãy liên hệ quản trị viên nền tảng.",
+      "numberOn": "{name} đang dùng {provider}.",
+      "numberNoMedia": "Không hỗ trợ tải tệp lên."
+    }
+  }
+}

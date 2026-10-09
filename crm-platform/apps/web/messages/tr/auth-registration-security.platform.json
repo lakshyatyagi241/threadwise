@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Platform konsolu",
+        "skipToContent": "İçeriğe geç",
+        "navLabel": "Konsol gezinmesi",
+        "openMenu": "Menüyü aç",
+        "closeMenu": "Menüyü kapat",
+        "language": "Dil",
+        "themeToLight": "Açık temaya geç",
+        "themeToDark": "Koyu temaya geç",
+        "accountLink": "Hesap ve güvenlik ({email})",
+        "signOut": "Çıkış yap",
+        "signingOut": "Çıkış yapılıyor",
+        "redirecting": "İki adımlı doğrulama kurulumu açılıyor",
+        "roles": {
+          "super_admin": "Süper yönetici",
+          "support": "Destek",
+          "auditor": "Denetçi"
+        },
+        "mfaRequired": {
+          "title": "İki adımlı doğrulama gerekli",
+          "body": "Süper yöneticiler konsolu kullanmadan önce bir kimlik doğrulama uygulaması açmalıdır. Tüm sayfaların kilidini açmak için aşağıdaki kurulumu tamamlayın."
+        }
+      },
+      "nav": {
+        "securityCenter": "Güvenlik Merkezi",
+        "securityEvents": "Güvenlik olayları",
+        "registration": "Kayıt politikası",
+        "socialLogin": "Sosyal giriş ve captcha",
+        "authPages": "Kimlik doğrulama sayfaları",
+        "plans": "Planlar",
+        "account": "Hesap ve iki adımlı doğrulama",
+        "groups": {
+          "security": "Güvenlik",
+          "guestPages": "Oturum açma ve kaydolma",
+          "plans": "Planlar",
+          "account": "Hesabınız"
+        }
+      },
+      "common": {
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Kopyalanamadı",
+        "loading": "Yükleniyor",
+        "retry": "Tekrar dene",
+        "requestId": "İstek kimliği",
+        "errors": {
+          "forbidden": "Rolünüz buna izin vermiyor.",
+          "request": "İstek reddedildi. Sayfayı yenileyip tekrar deneyin.",
+          "unexpected": "Bizim tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin."
+        },
+        "readOnly": {
+          "superAdmin": "Bu ayarları yalnızca süper yöneticiler değiştirebilir. Rolünüz ({role}) bunları görüntüleyebilir.",
+          "superAdminSupport": "Bu ayarları yalnızca süper yöneticiler ve destek değiştirebilir. Rolünüz ({role}) bunları görüntüleyebilir."
+        },
+        "copyWhat": "{what} öğesini kopyala"
+      },
+      "login": {
+        "title": "Operatör girişi",
+        "intro": "Bu konsol platformu yöneten kişiler içindir. Çalışma alanı kullanıcıları ana oturum açma sayfasından giriş yapar.",
+        "requestId": "İstek kimliği",
+        "submit": "Oturum aç",
+        "submitting": "Oturum açılıyor",
+        "fields": {
+          "email": "E-posta",
+          "emailPlaceholder": "siz@sirket.com",
+          "password": "Parola",
+          "showPassword": "Parolayı göster",
+          "hidePassword": "Parolayı gizle"
+        },
+        "errors": {
+          "email": "Geçerli bir e-posta adresi girin.",
+          "passwordRequired": "Parolanızı girin.",
+          "captchaRequired": "Robot olmadığınızı göstermek için kutuyu işaretleyin.",
+          "codeFormat": "Kimlik doğrulama uygulamanızdaki 6 haneyi girin.",
+          "recoveryFormat": "Kurtarma kodu 8 ile 32 harf, rakam veya tireden oluşur."
+        },
+        "notices": {
+          "expired": "Oturumunuz sona erdi. Devam etmek için yeniden oturum açın.",
+          "idle": "{minutes, plural, one {# dakika} other {# dakika}} etkinlik olmadığı için oturumunuz kapatıldı. Devam etmek için yeniden oturum açın."
+        },
+        "problems": {
+          "invalid": "Bu kimlik bilgileri eşleşmiyor.",
+          "invalidCode": "Bu kod geçerli değil. Kodu kontrol edip tekrar deneyin.",
+          "locked": "Çok fazla başarısız deneme. Oturum açma bir süreliğine duraklatıldı.",
+          "tryAgainIn": "{time} sonra tekrar deneyin",
+          "ipBlocked": "{ip} adresinden erişime izin verilmiyor.",
+          "ipBlockedUnknown": "Bu adresten erişime izin verilmiyor.",
+          "ipBlockedHelp": "Operatör izin listesinde bu adres yok. Bir süper yöneticiden eklemesini isteyin.",
+          "captcha": "Captcha doğrulaması başarısız oldu. Tamamlayıp tekrar deneyin.",
+          "challengeExpired": "Bu oturum açma işleminin süresi doldu. Parolanızı yeniden girin.",
+          "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+          "unexpected": "Oturumunuz açılamadı. Biraz sonra tekrar deneyin.",
+          "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
+        },
+        "captcha": {
+          "loadFailed": "Captcha yüklenemedi. Bağlantınızı veya içerik engelleyicinizi kontrol edip yeniden deneyin.",
+          "retry": "Captcha'yı yeniden dene",
+          "v3Notice": "Bu sayfa görünmez bir captcha denetimiyle korunmaktadır."
+        },
+        "mfa": {
+          "title": "İki adımlı doğrulama",
+          "intro": "Kimlik doğrulama uygulamanızdaki 6 haneli kodu girin.",
+          "recoveryIntro": "Kurtarma kodlarınızdan birini girin. Her kod bir kez çalışır.",
+          "codeLabel": "Doğrulama kodu",
+          "codeHint": "Kod 30 saniyede bir değişir.",
+          "recoveryLabel": "Kurtarma kodu",
+          "recoveryHint": "Harfler, rakamlar ve tireler, kaydedildiği gibi.",
+          "windowLeft": "Bu oturum açma işlemi {time} boyunca açık kalır.",
+          "windowClosed": "Bu oturum açma penceresi kapandı. Geri dönüp parolanızı yeniden girin.",
+          "verify": "Doğrula ve oturum aç",
+          "verifying": "Kontrol ediliyor",
+          "useRecovery": "Kurtarma kodu kullan",
+          "useAuthenticator": "Kimlik doğrulama uygulamasını kullan",
+          "back": "Oturum açmaya dön"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Hesabınız",
+        "title": "İki adımlı doğrulama",
+        "description": "{email} hesabını bir kimlik doğrulama uygulamasıyla koruyun. Operatör hesapları platformdaki en yüksek güvenli hesaplardır.",
+        "requestId": "İstek kimliği",
+        "status": {
+          "title": "Kimlik doğrulama uygulaması",
+          "on": "Açık",
+          "body": "Bu hesapta iki adımlı doğrulama açık. Her oturum açışınızda kod istenecek. Kurtarma kodları, açtığınızda bir kez gösterildi."
+        },
+        "intro": {
+          "title": "Kimlik doğrulama uygulaması kurun",
+          "step1": "Google Authenticator, Microsoft Authenticator veya 1Password gibi bir kimlik doğrulama uygulaması yükleyin.",
+          "step2": "Gösterdiğimiz QR kodunu tarayın veya kurulum anahtarını elle yazın.",
+          "step3": "Onaylamak için uygulamanın gösterdiği 6 haneli kodu girin. Ardından kurtarma kodlarını alırsınız.",
+          "begin": "Kurulumu başlat",
+          "starting": "Hazırlanıyor"
+        },
+        "setup": {
+          "qrLabel": "Kimlik doğrulama uygulamanız için QR kodu",
+          "title": "Tarayın, sonra onaylayın",
+          "scan": "Kimlik doğrulama uygulamanızı açın, bir hesap ekleyin ve bu kodu tarayın. Kod tarayıcınızda çizilir ve başka bir siteye gönderilmez.",
+          "manualTitle": "Tarayamıyor musunuz?",
+          "manualHint": "Bunun yerine bu kurulum anahtarını uygulamaya girin. Zamana dayalı, 6 haneli.",
+          "codeLabel": "6 haneli kod",
+          "codeHint": "Uygulamanın şu anda gösterdiği kodu girin.",
+          "enable": "İki adımlı doğrulamayı aç",
+          "enabling": "Açılıyor",
+          "cancel": "Kurulumu iptal et"
+        },
+        "codes": {
+          "enabled": "İki adımlı doğrulama açık.",
+          "title": "Kurtarma kodlarınızı kaydedin",
+          "body": "Telefonunuzu kaybederseniz bu kodların her biri bir kez oturum açmanızı sağlar. Yalnızca şimdi gösterilirler. Parolanızdan ayrı, güvenli bir yerde saklayın.",
+          "copyAll": "Tümünü kopyala",
+          "download": "Metin dosyası olarak indir",
+          "saved": "Bu kurtarma kodlarını güvenle sakladım.",
+          "continue": "Konsola devam et",
+          "fileHeader": "{email} için platform konsolu kurtarma kodları. Her kod bir kez çalışır."
+        },
+        "errors": {
+          "unexpected": "Bu adım tamamlanamadı. Biraz sonra tekrar deneyin.",
+          "codeFormat": "Uygulamanızda gösterilen 6 haneyi girin.",
+          "codeInvalid": "Bu kod geçerli değil. Telefonunuzun saatini kontrol edin ve sonraki kodu deneyin.",
+          "setupExpired": "Kurulumun süresi doldu. Baştan başlayın.",
+          "locked": "Çok fazla başarısız deneme. Tekrar denemeden önce bir süre bekleyin.",
+          "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
+        }
+      },
+      "security": {
+        "kicker": "Güvenlik Merkezi",
+        "title": "Güvenlik ve uyumluluk",
+        "description": "Operatör erişimini, WhatsApp gönderimini, cihazları ve webhook'ları koruyun. Her değişiklik tek bir güncelleme olarak kaydedilir ve güvenlik olay günlüğüne yazılır.",
+        "viewEvents": "Güvenlik olaylarını görüntüle",
+        "save": "Ayarları kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
+        "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
+        "requestId": "İstek kimliği",
+        "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
+        "discard": "Değişiklikleri at",
+        "errors": {
+          "forbidden": "Rolünüzün bu ayarları değiştirme yetkisi yok.",
+          "unexpected": "Ayarlar kaydedilemedi. Biraz sonra tekrar deneyin."
+        },
+        "tabs": {
+          "summary": "Özet",
+          "login": "Oturum açma ve MFA",
+          "whatsapp": "WhatsApp koruma önlemleri",
+          "abuse": "Kötüye kullanım filtreleri",
+          "api": "API ve webhook'lar",
+          "devices": "Cihazlar",
+          "danger": "Tehlikeli bölge"
+        },
+        "common": {
+          "range": "İzin verilen: {min} ile {max} arası.",
+          "rangeWithZero": "İzin verilen: 0 (kapalı) veya {min} ile {max} arası.",
+          "blankKeeps": "Boş bırakırsanız kayıtlı değer korunur."
+        },
+        "problems": {
+          "range": "{min} ile {max} arasında bir tam sayı girin.",
+          "rangeWithZero": "0 girin veya {min} ile {max} arasında bir tam sayı girin.",
+          "tooMany": "En fazla {max} girdi.",
+          "tooLong": "Her girdi en fazla {max} karakter olabilir.",
+          "invalidEntry": "{entry} geçerli bir adres veya aralık değil.",
+          "totalTooLong": "Listeyi toplamda {max} karakterin altında tutun."
+        },
+        "kpis": {
+          "score": {
+            "label": "Güvenlik puanı",
+            "strong": "güçlü kontroller etkin",
+            "attention": "dikkat gerekiyor"
+          },
+          "openRisks": {
+            "label": "Açık riskler",
+            "note": "{count} yüksek öncelikli"
+          },
+          "blocked": {
+            "label": "Engellenen denemeler"
+          },
+          "last24h": "son 24 saat",
+          "warnings": {
+            "label": "Uyarılar"
+          },
+          "mfa": {
+            "label": "Operatör MFA kapsamı",
+            "note": "{enrolled}/{total} operatör kayıtlı"
+          },
+          "webhooks": {
+            "label": "Webhook hataları",
+            "normal": "normal",
+            "review": "incele"
+          }
+        },
+        "risks": {
+          "kicker": "Öncelik kuyruğu",
+          "title": "İncelenecek risk öğeleri",
+          "seeAll": "Tüm hataları gör",
+          "empty": "Her şey yolunda. Son 7 günde hata veya uyarı yok.",
+          "columns": {
+            "severity": "Önem",
+            "signal": "Sinyal",
+            "workspace": "Çalışma alanı",
+            "owner": "Sahip",
+            "action": "İşlem"
+          },
+          "severity": {
+            "high": "Yüksek",
+            "medium": "Orta",
+            "watch": "İzle"
+          },
+          "platform": "Platform",
+          "inspect": "İncele",
+          "platformOf": "{app} Platformu",
+          "owner": {
+            "system": "Sistem",
+            "types": {
+              "user": "Kullanıcı",
+              "platform_operator": "Platform operatörü"
+            }
+          },
+          "noWorkspace": "Çalışma alanı yok"
+        },
+        "coverage": {
+          "kicker": "Kapsam",
+          "title": "Etkin kontroller",
+          "buckets": {
+            "admin_access": "Yönetici erişimi",
+            "send_abuse": "WhatsApp kötüye kullanım önleme",
+            "api_hardening": "API sıkılaştırma",
+            "incident_readiness": "Olay müdahale hazırlığı"
+          }
+        },
+        "quickActions": {
+          "kicker": "Hızlı işlemler",
+          "rotate": "Webhook gizli anahtarlarını yenile",
+          "forceReset": "Parola sıfırlamaya zorla",
+          "resume": "Gönderimi sürdür",
+          "halt": "Tüm gönderimleri acil durdur",
+          "scopeAll": "tümü",
+          "scopeUsers": "tüm kullanıcılar",
+          "scopeGlobal": "genel",
+          "halted": "şu anda durdurulmuş",
+          "superAdminOnly": "Bu işlemleri yalnızca bir süper yönetici çalıştırabilir."
+        },
+        "enforcement": {
+          "kicker": "Dürüst kontroller",
+          "title": "Her kontrolün bugün ne yaptığı",
+          "description": "Bir ayarı kaydetmek, platformun onu uyguladığı anlamına gelmez. Uygulanıyor, bir şeyin bunu şimdi denetlediği; kısmi, yalnızca bazı yolların denetlediği; ayrılmış ise sonrası için saklandığı anlamına gelir.",
+          "show": "Göster",
+          "hide": "Gizle",
+          "columns": {
+            "control": "Kontrol",
+            "consumer": "Neler kullanıyor",
+            "status": "Durum"
+          },
+          "enforced": "Uygulanıyor",
+          "partial": "Kısmi",
+          "reserved": "Ayrılmış"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Tüm kullanıcılar için 2FA iste",
+            "hint": "Her çalışma alanı kullanıcısı devam etmeden önce bir kimlik doğrulama uygulaması kurmalıdır."
+          },
+          "requireMfaForAdmins": {
+            "label": "Yöneticiler için 2FA iste",
+            "hint": "Herhangi bir çalışma alanında Yönetici rolüne sahip kullanıcılar bir kimlik doğrulama uygulaması kurmalıdır."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "Süper yöneticiler için 2FA iste",
+            "hint": "Bu kapalıyken platform süper yöneticileri yalnızca parolayla oturum açar. Açmak, onların kimlik doğrulama uygulamasına kaydolup kullanmasını sağlar."
+          },
+          "requireMfaForOwners": {
+            "label": "Çalışma alanı sahipleri için 2FA iste",
+            "hint": "Her çalışma alanının sahibi bir kimlik doğrulama uygulaması kurmalıdır."
+          },
+          "allowedMfaMethods": {
+            "label": "İzin verilen 2FA yöntemleri",
+            "hint": "En az biri seçili kalır: hiçbirini işaretlemezseniz kayıtlı liste korunur. Bugün yalnızca kimlik doğrulama uygulamaları var.",
+            "methods": {
+              "totp": "Kimlik doğrulama uygulaması",
+              "email": "E-posta kodu",
+              "telegram": "Telegram botu"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Oturum zaman aşımı (dakika)",
+            "hint": "Tarayıcı oturumunun sona ermesinden önceki boşta kalma süresi. 30 gün açık tutulan oturumlar hariçtir."
+          },
+          "maxConcurrentSessions": {
+            "label": "Kullanıcı başına en fazla eşzamanlı oturum",
+            "hint": "Aşıldığında en eski oturum kapatılır."
+          },
+          "rememberMeEnabled": {
+            "label": "Beni oturumda tut seçeneğine izin ver",
+            "hint": "Kapalıysa her oturum tarayıcı kapanınca sona erer."
+          },
+          "lockoutAfterFailures": {
+            "label": "En fazla oturum açma denemesi",
+            "hint": "Hesap duraklatılmadan önce süre içindeki başarısız oturum açmalar."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Kilitleme süresi (dakika)",
+            "hint": "Hataların ne kadar süreyle sayıldığı ve duraklatmanın ne kadar sürdüğü."
+          },
+          "passwordMinLength": {
+            "label": "En az uzunluk"
+          },
+          "passwordRequireUpper": {
+            "label": "Büyük harf iste",
+            "short": "Büyük harf"
+          },
+          "passwordRequireNumber": {
+            "label": "Rakam iste",
+            "short": "Rakam"
+          },
+          "passwordRequireSymbol": {
+            "label": "Sembol iste",
+            "short": "Sembol"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Parola yaşı sınırı (gün)",
+            "hint": "0, parolaların hiç sona ermediği anlamına gelir."
+          },
+          "waGuardrailsMode": {
+            "label": "Mod",
+            "options": {
+              "off": "Kapalı (denetim yok)",
+              "monitor": "İzleme (yalnızca günlük)",
+              "enforce": "Uygula (engelle)"
+            },
+            "explain": {
+              "off": "Hiçbir denetim çalışmaz. Bu sekmelerdeki sınırların ve filtrelerin etkisi yoktur.",
+              "monitor": "Denetimler çalışır ve eşleşmeler olay günlüğüne yazılır, ancak hiçbir mesaj durdurulmaz. Kuralları uygulamadan önce doğrulamak için kullanın.",
+              "enforce": "Eşleşen mesajlar gönderilmeden önce engellenir."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Dakikada en fazla gönderim",
+            "hint": "Çalışma alanı başına. 0 sınırsız demektir."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Günde en fazla gönderim",
+            "hint": "Çalışma alanı başına. 0 sınırsız demektir."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Bağlantılar şunu aşarsa beklet",
+            "hint": "Bundan fazla bağlantı içeren mesajlar bekletilir. 0 sınır yok demektir."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Dolandırıcılık kalıplarıyla eşleşen gönderimleri beklet",
+            "hint": "Ödül, acil hesap ve doğrulama tuzağı ifadeleri."
+          },
+          "waRequireTemplateReview": {
+            "label": "Göndermeden önce şablon incelemesi iste",
+            "hint": "Yalnızca güvenlik puanına sayılır; henüz hiçbir şey bunu denetlemez."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Finans ve zengin olma terimlerini engelle",
+            "hint": "Sahte yatırım, garantili getiri ve ödeme yönlendirme kalıpları."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Kısa ve şüpheli bağlantıları engelle",
+            "hint": "Bir mesajın nereye götürdüğünü gizleyen bağlantı kısaltıcılar."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Özel anahtar sözcük engelleme listesi",
+            "hint": "Her satıra bir tane veya virgülle ayrılmış. Toplamda en fazla 5.000 karakter. Eşleşme büyük/küçük harfe duyarlı değildir. Eşleşen mesajlar koruma moduna göre işaretlenir veya engellenir.",
+            "placeholder": "forex\nhızlı para\ngarantili getiri"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "Dakikada API isteği",
+            "hint": "Herhangi bir çalışma alanı API anahtarının dakikada yapabileceği en fazla istek. Bir anahtarın kendine ait daha düşük bir sınırı olabilir, daha yükseği olamaz."
+          },
+          "webhookSignatureRequired": {
+            "label": "HMAC imzaları iste",
+            "hint": "İmzalama sırrı olmadan webhook uç noktası oluşturulamaz."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Webhook yeniden oynatma penceresi (saniye)",
+            "hint": "Sonrası için saklanır; gelen sağlayıcı webhook'larının imzası zaten denetlenir."
+          },
+          "deviceTrustRequired": {
+            "label": "Güvenilir tarayıcı iste",
+            "hint": "Sonrası için saklanır; henüz bir cihaz güveni akışı yok."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Etkinlik olmadığında otomatik çıkış (gün)",
+            "hint": "Bu süre boyunca görülmeyen bağlı WhatsApp cihazları bağlantısı kesilmiş olarak işaretlenir. 0 asla demektir."
+          },
+          "ipAllowlistEnabled": {
+            "label": "İzin listesini etkinleştir",
+            "hint": "Bu konsola yalnızca aşağıdaki adresler erişebilir."
+          },
+          "ipAllowlistCidrs": {
+            "label": "İzin verilen adresler"
+          },
+          "alertOnNewDevice": {
+            "label": "Yeni cihaz uyarıları",
+            "hint": "Daha önce görülmemiş bir cihazdan oturum açıldığında kullanıcıya e-posta gönder."
+          },
+          "alertOnNewCountry": {
+            "label": "Ağ değişikliği uyarıları",
+            "hint": "Alışılandan farklı bir ağdan oturum açıldığında kullanıcıya e-posta gönder."
+          },
+          "alertChannel": {
+            "label": "Oturum açma uyarılarının gideceği yer",
+            "hint": "Bugün yalnızca e-posta gönderilir; WhatsApp kanalı sonrası için kaydedilir.",
+            "options": {
+              "email": "E-posta",
+              "whatsapp": "WhatsApp",
+              "both": "E-posta ve WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Güvenlik olaylarını şu süre sakla (gün)",
+            "hint": "0, sonsuza kadar saklamak demektir."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Oturum açma koruması",
+              "title": "Hesap kilitleme kuralları"
+            },
+            "password": {
+              "title": "Yeni parola kuralları",
+              "note": "Parola oluşturulduğunda veya değiştirildiğinde uygulanır, mevcut bir oturum açmaya asla uygulanmaz; bu yüzden sıkılaştırmak kimseyi dışarıda bırakmaz."
+            },
+            "mfa": {
+              "kicker": "Çok faktörlü kimlik doğrulama",
+              "title": "2FA zorunluluğu",
+              "description": "Çalışma alanı kullanıcıları için geçerlidir. Süper yönetici olan platform operatörleri her zaman 2FA kullanmalıdır."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Ana anahtar",
+              "title": "Koruma uygulaması",
+              "description": "Bu sekmelerdeki sınırlar ve filtreler yalnızca bu moda göre çalışır. Bir mod seçin ve ne yaptığını okuyun."
+            },
+            "caps": {
+              "kicker": "Gönderim hızı",
+              "title": "Kesin sınırlar"
+            },
+            "spam": {
+              "kicker": "İçerik kuralları",
+              "title": "Spam karşıtı kontroller"
+            },
+            "health": {
+              "kicker": "Güven kalitesi",
+              "title": "Çalışma alanı sağlığı",
+              "body": "Çalışma alanı başına engelleme ve işaretleme sayıları, gönderim hatları bunları bildirdiğinde burada görünür. O zamana kadar korumaların neleri yakaladığını görmek için güvenlik olay günlüğünü kullanın.",
+              "link": "Çalışma alanlarını görüntüle"
+            }
+          },
+          "abuse": {
+            "kicker": "Kötüye kullanım filtreleri",
+            "title": "Yasa dışı kullanımı önleme",
+            "aside": {
+              "title": "Bu politikayı katı tutun",
+              "body": "Bu filtreler dolandırıcılığı, kimlik avını ve tacizi müşterilerinizin kullandığı kanallardan uzak tutar. WhatsApp koruma önlemleri sekmesinde ayarlanan koruma moduna uyarlar."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Trafik kontrolü",
+              "title": "Hız sınırları"
+            },
+            "integrity": {
+              "kicker": "Webhook savunması",
+              "title": "Bütünlük"
+            },
+            "allowlist": {
+              "kicker": "IP izin listesi",
+              "title": "Konsol erişimi",
+              "description": "Yalnızca bu operatör konsolunu kısıtlar. Çalışma alanı kullanıcıları, genel API ve webhook'lar etkilenmez. Boş liste herkesi içeri alır, bu yüzden tüm operatörleri asla dışarıda bırakamaz.",
+              "cidrs": "İzin verilen adresler",
+              "cidrsHint": "Her satıra bir adres veya aralık, örneğin 203.0.113.9 veya 203.0.113.0/24. Virgül de çalışır.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "API tarafından görülen adresiniz:",
+              "yourIpUnknown": "Adresiniz algılanamadı, bu yüzden kendinizi dışarıda bırakma konusunda sizi uyaramayız.",
+              "addMine": "IP adresimi ekle",
+              "alreadyListed": "Zaten listede",
+              "lockoutWarning": "{ip} adresiniz bu listede yok. Kaydetmek sizi dışarıda bırakır, bu yüzden sunucu reddedecek. Önce adresinizi ekleyin."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Cihaz bütünlüğü",
+              "title": "Güven ve oturum politikası"
+            },
+            "alerts": {
+              "kicker": "Oturum açma uyarıları kanalı",
+              "title": "Uyarıların gideceği yer"
+            },
+            "audit": {
+              "kicker": "Denetim izi",
+              "title": "Saklama",
+              "description": "Bundan eski güvenlik olayları, temizleme işi oluşturulduğunda silinir.",
+              "link": "Güvenlik olay günlüğünü aç"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Tehlikeli bölge",
+          "title": "Geri alınamaz platform geneli işlemler",
+          "description": "Her işlem, bir şey olmadan önce adını yazmanızı ister ve her biri güvenlik olay günlüğüne yazılır.",
+          "superAdminOnly": "Bu işlemler yalnızca süper yöneticiler içindir. Rolünüz {role}.",
+          "haltState": "Giden gönderimler:",
+          "haltOn": "Durduruldu",
+          "haltOff": "Çalışıyor",
+          "revoke": {
+            "title": "Tüm oturumları iptal et",
+            "detail": "herkesin oturumunu kapatır"
+          },
+          "forceReset": {
+            "title": "Tüm kullanıcılar için parola sıfırlamaya zorla",
+            "detail": "her kullanıcıyı işaretler"
+          },
+          "rotate": {
+            "title": "Tüm webhook gizli anahtarlarını yenile",
+            "detail": "mevcut entegrasyonlar bozulur",
+            "note": "Webhook imzalama sırları henüz var olmayan entegrasyonlar alanına aittir, bu yüzden şimdilik 0 yenilenen bildirilir."
+          },
+          "halt": {
+            "title": "Tüm gönderimleri acil durdur",
+            "detail": "platform geneli kapatma anahtarı"
+          },
+          "resume": {
+            "title": "Gönderimi sürdür",
+            "detail": "şu anda durdurulmuş"
+          },
+          "logged": {
+            "kicker": "Neler günlüğe yazılır",
+            "title": "Her işlem bir olay yazar",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Sizinki dahil tüm oturumlar sonlandırıldığında.",
+              "forceReset": "Her kullanıcıya yeni parola seçmesi söylendiğinde.",
+              "rotate": "Gizli anahtarlar yenilendiğinde, sayısıyla birlikte.",
+              "halt": "Durdurma etkinleştirildiğinde ve gönderim sürdürüldüğünde yeniden.",
+              "policy": "Yukarıdaki herhangi bir ayar değişikliğinde, eski ve yeni değerlerle."
+            },
+            "trail": "Güvenlik denetim izini görüntüle"
+          },
+          "halted": {
+            "title": "Acil durdurma açık",
+            "body": "Gönderim sürdürülene kadar tüm giden mesajlar platform genelinde engellenir.",
+            "resume": "Gönderimi sürdür"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Tüm oturumları iptal et",
+              "body": "Bir çalışma alanında veya bu konsolda oturum açmış herkesin, sizin dahil, oturumu kapatılır.",
+              "effect1": "Her kişi, açıksa iki adımlı doğrulamayla yeniden oturum açmalıdır.",
+              "effect2": "Tarayıcıda kaydedilmemiş işler kaybolabilir.",
+              "confirm": "Tüm oturumları iptal et",
+              "done": "{count, plural, =0 {Etkin oturum yoktu.} one {# oturum iptal edildi.} other {# oturum iptal edildi.}}",
+              "signedOut": "Sizin de oturumunuz kapatıldı. Devam etmek için yeniden oturum açın."
+            },
+            "force_password_reset": {
+              "title": "Tüm kullanıcılar için parola sıfırlamaya zorla",
+              "body": "Her çalışma alanı kullanıcısından uygulamayı bir sonraki kullanışında yeni bir parola seçmesi istenecek.",
+              "effect1": "Şu anda kimsenin oturumu kapatılmıyor; istem bir sonraki isteklerinde görünür.",
+              "effect2": "İstemi yok sayanlar, değiştirene kadar uygulamayı kullanamaz.",
+              "confirm": "Sıfırlamaya zorla",
+              "done": "{count, plural, =0 {Hiçbir kullanıcı işaretlenmedi.} one {# kullanıcı yeni parola seçmeli.} other {# kullanıcı yeni parola seçmeli.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Tüm webhook gizli anahtarlarını yenile",
+              "body": "Her webhook imzalama sırrı yenisiyle değiştirilir.",
+              "effect1": "İmzaları doğrulayan entegrasyonlar yeni sırrı kullanana kadar çalışmaz.",
+              "effect2": "Eski sırları geri getirmenin bir yolu yoktur.",
+              "confirm": "Sırları yenile",
+              "done": "{count, plural, =0 {0 sır yenilendi.} one {# sır yenilendi.} other {# sır yenilendi.}}",
+              "noneRotated": "Entegrasyonlar alanı henüz webhook sırlarını saklamadığı için hiçbir şey yenilenmedi."
+            },
+            "halt_sends": {
+              "title": "Tüm gönderimleri acil durdur",
+              "body": "Tüm çalışma alanlarındaki her giden mesaj, gönderimi sürdürene kadar reddedilir.",
+              "effect1": "Müşteriler yanıtlar, kampanyalar ve otomasyonlar dahil hiçbir şey almaz.",
+              "effect2": "Mesajlaşmayı yeniden açmak için gönderimi sürdür seçeneğini kullanın.",
+              "confirm": "Tüm gönderimleri durdur",
+              "done": "Acil durdurma açık. Tüm giden gönderimler engelleniyor."
+            },
+            "resume_sends": {
+              "title": "Gönderimi sürdür",
+              "body": "Giden mesajlaşma her çalışma alanı için yeniden açılır.",
+              "effect1": "Durdurma sırasında reddedilen mesajlar otomatik olarak gönderilmez.",
+              "effect2": "Bir olay nedeniyle gönderimleri durdurduysanız önce olay günlüğünü kontrol edin.",
+              "confirm": "Gönderimi sürdür",
+              "done": "Gönderim sürdürüldü."
+            },
+            "typeToConfirm": "Onaylamak için <code>{phrase}</code> yazın",
+            "phraseHint": "Büyük harfler ve fazladan boşluklar yok sayılır.",
+            "cancel": "İptal",
+            "working": "İşleniyor",
+            "close": "Kapat",
+            "signInAgain": "Yeniden oturum aç",
+            "requestId": "İstek kimliği",
+            "errors": {
+              "forbidden": "Bu işlemi yalnızca bir süper yönetici çalıştırabilir.",
+              "unexpected": "İşlem tamamlanmadı. Tekrar denemeden önce olay günlüğünü kontrol edin."
+            }
+          }
+        },
+        "tabsLabel": "Güvenlik Merkezi bölümleri",
+        "search": {
+          "label": "Güvenlik kurallarını, IP'leri ve aktörleri ara",
+          "placeholder": "Güvenlik kurallarını, IP'leri, aktörleri ara…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Güvenlik Merkezi",
+        "title": "Güvenlik olayları",
+        "description": "Oturum açmalar, kilitlemeler, politika değişiklikleri ve tehlikeli işlemler, en yeniden en eskiye.",
+        "refresh": "Yenile",
+        "refreshing": "Yenileniyor",
+        "filters": {
+          "label": "Olayları filtrele",
+          "event": "Olay adı",
+          "eventHint": "Tam ad, örneğin auth.failed. Bir öneri seçin veya kendiniz yazın.",
+          "status": "Durum",
+          "anyStatus": "Herhangi bir durum",
+          "apply": "Uygula",
+          "clear": "Filtreleri temizle",
+          "q": "Arama metni",
+          "qHint": "Adı bu metni içeren olayları, harf büyüklüğüne bakmadan bulur."
+        },
+        "status": {
+          "success": "Başarılı",
+          "failure": "Başarısız",
+          "warning": "Uyarı",
+          "info": "Bilgi"
+        },
+        "empty": "Henüz hiçbir güvenlik olayı kaydedilmedi.",
+        "emptyFiltered": "Bu filtrelerle eşleşen olay yok.",
+        "listLabel": "Güvenlik olayları",
+        "ip": "IP",
+        "showPayload": "Ayrıntıları göster",
+        "hidePayload": "Ayrıntıları gizle",
+        "noPayload": "Bu olayın ek ayrıntısı yok.",
+        "payloadLabel": "{event} ayrıntıları",
+        "loadMore": "Daha fazla yükle",
+        "loading": "Yükleniyor",
+        "end": "{count, plural, one {Tek olay gösteriliyor.} other {Tüm # olay gösteriliyor.}}",
+        "export": "CSV dışa aktar",
+        "exported": "{count, plural, one {Yüklenen # olay bir CSV dosyasına kaydedildi.} other {Yüklenen # olay bir CSV dosyasına kaydedildi.}}",
+        "actorLabel": "Aktör",
+        "actorTypes": {
+          "user": "Kullanıcı",
+          "platform_operator": "Platform operatörü",
+          "system": "Sistem"
+        },
+        "workspaceLabel": "Çalışma alanı",
+        "requestIdLabel": "İstek kimliği",
+        "userAgentLabel": "Tarayıcı",
+        "copyNames": {
+          "actorId": "aktör kimliği",
+          "orgId": "çalışma alanı kimliği",
+          "requestId": "istek kimliği"
+        }
+      },
+      "registration": {
+        "kicker": "Ziyaretçi sayfaları",
+        "title": "Kayıt politikası",
+        "description": "Kimlerin kaydolabileceğine, e-postanın nasıl doğrulanacağına, yeni çalışma alanlarının hangi planla başlayacağına ve kayıt kodunun nasıl çalışacağına karar verin.",
+        "save": "Ayarları kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
+        "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
+        "requestId": "İstek kimliği",
+        "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
+        "discard": "Değişiklikleri at",
+        "errors": {
+          "unexpected": "Ayarlar kaydedilemedi. Biraz sonra tekrar deneyin."
+        },
+        "problems": {
+          "range": "{min} ile {max} arasında bir tam sayı girin.",
+          "tooLong": "En fazla {max} karakter.",
+          "required": "Bu alan zorunludur.",
+          "link": "/legal/terms gibi bir site yolu veya tam bir http ya da https adresi kullanın.",
+          "senderFormat": "Listeden gönderenlerden birini seçin.",
+          "countryFormat": "İki harfli bir ülke kodu kullanın.",
+          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin."
+        },
+        "policy": {
+          "kicker": "Kaydolma",
+          "title": "Kimler kaydolabilir",
+          "description": "Bu ayarlar sosyal hesapla kaydolma dahil yeni kayıtlar için geçerlidir."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Herkese açık kayıt",
+            "hintOn": "Herkes kayıt sayfasından bir çalışma alanı oluşturabilir.",
+            "hintOff": "Kayıt sayfasında kaydın kapalı olduğunu belirten bir mesaj görünür. Mevcut kullanıcılar etkilenmez."
+          },
+          "emailVerification": {
+            "label": "E-posta doğrulama",
+            "options": {
+              "off": "Kapalı: hesaplar otomatik doğrulanır",
+              "banner": "Bant: izin verilir, hatırlatmayla",
+              "block": "Engelle: devam etmeden önce doğrula"
+            },
+            "explain": {
+              "off": "Yeni hesaplar hemen doğrulanmış sayılır. Doğrulama e-postası gerekmez.",
+              "banner": "Kişiler uygulamayı hemen kullanabilir ve doğrulayana kadar bir hatırlatma görür.",
+              "block": "Kişiler başka bir şey kullanmadan önce e-postalarını doğrulamalıdır."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Varsayılan plan",
+            "hint": "Yeni çalışma alanlarının başladığı plan. Otomatik, kayıt varsayılanı olarak işaretlenen planı, yoksa ilk etkin ücretsiz planı kullanır.",
+            "placeholder": "plan kısa adı",
+            "auto": "Otomatik",
+            "unavailable": "{slug} (etkin bir plan değil)",
+            "loadFailed": "Plan listesi yüklenemedi.",
+            "kinds": {
+              "free": "Ücretsiz",
+              "paid": "Ücretli",
+              "custom_quote": "Özel teklif"
+            }
+          },
+          "trialDays": {
+            "label": "Ücretsiz deneme (gün)",
+            "hint": "{min} ile {max} arasında tam sayı. 0 deneme yok demektir. Kayıtlı değeri korumak için boş bırakın."
+          },
+          "defaultTimezone": {
+            "label": "Varsayılan saat dilimi",
+            "hint": "Yeni çalışma alanları kendi saat dilimlerini seçene kadar kullanılır."
+          },
+          "defaultCountryIso": {
+            "label": "Varsayılan ülke",
+            "hint": "Kayıtta telefon ülkesini önceden seçer.",
+            "none": "Varsayılan yok"
+          },
+          "termsUrl": {
+            "label": "Koşullar bağlantısı",
+            "hint": "Kayıt ve oturum açma sayfalarında gösterilen bir site yolu veya tam adres."
+          },
+          "privacyUrl": {
+            "label": "Gizlilik bağlantısı"
+          },
+          "cookiesUrl": {
+            "label": "Çerezler bağlantısı",
+            "hint": "İsteğe bağlı. Gizlemek için boş bırakın."
+          },
+          "otpEnabled": {
+            "label": "WhatsApp üzerinden kayıt kodu",
+            "hint": "Yeni hesaplar, çalışma alanı oluşturulmadan önce telefon numaralarını tek kullanımlık bir kodla onaylamalıdır."
+          },
+          "otpSender": {
+            "label": "Gönderen",
+            "hint": "Kodu gönderen bağlı numara. Göndericileri yönet ile bir tane ekleyin."
+          },
+          "ttlMinutes": {
+            "label": "Kod geçerlilik süresi (dakika)"
+          },
+          "length": {
+            "label": "Kod uzunluğu (hane)"
+          },
+          "resendCooldownSec": {
+            "label": "Yeniden gönderme bekleme süresi (saniye)"
+          },
+          "maxAttempts": {
+            "label": "En fazla deneme"
+          }
+        },
+        "otp": {
+          "kicker": "Doğrulama",
+          "title": "Kayıt kodu",
+          "description": "Biri kaydolduğunda gönderilen tek kullanımlık kodun ayarları.",
+          "knobHint": "{min} ile {max} arası. Boşsa {default} kullanılır.",
+          "status": {
+            "on": "Çalışıyor",
+            "off": "Çalışmıyor",
+            "unsavedNote": "Bu, kayıtlı ayarları gösterir. Nasıl uygulandıklarını görmek için değişikliklerinizi kaydedin.",
+            "reason": {
+              "active": "Yeni kayıtlar telefon numaralarını bir kodla onaylamalıdır.",
+              "disabled": "Anahtar kapalı, bu yüzden kayıt kod istemez.",
+              "no_sender": "Hiçbir gönderen seçilmedi, bu yüzden kayıt kod adımını atlar.",
+              "sender_missing": "Seçilen gönderen artık yok, bu yüzden kayıt kod adımını atlar.",
+              "sender_incomplete": "Seçilen göndericinin kimlik bilgileri eksik, bu yüzden kayıt kod adımını atlar.",
+              "dev_in_production": "Günlük göndericisi üretimde çalışamaz, bu yüzden kayıt kod adımını atlar.",
+              "template_missing": "WhatsApp Business göndericisi onaylı bir şablon gerektirir. Aşağıda bir tane oluşturup gönderin; o zamana kadar kayıt kod adımını atlar.",
+              "template_pending": "Meta şablonu hâlâ inceliyor, bu yüzden kayıt, şablon onaylanana kadar kod adımını atlar.",
+              "template_rejected": "Meta şablonu reddetti, bu yüzden kayıt kod adımını atlar. Düzeltip yeniden gönderin."
+            }
+          },
+          "sender": {
+            "none": "Gönderen yok",
+            "option": "{label} ({kind})",
+            "unknown": "Bilinmeyen gönderen ({ref})",
+            "manage": "Göndericileri yönet",
+            "empty": "Henüz gönderen yok. Göndericileri yönet ile bir tane ekleyin.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Resmi olmayan oturum",
+              "dev": "Yalnızca günlük"
+            },
+            "noneConnected": "Göndericilerinizin hiçbiri henüz bağlı değil. Göndericileri yönet bölümünde birini tamamlayın; yalnızca bağlı göndericiler seçilebilir.",
+            "unfinished": "{label} ({kind}, tamamlanmadı)"
+          },
+          "template": {
+            "title": "Mesaj şablonu",
+            "states": {
+              "none": "Oluşturulmadı",
+              "pending": "Meta bekleniyor",
+              "approved": "Onaylandı",
+              "rejected": "Reddedildi",
+              "local": "Hazır"
+            },
+            "explain": {
+              "none": "Yukarıdaki gönderen ve kod ayarları doğru olduğunda mesajı oluşturun. WhatsApp Business, Meta onayı gerektirir; diğer kanallar mesajı hemen kullanır.",
+              "waba": "Meta'ya kimlik doğrulama şablonu olarak gönderildi. Meta onayladığında kod adımı kendiliğinden açılır; genellikle birkaç dakika içinde.",
+              "local": "Bu kanal için düz metin olarak kaydedildi. İnceleme gerekmez, bu yüzden şimdi kullanımda."
+            },
+            "name": "Ad",
+            "metaId": "Meta şablon kimliği",
+            "validFor": "Kod geçerlilik süresi",
+            "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+            "submitted": "Oluşturuldu",
+            "checked": "Son kontrol",
+            "never": "Henüz değil",
+            "reason": "Neden",
+            "stale": "Bu şablon {count, plural, one {# dakika} other {# dakika}} geçerli bir kod için hazırlandı. Yukarıdaki geçerlilik süresiyle eşleşmesi için yeniden oluşturup gönderin.",
+            "create": "OTP şablonu oluştur ve gönder",
+            "creating": "İşleniyor",
+            "refresh": "Durumu yenile",
+            "refreshing": "Kontrol ediliyor",
+            "outcome": {
+              "submitted": "Şablon incelenmek üzere Meta'ya gönderildi. Meta onayladığında kod adımı kendiliğinden açılır.",
+              "resubmitted": "Şablon incelenmek üzere Meta'ya yeniden gönderildi. Onaylanana kadar kod adımı kapalı kalır.",
+              "local_ready": "Mesaj kaydedildi ve şimdi kullanımda. Bu kanal inceleme gerektirmez.",
+              "already_pending": "Şablon zaten Meta'da incelemede. Kontrol etmek için Durumu yenile seçeneğini kullanın.",
+              "already_approved": "Şablon zaten onaylı. Gönderilmesi gereken bir şey yoktu.",
+              "refreshed": "Durum kontrol edildi.",
+              "approvedNow": "Meta şablonu hemen onayladı. Kod adımı hazır.",
+              "rejectedNow": "Meta şablonu reddetti. Neden aşağıda gösteriliyor; düzeltip yeniden gönderin."
+            },
+            "refreshed": {
+              "pending": "Meta şablonu hâlâ inceliyor.",
+              "approved": "Meta şablonu onayladı. Kod adımı hazır.",
+              "rejected": "Meta şablonu reddetti.",
+              "local": "Bu şablon inceleme gerektirmez."
+            },
+            "errors": {
+              "submit": "Meta şablonu kabul etmedi. Diğer kod ayarlarınız kaydedildi.",
+              "check": "Durum Meta'dan okunamadı.",
+              "rejected": "Şablon oluşturulamadı.",
+              "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin."
+            },
+            "createHint": "Seçilen gönderen için kayıt mesajını oluşturur. WhatsApp Business incelenmek üzere Meta'ya gider; diğer kanallar hemen hazırdır.",
+            "picker": {
+              "label": "WhatsApp Business şablonu",
+              "hint": "Kayıt, aşağıdaki düğmeyle oluşturulan şablonu gönderir. Bu göndericinin diğer onaylı kimlik doğrulama şablonları görebilmeniz için listelenir; henüz buradan seçilemezler.",
+              "none": "Henüz yok (aşağıda bir tane oluşturun)",
+              "loading": "Şablonlar yükleniyor",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Şablonlarını görmek için göndericiyi kaydedin.",
+              "failed": "Şablon listesi yüklenemedi.",
+              "unavailable": "Meta şablon listesi okunamadı: {reason}"
+            }
+          },
+          "test": {
+            "about": "Kayıtlar buna bağlı olmadan önce göndericinin çalıştığını doğrulamak için bir telefona gerçek bir kod gönderin.",
+            "button": "Test kodu gönder",
+            "title": "Test kodu gönder",
+            "intro": "Girdiğiniz numaraya, aşağıdaki gönderen üzerinden gerçek bir kod gider. Kayıtlı kod ayarlarını ve şablonu kullanır. Saatte 5 gönderebilirsiniz.",
+            "to": "Telefon numarası",
+            "toHint": "Ülke koduyla, örneğin +91 98765 43221.",
+            "sender": "Gönderen",
+            "senderHint": "Kayıtlı gönderende bırakın veya listeden başka birini deneyin.",
+            "savedSender": "Kayıtlı gönderen",
+            "send": "Kodu gönder",
+            "sending": "Gönderiliyor",
+            "close": "Kapat",
+            "sent": "{to} numarasına bir test kodu gönderildi.",
+            "remaining": "{count, plural, one {Bu saat # test hakkı kaldı.} other {Bu saat # test hakkı kaldı.}}",
+            "notShown": "Kod burada gösterilmez; telefondan okuyun.",
+            "requestId": "İstek kimliği",
+            "errors": {
+              "invalidNumber": "Numarayı ülke koduyla girin, örneğin +91 98765 43221.",
+              "rateLimited": "Bu saat çok fazla test kodu. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
+              "failed": "Kod gönderilemedi.",
+              "rejected": "Test gönderilmedi.",
+              "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin."
+            },
+            "reasons": {
+              "not_configured": "Gönderen eksik veya tamamlanmamış.",
+              "template_not_approved": "Şablon henüz onaylanmadı.",
+              "invalid_number": "Bu numara geçerli değil.",
+              "auth_failed": "Sağlayıcı kimlik bilgilerini reddetti. Göndericileri yönet bölümündeki sırrı kontrol edin.",
+              "rejected": "Sağlayıcı mesajı reddetti.",
+              "provider_error": "Sağlayıcıda bir sorun oluştu. Kısa süre sonra tekrar deneyin.",
+              "connection_refused": "Sağlayıcı adresi bağlantıyı reddetti.",
+              "timeout": "Sağlayıcı zamanında yanıt vermedi.",
+              "transport_error": "Sağlayıcıya ulaşılamadı."
+            }
+          }
+        },
+        "senders": {
+          "title": "Göndericileri yönet",
+          "intro": "Kayıt kodunu gönderebilen bağlantılar. Sırlar şifrelenmiş olarak saklanır ve bir daha gösterilmez.",
+          "loading": "Yükleniyor",
+          "working": "İşleniyor",
+          "empty": "Henüz gönderen yok.",
+          "add": "Gönderen ekle",
+          "edit": "Düzenle",
+          "remove": "Kaldır",
+          "close": "Kapat",
+          "cancel": "İptal",
+          "save": "Göndereni kaydet",
+          "keep": "Koru",
+          "addTitle": "Yeni gönderen",
+          "editTitle": "{label} öğesini düzenle",
+          "kind": "Tür",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Resmi olmayan oturum (Node köprüsü)",
+            "dev": "Yalnızca günlük (geliştirme)"
+          },
+          "kindHint": {
+            "waba": "Meta üzerinden onaylı bir kimlik doğrulama şablonu gönderir. Şablon incelemesi gerekir.",
+            "twilio": "Twilio üzerinden bir WhatsApp mesajı gönderir. Şablon incelemesi yok.",
+            "device": "Node köprünüzdeki QR ile eşleştirilmiş bir oturum üzerinden gönderir. Şablon incelemesi yok.",
+            "dev": "Kodu göndermek yerine sunucu günlüğüne yazar. Üretimde asla kullanılamaz."
+          },
+          "fields": {
+            "label": "Ad",
+            "phoneNumberId": "Telefon numarası kimliği",
+            "wabaId": "WhatsApp Business hesap kimliği",
+            "graphBaseUrl": "Graph API adresi",
+            "accountSid": "Hesap SID",
+            "fromNumber": "WhatsApp numarası (From)",
+            "apiBaseUrl": "Twilio API adresi",
+            "bridgeUrl": "Köprü adresi",
+            "senderNumber": "Oturum numarası"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Meta'dan, WhatsApp numarasının API kurulumunda.",
+              "wabaId": "Şablonu Meta'ya göndermek için gerekir.",
+              "graphBaseUrl": "Meta'nın adresini kullanmak için boş bırakın."
+            },
+            "twilio": {
+              "accountSid": "Twilio konsolundan.",
+              "fromNumber": "WhatsApp etkin numara, ülke koduyla.",
+              "apiBaseUrl": "Twilio'nun adresini kullanmak için boş bırakın."
+            },
+            "device": {
+              "bridgeUrl": "Node köprünüzün dinlediği yer, örneğin http://127.0.0.1:3003.",
+              "senderNumber": "Köprünün gönderim yaptığı eşleştirilmiş numara, ülke koduyla."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Erişim belirteci",
+            "twilio": "Kimlik doğrulama belirteci",
+            "device": "Köprü belirteci",
+            "dev": "Sır"
+          },
+          "secretHint": "Şifrelenmiş olarak saklanır ve bir daha gösterilmez.",
+          "secretHintSaved": "Şifrelenmiş olarak saklanır. Kayıtlı olanı korumak için boş bırakın.",
+          "secretSaved": "kayıtlı, korumak için boş bırakın",
+          "showSecret": "Sırrı göster",
+          "hideSecret": "Sırrı gizle",
+          "removeSecret": "Kayıtlı sırrı kaldır",
+          "removeSecretBody": "Yeni bir sır kaydedilene kadar gönderen çalışmaz.",
+          "removeSecretConfirm": "Sırrı kaldır",
+          "hasSecret": "Sır kaydedildi",
+          "noSecret": "Sır yok",
+          "inUse": "Kayıt için kullanılıyor",
+          "removeBody": "{label} kaldırılsın mı? Kayıtlı sırrı da silinir.",
+          "removeBodyInUse": "{label} kaldırılsın mı? Kayıt bunu kullanıyor, bu yüzden kod adımı kapanır. Kayıtlı sırrı da silinir.",
+          "removeConfirm": "Göndereni kaldır",
+          "added": "Gönderen eklendi",
+          "saved": "Gönderen kaydedildi",
+          "removed": "Gönderen kaldırıldı",
+          "secretRemoved": "Kayıtlı sır kaldırıldı",
+          "requestId": "İstek kimliği",
+          "problems": {
+            "required": "Bu alan zorunludur.",
+            "tooLong": "En fazla {max} karakter.",
+            "digits": "Yalnızca rakam, 5 ile 24 arası.",
+            "url": "Kullanıcı adı veya parola olmadan tam bir http ya da https adresi kullanın.",
+            "accountSid": "Hesap SID AC ile başlar ve 34 karakterdir.",
+            "phone": "Numarayı ülke koduyla girin, 7 ile 15 hane."
+          },
+          "errors": {
+            "unexpected": "Gönderen kaydedilemedi. Biraz sonra tekrar deneyin."
+          }
+        },
+        "footer": {
+          "kicker": "Giden mesajlar",
+          "title": "Platform mesaj alt bilgisi",
+          "description": "Planı marka kaldırmaya izin vermeyen çalışma alanlarından gönderilen düz metin ve etkileşimli mesajların sonuna eklenir. Şablonlar kendi metnini taşır ve bunu atlar. Marka kaldırabilen bir plandaki çalışma alanı, kendi alt bilgisini veya hiç alt bilgi olmamasını hesabında belirler.",
+          "builtIn": "Yerleşik metin",
+          "label": "Alt bilgi metni",
+          "hint": "En fazla {max} karakter. Hiç alt bilgi göndermemek için boş bırakın.",
+          "count": "{used}/{max}",
+          "preview": "Önizleme",
+          "noFooter": "(alt bilgi yok)",
+          "save": "Alt bilgiyi kaydet",
+          "saving": "Kaydediliyor",
+          "clear": "Temizle",
+          "saved": "Platform alt bilgisi kaydedildi. Bir sonraki mesajdan itibaren geçerlidir.",
+          "savedNone": "Platform alt bilgisi kaldırıldı. Mesajlar alt bilgisiz gider.",
+          "errors": {
+            "invalid": "Bu alt bilgi kabul edilmedi.",
+            "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
+          },
+          "requestId": "İstek kimliği"
+        }
+      },
+      "social": {
+        "kicker": "Ziyaretçi sayfaları",
+        "title": "Sosyal giriş ve captcha",
+        "description": "İnsanların Google veya Facebook ile oturum açmasına izin verin ve oturum açma ile kayıt sayfalarını reCAPTCHA ile koruyun. Her biri yalnızca etkinleştirildiğinde ve anahtarları kaydedildiğinde görünür.",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
+        "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
+        "requestId": "İstek kimliği",
+        "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
+        "discard": "Değişiklikleri at",
+        "errors": {
+          "unexpected": "Ayarlar kaydedilemedi. Biraz sonra tekrar deneyin."
+        },
+        "problems": {
+          "tooLong": "En fazla {max} karakter.",
+          "threshold": "0 ile 1 arasında bir sayı girin."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Google istemci kimliği",
+            "clientSecret": "Google istemci sırrı",
+            "enabled": "Google ile oturum açma"
+          },
+          "facebook": {
+            "clientId": "Facebook uygulama kimliği",
+            "clientSecret": "Facebook uygulama sırrı",
+            "enabled": "Facebook ile oturum açma"
+          },
+          "recaptcha": {
+            "siteKey": "reCAPTCHA site anahtarı",
+            "secret": "reCAPTCHA gizli anahtarı",
+            "v3Threshold": "reCAPTCHA puan eşiği",
+            "version": "reCAPTCHA sürümü",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Etkinleştir",
+        "secretSaved": "kayıtlı, korumak için boş bırakın",
+        "secretHint": "Şifrelenmiş olarak saklanır ve bir daha gösterilmez. Kayıtlı olanı korumak için boş bırakın.",
+        "showSecret": "Sırrı göster",
+        "hideSecret": "Sırrı gizle",
+        "google": {
+          "kicker": "Google Cloud ile OAuth 2.0",
+          "title": "Google ile oturum açma",
+          "idLabel": "İstemci kimliği",
+          "idHint": "Google Cloud'da kimlik bilgileri altında, web uygulaması türündeki OAuth istemcisinden.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "İstemci sırrı",
+          "secretPlaceholder": "istemci sırrı",
+          "redirectLabel": "Yetkili yönlendirme URI'si",
+          "redirectHint": "Bunu OAuth istemcisine aynen yapıştırın, aksi halde Google yönlendirme uyuşmazlığıyla oturum açmayı reddeder."
+        },
+        "facebook": {
+          "kicker": "Meta for Developers ile Facebook Login",
+          "title": "Facebook ile oturum açma",
+          "idLabel": "Uygulama kimliği",
+          "idHint": "Uygulama ayarlarından, temel bölümünde, uygulama kimliği.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "Uygulama sırrı",
+          "secretPlaceholder": "32 karakterlik uygulama sırrı",
+          "redirectLabel": "Geçerli OAuth yönlendirme URI'si",
+          "redirectHint": "Bunu Facebook Login ayarları altına ekleyin. Uygulamanın e-posta ve genel profil izinlerine ihtiyacı var."
+        },
+        "recaptcha": {
+          "kicker": "Google reCAPTCHA ile bot koruması",
+          "title": "reCAPTCHA",
+          "versionLabel": "Sürüm",
+          "versionHint": "v2 bir onay kutusu gösterir. v3 görünmezdir ve her isteği puanlar.",
+          "versions": {
+            "v2": "v2: Robot değilim onay kutusu",
+            "v3": "v3: görünmez puan"
+          },
+          "thresholdLabel": "v3 puan eşiği",
+          "thresholdHint": "Yalnızca v3. 0 büyük olasılıkla bot, 1 büyük olasılıkla insan demektir. Boşsa 0,5 kullanılır.",
+          "siteKeyLabel": "Site anahtarı",
+          "siteKeyHint": "reCAPTCHA konsolundan, tarayıcıya gönderilen genel anahtar.",
+          "secretLabel": "Gizli anahtar"
+        },
+        "live": {
+          "kicker": "Durum",
+          "title": "Şu anda neler canlı",
+          "google": "Google canlı",
+          "facebook": "Facebook canlı",
+          "recaptcha": "reCAPTCHA canlı",
+          "yes": "canlı",
+          "no": "canlı değil",
+          "note": "Bir sağlayıcı yalnızca etkinleştirildiğinde ve iki anahtarı da kaydedildiğinde canlıdır. Bunlar kaydedilenleri gösterir, kaydedilmemiş düzenlemeleri değil."
+        },
+        "guide": {
+          "kicker": "Hızlı kurulum",
+          "google": {
+            "title": "Dört adımda Google",
+            "step1": "Google Cloud konsolunu açın ve bir proje seçin veya oluşturun.",
+            "step2": "OAuth onay ekranını destek e-postanızla harici bir uygulama olarak ayarlayın.",
+            "step3": "Kimlik bilgileri oluşturun, OAuth istemci kimliğini, ardından Web uygulaması seçeneğini seçin.",
+            "step4": "Formdaki yönlendirme URI'sini ekleyin, ardından istemci kimliğini ve sırrı buraya yapıştırın.",
+            "link": "Google Cloud kimlik bilgilerini aç"
+          },
+          "facebook": {
+            "title": "Dört adımda Facebook",
+            "step1": "Meta for Developers sitesini açın ve kullanıcıları doğrulamak için bir uygulama oluşturun.",
+            "step2": "Uygulamaya Facebook Login ürününü ekleyin.",
+            "step3": "Ayarlarında formdaki yönlendirme URI'sini ekleyin.",
+            "step4": "Uygulama kimliğini ve sırrı temel ayarlardan kopyalayıp buraya yapıştırın, ardından uygulamayı canlıya alın.",
+            "link": "Meta for Developers sitesini aç"
+          },
+          "recaptcha": {
+            "title": "reCAPTCHA anahtarları",
+            "body": "Sitenizi reCAPTCHA konsolunda kaydedin, v2 veya v3 seçin ve site anahtarı ile gizli anahtarı buraya yapıştırın.",
+            "link": "reCAPTCHA konsolunu aç"
+          },
+          "noSdk": {
+            "badge": "Bilmeniz gerekenler",
+            "body": "Oturum açma doğrudan standart OAuth adreslerini kullanır, bu yüzden kurulacak bir şey yoktur. Anahtarları yapıştırın ve açın."
+          }
+        },
+        "removeSecret": {
+          "action": "Kayıtlı sırrı kaldır",
+          "title": "Kayıtlı {name} sırrını kaldır",
+          "body": "{name} için kayıtlı sır sunucudan silinir ve gösterilemez veya geri alınamaz. {name} hizmetini yeniden kullanmak için yeni bir sır kaydetmeniz gerekir.",
+          "liveWarning": "{name} şu anda çalışıyor. Sırrını kaldırmak, yeni bir sır kaydedilene kadar onu kapatır.",
+          "confirm": "Sırrı kaldır",
+          "cancel": "İptal",
+          "working": "Kaldırılıyor",
+          "error": "Sır kaldırılamadı. Biraz sonra tekrar deneyin.",
+          "requestId": "İstek kimliği",
+          "done": "Kayıtlı {name} sırrı kaldırıldı.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Başvuru",
+          "title": "Resmi belgeler",
+          "opensNewTab": "(yeni sekmede açılır)",
+          "links": {
+            "google": "Google OAuth kurulumu",
+            "facebook": "Facebook Login kurulumu",
+            "recaptchaAdmin": "reCAPTCHA yönetim konsolu",
+            "recaptchaDocs": "reCAPTCHA belgeleri"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Planlar",
+        "title": "Planlar",
+        "description": "Çalışma alanlarının seçtiği katalog. Yeni kayıtlar varsayılan plana düşer; plan için ödeme faturalandırma ile gelecek.",
+        "new": "Yeni plan",
+        "kpi": {
+          "label": "Katalog özeti",
+          "total": "Toplam plan",
+          "active": "Etkin",
+          "free": "Ücretsiz",
+          "paid": "Ücretli"
+        },
+        "empty": {
+          "title": "Henüz plan yok",
+          "body": "İlk planı oluşturun. Bir plan oluşana kadar yeni çalışma alanları, hiçbir şeyi sınırlamayan starter adlı bir planla başlar.",
+          "action": "İlk planı oluştur"
+        },
+        "table": {
+          "label": "Planlar",
+          "plan": "Plan",
+          "price": "Fiyat",
+          "messages": "Mesajlar",
+          "workspaces": "Çalışma alanları",
+          "entitlements": "Dahil",
+          "features": "Özellikler",
+          "limits": "Sınırlar",
+          "addons": "Eklentiler",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{total} özellikten {count} tanesi açık",
+          "limits": "{total} sınırdan {count} tanesi ayarlı",
+          "addons": "{count, plural, one {# eklenti görünür} other {# eklenti görünür}}"
+        },
+        "badges": {
+          "popular": "Popüler",
+          "signupDefault": "Kayıt varsayılanı"
+        },
+        "price": {
+          "free": "Ücretsiz",
+          "custom": "Özel teklif",
+          "lifetime": "tek seferlik"
+        },
+        "period": {
+          "days": "{count, plural, one {/ gün} other {/ # gün}}",
+          "weeks": "{count, plural, one {/ hafta} other {/ # hafta}}",
+          "months": "{count, plural, one {/ ay} other {/ # ay}}",
+          "years": "{count, plural, one {/ yıl} other {/ # yıl}}"
+        },
+        "messages": {
+          "unlimited": "Sınırsız",
+          "limited": "Ayda {count, number}"
+        },
+        "active": {
+          "on": "Etkin",
+          "off": "Etkin değil",
+          "toggle": "Etkin: {name}"
+        },
+        "actions": {
+          "edit": "Düzenle",
+          "delete": "Sil",
+          "editName": "{name} öğesini düzenle",
+          "deleteName": "{name} öğesini sil"
+        },
+        "toasts": {
+          "created": "{name} planı oluşturuldu.",
+          "updated": "{name} planı kaydedildi.",
+          "activated": "{name} artık etkin.",
+          "deactivated": "{name} artık etkin değil.",
+          "deleted": "{name} planı silindi."
+        },
+        "delete": {
+          "title": "{name} silinsin mi?",
+          "body": "Bu işlem geri alınamaz. Bunun yerine bir planı devre dışı bırakmak onu alıcılardan gizler ve üzerindeki çalışma alanlarını korur.",
+          "inUseHint": "{count, plural, one {Bu planda # çalışma alanı var.} other {Bu planda # çalışma alanı var.}} Taşınana kadar silme reddedilir.",
+          "confirm": "Planı sil",
+          "cancel": "İptal",
+          "deleting": "Siliniyor"
+        },
+        "errors": {
+          "inUse": "{count, plural, one {Silinemez: # çalışma alanı şu anda bu planı kullanıyor.} other {Silinemez: # çalışma alanı şu anda bu planı kullanıyor.}} Onları başka bir plana taşıyın veya bunun yerine bu planı devre dışı bırakın.",
+          "defaultProtected": "Bu plan kayıt varsayılanı olduğu için devre dışı bırakılamaz veya silinemez. Önce başka bir varsayılan plan seçin.",
+          "notFound": "Bu plan artık yok. Listeyi yeniden yükleyin.",
+          "forbidden": "Planları yalnızca süper yöneticiler değiştirebilir.",
+          "generic": "Bir şeyler ters gitti. Tekrar deneyin."
+        },
+        "editor": {
+          "createTitle": "Yeni plan",
+          "editTitle": "{name} öğesini düzenle",
+          "slugLabel": "Kısa ad:",
+          "slugNote": "Plan oluşturulurken belirlenir ve asla değişmez.",
+          "save": "Değişiklikleri kaydet",
+          "create": "Plan oluştur",
+          "saving": "Kaydediliyor",
+          "cancel": "İptal",
+          "discard": "Değişiklikleriniz silinsin mi?",
+          "failed": "Plan kaydedilemedi. Tekrar deneyin.",
+          "unlimited": "Sınırsız",
+          "errorsBanner": "Bazı alanlar dikkat gerektiriyor. Nokta işaretli sekmelerde hatalar var.",
+          "tabs": {
+            "label": "Plan bölümleri",
+            "details": "Ayrıntılar ve fiyatlandırma",
+            "features": "Özellikler",
+            "limits": "Sınırlar",
+            "addons": "Eklentiler"
+          },
+          "tabSummary": {
+            "features": "{total} özellikten {count} tanesi açık",
+            "limits": "{total} sınırdan {count} tanesi ayarlı",
+            "addons": "{count} eklenti seçildi",
+            "error": "Düzeltilecek hatalar var"
+          },
+          "featuresUi": {
+            "intro": "Bu planın içermediği şeyleri kapatın. Plandaki bir çalışma alanı, özelliği kapalı olan bir alanı açamaz.",
+            "search": "Özellik ara",
+            "searchPlaceholder": "Özellik ara",
+            "enableAll": "Tümünü etkinleştir",
+            "disableAll": "Tümünü devre dışı bırak",
+            "noMatch": "Aramanızla eşleşen özellik yok.",
+            "groupCount": "{total} içinden {count} açık"
+          },
+          "limitsUi": {
+            "intro": "Bir sınır, çalışma alanı ona ulaştığında işlemi durdurur. Sınırı kaldırmak için Sınırsız seçeneğini işaretleyin.",
+            "search": "Sınır ara",
+            "searchPlaceholder": "Sınır ara",
+            "noMatch": "Aramanızla eşleşen sınır yok.",
+            "unlimited": "Sınırsız",
+            "platformDefault": "Platform varsayılanı",
+            "groupCount": "{total} içinden {count} sınırlı",
+            "valueFor": "{name} sınırı",
+            "unofficialOff": "Yalnızca resmi olmayan WhatsApp platform tarafından etkinleştirildiğinde geçerlidir (şu anda devre dışı)."
+          },
+          "limitUnits": {
+            "perMonth": "aylık",
+            "perBroadcast": "toplu gönderim başına",
+            "perMinute": "dakika başına",
+            "perPlanPeriod": "plan dönemi başına",
+            "total": "toplamda"
+          },
+          "addons": {
+            "intro": "Etkin eklentiler bu plandaki çalışma alanlarına Pazar yerinde gösterilir; yalnızca çalışma alanı satın aldıktan sonra kullanılabilir.",
+            "search": "Eklenti ara",
+            "searchPlaceholder": "Eklenti veya uygulama ara",
+            "selectAll": "Tümünü seç",
+            "clear": "Temizle",
+            "selected": "{total} içinden {count} seçildi",
+            "loading": "Eklentiler yükleniyor",
+            "empty": "Henüz ücretli eklenti yok",
+            "emptyHint": "Eklentiler operatör konsolunun Pazar yeri kataloğunda oluşturulur. Bir uygulamanın ücretli paketi olduğunda burada listelenir.",
+            "loadFailed": "Eklentiler yüklenemedi.",
+            "loadFailedKept": "Eklentiler yüklenemedi, bu yüzden burada değiştirmediğiniz sürece mevcut seçim olduğu gibi kalır.",
+            "retry": "Tekrar dene",
+            "noMatch": "Aramanızla eşleşen eklenti yok.",
+            "unknown": "Bilinmeyen eklenti",
+            "unknownHint": "Bu eklenti artık yok. Plandan çıkarmak için işaretini kaldırın.",
+            "notOnSale": "Satışta değil",
+            "packInactive": "Eklenti paketi kapalı, bu yüzden kimse satın alamaz.",
+            "appUnpublished": "Uygulama yayımlanmadı, bu yüzden çalışma alanları henüz göremez.",
+            "appLabel": "Uygulama: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "Sohbetlere yanıt veren ve onlar üzerinde işlem yapan akış oluşturucu ve otomasyonlar.",
+            "ai_assistants": "Web sitesi sohbet botu widget'ındaki yapay zeka modu dahil yapay zeka asistanları.",
+            "calling": "Arama bölümü: sesli aramalar ve arama ayarları.",
+            "woocommerce": "Sipariş mesajları, sepet kurtarma ve mağaza toplu gönderimleri için WooCommerce mağazalarını bağlayın.",
+            "shopify": "Sipariş mesajları, sepet kurtarma ve mağaza toplu gönderimleri için Shopify mağazalarını bağlayın.",
+            "analytics": "Analiz panoları ve raporlar.",
+            "remove_branding": "Beyaz etiket: çalışma alanı alt bilgisindeki platform markasını gizleyebilir.",
+            "sales_pipeline": "Fırsatlar, görevler ve satış hunileri ile panodaki huni rakamları.",
+            "appointment_booking": "Rezervasyon türleri, randevular ve herkese açık rezervasyon sayfaları. Bu anahtar ücretli Randevular uygulamasına aittir.",
+            "chatbot_widgets": "Web sitesi sohbet botu widget oluşturucusu.",
+            "wa_storefront": "WhatsApp kataloğu ve mağaza vitrini alanı.",
+            "inbox_sla": "Ekip gelen kutusundaki SLA politikaları ve son tarihler.",
+            "inbox_routing": "Gelen kutusu görüşmelerini otomatik atayan yönlendirme kuralları.",
+            "waba_calling": "Gelen kutusundan WhatsApp aramaları: arama numaraları, arama izinleri, arama yapma ve yanıtlama.",
+            "inbox_kanban": "Ekip gelen kutusunun Kanban pano görünümü.",
+            "team_performance": "Ekip performans raporları.",
+            "scheduled_messages": "Mesajları daha sonra gönderilmek üzere zamanlama.",
+            "whatsapp_warmer": "WhatsApp numara ısındırıcı.",
+            "marketplace": "Mini uygulamalar ve entegrasyonlardan oluşan Pazar yeri.",
+            "lead_sources": "Potansiyel müşteri kaynakları: reklam ve portal potansiyel müşterilerini kişilere ve fırsatlara dönüştüren webhook ve bağlayıcı kapıları.",
+            "team_chat": "Dahili ekip sohbet kanalları ve doğrudan mesajlar.",
+            "public_api": "Genel REST API ve API anahtarları.",
+            "outbound_webhooks": "Diğer sistemlere olaylardan haber veren giden webhook uç noktaları.",
+            "storefront_builder": "Çevrimiçi mağaza vitrini oluşturucu.",
+            "invoicing": "Faturalar, alacak dekontları, ödemeler, satış siparişleri ve vergi oranları.",
+            "forms_and_links": "Potansiyel müşteri toplama formları ve paylaşılabilir bağlantılar.",
+            "extra_channels": "Telegram, Facebook ve Instagram kanalları.",
+            "form_builder": "CRM'de kişi oluşturan barındırılan ve gömülü web formları. Bu anahtar ücretli Formlar uygulamasına aittir.",
+            "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır."
+          },
+          "units": {
+            "days": "Gün",
+            "weeks": "Hafta",
+            "months": "Ay",
+            "years": "Yıl"
+          },
+          "sections": {
+            "identity": {
+              "title": "Kimlik",
+              "description": "Planın nasıl adlandırıldığı ve gösterildiği."
+            },
+            "pricing": {
+              "title": "Fiyatlandırma",
+              "description": "Ne kadar tuttuğu ve ne sıklıkla faturalandığı."
+            },
+            "limits": {
+              "title": "Sınırlar",
+              "description": "Sınırsız için bir sınırı boş bırakın."
+            },
+            "features": {
+              "title": "Özellikler",
+              "description": "Planın içermediği şeyleri kapatın."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Plan adı"
+            },
+            "subtitle": {
+              "label": "Alt başlık",
+              "hint": "Adın altında kısa bir satır (en fazla {max} karakter)."
+            },
+            "detail": {
+              "label": "Açıklama",
+              "hint": "Fiyatlandırma sayfalarında gösterilir (en fazla {max} karakter)."
+            },
+            "ctaLabel": {
+              "label": "Düğme etiketi",
+              "hint": "En fazla {max} karakter."
+            },
+            "sortOrder": {
+              "label": "Sıralama",
+              "hint": "Küçük olan önce gelir."
+            },
+            "currency": {
+              "label": "Para birimi",
+              "placeholder": "Para birimi ara",
+              "empty": "Aramanızla eşleşen para birimi yok."
+            },
+            "amount": {
+              "label": "Fiyat",
+              "hint": "Örneğin 19 veya 19,99.",
+              "locked": "Ücretsiz ve özel teklifli planların fiyatı yoktur.",
+              "none": "yok"
+            },
+            "offerAmount": {
+              "label": "İndirimli fiyat",
+              "hint": "İsteğe bağlı. Fiyattan düşük olmalıdır."
+            },
+            "billingDuration": {
+              "label": "Faturalama dönemi",
+              "hint": "{min} ile {max} arası."
+            },
+            "billingUnit": {
+              "label": "Birim"
+            },
+            "dataRetentionDays": {
+              "label": "Veri saklama (süre bitiminden sonra gün)",
+              "hint": "Ücretli plan sona erdikten sonra çalışma alanı verilerinin silinmesine kadar geçen gün. 0 = asla. Silme kalıcıdır."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Etkin",
+              "hint": "Etkin olmayan planlar alıcılardan gizlenir; zaten birinde olan çalışma alanları onu korur."
+            },
+            "isDefault": {
+              "label": "Kayıtlar için varsayılan",
+              "hint": "Kayıt politikası başka bir plan belirtmedikçe yeni çalışma alanları buradan başlar. Yalnızca bir plan varsayılan olabilir."
+            },
+            "isHighlighted": {
+              "label": "Popüler olarak vurgula",
+              "hint": "En popüler rozetini gösterir."
+            },
+            "isFree": {
+              "label": "Ücretsiz plan",
+              "hint": "Fiyat yok. Ücretsiz plandaki yeni çalışma alanları ücretsiz denemeyi alır."
+            },
+            "isCustomQuote": {
+              "label": "Özel teklif",
+              "hint": "Fiyat gösterilmez. Alıcılar satışla görüşmeye yönlendirilir."
+            },
+            "isLifetime": {
+              "label": "Tek seferlik fiyat",
+              "hint": "Her faturalama dönemi için değil, bir kez tahsil edilir."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Mesajlaşma",
+            "workspace": "Çalışma alanı",
+            "content": "İçerik",
+            "sales": "Satış ve faturalama",
+            "integrations": "Entegrasyonlar",
+            "ai": "Yapay zeka"
+          },
+          "limitKeys": {
+            "monthly_messages": "Aylık mesaj",
+            "broadcasts": "Toplu gönderimler",
+            "devices": "Bağlı numaralar",
+            "users": "Ekip koltukları",
+            "contacts": "Kişiler",
+            "tags": "Etiketler",
+            "pipelines": "Satış hunileri",
+            "appointments": "Aylık randevu",
+            "saved_replies": "Kayıtlı yanıtlar",
+            "routing_rules": "Yönlendirme kuralları",
+            "templates": "Mesaj şablonları",
+            "flows": "Akışlar",
+            "autoreplies": "Anahtar sözcük otomatik yanıtları",
+            "total_campaigns": "Oluşturulan kampanyalar (silmekle serbest kalmaz)",
+            "api_rate_limit_per_minute": "Dakikada API isteği (0 = platform varsayılanı)",
+            "installed_apps": "Yüklü Pazar yeri uygulamaları ve entegrasyonları",
+            "scheduled_messages": "Tutulan zamanlanmış mesajlar",
+            "lead_sources": "Potansiyel müşteri kaynakları",
+            "broadcast_recipients": "Tek toplu gönderimdeki alıcılar",
+            "segments": "Kayıtlı segmentler",
+            "custom_fields": "Özel alanlar",
+            "team_chat_channels": "Ekip sohbet kanalları",
+            "sla_policies": "Gelen kutusu SLA politikaları",
+            "booking_types": "Rezervasyon türleri",
+            "chatbot_widgets": "Web sitesi sohbet botu widget'ları",
+            "catalog_products": "Katalog ürünleri",
+            "invoices_monthly": "Aylık faturalar",
+            "recurring_invoices": "Yinelenen faturalar",
+            "api_keys": "API anahtarları",
+            "webhooks": "Giden webhook'lar",
+            "ai_token_limit_monthly": "Aylık yapay zeka belirteçleri (platform anahtarları)",
+            "forms": "Web formları",
+            "form_submissions_monthly": "Aylık form gönderimleri",
+            "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri"
+          },
+          "featureGroups": {
+            "messaging": "Mesajlaşma",
+            "aiCalling": "Yapay zeka ve aramalar",
+            "integrations": "Entegrasyonlar",
+            "advanced": "Gelişmiş"
+          },
+          "featureKeys": {
+            "automation": "Otomasyon",
+            "ai_assistants": "Yapay zeka asistanları",
+            "calling": "WhatsApp aramaları",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analizler",
+            "remove_branding": "Beyaz etiket (platform markasını kaldırır)",
+            "sales_pipeline": "Satış hunisi (fırsatlar ve görevler)",
+            "appointment_booking": "Randevular ve rezervasyon sayfaları",
+            "chatbot_widgets": "Web sitesi sohbet botu widget'ları",
+            "wa_storefront": "WhatsApp mağaza vitrini ve kataloğu",
+            "inbox_sla": "Gelen kutusu SLA politikaları",
+            "inbox_routing": "Gelen kutusu yönlendirme kuralları ve çalışma saatleri",
+            "waba_calling": "Gelen kutusundan WhatsApp aramaları yapın ve yanıtlayın",
+            "inbox_kanban": "Gelen kutusu Kanban panosu",
+            "team_performance": "Ekip performans raporları",
+            "scheduled_messages": "Zamanlanmış mesajlar",
+            "whatsapp_warmer": "WhatsApp numara ısındırıcı",
+            "marketplace": "Pazar yeri (mini uygulamalar ve entegrasyonlar)",
+            "lead_sources": "Potansiyel müşteri kaynakları (kişi oluşturan webhook ve bağlayıcı kapıları)",
+            "team_chat": "Ekip sohbeti (dahili kanallar ve doğrudan mesajlar)",
+            "public_api": "Genel REST API ve API anahtarları",
+            "outbound_webhooks": "Giden webhook'lar",
+            "storefront_builder": "Mağaza vitrini ve web sitesi oluşturucu",
+            "invoicing": "Faturalama (faturalar, alacak dekontları, yinelenen faturalar)",
+            "forms_and_links": "Formlar, tıkla ve sohbet et bağlantıları ve gruplar",
+            "extra_channels": "Telegram, Facebook ve Instagram kanalları",
+            "form_builder": "Formlar (web formu oluşturucu)",
+            "waba_groups": "WhatsApp grupları (Cloud API)"
+          },
+          "problems": {
+            "required": "Bu alan zorunludur.",
+            "tooLong": "En fazla {max} karakter.",
+            "money": "19 veya 19,99 gibi bir tutar girin.",
+            "range": "{min} ile {max} arasında bir tam sayı girin.",
+            "whole": "Bir tam sayı girin veya sınırsız için boş bırakın.",
+            "server": "Sunucu bu değeri reddetti.",
+            "unknownAddon": "Artık var olmayan seçili eklentiler: {count}. İşaretlerini kaldırıp yeniden kaydedin.",
+            "free_needs_zero_price": "Ücretsiz bir planın fiyatı 0 olmalıdır.",
+            "free_no_offer": "Ücretsiz bir planın indirimli fiyatı olamaz.",
+            "custom_no_price": "Özel teklifli bir plan fiyat göstermez: fiyatı ve indirimli fiyatı boş bırakın.",
+            "custom_not_free": "Bir plan hem ücretsiz hem özel teklifli olamaz.",
+            "paid_needs_price": "0 üzerinde bir fiyat belirleyin veya planı ücretsiz olarak işaretleyin.",
+            "offer_not_lower": "İndirimli fiyat plan fiyatından düşük olmalıdır.",
+            "default_needs_active": "Kayıt varsayılanı plan etkin olmalıdır."
+          },
+          "limitHints": {
+            "monthly_messages": "Takvim ayında gönderilen giden mesajlar. Hak aşıldığında cüzdandan ücret alınır.",
+            "broadcasts": "Arşivlenmemiş toplu gönderimler.",
+            "scheduled_messages": "Çalışma alanının, her durumda tuttuğu zamanlanmış mesajlar. Birini silmek yerini serbest bırakır.",
+            "total_campaigns": "Plan döneminde oluşturulan kampanyalar. Kampanyayı silmek yeri geri vermez.",
+            "devices": "Bağlı WhatsApp numaraları. Birini kaldırmak yerini serbest bırakır.",
+            "users": "Devre dışı bırakılmamış ekip üyeleri.",
+            "contacts": "Çalışma alanındaki kişiler.",
+            "tags": "Kişi etiketleri.",
+            "pipelines": "Satış hunileri.",
+            "appointments": "Takvim ayında alınan randevular (beklemede, onaylı veya tamamlanmış), başlangıç zamanlarına göre.",
+            "saved_replies": "Ekip gelen kutusunun kayıtlı yanıtları (hızlı yanıtlar).",
+            "routing_rules": "Ekip gelen kutusunun yönlendirme kuralları.",
+            "templates": "WhatsApp mesaj şablonları.",
+            "flows": "Oluşturucudaki akışlar.",
+            "autoreplies": "Anahtar sözcük otomatik yanıtları.",
+            "api_rate_limit_per_minute": "Her API anahtarı için dakikadaki istek sayısı. 0, sınırsız yerine platform varsayılanını kullanır.",
+            "installed_apps": "Şu anda yüklü Pazar yeri uygulamaları ve entegrasyonları. Kaldırmak bir yeri serbest bırakır.",
+            "lead_sources": "Potansiyel müşteri kaynakları (webhook ve bağlayıcı kapıları). Birini silmek yerini serbest bırakır.",
+            "broadcast_recipients": "Tek bir toplu gönderimin gönderilebileceği en büyük kitle; toplu gönderim oluşturulurken veya düzenlenirken denetlenir.",
+            "segments": "Kayıtlı kişi segmentleri. Birini silmek yerini serbest bırakır.",
+            "custom_fields": "Herhangi bir modüle eklenen özel alanlar. Yerleşik sistem alanları sayılmaz.",
+            "team_chat_channels": "Herkese açık ve özel ekip sohbet kanalları. Birini silmek yerini serbest bırakır.",
+            "sla_policies": "Ekip gelen kutusunun SLA politikaları.",
+            "booking_types": "Herkese açık rezervasyon sayfalarının arkasındaki rezervasyon türleri.",
+            "chatbot_widgets": "Web sitesi sohbet botu widget'ları.",
+            "catalog_products": "WhatsApp kataloğundaki ürünler. Birini silmek yerini serbest bırakır.",
+            "invoices_monthly": "Takvim ayında oluşturulan, herhangi bir durumdaki faturalar. Birini iptal etmek veya silmek ayı geri vermez.",
+            "recurring_invoices": "Herhangi bir durumdaki yinelenen fatura zamanlamaları.",
+            "api_keys": "Etkin API anahtarları. Bir anahtarı iptal etmek yerini serbest bırakır.",
+            "webhooks": "Giden webhook uç noktaları (gelen kutusu webhook'ları ve API webhook'ları birlikte).",
+            "ai_token_limit_monthly": "Yapay zeka asistanlarının takvim ayında platform anahtarlarıyla kullandığı belirteçler. Kendi anahtarlarını kullanan çalışma alanları sınırlanmaz.",
+            "forms": "Etkin web formları (Formlar uygulaması). Bir formu arşivlemek yerini serbest bırakır. 0 = sınırsız.",
+            "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
+            "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Ziyaretçi sayfaları",
+        "title": "Kimlik doğrulama sayfaları",
+        "description": "Oturum açma, kayıt ve parolamı unuttum sayfaları için bir tasarım seçin, ardından her birinin sözcüklerini ve rengini düzenleyin. Önizleme kaydedilmemiş değişikliklerinizi ziyaretçilerin göreceği şekilde gösterir. Bu sayfalardaki Koşullar ve Gizlilik bağlantıları <link>Kayıt politikası</link> bölümünde ayarlanır.",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
+        "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
+        "requestId": "İstek kimliği",
+        "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
+        "discard": "Değişiklikleri at",
+        "errors": {
+          "unexpected": "Ayarlar kaydedilemedi. Biraz sonra tekrar deneyin."
+        },
+        "problems": {
+          "accent": "#rrggbb biçiminde bir renk kullanın.",
+          "mediaUrl": "Tam bir https adresi kullanın."
+        },
+        "pages": {
+          "login": "Oturum açma",
+          "register": "Kayıt",
+          "forgot": "Parolamı unuttum"
+        },
+        "designs": {
+          "legend": "Tasarım şablonu",
+          "legendNote": "Üç sayfa için tek seçim",
+          "split": {
+            "name": "Bölünmüş vitrin",
+            "description": "Bir tarafta pazarlama paneli, diğer tarafta form."
+          },
+          "cinematic": {
+            "name": "Sinematik",
+            "description": "Ortalanmış kartın arkasında tam ekran resim veya video."
+          },
+          "minimal": {
+            "name": "Minimal",
+            "description": "Görsel olmayan sade, ortalanmış bir kart."
+          },
+          "spotlight": {
+            "name": "Marka vitrini",
+            "description": "Formun yanında vurgu renginizde cesur bir panel."
+          },
+          "aurora": {
+            "name": "Aurora",
+            "description": "Buzlu bir kartın arkasında yumuşak parlayan renk."
+          }
+        },
+        "fields": {
+          "accent": "Vurgu rengi",
+          "accentHint": "#0f766e gibi altı haneli bir hex rengi. Kısa (#fff), sekiz haneli ve adlandırılmış renkler kabul edilmez. Vurgulanan sözcük, düğmeler ve marka paneli için kullanılır. Sıfırla, gönderilen renge döner.",
+          "accentPicker": "Vurgu rengini seçin",
+          "accentHex": "Hex olarak vurgu rengi",
+          "accentReset": "Varsayılana sıfırla",
+          "mediaUrl": "Medya adresi",
+          "mediaType": "Medya türü",
+          "eyebrow": "Üst başlık",
+          "heading": "Başlık",
+          "headingAccent": "Başlık vurgu sözcüğü",
+          "subheading": "Alt metin",
+          "emptyHint": "En fazla {max} karakter. Gri gösterilen hazır metni kullanmak için boş bırakın."
+        },
+        "media": {
+          "title": "Yan medya",
+          "description": "Tasarım paneli için bir resim, GIF veya döngüsel video. Barındırma şimdilik size ait: herkese açık bir https adresi yapıştırın.",
+          "url": "Medya adresi",
+          "urlHint": "https ile başlamalıdır. Medya istemiyorsanız boş bırakın.",
+          "type": "Medya türü",
+          "types": {
+            "image": "Görsel",
+            "gif": "Animasyonlu GIF",
+            "video": "Döngülü video"
+          },
+          "clear": "Medyayı temizle"
+        },
+        "showcase": {
+          "title": "Vitrin paneli metni",
+          "description": "Bölünmüş vitrin tasarımında gösterilir. Boş alanlar varsayılan metni korur.",
+          "groups": {
+            "hero": "Öne çıkan kart",
+            "stats": "İstatistikler",
+            "features": "Özellik kartları",
+            "chips": "Etiket çipleri",
+            "footer": "Alt bilgi satırı"
+          },
+          "keys": {
+            "hero_title": "Öne çıkan başlık",
+            "hero_desc": "Öne çıkan metin",
+            "stat1_num": "İstatistik 1 değeri",
+            "stat1_label": "İstatistik 1 etiketi",
+            "stat2_num": "İstatistik 2 değeri",
+            "stat2_label": "İstatistik 2 etiketi",
+            "stat3_num": "İstatistik 3 değeri",
+            "stat3_label": "İstatistik 3 etiketi",
+            "feat1_title": "Özellik 1 başlığı",
+            "feat1_desc": "Özellik 1 metni",
+            "feat2_title": "Özellik 2 başlığı",
+            "feat2_desc": "Özellik 2 metni",
+            "feat3_title": "Özellik 3 başlığı",
+            "feat3_desc": "Özellik 3 metni",
+            "feat4_title": "Özellik 4 başlığı",
+            "feat4_desc": "Özellik 4 metni",
+            "inside_heading": "Çip başlığı",
+            "chip1": "Çip 1",
+            "chip2": "Çip 2",
+            "chip3": "Çip 3",
+            "chip4": "Çip 4",
+            "chip5": "Çip 5",
+            "chip6": "Çip 6",
+            "footer": "Alt bilgi metni"
+          }
+        },
+        "preview": {
+          "title": "Canlı önizleme",
+          "note": "{page} sayfası, kaydedilmemiş değişiklikleriniz ile gösteriliyor.",
+          "showcaseNote": "Vitrin paneli metnini yalnızca Bölünmüş vitrin tasarımı gösterir.",
+          "device": "Önizleme boyutu",
+          "devices": {
+            "desktop": "Masaüstü",
+            "mobile": "Telefon"
+          },
+          "frameLabel": "Sayfa önizlemesi",
+          "frameTitle": "{page} sayfası önizlemesi",
+          "form": {
+            "org": "Çalışma alanı adı",
+            "name": "Adınız",
+            "email": "E-posta",
+            "password": "Parola",
+            "remember": "Beni 30 gün oturumda tut",
+            "submit": {
+              "login": "Giriş yap",
+              "register": "Çalışma alanı oluştur",
+              "forgot": "Sıfırlama bağlantısı gönder"
+            },
+            "workspace": "Çalışma alanı adresi",
+            "forgotLink": "Parolanızı mı unuttunuz?",
+            "newHere": "Yeni misiniz?",
+            "createAccount": "Çalışma alanı oluşturun",
+            "haveAccount": "Zaten kayıtlı mısınız?",
+            "signInLink": "Giriş yap",
+            "backToSignIn": "Girişe dön",
+            "captchaV3": "Bu sayfa reCAPTCHA ile korunmaktadır.",
+            "captchaV2": "Robot değilim",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Önizlemeyi büyüt",
+          "shrink": "Yan yana",
+          "openReal": "Gerçek sayfayı aç",
+          "openRealNote": "Kaydedilmiş sürümü yeni sekmede açar. Kaydetmediğiniz değişiklikler yalnızca bu önizlemede görünür.",
+          "opensNewTab": "(yeni sekmede açılır)"
+        },
+        "pagesLabel": "Düzenlenecek sayfa"
+      },
+      "ipBlocked": {
+        "kicker": "Erişim engellendi",
+        "title": "Bu adrese izin verilmiyor",
+        "body": "Operatör konsolu yalnızca izin listesindeki adreslerden gelen istekleri kabul eder. Bu isteklerin geldiği adres listede olmadığı için konsol istekleri reddetti.",
+        "addressLabel": "Engellenen adres",
+        "addressUnknown": "Sunucu adresinizi okuyamadı.",
+        "fixTitle": "Erişim nasıl sağlanır",
+        "fixBody": "Konsola hâlâ erişebilen bir süper yönetici bu adresi IP izin listesine ekler. Hesabınızla ilgili başka hiçbir şey değişmez.",
+        "fixPath": "Güvenlik Merkezi › API ve web kancaları › IP izin listesi",
+        "dashboard": "Panele git",
+        "signOut": "Çıkış yap",
+        "signingOut": "Çıkış yapılıyor"
+      }
+    }
+  }
+}

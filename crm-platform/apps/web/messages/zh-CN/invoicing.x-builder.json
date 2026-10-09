@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "发票中的金额、数量或税率无法使用。请检查高亮显示的字段。",
+        "INV_TAX_RATE_INVALID": "其中一个税率目前无法使用：已停用或不在有效期内。请选择其他税率。",
+        "INV_NOT_DRAFT": "此发票已开具，无法再编辑。如需更正，请复制发票以创建新草稿。",
+        "INV_ORDER_LINKED": "此发票属于销售订单，请改为修改该订单。",
+        "SALESDOC_INVALID_TRANSITION": "报价单或估价单尚未被接受，无法转为发票。",
+        "SALESDOC_ALREADY_CONVERTED": "此单据已转为发票。",
+        "SALESDOC_INVOICING_UNAVAILABLE": "此服务器暂不支持开票功能。",
+        "INV_LINK_UNAVAILABLE": "此发票链接已失效。"
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "正在根据已接受的单据创建草稿...",
+      "duplicating": "正在将发票复制为新草稿...",
+      "openExisting": "打开已创建的发票",
+      "backToInvoices": "返回发票列表",
+      "backToInvoice": "返回发票",
+      "issued": "发票已开具。",
+      "savedNotIssued": "草稿已保存，但无法开具：{reason}",
+      "buyerCountry": "国家/地区",
+      "buyerCountryHint": "两位字母，如 IN 或 GB。决定税号格式，并在自动模式下决定税费。",
+      "buyerTaxId": "税号",
+      "buyerTaxIdNamed": "税号（{label}）",
+      "taxIdHint": "GSTIN、VAT 号、EIN 等。输入时即时校验。",
+      "taxIdExpected": "期望格式：{label}，例如 {example}。",
+      "taxIdUnchecked": "该国家/地区没有已知的格式，因此将按输入内容原样保存。",
+      "taxIdValid": "{label} 格式看起来正确（{level, select, checksum {已检查格式和校验位} other {仅检查了格式}}）。这并不代表已登记。",
+      "taxIdInvalid": "此 {label} 看起来有误（{level, select, checksum {已检查格式和校验位} other {仅检查了格式}}）。",
+      "taxIdStillSave": "您仍可保存。",
+      "docType": "单据",
+      "docTypes": {
+        "tax_invoice": "税务发票",
+        "proforma": "形式发票"
+      },
+      "noDueDate": "默认付款条款",
+      "reference": "参考号",
+      "referenceHint": "买方的采购订单号或需打印的其他参考信息。",
+      "tax": "税费",
+      "taxMode": "税费计算方式",
+      "taxModes": {
+        "rates": "税率",
+        "auto": "自动"
+      },
+      "taxModeHint": {
+        "rates": "为每个明细选择税率。保留默认值的明细将使用工作区的默认税率。",
+        "auto": "税务引擎根据您的国家、买方的国家和税号、交易类型以及供应地确定每个明细的税费。保存的结果以服务器返回为准。"
+      },
+      "sellerCountry": "您的国家（来自开票资料）",
+      "sellerCountryMissing": "自动计税需要在开票资料中设置国家（需为有税率预设的国家）。请先在该处设置。",
+      "supplyType": "交易类型",
+      "supplyTypes": {
+        "goods": "货物",
+        "services": "服务",
+        "digital": "数字服务"
+      },
+      "placeOfSupply": "供应地",
+      "placeOfSupplyHint": "{country} 的州或省；保持第一个选项则适用于全国。",
+      "placeSameCountry": "全国",
+      "placeRegionPlaceholder": "地区代码（可选）",
+      "reverseCharge": "反向征税",
+      "reverseChargeHint": "由买方负责缴税，因此本发票不收取税费。",
+      "shipping": "运费（{currency}）",
+      "shippingHint": "不享受折扣，也不计税。",
+      "legalNotes": "法律附注",
+      "legalNotesHint": "单据上必须包含的文字，例如反向征税声明。自动模式在法律要求时会自动填写。",
+      "problems": {
+        "contactRequired": "请选择联系人或输入买方名称。",
+        "currencyInvalid": "请输入三位字母的货币代码。",
+        "issueDateInvalid": "请输入有效的开票日期。",
+        "dueBeforeIssue": "到期日不能早于开票日期。",
+        "dueInvalid": "请输入有效的到期日。",
+        "noLines": "开具前至少添加一个明细。",
+        "discountInvalid": "请输入有效的折扣（0 到 100 之间的百分比，或金额）。",
+        "shippingInvalid": "请输入有效的运费金额。",
+        "emailInvalid": "请输入有效的电子邮件地址。",
+        "amountZero": "发票总额必须大于零。",
+        "amountInvalid": "金额过大，或小数位数超出该货币允许的范围。",
+        "countryInvalid": "请使用两位国家代码。",
+        "regionInvalid": "请使用简短的地区代码，最多三个字母或数字。",
+        "autoNeedsSellerCountry": "请在开票资料中设置国家，以使用自动税费。",
+        "descriptionRequired": "请描述此明细。",
+        "qtyInvalid": "请输入大于零的数量，最多 4 位小数。",
+        "priceInvalid": "请输入有效单价，小数位数须符合该货币规则。",
+        "lineDiscountInvalid": "请输入有效的明细折扣。",
+        "hsnRequired": "请输入 HSN/SAC 代码。您所在国家要求每个明细都填写。",
+        "hsnInvalid": "HSN/SAC 代码应为 2 到 12 位字母或数字。",
+        "taxRateRemoved": "此明细的税率已被删除。请选择当前有效的税率。"
+      }
+    },
+    "lines": {
+      "discount": "折扣",
+      "discountKind": "折扣类型",
+      "taxAuto": "自动",
+      "taxDefault": "默认（{rate}）",
+      "taxDefaultNone": "默认（无税）",
+      "removedRateOption": "{rate}，已删除",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "代码"
+    },
+    "totals": {
+      "shipping": "运费",
+      "taxIncluded": "{name}，已含在内",
+      "taxOn": "基于 {base}",
+      "reverseCharge": "反向征税：不收取税费。",
+      "includesTotal": "价格含税"
+    },
+    "taxWhy": {
+      "title": "为何适用此税费？",
+      "preview": "预览",
+      "previewNote": "编辑时在浏览器中计算。保存时以服务器的结果为准。",
+      "taxFree": "此交易不收取税费",
+      "warnings": "请再次核对",
+      "placeOfSupply": "供应地",
+      "reverseCharge": "反向征税",
+      "reverseChargeNote": "由买方负责缴税，因此不收取税费。",
+      "documentNotes": "印在单据上",
+      "disclaimer": "税率和规则仅为默认值，请与您的会计师或税务机关核实。本内容不构成法律或税务建议。"
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "税务发票",
+        "proforma": "形式发票",
+        "receipt": "收据"
+      },
+      "sellerTaxId": "税号",
+      "registrationNo": "注册号",
+      "buyerTaxId": "税号",
+      "reference": "参考号",
+      "placeOfSupply": "供应地",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "折扣 {amount}",
+      "shipping": "运费",
+      "credited": "已贷记",
+      "taxSummary": "税费汇总",
+      "taxName": "税费",
+      "taxBase": "应税金额",
+      "taxAmount": "税费",
+      "taxInclusive": "已含在内",
+      "reverseCharge": "反向征税：由买方负责缴税。",
+      "paymentsReceived": "已收款项",
+      "refund": "退款",
+      "bankDetails": "银行信息",
+      "voidReason": "已取消：{reason}"
+    },
+    "public": {
+      "notFoundTitle": "未找到链接",
+      "notFoundMessage": "此发票链接不存在。请检查是否完整复制，或向发送方重新索取链接。",
+      "unavailableTitle": "此链接不可用",
+      "unavailableMessage": "此发票链接已被撤回或已过期。请向发送方索取新链接。",
+      "voidReason": "原因：{reason}",
+      "printable": "打开可打印页面",
+      "amountDueFooter": "应付金额：{amount}",
+      "noPayOptions": "卖家尚未设置在线付款方式。请联系对方安排付款。",
+      "payAmount": "应付金额（{currency}）",
+      "payAmountHint": "已填入全部余额。如需部分付款，请输入较小的金额。",
+      "amountErrors": {
+        "invalid": "请输入大于零的金额。",
+        "tooMuch": "金额不能超过应付金额。"
+      },
+      "linkUnavailable": "此发票链接已失效，无法在此付款。",
+      "payFailed": "无法发起付款，请稍后再试。",
+      "payUnavailable": "目前无法对此发票进行在线付款。",
+      "redirecting": "正在跳转到付款页面...",
+      "payInstructions": "请按以下说明付款。",
+      "bankTransfer": "银行转账",
+      "copyInstructions": "复制说明",
+      "copyValue": "复制{label}"
+    }
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Nur ein Auftragsentwurf kann geändert werden. Ein bestätigter Auftrag ist eingefroren: Stornieren Sie ihn und starten Sie einen neuen, um Positionen oder Preise zu ändern.",
+        "SO_NOT_CONFIRMED": "Bestätigen Sie zuerst den Auftrag. Nur ein bestätigter Auftrag kann abgerechnet oder mit einer Lieferung erfasst werden.",
+        "SO_CANCELLED": "Dieser Auftrag ist storniert, daher kann damit nichts mehr getan werden.",
+        "SO_QUOTE_NOT_ACCEPTED": "Nur ein angenommenes Angebot oder ein angenommener Kostenvoranschlag kann zu einem Verkaufsauftrag werden. Markieren Sie es zuerst als angenommen.",
+        "SO_QUOTE_TAKEN": "Zu diesem Angebot oder Kostenvoranschlag gibt es bereits einen Verkaufsauftrag.",
+        "SO_QUANTITY_EXCEEDS": "Eine Menge ist größer als der Restbestand dieser Position. Senken Sie sie und versuchen Sie es erneut.",
+        "SO_NOTHING_TO_INVOICE": "Hier gibt es nichts mehr zu tun: Alles ist bereits abgerechnet oder geliefert.",
+        "SO_HAS_INVOICES": "Eine aus diesem Auftrag erstellte Rechnung ist noch aktiv. Stornieren oder löschen Sie zuerst die Rechnung und stornieren Sie dann den Auftrag."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Verkaufsaufträge",
+        "subtitle": "Angenommene Angebote, die zu Aufträgen wurden, in einem Schritt oder in Teilen abgerechnet und geliefert.",
+        "newOrder": "Neuer Verkaufsauftrag",
+        "search": "Nach Nummer, Käufer oder Referenz suchen",
+        "reset": "Zurücksetzen",
+        "refresh": "Aktualisieren",
+        "tableLabel": "Verkaufsaufträge",
+        "noAccessTitle": "Kein Zugriff",
+        "noAccess": "Sie haben keine Berechtigung, Verkaufsaufträge zu sehen.",
+        "emptyFilteredTitle": "Keine Aufträge gefunden",
+        "emptyFiltered": "Kein Eintrag passt zu diesen Filtern. Ändern oder setzen Sie sie zurück.",
+        "resetFilters": "Filter zurücksetzen",
+        "loading": "Verkaufsaufträge werden geladen",
+        "showing": "{count} werden angezeigt",
+        "loadMore": "Mehr laden",
+        "allLoaded": "Alle geladen",
+        "contactLoading": "Wird geladen ...",
+        "empty": {
+          "all": {
+            "title": "Noch keine Verkaufsaufträge",
+            "message": "Machen Sie ein angenommenes Angebot oder einen Kostenvoranschlag zu einem Auftrag oder starten Sie einen neu."
+          },
+          "draft": {
+            "title": "Keine Auftragsentwürfe",
+            "message": "Aufträge, die Sie noch vorbereiten, werden hier angezeigt."
+          },
+          "confirmed": {
+            "title": "Keine bestätigten Aufträge",
+            "message": "Bestätigte Aufträge, die noch abgerechnet oder geliefert werden müssen, werden hier angezeigt."
+          },
+          "cancelled": {
+            "title": "Keine stornierten Aufträge",
+            "message": "Stornierte Aufträge werden hier mit ihrem Grund angezeigt."
+          },
+          "closed": {
+            "title": "Keine abgeschlossenen Aufträge",
+            "message": "Ein Auftrag wird abgeschlossen, wenn alles darin abgerechnet und geliefert ist."
+          }
+        }
+      },
+      "strip": {
+        "label": "Wert offener Aufträge",
+        "openValue": "Offene Aufträge ({currency})"
+      },
+      "tabs": {
+        "label": "Auftragsstatus",
+        "all": "Alle",
+        "draft": "Entwurf",
+        "confirmed": "Bestätigt",
+        "cancelled": "Storniert",
+        "closed": "Abgeschlossen",
+        "count": "{count} Aufträge"
+      },
+      "quick": {
+        "label": "Schnellfilter",
+        "toInvoice": "Abzurechnen",
+        "toFulfil": "Zu erfüllen"
+      },
+      "table": {
+        "scrollArea": "Tabelle der Verkaufsaufträge",
+        "columns": {
+          "number": "Auftrag",
+          "buyer": "Käufer",
+          "quote": "Angebot",
+          "deal": "Deal",
+          "expected": "Erwartet",
+          "status": "Status",
+          "invoicing": "Abrechnung",
+          "fulfilment": "Lieferung",
+          "total": "Gesamt",
+          "invoices": "Rechnungen"
+        }
+      },
+      "row": {
+        "moreFor": "Aktionen für {name}",
+        "open": "Öffnen",
+        "edit": "Bearbeiten",
+        "confirm": "Auftrag bestätigen",
+        "invoiceAll": "Alles Offene abrechnen",
+        "fulfilAll": "Alles als geliefert markieren",
+        "cancel": "Auftrag stornieren",
+        "delete": "Entwurf löschen"
+      },
+      "status": {
+        "draft": "Entwurf",
+        "confirmed": "Bestätigt",
+        "cancelled": "Storniert",
+        "closed": "Abgeschlossen"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Nicht abgerechnet",
+        "partially_invoiced": "Teilweise abgerechnet",
+        "invoiced": "Abgerechnet"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Nicht geliefert",
+        "partially_fulfilled": "Teilweise geliefert",
+        "fulfilled": "Geliefert"
+      },
+      "actions": {
+        "failed": "Das hat nicht funktioniert.",
+        "confirmed": "Auftrag {number} bestätigt.",
+        "invoicedDraft": "Rechnungsentwurf aus dem Auftrag erstellt.",
+        "invoicedIssued": "Rechnung {number} ausgestellt.",
+        "fulfilled": "Lieferung erfasst.",
+        "cancelled": "Auftrag {number} storniert.",
+        "deleted": "Auftragsentwurf gelöscht."
+      },
+      "dialog": {
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "how": "Welche Mengen",
+        "mode": {
+          "all": "Alles, was offen ist",
+          "lines": "Mengen auswählen"
+        },
+        "left": "{qty} offen",
+        "qtyExceeds": "Auf dieser Position sind höchstens {max} offen.",
+        "qtyInvalid": "Geben Sie eine Menge mit höchstens 4 Nachkommastellen ein oder 0, um diese Position zu überspringen.",
+        "nothingHint": "Alles in diesem Auftrag ist bereits abgerechnet."
+      },
+      "confirmDialog": {
+        "title": "Diesen Auftrag bestätigen?",
+        "message": "Mit der Bestätigung werden Positionen und Preise eingefroren. Danach können Sie den Auftrag in einem Schritt oder in Teilen abrechnen und Lieferungen erfassen. Solange keine gültige Rechnung besteht, können Sie ihn noch stornieren.",
+        "confirm": "Auftrag bestätigen"
+      },
+      "cancelDialog": {
+        "title": "Diesen Auftrag stornieren?",
+        "warning": "Ein stornierter Auftrag kann nicht mehr abgerechnet oder geliefert werden und lässt sich nicht wieder öffnen.",
+        "reason": "Grund",
+        "reasonHint": "Wird am Auftrag für Ihr Team gespeichert.",
+        "reasonRequired": "Geben Sie an, warum der Auftrag storniert wird.",
+        "reasonTooLong": "Halten Sie den Grund unter {max} Zeichen.",
+        "cancelOrder": "Auftrag stornieren",
+        "hasInvoices": "Dieser Auftrag hat noch eine Rechnung. Stornieren oder löschen Sie zuerst die Rechnung (eine stornierte Rechnung gibt ihre Mengen frei) und stornieren Sie dann den Auftrag.",
+        "seeInvoices": "Rechnungen ansehen"
+      },
+      "deleteDialog": {
+        "title": "Diesen Entwurf löschen?",
+        "message": "Der Auftragsentwurf wird endgültig entfernt. Ein bestätigter Auftrag kann nicht gelöscht, nur storniert werden.",
+        "delete": "Entwurf löschen"
+      },
+      "invoiceDialog": {
+        "title": "Diesen Auftrag abrechnen",
+        "intro": "Rechnen Sie den Auftrag zu den eingefrorenen Preisen ab. Sie können ihn in Teilen abrechnen: Was jetzt nicht abgerechnet wird, bleibt am Auftrag offen.",
+        "invoiceAndIssue": "Rechnung erstellen und ausstellen",
+        "createDraft": "Rechnungsentwurf erstellen",
+        "issueDate": "Ausstellungsdatum",
+        "issueDateHint": "Leer lassen für heute ({today}).",
+        "dueDate": "Fälligkeitsdatum",
+        "terms": "Zahlungsbedingungen",
+        "termsDefault": "Workspace-Standard",
+        "termsOnIssue": "Fällig bei Ausstellung",
+        "termsDays": "{count} Tage",
+        "issueNow": "Rechnung jetzt ausstellen",
+        "issueNowHint": "Die Rechnung erhält ihre Nummer und kann sofort gesendet werden.",
+        "draftHint": "Lassen Sie sie als Entwurf, um sie vor der Ausstellung zu prüfen.",
+        "includeShipping": "Versand mit dieser Rechnung abrechnen",
+        "problems": {
+          "nothing": "Wählen Sie bei mindestens einer Position eine Menge größer als null.",
+          "issueDateInvalid": "Geben Sie ein gültiges Ausstellungsdatum ein.",
+          "dueDateInvalid": "Geben Sie ein gültiges Fälligkeitsdatum ein.",
+          "dueBeforeIssue": "Das Fälligkeitsdatum darf nicht vor dem Ausstellungsdatum liegen."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Lieferung erfassen",
+        "intro": "Erfassen Sie, was an den Käufer geliefert wurde. Die Lieferung wird getrennt von der Abrechnung erfasst: Beides kann zuerst erfolgen.",
+        "record": "Lieferung erfassen",
+        "note": "Notiz",
+        "noteHint": "Optional, z. B. eine Lieferscheinnummer.",
+        "problems": {
+          "nothing": "Wählen Sie bei mindestens einer Position eine Menge größer als null.",
+          "noteTooLong": "Halten Sie die Notiz unter {max} Zeichen."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Kein Zugriff",
+        "noAccess": "Sie haben keine Berechtigung, Verkaufsaufträge zu sehen.",
+        "loading": "Auftrag wird geladen",
+        "back": "Zurück zu Verkaufsaufträgen",
+        "noBuyer": "Kein Käufer",
+        "edit": "Bearbeiten",
+        "confirm": "Auftrag bestätigen",
+        "recordDelivery": "Lieferung erfassen",
+        "invoice": "Abrechnen ...",
+        "more": "Weitere Aktionen",
+        "cancel": "Auftrag stornieren",
+        "delete": "Entwurf löschen",
+        "cancelledOn": "Storniert am {date}",
+        "draftHint": "Dieser Auftrag ist ein Entwurf. Bestätigen Sie ihn, um die Preise einzufrieren und mit Abrechnung und Lieferung zu beginnen.",
+        "notes": "Notizen",
+        "terms": "Bedingungen",
+        "progress": "Fortschritt",
+        "invoiced": "Abgerechnet",
+        "fulfilled": "Geliefert"
+      },
+      "lines": {
+        "title": "Positionen",
+        "scrollArea": "Auftragspositionen",
+        "item": "Artikel",
+        "ordered": "Bestellt",
+        "invoiced": "Abgerechnet",
+        "fulfilled": "Geliefert",
+        "toInvoice": "Abzurechnen",
+        "unitPrice": "Einzelpreis",
+        "amount": "Betrag",
+        "taxLine": "{name} {rate} %",
+        "taxRate": "Steuer {rate} %",
+        "invoicedBar": "Abgerechneter Anteil von {name}",
+        "fulfilledBar": "Gelieferter Anteil von {name}"
+      },
+      "totals": {
+        "title": "Summen",
+        "subtotal": "Zwischensumme",
+        "discount": "Rabatt",
+        "shipping": "Versand",
+        "shippingBilled": "Abgerechnet",
+        "shippingPending": "Mit der ersten Rechnung abgerechnet",
+        "tax": "Steuer",
+        "total": "Gesamt"
+      },
+      "info": {
+        "title": "Details",
+        "buyer": "Käufer",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "quote": "Angebot",
+        "deal": "Deal",
+        "owner": "Verantwortlich",
+        "reference": "Referenz",
+        "expected": "Erwartet",
+        "created": "Erstellt",
+        "confirmed": "Bestätigt"
+      },
+      "invoices": {
+        "title": "Rechnungen aus diesem Auftrag",
+        "none": "Aus diesem Auftrag wurde noch keine Rechnung erstellt.",
+        "noneDraft": "Rechnungen können erstellt werden, sobald der Auftrag bestätigt ist.",
+        "draft": "Entwurf",
+        "voidNote": "Eine stornierte Rechnung gibt ihre Mengen wieder an den Auftrag zurück."
+      },
+      "builder": {
+        "noAccessTitle": "Kein Zugriff",
+        "noAccess": "Sie haben keine Berechtigung, Verkaufsaufträge zu ändern.",
+        "loading": "Wird geladen",
+        "frozen": "Dieser Auftrag ist bestätigt, daher sind Positionen und Preise eingefroren. Stornieren Sie ihn und starten Sie einen neuen, um sie zu ändern.",
+        "openOrder": "Auftrag öffnen",
+        "back": "Zurück",
+        "editTitle": "{number} bearbeiten",
+        "newTitle": "Neuer Verkaufsauftrag",
+        "unsaved": "Nicht gespeicherte Änderungen",
+        "cancel": "Abbrechen",
+        "saveChanges": "Änderungen speichern",
+        "createDraft": "Entwurf erstellen",
+        "conflict": "Während Sie bearbeitet haben, hat eine andere Person diesen Entwurf geändert. Laden Sie neu, um deren Version zu sehen. Ihre Änderungen hier gehen verloren.",
+        "reload": "Neu laden",
+        "saved": "Entwurf gespeichert.",
+        "created": "Auftrag {number} als Entwurf erstellt.",
+        "fixProblems": "Korrigieren Sie zuerst die markierten Felder.",
+        "serverRejected": "Der Server hat einige Werte nicht akzeptiert. Prüfen Sie die Felder und versuchen Sie es erneut.",
+        "startFrom": "Starten mit",
+        "source": {
+          "scratch": "Ein leerer Auftrag",
+          "quote": "Ein angenommenes Angebot oder ein angenommener Kostenvoranschlag"
+        },
+        "loadingQuote": "Angebot wird geladen ...",
+        "buyer": "Käufer",
+        "contact": "Kontakt",
+        "contactHint": "Wählen Sie einen Kontakt, um den Auftrag mit ihm zu verknüpfen, oder geben Sie unten den Käufer ein.",
+        "buyerName": "Name des Käufers",
+        "fromQuoteHint": "Bleibt das Feld leer, wird der Käufer des Angebots verwendet.",
+        "buyerEmail": "E-Mail",
+        "buyerPhone": "Telefon",
+        "details": "Auftragsdetails",
+        "currency": "Währung",
+        "currencyHint": "Drei Buchstaben, z. B. USD oder KWD.",
+        "currencyLocked": "Nach dem Anlegen des Auftrags festgelegt.",
+        "expectedDate": "Erwartetes Datum",
+        "expectedHint": "Wann der Käufer die Lieferung erwartet.",
+        "reference": "Referenz",
+        "referenceHint": "Zum Beispiel die Bestellnummer des Käufers.",
+        "linesFromQuote": "Positionen",
+        "linesFromQuoteHint": "Der Auftrag übernimmt die Positionen, Preise und Steuern des angenommenen Angebots, wobei der Dokumentrabatt in die Positionen eingerechnet wird. Die Positionen des Entwurfs können Sie nach dem Anlegen weiterhin bearbeiten.",
+        "lineItems": "Positionen",
+        "shippingNotes": "Versand, Notizen und Bedingungen",
+        "shipping": "Versand ({currency})",
+        "shippingHint": "Mit der ersten Rechnung abgerechnet.",
+        "notes": "Notizen",
+        "notesHint": "Wird am Auftrag angezeigt.",
+        "terms": "Bedingungen",
+        "termsHint": "Wird auf die aus diesem Auftrag erstellten Rechnungen übernommen.",
+        "draftNote": "Der Auftrag bleibt ein Entwurf, bis Sie ihn bestätigen. Mit der Bestätigung werden seine Preise eingefroren.",
+        "quoteTotals": "Angebotssummen",
+        "quoteTotalsNote": "Wie im angenommenen Angebot. Die eigenen Werte des Auftrags werden nach dem Anlegen angezeigt.",
+        "subtotal": "Zwischensumme",
+        "discount": "Rabatt",
+        "tax": "Steuer",
+        "total": "Gesamt",
+        "openExisting": "Auftrag {number} öffnen",
+        "viewOrders": "Alle Aufträge anzeigen",
+        "pickAnother": "Anderes Angebot wählen",
+        "problems": {
+          "buyerRequired": "Wählen Sie einen Kontakt oder geben Sie den Namen des Käufers ein.",
+          "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+          "currencyInvalid": "Geben Sie einen dreistelligen Währungscode ein.",
+          "expectedDateInvalid": "Geben Sie ein gültiges Datum ein.",
+          "shippingInvalid": "Geben Sie einen gültigen Betrag ein.",
+          "noLines": "Fügen Sie mindestens eine Position hinzu.",
+          "referenceTooLong": "Halten Sie die Referenz unter 191 Zeichen."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Beschreiben Sie diese Position.",
+          "qtyInvalid": "Geben Sie eine Menge größer als null ein.",
+          "priceInvalid": "Geben Sie einen gültigen Preis ein.",
+          "lineDiscountInvalid": "Geben Sie einen gültigen Rabatt ein.",
+          "hsnRequired": "Geben Sie den HSN-/SAC-Code ein.",
+          "hsnInvalid": "Geben Sie einen gültigen HSN-/SAC-Code ein.",
+          "taxRateRemoved": "Der Steuersatz dieser Position existiert nicht mehr. Wählen Sie einen aktuellen aus."
+        }
+      },
+      "quotePicker": {
+        "search": "Angenommene Angebote durchsuchen",
+        "results": "Angenommene Angebote und Kostenvoranschläge",
+        "loading": "Angebote werden geladen",
+        "noMatch": "Kein angenommenes Angebot passt.",
+        "none": "Es gibt noch kein angenommenes Angebot oder keinen angenommenen Kostenvoranschlag.",
+        "kind": {
+          "proposal": "Angebot",
+          "estimate": "Kostenvoranschlag"
+        },
+        "untitled": "Ohne Titel",
+        "accepted": "Angenommen am {date}"
+      }
+    }
+  }
+}

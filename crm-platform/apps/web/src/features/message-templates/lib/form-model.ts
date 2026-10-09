@@ -31,6 +31,8 @@ export const isMediaKind = (k: HeaderKind): k is TplAttachment =>
   k === 'image' || k === 'video' || k === 'document';
 
 export const NAME_MAX = 60;
+export const LOCATION_NAME_MAX = 100;
+export const LOCATION_ADDRESS_MAX = 200;
 export const HEADER_MAX = 60;
 export const FOOTER_MAX = 60;
 export const BODY_MAX = 1024;
@@ -56,6 +58,11 @@ export interface FormState {
   buttons: ButtonRow[];
   /** Authentication only: minutes the code is valid, as typed. */
   otpExpiry: string;
+  /** The pin of a location header, as typed. */
+  latitude: string;
+  longitude: string;
+  locationName: string;
+  locationAddress: string;
 }
 
 export function initialState(connectionId = ''): FormState {
@@ -75,6 +82,10 @@ export function initialState(connectionId = ''): FormState {
     footer: '',
     buttons: [],
     otpExpiry: '',
+    latitude: '',
+    longitude: '',
+    locationName: '',
+    locationAddress: '',
   };
 }
 
@@ -115,6 +126,10 @@ export function withHeaderKind(s: FormState, headerKind: HeaderKind): FormState 
     headerHandle: '',
     headerFileName: '',
     headerSampleUrl: '',
+    latitude: '',
+    longitude: '',
+    locationName: '',
+    locationAddress: '',
   };
 }
 
@@ -123,6 +138,22 @@ type Fields = Omit<CreateTemplateInput, 'connectionId' | 'submit'>;
 /** True when the header is a media header that has its sample (just uploaded, or kept from the saved template). */
 export const hasHeaderFile = (s: FormState): boolean =>
   isMediaKind(s.headerKind) && Boolean(s.headerHandle || s.headerSampleUrl);
+
+/** The coordinates as numbers, or null while they are empty, not numbers, or out of the range WhatsApp accepts. */
+export function locationOf(
+  s: Pick<FormState, 'latitude' | 'longitude' | 'locationName' | 'locationAddress'>,
+): { latitude: number; longitude: number; name: string | null; address: string | null } | null {
+  const lat = s.latitude.trim() === '' ? NaN : Number(s.latitude);
+  const lng = s.longitude.trim() === '' ? NaN : Number(s.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+  return {
+    latitude: lat,
+    longitude: lng,
+    name: s.locationName.trim() || null,
+    address: s.locationAddress.trim() || null,
+  };
+}
 
 export function expiryMinutes(s: FormState): number | null {
   const n = Number(s.otpExpiry);
@@ -172,6 +203,7 @@ export function toFields(s: FormState): Fields {
     attachmentType,
     headerHandle: media && s.headerHandle ? s.headerHandle : null,
     headerSampleUrl: media && s.headerSampleUrl ? s.headerSampleUrl : null,
+    headerLocation: s.headerKind === 'location' ? locationOf(s) : null,
     body: normalizePlaceholders(s.body),
     footer: s.footer.trim() ? s.footer.trim() : null,
     buttons: s.buttons.map(rowToButton),
@@ -231,6 +263,10 @@ export function stateFromDetail(d: TemplateDetail): FormState {
     footer: d.footer ?? '',
     buttons: meta === 'AUTHENTICATION' ? [] : d.buttons.map((b) => buttonToRow(b)),
     otpExpiry: d.codeExpirationMinutes !== null ? String(d.codeExpirationMinutes) : '',
+    latitude: d.headerLocation ? String(d.headerLocation.latitude) : '',
+    longitude: d.headerLocation ? String(d.headerLocation.longitude) : '',
+    locationName: d.headerLocation?.name ?? '',
+    locationAddress: d.headerLocation?.address ?? '',
   };
 }
 

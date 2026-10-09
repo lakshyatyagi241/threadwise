@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Meta-groepen"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Dit nummer komt niet in aanmerking voor groepen. WhatsApp opent groepen alleen voor officiële zakelijke accounts.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Groepen zijn alleen beschikbaar voor nummers die rechtstreeks met Meta zijn verbonden. Dit nummer loopt via een andere provider.",
+      "WABA_GROUP_NOT_FOUND": "Groep niet gevonden.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp heeft deze groep opgeschort wegens een schending van het beleid.",
+      "WABA_GROUP_LIMIT_REACHED": "Een WhatsApp-limiet voor groepen is bereikt. Verwijder een groep of vraag WhatsApp om meer.",
+      "WABA_GROUP_RATE_LIMITED": "Te veel groepsacties vanaf dit nummer. Wacht even en probeer het opnieuw.",
+      "PLAN_FEATURE_LOCKED": "Je abonnement bevat geen WhatsApp-groepen. Upgrade om ze te ontgrendelen.",
+      "VALIDATION_FAILED": "Controleer de velden en probeer het opnieuw."
+    },
+    "groups": {
+      "pageTitle": "WhatsApp-groepen",
+      "eyebrow": "WhatsApp / Groepen",
+      "headingA": "Groep",
+      "headingB": "berichten",
+      "intro": "Maak WhatsApp-groepen aan vanaf je zakelijke nummer, deel de uitnodigingslink en behandel verzoeken om lid te worden. Gesprekken verschijnen in je inbox, net als elke andere chat.",
+      "loading": "Groepen laden…",
+      "loadFailed": "De groepen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "numbersDenied": "Je kunt groepen zien, maar niet de lijst met WhatsApp-nummers waartoe ze behoren. Vraag een beheerder om toegang tot WhatsApp-nummers.",
+      "rail": {
+        "title": "Groepen",
+        "noNumber": "Geen WhatsApp Business-nummer",
+        "eligible": "In aanmerking",
+        "notEligible": "Niet in aanmerking",
+        "numberLabel": "Nummer",
+        "howTitle": "Hoe groepen werken",
+        "howInvite": "Groepen zijn alleen op uitnodiging. Jij maakt de groep aan, WhatsApp geeft je een uitnodigingslink en jij deelt die link, mensen kiezen zelf of ze meedoen. Je kunt niemand rechtstreeks toevoegen.",
+        "howCost": "Elk bericht dat je verstuurt wordt één keer per ontvanger in rekening gebracht. Een bericht aan 100 leden kost 100 verzendingen."
+      },
+      "state": {
+        "noNumber": {
+          "title": "Geen WhatsApp Business-nummer gekoppeld",
+          "message": "Groepen vereisen een WhatsApp-nummer dat is gekoppeld via het officiële WhatsApp Business Platform.",
+          "hint": "Koppel er een via Instellingen, Kanalen, WhatsApp.",
+          "connect": "WhatsApp-nummers openen"
+        },
+        "notEligible": {
+          "title": "Dit nummer kan nog geen groepen gebruiken",
+          "message": "WhatsApp opent de functie Groepen alleen voor officiële zakelijke accounts: de geverifieerde laag met het groene label. Je nummer is gekoppeld en werkt voor gewone chats; het heeft alleen nog geen toegang tot groepen gekregen.",
+          "hint": "Vraag een officieel zakelijk account aan in WhatsApp Manager en laad daarna deze pagina opnieuw.",
+          "reload": "Opnieuw controleren",
+          "checking": "Controleren…"
+        },
+        "providerUnsupported": {
+          "title": "Groepen zijn niet beschikbaar via deze route",
+          "message": "Dit nummer loopt via een andere provider, niet rechtstreeks via Meta. Groepen zijn alleen ingesteld voor nummers die rechtstreeks met Meta zijn verbonden.",
+          "hint": "Koppel het nummer rechtstreeks met Meta, of vraag de provider of groepen worden ondersteund."
+        },
+        "missingCredentials": {
+          "title": "Dit nummer moet opnieuw worden gekoppeld",
+          "message": "Er is geen toegangstoken opgeslagen voor dit nummer, dus WhatsApp kan niet over groepen worden gevraagd.",
+          "hint": "Vervang het token op de gezondheidspagina van het nummer."
+        },
+        "checkFailed": "WhatsApp kon op dit moment niet worden gevraagd of dit nummer groepen kan gebruiken. Alles hieronder werkt wel als dat zo is; als een actie mislukt, probeer het dan zo meteen opnieuw."
+      },
+      "kpi": {
+        "groups": "Groepen",
+        "groupsSub": "op dit nummer",
+        "members": "Leden",
+        "membersSub": "over alle groepen",
+        "joinRequests": "Verzoeken om lid te worden",
+        "joinRequestsSub": "wachten op jou",
+        "suspended": "Opgeschort",
+        "suspendedSub": "geblokkeerd door WhatsApp"
+      },
+      "create": {
+        "title": "Een groep aanmaken",
+        "name": "Groepsnaam",
+        "nameHint": "Wat leden bovenaan de chat zien. Tot 128 tekens.",
+        "who": "Wie er mag deelnemen",
+        "whoAuto": "Iedereen met de link kan meteen deelnemen",
+        "whoApproval": "Jij keurt elke persoon eerst goed",
+        "whoHint": "Met goedkeuring krijg je een wachtrij om te bekijken voordat iemand wordt toegelaten.",
+        "description": "Beschrijving",
+        "descriptionHint": "Optioneel. Wordt getoond op het groepsinfoscherm.",
+        "submit": "Groep aanmaken",
+        "submitting": "Aanmaken…"
+      },
+      "list": {
+        "title": "Je groepen",
+        "empty": "Nog geen groepen. Maak hierboven een groep aan om te beginnen.",
+        "untitled": "Naamloze groep",
+        "members": "{count, plural, =0 {Geen leden} one {1 lid} other {# leden}}",
+        "approvalRequired": "goedkeuring vereist",
+        "suspended": "WhatsApp heeft deze groep opgeschort. Je kunt er geen berichten naartoe sturen totdat ze hem herstellen.",
+        "creationFailed": "WhatsApp kon deze groep niet aanmaken: {message}",
+        "refresh": "Vernieuwen",
+        "refreshing": "Vernieuwen…",
+        "delete": "Verwijderen",
+        "edit": "Bewerken",
+        "membersButton": "Leden",
+        "loadMore": "Meer groepen tonen",
+        "loadingMore": "Laden…"
+      },
+      "link": {
+        "awaiting": "Uitnodigingslink wordt door WhatsApp aangemaakt…",
+        "label": "Uitnodigingslink",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "newLink": "Nieuwe link"
+      },
+      "joinRequests": {
+        "title": "Wacht om lid te worden",
+        "approve": "Goedkeuren",
+        "reject": "Afwijzen",
+        "working": "…",
+        "hidden": "{count, plural, one {1 persoon wacht om lid te worden.} other {# personen wachten om lid te worden.}} Je hebt rechten nodig om groepen te beheren om te zien wie."
+      },
+      "confirm": {
+        "deleteTitle": "Deze groep verwijderen?",
+        "deleteMessage": "Deze groep verwijderen en iedereen eruit halen? Een verwijderde groep kan niet worden hersteld. De chatgeschiedenis blijft in je inbox.",
+        "deleteConfirm": "Groep verwijderen",
+        "linkTitle": "Een nieuwe link aanmaken?",
+        "linkMessage": "Een nieuwe link aanmaken? Iedereen aan wie je de oude link al hebt gestuurd, kan die niet meer gebruiken.",
+        "linkConfirm": "Nieuwe link aanmaken",
+        "cancel": "Annuleren"
+      },
+      "edit": {
+        "title": "Groep bewerken",
+        "subject": "Groepsnaam",
+        "description": "Beschrijving",
+        "hint": "Naar WhatsApp verzonden. De groep wordt hier ververst zodra Meta dit bevestigt.",
+        "save": "Naar WhatsApp verzenden",
+        "saving": "Verzenden…"
+      },
+      "members": {
+        "title": "Leden van {name}",
+        "hint": "Wordt uit WhatsApp gelezen wanneer je dit venster opent; er wordt hier niets opgeslagen. Je kunt tegelijk maximaal {max} personen verwijderen.",
+        "loading": "Leden worden uit WhatsApp gelezen…",
+        "empty": "Nog geen leden.",
+        "selected": "{count} geselecteerd",
+        "remove": "Geselecteerden verwijderen",
+        "removing": "Verwijderen…",
+        "limit": "Je kunt tegelijk maximaal {max} personen verwijderen.",
+        "removeConfirm": "{count, plural, one {Deze persoon} other {Deze # personen}} uit de groep verwijderen? Ze kunnen niet opnieuw meedoen met de oude link."
+      },
+      "notice": {
+        "created": "Groep aangemaakt. De uitnodigingslink verschijnt hier zodra Meta die uitgeeft.",
+        "refreshed": "Groep vernieuwd.",
+        "linkReset": "Nieuwe uitnodigingslink aangemaakt. Elke eerder gedeelde link werkt niet meer.",
+        "updateSent": "Wijziging naar WhatsApp verzonden. De groep wordt hier ververst zodra Meta dit bevestigt.",
+        "deleted": "Groep verwijderd en alle deelnemers verwijderd.",
+        "removed": "{count, plural, one {1 persoon uit de groep verwijderd.} other {# personen uit de groep verwijderd.}}",
+        "approved": "{count, plural, one {1 persoon goedgekeurd.} other {# personen goedgekeurd.}}",
+        "rejected": "{count, plural, one {1 verzoek afgewezen.} other {# verzoeken afgewezen.}}",
+        "copyFailed": "De link kon niet worden gekopieerd. Selecteer hem en kopieer hem handmatig."
+      },
+      "removeNumberWarning": "Dit nummer heeft hier {count, plural, one {1 groepsregistratie} other {# groepsregistraties}}. Het nummer verwijderen haalt ze uit deze workspace. De groepen zelf blijven bij WhatsApp en hun chats blijven in je inbox."
+    }
+  }
+}

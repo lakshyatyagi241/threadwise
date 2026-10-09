@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "閉じる",
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。",
+      "requestId": "参照: {id}"
+    },
+    "states": {
+      "noAccessTitle": "ソーシャルリードへのアクセス権がありません",
+      "noAccessBody": "現在のロールには、この画面に必要な権限（{permission}）がありません。ワークスペースの管理者に、ロールへの追加を依頼してください。",
+      "lockedTitle": "ソーシャルリードは現在のプランに含まれていません",
+      "lockedBody": "現在のプランにはリードソースが含まれていないため、表示や作成はできません。広告やランディングページのリードを連絡先に取り込むには、プランをアップグレードしてください。",
+      "upgrade": "プランをアップグレード",
+      "manageNeeded": "ここでは閲覧のみ可能で、変更はできません。ソースを変更するには権限（{permission}）が必要です。"
+    },
+    "errors": {
+      "conflict": "編集中に他のユーザーがこのソースを変更しました。再読み込みして最新版を確認してください。未保存の編集内容は失われます。",
+      "noAccess": "このロールではこの操作は許可されていません。",
+      "signedOut": "セッションが終了しました。続けるには再度サインインしてください。",
+      "planLocked": "現在のプランにはソーシャルリードが含まれていません。利用するにはプランをアップグレードしてください。",
+      "planLimit": "リードソースの上限に達しています。プランをアップグレードするか、使用しなくなったソースを削除してください。",
+      "nameTaken": "同じ名前のソースがすでにあります。別の名前を選択してください。",
+      "mappingInvalid": "マッピングが、リードから入力できない連絡先プロパティを指しています。",
+      "defaultsInvalid": "ルール内の一部（ユーザー、パイプライン、ステージ、ライフサイクルステージ）が、このワークスペースに存在しません。",
+      "notRetryable": "確認が必要なリードまたは失敗したリードのみ再試行できます。このリードはすでに完了しているか、処理中です。",
+      "payloadPurged": "保存されていたリードは保持期間後に削除されたため、再試行できません。",
+      "sourcePaused": "このソースは一時停止中です。テストリードの送信やリードの再試行の前に再開してください。",
+      "notFound": "見つかりませんでした。削除された可能性があります。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "rateLimitedWait": "リクエストが多すぎます。{seconds} 秒後にもう一度お試しください。",
+      "validation": "入力内容の一部が無効です。強調表示された項目を確認してください。",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "サーバーからの応答を処理できませんでした。ページを再読み込みしてください。解決しない場合はサポートにお問い合わせください。",
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "unexpected": "システム側でエラーが発生しました。しばらくしてから再度お試しください。",
+      "request": "リクエストが受け付けられませんでした。入力内容を確認して、もう一度お試しください。",
+      "details": {
+        "unknown_property": "この連絡先プロパティは存在しないか、オフになっています。",
+        "not_mappable": "このプロパティは計算値であるか、別のレコードを参照しているため、リードから入力できません。",
+        "unknown_pipeline": "このパイプラインはこのワークスペースにありません。",
+        "unknown_stage": "この案件ステージはこのワークスペースにありません。",
+        "stage_not_in_pipeline": "このステージは別のパイプラインに属しています。",
+        "pipeline_required": "このステージが属するパイプラインを選択してください。",
+        "unknown_or_lost_stage": "このライフサイクルステージは存在しないか、失注ステージです。",
+        "unknown_or_inactive_user": "選択された人の中に、このワークスペースの有効なメンバーではない人が含まれています。"
+      }
+    },
+    "problems": {
+      "nameRequired": "ソースに名前を付けてください。",
+      "nameLength": "{max} 文字以内で入力してください。",
+      "platformLength": "{max} 文字以内で入力してください。",
+      "secretLength": "共有シークレットは {min} 〜 {max} 文字です。",
+      "pathLength": "パスは {max} 文字以内です。",
+      "pathCharacters": "パスに制御文字を含めることはできません。",
+      "retentionRange": "1 から {max} までの整数（日数）を入力してください。",
+      "countryCode": "91 や 44 のような、1 〜 4 桁の国際電話番号を入力してください。",
+      "textLength": "{max} 文字以内で入力してください。",
+      "ownerFixed": "1 人だけ選択してください。",
+      "ownerRoundRobin": "順番に担当する人を 2 人以上選択してください。",
+      "ownerTooMany": "最大 {max} 人まで選択してください。",
+      "notifyTooMany": "最大 {max} 人まで選択してください。",
+      "dealTitleLength": "案件名は {max} 文字以内です。",
+      "propertyRequired": "入力する連絡先プロパティを選択してください。",
+      "propertyKey": "プロパティキーは英字で始まり、小文字、数字、アンダースコアを使用します。",
+      "propertyDuplicate": "このプロパティは 2 回マッピングされています。",
+      "pathRequired": "値がペイロードのどこにあるかを指定してください。",
+      "customFieldsTooMany": "カスタムプロパティのマッピングは最大 {max} 件です。",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta リードフォーム",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google 広告",
+      "connector": "マーケットプレイス連携"
+    },
+    "sourceStatus": {
+      "active": "有効",
+      "paused": "一時停止"
+    },
+    "eventStatus": {
+      "received": "受信済み",
+      "created": "連絡先を作成",
+      "updated": "連絡先を更新",
+      "duplicate": "重複",
+      "needs_review": "確認が必要",
+      "failed": "失敗"
+    },
+    "reasons": {
+      "no_contact_point": "メールも電話もありません",
+      "invalid_phone": "電話番号を読み取れませんでした",
+      "plan_limit_reached": "連絡先の上限に達しました",
+      "source_paused": "ソースが一時停止されていました",
+      "internal_error": "処理エラー",
+      "identity_conflict": "メールまたは電話が別の連絡先に紐づいています"
+    },
+    "guidance": {
+      "noContactPoint": "リードに使用可能なメールも電話番号もありませんでした。マッピングまたは既定の国番号を修正してから、再試行してください。",
+      "invalidPhone": "電話番号が送信されましたが、正しく読み取れず、メールアドレスもありませんでした。電話のマッピングと既定の国番号を確認してから、再試行してください。",
+      "planLimit": "プランの連絡先上限に達しているため、このリードを連絡先にできませんでした。プランをアップグレードしてから、再試行してください。",
+      "sourcePaused": "ソースが一時停止されていました。再開してから、再試行してください。",
+      "internalError": "このリードの処理中にエラーが発生しました。再試行してください。再び失敗する場合は、エラーの参照番号をサポートに伝えてください。",
+      "identityConflict": "リードは既存の連絡先に追加されましたが、そのメールまたは電話は別の連絡先に紐づいているため、この情報は移動されませんでした。",
+      "generic": "このリードは確認が必要です。理由とエラーを確認し、必要に応じてマッピングまたは既定値を修正してから、再試行してください。",
+      "upgrade": "プランをアップグレード"
+    },
+    "eventFilters": {
+      "all": "すべてのリード",
+      "attention": "要対応",
+      "needs_review": "確認が必要",
+      "failed": "失敗",
+      "created": "連絡先を作成",
+      "updated": "連絡先を更新",
+      "duplicate": "重複",
+      "received": "処理中"
+    },
+    "testFilters": {
+      "all": "本番とテストのリード",
+      "only": "テストリードのみ",
+      "hide": "テストリードを非表示"
+    },
+    "page": {
+      "title": "ソーシャルリード",
+      "description": "広告やランディングページのリードを、選択した担当者、タグ、案件とともに連絡先に取り込みます。",
+      "newSource": "新しいソース",
+      "loading": "リードソースを読み込んでいます",
+      "tabs": {
+        "ads": "広告",
+        "webhook": "Webhook",
+        "attention": "{count, plural, other {# 件のリードが要対応です}}"
+      }
+    },
+    "ads": {
+      "intro": "リードの取得元を選択します。どのソースも同じ流れで処理されます。ソースが記録された連絡先が作成され、担当者、任意の案件、通知が設定されます。",
+      "available": "利用可能",
+      "comingSoon": "近日公開",
+      "untilThen": "それまでは、Zapier または Make の Webhook を経由してリードを送信してください。",
+      "sourceCount": "{count, plural, =0 {ソースはまだありません} other {# 件のソース}}",
+      "setUpWebhook": "Webhook を設定",
+      "openSources": "ソースを開く",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Web リクエストを送信できる任意のツール（Zapier、Make、ランディングページビルダー、独自のフォームなど）からリードを送信できます。LinkedIn、TikTok、Google 広告のリードも受け付けます。"
+        },
+        "meta": {
+          "name": "Meta リードフォーム",
+          "body": "Facebook と Instagram のリード広告を、ページから直接受け付けます。"
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn リード獲得フォーム。"
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok リード獲得フォーム。"
+        },
+        "google": {
+          "name": "Google 広告",
+          "body": "Google 広告のリードフォーム拡張。"
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "ソースはまだありません",
+      "empty": "Webhook ソースを作成すると、Zapier、Make、フォームツールに貼り付けられる URL が取得できます。送信されたリードは連絡先になります。",
+      "emptyNoManage": "まだリードソースが作成されていません。リードソースを管理できるユーザーに作成を依頼してください。",
+      "create": "新しいソース",
+      "caption": "リードソース",
+      "col": {
+        "name": "名前",
+        "kind": "種類",
+        "status": "状態",
+        "token": "URL",
+        "lastEvent": "最新のリード",
+        "attention": "要対応"
+      },
+      "connector": "マーケットプレイス経由",
+      "endsIn": "{hint} で終了",
+      "noEvents": "リードはまだありません",
+      "needsAttention": "{count, plural, other {# 件のリード}}"
+    },
+    "wizard": {
+      "title": "新しいリードソース",
+      "description": "受信したリードを連絡先に変換する Webhook を設定します。",
+      "back": "ソーシャルリードに戻る",
+      "stepsLabel": "リードソースを作成する手順",
+      "steps": {
+        "basics": "基本情報",
+        "rules": "リードの処理内容",
+        "connect": "送信元を接続",
+        "mapping": "項目をマッピング"
+      },
+      "stepTitle": {
+        "basics": "ソースに名前を付ける",
+        "rules": "リードの処理内容",
+        "connect": "送信元を接続",
+        "mapping": "項目をマッピング"
+      },
+      "stepHelp": {
+        "basics": "このソースの名前と、元のリードデータの保持期間を入力してください。",
+        "rules": "届くすべてのリードについて、担当者、タグ、案件、通知を選択してください。",
+        "connect": "ソースが作成されました。URL とトークンは今すぐコピーしてください。一度しか表示されません。",
+        "mapping": "ツールが送信するデータの中で、各値がどこにあるかを指定してください。入力中、プレビューに結果が表示されます。"
+      },
+      "previous": "戻る",
+      "next": "次へ",
+      "cancel": "キャンセル",
+      "create": "ソースを作成",
+      "created": "ソース {name} を作成しました",
+      "mappingSaved": "マッピングを保存しました",
+      "planLimit": "プランのリードソース上限に達しているため、新しいソースは作成できません。",
+      "planLocked": "お使いのプランにはソーシャルリードが含まれていません。",
+      "upgrade": "プランをアップグレード",
+      "skipMapping": "今はスキップ",
+      "finish": "保存して完了",
+      "revealGone": "URLとトークンは再表示されません。控えていない場合は、ソースを開いてトークンを再発行すると、新しいURLを取得できます。",
+      "toMapping": "マッピングに進む"
+    },
+    "form": {
+      "name": "ソース名",
+      "nameHint": "例: Zapier: Facebookリード広告。名前は重複できません。",
+      "platform": "プラットフォーム表示名",
+      "platformHint": "連絡先のソースとして表示される名前です。例: Facebook、IndiaMART。最大{max}文字。",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "共有シークレット",
+        "isSet": "共有シークレットが設定されています。送信元は X-Webhook-Secret ヘッダーで送信する必要があります。",
+        "notSet": "共有シークレットはありません。URLを知っている人なら誰でもリードを送信できます。",
+        "willRemove": "保存時に共有シークレットが削除されます。",
+        "willReplace": "保存時に共有シークレットが置き換えられます。",
+        "willSet": "保存時に共有シークレットが設定されます。",
+        "newValue": "新しい共有シークレット",
+        "hint": "任意。{min}〜{max}文字。保存後は再表示されません。",
+        "show": "シークレットを表示",
+        "hide": "シークレットを非表示",
+        "replace": "置き換え",
+        "remove": "削除",
+        "keep": "現在のシークレットを保持"
+      },
+      "externalIdPath": "リードIDのパス",
+      "externalIdPathHint": "送信元が付与したリードIDがデータ内のどこにあるか（例: lead.id）。同じリードが二重に追加されるのを防ぎます。任意。",
+      "retention": "生のリードデータの保持期間（日）",
+      "retentionHint": "この期間を過ぎると保存データは削除されます（連絡先は残ります）。1〜{max}日。",
+      "sections": {
+        "contact": "連絡先",
+        "owner": "担当者",
+        "deal": "案件",
+        "notify": "通知"
+      },
+      "membersFailed": "チームを読み込めなかったため、現在担当者を選択できません。ページを再読み込みしてください。",
+      "countryCode": "既定の国番号",
+      "countryCodeHint": "国番号なしで送られた電話番号に付加されます（例: 91）。設定しない場合、電話番号には国番号を含める必要があります。",
+      "lifecycleStage": "開始のライフサイクルステージ",
+      "lifecycleStageHint": "このソースから作成された新しい連絡先が最初に置かれるステージです。",
+      "lifecycleDefault": "ワークスペースの既定値",
+      "tag": "タグ",
+      "tagHint": "このソースから届くすべての連絡先に付与されます。タグを付けない場合は空欄のままにしてください。",
+      "ownerMode": "連絡先の担当者",
+      "ownerModeHint": "担当者がまだいない連絡先にのみ適用されます。",
+      "ownerModes": {
+        "unassigned": "担当者なし（未割り当て）",
+        "fixed": "1人に割り当て",
+        "round_robin": "担当者間で順番に割り当て"
+      },
+      "ownerFixed": "担当者",
+      "ownerChoose": "担当者を選択",
+      "unknownMember": "現在利用できない担当者",
+      "ownerRoundRobin": "順番に割り当てる担当者",
+      "ownerRoundRobinHint": "2人以上を選択してください。リードは順番に各担当者へ割り当てられ、利用停止中の担当者はスキップされます。",
+      "pickMembers": "担当者を選択",
+      "noMembers": "選択できる担当者がいません",
+      "removeMember": "{name}を削除",
+      "dealEnabled": "新しい連絡先ごとに案件を作成",
+      "dealEnabledHint": "オンにするまでは無効です。すでに進行中の案件がある連絡先には、新たな案件は作成されません。",
+      "pipelinesFailed": "パイプラインを読み込めなかったため、現在パイプラインとステージを選択できません。",
+      "pipeline": "パイプライン",
+      "pipelineDefault": "ワークスペースの既定パイプライン",
+      "dealStage": "ステージ",
+      "dealStageNeedsPipeline": "ステージを選ぶ前に、パイプラインを選択してください。",
+      "dealStageFirst": "パイプラインの最初のステージ",
+      "dealTitle": "案件名",
+      "dealTitleHint": "リードから自動入力されます: {tokens}。",
+      "notifyOwner": "連絡先の担当者に通知",
+      "notifyOwnerHint": "新しいリードが届くとアプリ内通知を送ります。テストリードは通知しません。",
+      "notifyUsers": "追加の通知先",
+      "notifyUsersHint": "例: 営業マネージャー。最大20人。"
+    },
+    "mapping": {
+      "contact": "連絡先のフィールド",
+      "contactHelp": "キー（phone_number）またはパス（lead.contact.phone、answers[0].value）を入力します。空欄の場合は一般的な項目名から探します。",
+      "fields": {
+        "name": "氏名（フルネーム）",
+        "firstName": "名",
+        "lastName": "姓",
+        "email": "メール",
+        "phone": "電話"
+      },
+      "defaults": {
+        "name": "full_name、name、contact_name を探します",
+        "firstName": "first_name、firstname を探します",
+        "lastName": "last_name、lastname を探します",
+        "email": "email、email_address、mail を探します",
+        "phone": "phone、mobile、phone_number、whatsapp を探します"
+      },
+      "custom": "カスタムプロパティ",
+      "customHelp": "ツールが送信するデータから、連絡先のカスタムプロパティを設定します。",
+      "propertiesFailed": "連絡先プロパティを読み込めなかったため、プロパティのキーを直接入力してください。",
+      "property": "連絡先プロパティ",
+      "propertyChoose": "プロパティを選択",
+      "path": "ペイロード内のパス",
+      "removeRow": "カスタムプロパティ {number} を削除",
+      "remove": "削除",
+      "addRow": "カスタムプロパティを追加",
+      "attribution": "アトリビューション",
+      "attributionHelp": "キャンペーンの詳細が含まれる場所です。空欄の項目は、同名の項目から探します。",
+      "attributionFields": {
+        "platform": "プラットフォーム",
+        "campaign": "キャンペーン",
+        "adset": "広告セット",
+        "ad": "広告",
+        "form": "フォーム"
+      },
+      "attributionDefaults": {
+        "platform": "platform、utm_source を探します",
+        "campaign": "campaign、utm_campaign を探します",
+        "adset": "adset、adgroup を探します",
+        "ad": "ad を探します",
+        "form": "form を探します"
+      }
+    },
+    "preview": {
+      "title": "ライブプレビュー",
+      "updating": "更新中",
+      "help": "上のマッピングによってリードがどう扱われるかを表示します。プレビューでは何も保存・作成されません。",
+      "paste": "サンプルリード（JSON）を貼り付け",
+      "pasteHint": "オブジェクト、最大64 KB。",
+      "pasteProblems": {
+        "empty": "ツールが送信するJSONを貼り付けてください。",
+        "invalidJson": "有効なJSONではありません。引用符、カンマ、括弧の欠落がないか確認してください。",
+        "notObject": "リードはJSONオブジェクトである必要があります。波かっこで囲まれたキーと値のセットです。",
+        "tooLarge": "64 KBを超えています。"
+      },
+      "useLast": "最後に受信したリードを使用",
+      "pickStored": "または保存済みのリードを選択",
+      "storedOption": "{id}（{status}）",
+      "auditNote": "保存済みリードの閲覧は監査ログに記録されます。貼り付けたサンプルは記録されません。",
+      "fixDraft": "プレビューを表示するには、ハイライトされたマッピング項目を修正してください。",
+      "choose": "結果を表示するには、サンプルを貼り付けるか、最後に受信したリードを使用してください。",
+      "loading": "リードを読み込み中",
+      "none": "リードはまだ受信していません。サンプルを貼り付けてください。",
+      "usable": "このリードは処理されます",
+      "notUsable": "このリードは確認が必要です",
+      "basedOnEvent": "保存済みリードから",
+      "basedOnPayload": "貼り付けたサンプルから",
+      "externalId": "ID {id}",
+      "reasonsLabel": "理由",
+      "reasons": {
+        "no_payload": "まだ読み取るリードがありません。",
+        "no_contact_point": "メールも電話番号も見つかりませんでした。",
+        "invalid_phone": "電話番号は見つかりましたが、数値として読み取れず、メールもありません。",
+        "phone_unreadable": "電話番号を数値として読み取れないため、メールを使用します。",
+        "email_invalid": "メールアドレスが正しくないため、無視されます。"
+      },
+      "contact": {
+        "name": "名前",
+        "firstName": "名",
+        "lastName": "姓",
+        "email": "メール",
+        "phone": "電話"
+      },
+      "empty": "見つかりませんでした",
+      "phoneUnreadable": "数値として読み取れません",
+      "attribution": {
+        "platform": "プラットフォーム",
+        "campaign": "キャンペーン",
+        "adset": "広告セット",
+        "ad": "広告",
+        "form": "フォーム"
+      },
+      "paths": "このリードの項目",
+      "pathsPick": "クリックして入力: {field}",
+      "pathsFocusFirst": "入力するには、先にマッピング欄をクリックし、次に項目をクリックしてください。",
+      "pathsMore": "{count, plural, other {あと#項目}}"
+    },
+    "reveal": {
+      "titleCreated": "URLとトークンを今すぐ控えてください",
+      "titleRotated": "新しいURLとトークン",
+      "bodyCreated": "表示はこの1回だけです。当社はフィンガープリントのみ保持しているため、後から再表示することはできません。",
+      "bodyRotated": "古いURLは直ちに無効になりました。この新しいURLはこの画面でのみ表示されます。",
+      "url": "Webhook URL",
+      "copyUrl": "URLをコピー",
+      "noOrigin": "完全なURLを得るには、このパスの前に API のアドレスを付けてください。",
+      "token": "トークン",
+      "copyToken": "トークンをコピー",
+      "secretHint": "このソースには共有シークレットも必要です。送信元は {header} ヘッダーで送信する必要があります。",
+      "sample": "ターミナルから試す",
+      "sampleHelp": "ZapierやMakeでは、URLにJSONをPOSTするWebhookアクションを使用します。このコマンドはサンプルリードを1件送信します。",
+      "copied": "URLとトークンを安全な場所に控えました",
+      "done": "控えたので続行",
+      "doneHint": "先にチェックボックスをオンにしてください。この後、トークンは再表示できません。"
+    },
+    "test": {
+      "title": "テストリードを送信",
+      "help": "テストとしてマークされたサンプルリードを本番と同じパイプラインに送ります。削除可能な実際の連絡先が作成され、通知は送られません。",
+      "paused": "このソースは一時停止中です。テストリードを送信するには再開してください。",
+      "useSample": "代わりにサンプルリードを使用",
+      "useOwn": "独自のペイロードを送信",
+      "payload": "ペイロード（JSON）",
+      "payloadHint": "オブジェクト、最大64 KB。",
+      "payloadProblems": {
+        "empty": "送信するJSONを貼り付けるか、サンプルリードを使用してください。",
+        "invalidJson": "有効なJSONではありません。引用符、カンマ、括弧の欠落がないか確認してください。",
+        "notObject": "リードはJSONオブジェクトである必要があります。波かっこで囲まれたキーと値のセットです。",
+        "tooLarge": "64 KBを超えています。"
+      },
+      "send": "テストリードを送信",
+      "needsManage": "テストリードの送信には leads.sources.manage 権限が必要です。",
+      "result": "結果",
+      "flag": "テスト",
+      "openContact": "連絡先を開く"
+    },
+    "watch": {
+      "waiting": "最初のリードを待っています。URLをツールに貼り付けて、1件送信してください。",
+      "received": "最初のリードを受信しました:",
+      "error": "今はリードを確認できませんでした。"
+    },
+    "detail": {
+      "loading": "ソースを読み込み中",
+      "backToList": "ソース一覧へ戻る",
+      "pageTitle": "リードソース",
+      "needsAttention": "{count, plural, other {#件のリードに対応が必要です}}",
+      "lastEvent": "最新のリード",
+      "noEvents": "まだありません",
+      "pause": "一時停止",
+      "resume": "再開",
+      "rotate": "トークンを再発行",
+      "delete": "削除",
+      "conflict": "このソースは他の人によって変更されました。最新版を確認するには再読み込みしてください。未保存の変更は失われます。",
+      "reload": "再読み込み",
+      "connection": "接続",
+      "connector": "マーケットプレイス経由で接続されています。独自のURLやトークンはなく、リードはインストールされたアプリを通じて届きます。",
+      "connectorLink": "インストール済みのアプリを開く",
+      "endsIn": "URLトークンの末尾は {hint} です",
+      "noHint": "トークンの記録がありません。",
+      "urlOnce": "完全なURLはソース作成時に一度だけ表示されています。新しいURLが必要な場合は、トークンを再発行してください。",
+      "secretYes": "共有シークレットが設定されています。送信元は X-Webhook-Secret ヘッダーで送信する必要があります。",
+      "secretNo": "共有シークレットは設定されていません。",
+      "pausedNote": "このソースは一時停止中です。URLは404を返すため、再開するまで送信元にはエラーが表示されます。",
+      "settings": "設定",
+      "settingsHelp": "変更は保存後に届くリードに適用されます。古いリードを再試行すると、現在の設定が使用されます。",
+      "basics": "基本",
+      "rules": "リードの扱い",
+      "mapping": "フィールドのマッピング",
+      "unsaved": "保存されていない変更があります",
+      "discard": "変更を破棄",
+      "save": "変更を保存",
+      "saved": "変更を保存しました",
+      "pausedToast": "ソースを一時停止しました",
+      "resumedToast": "ソースを再開しました",
+      "deletedToast": "ソース {name} を削除しました",
+      "confirm": {
+        "cancel": "キャンセル",
+        "pause": {
+          "title": "このソースを一時停止しますか？",
+          "body": "一時停止中はURLが404を返し、送信されたリードは受信されません。いつでも再開できます。",
+          "action": "ソースを一時停止"
+        },
+        "rotate": {
+          "title": "トークンを再発行しますか？",
+          "body": "現在のURLは直ちに無効になるため、ツールを新しいURLで更新してください。新しいURLは一度だけ表示されます。",
+          "action": "トークンを再発行"
+        },
+        "delete": {
+          "title": "{name} を削除しますか？",
+          "body": "URLは無効になり、保存されたリードも一緒に削除されます。すでに作成された連絡先は残ります。この操作は元に戻せません。",
+          "action": "ソースを削除"
+        }
+      }
+    },
+    "events": {
+      "title": "受信したリード",
+      "help": "このソースに届いたすべてのリードと、その結果です。新しい順に表示します。",
+      "filterStatus": "表示",
+      "filterTests": "テスト",
+      "attentionTitle": "{count, plural, other {#件のリードに対応が必要です}}",
+      "attentionGroup": "{count, plural, other {#件のリード:}}",
+      "showAttention": "これらのリードのみ表示",
+      "loading": "リードを読み込み中",
+      "emptyTitle": "まだリードはありません",
+      "empty": "テストリードを送信するか、URLをツールに貼り付けてください。",
+      "emptyFilteredTitle": "一致するリードはありません",
+      "emptyFiltered": "これらの条件に一致するリードはありません。",
+      "clearFilters": "フィルターをクリア",
+      "col": {
+        "status": "ステータス",
+        "lead": "リード",
+        "result": "発生した内容",
+        "links": "変換先",
+        "received": "受信日時",
+        "actions": "操作"
+      },
+      "loadMore": "さらに読み込む",
+      "test": "テスト",
+      "attempts": "{count, plural, other {#回の試行}}",
+      "deliveredAgain": "{count, plural, other {#回再配信済み}}",
+      "contact": "連絡先",
+      "deal": "案件",
+      "retry": "再試行",
+      "open": "開く",
+      "retriedToast": "再試行済み: 現在 {status}"
+    },
+    "event": {
+      "title": "リードの詳細",
+      "close": "閉じる",
+      "retry": "このリードを再試行",
+      "auditNote": "ペイロードを開くと監査ログに記録されます。",
+      "externalId": "リードID",
+      "test": "テスト",
+      "received": "受信日時",
+      "processed": "処理日時",
+      "notProcessed": "まだ",
+      "attempts": "試行回数",
+      "duplicates": "再配信",
+      "deliveredAgain": "{count, plural, other {#回再配信済み}}",
+      "reason": "理由",
+      "contact": "連絡先",
+      "openContact": "連絡先を開く",
+      "deal": "案件",
+      "openDeal": "案件を開く",
+      "error": "エラー",
+      "retried": "再試行しました。リードの現在の状態:",
+      "payload": "保存されたペイロード",
+      "loadingPayload": "ペイロードを開く",
+      "purged": "生のペイロードは {days} 日後に削除されました。リードと連絡先は残ります。"
+    },
+    "attribution": {
+      "title": "リードのアトリビューション",
+      "first": "初回接点",
+      "latest": "最新の接点",
+      "firstAndLatest": "初回と最新の接点",
+      "total": "合計 {count} 回の接点",
+      "platform": "プラットフォーム",
+      "source": "ソース",
+      "fields": {
+        "campaign": "キャンペーン",
+        "adset": "広告セット",
+        "ad": "広告",
+        "form": "フォーム"
+      },
+      "capturedAt": "取得日時",
+      "openSource": "リードソースを開く"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "সহায়তা কেন্দ্র",
+    "searchLabel": "সহায়তায় খুঁজুন",
+    "searchPlaceholder": "গাইড খুঁজুন",
+    "resultsStatus": "{count, plural, =0 {কোনো গাইড পাওয়া যায়নি} one {#টি গাইড} other {#টি গাইড}}",
+    "none": {
+      "title": "এখনও কোনো গাইড নেই",
+      "message": "আপনার প্ল্যানের ফিচারের গাইড এখানে দেখা যাবে।"
+    },
+    "noResults": {
+      "title": "আপনার অনুসন্ধানের সঙ্গে কোনো গাইড মেলেনি",
+      "message": "অন্য শব্দ দিয়ে চেষ্টা করুন, অথবা সব গাইড দেখতে অনুসন্ধান মুছুন।"
+    },
+    "areas": {
+      "overview": "প্ল্যাটফর্ম",
+      "inbox": "ইনবক্স ও চ্যাট",
+      "audience": "CRM",
+      "sales": "সেলস",
+      "campaigns": "ক্যাম্পেইন",
+      "automation": "অটোমেশন",
+      "store": "স্টোর",
+      "apps": "মার্কেটপ্লেস",
+      "settings": "সেটিংস",
+      "account": "অ্যাকাউন্ট",
+      "getting-started": "শুরু করার নিয়ম",
+      "troubleshooting": "সমস্যা সমাধান"
+    },
+    "allHelp": "সহায়তায় ফিরুন",
+    "onThisPage": "এই পাতায়",
+    "openScreen": "এই স্ক্রিন খুলুন",
+    "shownInEnglish": "এই গাইডটি এখনও আপনার ভাষায় অনুবাদ করা হয়নি, তাই ইংরেজিতে দেখানো হচ্ছে।",
+    "tip": {
+      "label": "সহায়তা: {title}",
+      "readMore": "গাইডটি পড়ুন"
+    },
+    "guideCount": "{count, plural, =0 {কোনো গাইড নেই} one {#টি গাইড} other {#টি গাইড}}",
+    "crumb": "আরও / সহায়তা",
+    "heading": "সহায়তা",
+    "headingRest": "ও গাইড",
+    "back": "ফিরে যান",
+    "askSupport": "খুঁজে পাচ্ছেন না? সাপোর্টকে জিজ্ঞাসা করুন",
+    "askSupportShort": "সাপোর্ট",
+    "categories": "ক্যাটাগরি",
+    "allGuides": "সব গাইড",
+    "needHuman": "কারও সাহায্য দরকার?",
+    "contactSupport": "সাপোর্টের সঙ্গে যোগাযোগ করুন",
+    "popular": "জনপ্রিয়",
+    "searchResults": "অনুসন্ধানের ফলাফল",
+    "read": "গাইড পড়ুন",
+    "readMinutes": "{count, plural, one {# মিনিটের পাঠ} other {# মিনিটের পাঠ}}",
+    "moreInArea": "{area}-তে আরও"
+  }
+}

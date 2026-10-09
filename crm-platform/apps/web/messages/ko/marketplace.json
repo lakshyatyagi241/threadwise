@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "마켓플레이스"
+    },
+    "meta": {
+      "apps": "미니 앱 · 마켓플레이스",
+      "integrations": "통합 · 마켓플레이스",
+      "app": "앱 · 마켓플레이스",
+      "install": "설치 · 마켓플레이스",
+      "installed": "설치됨 · 마켓플레이스",
+      "manage": "앱 관리 · 마켓플레이스",
+      "requests": "요청 · 마켓플레이스"
+    },
+    "common": {
+      "dismiss": "닫기",
+      "loading": "불러오는 중",
+      "errorTitle": "이 항목을 불러올 수 없습니다",
+      "requestId": "요청 ID",
+      "retry": "다시 시도",
+      "upgrade": "요금제 보기 및 업그레이드",
+      "opensNewTab": "(새 탭에서 열림)",
+      "copy": "복사",
+      "copied": "복사됨",
+      "copyFailed": "복사할 수 없습니다. 텍스트를 선택해 직접 복사하세요.",
+      "needsPermission": "이 작업을 하려면 {permission} 권한이 필요합니다. 워크스페이스 관리자에게 문의하세요."
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 뒤 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 다시 로그인하세요.",
+      "conflict": "다른 사용자가 먼저 이것을 변경했습니다. 새로고침하여 최신 버전을 확인하세요.",
+      "validation": "일부 값이 올바르지 않습니다. 필드를 확인한 뒤 다시 시도하세요.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "rateLimitedWait": "요청이 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
+      "unavailable": "이 서버에서는 마켓플레이스를 아직 사용할 수 없습니다.",
+      "notFound": "해당 항목은 더 이상 존재하지 않습니다.",
+      "appNotFound": "이 앱은 존재하지 않거나 워크스페이스에서 사용할 수 없습니다.",
+      "notInstalled": "이 앱은 워크스페이스에 설치되어 있지 않습니다.",
+      "alreadyInstalled": "이 앱은 이미 워크스페이스에 설치되어 있습니다.",
+      "appUnavailable": "이 앱은 현재 제공되지 않습니다.",
+      "appLockedPlan": "현재 요금제에는 이 앱이 포함되어 있지 않습니다. 업그레이드하여 사용하세요.",
+      "appLockedModule": "이 앱은 이 제품 설치 환경에서 사용할 수 없습니다.",
+      "planLocked": "마켓플레이스는 현재 요금제에 포함되어 있지 않습니다. 사용하려면 업그레이드하세요.",
+      "planLimitInstalled": "요금제의 설치 앱 한도에 도달해 아무것도 설치되지 않았습니다. 앱을 하나 삭제하거나 요금제를 업그레이드하세요.",
+      "planLimitInstalledCounts": "요금제에서 허용하는 앱 {cap}개 중 {used}개를 설치해 아무것도 설치되지 않았습니다. 앱을 하나 삭제하거나 요금제를 업그레이드하세요.",
+      "planLimitLeadSources": "요금제의 리드 소스 한도에 도달해 아무것도 설치되지 않았습니다. 리드 소스를 삭제하거나 요금제를 업그레이드하세요.",
+      "planLimitLeadSourcesCounts": "요금제에서 허용하는 리드 소스 {cap}개 중 {used}개를 사용 중이므로 아무것도 설치되지 않았습니다. 하나를 삭제하거나 요금제를 업그레이드하세요.",
+      "planLimit": "요금제 한도에 도달해 아무것도 설치되지 않았습니다. 계속하려면 요금제를 업그레이드하세요.",
+      "planLimitCounts": "요금제 한도 {cap} 중 {used}을(를) 사용하고 있어 아무것도 설치되지 않았습니다. 계속하려면 요금제를 업그레이드하세요.",
+      "consentRequired": "권한이 변경되었습니다. 설치하기 전에 다시 검토하세요.",
+      "reconsentRequired": "새 버전이 더 많은 권한을 요구합니다. 먼저 검토하고 수락하세요.",
+      "scopeExceeds": "직접 보유하지 않은 권한은 부여할 수 없습니다. 누락된 권한: {permissions}.",
+      "installationKilled": "플랫폼이 이 앱을 중지했습니다. 제거만 가능합니다.",
+      "installationDisabled": "이 앱은 일시중지되어 있습니다. 먼저 재개하세요.",
+      "credentialMissing": "필수 항목을 입력하세요.",
+      "noConnection": "이 설치에는 해당 작업을 수행할 수 있는 연결이 없습니다.",
+      "leadPipeline": "리드 서비스를 지금 사용할 수 없습니다. 아무것도 저장되지 않았습니다. 잠시 후 다시 시도하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "subscriptionRequired": "유료 앱입니다. 설치하려면 구독하세요.",
+      "notForSale": "이 앱은 현재 새 구독자에게 판매되지 않습니다.",
+      "trialUnavailable": "이 앱의 무료 체험은 워크스페이스에서 사용할 수 없습니다.",
+      "subscriptionNotFound": "워크스페이스에 이 앱의 구독이 없습니다.",
+      "subscriptionState": "구독의 현재 상태와 맞지 않는 요청입니다. 새로고침하여 최신 상태를 확인하세요."
+    },
+    "chips": {
+      "installed": "설치됨",
+      "paused": "일시중지됨",
+      "killed": "플랫폼에 의해 중지됨",
+      "healthy": "정상",
+      "degraded": "성능 저하",
+      "error": "오류",
+      "needs_reauth": "다시 로그인이 필요함",
+      "unknown": "아직 확인하지 않음",
+      "needsConsent": "검토할 새 권한 있음",
+      "subscribed": "구독 중",
+      "trialing": "무료 체험",
+      "comped": "무상 제공",
+      "canceling": "갱신하지 않음",
+      "subscriptionEnded": "구독 종료"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "요금제에 포함되지 않음",
+        "message": "요금제에 이 앱이 포함되어 있지 않습니다. 여기에서 내용은 볼 수 있지만, 설치하려면 요금제를 업그레이드해야 합니다."
+      },
+      "moduleDisabled": {
+        "chip": "사용할 수 없음",
+        "message": "이 앱은 현재 설치된 제품에서 꺼져 있는 모듈에 의존합니다."
+      },
+      "limitReached": {
+        "chip": "요금제 한도에 도달함",
+        "message": "요금제에서 허용하는 최대 개수만큼 앱을 설치했습니다. 앱을 하나 삭제하거나 요금제를 업그레이드하세요."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "낮은 위험",
+        "medium": "중간 위험",
+        "high": "높은 위험"
+      },
+      "none": "이 앱은 어떤 권한도 요청하지 않습니다.",
+      "new": "신규",
+      "overall": {
+        "low": {
+          "title": "전반적으로 낮은 위험",
+          "message": "이 앱은 읽기 권한만 요청합니다."
+        },
+        "medium": {
+          "title": "전반적으로 중간 위험",
+          "message": "이 앱은 워크스페이스의 데이터를 읽고 변경할 수 있습니다."
+        },
+        "high": {
+          "title": "전반적으로 높은 위험",
+          "message": "이 앱은 메시지 발송이나 연동 관리 등 사용자를 대신해 작업할 수 있습니다. 개발자를 신뢰할 수 있을 때만 설치하세요."
+        }
+      },
+      "counts": "높음 {high}개, 중간 {medium}개, 낮음 {low}개"
+    },
+    "header": {
+      "title": "마켓플레이스",
+      "subtitle": "미니 앱을 추가하고 외부 서비스를 워크스페이스에 연결하세요.",
+      "tabsLabel": "마켓플레이스 섹션",
+      "moreLabel": "설치됨 및 요청",
+      "tabs": {
+        "mini_app": "미니 앱",
+        "integration": "연동"
+      },
+      "installed": "설치됨",
+      "installedLimit": "설치됨 ({installed}/{limit})",
+      "installedUnlimited": "설치됨 ({installed})",
+      "request": "연동 요청"
+    },
+    "card": {
+      "firstParty": "자체 제작",
+      "pricing": {
+        "free": "무료",
+        "included": "요금제에 포함됨",
+        "monthly": "월 {price}",
+        "subscribed": "구독 중",
+        "notForSale": "판매하지 않음",
+        "paid": "유료 앱",
+        "addOn": "부가 기능",
+        "trial": "{days}일 무료 체험"
+      },
+      "installs": "{count, plural, other {설치 #회}}",
+      "version": "버전 {version}",
+      "cta": {
+        "install": "설치",
+        "manage": "관리",
+        "review": "권한 검토",
+        "killed": "관리",
+        "locked": "자세히 보기",
+        "view": "자세히 보기",
+        "subscribe": "구독하기"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "카테고리",
+      "all": "전체",
+      "shelves": {
+        "featured": "추천",
+        "popular": "인기",
+        "new": "신규"
+      },
+      "searchLabel": "마켓플레이스 검색",
+      "searchPlaceholder": {
+        "mini_app": "미니 앱 검색",
+        "integration": "연동 검색"
+      },
+      "availability": {
+        "label": "표시",
+        "all": "전체",
+        "addons": "사용 가능한 부가 기능",
+        "installed": "설치됨"
+      },
+      "sortLabel": "정렬 기준",
+      "sort": {
+        "featured": "추천",
+        "popular": "설치 많은 순",
+        "new": "최신순",
+        "name": "이름"
+      },
+      "unknownCategory": "이 탭에는 해당 카테고리가 없습니다.",
+      "showAll": "전체 보기",
+      "resultsAll": "전체 앱",
+      "resultsFiltered": "결과",
+      "loadedCount": "{count, plural, other {앱 #개 표시됨}}",
+      "loadMore": "더 보기",
+      "clearFilters": "필터 지우기",
+      "empty": {
+        "search": {
+          "title": "검색 결과가 없습니다",
+          "message": "더 짧은 이름으로 검색하거나 필터를 지워 보세요. 목록에 없다면 아래에서 요청할 수 있습니다."
+        },
+        "addons": {
+          "title": "여기서 구매할 부가 기능이 없습니다",
+          "message": "요금제에 포함되어 있지만 아직 구매하지 않은 부가 기능이 여기에 표시됩니다. 전체를 보려면 전체를 선택하세요."
+        },
+        "installed": {
+          "title": "아직 설치된 항목이 없습니다",
+          "message": "설치한 앱이 여기에 표시됩니다. 전체를 둘러보려면 전체를 선택하세요."
+        },
+        "category": {
+          "title": "이 카테고리에는 아직 항목이 없습니다",
+          "message": "다른 카테고리를 선택하거나 아래에서 필요한 항목을 요청하세요."
+        },
+        "none": {
+          "title": "아직 등록된 항목이 없습니다",
+          "message": "새 앱이 게시되면 여기에 표시됩니다. 아래에서 요청할 수도 있습니다."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "원하는 미니 앱이 없나요?",
+        "integration": "원하는 연동이 없나요?"
+      },
+      "message": "필요한 내용을 알려 주세요. 요청은 집계되며, 요청이 많은 항목부터 먼저 만듭니다.",
+      "action": {
+        "mini_app": "미니 앱 요청",
+        "integration": "연동 요청"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "backToApps": "미니 앱으로 돌아가기",
+      "backToIntegrations": "연동으로 돌아가기",
+      "notFound": {
+        "title": "앱을 찾을 수 없음",
+        "message": "이 앱이 없거나 워크스페이스에서 사용할 수 없습니다.",
+        "integrations": "연동 둘러보기",
+        "apps": "미니 앱 둘러보기"
+      },
+      "kind": {
+        "mini_app": "미니 앱",
+        "integration": "연동"
+      },
+      "firstParty": "자체 제작",
+      "install": "설치",
+      "manage": "관리",
+      "killed": "플랫폼에서 이 앱을 중지했습니다. 삭제만 할 수 있습니다.",
+      "about": "앱 정보",
+      "screenshots": "스크린샷",
+      "screenshotAlt": "{name} 스크린샷 {n}",
+      "permissions": {
+        "title": "접근 가능한 항목",
+        "intro": "설치하기 전에 이 내용을 다시 확인하고 동의해야 합니다."
+      },
+      "setup": {
+        "title": "설정이 필요한 항목",
+        "intro": {
+          "oauth": "연결하려면 해당 서비스에 로그인해야 합니다.",
+          "push": "서비스는 여기에 입력하는 키를 사용해 워크스페이스로 데이터를 보냅니다.",
+          "pull": "여기에 입력하는 키를 사용해 서비스에서 데이터를 가져옵니다.",
+          "email_parse": "서비스가 보내는 알림 이메일을 읽습니다.",
+          "webhook_relay": "데이터를 보내는 도구에 붙여 넣을 웹 주소와 비밀 키가 제공됩니다.",
+          "client": "업무에서 사용하는 곳에 설치하고 본인 계정으로 로그인합니다."
+        },
+        "required": "필수",
+        "optional": "선택",
+        "kind": {
+          "secret": "비공개 보관",
+          "text": "텍스트",
+          "select": "선택 항목"
+        },
+        "noFields": "입력할 항목이 없습니다. 설치 후 연결 정보가 제공됩니다.",
+        "hasSample": "설치 후 샘플 리드를 보내 연결을 확인할 수 있습니다."
+      },
+      "data": {
+        "title": "데이터",
+        "intro": "이 앱이 저장하는 데이터, 저장 위치, 삭제 방법입니다.",
+        "summary": "저장 항목",
+        "regions": "저장 위치",
+        "deletion": "삭제 방법"
+      },
+      "changelog": {
+        "title": "변경 사항",
+        "version": "버전 {version}"
+      },
+      "facts": {
+        "title": "상세 정보",
+        "version": "버전",
+        "connector": "연결 방식",
+        "connectors": {
+          "oauth": "로그인",
+          "push": "데이터를 보냄",
+          "pull": "데이터를 가져옴",
+          "email_parse": "알림 이메일",
+          "webhook_relay": "웹 주소와 비밀 키",
+          "client": "구성원별 설치"
+        },
+        "installs": "설치 수",
+        "developer": "개발자"
+      },
+      "support": {
+        "title": "지원 및 법적 고지",
+        "website": "웹사이트",
+        "docs": "문서",
+        "privacy": "개인정보 처리방침",
+        "terms": "이용약관",
+        "status": "상태 페이지",
+        "email": "이메일 지원"
+      }
+    },
+    "install": {
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "backToApp": "{name} 페이지로 돌아가기",
+      "notFound": {
+        "title": "앱을 찾을 수 없음",
+        "message": "이 앱이 없거나 워크스페이스에서 사용할 수 없습니다."
+      },
+      "alreadyTitle": "이미 설치됨",
+      "alreadyMessage": "{name} 앱은 이미 워크스페이스에 설치되어 있습니다.",
+      "openManage": "열기",
+      "lockedTitle": "{name} 앱이 잠겨 있습니다",
+      "noPermissionTitle": "앱을 설치할 수 없습니다",
+      "noPermissionMessage": "앱을 설치하려면 현재 역할에 없는 권한이 필요합니다.",
+      "title": "{name} 설치",
+      "stepsLabel": "설치 단계",
+      "steps": {
+        "permissions": "권한",
+        "setup": "설정",
+        "done": "완료"
+      },
+      "permissions": {
+        "title": "권한 검토",
+        "intro": "{name} 앱은 아래 권한을 요청합니다. 설치하면 삭제할 때까지 이 권한만 부여됩니다.",
+        "diffSummary": "누락된 권한: {missing, plural, other {#개}}. 표시되지 않은 권한: {unexpected, plural, other {#개}}.",
+        "consent": "이해했으며, 이 앱이 워크스페이스에서 해당 권한을 사용하도록 허용합니다.",
+        "consentNone": "{name} 앱이 어떤 권한도 요청하지 않음을 이해했으며 설치하겠습니다.",
+        "continue": "계속"
+      },
+      "cancel": "취소",
+      "install": "설치",
+      "back": "뒤로",
+      "setup": {
+        "title": "설정",
+        "intro": "이 앱이 연결하는 데 필요한 정보를 입력하세요. 키는 암호화되어 저장되며 다시 조회할 수 없습니다."
+      },
+      "installing": "설치 중",
+      "missingPermissions": "다음 권한이 없습니다:",
+      "seeInstalled": "설치된 앱 보기",
+      "changed": {
+        "title": "확인하는 동안 권한이 변경되었습니다",
+        "message": "아래 목록을 다시 검토하세요. 아무것도 설치되지 않았습니다.",
+        "added": "추가로 요청하는 권한:",
+        "removed": "더 이상 요청하지 않는 권한:",
+        "edited": "일부 권한의 설명이나 위험도가 변경되었습니다."
+      },
+      "gaps": {
+        "title": "이 중 일부 권한은 부여할 수 없을 수 있습니다",
+        "message": "설치로는 설치하는 사람이 가진 권한 이상의 접근 권한이 부여되지 않습니다. 다음 권한이 없는 것으로 보입니다:"
+      },
+      "done": {
+        "title": "{name} 앱이 설치되었습니다",
+        "message": "버전 {version} 활성화됨. 워크스페이스에서 사용 중입니다.",
+        "saved": "저장했습니다. 계속",
+        "manage": "설정 열기",
+        "browse": "마켓플레이스로 돌아가기"
+      },
+      "subscribeTitle": "{name} 앱은 유료 앱입니다",
+      "subscribeIntro": "설치하려면 구독하세요. 첫 달 결제는 결제 페이지에서 진행하며, 체험판이 제공되는 경우 먼저 무료로 사용해 볼 수도 있습니다. 설치하기 전에 권한을 검토하고 확인해야 합니다.",
+      "notForSaleTitle": "{name} 앱은 판매하지 않습니다",
+      "goToCheckout": "결제 페이지로 이동"
+    },
+    "setup": {
+      "optionalLabel": "{label} (선택)",
+      "stored": {
+        "notSet": "설정되지 않음",
+        "endsIn": "저장됨, 끝자리 {last}",
+        "value": "값이 저장되어 있음",
+        "set": "저장됨"
+      },
+      "keepBlank": "저장된 값을 유지하려면 비워 두세요. 새 값을 입력하면 교체됩니다.",
+      "show": "값 표시",
+      "hide": "값 숨기기",
+      "choose": "선택",
+      "clear": "{label} 지우기",
+      "problems": {
+        "required": "{label}: 필수 항목입니다.",
+        "pattern": "{label} 값이 올바르지 않은 것 같습니다.",
+        "option": "{label}의 옵션 중 하나를 선택하세요.",
+        "server": "{label} 값이 허용되지 않았습니다. 값을 확인하세요."
+      }
+    },
+    "reveal": {
+      "title": "연결 비밀 키를 저장하세요",
+      "warning": "이 비밀 키는 다시 표시되지 않습니다. 지금 복사해 안전한 곳에 보관하세요. 분실하면 키를 재발급해 새 키를 받아야 합니다.",
+      "address": "전송할 웹 주소",
+      "secret": "비밀 키",
+      "copyAddress": "웹 주소 복사",
+      "copySecret": "비밀 키 복사",
+      "saved": "비밀 키와 주소를 저장했습니다.",
+      "doneHint": "계속하려면 체크박스를 선택하세요.",
+      "send": {
+        "title": "전송 방법",
+        "post": "해당 주소로 JSON 본문을 담은 POST 요청을 보내세요.",
+        "token": "비밀 키를 {header} 헤더에 넣으세요.",
+        "signature": "또는 비밀 키로 본문에 HMAC-SHA256 서명을 생성하고, {header} 헤더에 sha256= 뒤에 16진수 다이제스트를 붙여 보내세요."
+      },
+      "leaveConfirm": "비밀 키를 저장했는지 확인하지 않았습니다. 지금 나가면 다시 볼 수 없습니다. 그래도 나가시겠습니까?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "베타",
+        "needsPortalSetup": "포털 설정 필요",
+        "betaHint": "포털의 일부 문서를 바탕으로 만들었습니다. 작동하지만 첫 실제 리드를 받은 후 조정이 필요할 수 있습니다.",
+        "needsPortalSetupHint": "포털 측 담당자가 활성화하기 전까지는 아무것도 수신되지 않습니다."
+      },
+      "reveal": {
+        "title": "비공개 주소를 저장하세요",
+        "warning": "이 주소는 다시 표시되지 않습니다. 또한 이 주소가 연결의 비밀번호 역할을 하므로, 주소를 가진 사람은 누구든 워크스페이스로 리드를 보낼 수 있습니다. 지금 복사해 안전한 곳에 보관하세요. 분실하면 새 주소를 만드세요. 이전 주소는 그때부터 작동하지 않습니다.",
+        "address": "비공개 주소",
+        "copyAddress": "비공개 주소 복사",
+        "saved": "주소를 저장했습니다.",
+        "sendTitle": "발신 측에 필요한 정보",
+        "method": "메서드: {methods}",
+        "formats": "허용 형식: {formats}",
+        "noHeader": "그 밖에 필요한 것은 없습니다. 헤더와 서명도 필요 없습니다. 주소의 마지막 부분이 비밀번호입니다.",
+        "managerTitle": "포털의 계정 담당자에게 보내세요",
+        "managerIntro": "이 기능은 사용자가 아니라 {portal} 측 팀이 활성화합니다. 준비된 메시지를 복사해 해당 계정 담당자에게 보내세요.",
+        "copyMessage": "포털 계정 담당자에게 보낼 메시지 복사",
+        "messageCopied": "메시지가 복사됨",
+        "portalFallback": "포털"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "폼 필드",
+        "xml": "XML",
+        "query": "쿼리 문자열 매개변수"
+      },
+      "message": {
+        "subjectLine": "제목: {portal} 계정의 리드 전송 주소",
+        "body": "안녕하세요,\n\n{portal} 계정의 리드를 아래 비공개 주소로 보내 주시기 바랍니다:\n\n{address}\n\n각 리드는 {methods} 방식으로 보내 주세요. 세부 정보는 {formats} 형식으로 받을 수 있습니다. 이 주소가 이미 저희 계정을 식별하므로 헤더, 비밀번호, 서명은 필요하지 않습니다. 비공개로 관리해 주세요.\n\n활성화되면 테스트 리드를 한 건 보내 주셔서 정상 수신되는지 확인할 수 있도록 해 주세요.\n\n감사합니다."
+      },
+      "connection": {
+        "nextPoll": "다음 확인",
+        "notScheduled": "예약되지 않음",
+        "syncedThrough": "리드 가져오기 완료 시점",
+        "syncedNever": "아직 가져온 항목 없음",
+        "errorHint": "인증 정보에서 키를 다시 입력하거나 지금 동기화를 누르세요.",
+        "errorHintNoSync": "인증 정보에서 키를 다시 입력하세요.",
+        "rotatePath": "새 주소 만들기",
+        "rotatePathConfirm": {
+          "title": "새 주소를 만드시겠습니까?",
+          "message": "새 비공개 주소가 생성되며 이전 주소는 즉시 작동하지 않습니다. 포털 팀에 새 주소를 전달하기 전까지 이전 주소로 보내는 데이터는 거부됩니다. 새 주소는 한 번만 표시됩니다.",
+          "confirm": "새 주소 만들기"
+        },
+        "waiting": {
+          "title": "{portal}의 첫 리드를 기다리는 중",
+          "message": "{portal} 측 팀이 활성화해야 합니다. 연결 주소로 전송이 시작되기 전까지는 아무것도 수신되지 않습니다. 담당자에게 주소가 전달되었는지 확인하고, 테스트 리드를 요청하세요."
+        },
+        "path": {
+          "address": "비공개 주소",
+          "maskedNote": "주소의 마지막 부분이 비밀번호입니다. 설치하거나 새 주소를 만들 때 한 번만 표시되므로 여기에는 끝부분만 보입니다.",
+          "method": "메서드: {methods}",
+          "formats": "허용 형식: {formats}",
+          "noHeader": "헤더나 서명은 필요하지 않습니다. 주소가 비밀번호이므로 비공개로 관리하세요.",
+          "newAddressHint": "주소를 분실했거나 다른 사람의 사용을 막고 싶으신가요? 아래에서 새 주소를 만드세요. 이전 주소는 즉시 작동을 멈추며, 포털 팀에 새 주소를 전달해야 합니다."
+        }
+      },
+      "sync": {
+        "button": "지금 동기화",
+        "needsActive": "지금 동기화하려면 앱을 재개하세요.",
+        "scheduledNow": "동기화가 예약되었습니다. 바로 시작됩니다.",
+        "scheduled": "{time}에 동기화가 예약되었습니다.",
+        "waits": "포털은 {interval}마다 한 번의 요청만 허용하므로, 이 동기화는 그때까지 기다려야 합니다.",
+        "duration": {
+          "seconds": "{count, plural, other {#초}}",
+          "minutes": "{count, plural, other {#분}}",
+          "hours": "{count, plural, other {#시간}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "설치됨",
+      "filters": {
+        "kind": "유형",
+        "status": "상태",
+        "all": "전체"
+      },
+      "kind": {
+        "mini_app": "미니 앱",
+        "integration": "연동"
+      },
+      "status": {
+        "active": "설치됨",
+        "disabled": "일시 중지",
+        "killed": "플랫폼에서 중지됨"
+      },
+      "listLabel": "설치된 앱",
+      "emptyFiltered": {
+        "title": "이 필터에 맞는 항목이 없습니다",
+        "message": "필터를 변경하여 다른 설치된 앱을 확인하세요."
+      },
+      "empty": {
+        "title": "아직 설치된 앱이 없습니다",
+        "message": "마켓플레이스에서 미니 앱을 추가하거나 서비스를 연결하세요.",
+        "integrations": "연동 둘러보기",
+        "apps": "미니 앱 둘러보기"
+      },
+      "usage": {
+        "unlimited": "{installed}개 설치됨. 요금제에 설치 제한이 없습니다.",
+        "of": "{limit}개 중 {installed}개 설치됨",
+        "remaining": "{count, plural, other {#자리 남음}}",
+        "atCap": "요금제 한도에 도달했습니다. 다른 앱을 설치하려면 앱을 삭제하거나 요금제를 업그레이드하세요.",
+        "upgrade": "요금제 보기 및 업그레이드",
+        "nearCap": "요금제 한도에 가까워지고 있습니다."
+      },
+      "version": "버전 {version}",
+      "killReason": "사유: {reason}",
+      "lastError": "마지막 오류: {error}",
+      "installedOn": "{date} 설치됨",
+      "review": "검토",
+      "manage": "관리",
+      "subscriptions": {
+        "title": "구독",
+        "intro": "유료 앱과 체험판 목록입니다. 삭제된 앱이라도 유료 기간이 남아 있으면 포함됩니다.",
+        "listLabel": "구독",
+        "manage": "관리",
+        "viewApp": "앱 보기"
+      },
+      "pending": "버전 {version}: 새 권한 동의가 필요합니다."
+    },
+    "manage": {
+      "backToInstalled": "설치됨으로 돌아가기",
+      "notFound": {
+        "title": "설치 항목을 찾을 수 없음",
+        "message": "이 앱은 워크스페이스에 설치되어 있지 않거나 삭제되었습니다."
+      },
+      "version": "버전 {version}",
+      "checkedAt": "마지막 확인: {date}",
+      "notChecked": "아직 확인하지 않았습니다. 연결 테스트로 확인하세요.",
+      "lastError": "마지막 오류: {error}",
+      "viewListing": "목록 보기",
+      "resume": "재개",
+      "pause": "일시 중지",
+      "toast": {
+        "resumed": "앱을 재개했습니다.",
+        "paused": "앱을 일시 중지했습니다.",
+        "consented": "새 권한에 동의했습니다. 현재 사용 버전: {version}",
+        "uninstalled": "{name} 앱을 삭제했습니다."
+      },
+      "killed": {
+        "title": "플랫폼에서 중지됨",
+        "message": "이 앱은 모든 사용자에게 중지되었습니다. 삭제만 할 수 있습니다.",
+        "reason": "사유: {reason}"
+      },
+      "paused": {
+        "title": "일시 중지",
+        "message": "일시 중지된 앱은 동작하지 않으며, 재개할 때까지 웹 주소가 데이터 전송을 거부합니다."
+      },
+      "permissions": {
+        "title": "부여된 권한",
+        "intro": "이 앱이 현재 워크스페이스에서 할 수 있는 작업입니다."
+      },
+      "reconsent": {
+        "title": "새 권한 요청: 버전 {version}",
+        "message": "버전 {version}의 권한에 동의하기 전까지 이 앱은 버전 {current}에서 계속 실행됩니다.",
+        "newScopes": "새 권한",
+        "fullList": "새 버전의 전체 권한 목록",
+        "accept": "새 권한 수락"
+      },
+      "problem": {
+        "conflictTitle": "그사이 변경됨",
+        "conflictMessage": "다른 사용자가 이 앱을 변경했습니다. 새로고침하여 최신 상태를 확인한 후 다시 변경하세요.",
+        "reload": "새로고침",
+        "consentTitle": "권한이 변경됨",
+        "consentMessage": "이 페이지를 연 이후 권한 목록이 변경되었습니다. 새로고침하여 현재 목록을 확인하세요."
+      },
+      "credentials": {
+        "title": "인증 정보 및 설정",
+        "intro": "입력하면 저장된 값이 대체됩니다. 저장된 값을 유지하려면 필드를 비워 두세요. 저장된 키는 다시 표시되지 않습니다.",
+        "readOnly": "이 앱에 저장된 항목입니다. 키는 표시되지 않습니다.",
+        "saved": "설정이 저장되었습니다.",
+        "nothingToSave": "아직 저장할 내용이 없습니다.",
+        "save": "변경 사항 저장",
+        "missing": "필수 항목을 입력하세요.",
+        "invalid": "일부 값이 허용되지 않았습니다."
+      },
+      "connection": {
+        "title": "연결",
+        "intro": "이 앱이 워크스페이스와 통신하는 방식과 현재 상태입니다.",
+        "type": "유형",
+        "types": {
+          "oauth": "로그인",
+          "push": "데이터 수신",
+          "pull": "데이터 가져오기",
+          "email_parse": "알림 이메일",
+          "webhook_relay": "웹 주소와 비밀 키",
+          "client": "구성원별 설치"
+        },
+        "status": "연결 상태",
+        "statuses": {
+          "active": "활성",
+          "paused": "일시 중지",
+          "error": "오류",
+          "disabled": "꺼짐"
+        },
+        "pollEvery": "확인 주기",
+        "seconds": "{count, plural, other {#초}}",
+        "lastEvent": "마지막 전송",
+        "lastSuccess": "마지막 성공",
+        "lastError": "마지막 오류",
+        "never": "없음",
+        "counters": {
+          "received": "수신",
+          "accepted": "승인됨",
+          "duplicates": "중복",
+          "failed": "실패"
+        },
+        "inbound": {
+          "address": "전송할 웹 주소",
+          "copyAddress": "웹 주소 복사",
+          "method": "JSON 본문을 담아 POST 요청을 보내세요.",
+          "token": "{header} 헤더에 비밀 키를 넣으세요.",
+          "signature": "또는 HMAC-SHA256으로 본문에 서명하고, {header} 헤더에 sha256= 뒤에 16진수 다이제스트를 붙여 보내세요.",
+          "secretEndsIn": "비밀 키 끝자리는 {last}입니다. 다시 표시할 수 없습니다.",
+          "secretSet": "비밀 키가 설정되어 있습니다. 다시 표시할 수 없습니다."
+        },
+        "actions": {
+          "test": "연결 테스트",
+          "sample": "샘플 리드 보내기",
+          "rotate": "비밀 키 재발급",
+          "sampleNeedsActive": "샘플 리드를 보내려면 앱을 재개하세요.",
+          "testOk": "연결이 정상입니다.",
+          "testFailed": "연결 테스트에 실패했습니다.",
+          "latency": "{ms}ms",
+          "sampleAccepted": "샘플 리드가 승인되어 실제 리드로 등록되었습니다.",
+          "sampleDuplicate": "이 샘플 리드는 이미 수신되었습니다.",
+          "rotatedDone": "저장했습니다. 계속",
+          "rotateNotApplicable": "이 연결의 비밀 키는 다른 서비스의 키입니다. 대신 인증 정보 및 설정에서 변경하세요.",
+          "rotateConfirm": {
+            "title": "연결 비밀 키를 재발급하시겠습니까?",
+            "message": "새 비밀 키가 생성되며 이전 키는 즉시 작동하지 않습니다. 새 키를 전달하기 전까지 이전 키로 보내는 데이터는 거부됩니다. 새 키는 한 번만 표시됩니다.",
+            "confirm": "비밀 키 재발급",
+            "cancel": "취소"
+          }
+        }
+      },
+      "events": {
+        "title": "최근 전송 내역",
+        "intro": "이 연결이 받은 최근 항목을 최신순으로 표시합니다.",
+        "refresh": "새로고침",
+        "empty": {
+          "title": "아직 전송 내역이 없습니다",
+          "message": "다른 서비스가 데이터를 보내거나 샘플 리드를 보내면 여기에 표시됩니다."
+        },
+        "columns": {
+          "received": "수신",
+          "status": "결과",
+          "externalId": "전송 ID",
+          "error": "사유"
+        },
+        "status": {
+          "accepted": "승인됨",
+          "duplicate": "중복",
+          "rejected": "거부됨",
+          "failed": "실패"
+        },
+        "loadMore": "더 보기"
+      },
+      "pauseConfirm": {
+        "title": "{name} 앱을 일시 중지하시겠습니까?",
+        "message": "재개할 때까지 작동하지 않으며, 그 동안 웹 주소는 데이터 전송을 거부합니다.",
+        "confirm": "일시 중지",
+        "cancel": "취소"
+      },
+      "uninstall": {
+        "section": "삭제",
+        "sectionIntro": "워크스페이스에서 이 앱을 제거합니다.",
+        "open": "삭제",
+        "title": "{name} 앱을 삭제하시겠습니까?",
+        "confirm": "삭제",
+        "cancel": "취소",
+        "effect": "접근 권한이 즉시 종료됩니다.",
+        "effectConnection": "접근 권한이 즉시 종료되며, 웹 주소도 응답하지 않습니다.",
+        "dataLegend": "앱이 만든 데이터는 어떻게 할까요?",
+        "choices": {
+          "keep": {
+            "label": "만든 데이터 유지",
+            "help": "앱이 추가한 연락처와 기록은 워크스페이스에 남습니다."
+          },
+          "delete": {
+            "label": "만든 데이터 삭제",
+            "help": "요청을 기록하고 해당 데이터를 관리하는 제품 영역에 알립니다."
+          }
+        },
+        "honestNote": "현재는 어떤 옵션을 선택하든 이 앱이 이미 만든 연락처는 워크스페이스에 남습니다. 선택 내용은 데이터를 삭제할 영역을 위해 기록됩니다.",
+        "irreversible": "이 작업은 되돌릴 수 없습니다. 앱을 다시 사용하려면 다시 설치하세요.",
+        "renewal": {
+          "title": "이 앱은 유료 구독 중입니다",
+          "message": "삭제하면 자동 갱신이 중지되어 더 이상 요금이 청구되지 않습니다. 이미 결제한 기간은 그대로 유지되므로, 기간이 끝나기 전에는 추가 비용 없이 다시 설치할 수 있습니다.",
+          "messageUntil": "삭제하면 자동 갱신이 중지되어 더 이상 요금이 청구되지 않습니다. 이미 결제한 기간은 {date}까지 유지되므로, 그 전에는 추가 비용 없이 다시 설치할 수 있습니다."
+        }
+      },
+      "subscription": {
+        "title": "구독",
+        "subscribeTitle": "{name} 앱을 계속 사용하려면 구독하세요",
+        "subscribeIntro": "유료 앱이며 워크스페이스에 아직 구독이 없습니다.",
+        "included": "요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다."
+      },
+      "subscriptionEnded": {
+        "title": "구독 종료",
+        "message": {
+          "resubscribe": "{name} 앱은 구독이 종료되어 일시 중지되었습니다. 데이터와 설정은 유지됩니다. 다시 켜려면 구독하세요.",
+          "notForSale": "{name} 앱은 구독이 종료되어 일시 중지되었으며, 더 이상 판매되지 않아 다시 켤 수 없습니다. 데이터와 설정은 유지됩니다.",
+          "resumable": "{name} 앱은 구독이 종료되어 일시 중지되었지만, 워크스페이스에서 다시 사용할 수 있습니다. 재개하여 다시 켜세요."
+        },
+        "resubscribe": "다시 구독하기",
+        "resume": "재개",
+        "noCheckout": "지금은 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요."
+      }
+    },
+    "requests": {
+      "title": "요청",
+      "form": {
+        "title": "요청하기",
+        "intro": "목록에 없나요? 필요한 내용을 알려 주세요. 누군가 이미 요청했다면 여러분의 요청은 투표로 집계됩니다.",
+        "name": "이름",
+        "namePlaceholder": "예: 서비스 이름",
+        "kind": "유형",
+        "kinds": {
+          "mini_app": "미니 앱",
+          "integration": "연동"
+        },
+        "category": "카테고리",
+        "categoryHint": "선택 사항입니다.",
+        "anyCategory": "잘 모르겠음",
+        "website": "웹사이트",
+        "websiteHint": "선택 사항입니다. 전체 https:// 주소를 입력하세요.",
+        "note": "어떤 용도로 필요하신가요?",
+        "noteHint": "플랫폼 팀에만 표시됨",
+        "problems": {
+          "nameShort": "2자 이상 입력하세요.",
+          "nameLong": "80자 이하로 입력하세요.",
+          "websiteInvalid": "전체 https:// 주소를 입력하세요.",
+          "noteLong": "500자 이하로 입력하세요.",
+          "server": "허용되지 않았습니다. 값을 확인하세요."
+        },
+        "result": {
+          "created": {
+            "title": "요청이 추가되었습니다: {name}",
+            "message": "감사합니다. 이제 다른 워크스페이스도 이 요청에 투표할 수 있습니다."
+          },
+          "counted": {
+            "title": "이미 {name} 요청이 있습니다",
+            "message": "요청이 해당 항목의 투표로 집계되었습니다."
+          }
+        },
+        "submit": "요청 보내기"
+      },
+      "list": {
+        "title": "다른 사용자의 요청",
+        "intro": "원하는 항목에 투표하세요. 요청이 많은 항목부터 먼저 만듭니다.",
+        "searchLabel": "요청 검색",
+        "searchPlaceholder": "요청 검색",
+        "kind": "유형",
+        "allKinds": "전체 유형",
+        "kinds": {
+          "mini_app": "미니 앱",
+          "integration": "연동"
+        },
+        "status": "상태",
+        "allStatuses": "전체 상태",
+        "statuses": {
+          "open": "접수됨",
+          "planned": "계획됨",
+          "building": "개발 중",
+          "shipped": "출시됨",
+          "declined": "거절됨"
+        },
+        "sort": "정렬 기준",
+        "sorts": {
+          "votes": "투표 많은 순",
+          "new": "최신순"
+        },
+        "emptyFiltered": {
+          "title": "일치하는 요청이 없습니다",
+          "message": "필터를 변경하거나 직접 요청하세요."
+        },
+        "empty": {
+          "title": "아직 요청이 없습니다",
+          "message": "처음으로 요청해 보세요."
+        },
+        "loadMore": "더 보기",
+        "votes": "{count, plural, other {투표 #개}}",
+        "voted": "투표함",
+        "vote": "투표"
+      }
+    },
+    "pricing": {
+      "title": "가격",
+      "freeNote": "설치와 사용에 비용이 들지 않습니다.",
+      "included": {
+        "planFeature": "요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다.",
+        "minPlan": "현재 요금제 또는 상위 요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다.",
+        "plan": "요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다."
+      },
+      "needsPurchase": "요금제 카탈로그에 포함되어 있습니다. 사용하려면 구매하세요.",
+      "subscribedNote": "워크스페이스가 이 앱을 구독 중입니다.",
+      "trialOffer": "{days, plural, other {#일}} 동안 무료로 체험해 보세요. 구독을 선택하기 전까지는 요금이 청구되지 않습니다.",
+      "prepaidNote": "워크스페이스 결제를 통해 매월 청구됩니다. 각 결제는 한 달 이용권이며 자동으로 청구되지 않습니다. 앱을 계속 사용하려면 표시된 날짜 전에 다시 결제하세요.",
+      "notForSale": {
+        "title": "판매하지 않음",
+        "message": "현재 이 앱은 신규 구독자에게 판매하지 않습니다."
+      }
+    },
+    "subscribe": {
+      "subscribe": "구독하기",
+      "startTrial": "{days}일 무료 체험 시작",
+      "hintPrice": "월 {price}, 결제 시 지불됩니다. 각 결제는 한 달 이용권입니다.",
+      "hint": "결제 시 한 달 단위로 결제합니다.",
+      "working": "처리 중",
+      "noCheckout": "지금은 이 앱의 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요.",
+      "toast": {
+        "trial_started": "{name} 무료 체험이 시작되었습니다.",
+        "included": "{name} 앱은 요금제에 포함되어 있습니다.",
+        "already_entitled": "워크스페이스는 이미 {name}에 접근할 수 있습니다.",
+        "free": "{name} 앱은 무료입니다."
+      }
+    },
+    "subscription": {
+      "title": "구독",
+      "status": {
+        "active": "활성",
+        "trialing": "무료 체험",
+        "comped": "무상 제공",
+        "canceling": "갱신하지 않음",
+        "ended": "종료됨"
+      },
+      "date": {
+        "paidUntil": "{date}까지 결제됨",
+        "trialEnds": "무료 체험 종료일: {date}",
+        "compUntil": "{date}까지 무상 이용",
+        "compOpen": "무상 이용, 종료일 없음",
+        "cancelingUntil": "갱신하지 않음. {date}까지 사용 가능",
+        "endedOn": "{date}에 구독 종료",
+        "endedNoDate": "구독 종료"
+      },
+      "lastPayment": "마지막 결제: 월 {price}",
+      "nextPayment": "이 앱의 가격이 변경되었습니다. 다음 결제 금액은 월 {price}입니다.",
+      "compNote": "플랫폼 팀이 부여한 이용 권한입니다. 여기서는 취소할 수 없습니다.",
+      "renewHint": "유료 기간은 자동으로 갱신되지 않습니다. 중단 없이 앱을 계속 사용하려면 표시된 날짜 전에 갱신하세요.",
+      "actions": {
+        "renew": "지금 갱신",
+        "resubscribe": "다시 구독하기",
+        "subscribe": "지금 구독하기",
+        "resume": "구독 재개",
+        "cancel": "구독 취소"
+      },
+      "cancelConfirm": {
+        "title": "{name} 구독을 취소하시겠습니까?",
+        "message": "{name} 앱은 {date}까지 사용 가능하며 이후 일시 중지됩니다. 데이터와 설정은 유지됩니다.",
+        "messageNoDate": "{name} 앱은 결제한 기간이 끝날 때까지 사용 가능하며 이후 일시 중지됩니다. 데이터와 설정은 유지됩니다.",
+        "afterwards": "더 이상 요금이 청구되지 않으며, 언제든 다시 구독할 수 있습니다.",
+        "confirm": "구독 취소",
+        "keep": "구독 유지"
+      },
+      "toast": {
+        "canceled": "구독이 취소되었습니다. {date}까지 사용할 수 있습니다.",
+        "canceledNoDate": "구독이 취소되었습니다. 결제한 기간이 끝날 때까지 사용할 수 있습니다.",
+        "resumed": "구독이 재개되었습니다."
+      },
+      "working": "처리 중",
+      "noCheckout": "지금은 이 앱의 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요."
+    }
+  }
+}

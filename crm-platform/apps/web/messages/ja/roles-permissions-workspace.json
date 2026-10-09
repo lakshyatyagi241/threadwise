@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "チームメンバー",
+      "roles": "ロール"
+    },
+    "common": {
+      "settings": "設定",
+      "breadcrumb": "パンくず",
+      "loading": "読み込み中…",
+      "retry": "再試行",
+      "requestId": "リクエストID",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "dismiss": "閉じる",
+      "required": "この項目は必須です。",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示",
+      "noAccess": {
+        "title": "アクセス権がありません",
+        "body": "お使いのロールには、この画面に必要な権限が含まれていません。ワークスペースの所有者または管理者に付与を依頼してください。",
+        "bodyWithKey": "この画面には権限「{permission}」が必要です。ワークスペースの所有者または管理者に、いずれかのロールへの追加を依頼してください。",
+        "back": "ワークスペースに戻る"
+      }
+    },
+    "blurb": {
+      "owner": "所有者：請求を含むすべての操作。",
+      "admin": "管理者：ワークスペースへのフルアクセス（請求を除く）。",
+      "manager": "マネージャー：すべてを閲覧でき、割り当てと解決が可能。",
+      "agent": "エージェント：割り当てられた会話を対応。",
+      "viewer": "閲覧者：閲覧のみ。"
+    },
+    "errors": {
+      "unexpected": "システム側で問題が発生しました。もう一度お試しください。解決しない場合は、リクエストIDをお伝えください。",
+      "request": "リクエストを完了できませんでした。",
+      "validation": "フォームを確認して、もう一度お試しください。",
+      "passwordPolicy": "このパスワードはワークスペースのパスワードポリシーを満たしていません：",
+      "validationField": "この項目を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "conflict": "編集中に他のユーザーがこの内容を変更しました。再読み込みして最新版を確認し、変更を再度適用してください。",
+      "grantRole": "この操作はできません。そのロール（またはメンバーの現在のロール）は、お客様のロールより上位です。所有者と管理者の付与、変更、無効化は所有者のみが行えます。",
+      "grantPermission": "権限「{permission}」は付与できません。お客様自身がその権限を持っていません。",
+      "selfRoleChange": "ご自身のロールは変更できません。",
+      "lastOwner": "ワークスペースには所有者が少なくとも1人必要です。先に別のユーザーを所有者に設定してください。",
+      "selfDeactivate": "ご自身のアカウントを無効にすることはできません。",
+      "presetRole": "所有者、管理者、マネージャー、エージェント、閲覧者は事前設定のロールのため、名前の変更や削除はできません。",
+      "roleInUse": "このロールはまだメンバーに割り当てられています。先に別のロールに移動してから削除してください。",
+      "nameTaken": "同じ名前のロールが既に存在します。",
+      "nameRequired": "ロール名は必須です。",
+      "nameTooLong": "ロール名は{max}文字以内で入力してください。",
+      "notFound": "この項目はもう存在しません。削除された可能性があります。"
+    },
+    "team": {
+      "crumb": "チームメンバー",
+      "eyebrow": "設定 · チーム",
+      "titleLead": "チーム",
+      "titleAccent": "メンバー",
+      "description": "このワークスペースにユーザーを追加し、それぞれができることを選択します。メンバーが退任したら、アクセスをオフにできます。",
+      "addMember": "メンバーを追加",
+      "reload": "再読み込み",
+      "you": "あなた",
+      "noRole": "ロールなし",
+      "changeRoleAction": "ロールを変更",
+      "reactivate": "再有効化",
+      "selfRoleHint": "ご自身のロールは変更できません。",
+      "roleLockedHint": "このメンバーのロールは変更できません。お客様より上位のロールか、ロールを割り当てる権限がありません。",
+      "selfDeactivateHint": "ご自身のアカウントを無効にすることはできません。",
+      "rolesUnavailable": "ロールを読み込めなかったため、メンバーの追加とロールの変更はできません。ロールのチップは表示中のメンバーから作成されます。",
+      "footer": "{total}件中{shown}件を表示",
+      "status": {
+        "active": "有効",
+        "inactive": "無効"
+      },
+      "filter": {
+        "label": "ロールでメンバーを絞り込む",
+        "all": "すべて",
+        "preset": {
+          "owner": "所有者",
+          "admin": "管理者",
+          "manager": "マネージャー",
+          "agent": "エージェント",
+          "viewer": "閲覧者"
+        }
+      },
+      "search": {
+        "label": "メンバーを検索",
+        "placeholder": "名前またはメールアドレスで検索…"
+      },
+      "table": {
+        "caption": "ワークスペースのメンバー",
+        "member": "メンバー",
+        "roles": "ロール",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "empty": {
+        "none": "メンバーはまだいません。",
+        "noMatch": "このフィルターに一致するメンバーはいません。",
+        "clear": "フィルターをクリア"
+      },
+      "toasts": {
+        "added": "{name}をワークスペースに追加しました。",
+        "rolesUpdated": "{name}のロールを更新しました。",
+        "deactivated": "{name}を無効にしました。",
+        "reactivated": "{name}を再有効化しました。"
+      },
+      "deactivate": {
+        "action": "無効化",
+        "title": "メンバーを無効化",
+        "message": "{name}はサインインできなくなります。いつでも再有効化できます。",
+        "confirm": "無効化",
+        "cancel": "キャンセル"
+      },
+      "add": {
+        "eyebrow": "チーム",
+        "title": "メンバーを追加",
+        "fullName": "氏名",
+        "email": "メールアドレス",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "password": "パスワード",
+        "passwordHint": "8文字以上。本人に共有してください。サインイン後に変更できます。",
+        "passwordGenerated": "生成されたパスワードです。目のボタンで表示し、保存前にコピーしてください。",
+        "passwordShort": "パスワードは8文字以上にしてください。",
+        "generate": "生成",
+        "role": "ロール",
+        "submit": "メンバーを追加"
+      },
+      "changeRole": {
+        "title": "{name}のロールを変更",
+        "legend": "ロール",
+        "keptRole": "{name}は維持されます。お客様はこのロールを付与したり取り除いたりできません。",
+        "atLeastOne": "ロールを1つ以上選択してください。",
+        "save": "ロールを保存",
+        "reload": "再読み込み"
+      }
+    },
+    "list": {
+      "crumb": "ロール",
+      "eyebrow": "設定 · チーム · ロール",
+      "titleLead": "ロールと",
+      "titleAccent": "権限",
+      "description": "ロールによって、メンバーができることが決まります。事前設定から選ぶか、権限マトリクスからカスタムロールを作成してください。",
+      "teamLink": "チームメンバー",
+      "addRole": "ロールを追加",
+      "empty": "ロールはまだありません。",
+      "preset": "事前設定",
+      "custom": "カスタム",
+      "locked": "ロック済み",
+      "footer": "ロール{count}件",
+      "membersLink": "{name}のメンバーは{count}人",
+      "table": {
+        "caption": "ワークスペースのロール",
+        "name": "ロール",
+        "type": "種類",
+        "members": "メンバー",
+        "permissions": "権限",
+        "lastEdited": "最終更新",
+        "actions": "操作"
+      },
+      "row": {
+        "menu": "{name}の操作",
+        "edit": "ロールを編集",
+        "view": "ロールを表示",
+        "delete": "ロールを削除"
+      },
+      "toasts": {
+        "deleted": "ロール「{name}」を削除しました。"
+      }
+    },
+    "editor": {
+      "crumbRoles": "ロール",
+      "crumbNew": "新しいロール",
+      "eyebrowNew": "設定 · ロール · 新規",
+      "eyebrowEdit": "設定 · ロール · 編集",
+      "titleLead": "作成",
+      "titleAccent": "ロール",
+      "description": "ロール名を入力し、できることを選択してください。",
+      "summary": "{count, plural, =0 {このロールのメンバーはいません。} other {このロールのメンバーは#人です。}}",
+      "notFoundTitle": "ロールが見つかりません",
+      "notFoundBody": "このロールはもう存在しません。削除された可能性があります。",
+      "backToRoles": "ロールに戻る",
+      "back": "戻る",
+      "save": "変更を保存",
+      "create": "ロールを作成",
+      "saving": "保存中…",
+      "reload": "再読み込み",
+      "discard": "保存されていない変更があります。保存せずに離れますか？",
+      "lockedNotice": "所有者ロールはすべての権限を持つため、変更や削除はできません",
+      "adminNotice": "管理者ロールの権限を変更できるのは所有者のみです。",
+      "readOnlyNotice": "このロールの権限は変更できません。",
+      "details": "ロールの詳細",
+      "name": "ロール名",
+      "namePlaceholder": "例：サポートリーダー",
+      "presetNameHint": "事前設定のロールは名前が固定されています。",
+      "template": "ロールから開始",
+      "templateHint": "別のロールの権限を下のマトリクスにコピーします。",
+      "templateBlank": "空（権限なし）",
+      "templateOption": "{name}（権限{count}件）",
+      "danger": {
+        "title": "このロールを削除",
+        "hint": "このロールを持つユーザーはいないため、削除できます。",
+        "inUse": "{count, plural, other {このロールのメンバーが#人残っています。}} 先に別のロールに移動してください。",
+        "action": "ロールを削除"
+      },
+      "toasts": {
+        "created": "ロール「{name}」を作成しました。",
+        "updated": "ロール「{name}」を更新しました。",
+        "deleted": "ロール「{name}」を削除しました。"
+      }
+    },
+    "matrix": {
+      "title": "権限",
+      "counter": "{count} / {total}件を選択中",
+      "deniedCount": "{count}件を拒否",
+      "selectAll": "すべて選択",
+      "selectAllCategory": "すべて選択",
+      "selectAllOf": "{category}をすべて選択",
+      "search": "権限を検索…",
+      "searchLabel": "権限を検索",
+      "denyHint": "拒否が許可より優先されます。メンバーの別のロールで許可されていても、拒否された権限は付与されません。",
+      "emptyCatalogue": "利用可能な権限はありません。",
+      "noMatch": "「{query}」に一致する権限はありません。",
+      "allow": "許可",
+      "deny": "拒否",
+      "effectLabel": "許可または拒否：{label}",
+      "scopeLabel": "レコードの範囲：{label}",
+      "needsPlan": "{feature}プランが必要",
+      "needsApp": "アプリ{app}のインストールが必要",
+      "lockedHint": "この権限はまだこのワークスペースでは利用できません。プランの機能が有効になるか、アプリがインストールされると利用可能になります。",
+      "scope": {
+        "all": "すべてのレコード",
+        "team": "チームのレコード",
+        "own": "自分のレコード"
+      }
+    },
+    "delete": {
+      "title": "ロールを削除",
+      "message": "ロール「{name}」を削除しますか？ この操作は元に戻せません。",
+      "confirm": "ロールを削除",
+      "cancel": "キャンセル",
+      "inUseTitle": "「{name}」は使用中です",
+      "inUse": "{count, plural, =0 {このロールはまだメンバーに割り当てられています。} other {このロールのメンバーが#人残っています。}} 先に別のロールに移動してから削除してください。",
+      "viewMembers": "このロールのメンバーを表示"
+    }
+  }
+}

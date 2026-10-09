@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "Ayarlar",
+    "breadcrumb": "Gezinti yolu",
+    "backToSettings": "Ayarlara dön",
+    "sectionsLabel": "Ayar bölümleri",
+    "searchLabel": "Ayarlarda ara",
+    "searchPlaceholder": "Ayarlarda ara",
+    "searchHint": "Her ayarı ada ya da anahtar kelimeye göre filtrelemek için yazın. Temizlemek için Escape, sonuçlara geçmek için aşağı ok tuşuna basın.",
+    "clearSearch": "Aramayı temizle",
+    "results": {
+      "title": "{count, plural, other {“{query}” ile eşleşen # ayar}}",
+      "status": "{count, plural, =0 {Sonuç yok} other {# sonuç}}"
+    },
+    "noResults": {
+      "title": "“{query}” ile eşleşen ayar yok",
+      "message": "Yazımı kontrol edin ya da “vergi”, “ekip” veya “WhatsApp” gibi daha geniş bir kelime deneyin."
+    },
+    "emptySection": {
+      "title": "Burada ayarlanacak bir şey yok",
+      "message": "Bu bölümdeki ayarların hiçbiri rolünüz için kullanılabilir değil."
+    },
+    "inSection": "{section} bölümünde",
+    "soon": "Yakında",
+    "upgrade": "Yükselt",
+    "comingSoon": "Yakında geliyor",
+    "sections": {
+      "channels": {
+        "title": "Kanallar",
+        "description": "Müşterilerinizin size mesaj gönderdiği yerleri bağlayın."
+      },
+      "data": {
+        "title": "Veri ve özelleştirme",
+        "description": "Kişilerin, fırsatların ve konuşmaların nasıl tanımlanacağını belirleyin."
+      },
+      "business": {
+        "title": "İşletme ve faturalandırma",
+        "description": "Şirket bilgileriniz, vergileriniz, planınız ve ödemeleriniz."
+      },
+      "people": {
+        "title": "Ekip ve izinler",
+        "description": "Çalışma alanınızda kimin neler yapabileceği."
+      },
+      "automation": {
+        "title": "Otomasyon ve AI",
+        "description": "Yanıtlar, randevular, web sitesi widget'ı ve AI."
+      },
+      "integrations": {
+        "title": "Entegrasyonlar ve geliştirici",
+        "description": "Diğer araçları bağlayın ve ürünü genişletin."
+      },
+      "security": {
+        "title": "Veri ve güvenlik",
+        "description": "Oturum açma, gizlilik, dışa aktarma ve denetim kaydı."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "Tüm kanallar",
+        "description": "Bağladığınız tüm kanalları görün ve yenisini ekleyin.",
+        "keywords": "bağlantılar, gelen kutuları, numaralar, hesaplar"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Müşterilerle sohbet etmek için WhatsApp Business numaranızı bağlayın.",
+        "keywords": "wa, whatsapp business, cloud api, numara, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "Resmi olmayan WhatsApp API",
+        "description": "Kişisel bir WhatsApp numarasını QR kodla bağlayın ve güvenli gönderim için ısıtın.",
+        "keywords": "kişisel whatsapp, qr, eşleştirme kodu, cihazlar, baileys, ısıtıcı, ısındırma, resmi olmayan"
+      },
+      "warmer": {
+        "label": "Isıtıcı",
+        "description": "Zamanlanmış mesajlar güvenli bir hızda gitsin diye WhatsApp numaralarınızı ısındırın.",
+        "keywords": "ısındırma, ısıtma, numara, itibar, gönderim limiti, kuyruk, hız, zamanlanmış"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Facebook sayfanıza gönderilen mesajları yanıtlayın.",
+        "keywords": "meta, messenger, sayfa, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Instagram hesabınıza gönderilen doğrudan mesajları yanıtlayın.",
+        "keywords": "meta, dm, insta, doğrudan mesajlar"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Müşterilerle sohbet etmek için bir Telegram botu bağlayın.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "TikTok işletme hesabınıza gönderilen mesajları yanıtlayın.",
+        "keywords": "tik tok, dm, video"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Kendi gönderen adınızla kısa mesaj gönderin ve alın.",
+        "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
+      },
+      "email": {
+        "label": "E-posta",
+        "description": "Gelen kutusunda e-posta göndermek ve almak için bir posta kutusu bağlayın.",
+        "keywords": "posta kutusu, smtp, imap, gmail, outlook, gönderen"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "LINE resmi hesabınızı bağlayın.",
+        "keywords": "line resmi hesap, mesajlaşma"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Viber işletme hesabınızı bağlayın.",
+        "keywords": "viber botu, mesajlaşma"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "WeChat resmi hesabınızı bağlayın.",
+        "keywords": "weixin, resmi hesap"
+      },
+      "wa-links": {
+        "label": "WhatsApp bağlantıları",
+        "description": "WhatsApp sohbetini açan tıkla-konuş bağlantıları ve QR kodları oluşturun.",
+        "keywords": "tıkla-konuş, qr kodu, kısa bağlantı, wa.me"
+      },
+      "contact-stages": {
+        "label": "Kişi aşamaları",
+        "description": "Bir kişinin geçtiği aşamaları ve durumları belirleyin.",
+        "keywords": "yaşam döngüsü, durum, aday, müşteri, kazanıldı, kaybedildi, huni"
+      },
+      "contact-properties": {
+        "label": "Kişi özellikleri",
+        "description": "Her kişide tutmak istediğiniz alanları ekleyin.",
+        "keywords": "özel alanlar, alanlar, zorunlu, açılır liste, sütunlar, öznitelikler, değişkenler, birleştirme alanları"
+      },
+      "attributes": {
+        "label": "Öznitelikler",
+        "description": "Kişilere eklediğiniz etiketler ve diğer işaretler.",
+        "keywords": "etiketler, işaretler, kaynaklar, özel öznitelikler"
+      },
+      "deal-pipelines": {
+        "label": "Satış hatları ve aşamalar",
+        "description": "Fırsat satış hatlarınızı, aşamalarınızı ve kayıp nedenlerinizi düzenleyin.",
+        "keywords": "fırsatlar, satış aşamaları, pano, kayıp nedeni, huni"
+      },
+      "tags": {
+        "label": "Etiketler",
+        "description": "Kişilerde ve sohbetlerde kullanılan etiketleri oluşturun ve düzenleyin.",
+        "keywords": "etiketler, renk"
+      },
+      "saved-replies": {
+        "label": "Kayıtlı yanıtlar",
+        "description": "Ekibinizin tek tıkla gönderebileceği yeniden kullanılabilir yanıtlar yazın.",
+        "keywords": "hazır yanıtlar, kısayollar, kod parçacıkları, şablonlar"
+      },
+      "business-profile": {
+        "label": "İşletme profili",
+        "description": "Belgeler için şirket adınız, adresiniz, vergi numaranız ve logonuz.",
+        "keywords": "şirket, adres, gst, kdv, vergi kimliği, logo, fatura başlığı"
+      },
+      "tax-rates": {
+        "label": "Vergi oranları",
+        "description": "Faturalarınıza ve tekliflerinize eklenecek vergileri belirleyin.",
+        "keywords": "kdv, gst, satış vergisi, yüzde, oranlar, ülke"
+      },
+      "plans": {
+        "label": "Planlar",
+        "description": "Planınızı ve kullanımınızı, neleri kapsadığını görün ve yükseltin.",
+        "keywords": "abonelik, yükseltme, limitler, fiyatlandırma, deneme, kullanım, plan ve kullanım, sayaçlar"
+      },
+      "wallet": {
+        "label": "Cüzdan",
+        "description": "Mesajların ücretini ödeyen bakiyeyi yükleyin.",
+        "keywords": "kredi, bakiye, bakiye yükleme, dolum, fonlar"
+      },
+      "billing-orders": {
+        "label": "Sipariş geçmişi",
+        "description": "Plan ve cüzdan satın almalarınız, makbuzlarla birlikte.",
+        "keywords": "ödemeler, makbuzlar, faturalar, satın almalar, siparişler"
+      },
+      "account": {
+        "label": "Hesap",
+        "description": "Adınız, e-postanız, parolanız ve diliniz.",
+        "keywords": "profil, ben, avatar, e-posta, parola, tercihler"
+      },
+      "branding": {
+        "label": "Mesaj alt bilgisi",
+        "description": "Otomasyonlardan, zamanlanmış gönderimlerden ve ekip gelen kutusu yanıtlarından gönderilen mesajların altına eklenen satır.",
+        "keywords": "marka, alt bilgi, imza, beyaz etiket, markayı kaldır, şu aracılığıyla gönderildi"
+      },
+      "team-members": {
+        "label": "Ekip üyeleri",
+        "description": "Kişileri davet edin ve çalışma alanınızda kimlerin olduğunu yönetin.",
+        "keywords": "kullanıcılar, personel, davet, temsilciler, çalışanlar, koltuklar"
+      },
+      "roles": {
+        "label": "Roller ve izinler",
+        "description": "Her rolün neleri görebileceğine ve yapabileceğine karar verin.",
+        "keywords": "erişim, yönetici, müdür, temsilci, rbac, izinler"
+      },
+      "teams": {
+        "label": "Ekipler",
+        "description": "Yönlendirme ve raporlama için kişileri ekiplere ayırın.",
+        "keywords": "gruplar, departmanlar, atama, yönlendirme"
+      },
+      "ai-keys": {
+        "label": "AI sağlayıcı anahtarları",
+        "description": "AI özelliklerini çalıştırmak için kendi AI sağlayıcı anahtarınızı ekleyin.",
+        "keywords": "openai, gemini, claude, api anahtarı, model, token"
+      },
+      "ai-training": {
+        "label": "AI eğitimi",
+        "description": "Akışlar ve web sitesi sohbeti için sohbet asistanlarını kendi içeriğinizle eğitin.",
+        "keywords": "bilgi tabanı, asistan, akıllı temsilci, sss, eğit, kaynaklar, meta işletme temsilcisi, yanıtlayıcı"
+      },
+      "booking-types": {
+        "label": "Randevu türleri",
+        "description": "Müşterilerin saat ve kurallarla randevu alabileceği hizmetler.",
+        "keywords": "randevular, hizmetler, uygunluk, zaman dilimleri, program, takvim"
+      },
+      "appointment-settings": {
+        "label": "Randevu ayarları",
+        "description": "Randevu kuralları, hatırlatıcılar ve herkese açık randevu sayfası.",
+        "keywords": "randevu sayfası, hatırlatıcılar, tampon süre, bildirim, iptal"
+      },
+      "google-calendar": {
+        "label": "Google Takvim",
+        "description": "Randevular ve meşgul saatler senkron kalsın diye takviminizi bağlayın.",
+        "keywords": "google, takvim, meet, senkronizasyon, meşgul, randevular"
+      },
+      "chat-widget": {
+        "label": "Sohbet widget'ı",
+        "description": "Web sitenize, web sohbeti olarak da bilinen bir sohbet balonu ekleyin.",
+        "keywords": "web sohbeti, web sitesi sohbeti, canlı sohbet, widget, gömme, balon"
+      },
+      "auto-reply": {
+        "label": "Otomatik yanıt",
+        "description": "Müşterileri karşılayın ve siz yokken yanıt verin.",
+        "keywords": "uzakta mesajı, hoş geldiniz, karşılama, ofis dışında, anahtar kelimeler"
+      },
+      "lead-sources": {
+        "label": "Sosyal adaylar",
+        "description": "Reklamlardan ve açılış sayfalarından gelen adayları bir webhook ile içeri alın.",
+        "keywords": "aday reklamları, facebook adayları, meta, linkedin, tiktok, google ads, webhook, zapier, yakalama, formlar"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "Ürün üzerine geliştirme yapmak için anahtarlar ve dokümantasyon.",
+        "keywords": "api anahtarları, geliştiriciler, tokenlar, dokümanlar, openapi"
+      },
+      "webhooks": {
+        "label": "Webhook'lar",
+        "description": "Olayları gerçekleştikçe kendi sistemlerinize gönderin.",
+        "keywords": "geri çağrılar, olaylar, http, uç nokta, bildir"
+      },
+      "addons": {
+        "label": "Eklentiler",
+        "description": "Çalışma alanınız için isteğe bağlı özellikleri açın veya kapatın.",
+        "keywords": "uzantılar, modüller, eklentiler, pazar yeri"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Ürünleri ve siparişleri senkronize etmek ve müşterilerinize mesaj göndermek için Shopify mağazanızı bağlayın.",
+        "keywords": "mağaza, dükkan, e-ticaret, ürünler, siparişler, senkron, terk edilmiş sepet"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Ürünleri ve siparişleri senkronize etmek ve müşterilerinize mesaj göndermek için WooCommerce mağazanızı bağlayın.",
+        "keywords": "woo, wordpress, mağaza, dükkan, e-ticaret, ürünler, siparişler, senkron"
+      },
+      "i18n-translation": {
+        "label": "Çeviri",
+        "description": "Diller ve mesajların otomatik çevirisi.",
+        "keywords": "dil, diller, yerel ayar, çevir, otomatik çevir"
+      },
+      "account-security": {
+        "label": "Parola ve iki adımlı oturum açma",
+        "description": "Parolanızı değiştirin ve oturum açmayı ikinci bir adımla koruyun.",
+        "keywords": "mfa, 2fa, kimlik doğrulayıcı, oturumlar, cihazlar, oturum aç, giriş"
+      },
+      "import-export": {
+        "label": "İçe ve dışa aktarma",
+        "description": "Bir dosyadan veri aktarın veya bir kopya dışa aktarın.",
+        "keywords": "csv, excel, indir, yedek, yükle, taşı"
+      },
+      "activity-log": {
+        "label": "Denetim günlüğü",
+        "description": "Kimin neyi ne zaman değiştirdiğinin kaydı.",
+        "keywords": "etkinlik, geçmiş, değişiklikler, denetim izi, güvenlik günlüğü"
+      },
+      "privacy": {
+        "label": "Gizlilik ve veri",
+        "description": "Rıza, saklama ve veri silme talepleri.",
+        "keywords": "gdpr, rıza, saklama, veriyi sil, dpa, kişisel veri"
+      },
+      "whatsapp-customers": {
+        "label": "Kayıtlı müşteriler",
+        "description": "WhatsApp siparişleri için müşterinin adını ve teslimat adresini önceden ayarlayın.",
+        "keywords": "müşteriler, adres, teslimat, sipariş, mağaza"
+      },
+      "geta-publishing": {
+        "label": "Geta yayınlama",
+        "description": "Yayınlanan akışları Geta konsolunda canlıya alın.",
+        "keywords": "geta, yayınla, bot, konsol, canlıya al, sohbet botu"
+      },
+      "auto-assignment": {
+        "label": "Otomatik atama",
+        "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
+        "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
+      }
+    }
+  }
+}

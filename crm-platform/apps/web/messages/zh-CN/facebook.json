@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook 帖子",
+      "setup": "Messenger 设置",
+      "broadcasts": "Messenger 群发"
+    },
+    "common": {
+      "dismiss": "忽略",
+      "cancel": "取消"
+    },
+    "hub": {
+      "kicker": "渠道 · Facebook",
+      "title": "Facebook",
+      "titleAccent": "主页",
+      "intro": "只需使用 Facebook 登录一次，您账号管理的所有主页都会被添加。之后即可在收件箱中发布帖子、回复评论并运行 Messenger。",
+      "teamInbox": "团队收件箱",
+      "posts": "帖子",
+      "setup": "Messenger 设置",
+      "broadcasts": "Messenger 群发",
+      "loadError": "无法加载已连接的主页，请重试。",
+      "notConfigured": "此安装尚未配置 Facebook，需由管理员添加 Meta 应用后才能连接主页。",
+      "connectedCount": "{count, plural, other {已连接 # 个主页}}",
+      "notConnected": "未连接",
+      "cardTitle": "连接您的 Facebook 账号",
+      "cardBody": "只需使用 Facebook 登录一次，您账号管理的所有主页都会自动添加，且各自拥有独立权限。也可以使用访问令牌单独添加一个主页。",
+      "connect": "连接主页",
+      "connectAnother": "连接其他账号",
+      "connectedPages": "已连接的主页",
+      "webhookTitle": "Webhook 地址",
+      "webhookBody": "请将此地址粘贴到 Meta 应用的 Webhook 设置（回调 URL）中，以便 Messenger 消息和评论进入您的收件箱。除非设置了 Facebook 专用验证令牌，否则它与 WhatsApp 使用相同的验证令牌。"
+    },
+    "connect": {
+      "close": "关闭",
+      "kicker": "Facebook",
+      "title": "连接您的 Facebook 账号",
+      "intro": "只需使用 Facebook 登录一次，您账号管理的所有主页都会自动添加。之后即可在收件箱中发布帖子、回复评论并运行 Messenger。",
+      "continue": "使用 Facebook 继续",
+      "or": "或",
+      "manualToggle": "使用访问令牌手动添加主页",
+      "tokenLabel": "主页访问令牌",
+      "tokenHint": "来自 Meta → 商务设置 → 系统用户，或 Graph API Explorer。我们会根据令牌识别主页。",
+      "connectPage": "连接主页",
+      "tokenShape": "这看起来不是主页访问令牌。",
+      "failed": "无法连接，请重试。",
+      "footerLeft": "立即路由到您的收件箱",
+      "footerRight": "已加密"
+    },
+    "page": {
+      "facebookPage": "Facebook 主页",
+      "failed": "操作未成功，请重试。",
+      "live": "在线",
+      "reconnect": "重新连接",
+      "followers": "{count} 位粉丝",
+      "liveNoCount": "在线",
+      "dataAccess": "Meta 的数据访问将于 {when} 结束",
+      "refresh": "刷新资料",
+      "refreshed": "Facebook 主页已刷新。",
+      "inboundFixed": "已为此主页重新订阅 Facebook Webhook。",
+      "fixInbound": "修复入站",
+      "remove": "断开连接",
+      "removeConfirm": "断开此 Facebook 主页？其收件箱会话将保留，但在重新连接前无法发送消息。",
+      "cancel": "取消",
+      "removed": "Facebook 主页已断开连接。"
+    },
+    "broadcasts": {
+      "kicker": "Facebook · 群发",
+      "title": "Messenger",
+      "titleAccent": "群发",
+      "intro": "向最近与您的主页聊过天的用户发送消息。Meta 仅允许主页在用户最后一条消息后的 24 小时内向其发送消息，下方列表即为您当前可触达的受众。",
+      "inbox": "收件箱",
+      "loadError": "无法加载群发，请重试。",
+      "connectFirst": "请先连接 Facebook 主页。",
+      "connectPage": "连接主页",
+      "none": "暂无群发。请在右侧创建一个。",
+      "recipients": "{count, plural, other {# 位接收人}}",
+      "status": {
+        "sending": "发送中",
+        "done": "完成",
+        "failed": "失败",
+        "draft": "草稿"
+      },
+      "counts": "已发送 {sent} · 失败 {failed} · 已拦截 {blocked}",
+      "start": "开始发送",
+      "started": "已开始发送。即使离开此页面也会继续。",
+      "pause": "暂停",
+      "paused": "已暂停。剩余接收人仍在队列中。",
+      "retry": "重试失败项",
+      "retried": "已重新排队 {count, plural, other {# 位接收人}}。请点击“开始发送”。",
+      "delete": "删除",
+      "deleted": "群发已删除。",
+      "deleteConfirm": "删除此群发？",
+      "cancel": "取消",
+      "newBroadcast": "新建群发",
+      "name": "名称",
+      "namePlaceholder": "例如：周末特卖",
+      "page": "主页",
+      "template": "模板（可选）",
+      "templateHint": "预填消息并发送模板中的按钮。",
+      "templateNone": "— 无（自行撰写）—",
+      "buttons": "{count, plural, other {# 个按钮}}",
+      "message": "消息",
+      "messageHint": "使用 '{name}' 进行个性化。",
+      "messagePlaceholder": "你好 '{name}'！…",
+      "recipientsLabel": "接收人",
+      "within24": "（24 小时内）",
+      "selectAll": "全选",
+      "noAudience": "目前没有人处于 24 小时窗口内，需要有人先给此主页发消息。",
+      "messengerUser": "Messenger 用户",
+      "selected": "已选 {count} 个",
+      "create": "创建群发",
+      "created": "已创建群发，共 {count, plural, other {# 位接收人}}。准备好后请点击“开始发送”。",
+      "failed": "操作未成功，请重试。"
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "设置",
+      "intro": "设置 Messenger 聊天如何问候和引导客户：开始使用按钮、欢迎语、常驻菜单和可点击的常见问题。选择一项功能，了解其作用，然后填写。更改会直接保存到 Facebook。",
+      "pagePicker": "主页",
+      "composer": "编辑器",
+      "loadError": "无法加载 Messenger 资料，请重试。",
+      "noPage": "尚未连接 Facebook 主页。",
+      "connect": "连接 Facebook 账号",
+      "profile": "Messenger 资料",
+      "tabs": {
+        "getstarted": "开始使用按钮",
+        "greeting": "欢迎语",
+        "menu": "常驻菜单",
+        "icebreakers": "破冰问题"
+      },
+      "isSet": "已设置",
+      "notSet": "未设置",
+      "failed": "操作未成功，请重试。",
+      "footnote": "这些设置会通过 Graph API 写入 Facebook Messenger 资料，并应用于新对话。Meta 可能需要一些时间才能生效。",
+      "frame": {
+        "preview": "预览",
+        "yourPage": "您的主页",
+        "activeNow": "当前在线"
+      },
+      "explainer": {
+        "what": "这是什么",
+        "customer": "客户如何使用",
+        "how": "如何设置"
+      },
+      "getstarted": {
+        "title": "开始使用按钮",
+        "subtitle": "全新客户点击后开始聊天的按钮。",
+        "what": "这是用户打开您的 Messenger 时看到的第一样东西，即欢迎页上唯一的“开始使用”按钮。",
+        "customer": "他们点击一次，对话便开始。该按钮只会在第一条消息之前显示。",
+        "how": "为它设置一个 payload（如 GET_STARTED 这样的关键词）。然后在“流程”中添加监听该 payload 的触发器，这样点击的瞬间就会运行欢迎流程。",
+        "payload": "Payload",
+        "payloadHint": "点击按钮时，这个词会发送给您。在流程触发器中匹配它即可启动自动化。",
+        "remove": "移除",
+        "removeConfirm": "移除开始使用按钮？",
+        "save": "保存",
+        "yourPage": "您的主页",
+        "typically": "通常会立即回复",
+        "button": "开始使用"
+      },
+      "greeting": {
+        "title": "欢迎语",
+        "subtitle": "在任何人输入之前显示的友好欢迎语。",
+        "what": "显示在聊天首屏、主页名称下方的简短欢迎消息。",
+        "customer": "他们打开 Messenger 的瞬间就会读到它，它能定下基调，并告诉他们您能提供什么帮助。",
+        "how": "保持一句亲切的话（最多 160 个字符）。提示：加入名字标签，Messenger 就会按姓名问候每位客户。",
+        "welcomeText": "欢迎文本",
+        "placeholder": "您好！今天有什么可以帮您的吗？",
+        "remove": "移除",
+        "removeConfirm": "移除欢迎语？",
+        "save": "保存",
+        "yourPage": "您的主页",
+        "sample": "您好！今天有什么可以帮您的吗？"
+      },
+      "menu": {
+        "title": "常驻菜单",
+        "subtitle": "消息栏内始终可用的快捷菜单。",
+        "what": "在整个聊天过程中始终可用的菜单（文本框旁的 ☰ 图标），最多 3 个快捷项。",
+        "customer": "他们可以随时点击 ☰ 直达所需，例如“联系人工”“查询订单”“访问商店”。",
+        "how": "最多添加 3 项。每项可以运行一个流程（发送 payload）或打开链接（URL）。也可以隐藏文本框，让用户只使用菜单。",
+        "sample1": "联系我们",
+        "sample2": "查询订单",
+        "sample3": "访问商店",
+        "menuLabel": "菜单",
+        "menuItem": "菜单项",
+        "titleLabel": "标题",
+        "titlePlaceholder": "联系我们",
+        "action": "操作",
+        "actionFlow": "运行流程（发送 payload）",
+        "actionLink": "打开链接（URL）",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "移除菜单项",
+        "add": "添加菜单项",
+        "hideComposer": "隐藏文本框（仅菜单）",
+        "remove": "移除菜单",
+        "removeConfirm": "移除常驻菜单？",
+        "save": "保存菜单"
+      },
+      "ice": {
+        "title": "破冰问题",
+        "subtitle": "在第一条消息之前显示的推荐问题。",
+        "what": "欢迎页上最多 4 个可点击的问题，即人们常问的内容，点一下即可，无需输入。",
+        "customer": "无需思考写什么，他们点击“营业时间是什么时候？”这样的问题，就能立即得到回答。",
+        "how": "添加您最常见的问题。每次点击都会发送其 payload，在流程触发器中匹配该 payload 即可自动回答。",
+        "sample1": "营业时间是什么时候？",
+        "sample2": "你们发货到哪些地区？",
+        "sample3": "联系人工",
+        "yourPage": "您的主页",
+        "question": "问题",
+        "questionLabel": "问题",
+        "questionPlaceholder": "营业时间是什么时候？",
+        "payload": "Payload",
+        "removeItem": "移除破冰问题",
+        "add": "添加破冰问题",
+        "remove": "全部移除",
+        "removeConfirm": "移除所有破冰问题？",
+        "save": "保存破冰问题"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · 帖子",
+      "title": "Facebook",
+      "titleAccent": "帖子",
+      "intro": "您在此创建、定时或发布的所有内容：跟踪状态、重试失败项并管理队列。",
+      "allPages": "全部主页",
+      "pagePicker": "主页",
+      "myPosts": "我的帖子",
+      "insights": "数据洞察",
+      "create": "创建帖子",
+      "loadError": "无法加载帖子，请重试。",
+      "noPage": "尚未连接 Facebook 主页",
+      "noPageHint": "连接 Facebook 账号以发布和定时发布主页帖子。",
+      "connect": "连接 Facebook 账号",
+      "kpi": {
+        "total": "帖子总数",
+        "scheduled": "已定时",
+        "published": "已发布",
+        "failed": "失败"
+      },
+      "tabs": {
+        "all": "全部",
+        "scheduled": "已定时",
+        "published": "已发布",
+        "failed": "失败"
+      },
+      "ranges": {
+        "all": "全部时间",
+        "7d": "7 天",
+        "30d": "30 天",
+        "90d": "90 天"
+      },
+      "search": "搜索帖子…",
+      "cols": {
+        "post": "帖子",
+        "page": "主页",
+        "type": "类型",
+        "status": "状态",
+        "when": "时间",
+        "actions": "操作"
+      },
+      "status": {
+        "scheduled": "已定时",
+        "published": "已发布",
+        "failed": "失败",
+        "draft": "草稿"
+      },
+      "publishNow": "立即发布",
+      "delete": "删除",
+      "noMatch": "没有符合这些筛选条件的帖子",
+      "none": "暂无帖子",
+      "noneHint": "撰写您的第一篇帖子：立即发布或定时发布。",
+      "pageOf": "第 {page} 页，共 {last} 页",
+      "prev": "上一页",
+      "next": "下一页",
+      "deleteTitle": "删除帖子",
+      "deleteLive": "这也会从 Facebook 删除该帖子，且无法撤销。",
+      "deleteLocal": "移除此帖子？",
+      "deleteYes": "是，删除",
+      "cancel": "取消",
+      "rejected": "Facebook 拒绝了该帖子：{error}",
+      "published": "帖子已发布到 Facebook。",
+      "removed": "帖子已移除。",
+      "failed": "操作未成功，请重试。"
+    },
+    "compose": {
+      "kicker": "Facebook · 创建",
+      "title": "创建",
+      "titleAccent": "帖子",
+      "intro": "撰写照片、相册、链接、视频和短视频，立即发布或直接定时发布到已连接的主页。在实时预览中查看效果。",
+      "posts": "帖子",
+      "myPosts": "我的帖子",
+      "insights": "数据洞察",
+      "loadError": "无法加载主页，请重试。",
+      "noPage": "尚未连接 Facebook 主页",
+      "noPageHint": "连接 Facebook 账号以发布和定时发布主页帖子。",
+      "noAccess": "您无法发帖",
+      "noAccessHint": "请向管理员申请撰写 Facebook 帖子的权限。",
+      "connect": "连接 Facebook 账号",
+      "required": "必填",
+      "steps": {
+        "page": "主页",
+        "type": "帖子类型",
+        "media": "媒体",
+        "message": "消息",
+        "when": "发布时间"
+      },
+      "types": {
+        "photo": {
+          "label": "照片",
+          "hint": "单张照片帖子。"
+        },
+        "multi_photo": {
+          "label": "相册",
+          "hint": "一篇帖子含 2–10 张照片。"
+        },
+        "link": {
+          "label": "链接",
+          "hint": "分享带预览的链接。"
+        },
+        "video": {
+          "label": "视频",
+          "hint": "动态视频（MP4 / MOV）。"
+        },
+        "reel": {
+          "label": "短视频",
+          "hint": "竖屏短视频。"
+        }
+      },
+      "photoUrls": "粘贴公开的图片网址",
+      "photoHint": "每行一个，最多 10 个。上传文件需要存储服务，目前尚未连接，请使用公开的图片地址。",
+      "linkUrl": "链接网址",
+      "linkHint": "Facebook 会根据链接生成预览卡片。一篇帖子可以包含链接或照片，但不能同时包含两者。",
+      "videoUrl": "粘贴公开的 HTTPS 视频网址",
+      "reelNote": "短视频为竖屏短片。下方的消息将用作短视频描述。",
+      "videoNote": "Meta 会通过公开 HTTPS 获取该文件。下方的消息将用作视频描述。",
+      "messagePlaceholder": "撰写您的帖子…",
+      "ai": {
+        "title": "AI 撰写工具",
+        "caption": "文案",
+        "repurpose": "改写复用",
+        "review": "审核",
+        "bestTime": "最佳时间",
+        "image": "图片",
+        "unavailable": "AI 工具暂不可用，需等待 AI 服务商设置完成。"
+      },
+      "when": {
+        "now": "立即发布",
+        "later": "稍后定时发布",
+        "label": "发送日期和时间",
+        "hint": "从现在起 10 分钟到 75 天之间，按您的时区（{tz}）。Facebook 会将其排队，到期后发布。"
+      },
+      "submit": {
+        "publish": "发布",
+        "schedule": "定时"
+      },
+      "preview": {
+        "live": "实时预览",
+        "facebook": "Facebook",
+        "yourPage": "您的主页",
+        "justNow": "刚刚",
+        "empty": "您的帖子文本将显示在这里…",
+        "reel": "短视频",
+        "video": "视频",
+        "like": "赞",
+        "comment": "评论",
+        "share": "分享",
+        "note": "实时预览：实际帖子在 Facebook 上的显示可能略有不同。"
+      },
+      "help": {
+        "label": "帮助 - {n}",
+        "help1": {
+          "title": "我可以发布什么？",
+          "body": "照片、相册、链接、动态视频和短视频可通过 Graph API 直接发布到您已连接的主页。"
+        },
+        "help2": {
+          "title": "定时发布如何运作？",
+          "body": "选择 10 分钟到 75 天之内的时间，Facebook 会将其排队，到期后自动发布。也可以立即发布。"
+        },
+        "help3": {
+          "title": "帖子失败了，为什么？",
+          "body": "通常是媒体网址不是公开的 HTTPS，或主页被重新连接过。请查看该行上的错误信息，然后使用“立即发布”重试。"
+        }
+      },
+      "problem": {
+        "noPage": "请选择一个已连接的 Facebook 主页。",
+        "scheduleMissing": "请选择定时发布的日期和时间。",
+        "scheduleInvalid": "无法识别该日期和时间。"
+      },
+      "rejected": "Facebook 拒绝了该帖子：{error}",
+      "scheduled": "帖子已定时。",
+      "published": "帖子已发布到 Facebook。",
+      "failed": "操作未成功，请重试。"
+    },
+    "grid": {
+      "kicker": "Facebook · 我的帖子",
+      "title": "您的",
+      "titleAccent": "网格",
+      "intro": "您最近发布的主页帖子，实时来自 Facebook。点击任意帖子即可预览。",
+      "posts": "帖子",
+      "newPost": "新建帖子",
+      "pagePicker": "主页",
+      "loadError": "无法加载帖子，请重试。",
+      "noPage": "未连接 Facebook 主页",
+      "noPageHint": "连接一个主页后即可在此查看网格。",
+      "goHub": "前往 Facebook",
+      "empty": "这里还没有内容",
+      "emptyHint": "您发布的帖子会显示在这里。",
+      "firstPost": "创建您的第一篇帖子",
+      "noCaption": "（无文案）",
+      "view": "查看帖子",
+      "close": "关闭",
+      "postTitle": "帖子",
+      "noImage": "无图片",
+      "viewOnFacebook": "在 Facebook 上查看"
+    },
+    "insights": {
+      "kicker": "Facebook · 分析",
+      "title": "主页",
+      "titleAccent": "数据洞察",
+      "intro": "触达和互动数据（近 28 天，实时来自 Facebook），并结合您的 Messenger 活动和从这里发布的帖子。",
+      "create": "创建帖子",
+      "myPosts": "我的帖子",
+      "loadError": "无法加载数据洞察，请重试。",
+      "noPage": "尚未连接 Facebook 主页。",
+      "connect": "连接 Facebook 账号",
+      "connected": "已连接",
+      "viewing": "当前查看的账号",
+      "cards": {
+        "followers": "粉丝",
+        "followersSub": "总受众",
+        "reach": "触达 · 28 天",
+        "reachSub": "触达人数",
+        "impressions": "展示次数 · 28 天",
+        "impressionsSub": "展示次数",
+        "engagements": "互动 · 28 天",
+        "engagementsSub": "互动次数",
+        "convos": "会话",
+        "convosSub": "{n} 个进行中",
+        "messagesIn": "收到消息 · 28 天",
+        "messagesInSub": "已回复 {n} 条",
+        "published": "已发布帖子",
+        "publishedSub": "{n} 个已定时",
+        "rate": "互动率",
+        "rateSub": "互动 ÷ 触达"
+      },
+      "liveFromFacebook": "实时来自 Facebook",
+      "fromHere": "来自此工作区",
+      "activity": "Messenger 活动 · 近 14 天",
+      "received": "已接收",
+      "sent": "已发送",
+      "mix": {
+        "title": "内容构成",
+        "posts": "{n} 篇帖子",
+        "none": "尚未从这里发布过帖子。",
+        "first": "创建您的第一篇帖子"
+      },
+      "types": {
+        "photo": "照片",
+        "multi_photo": "相册",
+        "link": "链接",
+        "video": "视频",
+        "reel": "短视频"
+      },
+      "convos": {
+        "title": "会话",
+        "total": "共 {n} 个",
+        "open": "打开团队收件箱",
+        "none": "暂无 Facebook 会话。用户给您的主页发消息后会显示在这里。"
+      },
+      "status": {
+        "open": "进行中",
+        "pending": "待处理",
+        "resolved": "已解决",
+        "closed": "已关闭",
+        "snoozed": "已延后"
+      },
+      "recent": {
+        "title": "最近帖子",
+        "none": "暂无帖子，或数据洞察仍在准备中。",
+        "noCaption": "（无文案）",
+        "impressions": "展示次数",
+        "engaged": "已互动",
+        "view": "查看"
+      },
+      "legendLive": "实时来自 Facebook，已弃用的指标可能显示为 —。",
+      "legendHere": "来自此工作区：Messenger 和已发布的帖子。"
+    }
+  }
+}

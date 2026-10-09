@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "WhatsApp personale"
+    },
+    "area": {
+      "title": "API WhatsApp non ufficiale",
+      "numbers": "Numeri",
+      "warmer": "Warmer"
+    },
+    "common": {
+      "dismiss": "Ignora",
+      "requestId": "Richiesta {id}",
+      "unofficial": "Non ufficiale",
+      "reminder": "Connessione non ufficiale. WhatsApp può limitare questo numero.",
+      "readGuide": "Leggi la guida",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "back": "Indietro"
+    },
+    "list": {
+      "title": "Numeri WhatsApp personali",
+      "subtitle": "Collega un numero WhatsApp tramite codice QR o codice di abbinamento. Le chat di questo numero compaiono nell’inbox condiviso.",
+      "connect": "Collega un numero",
+      "capCount": "{used} di {limit} numeri",
+      "capUnlimited": "{used, plural, one {# numero} other {# numeri}}",
+      "capFull": "Il tuo workspace può avere {limit, plural, one {# numero} other {# numeri}} su questo motore. Elimina un numero per collegarne un altro.",
+      "capLabel": "Numeri in uso",
+      "loading": "Caricamento dei tuoi numeri...",
+      "retry": "Riprova",
+      "searchLabel": "Cerca per nome o numero",
+      "searchPlaceholder": "Cerca nome o numero",
+      "tabs": {
+        "all": "Tutti",
+        "connected": "Collegati",
+        "disconnected": "Disconnessi"
+      },
+      "noMatch": "Nessun numero corrisponde. Cancella la ricerca o scegli un’altra scheda.",
+      "empty": {
+        "title": "Nessun numero personale è ancora collegato",
+        "message": "Collega il numero WhatsApp che usi già. Funziona come WhatsApp Web, quindi non è un metodo approvato per automatizzare WhatsApp e WhatsApp può limitare il numero. Per un uso serio o a lungo termine, il percorso ufficiale WhatsApp Business è quello a rischio più basso.",
+        "action": "Collega un numero",
+        "noPermission": "Chiedi a un admin del workspace di collegare un numero."
+      },
+      "columns": {
+        "name": "Nome",
+        "lastSeen": "Ultimo accesso"
+      },
+      "lastSeenNever": "Mai",
+      "assignedTo": "Gestito da {name}",
+      "noticeChanged": {
+        "title": "Il nostro avviso è cambiato",
+        "body": "L’avviso sui rischi per i numeri personali è stato aggiornato. I numeri collegati continuano a funzionare. Ti sarà chiesto di leggerlo di nuovo la prossima volta che ne colleghi uno.",
+        "action": "Leggi l’avviso"
+      },
+      "action": {
+        "link": "Collega",
+        "reconnect": "Ricollega",
+        "relink": "Collega di nuovo",
+        "retry": "Riprova",
+        "details": "Dettagli",
+        "disconnect": "Disconnetti",
+        "rename": "Rinomina",
+        "delete": "Elimina"
+      },
+      "sendingToggle": "Usa {name} per l’invio",
+      "sendingOn": "Usato per l’invio",
+      "sendingOff": "Non usato per l’invio",
+      "done": {
+        "disconnected": "{name} è stato disconnesso.",
+        "disconnectedNotUnlinked": "{name} è stato disconnesso qui. Rimuovi anche questo dispositivo in WhatsApp, in Dispositivi collegati.",
+        "deleted": "{name} è stato eliminato. Le sue chat restano nell’inbox.",
+        "renamed": "Rinominato in {name}.",
+        "sendingSaved": "Salvato."
+      },
+      "workerDown": "Il servizio di connessione non è in esecuzione. I numeri non possono collegarsi finché non torna attivo."
+    },
+    "state": {
+      "created": "Non ancora collegato",
+      "awaiting_qr": "In attesa di scansione",
+      "awaiting_pairing_code": "In attesa del codice",
+      "connecting": "Connessione in corso",
+      "connected": "Collegato",
+      "disconnected": "Disconnesso",
+      "logged_out": "Collegamento terminato da WhatsApp",
+      "error": "Impossibile connettersi",
+      "unknown": "Sconosciuto"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp ha terminato il collegamento a questo numero. Succede quando il dispositivo viene rimosso in WhatsApp, in Dispositivi collegati, e anche quando WhatsApp limita un numero. Le tue chat qui sono conservate. Puoi collegarlo di nuovo.",
+      "forbidden": "WhatsApp ha rifiutato la connessione. Potrebbe significare che il numero è stato limitato. Le tue chat qui sono conservate.",
+      "qr_timeout": "Il codice non è stato scansionato in tempo.",
+      "pair_failed": "WhatsApp non è riuscito a completare il collegamento di questo numero.",
+      "code_failed": "Il codice di abbinamento non è stato accettato.",
+      "mismatch": "Il telefono che ha scansionato non è il numero che hai inserito. Controlla il numero e riprova.",
+      "proxy_unreachable": "Il proxy non ha risposto. Il numero resta offline finché non funziona.",
+      "session_conflict": "Lo stesso numero è collegato altrove e i due si sostituiscono a vicenda. Rimuovi l’altro collegamento, poi ricollegati.",
+      "device_limit_reached": "WhatsApp consente 4 dispositivi collegati. Rimuovine uno in WhatsApp, in Dispositivi collegati, e riprova.",
+      "worker_unavailable": "Il servizio di connessione non è disponibile. Riprova tra qualche minuto.",
+      "worker_silent": "Il servizio di connessione ha smesso di rispondere per questo numero. Si ricollega da solo quando il servizio torna disponibile.",
+      "user": "Disconnesso da questo workspace.",
+      "session_incomplete": "La sessione salvata non è stata completata. Collega di nuovo il numero."
+    },
+    "notice": {
+      "title": "Prima di collegare",
+      "intro": "Leggi questo. È breve e vero.",
+      "listLabel": "Conferma ogni punto",
+      "notesTitle": "Da sapere",
+      "version": "Versione dell’avviso {version}",
+      "accept": "Accetto e continuo",
+      "accepting": "Salvataggio...",
+      "mustTick": "Spunta tutte e tre le caselle per continuare.",
+      "pageTitle": "Avviso sui rischi per i numeri personali",
+      "pageIntro": "Questo è l’avviso che accetti prima di collegare un numero WhatsApp personale.",
+      "acceptedOn": "Hai accettato la versione {version} il {date}.",
+      "notAccepted": "Non hai ancora accettato la versione attuale. Ti viene chiesto quando colleghi un numero.",
+      "backToList": "Torna ai numeri",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Capisco che questo collega il mio WhatsApp come fa WhatsApp Web. Non è un metodo approvato per automatizzare WhatsApp e va contro i termini di WhatsApp. WhatsApp può limitare o bannare in modo permanente questo numero in qualsiasi momento, anche per un uso normale, e non possiamo impedirlo né recuperare il numero.",
+            "own_number_expected_contacts": "Collegherò solo un numero di cui sono proprietario o per cui ho il permesso del proprietario, e posso permettermi di perderlo. Scriverò solo a persone che si aspettano di sentire da me.",
+            "shared_inbox_disclosure": "Capisco che, dal momento in cui viene collegato, ogni chat privata su questo numero (non solo le chat di lavoro) compare nell’inbox condiviso di questo workspace per i membri che possono leggerlo, e anche i messaggi che scrivo dal telefono vengono copiati lì."
+          },
+          "notes": {
+            "official_route_lower_risk": "Il percorso ufficiale WhatsApp Business è quello a rischio più basso per un uso serio o a lungo termine.",
+            "warm_up": "Scalda il numero lentamente e mantieni bassi i volumi.",
+            "no_ban_support": "Un numero limitato o bannato non è coperto dall’assistenza: non lo indaghiamo, non lo ripristiniamo e non rimborsiamo.",
+            "shared_addresses": "In questo pilot, i numeri si collegano dagli indirizzi condivisi dei nostri server (senza proxy), quindi una limitazione su un numero può essere collegata ad altri.",
+            "disconnect_keeps_chats": "Disconnettere qui rimuove il collegamento e la sessione salvata, ma non elimina le chat dall’inbox."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Collega un numero",
+      "relinkTitle": "Collega {name}",
+      "stepOf": "Passo {step} di {total}",
+      "continue": "Continua",
+      "creating": "Salvataggio...",
+      "number": {
+        "title": "Quale numero?",
+        "name": "Nome",
+        "namePlaceholder": "Ad esempio Linea vendite",
+        "nameHelp": "Solo il tuo team vede questo nome.",
+        "phone": "Numero WhatsApp",
+        "phoneHelp": "Digita il numero che collegherai, con il prefisso del paese. Deve essere il numero del telefono che scansionerà o inserirà il codice.",
+        "activate": "Usa per l’invio dopo il collegamento",
+        "activateHelp": "Campagne, messaggi programmati e flow possono usare questo numero una volta collegato.",
+        "nameError": {
+          "required": "Inserisci un nome.",
+          "short": "Il nome deve avere almeno 2 caratteri.",
+          "long": "Il nome è troppo lungo (massimo 191 caratteri)."
+        },
+        "phoneError": {
+          "empty": "Inserisci il numero.",
+          "invalid": "Questo numero non è valido per il paese scelto."
+        },
+        "openExisting": "Apri il numero esistente"
+      },
+      "link": {
+        "title": "Collega il telefono",
+        "choose": "Come vuoi collegarlo?",
+        "methodLabel": "Metodo di collegamento",
+        "qr": "Scansiona un codice QR",
+        "qrHelp": "Scansiona con il telefono che ha questo numero.",
+        "code": "Usa un codice di abbinamento",
+        "codeHelp": "Digita sul telefono un codice di 8 caratteri. Utile se non puoi scansionare.",
+        "numberLine": "Numero: {phone}",
+        "startQr": "Mostra il codice QR",
+        "startCode": "Ottieni un codice di abbinamento",
+        "starting": "Avvio in corso...",
+        "needCountryCode": "Aggiungi il prefisso del paese per usare un codice di abbinamento.",
+        "someoneElse": "Inserisci questo codice solo sul telefono del numero che stai collegando. Non condividerlo mai con nessun altro. Un codice di abbinamento inserito sul telefono di qualcun altro collega l’intero account WhatsApp di quella persona a questo workspace.",
+        "qrSteps": {
+          "one": "Apri WhatsApp sul telefono.",
+          "two": "Vai su Dispositivi collegati, poi Collega un dispositivo.",
+          "three": "Inquadra con la fotocamera questo codice."
+        },
+        "codeSteps": {
+          "one": "Apri WhatsApp sul telefono.",
+          "two": "Vai su Dispositivi collegati, poi Collega un dispositivo, poi Collega con numero di telefono.",
+          "three": "Digita questo codice."
+        },
+        "qrAlt": "Codice QR per collegare il numero",
+        "qrRefresh": "Nuovo codice tra {seconds} s",
+        "qrExpires": "Scade tra {time}",
+        "codeValid": "Il codice è valido per circa 3 minuti.",
+        "codeExpires": "Valido per {time}",
+        "codeLabel": "Codice di abbinamento",
+        "copy": "Copia codice",
+        "copied": "Copiato",
+        "copyFailed": "Impossibile copiare. Seleziona il codice e copialo.",
+        "strip": {
+          "shown": "Codice mostrato",
+          "scanned": "Scansionato",
+          "ready": "Pronto"
+        },
+        "stripLabel": "Avanzamento",
+        "linking": "Collegamento in corso. WhatsApp sta sincronizzando, può richiedere un momento.",
+        "cancelAttempt": "Interrompi e scegli un altro metodo",
+        "reading": "In attesa del primo codice...",
+        "relinkAction": "Dimentica la sessione salvata e ricollega"
+      },
+      "result": {
+        "connectedTitle": "Connesso",
+        "connectedBody": "{phone} è collegato. Le chat di questo numero ora compaiono nell’inbox condivisa.",
+        "warmer": "Configura il warm-up",
+        "inbox": "Apri l’inbox",
+        "list": "Torna ai numeri",
+        "timedOutTitle": "Il codice non è stato scansionato in tempo",
+        "timedOutBody": "Nessun numero è stato collegato. Se il telefono era offline o bloccato, portalo online e ricomincia.",
+        "phoneOfflineTitle": "Impossibile raggiungere il telefono",
+        "phoneOfflineBody": "Verifica che il telefono sia online, poi ricomincia.",
+        "loggedOutTitle": "WhatsApp ha terminato il collegamento",
+        "loggedOutBody": "Succede quando il dispositivo viene rimosso in WhatsApp, in Dispositivi collegati, e anche quando WhatsApp limita un numero. Le tue chat qui vengono conservate. Puoi collegarlo di nuovo.",
+        "replacedTitle": "Un’altra sessione ha sostituito questa",
+        "replacedBody": "Lo stesso numero è collegato altrove. Rimuovi l’altro collegamento, poi connettiti di nuovo.",
+        "mismatchTitle": "Non è il numero che hai inserito",
+        "mismatchBody": "Il telefono che ha scansionato non corrisponde al numero inserito. Controlla il numero e riprova.",
+        "limitTitle": "Il telefono ha troppi dispositivi collegati",
+        "limitBody": "WhatsApp consente 4 dispositivi collegati. Rimuovine uno in WhatsApp, in Dispositivi collegati, e riprova.",
+        "proxyTitle": "Il proxy non ha risposto",
+        "proxyBody": "Il numero resta offline finché il proxy non funziona.",
+        "serviceTitle": "Il servizio di connessione non è disponibile",
+        "serviceBody": "Riprova tra qualche minuto.",
+        "failedTitle": "Impossibile collegare il numero",
+        "failedBody": "WhatsApp non ha completato il collegamento. Non è stato collegato nulla. Riprova.",
+        "tryAgain": "Riprova"
+      },
+      "discard": {
+        "title": "Interrompere la connessione?",
+        "message": "Non hai ancora finito. Se esci ora, quello che hai scritto andrà perso e un collegamento in corso verrà interrotto.",
+        "stay": "Continua",
+        "leave": "Esci"
+      }
+    },
+    "detail": {
+      "back": "Tutti i numeri",
+      "loading": "Caricamento del numero...",
+      "notFound": "Questo numero non esiste o è stato eliminato.",
+      "status": "Stato",
+      "lastSeen": "Ultimo accesso",
+      "linkedSince": "In questo stato dal",
+      "number": "Numero",
+      "numberLocked": "Il numero non può cambiare mentre esiste un collegamento. Scollega prima.",
+      "assignedTo": "Gestito da",
+      "createdBy": "Aggiunto da",
+      "sending": "Usa per l’invio",
+      "editTitle": "Modifica",
+      "name": "Nome",
+      "save": "Salva",
+      "saving": "Salvataggio...",
+      "saved": "Salvato.",
+      "dangerTitle": "Scollega o elimina",
+      "disconnectHelp": "Scollega il numero e rimuove la sessione salvata. Potrai ricollegarlo in seguito.",
+      "deleteHelp": "Rimuove il numero da questo workspace. Le chat restano nell’inbox.",
+      "warmerLink": "Configura il warm-up per questo numero"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "Scollegare {name}?",
+        "message": "Questa azione scollega il numero e rimuove la sessione salvata. Le conversazioni restano leggibili ma non potranno più ricevere risposte da questo numero finché non lo ricollegherai.",
+        "confirm": "Scollega"
+      },
+      "delete": {
+        "title": "Eliminare {name}?",
+        "message": "Questa azione scollega il numero e rimuove la sessione salvata. Le conversazioni restano leggibili nell’inbox ma non potranno più ricevere risposte da questo numero. L’operazione non può essere annullata.",
+        "confirm": "Elimina numero"
+      },
+      "rename": {
+        "title": "Rinomina numero",
+        "label": "Nome",
+        "confirm": "Salva"
+      },
+      "cancel": "Annulla"
+    },
+    "errors": {
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "FORBIDDEN": "Non hai il permesso per eseguire questa operazione.",
+      "UNAUTHENTICATED": "La sessione è terminata. Accedi di nuovo.",
+      "NOT_FOUND": "Questo numero non esiste o è stato eliminato.",
+      "VALIDATION_FAILED": "Alcuni campi richiedono attenzione.",
+      "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo numero. Ricarica la pagina e riprova.",
+      "WA_UNOFFICIAL_DISABLED": "Questa funzione non è più attiva per il tuo workspace.",
+      "PLAN_FEATURE_LOCKED": "Il tuo piano non include questa funzione.",
+      "PLAN_LIMIT_REACHED": "Il tuo piano consente {limit, plural, one {# numero WhatsApp} other {# numeri WhatsApp}} qui. Eliminane uno o passa a un piano superiore per aggiungerne un altro.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Il tuo piano non consente altri numeri qui. Eliminane uno o passa a un piano superiore per aggiungerne un altro.",
+      "DEVICE_ALREADY_EXISTS": "In questo workspace esiste già un dispositivo con quel numero di telefono.",
+      "DEVICE_PHONE_INVALID": "Aggiungi il prefisso internazionale per usare un codice di associazione.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Leggi e accetta prima l’avviso.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Troppi tentativi per questo numero. Riprova più tardi.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Troppi tentativi per questo numero. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Qualcuno ha avviato una connessione poco fa. Attendi che termini o che venga interrotta.",
+      "DEVICE_NOT_PAIRABLE": "Questo numero non può essere collegato ora. Scollegalo prima.",
+      "WA_WORKER_UNAVAILABLE": "Il servizio di connessione non è disponibile. Riprova tra qualche minuto.",
+      "RATE_LIMITED": "Troppe richieste. Attendi un momento.",
+      "upgrade": "Vedi i piani e passa a un piano superiore",
+      "requestId": "Richiesta {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Il tuo workspace ha raggiunto il numero di numeri WhatsApp personali consentiti durante il pilota. Eliminane uno per collegarne un altro.",
+      "DEVICE_CREATE_RATE_LIMITED": "Sono stati aggiunti troppi numeri nell’ultima ora. Riprova più tardi.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Sono stati aggiunti troppi numeri nell’ultima ora. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} ha avviato una connessione poco fa. Attendi che termini.",
+      "DEVICE_NO_PAIRING": "Questo tentativo di connessione è terminato. Ricomincia.",
+      "DEVICE_NUMBER_LOCKED": "Il numero non può cambiare mentre esiste un collegamento. Scollegalo prima.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp non ha risposto in tempo. Riprova.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Questo numero è già collegato. Scollegalo prima, poi connettilo di nuovo.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Questo numero ha ancora una sessione WhatsApp salvata. Ricollegalo da zero per dimenticare la sessione salvata e ricominciare.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Una connessione è già in corso per questo numero. Ricollegalo da zero per ricominciare."
+    }
+  }
+}

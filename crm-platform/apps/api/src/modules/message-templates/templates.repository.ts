@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { ERROR_CODES } from '@crm/contracts';
+import { AppError } from '../../common/errors/app-error';
 import { decodeCursor } from '../../common/pagination/cursor';
 
 /** A `wa_templates` row with the uuid of the number it is submitted through. */
@@ -23,6 +25,8 @@ export interface TemplateRow {
   /** The Meta media handle of the header example (WaDesk kept the stored file's path here). */
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  /** The pin of a `location` header (`{latitude, longitude, name, address}`). */
+  headerLocation: unknown;
   parameterFormat: string;
   status: string;
   metaStatus: string | null;
@@ -46,7 +50,7 @@ export interface TemplateRow {
 const SELECT = sql.raw(`
   t.id, t.uuid, t.user_id, t.template_name, t.language, t.header, t.template_body, t.footer, t.code_expiration_minutes,
   t.buttons, t.variable_map, t.category, t.meta_category, t.template_type, t.attachment_type, t.attachment_file,
-  t.header_sample_url, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
+  t.header_sample_url, t.header_location, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
   t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until,
   t.provider_config_id, c.uuid AS connection_uuid, t.row_version, t.created_at, t.updated_at,
   to_char(t.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
@@ -76,6 +80,7 @@ function toRow(r: Raw): TemplateRow {
     attachmentType: (r.attachment_type as string | null) ?? null,
     attachmentFile: (r.attachment_file as string | null) ?? null,
     headerSampleUrl: (r.header_sample_url as string | null) ?? null,
+    headerLocation: r.header_location ?? null,
     parameterFormat: String(r.parameter_format),
     status: String(r.status),
     metaStatus: (r.meta_status as string | null) ?? null,
@@ -100,6 +105,9 @@ export interface ListFilter {
   limit: number;
   cursor?: string;
   status?: string;
+  /** The library's status tab: approved / pending (in review and drafts) / rejected (rejected, paused, disabled). */
+  statusGroup?: 'approved' | 'pending' | 'rejected';
+  sort?: 'newest' | 'oldest' | 'name-asc' | 'name-desc';
   category?: string;
   connectionUuid?: string;
   /** Internal id of the WhatsApp connection: for a caller that already holds it (the team inbox), instead of its uuid. */
@@ -123,6 +131,7 @@ export interface NewTemplate {
   attachmentType: string | null;
   attachmentFile: string | null;
   headerSampleUrl: string | null;
+  headerLocation?: unknown;
   parameterFormat: string;
   status: string;
   metaStatus?: string | null;
@@ -156,6 +165,7 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   attachmentType: 'attachment_type',
   attachmentFile: 'attachment_file',
   headerSampleUrl: 'header_sample_url',
+  headerLocation: 'header_location',
   parameterFormat: 'parameter_format',
   status: 'status',
   metaStatus: 'meta_status',
@@ -169,7 +179,31 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   pausedUntil: 'paused_until',
   providerConfigId: 'provider_config_id',
 };
-const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap']);
+const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation']);
+
+/** The library's status tabs as WaDesk reads them: a draft is "in review", a paused or disabled template is "rejected". */
+const GROUP_WHERE = {
+  approved: sql`t.status IN ('approved', 'public')`,
+  pending: sql`t.status IN ('pending', 'draft')`,
+  rejected: sql`t.status IN ('rejected', 'paused', 'disabled')`,
+} as const;
+
+/** Keyset cursor of the two name sorts: the last name and id of the page. */
+export function encodeNameCursor(name: string, id: number): string {
+  return Buffer.from(JSON.stringify({ n: name, i: id }), 'utf8').toString('base64url');
+}
+function decodeNameCursor(raw: string): { name: string; id: number } {
+  try {
+    const v = JSON.parse(Buffer.from(raw, 'base64url').toString('utf8')) as {
+      n?: unknown;
+      i?: unknown;
+    };
+    if (typeof v.n !== 'string' || typeof v.i !== 'number') throw new Error('malformed');
+    return { name: v.n, id: v.i };
+  } catch {
+    throw new AppError(ERROR_CODES.VALIDATION_FAILED, 'Invalid pagination cursor', 400);
+  }
+}
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (m) => `\\${m}`);
 
@@ -177,6 +211,40 @@ const escapeLike = (s: string) => s.replace(/[\\%_]/g, (m) => `\\${m}`);
 @Injectable()
 export class TemplatesRepository {
   async list(tx: Tx, orgId: number, f: ListFilter): Promise<TemplateRow[]> {
+    const where = this.filters(orgId, f);
+    const sort = f.sort ?? 'newest';
+    let order: SQL = sql`t.created_at DESC, t.id DESC`;
+    if (f.cursor) {
+      if (sort === 'name-asc' || sort === 'name-desc') {
+        const c = decodeNameCursor(f.cursor);
+        where.push(
+          sort === 'name-asc'
+            ? sql`(lower(t.template_name), t.id) > (${c.name.toLowerCase()}, ${c.id})`
+            : sql`(lower(t.template_name), t.id) < (${c.name.toLowerCase()}, ${c.id})`,
+        );
+      } else {
+        const c = decodeCursor(f.cursor);
+        const at = c.createdAtIso ?? c.createdAt.toISOString();
+        where.push(
+          sort === 'oldest'
+            ? sql`(t.created_at, t.id) > (${at}::timestamptz, ${c.id})`
+            : sql`(t.created_at, t.id) < (${at}::timestamptz, ${c.id})`,
+        );
+      }
+    }
+    if (sort === 'oldest') order = sql`t.created_at ASC, t.id ASC`;
+    else if (sort === 'name-asc') order = sql`lower(t.template_name) ASC, t.id ASC`;
+    else if (sort === 'name-desc') order = sql`lower(t.template_name) DESC, t.id DESC`;
+    const res = await tx.execute(sql`
+      SELECT ${SELECT} FROM ${FROM}
+      WHERE ${sql.join(where, sql` AND `)}
+      ORDER BY ${order}
+      LIMIT ${f.limit + 1}`);
+    return res.rows.map(toRow);
+  }
+
+  /** The WHERE of a library query, without the keyset bound. */
+  private filters(orgId: number, f: ListFilter): SQL[] {
     const where: SQL[] = [sql`t.org_id = ${orgId}`];
     if (f.status) {
       // WaDesk's `public` (a global starter) reads as approved.
@@ -186,6 +254,7 @@ export class TemplatesRepository {
           : sql`t.status = ${f.status}`,
       );
     }
+    if (f.statusGroup) where.push(GROUP_WHERE[f.statusGroup]);
     if (f.category)
       where.push(sql`upper(coalesce(t.meta_category, t.category)) = ${f.category.toUpperCase()}`);
     if (f.connectionUuid) where.push(sql`c.uuid = ${f.connectionUuid}::uuid`);
@@ -197,18 +266,45 @@ export class TemplatesRepository {
         sql`(t.template_name ILIKE ${like} OR t.meta_template_id ILIKE ${like} OR t.template_body ILIKE ${like})`,
       );
     }
-    if (f.cursor) {
-      const c = decodeCursor(f.cursor);
-      where.push(
-        sql`(t.created_at, t.id) < (${c.createdAtIso ?? c.createdAt.toISOString()}::timestamptz, ${c.id})`,
-      );
+    return where;
+  }
+
+  /**
+   * The numbers on the library's tabs. Tab counts cover the whole library (WaDesk counts everything it can show); `filtered` is
+   * the size of the current result, for "Showing N of M".
+   */
+  async counts(
+    tx: Tx,
+    orgId: number,
+    f: Omit<ListFilter, 'limit' | 'cursor' | 'sort'>,
+  ): Promise<{
+    categories: Record<string, number>;
+    statuses: Record<string, number>;
+    filtered: number;
+  }> {
+    const tabs = await tx.execute(sql`
+      SELECT upper(coalesce(t.meta_category, t.category)) AS cat,
+        count(*)::int AS n,
+        count(*) FILTER (WHERE ${GROUP_WHERE.approved})::int AS approved,
+        count(*) FILTER (WHERE ${GROUP_WHERE.pending})::int AS pending,
+        count(*) FILTER (WHERE ${GROUP_WHERE.rejected})::int AS rejected
+      FROM wa_templates t
+      WHERE t.org_id = ${orgId}
+      GROUP BY 1`);
+    const categories: Record<string, number> = { all: 0 };
+    const statuses: Record<string, number> = { all: 0, approved: 0, pending: 0, rejected: 0 };
+    for (const r of tabs.rows as Array<Record<string, unknown>>) {
+      const n = Number(r.n);
+      categories.all += n;
+      statuses.all += n;
+      statuses.approved += Number(r.approved);
+      statuses.pending += Number(r.pending);
+      statuses.rejected += Number(r.rejected);
+      if (r.cat) categories[String(r.cat)] = (categories[String(r.cat)] ?? 0) + n;
     }
-    const res = await tx.execute(sql`
-      SELECT ${SELECT} FROM ${FROM}
-      WHERE ${sql.join(where, sql` AND `)}
-      ORDER BY t.created_at DESC, t.id DESC
-      LIMIT ${f.limit + 1}`);
-    return res.rows.map(toRow);
+    const filtered = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM ${FROM} WHERE ${sql.join(this.filters(orgId, { ...f, limit: 0 }), sql` AND `)}`);
+    return { categories, statuses, filtered: Number((filtered.rows[0] as { n: number }).n) };
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<TemplateRow | null> {
@@ -265,12 +361,12 @@ export class TemplatesRepository {
     const res = await tx.execute(sql`
       INSERT INTO wa_templates (org_id, user_id, template_name, language, header, template_body, footer,
         code_expiration_minutes, buttons, variable_map, category, meta_category, template_type, attachment_type,
-        attachment_file, header_sample_url, parameter_format, status, meta_status, meta_template_id, quality_score,
+        attachment_file, header_sample_url, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
         rejection_reason_code, approved_at, paused_until, submitted_at, last_synced_at, provider_config_id, channel)
       VALUES (${orgId}, ${v.userId}, ${v.templateName}, ${v.language}, ${v.header}, ${v.templateBody}, ${v.footer},
         ${v.codeExpirationMinutes}, ${JSON.stringify(v.buttons)}::jsonb, ${JSON.stringify(v.variableMap ?? {})}::jsonb,
         ${v.category}, ${v.metaCategory}, ${v.templateType}, ${v.attachmentType}, ${v.attachmentFile},
-        ${v.headerSampleUrl}, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
+        ${v.headerSampleUrl}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
         ${v.qualityScore ?? null}, ${v.rejectionReasonCode ?? null}, ${v.approvedAt ?? null}, ${v.pausedUntil ?? null},
         ${v.submittedAt ?? null},
         ${v.lastSyncedAt ?? null}, ${v.providerConfigId}, 'waba')

@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "connect": {
+      "title": "Telegram ボットを接続",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "submit": "ボットを接続",
+      "intro": "HTTP API ボットトークンを入力して、Webhook を設定し、Telegram のチャットへの対応を開始してください。",
+      "tokenLabel": "ボットトークン *",
+      "tokenPlaceholder": "例: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "BotFather のトークンではないようです。",
+      "connected": "Telegram ボットを接続しました。",
+      "savedNeedsAttention": "ボットは保存されましたが、Telegram が Webhook を受け付けませんでした。",
+      "failed": "ボットを接続できませんでした。もう一度お試しください。",
+      "howTitle": "ボットトークンの取得方法は？",
+      "how1a": "Telegram を開き、認証済みの",
+      "how1b": "アカウントを検索します。",
+      "how2a": "送信",
+      "how2b": "を選択し、表示名とユーザー名を設定します。",
+      "how3": "生成された HTTP API トークンをコピーして、上の欄に貼り付けます。"
+    },
+    "bot": {
+      "failed": "うまくいきませんでした。もう一度お試しください。",
+      "webhookFixed": "受信が再び有効になりました。",
+      "live": "稼働中",
+      "paused": "一時停止中",
+      "needsAttention": "要対応",
+      "lastMessage": "最後のメッセージ {when}",
+      "payments": "支払い",
+      "on": "オン",
+      "paymentsSaved": "支払い設定を保存しました。",
+      "paymentsHint": "@BotFather（/mybots → Payments）から支払いプロバイダーのトークンを貼り付けると、支払いフローノードを有効にできます。チャット内でネイティブに請求書を送信できます。",
+      "paymentsSavedPlaceholder": "•••••••• （保存済み。変更しない場合は空欄のまま）",
+      "paymentsToken": "支払いプロバイダーのトークン",
+      "removeToken": "トークンを削除",
+      "save": "保存",
+      "webhook": "Webhook",
+      "fixInbound": "受信を修正（Webhook を再登録）",
+      "pause": "一時停止",
+      "resume": "再開",
+      "pausedDone": "ボットを一時停止しました。",
+      "resumedDone": "ボットを再開しました。",
+      "disconnect": "切断",
+      "disconnectConfirm": "この Telegram ボットを切断しますか？受信箱のスレッドは残りますが、送受信は停止します。",
+      "cancel": "キャンセル",
+      "disconnected": "ボットを切断しました。"
+    },
+    "hub": {
+      "kicker": "チャネル · Telegram",
+      "title": "Telegram",
+      "titleAccent": "接続",
+      "intro": "Telegram ボットを導入して、メッセージのワークフローを自動化し、カスタマーサポートに対応し、世界中の購読者にお知らせを一斉配信できます。",
+      "teamInbox": "チーム受信箱",
+      "flows": "フロー",
+      "broadcasts": "一斉配信",
+      "telegramBroadcasts": "Telegram の一斉配信",
+      "loadError": "Telegram ボットを読み込めませんでした。",
+      "connectedCount": "{count} 件接続済み",
+      "notConnected": "未接続",
+      "botCardTitle": "Telegram ボットの接続",
+      "botCardBody": "@BotFather のボットトークンを貼り付けると、メッセージの自動化、サポート対応、購読者への一斉配信ができます。",
+      "connectAnother": "別のボットを接続",
+      "connectBot": "ボットを接続",
+      "accountCardTitle": "Telegram アカウントの接続",
+      "accountCardBody": "Telegram アカウントをリンクすると、ここからボットを作成できます。WhatsApp と同様に、QR コードをスキャンするか電話番号を使用してください。",
+      "connectAccount": "アカウントを接続",
+      "accountUnavailable": "まだ利用できません。このワークスペースには Telegram アカウントサービスが設定されていないため、必要です。",
+      "connectedBots": "接続済みのボット",
+      "guideTitle": "Telegram ボット設定ガイド",
+      "guideBody": "以下の手順で Telegram チャネルをリンクし、自動ワークフローを有効にしてください。",
+      "prerequisites": "事前準備",
+      "pre": {
+        "account": "有効な Telegram アカウント",
+        "name": "ボットの一意の名前",
+        "app": "Telegram Web/アプリへのアクセス"
+      },
+      "stepsTitle": "接続手順",
+      "step": "ステップ {n}",
+      "steps": {
+        "locate": {
+          "title": "BotFather を探す",
+          "body": "Telegram を開き、公式の @BotFather アカウントを検索してください（認証済みバッジを確認）。"
+        },
+        "create": {
+          "title": "新しいボットを作成",
+          "body": "@BotFather に /newbot と送信し、案内に従ってボットの名前とユーザー名を設定します。"
+        },
+        "token": {
+          "title": "API トークンを取得",
+          "body": "BotFather が HTTP API トークン（例: 123456789:ABC…）を生成します。安全にコピーしてください。"
+        },
+        "connect": {
+          "title": "ここでボットを接続",
+          "body": "「ボットを接続」をクリックし、トークンを入力欄に貼り付けて送信すると、リンクが完了します。"
+        }
+      },
+      "unlockedTitle": "利用できる機能は？",
+      "unlocked": {
+        "support": {
+          "title": "サポートを自動化",
+          "body": "AI ボットが FAQ に対応し、会話を24時間振り分けます。"
+        },
+        "broadcast": {
+          "title": "一斉配信キャンペーン",
+          "body": "プロモーション、通知、ニュースレターをすべての購読者へ一度に送信します。"
+        },
+        "media": {
+          "title": "リッチなインタラクティブメディア",
+          "body": "ボタン、メニュー、請求書、画像でユーザーとのやり取りを促進します。"
+        }
+      },
+      "tipTitle": "設定のヒント",
+      "tipBody": "ボットの API トークンは公開しないでください。漏えいした場合は @BotFather にメッセージを送り、/revoke を実行して直ちに新しいトークンを発行してください。localhost では、トンネルのアドレスが再起動のたびに変わります。その場合は「受信を修正」を押して再登録してください。"
+    },
+    "broadcasts": {
+      "kicker": "Telegram · 一斉配信",
+      "title": "Telegram",
+      "titleAccent": "一斉配信",
+      "intro": "ボットとチャットしたすべてのユーザーにメッセージを送信し、一斉配信ごとに送信済み、失敗、ブロックの件数を確認できます。",
+      "bots": "ボット",
+      "newBroadcast": "新規一斉配信",
+      "connectFirst": "先に Telegram ボットを接続してください。",
+      "connectBot": "ボットを接続",
+      "tile": {
+        "sent": "送信済み",
+        "audience": "対象者",
+        "failed": "失敗",
+        "blocked": "ブロック",
+        "sending": "送信中",
+        "broadcasts": "{count} 件の一斉配信",
+        "audienceHint": "受信者の合計",
+        "failedHint": "配信エラー",
+        "blockedHint": "ユーザーによりボットがブロックされました",
+        "sendingHint": "送信処理中"
+      },
+      "listKicker": "一斉配信リスト",
+      "listTitle": "最近の一斉配信",
+      "col": {
+        "broadcast": "一斉配信",
+        "bot": "ボット",
+        "recipients": "受信者",
+        "progress": "進捗",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "counts": "{sent} 件送信 · {failed} 件失敗 · {blocked} 件ブロック",
+      "status": {
+        "draft": "下書き",
+        "sending": "送信中",
+        "done": "完了",
+        "failed": "失敗"
+      },
+      "start": "開始",
+      "pause": "一時停止",
+      "retry": "再試行",
+      "delete": "削除",
+      "deleteConfirm": "この一斉配信を削除しますか？",
+      "cancel": "キャンセル",
+      "empty": "一斉配信はまだありません。",
+      "createFirst": "最初の一斉配信を作成",
+      "failed": "うまくいきませんでした。もう一度お試しください。",
+      "started": "送信を開始しました。",
+      "paused": "一時停止しました。未送信のチャットは保留のままです。",
+      "retried": "失敗した {count} 件のチャットを再送できます。開始を押してください。",
+      "deleted": "一斉配信を削除しました。"
+    },
+    "compose": {
+      "kicker": "Telegram · 新規一斉配信",
+      "title": "新しい",
+      "titleAccent": "一斉配信",
+      "back": "戻る",
+      "loadError": "ボットとテンプレートを読み込めませんでした。",
+      "noPermission": "このページは閲覧できますが、一斉配信を作成する権限はありません。",
+      "setup": "一斉配信の設定",
+      "name": "一斉配信名",
+      "namePlaceholder": "例: 週末セール",
+      "bot": "ボット",
+      "template": "テンプレート（任意）",
+      "templateHint": "メッセージを自動入力し、テンプレートのボタンも送信します。",
+      "templateNone": "— なし（自分で入力） —",
+      "buttonCount": "{count} 個のボタン",
+      "message": "メッセージ",
+      "messageHint": "'{name}' を使うと内容を個別化できます。",
+      "messagePlaceholder": "'{name}' さん、こんにちは！…",
+      "attachment": "添付ファイル（任意）",
+      "attachmentHint": "画像、動画、音声ファイル、ドキュメントの公開 URL です。ファイルをアップロードするにはストレージサービスが必要です。",
+      "attachmentInvalid": "http:// または https:// で始まる完全なアドレスを入力してください。",
+      "recipients": "受信者",
+      "selectAll": "すべて選択",
+      "clearAll": "すべて解除",
+      "noChats": "このボットとチャットしたユーザーはまだいません。",
+      "type": {
+        "private": "個人",
+        "group": "グループ",
+        "channel": "チャンネル"
+      },
+      "selected": "{count} 件選択中",
+      "submit": "一斉配信を作成",
+      "preview": "ライブプレビュー",
+      "previewEmpty": "メッセージのプレビュー…",
+      "previewNote": "各受信者のチャットに一斉配信がこのように表示されます。",
+      "created": "{count} 人の受信者で一斉配信を作成しました。準備ができたら「送信を開始」を押してください。",
+      "failed": "一斉配信を作成できませんでした。もう一度お試しください。"
+    }
+  }
+}

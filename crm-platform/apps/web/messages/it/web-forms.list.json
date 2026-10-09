@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Moduli",
+      "subtitle": "Crea moduli, inseriscili nel tuo sito o condividi un link, e ogni risposta arriva nel CRM come contatto.",
+      "templates": "Template",
+      "newForm": "Nuovo modulo",
+      "statsLabel": "Totali dei moduli mostrati",
+      "stats": {
+        "forms": "Moduli",
+        "published": "Pubblicati",
+        "submissions": "Invii",
+        "needsReview": "Richiede attenzione"
+      },
+      "views": {
+        "label": "Mostra",
+        "all": "Tutti",
+        "published": "Pubblicati",
+        "draft": "Bozze",
+        "paused": "In pausa",
+        "archived": "Archiviati"
+      },
+      "search": "Cerca moduli",
+      "loading": "Caricamento moduli",
+      "loadFailed": "Impossibile caricare i moduli.",
+      "retry": "Riprova",
+      "empty": {
+        "title": "Nessun modulo ancora",
+        "message": "Parti da un template o da un modulo vuoto, pubblicalo, e condividi il link o incolla il codice di incorporamento nel tuo sito.",
+        "fromTemplate": "Parti da un template",
+        "blank": "Modulo vuoto"
+      },
+      "noMatch": {
+        "title": "Nessun modulo corrisponde",
+        "message": "Prova un’altra ricerca o vista.",
+        "clear": "Cancella filtri"
+      },
+      "col": {
+        "name": "Modulo",
+        "status": "Stato",
+        "submissions": "Invii",
+        "views": "Visualizzazioni",
+        "conversion": "Conversione",
+        "last": "Ultimo invio"
+      },
+      "unpublished": "Modifiche non pubblicate",
+      "version": "Versione {n}",
+      "needsReview": "{count, plural, one {# richiede attenzione} other {# richiedono attenzione}}",
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "paused": "In pausa",
+        "archived": "Archiviato"
+      },
+      "noRate": "-",
+      "never": "Mai",
+      "actionsFor": "Azioni per {name}",
+      "action": {
+        "edit": "Modifica",
+        "submissions": "Invii",
+        "copyLink": "Copia link",
+        "embed": "Incorpora in un sito",
+        "duplicate": "Duplica",
+        "pause": "Metti in pausa",
+        "resume": "Riattiva",
+        "archive": "Archivia",
+        "delete": "Elimina",
+        "restore": "Ripristina"
+      },
+      "loadMore": "Carica altri",
+      "copied": "Link copiato",
+      "copyBlocked": "La copia è bloccata in questo browser. Il link è {url}",
+      "paused": "Modulo in pausa. I visitatori vedono che è chiuso.",
+      "resumed": "Modulo riattivato",
+      "archived": "Modulo archiviato",
+      "deleted": "Modulo eliminato",
+      "cancel": "Annulla",
+      "archive": {
+        "title": "Archiviare questo modulo?",
+        "message": "Il link pubblico e tutti gli incorporamenti di «{name}» smettono di funzionare. I suoi invii vengono conservati e puoi ancora leggerli.",
+        "confirm": "Archivia"
+      },
+      "delete": {
+        "title": "Eliminare questo modulo?",
+        "message": "«{name}» viene eliminato in modo definitivo. I contatti che ha creato restano nel tuo CRM.",
+        "confirm": "Elimina"
+      },
+      "restored": "Modulo ripristinato"
+    },
+    "newForm": {
+      "eyebrow": "Moduli",
+      "title": "Nuovo modulo",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "create": "Crea modulo",
+      "startFrom": "Parti da",
+      "mode": {
+        "template": "Un template",
+        "blank": "Vuoto"
+      },
+      "loadingTemplates": "Caricamento template",
+      "templatesFailed": "Impossibile caricare i template. Puoi comunque partire da un modulo vuoto.",
+      "templates": "Template",
+      "fieldCount": "{count, plural, one {# campo} other {# campi}}",
+      "pickTemplate": "Scegli un template per continuare.",
+      "name": "Nome del modulo",
+      "nameHint": "Lo vede solo il tuo team.",
+      "nameRequired": "Inserisci un nome per il modulo."
+    },
+    "templates": {
+      "breadcrumb": "Percorso di navigazione",
+      "back": "Torna ai moduli",
+      "title": "Template dei moduli",
+      "subtitle": "Parti da un modulo già pronto e modifica ciò che vuoi.",
+      "blank": "Modulo vuoto",
+      "loading": "Caricamento template",
+      "loadFailed": "Impossibile caricare i template.",
+      "retry": "Riprova",
+      "empty": "Nessun template disponibile.",
+      "category": {
+        "lead": "Acquisizione lead",
+        "contact": "Contatto",
+        "event": "Evento",
+        "order": "Ordine",
+        "survey": "Sondaggio"
+      },
+      "fields": "Campi di questo template",
+      "more": "+{count} altri",
+      "use": "Usa questo template"
+    }
+  }
+}

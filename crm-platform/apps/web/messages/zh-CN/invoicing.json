@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "activity": {
+      "loading": "正在加载活动",
+      "events": {
+        "created": "草稿已创建",
+        "edited": "草稿已编辑",
+        "issued": "发票已开具",
+        "sent": "已标记为已发送",
+        "viewed": "客户已打开",
+        "payment_recorded": "已记录付款",
+        "payment_refunded": "已退款",
+        "paid": "已全额付清",
+        "reminder_sent": "已发送提醒",
+        "voided": "发票已作废"
+      },
+      "title": "活动"
+    },
+    "pickInvoice": {
+      "title": "哪张发票已付款？",
+      "close": "关闭",
+      "cancel": "取消",
+      "search": "按编号或客户搜索",
+      "loading": "正在加载发票",
+      "noMatch": "没有匹配的未付发票。",
+      "nothingOwed": "目前没有应收款项。",
+      "balance": "余额",
+      "more": "显示更多"
+    },
+    "aging": {
+      "loading": "正在加载账龄报告",
+      "emptyTitle": "没有应收款项",
+      "emptyMessage": "所有已开具的发票均已付清。未付发票将按逾期时长分组显示在此处。",
+      "asOf": "截至 {date}。逾期天数从到期日起算。",
+      "currencyLabel": "{currency} 未付金额",
+      "outstanding": "未付金额",
+      "invoices": "{count, plural, other {# 张发票}}",
+      "barLabel": "各账龄区间在未付金额中所占的比例",
+      "buckets": {
+        "current": "尚未到期",
+        "d1_30": "逾期 1-30 天",
+        "d31_60": "逾期 31-60 天",
+        "d61_90": "逾期 61-90 天",
+        "d90_plus": "逾期超过 90 天"
+      },
+      "total": "合计",
+      "unnamed": "未命名联系人",
+      "noContact": "无联系人"
+    },
+    "payments": {
+      "title": "付款",
+      "subtitle": "发票已收到的款项，以及仍未付清的金额。",
+      "invoices": "发票",
+      "record": "记录付款",
+      "viewLabel": "付款视图",
+      "views": {
+        "ledger": "账本",
+        "aging": "账龄"
+      },
+      "tableLabel": "付款账本",
+      "loading": "正在加载付款记录",
+      "emptyFilteredTitle": "没有匹配的付款记录",
+      "emptyFiltered": "请尝试其他搜索词或清除筛选条件。",
+      "emptyTitle": "暂无付款记录",
+      "emptyMessage": "客户付清发票后，可在此处或发票页面中记录。",
+      "resetFilters": "清除筛选",
+      "showing": "已加载 {count, plural, other {# 条付款记录}}",
+      "loadMore": "加载更多",
+      "allLoaded": "已全部加载",
+      "strip": {
+        "loading": "正在加载合计",
+        "label": "付款合计",
+        "window": "{from} 至 {to}",
+        "none": "此时段内没有付款记录。",
+        "collected": "已收款（{currency}）",
+        "count": "付款",
+        "refunded": "已退款"
+      },
+      "toolbar": {
+        "search": "搜索参考号、发票或客户",
+        "method": "付款方式",
+        "allMethods": "所有方式",
+        "from": "开始",
+        "to": "结束",
+        "paidFrom": "付款起始日期",
+        "paidTo": "付款截止日期",
+        "reset": "清除筛选",
+        "refresh": "刷新"
+      },
+      "table": {
+        "scrollArea": "付款表格",
+        "columns": {
+          "date": "日期",
+          "invoice": "发票",
+          "contact": "客户",
+          "method": "付款方式",
+          "reference": "参考号",
+          "amount": "金额",
+          "refunded": "已退款",
+          "recordedBy": "记录人",
+          "actions": "操作"
+        },
+        "moreFor": "{date} 付款的操作",
+        "openInvoice": "打开发票",
+        "refund": "退款"
+      }
+    },
+    "taxRates": {
+      "title": "税率",
+      "subtitle": "添加到发票明细中的税费。其中一项为新明细的默认税率。",
+      "new": "新建税率",
+      "tableLabel": "税率",
+      "loading": "正在加载税率",
+      "emptyTitle": "暂无税率",
+      "emptyMessage": "添加您收取的税费（如增值税或消费税），即可在发票明细中选用。",
+      "scrollArea": "税率表格",
+      "columns": {
+        "name": "名称",
+        "rate": "税率",
+        "type": "类型",
+        "status": "状态",
+        "effective": "生效日期",
+        "used": "明细",
+        "actions": "操作"
+      },
+      "default": "默认",
+      "inclusive": "含税",
+      "exclusive": "不含税",
+      "active": "启用",
+      "inactive": "停用",
+      "always": "始终",
+      "moreFor": "{name} 的操作",
+      "edit": "编辑",
+      "makeDefault": "设为默认",
+      "madeDefault": "{name} 已设为默认。",
+      "deactivate": "停用",
+      "activate": "启用",
+      "deactivated": "{name} 已停用。",
+      "activated": "{name} 已启用。",
+      "delete": "删除",
+      "deleteTitle": "删除此税率？",
+      "keep": "保留",
+      "deleted": "{name} 已删除。",
+      "count": "{count, plural, other {# 个税率}}",
+      "hint": "修改税率不会改变已开具的发票：每张发票保留开具时使用的税率。",
+      "errors": {
+        "isDefault": "这是默认税率。请先将其他税率设为默认。"
+      },
+      "form": {
+        "eyebrow": "税率",
+        "editTitle": "编辑税率",
+        "newTitle": "新建税率",
+        "close": "关闭",
+        "cancel": "取消",
+        "save": "保存",
+        "name": "名称",
+        "namePlaceholder": "VAT、GST、Sales tax",
+        "rate": "税率",
+        "type": "适用方式",
+        "exclusive": "不含税：在价格之外加收",
+        "inclusive": "含税：已包含在价格中",
+        "typeHint": {
+          "exclusive": "客户支付价格加税费。",
+          "inclusive": "价格中已包含税费；发票将显示其中的税额。"
+        },
+        "effectiveFrom": "生效日期",
+        "effectiveHint": "可选。适用于按日期变化的税率。",
+        "description": "说明",
+        "makeDefault": "新明细的默认税率",
+        "defaultHint": "新的发票明细将默认使用此税率。",
+        "active": "启用",
+        "activeHint": "停用的税率无法在新明细中选用。",
+        "saved": "{name} 已保存。",
+        "created": "{name} 已添加。",
+        "problems": {
+          "nameRequired": "请输入名称。",
+          "nameTaken": "已存在同名税率。",
+          "rateInvalid": "请输入 0 到 100 之间的百分比。",
+          "dateInvalid": "请输入有效日期。",
+          "conflict": "此税率已被他人修改。请关闭后重新打开。"
+        }
+      }
+    },
+    "public": {
+      "loading": "正在加载发票",
+      "errorTitle": "无法加载此发票",
+      "errorMessage": "请检查网络连接后重试。",
+      "retry": "重试",
+      "title": "{seller} 开具的发票",
+      "dueOn": "到期日 {date}",
+      "print": "打印",
+      "download": "下载 PDF",
+      "paidBanner": "此发票已全额付清，谢谢。",
+      "voidBanner": "此发票已取消，无需付款。",
+      "payNow": "付款方式",
+      "amountDue": "应付金额：",
+      "bankIntro": "请通过银行转账付款，并将 {number} 作为付款参考号。",
+      "copied": "已复制",
+      "payButton": "支付 {amount}",
+      "gatewayNote": "您将前往卖家的支付服务商付款页面。",
+      "questions": "对此发票有疑问？",
+      "metaTitle": "发票"
+    },
+    "linked": {
+      "title": "发票",
+      "new": "新建发票",
+      "viewAll": "查看全部",
+      "loading": "正在加载发票",
+      "none": "暂无发票。",
+      "draft": "草稿",
+      "owes": "应付"
+    },
+    "nav": {
+      "invoices": "发票",
+      "payments": "付款",
+      "taxRates": "税率",
+      "recurring": "定期发票",
+      "salesOrders": "销售订单"
+    },
+    "common": {
+      "unnamedContact": "未命名联系人",
+      "dismiss": "关闭"
+    },
+    "status": {
+      "draft": "草稿",
+      "issued": "已开具",
+      "partially_paid": "部分付款",
+      "overdue": "逾期",
+      "paid": "已付款",
+      "void": "作废"
+    },
+    "method": {
+      "bank_transfer": "银行转账",
+      "cash": "现金",
+      "card": "银行卡",
+      "upi": "UPI",
+      "cheque": "支票",
+      "gateway": "在线",
+      "other": "其他"
+    },
+    "errors": {
+      "network": "无法连接服务器，请检查网络后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "会话已结束，请重新登录。",
+      "conflict": "此内容刚刚被他人修改。请重新加载以查看最新版本。",
+      "validation": "部分信息无效，请检查高亮显示的字段。",
+      "unavailable": "此服务器暂不支持发票功能。",
+      "rateLimited": "请求过于频繁，请稍候再试。",
+      "notFound": "此发票已不存在。",
+      "planDisabled": "您的套餐不包含发票功能。",
+      "invalidState": "当前发票状态下无法执行此操作。请重新加载并检查其状态。",
+      "unexpected": "系统出现问题，请重试。",
+      "requestId": "请求 ID",
+      "retry": "重试"
+    },
+    "picker": {
+      "unlink": "移除联系人",
+      "searchContact": "按姓名搜索联系人",
+      "results": "匹配的联系人",
+      "searching": "搜索中...",
+      "unavailable": "无法加载联系人。",
+      "none": "未找到联系人。"
+    },
+    "actions": {
+      "failed": "操作未成功。",
+      "issued": "发票 {number} 已开具。",
+      "sent": "已标记为已发送。",
+      "voided": "发票 {number} 已作废。",
+      "duplicated": "已创建草稿副本。",
+      "deleted": "草稿已删除。",
+      "linkCopied": "链接已复制。",
+      "linkCopyFailed": "浏览器阻止了复制，请选中链接后手动复制。"
+    },
+    "payDialog": {
+      "title": "记录付款",
+      "forInvoice": "发票 {number}",
+      "close": "关闭",
+      "cancel": "取消",
+      "record": "记录付款",
+      "markPaid": "记录并标记为已付款",
+      "recordAnyway": "仍然记录",
+      "balance": "应付余额",
+      "amount": "金额（{currency}）",
+      "method": "付款方式",
+      "paidOn": "付款日期",
+      "reference": "参考号",
+      "referenceHint": "交易编号或支票号码",
+      "note": "备注",
+      "recorded": "已记录 {amount} 的付款。",
+      "partialNote": "这是部分付款，仍有 {left} 待付。",
+      "overpayNote": "此金额比应付余额多 {extra}，请在记录前核对金额。",
+      "problems": {
+        "amountInvalid": "请输入金额，例如 125.50。",
+        "amountZero": "金额必须大于零。",
+        "dateInvalid": "请输入有效日期。",
+        "dateFuture": "付款日期不能是未来日期。",
+        "tooMuch": "超出可退款金额。",
+        "referenceTooLong": "参考号过长（最多 191 个字符）。",
+        "noteTooLong": "备注过长（最多 2000 个字符）。"
+      }
+    },
+    "refundDialog": {
+      "title": "退款",
+      "close": "关闭",
+      "cancel": "取消",
+      "refund": "退款",
+      "available": "最多可退款 {amount}。",
+      "amount": "金额（{currency}）",
+      "date": "退款日期",
+      "reason": "原因",
+      "effect": "退款后，发票将重新计入应付金额。",
+      "refunded": "已退款 {amount}。",
+      "problems": {
+        "amountInvalid": "请输入金额，例如 125.50。",
+        "amountZero": "金额必须大于零。",
+        "tooMuch": "超出可退款金额。"
+      }
+    },
+    "voidDialog": {
+      "title": "作废发票",
+      "close": "关闭",
+      "keep": "保留发票",
+      "void": "作废发票",
+      "warning": "作废的发票会保留其编号，但无法再付款、编辑或重新打开。客户的链接将显示为已取消。",
+      "reason": "原因",
+      "reasonHint": "可选。将保存在发票的活动记录中。"
+    },
+    "sendDialog": {
+      "title": "分享发票",
+      "issueTitle": "开具发票",
+      "close": "关闭",
+      "cancel": "取消",
+      "issue": "开具发票",
+      "done": "完成",
+      "issueIntro": "开具后，此发票即正式生效：",
+      "issueNumber": "将分配下一个发票编号。",
+      "issueFrozen": "其明细、价格和税费将无法再编辑。",
+      "issueLink": "将生成供客户使用的链接。",
+      "link": "客户链接",
+      "linkHint": "拥有此链接的任何人都可以查看发票及付款方式。",
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "浏览器阻止了复制，请选中链接后手动复制。",
+      "open": "打开客户页面",
+      "email": "发送邮件至",
+      "emailHint": "可选。留空则仅手动分享链接，并将发票标记为已发送。",
+      "alreadySent": "此发票已标记为已发送。"
+    },
+    "deleteDialog": {
+      "title": "删除草稿？",
+      "message": "{name} 将被永久删除。仅草稿可以删除。",
+      "delete": "删除草稿",
+      "keep": "保留"
+    },
+    "row": {
+      "moreFor": "{name} 的操作",
+      "draft": "草稿",
+      "open": "打开",
+      "edit": "编辑",
+      "issue": "开具并发送",
+      "send": "分享链接 / 标记为已发送",
+      "copyLink": "复制链接",
+      "recordPayment": "记录付款",
+      "markPaid": "标记为已付款",
+      "duplicate": "复制",
+      "print": "下载 / 打印",
+      "void": "作废",
+      "delete": "删除草稿"
+    },
+    "table": {
+      "columns": {
+        "number": "发票",
+        "contact": "客户",
+        "issued": "开具日期",
+        "due": "到期日",
+        "total": "总计",
+        "paid": "已付",
+        "balance": "余额",
+        "status": "状态"
+      },
+      "draft": "草稿",
+      "daysLate": "{count, plural, other {逾期 # 天}}",
+      "selectAll": "选择所有已加载的发票",
+      "selectRow": "选择 {name}",
+      "scrollArea": "发票表格"
+    },
+    "tabs": {
+      "label": "发票状态",
+      "all": "全部",
+      "draft": "草稿",
+      "issued": "已开具",
+      "partially_paid": "部分付款",
+      "overdue": "逾期",
+      "paid": "已付款",
+      "void": "作废",
+      "count": "{count, plural, other {# 张发票}}"
+    },
+    "toolbar": {
+      "search": "按编号或客户搜索",
+      "contactLoading": "客户",
+      "from": "开始日期",
+      "to": "结束日期",
+      "issuedFrom": "开具日期从",
+      "issuedTo": "开具日期至",
+      "sort": "发票排序",
+      "sorts": {
+        "newest": "最新优先",
+        "oldest": "最早优先",
+        "due": "到期日",
+        "amount": "金额最高"
+      },
+      "reset": "清除筛选",
+      "refresh": "刷新"
+    },
+    "bulk": {
+      "label": "批量操作",
+      "selected": "{count, plural, other {已选择 # 张发票}}",
+      "working": "处理中...",
+      "issue": "开具草稿",
+      "void": "作废",
+      "delete": "删除草稿",
+      "clear": "清除选择",
+      "failed": "操作未成功。",
+      "keep": "保留",
+      "someFailed": "{count, plural, other {# 张发票无法更改。}}",
+      "done": {
+        "issue": "{count, plural, other {已开具 # 张草稿。}}",
+        "void": "{count, plural, other {已作废 # 张发票。}}",
+        "delete": "{count, plural, other {已删除 # 张草稿。}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "作废所选发票？",
+          "message": "{count, plural, other {所选的 # 张发票将被作废。已有付款记录的发票将被跳过。}}",
+          "confirm": "作废发票"
+        },
+        "delete": {
+          "title": "删除所选草稿？",
+          "message": "{count, plural, other {所选的 # 张发票将被处理。仅草稿会被永久删除。}}",
+          "confirm": "删除草稿"
+        }
+      }
+    },
+    "list": {
+      "title": "发票",
+      "subtitle": "向客户开具账单，跟踪已付与逾期情况。",
+      "payments": "付款",
+      "newInvoice": "新建发票",
+      "tableLabel": "发票列表",
+      "empty": {
+        "all": {
+          "title": "暂无发票",
+          "message": "创建您的第一张发票，或从已接受的报价单或估价单开始创建。"
+        },
+        "draft": {
+          "title": "暂无草稿",
+          "message": "您仍在编辑的发票将显示在此处。"
+        },
+        "issued": {
+          "title": "暂无待付款项",
+          "message": "已开具但尚无付款的发票将显示在此处。"
+        },
+        "partially_paid": {
+          "title": "暂无部分付款的发票",
+          "message": "已有付款但仍有余额的发票将显示在此处。"
+        },
+        "overdue": {
+          "title": "暂无逾期款项",
+          "message": "超过到期日且仍有余额的发票将显示在此处。"
+        },
+        "paid": {
+          "title": "暂无已付款发票",
+          "message": "全额付清的发票将显示在此处。"
+        },
+        "void": {
+          "title": "暂无作废发票",
+          "message": "已取消的发票将显示在此处并保留其编号。"
+        }
+      },
+      "emptyFilteredTitle": "没有匹配的发票",
+      "emptyFiltered": "请尝试其他搜索词或清除筛选条件。",
+      "resetFilters": "清除筛选",
+      "loading": "正在加载发票",
+      "showing": "{count, plural, other {已加载 # 张发票}}",
+      "loadMore": "加载更多",
+      "allLoaded": "已全部加载"
+    },
+    "lines": {
+      "lineN": "第 {n} 行",
+      "description": "描述",
+      "descriptionPlaceholder": "您要收取什么费用？",
+      "removeLine": "删除第 {n} 行",
+      "qty": "数量",
+      "price": "单价（{currency}）",
+      "discount": "折扣 %",
+      "tax": "税费",
+      "noTax": "无税",
+      "inclusive": "含",
+      "removedRate": "税率已删除",
+      "inactive": "已停用",
+      "amount": "金额",
+      "addLine": "添加一行",
+      "problems": {
+        "descriptionRequired": "请描述此行。",
+        "qtyInvalid": "请输入大于零的数量。",
+        "priceInvalid": "请输入价格，例如 49.90。",
+        "lineDiscountInvalid": "请输入 0 到 100 之间的百分比。",
+        "noLines": "开具前请至少添加一行。",
+        "amountZero": "发票总额必须大于零。"
+      }
+    },
+    "totals": {
+      "label": "发票合计",
+      "title": "合计",
+      "subtotal": "小计",
+      "discount": "折扣",
+      "total": "总计"
+    },
+    "builder": {
+      "creatingFromDocument": "正在根据文档创建发票...",
+      "loading": "加载中",
+      "notEditable": "此发票已开具，无法再编辑。请复制以创建更正版本。",
+      "openInvoice": "打开发票",
+      "newTitle": "新建发票",
+      "editTitle": "编辑草稿",
+      "back": "返回",
+      "unsaved": "未保存的更改",
+      "cancel": "取消",
+      "saveDraft": "保存草稿",
+      "saveAndIssue": "保存并开具",
+      "conflict": "您编辑时他人修改了此草稿。请重新加载以查看其版本；您在此处的编辑将丢失。",
+      "reload": "重新加载",
+      "viewLabel": "编辑器视图",
+      "views": {
+        "edit": "编辑",
+        "preview": "预览"
+      },
+      "billTo": "收件方",
+      "contact": "联系人",
+      "contactHint": "选择联系人以将发票关联到其名下，或在下方输入买方信息。",
+      "buyerName": "发票上的名称",
+      "buyerEmail": "邮箱",
+      "buyerPhone": "电话",
+      "buyerAddress": "账单地址",
+      "details": "日期与货币",
+      "currency": "货币",
+      "currencyHint": "三个字母，如 USD 或 KWD。小数位数随货币而定。",
+      "issueDate": "开具日期",
+      "terms": "付款条件",
+      "noDueDate": "无到期日",
+      "dueDate": "到期日",
+      "lineItems": "明细项目",
+      "orderLinkedNote": "由销售订单生成的发票，其明细不可更改。如需修改，请作废或删除此发票，然后重新为订单开具发票。",
+      "adjustments": "折扣",
+      "discountKind": "整张发票的折扣",
+      "discountNone": "无折扣",
+      "discountPercent": "百分比",
+      "discountAmount": "固定金额（{currency}）",
+      "discountValue": "折扣值",
+      "notesAndTerms": "备注与条款",
+      "notes": "给客户的备注",
+      "notesHint": "将显示在发票上。",
+      "termsText": "条款与条件",
+      "termsHint": "将显示在发票底部。",
+      "preview": "预览",
+      "saved": "草稿已保存。",
+      "fixProblems": "请先修正高亮的字段。",
+      "serverRejected": "服务器未接受部分值，请检查字段后重试。",
+      "problems": {
+        "contactRequired": "请选择联系人或输入买方名称。",
+        "currencyInvalid": "请输入三个字母的货币代码。",
+        "issueDateInvalid": "请输入有效的开具日期。",
+        "dueBeforeIssue": "到期日不能早于开具日期。",
+        "dueInvalid": "请输入有效的到期日。",
+        "noLines": "开具前请至少添加一行。",
+        "discountInvalid": "请输入有效的折扣。",
+        "emailInvalid": "请输入有效的邮箱地址。",
+        "amountZero": "发票总额必须大于零。",
+        "descriptionRequired": "请描述此行。",
+        "priceInvalid": "请输入有效的价格。",
+        "qtyInvalid": "请输入大于零的数量。",
+        "lineDiscountInvalid": "请输入 0 到 100 之间的百分比。"
+      }
+    },
+    "terms": {
+      "onReceipt": "收到即付",
+      "net": "净 {days} 天",
+      "custom": "自定义日期"
+    },
+    "paper": {
+      "label": "发票 {number}",
+      "labelDraft": "草稿发票预览",
+      "sellerFallback": "您的企业名称",
+      "title": "发票",
+      "draftNumber": "草稿",
+      "billedTo": "收件方",
+      "buyerFallback": "客户",
+      "issued": "开具日期",
+      "due": "到期日",
+      "onReceipt": "收到即付",
+      "item": "项目",
+      "qty": "数量",
+      "price": "单价",
+      "tax": "税费",
+      "amount": "金额",
+      "noLines": "暂无明细",
+      "noDescription": "无描述",
+      "lineDiscount": "{percent}% 折扣",
+      "subtotal": "小计",
+      "discount": "折扣",
+      "discountPercent": "折扣（{percent}%）",
+      "total": "总计",
+      "includesTax": "价格中已含税",
+      "paid": "已付",
+      "balanceDue": "应付余额",
+      "notes": "备注",
+      "terms": "条款"
+    },
+    "detail": {
+      "loading": "正在加载发票",
+      "backToList": "返回发票列表",
+      "draftTitle": "草稿发票",
+      "edit": "编辑",
+      "issueAndSend": "开具并发送",
+      "shareAgain": "再次分享",
+      "send": "分享并发送",
+      "recordPayment": "记录付款",
+      "markPaid": "标记为已付款",
+      "copyLink": "复制链接",
+      "print": "下载 / 打印",
+      "duplicate": "复制",
+      "void": "作废",
+      "delete": "删除草稿",
+      "voidedBanner": "此发票已于 {date} 作废。其编号保留，但无法再付款。",
+      "voidNeedsRefund": "如需作废此发票，请先退还其付款。",
+      "overpaid": "已付金额超过此发票应付金额。",
+      "amountsLabel": "金额",
+      "total": "总计",
+      "paid": "已付",
+      "balance": "应付余额",
+      "issued": "开具日期",
+      "due": "到期日",
+      "noDue": "无到期日",
+      "daysLate": "{count, plural, other {逾期 # 天}}",
+      "sentAt": "已发送",
+      "paidAt": "已全额付款",
+      "source": "创建来源",
+      "sourceKind": {
+        "proposal": "报价",
+        "estimate": "估价单"
+      },
+      "deal": "交易",
+      "dealFallback": "打开交易"
+    },
+    "paymentsSection": {
+      "title": "付款",
+      "loading": "正在加载付款",
+      "none": "尚未记录付款。",
+      "refund": "退款"
+    }
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Widget Obrolan"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "paywall": {
+      "kicker": "Paket",
+      "title": "Widget chatbot tidak termasuk dalam paket Anda",
+      "body": "Paket Anda tidak menyertakan widget chatbot. Upgrade untuk membuka fitur ini.",
+      "upgrade": "Lihat paket"
+    },
+    "list": {
+      "tip": "Tips",
+      "tipBody": "Tempel satu baris snippet ke situs mana pun untuk meluncurkan gelembung obrolan mengambang. Setiap widget dapat didukung agen cerdas, diarahkan ke WhatsApp, atau keduanya — percakapan pengunjung masuk ke kotak masuk tim Anda.",
+      "statusViews": "Status widget",
+      "view": {
+        "all": "Semua widget",
+        "active": "Aktif",
+        "paused": "Dijeda"
+      },
+      "status": {
+        "all": "Semua",
+        "active": "Aktif",
+        "paused": "Dijeda"
+      },
+      "trainFirst": "Latih dulu",
+      "trainBody": "Buat agen cerdas + tambahkan pengetahuan di <link>Pelatihan AI</link>, lalu pasang di sini agar widget Anda menjawab dengan gaya Anda.",
+      "workspace": "Workspace",
+      "title": "Chatbot",
+      "titleAccent": "widget",
+      "intro": "Sematkan gelembung obrolan mengambang di halaman mana pun. Agen cerdas membalas di browser, lalu menyerahkan ke Kotak Masuk Terpadu bila perlu.",
+      "activePill": "{count} aktif",
+      "newWidget": "Widget baru",
+      "card": {
+        "total": "Total widget",
+        "visitors": "Pengunjung",
+        "avg": "Rata-rata / widget",
+        "health": "Kesehatan",
+        "activeHint": "{count} aktif",
+        "allTime": "sepanjang waktu",
+        "visitorsUnit": "pengunjung"
+      },
+      "health": {
+        "healthy": "sehat",
+        "empty": "kosong",
+        "attention": "perlu perhatian"
+      },
+      "search": "Cari berdasarkan nama atau slug…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Mesin",
+        "agent": "Agen cerdas",
+        "visitors": "Pengunjung",
+        "updated": "Diperbarui",
+        "actions": "Tindakan"
+      },
+      "loading": "Memuat widget",
+      "loadError": "Widget tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada widget",
+      "emptyBody": "Buat widget obrolan pertama Anda — widget akan tampil sebagai gelembung mengambang di halaman tempat Anda menyematkannya.",
+      "createWidget": "Buat widget",
+      "noMatch": "Tidak ada widget di halaman ini yang cocok dengan pencarian Anda.",
+      "showing": "Menampilkan",
+      "of": "dari",
+      "widgetsCount": "{count} widget",
+      "loadMore": "Muat lebih banyak",
+      "pill": {
+        "active": "Aktif",
+        "paused": "Dijeda"
+      },
+      "action": {
+        "preview": "Buka pratinjau mandiri",
+        "copy": "Salin snippet embed",
+        "edit": "Edit widget",
+        "rotate": "Rotasi token embed",
+        "duplicate": "Duplikat widget",
+        "delete": "Hapus widget"
+      },
+      "copied": "Snippet disalin — tempel sebelum {tag} di situs Anda.",
+      "duplicateFailed": "Widget tidak dapat diduplikasi.",
+      "rotated": "Token dirotasi — salin snippet yang baru.",
+      "rotateFailed": "Rotasi gagal — {reason}",
+      "networkError": "kesalahan jaringan",
+      "deleted": "Widget dihapus.",
+      "deleteFailed": "Penghapusan gagal — {reason}",
+      "rotateTitle": "Rotasi token embed widget ini?",
+      "rotateBody": "Snippet saat ini di situs Anda akan langsung berhenti berfungsi. Anda perlu menyalin dan menempel snippet yang baru.",
+      "rotate": "Rotasi",
+      "cancel": "Batal",
+      "deleteTitle": "Hapus \"{name}\"?",
+      "deleteBody": "Snippet embed di situs Anda akan langsung berhenti berfungsi. Percakapan sebelumnya tetap ada di kotak masuk tim Anda.",
+      "delete": "Hapus widget",
+      "keep": "Pertahankan",
+      "copyManuallyTitle": "Salin ini secara manual",
+      "gotIt": "Mengerti",
+      "close": "Tutup"
+    },
+    "builder": {
+      "loading": "Memuat widget",
+      "notFoundTitle": "Widget tidak ditemukan",
+      "notFoundBody": "Widget ini tidak ada di workspace Anda.",
+      "loadError": "Widget tidak dapat dimuat.",
+      "backToWidgets": "Kembali ke widget",
+      "back": "Kembali ke widget",
+      "crumb": "Widget chatbot",
+      "crumbEdit": "Edit",
+      "crumbNew": "Baru",
+      "titleNew": "Buat chatbot",
+      "titleEdit": "Edit chatbot",
+      "titleAccent": "widget",
+      "stateSaved": "Tersimpan",
+      "stateDraft": "Draf / belum disimpan",
+      "saveDraft": "Simpan draf",
+      "stepper": "Langkah pembuat",
+      "steps": {
+        "setup": "Penyiapan",
+        "look": "Tampilan",
+        "voice": "Suara",
+        "launch": "Peluncuran"
+      },
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "stepOf": "Langkah {n} dari {total}",
+      "launchWidget": "Luncurkan widget",
+      "draftSaved": "Draf disimpan.",
+      "savedEmbed": "Tersimpan — embed siap disalin.",
+      "saveFailed": "Gagal menyimpan — periksa langkah yang ditandai.",
+      "snippetCopied": "Snippet disalin.",
+      "clipboardBlocked": "Clipboard diblokir — pilih snippet secara manual.",
+      "problem": {
+        "name": "Beri nama widget Anda.",
+        "assistant": "Tautkan agen cerdas — atau ubah mesin ke deep-link WhatsApp.",
+        "whatsapp": "Tambahkan nomor WhatsApp lengkap — kode negara dan angka.",
+        "launcherColour": "Warna isian launcher harus berupa warna hex (mis. #075E54).",
+        "headerTitle": "Beri judul pada jendela obrolan.",
+        "welcome": "Tulis kalimat pembuka.",
+        "bgImage": "Tambahkan URL gambar latar atau beralih ke warna solid."
+      },
+      "setup": {
+        "title": "Penyiapan widget",
+        "required": "wajib",
+        "name": "Nama internal",
+        "namePlaceholder": "mis. Widget halaman harga",
+        "nameHint": "Untuk tim Anda. Pengunjung tidak melihat label ini.",
+        "position": "Penempatan launcher",
+        "bottomRight": "Pojok kanan bawah",
+        "bottomLeft": "Pojok kiri bawah",
+        "positionHint": "Tempat gelembung obrolan bundar mengambang di situs Anda.",
+        "engine": "Mesin percakapan",
+        "mode": {
+          "ai": {
+            "title": "Agen cerdas",
+            "body": "Jawaban AI terlatih langsung di browser."
+          },
+          "whatsapp": {
+            "title": "Deep-link WhatsApp",
+            "body": "Arahkan pengunjung ke aplikasi WhatsApp untuk mengobrol."
+          },
+          "both": {
+            "title": "Cerdas + WhatsApp",
+            "body": "Pengunjung memilih — mengobrol di sini atau membuka WhatsApp."
+          }
+        },
+        "agent": "Agen cerdas (otaknya)",
+        "agentPlaceholder": "— Pilih agen cerdas tersimpan —",
+        "agentHintBefore": "Tidak melihatnya?",
+        "agentBuild": "Buat agen cerdas",
+        "agentHintAfter": "terlebih dahulu.",
+        "whatsapp": "Nomor WhatsApp",
+        "country": "Negara",
+        "phonePlaceholder": "Nomor Anda tanpa kode negara",
+        "whatsappHint": "Pilih bendera negara — kode telepon ditambahkan otomatis.",
+        "prefilled": "Pesan yang sudah diketik (muncul di WhatsApp)",
+        "prefilledPlaceholder": "Halo, saya ingin tahu lebih banyak tentang harga.",
+        "prefilledHint": "Pengunjung masuk ke WhatsApp dengan pesan ini yang sudah terketik."
+      },
+      "look": {
+        "title": "Gaya launcher & jendela",
+        "tag": "merek",
+        "launcherFill": "Isian launcher",
+        "launcherFillHint": "Latar gelembung bundar.",
+        "headerTint": "Warna header jendela",
+        "headerTintHint": "Strip atas jendela obrolan.",
+        "headerInk": "Warna teks header",
+        "headerInkHint": "Warna teks/ikon untuk header.",
+        "windowTitle": "Judul jendela (ditampilkan di header)",
+        "windowTitlePlaceholder": "Ngobrol dengan tim kami",
+        "windowTitleHint": "Jaga di bawah ~30 karakter.",
+        "icon": "URL ikon launcher kustom",
+        "optional": "opsional",
+        "iconHint": "PNG / SVG · disarankan 80×80 px · latar transparan."
+      },
+      "voice": {
+        "title": "Pesan pembuka & tampilan obrolan",
+        "tag": "konten",
+        "opening": "Kalimat pembuka",
+        "openingPlaceholder": "Halo! Ada yang bisa kami bantu hari ini?",
+        "openingHint": "Gelembung pertama yang tampil saat obrolan dibuka.",
+        "bubbleFill": "Isian gelembung masuk",
+        "bubbleFillHint": "Warna gelembung dari pihak Anda.",
+        "bubbleInk": "Warna teks gelembung masuk",
+        "bubbleInkHint": "Warna teks di dalam gelembung.",
+        "canvas": "Kanvas jendela",
+        "canvasKind": {
+          "color": "Warna solid",
+          "image": "Gambar ubin"
+        },
+        "canvasColour": "Warna kanvas jendela",
+        "canvasImage": "URL gambar kanvas jendela",
+        "canvasImageHint": "PNG yang dapat diulang (tile) paling cocok.",
+        "autoOpen": "Buka otomatis",
+        "autoOpenHint": "Membuka obrolan ~1,2 dtk setelah halaman dimuat.",
+        "intake": "Pengisian data pengunjung",
+        "intakeHint": "Kolom pra-obrolan yang ditampilkan sebelum obrolan dimulai. Lewati semuanya untuk obrolan anonim.",
+        "intakeField": {
+          "name": "Nama tampilan",
+          "email": "Alamat email",
+          "phone": "Nomor telepon"
+        }
+      },
+      "launch": {
+        "title": "Tombol kirim & snippet embed",
+        "tag": "peluncuran",
+        "label": "Label tombol kirim",
+        "labelPlaceholder": "Kirim pesan",
+        "labelHint": "Hindari \"Submit\". Coba \"Kirim pesan\" atau \"Tanya tim\".",
+        "fill": "Isian tombol kirim",
+        "ink": "Warna teks tombol kirim",
+        "ready": "Siap. Tempel ini tepat sebelum <code>{tag}</code> pada halaman yang ingin diberi widget.",
+        "copy": "Salin ke clipboard",
+        "preview": "Buka pratinjau mandiri"
+      },
+      "preview": {
+        "title": "Pratinjau langsung",
+        "chat": "Obrolan",
+        "hi": "Halo!",
+        "send": "Kirim",
+        "engine": {
+          "ai": "Agen cerdas",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "Mesin",
+        "metaPlacement": "Penempatan",
+        "metaAutoOpen": "Buka otomatis",
+        "metaIntake": "Pengisian data",
+        "left": "Kiri",
+        "right": "Kanan",
+        "on": "Aktif",
+        "off": "Nonaktif",
+        "none": "Tidak ada"
+      },
+      "colorSwatch": "{label} (contoh warna)"
+    },
+    "whatsappBuilder": {
+      "crumb": "Widget WhatsApp",
+      "title": "Widget WhatsApp",
+      "titleAccent": "Pasang & Sesuaikan",
+      "type": "Jenis widget",
+      "nameHint": "Hanya Anda yang melihat nama ini. Nama ini juga menjadi nama bisnis yang tampil di messenger.",
+      "save": "Simpan Perubahan",
+      "saved": "Perubahan disimpan. Widget Anda aktif.",
+      "card": {
+        "1": {
+          "title": "Atur gaya tombol obrolan WhatsApp Anda",
+          "subtitle": "Pilih desain tombol obrolan yang paling cocok untuk situs web Anda",
+          "buttonType": "Jenis Tombol",
+          "type": {
+            "pill": "Tombol Chat With Us",
+            "icon": "Tombol bundar hanya ikon"
+          },
+          "iconOnly": "Hanya ikon",
+          "buttonColor": "Warna Tombol",
+          "pickCustom": "Pilih warna kustom",
+          "custom": "Kustom {hex}"
+        },
+        "2": {
+          "title": "Desain messenger Anda",
+          "subtitle": "Pilih gambar yang bagus untuk messenger Anda",
+          "image": "Gambar messenger",
+          "names": {
+            "support": "Dukungan",
+            "store": "Toko",
+            "chat": "Obrolan",
+            "person": "Orang"
+          },
+          "url": "Atau gunakan alamat gambar Anda sendiri",
+          "urlHint": "Tempel alamat gambar persegi (https://...). Unggah file belum tersedia."
+        },
+        "3": {
+          "title": "Atur pesan sambutan Anda",
+          "subtitle": "Sambut pelanggan Anda",
+          "greeting": "Salam",
+          "greetingHint": "Sapa pelanggan Anda saat mereka membuka messenger",
+          "intro": "Pesan Perkenalan",
+          "introHint": "Perkenalkan bisnis Anda dan beri tahu pelanggan bagaimana Anda dapat membantu"
+        },
+        "4": {
+          "title": "Atur posisi Tombol Obrolan Anda",
+          "subtitle": "Sesuaikan posisi tombol di komputer dan ponsel",
+          "preview": "Pratinjau Tombol Obrolan",
+          "desktopPreview": "Pratinjau Desktop",
+          "mobilePreview": "Pratinjau Seluler",
+          "desktopPosition": "Posisi Launcher Desktop",
+          "mobilePosition": "Posisi Launcher Seluler",
+          "left": "Kiri",
+          "right": "Kanan",
+          "desktopSideSpacing": "Jarak Samping Desktop",
+          "desktopBottomSpacing": "Jarak Bawah Desktop",
+          "mobileSideSpacing": "Jarak Samping Seluler",
+          "mobileBottomSpacing": "Jarak Bawah Seluler",
+          "px": "px"
+        },
+        "5": {
+          "title": "Atur nomor WhatsApp Anda",
+          "subtitle": "Hubungkan nomor WhatsApp ke messenger",
+          "number": "Nomor WhatsApp",
+          "numberHint": "Messenger akan mengarahkan pelanggan Anda ke nomor WhatsApp ini",
+          "prefilled": "Pesan Terisi Otomatis",
+          "prefilledHint": "Ini akan menjadi teks pesan default pertama"
+        }
+      },
+      "install": {
+        "title": "Pasang di situs web Anda",
+        "body": "Tempel tag ini tepat sebelum tag body penutup di setiap halaman yang harus menampilkan widget.",
+        "copy": "Salin kode"
+      },
+      "problem": {
+        "name": "Beri nama widget Anda.",
+        "avatar": "Gunakan gambar bawaan atau alamat gambar http(s).",
+        "greeting": "Tambahkan salam.",
+        "intro": "Tambahkan pesan perkenalan.",
+        "spacing": "Jarak harus berupa bilangan bulat piksel dari 0 sampai 500.",
+        "whatsapp": "Tambahkan nomor WhatsApp lengkap: kode negara dan angka."
+      },
+      "preview": {
+        "title": "Pratinjau langsung",
+        "desktop": "Desktop",
+        "mobile": "Seluler",
+        "frameTitle": "Pratinjau langsung widget WhatsApp Anda",
+        "hint": "Ciutkan panel dengan tombol bundar, buka lagi dari launcher, dan coba Start Conversation.",
+        "businessName": "Bisnis Anda"
+      }
+    }
+  }
+}

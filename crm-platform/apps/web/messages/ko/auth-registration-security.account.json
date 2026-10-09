@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "계정"
+      },
+      "common": {
+        "cancel": "취소",
+        "loading": "로딩 중",
+        "reset": "초기화",
+        "retry": "다시 시도",
+        "save": "변경 사항 저장",
+        "saving": "저장 중",
+        "showPassword": "비밀번호 표시",
+        "hidePassword": "비밀번호 숨기기",
+        "signOut": "로그아웃"
+      },
+      "errors": {
+        "unexpected": "서버에 문제가 발생했습니다. 다시 시도해 주세요.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+        "forbidden": "이 작업을 수행할 권한이 없습니다.",
+        "signedOut": "세션이 종료되었습니다. 다시 로그인해 주세요.",
+        "rateLimited": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+        "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
+        "requestId": "요청 ID",
+        "locked": "실패한 시도가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+        "lockedWait": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요."
+      },
+      "hub": {
+        "railLabel": "계정",
+        "menuLabel": "계정 섹션",
+        "groups": {
+          "account": "계정",
+          "security": "보안"
+        },
+        "tabs": {
+          "profile": "프로필",
+          "security": "비밀번호 및 보안",
+          "delete": "계정 삭제",
+          "plan": "요금제"
+        },
+        "pages": {
+          "profile": {
+            "title": "프로필",
+            "description": "사진, 이름, 연락처 정보를 업데이트하세요."
+          },
+          "security": {
+            "title": "비밀번호 및 보안",
+            "description": "비밀번호를 변경하고, 2단계 인증을 켜고, 로그인된 위치를 확인하세요."
+          },
+          "delete": {
+            "title": "계정 삭제",
+            "description": "이 워크스페이스에서 내 계정을 영구적으로 제거합니다."
+          }
+        },
+        "breadcrumbLabel": "탐색 경로",
+        "breadcrumbRoot": "계정",
+        "planBadge": "{plan} 요금제",
+        "planFree": "무료",
+        "upgrade": {
+          "title": "더 많은 공간이 필요하신가요?",
+          "body": "상위 요금제로 더 많은 캠페인, 기기, AI 기능을 이용하세요.",
+          "cta": "요금제 보기"
+        },
+        "lockedHint": "먼저 이 계정의 보안 단계를 완료하세요."
+      },
+      "avatar": {
+        "alt": "{name}님의 사진",
+        "change": "사진 변경",
+        "remove": "사진 삭제",
+        "uploading": "사진 업로드 중",
+        "removing": "사진 삭제 중",
+        "updated": "사진이 업데이트되었습니다.",
+        "removed": "사진이 삭제되었습니다.",
+        "errors": {
+          "type": "JPG, PNG, WebP 또는 GIF 이미지를 선택하세요.",
+          "too-large": "이미지를 축소해도 {size} 제한을 초과합니다. 더 작은 사진을 사용해 보세요.",
+          "decode": "이미지를 읽을 수 없습니다. 다른 파일을 사용해 보세요.",
+          "encode": "이미지를 준비할 수 없습니다. 다른 파일을 사용해 보세요.",
+          "rejected": "허용되지 않는 파일입니다. JPG, PNG, WebP 또는 GIF 이미지를 사용하세요.",
+          "source-too-large": "이미지가 너무 커서 열 수 없습니다. 20MB 이하의 파일을 선택하세요.",
+          "forbidden": "이 계정의 사진을 변경할 권한이 없습니다.",
+          "expired": "세션이 종료되었습니다. 페이지를 새로고침하고 다시 로그인한 후 재시도하세요."
+        },
+        "hint": "JPG, PNG, WebP 또는 GIF. {size}에 맞게 축소됩니다."
+      },
+      "timezone": {
+        "label": "시간대",
+        "placeholder": "시간대 검색(예: Kolkata 또는 UTC+05:30)",
+        "empty": "검색과 일치하는 시간대가 없습니다."
+      },
+      "phone": {
+        "country": "국가",
+        "countryPlaceholder": "국가 검색",
+        "countryEmpty": "검색과 일치하는 국가가 없습니다.",
+        "number": "전화번호",
+        "numberPlaceholder": "전화번호"
+      },
+      "profile": {
+        "personalInfo": "개인 정보",
+        "fullName": "이름",
+        "displayName": "표시 이름",
+        "displayNameHint": "팀원에게 표시되는 이름입니다. 기본값은 이름(first name)입니다.",
+        "email": "이메일",
+        "changeEmail": "이메일 변경",
+        "verified": "인증됨",
+        "unverified": "인증되지 않음",
+        "pendingEmail": "{email}(으)로 확인 링크를 보냈습니다. 링크를 열면 로그인 이메일이 변경됩니다.",
+        "phone": "전화",
+        "phoneHint": "선택 사항입니다. 국가를 선택한 후 번호를 입력하세요.",
+        "language": "언어",
+        "languageHint": "나에게 적용되는 앱 언어입니다.",
+        "languageDefault": "기본값 사용",
+        "theme": "테마",
+        "themes": {
+          "paper": "페이퍼",
+          "bright": "밝게",
+          "dark": "어둡게"
+        },
+        "workspaceTimezone": "시간대",
+        "workspaceTimezoneHint": "{workspace}에 적용됩니다. 소유자와 관리자만 변경할 수 있습니다.",
+        "saved": "프로필이 저장되었습니다.",
+        "errors": {
+          "fullNameRequired": "이름을 입력하세요.",
+          "phoneInvalid": "선택한 국가에 맞는 올바른 전화번호를 입력하세요.",
+          "invalid": "유효하지 않은 값입니다.",
+          "timezoneInvalid": "목록에서 시간대를 선택하세요.",
+          "timezoneForbidden": "소유자와 관리자만 워크스페이스 시간대를 변경할 수 있습니다."
+        },
+        "workspaceTag": "(워크스페이스)"
+      },
+      "emailChange": {
+        "title": "이메일 변경",
+        "intro": "새 주소와 현재 비밀번호를 입력하세요. 새 주소로 확인 링크를 보내며, 링크를 열어야 로그인 이메일이 변경됩니다.",
+        "newEmail": "새 이메일 주소",
+        "password": "현재 비밀번호",
+        "passwordHint": "새 주소가 로그인 ID가 되므로 비밀번호를 확인합니다.",
+        "showPassword": "비밀번호 표시",
+        "hidePassword": "비밀번호 숨기기",
+        "cancel": "취소",
+        "submit": "확인 링크 보내기",
+        "sending": "보내는 중",
+        "errors": {
+          "invalidEmail": "올바른 이메일 주소를 입력하세요.",
+          "same": "이미 사용 중인 내 이메일 주소입니다.",
+          "taken": "이 이메일 주소는 이미 이 워크스페이스에서 사용 중입니다.",
+          "passwordRequired": "현재 비밀번호를 입력하세요.",
+          "passwordWrong": "비밀번호가 올바르지 않습니다."
+        }
+      },
+      "messageFooterPage": {
+        "title": "메시지 푸터",
+        "titleLead": "메시지",
+        "titleAccent": "푸터",
+        "description": "자동화, 예약 발송, 팀 인박스 답장으로 워크스페이스에서 보내는 메시지 끝에 붙는 문구입니다."
+      },
+      "branding": {
+        "title": "메시지 푸터",
+        "description": "자동화, 예약 발송, 팀 인박스 답장으로 보내는 일반 텍스트 및 인터랙티브 메시지 하단에 추가되는 문구입니다. 승인된 템플릿은 자체 텍스트를 포함하므로 적용되지 않습니다.",
+        "label": "사용자 지정 푸터(최대 {max}자)",
+        "hint": "비워 두면 푸터 없이 메시지를 보냅니다.",
+        "preview": "미리보기",
+        "sampleMessage": "안녕하세요! 요청하신 정보를 안내해 드립니다.",
+        "noFooter": "(푸터 없음)",
+        "save": "푸터 저장",
+        "saving": "저장 중",
+        "saved": "푸터가 업데이트되었습니다. 다음에 보내는 메시지부터 적용됩니다.",
+        "tooLong": "푸터는 최대 {max}자까지 입력할 수 있습니다.",
+        "forbidden": "푸터를 변경할 권한이 없습니다.",
+        "current": "현재 푸터",
+        "currentDefault": "현재 푸터(플랫폼 기본값)",
+        "planLocked": "현재 요금제는 발신 메시지에 플랫폼 기본 푸터를 사용합니다. 상위 요금제에서는 사용자 지정 푸터를 쓰거나 푸터를 없앨 수 있습니다.",
+        "permissionLocked": "워크스페이스 관리자만 푸터를 변경할 수 있습니다. 여기서 확인만 할 수 있고 편집할 수는 없습니다.",
+        "upgrade": "요금제 보기",
+        "upgradeTitle": "업그레이드하여 플랫폼 푸터를 제거하세요.",
+        "placeholder": "{name}을(를) 통해 발송됨",
+        "remove": "내 푸터 제거",
+        "removed": "푸터가 제거되었습니다. 다음 발송부터 푸터 없이 메시지가 전송됩니다."
+      },
+      "password": {
+        "title": "비밀번호 변경",
+        "subtitle": "다른 곳에서 사용하지 않는 강력한 비밀번호를 선택하세요.",
+        "current": "현재 비밀번호",
+        "new": "새 비밀번호",
+        "newHint": "{count}자 이상.",
+        "confirm": "새 비밀번호 확인",
+        "submit": "비밀번호 업데이트",
+        "updating": "업데이트 중",
+        "forcedBanner": "계속하려면 새 비밀번호를 설정해야 합니다. 아래에서 선택하세요.",
+        "forcedDone": "비밀번호가 업데이트되었습니다. 다시 오신 것을 환영합니다.",
+        "success": "비밀번호가 업데이트되었습니다. {count, plural, =0 {이 기기는 로그인 상태를 유지합니다.} other {다른 기기 #대가 로그아웃되었습니다.}}",
+        "errors": {
+          "currentRequired": "현재 비밀번호를 입력하세요.",
+          "currentWrong": "비밀번호가 올바르지 않습니다.",
+          "tooShort": "{count}자 이상 입력하세요.",
+          "tooLong": "최대 256자까지 입력할 수 있습니다.",
+          "sameAsCurrent": "현재 비밀번호와 다른 비밀번호를 선택하세요.",
+          "mismatch": "두 비밀번호가 일치하지 않습니다.",
+          "policy": "워크스페이스의 비밀번호 규칙을 충족하지 않습니다:"
+        },
+        "rules": {
+          "min_length": "{count}자 이상 입력하세요.",
+          "upper_lower": "대문자와 소문자를 함께 사용하세요.",
+          "number": "숫자를 하나 이상 포함하세요.",
+          "symbol": "기호를 하나 이상 포함하세요.",
+          "common": "추측하기 너무 쉬운 비밀번호입니다."
+        },
+        "currentPlaceholder": "현재 비밀번호 입력",
+        "newPlaceholder": "{count}자 이상",
+        "confirmPlaceholder": "다시 입력하세요",
+        "tips": {
+          "title": "비밀번호 팁",
+          "mix": "대문자, 소문자, 숫자, 기호를 섞어 사용하세요.",
+          "reuse": "다른 사이트의 비밀번호를 재사용하지 마세요.",
+          "manager": "비밀번호 관리자 사용을 고려해 보세요."
+        },
+        "newHintRequires": "{rules}을(를) 포함해야 합니다.",
+        "requirement": {
+          "mixedCase": "대문자와 소문자",
+          "number": "숫자",
+          "symbol": "기호"
+        },
+        "resetLink": {
+          "title": "현재 비밀번호를 입력할 수 없나요?",
+          "body": "Google 또는 Facebook으로 로그인했거나 비밀번호가 기억나지 않으면, {email}(으)로 링크를 보내 드립니다. 그 링크로 현재 비밀번호 없이 새 비밀번호를 설정할 수 있습니다.",
+          "send": "재설정 링크 이메일로 받기",
+          "sending": "보내는 중",
+          "sent": "{email}에서 메일을 받을 수 있다면 재설정 링크가 발송됩니다. 링크를 열어 새 비밀번호를 설정하세요. 모든 기기에서 로그아웃되며 새 비밀번호로 다시 로그인할 수 있습니다.",
+          "captchaFailed": "캡차 확인을 완료한 후 다시 시도하세요."
+        }
+      },
+      "passwordConfirm": {
+        "password": "현재 비밀번호",
+        "required": "현재 비밀번호를 입력하세요.",
+        "wrong": "비밀번호가 올바르지 않습니다.",
+        "show": "비밀번호 표시",
+        "hide": "비밀번호 숨기기",
+        "cancel": "취소",
+        "working": "처리 중"
+      },
+      "mfa": {
+        "title": "2단계 인증",
+        "subtitle": "로그인할 때마다 인증 앱의 코드를 요청합니다.",
+        "forcedBanner": "조직에서 2단계 인증을 요구합니다. 앱을 계속 사용하려면 설정하세요.",
+        "forcedDone": "2단계 인증이 켜졌습니다. 다시 오신 것을 환영합니다.",
+        "offDescription": "2단계 인증이 꺼져 있습니다. 비밀번호가 유출되어도 계정을 보호하려면 켜세요.",
+        "starting": "설정 준비 중",
+        "step1": "휴대폰에서 인증 앱(Google Authenticator, Microsoft Authenticator, 1Password 등)을 엽니다.",
+        "step2": "QR 코드를 스캔하거나 설정 키를 직접 입력하세요.",
+        "step3": "앱에 표시된 6자리 코드를 입력하여 완료하세요.",
+        "qrLabel": "인증 앱용 QR 코드",
+        "manualKey": "설정 키",
+        "manualKeyHint": "코드를 스캔할 수 없을 때 사용하세요. 외부에 공개하지 마세요.",
+        "copy": "복사",
+        "copied": "복사됨",
+        "codeLabel": "6자리 코드",
+        "codeHint": "코드는 30초마다 바뀝니다.",
+        "codeInvalid": "앱에 표시된 6자리 숫자를 입력하세요.",
+        "codeWrong": "코드가 올바르지 않거나 만료되었습니다. 새 코드를 기다린 후 다시 시도하세요.",
+        "enable": "켜기",
+        "enabling": "켜는 중",
+        "expired": "이 설정이 만료되었습니다. 처음부터 다시 시작하여 새 코드를 받으세요.",
+        "restart": "다시 시작",
+        "on": "켜짐",
+        "since": "{date}부터",
+        "onDescription": "로그인할 때마다 인증 앱의 코드를 입력해야 합니다.",
+        "remaining": "{count, plural, =0 {남은 복구 코드가 없습니다.} other {복구 코드 #개 남음.}}",
+        "remainingLow": "곧 새 코드를 생성하세요.",
+        "regenerate": "복구 코드 교체",
+        "regenerateTitle": "복구 코드 교체",
+        "regenerateDescription": "새 코드 10개가 생성되며 기존 코드는 사용할 수 없게 됩니다. 계속하려면 비밀번호를 입력하세요.",
+        "regenerateConfirm": "코드 교체",
+        "disable": "끄기",
+        "disableTitle": "2단계 인증 끄기",
+        "disableDescription": "계정이 비밀번호만으로 보호됩니다. 확인을 위해 비밀번호를 입력하세요.",
+        "disableConfirm": "끄기",
+        "disabledDone": "2단계 인증이 꺼졌습니다.",
+        "codesTitleEnabled": "2단계 인증이 켜졌습니다. 복구 코드를 저장하세요.",
+        "codesTitleRegenerated": "새 복구 코드",
+        "scanTitle": "이 QR 코드를 스캔하세요"
+      },
+      "recovery": {
+        "intro": "휴대폰을 분실한 경우, 이 코드 중 하나로 한 번 로그인할 수 있습니다.",
+        "onlyOnce": "이 코드는 한 번만 표시됩니다. 비밀번호 관리자 등 안전한 곳에 보관하세요.",
+        "listLabel": "복구 코드",
+        "copy": "코드 복사",
+        "copied": "복사됨",
+        "copyFailed": "브라우저에서 복사가 허용되지 않았습니다. 코드를 선택해 직접 복사하거나 다운로드하세요.",
+        "download": "다운로드",
+        "fileHeader": "복구 코드. 각 코드는 한 번만 사용할 수 있습니다.",
+        "confirmSaved": "이 코드를 안전한 곳에 저장했습니다.",
+        "done": "저장했습니다"
+      },
+      "sessions": {
+        "title": "로그인된 위치",
+        "subtitle": "내 계정에 로그인된 기기입니다. 알 수 없는 기기는 해제하세요.",
+        "thisDevice": "이 기기",
+        "remembered": "로그인 유지됨",
+        "ipUnknown": "알 수 없는 주소",
+        "signOutOthers": "다른 모든 기기에서 로그아웃",
+        "signingOut": "로그아웃 중",
+        "empty": "활성 세션이 없습니다.",
+        "confirmOneTitle": "이 기기에서 로그아웃할까요?",
+        "confirmOneBody": "{device}이(가) 로그아웃되며, 다시 로그인하려면 비밀번호가 필요합니다.",
+        "confirmOthersTitle": "다른 모든 기기에서 로그아웃할까요?",
+        "confirmOthersBody": "다른 기기 {count, plural, other {#대}}가 로그아웃됩니다. 이 기기는 로그인 상태를 유지합니다.",
+        "revoked": "{device}이(가) 로그아웃되었습니다.",
+        "revokedOthers": "{count, plural, =0 {로그인된 다른 기기가 없습니다.} other {기기 #대가 로그아웃되었습니다.}}",
+        "columns": {
+          "device": "기기",
+          "ip": "IP 주소",
+          "lastActive": "마지막 활동",
+          "actions": "작업"
+        },
+        "revoke": "해제",
+        "showing": "{total}개 중 {from}–{to}개 표시",
+        "prev": "이전",
+        "next": "다음",
+        "lifetimes": "로그인은 {session} 후 자동으로 종료되며, 로그인 유지를 선택한 경우 {remembered} 후 종료됩니다.",
+        "idle": "로그인 유지를 선택하지 않은 경우 {idle} 동안 활동이 없어도 종료됩니다."
+      },
+      "delete": {
+        "title": "계정 삭제",
+        "warning": "계정이 영구적으로 삭제됩니다. 로그인 정보, 프로필, 사진, 기기가 모두 삭제됩니다.",
+        "irreversible": "이 작업은 되돌릴 수 없습니다.",
+        "consequencesTitle": "삭제 시 일어나는 일",
+        "consequence1": "모든 기기에서 로그아웃되며, 이 계정으로 다시 로그인할 수 없습니다.",
+        "consequence2": "워크스페이스와 다른 멤버는 그대로 유지됩니다. 내가 한 작업은 워크스페이스에 남습니다.",
+        "consequence3": "계정이 삭제되었다는 기록은 감사를 위해 보관됩니다.",
+        "blocked": {
+          "sole_member": {
+            "title": "이 워크스페이스의 유일한 멤버입니다.",
+            "body": "계정만 따로 삭제할 수 없습니다. 플랫폼 팀에 워크스페이스 폐쇄를 요청하세요."
+          },
+          "sole_admin": {
+            "title": "유일한 관리자입니다.",
+            "body": "먼저 다른 멤버를 관리자로 지정한 후 돌아와서 계정을 삭제하세요."
+          }
+        },
+        "phraseLabel": "확인하려면 {phrase}을(를) 입력하세요",
+        "phraseHint": "대소문자를 포함해 표시된 그대로 입력하세요.",
+        "password": "현재 비밀번호",
+        "showPassword": "비밀번호 표시",
+        "hidePassword": "비밀번호 숨기기",
+        "cancel": "취소",
+        "submit": "계정 영구 삭제",
+        "deleting": "삭제 중",
+        "errors": {
+          "phrase": "문구를 표시된 그대로 입력하세요.",
+          "passwordRequired": "현재 비밀번호를 입력하세요.",
+          "passwordWrong": "비밀번호가 올바르지 않습니다."
+        },
+        "considerTitle": "삭제하기 전에 고려해 보세요",
+        "considerPlanLink": "삭제하는 대신",
+        "considerPlanRest": "무료 요금제로 변경하는 방법이 있습니다.",
+        "considerSupportLink": "문제 때문에 떠나시는 경우",
+        "considerSupportRest": "지원팀에 문의하세요. 해결해 드릴 수 있을지도 모릅니다.",
+        "reasonLabel": "떠나시는 이유가 무엇인가요? (선택 사항)",
+        "reasonHint": "이 내용은 이 양식에만 남으며 어디로도 전송되지 않습니다.",
+        "reasonPlaceholder": "개선할 점을 알려주세요"
+      },
+      "switcher": {
+        "heading": "워크스페이스",
+        "label": "워크스페이스: {name}. 워크스페이스 전환",
+        "switching": "워크스페이스 전환 중",
+        "switched": "{name}(으)로 전환되었습니다",
+        "failed": "워크스페이스를 전환할 수 없습니다. 다시 시도하세요.",
+        "notAvailable": "해당 워크스페이스로 전환할 수 없습니다.",
+        "rateLimited": "시도 횟수가 너무 많습니다. 잠시 후 다시 시도하세요.",
+        "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요."
+      },
+      "mfaChallenge": {
+        "title": "본인 확인",
+        "intro": "{name}은(는) 2단계 인증을 사용합니다. 전환하려면 인증 앱의 코드를 입력하세요.",
+        "codeLabel": "6자리 코드",
+        "codeHint": "코드는 30초마다 바뀝니다.",
+        "codeInvalid": "앱에 표시된 6자리 숫자를 입력하세요.",
+        "codeWrong": "코드가 올바르지 않거나 만료되었습니다. 다음 코드를 시도하세요.",
+        "recoveryLabel": "복구 코드",
+        "recoveryHint": "각 복구 코드는 한 번만 사용할 수 있습니다.",
+        "recoveryInvalid": "복구 코드를 입력하세요.",
+        "recoveryWrong": "유효하지 않은 복구 코드입니다.",
+        "expired": "이 로그인 단계가 만료되었습니다. 이 창을 닫고 워크스페이스를 다시 선택하세요.",
+        "useRecovery": "복구 코드 사용",
+        "useCode": "인증 앱 코드 사용",
+        "cancel": "취소",
+        "confirm": "확인",
+        "verifying": "확인 중"
+      },
+      "banners": {
+        "dismiss": "닫기",
+        "verifyMessage": "이메일 주소({email})를 인증해 주세요. 가입 시 링크를 보내 드렸습니다.",
+        "resend": "이메일 다시 보내기",
+        "resendIn": "{seconds}초 후 다시 보내기",
+        "resendWait": "잠시 후 이메일을 다시 요청할 수 있습니다.",
+        "sending": "보내는 중",
+        "sent": "이메일을 보냈습니다.",
+        "notSent": "지금은 이메일을 보낼 수 없습니다.",
+        "throttled": "잠시 기다린 후 다시 요청하세요.",
+        "alreadyVerified": "이메일이 이미 인증되었습니다."
+      },
+      "suspended": {
+        "title": "계정이 정지되었습니다",
+        "greeting": "{name}님, 관리자가 이 계정을 정지했습니다. 로그인은 할 수 있지만 계정이 다시 활성화될 때까지 나머지 앱 기능은 잠겨 있습니다.",
+        "support": "잘못된 조치라고 생각하시면 워크스페이스 소유자나 관리자에게 계정 재활성화를 요청하세요.",
+        "signOut": "로그아웃",
+        "checking": "확인 중"
+      },
+      "verifyRequired": {
+        "title": "이메일을 인증해 주세요",
+        "body": "아래 주소로 인증 링크를 보냈습니다. 링크를 열어 워크스페이스를 활성화하세요.",
+        "resend": "인증 이메일 다시 보내기",
+        "resendIn": "{seconds}초 후 다시 보내기",
+        "sending": "보내는 중",
+        "sent": "{email}(으)로 새 링크를 보냈습니다.",
+        "notSent": "지금은 이메일을 보낼 수 없습니다.",
+        "throttled": "방금 링크를 보냈습니다. 잠시 기다린 후 다시 요청하세요.",
+        "alreadyVerified": "이메일이 이미 인증되었습니다. 이동 중입니다.",
+        "signOut": "로그아웃",
+        "help": "받지 못하셨나요? 스팸 폴더를 확인하세요. 다른 기기에서 링크를 열었다면 이 탭으로 돌아오세요. 자동으로 확인됩니다."
+      },
+      "onboarding": {
+        "metaTitle": "워크스페이스 설정",
+        "notAllowed": {
+          "title": "설정이 완료되지 않았습니다",
+          "body": "워크스페이스를 아직 설정하는 중입니다. 계속하려면 관리자가 설정을 완료해야 합니다."
+        },
+        "stepper": {
+          "label": "{total}단계 중 {current}단계 / {name}",
+          "progress": "설정 진행률",
+          "account": "계정",
+          "workspace": "워크스페이스",
+          "plan": "요금제"
+        },
+        "workspace": {
+          "title": "워크스페이스 설정",
+          "subtitle": "팀에 맞게 앱을 구성하기 위한 몇 가지 정보입니다.",
+          "name": "워크스페이스 이름",
+          "nameHint": "앱 상단에 팀원에게 표시되는 이름입니다.",
+          "namePlaceholder": "예: Bloomly Marketing",
+          "industry": "업종",
+          "industryPlaceholder": "업종 선택",
+          "industries": {
+            "ecommerce": "이커머스",
+            "saas": "SaaS",
+            "agency": "에이전시",
+            "education": "교육",
+            "healthcare": "의료",
+            "finance": "금융",
+            "travel": "여행",
+            "hospitality": "숙박",
+            "other": "기타"
+          },
+          "size": "팀 규모",
+          "sizePlaceholder": "팀 규모 선택",
+          "timezone": "시간대",
+          "timezoneHint": "입력하여 시간대를 검색하세요. 일정과 보고서에 사용됩니다.",
+          "currency": "통화",
+          "currencyHint": "메시지 지갑이 청구되는 통화입니다. 인도는 기본값이 INR, 그 외 모든 국가는 USD입니다. 지갑을 사용한 후에는 변경할 수 없습니다.",
+          "currencyNone": "설정 안 됨",
+          "currencyPlaceholder": "통화 검색",
+          "currencyEmpty": "검색과 일치하는 통화가 없습니다.",
+          "phone": "휴대폰 번호",
+          "phoneHint": "계정 및 중요 업데이트에 관해 연락드리는 데 사용합니다.",
+          "continue": "계속",
+          "saving": "저장 중",
+          "errors": {
+            "nameInvalid": "워크스페이스 이름을 2자 이상 120자 이하로 입력하세요.",
+            "timezoneRequired": "시간대를 선택하세요.",
+            "timezoneInvalid": "목록에서 시간대를 선택하세요.",
+            "phoneRequired": "휴대폰 번호를 입력하세요.",
+            "phoneInvalid": "선택한 국가에 맞는 올바른 전화번호를 입력하세요.",
+            "invalid": "유효하지 않은 값입니다.",
+            "forbidden": "워크스페이스 관리자만 워크스페이스를 설정할 수 있습니다.",
+            "countryRequired": "국가를 선택하세요.",
+            "countryInvalid": "목록에서 국가를 선택하세요.",
+            "currencyInvalid": "이 통화는 사용할 수 없거나 청구 통화가 이미 사용 중입니다. 변경하려면 지원팀에 문의하세요."
+          },
+          "country": "국가",
+          "countryHint": "비즈니스 소재지입니다.",
+          "countryPlaceholder": "국가 검색",
+          "countryEmpty": "검색과 일치하는 국가가 없습니다."
+        },
+        "plan": {
+          "title": "요금제 선택",
+          "intro": "각 요금제에는 월간 메시지 제공량이 포함됩니다. 무료로 시작하거나 요금제를 선택해 더 많은 기능을 이용하세요. 나중에 변경할 수 있습니다.",
+          "empty": "아직 설정된 요금제가 없습니다. 지금은 무료로 시작하고 나중에 요금제를 선택할 수 있습니다.",
+          "listLabel": "이용 가능한 요금제",
+          "free": "무료",
+          "back": "뒤로",
+          "startFree": "무료로 시작 / 나중에 하기",
+          "finishing": "완료하는 중",
+          "welcome": "모든 준비가 끝났습니다. 환영합니다!"
+        }
+      },
+      "plans": {
+        "title": "요금제",
+        "description": "워크스페이스에서 사용할 수 있는 기능 범위를 선택하세요.",
+        "currentPlan": "내 요금제",
+        "noPlan": "요금제 없음",
+        "trialEnds": "무료 체험 종료일 {date}",
+        "comingSoon": "요금제 선택 및 결제는 아직 이번 릴리스에 포함되지 않은 결제 기능과 함께 제공됩니다. 그때까지는 지원팀에 문의하시면 필요한 요금제로 워크스페이스를 옮겨 드립니다.",
+        "contactSupport": "지원팀에 문의",
+        "back": "계정으로 돌아가기",
+        "card": {
+          "popular": "가장 인기",
+          "current": "현재 요금제",
+          "free": "무료",
+          "custom": "맞춤",
+          "lifetime": "1회성",
+          "messagesUnlimited": "무제한 메시지",
+          "messagesLimited": "월 {count, number}건의 메시지",
+          "chipsLabel": "포함된 기능",
+          "period": {
+            "days": "{count, plural, other {/ #일}}",
+            "weeks": "{count, plural, other {/ #주}}",
+            "months": "{count, plural, other {/ #개월}}",
+            "years": "{count, plural, other {/ #년}}"
+          },
+          "chips": {
+            "analytics": "분석",
+            "automation": "자동화",
+            "ai_assistants": "AI 어시스턴트",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp 통화",
+            "remove_branding": "화이트 라벨",
+            "sales_pipeline": "영업 파이프라인",
+            "appointment_booking": "예약",
+            "chatbot_widgets": "챗봇 위젯",
+            "wa_storefront": "WhatsApp 카탈로그",
+            "inbox_sla": "인박스 SLA",
+            "inbox_routing": "인박스 라우팅",
+            "waba_calling": "WhatsApp 통화",
+            "inbox_kanban": "인박스 칸반",
+            "team_performance": "팀 성과",
+            "scheduled_messages": "예약 메시지",
+            "whatsapp_warmer": "WhatsApp 워머",
+            "marketplace": "마켓플레이스",
+            "lead_sources": "리드 소스",
+            "team_chat": "팀 채팅",
+            "public_api": "공개 API",
+            "outbound_webhooks": "아웃바운드 웹훅",
+            "storefront_builder": "스토어프론트 빌더",
+            "invoicing": "인보이스",
+            "forms_and_links": "양식 및 링크",
+            "extra_channels": "Telegram, Facebook, Instagram",
+            "form_builder": "양식",
+            "waba_groups": "WhatsApp 그룹"
+          },
+          "cta": {
+            "continueFree": "무료로 계속",
+            "talkToSales": "영업팀 문의",
+            "upgrade": "{name}(으)로 업그레이드",
+            "downgradeUnavailable": "다운그레이드 불가",
+            "downgradeHint": "온라인에서는 다운그레이드할 수 없습니다. 하위 요금제로 변경하려면 지원팀에 문의하세요.",
+            "working": "처리 중"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "이 플랫폼에는 이메일 발송이 아직 설정되지 않았습니다. 관리자에게 문의하세요.",
+        "auth_failed": "메일 서버가 로그인을 거부했습니다. 관리자에게 메일 설정 확인을 요청하세요.",
+        "connection_refused": "메일 서버가 연결을 수락하지 않았습니다. 나중에 다시 시도하거나 관리자에게 문의하세요.",
+        "timeout": "메일 서버 응답이 너무 오래 걸렸습니다. 바로 다시 시도할 수 있습니다.",
+        "transport_error": "이메일을 메일 서버에 전달하지 못했습니다. 바로 다시 시도할 수 있습니다.",
+        "unknown": "알 수 없는 이유로 이메일을 보내지 못했습니다. 바로 다시 시도할 수 있습니다."
+      }
+    }
+  }
+}

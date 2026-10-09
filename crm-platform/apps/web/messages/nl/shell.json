@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Platform",
+      "inbox": "Inbox en chat",
+      "audience": "CRM",
+      "sales": "Verkoop",
+      "campaigns": "Campagnes",
+      "automation": "Automatisering",
+      "store": "Store",
+      "apps": "Marktplaats",
+      "help": "Support en hulp",
+      "settings": "Instellingen"
+    },
+    "locked": "Upgraden",
+    "language": "Taal",
+    "theme": "Thema",
+    "themeLight": "Licht",
+    "themeDark": "Donker",
+    "logout": "Uitloggen",
+    "openMenu": "Menu openen",
+    "admin": {
+      "title": "Platformconsole",
+      "note": "Schermen voor platformbeheerders verschijnen hier zodra de superbeheerder bestaat."
+    },
+    "soon": "Binnenkort",
+    "new": "Nieuw",
+    "comingSoon": "Binnenkort beschikbaar",
+    "appGate": {
+      "title": "{app} hoort niet bij je workspace",
+      "body": "{app} is een optionele app. Voeg hem toe via de Marktplaats en hij verschijnt in je menu.",
+      "bodyNoMarketplace": "{app} is een optionele app die deze workspace niet heeft. Vraag een workspacebeheerder om hem via de Marktplaats toe te voegen.",
+      "browse": "Blader door de Marktplaats",
+      "back": "Terug naar het dashboard",
+      "unofficialTitle": "{app} is niet beschikbaar",
+      "unofficialBody": "{app} wordt alleen gebruikt met persoonlijke WhatsApp-nummers die via QR-code zijn gekoppeld, en die zijn niet ingeschakeld voor je workspace. WhatsApp verbindt via de officiële WhatsApp Business API."
+    },
+    "closeMenu": "Menu sluiten",
+    "mainMenu": "Hoofdmenu",
+    "userMenu": "Accountmenu",
+    "account": "Account",
+    "balance": "Saldo",
+    "pageSettings": {
+      "label": "Instellingen voor deze pagina",
+      "hint": "Deze instellingen worden alleen getoond omdat je rol het wijzigen toestaat."
+    },
+    "notifications": "Meldingen",
+    "settings": "Instellingen",
+    "pinned": "Hulp en instellingen",
+    "nav": {
+      "analytics": "Analyse",
+      "notifications": "Meldingen",
+      "inbox": "Inbox",
+      "quickChat": "Snelle chat",
+      "callLogs": "Gesprekslogboeken",
+      "teamChat": "Teamchat",
+      "leadFinder": "Leadzoeker",
+      "campaigns": "Campagnes",
+      "broadcasts": "Broadcasts",
+      "scheduled": "Gepland",
+      "templates": "Sjablonen",
+      "history": "Geschiedenis",
+      "flows": "Flows",
+      "aiAssistants": "AI-assistenten",
+      "appointments": "Afspraken",
+      "crmDashboard": "CRM-dashboard",
+      "store": "Store",
+      "catalog": "Catalogus",
+      "support": "Support",
+      "guidebook": "Gids",
+      "pipelines": "Pijplijnen",
+      "tasks": "Taken",
+      "companies": "Bedrijven",
+      "emailTemplates": "E-mailsjablonen",
+      "proposals": "Voorstellen",
+      "estimates": "Schattingen",
+      "invoices": "Facturen",
+      "payments": "Betalingen"
+    },
+    "help": "Hulp",
+    "unreadCount": "{count, plural, one {# ongelezen} other {# ongelezen}}"
+  }
+}

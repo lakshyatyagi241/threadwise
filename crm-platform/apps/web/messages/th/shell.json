@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "แพลตฟอร์ม",
+      "inbox": "กล่องข้อความและแชท",
+      "audience": "CRM",
+      "sales": "การขาย",
+      "campaigns": "แคมเปญ",
+      "automation": "ออโตเมชัน",
+      "store": "สโตร์",
+      "apps": "Marketplace",
+      "help": "การสนับสนุนและความช่วยเหลือ",
+      "settings": "การตั้งค่า"
+    },
+    "locked": "อัปเกรด",
+    "language": "ภาษา",
+    "theme": "ธีม",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "logout": "ออกจากระบบ",
+    "openMenu": "เปิดเมนู",
+    "admin": {
+      "title": "คอนโซลแพลตฟอร์ม",
+      "note": "หน้าจอผู้ดูแลแพลตฟอร์มจะแสดงที่นี่เมื่อมีผู้ดูแลระบบสูงสุด"
+    },
+    "soon": "เร็วๆ นี้",
+    "new": "ใหม่",
+    "comingSoon": "เร็วๆ นี้",
+    "appGate": {
+      "title": "{app} ไม่ได้เป็นส่วนหนึ่งของเวิร์กสเปซของคุณ",
+      "body": "{app} เป็นแอปเสริม เพิ่มได้จาก Marketplace แล้วจะปรากฏในเมนูของคุณ",
+      "bodyNoMarketplace": "{app} เป็นแอปเสริมที่เวิร์กสเปซนี้ไม่มี ขอให้ผู้ดูแลเวิร์กสเปซเพิ่มจาก Marketplace",
+      "browse": "เรียกดู Marketplace",
+      "back": "กลับไปที่แดชบอร์ด",
+      "unofficialTitle": "{app} ใช้ไม่ได้",
+      "unofficialBody": "{app} ใช้เฉพาะกับหมายเลข WhatsApp ส่วนตัวที่จับคู่ด้วยรหัส QR ซึ่งยังไม่เปิดใช้งานสำหรับเวิร์กสเปซของคุณ WhatsApp เชื่อมต่อผ่าน WhatsApp Business API อย่างเป็นทางการ"
+    },
+    "closeMenu": "ปิดเมนู",
+    "mainMenu": "เมนูหลัก",
+    "userMenu": "เมนูบัญชี",
+    "account": "บัญชี",
+    "balance": "ยอดคงเหลือ",
+    "pageSettings": {
+      "label": "การตั้งค่าของหน้านี้",
+      "hint": "แสดงการตั้งค่าเหล่านี้เพราะบทบาทของคุณอนุญาตให้เปลี่ยนแปลงได้เท่านั้น"
+    },
+    "notifications": "การแจ้งเตือน",
+    "settings": "การตั้งค่า",
+    "pinned": "ความช่วยเหลือและการตั้งค่า",
+    "nav": {
+      "analytics": "การวิเคราะห์",
+      "notifications": "การแจ้งเตือน",
+      "inbox": "กล่องข้อความ",
+      "quickChat": "แชทด่วน",
+      "callLogs": "บันทึกการโทร",
+      "teamChat": "แชททีม",
+      "leadFinder": "ค้นหาลีด",
+      "campaigns": "แคมเปญ",
+      "broadcasts": "บรอดแคสต์",
+      "scheduled": "ตั้งเวลาไว้",
+      "templates": "เทมเพลต",
+      "history": "ประวัติ",
+      "flows": "โฟลว์",
+      "aiAssistants": "ผู้ช่วย AI",
+      "appointments": "นัดหมาย",
+      "crmDashboard": "แดชบอร์ด CRM",
+      "store": "สโตร์",
+      "catalog": "แคตตาล็อก",
+      "support": "การสนับสนุน",
+      "guidebook": "คู่มือ",
+      "pipelines": "ไปป์ไลน์",
+      "tasks": "งาน",
+      "companies": "บริษัท",
+      "emailTemplates": "เทมเพลตอีเมล",
+      "proposals": "ข้อเสนอ",
+      "estimates": "ใบเสนอราคา",
+      "invoices": "ใบแจ้งหนี้",
+      "payments": "การชำระเงิน"
+    },
+    "help": "ช่วยเหลือ",
+    "unreadCount": "{count, plural, one {# ยังไม่อ่าน} other {# ยังไม่อ่าน}}"
+  }
+}

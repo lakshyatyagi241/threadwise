@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Transfer bank",
+      "manual": "Manual",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Toko online"
+    },
+    "toolbar": {
+      "currency": "Mata uang",
+      "currencyPlaceholder": "USD",
+      "issued": "Diterbitkan",
+      "issuedWindow": "Rentang tanggal terbit",
+      "due": "Jatuh tempo",
+      "dueWindow": "Rentang tanggal jatuh tempo",
+      "dueFrom": "Jatuh tempo dari",
+      "dueTo": "Jatuh tempo sampai",
+      "docType": "Jenis dokumen",
+      "anyDocType": "Semua jenis",
+      "mine": "Faktur saya",
+      "docTypes": {
+        "tax_invoice": "Faktur pajak",
+        "proforma": "Proforma",
+        "receipt": "Kuitansi"
+      }
+    },
+    "strip": {
+      "label": "Tagihan yang masih terutang",
+      "outstanding": "Terutang ({currency})",
+      "overdue": "Di antaranya lewat jatuh tempo"
+    },
+    "row": {
+      "creditNote": "Buat nota kredit",
+      "downloadPdf": "Unduh PDF"
+    },
+    "bulk": {
+      "sendLink": "Tandai tautan sebagai terkirim",
+      "someSkipped": "{count, plural, other {# faktur yang dipilih dilewati karena tidak menerima tindakan ini.}}",
+      "done": {
+        "send": "{count, plural, other {# faktur ditandai sebagai terkirim.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, other {# draf akan dihapus permanen. Faktur yang bukan draf tidak diubah.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Batalkan faktur yang dipilih",
+        "close": "Tutup",
+        "keep": "Pertahankan faktur",
+        "confirm": "{count, plural, other {Batalkan # faktur}}",
+        "warning": "{count, plural, other {# faktur akan dibatalkan. Nomornya tetap, tetapi tidak bisa lagi dibayar atau diedit.}}",
+        "skipped": "{count, plural, other {# faktur yang dipilih dilewati: hanya faktur yang diterbitkan tanpa pembayaran dan tanpa nota kredit yang bisa dibatalkan.}}",
+        "reason": "Alasan (disimpan di setiap faktur)",
+        "reasonRequired": "Jelaskan alasan faktur ini dibatalkan."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Dicatat sebagai terkirim bersama tautannya.",
+        "email": "Faktur dikirim melalui email.",
+        "whatsapp": "Faktur dikirim melalui WhatsApp."
+      },
+      "markedPaid": "Ditandai sebagai lunas.",
+      "linkRegenerated": "Tautan baru dibuat. Tautan lama tidak berlaku lagi.",
+      "linkRevoked": "Tautan dinonaktifkan.",
+      "linkUnavailable": "Faktur ini tidak memiliki tautan aktif. Buka faktur untuk membuat tautan baru."
+    },
+    "voidDialog": {
+      "reasonHint": "Wajib diisi. Disimpan di linimasa faktur.",
+      "reasonRequired": "Jelaskan alasan faktur ini dibatalkan.",
+      "refundFirst": "Faktur ini sudah menerima pembayaran. Kembalikan dananya terlebih dahulu (dari daftar Pembayaran di faktur), lalu batalkan.",
+      "creditsFirst": "Faktur ini memiliki nota kredit. Batalkan nota kreditnya terlebih dahulu, lalu batalkan faktur."
+    },
+    "sendDialog": {
+      "loading": "Memuat faktur",
+      "channel": "Bagaimana Anda mengirimkannya?",
+      "channels": {
+        "link": "Saya bagikan tautannya sendiri",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Tandai sebagai terkirim",
+        "email": "Kirim email",
+        "whatsapp": "Kirim lewat WhatsApp"
+      },
+      "linkOff": "Faktur ini tidak memiliki tautan aktif. Buat tautan baru dari kartu tautan di faktur, lalu bagikan.",
+      "linkRecords": "Membagikan tautan sendiri hanya mencatat bahwa tautan sudah dikirim.",
+      "noEmail": "Faktur ini tidak memiliki alamat email",
+      "noPhone": "Faktur ini tidak memiliki nomor telepon",
+      "noEmailHelp": "Faktur ini tidak memiliki email pembeli. Tutup jendela ini, gunakan Edit detail untuk menambahkannya, lalu coba lagi.",
+      "noPhoneHelp": "Faktur ini tidak memiliki nomor telepon pembeli. Tutup jendela ini, gunakan Edit detail untuk menambahkannya, lalu coba lagi.",
+      "message": "Pesan",
+      "messageHint": "Opsional. Ditambahkan ke pesan yang menyertai faktur.",
+      "deliveryNote": "Faktur masuk antrean untuk dikirim ke pembeli. Linimasa menampilkan kapan faktur dikirim."
+    },
+    "editDialog": {
+      "title": "Edit detail",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "save": "Simpan perubahan",
+      "saved": "Detail faktur disimpan.",
+      "reload": "Muat ulang faktur",
+      "conflict": "Orang lain mengubah faktur ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versi terbaru, lalu ulangi perubahan Anda.",
+      "intro": "Faktur yang diterbitkan tetap memiliki baris, nominal, dan penomorannya. Detail ini tetap bisa diubah.",
+      "email": "Email pembeli",
+      "phone": "Telepon pembeli",
+      "phoneHint": "Dengan kode negara, misalnya +14155550123",
+      "contact": "Kontak",
+      "owner": "Pemilik",
+      "dueDate": "Tanggal jatuh tempo",
+      "dueHint": "Perpanjang atau persingkat ketentuan pembayaran.",
+      "reference": "Referensi",
+      "notes": "Catatan",
+      "terms": "Ketentuan"
+    },
+    "payDialog": {
+      "overpayNote": "Jumlah ini {extra} lebih dari saldo. Anda akan diminta konfirmasi sebelum dicatat sebagai kredit.",
+      "overpayConfirm": "{extra} lebih dari saldo akan dicatat dan ditampilkan sebagai kredit pada faktur. Tekan tombol lagi untuk mengonfirmasi.",
+      "problems": {
+        "tooMuch": "Jumlah itu lebih besar dari yang masih harus dibayar pada faktur."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Tandai sebagai lunas",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "confirm": "Catat pembayaran",
+      "message": "Catat pelunasan saldo {amount} sebagai diterima hari ini?",
+      "method": "Diterima oleh"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "Tanggal pengembalian dana tidak boleh di masa depan."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Pengembalian dana",
+      "receipt": "Kuitansi",
+      "refundOf": "mengembalikan {receipt}",
+      "refundedSoFar": "{amount} sudah dikembalikan"
+    },
+    "activity": {
+      "none": "Belum ada aktivitas.",
+      "actors": {
+        "buyer": "Pembeli",
+        "gateway": "Gerbang pembayaran",
+        "system": "Sistem"
+      },
+      "events": {
+        "sent": "Dikirim ke pembeli",
+        "overdue": "Lewat jatuh tempo",
+        "partially_paid": "Dibayar sebagian",
+        "link_regenerated": "Tautan publik diganti",
+        "link_revoked": "Tautan publik dinonaktifkan",
+        "pay_attempt": "Percobaan pembayaran online",
+        "credit_note_issued": "Nota kredit"
+      }
+    },
+    "linked": {
+      "invoiced": "Ditagihkan",
+      "paid": "Dibayar",
+      "outstanding": "Terutang",
+      "overdue": "Lewat jatuh tempo",
+      "latest": "{count, plural, other {Menampilkan faktur terbaru.}}"
+    },
+    "detail": {
+      "editDetails": "Edit detail",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Buat nota kredit",
+      "linkOffBanner": "Tautan pembeli dinonaktifkan, sehingga pembeli tidak dapat membuka faktur ini. Buat tautan baru di kartu tautan.",
+      "refunded": "Dikembalikan",
+      "credited": "Dikreditkan",
+      "credit": "Kredit",
+      "detailsLabel": "Detail faktur",
+      "contact": "Kontak",
+      "company": "Perusahaan",
+      "quote": "Penawaran",
+      "salesOrder": "Pesanan penjualan",
+      "recurring": "Jadwal berulang",
+      "makeRecurring": "Jadikan berulang",
+      "reference": "Referensi",
+      "owner": "Pemilik",
+      "createdBy": "Dibuat oleh",
+      "overpaid": "Jumlah yang diterima atau dikreditkan lebih besar dari yang diminta faktur. Kelebihannya ditampilkan sebagai kredit.",
+      "voidNeedsRefund": "Untuk membatalkan faktur ini, kembalikan dulu pembayarannya. Faktur juga tidak boleh memiliki nota kredit.",
+      "sources": {
+        "manual": "Dibuat manual",
+        "quote": "Dari penawaran",
+        "order": "Dari pesanan",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Toko online",
+        "api": "API",
+        "ai": "Asisten AI",
+        "recurring": "Faktur berulang",
+        "sales_order": "Pesanan penjualan"
+      },
+      "creditNotes": {
+        "title": "Nota kredit",
+        "create": "Buat nota kredit",
+        "loading": "Memuat nota kredit",
+        "none": "Belum ada nota kredit untuk faktur ini.",
+        "draft": "Draf",
+        "status": {
+          "draft": "Draf",
+          "issued": "Diterbitkan",
+          "void": "Batalkan"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Tautan publik",
+      "address": "Alamat tautan",
+      "state": {
+        "active": "Aktif",
+        "revoked": "Dimatikan",
+        "expired": "Kedaluwarsa"
+      },
+      "off": {
+        "revoked": "Tautan dimatikan. Pembeli akan melihat halaman yang menyatakan faktur tidak tersedia.",
+        "expired": "Tautan sudah kedaluwarsa. Pembeli akan melihat halaman yang menyatakan faktur tidak tersedia."
+      },
+      "copy": "Salin",
+      "copied": "Disalin",
+      "expires": "Berakhir",
+      "revokedAt": "Dimatikan",
+      "views": "Jumlah dibuka",
+      "firstViewed": "Pertama dibuka",
+      "lastViewed": "Terakhir dibuka",
+      "open": "Buka halaman pembeli",
+      "regenerate": "Tautan baru",
+      "revoke": "Matikan",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "regenerateTitle": "Buat tautan baru",
+      "regenerateWarning": "Tautan saat ini langsung berhenti berfungsi. Siapa pun yang memilikinya akan melihat bahwa faktur tidak tersedia.",
+      "regenerateConfirm": "Buat tautan baru",
+      "expiry": "Tautan baru berlaku selama",
+      "expiryNever": "Tanpa kedaluwarsa",
+      "expiryDays": "{count, plural, other {# hari}}",
+      "revokeTitle": "Matikan tautan?",
+      "revokeMessage": "Pembeli tidak lagi dapat membuka atau membayar faktur ini melalui tautan. Anda dapat membuat tautan baru nanti.",
+      "revokeConfirm": "Matikan tautan"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Faktur ini sudah diterbitkan, jadi rincian dan jumlahnya tidak dapat diubah lagi.",
+        "INV_NOT_ISSUED": "Hanya faktur yang sudah diterbitkan yang bisa melakukannya. Terbitkan draf terlebih dahulu.",
+        "INV_ALREADY_VOID": "Faktur ini sudah dibatalkan.",
+        "INV_HAS_PAYMENTS": "Faktur ini masih memiliki pembayaran. Kembalikan dananya terlebih dahulu, lalu batalkan faktur.",
+        "INV_HAS_CREDITS": "Faktur ini memiliki nota kredit. Batalkan nota kredit terlebih dahulu, lalu batalkan faktur.",
+        "INV_NOT_DELETABLE": "Hanya draf yang dapat dihapus. Batalkan faktur ini sebagai gantinya.",
+        "INV_NO_RECIPIENT": "Faktur tidak memiliki alamat email atau nomor telepon untuk saluran tersebut. Tambahkan melalui Edit detail, lalu coba lagi.",
+        "INV_LINK_UNAVAILABLE": "Faktur ini tidak memiliki tautan aktif. Buat tautan baru dari kartu tautan.",
+        "INV_OWNER_INVALID": "Orang tersebut bukan anggota aktif workspace ini. Pilih pemilik lain.",
+        "PAY_OVERPAYMENT": "Jumlah itu melebihi sisa tagihan faktur. Kurangi jumlahnya, atau pastikan Anda mencatat kredit.",
+        "PAY_FUTURE_DATE": "Tanggal pembayaran tidak boleh di masa depan.",
+        "PAY_CURRENCY_MISMATCH": "Pembayaran harus menggunakan mata uang yang sama dengan faktur.",
+        "PAY_REFUND_EXCEEDS": "Jumlah itu melebihi sisa yang dapat dikembalikan pada pembayaran ini.",
+        "PAY_NOT_REFUNDABLE": "Entri ini tidak dapat dikembalikan. Hanya pembayaran yang masih memiliki sisa yang dapat dikembalikan.",
+        "PAY_NOTHING_TO_PAY": "Faktur ini sudah tidak ada sisa yang harus dibayar.",
+        "ROW_VERSION_CONFLICT": "Faktur ini baru saja diubah orang lain. Muat ulang untuk melihat versi terbaru, lalu coba lagi."
+      }
+    }
+  }
+}

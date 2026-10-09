@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Đóng",
+      "ok": "OK",
+      "done": "Xong",
+      "skip": "Chuyển tới nội dung"
+    },
+    "strip": "Đặt hàng qua WhatsApp · Có thanh toán khi nhận hàng · Chat miễn phí, phản hồi nhanh",
+    "header": {
+      "navLabel": "Các mục cửa hàng",
+      "shop": "Cửa hàng",
+      "categories": "Danh mục",
+      "about": "Giới thiệu",
+      "searchPlaceholder": "Tìm sản phẩm…",
+      "searchLabel": "Tìm sản phẩm",
+      "wishlist": "Danh sách yêu thích",
+      "compare": "So sánh",
+      "cart": "Giỏ hàng",
+      "withCount": "{label}, {count, plural, other {# mặt hàng}}"
+    },
+    "hero": {
+      "welcome": "Chào mừng đến với {shop}.",
+      "sub": "Sản phẩm được chọn lọc kỹ. Đặt bất kỳ món nào trực tiếp qua WhatsApp — không cần biểu mẫu thanh toán, không cần cài ứng dụng.",
+      "trust": {
+        "cod": "Thanh toán khi nhận hàng",
+        "chat": "Hỗ trợ chat miễn phí",
+        "returns": "Đổi trả dễ dàng"
+      }
+    },
+    "catalog": {
+      "label": "Sản phẩm",
+      "emptyTitle": "Chưa có sản phẩm",
+      "emptyBody": "Chủ cửa hàng vẫn đang thiết lập — vui lòng quay lại sau.",
+      "count": "{count, plural, other {# sản phẩm}}",
+      "sort": {
+        "label": "Sắp xếp sản phẩm",
+        "featured": "Sắp xếp · Nổi bật",
+        "priceAsc": "Giá · Thấp đến cao",
+        "priceDesc": "Giá · Cao đến thấp",
+        "nameAsc": "Tên · A → Z",
+        "nameDesc": "Tên · Z → A"
+      },
+      "view": {
+        "label": "Bố cục",
+        "grid": "Xem dạng lưới",
+        "list": "Xem dạng danh sách"
+      },
+      "filters": {
+        "title": "Bộ lọc",
+        "category": "Danh mục",
+        "price": "Giá",
+        "min": "Tối thiểu",
+        "max": "Tối đa",
+        "range": "Khoảng giá: {min} — {max}",
+        "availability": "Tình trạng",
+        "inStock": "Chỉ hàng còn trong kho",
+        "onSale": "Đang giảm giá",
+        "reset": "Đặt lại bộ lọc",
+        "clear": "Xóa bộ lọc"
+      },
+      "noMatch": "Không có sản phẩm nào khớp với bộ lọc",
+      "showMore": "Xem thêm sản phẩm",
+      "loading": "Đang tải…",
+      "retry": "Thử lại",
+      "showing": "Đang hiển thị {shown} trên {total} sản phẩm"
+    },
+    "card": {
+      "new": "Mới",
+      "soldOut": "Đã bán hết",
+      "soldOutNamed": "{name}: đã bán hết",
+      "addToCart": "Thêm vào giỏ",
+      "addToCartNamed": "Thêm {name} vào giỏ",
+      "addWish": "Thêm {name} vào danh sách yêu thích",
+      "removeWish": "Xóa {name} khỏi danh sách yêu thích",
+      "quickView": "Xem nhanh {name}",
+      "quickViewTitle": "Xem nhanh",
+      "was": "Giá cũ"
+    },
+    "quick": {
+      "details": "Xem chi tiết đầy đủ →"
+    },
+    "product": {
+      "gallery": "Hình ảnh sản phẩm",
+      "showImage": "Xem hình {n}",
+      "breadcrumb": "Bạn đang ở đây",
+      "save": "Tiết kiệm {percent}%",
+      "onlyLeft": "Chỉ còn {count}",
+      "inStock": "Còn hàng · sẵn sàng giao",
+      "quantity": "Số lượng",
+      "addCompare": "Thêm vào so sánh",
+      "removeCompare": "Xóa khỏi so sánh",
+      "share": "Chia sẻ sản phẩm này",
+      "shareTitle": "Chia sẻ sản phẩm này",
+      "ask": "Hỏi qua WhatsApp",
+      "sku": "SKU",
+      "category": "Danh mục",
+      "weight": "Trọng lượng",
+      "grams": "{count} g",
+      "delivery": "Giao hàng",
+      "deliveryTime": "2–5 ngày làm việc",
+      "tags": "Thẻ",
+      "tabs": {
+        "label": "Thông tin sản phẩm",
+        "desc": "Mô tả",
+        "ship": "Vận chuyển & đổi trả",
+        "reviews": "Đánh giá"
+      },
+      "noDescription": "Chưa có mô tả — nhắn tin cho người bán qua WhatsApp để biết thêm.",
+      "shippingHeading": "Vận chuyển.",
+      "shippingBody": "Đơn hàng được gửi đi trong vòng 1–2 ngày làm việc. Thời gian giao hàng phụ thuộc vào khu vực của bạn, thường là 2–5 ngày làm việc.",
+      "freeAbove": "Miễn phí vận chuyển cho đơn hàng từ {amount} trở lên.",
+      "returnsHeading": "Đổi trả.",
+      "returnsBody": "Sản phẩm chưa sử dụng có thể đổi trả trong 7 ngày kể từ khi giao. Nhắn tin cho chúng tôi qua WhatsApp để bắt đầu đổi trả — chúng tôi sẽ sắp xếp lấy hàng.",
+      "reviewCount": "{count, plural, other {# đánh giá}}",
+      "anonymous": "Ẩn danh",
+      "ratingOf": "{rating} trên 5",
+      "noReviews": "Chưa có đánh giá — hãy là người đầu tiên đánh giá sản phẩm này.",
+      "related": "Bạn cũng có thể thích"
+    },
+    "review": {
+      "write": "Viết đánh giá",
+      "name": "Tên của bạn",
+      "rating": "Xếp hạng",
+      "ratings": {
+        "1": "Tệ",
+        "2": "Kém",
+        "3": "Tạm được",
+        "4": "Tốt",
+        "5": "Xuất sắc"
+      },
+      "bodyLabel": "Đánh giá của bạn",
+      "body": "Chia sẻ trải nghiệm của bạn (không bắt buộc)",
+      "submit": "Gửi đánh giá",
+      "nameRequired": "Vui lòng nhập tên của bạn.",
+      "thanks": "Cảm ơn bạn đã đánh giá!",
+      "network": "Lỗi mạng. Vui lòng thử lại.",
+      "failed": "Không thể gửi đánh giá của bạn."
+    },
+    "cart": {
+      "title": "Giỏ hàng của bạn",
+      "subtotal": "Tạm tính",
+      "shipping": "Vận chuyển",
+      "free": "MIỄN PHÍ ✓",
+      "total": "Tổng cộng",
+      "addForFree": "Thêm {amount} nữa để được miễn phí vận chuyển",
+      "order": "Đặt hàng qua WhatsApp →",
+      "payVia": "Thanh toán qua {method} · Thanh toán khi nhận hàng",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Thẻ",
+        "paypal": "PayPal",
+        "bank": "Chuyển khoản ngân hàng"
+      },
+      "codOnly": "Thanh toán khi nhận hàng · Xác nhận trong chat",
+      "emptyTitle": "Giỏ hàng của bạn đang trống",
+      "emptyBody": "Xem danh mục và thêm vài sản phẩm yêu thích.",
+      "keepBrowsing": "Tiếp tục xem",
+      "quantityOf": "Số lượng của {name}",
+      "decrease": "Giảm số lượng",
+      "increase": "Tăng số lượng",
+      "remove": "Xóa {name} khỏi giỏ hàng",
+      "fullTitle": "Giỏ hàng của bạn đã đầy",
+      "fullBody": "Một giỏ hàng chứa tối đa 100 sản phẩm khác nhau. Hãy đặt các sản phẩm này trước, rồi tạo giỏ hàng mới."
+    },
+    "wish": {
+      "title": "Danh sách yêu thích",
+      "emptyTitle": "Chưa có mục yêu thích nào",
+      "emptyBody": "Nhấn biểu tượng trái tim trên bất kỳ sản phẩm nào để lưu lại xem sau.",
+      "remove": "Xóa {name} khỏi danh sách yêu thích"
+    },
+    "compare": {
+      "title": "So sánh sản phẩm",
+      "emptyTitle": "Không có gì để so sánh",
+      "emptyBody": "Nhấn “So sánh” trên hai sản phẩm để xem cạnh nhau.",
+      "attribute": "Thuộc tính",
+      "rows": {
+        "image": "Hình ảnh",
+        "name": "Tên",
+        "price": "Giá",
+        "sku": "SKU",
+        "category": "Danh mục",
+        "description": "Mô tả"
+      },
+      "remove": "Xóa {name} khỏi so sánh",
+      "bar": "Sản phẩm để so sánh",
+      "open": "So sánh →",
+      "fullTitle": "Đã đầy danh sách so sánh",
+      "fullBody": "Bạn có thể so sánh tối đa {count} sản phẩm cùng lúc. Xóa một sản phẩm khỏi thanh so sánh để thêm sản phẩm mới."
+    },
+    "stock": {
+      "title": "Chỉ còn {count} trong kho",
+      "soldOut": "Sản phẩm này đã bán hết. Chúng tôi sẽ nhập hàng sớm — nhắn tin cho chúng tôi qua WhatsApp để được thông báo.",
+      "limit": "{count, plural, other {Chỉ còn # sản phẩm, và bạn đã có toàn bộ trong giỏ hàng.}}",
+      "maxTitle": "Đã đạt giới hạn",
+      "maxBody": "Mỗi lần bạn chỉ có thể đặt tối đa {count} sản phẩm cùng loại."
+    },
+    "toast": {
+      "added": "{name} · đã thêm vào giỏ hàng",
+      "wishAdded": "Đã thêm vào danh sách yêu thích ♡",
+      "wishRemoved": "Đã xóa khỏi danh sách yêu thích",
+      "compareAdded": "Đã thêm vào so sánh",
+      "compareRemoved": "Đã xóa khỏi so sánh"
+    },
+    "checkout": {
+      "title": "Thanh toán",
+      "summary": "{count, plural, other {# mặt hàng}} · {total}",
+      "name": "Tên của bạn",
+      "phone": "Số WhatsApp",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "Địa chỉ giao hàng",
+      "note": "Ghi chú (không bắt buộc)",
+      "coupon": "Mã giảm giá",
+      "apply": "Áp dụng",
+      "payment": "Thanh toán",
+      "prepaid": "Chi tiết thanh toán trực tuyến / khi nhận hàng",
+      "cod": "Thanh toán khi nhận hàng",
+      "place": "Đặt hàng",
+      "placing": "Đang đặt hàng…",
+      "opening": "Đã đặt hàng! Đang mở WhatsApp…",
+      "nameRequired": "Vui lòng nhập tên của bạn.",
+      "phoneInvalid": "Vui lòng nhập số WhatsApp hợp lệ.",
+      "cartEmpty": "Giỏ hàng của bạn đang trống.",
+      "emptyTitle": "Giỏ hàng của bạn đang trống",
+      "emptyBody": "Xem danh mục và thêm sản phẩm trước khi thanh toán.",
+      "failed": "Không thể đặt hàng. Vui lòng thử lại.",
+      "network": "Lỗi mạng. Vui lòng thử lại.",
+      "couponSave": "Bạn tiết kiệm {discount} · Tổng mới {total}",
+      "couponFree": "Đã áp dụng miễn phí vận chuyển · Tổng mới {total}",
+      "couponInvalid": "Mã này không áp dụng được cho giỏ hàng này.",
+      "couponNetwork": "Không thể kiểm tra mã này.",
+      "couponFallback": "Mã không hợp lệ."
+    },
+    "errors": {
+      "itemsUnavailable": "Các sản phẩm này không còn khả dụng. Vui lòng làm mới trang và thử lại.",
+      "notAvailable": "Cửa hàng này hiện không khả dụng.",
+      "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại."
+    },
+    "placed": {
+      "title": "Đã đặt hàng",
+      "track": "Theo dõi đơn hàng #{orderNo} →"
+    },
+    "share": {
+      "title": "Chia sẻ",
+      "url": "Liên kết để chia sẻ",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép ✓",
+      "copyFailed": "Không thể sao chép liên kết",
+      "linkCopied": "Đã sao chép liên kết",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Gửi đến một cuộc chat",
+      "email": "Email",
+      "emailHint": "Mở ứng dụng thư",
+      "telegram": "Telegram",
+      "telegramHint": "Chia sẻ vào cuộc chat",
+      "more": "Thêm…",
+      "moreHint": "Menu chia sẻ trên điện thoại",
+      "showQr": "Hiện mã QR →",
+      "qrTitle": "Mã QR của liên kết",
+      "scan": "Quét để mở cửa hàng"
+    },
+    "info": {
+      "freeAbove": "Miễn phí vận chuyển cho đơn từ {amount}.",
+      "shipping": {
+        "title": "Vận chuyển & giao hàng",
+        "body": "Đơn hàng được xác nhận qua WhatsApp. Thời gian giao hàng tùy thuộc vào khu vực của bạn — thường là 2–5 ngày làm việc."
+      },
+      "returns": {
+        "title": "Đổi trả",
+        "body": "Sản phẩm chưa sử dụng có thể đổi trả trong vòng 7 ngày. Nhắn tin cho chúng tôi qua WhatsApp để bắt đầu đổi trả."
+      },
+      "howToOrder": {
+        "title": "Cách đặt hàng",
+        "body": "Xem danh mục, thêm vào giỏ hàng, rồi nhấn “Đặt hàng qua WhatsApp”. Chúng tôi sẽ xác nhận đơn hàng trong chat và sắp xếp giao hàng."
+      },
+      "privacy": {
+        "title": "Quyền riêng tư",
+        "body": "Chúng tôi chỉ thu thập thông tin bạn chia sẻ trong chat để hoàn tất đơn hàng. Chúng tôi không bao giờ bán dữ liệu của bạn."
+      }
+    },
+    "footer": {
+      "blurb": "Sản phẩm được chọn lọc, đặt qua WhatsApp như một cuộc gọi. Không cần ứng dụng — chỉ cần trò chuyện với chúng tôi để mua hàng.",
+      "paymentsLabel": "Hình thức thanh toán",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Thanh toán khi nhận hàng",
+        "bank": "Chuyển khoản ngân hàng"
+      },
+      "shopHeading": "Cửa hàng",
+      "allProducts": "Tất cả sản phẩm",
+      "helpHeading": "Trợ giúp",
+      "help": {
+        "shipping": "Vận chuyển",
+        "returns": "Đổi trả",
+        "howToOrder": "Cách đặt hàng",
+        "privacy": "Quyền riêng tư"
+      },
+      "contactHeading": "Liên hệ",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Thứ Hai–Chủ Nhật · 9:00–21:00",
+      "hoursToast": "Giờ mở cửa: 9:00–21:00",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Đơn hàng #{orderNo}",
+      "progress": "Tiến trình đơn hàng",
+      "cancelled": "Đơn hàng này đã bị hủy. Liên hệ chúng tôi nếu điều này không như bạn mong đợi.",
+      "steps": {
+        "placed": "Đã đặt",
+        "confirmed": "Đã xác nhận",
+        "paid": "Đã thanh toán",
+        "shipped": "Đã giao vận"
+      },
+      "stepDone": "xong",
+      "stepTodo": "chưa",
+      "items": "Mặt hàng",
+      "qty": "SL {qty} · {price}",
+      "free": "Miễn phí",
+      "deliveryTo": "Giao đến",
+      "payNow": "Thanh toán ngay",
+      "message": "Nhắn tin cho chúng tôi về đơn hàng này"
+    },
+    "notFound": {
+      "kicker": "Lạc trong không gian làm việc",
+      "title": "Trang này đã đi nhầm đường.",
+      "body": "Chúng tôi không tìm thấy nội dung bạn cần. Liên kết có thể bị lỗi, trang có thể đã được chuyển, hoặc có thể chưa từng tồn tại.",
+      "back": "Quay lại",
+      "signIn": "Đăng nhập",
+      "help": "Cần trợ giúp?",
+      "support": "Liên hệ bộ phận hỗ trợ",
+      "metaTitle": "Không tìm thấy trang"
+    }
+  }
+}

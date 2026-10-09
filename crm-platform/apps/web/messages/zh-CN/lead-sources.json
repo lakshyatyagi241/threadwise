@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "wizard": {
+      "skipMapping": "暂时跳过",
+      "finish": "保存并完成",
+      "revealGone": "网址和令牌不再显示。如果您没有保存，请打开来源并轮换令牌以获取新网址。",
+      "toMapping": "继续设置映射",
+      "title": "新建线索来源",
+      "description": "设置 Webhook，将接收到的线索转为联系人。",
+      "back": "返回社交线索",
+      "stepsLabel": "创建线索来源的步骤",
+      "steps": {
+        "basics": "基本信息",
+        "rules": "线索的处理方式",
+        "connect": "连接发送方",
+        "mapping": "映射字段"
+      },
+      "stepTitle": {
+        "basics": "为来源命名",
+        "rules": "线索的处理方式",
+        "connect": "连接发送方",
+        "mapping": "映射字段"
+      },
+      "stepHelp": {
+        "basics": "请填写此来源的名称，以及原始线索数据的保留时长。",
+        "rules": "为每条到达的线索选择负责人、标签、交易和通知。",
+        "connect": "来源已创建。请立即复制网址和令牌：它们只会显示一次。",
+        "mapping": "请说明每个值在您的工具发送的数据中的位置。输入时预览会实时显示结果。"
+      },
+      "previous": "返回",
+      "next": "下一步",
+      "cancel": "取消",
+      "create": "创建来源",
+      "created": "已创建来源 {name}",
+      "mappingSaved": "映射已保存",
+      "planLimit": "已达到套餐的线索来源数量上限，因此无法创建新来源。",
+      "planLocked": "您的套餐不包含社交线索。",
+      "upgrade": "升级套餐"
+    },
+    "form": {
+      "name": "来源名称",
+      "nameHint": "例如 Zapier：Facebook 线索广告。名称必须唯一。",
+      "platform": "平台标签",
+      "platformHint": "联系人中显示的来源名称，例如 Facebook 或 IndiaMART。最多 {max} 个字符。",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "共享密钥",
+        "isSet": "已设置共享密钥。发送方必须在 X-Webhook-Secret 请求头中发送该密钥。",
+        "notSet": "未设置共享密钥。任何拥有该网址的人都可以发送线索。",
+        "willRemove": "保存时将删除共享密钥。",
+        "willReplace": "保存时将替换共享密钥。",
+        "willSet": "保存时将设置共享密钥。",
+        "newValue": "新共享密钥",
+        "hint": "可选。{min} 至 {max} 个字符。保存后不会再次显示。",
+        "show": "显示密钥",
+        "hide": "隐藏密钥",
+        "replace": "替换",
+        "remove": "删除",
+        "keep": "保留当前密钥"
+      },
+      "externalIdPath": "线索 ID 路径",
+      "externalIdPathHint": "发送方的线索 ID 在数据中的位置，例如 lead.id。用于防止同一线索被重复添加。可选。",
+      "retention": "保留原始线索数据的天数",
+      "retentionHint": "到期后存储的数据将被删除；联系人保留。1 至 {max} 天。",
+      "sections": {
+        "contact": "联系人",
+        "owner": "负责人",
+        "deal": "交易",
+        "notify": "通知"
+      },
+      "membersFailed": "无法加载您的团队，目前无法选择人员。请重新加载页面重试。",
+      "countryCode": "默认国家/地区代码",
+      "countryCodeHint": "添加到未带国家代码的电话号码前，例如 91。未设置时，号码必须自带国家代码。",
+      "lifecycleStage": "初始生命周期阶段",
+      "lifecycleStageHint": "来自此来源的新联系人开始所处的阶段。",
+      "lifecycleDefault": "工作区默认值",
+      "tag": "标签",
+      "tagHint": "添加到此来源带来的每位联系人上。留空则不添加标签。",
+      "ownerMode": "联系人归属",
+      "ownerModeHint": "仅适用于尚无负责人的联系人。",
+      "ownerModes": {
+        "unassigned": "无人（未分配）",
+        "fixed": "指定一人",
+        "round_robin": "在多人之间轮流分配"
+      },
+      "ownerFixed": "负责人",
+      "ownerChoose": "选择一人",
+      "unknownMember": "已不再可用的人员",
+      "ownerRoundRobin": "轮流分配的人员",
+      "ownerRoundRobinHint": "至少选择两人。线索将依次分配给各人；已停用的人员将被跳过。",
+      "pickMembers": "选择人员",
+      "noMembers": "没有可选的人员",
+      "removeMember": "移除 {name}",
+      "dealEnabled": "为每位新联系人创建交易",
+      "dealEnabledHint": "默认关闭，开启后才生效。已有未结交易的联系人不会再次创建交易。",
+      "pipelinesFailed": "无法加载销售管道，目前无法选择管道和阶段。",
+      "pipeline": "销售管道",
+      "pipelineDefault": "工作区默认销售管道",
+      "dealStage": "阶段",
+      "dealStageNeedsPipeline": "请先选择销售管道，再选择阶段。",
+      "dealStageFirst": "销售管道的第一阶段",
+      "dealTitle": "交易标题",
+      "dealTitleHint": "这些内容由线索填充：{tokens}。",
+      "notifyOwner": "通知联系人负责人",
+      "notifyOwnerHint": "有新线索进入时在应用内发送通知。测试线索不会发送通知。",
+      "notifyUsers": "同时通知",
+      "notifyUsersHint": "例如您的销售经理。最多 20 人。"
+    },
+    "mapping": {
+      "contact": "联系人字段",
+      "contactHelp": "输入键名（phone_number）或路径（lead.contact.phone、answers[0].value）。留空的框将查找常用名称。",
+      "fields": {
+        "name": "全名",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "email": "电子邮箱",
+        "phone": "电话"
+      },
+      "defaults": {
+        "name": "查找 full_name、name、contact_name",
+        "firstName": "查找 first_name、firstname",
+        "lastName": "查找 last_name、lastname",
+        "email": "查找 email、email_address、mail",
+        "phone": "查找 phone、mobile、phone_number、whatsapp"
+      },
+      "custom": "自定义属性",
+      "customHelp": "使用您的工具发送的数据填充您自己的联系人属性。",
+      "propertiesFailed": "无法加载联系人属性，请改为输入属性键名。",
+      "property": "联系人属性",
+      "propertyChoose": "选择属性",
+      "path": "负载中的路径",
+      "removeRow": "移除自定义属性 {number}",
+      "remove": "移除",
+      "addRow": "添加自定义属性",
+      "attribution": "归因",
+      "attributionHelp": "广告系列详情所在的位置。留空的项将按其自身名称查找。",
+      "attributionFields": {
+        "platform": "平台",
+        "campaign": "广告系列",
+        "adset": "广告组",
+        "ad": "广告",
+        "form": "表单"
+      },
+      "attributionDefaults": {
+        "platform": "查找 platform、utm_source",
+        "campaign": "查找 campaign、utm_campaign",
+        "adset": "查找 adset、adgroup",
+        "ad": "查找 ad",
+        "form": "查找 form"
+      }
+    },
+    "preview": {
+      "title": "实时预览",
+      "updating": "正在更新",
+      "help": "上方映射对线索的处理结果。预览不会保存或创建任何内容。",
+      "paste": "粘贴示例线索（JSON）",
+      "pasteHint": "一个对象，最大 64 KB。",
+      "pasteProblems": {
+        "empty": "粘贴您的工具发送的 JSON。",
+        "invalidJson": "这不是有效的 JSON。请检查是否缺少引号、逗号或括号。",
+        "notObject": "线索必须是 JSON 对象：即位于花括号之间的一组键和值。",
+        "tooLarge": "超过 64 KB。"
+      },
+      "useLast": "使用我们最近收到的线索",
+      "pickStored": "或选择已存储的线索",
+      "storedOption": "{id}（{status}）",
+      "auditNote": "读取已存储的线索会记录在审计日志中。粘贴的示例不会记录。",
+      "fixDraft": "请修正高亮的映射字段以查看预览。",
+      "choose": "粘贴示例或使用最近收到的线索，以查看结果。",
+      "loading": "正在读取线索",
+      "none": "尚未收到线索：请粘贴示例。",
+      "usable": "此线索将被处理",
+      "notUsable": "此线索需要人工审核",
+      "basedOnEvent": "来自已存储的线索",
+      "basedOnPayload": "来自您的示例",
+      "externalId": "ID {id}",
+      "reasonsLabel": "原因",
+      "reasons": {
+        "no_payload": "尚无可读取的线索。",
+        "no_contact_point": "未找到电子邮箱和电话。",
+        "invalid_phone": "找到了电话，但无法识别为号码，且没有电子邮箱。",
+        "phone_unreadable": "电话无法识别为号码；将使用电子邮箱。",
+        "email_invalid": "电子邮箱地址无效，已忽略。"
+      },
+      "contact": {
+        "name": "姓名",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "email": "电子邮箱",
+        "phone": "电话"
+      },
+      "empty": "未找到",
+      "phoneUnreadable": "无法识别为号码",
+      "attribution": {
+        "platform": "平台",
+        "campaign": "广告系列",
+        "adset": "广告组",
+        "ad": "广告",
+        "form": "表单"
+      },
+      "paths": "此线索中的字段",
+      "pathsPick": "点击以填充：{field}",
+      "pathsFocusFirst": "请先点击一个映射框，再点击字段进行填充。",
+      "pathsMore": "{count, plural, other {还有 # 个字段}}"
+    },
+    "reveal": {
+      "titleCreated": "请立即复制您的网址和令牌",
+      "titleRotated": "您的新网址和令牌",
+      "bodyCreated": "仅显示这一次。我们只保存指纹，之后无法再次显示。",
+      "bodyRotated": "旧网址已立即失效。此新网址仅显示这一次。",
+      "url": "Webhook 网址",
+      "copyUrl": "复制网址",
+      "noOrigin": "在此路径前加上您的 API 地址即可得到完整网址。",
+      "token": "令牌",
+      "copyToken": "复制令牌",
+      "secretHint": "此来源还需要共享密钥：发送方必须在 {header} 请求头中发送该密钥。",
+      "sample": "从终端试用",
+      "sampleHelp": "在 Zapier 或 Make 中，使用向网址发送 JSON 的 Webhooks 操作。此命令将发送一条示例线索。",
+      "copied": "我已将网址和令牌保存到安全的地方",
+      "done": "我已复制，继续",
+      "doneHint": "请先勾选此框。此后将无法再次显示令牌。"
+    },
+    "test": {
+      "title": "发送测试线索",
+      "help": "通过真实流程发送一条标记为测试的示例线索。它会创建一个可删除的真实联系人，且不会通知任何人。",
+      "paused": "此来源已暂停。恢复后才能发送测试线索。",
+      "useSample": "改用示例线索",
+      "useOwn": "发送我自己的负载",
+      "payload": "负载（JSON）",
+      "payloadHint": "一个对象，最大 64 KB。",
+      "payloadProblems": {
+        "empty": "粘贴要发送的 JSON，或使用示例线索。",
+        "invalidJson": "这不是有效的 JSON。请检查是否缺少引号、逗号或括号。",
+        "notObject": "线索必须是 JSON 对象：即位于花括号之间的一组键和值。",
+        "tooLarge": "超过 64 KB。"
+      },
+      "send": "发送测试线索",
+      "needsManage": "发送测试线索需要权限 leads.sources.manage。",
+      "result": "结果",
+      "flag": "测试",
+      "openContact": "打开联系人"
+    },
+    "watch": {
+      "waiting": "正在等待第一条线索。请将网址粘贴到您的工具中并发送一条。",
+      "received": "已收到第一条线索：",
+      "error": "目前无法检查线索。"
+    },
+    "detail": {
+      "loading": "正在加载来源",
+      "backToList": "返回来源列表",
+      "pageTitle": "线索来源",
+      "needsAttention": "{count, plural, other {# 条线索需要处理}}",
+      "lastEvent": "最近一条线索",
+      "noEvents": "暂无",
+      "pause": "暂停",
+      "resume": "恢复",
+      "rotate": "轮换令牌",
+      "delete": "删除",
+      "conflict": "其他人已修改此来源。请重新加载以查看其版本；您未保存的编辑将丢失。",
+      "reload": "重新加载",
+      "connection": "连接",
+      "connector": "通过应用市场连接。它没有自己的网址或令牌；线索通过已安装的应用送达。",
+      "connectorLink": "打开已安装的应用",
+      "endsIn": "网址令牌以 {hint} 结尾",
+      "noHint": "没有记录的令牌。",
+      "urlOnce": "创建来源时完整网址只显示过一次。如需新网址，请轮换令牌。",
+      "secretYes": "已设置共享密钥：发送方必须在 X-Webhook-Secret 请求头中发送该密钥。",
+      "secretNo": "未设置共享密钥。",
+      "pausedNote": "此来源已暂停：其网址返回 404，因此发送方会看到错误，直到您恢复它。",
+      "settings": "设置",
+      "settingsHelp": "更改将应用于保存后收到的线索。重试旧线索时使用当前设置。",
+      "basics": "基本信息",
+      "rules": "线索的处理方式",
+      "mapping": "字段映射",
+      "unsaved": "您有未保存的更改",
+      "discard": "放弃更改",
+      "save": "保存更改",
+      "saved": "更改已保存",
+      "pausedToast": "来源已暂停",
+      "resumedToast": "来源已恢复",
+      "deletedToast": "来源 {name} 已删除",
+      "confirm": {
+        "cancel": "取消",
+        "pause": {
+          "title": "暂停此来源？",
+          "body": "暂停期间，其网址返回 404，发送到该来源的线索不会被接收。您可随时恢复。",
+          "action": "暂停来源"
+        },
+        "rotate": {
+          "title": "轮换令牌？",
+          "body": "当前网址将立即失效，请用新网址更新您的工具。新网址仅显示一次。",
+          "action": "轮换令牌"
+        },
+        "delete": {
+          "title": "删除 {name}？",
+          "body": "其网址将失效，其中存储的线索也会一并删除。已创建的联系人会保留。此操作无法撤销。",
+          "action": "删除来源"
+        }
+      }
+    },
+    "events": {
+      "title": "已收到的线索",
+      "help": "所有到达此来源的线索及其处理结果。最新的在前。",
+      "filterStatus": "显示",
+      "filterTests": "测试",
+      "attentionTitle": "{count, plural, other {# 条线索需要处理}}",
+      "attentionGroup": "{count, plural, other {# 条线索：}}",
+      "showAttention": "仅显示这些线索",
+      "loading": "正在加载线索",
+      "emptyTitle": "暂无线索",
+      "empty": "发送测试线索或将网址粘贴到您的工具中。",
+      "emptyFilteredTitle": "没有匹配的线索",
+      "emptyFiltered": "没有符合这些筛选条件的线索。",
+      "clearFilters": "清除筛选",
+      "col": {
+        "status": "状态",
+        "lead": "线索",
+        "result": "发生了什么",
+        "links": "变为",
+        "received": "接收时间",
+        "actions": "操作"
+      },
+      "loadMore": "加载更多",
+      "test": "测试",
+      "attempts": "{count, plural, other {# 次尝试}}",
+      "deliveredAgain": "{count, plural, other {再次送达 # 次}}",
+      "contact": "联系人",
+      "deal": "交易",
+      "retry": "重试",
+      "open": "打开",
+      "retriedToast": "已重试：现在为 {status}"
+    },
+    "event": {
+      "title": "线索详情",
+      "close": "关闭",
+      "retry": "重试此线索",
+      "auditNote": "打开负载会记录在审计日志中。",
+      "externalId": "线索 ID",
+      "test": "测试",
+      "received": "接收时间",
+      "processed": "处理时间",
+      "notProcessed": "尚未",
+      "attempts": "尝试次数",
+      "duplicates": "重复投递",
+      "deliveredAgain": "{count, plural, other {再次送达 # 次}}",
+      "reason": "原因",
+      "contact": "联系人",
+      "openContact": "打开联系人",
+      "deal": "交易",
+      "openDeal": "打开交易",
+      "error": "错误",
+      "retried": "已重试。线索现在为",
+      "payload": "已存储的负载",
+      "loadingPayload": "正在打开负载",
+      "purged": "原始负载已在 {days} 天后清除。线索及其联系人保留。"
+    },
+    "attribution": {
+      "title": "线索归因",
+      "first": "首次触点",
+      "latest": "最近触点",
+      "firstAndLatest": "首次和最近触点",
+      "total": "共 {count} 个触点",
+      "platform": "平台",
+      "source": "来源",
+      "fields": {
+        "campaign": "广告系列",
+        "adset": "广告组",
+        "ad": "广告",
+        "form": "表单"
+      },
+      "capturedAt": "捕获时间",
+      "openSource": "打开线索来源"
+    },
+    "common": {
+      "dismiss": "关闭",
+      "loading": "加载中",
+      "retry": "重试",
+      "copied": "已复制",
+      "copyFailed": "无法复制：请选中文本后手动复制",
+      "requestId": "参考：{id}"
+    },
+    "states": {
+      "noAccessTitle": "您无权访问社交线索",
+      "noAccessBody": "您的角色不包含此页面所需的权限（{permission}）。请让工作区管理员为您的角色添加该权限。",
+      "lockedTitle": "您的套餐不包含社交线索",
+      "lockedBody": "您当前的套餐不包含线索来源，因此无法查看或创建。升级后即可将广告和落地页线索导入联系人。",
+      "upgrade": "升级套餐",
+      "manageNeeded": "您只能查看，无法在此进行更改：更改来源需要 {permission} 权限。"
+    },
+    "errors": {
+      "conflict": "您编辑时，其他人修改了此来源。请重新加载查看其版本；您未保存的编辑将会丢失。",
+      "noAccess": "您的角色不允许此操作。",
+      "signedOut": "您的会话已结束。请重新登录后继续。",
+      "planLocked": "您的套餐不包含社交线索。请升级后使用。",
+      "planLimit": "已达到套餐的线索来源数量上限。请升级套餐，或删除不再使用的来源。",
+      "nameTaken": "已有其他来源使用此名称。请选择其他名称。",
+      "mappingInvalid": "字段映射指向了无法由线索填充的联系人属性。",
+      "defaultsInvalid": "规则中有内容不属于此工作区（用户、销售管道、阶段或生命周期阶段）。",
+      "notRetryable": "只能重试需要审核或失败的线索。此线索已完成或正在处理中。",
+      "payloadPurged": "已保存的线索在保留期限后已被删除，因此无法重试。",
+      "sourcePaused": "此来源已暂停。请先恢复，再发送测试线索或重试线索。",
+      "notFound": "未找到该内容，可能已被删除。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "rateLimitedWait": "请求过于频繁。请在 {seconds} 秒后重试。",
+      "validation": "部分输入内容无效。请检查高亮显示的字段。",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "服务器返回了此页面无法识别的响应。请重新加载页面；如果问题持续出现，请联系支持团队。",
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "unexpected": "服务出现问题。请稍后重试。",
+      "request": "请求未被接受。请检查输入内容后重试。",
+      "details": {
+        "unknown_property": "此联系人属性不存在或已关闭。",
+        "not_mappable": "此属性为计算字段或指向其他记录，因此线索无法填充。",
+        "unknown_pipeline": "此销售管道不在您的工作区中。",
+        "unknown_stage": "此交易阶段不在您的工作区中。",
+        "stage_not_in_pipeline": "此阶段属于其他销售管道。",
+        "pipeline_required": "请选择此阶段所属的销售管道。",
+        "unknown_or_lost_stage": "此生命周期阶段不存在，或为丢失阶段。",
+        "unknown_or_inactive_user": "所选人员中有人不是此工作区的有效成员。"
+      }
+    },
+    "problems": {
+      "nameRequired": "请为来源命名。",
+      "nameLength": "最多使用 {max} 个字符。",
+      "platformLength": "最多使用 {max} 个字符。",
+      "secretLength": "共享密钥为 {min} 到 {max} 个字符。",
+      "pathLength": "路径最多 {max} 个字符。",
+      "pathCharacters": "路径不能包含控制字符。",
+      "retentionRange": "请输入 1 到 {max} 之间的整数天数。",
+      "countryCode": "请输入 1 到 4 位的区号，例如 91 或 44。",
+      "textLength": "最多使用 {max} 个字符。",
+      "ownerFixed": "请只选择一人。",
+      "ownerRoundRobin": "请至少选择两人轮流分配。",
+      "ownerTooMany": "最多选择 {max} 人。",
+      "notifyTooMany": "最多选择 {max} 人。",
+      "dealTitleLength": "交易标题最多 {max} 个字符。",
+      "propertyRequired": "请选择要填充的联系人属性。",
+      "propertyKey": "属性键以字母开头，仅使用小写字母、数字和下划线。",
+      "propertyDuplicate": "此属性被重复映射。",
+      "pathRequired": "请说明该值在数据负载中的位置。",
+      "customFieldsTooMany": "最多映射 {max} 个自定义属性。",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta 线索表单",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "应用市场连接"
+    },
+    "sourceStatus": {
+      "active": "有效",
+      "paused": "已暂停"
+    },
+    "eventStatus": {
+      "received": "已接收",
+      "created": "已创建联系人",
+      "updated": "已更新联系人",
+      "duplicate": "重复",
+      "needs_review": "需要审核",
+      "failed": "失败"
+    },
+    "reasons": {
+      "no_contact_point": "无邮箱或电话",
+      "invalid_phone": "无法识别电话",
+      "plan_limit_reached": "已达联系人上限",
+      "source_paused": "来源已暂停",
+      "internal_error": "处理错误",
+      "identity_conflict": "邮箱或电话属于其他联系人"
+    },
+    "guidance": {
+      "noContactPoint": "该线索既没有可用的邮箱，也没有电话号码。请修正字段映射或默认国家/地区代码后重试。",
+      "invalidPhone": "已发送电话号码，但无法识别，且没有邮箱。请检查电话字段映射和默认国家/地区代码后重试。",
+      "planLimit": "已达到套餐的联系人上限，因此该线索无法转为联系人。请升级套餐后重试。",
+      "sourcePaused": "来源已暂停。请恢复后重试。",
+      "internalError": "处理此线索时出错。请重试；如果仍然失败，请将错误中的参考号提供给支持团队。",
+      "identityConflict": "线索已关联到现有联系人，但其邮箱或电话已属于其他联系人，因此未转移该信息。",
+      "generic": "此线索需要检查。请查看原因和错误信息，如有需要请修正映射或默认设置，然后重试。",
+      "upgrade": "升级套餐"
+    },
+    "eventFilters": {
+      "all": "全部线索",
+      "attention": "需要处理",
+      "needs_review": "需要审核",
+      "failed": "失败",
+      "created": "已创建联系人",
+      "updated": "已更新联系人",
+      "duplicate": "重复",
+      "received": "处理中"
+    },
+    "testFilters": {
+      "all": "真实和测试线索",
+      "only": "仅测试线索",
+      "hide": "隐藏测试线索"
+    },
+    "page": {
+      "title": "社交线索",
+      "description": "将广告和落地页的线索导入联系人，并设置负责人、标签和交易。",
+      "newSource": "新建来源",
+      "loading": "正在加载线索来源",
+      "tabs": {
+        "ads": "广告",
+        "webhook": "Webhook",
+        "attention": "{count, plural, other {# 条线索需要处理}}"
+      }
+    },
+    "ads": {
+      "intro": "选择线索的来源。所有来源最终都会进入同一处：一个记录了来源的联系人，并分配负责人，可选关联交易并发送通知。",
+      "available": "可用",
+      "comingSoon": "即将推出",
+      "untilThen": "在此之前，请通过 Webhook 结合 Zapier 或 Make 发送这些线索。",
+      "sourceCount": "{count, plural, =0 {暂无来源} other {# 个来源}}",
+      "setUpWebhook": "设置 Webhook",
+      "openSources": "打开来源",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "从任何可以发送网络请求的工具提交线索，例如 Zapier、Make、落地页搭建工具或您自己的表单。也可接收 LinkedIn、TikTok 和 Google Ads 的线索。"
+        },
+        "meta": {
+          "name": "Meta 线索表单",
+          "body": "直接从您的主页接收 Facebook 和 Instagram 线索广告。"
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn 线索生成表单。"
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok 线索生成表单。"
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Google Ads 线索表单扩展。"
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "暂无来源",
+      "empty": "创建 Webhook 来源，即可获得可粘贴到 Zapier、Make 或表单工具中的网址。发送到该地址的线索将成为联系人。",
+      "emptyNoManage": "尚未创建任何线索来源。请联系有权管理线索来源的人员进行创建。",
+      "create": "新建来源",
+      "caption": "线索来源",
+      "col": {
+        "name": "名称",
+        "kind": "类型",
+        "status": "状态",
+        "token": "网址",
+        "lastEvent": "最近线索",
+        "attention": "需要处理"
+      },
+      "connector": "通过应用市场",
+      "endsIn": "将于 {hint} 结束",
+      "noEvents": "暂无线索",
+      "needsAttention": "{count, plural, other {# 条线索}}"
+    }
+  }
+}

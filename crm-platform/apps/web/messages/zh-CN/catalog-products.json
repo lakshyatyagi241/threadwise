@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "商品目录",
+      "products": "商品",
+      "reviews": "评价"
+    },
+    "common": {
+      "dismiss": "关闭",
+      "retry": "重试",
+      "requestId": "请求 ID"
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "forbidden": "您没有权限执行此操作。",
+      "signedOut": "您的会话已结束。请重新登录以继续。",
+      "conflict": "您编辑期间其他人修改了此内容。请重新加载以查看最新版本。",
+      "validation": "部分字段无效。请检查高亮显示的字段后重试。",
+      "unavailable": "此服务器上暂不提供商品目录的这一部分。",
+      "rateLimited": "请求过多。请稍候再试。",
+      "notFound": "找不到该项目，它可能已被删除。",
+      "planLocked": "您的套餐不包含 WhatsApp 商品目录。升级即可解锁。",
+      "planLimit": "已达到您套餐的消息上限。",
+      "wallet": "您的钱包余额不足，无法发送。请充值后重试。",
+      "sendBlocked": "目前发送被阻止：{detail}",
+      "notConnected": "尚未连接商品目录。请先在“设置”标签页中连接。",
+      "metaRejected": "Meta 拒绝了该请求：{detail}",
+      "noWaba": "未找到已连接的 WhatsApp Business（WABA）号码。请先连接 WABA 号码，或手动关联商品目录。",
+      "wabaToken": "您的 WABA 号码已连接，但无法读取其令牌。请重新连接该号码，或手动关联商品目录。",
+      "noCatalogLinked": "您的 WhatsApp 账户尚未关联商品目录。请在 Meta Commerce Manager 中创建一个后重试，或手动关联。",
+      "noRecipients": "请至少选择一个联系人、分组或粘贴一个号码。",
+      "tooManyRecipients": "每次最多发送给 500 位收件人。请拆分为较小的批次。",
+      "noProducts": "请先至少选择一个商品。",
+      "noSender": "没有已连接的设备。请先在“渠道”下配对一个。",
+      "sendFailed": "无法发送消息：{detail}",
+      "collectionProducts": "所选商品均不属于此工作区。",
+      "providerFailed": "WhatsApp 或 Meta 无法完成该请求：{detail}",
+      "unexpected": "出了点问题。请稍后重试。"
+    },
+    "paywall": {
+      "kicker": "高级功能",
+      "title": "您的套餐不包含 WhatsApp 店铺",
+      "message": "请选择包含该功能的套餐。升级后即可立即解锁此功能。",
+      "back": "返回",
+      "compare": "比较所有套餐"
+    },
+    "status": {
+      "unsynced": "未同步",
+      "pending": "待处理",
+      "synced": "已同步",
+      "failed": "失败"
+    },
+    "pager": {
+      "showing": "显示第 {from} 至 {to} 条，共 {total} 条结果",
+      "label": "页码",
+      "prev": "上一页",
+      "next": "下一页",
+      "goTo": "前往第 {page} 页"
+    },
+    "shell": {
+      "back": "返回集成",
+      "breadcrumb": "集成 / WhatsApp 商品目录",
+      "titleLead": "将商品推送到",
+      "titleAccent": "WhatsApp 聊天",
+      "connected": "{provider} · 已连接",
+      "notConnected": "未连接",
+      "tabs": "商品目录部分",
+      "tab": {
+        "setup": "设置",
+        "send": "发送",
+        "collections": "系列",
+        "activity": "活动"
+      }
+    },
+    "connect": {
+      "provider": "提供商",
+      "providers": {
+        "meta_cloud": "Meta Cloud API（直连）",
+        "dialog_360": "360dialog（BSP）"
+      },
+      "catalogId": "商品目录 ID",
+      "catalogName": "商品目录名称",
+      "label": "（标签）",
+      "catalogNamePlaceholder": "例如：主商品目录",
+      "wabaId": "WABA ID",
+      "phoneNumberId": "电话号码 ID",
+      "accessToken": "访问令牌 / API 密钥",
+      "accessTokenHint": "静态加密存储。保存时会向 Meta 验证。",
+      "accessTokenPlaceholder": "EAAxx... 或 D360-API-KEY...",
+      "showToken": "显示令牌",
+      "hideToken": "隐藏令牌",
+      "submit": "连接并验证",
+      "connected": "商品目录已连接。",
+      "problem": {
+        "required": "此字段为必填项。",
+        "tooShort": "访问令牌至少需要 20 个字符。",
+        "tooLong": "此值过长。"
+      }
+    },
+    "setup": {
+      "loading": "正在加载商品目录",
+      "loadError": "无法加载商品目录",
+      "cancel": "取消",
+      "manage": "管理 →",
+      "view": "查看 →",
+      "advanced": {
+        "kicker": "可选 · 高级",
+        "titleManual": "或手动关联商品目录",
+        "titleAlso": "同时关联 Meta Commerce 商品目录",
+        "intro": "可解锁 WhatsApp Business 资料上的官方商品目录按钮、购物车和“已下单”Webhook。仅在使用已验证的 WABA 时需要。不使用此项，非官方 API 也能正常工作。"
+      },
+      "noSender": {
+        "title": "请先连接设备",
+        "message": "发送商品目录至少需要此账户上有一台 WhatsApp 设备：非官方 API 二维码配对（免费）或经 Meta 验证的 WABA 号码。只需 30 秒。",
+        "connect": "连接设备"
+      },
+      "ready": {
+        "kicker": "✓ 可以发送",
+        "officialTitle": "官方 WhatsApp 商品目录模式",
+        "unofficialTitle": "非官方 API 轮播模式",
+        "officialBody": "您已连接 {count, plural, other {# 个号码}}。商品目录将通过您已连接的 {engine} 号码发送。如需交互式商品消息，请在下方关联 Meta Commerce 商品目录。",
+        "unofficialBody": "您已连接 {count, plural, other {# 台设备}}。商品目录发送目前可通过非官方 API 的原生 WhatsApp 轮播使用，无需 Meta 设置，也无需等待审核。",
+        "head": "前往<b>发送标签页</b>，将商品推送到任意客户的号码。",
+        "openSend": "打开发送标签页"
+      },
+      "senders": {
+        "title": "已连接的设备",
+        "noNumber": "无号码",
+        "connected": "已连接"
+      },
+      "tiles": {
+        "products": "商品",
+        "shops": "店铺",
+        "recentSends": "最近发送",
+        "total": "总计",
+        "synced": "已同步",
+        "pending": "待处理",
+        "failed": "失败"
+      },
+      "autodetect": {
+        "title": "关联您的 Meta Commerce 商品目录",
+        "intro": "您的 WhatsApp 号码已连接，因此我们可以直接从 Meta 拉取商品目录，无需粘贴商品目录 ID、WABA ID 或访问令牌。可解锁官方商品目录按钮、购物车和“已下单”Webhook。",
+        "button": "从我的 WhatsApp 账户获取",
+        "linked": "已从您的 WhatsApp 账户关联商品目录。"
+      },
+      "header": {
+        "connected": "已连接 · {provider}",
+        "defaultName": "Meta Commerce 商品目录",
+        "sendProducts": "发送商品 →",
+        "disconnect": "断开连接"
+      },
+      "disconnectTitle": "断开商品目录？",
+      "disconnectConfirm": "商品会保留在 Meta 上；我们只是停止同步。",
+      "disconnected": "商品目录已断开连接。",
+      "table": {
+        "title": "商品",
+        "hint": "最近更新 · 点击<b>刷新状态</b>以查询 Meta。",
+        "manage": "管理商品 →",
+        "product": "商品",
+        "sku": "SKU",
+        "price": "价格",
+        "availability": "库存状态",
+        "metaStatus": "Meta 状态",
+        "actions": "操作",
+        "empty": "暂无商品。",
+        "addOne": "去添加 →",
+        "sync": {
+          "idle": "同步",
+          "busy": "…",
+          "queued": "已排队 ✓",
+          "skipped": "未排队",
+          "failed": "失败"
+        }
+      }
+    },
+    "sync": {
+      "title": "将商品同步到 Meta",
+      "intro": "每次请求最多推送 1000 个，循环直至完成。{count} 个等待中。",
+      "syncButton": "同步到 Meta",
+      "syncing": "正在同步…",
+      "pollButton": "刷新状态",
+      "polling": "查询中…",
+      "importButton": "从 Meta 导入",
+      "importing": "正在导入…",
+      "importHint": "将直接在 Meta Commerce Manager 中创建的商品拉取到商品目录。",
+      "progress": "同步进度",
+      "starting": "正在开始…",
+      "pushed": "已推送 {pushed} · 待处理 {pending} · 已同步 {synced} · 失败 {failed}",
+      "stalled": "本次运行无法再推送更多内容。请检查标记为失败的商品。",
+      "done": "完成 · 已排队 {count} 个",
+      "polled": "已查询 · 已同步 +{synced} · 失败 +{failed}",
+      "importStarting": "从 Meta 导入 · 正在开始…",
+      "imported": "已导入 {imported} · 已更新 {updated} · 已跳过 {skipped}，共 {total}"
+    },
+    "commerce": {
+      "title": "商务设置",
+      "visible": "在商家资料中显示商品目录",
+      "visibleHint": "在您的 WhatsApp Business 资料中添加“商品目录”按钮。",
+      "cart": "启用购物车",
+      "cartHint": "买家可在发送订单前添加多件商品。",
+      "save": "保存",
+      "saved": "商务设置已更新。"
+    },
+    "automation": {
+      "title": "自动化",
+      "ack": "客户发送购物车时自动回复",
+      "ackHint": "买家会立即收到订单已接收的消息（商品和总额），而不是无人回应，这是提升商品目录转化率的头号举措。",
+      "payUrl": "付款链接前缀（可选）",
+      "payUrlHint": "我们会附加订单 ID；留空则仅确认收到。",
+      "concierge": "商品目录助手：自动回答商品问题",
+      "conciergeHint": "当客户输入例如“2000 以内的红色鞋子”时，自动回复匹配的多商品消息。默认关闭。",
+      "header": "回复标题",
+      "headerPlaceholder": "这是我找到的内容",
+      "max": "最大商品数",
+      "replyOnEmpty": "即使没有匹配也回复",
+      "replyOnEmptyHint": "否则无匹配时助手保持沉默（推荐）。",
+      "emptyText": "无匹配回复",
+      "emptyTextPlaceholder": "抱歉，我没有找到匹配的商品。请尝试其他关键词或预算。",
+      "save": "保存自动化",
+      "saved": "自动化设置已保存。",
+      "problem": {
+        "badUrl": "请输入以 https:// 开头的完整链接",
+        "tooLong": "此文本过长。",
+        "range": "请输入 1 到 30 之间的整数。"
+      }
+    },
+    "health": {
+      "title": "商品目录状况",
+      "needAttention": "{count, plural, other {# 件商品需要处理后才能销售。}}",
+      "allGood": "所有商品均已准备好上架商品目录。太棒了。",
+      "noImage": "无图片",
+      "noPrice": "无价格",
+      "syncError": "同步错误",
+      "showFix": "显示需要修复的商品",
+      "fix": "修复 →"
+    },
+    "send": {
+      "loading": "正在加载发送表单",
+      "loadError": "无法加载发送表单",
+      "maxProducts": "每个轮播最多 {max} 件商品。",
+      "noSender": {
+        "title": "请先连接设备",
+        "message": "您需要已连接的 WhatsApp 设备才能发送商品目录消息。",
+        "connect": "连接设备"
+      },
+      "feedback": {
+        "failed": "未发送任何内容。",
+        "sent": "{count, plural, other {已发送给 # 位收件人}}",
+        "someFailed": "{count} 个失败"
+      },
+      "recipients": {
+        "title": "收件人",
+        "count": "{count, plural, other {# 位收件人}}",
+        "source": "收件人来源",
+        "modes": {
+          "groups": {
+            "title": "联系人分组",
+            "hint": "使用已保存的细分。"
+          },
+          "contacts": {
+            "title": "单个联系人",
+            "hint": "选择特定的人。"
+          },
+          "manual": {
+            "title": "手动输入号码",
+            "hint": "粘贴，每行一个。"
+          }
+        },
+        "noGroups": "暂无联系人分组。请先在<link>联系人</link>页面创建一个。",
+        "groupContacts": "{count, plural, other {# 个联系人}}",
+        "noContacts": "暂无联系人。请在<link>联系人</link>页面添加。",
+        "searchContacts": "搜索联系人…",
+        "noMatch": "没有匹配的联系人。",
+        "paste": "粘贴电话号码",
+        "pastePlaceholder": "每行一个号码，包含国家/地区代码",
+        "pasteHint": "每行一个，或用逗号、分号分隔。需要国家/地区代码（可带或不带 +）。",
+        "overCap": "每次最多发送给 {max} 位收件人。请拆分为较小的批次。"
+      },
+      "format": {
+        "title": "格式与发送方",
+        "spm": {
+          "title": "单个商品",
+          "hint": "一张商品卡片"
+        },
+        "mpm": {
+          "title": "商品列表（轮播）",
+          "hint": "最多 30 件商品"
+        },
+        "link": {
+          "title": "商品目录链接",
+          "hint": "纯文本 · 随时可用"
+        },
+        "sendFrom": "发送自",
+        "fromShop": "来自店铺",
+        "brandingContext": "（品牌上下文）",
+        "shopFallback": "店铺 {slug}"
+      },
+      "products": {
+        "title": "商品",
+        "selected": "（已选择 {count} 个）",
+        "selectedOf": "（已选择 {count} / {max}）",
+        "search": "搜索商品…",
+        "showingFrom": "正在显示<b>{shop}</b>的商品。更改上方的<b>来自店铺</b>选择器可查看其他店铺的商品目录。",
+        "loading": "正在加载商品…",
+        "loadError": "无法加载商品",
+        "other": "其他",
+        "noMatch": "没有符合搜索条件的商品。",
+        "emptyShop": "此店铺中没有上架的商品。",
+        "empty": "暂无上架的商品。",
+        "addOne": "去添加 →"
+      },
+      "message": {
+        "title": "消息与发送",
+        "text": "消息文本",
+        "optional": "（可选）",
+        "placeholder": "例如：这里有一些您可能喜欢的商品，点击任意一件了解更多。",
+        "header": "页眉",
+        "headerPlaceholder": "例如：来看看这些",
+        "footer": "页脚",
+        "footerPlaceholder": "例如：回复 STOP 即可退订",
+        "counter": "{used} / {max}",
+        "viewRecent": "查看最近发送 →",
+        "sendProduct": "发送商品 →",
+        "sendCarousel": "发送轮播 →",
+        "sendLink": "发送商品目录链接 →",
+        "sending": "发送中…",
+        "noPermission": "您可以查看此表单，但无法发送商品目录消息。"
+      },
+      "rail": {
+        "label": "发送摘要",
+        "summary": "摘要",
+        "recipients": "收件人",
+        "products": "商品",
+        "format": "格式",
+        "formats": {
+          "spm": "单个商品",
+          "mpm": "多商品列表",
+          "link": "商品目录链接"
+        },
+        "catalog": "商品目录",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, other {# 件商品}}",
+        "unofficial": "非官方 API（轮播）",
+        "linkMeta": "关联 Meta →",
+        "recent": "最近发送",
+        "windowTitle": "24 小时窗口",
+        "windowBody": "SPM 和列表模式要求买家在过去 24 小时内给您发过消息。<b>商品目录链接</b>模式随时可用。"
+      }
+    },
+    "collections": {
+      "loading": "正在加载系列",
+      "loadError": "无法加载系列",
+      "title": "系列",
+      "intro": "将一组商品保存一次，之后一键作为多商品消息发送，无需每次重新挑选。",
+      "new": "新建系列",
+      "create": "创建系列",
+      "created": "系列已创建。",
+      "updated": "系列已更新。",
+      "deleted": "系列已删除。",
+      "empty": "暂无系列。请在上方创建您的第一个系列。",
+      "productCount": "{count, plural, =0 {无商品} other {# 件商品}}",
+      "edit": "编辑",
+      "delete": "删除",
+      "cancel": "取消",
+      "saveChanges": "保存更改",
+      "deleteTitle": "删除此系列？",
+      "deleteBody": "“{name}”将被删除。商品不受影响。",
+      "send": {
+        "button": "发送",
+        "noLive": "此系列中没有可发送的上架商品。",
+        "needNumber": "请先输入收件人号码。",
+        "sending": "发送中…",
+        "sent": "{count, plural, other {已发送给 # 位收件人}}",
+        "someFailed": "{count} 个失败",
+        "failed": "未发送任何内容。",
+        "number": "收件人号码",
+        "numberPlaceholder": "带国家/地区代码的号码",
+        "header": "页眉（可选）",
+        "headerPlaceholder": "来看看这些",
+        "from": "发送自",
+        "auto": "自动（启用的）",
+        "go": "作为 MPM 发送"
+      },
+      "picker": {
+        "filter": "筛选商品…",
+        "empty": "暂无上架的商品。",
+        "addOne": "去添加 →",
+        "noMatch": "没有匹配的商品。",
+        "max": "一个系列最多包含 {max} 件商品。"
+      },
+      "form": {
+        "name": "名称",
+        "namePlaceholder": "例如：夏季大促",
+        "description": "描述（可选）",
+        "products": "商品",
+        "upTo": "最多 {max} 件",
+        "reload": "重新加载",
+        "problem": {
+          "nameRequired": "请输入名称。",
+          "nameTooLong": "名称过长。",
+          "descriptionTooLong": "描述过长。",
+          "noProducts": "请至少选择一件商品。"
+        }
+      }
+    },
+    "activity": {
+      "loading": "正在加载活动",
+      "loadError": "无法加载活动",
+      "title": "商品目录发送活动",
+      "subtitle": "您的工作区发送过的每条商品目录消息（SPM · MPM · 链接）。",
+      "sendAnother": "再发送一次 →",
+      "emptyTitle": "尚无发送记录",
+      "emptyBody": "从<link>发送标签页</link>发送您的第一个商品目录。",
+      "failed": "失败",
+      "col": {
+        "when": "时间",
+        "to": "收件人",
+        "mode": "模式",
+        "body": "正文"
+      }
+    },
+    "products": {
+      "kicker": "店铺 / 商品",
+      "title": "商品目录",
+      "add": "添加商品",
+      "search": "按名称或 SKU 搜索...",
+      "loading": "正在加载商品",
+      "loadError": "无法加载商品",
+      "col": {
+        "image": "图片",
+        "name": "名称",
+        "sku": "SKU",
+        "price": "价格",
+        "stock": "库存",
+        "actions": "操作"
+      },
+      "noMatchTitle": "没有匹配的商品",
+      "noMatchBody": "没有按名称或 SKU 匹配“{q}”的内容。",
+      "clearSearch": "清除搜索",
+      "emptyTitle": "暂无商品",
+      "emptyBody": "点击“添加商品”创建您的第一件商品。",
+      "inStock": "有货",
+      "out": "缺货",
+      "share": "分享",
+      "edit": "编辑",
+      "delete": "删除",
+      "cancel": "取消",
+      "deleted": "商品已移除。",
+      "deleteTitle": "删除此商品？",
+      "deleteBody": "“{name}”将被删除。在您于 Meta 上将其移除之前，它会保留在 Meta 上。"
+    },
+    "share": {
+      "eyebrow": "分享商品",
+      "product": "商品",
+      "close": "关闭",
+      "loading": "正在加载链接",
+      "storefrontLink": "店铺链接",
+      "noStorefront": "（请先设置您的店铺 slug）",
+      "waLink": "WhatsApp 深度链接",
+      "noPhone": "（请先连接电话号码）",
+      "copy": "复制",
+      "copied": "已复制！",
+      "sendToCustomer": "发送给客户",
+      "phonePlaceholder": "WhatsApp 号码，例如 +1 555…",
+      "send": "发送",
+      "sending": "发送中…",
+      "sent": "已发送。",
+      "invalidPhone": "请输入带国家/地区代码的有效 WhatsApp 号码。"
+    },
+    "form": {
+      "breadcrumb": "面包屑导航",
+      "products": "商品",
+      "crumbNew": "新建",
+      "crumbEdit": "编辑",
+      "addTitle": "添加商品",
+      "editFallback": "编辑商品",
+      "loading": "正在加载商品",
+      "loadError": "无法加载商品",
+      "noPermissionTitle": "您无法执行此操作",
+      "noPermission": "您的角色不允许创建或编辑商品。",
+      "reload": "重新加载",
+      "fixFields": "部分字段无效。请检查高亮显示的字段。",
+      "basics": "基本信息",
+      "name": "名称",
+      "namePlaceholder": "例如：春季纯棉 T 恤",
+      "sku": "SKU",
+      "optional": "（可选）",
+      "shortDescription": "简短描述",
+      "shortDescriptionPlaceholder": "显示在商品目录卡片和 WhatsApp 分享链接中。",
+      "fullDescription": "完整描述",
+      "fullDescriptionNote": "（商品页面正文）",
+      "fullDescriptionPlaceholder": "尺码、面料、护理说明：任何有助于买家决策的信息。允许使用 HTML。",
+      "media": "媒体",
+      "primaryImage": "主图 · 粘贴 URL",
+      "imageUrl": "图片 URL",
+      "imageUrlHint": "粘贴任意直接图片 URL。",
+      "photoTipsTitle": "拍出好商品照片的小技巧",
+      "photoTips": "使用 1024×1024 像素或更大的方形（1:1）图片。简洁的背景比杂乱的背景转化率更高。",
+      "gallery": "图库",
+      "galleryHint": "为商品详情页添加更多图片。买家会看到这些缩略图。",
+      "addGalleryUrl": "添加图片 URL",
+      "galleryRow": "图库图片 {n} URL",
+      "removeGallery": "移除图库图片 {n}",
+      "galleryEmpty": "暂无图库图片。点击上方的“添加图片 URL”添加一张。",
+      "pricing": "定价",
+      "price": "价格",
+      "comparePrice": "划线价",
+      "was": "（原价）",
+      "comparePriceHint": "原价 · 以删除线显示。",
+      "currency": "货币",
+      "profit": "利润指标",
+      "profitHint": "自动 · 价格与划线价对比。",
+      "profitOff": "-{percent}% 折扣",
+      "profitLower": "划线价 < 价格",
+      "profitSame": "0% · 相同",
+      "inventory": "库存与配送",
+      "stockQty": "库存数量",
+      "stockPlaceholder": "留空 = 不限量",
+      "weight": "重量",
+      "weightHint": "用于运费计算。",
+      "weightPlaceholder": "例如：250",
+      "available": "可售",
+      "availableHint": "取消勾选可标记为售罄，同时保持商品可见。",
+      "sortOrder": "排序",
+      "sortOrderHint": "数字越小越靠前。",
+      "visibility": "可见性",
+      "status": {
+        "active": "启用：在店铺中上线",
+        "draft": "草稿：隐藏，可编辑",
+        "archived": "已归档：隐藏，保留在记录中"
+      },
+      "organization": "分类整理",
+      "category": "类别",
+      "categoryPlaceholder": "例如：服装、零食",
+      "tags": "标签",
+      "tagsNote": "（以逗号分隔）",
+      "tagsPlaceholder": "纯棉, 夏季, 畅销",
+      "preview": "店铺预览",
+      "noImage": "暂无图片",
+      "productName": "商品名称",
+      "cancel": "取消",
+      "saveChanges": "保存更改",
+      "createProduct": "创建商品",
+      "created": "商品已创建。",
+      "updated": "商品已更新。",
+      "problem": {
+        "required": "此字段为必填项。",
+        "tooLong": "此文本过长。",
+        "notNumber": "请输入数字，例如 499 或 499.50。",
+        "tooBig": "金额过大。",
+        "notWhole": "请输入整数。",
+        "badUrl": "请输入以 https:// 开头的完整链接",
+        "outOfRange": "此数字超出范围。",
+        "tooMany": "图片过多。"
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, other {5 星中的 # 星}}",
+      "kicker": "店铺 / 评价",
+      "title": "商品评价",
+      "subtitle": "审核通过客户评价后，评价会显示在店铺商品页面上。",
+      "tabs": "评价状态",
+      "tab": {
+        "pending": "待处理",
+        "approved": "已通过",
+        "rejected": "已拒绝"
+      },
+      "loading": "正在加载评价",
+      "loadError": "无法加载评价",
+      "empty": {
+        "pending": "没有待处理的评价。",
+        "approved": "没有已通过的评价。",
+        "rejected": "没有已拒绝的评价。"
+      },
+      "anonymous": "匿名",
+      "on": "评价于",
+      "unknownProduct": "已删除的商品",
+      "approve": "通过",
+      "reject": "拒绝",
+      "delete": "删除",
+      "cancel": "取消",
+      "approved": "评价已通过。",
+      "rejected": "评价已拒绝。",
+      "deleted": "评价已删除。",
+      "deleteTitle": "删除此评价？",
+      "deleteBody": "该评价将被永久移除。"
+    },
+    "senderPicker": {
+      "none": "没有已连接的发送方。",
+      "connectOne": "去连接 →",
+      "select": "— 选择发送方 —",
+      "connectNew": "连接新设备",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "非官方 API"
+      }
+    },
+    "admin": {
+      "nav": "商品目录",
+      "pageTitle": "商品目录设置",
+      "loading": "正在加载商品目录设置",
+      "retry": "重试",
+      "eyebrow": "管理员 · 项目设置",
+      "titleLead": "WhatsApp",
+      "titleAccent": "商品目录",
+      "intro": "WABA 商品目录功能的平台级控制。每位商家在工作区端的 <link>/catalog</link> 页面连接各自的 Meta Commerce 账户商品目录。此页面设置所有工作区继承的默认值。",
+      "allSettings": "全部设置",
+      "openCatalog": "打开用户商品目录",
+      "reset": "重置草稿",
+      "save": "保存更改",
+      "saved": "商品目录设置已保存。",
+      "superOnly": "只有超级管理员可以更改这些设置。您可以查看已保存的值。",
+      "fix": "请修正高亮的字段：",
+      "problems": {
+        "graphVersion": "请使用 Graph API 版本，例如 v23.0。",
+        "currency": "请使用 3 位字母的货币代码。"
+      },
+      "errors": {
+        "conflict": "其他人已先保存了这些设置。当前显示的是最新值，请重新进行更改。",
+        "forbidden": "您没有权限更改这些设置。",
+        "validation": "部分字段无效。请检查高亮的字段后重试。",
+        "network": "无法连接到服务器。请检查网络连接后重试。",
+        "unexpected": "出了点问题。请稍后重试。"
+      },
+      "usage": {
+        "connected": "已连接的工作区",
+        "connectedHint": "已保存 Meta 商品目录 ID",
+        "products": "已同步的商品",
+        "productsHint": "覆盖所有工作区商品目录",
+        "sends": "已发送的商品目录消息",
+        "sendsHint": "SPM + MPM + 商品目录 CTA"
+      },
+      "gate": {
+        "kicker": "功能开关",
+        "title": "商品目录可用性",
+        "enabled": "已启用",
+        "body": "启用后，工作区所有者可在 <link>/catalog</link> 连接其 Meta Commerce 商品目录，并在聊天和流程构建器中发送单商品、多商品和商品目录 CTA 消息。关闭后将在所有工作区隐藏菜单入口（现有连接保持不变，但变为只读）。",
+        "commerce": "允许 Commerce 结账",
+        "commerceHint": "让商家通过已连接的 Commerce 账户在 WhatsApp 内收款。需要经 Meta 批准的 Commerce 账户和受支持的地区。"
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph API 版本",
+        "intro": "所有商品目录操作（发送、同步、推送）都使用此 Graph API 版本。Meta 约每 3 个月发布一个新版本，并对上一版本提供约 2 年的支持。",
+        "version": "Graph API 版本",
+        "versionHint": "格式：v'{'major'}'.'{'minor'}'，例如 v23.0。留空则使用默认值。",
+        "currency": "默认货币",
+        "currencyHint": "ISO-4217 代码（3 位字母）。用作新商品目录的默认值；每个 Meta Commerce 商品目录仍固定使用单一货币。"
+      },
+      "app": {
+        "kicker": "可选 · Meta 应用",
+        "title": "平台级 Meta 应用",
+        "intro": "仅当您计划提供“通过 Meta 安装”的 OAuth 体验时才需要。默认流程由每位商家在商品目录页面粘贴自己的系统用户令牌，因此无需应用凭据。",
+        "id": "Meta 应用 ID",
+        "idHint": "在 developers.facebook.com → 您的应用 → 设置 → 基本 中查看。",
+        "secret": "Meta 应用密钥",
+        "secretPlaceholder": "应用密钥",
+        "secretSaved": "•••••••••••• （已保存，留空则保持不变）",
+        "secretHint": "静态加密存储。用于验证 Webhook 负载签名 (X-Hub-Signature-256)。"
+      },
+      "walk": {
+        "kicker": "商家操作指引",
+        "title": "工作区如何连接其商品目录",
+        "intro": "会在商品目录页面展示给商家。此处一并列出，方便您核对流程。",
+        "waba": {
+          "title": "拥有有效的 WABA 和电话号码 ID",
+          "body": "商家需要在 Meta Business Suite 中拥有已验证的 WhatsApp Business 账户，且至少有一个已获批准的电话号码。否则无法发送任何商品目录消息。"
+        },
+        "catalog": {
+          "title": "在 Meta Commerce Manager 中创建商品目录",
+          "body": "前往 business.facebook.com/commerce → 创建商品目录 → 选择电子商务。可手动添加商品、通过 CSV 导入，或从 Shopify/Woo 拉取。商品目录必须为公开，且锁定为单一货币。"
+        },
+        "link": {
+          "title": "将商品目录连接到 WABA",
+          "body": "在 Business Suite → WhatsApp Manager → 商品目录标签页 →“选择商品目录”→ 选择第 2 步创建的目录。这样才能启用 Cloud API 商品消息。"
+        },
+        "token": {
+          "title": "生成系统用户令牌",
+          "body": "商务设置 → 系统用户 → 添加 → 管理员。生成包含 whatsapp_business_messaging、whatsapp_business_management、catalog_management、business_management 权限的令牌。过期时间选择“永不”，以避免每季度重新授权。"
+        },
+        "paste": {
+          "title": "在商品目录页面粘贴凭据",
+          "body": "WABA ID、商品目录 ID、电话号码 ID 和系统用户令牌填写在工作区端的商品目录页面。随后系统会运行测试请求 GET /{CATALOG_ID}?fields=name,product_count，以验证令牌对该商品目录拥有 catalog_management 权限。"
+        }
+      },
+      "side": {
+        "archKicker": "架构",
+        "archTitle": "商家级与平台级",
+        "here": "此处（管理员，一次性）",
+        "hereBody": "功能开关、Graph API 版本、默认货币、可选的 Meta 应用凭据。",
+        "merchant": "商品目录页面（每位商家）",
+        "merchantBody": "WABA ID、商品目录 ID、电话号码 ID、系统用户令牌。Meta 要求商品目录归商家的 Commerce 账户所有，因此不存在共享商品目录。",
+        "payloadsKicker": "Cloud API 负载",
+        "payloadsTitle": "我们发送的三种消息类型",
+        "payload": {
+          "spm": {
+            "title": "SPM · 单商品",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · 多商品",
+            "code": "interactive.type = \"product_list\" · 最多 10 个分区、30 个条目"
+          },
+          "cta": {
+            "title": "商品目录 CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "官方文档",
+        "docsTitle": "参考",
+        "docs": {
+          "sell": "销售商品和服务 →",
+          "messages": "Cloud API 消息参考 →",
+          "batch": "商品目录批量 API（推送商品）→",
+          "changelog": "Graph API 更新日志 →",
+          "policies": "Commerce 政策 →"
+        },
+        "constraintsTitle": "限制",
+        "constraints": {
+          "public": "商品目录必须为公开",
+          "currency": "每个商品目录仅限一种货币",
+          "images": "图片不小于 500×500 像素（JPG / PNG）",
+          "goods": "禁止酒类 / 成人 / 受管制商品",
+          "verification": "生产环境需要完成商家验证"
+        }
+      }
+    }
+  }
+}

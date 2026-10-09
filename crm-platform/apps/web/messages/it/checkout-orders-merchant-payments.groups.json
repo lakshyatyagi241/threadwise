@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Negozio / Gruppi",
+      "title": "Gruppi WhatsApp",
+      "subtitle": "Gruppi a cui appartiene il tuo numero connesso. Quando un ordine viene confermato, viene pubblicato nel gruppo del cliente e il cliente viene menzionato con @. Assegna un codice d'ordine a un gruppo così i clienti possono ordinare da lì.",
+      "loading": "Caricamento dei gruppi",
+      "summary": {
+        "groups": "Gruppi sincronizzati",
+        "coded": "Con codice d'ordine",
+        "bot": "Numero del bot",
+        "noBot": "Nessun numero WhatsApp connesso.",
+        "connect": "Connetti un numero in Canali",
+        "copyNumber": "Copia numero"
+      },
+      "search": {
+        "label": "Cerca gruppi",
+        "placeholder": "Cerca nome del gruppo..."
+      },
+      "columns": {
+        "group": "Gruppo",
+        "members": "Membri",
+        "device": "Dispositivo del bot",
+        "synced": "Sincronizzato",
+        "code": "Codice d'ordine"
+      },
+      "row": {
+        "unnamed": "(gruppo senza nome)",
+        "noCode": "Nessun codice",
+        "placeholder": "es. ACME",
+        "label": "Codice d'ordine per {name}",
+        "copyLink": "Copia link d'ordine",
+        "saved": "Codice d'ordine salvato.",
+        "cleared": "Codice d'ordine cancellato.",
+        "tooLong": "Usa {max} caratteri o meno.",
+        "badChars": "Usa solo lettere, numeri, punti, trattini e trattini bassi.",
+        "taken": "Un altro gruppo usa già questo codice."
+      },
+      "empty": {
+        "title": "Ancora nessun gruppo",
+        "message": "L'elenco dei gruppi viene copiato dalla tua sessione WhatsApp connessa. I gruppi compaiono qui quando la sessione li ha sincronizzati; per ora non è garantita alcuna tempistica.",
+        "action": "Apri Canali"
+      },
+      "noMatch": {
+        "title": "Nessun gruppo corrisponde alla ricerca",
+        "message": "Prova un'altra parte del nome del gruppo oppure cancella la ricerca."
+      },
+      "how": {
+        "title": "Come funzionano i codici d'ordine",
+        "body": "Assegna a un gruppo un codice breve (ad esempio ACME), poi condividi il suo link d'ordine. Quando un cliente lo tocca e conferma un ordine, l'ordine viene pubblicato direttamente in quel gruppo e il cliente viene menzionato con @, anche se appartiene a più gruppi."
+      }
+    }
+  }
+}

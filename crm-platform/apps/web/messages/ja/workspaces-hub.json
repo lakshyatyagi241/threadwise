@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "ワークスペース",
+      "workspaces": "ワークスペース"
+    },
+    "crumb": {
+      "admin": "管理",
+      "workspaces": "ワークスペース",
+      "label": "パンくずリスト"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "none": "なし",
+      "never": "なし",
+      "unlimited": "無制限",
+      "noAccess": "お使いのロールではこの操作はできません。"
+    },
+    "list": {
+      "title": "ワークスペース",
+      "subtitle": "すべての顧客ワークスペースを1か所で確認できます。プラン、プロバイダー、ウォレット、オーナー、アクティビティを、それぞれに必要な操作とともに表示します。",
+      "kpi": {
+        "total": "ワークスペース",
+        "active": "有効",
+        "suspended": "停止中",
+        "trial": "試用中",
+        "newThisMonth": "今月の新規",
+        "lowBalance": "残高が少ない",
+        "mrr": "MRR"
+      },
+      "search": "検索",
+      "searchPlaceholder": "名前、スラッグ、オーナー名またはメールアドレス",
+      "status": {
+        "label": "ステータス",
+        "all": "すべて",
+        "active": "有効",
+        "suspended": "停止中"
+      },
+      "plan": "プラン",
+      "allPlans": "すべてのプラン",
+      "state": "状態",
+      "allStates": "すべての状態",
+      "provider": "プロバイダー",
+      "allProviders": "すべてのプロバイダー",
+      "lowOnly": "残高が少ないもののみ",
+      "sort": {
+        "label": "並び替え",
+        "created": "新しい順",
+        "last_active": "最終アクティブ順",
+        "name": "名前"
+      },
+      "clear": "フィルターをクリア",
+      "refresh": "更新",
+      "columns": {
+        "menu": "列",
+        "reset": "列をリセット",
+        "workspace": "ワークスペース",
+        "provider": "プロバイダー",
+        "numbers": "番号",
+        "plan": "プラン",
+        "state": "状態",
+        "ends": "終了",
+        "limits": "上限",
+        "wallet": "ウォレット",
+        "owner": "オーナー",
+        "mrr": "MRR",
+        "messages7d": "7日間のメッセージ",
+        "lastActive": "最終アクティブ",
+        "actions": "操作"
+      },
+      "tableLabel": "ワークスペース",
+      "emptyTitle": "まだワークスペースがありません",
+      "emptyMessage": "顧客がサインアップすると、ワークスペースがここに表示されます。",
+      "noMatchTitle": "一致するワークスペースはありません",
+      "noMatchMessage": "検索またはフィルターを変更すると、さらに表示されます。",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "さらに読み込み中",
+      "loaded": "{count, plural, other {# 件のワークスペース}}を表示中"
+    },
+    "cell": {
+      "suspended": "停止中",
+      "suspendedBy": {
+        "frozen": "凍結",
+        "tos_violation": "利用規約違反",
+        "fraud": "不正利用"
+      },
+      "providerSource": {
+        "override": "上書き",
+        "default": "既定",
+        "platform_setting": "プラットフォーム設定"
+      },
+      "numbersCount": "{count, plural, other {# 件の番号}}",
+      "platformOwned": "プラットフォーム",
+      "unknownPlan": "不明なプラン",
+      "health": {
+        "suspended": "停止中",
+        "good": "良好",
+        "active": "有効",
+        "low": "利用が少ない",
+        "new": "新規",
+        "idle": "未使用"
+      },
+      "daysLeft": "{count, plural, other {残り # 日}}",
+      "expired": "期限切れ",
+      "limits": {
+        "summary": "{messages} 通/月 · {users} ユーザー · {contacts} 件の連絡先 · {devices} 台のデバイス",
+        "override": "上書き",
+        "messages": "月間メッセージ数",
+        "users": "ユーザー",
+        "contacts": "連絡先",
+        "devices": "デバイス"
+      },
+      "lowBalance": "低",
+      "noOwner": "オーナーなし",
+      "ago": {
+        "now": "たった今",
+        "minutes": "{count, plural, other {# 分前}}",
+        "hours": "{count, plural, other {# 時間前}}",
+        "days": "{count, plural, other {# 日前}}"
+      }
+    },
+    "actions": {
+      "menu": "{name} の操作",
+      "dashboard": "ワークスペースのダッシュボード",
+      "editPlan": "編集してプランを変更",
+      "planLimits": "プランと上限",
+      "provider": "プロバイダーを変更して設定",
+      "impersonate": "オーナーとしてログイン",
+      "suspend": "停止",
+      "unsuspend": "再開",
+      "denied": "許可されていません"
+    },
+    "plan": {
+      "loading": "プランを読み込んでいます",
+      "loadFailed": "プランを読み込めませんでした。",
+      "saved": "{name} のプランを保存しました。"
+    },
+    "provider": {
+      "title": "{name} のプロバイダー",
+      "help": "このワークスペースの新しい番号は、選択したプロバイダー経由で接続されます。既存の接続済み番号は、移動するまでそのままです。",
+      "current": "現在 {name} を使用中({source})",
+      "field": "プロバイダー",
+      "note": "メモ(任意)",
+      "noteHint": "上書きとともに保存されるため、次の運用担当者が理由を把握できます。",
+      "noActive": "有効なプロバイダーがありません。先にプロバイダーレジストリで有効にしてください。",
+      "save": "上書きを設定",
+      "clear": "既定を使用",
+      "switchLink": "接続済みの番号を別のプロバイダーに移動",
+      "assignmentsLink": "プロバイダーレジストリ",
+      "saved": "{name} のプロバイダーを設定しました。",
+      "cleared": "{name} は再び既定のプロバイダーに従います。"
+    },
+    "impersonate": {
+      "title": "{name} のオーナーとしてログイン",
+      "help": "新しいタブでオーナーとしてワークスペースを開きます。セッションは最長 {minutes} 分間有効で、理由とともに記録されます。",
+      "reason": "理由",
+      "reasonHint": "{min} 文字以上。監査ログに保存されます。",
+      "readOnly": "読み取り専用セッション",
+      "readOnlyHint": "内容を閲覧することはできますが、すべての変更は拒否されます。",
+      "submit": "ワークスペースを開く",
+      "opened": "新しいタブで {name} を開いています。",
+      "popupBlocked": "ブラウザが新しいタブをブロックしました。このページでポップアップを許可してから、もう一度お試しください。",
+      "reasonShort": "{min} 文字以上入力してください。"
+    },
+    "suspend": {
+      "title": "{name} を停止しますか?",
+      "message": "ユーザーはワークスペースからサインアウトされ、再開するまでメッセージングが停止します。",
+      "reason": "理由(任意)",
+      "confirm": "ワークスペースを停止",
+      "done": "{name} は停止されました。"
+    },
+    "unsuspend": {
+      "title": "{name} を再開しますか?",
+      "message": "ユーザーは再びワークスペースを使用できます。",
+      "reason": "メモ(任意)",
+      "confirm": "ワークスペースを再開",
+      "done": "{name} は再び有効になりました。"
+    },
+    "errors": {
+      "unexpected": "問題が発生しました。もう一度お試しください。",
+      "forbidden": "お使いのロールではこの操作はできません。",
+      "conflict": "他の担当者がこのワークスペースを変更しました。再読み込みしてから、もう一度お試しください。",
+      "notFound": "このワークスペースはもう存在しません。",
+      "reasonRequired": "8 文字以上の理由が必要です。",
+      "orgSuspended": "ワークスペースは停止中のため、入室できません。",
+      "validation": "値を確認して、もう一度お試しください。",
+      "requestId": "リクエストID"
+    },
+    "detail": {
+      "crumb": "ワークスペース",
+      "back": "すべてのワークスペース",
+      "loadFailed": "このワークスペースを読み込めませんでした。",
+      "slug": "スラッグ",
+      "created": "作成日: {date}",
+      "kpi": {
+        "members": "メンバー",
+        "contacts": "連絡先",
+        "openTickets": "未対応のチケット",
+        "delivered": "配信済み",
+        "wallet": "ウォレット",
+        "mrr": "MRR",
+        "messages7d": "メッセージ、7日間"
+      },
+      "chart": {
+        "title": "過去30日間",
+        "label": "送信および配信されたメッセージを日別に表示、過去30日間",
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "empty": "過去30日間にメッセージはありません。"
+      },
+      "tabs": {
+        "label": "ワークスペースのセクション",
+        "overview": "概要",
+        "plan": "プランと上限",
+        "wallet": "ウォレット",
+        "provider": "プロバイダー",
+        "support": "サポート"
+      },
+      "overview": {
+        "owner": "オーナー",
+        "adminNote": "管理者メモ",
+        "noNote": "メモはありません。",
+        "health": "ヘルス",
+        "lastActive": "最終アクティブ",
+        "suspendedBy": "保持者"
+      },
+      "planTab": {
+        "plan": "プラン",
+        "state": "状態",
+        "ends": "終了",
+        "limits": "有効な上限",
+        "edit": "編集してプランを変更",
+        "overrideNote": "このワークスペースには、プランの上限に代わる独自の上限が設定されています。"
+      },
+      "walletTab": {
+        "open": "ウォレットを開く",
+        "balance": "残高",
+        "adjust": "残高を調整",
+        "adjusted": "残高を調整しました。"
+      },
+      "providerTab": {
+        "provider": "有効なプロバイダー",
+        "source": "選択者",
+        "numbers": "接続済みの番号",
+        "change": "プロバイダーを変更して設定",
+        "switch": "番号を別のプロバイダーに移動"
+      },
+      "supportTab": {
+        "text": "このワークスペースのチケット、会話、サポート履歴。",
+        "open": "サポートの記録を開く",
+        "openTickets": "{count, plural, other {# 件の未対応チケット}}"
+      }
+    }
+  }
+}

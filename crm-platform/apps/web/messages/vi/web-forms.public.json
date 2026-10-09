@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Tiếp",
+      "back": "Quay lại",
+      "sending": "Đang gửi...",
+      "optional": "không bắt buộc",
+      "selectPlaceholder": "Chọn một tùy chọn",
+      "stepOf": "Bước {n} trên {total}",
+      "summaryTitle": "{count, plural, other {Hãy sửa # trường}}",
+      "successTitle": "Cảm ơn bạn",
+      "continue": "Tiếp tục",
+      "previewNotice": "Xem trước: không có gì được gửi từ đây.",
+      "honeypot": "Để trống trường này",
+      "privacyPolicy": "Chính sách quyền riêng tư",
+      "poweredBy": "Cung cấp bởi {brand}",
+      "brandName": "Biểu mẫu",
+      "captchaNeeded": "Vui lòng hoàn thành xác minh bên dưới trước khi gửi.",
+      "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
+      "closed": "Biểu mẫu này hiện không nhận câu trả lời.",
+      "genericError": "Đã xảy ra lỗi và câu trả lời chưa được gửi. Vui lòng thử lại.",
+      "notAvailableTitle": "Biểu mẫu không khả dụng",
+      "notAvailableBody": "Liên kết có thể không đúng, hoặc biểu mẫu đã bị đóng.",
+      "errors": {
+        "required": "Trường này là bắt buộc.",
+        "consent_required": "Vui lòng đánh dấu ô này để tiếp tục.",
+        "invalid_email": "Vui lòng nhập địa chỉ email hợp lệ.",
+        "invalid_phone": "Nhập số điện thoại hợp lệ, kèm mã quốc gia nếu có thể.",
+        "invalid_number": "Nhập một số hợp lệ.",
+        "invalid_date": "Nhập một ngày hợp lệ.",
+        "too_small": "Nhập giá trị tối thiểu là {min}.",
+        "too_large": "Nhập giá trị tối đa là {max}.",
+        "too_short": "Nhập tối thiểu {min} ký tự.",
+        "too_long": "Nhập tối đa {max} ký tự.",
+        "pattern": "Không khớp với định dạng yêu cầu.",
+        "invalid_option": "Chọn một trong các tùy chọn đã liệt kê."
+      },
+      "closedTitle": "Biểu mẫu đã đóng"
+    }
+  }
+}

@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "WhatsAppプロバイダー",
+      "providers": "プロバイダー",
+      "assignments": "ワークスペースの割り当て",
+      "switch": "プロバイダーを切り替え"
+    },
+    "common": {
+      "loading": "読み込み中...",
+      "retry": "再試行",
+      "requestId": "リクエストID"
+    },
+    "errors": {
+      "conflict": "編集中に、他の担当者がこのプロバイダーを変更しました。最新版を読み込みましたので、内容を確認してから変更を再度適用してください。",
+      "noAccess": "これに必要なプラットフォーム権限({permission})がありません。スーパー管理者に「ロール」で付与を依頼してください。",
+      "keyTaken": "このキーのプロバイダーは既に存在します。別のキーを選んでください。",
+      "baseUrlRefused": "このアドレスは拒否されました: {detail}。",
+      "baseUrlRefusedPlain": "このアドレスは拒否されました。公開ホスト名の https アドレスを使用してください。",
+      "inUse": "このプロバイダーを、まだ番号やワークスペースが使用しています。先に別のプロバイダーに切り替えてください(番号がこのプロバイダー経由で連携されている間は、認証情報のモードは変更できません)。",
+      "disabled": "これを行うには、プロバイダーが有効である必要があります。先に有効化してください。",
+      "credentialsMissing": "このプロバイダーにはまだ保存されたトークンがありません。プロバイダートークンを追加して保存してから、有効化してください。",
+      "isDefault": "これは既定のプロバイダーです。先に別のプロバイダーを既定に設定するか、既定を解除してください。",
+      "builtin": "これは組み込みのプロバイダーです。アドレス、バージョン、シークレットはプラットフォーム設定の「WhatsApp」で編集します。",
+      "nothingToDo": "切り替える必要はありません。このワークスペースの連携済み番号は、すべてそのプロバイダーを使用しています。",
+      "partnerNotConfigured": "このプロバイダーには、パートナープログラムに必要な項目が不足しています: パートナーキー(プロバイダートークン)、ソリューションID、または埋め込みサインアップの設定です。プロバイダーを確認して保存してください。",
+      "partnerRefused": "パートナーがこのリクエストを拒否しました: {message}",
+      "partnerRefusedPlain": "パートナーがこのリクエストを拒否しました。もう一度お試しいただくか、プロバイダーの設定を確認してください。",
+      "unavailable": "このプロバイダーは利用できません。アーカイブされているか、認証情報が不足している可能性があります。",
+      "notFound": "このプロバイダーまたはワークスペースは存在しなくなりました。戻って一覧を再読み込みしてください。",
+      "tooManyNumbers": "一度に50件を超える番号が移動されることになります。移動元のプロバイダーを選んで対象を絞り込み、残りについては切り替えを再度実行してください。",
+      "validationField": "{message}",
+      "validation": "一部の値は受け付けられませんでした。フォームを確認して、もう一度お試しください。",
+      "request": "リクエストが拒否されました。値を確認して、もう一度お試しください。",
+      "unexpected": "当方側で問題が発生しました。しばらくしてから、もう一度お試しください。"
+    },
+    "status": {
+      "active": "有効",
+      "disabled": "無効",
+      "archived": "アーカイブ済み",
+      "default": "既定",
+      "builtin": "組み込み"
+    },
+    "secret": {
+      "show": "入力した値を表示",
+      "hide": "入力した値を非表示",
+      "placeholderKeep": "空欄のままにすると、保存されている値が維持されます",
+      "placeholderNew": "値を貼り付け",
+      "undoClear": "そのまま保持",
+      "clear": "保存されている値を削除",
+      "setWithHint": "設定済み、末尾は {last4}",
+      "set": "設定済み",
+      "notSet": "未設定",
+      "willClear": "保存時に削除されます",
+      "willReplace": "保存時に、保存されている値を置き換えます"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearerトークン",
+          "help": "認証情報モードのトークンを使って、Authorization: Bearer ヘッダーを送信します。"
+        },
+        "custom_headers": {
+          "label": "カスタムヘッダー",
+          "help": "定義したヘッダーを送信します。トークン、WABA ID、電話番号 ID は呼び出しごとに設定されます。"
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "プラットフォームトークン",
+          "help": "プロバイダーにおけるプラットフォームのトークンです(パートナートークン)。顧客は保持しません。"
+        },
+        "channel_token": {
+          "label": "番号トークン",
+          "help": "連携された各番号が、それぞれのアクセストークンを保持します。"
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "アプリレベルのコールバック",
+          "help": "プラットフォームは WABA の購読のみを行います。コールバックは Meta アプリで一度だけ設定します。"
+        },
+        "number_level_override": {
+          "label": "番号ごとのコールバック",
+          "help": "購読後、プラットフォームはプロバイダー経由で各番号のコールバックを設定します。"
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Metaの署名(アプリシークレット)",
+          "help": "配信には X-Hub-Signature-256 が付与され、プロバイダーのアプリシークレットで検証されます。"
+        },
+        "shared_secret_header": {
+          "label": "ヘッダー内の共有シークレット",
+          "help": "指定したヘッダーには、プロバイダーのWebhookシークレットそのものが含まれます。"
+        },
+        "none": {
+          "label": "署名なし",
+          "help": "プロバイダーは署名を付与しません。コールバックURL内のシークレットだけで配信を認証します。"
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "プロバイダーのクレジットライン",
+          "help": "プロバイダーは、自身のクレジットラインからプラットフォームに請求します。"
+        },
+        "customer_direct": {
+          "label": "顧客がMetaに直接支払い",
+          "help": "顧客の支払い方法はMetaに登録されています(リセラーエンジンモード meta_direct)。"
+        },
+        "meta_reseller": {
+          "label": "Metaリセラーのクレジットライン",
+          "help": "プラットフォームのMetaクレジットラインが顧客のWABAに共有されます(リセラーエンジンモード reseller)。"
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "手動",
+          "help": "ワークスペースが WABA ID と電話番号 ID を貼り付けます。"
+        },
+        "embedded_signup": {
+          "label": "埋め込みサインアップ",
+          "help": "ワークスペースは、プラットフォームのMetaアプリの埋め込みサインアップを通じて接続します。"
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "なし"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "プロバイダートークンは保存されていません。このプロバイダーを有効化するには必要です。",
+      "appSecret": "アプリシークレットは保存されていません。保存されるまで、このプロバイダーのすべてのWebhook配信は拒否されます。",
+      "webhookSecret": "Webhookシークレットは保存されていません。保存されるまで、このプロバイダーのすべてのWebhook配信は拒否されます。"
+    },
+    "headers": {
+      "intro": "このプロバイダーへの各呼び出しに付与されるヘッダーです。呼び出し時に値が不明なヘッダーは除外され、プレースホルダーのまま送信されることはありません。",
+      "listLabel": "ヘッダーのテンプレート",
+      "name": "ヘッダー名",
+      "value": "値",
+      "insertFor": "ヘッダー {n} にプレースホルダーを挿入",
+      "insert": "プレースホルダーを挿入",
+      "removeFor": "ヘッダー {n} を削除",
+      "remove": "削除",
+      "add": "ヘッダーを追加",
+      "placeholdersTitle": "プレースホルダーとルール",
+      "leftOut": "呼び出し時に値がないプレースホルダーを使うヘッダーは除外されます。ホップ単位のヘッダーとフレーミングヘッダー(host、content-length、transfer-encoding など)は設定できません。",
+      "channelTokenNeverKnown": "このプロバイダーはプラットフォームのトークンを使用するため、顧客は番号トークンを保持しません。番号トークンのプレースホルダーを使うヘッダーは、常に除外されます。",
+      "problems": {
+        "tooMany": "ヘッダーは最大 {max} 件までです。",
+        "nameInvalid": "ヘッダー名には、英字、数字、ハイフンのみ使用できます。",
+        "nameDenied": "ヘッダー {name} は接続によって管理されているため、設定できません。",
+        "nameDuplicate": "ヘッダー {name} が2回指定されています。",
+        "valueEmpty": "ヘッダー {name} には値が必要です。",
+        "valueTooLong": "{name} の値が {max} 文字を超えています。",
+        "valueCharacters": "{name} の値に制御文字または ASCII 以外の文字が含まれています。",
+        "placeholderUnknown": "ヘッダー {name} に不明なプレースホルダーが含まれています: {names}。",
+        "strayBrace": "ヘッダー {name} に余分な波かっこがあります。プレースホルダーは、名前の前後を二重の波かっこで囲んで記述します。",
+        "credentialNotCarried": "ヘッダーのうち1つには、プレースホルダー {placeholder} を含める必要があります。認証情報がプロバイダーに届くのはこの経路です。"
+      },
+      "placeholders": {
+        "providerToken": "プロバイダーにおけるプラットフォームのトークンです。",
+        "channelToken": "呼び出し先の番号のアクセストークンです。",
+        "wabaId": "番号のWhatsApp Business Account ID です。",
+        "phoneNumberId": "番号の電話番号 ID です。"
+      },
+      "preview": {
+        "title": "呼び出しのプレビュー",
+        "urlPending": "(有効なアドレスを入力してください)",
+        "note": "代わりの値を表示しています。実際のトークンと ID は呼び出しごとに設定され、ここでは表示されません。"
+      }
+    },
+    "form": {
+      "wizardLabel": "WhatsAppプロバイダーを追加",
+      "editLabel": "WhatsAppプロバイダーを変更",
+      "stepsLabel": "手順",
+      "steps": {
+        "basics": "基本",
+        "connection": "接続",
+        "credentials": "認証情報",
+        "webhooks": "Webhook",
+        "billing": "請求とオンボーディング",
+        "review": "確認"
+      },
+      "stepHelp": {
+        "basics": "安定したキー、運用担当者が識別できる名前、任意のメモ。",
+        "connection": "プロバイダーが応答するアドレスと、プラットフォームがそれに対して認証する方法。",
+        "credentials": "どの認証情報が処理を行うか、およびプロバイダートークン。",
+        "webhooks": "プロバイダーが受信メッセージを配信する方法と、それが正規のものであることを証明する方法。",
+        "billing": "Metaへの支払い主体、ファイルをアップロードできるか、ワークスペースのオンボーディング方法。",
+        "review": "すべてを確認してください。プロバイダーを作成するまで何も送信されません。"
+      },
+      "fields": {
+        "key": "キー",
+        "label": "名前",
+        "notes": "メモ",
+        "baseUrl": "ベースURL",
+        "apiVersion": "APIバージョン",
+        "authScheme": "認証",
+        "credentialMode": "認証情報モード",
+        "providerToken": "プロバイダートークン",
+        "webhookMode": "Webhookモード",
+        "signatureScheme": "Webhook署名",
+        "appSecret": "アプリシークレット",
+        "webhookSecret": "Webhookシークレット",
+        "verifyToken": "検証トークン",
+        "signatureHeaderName": "署名ヘッダー名",
+        "billingMode": "請求モード",
+        "mediaUpload": "メディアアップロードに対応",
+        "onboarding": "オンボーディング",
+        "onboardingAppId": "Metaアプリ ID",
+        "onboardingConfigId": "埋め込みサインアップの設定 ID",
+        "partnerProgram": "パートナープログラム",
+        "partnerSolutionId": "ソリューション ID"
+      },
+      "hints": {
+        "key": "英小文字、数字、アンダースコア、ハイフンを使用し、2〜40文字で、英字で始めてください。後から変更できません。",
+        "keyFixed": "キーは変更できません。",
+        "notes": "これらは運用担当者のみに表示されます。",
+        "baseUrl": "https://host または https://host/prefix。プラットフォームは公開されている https のホストにのみ接続します。",
+        "credentialModeLocked": "このプロバイダー経由で {count, plural, other {# 件の番号}} が連携されているため、認証情報モードは変更できません。先に別のプロバイダーへ切り替えてください。",
+        "providerTokenNeeded": "このプロバイダーを有効化するには、この項目が必要です。",
+        "providerTokenOptional": "ここでは任意です。各番号が独自のトークンを持ちます。",
+        "appSecret": "各配信の X-Hub-Signature-256 を検証します。これがないと、このプロバイダーのすべての配信は拒否されます。",
+        "webhookSecret": "プロバイダーが署名ヘッダーに設定する値です。これがないと、すべての配信は拒否されます。",
+        "signatureHeaderName": "英字、数字、ハイフンを使用します(例: x-bsp-secret)。",
+        "verifyToken": "プロバイダーの購読チャレンジに応答します。任意です。",
+        "billingMode": "リセラーの請求エンジンを示すラベルです。請求の動作は変わりません。",
+        "mediaUpload": "オフの場合、ファイルはアップロードではなく公開リンクで送信されます。",
+        "onboardingIds": "数字のみ。プラットフォームのMetaアプリの公開IDです。",
+        "partnerPinnacle": "Pinnacleでは、番号ごとに独自のキーが発行されます。パートナーキーはプロバイダートークンとして、Metaアプリシークレットはアプリシークレットとして保存してください(受信Webhookはこれで検証されます)。",
+        "partnerSolutionId": "数字のみ、5〜32桁。Pinnacleダッシュボードのパートナーソリューション ID です。"
+      },
+      "devLoopback": "ループバックアドレスへの平文の http は、サーバーフラグを有効にした開発環境でのみ受け付けられます。本番環境では、このアドレスは拒否されます。",
+      "ssrfNote": "アドレスはサーバーによって再度検証されます: https のみ、公開ホスト名、既定のポート、解決先のすべてのアドレスが公開されていること。",
+      "secretsNote": "シークレットは書き込み専用です。保存後は、設定済みであることと末尾4文字のみが表示されます。",
+      "signatureNoneNote": "署名がない場合、コールバックURL内のシークレットだけで配信が認証されます。プロバイダーが署名できない場合にのみ使用してください。",
+      "builtinNotice": "これは組み込みのプロバイダーです。アドレス、バージョン、シークレットはプラットフォーム設定の「WhatsApp」にあります。ここで変更できるのは名前、メモ、請求モードのみです。",
+      "openConsoleSettings": "プラットフォーム設定の「WhatsApp」を開く",
+      "conflictHint": "変更は保存されませんでした。フォームには最新の値が表示されています。",
+      "fixProblems": "{count, plural, other {# 件の値}}に確認が必要です。マークされた項目を修正してください。",
+      "save": "変更を保存",
+      "nothingToSave": "まだ変更はありません",
+      "back": "戻る",
+      "next": "次へ",
+      "cancel": "キャンセル",
+      "create": "プロバイダーを作成",
+      "saved": "{name} を保存しました。",
+      "created": "{name} を作成しました。最初は無効な状態で作成されます。テストしてから有効化してください。",
+      "review": {
+        "headers": "ヘッダー",
+        "yes": "はい",
+        "no": "いいえ",
+        "secrets": "保存するシークレット",
+        "noSecrets": "なし",
+        "gapsTitle": "このプロバイダーが動作するまでに、まだ不足しているもの",
+        "startsDisabled": "新しいプロバイダーは無効な状態で作成されます。作成後、「接続をテスト」を実行してから有効化してください。"
+      },
+      "problems": {
+        "labelRequired": "名前を入力してください。",
+        "labelLength": "名前は {max} 文字以内で入力してください。",
+        "notesLength": "メモは {max} 文字以内で入力してください。",
+        "keyRequired": "キーを入力してください。",
+        "keyBuiltin": "meta と interakt は組み込みのプロバイダーです。別のキーを選んでください。",
+        "keyFormat": "英字で始め、その後に英字、数字、アンダースコア、ハイフンを使用します。全体で2〜40文字です。",
+        "baseUrl": {
+          "empty": "プロバイダーのベースURLを入力してください。",
+          "length": "アドレスは1〜200文字である必要があります。",
+          "characters": "アドレスに空白や制御文字を含めることはできません。",
+          "invalid": "有効なURLではありません。",
+          "credentials": "アドレスにユーザー名やパスワードを含めることはできません。",
+          "queryOrFragment": "アドレスにクエリやフラグメントを含めることはできません。",
+          "notHttps": "アドレスは https:// で始まる必要があります。",
+          "port": "既定の https ポートのみ使用できます。",
+          "host": "IPアドレスや単一ラベルの名前ではなく、公開ホスト名を使用してください。",
+          "internal": "内部のホスト名ではなく、公開ホスト名を使用してください。"
+        },
+        "apiVersion": "v25.0 のようなバージョンを使用してください。",
+        "headers": "ヘッダーに {count, plural, other {# 件の問題}}があります。上の一覧を確認してください。",
+        "signatureHeaderRequired": "シークレットを格納するヘッダーの名前を指定してください。",
+        "signatureHeaderFormat": "英字、数字、ハイフンのみ使用できます。",
+        "digits": "数字のみ、5〜32桁。",
+        "partnerSolutionIdRequired": "ソリューション ID を入力してください。",
+        "partnerCredentialMode": "パートナープログラムでは各番号に独自のトークンが発行されるため、チャネルトークンモードを使用してください。",
+        "secretCharacters": "空白や制御文字は使用できません。",
+        "secretLength": "{min} 〜 {max} 文字で入力してください。"
+      }
+    },
+    "actions": {
+      "activate": "有効化",
+      "makeDefault": "既定に設定",
+      "clearDefault": "既定を解除",
+      "disable": "無効化",
+      "archive": "アーカイブ",
+      "cancel": "キャンセル",
+      "menu": "操作",
+      "menuLabel": "{name} の操作",
+      "manage": "管理",
+      "open": "開く",
+      "switchTo": "ここで番号を切り替える",
+      "blocked": {
+        "default": "既定です",
+        "builtin": "組み込み",
+        "inUse": "使用中"
+      },
+      "done": {
+        "activate": "{name} は有効です。",
+        "disable": "{name} は無効です。すでにこのプロバイダーを使用している番号は、引き続き送信されます。",
+        "archive": "{name} はアーカイブされました。",
+        "default": "{name} が新しい番号の既定になりました。",
+        "clearDefault": "既定が解除されました。新しい番号はコンソールの WhatsApp 設定に従います。"
+      },
+      "confirm": {
+        "disable": {
+          "title": "{name} を無効にしますか?",
+          "body": "新しい番号や割り当てには提供されなくなります。すでにこのプロバイダーを使用している番号は引き続き送信されるため、停止にはなりません。",
+          "inUse": "{count, plural, other {# 件の番号}}がまだこのプロバイダーを使用しています。準備ができたら切り替えてください。",
+          "action": "無効化"
+        },
+        "archive": {
+          "title": "{name} をアーカイブしますか?",
+          "body": "アーカイブされたプロバイダーは廃止されます。いずれかの番号またはワークスペースの上書きで使用中の間は、この操作は拒否されます。後で再度有効化できます。",
+          "action": "アーカイブ"
+        },
+        "default": {
+          "title": "{name} を既定にしますか?",
+          "body": "上書き設定のないワークスペースは、このプロバイダー経由で新しい番号を接続します。すでに接続されている番号は移動しません。",
+          "action": "既定に設定"
+        },
+        "clearDefault": {
+          "title": "既定を解除しますか?",
+          "body": "新しい番号は再びコンソールの WhatsApp 設定に従います。すでに接続されている番号は移動しません。",
+          "action": "既定を解除"
+        }
+      }
+    },
+    "test": {
+      "title": "接続をテスト",
+      "description": "保存された認証情報を使って、プロバイダーに対して認証付きの読み取りを1回行います。プロバイダー側では何も変更されません。",
+      "path": "読み取るパス",
+      "pathHint": "/ で始めます。既定は /me です。",
+      "willCall": "{url} を呼び出します",
+      "pathInvalid": "/ で始め、英字、数字、. _ / - のみを使用してください。",
+      "wabaId": "WABA ID(任意)",
+      "idsHint": "この呼び出しのヘッダープレースホルダーにのみ使用されます。保存されません。",
+      "idInvalid": "英字、数字、. _ : - のみ使用できます。",
+      "phoneNumberId": "電話番号 ID(任意)",
+      "channelToken": "テスト用の番号トークン(任意)",
+      "channelTokenHint": "各番号が独自のトークンを持つプロバイダー向けです。この呼び出しにのみ使用され、その後このフォームからは消去されます。",
+      "tokenInvalid": "印刷可能な文字を8文字以上、空白なし。",
+      "show": "入力した値を表示",
+      "hide": "入力した値を非表示",
+      "run": "テストを実行",
+      "running": "テスト中...",
+      "forgotten": "ここに入力した ID とトークンは1回の呼び出しにのみ使用され、その後は保持されません。",
+      "needManage": "直前の結果を確認できます。テストの実行には管理権限が必要です。",
+      "ok": "接続済み",
+      "failed": "失敗",
+      "justNow": "たった今",
+      "lastTest": "直近のテスト",
+      "httpStatus": "HTTP ステータス",
+      "noResponse": "応答なし",
+      "latency": "レイテンシー",
+      "ms": "{ms} ミリ秒",
+      "errorCode": "エラーコード",
+      "message": "プロバイダーの応答",
+      "redactedNote": "サーバーは、応答を返す前にすべてのシークレットを [redacted] に置き換えます。",
+      "never": "このプロバイダーはまだテストされていません。",
+      "hints": {
+        "ok": "プロバイダーは認証付きの読み取りに応答しました。有効化しても問題ありません。",
+        "addressRefused": "アドレスが拒否されました(https ではない、公開名ではない、またはプライベートアドレスに解決される)。ベースURLを修正してください。",
+        "credentialsMissing": "プロバイダーに保存されたトークンがありません。プロバイダートークンを追加して保存してください。",
+        "unauthorized": "プロバイダーが認証情報を拒否しました。トークンと、ヘッダー名および値を確認してください。",
+        "notFound": "パスが見つかりませんでした。プロバイダーがサポートする読み取りを試すか、ベースURLと API バージョンを確認してください。",
+        "rateLimited": "プロバイダーがレート制限しています。しばらく待ってから、もう一度テストしてください。",
+        "providerError": "プロバイダーがサーバーエラーを返しました。しばらくしてから、もう一度お試しください。",
+        "unreachable": "応答がありません: ホストが応答しなかったか、接続に失敗しました。アドレスを確認してください。",
+        "other": "プロバイダーが予期しないステータスを返しました。上の応答内容を確認してください。"
+      }
+    },
+    "list": {
+      "title": "WhatsAppプロバイダー",
+      "description": "プラットフォームが送信に使うWhatsApp Business Solution Providerを選び、プロバイダーを追加し、ワークスペースをプロバイダー間で移動します。",
+      "consoleSettings": "Metaアプリと Interakt の認証情報",
+      "switchWorkspace": "ワークスペースを切り替え",
+      "add": "プロバイダーを追加",
+      "kpi": {
+        "providers": "プロバイダー",
+        "active": "有効",
+        "numbers": "連携済みの番号",
+        "overrides": "ワークスペースの上書き"
+      },
+      "defaultIs": "ワークスペースに独自の設定がない限り、新しい番号は {name} 経由で接続されます。",
+      "noDefault": "レジストリの既定は設定されていません。新しい番号はコンソールの WhatsApp 設定に従います。",
+      "defaultHelp": "既定や上書きを変更しても、すでに接続されている番号は移動しません。移動するには「切り替え」を使用してください。",
+      "filterLabel": "ステータスで絞り込み",
+      "filters": {
+        "all": "すべて",
+        "active": "有効",
+        "disabled": "無効",
+        "archived": "アーカイブ済み"
+      },
+      "search": "名前またはキーで絞り込み",
+      "emptyTitle": "まだプロバイダーがありません",
+      "emptyMessage": "別の BSP 経由で WhatsApp を経路設定するには、プロバイダーを追加してください。組み込みの Meta と Interakt の経路は常に利用できます。",
+      "noMatchTitle": "一致するプロバイダーはありません",
+      "noMatchMessage": "このステータスと検索に一致するものはありません。別のフィルターを試すか、検索をクリアしてください。",
+      "tableCaption": "WhatsAppプロバイダー",
+      "cols": {
+        "provider": "プロバイダー",
+        "status": "ステータス",
+        "billing": "請求モード",
+        "credentials": "認証情報モード",
+        "usage": "使用中",
+        "lastTest": "直近のテスト",
+        "actions": "操作"
+      },
+      "usage": {
+        "numbers": "{count, plural, other {# 件の番号}}",
+        "workspaces": "{count, plural, other {# 件のワークスペース}}"
+      },
+      "test": {
+        "ok": "接続済み",
+        "failed": "失敗",
+        "never": "未テスト"
+      },
+      "officialLabel": "公式 WhatsApp(対応)"
+    },
+    "detail": {
+      "title": "WhatsAppプロバイダー",
+      "back": "プロバイダー一覧に戻る",
+      "gapsTitle": "このプロバイダーが動作するまでに、まだ不足しているもの",
+      "lifecycle": {
+        "title": "ステータスと既定",
+        "description": "有効化すると、新しい番号や割り当てで選択できるようになります。無効化しても、すでにそのプロバイダーを使用している番号は停止しません。"
+      },
+      "edit": {
+        "title": "編集",
+        "readOnly": "このプロバイダーは閲覧できます。変更するには管理権限が必要です。"
+      },
+      "overview": {
+        "title": "概要",
+        "headers": "ヘッダー名",
+        "none": "なし",
+        "engineMode": "リセラーエンジンモード: {mode}",
+        "yes": "はい",
+        "no": "いいえ",
+        "usage": "使用中",
+        "numbers": "{count, plural, other {# 件の番号}}",
+        "workspaces": "{count, plural, other {# 件のワークスペース上書き}}",
+        "updated": "最終変更",
+        "builtinNote": "これは組み込みのプロバイダーです。アドレス、バージョン、シークレットはプラットフォーム設定の「WhatsApp」から直接読み込まれます。",
+        "openConsoleSettings": "プラットフォーム設定の「WhatsApp」を開く",
+        "credentialsTitle": "保存済みのシークレット",
+        "credentialsNote": "シークレットは書き込み専用です。保存後に再表示されることはなく、設定済みかどうかと末尾4文字のみが表示されます。",
+        "webhookTitle": "Webhook",
+        "webhookNote": "公開 API のアドレスにこのパスを加えたものを、プロバイダーに登録してください。1つのURLで、すべてのプロバイダーとすべてのワークスペースに対応します。"
+      }
+    },
+    "new": {
+      "title": "WhatsAppプロバイダーを追加",
+      "back": "プロバイダー一覧に戻る",
+      "description": "Graph 互換の BSP を登録します。最初は無効な状態になります。テストしてから有効化してください。"
+    },
+    "assignments": {
+      "title": "ワークスペースの割り当て",
+      "description": "各ワークスペースが新しい番号を接続するプロバイダーです。上書きのないワークスペースは既定に従います。",
+      "defaultIs": "レジストリの既定: {name}。",
+      "noDefault": "レジストリの既定はありません。上書きのないワークスペースは、コンソールの WhatsApp 設定に従います。",
+      "existingNote": "上書きを変更しても、既存の番号は移動しません。移動するには「切り替え」を使用してください。",
+      "search": "ワークスペースを検索",
+      "overrideOnly": "上書きのあるワークスペースのみ",
+      "noMatchTitle": "一致するワークスペースはありません",
+      "noMatchMessage": "別の検索語を試すか、フィルターをクリアしてください。",
+      "emptyTitle": "まだワークスペースがありません",
+      "emptyMessage": "ワークスペースは、作成されるとここに表示されます。",
+      "loadMore": "さらに読み込む",
+      "tableCaption": "ワークスペースのプロバイダー割り当て",
+      "cols": {
+        "workspace": "ワークスペース",
+        "override": "上書き",
+        "effective": "新しい番号の接続先",
+        "numbers": "番号",
+        "actions": "操作"
+      },
+      "followsDefault": "既定に従う",
+      "source": {
+        "override": "ワークスペースの上書き",
+        "default": "レジストリの既定",
+        "platform_setting": "コンソールの WhatsApp 設定"
+      },
+      "numberCount": "{count, plural, other {# 件の番号}}",
+      "onOther": "{count} 件が別のプロバイダー上",
+      "change": "変更",
+      "setOverride": "上書きを設定",
+      "clear": "上書きを解除",
+      "switch": "番号を切り替え",
+      "common": {
+        "close": "閉じる",
+        "cancel": "キャンセル"
+      },
+      "set": {
+        "title": "{name} の上書き",
+        "help": "このワークスペースの新しい番号は、選択したプロバイダー経由で接続されます。すでに接続されている番号はそのままです。",
+        "noActive": "有効なプロバイダーがありません。先に1つ有効化してください。",
+        "provider": "プロバイダー",
+        "note": "メモ(任意)",
+        "noteHint": "このワークスペースが独自のプロバイダーを持つ理由。500文字まで。",
+        "save": "上書きを保存",
+        "done": "{workspace} は新しい番号を {provider} 経由で接続するようになりました。"
+      },
+      "clearDialog": {
+        "title": "{name} の上書きを解除しますか?",
+        "body": "{name} は再び既定に従います。{provider} 経由で接続済みの番号は移動しません。",
+        "action": "上書きを解除",
+        "done": "{workspace} は再び既定に従います。"
+      }
+    },
+    "switch": {
+      "title": "プロバイダーを切り替え",
+      "description": "ワークスペースの接続済み WhatsApp 番号を別のプロバイダーに移動します。まずドライランを実行してください。ドライランでは何も変更されず、何も呼び出されません。",
+      "choose": {
+        "title": "ワークスペースと移動先",
+        "description": "ワークスペースと、その番号を移動させるプロバイダーを選んでください。",
+        "target": "移動先",
+        "targetHint": "移動先に指定できるのは有効なプロバイダーのみです。",
+        "pick": "プロバイダーを選択",
+        "from": "次の番号のみ:",
+        "fromHint": "任意です。任意のプロバイダーのままにすると、移動先にまだない番号がすべて移動します。",
+        "anyProvider": "任意のプロバイダー",
+        "setOverride": "このワークスペースの上書きにもする",
+        "setOverrideHint": "ワークスペースが後から接続する番号にも適用されます。切り替えを適用したときにのみ反映され、ドライランでは反映されません。",
+        "reason": "理由(任意)",
+        "reasonHint": "監査ログに記録されます。500文字まで。",
+        "targetNotActive": "このプロバイダーは有効ではありません。有効化されるまで、切り替えは拒否されます。",
+        "dryRun": "変更内容を確認",
+        "dryRunNote": "ドライラン: 何も変更されず、どのプロバイダーも呼び出されません。"
+      },
+      "workspace": {
+        "selected": "ワークスペース",
+        "unnamed": "選択中のワークスペース",
+        "change": "ワークスペースを変更",
+        "label": "ワークスペース",
+        "search": "ワークスペースを検索",
+        "none": "一致するワークスペースはありません。",
+        "numbers": "{count, plural, other {# 件の番号}}",
+        "onOther": "{count} 件が別のプロバイダー上",
+        "narrow": "さらにワークスペースがあります。検索を絞り込んでください。"
+      },
+      "plan": {
+        "stale": "ドライランの後で選択内容を変更しました。適用する前に、もう一度確認を実行してください。",
+        "title": "変更される内容",
+        "description": "移動する番号にチェックを入れてください。ブロックされた番号には触れません。",
+        "nothingReady": "まだ移動できる番号はありません。一覧の項目を解決してから、もう一度確認を実行してください。",
+        "headline": "ドライランで評価: {total, plural, other {# 件の番号}}、うち {ready} 件を {provider} に移動できます。",
+        "ready": "{count} 件が準備完了",
+        "blocked": "{count} 件がブロック",
+        "failed": "{count} 件は評価できませんでした",
+        "reconnect": "{count} 件は切断済み"
+      },
+      "requirements": {
+        "title": "担当者による対応が必要な項目",
+        "blocks": "移動をブロックしています",
+        "advice": "フォローアップが必要です",
+        "numberToken": {
+          "label": "番号のアクセストークンが必要です",
+          "help": "移動先では番号ごとに独自のトークンを使用しますが、この番号にはトークンがありません。ワークスペースに番号の詳細ページで貼り付けてもらうか、再連携してから、もう一度確認を実行してください。"
+        },
+        "providerToken": {
+          "label": "プロバイダートークンが必要です",
+          "help": "移動先プロバイダーにはパートナートークンが保存されていません。先にプロバイダーのページで追加してください。"
+        },
+        "idsMissing": {
+          "label": "WABA ID または電話番号 ID がありません",
+          "help": "この接続には、記録上 WABA ID も電話番号 ID もありません。再連携してください。"
+        },
+        "reconnect": {
+          "label": "番号が切断されています",
+          "help": "再接続はせず、移動先の指定のみを変更します。送信するには、ワークスペースで再連携が必要です。"
+        }
+      },
+      "numbers": {
+        "captionPlan": "ドライランで評価された番号",
+        "captionResult": "切り替えの番号ごとの結果",
+        "cols": {
+          "move": "移動",
+          "number": "番号",
+          "from": "現在の接続先",
+          "state": "状態",
+          "details": "詳細"
+        },
+        "moveNumber": "{name} を移動",
+        "unknownProvider": "不明",
+        "state": {
+          "ready": "準備完了",
+          "blocked": "ブロック",
+          "switched": "切り替え済み",
+          "repointed": "指定変更のみ",
+          "failed": "失敗"
+        },
+        "willResubscribe": "Webhook は、まず新しいプロバイダー経由で再購読されます。",
+        "willRepoint": "指定の変更のみ行われます。",
+        "inboundNotWired": "プロバイダーが番号ごとのコールバックを受け付けませんでした。プロバイダーまたは Meta アプリで、コールバックをプラットフォームの Webhook に設定してください。",
+        "inboundWired": "受信コールバックが設定されました。"
+      },
+      "apply": {
+        "title": "切り替えを適用",
+        "summary": "{count, plural, other {# 件の番号}}を {provider} に移動します。",
+        "understood": "ワークスペースの稼働中の番号の指定を変更し、その Webhook を再購読することを理解しています。",
+        "action": "切り替えを適用",
+        "tickOne": "少なくとも1つの番号にチェックを入れてください。"
+      },
+      "confirm": {
+        "title": "番号を移動しますか?",
+        "body": "{workspace} の {count, plural, other {# 件の番号}}を {provider} に移動します。各番号は先に再購読され、それが成功した場合にのみ指定が変更されます。",
+        "rollback": "元に戻すには、切り替えを逆に行ってください。メッセージ履歴、メッセージ ID、配信ステータスには影響しません。",
+        "action": "番号を移動",
+        "cancel": "キャンセル"
+      },
+      "errorHints": {
+        "nothingToDo": "別の移動先、または別の移動元プロバイダーを選んでください。",
+        "tooMany": "対象を絞り込むため、移動元プロバイダーを選んでください。",
+        "disabled": "移動先プロバイダーをそのページで有効化してから、もう一度お試しください。"
+      },
+      "result": {
+        "title": "結果",
+        "allMoved": "{count, plural, other {# 件の番号}}はすべて {provider} に移動しました。",
+        "noneMoved": "番号は移動されませんでした。詳細は下をご確認ください。",
+        "partial": "{total} 件中 {moved} 件の番号が移動しました。詳細は下をご確認ください。",
+        "switched": "{count} 件切り替え済み",
+        "repointed": "{count} 件の指定を変更",
+        "failed": "{count} 件失敗",
+        "blocked": "{count} 件ブロック",
+        "overrideSet": "{provider} がこのワークスペースの上書きになりました。",
+        "repointedNote": "切断された番号は指定のみ変更されました。送信するには、ワークスペースで再連携する必要があります。",
+        "inboundNote": "{count, plural, other {# 件の番号}}が移動しましたが、番号ごとのコールバックは受け付けられませんでした。プロバイダーまたは Meta アプリで、コールバックをプラットフォームの Webhook に設定してください。",
+        "rollback": {
+          "title": "元に戻す",
+          "description": "元に戻すとは、切り替えを逆に行うことです。番号は保持していたすべての認証情報を維持するため、番号トークンの経路では新たな作業は不要です。プラットフォームトークンの経路では、そのトークンが保存されている必要があります。",
+          "action": "{provider} への切り替えを逆方向に準備",
+          "unknown": "これらの番号の以前のプロバイダーが不明なため、ここからは元に戻す準備ができません。"
+        },
+        "another": "別のワークスペースを切り替え",
+        "toAssignments": "割り当てに戻る"
+      }
+    },
+    "workspaceNote": {
+      "title": "あなたのWhatsAppプロバイダー",
+      "newNumbers": "新しい番号は {provider} 経由で接続されます。",
+      "ownToken": "各番号は独自のアクセストークンを使用します。",
+      "platformToken": "プラットフォームが認証情報を保持します。接続時は ID のみ入力します。",
+      "mediaYes": "ファイルのアップロードに対応しています。",
+      "mediaNo": "ファイルのアップロードには対応していません。ファイルは公開リンク経由で送信されます。",
+      "none": "現在、新しい番号を接続できるプロバイダーがありません。プラットフォーム管理者にお問い合わせください。",
+      "numberOn": "{name} は {provider} を使用しています。",
+      "numberNoMedia": "ファイルのアップロードには対応していません。"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "הבא",
+      "back": "הקודם",
+      "sending": "שולח...",
+      "optional": "רשות",
+      "selectPlaceholder": "בחר אפשרות",
+      "stepOf": "שלב {n} מתוך {total}",
+      "summaryTitle": "{count, plural, one {נא לתקן שדה אחד} two {נא לתקן # שדות} other {נא לתקן # שדות}}",
+      "successTitle": "תודה",
+      "continue": "המשך",
+      "previewNotice": "תצוגה מקדימה: שום דבר לא נשלח מכאן.",
+      "honeypot": "השאר את השדה הזה ריק",
+      "privacyPolicy": "מדיניות פרטיות",
+      "poweredBy": "מופעל על ידי {brand}",
+      "brandName": "טפסים",
+      "captchaNeeded": "נא להשלים את הבדיקה למטה לפני השליחה.",
+      "rateLimited": "יותר מדי ניסיונות. נא להמתין רגע ולנסות שוב.",
+      "closed": "הטופס הזה אינו מקבל תשובות כרגע.",
+      "genericError": "משהו השתבש והתשובות שלך לא נשלחו. נסה שוב.",
+      "notAvailableTitle": "הטופס הזה אינו זמין",
+      "notAvailableBody": "ייתכן שהקישור שגוי, או שהטופס נסגר.",
+      "errors": {
+        "required": "שדה זה חובה.",
+        "consent_required": "נא לסמן את התיבה כדי להמשיך.",
+        "invalid_email": "הזן כתובת דוא״ל תקינה.",
+        "invalid_phone": "הזינו מספר טלפון תקין, כולל קידומת מדינה אם אפשר.",
+        "invalid_number": "הזינו מספר תקין.",
+        "invalid_date": "הזינו תאריך תקין.",
+        "too_small": "הזינו ערך של {min} לפחות.",
+        "too_large": "הזינו ערך של עד {max}.",
+        "too_short": "הזינו לפחות {min} תווים.",
+        "too_long": "הזינו עד {max} תווים.",
+        "pattern": "הערך אינו תואם לפורמט הנדרש.",
+        "invalid_option": "בחרו אחת מהאפשרויות המוצגות."
+      },
+      "closedTitle": "הטופס סגור"
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "团队聊天"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "screen": {
+      "title": "团队聊天",
+      "back": "返回频道",
+      "search": "搜索此频道",
+      "pinned": "置顶消息",
+      "members": "频道成员",
+      "deleteChannel": "删除此频道",
+      "type": {
+        "public": "频道",
+        "private": "私密",
+        "dm": "私信"
+      },
+      "olderMessage": "该消息较早。请加载更早的消息以查看。",
+      "loading": "正在加载团队聊天",
+      "loadFailed": "无法加载团队聊天。",
+      "retry": "重试",
+      "deleteTitle": "删除此频道？",
+      "deleteMessage": "#{name} 及其所有消息将为所有人删除，且无法恢复。",
+      "deleteConfirm": "删除频道",
+      "cancel": "取消",
+      "defaultDescription": "工作区内部聊天",
+      "customerChats": "客户聊天"
+    },
+    "sidebar": {
+      "label": "频道与成员",
+      "channels": "频道",
+      "createChannel": "创建频道",
+      "loading": "正在加载频道",
+      "loadFailed": "无法加载频道。",
+      "noChannels": "暂无频道",
+      "direct": "私信",
+      "people": "成员",
+      "invite": "邀请团队成员",
+      "pending": "待处理请求",
+      "pendingCount": "{count, plural, other {# 个待处理请求}}",
+      "unread": "{count, plural, other {# 条未读消息}}",
+      "workspace": "工作区",
+      "mode": "模式",
+      "customerChats": "客户聊天",
+      "teamChat": "团队聊天",
+      "membersLink": "成员"
+    },
+    "members": {
+      "label": "成员",
+      "title": "团队聊天",
+      "count": "{count, plural, other {# 名成员}}",
+      "countUnknown": "成员",
+      "search": "搜索成员",
+      "loading": "正在加载成员",
+      "none": "没有匹配的成员",
+      "online": "在线",
+      "offline": "离线",
+      "you": "（您）",
+      "message": "发消息给 {name}",
+      "titleAccent": "聊天"
+    },
+    "panel": {
+      "searchTitle": "搜索消息",
+      "pinnedTitle": "置顶消息",
+      "searchPlaceholder": "搜索此频道",
+      "searchHint": "请至少输入两个字符。",
+      "close": "关闭",
+      "failed": "无法加载该内容。",
+      "noResults": "没有匹配的消息。",
+      "noPinned": "此频道没有置顶消息。"
+    },
+    "stream": {
+      "loading": "正在加载消息",
+      "loadFailed": "无法加载消息。",
+      "loadOlder": "加载更早的消息",
+      "emptyTitle": "#{name} 中暂无消息",
+      "emptyMessage": "打个招呼，开始交流吧。"
+    },
+    "message": {
+      "edited": "（已编辑）",
+      "pinned": "已置顶",
+      "editLabel": "编辑消息",
+      "cancel": "取消",
+      "save": "保存",
+      "editConflict": "您编辑时此消息已被更改。请刷新后重试。",
+      "reactions": "表情回应",
+      "reactionChip": "{emoji}，{count, plural, other {# 人}}",
+      "reactionTray": "选择表情回应",
+      "reply": "回复",
+      "react": "回应",
+      "edit": "编辑",
+      "pin": "置顶",
+      "unpin": "取消置顶",
+      "delete": "删除",
+      "deleteTitle": "删除此消息？",
+      "deleteMessage": "将为频道中的所有人删除。",
+      "uploading": "上传中",
+      "retry": "重试",
+      "discard": "舍弃"
+    },
+    "composer": {
+      "placeholder": "发送至 #{name}",
+      "attach": "添加文件",
+      "send": "发送",
+      "hint": "按 Enter 发送，Shift+Enter 换行，输入 @ 可提及团队成员。",
+      "replyingTo": "回复 {name}",
+      "cancelReply": "取消回复",
+      "removeFile": "移除附件",
+      "fileTooLarge": "该文件超过 20 MB。",
+      "mentionList": "可提及的团队成员",
+      "typingOne": "{name} 正在输入",
+      "typingMany": "{count} 人正在输入",
+      "hintSend": "发送",
+      "hintNewLine": "换行",
+      "hintMention": "提及",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "创建频道",
+      "close": "关闭",
+      "name": "名称",
+      "nameHint": "仅限小写字母、数字、短横线和下划线，不可含空格。",
+      "description": "描述（可选）",
+      "privacy": "隐私设置",
+      "public": {
+        "label": "公开",
+        "hint": "工作区中的所有人都可以阅读和发送消息。"
+      },
+      "private": {
+        "label": "私密",
+        "hint": "仅限受邀成员。只有成员可以看到。"
+      },
+      "cancel": "取消",
+      "create": "创建频道",
+      "namePlaceholder": "例如：support",
+      "descriptionPlaceholder": "此频道用于什么？"
+    },
+    "invite": {
+      "title": "邀请团队成员",
+      "close": "关闭",
+      "email": "邮箱",
+      "name": "姓名（可选）",
+      "note": "给管理员的备注（可选）",
+      "noteHint": "说明此人为何需要加入。",
+      "addToChannel": "同时添加到 #{name}",
+      "approved": "完成。请求已批准。",
+      "pending": "邀请已提交，等待管理员批准。",
+      "cancel": "取消",
+      "submit": "提交邀请",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "他们的姓名",
+      "notePlaceholder": "他们为什么应该加入？"
+    },
+    "invitations": {
+      "title": "待处理邀请",
+      "close": "关闭",
+      "loading": "加载中",
+      "loadFailed": "无法加载邀请。",
+      "empty": "暂无邀请",
+      "status": {
+        "pending": "待处理",
+        "approved": "已批准",
+        "declined": "已拒绝",
+        "expired": "已过期"
+      },
+      "requestedBy": "由 {name} 发起 · {time}",
+      "decidedBy": "{status}，操作人 {name} · {time}",
+      "needsAccount": "此人尚未在工作区中拥有账号，因此未添加任何人。",
+      "approve": "批准",
+      "decline": "拒绝"
+    },
+    "channelMembers": {
+      "title": "#{name} 的成员",
+      "close": "关闭",
+      "admin": "管理员",
+      "leave": "退出",
+      "remove": "移除",
+      "addLabel": "添加团队成员",
+      "choose": "选择团队成员",
+      "add": "添加"
+    },
+    "errors": {
+      "network": "网络错误。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "您已退出登录。请重新登录。",
+      "notFound": "该内容已不存在。",
+      "validation": "请检查输入内容后重试。",
+      "conflict": "此内容已被更改。请刷新后重试。",
+      "tooLarge": "该文件超过 20 MB。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "emptyMessage": "请输入消息或添加文件。",
+      "replyOtherChannel": "只能回复同一频道中的消息。",
+      "attachmentRejected": "无法添加此文件。仅允许添加不超过 20 MB 的图片、PDF、Word、Excel、文本和 CSV 文件。",
+      "editExpired": "消息只能在 15 分钟内编辑。",
+      "nameTaken": "已存在同名频道。",
+      "channelProtected": "无法删除 #general。",
+      "alreadyMember": "已是工作区成员。",
+      "alreadyDecided": "已处理。",
+      "notMember": "您不是此频道的成员。",
+      "notAuthor": "只能更改自己的消息。",
+      "kindInvalid": "此类频道不支持该操作。",
+      "unexpected": "出错了，请重试。"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Volgende",
+      "back": "Terug",
+      "sending": "Verzenden...",
+      "optional": "optioneel",
+      "selectPlaceholder": "Kies een optie",
+      "stepOf": "Stap {n} van {total}",
+      "summaryTitle": "{count, plural, one {Corrigeer 1 veld} other {Corrigeer # velden}}",
+      "successTitle": "Bedankt",
+      "continue": "Doorgaan",
+      "previewNotice": "Voorbeeld: vanaf hier wordt niets verzonden.",
+      "honeypot": "Laat dit veld leeg",
+      "privacyPolicy": "Privacybeleid",
+      "poweredBy": "Mogelijk gemaakt door {brand}",
+      "brandName": "Formulieren",
+      "captchaNeeded": "Vul de controle hieronder in voordat je verzendt.",
+      "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+      "closed": "Dit formulier neemt op dit moment geen antwoorden aan.",
+      "genericError": "Er ging iets mis en je antwoorden zijn niet verzonden. Probeer het opnieuw.",
+      "notAvailableTitle": "Dit formulier is niet beschikbaar",
+      "notAvailableBody": "De link klopt mogelijk niet, of het formulier is gesloten.",
+      "errors": {
+        "required": "Dit veld is verplicht.",
+        "consent_required": "Vink dit vakje aan om door te gaan.",
+        "invalid_email": "Voer een geldig e-mailadres in.",
+        "invalid_phone": "Voer een geldig telefoonnummer in, met het landnummer als je dat weet.",
+        "invalid_number": "Voer een geldig nummer in.",
+        "invalid_date": "Voer een geldige datum in.",
+        "too_small": "Voer een waarde van minimaal {min} in.",
+        "too_large": "Voer een waarde van maximaal {max} in.",
+        "too_short": "Voer minimaal {min} tekens in.",
+        "too_long": "Voer maximaal {max} tekens in.",
+        "pattern": "Dit voldoet niet aan het verwachte formaat.",
+        "invalid_option": "Kies een van de vermelde opties."
+      },
+      "closedTitle": "Dit formulier is gesloten"
+    }
+  }
+}

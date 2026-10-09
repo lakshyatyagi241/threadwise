@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "WhatsApp sağlayıcıları",
+      "providers": "Sağlayıcılar",
+      "assignments": "Çalışma alanı atamaları",
+      "switch": "Sağlayıcıyı değiştir"
+    },
+    "common": {
+      "loading": "Yükleniyor...",
+      "retry": "Yeniden dene",
+      "requestId": "İstek kimliği"
+    },
+    "errors": {
+      "conflict": "Siz düzenlerken bu sağlayıcıyı başka biri değiştirdi. En son sürüm yüklendi; gözden geçirip değişikliğinizi yeniden uygulayın.",
+      "noAccess": "Bunun için gereken platform izniniz yok ({permission}). Roller bölümünden bu izni vermesi için bir Süper Yöneticiye başvurun.",
+      "keyTaken": "Bu anahtara sahip bir sağlayıcı zaten var. Başka bir anahtar seçin.",
+      "baseUrlRefused": "Bu adres reddedildi: {detail}.",
+      "baseUrlRefusedPlain": "Bu adres reddedildi. Herkese açık bir ana bilgisayar adında https adresi kullanın.",
+      "inUse": "Bu sağlayıcıyı hâlâ numaralar veya çalışma alanları kullanıyor. Önce bunları başka bir sağlayıcıya geçirin (bu üzerinden numara bağlıyken kimlik bilgisi modu değiştirilemez).",
+      "disabled": "Bunun için sağlayıcının etkin olması gerekir. Önce etkinleştirin.",
+      "credentialsMissing": "Sağlayıcının henüz kayıtlı bir jetonu yok. Sağlayıcı jetonunu ekleyin, kaydedin, sonra etkinleştirin.",
+      "isDefault": "Bu varsayılan sağlayıcı. Önce başka bir sağlayıcıyı varsayılan yapın veya varsayılanı kaldırın.",
+      "builtin": "Bu yerleşik bir sağlayıcıdır. Adresi, sürümü ve gizli bilgileri Platform ayarları, WhatsApp bölümünden düzenlenir.",
+      "nothingToDo": "Değiştirilecek bir şey yok: bu çalışma alanındaki bağlı tüm numaralar zaten bu sağlayıcıda.",
+      "partnerNotConfigured": "Bu sağlayıcıda iş ortağı programının gerektirdiği bir şey eksik: iş ortağı anahtarı (sağlayıcı jetonu), çözüm kimliği veya gömülü kayıt yapılandırması. Sağlayıcıyı kontrol edip kaydedin.",
+      "partnerRefused": "İş ortağı bu isteği reddetti: {message}",
+      "partnerRefusedPlain": "İş ortağı bu isteği reddetti. Yeniden deneyin veya sağlayıcı ayarlarını kontrol edin.",
+      "unavailable": "Bu sağlayıcı kullanılamıyor. Arşivlenmiş olabilir veya bir kimlik bilgisi eksik olabilir.",
+      "notFound": "Bu sağlayıcı veya çalışma alanı artık yok. Geri dönüp listeyi yenileyin.",
+      "tooManyNumbers": "Aynı anda 50'den fazla numara taşınacak. Kapsamı daraltmak için bir kaynak sağlayıcı seçin, sonra kalanlar için geçişi yeniden çalıştırın.",
+      "validationField": "{message}",
+      "validation": "Bazı değerler kabul edilmedi. Formu kontrol edip yeniden deneyin.",
+      "request": "İstek reddedildi. Değerleri kontrol edip yeniden deneyin.",
+      "unexpected": "Tarafımızda bir sorun oluştu. Birazdan yeniden deneyin."
+    },
+    "status": {
+      "active": "Etkin",
+      "disabled": "Devre dışı",
+      "archived": "Arşivlenmiş",
+      "default": "Varsayılan",
+      "builtin": "Yerleşik"
+    },
+    "secret": {
+      "show": "Yazdığınız değeri göster",
+      "hide": "Yazdığınız değeri gizle",
+      "placeholderKeep": "Kayıtlı değeri korumak için boş bırakın",
+      "placeholderNew": "Değeri yapıştırın",
+      "undoClear": "Vazgeç",
+      "clear": "Kayıtlı değeri kaldır",
+      "setWithHint": "Ayarlı, son dört karakter: {last4}",
+      "set": "Ayarlı",
+      "notSet": "Ayarlı değil",
+      "willClear": "Kaydettiğinizde kaldırılacak",
+      "willReplace": "Kaydettiğinizde kayıtlı değerin yerini alacak"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearer jetonu",
+          "help": "Kimlik bilgisi modunun jetonuyla Authorization: Bearer gönderir."
+        },
+        "custom_headers": {
+          "label": "Özel başlıklar",
+          "help": "Tanımladığınız başlıkları gönderir; her çağrıda jeton, WABA kimliği ve telefon numarası kimliği doldurulur."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Platform jetonu",
+          "help": "Sağlayıcıdaki platformun bir jetonu (iş ortağı jetonu). Müşteriler jeton tutmaz."
+        },
+        "channel_token": {
+          "label": "Numara jetonu",
+          "help": "Bağlı her numara kendi erişim jetonuna sahiptir."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Uygulama düzeyinde geri çağırma",
+          "help": "Platform yalnızca WABA'ya abone olur. Geri çağırma, Meta uygulamasında bir kez ayarlanır."
+        },
+        "number_level_override": {
+          "label": "Numara bazında geri çağırma",
+          "help": "Abone olduktan sonra platform, sağlayıcı üzerinden her numara için geri çağırmayı ayarlar."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Meta imzası (uygulama gizli anahtarı)",
+          "help": "Teslimatlar X-Hub-Signature-256 taşır; sağlayıcı uygulama gizli anahtarıyla doğrulanır."
+        },
+        "shared_secret_header": {
+          "label": "Bir başlıkta paylaşılan gizli anahtar",
+          "help": "Adını verdiğiniz bir başlık, sağlayıcının webhook gizli anahtarını doğrudan taşır."
+        },
+        "none": {
+          "label": "İmza yok",
+          "help": "Sağlayıcı hiçbir şeyi imzalamaz. Teslimatları yalnızca geri çağırma URL'sindeki gizli anahtar doğrular."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Sağlayıcı kredi hattı",
+          "help": "Sağlayıcı, platforma kendi kredi hattından fatura keser."
+        },
+        "customer_direct": {
+          "label": "Müşteri Meta'ya doğrudan öder",
+          "help": "Müşterinin ödeme yöntemi Meta üzerindedir (satıcı motoru modu meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Meta satıcı kredi hattı",
+          "help": "Platformun Meta kredi hattı müşterinin WABA hesabıyla paylaşılır (satıcı motoru modu reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Manuel",
+          "help": "Çalışma alanları WABA ve telefon numarası kimliklerini yapıştırır."
+        },
+        "embedded_signup": {
+          "label": "Gömülü kayıt",
+          "help": "Çalışma alanları, platform Meta uygulamasının gömülü kaydı üzerinden bağlanır."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Yok"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "Sağlayıcı jetonu kayıtlı değil. Bu sağlayıcıyı etkinleştirmek için gereklidir.",
+      "appSecret": "Uygulama gizli anahtarı kayıtlı değil. Kaydedilene kadar bu sağlayıcının her webhook teslimatı reddedilir.",
+      "webhookSecret": "Webhook gizli anahtarı kayıtlı değil. Kaydedilene kadar bu sağlayıcının her webhook teslimatı reddedilir."
+    },
+    "headers": {
+      "intro": "Bu sağlayıcıya yapılan her çağrıyla gönderilen başlıklar. Bir çağrıda değeri bilinmeyen bir başlık atlanır; asla olduğu gibi yer tutucu olarak gönderilmez.",
+      "listLabel": "Başlık şablonları",
+      "name": "Başlık adı",
+      "value": "Değer",
+      "insertFor": "{n} numaralı başlığa yer tutucu ekle",
+      "insert": "Yer tutucu ekle",
+      "removeFor": "{n} numaralı başlığı kaldır",
+      "remove": "Kaldır",
+      "add": "Başlık ekle",
+      "placeholdersTitle": "Yer tutucular ve kurallar",
+      "leftOut": "Bir çağrıda değeri olmayan yer tutucu kullanan başlık atlanır. Hop-by-hop ve çerçeveleme başlıkları (host, content-length, transfer-encoding ve benzerleri) ayarlanamaz.",
+      "channelTokenNeverKnown": "Bu sağlayıcı platform jetonunu kullanır, bu nedenle müşteriler numara jetonu tutmaz: numara jetonu yer tutucusunu kullanan bir başlık her zaman atlanır.",
+      "problems": {
+        "tooMany": "En fazla {max} başlığa izin verilir.",
+        "nameInvalid": "Başlık adlarında yalnızca harf, rakam ve kısa çizgi kullanılır.",
+        "nameDenied": "{name} başlığı bağlantı tarafından yönetilir ve ayarlanamaz.",
+        "nameDuplicate": "{name} başlığı iki kez görünüyor.",
+        "valueEmpty": "{name} başlığının bir değere ihtiyacı var.",
+        "valueTooLong": "{name} değeri {max} karakterden uzun.",
+        "valueCharacters": "{name} değeri bir denetim veya ASCII dışı karakter içeriyor.",
+        "placeholderUnknown": "{name} başlığı bilinmeyen bir yer tutucu kullanıyor: {names}.",
+        "strayBrace": "{name} başlığında fazladan bir parantez var. Yer tutucular adın etrafında çift parantezle yazılır.",
+        "credentialNotCarried": "Başlıklardan biri {placeholder} yer tutucusunu taşımalıdır; kimlik bilgisi bu yolla sağlayıcıya ulaşır."
+      },
+      "placeholders": {
+        "providerToken": "Sağlayıcıdaki platformun jetonu.",
+        "channelToken": "Çağrının ait olduğu numaranın erişim jetonu.",
+        "wabaId": "Numaranın WhatsApp Business Hesabı kimliği.",
+        "phoneNumberId": "Numaranın telefon numarası kimliği."
+      },
+      "preview": {
+        "title": "Çağrının önizlemesi",
+        "urlPending": "(geçerli bir adres girin)",
+        "note": "Yerine geçen değerler gösterilir. Gerçek jetonlar ve kimlikler her çağrıda doldurulur ve burada asla gösterilmez."
+      }
+    },
+    "form": {
+      "wizardLabel": "WhatsApp sağlayıcısı ekle",
+      "editLabel": "WhatsApp sağlayıcısını değiştir",
+      "stepsLabel": "Adımlar",
+      "steps": {
+        "basics": "Temel bilgiler",
+        "connection": "Bağlantı",
+        "credentials": "Kimlik bilgileri",
+        "webhooks": "Webhooklar",
+        "billing": "Faturalandırma ve kayıt",
+        "review": "Gözden geçir"
+      },
+      "stepHelp": {
+        "basics": "Kararlı bir anahtar, operatörlerin tanıyacağı bir ad ve isteğe bağlı notlar.",
+        "connection": "Sağlayıcının yanıt verdiği adres ve platformun bu adrese nasıl kimlik doğruladığı.",
+        "credentials": "İşi hangi kimlik bilgisinin yaptığı ve sağlayıcı jetonu.",
+        "webhooks": "Sağlayıcının gelen mesajları nasıl ilettiği ve bunların gerçek olduğunu nasıl kanıtladığı.",
+        "billing": "Meta'yı kimin ödediği, dosya yüklenip yüklenemeyeceği ve çalışma alanlarının nasıl kaydolduğu.",
+        "review": "Her şeyi kontrol edin. Sağlayıcıyı oluşturana kadar hiçbir şey gönderilmez."
+      },
+      "fields": {
+        "key": "Anahtar",
+        "label": "Ad",
+        "notes": "Notlar",
+        "baseUrl": "Temel URL",
+        "apiVersion": "API sürümü",
+        "authScheme": "Kimlik doğrulama",
+        "credentialMode": "Kimlik bilgisi modu",
+        "providerToken": "Sağlayıcı jetonu",
+        "webhookMode": "Webhook modu",
+        "signatureScheme": "Webhook imzası",
+        "appSecret": "Uygulama gizli anahtarı",
+        "webhookSecret": "Webhook gizli anahtarı",
+        "verifyToken": "Doğrulama jetonu",
+        "signatureHeaderName": "İmza başlığı adı",
+        "billingMode": "Faturalandırma modu",
+        "mediaUpload": "Medya yüklemesi destekleniyor",
+        "onboarding": "Kayıt",
+        "onboardingAppId": "Meta uygulama kimliği",
+        "onboardingConfigId": "Gömülü kayıt yapılandırma kimliği",
+        "partnerProgram": "İş ortağı programı",
+        "partnerSolutionId": "Çözüm kimliği"
+      },
+      "hints": {
+        "key": "Küçük harf, rakam, alt çizgi ve kısa çizgi; 2 ila 40 karakter, bir harfle başlar. Sonradan değiştirilemez.",
+        "keyFixed": "Anahtar değiştirilemez.",
+        "notes": "Bunları yalnızca operatörler görür.",
+        "baseUrl": "https://host veya https://host/önek. Platform yalnızca herkese açık https ana bilgisayarlarını çağırır.",
+        "credentialModeLocked": "Bu sağlayıcı üzerinden {count, plural, other {# numara bağlı}}, bu nedenle kimlik bilgisi modu değiştirilemez. Önce bunları başka bir sağlayıcıya geçirin.",
+        "providerTokenNeeded": "Bu sağlayıcının etkinleştirilebilmesi için gereklidir.",
+        "providerTokenOptional": "Burada isteğe bağlı: her numara kendi jetonunu getirir.",
+        "appSecret": "Her teslimatın X-Hub-Signature-256 değerini denetler. Bu olmadan bu sağlayıcının her teslimatı reddedilir.",
+        "webhookSecret": "Sağlayıcının imza başlığına koyduğu değer. Bu olmadan her teslimat reddedilir.",
+        "signatureHeaderName": "Harf, rakam ve kısa çizgi, örneğin x-bsp-secret.",
+        "verifyToken": "Sağlayıcının abonelik doğrulamasına yanıt verir. İsteğe bağlı.",
+        "billingMode": "Satıcı faturalandırma motoruna işaret eden bir etiket. Faturalandırma davranışını değiştirmez.",
+        "mediaUpload": "Kapalıyken dosyalar yükleme yerine herkese açık bağlantıyla gönderilir.",
+        "onboardingIds": "Yalnızca rakam. Bunlar platform Meta uygulamasının herkese açık kimlikleridir.",
+        "partnerPinnacle": "Pinnacle her numaraya kendi anahtarını verir. İş ortağı anahtarını sağlayıcı jetonu olarak, Meta uygulama gizli anahtarını ise uygulama gizli anahtarı olarak kaydedin (gelen webhook'lar bununla doğrulanır).",
+        "partnerSolutionId": "Yalnızca rakam, 5 ila 32. Pinnacle panelindeki iş ortağı çözüm kimliği."
+      },
+      "devLoopback": "Döngü adresinde düz http yalnızca geliştirmede, sunucu bayrağı arkasında kabul edilir. Üretimde bu adres reddedilir.",
+      "ssrfNote": "Adres sunucu tarafından yeniden denetlenir: yalnızca https, herkese açık bir ana bilgisayar adı, varsayılan bağlantı noktası ve çözümlendiği her adres herkese açık olmalıdır.",
+      "secretsNote": "Gizli bilgiler yalnızca yazılabilir. Kaydettikten sonra yalnızca ayarlı olarak ve son dört karakteriyle gösterilir.",
+      "signatureNoneNote": "İmza yokken teslimatları yalnızca geri çağırma URL'sindeki gizli anahtar doğrular. Bunu yalnızca sağlayıcı imzalayamıyorsa kullanın.",
+      "builtinNotice": "Bu yerleşik bir sağlayıcıdır. Adresi, sürümü ve gizli bilgileri Platform ayarları, WhatsApp bölümündedir. Burada yalnızca ad, notlar ve faturalandırma modu değiştirilebilir.",
+      "openConsoleSettings": "Platform ayarları, WhatsApp'ı aç",
+      "conflictHint": "Değişiklikleriniz kaydedilmedi. Form en son değerleri gösteriyor.",
+      "fixProblems": "{count, plural, other {# değerin dikkate ihtiyacı var.}} İşaretli alanları düzeltin.",
+      "save": "Değişiklikleri kaydet",
+      "nothingToSave": "Henüz değişiklik yok",
+      "back": "Geri",
+      "next": "İleri",
+      "cancel": "İptal",
+      "create": "Sağlayıcı oluştur",
+      "saved": "{name} kaydedildi.",
+      "created": "{name} oluşturuldu. Devre dışı başlar: önce test edin, sonra etkinleştirin.",
+      "review": {
+        "headers": "Başlıklar",
+        "yes": "Evet",
+        "no": "Hayır",
+        "secrets": "Kaydedilecek gizli bilgiler",
+        "noSecrets": "Yok",
+        "gapsTitle": "Bu sağlayıcının çalışması için hâlâ eksik olanlar",
+        "startsDisabled": "Yeni sağlayıcı devre dışı başlar. Oluşturduktan sonra Bağlantıyı test et'i çalıştırıp etkinleştirin."
+      },
+      "problems": {
+        "labelRequired": "Bir ad girin.",
+        "labelLength": "Ad en fazla {max} karakter olabilir.",
+        "notesLength": "Notlar en fazla {max} karakter olabilir.",
+        "keyRequired": "Bir anahtar girin.",
+        "keyBuiltin": "meta ve interakt yerleşik sağlayıcılardır. Başka bir anahtar seçin.",
+        "keyFormat": "Bir harfle başlayın; ardından harf, rakam, alt çizgi veya kısa çizgi kullanın. Toplamda 2 ila 40 karakter.",
+        "baseUrl": {
+          "empty": "Sağlayıcının temel URL'sini girin.",
+          "length": "Adres 1 ila 200 karakter arasında olmalıdır.",
+          "characters": "Adres boşluk veya denetim karakteri içermemelidir.",
+          "invalid": "Bu geçerli bir URL değil.",
+          "credentials": "Adres bir kullanıcı adı veya parola içermemelidir.",
+          "queryOrFragment": "Adres bir sorgu veya parça içermemelidir.",
+          "notHttps": "Adres https:// ile başlamalıdır.",
+          "port": "Yalnızca varsayılan https bağlantı noktasına izin verilir.",
+          "host": "IP adresi veya tek etiketli bir ad değil, herkese açık bir ana bilgisayar adı kullanın.",
+          "internal": "Dahili değil, herkese açık bir ana bilgisayar adı kullanın."
+        },
+        "apiVersion": "v25.0 gibi bir sürüm kullanın.",
+        "headers": "{count, plural, other {# başlık sorunu.}} Yukarıdaki listeye bakın.",
+        "signatureHeaderRequired": "Gizli bilgiyi taşıyan başlığın adını girin.",
+        "signatureHeaderFormat": "Yalnızca harf, rakam ve kısa çizgi.",
+        "digits": "Yalnızca rakam, 5 ila 32.",
+        "partnerSolutionIdRequired": "Çözüm kimliğini girin.",
+        "partnerCredentialMode": "İş ortağı programı her numaraya kendi jetonunu verir: kanal jetonu modunu kullanın.",
+        "secretCharacters": "Boşluk veya denetim karakteri yok.",
+        "secretLength": "{min} ila {max} karakter arasında."
+      }
+    },
+    "actions": {
+      "activate": "Etkinleştir",
+      "makeDefault": "Varsayılan yap",
+      "clearDefault": "Varsayılanı kaldır",
+      "disable": "Devre dışı bırak",
+      "archive": "Arşivle",
+      "cancel": "İptal",
+      "menu": "İşlemler",
+      "menuLabel": "{name} için işlemler",
+      "manage": "Yönet",
+      "open": "Aç",
+      "switchTo": "Numaraları burada değiştir",
+      "blocked": {
+        "default": "varsayılan olan",
+        "builtin": "yerleşik",
+        "inUse": "kullanımda"
+      },
+      "done": {
+        "activate": "{name} etkin.",
+        "disable": "{name} devre dışı. Üzerindeki numaralar göndermeye devam eder.",
+        "archive": "{name} arşivlendi.",
+        "default": "{name} artık yeni numaralar için varsayılan.",
+        "clearDefault": "Varsayılan kaldırıldı. Yeni numaralar konsoldaki WhatsApp ayarını izler."
+      },
+      "confirm": {
+        "disable": {
+          "title": "{name} devre dışı bırakılsın mı?",
+          "body": "Yeni numaralar veya atamalar için artık sunulmayacak. Üzerindeki numaralar göndermeye devam eder; bu bir kesinti değildir.",
+          "inUse": "Bu sağlayıcıda hâlâ {count, plural, other {# numara var}}. Hazır olduğunuzda bunları geçirin.",
+          "action": "Devre dışı bırak"
+        },
+        "archive": {
+          "title": "{name} arşivlensin mi?",
+          "body": "Arşivlenmiş bir sağlayıcı kullanımdan kaldırılmıştır. Herhangi bir numara veya çalışma alanı geçersiz kılması bunu kullanırken bu işlem reddedilir. Daha sonra yeniden etkinleştirebilirsiniz.",
+          "action": "Arşivle"
+        },
+        "default": {
+          "title": "{name} varsayılan yapılsın mı?",
+          "body": "Geçersiz kılması olmayan çalışma alanları YENİ numaraları bu sağlayıcı üzerinden bağlayacak. Zaten bağlı numaralar taşınmaz.",
+          "action": "Varsayılan yap"
+        },
+        "clearDefault": {
+          "title": "Varsayılan kaldırılsın mı?",
+          "body": "Yeni numaralar yeniden konsoldaki WhatsApp ayarını izleyecek. Zaten bağlı numaralar taşınmaz.",
+          "action": "Varsayılanı kaldır"
+        }
+      }
+    },
+    "test": {
+      "title": "Bağlantıyı test et",
+      "description": "Kayıtlı kimlik bilgisiyle sağlayıcıya kimliği doğrulanmış tek bir okuma yapar. Sağlayıcıda hiçbir şey değiştirilmez.",
+      "path": "Okunacak yol",
+      "pathHint": "Eğik çizgiyle başlar. Varsayılan /me.",
+      "willCall": "{url} adresini çağıracak",
+      "pathInvalid": "/ ile başlayın ve yalnızca harf, rakam ve . _ / - kullanın.",
+      "wabaId": "WABA kimliği (isteğe bağlı)",
+      "idsHint": "Yalnızca bu çağrı için başlık yer tutucularını doldurur. Kaydedilmez.",
+      "idInvalid": "Yalnızca harf, rakam ve . _ : -",
+      "phoneNumberId": "Telefon numarası kimliği (isteğe bağlı)",
+      "channelToken": "Test numarası jetonu (isteğe bağlı)",
+      "channelTokenHint": "Her numaranın kendi jetonu olan sağlayıcılar için. Yalnızca bu çağrıda kullanılır, ardından bu formdan silinir.",
+      "tokenInvalid": "En az 8 yazdırılabilir karakter, boşluk yok.",
+      "show": "Yazdığınız değeri göster",
+      "hide": "Yazdığınız değeri gizle",
+      "run": "Testi çalıştır",
+      "running": "Test ediliyor...",
+      "forgotten": "Burada yazılan kimlikler ve jetonlar tek bir çağrıda kullanılır ve unutulur.",
+      "needManage": "Son sonucu görebilirsiniz. Test çalıştırmak için yönetme izni gerekir.",
+      "ok": "Bağlı",
+      "failed": "Başarısız",
+      "justNow": "Az önce",
+      "lastTest": "Son test",
+      "httpStatus": "HTTP durumu",
+      "noResponse": "Yanıt yok",
+      "latency": "Gecikme",
+      "ms": "{ms} ms",
+      "errorCode": "Hata kodu",
+      "message": "Sağlayıcının bildirdiği",
+      "redactedNote": "Sunucu yanıt vermeden önce her gizli bilgiyi [redacted] ile değiştirir.",
+      "never": "Bu sağlayıcı henüz test edilmedi.",
+      "hints": {
+        "ok": "Sağlayıcı kimliği doğrulanmış bir okumaya yanıt verdi. Etkinleştirmek güvenli.",
+        "addressRefused": "Adres reddedildi (https değil, herkese açık bir ad değil veya özel bir adrese çözümleniyor). Temel URL'yi düzeltin.",
+        "credentialsMissing": "Sağlayıcının kayıtlı bir jetonu yok. Sağlayıcı jetonunu ekleyip kaydedin.",
+        "unauthorized": "Sağlayıcı kimlik bilgisini reddetti. Jetonu ve başlık adlarını ile değerlerini kontrol edin.",
+        "notFound": "Yol bulunamadı. Sağlayıcının desteklediği bir okuma deneyin veya temel URL'yi ve API sürümünü kontrol edin.",
+        "rateLimited": "Sağlayıcı istek sınırlıyor. Biraz bekleyip yeniden test edin.",
+        "providerError": "Sağlayıcı bir sunucu hatasıyla yanıt verdi. Daha sonra yeniden deneyin.",
+        "unreachable": "Yanıt yok: ana bilgisayar yanıt vermedi veya bağlantı başarısız oldu. Adresi kontrol edin.",
+        "other": "Sağlayıcı beklenmeyen bir durumla yanıt verdi. Yukarıda ne dediğine bakın."
+      }
+    },
+    "list": {
+      "title": "WhatsApp sağlayıcıları",
+      "description": "Platformun hangi WhatsApp Business Çözüm Sağlayıcısı üzerinden gönderim yapacağını seçin, sağlayıcı ekleyin ve çalışma alanlarını aralarında taşıyın.",
+      "consoleSettings": "Meta uygulaması ve Interakt kimlik bilgileri",
+      "switchWorkspace": "Bir çalışma alanını değiştir",
+      "add": "Sağlayıcı ekle",
+      "kpi": {
+        "providers": "Sağlayıcılar",
+        "active": "Etkin",
+        "numbers": "Bağlı numaralar",
+        "overrides": "Çalışma alanı geçersiz kılmaları"
+      },
+      "defaultIs": "Bir çalışma alanının kendi geçersiz kılması yoksa yeni numaralar {name} üzerinden bağlanır.",
+      "noDefault": "Kayıt varsayılanı ayarlanmamış. Yeni numaralar konsoldaki WhatsApp ayarını izler.",
+      "defaultHelp": "Varsayılanı veya bir geçersiz kılmayı değiştirmek, zaten bağlı bir numarayı asla taşımaz. Bunun için Değiştir'i kullanın.",
+      "filterLabel": "Duruma göre filtrele",
+      "filters": {
+        "all": "Tümü",
+        "active": "Etkin",
+        "disabled": "Devre dışı",
+        "archived": "Arşivlenmiş"
+      },
+      "search": "Ada veya anahtara göre filtrele",
+      "emptyTitle": "Henüz sağlayıcı yok",
+      "emptyMessage": "WhatsApp'ı başka bir BSP üzerinden yönlendirmek için sağlayıcı ekleyin. Yerleşik Meta ve Interakt yolları her zaman çalışır.",
+      "noMatchTitle": "Eşleşen sağlayıcı yok",
+      "noMatchMessage": "Bu durum ve aramayla eşleşen bir şey yok. Başka bir filtre deneyin veya aramayı temizleyin.",
+      "tableCaption": "WhatsApp sağlayıcıları",
+      "cols": {
+        "provider": "Sağlayıcı",
+        "status": "Durum",
+        "billing": "Faturalandırma modu",
+        "credentials": "Kimlik bilgisi modu",
+        "usage": "Kullanımda",
+        "lastTest": "Son test",
+        "actions": "İşlemler"
+      },
+      "usage": {
+        "numbers": "{count, plural, other {# numara}}",
+        "workspaces": "{count, plural, other {# çalışma alanı}}"
+      },
+      "test": {
+        "ok": "Bağlı",
+        "failed": "Başarısız",
+        "never": "Test edilmedi"
+      },
+      "officialLabel": "Resmi WhatsApp (destekleniyor)"
+    },
+    "detail": {
+      "title": "WhatsApp sağlayıcısı",
+      "back": "Sağlayıcılara dön",
+      "gapsTitle": "Bu sağlayıcının çalışması için hâlâ eksik olanlar",
+      "lifecycle": {
+        "title": "Durum ve varsayılan",
+        "description": "Etkinleştirmek sağlayıcıyı yeni numaralar ve atamalar için seçilebilir yapar. Devre dışı bırakmak, üzerindeki numaraların göndermesini asla durdurmaz."
+      },
+      "edit": {
+        "title": "Düzenle",
+        "readOnly": "Bu sağlayıcıyı görüntüleyebilirsiniz. Değiştirmek için yönetme izni gerekir."
+      },
+      "overview": {
+        "title": "Genel bakış",
+        "headers": "Başlık adları",
+        "none": "yok",
+        "engineMode": "Satıcı motoru modu: {mode}",
+        "yes": "Evet",
+        "no": "Hayır",
+        "usage": "Kullanımda",
+        "numbers": "{count, plural, other {# numara}}",
+        "workspaces": "{count, plural, other {# çalışma alanı geçersiz kılması}}",
+        "updated": "Son değişiklik",
+        "builtinNote": "Bu yerleşik bir sağlayıcıdır. Adresi, sürümü ve gizli bilgileri canlı olarak Platform ayarları, WhatsApp bölümünden okunur.",
+        "openConsoleSettings": "Platform ayarları, WhatsApp'ı aç",
+        "credentialsTitle": "Kayıtlı gizli bilgiler",
+        "credentialsNote": "Gizli bilgiler yalnızca yazılabilir. Kaydettikten sonra bir daha gösterilmez; yalnızca her birinin ayarlı olup olmadığı ve son dört karakteri gösterilir.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Herkese açık API adresinizi ve bu yolu sağlayıcıya kaydedin. Tek bir URL tüm sağlayıcılara ve tüm çalışma alanlarına hizmet eder."
+      }
+    },
+    "new": {
+      "title": "WhatsApp sağlayıcısı ekle",
+      "back": "Sağlayıcılara dön",
+      "description": "Graph uyumlu bir BSP kaydedin. Devre dışı başlar; test edin, sonra etkinleştirin."
+    },
+    "assignments": {
+      "title": "Çalışma alanı atamaları",
+      "description": "Her çalışma alanının YENİ numaraları bağladığı sağlayıcı. Geçersiz kılması olmayan çalışma alanı varsayılanı izler.",
+      "defaultIs": "Kayıt varsayılanı: {name}.",
+      "noDefault": "Kayıt varsayılanı yok. Geçersiz kılması olmayan çalışma alanları konsoldaki WhatsApp ayarını izler.",
+      "existingNote": "Bir geçersiz kılmayı değiştirdiğinizde mevcut numaralar taşınmaz. Taşımak için Değiştir'i kullanın.",
+      "search": "Çalışma alanlarında ara",
+      "overrideOnly": "Yalnızca geçersiz kılması olan çalışma alanları",
+      "noMatchTitle": "Eşleşen çalışma alanı yok",
+      "noMatchMessage": "Başka bir arama deneyin veya filtreyi temizleyin.",
+      "emptyTitle": "Henüz çalışma alanı yok",
+      "emptyMessage": "Çalışma alanları oluşturulduğunda burada görünür.",
+      "loadMore": "Daha fazla yükle",
+      "tableCaption": "Çalışma alanı sağlayıcı atamaları",
+      "cols": {
+        "workspace": "Çalışma alanı",
+        "override": "Geçersiz kılma",
+        "effective": "Yeni numaralar şunun üzerinden gider",
+        "numbers": "Numaralar",
+        "actions": "İşlemler"
+      },
+      "followsDefault": "Varsayılanı izler",
+      "source": {
+        "override": "Çalışma alanı geçersiz kılması",
+        "default": "Kayıt varsayılanı",
+        "platform_setting": "Konsol WhatsApp ayarı"
+      },
+      "numberCount": "{count, plural, other {# numara}}",
+      "onOther": "{count} başka sağlayıcıda",
+      "change": "Değiştir",
+      "setOverride": "Geçersiz kılma ayarla",
+      "clear": "Geçersiz kılmayı kaldır",
+      "switch": "Numaraları değiştir",
+      "common": {
+        "close": "Kapat",
+        "cancel": "İptal"
+      },
+      "set": {
+        "title": "{name} için geçersiz kılma",
+        "help": "Bu çalışma alanının yeni numaraları seçtiğiniz sağlayıcı üzerinden bağlanır. Zaten bağlı numaralar olduğu yerde kalır.",
+        "noActive": "Etkin bir sağlayıcı yok. Önce birini etkinleştirin.",
+        "provider": "Sağlayıcı",
+        "note": "Not (isteğe bağlı)",
+        "noteHint": "Bu çalışma alanının neden kendi sağlayıcısı olduğu. En fazla 500 karakter.",
+        "save": "Geçersiz kılmayı kaydet",
+        "done": "{workspace} artık yeni numaraları {provider} üzerinden bağlıyor."
+      },
+      "clearDialog": {
+        "title": "{name} için geçersiz kılma kaldırılsın mı?",
+        "body": "{name} yeniden varsayılanı izleyecek. {provider} üzerinden zaten bağlı numaralar taşınmaz.",
+        "action": "Geçersiz kılmayı kaldır",
+        "done": "{workspace} yeniden varsayılanı izliyor."
+      }
+    },
+    "switch": {
+      "title": "Sağlayıcıyı değiştir",
+      "description": "Bir çalışma alanının bağlı WhatsApp numaralarını başka bir sağlayıcıya taşıyın. Önce deneme çalıştırması yapın: hiçbir şeyi değiştirmez ve çağırmaz.",
+      "choose": {
+        "title": "Çalışma alanı ve hedef",
+        "description": "Çalışma alanını ve numaralarının taşınacağı sağlayıcıyı seçin.",
+        "target": "Taşı",
+        "targetHint": "Hedef yalnızca etkin sağlayıcılar olabilir.",
+        "pick": "Bir sağlayıcı seçin",
+        "from": "Yalnızca şu üzerindeki numaralar:",
+        "fromHint": "İsteğe bağlı. Hedefte olmayan her numarayı taşımak için herhangi bir sağlayıcıda bırakın.",
+        "anyProvider": "Herhangi bir sağlayıcı",
+        "setOverride": "Ayrıca bunu bu çalışma alanının geçersiz kılması yap",
+        "setOverrideHint": "Çalışma alanının daha sonra bağlayacağı numaralar bunu izleyecek. Yalnızca geçişi uyguladığınızda geçerli olur, deneme çalıştırmasında değil.",
+        "reason": "Neden (isteğe bağlı)",
+        "reasonHint": "Denetim kaydına yazılır. En fazla 500 karakter.",
+        "targetNotActive": "Bu sağlayıcı etkin değil. Etkinleştirilene kadar geçiş reddedilir.",
+        "dryRun": "Neyin değişeceğini kontrol et",
+        "dryRunNote": "Deneme çalıştırması: hiçbir şey değiştirilmez ve hiçbir sağlayıcı çağrılmaz."
+      },
+      "workspace": {
+        "selected": "Çalışma alanı",
+        "unnamed": "Seçili çalışma alanı",
+        "change": "Çalışma alanını değiştir",
+        "label": "Çalışma alanı",
+        "search": "Çalışma alanlarında ara",
+        "none": "Eşleşen çalışma alanı yok.",
+        "numbers": "{count, plural, other {# numara}}",
+        "onOther": "{count} başka sağlayıcıda",
+        "narrow": "Daha fazla çalışma alanı var. Aramayı daraltın."
+      },
+      "plan": {
+        "stale": "Deneme çalıştırmasından sonra seçimleri değiştirdiniz. Uygulamadan önce kontrolü yeniden çalıştırın.",
+        "title": "Neler değişecek",
+        "description": "Taşınacak numaraları işaretleyin. Engellenen bir numara dokunulmaz.",
+        "nothingReady": "Henüz hiçbir numara taşınamaz. Listelenenleri çözün, sonra kontrolü yeniden çalıştırın.",
+        "headline": "{total, plural, other {# numara}} değerlendirildi, {ready} tanesi {provider} sağlayıcısına taşınabilir.",
+        "ready": "{count} hazır",
+        "blocked": "{count} engellendi",
+        "failed": "{count} değerlendirilemedi",
+        "reconnect": "{count} bağlantısı kesilmiş"
+      },
+      "requirements": {
+        "title": "Bir kişinin ilgilenmesi gerekenler",
+        "blocks": "Taşımayı engeller",
+        "advice": "Takip gerektirir",
+        "numberToken": {
+          "label": "Numara erişim jetonu gerekli",
+          "help": "Hedef her numaranın kendi jetonunu kullanır ve bu numaranın jetonu yok. Çalışma alanının numara sağlığı sayfasına bir jeton yapıştırmasını sağlayın veya numarayı yeniden bağlayın, sonra kontrolü yeniden çalıştırın."
+        },
+        "providerToken": {
+          "label": "Sağlayıcı jetonu gerekli",
+          "help": "Hedef sağlayıcının kayıtlı bir iş ortağı jetonu yok. Önce sağlayıcı sayfasından ekleyin."
+        },
+        "idsMissing": {
+          "label": "WABA veya telefon numarası kimliği eksik",
+          "help": "Bağlantının kayıtlarında WABA kimliği veya telefon numarası kimliği yok. Yeniden bağlayın."
+        },
+        "reconnect": {
+          "label": "Numaranın bağlantısı kesilmiş",
+          "help": "Yalnızca yeniden yönlendirilir, canlandırılmaz. Gönderebilmesi için çalışma alanının yeniden bağlaması gerekir."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Deneme çalıştırmasıyla değerlendirilen numaralar",
+        "captionResult": "Geçişin numara bazında sonucu",
+        "cols": {
+          "move": "Taşı",
+          "number": "Numara",
+          "from": "Şu an",
+          "state": "Durum",
+          "details": "Ayrıntılar"
+        },
+        "moveNumber": "{name} taşı",
+        "unknownProvider": "Bilinmiyor",
+        "state": {
+          "ready": "Hazır",
+          "blocked": "Engellendi",
+          "switched": "Değiştirildi",
+          "repointed": "Yeniden yönlendirildi",
+          "failed": "Başarısız"
+        },
+        "willResubscribe": "Webhook önce yeni sağlayıcı üzerinden yeniden abone edilecek.",
+        "willRepoint": "Yalnızca yeniden yönlendirilecek.",
+        "inboundNotWired": "Sağlayıcı numara bazında geri çağırmayı kabul etmedi. Geri çağırmayı sağlayıcıda veya Meta uygulamasında platform webhook'una ayarlayın.",
+        "inboundWired": "Gelen geri çağırma ayarlandı."
+      },
+      "apply": {
+        "title": "Geçişi uygula",
+        "summary": "{count, plural, other {# numara}} {provider} sağlayıcısına taşınacak.",
+        "understood": "Bunun çalışma alanındaki canlı numaraları yeniden yönlendirdiğini ve webhook'larına yeniden abone olduğunu anlıyorum.",
+        "action": "Geçişi uygula",
+        "tickOne": "En az bir numara işaretleyin."
+      },
+      "confirm": {
+        "title": "Numaralar taşınsın mı?",
+        "body": "{workspace} çalışma alanına ait {count, plural, other {# numara}} {provider} sağlayıcısına taşınacak. Her numaraya önce yeniden abone olunur ve yalnızca bu çalıştığında yeniden yönlendirilir.",
+        "rollback": "Geri almak için bunları yeniden değiştirin. Mesaj geçmişi, mesaj kimlikleri ve makbuzlar etkilenmez.",
+        "action": "Numaraları taşı",
+        "cancel": "İptal"
+      },
+      "errorHints": {
+        "nothingToDo": "Farklı bir hedef veya farklı bir kaynak sağlayıcı seçin.",
+        "tooMany": "Kümeyi daraltmak için bir kaynak sağlayıcı seçin.",
+        "disabled": "Hedef sağlayıcıyı kendi sayfasında etkinleştirin, sonra yeniden deneyin."
+      },
+      "result": {
+        "title": "Sonuç",
+        "allMoved": "Tüm {count, plural, other {# numara}} artık {provider} üzerinde.",
+        "noneMoved": "Hiçbir numara taşınmadı. Aşağıdaki ayrıntılara bakın.",
+        "partial": "{total} numaradan {moved} tanesi taşındı. Aşağıdaki ayrıntılara bakın.",
+        "switched": "{count} değiştirildi",
+        "repointed": "{count} yeniden yönlendirildi",
+        "failed": "{count} başarısız",
+        "blocked": "{count} engellendi",
+        "overrideSet": "{provider} artık bu çalışma alanının geçersiz kılmasıdır.",
+        "repointedNote": "Bağlantısı kesilmiş numaralar yalnızca yeniden yönlendirildi. Gönderebilmeleri için çalışma alanının onları yeniden bağlaması gerekir.",
+        "inboundNote": "{count, plural, other {# numara taşındı ancak numara bazındaki geri çağırmaları kabul edilmedi}}. Geri çağırmayı sağlayıcıda veya Meta uygulamasında platform webhook'una ayarlayın.",
+        "rollback": {
+          "title": "Geri al",
+          "description": "Geri almak, geri değiştirmektir. Numaralar sahip oldukları tüm kimlik bilgilerini korur; numara jetonu yolu için yeni bir şey gerekmez; platform jetonu yolu için jetonunun kayıtlı olması gerekir.",
+          "action": "{provider} sağlayıcısına geri geçişi hazırla",
+          "unknown": "Bu numaraların önceki sağlayıcısı bilinmiyor, bu yüzden buradan geri alma hazırlanamaz."
+        },
+        "another": "Başka bir çalışma alanını değiştir",
+        "toAssignments": "Atamalara dön"
+      }
+    },
+    "workspaceNote": {
+      "title": "WhatsApp sağlayıcınız",
+      "newNumbers": "Yeni numaralar {provider} üzerinden bağlanır.",
+      "ownToken": "Her numara kendi erişim jetonunu kullanır.",
+      "platformToken": "Kimlik bilgisini platform tutar; yalnızca kimliklerle bağlanırsınız.",
+      "mediaYes": "Dosya yükleme destekleniyor.",
+      "mediaNo": "Dosya yükleme desteklenmiyor: dosyalar herkese açık bağlantıyla gönderilir.",
+      "none": "Yeni bir numara bağlamak için şu anda kullanılabilir sağlayıcı yok. Platform yöneticinizle iletişime geçin.",
+      "numberOn": "{name} {provider} üzerinde.",
+      "numberNoMedia": "Dosya yükleme desteklenmiyor."
+    }
+  }
+}

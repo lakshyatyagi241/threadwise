@@ -307,6 +307,16 @@ const SHAPERS: Record<string, Shaper> = {
     ),
   }),
 
+  api_library: (d) => ({
+    apiId: s(d.apiId),
+    apiName: s(d.apiName),
+    inputs: list(d.inputs)
+      .filter(isRecord)
+      .map((i) => ({ name: s(i.name).trim(), value: s(i.value) }))
+      .filter((i) => i.name !== ''),
+    variable: variableFrom(d, 'save', 'api_response'),
+  }),
+
   google_sheets: (d) => ({
     mode: s(d.mode, 'write'),
     sheetId: s(d.sheetId),

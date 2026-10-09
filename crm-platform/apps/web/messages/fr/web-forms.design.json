@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Thème",
+        "custom": "Personnalisé : vous avez modifié une couleur, un angle ou une police du thème de départ.",
+        "classic": "Classique",
+        "ocean": "Océan",
+        "forest": "Forêt",
+        "sunset": "Coucher de soleil",
+        "berry": "Baie",
+        "slate": "Ardoise",
+        "noir": "Noir",
+        "paper": "Papier"
+      },
+      "colours": {
+        "title": "Couleurs",
+        "hint": "Utilisez des couleurs hexadécimales à six chiffres, comme #2563eb. Une valeur incomplète n’est pas appliquée.",
+        "swatch": "{name} (sélecteur de couleur)",
+        "primary": "Principale (boutons et accents)",
+        "background": "Arrière-plan de la page",
+        "surface": "Arrière-plan du formulaire",
+        "text": "Texte",
+        "mutedText": "Texte secondaire",
+        "border": "Bordures",
+        "error": "Erreur"
+      },
+      "contrast": {
+        "title": "Certaines couleurs sont difficiles à lire. Visez un contraste d’au moins 4,5:1.",
+        "item": "{pair} : {ratio}:1",
+        "ok": "Toutes les paires de couleurs vérifiées sont faciles à lire.",
+        "text": "Texte sur l’arrière-plan du formulaire",
+        "muted": "Texte secondaire sur l’arrière-plan du formulaire",
+        "button": "Libellé du bouton sur le bouton"
+      },
+      "shape": {
+        "title": "Forme et espacement",
+        "radius": "Angles",
+        "none": "Aucun",
+        "sm": "Petit",
+        "md": "Moyen",
+        "lg": "Grand",
+        "pill": "Arrondis",
+        "density": "Espacement",
+        "compact": "Compact",
+        "comfortable": "Confortable",
+        "spacious": "Aéré",
+        "shadow": "Ombre",
+        "shadowNone": "Aucune"
+      },
+      "type": {
+        "title": "Typographie",
+        "font": "Police",
+        "fontHint": "Les polices web ne se chargent que si vous en choisissez une.",
+        "sample": "Voix ambiguë d’un cœur qui au zéphyr préfère les jattes de kiwi",
+        "scale": "Taille du texte"
+      },
+      "fonts": {
+        "system": "Par défaut du système",
+        "serif": "Avec empattements",
+        "mono": "Chasse fixe"
+      },
+      "layout": {
+        "title": "Mise en page et boutons",
+        "preset": "Mise en page",
+        "classic": "Carte classique",
+        "fullWidth": "Pleine largeur",
+        "split": "Partagée avec image de couverture",
+        "minimal": "Minimale",
+        "labelPosition": "Position de l’intitulé",
+        "labelTop": "Au-dessus du champ",
+        "labelLeft": "À côté du champ",
+        "buttonStyle": "Style du bouton",
+        "filled": "Plein",
+        "outline": "Contour",
+        "buttonWidth": "Largeur du bouton",
+        "widthAuto": "Adapter à l’intitulé",
+        "widthFull": "Pleine largeur",
+        "maxWidth": "Largeur maximale",
+        "maxWidthHint": "Entre 320 et 960 pixels.",
+        "maxWidthInvalid": "Saisissez un nombre entier de 320 à 960.",
+        "maxWidthSlider": "Curseur de largeur maximale",
+        "mode": "Mode couleur",
+        "light": "Clair",
+        "dark": "Sombre",
+        "auto": "Suivre l’appareil du visiteur"
+      },
+      "images": {
+        "title": "Images",
+        "logo": "Logo",
+        "logoHint": "Une adresse https. Laissez vide pour aucun logo.",
+        "cover": "Image de couverture",
+        "coverHint": "Affichée à côté du formulaire dans la mise en page partagée.",
+        "background": "Image d’arrière-plan",
+        "backgroundHint": "Une adresse https. Laissez vide pour un arrière-plan uni.",
+        "invalid": "Saisissez une adresse https, ou laissez vide."
+      },
+      "reset": "Rétablir les valeurs par défaut",
+      "readOnly": "Vous pouvez consulter le design sans le modifier.",
+      "preview": {
+        "title": "Aperçu",
+        "device": "Taille d’aperçu",
+        "desktop": "Ordinateur",
+        "mobile": "Mobile",
+        "scheme": "Mode couleur de l’aperçu",
+        "light": "Clair",
+        "dark": "Sombre",
+        "schemeHint": "Le mode couleur est réglé sur Clair : il n’existe donc pas de version sombre à afficher.",
+        "frameTitle": "Aperçu en direct du formulaire"
+      }
+    }
+  }
+}

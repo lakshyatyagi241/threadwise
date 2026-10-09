@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Posteingang"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "screen": {
+      "listRegion": "Unterhaltungen",
+      "panelRegion": "Kontakt und Notizen",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "conflict": "Diese Unterhaltung wurde zuerst von jemand anderem geändert. Sie wurde neu geladen; versuchen Sie es erneut.",
+      "assigned": "Unterhaltung zugewiesen.",
+      "assignedToYou": "Ihnen zugewiesen.",
+      "unassigned": "Zuweisung der Unterhaltung aufgehoben.",
+      "resolved": "Unterhaltung als gelöst markiert.",
+      "reopened": "Unterhaltung wieder geöffnet.",
+      "deleteNoteTitle": "Diese Notiz löschen?",
+      "deleteNoteMessage": "Die Notiz wird für alle in Ihrem Team entfernt. Dies kann nicht rückgängig gemacht werden.",
+      "deleteNoteConfirm": "Notiz löschen",
+      "pickTitle": "Unterhaltung auswählen",
+      "pickMessage": "Wählen Sie eine Unterhaltung aus der Liste, um sie zu lesen und zu antworten. Neue Nachrichten erscheinen hier automatisch.",
+      "shortcuts": "Tastenkürzel: j und k bewegen sich durch die Liste, e löst, / sucht.",
+      "teamChanged": "Team aktualisiert."
+    },
+    "list": {
+      "title": "Posteingang",
+      "refresh": "Liste aktualisieren",
+      "openSimulator": "Kundensimulator öffnen",
+      "search": "Unterhaltungen durchsuchen",
+      "searchPlaceholder": "Name oder Nummer suchen",
+      "tabsLabel": "Unterhaltungsansichten",
+      "tabs": {
+        "all": "Alle",
+        "mine": "Meine",
+        "unassigned": "Nicht zugewiesen",
+        "unread": "Ungelesen"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Offen",
+      "statusAll": "Alle Status",
+      "status": {
+        "open": "Offen",
+        "pending": "Ausstehend",
+        "snoozed": "Zurückgestellt",
+        "resolved": "Gelöst",
+        "closed": "Gelöst",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Niedrig",
+        "normal": "Normal",
+        "high": "Hoch",
+        "urgent": "Dringend"
+      },
+      "channelFilter": "Kanal",
+      "allChannels": "Alle Kanäle",
+      "archived": "Archiviert",
+      "backToInbox": "Zurück zum Posteingang",
+      "loading": "Unterhaltungen werden geladen",
+      "retry": "Erneut versuchen",
+      "listLabel": "Unterhaltungen",
+      "loadMore": "Mehr laden",
+      "moreFailed": "Weitere Unterhaltungen konnten nicht geladen werden.",
+      "unreadCount": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+      "you": "Sie:",
+      "noMessages": "Noch keine Nachrichten",
+      "windowClosed": "Zeitfenster geschlossen",
+      "windowLeftHours": "Noch {hours} Std. {minutes} Min.",
+      "windowLeftMinutes": "Noch {minutes} Min.",
+      "unassigned": "Nicht zugewiesen",
+      "needsContact": "Kein Kontaktdatensatz",
+      "gettingStarted": {
+        "title": "Verbinden Sie einen Kanal, um zu starten",
+        "message": "Ihr Posteingang füllt sich, wenn Kunden an einen verbundenen Kanal schreiben. Verbinden Sie einen Kanal, dann landet jede Unterhaltung hier.",
+        "connect": "Kanal verbinden"
+      },
+      "emptyFiltered": {
+        "title": "Keine passenden Unterhaltungen",
+        "message": "Nichts passt zu diesen Filtern. Setzen Sie sie zurück, um wieder alle Unterhaltungen zu sehen.",
+        "clear": "Filter zurücksetzen"
+      },
+      "empty": {
+        "all": {
+          "title": "Noch keine Unterhaltungen",
+          "message": "Sobald ein Kunde an einen Ihrer Kanäle schreibt, erscheint die Unterhaltung hier."
+        },
+        "mine": {
+          "title": "Ihnen ist nichts zugewiesen",
+          "message": "Ihnen zugewiesene Unterhaltungen erscheinen hier. Öffnen Sie eine unter Alle und weisen Sie sie sich selbst zu."
+        },
+        "unassigned": {
+          "title": "Jede Unterhaltung hat einen Verantwortlichen",
+          "message": "Neue Unterhaltungen, die noch niemand übernommen hat, werden hier aufgelistet."
+        },
+        "unread": {
+          "title": "Sie sind auf dem neuesten Stand",
+          "message": "Unterhaltungen mit neuen Nachrichten von Kunden werden hier aufgelistet."
+        }
+      }
+    },
+    "status": {
+      "received": "Empfangen",
+      "queued": "Wird gesendet",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "read": "Gelesen",
+      "failed": "Nicht gesendet"
+    },
+    "errors": {
+      "conflict": "Dies wurde zuerst von jemand anderem geändert. Es wurde neu geladen; versuchen Sie es erneut.",
+      "windowClosed": "Das 24-Stunden-Antwortfenster ist geschlossen, daher kann keine freie Nachricht gesendet werden.",
+      "planLimit": "Das monatliche Nachrichtenlimit Ihres Tarifs wurde erreicht.",
+      "channelDisconnected": "Dieser Kanal ist getrennt. Verbinden Sie ihn erneut, um Nachrichten zu senden.",
+      "sendHalted": "Das Senden ist derzeit auf der gesamten Plattform pausiert. Versuchen Sie es später erneut.",
+      "notFound": "Diese Unterhaltung existiert nicht mehr oder Sie können sie nicht sehen.",
+      "notRetryable": "Nur eine fehlgeschlagene Nachricht kann erneut gesendet werden.",
+      "mediaNotFound": "Der Anhang ist abgelaufen oder wurde entfernt. Hängen Sie ihn erneut an.",
+      "statusInvalid": "Diese Änderung ist im aktuellen Status der Unterhaltung nicht zulässig.",
+      "assigneeInvalid": "Dieser Person kann die Unterhaltung nicht zugewiesen werden.",
+      "forbidden": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "simulatorDisabled": "Der Kanal-Simulator ist auf diesem Server deaktiviert.",
+      "channelInUse": "Dieser Kanal hat noch Unterhaltungen. Trennen Sie ihn, anstatt ihn zu entfernen.",
+      "validation": "Der Text enthält ungültige Angaben.",
+      "tooLarge": "Diese Datei ist zu groß.",
+      "unsupported": "Dieser Kanal kann diese Art von Nachricht oder Datei nicht senden.",
+      "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "genericWithId": "Etwas ist schiefgelaufen. Versuchen Sie es erneut. Referenz: {id}",
+      "templateNotSendable": "Diese Vorlage kann in dieser Unterhaltung nicht gesendet werden. Wählen Sie eine andere.",
+      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Foto",
+        "text": "Nachricht",
+        "attachment": "Anhang"
+      },
+      "template": "Vorlagennachricht: {name}",
+      "unavailable": "Nachricht nicht verfügbar",
+      "sentIn": "In {lang} gesendet. Originaltext anzeigen",
+      "translatedFrom": "Aus {lang} übersetzt. Original anzeigen",
+      "bot": "Bot",
+      "broadcast": "Broadcast",
+      "reacted": "Reaktion {emoji}",
+      "edited": "Bearbeitet",
+      "failed": "Diese Nachricht wurde nicht zugestellt.",
+      "retry": "Erneut versuchen",
+      "sending": "Wird gesendet",
+      "dismiss": "Verwerfen",
+      "noteLabel": "Interne Notiz",
+      "unknownAuthor": "Ein Teammitglied",
+      "deleteNote": "Diese Notiz löschen",
+      "templateHeader": {
+        "image": "Bild",
+        "video": "Video",
+        "document": "Dokument",
+        "location": "Standort"
+      },
+      "templateCopyCode": "Code kopieren",
+      "templateButtonUnnamed": "Schaltfläche",
+      "templateButtonPrefix": "Schaltfläche: "
+    },
+    "media": {
+      "openImage": "Bild {name} öffnen",
+      "video": "Video",
+      "voice": "Sprachnachricht",
+      "audio": "Audio",
+      "document": "Dokument",
+      "download": "{name} herunterladen",
+      "location": "Geteilter Standort",
+      "openMap": "In OpenStreetMap öffnen"
+    },
+    "thread": {
+      "title": "Unterhaltung",
+      "back": "Zurück zur Unterhaltungsliste",
+      "loading": "Unterhaltung wird geladen",
+      "retry": "Erneut versuchen",
+      "notFound": {
+        "title": "Unterhaltung nicht gefunden",
+        "message": "Sie wurde entfernt oder Sie können sie nicht sehen. Wählen Sie eine andere aus der Liste."
+      },
+      "status": {
+        "resolved": "Gelöst",
+        "closed": "Geschlossen",
+        "spam": "Spam",
+        "snoozed": "Zurückgestellt"
+      },
+      "assignToMe": "Mir zuweisen",
+      "resolve": "Lösen",
+      "reopen": "Wieder öffnen",
+      "resolveShortcut": "Lösen oder wieder öffnen (e)",
+      "showPanel": "Kontakt und Notizen anzeigen",
+      "hidePanel": "Kontakt und Notizen ausblenden",
+      "window": {
+        "closed": "Zeitfenster geschlossen",
+        "closesInHours": "Schließt in {hours} Std. {minutes} Min.",
+        "closesInMinutes": "Schließt in {minutes} Min."
+      },
+      "windowBanner": {
+        "title": "Das 24-Stunden-Antwortfenster ist geschlossen.",
+        "message": "Dieser Kanal erlaubt mehr als 24 Stunden nach der letzten Nachricht des Kunden nur eine genehmigte Vorlagennachricht. Sie können weiterhin interne Notizen hinzufügen. Eine neue Nachricht des Kunden öffnet das Fenster wieder.",
+        "sendTemplate": "Vorlage senden"
+      },
+      "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
+      "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
+      "messagesLabel": "Nachrichten",
+      "loadOlder": "Frühere Nachrichten laden",
+      "empty": "In dieser Unterhaltung gibt es noch keine Nachrichten.",
+      "newMessageAnnounce": "Neue Nachricht: {text}",
+      "attachment": "ein Anhang",
+      "jumpLatest": "Zur neuesten Nachricht springen",
+      "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+    },
+    "composer": {
+      "modeLabel": "Nachrichtentyp",
+      "mode": {
+        "reply": "Antworten",
+        "note": "Interne Notiz"
+      },
+      "attach": "Datei anhängen",
+      "removeAttachment": "Anhang entfernen",
+      "replyLabel": "Dem Kunden antworten",
+      "noteLabel": "Interne Notiz",
+      "replyPlaceholder": "Nachricht eingeben",
+      "notePlaceholder": "Notiz schreiben, die nur Ihr Team sehen kann",
+      "replyDisabledPlaceholder": "Antworten sind für diese Unterhaltung deaktiviert",
+      "send": "Senden",
+      "addNote": "Notiz hinzufügen",
+      "hint": "Enter sendet. Umschalt+Enter fügt eine neue Zeile hinzu.",
+      "template": "Vorlage senden",
+      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App."
+    },
+    "panel": {
+      "tabsLabel": "Notizen und Verlauf",
+      "contact": "Kontakt",
+      "openContact": "Kontakt öffnen",
+      "needsContact": "Diese Nummer hat keinen Kontaktdatensatz, weil Ihr Kontaktlimit erreicht wurde.",
+      "noContact": "Diese Unterhaltung ist mit keinem Kontakt verknüpft.",
+      "email": "E-Mail",
+      "stage": "Phase",
+      "status": "Status",
+      "source": "Quelle",
+      "since": "Kontakt seit",
+      "optedOut": "Vom Marketing abgemeldet",
+      "resolve": "Lösen",
+      "reopen": "Wieder öffnen",
+      "assignee": {
+        "title": "Zugewiesen an",
+        "unknown": "Unbekanntes Teammitglied",
+        "none": "Niemand bearbeitet diese Unterhaltung",
+        "team": "Team: {name}",
+        "pick": "Wählen Sie aus, wer diese Unterhaltung bearbeitet",
+        "unassigned": "Nicht zugewiesen",
+        "you": "Sie",
+        "loadFailed": "Die Liste der Teammitglieder konnte nicht geladen werden.",
+        "assignToMe": "Mir zuweisen",
+        "unassign": "Zuweisung aufheben",
+        "open": "{count} offen",
+        "pickTeam": "Wählen Sie ein Team für diese Unterhaltung",
+        "noTeam": "Kein Team"
+      },
+      "presence": {
+        "online": "Online",
+        "away": "Abwesend",
+        "busy": "Beschäftigt",
+        "offline": "Offline"
+      },
+      "notes": {
+        "tab": "Notizen",
+        "label": "Neue interne Notiz",
+        "placeholder": "Notiz schreiben, die nur Ihr Team sehen kann",
+        "hint": "Strg+Enter fügt die Notiz hinzu.",
+        "add": "Notiz hinzufügen",
+        "addFailed": "Die Notiz konnte nicht gespeichert werden.",
+        "loading": "Notizen werden geladen",
+        "empty": "Noch keine Notizen.",
+        "unknownAuthor": "Ein Teammitglied",
+        "delete": "Diese Notiz löschen"
+      },
+      "timeline": {
+        "tab": "Verlauf",
+        "loading": "Verlauf wird geladen",
+        "failed": "Der Verlauf konnte nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "empty": "In dieser Unterhaltung ist bisher nichts passiert.",
+        "events": {
+          "created": "Unterhaltung gestartet",
+          "assigned": "Zugewiesen von {actor}",
+          "reassigned": "Neu zugewiesen von {actor}",
+          "unassigned": "Zuweisung aufgehoben von {actor}",
+          "ai_handoff": "An eine Person übergeben von {actor}",
+          "resolved": "Gelöst von {actor}",
+          "closed": "Geschlossen von {actor}",
+          "reopened": "Wieder geöffnet von {actor}",
+          "status_changed": "Status geändert von {actor}",
+          "note_added": "Notiz hinzugefügt von {actor}",
+          "snoozed": "Zurückgestellt von {actor}",
+          "auto_unsnoozed": "Zurückstellung beendet",
+          "priority_changed": "Priorität geändert von {actor}",
+          "tag_added": "Label hinzugefügt von {actor}",
+          "tag_removed": "Label entfernt von {actor}",
+          "first_response": "Erste Antwort gesendet",
+          "sla_breach": "Antwortfrist verpasst",
+          "unknown": "{what} von {actor}"
+        },
+        "actors": {
+          "user": "Ein Teammitglied",
+          "system": "Das System",
+          "bot": "Ein Bot",
+          "flow": "Eine Automatisierung",
+          "ai": "Der KI-Assistent"
+        }
+      },
+      "owner": "Verantwortlicher",
+      "past": {
+        "title": "Frühere Unterhaltungen",
+        "noMessages": "Keine Nachrichten",
+        "status": {
+          "open": "Offen",
+          "pending": "Ausstehend",
+          "snoozed": "Zurückgestellt",
+          "resolved": "Gelöst",
+          "closed": "Geschlossen",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Kundensimulator",
+      "close": "Simulator schließen",
+      "devOnly": "Nur für die Entwicklung. Dies gibt sich als Kunde auf einem simulierten Kanal aus; nichts erreicht ein echtes Telefon.",
+      "noChannel": "Es gibt noch keinen Simulator-Kanal.",
+      "createChannel": "Simulator-Kanal erstellen",
+      "disabled": "Der Simulator ist auf diesem Server deaktiviert.",
+      "channel": "Simulator-Kanal",
+      "customer": "Der Kunde",
+      "name": "Name",
+      "number": "Nummer",
+      "numberHint": "Nur Ziffern, 5 bis 15.",
+      "kind": "Nachrichtentyp",
+      "kinds": {
+        "text": "Text",
+        "image": "Bild",
+        "document": "Dokument",
+        "audio": "Audio",
+        "video": "Video",
+        "location": "Standort"
+      },
+      "file": "Datei",
+      "fileHint": "Optional. Name und Typ werden übernommen; andernfalls wird eine Beispieldatei gesendet.",
+      "message": "Nachricht",
+      "caption": "Beschriftung",
+      "placeName": "Ortsname",
+      "send": "Als Kunde senden",
+      "sent": "{count, plural, one {Einmal gesendet.} other {# Mal zugestellt, einmal gespeichert.}}",
+      "duplicate": "Doppelte Zustellung",
+      "duplicateHint": "Stellt dieselbe Nachricht dreimal zu, um zu zeigen, dass sie einmal gespeichert wird.",
+      "nextSend": "Ihre nächste Antwort",
+      "nextSendHint": "Gilt für die nächste Nachricht, die Sie aus dem Editor senden, und wechselt danach zurück in den Normalbetrieb.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Schlägt fehl",
+        "flaky": "Schlägt zweimal fehl, dann funktioniert es",
+        "slow": "Langsam (10 s)",
+        "ooo": "Zustellbestätigungen in falscher Reihenfolge"
+      },
+      "window": "24-Stunden-Fenster",
+      "windows": {
+        "auto": "Automatisch",
+        "open": "Erzwungen geöffnet",
+        "closed": "Erzwungen geschlossen"
+      },
+      "windowHint": "Geschlossen zeigt, wie sich der Editor verhält, wenn nur eine Vorlage gesendet werden darf."
+    },
+    "channels": {
+      "title": "Kanäle",
+      "intro": "Die Konten, über die Kunden Sie erreichen. Jedes speist den Posteingang.",
+      "backToInbox": "Zurück zum Posteingang",
+      "simulatorNote": "Entwicklung: Fügen Sie einen simulierten Kanal hinzu, um den Posteingang ohne echtes Konto auszuprobieren.",
+      "addSimulator": "Simulator-Kanal hinzufügen",
+      "simulatorAdded": "Simulator-Kanal hinzugefügt.",
+      "simulatorDisabled": "Der Simulator ist auf diesem Server deaktiviert.",
+      "loading": "Kanäle werden geladen",
+      "loadFailed": "Kanäle konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": {
+        "title": "Keine Kanäle verbunden",
+        "message": "Verbinden Sie einen Kanal, dann erscheinen Kundennachrichten im Posteingang."
+      },
+      "listLabel": "Verbundene Kanäle",
+      "status": {
+        "connected": "Verbunden",
+        "disconnected": "Getrennt",
+        "error": "Fehler"
+      },
+      "capWindow": "{hours}-Stunden-Antwortfenster",
+      "capTemplates": "Vorlagen",
+      "capMedia": "Medien",
+      "capReceipts": "Zustellbestätigungen",
+      "lastEvent": "Letzte Aktivität {when}",
+      "noEvents": "Noch keine Aktivität",
+      "remove": "Entfernen",
+      "removeTitle": "Diesen Kanal entfernen?",
+      "removeMessage": "{name} wird entfernt. Ein Kanal mit noch vorhandenen Unterhaltungen kann nicht entfernt werden; trennen Sie ihn stattdessen.",
+      "removeConfirm": "Kanal entfernen",
+      "cancel": "Abbrechen"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Vorlage senden",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "back": "Zurück zu den Vorlagen",
+      "search": "Nach Name oder Text suchen",
+      "searchLabel": "Vorlagen durchsuchen",
+      "loading": "Vorlagen werden geladen",
+      "loadError": "Die Vorlagen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Für diese WhatsApp-Nummer gibt es noch keine genehmigten Vorlagen. Erstellen Sie eine unter Vorlagen und warten Sie, bis Meta sie genehmigt.",
+      "noResults": "Keine Vorlage passt zu Ihrer Suche.",
+      "windowHint": "Eine Vorlage funktioniert auch dann, wenn das 24-Stunden-Antwortfenster geschlossen ist.",
+      "variables": "Variablen ausfüllen",
+      "preview": "Was der Kunde lesen wird",
+      "send": "Vorlage senden",
+      "sending": "Wird gesendet",
+      "sent": "Vorlage gesendet",
+      "problem": {
+        "required": "{label} ist erforderlich.",
+        "format": "{label} darf keinen Zeilenumbruch, keinen Tabulator und keine vier Leerzeichen hintereinander enthalten."
+      },
+      "reason": {
+        "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
+        "media_header": "Hat einen Bild-, Video- oder Dokumentkopf, der im Posteingang noch nicht gesendet werden kann.",
+        "header_variable": "Hat eine Variable im Kopf, die im Posteingang noch nicht ausgefüllt werden kann.",
+        "dynamic_button": "Hat einen Schaltflächenlink mit einer Variable, die im Posteingang noch nicht ausgefüllt werden kann.",
+        "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet, nicht aus dem Posteingang.",
+        "named_variables": "Verwendet benannte Variablen, die der Posteingang noch nicht unterstützt."
+      },
+      "hasMore": "Es werden die ersten {count} Vorlagen angezeigt. Suchen Sie nach Name oder Text, um die übrigen zu finden."
+    }
+  }
+}

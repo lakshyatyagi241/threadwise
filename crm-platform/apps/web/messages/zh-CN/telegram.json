@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "connect": {
+      "title": "连接 Telegram 机器人",
+      "close": "关闭",
+      "cancel": "取消",
+      "submit": "连接机器人",
+      "intro": "输入您的 HTTP API 机器人令牌，以配置 Webhook 并开始处理 Telegram 聊天。",
+      "tokenLabel": "机器人令牌 *",
+      "tokenPlaceholder": "例如：123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "这看起来不是 BotFather 令牌。",
+      "connected": "Telegram 机器人已连接。",
+      "savedNeedsAttention": "机器人已保存，但 Telegram 未接受 Webhook。",
+      "failed": "无法连接机器人。请重试。",
+      "howTitle": "如何获取机器人令牌？",
+      "how1a": "打开 Telegram，搜索经过验证的",
+      "how1b": "账号。",
+      "how2a": "发送",
+      "how2b": "并选择显示名称和用户名。",
+      "how3": "复制生成的 HTTP API 令牌并粘贴到上方。"
+    },
+    "bot": {
+      "failed": "操作失败，请重试。",
+      "webhookFixed": "入站消息已恢复。",
+      "live": "运行中",
+      "paused": "已暂停",
+      "needsAttention": "需要处理",
+      "lastMessage": "最后消息：{when}",
+      "payments": "付款",
+      "on": "开启",
+      "paymentsSaved": "付款设置已保存。",
+      "paymentsHint": "从 @BotFather（/mybots → Payments）粘贴付款服务商令牌，以启用“付款流程”节点，即聊天内原生发票。",
+      "paymentsSavedPlaceholder": "•••••••• （已保存，留空即保留）",
+      "paymentsToken": "付款服务商令牌",
+      "removeToken": "移除令牌",
+      "save": "保存",
+      "webhook": "Webhook",
+      "fixInbound": "修复入站（重新注册 Webhook）",
+      "pause": "暂停",
+      "resume": "恢复",
+      "pausedDone": "机器人已暂停。",
+      "resumedDone": "机器人已恢复。",
+      "disconnect": "断开连接",
+      "disconnectConfirm": "断开此 Telegram 机器人？其收件箱会话将保留，但将停止收发消息。",
+      "cancel": "取消",
+      "disconnected": "机器人已断开连接。"
+    },
+    "hub": {
+      "kicker": "渠道 · Telegram",
+      "title": "Telegram",
+      "titleAccent": "连接",
+      "intro": "部署 Telegram 机器人，实现消息流程自动化、处理客户支持，并向全球订阅者群发更新。",
+      "teamInbox": "团队收件箱",
+      "flows": "流程",
+      "broadcasts": "群发",
+      "telegramBroadcasts": "Telegram 群发",
+      "loadError": "无法加载您的 Telegram 机器人。",
+      "connectedCount": "已连接 {count} 个",
+      "notConnected": "未连接",
+      "botCardTitle": "Telegram 机器人连接",
+      "botCardBody": "粘贴 @BotFather 提供的机器人令牌，以实现消息自动化、处理支持并向订阅者群发消息。",
+      "connectAnother": "连接另一个机器人",
+      "connectBot": "连接机器人",
+      "accountCardTitle": "Telegram 账号连接",
+      "accountCardBody": "关联您的 Telegram 账号，即可在此处创建机器人：扫描二维码或使用手机号，与 WhatsApp 相同。",
+      "connectAccount": "连接账号",
+      "accountUnavailable": "暂不可用：需要 Telegram 账号服务，而此工作区尚未配置该服务。",
+      "connectedBots": "已连接的机器人",
+      "guideTitle": "Telegram 机器人设置指南",
+      "guideBody": "完成以下步骤即可关联您的 Telegram 渠道并启用自动化流程。",
+      "prerequisites": "前提条件",
+      "pre": {
+        "account": "一个可用的 Telegram 账号",
+        "name": "为机器人起一个唯一的名称",
+        "app": "可访问 Telegram 网页版或应用"
+      },
+      "stepsTitle": "连接步骤",
+      "step": "第 {n} 步",
+      "steps": {
+        "locate": {
+          "title": "找到 BotFather",
+          "body": "打开 Telegram，搜索官方 @BotFather 账号（认准认证标识）。"
+        },
+        "create": {
+          "title": "创建新机器人",
+          "body": "向 @BotFather 发送 /newbot，并按提示为机器人命名并选择用户名。"
+        },
+        "token": {
+          "title": "获取 API 令牌",
+          "body": "BotFather 会生成 HTTP API 令牌（例如 123456789:ABC…）。请妥善保存。"
+        },
+        "connect": {
+          "title": "在此连接机器人",
+          "body": "点击“连接机器人”，将令牌粘贴到输入框中并提交即可完成关联。"
+        }
+      },
+      "unlockedTitle": "可解锁哪些功能？",
+      "unlocked": {
+        "support": {
+          "title": "自动化支持",
+          "body": "让 AI 机器人全天候处理常见问题并分配会话。"
+        },
+        "broadcast": {
+          "title": "群发营销活动",
+          "body": "一次性向所有订阅者发送促销、提醒和通讯。"
+        },
+        "media": {
+          "title": "丰富的交互式媒体",
+          "body": "通过按钮、菜单、发票和图片与用户互动。"
+        }
+      },
+      "tipTitle": "配置提示",
+      "tipBody": "切勿公开分享机器人 API 令牌。若令牌泄露，请立即向 @BotFather 发送 /revoke 以生成新令牌。在 localhost 上，隧道地址每次重启都会变化，请点击“修复入站”重新注册。"
+    },
+    "broadcasts": {
+      "kicker": "Telegram · 群发",
+      "title": "Telegram",
+      "titleAccent": "群发",
+      "intro": "向所有与您的机器人聊过天的用户发送消息，并按群发任务跟踪已发送、失败和被拦截的数量。",
+      "bots": "机器人",
+      "newBroadcast": "新建群发",
+      "connectFirst": "请先连接 Telegram 机器人。",
+      "connectBot": "连接机器人",
+      "tile": {
+        "sent": "已发送",
+        "audience": "受众",
+        "failed": "失败",
+        "blocked": "已拦截",
+        "sending": "发送中",
+        "broadcasts": "{count} 个群发",
+        "audienceHint": "收件人总数",
+        "failedHint": "投递错误",
+        "blockedHint": "用户已拦截机器人",
+        "sendingHint": "发送中"
+      },
+      "listKicker": "群发列表",
+      "listTitle": "最近群发",
+      "col": {
+        "broadcast": "群发",
+        "bot": "机器人",
+        "recipients": "收件人",
+        "progress": "进度",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "counts": "已发送 {sent} · 失败 {failed} · 已拦截 {blocked}",
+      "status": {
+        "draft": "草稿",
+        "sending": "发送中",
+        "done": "完成",
+        "failed": "失败"
+      },
+      "start": "开始",
+      "pause": "暂停",
+      "retry": "重试",
+      "delete": "删除",
+      "deleteConfirm": "删除此群发？",
+      "cancel": "取消",
+      "empty": "暂无群发。",
+      "createFirst": "创建第一个群发",
+      "failed": "操作失败，请重试。",
+      "started": "已开始发送。",
+      "paused": "已暂停。未发送的聊天保持待处理。",
+      "retried": "{count} 个失败的聊天已可重新发送。请点击“开始”。",
+      "deleted": "群发已删除。"
+    },
+    "compose": {
+      "kicker": "Telegram · 新建群发",
+      "title": "撰写",
+      "titleAccent": "群发",
+      "back": "返回",
+      "loadError": "无法加载机器人和模板。",
+      "noPermission": "您可以查看此页面，但没有创建群发的权限。",
+      "setup": "群发设置",
+      "name": "群发名称",
+      "namePlaceholder": "例如：周末促销",
+      "bot": "机器人",
+      "template": "模板（可选）",
+      "templateHint": "预填消息内容，并发送模板中的按钮。",
+      "templateNone": "— 无（自行撰写）—",
+      "buttonCount": "{count} 个按钮",
+      "message": "消息",
+      "messageHint": "使用 '{name}' 进行个性化设置。",
+      "messagePlaceholder": "你好 '{name}'！…",
+      "attachment": "附件（可选）",
+      "attachmentHint": "图片、视频、音频文件或文档的公开地址。上传文件需要存储服务。",
+      "attachmentInvalid": "请输入以 http:// 或 https:// 开头的完整地址。",
+      "recipients": "收件人",
+      "selectAll": "全选",
+      "clearAll": "全部清除",
+      "noChats": "暂无用户与此机器人聊过天。",
+      "type": {
+        "private": "私聊",
+        "group": "群组",
+        "channel": "频道"
+      },
+      "selected": "已选择 {count} 个",
+      "submit": "创建群发",
+      "preview": "实时预览",
+      "previewEmpty": "消息预览…",
+      "previewNote": "这是每位收件人聊天窗口中群发消息的显示效果。",
+      "created": "已创建包含 {count} 位收件人的群发。准备就绪后请点击“开始发送”。",
+      "failed": "无法创建群发。请重试。"
+    }
+  }
+}

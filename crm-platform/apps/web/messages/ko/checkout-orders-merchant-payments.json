@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "주문",
+      "coupons": "쿠폰"
+    },
+    "settingsTile": {
+      "label": "결제 게이트웨이",
+      "description": "스토어 결제와 판매 인보이스에서 온라인 결제를 받는 데 사용하는 게이트웨이입니다.",
+      "keywords": "결제 게이트웨이, razorpay, stripe, 결제, 결제 링크, 온라인 결제, 카드, upi"
+    },
+    "common": {
+      "noAccessTitle": "이 페이지에 접근할 수 없습니다",
+      "noAccessMessage": "워크스페이스 관리자에게 역할에 해당 권한을 부여해 달라고 요청하세요.",
+      "loading": "불러오는 중",
+      "loadMore": "더 보기",
+      "cancel": "취소",
+      "close": "닫기",
+      "save": "저장",
+      "saving": "저장 중",
+      "edit": "수정",
+      "delete": "삭제",
+      "remove": "삭제",
+      "open": "열기",
+      "view": "보기",
+      "search": "검색",
+      "clear": "지우기",
+      "all": "전체",
+      "no": "아니요",
+      "none": "없음",
+      "actions": "작업",
+      "retry": "다시 시도",
+      "dismiss": "닫기",
+      "copy": "복사",
+      "copied": "복사됨",
+      "viewContact": "연락처 보기",
+      "allShops": "모든 쇼핑몰",
+      "shop": "쇼핑몰"
+    },
+    "status": {
+      "new": "신규",
+      "pending": "대기 중",
+      "confirmed": "확인됨",
+      "paid": "결제 완료",
+      "processing": "처리 중",
+      "completed": "완료됨",
+      "shipped": "배송됨",
+      "cancelled": "취소됨"
+    },
+    "paymentStatus": {
+      "paid": "결제 완료",
+      "awaiting": "결제 대기 중",
+      "cod": "착불",
+      "unpaid": "미결제"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "스토어프론트",
+      "twilio": "Twilio",
+      "manual": "수동",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "요청 ID",
+      "retry": "다시 시도",
+      "network": {
+        "title": "서버에 연결할 수 없습니다",
+        "message": "연결 상태를 확인하고 다시 시도하세요."
+      },
+      "forbidden": {
+        "title": "허용되지 않음",
+        "message": "현재 역할로는 이 작업을 할 수 없습니다."
+      },
+      "signedOut": {
+        "title": "로그아웃되었습니다",
+        "message": "계속하려면 다시 로그인하세요."
+      },
+      "conflict": {
+        "title": "다른 사용자가 변경함",
+        "message": "열어 둔 사이에 이 레코드가 변경되었습니다. 다시 불러온 후 다시 시도하세요."
+      },
+      "validation": {
+        "title": "양식을 확인하세요",
+        "message": "유효하지 않은 값이 있습니다. 강조 표시된 필드를 확인하세요."
+      },
+      "unavailable": {
+        "title": "아직 사용할 수 없음",
+        "message": "스토어의 이 부분은 이 서버에서 아직 사용할 수 없습니다."
+      },
+      "rateLimited": {
+        "title": "요청이 너무 많습니다",
+        "message": "잠시 기다린 후 다시 시도하세요."
+      },
+      "notFound": {
+        "title": "찾을 수 없음",
+        "message": "삭제되었거나 존재하지 않습니다."
+      },
+      "planLocked": {
+        "title": "요금제에 포함되지 않음",
+        "message": "현재 요금제에는 스토어가 포함되어 있지 않습니다. 사용하려면 업그레이드하세요."
+      },
+      "couponCodeTaken": {
+        "title": "이미 사용 중인 코드",
+        "message": "다른 쿠폰에서 이미 이 코드를 사용하고 있습니다. 다른 코드를 선택하세요."
+      },
+      "groupCodeTaken": {
+        "title": "이미 사용 중인 코드",
+        "message": "다른 그룹에서 이미 이 주문 코드를 사용하고 있습니다."
+      },
+      "orderNoPhone": {
+        "title": "전화번호 없음",
+        "message": "이 주문에는 구매자 전화번호가 없어 아무것도 보낼 수 없습니다."
+      },
+      "gatewayNotConfigured": {
+        "title": "설정된 결제 게이트웨이 없음",
+        "message": "먼저 결제 게이트웨이를 설정하세요. 키가 없거나 게이트웨이가 꺼져 있습니다."
+      },
+      "gatewayUnavailable": {
+        "title": "게이트웨이를 사용할 수 없음",
+        "message": "이 게이트웨이로는 구매자가 열 수 있는 결제 링크를 만들 수 없습니다."
+      },
+      "paymentLinkFailed": {
+        "title": "게이트웨이가 링크를 거부함",
+        "message": "키와 금액이 게이트웨이 최소 금액 이상인지 확인하세요."
+      },
+      "unexpected": {
+        "title": "문제가 발생했습니다",
+        "message": "다시 시도하세요. 계속 발생하면 요청 ID를 지원팀에 전달하세요."
+      }
+    }
+  }
+}

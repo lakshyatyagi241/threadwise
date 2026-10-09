@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Store"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Ausblenden"
+      },
+      "errors": {
+        "requestId": "Anfrage-ID",
+        "retry": "Erneut versuchen",
+        "network": {
+          "title": "Server nicht erreichbar",
+          "message": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+        },
+        "forbidden": {
+          "title": "Kein Zugriff",
+          "message": "Ihre Rolle erlaubt dies nicht."
+        },
+        "signedOut": {
+          "title": "Sie sind abgemeldet",
+          "message": "Melden Sie sich erneut an, um fortzufahren."
+        },
+        "conflict": {
+          "title": "Anderweitig geändert",
+          "message": "Jemand anderes hat dies während Ihrer Bearbeitung geändert. Laden Sie neu, um die aktuelle Version zu sehen."
+        },
+        "validation": {
+          "title": "Formular prüfen",
+          "message": "Einige Felder benötigen Aufmerksamkeit."
+        },
+        "unavailable": {
+          "title": "Noch nicht verfügbar",
+          "message": "Der Store-Dienst ist auf diesem Server nicht verfügbar."
+        },
+        "rateLimited": {
+          "title": "Zu viele Anfragen",
+          "message": "Warten Sie einen Moment und versuchen Sie es erneut."
+        },
+        "notFound": {
+          "title": "Nicht gefunden",
+          "message": "Dieser Shop existiert in diesem Workspace nicht."
+        },
+        "noShop": {
+          "title": "Noch kein Shop",
+          "message": "Richten Sie zuerst Ihren Store ein."
+        },
+        "slugTaken": {
+          "title": "Adresse bereits vergeben",
+          "message": "Diese Store-Adresse wird bereits verwendet."
+        },
+        "deviceInvalid": {
+          "title": "Verbundenes Gerät auswählen",
+          "message": "Wählen Sie eines Ihrer verbundenen Geräte aus."
+        },
+        "noSender": {
+          "title": "Verbinden Sie zuerst WhatsApp",
+          "message": "Ein Shop benötigt eine verbundene WhatsApp-Nummer. Verbinden Sie eine und versuchen Sie es erneut."
+        },
+        "resetNotConfirmed": {
+          "title": "Nicht bestätigt",
+          "message": "Zurücksetzen nicht bestätigt."
+        },
+        "domainNotSet": {
+          "title": "Keine eigene Domain",
+          "message": "Keine eigene Domain festgelegt."
+        },
+        "unexpected": {
+          "title": "Etwas ist schiefgelaufen",
+          "message": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+        }
+      },
+      "sidebar": {
+        "label": "Store",
+        "navLabel": "Store-Bereiche",
+        "section": "Store",
+        "settings": "Einstellungen",
+        "items": {
+          "overview": "Übersicht",
+          "orders": "Bestellungen",
+          "products": "Produkte",
+          "groups": "Gruppen",
+          "storefront": "Storefront",
+          "coupons": "Gutscheine",
+          "reviews": "Bewertungen",
+          "payments": "Zahlungen",
+          "gateways": "Checkout-Gateways",
+          "customers": "Kunden",
+          "invoices": "Rechnungen",
+          "connection": "Verbindung"
+        },
+        "comingSoon": "Demnächst verfügbar",
+        "comingSoonHint": "Demnächst verfügbar",
+        "noShopTitle": "Noch kein Shop",
+        "noShopMessage": "Erstellen Sie Ihren ersten Shop, um die Store-Tools zu nutzen.",
+        "noShopAction": "Store einrichten",
+        "live": "Live",
+        "setup": "Einrichtung",
+        "yourStore": "Ihr Store",
+        "notConnected": "Nicht verbunden",
+        "unofficialApi": "Inoffizielle API",
+        "deviceConnected": "Gerät verbunden · /channels",
+        "switchShop": "Shop wechseln",
+        "shopFallback": "Shop",
+        "manageShops": "Alle Shops verwalten →",
+        "publicUrl": "Öffentliche URL",
+        "open": "Öffnen",
+        "copy": "Kopieren",
+        "copied": "Kopiert!",
+        "providerLive": "Anbieter aktiv",
+        "sendingFrom": "Versand über",
+        "noDevice": "Kein Gerät verbunden.",
+        "connectOne": "Eines verbinden,",
+        "thenBind": "und binden Sie es dann über den",
+        "connectWizard": "Verbindungsassistenten an diesen Store"
+      },
+      "dashboard": {
+        "eyebrow": "Store / Übersicht",
+        "title": "Verkaufsübersicht",
+        "subtitle": "Letzte 30 Tage. Bestellungen werden aus allen Kanälen zusammengeführt — WABA, Storefront, Twilio.",
+        "addProduct": "Produkt hinzufügen",
+        "loading": "Store-Übersicht wird geladen",
+        "kpi": {
+          "revenue": "Umsatz (30 T.)",
+          "orders": "Bestellungen (30 T.)",
+          "aov": "Ø Bestellwert",
+          "products": "Produkte",
+          "visits": "Besuche (30 T.)"
+        },
+        "trend": {
+          "eyebrow": "Verkaufstrend",
+          "title": "Umsatz im Zeitverlauf"
+        },
+        "legendRevenue": "Umsatz ({symbol})",
+        "legendOrders": "Bestellungen",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# Bestellung} other {# Bestellungen}}",
+        "chartLabel": "Umsatz und Bestellungen pro Tag, letzte 30 Tage",
+        "tableDay": "Tag",
+        "tableRevenue": "Umsatz ({symbol})",
+        "tableOrders": "Bestellungen",
+        "top": {
+          "eyebrow": "Top-Produkte (30 T.)",
+          "title": "Bestseller",
+          "empty": "Noch keine Verkäufe — teilen Sie Ihren Store-Link."
+        },
+        "recent": {
+          "title": "Neueste Bestellungen",
+          "viewAll": "Alle anzeigen",
+          "open": "Öffnen",
+          "columns": {
+            "when": "Wann",
+            "customer": "Kunde",
+            "source": "Quelle",
+            "items": "Artikel",
+            "total": "Gesamt",
+            "status": "Status",
+            "open": "Offen"
+          },
+          "itemsCount": "{count, plural, one {# Artikel} other {# Artikel}}",
+          "emptyTitle": "Noch keine Bestellungen",
+          "emptyMessage": "Sobald Kunden über Ihren Storefront oder WhatsApp bestellen, erscheinen sie hier."
+        }
+      },
+      "settings": {
+        "eyebrow": "Store / Storefront",
+        "title": "Storefront-Design",
+        "viewLive": "Live ansehen",
+        "noAccess": "Ihre Rolle hat keinen Zugriff auf die Storefront-Einstellungen.",
+        "loading": "Storefront-Einstellungen werden geladen",
+        "saved": "Storefront aktualisiert.",
+        "conflict": "Dieser Storefront wurde während Ihrer Bearbeitung anderweitig geändert. Laden Sie neu, um die aktuellen Einstellungen zu erhalten, und nehmen Sie Ihre Änderungen dann erneut vor.",
+        "reload": "Neu laden",
+        "fixErrors": "Korrigieren Sie die markierten Felder und speichern Sie erneut.",
+        "optional": "(optional)",
+        "save": "Speichern",
+        "readOnly": "Sie können diese Einstellungen ansehen, aber nicht ändern.",
+        "live": "Storefront live (Deaktivieren nimmt ihn offline)",
+        "theme": {
+          "title": "Design"
+        },
+        "slug": {
+          "label": "Storefront-Slug",
+          "hint": "Ihr Store ist erreichbar unter"
+        },
+        "domain": {
+          "label": "Eigene Domain",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Verifiziert — Ihre Domain ist live",
+          "addCname": "Fügen Sie diesen CNAME bei Ihrem DNS-Anbieter hinzu:",
+          "cname": "CNAME",
+          "verify": "Jetzt verifizieren",
+          "verified": "Domain verifiziert ✓",
+          "notPointing": "CNAME zeigt nicht auf {expected}",
+          "notSet": "Keine eigene Domain festgelegt.",
+          "verifyFailed": "Die Domain konnte nicht geprüft werden. Versuchen Sie es erneut."
+        },
+        "brand": {
+          "logoUrl": "Logo-URL",
+          "color": "Markenfarbe (Hex)",
+          "colorPicker": "Markenfarbe auswählen",
+          "heroText": "Hero-Text",
+          "heroPlaceholder": "Willkommen in unserem Store",
+          "footerText": "Fußzeilentext",
+          "footerPlaceholder": "© 2026 Ihr Store"
+        },
+        "currency": {
+          "title": "Währung",
+          "label": "Währung",
+          "hint": "Standard für neue Produkte und das Symbol im Warenkorb-Panel."
+        },
+        "shipping": {
+          "title": "Versand",
+          "flat": "Pauschale Versandgebühr",
+          "flatHint": "Wird jeder Bestellung hinzugefügt. Leer oder 0 = kostenlos.",
+          "freeAbove": "Kostenloser Versand ab",
+          "freeAboveHint": "Warenkörbe über diesem Betrag werden kostenlos versendet.",
+          "note": "Versandhinweis",
+          "noteHint": "Wird im Warenkorb und auf der Produktseite angezeigt.",
+          "notePlaceholder": "2–5 Werktage · Mit Sendungsverfolgung"
+        },
+        "payment": {
+          "title": "Zahlungslink",
+          "intro": "Wählen Sie einen Zahlungsanbieter, dann wird der Zahlungslink an jede WhatsApp-Bestellnachricht angehängt. Der Käufer zahlt über den Link, Sie bestätigen im Chat. Im Storefront ist kein Checkout-Ablauf integriert.",
+          "provider": "Anbieter",
+          "providers": {
+            "none": "Keiner · Barzahlung bei Lieferung",
+            "upi": "UPI (Indien) — VPA + Name",
+            "razorpay_link": "Razorpay-Zahlungslink (statischen Link einfügen)",
+            "razorpay_api": "Razorpay (Links automatisch erzeugen + automatisch bestätigen)",
+            "stripe_link": "Stripe-Zahlungslink",
+            "paypal_me": "PayPal.me-Name",
+            "bank_transfer": "Anweisungen zur Banküberweisung"
+          },
+          "handle": "Zahlungsdetail",
+          "handleHint": "UPI-VPA, Zahlungslink-URL, PayPal.me-Name oder Bankkonto.",
+          "handlePlaceholder": "z. B. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay-API (automatische Links)",
+            "keyId": "Key-ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Key-Secret",
+            "webhookSecret": "Webhook-Secret",
+            "stored": "gespeichert — leer lassen, um beizubehalten",
+            "show": "Secret anzeigen",
+            "hide": "Secret ausblenden",
+            "webhookHelp": "Setzen Sie im Razorpay-Dashboard die Webhook-URL auf",
+            "webhookEvent": "für das Ereignis payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Wiederherstellung abgebrochener Warenkörbe",
+          "enable": "Senden Sie eine WhatsApp-Erinnerung an Kunden, die den Checkout starten, aber nicht abschließen",
+          "enableHint": "Erfasst die Telefonnummer beim Checkout. Die Erinnerung wird automatisch storniert, wenn bestellt wird. Ein verbundenes Gerät ist erforderlich.",
+          "delay": "Verzögerung (Minuten)",
+          "message": "Nachricht",
+          "messageHint": "(leer = Standard; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Hallo '{name}'! Sie haben Artikel in Ihrem Warenkorb bei '{shop}' gelassen. Schließen Sie hier ab: '{url}'"
+        },
+        "problems": {
+          "required": "Dieses Feld ist erforderlich.",
+          "tooLong": "Höchstens {max} Zeichen.",
+          "slugPattern": "Verwenden Sie nur Kleinbuchstaben, Zahlen und Bindestriche.",
+          "domainInvalid": "Das sieht nicht nach einer gültigen Domain aus (z. B. shop.yourbiz.com).",
+          "urlInvalid": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
+          "colorInvalid": "Verwenden Sie eine Hex-Farbe wie #075E54.",
+          "amountInvalid": "Geben Sie eine Zahl ein, null oder mehr.",
+          "amountTooBig": "Höchstens {max}.",
+          "delayRange": "Geben Sie eine ganze Zahl von {min} bis {max} ein.",
+          "themeInvalid": "Wählen Sie eines der Designs aus.",
+          "currencyInvalid": "Wählen Sie eine der Währungen aus der Liste.",
+          "providerInvalid": "Wählen Sie einen der Anbieter aus der Liste.",
+          "slugTaken": "Dieser Slug ist bereits vergeben. Wählen Sie einen anderen."
+        }
+      },
+      "share": {
+        "message": "Sehen Sie sich meinen Shop an: {name}",
+        "subject": "Sehen Sie sich meinen Shop an · {name}",
+        "eyebrow": "Teilen Sie Ihren Shop",
+        "fallbackName": "Mein Shop",
+        "close": "Schließen",
+        "link": "Shop-Link",
+        "copy": "Kopieren",
+        "copied": "Kopiert ✓",
+        "copiedShort": "Kopiert",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "In einen Chat senden",
+        "email": "E-Mail",
+        "emailHint": "Mail-App öffnen",
+        "telegram": "Telegram",
+        "telegramHint": "In Kanal teilen",
+        "more": "Mehr…",
+        "moreHint": "Teilen-Menü des Telefons",
+        "nativeUnsupported": "In diesem Browser nicht unterstützt",
+        "showQr": "QR-Code anzeigen",
+        "qrAlt": "QR-Code",
+        "qrCaption": "Scannen, um den Shop zu öffnen"
+      },
+      "wizard": {
+        "loading": "Ihre Shops werden geladen",
+        "back": "Zurück",
+        "breadcrumb": "Verbinden / WhatsApp-Store",
+        "manageConnections": "Alle Verbindungen verwalten →",
+        "titles": {
+          "list": "Ihre Shops",
+          "add": "Store einrichten",
+          "edit": "{name} bearbeiten",
+          "shopFallback": "Shop"
+        },
+        "gate": {
+          "step": "Schritt 1 von 3",
+          "title": "Verbinden Sie zuerst WhatsApp",
+          "message": "Ihr Store benötigt eine verbundene WhatsApp-Nummer, um Bestellbestätigungen zu senden und Kunden das Chatten zu ermöglichen. Gehen Sie zu Ihren Kanälen, um eine zu koppeln — es dauert 30 Sekunden.",
+          "action": "Zu den Geräten"
+        },
+        "list": {
+          "headline": "{count, plural, one {# Shop} other {# Shops}} in {workspace}",
+          "intro": "Jeder Shop hat eine eigene öffentliche URL, ein eigenes Design und ein eigenes Versandgerät. Fügen Sie so viele hinzu, wie Sie benötigen — für verschiedene Marken, Sprachen oder Regionen.",
+          "add": "Shop hinzufügen",
+          "addAnother": "Weiteren Shop hinzufügen",
+          "addAnotherHint": "Betreiben Sie einen eigenen Storefront mit eigener URL, eigenem Design und eigener WhatsApp-Nummer."
+        },
+        "share": {
+          "fallbackName": "Mein Shop"
+        },
+        "noAccess": {
+          "title": "Sie können Shops nicht ändern",
+          "message": "Ihre Rolle kann die Shops ansehen, aber nicht erstellen oder bearbeiten.",
+          "action": "Zurück zu den Shops"
+        },
+        "delete": {
+          "title": "{name} löschen?",
+          "message": "Löscht den Storefront und seine Bestellungen dauerhaft. Produkte in Ihrem Workspace bleiben unberührt. Dies kann nicht rückgängig gemacht werden.",
+          "confirm": "Ja, löschen",
+          "cancel": "Abbrechen",
+          "done": "Shop gelöscht.",
+          "thisShop": "diesen Shop"
+        },
+        "reset": {
+          "open": "Alle Store-Daten löschen",
+          "title": "Alle Store-Daten löschen?",
+          "message": "Löscht alle Shops, Bestellungen und Produkte dieses Workspace dauerhaft. Dies kann nicht rückgängig gemacht werden.",
+          "confirm": "Ja, alles löschen",
+          "done": "Alle Store-Daten für diesen Workspace wurden gelöscht.",
+          "notConfirmed": "Zurücksetzen nicht bestätigt."
+        },
+        "card": {
+          "live": "Live",
+          "disabled": "Deaktiviert",
+          "theme": "Design {theme}",
+          "untitled": "Unbenannter Shop",
+          "sendingFrom": "Versand über",
+          "noDevice": "Kein Gerät",
+          "domain": "Domain",
+          "pending": "ausstehend",
+          "builtIn": "Integrierte URL",
+          "manage": "Verwalten",
+          "manageTitle": "Admin-Dashboard öffnen",
+          "preview": "Vorschau",
+          "previewTitle": "Öffentlichen Storefront in neuem Tab öffnen",
+          "edit": "Bearbeiten",
+          "editTitle": "Shop-Einstellungen bearbeiten",
+          "share": "Teilen",
+          "shareAria": "{name} teilen",
+          "delete": "Shop löschen",
+          "deleteAria": "{name} löschen"
+        },
+        "form": {
+          "backToShops": "Zurück zu den Shops",
+          "creatingShop": "Shop Nr. {n} wird erstellt",
+          "progress": "Schritte",
+          "steps": {
+            "details": "Shop-Details",
+            "url": "Öffentliche URL",
+            "device": "Versandgerät"
+          },
+          "optional": "(optional)",
+          "details": {
+            "title": "Shop-Details",
+            "hint": "Kundensichtbarer Name und der URL-Slug, unter dem die Produkte erreichbar sein werden.",
+            "name": "Shop-Name",
+            "nameHint": "Wird im Storefront-Header und in Bestellbestätigungen angezeigt.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "z. B. {workspace} · Mumbai",
+            "slug": "Storefront-Slug",
+            "auto": "(automatisch)",
+            "slugLocked": "Gesperrt, sobald der Store live ist, damit geteilte Links weiter funktionieren.",
+            "slugAuto": "Aus Ihrem Shop-Namen erzeugt — wird beim Speichern festgelegt."
+          },
+          "url": {
+            "title": "Öffentliche URL",
+            "hint": "Wählen Sie, wie Käufer Ihren Store erreichen — die integrierte URL ist kostenlos, eine eigene Domain wirkt professioneller.",
+            "builtIn": "Integrierte URL · kostenlos",
+            "pathMode": "Funktioniert sofort nach dem Speichern. Pfadbasierte URL, da kein öffentlicher Storefront-Host konfiguriert ist.",
+            "subdomainMode": "Funktioniert sofort nach dem Speichern. Gehostet auf der Storefront-Domain der Plattform.",
+            "domain": "Eigene Domain",
+            "domainHint": "Sie fügen bei Ihrem DNS-Anbieter einen CNAME hinzu und verifizieren ihn nach dem Speichern auf der Storefront-Einstellungsseite. Leer lassen, um die integrierte URL zu verwenden.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} ist verifiziert.",
+            "pending": "{domain} wartet auf DNS-Verifizierung."
+          },
+          "device": {
+            "title": "Versandgerät",
+            "hint": "Welche WhatsApp-Nummer Bestellbestätigungen und Antworten an Käufer sendet.",
+            "none": "Auf diesem Konto sind keine Geräte verbunden.",
+            "pair": "Koppeln Sie eines in Ihren Kanälen →",
+            "official": "Offizielle API · Meta (WABA)",
+            "officialDetail": "WhatsApp-Business-Nummer des Workspace",
+            "fallback": "Gerät",
+            "noNumber": "Keine Nummer",
+            "connected": "verbunden"
+          },
+          "cancel": "Abbrechen",
+          "deleteThis": "Diesen Shop löschen",
+          "saveChanges": "Änderungen speichern",
+          "create": "Shop erstellen →",
+          "created": "Shop „{name}“ erstellt.",
+          "updated": "Shop „{name}“ aktualisiert.",
+          "problems": {
+            "nameRequired": "Geben Sie einen Shop-Namen ein.",
+            "nameTooLong": "Höchstens 191 Zeichen.",
+            "domainInvalid": "Das sieht nicht nach einer gültigen Domain aus (z. B. shop.yourbiz.com).",
+            "domainTooLong": "Höchstens 191 Zeichen.",
+            "deviceInvalid": "Wählen Sie eines Ihrer verbundenen Geräte aus.",
+            "slugTaken": "Dieser Shop-Name ergibt eine Adresse, die bereits vergeben ist. Ändern Sie den Namen leicht."
+          },
+          "live": {
+            "eyebrow": "Dieser Shop ist live",
+            "fallbackName": "Ihr Shop",
+            "hint": "Fügen Sie Produkte hinzu, wählen Sie ein Design, sehen Sie Bestellungen ein und teilen Sie Ihren Link.",
+            "view": "Shop ansehen",
+            "share": "Shop teilen",
+            "dashboard": "Dashboard öffnen"
+          }
+        }
+      }
+    }
+  }
+}

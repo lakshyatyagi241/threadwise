@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "nav": {
+      "proposals": "提案書",
+      "estimates": "見積書"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "提案書",
+        "plural": "提案書"
+      },
+      "estimate": {
+        "singular": "見積書",
+        "plural": "見積書"
+      }
+    },
+    "status": {
+      "draft": "下書き",
+      "sent": "送信済み",
+      "viewed": "閲覧済み",
+      "accepted": "承諾済み",
+      "declined": "辞退",
+      "expired": "期限切れ",
+      "converted": "変換済み"
+    },
+    "tabs": {
+      "label": "ステータス",
+      "all": "すべて",
+      "draft": "下書き",
+      "sent": "送信済み",
+      "viewed": "閲覧済み",
+      "accepted": "承諾済み",
+      "declined": "辞退",
+      "expired": "期限切れ",
+      "converted": "変換済み",
+      "count": "{count, plural, other {書類#件}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "提案書",
+        "subtitle": "提案の範囲と金額を提示し、購入者の行動を追跡して、成約したものを請求書に変換します。",
+        "new": "新しい提案書",
+        "emptyTitle": "提案書はまだありません",
+        "emptyMessage": "最初の提案書を作成し、リンクを購入者に送って、送信済みから承諾済みになるまで確認しましょう。"
+      },
+      "estimate": {
+        "title": "見積書",
+        "subtitle": "請求の前に金額を見積もります。送信して承諾を得たら、ワンクリックで変換できます。",
+        "new": "新しい見積書",
+        "emptyTitle": "見積書はまだありません",
+        "emptyMessage": "最初の見積書を作成し、リンクを購入者に送ってください。承諾されたら請求書に変換できます。"
+      },
+      "openValue": "未解決の金額",
+      "tableLabel": "書類",
+      "loading": "読み込み中",
+      "showing": "{count, plural, other {書類#件を表示}}",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "すべて読み込み済み",
+      "useSampleData": "サンプルデータを使用",
+      "emptyFilteredTitle": "一致する項目はありません",
+      "emptyFiltered": "検索とフィルターに一致する書類はありません。フィルターを減らすか、別の語句をお試しください。",
+      "resetFilters": "フィルターをクリア",
+      "emptyTabTitle": "{status}の書類はありません",
+      "emptyTab": "{kind}がこのステータスになると、ここに表示されます。",
+      "statusWord": {
+        "all": "すべて",
+        "draft": "下書き",
+        "sent": "送信済み",
+        "viewed": "閲覧済み",
+        "accepted": "承諾済み",
+        "declined": "辞退",
+        "expired": "期限切れ",
+        "converted": "変換済み"
+      }
+    },
+    "toolbar": {
+      "label": "フィルター",
+      "search": "番号、タイトル、購入者で検索",
+      "owner": "担当者",
+      "allOwners": "すべての担当者",
+      "validity": "有効期限",
+      "anyValidity": "すべての日付",
+      "validWeek": "7日以内に期限切れ",
+      "validLapsed": "期限を過ぎています",
+      "clear": "クリア",
+      "refresh": "更新",
+      "shortcuts": "キーボードショートカット",
+      "contactFilter": "連絡先",
+      "dealFilter": "案件",
+      "removeFilter": "このフィルターを削除",
+      "mine": "自分の書類"
+    },
+    "table": {
+      "scrollArea": "書類の表",
+      "selectAll": "読み込み済みの書類をすべて選択",
+      "selectRow": "{number}を選択",
+      "columns": {
+        "number": "番号",
+        "title": "タイトル / 購入者",
+        "contact": "連絡先",
+        "amount": "金額",
+        "status": "ステータス",
+        "validUntil": "有効期限",
+        "owner": "担当者",
+        "created": "作成日"
+      }
+    },
+    "row": {
+      "moreFor": "{number}の操作",
+      "untitled": "無題",
+      "noBuyer": "購入者未設定",
+      "unowned": "担当者なし"
+    },
+    "bulk": {
+      "label": "一括操作",
+      "selected": "{count, plural, other {#件を選択中}}",
+      "working": "処理中",
+      "delete": "削除",
+      "clear": "選択を解除",
+      "deleteTitle": "選択した書類を削除しますか？",
+      "deleteMessage": "{count, plural, other {書類#件を完全に削除します。公開リンクも使えなくなります。}} 変換済みの書類は残ります。",
+      "deleteConfirm": "削除",
+      "keep": "残す",
+      "deleted": "{count, plural, other {書類#件を削除しました}}",
+      "someFailed": "{count, plural, other {書類#件を削除できませんでした}}",
+      "failed": "削除に失敗しました。"
+    },
+    "shortcuts": {
+      "title": "キーボードショートカット",
+      "close": "閉じる",
+      "list": "一覧画面",
+      "builder": "作成画面",
+      "actions": {
+        "next": "次の行",
+        "prev": "前の行",
+        "open": "行を開く",
+        "toggleSelect": "行を選択または選択解除",
+        "newDoc": "新しい書類",
+        "focusSearch": "検索",
+        "clearSelection": "選択を解除",
+        "help": "このリストを表示",
+        "save": "下書きを保存",
+        "send": "送信",
+        "addRow": "明細行を追加"
+      }
+    },
+    "actions": {
+      "open": "開く",
+      "edit": "編集",
+      "send": "送信",
+      "copyLink": "公開リンクをコピー",
+      "markSent": "送信済みにする",
+      "convertInvoice": "請求書に変換",
+      "createSalesOrder": "販売注文を作成",
+      "convertDeal": "案件を作成",
+      "duplicate": "複製",
+      "print": "印刷 / PDF",
+      "activity": "アクティビティ",
+      "delete": "削除",
+      "accept": "承諾として記録",
+      "decline": "辞退として記録",
+      "revise": "修正（下書きに戻す）",
+      "extend": "有効期限を延長"
+    },
+    "confirm": {
+      "cancel": "キャンセル",
+      "linkCopied": "リンクをコピーしました",
+      "copyFailed": "リンクをコピーできませんでした。選択して手動でコピーしてください。",
+      "markSent": {
+        "title": "{number}を送信済みにしますか？",
+        "message": "{kind}を購入者に手動で共有したことを記録します（リンクをコピーした場合）。送信は行われません。送信するには「送信」を使用してください。",
+        "confirm": "送信済みにする"
+      },
+      "convertInvoice": {
+        "title": "{number}を請求書に変換しますか？",
+        "message": "同じ明細と合計で請求書の下書きを作成し、この{kind}は変換済みとしてロックされます。この操作は元に戻せません。",
+        "confirm": "請求書に変換"
+      },
+      "convertDeal": {
+        "title": "{number}から案件を作成しますか？",
+        "message": "この{kind}の合計金額と連絡先を使って案件を作成し、この{kind}にリンクします。",
+        "confirm": "案件を作成"
+      },
+      "delete": {
+        "title": "{number}を削除しますか？",
+        "message": "この{kind}は完全に削除され、公開リンクも使えなくなります。番号は再利用されません。",
+        "confirm": "削除"
+      },
+      "close": "閉じる",
+      "theBuyer": "購入者",
+      "linkCopiedInactive": "リンクをコピーしました。書類が送信されるまで、購入者は開けません。",
+      "accept": {
+        "title": "{number}を承諾として記録しますか？",
+        "message": "{name}がリンク以外で（電話や署名済みの控えなどで）同意した場合に使用します。アクティビティには、購入者本人の署名ではなく、お客様が入力したものとして記録されます。",
+        "confirm": "承諾として記録"
+      },
+      "decline": {
+        "title": "{number}を辞退として記録しますか？",
+        "message": "{name}がリンク以外で断った場合に使用します。この{kind}は辞退として終了します。後で修正して新しい下書きにすることもできます。",
+        "confirm": "辞退として記録"
+      },
+      "extend": {
+        "title": "{number}の有効期限を延長",
+        "message": "この{kind}に新しい有効期限を設定します。期限切れのものは{name}向けに再び開かれます。",
+        "confirm": "延長",
+        "date": "新しい有効期限",
+        "past": "過去の日付は指定できません。"
+      },
+      "revise": {
+        "title": "{number}を修正しますか？",
+        "message": "{kind}は変更できるように下書きに戻ります（改訂番号が上がり、以前の内容は保持されます）。変更後は、購入者が以前の版を承諾することはできません。",
+        "confirm": "修正"
+      },
+      "note": "メモ（任意）",
+      "noteHint": "この判断とともにアクティビティに保存されます。"
+    },
+    "toast": {
+      "created": "{number}を作成しました",
+      "saved": "{number}を保存しました",
+      "duplicated": "下書き{number}を作成しました",
+      "convertedInvoice": "{number}を請求書に変換しました",
+      "convertedDeal": "{number}から案件{deal}を作成しました",
+      "deleted": "{number}を削除しました",
+      "accepted": "{number}を承諾として記録しました",
+      "declined": "{number}を辞退として記録しました",
+      "revised": "{number}は再び下書きになりました（改訂{revision}）",
+      "extended": "{number}の有効期限を延長しました",
+      "delivery": {
+        "sent": "{number}を購入者にメールで送信しました",
+        "queued": "{number}をWhatsAppでの送信待ちに追加しました",
+        "shared": "{number}を送信済みにしました"
+      }
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。再度サインインしてください。",
+      "conflict": "他のユーザーがこの書類を変更しました。再読み込みしましたので、内容を確認してもう一度お試しください。",
+      "validation": "一部の値は受け付けられませんでした。ハイライトされた項目を確認してください。",
+      "unavailable": "このサーバーではまだ提案書と見積書を利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "この書類は見つかりませんでした。削除された可能性があります。",
+      "planDisabled": "お使いのプランには提案書と見積書が含まれていません。",
+      "invalidTransition": "書類の現在のステータスでは、その変更は許可されていません。再読み込みしました。",
+      "notEditable": "編集できるのは下書きのみです。書類を修正して下書きに戻してください。",
+      "notDeletable": "承諾済みと変換済みの書類は記録として保持され、削除できません。",
+      "alreadyDecided": "この書類は既に判断済みです。再読み込みしました。",
+      "alreadyConverted": "この書類は既に請求書に変換されています。",
+      "alreadyLinkedDeal": "この書類には既に案件がリンクされています。",
+      "linkUnavailable": "公開リンクは取り消されたか、期限切れです。先に新しいリンクを作成してください。",
+      "noRecipient": "先に購入者のメールアドレスまたは電話番号を追加してから送信してください。",
+      "sendFailed": "メッセージを配信できなかったため、書類は送信済みになりませんでした。もう一度お試しください。",
+      "expired": "この書類は有効期限を過ぎています。先に有効期限を延長してください。",
+      "ownerInvalid": "担当者はワークスペースの有効なメンバーである必要があります。",
+      "invoicingUnavailable": "請求機能はまだ利用できないため、この書類は変換できません。",
+      "unexpected": "問題が発生しました。もう一度お試しください。",
+      "requestId": "リクエストID",
+      "retry": "再試行"
+    },
+    "link": {
+      "unnamedContact": "名称未設定の連絡先"
+    },
+    "picker": {
+      "unnamed": "名称未設定",
+      "unlinkContact": "連絡先のリンクを解除",
+      "unlinkDeal": "案件のリンクを解除",
+      "searchContact": "名前、メールアドレス、電話番号で連絡先を検索",
+      "searchDeal": "案件を検索",
+      "results": "結果",
+      "searching": "検索中",
+      "unavailable": "一覧を読み込めませんでした。",
+      "none": "一致するものはありません。",
+      "create": "連絡先を作成",
+      "createNamed": "連絡先「{name}」を作成",
+      "createTitle": "連絡先を作成",
+      "createEyebrow": "新しい連絡先",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "createConfirm": "作成してリンク",
+      "nameLabel": "名前",
+      "emailLabel": "メールアドレス",
+      "phoneLabel": "電話番号",
+      "phoneHint": "国番号を付けて入力してください（例：+971 50 123 4567）。",
+      "nameInvalid": "名前を入力してください。",
+      "emailInvalid": "有効なメールアドレスを入力してください。",
+      "phoneInvalid": "有効な電話番号を入力してください。",
+      "forbidden": "連絡先を作成する権限がありません。",
+      "createFailed": "連絡先を作成できませんでした。もう一度お試しください。",
+      "contactCreated": "連絡先{name}を作成しました"
+    },
+    "send": {
+      "eyebrow": "購入者に送信",
+      "title": "{number}を送信",
+      "close": "閉じる",
+      "done": "完了",
+      "channels": "送信方法",
+      "tabs": {
+        "link": "リンク",
+        "email": "メール",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "公開リンク",
+      "linkHint": "このリンクを知っている人は誰でも書類を閲覧し、承諾または辞退できます。購入者にのみ共有してください。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "copiedToast": "リンクをコピーしました",
+      "copyFailed": "リンクをコピーできませんでした。選択して手動でコピーしてください。",
+      "to": "宛先",
+      "emailInvalid": "有効なメールアドレスを入力してください。",
+      "noEmail": "この書類には購入者のメールアドレスがありません。ここに入力してください。",
+      "message": "メッセージ",
+      "messageDefault": "{name}様、書類をお送りします。範囲と金額を記載しており、オンラインで承諾いただけます。",
+      "messageHint": "書類へのリンクはメッセージの下に追加されます。",
+      "sendEmail": "メールを送信",
+      "waTo": "送信先",
+      "noPhone": "この書類には購入者の電話番号がありません。先に購入者の詳細で追加してください。",
+      "waPreview": "メッセージ",
+      "waTotal": "合計",
+      "waView": "表示して承諾",
+      "sendWhatsapp": "WhatsAppで送信",
+      "openWhatsapp": "WhatsAppで開く",
+      "markSent": "共有しました：送信済みにする",
+      "linkLoading": "リンクを読み込み中",
+      "linkUnavailable": "このサーバーではまだリンクを利用できません。",
+      "stateDraft": "リンクは書類の送信後に開けるようになります。それまで購入者には何も表示されません。",
+      "stateRevoked": "このリンクは取り消されたため、購入者は開けません。再度共有するには新しいリンクを作成してください。",
+      "stateActive": "{views, plural, =0 {まだ開かれていません。} other {#回開かれました。}}",
+      "stateInactive": "このリンクは期限切れのため、購入者は開けません。新しいリンクを作成してください。",
+      "regenerate": "新しいリンクを作成",
+      "revoke": "リンクを取り消す",
+      "regenerateWarning": "古いリンクはすぐに使えなくなります。リンクを持っている人には、利用できなくなったと表示されます。",
+      "keepLink": "現在のリンクを維持",
+      "regenerateConfirm": "新しいリンクを作成",
+      "regenerated": "新しいリンクを作成しました",
+      "revoked": "リンクを取り消しました",
+      "waHint": "「送信」は、連携済みのWhatsAppでメッセージを送信待ちに入れ、書類を送信済みにします。「WhatsAppで開く」では自分で送信できます。その後、「リンク」タブで送信済みにしてください。"
+    },
+    "activity": {
+      "title": "{number}のアクティビティ",
+      "subtitle": "この書類に起きたことを、新しい順に表示します。",
+      "close": "閉じる",
+      "loading": "読み込み中",
+      "unavailable": "このサーバーではまだアクティビティ履歴を利用できません。",
+      "empty": "この書類にはまだ何も起きていません。",
+      "buyer": "購入者",
+      "system": "システム",
+      "someone": "誰か",
+      "via": "{channel}で送信",
+      "signedBy": "{name}が署名",
+      "reason": "理由：{reason}",
+      "channels": {
+        "link": "リンク",
+        "email": "メール",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "{who}が作成",
+        "edited": "{who}が編集",
+        "sent": "{who}が送信",
+        "viewed": "{who}が閲覧",
+        "accepted": "{who}が承諾",
+        "declined": "{who}が辞退",
+        "expired": "期限切れ",
+        "duplicated": "{who}が複製",
+        "revised": "{who}が修正",
+        "extended": "{who}が有効期限を延長",
+        "converted_invoice": "{who}が請求書に変換",
+        "converted_deal": "{who}が案件を作成",
+        "link_regenerated": "{who}が新しいリンクを作成",
+        "link_revoked": "{who} がリンクを無効化しました"
+      },
+      "withSignature": "手書きの署名が記録されました",
+      "recordedByStaff": "購入者に代わってチームメンバーが記録しました",
+      "note": "メモ: {note}",
+      "revision": "改訂 {revision}",
+      "fromAddress": "ネットワークアドレス {ip} から"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "自社",
+      "numberPending": "保存時に番号を採番します",
+      "untitled": "無題の{kind}",
+      "preparedFor": "宛先",
+      "noBuyer": "購入者未設定",
+      "issued": "発行日",
+      "validUntil": "有効期限",
+      "description": "内容",
+      "qty": "数量",
+      "unit": "単価",
+      "discount": "割引",
+      "tax": "税",
+      "amount": "金額",
+      "noItems": "明細がありません。",
+      "subtotal": "小計",
+      "discountPercent": "割引 ({percent}%)",
+      "discountRow": "割引",
+      "taxRow": "税 ({percent}%)",
+      "total": "合計",
+      "notes": "備考",
+      "terms": "条件"
+    },
+    "builder": {
+      "loading": "読み込み中",
+      "notFoundTitle": "書類が見つかりません",
+      "notFound": "この書類は存在しないか、削除されています。",
+      "back": {
+        "proposal": "すべての提案書",
+        "estimate": "すべての見積書"
+      },
+      "formLabel": "書類の詳細",
+      "newTitle": {
+        "proposal": "新規提案書",
+        "estimate": "新規見積書"
+      },
+      "newSubtitle": "購入者と明細を入力してください。番号は、この{kind}を保存するときに採番されます。",
+      "untitledSub": "無題",
+      "unsaved": "未保存の変更",
+      "leaveTitle": "保存せずに離れますか？",
+      "leaveMessage": "このページには未保存の変更があります。今離れると変更は失われます。",
+      "leave": "保存せずに離れる",
+      "keepEditing": "編集を続ける",
+      "save": "下書きを保存",
+      "send": "送信",
+      "more": "その他の操作",
+      "fixErrors": "保存する前に、いくつかの項目を確認してください。",
+      "panes": "入力またはプレビュー",
+      "pane": {
+        "edit": "編集",
+        "preview": "プレビュー"
+      },
+      "locked": {
+        "sent": "この書類は購入者に送付済みのため編集できません。改訂して下書きに戻すか、複製して新しく作成してください。",
+        "accepted": "この書類は承諾済みで、記録として保管されています。請求書に変換するか、複製して新しく作成してください。",
+        "converted": "この書類は請求書に変換済みのため、ロックされています。",
+        "openInvoice": "請求書を開く",
+        "revise": "改訂する",
+        "duplicate": "下書きとして複製"
+      },
+      "buyer": {
+        "title": "購入者",
+        "hint": "連絡先を選択するか、購入者の情報を入力してください。送信には、そのメールアドレスと電話番号を使用します。",
+        "contact": "連絡先",
+        "name": "購入者名",
+        "email": "購入者のメールアドレス",
+        "phone": "購入者の電話番号",
+        "phoneHint": "国番号を付けてください。WhatsAppで送信する場合に必要です。"
+      },
+      "details": {
+        "title": "詳細",
+        "docTitle": "タイトル",
+        "titlePlaceholder": {
+          "proposal": "例: ウェブサイト刷新 フェーズ1",
+          "estimate": "例: キッチン施工の概算見積"
+        },
+        "deal": "案件",
+        "currency": "通貨",
+        "validUntil": "有効期限",
+        "plusDays": "+{days} 日",
+        "noExpiry": "期限なし"
+      },
+      "items": {
+        "title": "明細",
+        "hint": "数量は小数点を使用できます。割引は割合または金額で指定できます（欄内の記号をタップして切り替えます）。税が空欄の場合は、書類の税率が適用されます。",
+        "description": "内容",
+        "qty": "数量",
+        "unit": "単価",
+        "discount": "割引 %",
+        "tax": "税 %",
+        "amount": "金額",
+        "drag": "ドラッグで並べ替え",
+        "row": "行 {n}",
+        "descriptionPlaceholder": "請求する内容",
+        "descriptionFor": "行 {n} の内容",
+        "qtyFor": "行 {n} の数量",
+        "unitFor": "行 {n} の単価",
+        "discountFor": "行 {n} の割引率",
+        "taxFor": "行 {n} の税率",
+        "amountFor": "行 {n} の金額",
+        "moveUp": "行 {n} を上へ移動",
+        "moveDown": "行 {n} を下へ移動",
+        "duplicate": "行 {n} を複製",
+        "remove": "行 {n} を削除",
+        "add": "行を追加",
+        "discountToAmount": "行 {n}: 割引は割合です。金額に切り替えてください",
+        "discountToPercent": "行 {n}: 割引は金額です。割合に切り替えてください"
+      },
+      "problems": {
+        "noItems": "内容と価格を入力した明細を少なくとも1つ追加してください。",
+        "descriptionRequired": "内容を入力してください。",
+        "descriptionTooLong": "内容が長すぎます（500文字以内）。",
+        "qtyInvalid": "数量は0以上の数値で、小数点以下4桁までにしてください。",
+        "priceInvalid": "単価は0以上の数値で入力してください。",
+        "discountInvalid": "割引は0〜100%の割合で入力してください。",
+        "taxInvalid": "税は0〜100%の割合で入力してください。",
+        "docDiscountInvalid": "割引は0以上の数値で入力してください。",
+        "docTaxInvalid": "税は0〜100%の割合で入力してください。",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "phoneInvalid": "国番号付きの電話番号を入力してください。例: +971 50 123 4567",
+        "titleTooLong": "タイトルが長すぎます（255文字以内）。",
+        "notesTooLong": "備考が長すぎます（5,000文字以内）。",
+        "termsTooLong": "条件が長すぎます（10,000文字以内）。",
+        "dateInvalid": "有効な日付を入力してください。",
+        "tooLarge": "金額が大きすぎます。数量または単価を減らしてください。"
+      },
+      "totals": {
+        "defaultTax": "税率",
+        "defaultTaxHint": "個別の税率がない行すべてに適用されます。",
+        "discount": "書類全体の割引",
+        "discountKind": "割引の種類",
+        "subtotal": "小計",
+        "discountRow": "割引",
+        "taxRow": "税 ({percent}%)",
+        "total": "合計"
+      },
+      "notes": {
+        "title": "備考と条件",
+        "notes": "購入者への備考",
+        "terms": "条件",
+        "insertTemplate": "テンプレートを使用",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "プレビュー",
+        "print": "印刷 / PDF",
+        "hint": "購入者に表示され、印刷される内容です。合計は保存済みの書類と同じ端数処理で計算されます。"
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "ありがとうございます",
+          "text": "お取引の機会をいただき、ありがとうございます。準備が整い次第、速やかに開始いたします。"
+        },
+        "scope": {
+          "label": "業務範囲について",
+          "text": "この書類は上記の項目のみを対象としています。範囲外の作業は別途お見積りいたします。"
+        },
+        "followUp": {
+          "label": "次のステップ",
+          "text": "進める場合は、この書類をオンラインで承諾してください。開始日は営業日1日以内にご連絡いたします。"
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "14日以内のお支払い",
+          "text": "お支払いは請求日から14日以内にお願いいたします。"
+        },
+        "net30": {
+          "label": "30日以内のお支払い",
+          "text": "お支払いは請求日から30日以内にお願いいたします。"
+        },
+        "deposit50": {
+          "label": "50%の前払金",
+          "text": "承諾時に50%の前払金をお支払いいただきます。残金は完了時にお支払いいただきます。"
+        },
+        "warranty": {
+          "label": "保証",
+          "text": "納品日から90日間、施工上の不具合を保証します。"
+        }
+      }
+    },
+    "linked": {
+      "title": "提案書と見積書",
+      "newProposal": "提案書",
+      "newEstimate": "見積書",
+      "loading": "読み込み中",
+      "unavailableTitle": "まだ利用できません",
+      "unavailable": "このサーバーではまだ提案書と見積書をご利用いただけません。",
+      "empty": "提案書や見積書はまだありません。",
+      "kind": {
+        "proposal": "提案書",
+        "estimate": "見積書"
+      },
+      "viewProposals": "すべての提案書",
+      "viewEstimates": "すべての見積書"
+    },
+    "signature": {
+      "area": "署名欄: 指、ペン、またはマウスで署名してください",
+      "placeholder": "ここに署名",
+      "clear": "署名を消去"
+    },
+    "public": {
+      "loading": "書類を読み込んでいます",
+      "brandFallback": "ご担当の販売者",
+      "language": "言語",
+      "print": "印刷 / PDF",
+      "invalid": {
+        "title": "このリンクは無効です",
+        "message": "書類が削除されたか、リンクが不完全な可能性があります。送信者に新しいリンクを依頼してください。"
+      },
+      "error": {
+        "title": "書類を読み込めませんでした",
+        "message": "接続を確認して、もう一度お試しください。繰り返し発生する場合は、送信者にお問い合わせください。",
+        "retry": "再試行"
+      },
+      "banner": {
+        "accepted": "この{kind}を承諾しました。{seller}に通知されており、追ってご連絡があります。",
+        "signedBy": "{name} が署名",
+        "declined": "この{kind}は辞退されました。",
+        "declinedHint": "誤りの場合は、{seller}にお問い合わせください。",
+        "converted": "承諾済みです。この{kind}について請求書が発行されました。",
+        "expired": "この{kind}は{date}に期限切れになりました。",
+        "expiredHint": "もう承諾することはできません。新しいものを依頼するには、{seller}にお問い合わせください。"
+      },
+      "footer": "この{kind}は{seller}が作成しました。",
+      "decision": {
+        "title": "ご判断",
+        "intro": "{total}のこの{kind}を承諾すると、上記の業務範囲と価格が{seller}と確定します。",
+        "name": "お名前（フルネーム）",
+        "nameHint": "記録に残るお名前として入力してください（2文字以上）。",
+        "nameRequired": "お名前を入力してください。",
+        "signature": "署名",
+        "typedPlaceholder": "お名前がここに表示されます",
+        "useTyped": "手書きではなく入力した名前で署名する",
+        "signatureRequired": "手書きで署名するか、入力したお名前で署名を選択してください。",
+        "agree": "この{kind}を読み、業務範囲、価格、条件に同意します。",
+        "agreeRequired": "確認のため、チェックボックスにチェックを入れてください。",
+        "accept": "この{kind}を承諾する",
+        "decline": "辞退する",
+        "note": "ご判断とともに、お名前、署名、日時、ネットワークアドレスが記録されます。",
+        "declineTitle": "この{kind}を辞退しますか？",
+        "declineMessage": "{seller}に辞退されたことが通知されます。後から変更することはできません。",
+        "reason": "理由（任意）",
+        "reasonHint": "簡単なメモがあると、{seller}が修正点を把握しやすくなります。",
+        "keep": "戻る",
+        "declineConfirm": "辞退する",
+        "close": "閉じる",
+        "problem": {
+          "expired": "この書類は期限切れのため、承諾できなくなりました。",
+          "closed": "この書類はすでに判断済みです。ページを更新しました。",
+          "rateLimited": "試行回数が多すぎます。1分ほど待ってから再度お試しください。",
+          "validation": "一部の入力内容が受け付けられませんでした。お名前を確認して、もう一度お試しください。",
+          "generic": "ご判断を記録できませんでした。接続を確認して、もう一度お試しください。",
+          "gone": "このリンクは無効になっています。"
+        }
+      },
+      "gone": {
+        "title": "このリンクは無効になっています",
+        "message": "送信者がこのリンクを無効にしたか、期限が切れています。新しいリンクを依頼してください。"
+      },
+      "metaTitle": "見積"
+    }
+  }
+}

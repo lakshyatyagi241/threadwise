@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Dodatki i moduły",
+      "packs": "Dodatki (rozliczenia)",
+      "extensions": "Dodatki (kod)",
+      "workspace": "Dodatki"
+    },
+    "common": {
+      "loading": "Ładowanie",
+      "retry": "Spróbuj ponownie",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "saving": "Zapisywanie",
+      "close": "Zamknij",
+      "dismiss": "Odrzuć",
+      "admin": "Administrator",
+      "settings": "Ustawienia",
+      "optional": "opcjonalne",
+      "required": "wymagane",
+      "readOnly": "Możesz przeglądać tę stronę, ale zmieniać ją może tylko superadministrator.",
+      "requestId": "Identyfikator żądania",
+      "errors": {
+        "forbidden": "Nie masz dostępu do tej strony.",
+        "request": "Nie udało się zrealizować żądania.",
+        "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+        "conflict": "Ktoś właśnie to zmienił. Odśwież stronę i spróbuj ponownie."
+      }
+    },
+    "packs": {
+      "crumbHere": "Dodatki",
+      "eyebrow": "Administracja · Rozliczenia i plany · Dodatki",
+      "titleLead": "Dodat",
+      "titleAccent": "ki",
+      "title": "Dodatki",
+      "description": "Pakiety funkcji à la carte, które klient kupuje ponad swój plan, np. „Dodatek Kampanie” lub „+1 numer WhatsApp”. Każdy dodatek przyznaje ustawione przez Ciebie przełączniki funkcji i limity, które są dołączane do planu klienta. Pojawiają się na stronie Konto klienta, gdy ma on aktywny plan.",
+      "new": "Nowy dodatek",
+      "empty": {
+        "title": "Brak dodatków.",
+        "action": "Utwórz pierwszy dodatek"
+      },
+      "table": {
+        "label": "Dodatki",
+        "name": "Nazwa",
+        "price": "Cena",
+        "period": "Okres",
+        "grants": "Przyznaje",
+        "status": "Status",
+        "actions": "Akcje"
+      },
+      "price": {
+        "free": "Bezpłatnie",
+        "lifetime": "jednorazowo"
+      },
+      "period": {
+        "days": "{count} dni",
+        "weeks": "{count} tyg.",
+        "months": "{count} mies.",
+        "years": "{count} lat"
+      },
+      "grants": {
+        "none": "nic nie ustawiono",
+        "unlimited": "Bez limitu: {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Aktywny",
+        "off": "Wyłączony"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "enable": "Włącz",
+        "disable": "Wyłącz",
+        "delete": "Usuń"
+      },
+      "toasts": {
+        "created": "Dodatek został utworzony.",
+        "updated": "Dodatek został zaktualizowany.",
+        "activated": "Włączono: {name}",
+        "deactivated": "Wyłączono: {name}",
+        "deleted": "Usunięto: {name}"
+      },
+      "delete": {
+        "title": "Usunąć {name}?",
+        "body": "Usunąć ten dodatek? Przestrzenie robocze, które go kupiły, zachowają go do wygaśnięcia.",
+        "confirm": "Usuń",
+        "inUse": "{count, plural, one {# przestrzeń robocza posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} few {# przestrzenie robocze posiadają ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} many {# przestrzeni roboczych posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} other {# przestrzeni roboczej posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.}}"
+      },
+      "errors": {
+        "generic": "Nie udało się zapisać dodatku.",
+        "forbidden": "Tylko superadministrator może zmieniać dodatki.",
+        "notFound": "Ten dodatek już nie istnieje."
+      },
+      "editor": {
+        "crumbHere": "Dodatki",
+        "crumbNew": "Nowy",
+        "crumbEdit": "Edytuj",
+        "eyebrowNew": "Administracja · Dodatki · Nowy",
+        "eyebrowEdit": "Administracja · Dodatki · Edycja",
+        "titleNewLead": "Utwórz",
+        "titleEditLead": "Edytuj",
+        "titleAccent": "dodatek",
+        "intro": "Dodatek przyznaje WYŁĄCZNIE to, co włączysz, i nic więcej. Pusty limit nie jest zmieniany, więc nie ma przypadkowego „braku limitu”.",
+        "fixTitle": "Popraw następujące pola:",
+        "cancel": "Anuluj",
+        "create": "Utwórz dodatek",
+        "saveChanges": "Zapisz zmiany",
+        "basics": "Podstawy dodatku",
+        "features": "Funkcje odblokowywane przez ten dodatek",
+        "featuresHint": "Zaznacz tylko to, co przyznaje ten dodatek. Wszystko niezaznaczone pozostaje zgodne z planem klienta.",
+        "coreFeature": "w każdym planie",
+        "limits": "Zwiększenia limitów",
+        "limitsHint": "Puste = dodatek nie zmienia tego limitu. Wpisz liczbę, aby DODAĆ ją do planu (np. +2 urządzenia). Użyj -1 dla braku limitu.",
+        "fields": {
+          "name": "Nazwa",
+          "namePlaceholder": "Dodatek Kampanie",
+          "subtitle": "Podtytuł",
+          "subtitlePlaceholder": "Odblokuj kampanie",
+          "amount": "Cena",
+          "offerAmount": "Cena promocyjna (opcjonalnie)",
+          "currency": "Waluta",
+          "billingDuration": "Czas trwania",
+          "billingUnit": "Jednostka",
+          "billingMode": "Rozliczanie",
+          "sortOrder": "Kolejność",
+          "isActive": "Aktywny",
+          "isLifetime": "Dożywotnio (jednorazowo)"
+        },
+        "modes": {
+          "one_time": "Jednorazowo (kup ponownie po wygaśnięciu)",
+          "recurring": "Cyklicznie (odnawiane automatyczną płatnością)"
+        },
+        "units": {
+          "days": "Dni",
+          "weeks": "Tygodnie",
+          "months": "Miesiące",
+          "years": "Lata"
+        },
+        "problems": {
+          "name": "Wpisz nazwę.",
+          "amount": "Wpisz kwotę, np. 19 lub 19.99.",
+          "offerAmount": "Cena promocyjna musi być niższa od ceny.",
+          "currency": "Użyj trzyliterowego kodu waluty.",
+          "billingDuration": "Wpisz liczbę całkowitą równą 1 lub większą.",
+          "sortOrder": "Wpisz liczbę całkowitą.",
+          "limits": "Limity to liczby całkowite lub -1 dla braku limitu.",
+          "form": "Sprawdź zaznaczone pola."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Dodatki",
+      "eyebrow": "Administracja · Dodatki",
+      "titleLead": "Zainstaluj",
+      "titleAccent": "dodatek",
+      "title": "Dodatki",
+      "description": "Dodatki dołączają dodatkowe funkcje do tej instalacji. Pierwszym jest Instagram. Zweryfikuj kod zakupu, prześlij pakiet, a zostanie zainstalowany na miejscu. Twoje dane i ustawienia pozostaną nietknięte.",
+      "coreVersion": "Rdzeń",
+      "packsLead": "Szukasz płatnych pakietów funkcji, które klienci kupują ponad plan?",
+      "packsLink": "To dodatki do planu (rozliczenia)",
+      "packsTail": ". Ta strona instaluje kod.",
+      "installed": {
+        "title": "Zainstalowane dodatki",
+        "empty": "Nie zainstalowano jeszcze żadnych dodatków. Zweryfikuj powyżej kod zakupu, a następnie prześlij pakiet.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# plik} few {# pliki} many {# plików} other {# pliku}}",
+        "inPlace": "Moduł zainstalowany na miejscu",
+        "filesKept": "pliki zachowane na dysku",
+        "active": "Aktywny",
+        "disabled": "Wyłączony",
+        "inactive": "Nieaktywny",
+        "enable": "Włącz",
+        "disable": "Wyłącz",
+        "remove": "Usuń",
+        "reactivate": "Aktywuj ponownie",
+        "footnote": "Usunięcie dodatku kasuje tylko pliki, które zainstalował, śledzone od momentu jego dodania, więc pliki rdzenia nigdy nie są ruszane. Dane pozostają w bazie danych."
+      },
+      "verify": {
+        "title": "Zweryfikuj kod zakupu",
+        "body": "Ta sama licencja {brand}, która odblokowuje aktualizacje. Dodatki są z nią powiązane.",
+        "placeholder": "np. 8f2c1a44-...",
+        "label": "Kod zakupu",
+        "action": "Zweryfikuj",
+        "checking": "Weryfikowanie…",
+        "empty": "Najpierw wpisz kod zakupu.",
+        "failed": "Weryfikacja nie powiodła się."
+      },
+      "upload": {
+        "title": "Prześlij pakiet dodatku",
+        "body": "Plik ZIP jest sprawdzany, zanim cokolwiek zostanie zapisane. Uszkodzony lub niezgodny pakiet zostanie odrzucony, a Twoja instalacja pozostanie nietknięta.",
+        "choose": "Wybierz plik .zip dodatku",
+        "max": "Maks. 100 MB",
+        "action": "Zainstaluj",
+        "installing": "Instalowanie…",
+        "progress": "Przesyłanie i scalanie. Nie zamykaj tej karty."
+      },
+      "confirm": {
+        "removeTitle": "Usunąć {name}?",
+        "removeBody": "To usuwa pliki, które zainstalował. Jego dane pozostają w bazie danych.",
+        "remove": "Usuń",
+        "moduleOffTitle": "Usunąć {name}?",
+        "moduleOffBody": "To dezaktywuje dodatek, więc jego strony i automatyzacje przestaną działać. Pliki są zachowane, więc możesz go aktywować ponownie w dowolnym momencie. Nic nie jest usuwane, a jego dane pozostają w bazie danych.",
+        "moduleOnTitle": "Aktywować ponownie {name}?",
+        "moduleOnBody": "To ponownie włącza dodatek. Jego pliki nadal są na dysku, więc zacznie działać natychmiast.",
+        "reactivate": "Aktywuj ponownie"
+      },
+      "engines": {
+        "connected": "Połączono",
+        "notConnected": "Nie połączono",
+        "connect": "Połącz",
+        "manage": "Zarządzaj",
+        "disconnect": "Rozłącz",
+        "disconnectYes": "Tak, rozłącz",
+        "save": "Zapisz i połącz",
+        "testing": "Łączenie…",
+        "displayName": "Nazwa wyświetlana",
+        "secret": "Wspólny token tajny",
+        "secretSaved": "•••••••• zapisano, zostaw puste, aby zachować",
+        "secretNew": "wklej wspólny sekret",
+        "lastChecked": "Ostatnie sprawdzenie",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Działa jako osobne wdrożenie {brand}. Połącz przez adres URL i sekret, bez przesyłania plików.",
+          "blocked": "Zablokowane: aktywny natywny dodatek",
+          "blockedNote": "Natywny dodatek Instagram jest zainstalowany. Usuń go poniżej, aby połączyć zdalne {brand}.",
+          "modalTitle": "Połącz Instagram",
+          "modalBody": "Wklej adres URL wdrożenia {brand} i wspólny token tajny. {app} weryfikuje połączenie przez API. Nic nie jest przesyłane.",
+          "url": "Adres URL {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Wyświetlane w każdej etykiecie „Synchronizuj z …”, „Zarządzaj w …” i „… URL” w całej aplikacji.",
+          "disconnectTitle": "Rozłączyć Instagram?",
+          "disconnectBody": "To rozłącza Instagram z {app}. Instagram natychmiast zniknie z pulpitu, analityki, skrzynki odbiorczej, przepływów, szablonów i automatycznych odpowiedzi w każdej przestrzeni roboczej i nie będzie można z niego korzystać do ponownego połączenia. Kontynuować?"
+        },
+        "email": {
+          "title": "E-mail",
+          "body": "Połączenie łączy platformę e-mail {brand}, dzięki czemu poczta trafia do skrzynki zespołu, przez adres URL i sekret, bez przesyłania plików.",
+          "modalTitle": "Połącz e-mail",
+          "modalBody": "Wklej adres URL wdrożenia {brand} i wspólny token tajny. {app} weryfikuje połączenie przez API. Nic nie jest przesyłane.",
+          "url": "Adres URL {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Wyświetlane w każdej etykiecie e-mail w całej aplikacji.",
+          "disconnectTitle": "Rozłączyć e-mail?",
+          "disconnectBody": "To rozłącza platformę e-mail z {app}. Poczta przestanie trafiać do skrzynki zespołu w każdej przestrzeni roboczej do ponownego połączenia. Kontynuować?"
+        }
+      },
+      "errors": {
+        "generic": "To nie zadziałało.",
+        "forbidden": "Tylko superadministrator może zmieniać moduły.",
+        "invalidPackage": "Pakiet jest nieprawidłowy.",
+        "tooLarge": "Pakiet jest za duży.",
+        "coreTooOld": "Ten pakiet wymaga nowszej wersji rdzenia.",
+        "engineConflict": "Instagram działa na jednym silniku naraz. Najpierw rozłącz drugi."
+      }
+    },
+    "workspace": {
+      "title": "Dodatki",
+      "description": "Dodatkowe pakiety funkcji kupowane ponad subskrypcję.",
+      "needPlanTitle": "Dodatki wymagają aktywnego planu",
+      "needPlanBody": "Dodatki to dodatkowe pakiety funkcji kupowane ponad subskrypcję. Najpierw wybierz plan, a potem wróć tutaj, aby dodać funkcje.",
+      "viewPlans": "Zobacz plany",
+      "noneTitle": "Brak dostępnych dodatków",
+      "noneBody": "Obecnie nie oferujemy żadnych dodatków. Zajrzyj później.",
+      "ownedTitle": "Twoje dodatki",
+      "ownedBody": "Aktywne pakiety dołączone do Twojego obecnego planu.",
+      "ends": "Kończy się {date}",
+      "lifetime": "Dożywotnio",
+      "autoRenews": "Odnawia się automatycznie",
+      "renewal": {
+        "cancel": "Anuluj odnawianie",
+        "confirmTitle": "Anulować odnawianie?",
+        "confirmBody": "Ten dodatek pozostanie aktywny do końca opłaconego już okresu, a potem nie zostanie odnowiony.",
+        "confirm": "Anuluj odnawianie",
+        "keep": "Odnawiaj dalej",
+        "forbidden": "Nie masz uprawnień do zmiany planu.",
+        "none": "Brak aktywnej subskrypcji do anulowania.",
+        "failed": "Nie udało się anulować odnawiania. Spróbuj ponownie."
+      },
+      "active": "Aktywny",
+      "cardEyebrow": "Dodatek",
+      "catalogTitle": "Dodatki",
+      "catalogBody": "Odblokuj dodatkowe funkcje ponad obecny plan. Zmiana planu nie jest potrzebna.",
+      "count": "{count, plural, one {# dodatek} few {# dodatki} many {# dodatków} other {# dodatku}}",
+      "free": "Bezpłatnie",
+      "lifetimePrice": "jednorazowo",
+      "per": "/ {unit}",
+      "units": {
+        "days": "dni",
+        "weeks": "tygodnie",
+        "months": "miesiące",
+        "years": "lata"
+      },
+      "buy": "Dodaj do planu",
+      "buyAgain": "Kup ponownie",
+      "owned": "Posiadane ×{count} · ponowny zakup dodaje więcej",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "Bez limitu: {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "Nie udało się załadować dodatków."
+    },
+    "planFields": {
+      "fromModule": "z zainstalowanego modułu",
+      "unlimited": "Bez limitu"
+    }
+  }
+}

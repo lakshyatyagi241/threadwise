@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Platformconsole",
+        "skipToContent": "Naar de inhoud springen",
+        "navLabel": "Consolenavigatie",
+        "openMenu": "Menu openen",
+        "closeMenu": "Menu sluiten",
+        "language": "Taal",
+        "themeToLight": "Overschakelen naar licht thema",
+        "themeToDark": "Overschakelen naar donker thema",
+        "accountLink": "Account en beveiliging ({email})",
+        "signOut": "Uitloggen",
+        "signingOut": "Uitloggen",
+        "redirecting": "Installatie van tweestapsverificatie openen",
+        "roles": {
+          "super_admin": "Superbeheerder",
+          "support": "Support",
+          "auditor": "Auditor"
+        },
+        "mfaRequired": {
+          "title": "Tweestapsverificatie is vereist",
+          "body": "Superbeheerders moeten een authenticator-app inschakelen voordat ze de console gebruiken. Voltooi de installatie hieronder om alle pagina's te ontgrendelen."
+        }
+      },
+      "nav": {
+        "securityCenter": "Beveiligingscentrum",
+        "securityEvents": "Beveiligingsgebeurtenissen",
+        "registration": "Registratiebeleid",
+        "socialLogin": "Sociale login en captcha",
+        "authPages": "Authenticatiepagina's",
+        "plans": "Plannen",
+        "account": "Account en tweestapsverificatie",
+        "groups": {
+          "security": "Beveiliging",
+          "guestPages": "Inloggen en aanmelden",
+          "plans": "Plannen",
+          "account": "Jouw account"
+        }
+      },
+      "common": {
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Kopiëren mislukt",
+        "loading": "Laden",
+        "retry": "Opnieuw proberen",
+        "requestId": "Aanvraag-id",
+        "errors": {
+          "forbidden": "Je rol staat dit niet toe.",
+          "request": "De aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens.",
+          "unexpected": "Er is iets misgegaan aan onze kant. Probeer het zo meteen opnieuw."
+        },
+        "readOnly": {
+          "superAdmin": "Alleen superbeheerders kunnen deze instellingen wijzigen. Je rol ({role}) kan ze bekijken.",
+          "superAdminSupport": "Alleen superbeheerders en support kunnen deze instellingen wijzigen. Je rol ({role}) kan ze bekijken."
+        },
+        "copyWhat": "{what} kopiëren"
+      },
+      "login": {
+        "title": "Operator-login",
+        "intro": "Deze console is voor de mensen die het platform beheren. Workspacegebruikers loggen in op de hoofdloginpagina.",
+        "requestId": "Aanvraag-id",
+        "submit": "Inloggen",
+        "submitting": "Inloggen",
+        "fields": {
+          "email": "E-mail",
+          "emailPlaceholder": "jij@bedrijf.com",
+          "password": "Wachtwoord",
+          "showPassword": "Wachtwoord tonen",
+          "hidePassword": "Wachtwoord verbergen"
+        },
+        "errors": {
+          "email": "Voer een geldig e-mailadres in.",
+          "passwordRequired": "Voer je wachtwoord in.",
+          "captchaRequired": "Vink het vakje aan om te laten zien dat je geen robot bent.",
+          "codeFormat": "Voer de 6 cijfers uit je authenticator-app in.",
+          "recoveryFormat": "Een herstelcode bestaat uit 8 tot 32 letters, cijfers of streepjes."
+        },
+        "notices": {
+          "expired": "Je sessie is beëindigd. Log opnieuw in om door te gaan.",
+          "idle": "Je bent uitgelogd na {minutes, plural, one {# minuut} other {# minuten}} zonder activiteit. Log opnieuw in om door te gaan."
+        },
+        "problems": {
+          "invalid": "Die inloggegevens komen niet overeen.",
+          "invalidCode": "Die code is ongeldig. Controleer de code en probeer het opnieuw.",
+          "locked": "Te veel mislukte pogingen. Inloggen is tijdelijk gepauzeerd.",
+          "tryAgainIn": "Probeer het over {time} opnieuw",
+          "ipBlocked": "Toegang vanaf {ip} is niet toegestaan.",
+          "ipBlockedUnknown": "Toegang vanaf dit adres is niet toegestaan.",
+          "ipBlockedHelp": "De toegestane lijst van operators bevat dit adres niet. Vraag een superbeheerder om het toe te voegen.",
+          "captcha": "De captchacontrole is mislukt. Voltooi deze en probeer het opnieuw.",
+          "challengeExpired": "Die login is verlopen. Voer je wachtwoord opnieuw in.",
+          "rateLimited": "Te veel aanvragen. Wacht even en probeer het opnieuw.",
+          "unexpected": "We kunnen je niet inloggen. Probeer het zo meteen opnieuw.",
+          "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+        },
+        "captcha": {
+          "loadFailed": "De captcha kon niet worden geladen. Controleer je verbinding of een contentblocker en probeer het opnieuw.",
+          "retry": "Captcha opnieuw proberen",
+          "v3Notice": "Deze pagina wordt beschermd door een onzichtbare captchacontrole."
+        },
+        "mfa": {
+          "title": "Tweestapscontrole",
+          "intro": "Voer de 6-cijferige code uit je authenticator-app in.",
+          "recoveryIntro": "Voer een van je herstelcodes in. Elke code werkt één keer.",
+          "codeLabel": "Authenticatiecode",
+          "codeHint": "De code verandert elke 30 seconden.",
+          "recoveryLabel": "Herstelcode",
+          "recoveryHint": "Letters, cijfers en streepjes, precies zoals opgeslagen.",
+          "windowLeft": "Deze login blijft {time} open.",
+          "windowClosed": "Dit inlogvenster is gesloten. Ga terug en voer je wachtwoord opnieuw in.",
+          "verify": "Verifiëren en inloggen",
+          "verifying": "Controleren",
+          "useRecovery": "Gebruik een herstelcode",
+          "useAuthenticator": "Gebruik de authenticator-app",
+          "back": "Terug naar inloggen"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Jouw account",
+        "title": "Tweestapsverificatie",
+        "description": "Bescherm {email} met een authenticator-app. Operatoraccounts zijn de accounts met het hoogste vertrouwen op het platform.",
+        "requestId": "Aanvraag-id",
+        "status": {
+          "title": "Authenticator-app",
+          "on": "Aan",
+          "body": "Tweestapsverificatie is ingeschakeld voor dit account. Bij elke login wordt om een code gevraagd. De herstelcodes zijn eenmalig getoond toen je dit inschakelde."
+        },
+        "intro": {
+          "title": "Een authenticator-app instellen",
+          "step1": "Installeer een authenticator-app zoals Google Authenticator, Microsoft Authenticator of 1Password.",
+          "step2": "Scan de QR-code die we tonen of typ de installatiesleutel handmatig in.",
+          "step3": "Voer ter bevestiging de 6-cijferige code in die de app toont. Daarna ontvang je herstelcodes.",
+          "begin": "Installatie starten",
+          "starting": "Voorbereiden"
+        },
+        "setup": {
+          "qrLabel": "QR-code voor je authenticator-app",
+          "title": "Scannen en bevestigen",
+          "scan": "Open je authenticator-app, voeg een account toe en scan deze code. De code wordt in je browser getekend en nooit naar een andere site gestuurd.",
+          "manualTitle": "Scannen lukt niet?",
+          "manualHint": "Voer in plaats daarvan deze installatiesleutel in de app in. Tijdgebaseerd, 6 cijfers.",
+          "codeLabel": "6-cijferige code",
+          "codeHint": "Voer de code in die de app nu toont.",
+          "enable": "Tweestapsverificatie inschakelen",
+          "enabling": "Inschakelen",
+          "cancel": "Installatie annuleren"
+        },
+        "codes": {
+          "enabled": "Tweestapsverificatie is ingeschakeld.",
+          "title": "Bewaar je herstelcodes",
+          "body": "Als je je telefoon kwijtraakt, kun je met elk van deze codes één keer inloggen. Ze worden alleen nu getoond. Bewaar ze op een veilige plek, los van je wachtwoord.",
+          "copyAll": "Alles kopiëren",
+          "download": "Downloaden als tekstbestand",
+          "saved": "Ik heb deze herstelcodes veilig bewaard.",
+          "continue": "Doorgaan naar de console",
+          "fileHeader": "Herstelcodes voor de platformconsole van {email}. Elke code werkt één keer."
+        },
+        "errors": {
+          "unexpected": "We kunnen die stap niet voltooien. Probeer het zo meteen opnieuw.",
+          "codeFormat": "Voer de 6 cijfers in die je app toont.",
+          "codeInvalid": "Die code is ongeldig. Controleer de klok op je telefoon en probeer de volgende code.",
+          "setupExpired": "De installatie is verlopen. Begin opnieuw.",
+          "locked": "Te veel mislukte pogingen. Wacht even voordat je het opnieuw probeert.",
+          "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+        }
+      },
+      "security": {
+        "kicker": "Beveiligingscentrum",
+        "title": "Beveiliging en compliance",
+        "description": "Bescherm operatortoegang, WhatsApp-verzending, apparaten en webhooks. Elke wijziging wordt als één update opgeslagen en vastgelegd in het logboek van beveiligingsgebeurtenissen.",
+        "viewEvents": "Beveiligingsgebeurtenissen bekijken",
+        "save": "Instellingen opslaan",
+        "saving": "Opslaan",
+        "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
+        "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
+        "requestId": "Aanvraag-id",
+        "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
+        "discard": "Wijzigingen negeren",
+        "errors": {
+          "forbidden": "Je rol mag deze instellingen niet wijzigen.",
+          "unexpected": "De instellingen konden niet worden opgeslagen. Probeer het zo meteen opnieuw."
+        },
+        "tabs": {
+          "summary": "Overzicht",
+          "login": "Login en MFA",
+          "whatsapp": "WhatsApp-vangrails",
+          "abuse": "Misbruikfilters",
+          "api": "API en webhooks",
+          "devices": "Apparaten",
+          "danger": "Gevarenzone"
+        },
+        "common": {
+          "range": "Toegestaan: {min} tot {max}.",
+          "rangeWithZero": "Toegestaan: 0 (uit), of {min} tot {max}.",
+          "blankKeeps": "Leeg laten behoudt de opgeslagen waarde."
+        },
+        "problems": {
+          "range": "Voer een geheel getal in van {min} tot {max}.",
+          "rangeWithZero": "Voer 0 in, of een geheel getal van {min} tot {max}.",
+          "tooMany": "Maximaal {max} items.",
+          "tooLong": "Elk item mag maximaal {max} tekens bevatten.",
+          "invalidEntry": "{entry} is geen geldig adres of bereik.",
+          "totalTooLong": "Houd de lijst onder de {max} tekens in totaal."
+        },
+        "kpis": {
+          "score": {
+            "label": "Beveiligingsscore",
+            "strong": "sterke controles actief",
+            "attention": "aandacht nodig"
+          },
+          "openRisks": {
+            "label": "Openstaande risico's",
+            "note": "{count} hoge prioriteit"
+          },
+          "blocked": {
+            "label": "Geblokkeerde pogingen"
+          },
+          "last24h": "laatste 24 uur",
+          "warnings": {
+            "label": "Waarschuwingen"
+          },
+          "mfa": {
+            "label": "MFA-dekking van operators",
+            "note": "{enrolled}/{total} operators aangemeld"
+          },
+          "webhooks": {
+            "label": "Webhookfouten",
+            "normal": "normaal",
+            "review": "controleren"
+          }
+        },
+        "risks": {
+          "kicker": "Prioriteitswachtrij",
+          "title": "Te beoordelen risico-items",
+          "seeAll": "Alle fouten bekijken",
+          "empty": "Alles in orde. Geen fouten of waarschuwingen in de afgelopen 7 dagen.",
+          "columns": {
+            "severity": "Ernst",
+            "signal": "Signaal",
+            "workspace": "Workspace",
+            "owner": "Eigenaar",
+            "action": "Actie"
+          },
+          "severity": {
+            "high": "Hoog",
+            "medium": "Gemiddeld",
+            "watch": "Volgen"
+          },
+          "platform": "Platform",
+          "inspect": "Inspecteren",
+          "platformOf": "{app}-platform",
+          "owner": {
+            "system": "Systeem",
+            "types": {
+              "user": "Gebruiker",
+              "platform_operator": "Platformoperator"
+            }
+          },
+          "noWorkspace": "Geen workspace"
+        },
+        "coverage": {
+          "kicker": "Dekking",
+          "title": "Ingeschakelde controles",
+          "buckets": {
+            "admin_access": "Beheerderstoegang",
+            "send_abuse": "Preventie van WhatsApp-misbruik",
+            "api_hardening": "API-versterking",
+            "incident_readiness": "Incidentgereedheid"
+          }
+        },
+        "quickActions": {
+          "kicker": "Snelle acties",
+          "rotate": "Webhookgeheimen roteren",
+          "forceReset": "Wachtwoordreset afdwingen",
+          "resume": "Verzending hervatten",
+          "halt": "Verzending noodstoppen",
+          "scopeAll": "alle",
+          "scopeUsers": "alle gebruikers",
+          "scopeGlobal": "globaal",
+          "halted": "momenteel gestopt",
+          "superAdminOnly": "Alleen een superbeheerder kan deze acties uitvoeren."
+        },
+        "enforcement": {
+          "kicker": "Eerlijke controles",
+          "title": "Wat elke controle nu doet",
+          "description": "Een instelling opslaan betekent niet dat het platform er ook naar handelt. Afgedwongen betekent dat het nu wordt gecontroleerd, gedeeltelijk dat slechts enkele paden het controleren, gereserveerd dat het voor later wordt bewaard.",
+          "show": "Tonen",
+          "hide": "Verbergen",
+          "columns": {
+            "control": "Controle",
+            "consumer": "Wat het gebruikt",
+            "status": "Status"
+          },
+          "enforced": "Afgedwongen",
+          "partial": "Gedeeltelijk",
+          "reserved": "Gereserveerd"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "2FA vereisen voor alle gebruikers",
+            "hint": "Elke workspacegebruiker moet een authenticator-app instellen voordat hij of zij verder kan."
+          },
+          "requireMfaForAdmins": {
+            "label": "2FA vereisen voor beheerders",
+            "hint": "Gebruikers met de rol Beheerder in een workspace moeten een authenticator-app instellen."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "2FA vereisen voor superbeheerders",
+            "hint": "Platformsuperbeheerders loggen in met alleen een wachtwoord zolang dit uit staat. Als je dit inschakelt, moeten ze een authenticator-app registreren en gebruiken."
+          },
+          "requireMfaForOwners": {
+            "label": "2FA vereisen voor workspace-eigenaren",
+            "hint": "De eigenaar van elke workspace moet een authenticator-app instellen."
+          },
+          "allowedMfaMethods": {
+            "label": "Toegestane 2FA-methoden",
+            "hint": "Minstens één blijft geselecteerd: als je niets aanvinkt, blijft de opgeslagen lijst behouden. Er bestaan nu alleen authenticator-apps.",
+            "methods": {
+              "totp": "Authenticator-app",
+              "email": "E-mailcode",
+              "telegram": "Telegram-bot"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Sessietime-out (minuten)",
+            "hint": "Inactieve tijd voordat een login met browsersessie eindigt. Sessies die 30 dagen bewaard blijven zijn uitgezonderd."
+          },
+          "maxConcurrentSessions": {
+            "label": "Max. gelijktijdige sessies per gebruiker",
+            "hint": "Bij overschrijding wordt de oudste sessie uitgelogd."
+          },
+          "rememberMeEnabled": {
+            "label": "Ingelogd blijven toestaan",
+            "hint": "Uit betekent dat elke sessie eindigt zodra de browser wordt gesloten."
+          },
+          "lockoutAfterFailures": {
+            "label": "Max. inlogpogingen",
+            "hint": "Mislukte logins binnen het tijdvenster voordat het account wordt gepauzeerd."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Vergrendelingsvenster (minuten)",
+            "hint": "Hoelang mislukte pogingen worden geteld en hoelang de pauze duurt."
+          },
+          "passwordMinLength": {
+            "label": "Minimale lengte"
+          },
+          "passwordRequireUpper": {
+            "label": "Hoofdletter vereisen",
+            "short": "Hoofdletter"
+          },
+          "passwordRequireNumber": {
+            "label": "Cijfer vereisen",
+            "short": "Cijfer"
+          },
+          "passwordRequireSymbol": {
+            "label": "Symbool vereisen",
+            "short": "Symbool"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Maximale wachtwoordleeftijd (dagen)",
+            "hint": "0 betekent dat wachtwoorden nooit verlopen."
+          },
+          "waGuardrailsMode": {
+            "label": "Modus",
+            "options": {
+              "off": "Uit (geen controles)",
+              "monitor": "Monitor (alleen loggen)",
+              "enforce": "Afdwingen (blokkeren)"
+            },
+            "explain": {
+              "off": "Er worden geen controles uitgevoerd. De limieten en filters op deze tabbladen hebben geen effect.",
+              "monitor": "Controles worden uitgevoerd en treffers worden in het gebeurtenissenlogboek vastgelegd, maar er wordt geen bericht tegengehouden. Gebruik dit om de regels te bevestigen voordat je ze afdwingt.",
+              "enforce": "Overeenkomende berichten worden geblokkeerd voordat ze worden verzonden."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Max. verzendingen per minuut",
+            "hint": "Per workspace. 0 betekent onbeperkt."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Max. verzendingen per dag",
+            "hint": "Per workspace. 0 betekent onbeperkt."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Vasthouden bij meer links dan",
+            "hint": "Berichten met meer links dan dit worden vastgehouden. 0 betekent geen limiet."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Verzendingen met oplichtingspatronen vasthouden",
+            "hint": "Formuleringen rond prijzen, dringende accountmeldingen en verificatiefuiken."
+          },
+          "waRequireTemplateReview": {
+            "label": "Sjabloonbeoordeling vereisen voor verzending",
+            "hint": "Telt alleen mee voor de beveiligingsscore; er wordt nog niets gecontroleerd."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Financiële termen en snel-rijk-termen blokkeren",
+            "hint": "Nepbeleggingen, gegarandeerd rendement en betalingsomleidingspatronen."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Korte en verdachte links blokkeren",
+            "hint": "Linkverkorters die verbergen waar een bericht naartoe leidt."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Eigen blokkeerlijst met trefwoorden",
+            "hint": "Eén per regel, of gescheiden door komma's. In totaal maximaal 5.000 tekens. Overeenkomsten zijn niet hoofdlettergevoelig. Overeenkomende berichten worden gemarkeerd of geblokkeerd volgens de vangrailmodus.",
+            "placeholder": "forex\nsnel geld\ngegarandeerd rendement"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "API-aanvragen per minuut",
+            "hint": "Het maximale aantal aanvragen per minuut dat één API-sleutel van een workspace mag doen. Een sleutel kan een lagere eigen limiet hebben, nooit een hogere."
+          },
+          "webhookSignatureRequired": {
+            "label": "HMAC-handtekeningen vereisen",
+            "hint": "Een webhook-endpoint kan niet worden aangemaakt zonder ondertekeningsgeheim."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Webhook-herhalingsvenster (seconden)",
+            "hint": "Voor later bewaard; binnenkomende providerwebhooks worden al op handtekening gecontroleerd."
+          },
+          "deviceTrustRequired": {
+            "label": "Vertrouwde browser vereisen",
+            "hint": "Voor later bewaard; er is nog geen flow voor apparaatvertrouwen."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Automatisch uitloggen na inactiviteit (dagen)",
+            "hint": "Gekoppelde WhatsApp-apparaten die zo lang niet zijn gezien, worden als losgekoppeld gemarkeerd. 0 betekent nooit."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Toegestane lijst inschakelen",
+            "hint": "Alleen de onderstaande adressen hebben toegang tot deze console."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Toegestane adressen"
+          },
+          "alertOnNewDevice": {
+            "label": "Meldingen voor nieuwe apparaten",
+            "hint": "Mail de gebruiker wanneer een login vanaf een eerder niet geziene apparaat komt."
+          },
+          "alertOnNewCountry": {
+            "label": "Meldingen voor netwerkwijzigingen",
+            "hint": "Mail de gebruiker wanneer een login vanaf een ander netwerk dan gebruikelijk komt."
+          },
+          "alertChannel": {
+            "label": "Waar loginmeldingen naartoe gaan",
+            "hint": "Er wordt nu alleen e-mail verstuurd; het WhatsApp-kanaal wordt voor later vastgelegd.",
+            "options": {
+              "email": "E-mail",
+              "whatsapp": "WhatsApp",
+              "both": "E-mail en WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Beveiligingsgebeurtenissen bewaren gedurende (dagen)",
+            "hint": "0 betekent voor altijd bewaren."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Loginbeveiliging",
+              "title": "Regels voor accountvergrendeling"
+            },
+            "password": {
+              "title": "Regels voor nieuwe wachtwoorden",
+              "note": "Wordt toegepast wanneer een wachtwoord wordt aangemaakt of gewijzigd, nooit op een bestaande login, zodat aanscherpen niemand kan buitensluiten."
+            },
+            "mfa": {
+              "kicker": "Multifactorauthenticatie",
+              "title": "2FA-afdwinging",
+              "description": "Geldt voor workspacegebruikers. Platformoperators die superbeheerder zijn, hebben altijd 2FA nodig."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Hoofdschakelaar",
+              "title": "Vangrailafdwinging",
+              "description": "De limieten en filters op deze tabbladen werken alleen volgens deze modus. Kies een modus en lees wat deze doet."
+            },
+            "caps": {
+              "kicker": "Verzendsnelheid",
+              "title": "Harde limieten"
+            },
+            "spam": {
+              "kicker": "Inhoudsregels",
+              "title": "Antispamcontroles"
+            },
+            "health": {
+              "kicker": "Betrouwbaarheidskwaliteit",
+              "title": "Workspacegezondheid",
+              "body": "Aantallen geblokkeerde en gemarkeerde berichten per workspace verschijnen hier zodra de verzendpijplijnen ze rapporteren. Gebruik tot die tijd het logboek van beveiligingsgebeurtenissen om te zien wat de vangrails hebben onderschept.",
+              "link": "Workspaces bekijken"
+            }
+          },
+          "abuse": {
+            "kicker": "Misbruikfilters",
+            "title": "Preventie van illegaal gebruik",
+            "aside": {
+              "title": "Houd dit beleid strikt",
+              "body": "Deze filters houden oplichting, phishing en intimidatie weg uit de kanalen die je klanten gebruiken. Ze volgen de vangrailmodus die is ingesteld op het tabblad WhatsApp-vangrails."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Verkeersbeheer",
+              "title": "Snelheidslimieten"
+            },
+            "integrity": {
+              "kicker": "Webhookverdediging",
+              "title": "Integriteit"
+            },
+            "allowlist": {
+              "kicker": "IP-toegestane lijst",
+              "title": "Toegang tot de console",
+              "description": "Beperkt alleen deze operatorconsole. Workspacegebruikers, de openbare API en webhooks worden niet beïnvloed. Een lege lijst laat iedereen toe, dus je kunt nooit alle operators buitensluiten.",
+              "cidrs": "Toegestane adressen",
+              "cidrsHint": "Eén adres of bereik per regel, bijvoorbeeld 203.0.113.9 of 203.0.113.0/24. Komma's werken ook.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Je adres zoals de API het ziet:",
+              "yourIpUnknown": "We kunnen je adres niet detecteren, dus we kunnen je niet waarschuwen voor het buitensluiten van jezelf.",
+              "addMine": "Mijn IP toevoegen",
+              "alreadyListed": "Al in de lijst",
+              "lockoutWarning": "Je adres {ip} staat niet in deze lijst. Opslaan zou je buitensluiten, dus de server weigert het. Voeg eerst je adres toe."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Apparaatintegriteit",
+              "title": "Vertrouwens- en sessiebeleid"
+            },
+            "alerts": {
+              "kicker": "Kanaal voor loginmeldingen",
+              "title": "Waar meldingen naartoe gaan"
+            },
+            "audit": {
+              "kicker": "Auditlogboek",
+              "title": "Bewaartermijn",
+              "description": "Beveiligingsgebeurtenissen die ouder zijn dan dit worden opgeschoond zodra de opschoontaak bestaat.",
+              "link": "Het logboek van beveiligingsgebeurtenissen openen"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Gevarenzone",
+          "title": "Onomkeerbare acties voor het hele platform",
+          "description": "Bij elke actie moet je de naam ervan typen voordat er iets gebeurt, en elke actie wordt vastgelegd in het logboek van beveiligingsgebeurtenissen.",
+          "superAdminOnly": "Deze acties zijn alleen voor superbeheerders. Jouw rol is {role}.",
+          "haltState": "Uitgaande verzendingen:",
+          "haltOn": "Gestopt",
+          "haltOff": "Actief",
+          "revoke": {
+            "title": "Alle sessies intrekken",
+            "detail": "logt iedereen uit"
+          },
+          "forceReset": {
+            "title": "Wachtwoordreset afdwingen voor alle gebruikers",
+            "detail": "markeert elke gebruiker"
+          },
+          "rotate": {
+            "title": "Alle webhookgeheimen roteren",
+            "detail": "bestaande integraties raken defect",
+            "note": "Webhook-ondertekeningsgeheimen horen bij het integratiegedeelte, dat nog niet bestaat, dus dit meldt voorlopig 0 geroteerd."
+          },
+          "halt": {
+            "title": "Alle verzendingen noodstoppen",
+            "detail": "stopschakelaar voor het hele platform"
+          },
+          "resume": {
+            "title": "Verzending hervatten",
+            "detail": "momenteel gestopt"
+          },
+          "logged": {
+            "kicker": "Wat wordt gelogd",
+            "title": "Elke actie schrijft een gebeurtenis",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Wanneer alle sessies worden beëindigd, ook die van jou.",
+              "forceReset": "Wanneer elke gebruiker wordt gevraagd een nieuw wachtwoord te kiezen.",
+              "rotate": "Wanneer geheimen worden geroteerd, met het aantal.",
+              "halt": "Wanneer de stop wordt ingeschakeld, en opnieuw wanneer de verzending wordt hervat.",
+              "policy": "Bij elke instellingswijziging hierboven, met de oude en nieuwe waarden."
+            },
+            "trail": "Beveiligingsauditlogboek bekijken"
+          },
+          "halted": {
+            "title": "Noodstop is actief",
+            "body": "Elk uitgaand bericht wordt platformbreed geblokkeerd totdat de verzending wordt hervat.",
+            "resume": "Verzending hervatten"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Alle sessies intrekken",
+              "body": "Iedereen die bij een workspace of deze console is ingelogd, wordt uitgelogd, jij ook.",
+              "effect1": "Iedereen moet opnieuw inloggen, met tweestapsverificatie als die aan staat.",
+              "effect2": "Werk dat niet in de browser is opgeslagen, kan verloren gaan.",
+              "confirm": "Alle sessies intrekken",
+              "done": "{count, plural, =0 {Er waren geen actieve sessies.} one {# sessie ingetrokken.} other {# sessies ingetrokken.}}",
+              "signedOut": "Je bent ook uitgelogd. Log opnieuw in om door te gaan."
+            },
+            "force_password_reset": {
+              "title": "Wachtwoordreset afdwingen voor alle gebruikers",
+              "body": "Elke workspacegebruiker wordt gevraagd een nieuw wachtwoord te kiezen zodra hij of zij de app weer gebruikt.",
+              "effect1": "Er wordt nu niemand uitgelogd; de melding verschijnt bij de volgende aanvraag.",
+              "effect2": "Mensen die de melding negeren, kunnen de app niet gebruiken totdat ze het wachtwoord wijzigen.",
+              "confirm": "Reset afdwingen",
+              "done": "{count, plural, =0 {Er zijn geen gebruikers gemarkeerd.} one {# gebruiker moet een nieuw wachtwoord kiezen.} other {# gebruikers moeten een nieuw wachtwoord kiezen.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Alle webhookgeheimen roteren",
+              "body": "Elk webhook-ondertekeningsgeheim wordt vervangen door een nieuw geheim.",
+              "effect1": "Integraties die handtekeningen verifiëren, werken niet meer totdat ze het nieuwe geheim gebruiken.",
+              "effect2": "De oude geheimen kunnen niet worden teruggehaald.",
+              "confirm": "Geheimen roteren",
+              "done": "{count, plural, =0 {0 geheimen geroteerd.} one {# geheim geroteerd.} other {# geheimen geroteerd.}}",
+              "noneRotated": "Er is niets geroteerd omdat het integratiegedeelte nog geen webhookgeheimen opslaat."
+            },
+            "halt_sends": {
+              "title": "Alle verzendingen noodstoppen",
+              "body": "Elk uitgaand bericht in alle workspaces wordt geweigerd totdat je de verzending hervat.",
+              "effect1": "Klanten ontvangen niets, ook geen antwoorden, campagnes en automatiseringen.",
+              "effect2": "Gebruik verzending hervatten om berichten weer in te schakelen.",
+              "confirm": "Alle verzendingen stoppen",
+              "done": "Noodstop is actief. Alle uitgaande verzendingen zijn geblokkeerd."
+            },
+            "resume_sends": {
+              "title": "Verzending hervatten",
+              "body": "Uitgaande berichten worden voor elke workspace weer ingeschakeld.",
+              "effect1": "Berichten die tijdens de stop zijn geweigerd, worden niet automatisch verzonden.",
+              "effect2": "Controleer eerst het gebeurtenissenlogboek als je de verzending vanwege een incident hebt gestopt.",
+              "confirm": "Verzending hervatten",
+              "done": "De verzending is hervat."
+            },
+            "typeToConfirm": "Typ <code>{phrase}</code> om te bevestigen",
+            "phraseHint": "Hoofdletters en extra spaties worden genegeerd.",
+            "cancel": "Annuleren",
+            "working": "Bezig",
+            "close": "Sluiten",
+            "signInAgain": "Opnieuw inloggen",
+            "requestId": "Aanvraag-id",
+            "errors": {
+              "forbidden": "Alleen een superbeheerder kan deze actie uitvoeren.",
+              "unexpected": "De actie is niet voltooid. Controleer het gebeurtenissenlogboek voordat je het opnieuw probeert."
+            }
+          }
+        },
+        "tabsLabel": "Secties van het Beveiligingscentrum",
+        "search": {
+          "label": "Zoek beveiligingsregels, IP's en actoren",
+          "placeholder": "Zoek beveiligingsregels, IP's, actoren…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Beveiligingscentrum",
+        "title": "Beveiligingsgebeurtenissen",
+        "description": "Logins, vergrendelingen, beleidswijzigingen en gevaarlijke acties, nieuwste eerst.",
+        "refresh": "Vernieuwen",
+        "refreshing": "Vernieuwen",
+        "filters": {
+          "label": "Gebeurtenissen filteren",
+          "event": "Gebeurtenisnaam",
+          "eventHint": "Exacte naam, bijvoorbeeld auth.failed. Kies een suggestie of typ je eigen naam.",
+          "status": "Status",
+          "anyStatus": "Elke status",
+          "apply": "Toepassen",
+          "clear": "Filters wissen",
+          "q": "Zoektekst",
+          "qHint": "Vindt gebeurtenissen waarvan de naam deze tekst bevat, ongeacht hoofdletters."
+        },
+        "status": {
+          "success": "Gelukt",
+          "failure": "Mislukt",
+          "warning": "Waarschuwing",
+          "info": "Info"
+        },
+        "empty": "Er zijn nog geen beveiligingsgebeurtenissen vastgelegd.",
+        "emptyFiltered": "Geen gebeurtenissen gevonden voor deze filters.",
+        "listLabel": "Beveiligingsgebeurtenissen",
+        "ip": "IP",
+        "showPayload": "Details tonen",
+        "hidePayload": "Details verbergen",
+        "noPayload": "Deze gebeurtenis heeft geen extra details.",
+        "payloadLabel": "Details van {event}",
+        "loadMore": "Meer laden",
+        "loading": "Laden",
+        "end": "{count, plural, one {De enige gebeurtenis wordt getoond.} other {Alle # gebeurtenissen worden getoond.}}",
+        "export": "CSV exporteren",
+        "exported": "{count, plural, one {# geladen gebeurtenis opgeslagen in een CSV-bestand.} other {# geladen gebeurtenissen opgeslagen in een CSV-bestand.}}",
+        "actorLabel": "Actor",
+        "actorTypes": {
+          "user": "Gebruiker",
+          "platform_operator": "Platformoperator",
+          "system": "Systeem"
+        },
+        "workspaceLabel": "Workspace",
+        "requestIdLabel": "Aanvraag-id",
+        "userAgentLabel": "Browser",
+        "copyNames": {
+          "actorId": "actor-id",
+          "orgId": "workspace-id",
+          "requestId": "aanvraag-id"
+        }
+      },
+      "registration": {
+        "kicker": "Gastpagina's",
+        "title": "Registratiebeleid",
+        "description": "Bepaal wie zich kan aanmelden, hoe e-mail wordt geverifieerd, met welk plan nieuwe workspaces beginnen en hoe de aanmeldcode werkt.",
+        "save": "Instellingen opslaan",
+        "saving": "Opslaan",
+        "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
+        "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
+        "requestId": "Aanvraag-id",
+        "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
+        "discard": "Wijzigingen negeren",
+        "errors": {
+          "unexpected": "De instellingen konden niet worden opgeslagen. Probeer het zo meteen opnieuw."
+        },
+        "problems": {
+          "range": "Voer een geheel getal in van {min} tot {max}.",
+          "tooLong": "Maximaal {max} tekens.",
+          "required": "Dit veld is verplicht.",
+          "link": "Gebruik een sitepad zoals /legal/terms, of een volledig http- of https-adres.",
+          "senderFormat": "Kies een van de afzenders uit de lijst.",
+          "countryFormat": "Gebruik een landcode van twee letters.",
+          "senderRequired": "Kies een afzenderkanaal voordat je het sjabloon aanmaakt."
+        },
+        "policy": {
+          "kicker": "Aanmelden",
+          "title": "Wie zich kan registreren",
+          "description": "Deze instellingen gelden voor nieuwe aanmeldingen, ook via sociale media."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Openbare registratie",
+            "hintOn": "Iedereen kan op de aanmeldpagina een workspace aanmaken.",
+            "hintOff": "De aanmeldpagina toont een melding dat registratie is gesloten. Bestaande gebruikers worden niet beïnvloed."
+          },
+          "emailVerification": {
+            "label": "E-mailverificatie",
+            "options": {
+              "off": "Uit: accounts worden automatisch geverifieerd",
+              "banner": "Banner: toegestaan, met een herinnering",
+              "block": "Blokkeren: eerst verifiëren om door te gaan"
+            },
+            "explain": {
+              "off": "Nieuwe accounts tellen meteen als geverifieerd. Er is geen verificatie-e-mail nodig.",
+              "banner": "Mensen kunnen de app meteen gebruiken en zien een herinnering totdat ze verifiëren.",
+              "block": "Mensen moeten hun e-mailadres verifiëren voordat ze iets anders kunnen gebruiken."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Standaardplan",
+            "hint": "Het plan waarmee nieuwe workspaces beginnen. Automatisch gebruikt het plan dat als aanmeldstandaard is gemarkeerd, anders het eerste actieve gratis plan.",
+            "placeholder": "plan-slug",
+            "auto": "Automatisch",
+            "unavailable": "{slug} (geen actief plan)",
+            "loadFailed": "De planlijst kon niet worden geladen.",
+            "kinds": {
+              "free": "Gratis",
+              "paid": "Betaald",
+              "custom_quote": "Offerte op maat"
+            }
+          },
+          "trialDays": {
+            "label": "Gratis proefperiode (dagen)",
+            "hint": "Geheel getal van {min} tot {max}. 0 betekent geen proefperiode. Laat leeg om de opgeslagen waarde te behouden."
+          },
+          "defaultTimezone": {
+            "label": "Standaardtijdzone",
+            "hint": "Wordt gebruikt voor nieuwe workspaces totdat ze zelf een tijdzone kiezen."
+          },
+          "defaultCountryIso": {
+            "label": "Standaardland",
+            "hint": "Selecteert vooraf het telefoonland bij het aanmelden.",
+            "none": "Geen standaard"
+          },
+          "termsUrl": {
+            "label": "Link naar voorwaarden",
+            "hint": "Een sitepad of een volledig adres, getoond op de aanmeld- en loginpagina's."
+          },
+          "privacyUrl": {
+            "label": "Link naar privacybeleid"
+          },
+          "cookiesUrl": {
+            "label": "Link naar cookiebeleid",
+            "hint": "Optioneel. Laat leeg om te verbergen."
+          },
+          "otpEnabled": {
+            "label": "Aanmeldcode via WhatsApp",
+            "hint": "Nieuwe accounts moeten hun telefoonnummer met een eenmalige code bevestigen voordat de workspace wordt aangemaakt."
+          },
+          "otpSender": {
+            "label": "Afzender",
+            "hint": "Het gekoppelde nummer dat de code verstuurt. Voeg er een toe via Afzenders beheren."
+          },
+          "ttlMinutes": {
+            "label": "Geldigheid van de code (minuten)"
+          },
+          "length": {
+            "label": "Lengte van de code (cijfers)"
+          },
+          "resendCooldownSec": {
+            "label": "Wachttijd voor opnieuw versturen (seconden)"
+          },
+          "maxAttempts": {
+            "label": "Max. pogingen"
+          }
+        },
+        "otp": {
+          "kicker": "Verificatie",
+          "title": "Aanmeldcode",
+          "description": "Instellingen voor de eenmalige code die wordt verstuurd wanneer iemand zich aanmeldt.",
+          "knobHint": "{min} tot {max}. Leeg gebruikt {default}.",
+          "status": {
+            "on": "Actief",
+            "off": "Niet actief",
+            "unsavedNote": "Dit toont de opgeslagen instellingen. Sla je wijzigingen op om te zien hoe ze werken.",
+            "reason": {
+              "active": "Nieuwe aanmeldingen moeten hun telefoonnummer met een code bevestigen.",
+              "disabled": "De schakelaar staat uit, dus bij het aanmelden wordt niet om een code gevraagd.",
+              "no_sender": "Er is geen afzender gekozen, dus de codestap wordt overgeslagen bij het aanmelden.",
+              "sender_missing": "De gekozen afzender bestaat niet meer, dus de codestap wordt overgeslagen bij het aanmelden.",
+              "sender_incomplete": "Bij de gekozen afzender ontbreken inloggegevens, dus de codestap wordt overgeslagen bij het aanmelden.",
+              "dev_in_production": "De logafzender kan niet in productie draaien, dus de codestap wordt overgeslagen bij het aanmelden.",
+              "template_missing": "Een WhatsApp Business-afzender heeft een goedgekeurd sjabloon nodig. Maak er hieronder een aan en dien het in; tot die tijd wordt de codestap bij het aanmelden overgeslagen.",
+              "template_pending": "Meta beoordeelt het sjabloon nog, dus de codestap wordt bij het aanmelden overgeslagen totdat het is goedgekeurd.",
+              "template_rejected": "Meta heeft het sjabloon afgewezen, dus de codestap wordt bij het aanmelden overgeslagen. Los het op en dien het opnieuw in."
+            }
+          },
+          "sender": {
+            "none": "Geen afzender",
+            "option": "{label} ({kind})",
+            "unknown": "Onbekende afzender ({ref})",
+            "manage": "Afzenders beheren",
+            "empty": "Nog geen afzenders. Voeg er een toe via Afzenders beheren.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Onofficiële sessie",
+              "dev": "Alleen loggen"
+            },
+            "noneConnected": "Geen van je afzenders is al gekoppeld. Rond er een af in Afzenders beheren; alleen gekoppelde afzenders kunnen worden gekozen.",
+            "unfinished": "{label} ({kind}, niet afgerond)"
+          },
+          "template": {
+            "title": "Berichtsjabloon",
+            "states": {
+              "none": "Niet aangemaakt",
+              "pending": "Wacht op Meta",
+              "approved": "Goedgekeurd",
+              "rejected": "Afgewezen",
+              "local": "Klaar"
+            },
+            "explain": {
+              "none": "Maak het bericht aan zodra de afzender en de code-instellingen hierboven kloppen. WhatsApp Business heeft goedkeuring van Meta nodig; de andere kanalen gebruiken het bericht direct.",
+              "waba": "Als authenticatiesjabloon bij Meta ingediend. De codestap wordt automatisch ingeschakeld zodra Meta het goedkeurt, meestal binnen enkele minuten.",
+              "local": "Opgeslagen als gewone tekst voor dit kanaal. Er is geen beoordeling nodig, dus het is nu in gebruik."
+            },
+            "name": "Naam",
+            "metaId": "Meta-sjabloon-id",
+            "validFor": "Code geldig gedurende",
+            "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+            "submitted": "Aangemaakt",
+            "checked": "Laatst gecontroleerd",
+            "never": "Nog niet",
+            "reason": "Reden",
+            "stale": "Dit sjabloon is gemaakt voor een code die {count, plural, one {# minuut} other {# minuten}} geldig is. Maak het opnieuw aan en dien het in om de geldigheid hierboven te volgen.",
+            "create": "OTP-sjabloon aanmaken en indienen",
+            "creating": "Bezig",
+            "refresh": "Status vernieuwen",
+            "refreshing": "Controleren",
+            "outcome": {
+              "submitted": "Het sjabloon is ter beoordeling bij Meta ingediend. De codestap wordt automatisch ingeschakeld zodra Meta het goedkeurt.",
+              "resubmitted": "Het sjabloon is opnieuw ter beoordeling naar Meta gestuurd. De codestap blijft uit totdat het is goedgekeurd.",
+              "local_ready": "Het bericht is opgeslagen en nu in gebruik. Dit kanaal heeft geen beoordeling nodig.",
+              "already_pending": "Het sjabloon ligt al ter beoordeling bij Meta. Gebruik Status vernieuwen om het te controleren.",
+              "already_approved": "Het sjabloon is al goedgekeurd. Er hoefde niets te worden verstuurd.",
+              "refreshed": "Status gecontroleerd.",
+              "approvedNow": "Meta heeft het sjabloon meteen goedgekeurd. De codestap is klaar.",
+              "rejectedNow": "Meta heeft het sjabloon afgewezen. De reden staat hieronder; los het op en dien het opnieuw in."
+            },
+            "refreshed": {
+              "pending": "Meta beoordeelt het sjabloon nog.",
+              "approved": "Meta heeft het sjabloon goedgekeurd. De codestap is klaar.",
+              "rejected": "Meta heeft het sjabloon afgewezen.",
+              "local": "Dit sjabloon heeft geen beoordeling nodig."
+            },
+            "errors": {
+              "submit": "Meta heeft het sjabloon niet geaccepteerd. Je andere code-instellingen zijn opgeslagen.",
+              "check": "De status kon niet bij Meta worden opgehaald.",
+              "rejected": "Het sjabloon kon niet worden aangemaakt.",
+              "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+            },
+            "createHint": "Bouwt het aanmeldbericht voor de gekozen afzender. WhatsApp Business gaat ter beoordeling naar Meta; de andere kanalen zijn direct klaar.",
+            "picker": {
+              "label": "WhatsApp Business-sjabloon",
+              "hint": "Bij het aanmelden wordt het sjabloon verstuurd dat met de knop hieronder is aangemaakt. Andere goedgekeurde authenticatiesjablonen van deze afzender worden getoond zodat je ze kunt zien; ze kunnen hier nog niet worden gekozen.",
+              "none": "Nog geen (maak er hieronder een aan)",
+              "loading": "Sjablonen laden",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Sla de afzender op om de sjablonen te zien.",
+              "failed": "De sjabloonlijst kon niet worden geladen.",
+              "unavailable": "De sjabloonlijst van Meta kon niet worden gelezen: {reason}"
+            }
+          },
+          "test": {
+            "about": "Stuur een echte code naar een telefoon om te controleren of de afzender werkt voordat aanmeldingen ervan afhangen.",
+            "button": "Testcode versturen",
+            "title": "Testcode versturen",
+            "intro": "Een echte code gaat via de afzender hieronder naar het nummer dat je invoert. Hierbij worden de opgeslagen code-instellingen en het sjabloon gebruikt. Je kunt er 5 per uur versturen.",
+            "to": "Telefoonnummer",
+            "toHint": "Met landcode, bijvoorbeeld +91 98765 43221.",
+            "sender": "Afzender",
+            "senderHint": "Laat de opgeslagen afzender staan of probeer een andere uit de lijst.",
+            "savedSender": "Opgeslagen afzender",
+            "send": "Code versturen",
+            "sending": "Versturen",
+            "close": "Sluiten",
+            "sent": "Er is een testcode verstuurd naar {to}.",
+            "remaining": "{count, plural, one {# test over dit uur.} other {# tests over dit uur.}}",
+            "notShown": "De code wordt hier niet getoond; lees hem af op de telefoon.",
+            "requestId": "Aanvraag-id",
+            "errors": {
+              "invalidNumber": "Voer het nummer in met landcode, bijvoorbeeld +91 98765 43221.",
+              "rateLimited": "Te veel testcodes dit uur. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+              "failed": "De code kon niet worden verstuurd.",
+              "rejected": "De test is niet verstuurd.",
+              "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+            },
+            "reasons": {
+              "not_configured": "De afzender ontbreekt of is onvolledig.",
+              "template_not_approved": "Het sjabloon is nog niet goedgekeurd.",
+              "invalid_number": "Dat nummer is ongeldig.",
+              "auth_failed": "De provider heeft de inloggegevens geweigerd. Controleer het geheim in Afzenders beheren.",
+              "rejected": "De provider heeft het bericht geweigerd.",
+              "provider_error": "De provider had een probleem. Probeer het zo meteen opnieuw.",
+              "connection_refused": "Het adres van de provider heeft de verbinding geweigerd.",
+              "timeout": "De provider antwoordde niet op tijd.",
+              "transport_error": "De provider was niet bereikbaar."
+            }
+          }
+        },
+        "senders": {
+          "title": "Afzenders beheren",
+          "intro": "De verbindingen die de aanmeldcode kunnen versturen. Geheimen worden versleuteld opgeslagen en nooit meer getoond.",
+          "loading": "Laden",
+          "working": "Bezig",
+          "empty": "Nog geen afzenders.",
+          "add": "Afzender toevoegen",
+          "edit": "Bewerken",
+          "remove": "Verwijderen",
+          "close": "Sluiten",
+          "cancel": "Annuleren",
+          "save": "Afzender opslaan",
+          "keep": "Behouden",
+          "addTitle": "Nieuwe afzender",
+          "editTitle": "{label} bewerken",
+          "kind": "Soort",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Onofficiële sessie (Node-bridge)",
+            "dev": "Alleen loggen (ontwikkeling)"
+          },
+          "kindHint": {
+            "waba": "Verstuurt een goedgekeurd authenticatiesjabloon via Meta. Vereist een sjabloonbeoordeling.",
+            "twilio": "Verstuurt een WhatsApp-bericht via Twilio. Geen sjabloonbeoordeling.",
+            "device": "Verstuurt via een met QR gekoppelde sessie op je Node-bridge. Geen sjabloonbeoordeling.",
+            "dev": "Schrijft de code naar het serverlogboek in plaats van hem te versturen. Nooit beschikbaar in productie."
+          },
+          "fields": {
+            "label": "Naam",
+            "phoneNumberId": "Telefoonnummer-id",
+            "wabaId": "WhatsApp Business-account-id",
+            "graphBaseUrl": "Graph API-adres",
+            "accountSid": "Account-SID",
+            "fromNumber": "WhatsApp-nummer (Van)",
+            "apiBaseUrl": "Twilio API-adres",
+            "bridgeUrl": "Bridge-adres",
+            "senderNumber": "Sessienummer"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Van Meta, in de API-instelling van het WhatsApp-nummer.",
+              "wabaId": "Nodig om het sjabloon bij Meta in te dienen.",
+              "graphBaseUrl": "Laat leeg om het adres van Meta te gebruiken."
+            },
+            "twilio": {
+              "accountSid": "Uit de Twilio-console.",
+              "fromNumber": "Het nummer met WhatsApp ingeschakeld, met landcode.",
+              "apiBaseUrl": "Laat leeg om het adres van Twilio te gebruiken."
+            },
+            "device": {
+              "bridgeUrl": "Waar je Node-bridge op luistert, bijvoorbeeld http://127.0.0.1:3003.",
+              "senderNumber": "Het gekoppelde nummer waarvan de bridge verstuurt, met landcode."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Toegangstoken",
+            "twilio": "Authenticatietoken",
+            "device": "Bridge-token",
+            "dev": "Geheim"
+          },
+          "secretHint": "Versleuteld opgeslagen en nooit meer getoond.",
+          "secretHintSaved": "Versleuteld opgeslagen. Laat leeg om het opgeslagen geheim te behouden.",
+          "secretSaved": "opgeslagen, laat leeg om te behouden",
+          "showSecret": "Geheim tonen",
+          "hideSecret": "Geheim verbergen",
+          "removeSecret": "Opgeslagen geheim verwijderen",
+          "removeSecretBody": "De afzender werkt niet meer totdat een nieuw geheim is opgeslagen.",
+          "removeSecretConfirm": "Geheim verwijderen",
+          "hasSecret": "Geheim opgeslagen",
+          "noSecret": "Geen geheim",
+          "inUse": "Gebruikt voor aanmelden",
+          "removeBody": "{label} verwijderen? Het opgeslagen geheim wordt ook verwijderd.",
+          "removeBodyInUse": "{label} verwijderen? Het aanmelden gebruikt deze afzender, dus de codestap wordt uitgeschakeld. Het opgeslagen geheim wordt ook verwijderd.",
+          "removeConfirm": "Afzender verwijderen",
+          "added": "Afzender toegevoegd",
+          "saved": "Afzender opgeslagen",
+          "removed": "Afzender verwijderd",
+          "secretRemoved": "Opgeslagen geheim verwijderd",
+          "requestId": "Aanvraag-id",
+          "problems": {
+            "required": "Dit veld is verplicht.",
+            "tooLong": "Maximaal {max} tekens.",
+            "digits": "Alleen cijfers, 5 tot 24.",
+            "url": "Gebruik een volledig http- of https-adres, zonder gebruikersnaam of wachtwoord.",
+            "accountSid": "Een account-SID begint met AC en heeft 34 tekens.",
+            "phone": "Voer het nummer in met landcode, 7 tot 15 cijfers."
+          },
+          "errors": {
+            "unexpected": "De afzender kon niet worden opgeslagen. Probeer het zo meteen opnieuw."
+          }
+        },
+        "footer": {
+          "kicker": "Uitgaande berichten",
+          "title": "Platformvoettekst voor berichten",
+          "description": "Wordt toegevoegd aan het einde van gewone tekstberichten en interactieve berichten die worden verstuurd vanuit workspaces waarvan het plan de branding niet kan verwijderen. Sjablonen hebben hun eigen tekst en slaan dit over. Een workspace met een plan dat de branding kan verwijderen, stelt in het eigen account een eigen voettekst in, of geen.",
+          "builtIn": "Ingebouwde tekst",
+          "label": "Voettekst",
+          "hint": "Maximaal {max} tekens. Laat leeg om helemaal geen voettekst te versturen.",
+          "count": "{used}/{max}",
+          "preview": "Voorbeeld",
+          "noFooter": "(geen voettekst)",
+          "save": "Voettekst opslaan",
+          "saving": "Opslaan",
+          "clear": "Wissen",
+          "saved": "Platformvoettekst opgeslagen. Deze geldt vanaf het volgende bericht.",
+          "savedNone": "Platformvoettekst verwijderd. Berichten gaan zonder voettekst de deur uit.",
+          "errors": {
+            "invalid": "Die voettekst is niet geaccepteerd.",
+            "unexpected": "De voettekst kon niet worden opgeslagen. Probeer het zo meteen opnieuw."
+          },
+          "requestId": "Aanvraag-id"
+        }
+      },
+      "social": {
+        "kicker": "Gastpagina's",
+        "title": "Sociale login en captcha",
+        "description": "Laat mensen inloggen met Google of Facebook en beveilig de login- en aanmeldpagina's met reCAPTCHA. Elk onderdeel verschijnt pas zodra het is ingeschakeld en de sleutels zijn opgeslagen.",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan",
+        "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
+        "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
+        "requestId": "Aanvraag-id",
+        "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
+        "discard": "Wijzigingen negeren",
+        "errors": {
+          "unexpected": "De instellingen konden niet worden opgeslagen. Probeer het zo meteen opnieuw."
+        },
+        "problems": {
+          "tooLong": "Maximaal {max} tekens.",
+          "threshold": "Voer een getal van 0 tot 1 in."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Google-client-id",
+            "clientSecret": "Google-clientgeheim",
+            "enabled": "Inloggen met Google"
+          },
+          "facebook": {
+            "clientId": "Facebook-app-id",
+            "clientSecret": "Facebook-appgeheim",
+            "enabled": "Inloggen met Facebook"
+          },
+          "recaptcha": {
+            "siteKey": "reCAPTCHA-sitesleutel",
+            "secret": "reCAPTCHA-geheime sleutel",
+            "v3Threshold": "reCAPTCHA-scoredrempel",
+            "version": "reCAPTCHA-versie",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Inschakelen",
+        "secretSaved": "opgeslagen, laat leeg om te behouden",
+        "secretHint": "Versleuteld opgeslagen en nooit meer getoond. Laat leeg om het opgeslagen geheim te behouden.",
+        "showSecret": "Geheim tonen",
+        "hideSecret": "Geheim verbergen",
+        "google": {
+          "kicker": "OAuth 2.0 met Google Cloud",
+          "title": "Inloggen met Google",
+          "idLabel": "Client-id",
+          "idHint": "Uit Google Cloud, onder inloggegevens, de OAuth-client van het type webapplicatie.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Clientgeheim",
+          "secretPlaceholder": "clientgeheim",
+          "redirectLabel": "Geautoriseerde redirect-URI",
+          "redirectHint": "Plak dit exact in de OAuth-client, anders weigert Google het inloggen vanwege een niet-overeenkomende redirect."
+        },
+        "facebook": {
+          "kicker": "Facebook Login met Meta for Developers",
+          "title": "Inloggen met Facebook",
+          "idLabel": "App-id",
+          "idHint": "Uit de app-instellingen, onder basis, de app-id.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "Appgeheim",
+          "secretPlaceholder": "appgeheim van 32 tekens",
+          "redirectLabel": "Geldige OAuth-redirect-URI",
+          "redirectHint": "Voeg dit toe onder de instellingen van Facebook Login. De app heeft de rechten voor e-mail en openbaar profiel nodig."
+        },
+        "recaptcha": {
+          "kicker": "Botbescherming met Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Versie",
+          "versionHint": "v2 toont een selectievakje. v3 is onzichtbaar en geeft elke aanvraag een score.",
+          "versions": {
+            "v2": "v2: selectievakje Ik ben geen robot",
+            "v3": "v3: onzichtbare score"
+          },
+          "thresholdLabel": "v3-scoredrempel",
+          "thresholdHint": "Alleen v3. 0 is hoogstwaarschijnlijk een bot, 1 hoogstwaarschijnlijk een persoon. Leeg gebruikt 0,5.",
+          "siteKeyLabel": "Sitesleutel",
+          "siteKeyHint": "De openbare sleutel die naar de browser wordt gestuurd, uit de reCAPTCHA-console.",
+          "secretLabel": "Geheime sleutel"
+        },
+        "live": {
+          "kicker": "Status",
+          "title": "Wat nu live is",
+          "google": "Google live",
+          "facebook": "Facebook live",
+          "recaptcha": "reCAPTCHA live",
+          "yes": "live",
+          "no": "niet live",
+          "note": "Een provider is alleen live als deze is ingeschakeld en beide sleutels zijn opgeslagen. Dit toont wat is opgeslagen, niet de niet-opgeslagen wijzigingen."
+        },
+        "guide": {
+          "kicker": "Snelle installatie",
+          "google": {
+            "title": "Google in vier stappen",
+            "step1": "Open de Google Cloud-console en kies of maak een project.",
+            "step2": "Stel het OAuth-toestemmingsscherm in als externe app met je supportadres.",
+            "step3": "Maak inloggegevens aan, kies OAuth-client-id en dan Webapplicatie.",
+            "step4": "Voeg de redirect-URI uit het formulier toe en plak daarna het client-id en het geheim hier.",
+            "link": "Google Cloud-inloggegevens openen"
+          },
+          "facebook": {
+            "title": "Facebook in vier stappen",
+            "step1": "Open Meta for Developers en maak een app voor het authenticeren van gebruikers.",
+            "step2": "Voeg het product Facebook Login toe aan de app.",
+            "step3": "Voeg in de instellingen de redirect-URI uit het formulier toe.",
+            "step4": "Kopieer de app-id en het geheim uit de basisinstellingen, plak ze hier en zet de app daarna live.",
+            "link": "Meta for Developers openen"
+          },
+          "recaptcha": {
+            "title": "reCAPTCHA-sleutels",
+            "body": "Registreer je site in de reCAPTCHA-console, kies v2 of v3 en plak de sitesleutel en de geheime sleutel hier.",
+            "link": "De reCAPTCHA-console openen"
+          },
+          "noSdk": {
+            "badge": "Goed om te weten",
+            "body": "Inloggen gebruikt rechtstreeks de standaard OAuth-adressen, dus er hoeft niets te worden geïnstalleerd. Plak de sleutels en schakel het in."
+          }
+        },
+        "removeSecret": {
+          "action": "Opgeslagen geheim verwijderen",
+          "title": "Het opgeslagen {name}-geheim verwijderen",
+          "body": "Het opgeslagen geheim voor {name} wordt van de server verwijderd en kan niet worden getoond of hersteld. Om {name} weer te gebruiken moet je een nieuw geheim opslaan.",
+          "liveWarning": "{name} werkt nu. Als je het geheim verwijdert, wordt het uitgeschakeld totdat een nieuw geheim is opgeslagen.",
+          "confirm": "Geheim verwijderen",
+          "cancel": "Annuleren",
+          "working": "Verwijderen",
+          "error": "Het geheim kon niet worden verwijderd. Probeer het zo meteen opnieuw.",
+          "requestId": "Aanvraag-id",
+          "done": "Het opgeslagen {name}-geheim is verwijderd.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Naslag",
+          "title": "Officiële documentatie",
+          "opensNewTab": "(opent in een nieuw tabblad)",
+          "links": {
+            "google": "Google OAuth-installatie",
+            "facebook": "Facebook Login-installatie",
+            "recaptchaAdmin": "reCAPTCHA-beheerconsole",
+            "recaptchaDocs": "reCAPTCHA-documentatie"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Plannen",
+        "title": "Plannen",
+        "description": "De catalogus waaruit workspaces kiezen. Nieuwe aanmeldingen komen op het standaardplan; betalen voor een plan komt met facturering.",
+        "new": "Nieuw plan",
+        "kpi": {
+          "label": "Catalogusoverzicht",
+          "total": "Totaal aantal plannen",
+          "active": "Actief",
+          "free": "Gratis",
+          "paid": "Betaald"
+        },
+        "empty": {
+          "title": "Nog geen plannen",
+          "body": "Maak het eerste plan aan. Totdat er een bestaat, beginnen nieuwe workspaces op een plan met de naam starter dat niets beperkt.",
+          "action": "Eerste plan aanmaken"
+        },
+        "table": {
+          "label": "Plannen",
+          "plan": "Plan",
+          "price": "Prijs",
+          "messages": "Berichten",
+          "workspaces": "Workspaces",
+          "entitlements": "Inbegrepen",
+          "features": "Functies",
+          "limits": "Limieten",
+          "addons": "Add-ons",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{count} van {total} functies aan",
+          "limits": "{count} van {total} limieten ingesteld",
+          "addons": "{count, plural, one {# add-on zichtbaar} other {# add-ons zichtbaar}}"
+        },
+        "badges": {
+          "popular": "Populair",
+          "signupDefault": "Standaard bij aanmelden"
+        },
+        "price": {
+          "free": "Gratis",
+          "custom": "Offerte op maat",
+          "lifetime": "eenmalig"
+        },
+        "period": {
+          "days": "{count, plural, one {/ dag} other {/ # dagen}}",
+          "weeks": "{count, plural, one {/ week} other {/ # weken}}",
+          "months": "{count, plural, one {/ maand} other {/ # maanden}}",
+          "years": "{count, plural, one {/ jaar} other {/ # jaar}}"
+        },
+        "messages": {
+          "unlimited": "Onbeperkt",
+          "limited": "{count, number} / maand"
+        },
+        "active": {
+          "on": "Actief",
+          "off": "Inactief",
+          "toggle": "Actief: {name}"
+        },
+        "actions": {
+          "edit": "Bewerken",
+          "delete": "Verwijderen",
+          "editName": "{name} bewerken",
+          "deleteName": "{name} verwijderen"
+        },
+        "toasts": {
+          "created": "Plan {name} aangemaakt.",
+          "updated": "Plan {name} opgeslagen.",
+          "activated": "{name} is nu actief.",
+          "deactivated": "{name} is nu inactief.",
+          "deleted": "Plan {name} verwijderd."
+        },
+        "delete": {
+          "title": "{name} verwijderen?",
+          "body": "Dit kan niet ongedaan worden gemaakt. Een plan deactiveren verbergt het voor kopers en behoudt de workspaces die erop zitten.",
+          "inUseHint": "{count, plural, one {# workspace zit op dit plan.} other {# workspaces zitten op dit plan.}} Verwijderen wordt geweigerd totdat ze zijn verplaatst.",
+          "confirm": "Plan verwijderen",
+          "cancel": "Annuleren",
+          "deleting": "Verwijderen"
+        },
+        "errors": {
+          "inUse": "{count, plural, one {Verwijderen niet mogelijk: # workspace gebruikt dit plan momenteel.} other {Verwijderen niet mogelijk: # workspaces gebruiken dit plan momenteel.}} Verplaats ze naar een ander plan of deactiveer dit plan in plaats daarvan.",
+          "defaultProtected": "Dit plan is de standaard bij aanmelden, dus het kan niet worden gedeactiveerd of verwijderd. Kies eerst een ander standaardplan.",
+          "notFound": "Dit plan bestaat niet meer. Laad de lijst opnieuw.",
+          "forbidden": "Alleen superbeheerders kunnen plannen wijzigen.",
+          "generic": "Er is iets misgegaan. Probeer het opnieuw."
+        },
+        "editor": {
+          "createTitle": "Nieuw plan",
+          "editTitle": "{name} bewerken",
+          "slugLabel": "Slug:",
+          "slugNote": "Wordt ingesteld bij het aanmaken van het plan en verandert nooit.",
+          "save": "Wijzigingen opslaan",
+          "create": "Plan aanmaken",
+          "saving": "Opslaan",
+          "cancel": "Annuleren",
+          "discard": "Je wijzigingen negeren?",
+          "failed": "Het plan kon niet worden opgeslagen. Probeer het opnieuw.",
+          "unlimited": "Onbeperkt",
+          "errorsBanner": "Sommige velden vragen aandacht. Tabbladen met een stip bevatten fouten.",
+          "tabs": {
+            "label": "Plansecties",
+            "details": "Details en prijzen",
+            "features": "Functies",
+            "limits": "Limieten",
+            "addons": "Add-ons"
+          },
+          "tabSummary": {
+            "features": "{count} van {total} functies aan",
+            "limits": "{count} van {total} limieten ingesteld",
+            "addons": "{count} add-ons geselecteerd",
+            "error": "Bevat fouten die moeten worden opgelost"
+          },
+          "featuresUi": {
+            "intro": "Schakel uit wat dit plan niet bevat. Een workspace op het plan kan een gebied waarvan de functie uit staat niet openen.",
+            "search": "Functies zoeken",
+            "searchPlaceholder": "Functies zoeken",
+            "enableAll": "Alles inschakelen",
+            "disableAll": "Alles uitschakelen",
+            "noMatch": "Geen functies gevonden voor je zoekopdracht.",
+            "groupCount": "{count} van {total} aan"
+          },
+          "limitsUi": {
+            "intro": "Een limiet stopt de actie zodra de workspace die bereikt. Vink Onbeperkt aan om de limiet te verwijderen.",
+            "search": "Limieten zoeken",
+            "searchPlaceholder": "Limieten zoeken",
+            "noMatch": "Geen limieten gevonden voor je zoekopdracht.",
+            "unlimited": "Onbeperkt",
+            "platformDefault": "Platformstandaard",
+            "groupCount": "{count} van {total} begrensd",
+            "valueFor": "Limiet voor {name}",
+            "unofficialOff": "Geldt alleen wanneer onofficiële WhatsApp door het platform is ingeschakeld (momenteel uitgeschakeld)."
+          },
+          "limitUnits": {
+            "perMonth": "per maand",
+            "perBroadcast": "per broadcast",
+            "perMinute": "per minuut",
+            "perPlanPeriod": "per planperiode",
+            "total": "in totaal"
+          },
+          "addons": {
+            "intro": "Ingeschakelde add-ons worden getoond aan workspaces op dit plan in hun Marktplaats; ze kunnen pas worden gebruikt nadat de workspace ze heeft gekocht.",
+            "search": "Add-ons zoeken",
+            "searchPlaceholder": "Zoek add-ons of apps",
+            "selectAll": "Alles selecteren",
+            "clear": "Wissen",
+            "selected": "{count} van {total} geselecteerd",
+            "loading": "Add-ons laden",
+            "empty": "Er bestaan nog geen betaalde add-ons",
+            "emptyHint": "Add-ons worden aangemaakt in de Marktplaatscatalogus van de operatorconsole. Zodra een app een betaald pakket heeft, staat die hier.",
+            "loadFailed": "De add-ons konden niet worden geladen.",
+            "loadFailedKept": "De add-ons konden niet worden geladen, dus de huidige selectie blijft zoals ze is tenzij je haar hier wijzigt.",
+            "retry": "Opnieuw proberen",
+            "noMatch": "Geen add-ons gevonden voor je zoekopdracht.",
+            "unknown": "Onbekende add-on",
+            "unknownHint": "Deze add-on bestaat niet meer. Vink hem uit om hem van het plan te verwijderen.",
+            "notOnSale": "Niet te koop",
+            "packInactive": "Het add-onpakket is uitgeschakeld, dus niemand kan het kopen.",
+            "appUnpublished": "De app is niet gepubliceerd, dus workspaces kunnen hem nog niet zien.",
+            "appLabel": "App: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "De flowbuilder en automatiseringen die op gesprekken reageren en erop handelen.",
+            "ai_assistants": "AI-assistenten, inclusief de AI-modus in de chatbotwidget van de website.",
+            "calling": "Het belgedeelte: spraakgesprekken en instellingen voor bellen.",
+            "woocommerce": "Koppel WooCommerce-winkels voor ordermeldingen, herstel van achtergelaten winkelwagens en winkelbroadcasts.",
+            "shopify": "Koppel Shopify-winkels voor ordermeldingen, herstel van achtergelaten winkelwagens en winkelbroadcasts.",
+            "analytics": "De analysedashboards en rapporten.",
+            "remove_branding": "White-label: de workspace kan de platformbranding in de voettekst verbergen.",
+            "sales_pipeline": "Deals, taken en pijplijnen, en de pijplijncijfers op het dashboard.",
+            "appointment_booking": "Boekingstypen, afspraken en de openbare boekingspagina's. De betaalde Afspraken-app beheert deze schakelaar.",
+            "chatbot_widgets": "De builder voor de chatbotwidget van de website.",
+            "wa_storefront": "Het WhatsApp-catalogus- en winkelgedeelte.",
+            "inbox_sla": "SLA-beleid en deadlines in de teaminbox.",
+            "inbox_routing": "Routeringsregels die inboxgesprekken automatisch toewijzen.",
+            "waba_calling": "Bellen via WhatsApp vanuit de inbox: belnummers, belrechten, bellen en gesprekken beantwoorden.",
+            "inbox_kanban": "De kanbanweergave van de teaminbox.",
+            "team_performance": "De rapporten over teamprestaties.",
+            "scheduled_messages": "Berichten plannen om later te versturen.",
+            "whatsapp_warmer": "De WhatsApp-nummerwarmer.",
+            "marketplace": "De Marktplaats met mini-apps en integraties.",
+            "lead_sources": "Leadbronnen: webhook- en connectoringangen die advertentie- en portaalleads omzetten in contacten en deals.",
+            "team_chat": "Interne teamchatkanalen en directe berichten.",
+            "public_api": "De openbare REST API en de bijbehorende API-sleutels.",
+            "outbound_webhooks": "Uitgaande webhook-endpoints die andere systemen op de hoogte brengen van gebeurtenissen.",
+            "storefront_builder": "De builder voor de online winkel.",
+            "invoicing": "Facturen, creditnota's, betalingen, verkooporders en belastingtarieven.",
+            "forms_and_links": "Formulieren voor leadcaptatie en deelbare links.",
+            "extra_channels": "De kanalen Telegram, Facebook en Instagram.",
+            "form_builder": "Gehoste en ingebedde webformulieren die contacten in het CRM aanmaken. De betaalde Formulieren-app beheert deze schakelaar.",
+            "waba_groups": "Maak en beheer WhatsApp-groepen vanaf een Cloud API-nummer: uitnodigingslink, deelnameverzoeken, leden. Het nummer moet een Official Business Account zijn."
+          },
+          "units": {
+            "days": "Dagen",
+            "weeks": "Weken",
+            "months": "Maanden",
+            "years": "Jaren"
+          },
+          "sections": {
+            "identity": {
+              "title": "Identiteit",
+              "description": "Hoe het plan heet en wordt getoond."
+            },
+            "pricing": {
+              "title": "Prijzen",
+              "description": "Wat het kost en hoe vaak het wordt gefactureerd."
+            },
+            "limits": {
+              "title": "Limieten",
+              "description": "Laat een limiet leeg voor onbeperkt."
+            },
+            "features": {
+              "title": "Functies",
+              "description": "Schakel uit wat het plan niet bevat."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Plannaam"
+            },
+            "subtitle": {
+              "label": "Ondertitel",
+              "hint": "Eén korte regel onder de naam (maximaal {max} tekens)."
+            },
+            "detail": {
+              "label": "Beschrijving",
+              "hint": "Getoond op prijspagina's (maximaal {max} tekens)."
+            },
+            "ctaLabel": {
+              "label": "Knoplabel",
+              "hint": "Maximaal {max} tekens."
+            },
+            "sortOrder": {
+              "label": "Sorteervolgorde",
+              "hint": "Lager komt eerst."
+            },
+            "currency": {
+              "label": "Valuta",
+              "placeholder": "Zoek valuta's",
+              "empty": "Geen valuta gevonden voor je zoekopdracht."
+            },
+            "amount": {
+              "label": "Prijs",
+              "hint": "Bijvoorbeeld 19 of 19,99.",
+              "locked": "Gratis plannen en plannen met offerte op maat hebben geen prijs.",
+              "none": "geen"
+            },
+            "offerAmount": {
+              "label": "Aanbiedingsprijs",
+              "hint": "Optioneel. Moet lager zijn dan de prijs."
+            },
+            "billingDuration": {
+              "label": "Factureringsperiode",
+              "hint": "Van {min} tot {max}."
+            },
+            "billingUnit": {
+              "label": "Eenheid"
+            },
+            "dataRetentionDays": {
+              "label": "Gegevensbewaring (dagen na verlopen)",
+              "hint": "Dagen nadat een betaald plan is verlopen voordat de gegevens van de workspace worden verwijderd. 0 = nooit. Verwijderen is definitief."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Actief",
+              "hint": "Inactieve plannen zijn verborgen voor kopers; workspaces die er al op zitten, behouden het."
+            },
+            "isDefault": {
+              "label": "Standaard bij aanmelden",
+              "hint": "Nieuwe workspaces beginnen hier, tenzij het registratiebeleid een ander plan noemt. Slechts één plan kan de standaard zijn."
+            },
+            "isHighlighted": {
+              "label": "Markeren als populair",
+              "hint": "Toont een badge Meest populair."
+            },
+            "isFree": {
+              "label": "Gratis plan",
+              "hint": "Geen prijs. Nieuwe workspaces op een gratis plan krijgen de gratis proefperiode."
+            },
+            "isCustomQuote": {
+              "label": "Offerte op maat",
+              "hint": "Er wordt geen prijs getoond. Kopers worden doorverwezen naar sales."
+            },
+            "isLifetime": {
+              "label": "Eenmalige prijs",
+              "hint": "Eenmalig in rekening gebracht, niet voor elke factureringsperiode."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Berichten",
+            "workspace": "Workspace",
+            "content": "Inhoud",
+            "sales": "Verkoop en facturering",
+            "integrations": "Integraties",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "Berichten per maand",
+            "broadcasts": "Broadcasts",
+            "devices": "Gekoppelde nummers",
+            "users": "Teamplekken",
+            "contacts": "Contacten",
+            "tags": "Tags",
+            "pipelines": "Verkooppijplijnen",
+            "appointments": "Afspraken per maand",
+            "saved_replies": "Opgeslagen antwoorden",
+            "routing_rules": "Routeringsregels",
+            "templates": "Berichtsjablonen",
+            "flows": "Flows",
+            "autoreplies": "Automatische antwoorden op trefwoorden",
+            "total_campaigns": "Aangemaakte campagnes (nooit vrijgegeven door verwijderen)",
+            "api_rate_limit_per_minute": "API-aanvragen per minuut (0 = platformstandaard)",
+            "installed_apps": "Geïnstalleerde Marktplaats-apps en -integraties",
+            "scheduled_messages": "Vastgehouden geplande berichten",
+            "lead_sources": "Leadbronnen",
+            "broadcast_recipients": "Ontvangers in één broadcast",
+            "segments": "Opgeslagen segmenten",
+            "custom_fields": "Aangepaste velden",
+            "team_chat_channels": "Teamchatkanalen",
+            "sla_policies": "Inbox-SLA-beleid",
+            "booking_types": "Boekingstypen",
+            "chatbot_widgets": "Chatbotwidgets voor websites",
+            "catalog_products": "Catalogusproducten",
+            "invoices_monthly": "Facturen per maand",
+            "recurring_invoices": "Terugkerende facturen",
+            "api_keys": "API-sleutels",
+            "webhooks": "Uitgaande webhooks",
+            "ai_token_limit_monthly": "AI-tokens per maand (platformsleutels)",
+            "forms": "Webformulieren",
+            "form_submissions_monthly": "Formulierinzendingen per maand",
+            "ai_form_generations_monthly": "AI-formulierbuilder-generaties per maand"
+          },
+          "featureGroups": {
+            "messaging": "Berichten",
+            "aiCalling": "AI en bellen",
+            "integrations": "Integraties",
+            "advanced": "Geavanceerd"
+          },
+          "featureKeys": {
+            "automation": "Automatisering",
+            "ai_assistants": "AI-assistenten",
+            "calling": "Bellen via WhatsApp",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analyses",
+            "remove_branding": "White-label (verwijdert platformbranding)",
+            "sales_pipeline": "Verkooppijplijn (deals en taken)",
+            "appointment_booking": "Afspraken en boekingspagina's",
+            "chatbot_widgets": "Chatbotwidgets voor websites",
+            "wa_storefront": "WhatsApp-winkel en -catalogus",
+            "inbox_sla": "Inbox-SLA-beleid",
+            "inbox_routing": "Inbox-routeringsregels en kantooruren",
+            "waba_calling": "WhatsApp-gesprekken starten en beantwoorden vanuit de inbox",
+            "inbox_kanban": "Inbox-kanbanbord",
+            "team_performance": "Rapporten over teamprestaties",
+            "scheduled_messages": "Geplande berichten",
+            "whatsapp_warmer": "WhatsApp-nummerwarmer",
+            "marketplace": "Marktplaats (mini-apps en integraties)",
+            "lead_sources": "Leadbronnen (webhook- en connectoringangen die contacten aanmaken)",
+            "team_chat": "Teamchat (interne kanalen en directe berichten)",
+            "public_api": "Openbare REST API en API-sleutels",
+            "outbound_webhooks": "Uitgaande webhooks",
+            "storefront_builder": "Winkel- en websitebuilder",
+            "invoicing": "Facturatie (facturen, creditnota's, terugkerende facturen)",
+            "forms_and_links": "Formulieren, klik-om-te-chatten-links en groepen",
+            "extra_channels": "Telegram-, Facebook- en Instagram-kanalen",
+            "form_builder": "Formulieren (webformulierbuilder)",
+            "waba_groups": "WhatsApp-groepen (Cloud API)"
+          },
+          "problems": {
+            "required": "Dit veld is verplicht.",
+            "tooLong": "Maximaal {max} tekens.",
+            "money": "Voer een bedrag in zoals 19 of 19,99.",
+            "range": "Voer een geheel getal in van {min} tot {max}.",
+            "whole": "Voer een geheel getal in, of laat leeg voor onbeperkt.",
+            "server": "De server heeft deze waarde geweigerd.",
+            "unknownAddon": "Geselecteerde add-ons die niet meer bestaan: {count}. Vink ze uit en sla opnieuw op.",
+            "free_needs_zero_price": "Een gratis plan moet een prijs van 0 hebben.",
+            "free_no_offer": "Een gratis plan kan geen aanbiedingsprijs hebben.",
+            "custom_no_price": "Een plan met offerte op maat toont geen prijs: laat de prijs en de aanbieding leeg.",
+            "custom_not_free": "Een plan kan niet tegelijk gratis en offerte op maat zijn.",
+            "paid_needs_price": "Stel een prijs boven 0 in, of markeer het plan als gratis.",
+            "offer_not_lower": "De aanbiedingsprijs moet lager zijn dan de prijs van het plan.",
+            "default_needs_active": "Het standaardplan bij aanmelden moet actief zijn."
+          },
+          "limitHints": {
+            "monthly_messages": "Uitgaande berichten die in de kalendermaand zijn verstuurd. Boven het budget wordt de wallet belast.",
+            "broadcasts": "Broadcasts die niet zijn gearchiveerd.",
+            "scheduled_messages": "Geplande berichten die de workspace bewaart, in elke status. Een bericht verwijderen maakt zijn plek vrij.",
+            "total_campaigns": "Campagnes die in de planperiode zijn aangemaakt. Een campagne verwijderen geeft de plek niet terug.",
+            "devices": "Gekoppelde WhatsApp-nummers. Een nummer verwijderen maakt zijn plek vrij.",
+            "users": "Teamleden die niet zijn gedeactiveerd.",
+            "contacts": "Contacten in de workspace.",
+            "tags": "Contacttags.",
+            "pipelines": "Verkooppijplijnen.",
+            "appointments": "Afspraken die in de kalendermaand zijn geboekt (in behandeling, bevestigd of voltooid), op basis van hun starttijd.",
+            "saved_replies": "Opgeslagen antwoorden (snelle antwoorden) van de teaminbox.",
+            "routing_rules": "Routeringsregels van de teaminbox.",
+            "templates": "WhatsApp-berichtsjablonen.",
+            "flows": "Flows in de builder.",
+            "autoreplies": "Automatische antwoorden op trefwoorden.",
+            "api_rate_limit_per_minute": "Aanvragen per minuut voor elke API-sleutel. 0 gebruikt de platformstandaard in plaats van onbeperkt.",
+            "installed_apps": "Nu geïnstalleerde Marktplaats-apps en -integraties. Verwijderen maakt een plek vrij.",
+            "lead_sources": "Leadbronnen (webhook- en connectoringangen). Een bron verwijderen maakt zijn plek vrij.",
+            "broadcast_recipients": "Het grootste publiek waarnaar één broadcast mag worden verstuurd, gecontroleerd bij het aanmaken of bewerken van de broadcast.",
+            "segments": "Opgeslagen contactsegmenten. Een segment verwijderen maakt zijn plek vrij.",
+            "custom_fields": "Aangepaste velden die aan een module zijn toegevoegd. De ingebouwde systeemvelden tellen niet mee.",
+            "team_chat_channels": "Teamchatkanalen, openbaar en privé. Een kanaal verwijderen maakt zijn plek vrij.",
+            "sla_policies": "SLA-beleid van de teaminbox.",
+            "booking_types": "Boekingstypen achter de openbare boekingspagina's.",
+            "chatbot_widgets": "Chatbotwidgets voor websites.",
+            "catalog_products": "Producten in de WhatsApp-catalogus. Een product verwijderen maakt zijn plek vrij.",
+            "invoices_monthly": "Facturen die in de kalendermaand zijn aangemaakt, in elke status. Een factuur ongeldig maken of verwijderen geeft de maand niet terug.",
+            "recurring_invoices": "Schema's voor terugkerende facturen, in elke status.",
+            "api_keys": "Actieve API-sleutels. Een sleutel intrekken maakt zijn plek vrij.",
+            "webhooks": "Uitgaande webhook-endpoints (inboxwebhooks en API-webhooks samen).",
+            "ai_token_limit_monthly": "Tokens die de AI-assistenten in de kalendermaand op de sleutels van het platform gebruiken. Workspaces met eigen sleutels hebben geen limiet.",
+            "forms": "Actieve webformulieren (Formulieren-app). Een formulier archiveren maakt zijn plek vrij. 0 = onbeperkt.",
+            "form_submissions_monthly": "Formulierinzendingen die in de kalendermaand zijn geaccepteerd, spam uitgezonderd. Boven de limiet wordt een inzending nog steeds bewaard ter beoordeling en nooit weggegooid. 0 = onbeperkt.",
+            "ai_form_generations_monthly": "AI-formulierbuilder-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Gastpagina's",
+        "title": "Authenticatiepagina's",
+        "description": "Kies een ontwerp voor de pagina's voor inloggen, aanmelden en wachtwoord vergeten en bewerk daarna de woorden en kleur van elke pagina. Het voorbeeld toont je niet-opgeslagen wijzigingen zoals bezoekers ze zien. De links naar de Voorwaarden en het Privacybeleid op deze pagina's stel je in bij <link>Registratiebeleid</link>.",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan",
+        "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
+        "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
+        "requestId": "Aanvraag-id",
+        "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
+        "discard": "Wijzigingen negeren",
+        "errors": {
+          "unexpected": "De instellingen konden niet worden opgeslagen. Probeer het zo meteen opnieuw."
+        },
+        "problems": {
+          "accent": "Gebruik een kleur in de vorm #rrggbb.",
+          "mediaUrl": "Gebruik een volledig https-adres."
+        },
+        "pages": {
+          "login": "Inloggen",
+          "register": "Registreren",
+          "forgot": "Wachtwoord vergeten"
+        },
+        "designs": {
+          "legend": "Ontwerpsjabloon",
+          "legendNote": "Eén keuze voor alle drie de pagina's",
+          "split": {
+            "name": "Gesplitste showcase",
+            "description": "Marketingpaneel aan de ene kant, formulier aan de andere."
+          },
+          "cinematic": {
+            "name": "Cinematisch",
+            "description": "Beeld of video op volledig scherm achter een gecentreerde kaart."
+          },
+          "minimal": {
+            "name": "Minimaal",
+            "description": "Een eenvoudige gecentreerde kaart zonder beeldmateriaal."
+          },
+          "spotlight": {
+            "name": "Merkspotlight",
+            "description": "Een opvallend paneel in je accentkleur naast het formulier."
+          },
+          "aurora": {
+            "name": "Aurora",
+            "description": "Zachte gloeiende kleur achter een matglazen kaart."
+          }
+        },
+        "fields": {
+          "accent": "Accentkleur",
+          "accentHint": "Een hex-kleur van zes cijfers zoals #0f766e. Korte (#fff), achtcijferige en benoemde kleuren worden niet geaccepteerd. Gebruikt voor het gemarkeerde woord, knoppen en het merkpaneel. Resetten keert terug naar de standaardkleur.",
+          "accentPicker": "Kies de accentkleur",
+          "accentHex": "Accentkleur als hex",
+          "accentReset": "Standaard herstellen",
+          "mediaUrl": "Mediaadres",
+          "mediaType": "Mediatype",
+          "eyebrow": "Bovenkopje",
+          "heading": "Kop",
+          "headingAccent": "Accentwoord in de kop",
+          "subheading": "Subtekst",
+          "emptyHint": "Maximaal {max} tekens. Laat leeg om de standaardtekst in grijs te gebruiken."
+        },
+        "media": {
+          "title": "Zijmedia",
+          "description": "Een afbeelding, GIF of herhalende video voor het ontwerppaneel. Hosting is voorlopig jouw taak: plak een openbaar https-adres.",
+          "url": "Mediaadres",
+          "urlHint": "Moet beginnen met https. Laat leeg voor geen media.",
+          "type": "Mediatype",
+          "types": {
+            "image": "Afbeelding",
+            "gif": "Geanimeerde GIF",
+            "video": "Herhalende video"
+          },
+          "clear": "Media wissen"
+        },
+        "showcase": {
+          "title": "Tekst van het showcasepaneel",
+          "description": "Wordt getoond door het Split-showcaseontwerp. Lege velden behouden de standaardtekst.",
+          "groups": {
+            "hero": "Highlightkaart",
+            "stats": "Statistieken",
+            "features": "Functiekaarten",
+            "chips": "Chips",
+            "footer": "Voettekstregel"
+          },
+          "keys": {
+            "hero_title": "Highlighttitel",
+            "hero_desc": "Highlighttekst",
+            "stat1_num": "Waarde statistiek 1",
+            "stat1_label": "Label statistiek 1",
+            "stat2_num": "Waarde statistiek 2",
+            "stat2_label": "Label statistiek 2",
+            "stat3_num": "Waarde statistiek 3",
+            "stat3_label": "Label statistiek 3",
+            "feat1_title": "Titel functie 1",
+            "feat1_desc": "Tekst functie 1",
+            "feat2_title": "Titel functie 2",
+            "feat2_desc": "Tekst functie 2",
+            "feat3_title": "Titel functie 3",
+            "feat3_desc": "Tekst functie 3",
+            "feat4_title": "Titel functie 4",
+            "feat4_desc": "Tekst functie 4",
+            "inside_heading": "Kop van chips",
+            "chip1": "Chip 1",
+            "chip2": "Chip 2",
+            "chip3": "Chip 3",
+            "chip4": "Chip 4",
+            "chip5": "Chip 5",
+            "chip6": "Chip 6",
+            "footer": "Voettekst"
+          }
+        },
+        "preview": {
+          "title": "Livevoorbeeld",
+          "note": "De pagina {page} wordt getoond met je niet-opgeslagen wijzigingen.",
+          "showcaseNote": "Alleen het Split-showcaseontwerp toont de tekst van het showcasepaneel.",
+          "device": "Voorbeeldgrootte",
+          "devices": {
+            "desktop": "Desktop",
+            "mobile": "Telefoon"
+          },
+          "frameLabel": "Voorbeeld van de pagina",
+          "frameTitle": "Voorbeeld van de pagina {page}",
+          "form": {
+            "org": "Naam van workspace",
+            "name": "Je naam",
+            "email": "E-mail",
+            "password": "Wachtwoord",
+            "remember": "Houd me 30 dagen ingelogd",
+            "submit": {
+              "login": "Inloggen",
+              "register": "Workspace maken",
+              "forgot": "Resetlink sturen"
+            },
+            "workspace": "Workspace-adres",
+            "forgotLink": "Wachtwoord vergeten?",
+            "newHere": "Nieuw hier?",
+            "createAccount": "Maak een workspace",
+            "haveAccount": "Al geregistreerd?",
+            "signInLink": "Inloggen",
+            "backToSignIn": "Terug naar inloggen",
+            "captchaV3": "Deze pagina wordt beschermd door reCAPTCHA.",
+            "captchaV2": "Ik ben geen robot",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Voorbeeld vergroten",
+          "shrink": "Naast elkaar",
+          "openReal": "Open de echte pagina",
+          "openRealNote": "Opent de opgeslagen versie in een nieuw tabblad. Wijzigingen die je niet hebt opgeslagen zijn alleen in dit voorbeeld zichtbaar.",
+          "opensNewTab": "(opent in een nieuw tabblad)"
+        },
+        "pagesLabel": "Te bewerken pagina"
+      },
+      "ipBlocked": {
+        "kicker": "Toegang geblokkeerd",
+        "title": "Dit adres is niet toegestaan",
+        "body": "De operatorconsole accepteert alleen verzoeken van adressen op de toegestane lijst. Het adres waarvan deze verzoeken komen staat er niet op, dus de console heeft ze geweigerd.",
+        "addressLabel": "Geblokkeerd adres",
+        "addressUnknown": "De server kon je adres niet lezen.",
+        "fixTitle": "Zo krijg je toegang",
+        "fixBody": "Een superbeheerder die nog bij de console kan, voegt dit adres toe aan de IP-allowlist. Verder verandert er niets aan je account.",
+        "fixPath": "Beveiligingscentrum › API en webhooks › IP-allowlist",
+        "dashboard": "Naar dashboard",
+        "signOut": "Uitloggen",
+        "signingOut": "Uitloggen…"
+      }
+    }
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Thành viên nhóm",
+      "roles": "Vai trò"
+    },
+    "common": {
+      "settings": "Cài đặt",
+      "breadcrumb": "Đường dẫn",
+      "loading": "Đang tải…",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "dismiss": "Bỏ qua",
+      "required": "Trường này là bắt buộc.",
+      "showPassword": "Hiện mật khẩu",
+      "hidePassword": "Ẩn mật khẩu",
+      "noAccess": {
+        "title": "Bạn không có quyền truy cập",
+        "body": "Vai trò của bạn không có quyền màn hình này cần. Hãy nhờ Chủ sở hữu hoặc Quản trị viên của không gian làm việc cấp quyền.",
+        "bodyWithKey": "Màn hình này cần quyền {permission}. Hãy nhờ Chủ sở hữu hoặc Quản trị viên của không gian làm việc thêm quyền này vào một trong các vai trò của bạn.",
+        "back": "Quay lại không gian làm việc"
+      }
+    },
+    "blurb": {
+      "owner": "Chủ sở hữu: toàn quyền, bao gồm thanh toán.",
+      "admin": "Quản trị viên: toàn quyền truy cập không gian làm việc, không gồm thanh toán.",
+      "manager": "Quản lý: xem tất cả, có thể phân công và giải quyết.",
+      "agent": "Nhân viên: xử lý các cuộc trò chuyện được phân công.",
+      "viewer": "Người xem: chỉ đọc."
+    },
+    "errors": {
+      "unexpected": "Đã xảy ra lỗi phía chúng tôi. Vui lòng thử lại; nếu vẫn tiếp diễn, hãy cung cấp mã yêu cầu.",
+      "request": "Không thể hoàn tất yêu cầu.",
+      "validation": "Kiểm tra biểu mẫu và thử lại.",
+      "passwordPolicy": "Mật khẩu này không đáp ứng chính sách mật khẩu của không gian làm việc:",
+      "validationField": "Kiểm tra trường này và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện việc này.",
+      "conflict": "Có người khác đã thay đổi nội dung này khi bạn đang chỉnh sửa. Tải lại để xem phiên bản của họ, rồi áp dụng lại thay đổi của bạn.",
+      "grantRole": "Bạn không thể thực hiện: vai trò đó (hoặc vai trò hiện tại của thành viên) cao hơn vai trò của bạn. Chỉ Chủ sở hữu mới có thể cấp, thay đổi hoặc vô hiệu hóa Chủ sở hữu và Quản trị viên.",
+      "grantPermission": "Bạn không thể cấp {permission}: bản thân bạn không có quyền này.",
+      "selfRoleChange": "Bạn không thể thay đổi vai trò của chính mình.",
+      "lastOwner": "Không gian làm việc phải có ít nhất một Chủ sở hữu. Hãy chỉ định người khác làm Chủ sở hữu trước.",
+      "selfDeactivate": "Bạn không thể vô hiệu hóa tài khoản của chính mình.",
+      "presetRole": "Chủ sở hữu, Quản trị viên, Quản lý, Nhân viên và Người xem là các vai trò có sẵn: không thể đổi tên hoặc xóa.",
+      "roleInUse": "Vẫn còn thành viên giữ vai trò này. Hãy chuyển họ sang vai trò khác trước, rồi mới xóa.",
+      "nameTaken": "Đã có vai trò với tên này.",
+      "nameRequired": "Tên vai trò là bắt buộc.",
+      "nameTooLong": "Tên vai trò tối đa {max} ký tự.",
+      "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa."
+    },
+    "team": {
+      "crumb": "Thành viên nhóm",
+      "eyebrow": "Cài đặt · Nhóm",
+      "titleLead": "Nhóm",
+      "titleAccent": "thành viên",
+      "description": "Thêm người vào không gian làm việc này, chọn những gì mỗi người được làm, và tắt quyền truy cập khi có người rời đi.",
+      "addMember": "Thêm thành viên",
+      "reload": "Tải lại",
+      "you": "Bạn",
+      "noRole": "Chưa có vai trò",
+      "changeRoleAction": "Đổi vai trò",
+      "reactivate": "Kích hoạt lại",
+      "selfRoleHint": "Bạn không thể thay đổi vai trò của chính mình.",
+      "roleLockedHint": "Bạn không thể đổi vai trò của thành viên này: vai trò đó cao hơn bạn, hoặc bạn không có quyền phân vai trò.",
+      "selfDeactivateHint": "Bạn không thể vô hiệu hóa tài khoản của chính mình.",
+      "rolesUnavailable": "Không thể tải vai trò cho bạn, nên không thể thêm thành viên hoặc đổi vai trò. Các thẻ vai trò được tạo từ danh sách thành viên đang hiển thị.",
+      "footer": "Hiển thị {shown} / {total}",
+      "status": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "filter": {
+        "label": "Lọc thành viên theo vai trò",
+        "all": "Tất cả",
+        "preset": {
+          "owner": "Chủ sở hữu",
+          "admin": "Quản trị viên",
+          "manager": "Quản lý",
+          "agent": "Nhân viên",
+          "viewer": "Người xem"
+        }
+      },
+      "search": {
+        "label": "Tìm thành viên",
+        "placeholder": "Tìm theo tên hoặc email…"
+      },
+      "table": {
+        "caption": "Thành viên không gian làm việc",
+        "member": "Thành viên",
+        "roles": "Vai trò",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "empty": {
+        "none": "Chưa có thành viên nào.",
+        "noMatch": "Không có thành viên nào khớp bộ lọc này.",
+        "clear": "Xóa bộ lọc"
+      },
+      "toasts": {
+        "added": "{name} đã được thêm vào không gian làm việc.",
+        "rolesUpdated": "Đã cập nhật vai trò cho {name}.",
+        "deactivated": "Đã vô hiệu hóa {name}.",
+        "reactivated": "Đã kích hoạt lại {name}."
+      },
+      "deactivate": {
+        "action": "Vô hiệu hóa",
+        "title": "Vô hiệu hóa thành viên",
+        "message": "{name} sẽ không thể đăng nhập nữa. Bạn có thể kích hoạt lại bất cứ lúc nào.",
+        "confirm": "Vô hiệu hóa",
+        "cancel": "Hủy"
+      },
+      "add": {
+        "eyebrow": "Nhóm",
+        "title": "Thêm thành viên",
+        "fullName": "Họ và tên",
+        "email": "Email",
+        "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+        "password": "Mật khẩu",
+        "passwordHint": "Tối thiểu 8 ký tự. Hãy chia sẻ cho người đó; họ có thể đổi sau khi đăng nhập.",
+        "passwordGenerated": "Mật khẩu đã tạo: hãy hiện mật khẩu bằng nút con mắt và sao chép trước khi lưu.",
+        "passwordShort": "Mật khẩu phải có ít nhất 8 ký tự.",
+        "generate": "Tạo",
+        "role": "Vai trò",
+        "submit": "Thêm thành viên"
+      },
+      "changeRole": {
+        "title": "Đổi vai trò của {name}",
+        "legend": "Vai trò",
+        "keptRole": "{name} được giữ nguyên: bạn không thể cấp hoặc gỡ vai trò này.",
+        "atLeastOne": "Chọn ít nhất một vai trò.",
+        "save": "Lưu vai trò",
+        "reload": "Tải lại"
+      }
+    },
+    "list": {
+      "crumb": "Vai trò",
+      "eyebrow": "Cài đặt · Nhóm · Vai trò",
+      "titleLead": "Vai trò &",
+      "titleAccent": "quyền",
+      "description": "Vai trò quyết định thành viên được làm gì. Chọn vai trò có sẵn hoặc tạo vai trò tùy chỉnh từ ma trận quyền.",
+      "teamLink": "Thành viên nhóm",
+      "addRole": "Thêm vai trò",
+      "empty": "Chưa có vai trò nào.",
+      "preset": "Có sẵn",
+      "custom": "Tùy chỉnh",
+      "locked": "Đã khóa",
+      "footer": "{count} vai trò",
+      "membersLink": "{count} thành viên giữ {name}",
+      "table": {
+        "caption": "Vai trò không gian làm việc",
+        "name": "Vai trò",
+        "type": "Loại",
+        "members": "Thành viên",
+        "permissions": "Quyền",
+        "lastEdited": "Chỉnh sửa lần cuối",
+        "actions": "Thao tác"
+      },
+      "row": {
+        "menu": "Thao tác cho {name}",
+        "edit": "Sửa vai trò",
+        "view": "Xem vai trò",
+        "delete": "Xóa vai trò"
+      },
+      "toasts": {
+        "deleted": "Đã xóa vai trò “{name}”."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Vai trò",
+      "crumbNew": "Vai trò mới",
+      "eyebrowNew": "Cài đặt · Vai trò · Mới",
+      "eyebrowEdit": "Cài đặt · Vai trò · Chỉnh sửa",
+      "titleLead": "Tạo",
+      "titleAccent": "vai trò",
+      "description": "Đặt tên vai trò và chọn những gì vai trò này được làm.",
+      "summary": "{count, plural, =0 {Không có thành viên nào giữ vai trò này.} other {# thành viên giữ vai trò này.}}",
+      "notFoundTitle": "Không tìm thấy vai trò",
+      "notFoundBody": "Vai trò này không còn tồn tại. Có thể đã bị xóa.",
+      "backToRoles": "Quay lại danh sách vai trò",
+      "back": "Quay lại",
+      "save": "Lưu thay đổi",
+      "create": "Tạo vai trò",
+      "saving": "Đang lưu…",
+      "reload": "Tải lại",
+      "discard": "Bạn có thay đổi chưa lưu. Rời đi mà không lưu?",
+      "lockedNotice": "Vai trò Chủ sở hữu có mọi quyền và không thể thay đổi hoặc xóa",
+      "adminNotice": "Chỉ Chủ sở hữu mới có thể thay đổi quyền của vai trò Quản trị viên.",
+      "readOnlyNotice": "Bạn không thể thay đổi quyền của vai trò này.",
+      "details": "Chi tiết vai trò",
+      "name": "Tên vai trò",
+      "namePlaceholder": "Ví dụ: Trưởng nhóm hỗ trợ",
+      "presetNameHint": "Vai trò có sẵn giữ nguyên tên.",
+      "template": "Bắt đầu từ vai trò",
+      "templateHint": "Sao chép quyền của vai trò khác vào ma trận bên dưới.",
+      "templateBlank": "Trống (không có quyền)",
+      "templateOption": "{name} ({count} quyền)",
+      "danger": {
+        "title": "Xóa vai trò này",
+        "hint": "Không có ai giữ vai trò này nên có thể xóa.",
+        "inUse": "{count, plural, other {# thành viên vẫn giữ vai trò này.}} Hãy chuyển họ sang vai trò khác trước.",
+        "action": "Xóa vai trò"
+      },
+      "toasts": {
+        "created": "Đã tạo vai trò “{name}”.",
+        "updated": "Đã cập nhật vai trò “{name}”.",
+        "deleted": "Đã xóa vai trò “{name}”."
+      }
+    },
+    "matrix": {
+      "title": "Quyền",
+      "counter": "Đã chọn {count} / {total}",
+      "deniedCount": "{count} bị từ chối",
+      "selectAll": "Chọn tất cả",
+      "selectAllCategory": "Chọn tất cả",
+      "selectAllOf": "Chọn tất cả trong {category}",
+      "search": "Tìm quyền…",
+      "searchLabel": "Tìm quyền",
+      "denyHint": "Từ chối được ưu tiên hơn cho phép: quyền bị từ chối sẽ bị chặn ngay cả khi một vai trò khác của thành viên cho phép.",
+      "emptyCatalogue": "Không có quyền nào khả dụng.",
+      "noMatch": "Không có quyền nào khớp “{query}”.",
+      "allow": "Cho phép",
+      "deny": "Từ chối",
+      "effectLabel": "Cho phép hoặc từ chối: {label}",
+      "scopeLabel": "Phạm vi bản ghi: {label}",
+      "needsPlan": "Cần gói {feature}",
+      "needsApp": "Cần cài ứng dụng {app}",
+      "lockedHint": "Quyền này chưa khả dụng cho không gian làm việc này. Quyền sẽ mở khi tính năng của gói được bật hoặc ứng dụng được cài.",
+      "scope": {
+        "all": "Tất cả bản ghi",
+        "team": "Bản ghi của nhóm",
+        "own": "Bản ghi của riêng tôi"
+      }
+    },
+    "delete": {
+      "title": "Xóa vai trò",
+      "message": "Xóa vai trò “{name}”? Không thể hoàn tác.",
+      "confirm": "Xóa vai trò",
+      "cancel": "Hủy",
+      "inUseTitle": "“{name}” vẫn đang được sử dụng",
+      "inUse": "{count, plural, =0 {Vẫn còn thành viên giữ vai trò này.} other {# thành viên vẫn giữ vai trò này.}} Hãy chuyển họ sang vai trò khác trước, rồi mới xóa.",
+      "viewMembers": "Xem thành viên có vai trò này"
+    }
+  }
+}

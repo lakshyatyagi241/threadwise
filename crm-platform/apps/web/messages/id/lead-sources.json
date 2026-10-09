@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Tutup",
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "copied": "Disalin",
+      "copyFailed": "Tidak dapat menyalin: pilih teksnya dan salin secara manual",
+      "requestId": "Referensi: {id}"
+    },
+    "states": {
+      "noAccessTitle": "Anda tidak memiliki akses ke Prospek media sosial",
+      "noAccessBody": "Peran Anda tidak memiliki izin yang dibutuhkan layar ini ({permission}). Minta admin workspace untuk menambahkannya ke peran Anda.",
+      "lockedTitle": "Prospek media sosial tidak termasuk dalam paket Anda",
+      "lockedBody": "Paket Anda saat ini tidak mencakup sumber prospek, jadi Anda tidak dapat melihat atau membuatnya. Tingkatkan paket untuk memasukkan prospek iklan dan halaman landing ke kontak Anda.",
+      "upgrade": "Tingkatkan paket",
+      "manageNeeded": "Anda hanya dapat melihat, tidak dapat mengubah apa pun di sini: mengubah sumber memerlukan izin {permission}."
+    },
+    "errors": {
+      "conflict": "Orang lain mengubah sumber ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versinya; perubahan Anda yang belum disimpan akan hilang.",
+      "noAccess": "Peran Anda tidak mengizinkan tindakan ini.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "planLocked": "Paket Anda tidak mencakup Prospek media sosial. Tingkatkan paket untuk menggunakannya.",
+      "planLimit": "Batas sumber prospek pada paket Anda sudah tercapai. Tingkatkan paket atau hapus sumber yang tidak lagi Anda gunakan.",
+      "nameTaken": "Sumber lain sudah memiliki nama ini. Pilih nama lain.",
+      "mappingInvalid": "Pemetaan mengarah ke properti kontak yang tidak dapat diisi dari prospek.",
+      "defaultsInvalid": "Ada yang dalam aturan tidak termasuk dalam workspace ini (pengguna, pipeline, tahap, atau tahap siklus hidup).",
+      "notRetryable": "Hanya prospek yang perlu ditinjau atau gagal yang dapat dicoba ulang. Prospek ini sudah selesai atau sedang diproses.",
+      "payloadPurged": "Prospek tersimpan dihapus setelah masa retensinya, jadi tidak ada yang dapat dicoba ulang.",
+      "sourcePaused": "Sumber ini dijeda. Lanjutkan untuk mengirim prospek uji atau mencoba ulang prospek.",
+      "notFound": "Kami tidak dapat menemukannya. Mungkin sudah dihapus.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "rateLimitedWait": "Terlalu banyak permintaan. Coba lagi dalam {seconds} detik.",
+      "validation": "Sebagian isian Anda tidak valid. Periksa kolom yang disorot.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "Server merespons dengan cara yang tidak dipahami halaman ini. Muat ulang halaman; jika terus terjadi, hubungi dukungan.",
+      "network": "Kami tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
+      "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi sebentar lagi.",
+      "request": "Permintaan tidak diterima. Periksa isian Anda dan coba lagi.",
+      "details": {
+        "unknown_property": "Properti kontak ini tidak ada atau dinonaktifkan.",
+        "not_mappable": "Properti ini dihitung atau mengarah ke catatan lain, sehingga prospek tidak dapat mengisinya.",
+        "unknown_pipeline": "Pipeline ini tidak ada di workspace Anda.",
+        "unknown_stage": "Tahap deal ini tidak ada di workspace Anda.",
+        "stage_not_in_pipeline": "Tahap ini termasuk pipeline lain.",
+        "pipeline_required": "Pilih pipeline tempat tahap ini berada.",
+        "unknown_or_lost_stage": "Tahap siklus hidup ini tidak ada atau merupakan tahap hilang.",
+        "unknown_or_inactive_user": "Salah satu orang yang dipilih bukan anggota aktif workspace ini."
+      }
+    },
+    "problems": {
+      "nameRequired": "Beri nama sumber ini.",
+      "nameLength": "Gunakan paling banyak {max} karakter.",
+      "platformLength": "Gunakan paling banyak {max} karakter.",
+      "secretLength": "Kunci bersama terdiri dari {min} sampai {max} karakter.",
+      "pathLength": "Jalur paling banyak {max} karakter.",
+      "pathCharacters": "Jalur tidak boleh memuat karakter kontrol.",
+      "retentionRange": "Masukkan jumlah hari bulat dari 1 sampai {max}.",
+      "countryCode": "Masukkan kode negara 1 sampai 4 digit, seperti 91 atau 44.",
+      "textLength": "Gunakan paling banyak {max} karakter.",
+      "ownerFixed": "Pilih tepat satu orang.",
+      "ownerRoundRobin": "Pilih minimal dua orang untuk bergiliran.",
+      "ownerTooMany": "Pilih paling banyak {max} orang.",
+      "notifyTooMany": "Pilih paling banyak {max} orang.",
+      "dealTitleLength": "Judul deal paling banyak {max} karakter.",
+      "propertyRequired": "Pilih properti kontak yang akan diisi.",
+      "propertyKey": "Kunci properti diawali dengan huruf dan menggunakan huruf kecil, angka, dan garis bawah.",
+      "propertyDuplicate": "Properti ini dipetakan dua kali.",
+      "pathRequired": "Tentukan di bagian mana dari payload nilai ini berada.",
+      "customFieldsTooMany": "Petakan paling banyak {max} properti kustom.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Formulir prospek Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Koneksi Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Aktif",
+      "paused": "Dijeda"
+    },
+    "eventStatus": {
+      "received": "Diterima",
+      "created": "Kontak dibuat",
+      "updated": "Kontak diperbarui",
+      "duplicate": "Duplikat",
+      "needs_review": "Perlu ditinjau",
+      "failed": "Gagal"
+    },
+    "reasons": {
+      "no_contact_point": "Tidak ada email atau telepon",
+      "invalid_phone": "Telepon tidak dapat dibaca",
+      "plan_limit_reached": "Batas kontak tercapai",
+      "source_paused": "Sumber dijeda",
+      "internal_error": "Kesalahan pemrosesan",
+      "identity_conflict": "Email atau telepon milik kontak lain"
+    },
+    "guidance": {
+      "noContactPoint": "Prospek tidak memiliki email atau nomor telepon yang dapat digunakan. Perbaiki pemetaan atau kode negara default, lalu coba lagi.",
+      "invalidPhone": "Nomor telepon dikirim tetapi tidak dapat dibaca sebagai nomor telepon, dan tidak ada email. Periksa pemetaan telepon dan kode negara default, lalu coba lagi.",
+      "planLimit": "Batas kontak pada paket Anda sudah tercapai, sehingga prospek ini tidak dapat menjadi kontak. Tingkatkan paket, lalu coba lagi.",
+      "sourcePaused": "Sumber dijeda. Lanjutkan, lalu coba lagi.",
+      "internalError": "Terjadi kesalahan saat memproses prospek ini. Coba lagi; jika gagal lagi, bagikan referensi dari kesalahan tersebut kepada dukungan.",
+      "identityConflict": "Prospek bergabung dengan kontak yang sudah ada, tetapi email atau teleponnya sudah milik kontak lain, sehingga detail tersebut tidak dipindahkan.",
+      "generic": "Prospek ini perlu diperiksa. Periksa alasan dan kesalahannya, perbaiki pemetaan atau default jika perlu, lalu coba lagi.",
+      "upgrade": "Tingkatkan paket"
+    },
+    "eventFilters": {
+      "all": "Semua prospek",
+      "attention": "Perlu perhatian",
+      "needs_review": "Perlu ditinjau",
+      "failed": "Gagal",
+      "created": "Kontak dibuat",
+      "updated": "Kontak diperbarui",
+      "duplicate": "Duplikat",
+      "received": "Sedang diproses"
+    },
+    "testFilters": {
+      "all": "Prospek asli dan uji",
+      "only": "Hanya prospek uji",
+      "hide": "Sembunyikan prospek uji"
+    },
+    "page": {
+      "title": "Prospek media sosial",
+      "description": "Masukkan prospek dari iklan dan halaman landing Anda ke kontak, dengan pemilik, tag, dan deal yang Anda pilih.",
+      "newSource": "Sumber baru",
+      "loading": "Memuat sumber prospek",
+      "tabs": {
+        "ads": "Iklan",
+        "webhook": "Webhook",
+        "attention": "{count, plural, other {# prospek perlu perhatian}}"
+      }
+    },
+    "ads": {
+      "intro": "Pilih asal prospek Anda. Setiap sumber berakhir di tempat yang sama: kontak dengan sumbernya tercatat, pemilik, deal opsional, dan notifikasi.",
+      "available": "Tersedia",
+      "comingSoon": "Segera hadir",
+      "untilThen": "Sampai saat itu, kirim prospek ini melalui Webhook dengan Zapier atau Make.",
+      "sourceCount": "{count, plural, =0 {Belum ada sumber} other {# sumber}}",
+      "setUpWebhook": "Atur webhook",
+      "openSources": "Buka sumber",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Kirim prospek dari alat apa pun yang dapat mengirim permintaan web: Zapier, Make, pembuat halaman landing, atau formulir Anda sendiri. Juga memuat prospek LinkedIn, TikTok, dan Google Ads."
+        },
+        "meta": {
+          "name": "Formulir prospek Meta",
+          "body": "Iklan prospek Facebook dan Instagram, langsung dari Halaman Anda."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "Formulir lead gen LinkedIn."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "Formulir lead generation TikTok."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Ekstensi formulir prospek Google Ads."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Belum ada sumber",
+      "empty": "Buat sumber webhook untuk mendapatkan URL yang dapat Anda tempel di Zapier, Make, atau alat formulir Anda. Prospek yang dikirim ke sana akan menjadi kontak.",
+      "emptyNoManage": "Belum ada sumber prospek yang dibuat. Minta seseorang yang dapat mengelola sumber prospek untuk membuatnya.",
+      "create": "Sumber baru",
+      "caption": "Sumber prospek",
+      "col": {
+        "name": "Nama",
+        "kind": "Jenis",
+        "status": "Status",
+        "token": "URL",
+        "lastEvent": "Prospek terakhir",
+        "attention": "Perlu perhatian"
+      },
+      "connector": "Melalui Marketplace",
+      "endsIn": "Berakhir dalam {hint}",
+      "noEvents": "Belum ada prospek",
+      "needsAttention": "{count, plural, other {# prospek}}"
+    },
+    "wizard": {
+      "title": "Sumber prospek baru",
+      "description": "Atur webhook yang mengubah prospek masuk menjadi kontak.",
+      "back": "Kembali ke Prospek media sosial",
+      "stepsLabel": "Langkah membuat sumber prospek",
+      "steps": {
+        "basics": "Dasar",
+        "rules": "Apa yang terjadi pada prospek",
+        "connect": "Hubungkan pengirim Anda",
+        "mapping": "Petakan kolom"
+      },
+      "stepTitle": {
+        "basics": "Beri nama sumber Anda",
+        "rules": "Apa yang terjadi pada prospek",
+        "connect": "Hubungkan pengirim Anda",
+        "mapping": "Petakan kolom"
+      },
+      "stepHelp": {
+        "basics": "Tentukan nama sumber ini dan berapa lama data prospek mentah disimpan.",
+        "rules": "Pilih pemilik, tag, deal, dan notifikasi untuk setiap prospek yang masuk.",
+        "connect": "Sumber Anda sudah dibuat. Salin URL dan token sekarang: keduanya hanya ditampilkan sekali.",
+        "mapping": "Beri tahu kami di mana setiap nilai berada dalam data yang dikirim alat Anda. Pratinjau menampilkan hasilnya saat Anda mengetik."
+      },
+      "previous": "Kembali",
+      "next": "Berikutnya",
+      "cancel": "Batal",
+      "create": "Buat sumber",
+      "created": "Sumber {name} dibuat",
+      "mappingSaved": "Pemetaan disimpan",
+      "planLimit": "Batas paket Anda untuk sumber prospek sudah tercapai, jadi sumber baru tidak dapat dibuat.",
+      "planLocked": "Paket Anda tidak mencakup Prospek media sosial.",
+      "upgrade": "Tingkatkan paket",
+      "skipMapping": "Lewati dulu",
+      "finish": "Simpan dan selesai",
+      "revealGone": "URL dan token tidak lagi ditampilkan. Jika Anda tidak menyimpannya, buka sumber lalu putar token untuk mendapatkan URL baru.",
+      "toMapping": "Lanjut ke pemetaan"
+    },
+    "form": {
+      "name": "Nama sumber",
+      "nameHint": "Misalnya Zapier: Facebook lead ads. Nama harus unik.",
+      "platform": "Label platform",
+      "platformHint": "Sumber yang ditampilkan kontak Anda, misalnya Facebook atau IndiaMART. Maksimal {max} karakter.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Rahasia bersama",
+        "isSet": "Rahasia bersama sudah diatur. Pengirim harus mengirimkannya di header X-Webhook-Secret.",
+        "notSet": "Tidak ada rahasia bersama. Siapa pun yang memiliki URL dapat mengirim prospek.",
+        "willRemove": "Rahasia bersama akan dihapus saat Anda menyimpan.",
+        "willReplace": "Rahasia bersama akan diganti saat Anda menyimpan.",
+        "willSet": "Rahasia bersama akan diatur saat Anda menyimpan.",
+        "newValue": "Rahasia bersama baru",
+        "hint": "Opsional. {min} sampai {max} karakter. Tidak akan ditampilkan lagi setelah Anda menyimpan.",
+        "show": "Tampilkan rahasia",
+        "hide": "Sembunyikan rahasia",
+        "replace": "Ganti",
+        "remove": "Hapus",
+        "keep": "Pertahankan rahasia saat ini"
+      },
+      "externalIdPath": "Jalur ID prospek",
+      "externalIdPathHint": "Lokasi ID prospek milik pengirim dalam data, misalnya lead.id. Ini mencegah prospek yang sama ditambahkan dua kali. Opsional.",
+      "retention": "Simpan data prospek mentah selama (hari)",
+      "retentionHint": "Setelah itu data tersimpan dihapus; kontak tetap ada. 1 sampai {max} hari.",
+      "sections": {
+        "contact": "Kontak",
+        "owner": "Pemilik",
+        "deal": "Deal",
+        "notify": "Notifikasi"
+      },
+      "membersFailed": "Kami tidak dapat memuat tim Anda, jadi anggota tim belum bisa dipilih. Muat ulang halaman untuk mencoba lagi.",
+      "countryCode": "Kode negara default",
+      "countryCodeHint": "Ditambahkan ke nomor telepon yang dikirim tanpa kode negara, misalnya 91. Tanpa ini, nomor harus disertai kode negaranya sendiri.",
+      "lifecycleStage": "Tahap lifecycle awal",
+      "lifecycleStageHint": "Tahap tempat kontak baru dari sumber ini dimulai.",
+      "lifecycleDefault": "Default workspace",
+      "tag": "Tag",
+      "tagHint": "Dipasang pada setiap kontak yang dibawa sumber ini. Kosongkan jika tidak ada tag.",
+      "ownerMode": "Siapa pemilik kontak",
+      "ownerModeHint": "Hanya berlaku untuk kontak yang belum memiliki pemilik.",
+      "ownerModes": {
+        "unassigned": "Tidak ada (tanpa penanggung jawab)",
+        "fixed": "Satu orang",
+        "round_robin": "Bergiliran antar orang"
+      },
+      "ownerFixed": "Pemilik",
+      "ownerChoose": "Pilih seseorang",
+      "unknownMember": "Orang yang tidak lagi tersedia",
+      "ownerRoundRobin": "Orang yang bergiliran",
+      "ownerRoundRobinHint": "Pilih minimal dua. Prospek dibagikan ke setiap orang secara bergiliran; orang yang tidak aktif akan dilewati.",
+      "pickMembers": "Pilih orang",
+      "noMembers": "Tidak ada lagi yang bisa dipilih",
+      "removeMember": "Hapus {name}",
+      "dealEnabled": "Buat deal untuk setiap kontak baru",
+      "dealEnabledHint": "Nonaktif sampai Anda mengaktifkannya. Kontak yang sudah memiliki deal terbuka tidak akan mendapatkan deal lagi.",
+      "pipelinesFailed": "Kami tidak dapat memuat pipeline Anda. Pipeline dan tahap belum bisa dipilih sekarang.",
+      "pipeline": "Pipeline",
+      "pipelineDefault": "Pipeline default workspace",
+      "dealStage": "Tahap",
+      "dealStageNeedsPipeline": "Pilih pipeline terlebih dahulu untuk memilih tahap.",
+      "dealStageFirst": "Tahap pertama pipeline",
+      "dealTitle": "Judul deal",
+      "dealTitleHint": "Ini diisi otomatis dari prospek: {tokens}.",
+      "notifyOwner": "Beri tahu pemilik kontak",
+      "notifyOwnerHint": "Notifikasi dalam aplikasi saat prospek baru masuk. Prospek uji tidak pernah memicu notifikasi.",
+      "notifyUsers": "Juga beri tahu",
+      "notifyUsersHint": "Misalnya manajer penjualan Anda. Maksimal 20 orang."
+    },
+    "mapping": {
+      "contact": "Field kontak",
+      "contactHelp": "Ketik kunci (phone_number) atau jalur (lead.contact.phone, answers[0].value). Biarkan kotak kosong untuk mencari nama umum.",
+      "fields": {
+        "name": "Nama lengkap",
+        "firstName": "Nama depan",
+        "lastName": "Nama belakang",
+        "email": "Email",
+        "phone": "Telepon"
+      },
+      "defaults": {
+        "name": "Mencari full_name, name, contact_name",
+        "firstName": "Mencari first_name, firstname",
+        "lastName": "Mencari last_name, lastname",
+        "email": "Mencari email, email_address, mail",
+        "phone": "Mencari phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Properti kustom",
+      "customHelp": "Isi properti kontak Anda sendiri dari data yang dikirim alat Anda.",
+      "propertiesFailed": "Kami tidak dapat memuat properti kontak Anda, jadi ketik kunci properti secara manual.",
+      "property": "Properti kontak",
+      "propertyChoose": "Pilih properti",
+      "path": "Jalur di payload",
+      "removeRow": "Hapus properti kustom {number}",
+      "remove": "Hapus",
+      "addRow": "Tambah properti kustom",
+      "attribution": "Atribusi",
+      "attributionHelp": "Lokasi detail kampanye berada. Kolom yang dibiarkan kosong akan dicari dengan nama aslinya.",
+      "attributionFields": {
+        "platform": "Platform",
+        "campaign": "Kampanye",
+        "adset": "Set iklan",
+        "ad": "Iklan",
+        "form": "Formulir"
+      },
+      "attributionDefaults": {
+        "platform": "Mencari platform, utm_source",
+        "campaign": "Mencari campaign, utm_campaign",
+        "adset": "Mencari adset, adgroup",
+        "ad": "Mencari ad",
+        "form": "Mencari form"
+      }
+    },
+    "preview": {
+      "title": "Pratinjau langsung",
+      "updating": "Memperbarui",
+      "help": "Hasil pemetaan di atas untuk sebuah prospek. Pratinjau tidak menyimpan atau membuat apa pun.",
+      "paste": "Tempel contoh prospek (JSON)",
+      "pasteHint": "Objek, maksimal 64 KB.",
+      "pasteProblems": {
+        "empty": "Tempel JSON yang dikirim alat Anda.",
+        "invalidJson": "Ini bukan JSON yang valid. Periksa tanda kutip, koma, atau kurung yang hilang.",
+        "notObject": "Prospek harus berupa objek JSON: kumpulan kunci dan nilai di antara kurung kurawal.",
+        "tooLarge": "Ukurannya melebihi 64 KB."
+      },
+      "useLast": "Gunakan prospek terakhir yang kami terima",
+      "pickStored": "Atau pilih prospek tersimpan",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Membaca prospek yang kami simpan dicatat di log audit. Contoh yang ditempel tidak dicatat.",
+      "fixDraft": "Perbaiki kolom pemetaan yang disorot untuk melihat pratinjau.",
+      "choose": "Tempel contoh atau gunakan prospek terakhir yang kami terima untuk melihat hasilnya.",
+      "loading": "Membaca prospek",
+      "none": "Belum ada prospek yang diterima: tempel contoh.",
+      "usable": "Prospek ini akan diproses",
+      "notUsable": "Prospek ini perlu ditinjau",
+      "basedOnEvent": "Dari prospek tersimpan",
+      "basedOnPayload": "Dari contoh Anda",
+      "externalId": "id {id}",
+      "reasonsLabel": "Alasan",
+      "reasons": {
+        "no_payload": "Belum ada prospek untuk dibaca.",
+        "no_contact_point": "Tidak ditemukan email maupun telepon.",
+        "invalid_phone": "Telepon ditemukan tetapi tidak dapat dibaca sebagai nomor, dan tidak ada email.",
+        "phone_unreadable": "Telepon tidak dapat dibaca sebagai nomor; email akan digunakan.",
+        "email_invalid": "Email bukan alamat yang valid dan akan diabaikan."
+      },
+      "contact": {
+        "name": "Nama",
+        "firstName": "Nama depan",
+        "lastName": "Nama belakang",
+        "email": "Email",
+        "phone": "Telepon"
+      },
+      "empty": "Tidak ditemukan",
+      "phoneUnreadable": "Tidak dapat dibaca sebagai nomor",
+      "attribution": {
+        "platform": "Platform",
+        "campaign": "Kampanye",
+        "adset": "Set iklan",
+        "ad": "Iklan",
+        "form": "Formulir"
+      },
+      "paths": "Field dalam prospek ini",
+      "pathsPick": "Klik satu untuk mengisi: {field}",
+      "pathsFocusFirst": "Klik kotak pemetaan terlebih dahulu, lalu klik field untuk mengisinya.",
+      "pathsMore": "{count, plural, one {# field lagi} other {# field lagi}}"
+    },
+    "reveal": {
+      "titleCreated": "Salin URL dan token Anda sekarang",
+      "titleRotated": "URL dan token baru Anda",
+      "bodyCreated": "Ini satu-satunya saat keduanya ditampilkan. Kami hanya menyimpan sidik jarinya, jadi tidak dapat menampilkannya lagi.",
+      "bodyRotated": "URL lama langsung berhenti berfungsi. URL baru ini hanya ditampilkan sekali.",
+      "url": "URL webhook",
+      "copyUrl": "Salin URL",
+      "noOrigin": "Letakkan alamat API Anda di depan jalur ini untuk mendapatkan URL lengkap.",
+      "token": "Token",
+      "copyToken": "Salin token",
+      "secretHint": "Sumber ini juga memerlukan rahasia bersama: pengirim harus mengirimkannya di header {header}.",
+      "sample": "Coba dari terminal",
+      "sampleHelp": "Di Zapier atau Make, gunakan aksi Webhooks yang mengirim JSON ke URL. Perintah ini mengirim satu contoh prospek.",
+      "copied": "Saya sudah menyalin URL dan token ke tempat yang aman",
+      "done": "Saya sudah menyalinnya, lanjutkan",
+      "doneHint": "Centang kotak dulu. Setelah ini token tidak dapat ditampilkan lagi."
+    },
+    "test": {
+      "title": "Kirim prospek uji",
+      "help": "Mengirim contoh prospek melalui pipeline asli, ditandai sebagai uji. Ini membuat kontak asli yang bisa Anda hapus, dan tidak ada yang diberi tahu.",
+      "paused": "Sumber ini dijeda. Lanjutkan untuk mengirim prospek uji.",
+      "useSample": "Gunakan contoh prospek sebagai gantinya",
+      "useOwn": "Kirim payload saya sendiri",
+      "payload": "Payload (JSON)",
+      "payloadHint": "Objek, maksimal 64 KB.",
+      "payloadProblems": {
+        "empty": "Tempel JSON yang akan dikirim, atau gunakan contoh prospek.",
+        "invalidJson": "Ini bukan JSON yang valid. Periksa tanda kutip, koma, atau kurung yang hilang.",
+        "notObject": "Prospek harus berupa objek JSON: kumpulan kunci dan nilai di antara kurung kurawal.",
+        "tooLarge": "Ukurannya melebihi 64 KB."
+      },
+      "send": "Kirim prospek uji",
+      "needsManage": "Mengirim prospek uji memerlukan izin leads.sources.manage.",
+      "result": "Hasil",
+      "flag": "Uji",
+      "openContact": "Buka kontak"
+    },
+    "watch": {
+      "waiting": "Menunggu prospek pertama. Tempel URL ke alat Anda dan kirim satu prospek.",
+      "received": "Prospek pertama diterima:",
+      "error": "Kami tidak dapat memeriksa prospek saat ini."
+    },
+    "detail": {
+      "loading": "Memuat sumber",
+      "backToList": "Kembali ke sumber",
+      "pageTitle": "Sumber prospek",
+      "needsAttention": "{count, plural, one {# prospek perlu perhatian} other {# prospek perlu perhatian}}",
+      "lastEvent": "Prospek terakhir",
+      "noEvents": "belum ada",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "rotate": "Putar token",
+      "delete": "Hapus",
+      "conflict": "Orang lain telah mengubah sumber ini. Muat ulang untuk melihat versi mereka; perubahan yang belum disimpan akan hilang.",
+      "reload": "Muat ulang",
+      "connection": "Koneksi",
+      "connector": "Terhubung melalui Marketplace. Tidak memiliki URL atau token sendiri; prospek masuk melalui aplikasi yang terpasang.",
+      "connectorLink": "Buka aplikasi terpasang",
+      "endsIn": "Token URL berakhir dengan {hint}",
+      "noHint": "Tidak ada token yang tercatat.",
+      "urlOnce": "URL lengkap ditampilkan sekali saat sumber dibuat. Untuk mendapatkan yang baru, putar token.",
+      "secretYes": "Rahasia bersama sudah diatur: pengirim harus mengirimkannya di header X-Webhook-Secret.",
+      "secretNo": "Rahasia bersama belum diatur.",
+      "pausedNote": "Sumber ini dijeda: URL-nya menjawab 404, jadi pengirim akan melihat error sampai Anda melanjutkannya.",
+      "settings": "Pengaturan",
+      "settingsHelp": "Perubahan berlaku untuk prospek yang masuk setelah Anda menyimpan. Mencoba ulang prospek lama memakai pengaturan saat ini.",
+      "basics": "Dasar",
+      "rules": "Apa yang terjadi pada prospek",
+      "mapping": "Pemetaan field",
+      "unsaved": "Anda memiliki perubahan yang belum disimpan",
+      "discard": "Buang perubahan",
+      "save": "Simpan perubahan",
+      "saved": "Perubahan disimpan",
+      "pausedToast": "Sumber dijeda",
+      "resumedToast": "Sumber dilanjutkan",
+      "deletedToast": "Sumber {name} dihapus",
+      "confirm": {
+        "cancel": "Batal",
+        "pause": {
+          "title": "Jeda sumber ini?",
+          "body": "Selama dijeda, URL-nya menjawab 404 dan prospek yang dikirim ke sana tidak akan diterima. Anda dapat melanjutkannya kapan saja.",
+          "action": "Jeda sumber"
+        },
+        "rotate": {
+          "title": "Putar token?",
+          "body": "URL saat ini langsung berhenti berfungsi, jadi perbarui alat Anda dengan yang baru. URL baru hanya ditampilkan sekali.",
+          "action": "Putar token"
+        },
+        "delete": {
+          "title": "Hapus {name}?",
+          "body": "URL-nya berhenti berfungsi dan prospek yang tersimpan di sana ikut dihapus. Kontak yang sudah dibuat tetap ada. Tindakan ini tidak dapat dibatalkan.",
+          "action": "Hapus sumber"
+        }
+      }
+    },
+    "events": {
+      "title": "Prospek diterima",
+      "help": "Setiap prospek yang masuk ke sumber ini dan hasilnya. Terbaru di atas.",
+      "filterStatus": "Tampilkan",
+      "filterTests": "Uji",
+      "attentionTitle": "{count, plural, one {# prospek perlu perhatian} other {# prospek perlu perhatian}}",
+      "attentionGroup": "{count, plural, one {# prospek:} other {# prospek:}}",
+      "showAttention": "Tampilkan hanya prospek ini",
+      "loading": "Memuat prospek",
+      "emptyTitle": "Belum ada prospek",
+      "empty": "Kirim prospek uji atau tempel URL ke alat Anda.",
+      "emptyFilteredTitle": "Tidak ada prospek yang cocok",
+      "emptyFiltered": "Tidak ada prospek yang cocok dengan filter ini.",
+      "clearFilters": "Hapus filter",
+      "col": {
+        "status": "Status",
+        "lead": "Prospek",
+        "result": "Apa yang terjadi",
+        "links": "Menjadi",
+        "received": "Diterima",
+        "actions": "Tindakan"
+      },
+      "loadMore": "Muat lainnya",
+      "test": "Uji",
+      "attempts": "{count, plural, one {# percobaan} other {# percobaan}}",
+      "deliveredAgain": "{count, plural, one {Dikirim ulang sekali} other {Dikirim ulang # kali}}",
+      "contact": "Kontak",
+      "deal": "Deal",
+      "retry": "Coba lagi",
+      "open": "Buka",
+      "retriedToast": "Dicoba ulang: sekarang {status}"
+    },
+    "event": {
+      "title": "Detail prospek",
+      "close": "Tutup",
+      "retry": "Coba ulang prospek ini",
+      "auditNote": "Membuka payload dicatat di log audit.",
+      "externalId": "ID prospek",
+      "test": "Uji",
+      "received": "Diterima",
+      "processed": "Diproses",
+      "notProcessed": "belum",
+      "attempts": "Percobaan",
+      "duplicates": "Pengiriman ulang",
+      "deliveredAgain": "{count, plural, one {Dikirim ulang sekali} other {Dikirim ulang # kali}}",
+      "reason": "Alasan",
+      "contact": "Kontak",
+      "openContact": "Buka kontak",
+      "deal": "Deal",
+      "openDeal": "Buka deal",
+      "error": "Error",
+      "retried": "Dicoba ulang. Prospek sekarang",
+      "payload": "Payload tersimpan",
+      "loadingPayload": "Membuka payload",
+      "purged": "Payload mentah dihapus setelah {days} hari. Prospek dan kontaknya tetap ada."
+    },
+    "attribution": {
+      "title": "Atribusi prospek",
+      "first": "Sentuhan pertama",
+      "latest": "Sentuhan terakhir",
+      "firstAndLatest": "Sentuhan pertama dan terakhir",
+      "total": "{count} sentuhan secara total",
+      "platform": "Platform",
+      "source": "Sumber",
+      "fields": {
+        "campaign": "Kampanye",
+        "adset": "Set iklan",
+        "ad": "Iklan",
+        "form": "Formulir"
+      },
+      "capturedAt": "Ditangkap",
+      "openSource": "Buka sumber prospek"
+    }
+  }
+}

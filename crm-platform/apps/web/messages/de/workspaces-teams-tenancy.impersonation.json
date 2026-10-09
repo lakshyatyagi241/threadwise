@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Identitätsübernahme",
+      "viewing": "{workspace} wird als {owner} angezeigt",
+      "reason": "Grund: {reason}",
+      "readOnly": "Nur lesen",
+      "timeLeft": "{minutes, plural, one {# Minute verbleibt} other {# Minuten verbleiben}}",
+      "endsSoon": "Weniger als eine Minute verbleibt",
+      "stop": "Identitätsübernahme beenden",
+      "stopping": "Wird beendet",
+      "stopFailed": "Die Sitzung konnte nicht beendet werden. Versuchen Sie es erneut.",
+      "readOnlyRefused": "Diese Sitzung ist schreibgeschützt, daher sind Änderungen nicht erlaubt.",
+      "forbiddenRefused": "Dies ist nicht verfügbar, während Sie den Workspace als Inhaber betrachten.",
+      "ended": {
+        "title": "Diese Identitätsübernahme-Sitzung ist beendet",
+        "expired": "Der Link wurde bereits verwendet oder ist abgelaufen. Starten Sie erneut über die Konsole.",
+        "body": "Von hier aus kann im Workspace nichts mehr getan werden. Gehen Sie zurück zur Konsole, um eine neue Sitzung zu starten.",
+        "back": "Zurück zur Konsole"
+      }
+    }
+  }
+}

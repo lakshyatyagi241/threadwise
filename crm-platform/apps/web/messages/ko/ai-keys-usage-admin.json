@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "AI 사용량",
+      "keys": "AI 프로바이더 키"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "AI 프로바이더 키",
+        "dashboard": "AI 사용량"
+      }
+    },
+    "common": {
+      "loading": "로딩 중",
+      "retry": "다시 시도",
+      "requestId": "요청 ID",
+      "dismiss": "닫기",
+      "tokens": "{count, number} 토큰",
+      "dash": "-",
+      "errors": {
+        "forbidden": "이 내용을 볼 권한이 없습니다.",
+        "request": "요청을 완료할 수 없습니다.",
+        "unexpected": "서버에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+        "conflict": "다른 사용자가 이 내용을 변경했습니다. 페이지를 새로고침했으니 변경 사항을 다시 적용하세요.",
+        "keyRequired": "이 프로바이더를 켜기 전에 API 키를 추가하세요.",
+        "validation": "일부 값이 올바르지 않습니다. 강조 표시된 필드를 확인하세요.",
+        "notFound": "해당 항목이 더 이상 존재하지 않습니다."
+      }
+    },
+    "windows": {
+      "label": "기간",
+      "7d": "7일",
+      "30d": "30일",
+      "90d": "90일",
+      "1y": "1년",
+      "custom": "사용자 지정",
+      "from": "시작",
+      "to": "종료",
+      "pick": "시작일과 종료일을 선택하세요.",
+      "invalid": "종료일이 시작일보다 앞섭니다.",
+      "tooLong": "{days}일 이내의 기간을 선택하세요."
+    },
+    "keys": {
+      "eyebrow": "관리자 · 시스템 · AI 프로바이더",
+      "title": "AI API 키",
+      "description": "지원하는 모든 AI 프로바이더의 전역 키입니다. \"자체 키 사용\"이 없는 요금제의 워크스페이스는 이 키를 대체로 사용합니다. 저장 시 암호화됩니다.",
+      "superOnly": "슈퍼 관리자만 플랫폼 AI 키를 관리할 수 있습니다.",
+      "summary": {
+        "providers": "프로바이더",
+        "providersHint": "기본 제공",
+        "active": "활성",
+        "activeHint": "대체용으로 사용 설정됨",
+        "ready": "준비됨",
+        "readyHint": "활성 + 키 있음",
+        "noKey": "키 미설정",
+        "noKeyHint": "키를 붙여넣으면 준비됩니다"
+      },
+      "groups": {
+        "llm": "언어 모델",
+        "voice": "음성"
+      },
+      "card": {
+        "active": "활성",
+        "off": "사용 중지됨",
+        "keySaved": "키 저장됨",
+        "keySavedLast4": "키 저장됨, 끝자리 {last4}",
+        "noKey": "키 없음",
+        "unreadable": "저장된 키를 읽을 수 없습니다. 다시 붙여넣으세요",
+        "apiKey": "API 키",
+        "apiKeyHint": "저장된 키를 유지하려면 비워 두세요.",
+        "apiKeyPlaceholder": "여기에 키를 붙여넣으세요",
+        "apiKeySavedPlaceholder": "•••••••••• (저장됨 — 유지하려면 비워 두세요)",
+        "defaultModel": "기본 모델",
+        "pickModel": "— 기본 모델 선택 —",
+        "customModel": "{model} (사용자 지정)",
+        "sortOrder": "정렬 순서",
+        "maxTokens": "요청당 최대 토큰",
+        "maxTokensHint": "모든 워크스페이스에 적용되는 응답 길이의 선택적 상한입니다. 비워 두면 상한이 없습니다.",
+        "extraModels": "추가 모델",
+        "extraModelsHint": "선택 사항. 기본 모델과 함께 제공할 모델 ID를 쉼표로 구분해 입력하세요.",
+        "save": "{name} 저장",
+        "saving": "저장 중",
+        "turnOn": "활성화",
+        "turnOff": "사용 중지",
+        "removeKey": "키 제거",
+        "removeTitle": "{name} 키를 제거할까요?",
+        "removeBody": "키를 다시 추가하기 전까지 워크스페이스에서 {name}을(를) 사용하지 않습니다. 프로바이더는 꺼집니다.",
+        "removeConfirm": "키 제거",
+        "cancel": "취소",
+        "slug": "제공자: {provider} · 기본 모델: {model}",
+        "maxTokensPlaceholder": "예: 4096"
+      },
+      "toasts": {
+        "saved": "{name}을(를) 저장했습니다.",
+        "savedOn": "{name}을(를) 저장하고 켰습니다.",
+        "on": "{name}을(를) 켰습니다.",
+        "off": "{name}을(를) 껐습니다.",
+        "removed": "{name} 키를 제거했습니다."
+      },
+      "help": {
+        "title": "키 사용 방식",
+        "body": "워크스페이스의 자체 키는 요금제에서 허용하는 경우에만 우선합니다. 그렇지 않으면 여기의 해당 활성 프로바이더가 사용됩니다. 프로바이더를 끄면 자체 키가 없는 워크스페이스는 사용할 수 없습니다.",
+        "eyebrow": "이 키의 사용 방식"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "관리자 / AI 대시보드",
+      "title": "AI 사용량 및 토큰 소모",
+      "description": "플랫폼 전체의 모든 AI 호출입니다. 프로바이더, 모델, 워크스페이스, 플랫폼 키와 자체(BYOK) 키 구분, 예상 비용을 보여 줍니다.",
+      "kpis": {
+        "tokens": "소모된 토큰",
+        "tokensHint": "이 기간",
+        "cost": "예상 비용",
+        "costHint": "혼합 추정치",
+        "calls": "AI 호출",
+        "callsHint": "기록된 요청",
+        "workspaces": "AI 사용 워크스페이스",
+        "workspacesHint": "활성"
+      },
+      "daily": "일별 토큰 소모",
+      "byProvider": "프로바이더별 토큰",
+      "split": "비용 부담 주체 — 플랫폼 vs BYOK",
+      "splitPlatform": "플랫폼 키",
+      "splitOwn": "자체 키 (BYOK)",
+      "topWorkspaces": "토큰 소모 상위 워크스페이스",
+      "topModels": "상위 모델",
+      "keyHealth": "AI 키 상태",
+      "live": "사용 중",
+      "notLive": "꺼짐",
+      "peak": "최대 {value}/일",
+      "dailyEmpty": "이 기간에 기록된 AI 호출이 아직 없습니다.",
+      "providerCalls": "{count, number}회 호출",
+      "providerEmpty": "아직 사용 내역이 없습니다.",
+      "splitNote": "플랫폼 키 토큰만 요금제의 월간 AI 한도에 포함됩니다. BYOK 워크스페이스는 자체 프로바이더 계정에서 사용합니다.",
+      "workspaceEmpty": "아직 워크스페이스 AI 사용 내역이 없습니다.",
+      "workspaceMeta": "{count, number}회 호출",
+      "workspaceByok": "BYOK {tokens}",
+      "modelEmpty": "아직 모델 사용 내역이 없습니다.",
+      "modelMeta": "{provider} · {count, number}회 호출",
+      "manageKeys": "키 관리",
+      "noDefaultModel": "기본 모델 없음",
+      "noPlatformKeys": "설정된 플랫폼 AI 키가 없습니다.",
+      "byokKeys": "BYOK 키 활성",
+      "byokWorkspaces": "BYOK 워크스페이스"
+    },
+    "usage": {
+      "title": "AI 사용량",
+      "description": "워크스페이스가 수행한 모든 AI 호출입니다. 모델 및 프로바이더별 소모 토큰, 요금제 키와 자체 키 구분, 예상 비용을 보여 줍니다.",
+      "kpis": {
+        "tokens": "사용한 토큰",
+        "calls": "{count, plural, other {AI 호출 #회}}",
+        "platform": "요금제 키",
+        "ownKeys": "내 키 (BYOK)",
+        "cost": "예상 비용",
+        "costHint": "프로바이더 혼합 요율",
+        "providers": "프로바이더",
+        "models": "모델"
+      },
+      "cap": {
+        "title": "이번 달 · 요금제 AI 한도",
+        "used": "이번 달 {limit, number} 토큰 중 {used, number} 토큰 사용",
+        "unlimited": "이번 달 {used, number} 토큰 사용: 요금제에서 무제한",
+        "reached": "월간 한도에 거의 도달했습니다. AI를 계속 사용하려면 요금제를 업그레이드하거나 자체 키(BYOK)를 추가하세요.",
+        "note": "BYOK 토큰은 자체 프로바이더 계정에서 사용되며 요금제 한도에 포함되지 않습니다."
+      },
+      "daily": "일별 토큰 소모",
+      "byProvider": "프로바이더별",
+      "split": "요금제 키 vs 내 키",
+      "splitPlatform": "요금제 키",
+      "splitOwn": "내 키 (BYOK)",
+      "models": "모델별",
+      "columns": {
+        "model": "모델",
+        "provider": "프로바이더",
+        "tokens": "토큰",
+        "calls": "호출",
+        "prompt": "프롬프트",
+        "completion": "완성"
+      },
+      "empty": "이 기간에 AI 사용 내역이 아직 없습니다.",
+      "costNote": "비용은 공개된 프로바이더별 혼합 토큰 요율을 기준으로 한 추정치이며 프로바이더 청구서와 다를 수 있습니다. 토큰 수는 정확합니다."
+    },
+    "own": {
+      "title": "내 AI 프로바이더 키",
+      "description": "공급업체의 자체 키를 추가하면 AI 기능이 공용 키 대신 내 계정을 사용합니다. 키는 암호화되며 다시 표시되지 않습니다.",
+      "allowed": "요금제에서 자체 키가 우선 적용됩니다.",
+      "notAllowed": "현재 요금제에는 자체 키가 포함되어 있지 않습니다. 지금 저장할 수는 있지만 업그레이드하기 전까지는 호출이 계속 공용 키를 사용합니다.",
+      "add": "키 추가",
+      "provider": "프로바이더",
+      "apiKey": "API 키",
+      "apiKeyHint": "8자 이상이어야 합니다.",
+      "save": "키 저장",
+      "replace": "키 교체",
+      "saving": "저장 중",
+      "on": "켜짐",
+      "off": "사용 중지됨",
+      "ends": "끝자리 {last4}",
+      "using": "호출에 사용",
+      "usingOwn": "내 키",
+      "usingShared": "공용 키",
+      "usingNone": "키 없음 (사용 불가)",
+      "turnOn": "켜기",
+      "turnOff": "끄기",
+      "remove": "제거",
+      "removeTitle": "내 {name} 키를 제거할까요?",
+      "removeBody": "공용 키가 있으면 호출이 공용 키로 대체됩니다.",
+      "removeConfirm": "키 제거",
+      "cancel": "취소",
+      "empty": "추가한 키가 없습니다.",
+      "toasts": {
+        "saved": "{name} 키를 저장했습니다.",
+        "on": "{name} 키를 켰습니다.",
+        "off": "{name} 키를 껐습니다.",
+        "removed": "{name} 키를 제거했습니다."
+      },
+      "errors": {
+        "tooShort": "키는 8자 이상이어야 합니다."
+      }
+    }
+  }
+}

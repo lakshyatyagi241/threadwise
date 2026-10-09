@@ -1,3 +1,4 @@
+import { msg, type Msg } from './msg';
 import { FLOW_PAGE_SIZE, flowStatusFilterSchema, type FlowStatusFilter } from '@crm/contracts';
 
 /** The flows list's state lives in the address (status, category, q, page) so back and forward re-fetch (WD-FLB-001). */
@@ -51,10 +52,10 @@ export function pageItems(current: number, last: number): Array<number | 'gap-a'
 export const lastPage = (total: number, size = PAGE_SIZE): number =>
   Math.max(1, Math.ceil(total / size));
 
-/** "5 minutes ago": the card's `Edited <relative>` line. */
-export function relativeTime(iso: string, now = Date.now()): string {
+/** "5 minutes ago": the card's `Edited <relative>` line, as a message the card resolves. */
+export function relativeTime(iso: string, now = Date.now()): Msg {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
-  if (s < 45) return 'just now';
+  if (s < 45) return msg('card.relative.justNow');
   const units: Array<[number, string]> = [
     [60, 'minute'],
     [3600, 'hour'],
@@ -71,24 +72,21 @@ export function relativeTime(iso: string, now = Date.now()): string {
       div = limit;
     }
   }
-  const n = Math.max(1, Math.round(s / div));
-  return `${n} ${label}${n === 1 ? '' : 's'} ago`;
+  return msg(`card.relative.${label}`, { n: Math.max(1, Math.round(s / div)) });
 }
 
-const PURPOSE: Record<string, string> = {
-  welcome: 'Routes new subscribers into catalog, support, or first-order incentive paths.',
-  cart: 'Triggers after checkout drop-off with product context and a support fallback.',
-  'cart-recovery': 'Triggers after checkout drop-off with product context and a support fallback.',
-  'post-purchase': 'Follows up after delivery to drive reviews, repeat orders, and feedback.',
-  're-engagement': 'Re-activates dormant contacts with a personalised offer or check-in.',
-  lead: 'Nurtures new leads with educational touches before handing to sales.',
-  'lead-nurture': 'Nurtures new leads with educational touches before handing to sales.',
-  event: 'Time-boxed broadcast around a launch, sale, or seasonal moment.',
-  'special-events': 'Time-boxed broadcast around a launch, sale, or seasonal moment.',
+/** The message key of the "purpose" sentence for a category (several categories share one). */
+const PURPOSE_KEY: Record<string, string> = {
+  welcome: 'welcome',
+  cart: 'cart',
+  'cart-recovery': 'cart',
+  'post-purchase': 'postPurchase',
+  're-engagement': 'reEngagement',
+  lead: 'lead',
+  'lead-nurture': 'lead',
+  event: 'event',
+  'special-events': 'event',
 };
 /** The static "purpose" sentence under a card title, picked by category (there is no description column). */
-export const purposeOf = (category: string | null): string =>
-  PURPOSE[category ?? ''] ?? 'Automated WhatsApp journey built in the flow editor.';
-
-export const plural = (n: number, one: string, many = `${one}s`): string =>
-  `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
+export const purposeOf = (category: string | null): Msg =>
+  msg(`card.purpose.${PURPOSE_KEY[category ?? ''] ?? 'default'}`);

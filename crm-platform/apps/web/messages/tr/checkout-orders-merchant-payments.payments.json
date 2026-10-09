@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Mağaza / Ödemeler",
+      "title": "Ödemeler",
+      "subtitle": "Mağaza siparişlerinizin parasal tarafı: neler ödendi, neler bekliyor ve neler kapıda ödeme.",
+      "listTitle": "Ödeme listesi",
+      "loading": "Ödemeler yükleniyor",
+      "emptyFilteredTitle": "Eşleşen ödeme yok",
+      "emptyFilteredMessage": "Tüm ödemeleri görmek için filtreleri değiştirin veya sıfırlayın.",
+      "resetFilters": "Filtreleri sıfırla",
+      "emptyTitle": "Henüz ödeme yok",
+      "emptyMessage": "Bir mağaza siparişi verilir verilmez ödeme burada görünür. Siparişlerinizi görmek veya elle bir sipariş eklemek için Siparişler'i açın.",
+      "goToOrders": "Siparişlere git",
+      "summary": {
+        "loading": "Ödeme toplamları yükleniyor",
+        "orders": "sipariş",
+        "collected": "Tahsil edilen",
+        "collectedNone": "Henüz tahsilat yok."
+      },
+      "filters": {
+        "search": "Ara",
+        "searchPlaceholder": "Sipariş numarası, müşteri veya referans",
+        "status": "Durum",
+        "allStatuses": "Tüm durumlar",
+        "method": "Yöntem",
+        "allMethods": "Tüm yöntemler",
+        "prepaid": "Önceden ödenmiş",
+        "cod": "Kapıda ödeme",
+        "gatewayOption": "Bir ağ geçidi...",
+        "gatewayCode": "Ağ geçidi kodu",
+        "gatewayCodePlaceholder": "ör. razorpay",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "rangeInverted": "Başlangıç tarihi bitiş tarihinden sonra, bu yüzden tarih aralığı yok sayılır.",
+        "reset": "Filtreleri sıfırla"
+      },
+      "table": {
+        "caption": "Mağaza siparişlerinin ödemeleri, en yeniden eskiye",
+        "order": "Sipariş",
+        "customer": "Müşteri",
+        "status": "Durum",
+        "method": "Yöntem",
+        "paidVia": "Ödeme kanalı",
+        "reference": "Referans",
+        "amount": "Tutar",
+        "shop": "Mağaza",
+        "date": "Tarih",
+        "methodPrepaid": "Önceden ödenmiş",
+        "methodCod": "Kapıda ödeme",
+        "via": {
+          "razorpay_link": "Razorpay bağlantısı",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "Sohbette WhatsApp Pay",
+        "intro": "Alıcıların WhatsApp'tan çıkmadan sipariş ödemesi yapmasını (UPI, kartlar, internet bankacılığı, cüzdanlar) ve parayı kendi Razorpay, PayU, BillDesk veya Zaakpay hesabınızda toplamanızı sağlayın.",
+        "indiaOnly": "Şimdilik desteklenen tek pazar Hindistan: ülke ve para birimi Hindistan ve INR olarak sabittir.",
+        "viewOnly": "WhatsApp Pay yapılandırmalarını görebilir ancak değiştiremezsiniz. Ödemeleri yönetme izni için çalışma alanı yöneticisine başvurun.",
+        "howTitle": "Nasıl kurulur",
+        "how1": "WhatsApp Manager'da Hindistan için Ödemeler altında bir Doğrudan Ödeme Yöntemi oluşturun ve ağ geçidi hesabınızı bağlayın.",
+        "how2": "Ona bir ad verin ve o adı buraya kopyalayın. Bu uygulamadan oluşturulamaz, Meta tarafındaki bir adımdır.",
+        "how3": "Yapılandırmayı kaydedin, ardından Siparişler'i açın ve herhangi bir sipariş için WhatsApp'ta ödeme isteyin.",
+        "how4": "Alıcı İncele ve Öde'ye dokunur, sohbette öder ve Meta onaylayınca sipariş ödendi olarak işaretlenir.",
+        "listTitle": "Yapılandırmalarınız",
+        "loading": "Yapılandırmalar yükleniyor",
+        "emptyTitle": "Henüz ödeme yapılandırması yok",
+        "emptyMessage": "Sohbette ödeme almaya başlamak için bu sayfada bir tane ekleyin.",
+        "emptyMessageReadOnly": "Henüz kimse eklemedi.",
+        "market": "Hindistan · INR",
+        "autoChargeOn": "Otomatik tahsilat açık",
+        "active": "Etkin",
+        "off": "Kapalı",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Yapılandırma kaydedildi",
+          "removed": "Yapılandırma kaldırıldı"
+        },
+        "addTitle": "Ödeme yapılandırması ekle",
+        "editTitle": "{name} öğesini düzenle",
+        "name": "Yapılandırma adı",
+        "nameLocked": "Ad, yapılandırmayı tanımlar. Yeniden adlandırmak için kaldırıp yeniden ekleyin.",
+        "updatesExisting": "Bu adla bir yapılandırma var: kaydetmek onu günceller.",
+        "nameHint": "WhatsApp Manager'daki (Ödemeler, Hindistan) Doğrudan Ödeme Yöntemi adıyla tam olarak eşleşmelidir.",
+        "nameInvalid": "1 ile {max} karakter arasında bir ad girin.",
+        "namePlaceholder": "ör. my-razorpay-pay",
+        "gateway": "Ağ geçidi",
+        "activeLabel": "Etkin",
+        "autoCharge": "Yeni siparişleri otomatik tahsil et",
+        "autoChargeHint": "Sipariş verildiği anda sohbet içi ödeme isteğini otomatik olarak gönderir.",
+        "save": "Yapılandırmayı kaydet",
+        "cancelEdit": "Düzenlemeyi iptal et",
+        "removeTitle": "{name} kaldırılsın mı?",
+        "removeMessage": "Siparişler artık bu yapılandırmayla sohbette tahsil edilemez. WhatsApp Manager'daki Doğrudan Ödeme Yöntemine dokunulmaz.",
+        "removeConfirm": "Yapılandırmayı kaldır"
+      }
+    }
+  }
+}

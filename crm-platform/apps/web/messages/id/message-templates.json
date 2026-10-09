@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Templat"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "requestId": "ID permintaan"
+    },
+    "status": {
+      "draft": "Draf",
+      "pending": "Dalam peninjauan",
+      "approved": "Disetujui",
+      "rejected": "Ditolak",
+      "paused": "Dijeda",
+      "disabled": "Dinonaktifkan",
+      "deleted": "Tidak ada di Meta"
+    },
+    "category": {
+      "MARKETING": "Pemasaran",
+      "UTILITY": "Utilitas",
+      "AUTHENTICATION": "Autentikasi"
+    },
+    "quality": {
+      "GREEN": "Kualitas tinggi",
+      "YELLOW": "Kualitas sedang",
+      "RED": "Kualitas rendah",
+      "UNKNOWN": "Kualitas menunggu"
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Coba lagi, dan sebutkan ID permintaan jika masih terjadi.",
+      "TPL_NOT_FOUND": "Templat ini sudah tidak ada.",
+      "TPL_NAME_TAKEN": "Templat dengan nama dan bahasa ini sudah ada di nomor ini. Pilih nama atau bahasa lain.",
+      "TPL_LINT_FAILED": "Pemeriksaan menemukan masalah yang akan ditolak Meta. Tidak ada yang dikirim. Perbaiki kesalahan yang tercantum di sebelah kanan.",
+      "TPL_META_REJECTED": "Meta menolak templat. Alasannya ada di bawah; templat disimpan sebagai draf agar Anda dapat memperbaikinya dan mencoba lagi.",
+      "TPL_NO_CONNECTION": "Templat ini tidak memiliki nomor WhatsApp yang terhubung untuk dikirim. Hubungkan nomor terlebih dahulu.",
+      "TPL_IN_USE": "Templat ini tidak dapat dihapus karena sedang dipakai broadcast yang berjalan atau terjadwal.",
+      "TPL_NOT_EDITABLE": "Hanya templat yang belum disetujui Meta atau yang ditolak yang dapat diedit.",
+      "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
+      "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
+      "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi."
+    },
+    "preview": {
+      "title": "Pratinjau",
+      "headerImageAlt": "Contoh gambar header",
+      "header": {
+        "image": "Gambar",
+        "video": "Video",
+        "document": "Dokumen",
+        "location": "Lokasi"
+      },
+      "authBody": "adalah kode verifikasi Anda.",
+      "authExpiry": "{count, plural, other {Kode ini kedaluwarsa dalam # menit.}}",
+      "bodyEmpty": "Teks pesan Anda muncul di sini.",
+      "time": "10:30",
+      "copyCode": "Salin kode",
+      "buttonUnnamed": "Tombol",
+      "moreButtons": "{count, plural, other {+# tombol lainnya}}"
+    },
+    "card": {
+      "rejected": "Ditolak: {reason}",
+      "view": "Lihat",
+      "edit": "Edit",
+      "delete": "Hapus"
+    },
+    "library": {
+      "title": "Pustaka templat",
+      "intro": "Templat pesan WhatsApp: tulis, kirim ke Meta untuk ditinjau, dan pantau statusnya di sini.",
+      "sync": "Sinkronkan dari Meta",
+      "syncing": "Menyinkronkan...",
+      "syncHint": "Ambil templat Anda dari Meta",
+      "syncDone": "Disinkronkan dari Meta: {created} baru, {updated} diperbarui, {missing} tidak ada lagi di Meta.",
+      "syncNone": "Belum ada templat di akun WhatsApp Business ini.",
+      "syncFailed": "Sinkronisasi dari Meta gagal. Periksa koneksi nomor dan coba lagi.",
+      "syncPartial": "{count, plural, other {# nomor tidak dapat disinkronkan.}}",
+      "new": "Templat baru",
+      "filters": "Filter templat",
+      "search": "Cari",
+      "searchPlaceholder": "Nama templat",
+      "status": "Status",
+      "allStatuses": "Semua status",
+      "category": "Kategori",
+      "allCategories": "Semua kategori",
+      "connection": "Nomor WhatsApp",
+      "allConnections": "Semua nomor",
+      "loading": "Memuat templat",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada templat",
+      "emptyBody": "Buat templat dan kirim ke Meta, atau sinkronkan yang sudah ada di Meta Business Manager.",
+      "emptyFilteredTitle": "Tidak ada templat yang cocok",
+      "emptyFilteredBody": "Ubah atau hapus filter untuk melihat lebih banyak templat.",
+      "clearFilters": "Hapus filter",
+      "loadMore": "Muat lebih banyak"
+    },
+    "delete": {
+      "title": "Hapus templat",
+      "message": "Hapus \"{name}\"? Templat akan dihapus di sini dan di Meta, dan tidak dapat dikirim lagi.",
+      "confirm": "Hapus templat",
+      "cancel": "Batal",
+      "done": "\"{name}\" dihapus.",
+      "inUseHelp": "Buka broadcast yang memakai templat ini lalu batalkan atau pilih templat lain, kemudian hapus templat ini."
+    },
+    "lint": {
+      "title": "Pemeriksaan sebelum kirim",
+      "checking": "Memeriksa",
+      "unavailable": "Pemeriksaan tidak dapat dijalankan saat ini. Peninjauan Meta tetap berlaku, dan server memeriksa lagi saat dikirim.",
+      "clean": "Tidak ditemukan masalah.",
+      "summary": "{errors, plural, other {# error}}, {warnings, plural, other {# peringatan}}",
+      "severity": {
+        "error": "Error",
+        "warning": "Peringatan"
+      },
+      "field": {
+        "name": "Nama",
+        "language": "Bahasa",
+        "header": "Header",
+        "body": "Isi",
+        "footer": "Footer",
+        "buttons": "Tombol",
+        "template": "Templat"
+      }
+    },
+    "form": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "backToLibrary": "Kembali ke pustaka",
+      "noPermission": "Anda tidak memiliki izin untuk membuat atau mengedit templat.",
+      "notEditableTitle": "Templat ini tidak dapat diedit lagi",
+      "notEditableBody": "Hanya templat yang belum disetujui Meta atau yang ditolak yang dapat diedit. Buat templat baru untuk mengubah yang sudah disetujui.",
+      "viewTemplate": "Lihat templat",
+      "breadcrumb": "Jalur navigasi",
+      "breadcrumbLibrary": "Templat",
+      "breadcrumbNew": "Baru",
+      "breadcrumbEdit": "Edit",
+      "titleNew": "Templat baru",
+      "titleEdit": "Edit {name}",
+      "saveDraft": "Simpan draf",
+      "submit": "Kirim ke Meta",
+      "reload": "Muat ulang templat",
+      "aside": "Pratinjau dan pemeriksaan",
+      "why": {
+        "connection": "Pilih nomor WhatsApp untuk mengirim.",
+        "name": "Masukkan nama templat.",
+        "fields": "Beberapa kolom tidak valid.",
+        "errors": "Perbaiki kesalahan sebelum mengirim.",
+        "checking": "Memeriksa templat."
+      },
+      "toast": {
+        "submitted": "Templat dikirim ke Meta untuk ditinjau.",
+        "saved": "Templat disimpan sebagai draf."
+      },
+      "errors": {
+        "name": "Masukkan nama templat.",
+        "header": "Header maksimal 60 karakter.",
+        "body": "Isi maksimal {max} karakter.",
+        "footer": "Footer maksimal 60 karakter."
+      },
+      "identity": {
+        "title": "Identitas",
+        "connection": "Nomor WhatsApp",
+        "connectionHint": "Media dan pengiriman harus memakai nomor yang sama, atau Meta menolak templat.",
+        "connectionUnknown": "Nomor tidak lagi tersedia",
+        "noConnection": "Tidak ada nomor WhatsApp yang terhubung untuk mengirim.",
+        "connectNumber": "Hubungkan nomor",
+        "category": "Kategori",
+        "categoryHint": "Meta meninjau dan menetapkan harga templat berdasarkan kategorinya.",
+        "categories": {
+          "MARKETING": "Pemasaran",
+          "UTILITY": "Utilitas",
+          "AUTHENTICATION": "Autentikasi"
+        },
+        "name": "Nama templat",
+        "nameHint": "Hanya a-z, 0-9, dan _, maksimal 60 karakter.",
+        "nameTaken": "Nama ini sudah dipakai untuk bahasa ini di nomor ini.",
+        "language": "Bahasa"
+      },
+      "auth": {
+        "title": "Kode sandi sekali pakai",
+        "hint": "Meta menulis pesan dan tombol Salin kode pada templat autentikasi.",
+        "expiry": "Kode kedaluwarsa setelah (menit)",
+        "expiryHint": "Opsional. Dari {min} sampai {max} menit.",
+        "expiryInvalid": "Masukkan angka bulat dari {min} sampai {max}.",
+        "fixedBody": "Isi pesan: sebuah kode, diikuti \"adalah kode verifikasi Anda\" dan pengingat keamanan. Anda tidak dapat mengubahnya."
+      },
+      "header": {
+        "title": "Header",
+        "hint": "Opsional. Teks, atau satu gambar, video, dokumen, atau lokasi.",
+        "type": "Jenis header",
+        "kind": {
+          "none": "Tidak ada",
+          "text": "Teks",
+          "image": "Gambar",
+          "video": "Video",
+          "document": "Dokumen",
+          "location": "Lokasi"
+        },
+        "text": "Teks header",
+        "textHint": "{used}/{max}. Maksimal satu variabel.",
+        "sample": "File contoh",
+        "uploading": "Mengunggah",
+        "keptSample": "Contoh yang tersimpan tetap ada. Pilih file untuk menggantinya.",
+        "noFile": "Belum ada file dipilih",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 100 MB.",
+        "replace": "Ganti file",
+        "choose": "Pilih file contoh",
+        "tooBig": "{kind} ini berukuran {size} MB. WhatsApp menerima hingga {max} MB. Pilih file yang lebih kecil.",
+        "wrongType": "Jenis file ini tidak diterima untuk header ini.",
+        "emptyFile": "File ini kosong.",
+        "locationHelp": "Lokasi diisi saat pesan dikirim. Meta hanya perlu tahu bahwa header adalah lokasi."
+      },
+      "body": {
+        "title": "Isi",
+        "hint": "Teks pesan. Gunakan variabel bergaya '{{name}}'; variabel diberi nomor untuk Meta saat Anda menyimpan.",
+        "toolbar": "Format teks",
+        "format": {
+          "bold": "Tebal",
+          "italic": "Miring",
+          "strike": "Coret",
+          "code": "Kode"
+        },
+        "variable": "Tambah variabel",
+        "label": "Teks isi",
+        "counter": "{used}/{max}",
+        "wrapSample": "teks"
+      },
+      "variables": {
+        "title": "Pemetaan variabel",
+        "empty": "Belum ada variabel. Ketik placeholder seperti '{{name}}' di isi, atau gunakan Tambah variabel.",
+        "help": "Untuk setiap variabel, sebutkan atribut kontak yang mengisinya saat dikirim, dan beri nilai contoh untuk peninjauan Meta.",
+        "attribute": "Atribut kontak",
+        "sample": "Nilai contoh",
+        "header": "header",
+        "body": "isi"
+      },
+      "footer": {
+        "title": "Footer",
+        "label": "Teks footer",
+        "hint": "Opsional. {used}/{max}. Tanpa variabel."
+      },
+      "buttons": {
+        "title": "Tombol",
+        "hint": "Opsional. Balasan cepat harus berada bersama di awal atau akhir.",
+        "add": {
+          "quick_reply": "Balasan cepat",
+          "url": "Kunjungi situs",
+          "phone": "Telepon",
+          "copy_code": "Salin kode"
+        },
+        "kind": {
+          "quick_reply": "Balasan cepat",
+          "url": "Kunjungi situs",
+          "phone": "Telepon",
+          "copy_code": "Salin kode",
+          "other": "Lainnya"
+        },
+        "count": "{used}/{max} tombol",
+        "limitReached": "Maksimal {max} untuk jenis ini.",
+        "empty": "Tidak ada tombol. Tambahkan dengan tombol di atas.",
+        "moveUp": "Pindahkan tombol {n} ke atas",
+        "moveDown": "Pindahkan tombol {n} ke bawah",
+        "remove": "Hapus tombol {n}",
+        "keptAsIs": "\"{text}\" dibiarkan apa adanya. Editor ini tidak mengubahnya.",
+        "text": "Teks tombol",
+        "textHint": "{used}/25",
+        "url": "URL situs web",
+        "urlHint": "Tambahkan '{{1}}' di akhir untuk bagian dinamis.",
+        "urlExample": "Contoh untuk variabel",
+        "phone": "Nomor telepon",
+        "phoneHint": "Dengan kode negara.",
+        "code": "Kode contoh",
+        "codeHint": "Misalnya PROMO50.",
+        "limits": "Meta mengizinkan hingga {quick} balasan cepat, {url} tombol situs web, {phone} tombol telepon, dan {copy} tombol salin kode.",
+        "allUsed": "Setiap jenis tombol sudah mencapai batasnya.",
+        "issue": {
+          "textRequired": "Masukkan teks tombol.",
+          "textTooLong": "Maksimal {max} karakter.",
+          "urlRequired": "Masukkan URL.",
+          "urlInvalid": "URL harus diawali http:// atau https://.",
+          "phoneRequired": "Masukkan nomor telepon.",
+          "codeRequired": "Masukkan kode contoh.",
+          "quickReplyVariable": "Balasan cepat tidak boleh berisi variabel.",
+          "urlExampleRequired": "Berikan nilai contoh untuk variabel URL.",
+          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol."
+        }
+      },
+      "result": {
+        "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
+        "metaRefusedHelp": "Templat disimpan sebagai draf. Perbaiki yang disebutkan Meta, lalu kirim lagi. Formulir Anda tidak berubah.",
+        "submitted": "Dikirim ke Meta untuk ditinjau.",
+        "saved": "Disimpan sebagai draf.",
+        "warnings": "Perlu diperiksa sebelum Meta meninjau:",
+        "open": "Buka templat"
+      }
+    },
+    "detail": {
+      "loading": "Memuat templat",
+      "retry": "Coba lagi",
+      "back": "Kembali ke pustaka",
+      "breadcrumb": "Jalur navigasi",
+      "refresh": "Segarkan status",
+      "retrySubmit": "Kirim ke Meta",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "refreshed": "Status disegarkan dari Meta.",
+      "submittedToast": "Templat dikirim ke Meta untuk ditinjau.",
+      "never": "Tidak pernah",
+      "none": "Tidak ada",
+      "banner": {
+        "metaFailed": "Templat ditolak Meta",
+        "draft": "Templat ini belum dikirim ke Meta. Kirim untuk memulai peninjauan.",
+        "pending": "Dikirim untuk peninjauan Meta. Halaman ini memeriksa jawaban setiap 15 detik.",
+        "pendingMeta": "Dikirim {submitted}. Terakhir diperiksa {checked}.",
+        "polling": "Anda dapat membiarkan halaman ini terbuka atau kembali nanti.",
+        "rejected": "Ditolak oleh Meta",
+        "rejectedHelp": "Edit templat untuk mengatasi alasannya, lalu kirim lagi.",
+        "paused": "Dijeda oleh Meta. Tidak dapat dikirim sampai Meta mencabut jeda.",
+        "pausedUntil": "Dijeda oleh Meta sampai {when}.",
+        "disabled": "Dinonaktifkan oleh Meta. Tidak dapat dikirim.",
+        "deleted": "Meta tidak lagi mencantumkan templat ini. Templat tetap disimpan di sini; sinkronkan lagi atau hapus."
+      },
+      "facts": {
+        "title": "Sinkronisasi Meta",
+        "status": "Status Meta",
+        "quality": "Kualitas",
+        "category": "Kategori Meta",
+        "metaId": "ID templat",
+        "number": "Nomor WhatsApp",
+        "numberUnknown": "Nomor tidak lagi tersedia",
+        "submitted": "Dikirim",
+        "approved": "Disetujui",
+        "synced": "Terakhir disinkronkan"
+      },
+      "components": {
+        "title": "Komponen",
+        "header": "Header",
+        "media": "Media header",
+        "body": "Isi",
+        "footer": "Footer",
+        "buttons": "Tombol",
+        "expiry": "Kedaluwarsa kode",
+        "expiryValue": "{count, plural, other {# menit}}"
+      },
+      "attachment": {
+        "none": "Tidak ada",
+        "image": "Gambar",
+        "video": "Video",
+        "document": "Dokumen",
+        "location": "Lokasi"
+      },
+      "lint": {
+        "title": "Pemeriksaan",
+        "clean": "Tidak ditemukan masalah."
+      },
+      "payload": {
+        "title": "Payload Meta",
+        "hint": "Yang dikirim ke Meta untuk peninjauan, persis seperti yang dibuat.",
+        "empty": "Belum ada yang dibuat."
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formlar",
+      "subtitle": "Formlar oluşturun, sitenize koyun veya bağlantıyı paylaşın; her yanıt CRM'inizde bir kişi olarak kaydedilir.",
+      "templates": "Şablonlar",
+      "newForm": "Yeni form",
+      "statsLabel": "Gösterilen formların toplamları",
+      "stats": {
+        "forms": "Formlar",
+        "published": "Yayında",
+        "submissions": "Yanıtlar",
+        "needsReview": "Dikkat gerekiyor"
+      },
+      "views": {
+        "label": "Göster",
+        "all": "Tümü",
+        "published": "Yayında",
+        "draft": "Taslaklar",
+        "paused": "Duraklatıldı",
+        "archived": "Arşivlendi"
+      },
+      "search": "Formlarda ara",
+      "loading": "Formlar yükleniyor",
+      "loadFailed": "Formlar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": {
+        "title": "Henüz form yok",
+        "message": "Bir şablondan veya boş bir formdan başlayın, yayımlayın ve bağlantıyı paylaşın ya da sitenize gömme kodunu yapıştırın.",
+        "fromTemplate": "Bir şablondan başla",
+        "blank": "Boş form"
+      },
+      "noMatch": {
+        "title": "Eşleşen form yok",
+        "message": "Başka bir arama veya görünüm deneyin.",
+        "clear": "Filtreleri temizle"
+      },
+      "col": {
+        "name": "Form",
+        "status": "Durum",
+        "submissions": "Yanıtlar",
+        "views": "Görüntülenme",
+        "conversion": "Dönüşüm",
+        "last": "Son yanıt"
+      },
+      "unpublished": "Yayımlanmamış değişiklikler",
+      "version": "Sürüm {n}",
+      "needsReview": "{count, plural, other {# dikkat gerektiriyor}}",
+      "status": {
+        "draft": "Taslak",
+        "published": "Yayında",
+        "paused": "Duraklatıldı",
+        "archived": "Arşivlendi"
+      },
+      "noRate": "-",
+      "never": "Hiç",
+      "actionsFor": "{name} için işlemler",
+      "action": {
+        "edit": "Düzenle",
+        "submissions": "Yanıtlar",
+        "copyLink": "Bağlantıyı kopyala",
+        "embed": "Bir siteye göm",
+        "duplicate": "Çoğalt",
+        "pause": "Duraklat",
+        "resume": "Devam ettir",
+        "archive": "Arşivle",
+        "delete": "Sil",
+        "restore": "Geri yükle"
+      },
+      "loadMore": "Daha fazla yükle",
+      "copied": "Bağlantı kopyalandı",
+      "copyBlocked": "Bu tarayıcıda kopyalama engellendi. Bağlantı: {url}",
+      "paused": "Form duraklatıldı. Ziyaretçiler kapalı olduğunu görür.",
+      "resumed": "Form devam ettirildi",
+      "archived": "Form arşivlendi",
+      "deleted": "Form silindi",
+      "cancel": "Vazgeç",
+      "archive": {
+        "title": "Bu form arşivlensin mi?",
+        "message": "\"{name}\" formunun herkese açık bağlantısı ve tüm gömmeleri çalışmayı durdurur. Yanıtları saklanır ve yine de okuyabilirsiniz.",
+        "confirm": "Arşivle"
+      },
+      "delete": {
+        "title": "Bu form kalıcı olarak silinsin mi?",
+        "message": "\"{name}\" kalıcı olarak silinir. Bu formun oluşturduğu kişiler CRM'inizde kalır.",
+        "confirm": "Sil"
+      },
+      "restored": "Form geri yüklendi"
+    },
+    "newForm": {
+      "eyebrow": "Formlar",
+      "title": "Yeni form",
+      "close": "Kapat",
+      "cancel": "Vazgeç",
+      "create": "Form oluştur",
+      "startFrom": "Şuradan başla",
+      "mode": {
+        "template": "Bir şablon",
+        "blank": "Boş"
+      },
+      "loadingTemplates": "Şablonlar yükleniyor",
+      "templatesFailed": "Şablonlar yüklenemedi. Yine de boş bir formdan başlayabilirsiniz.",
+      "templates": "Şablonlar",
+      "fieldCount": "{count, plural, other {# alan}}",
+      "pickTemplate": "Devam etmek için bir şablon seçin.",
+      "name": "Form adı",
+      "nameHint": "Bu adı yalnızca ekibiniz görür.",
+      "nameRequired": "Form için bir ad girin."
+    },
+    "templates": {
+      "breadcrumb": "Gezinti yolu",
+      "back": "Formlara dön",
+      "title": "Form şablonları",
+      "subtitle": "Hazır bir formdan başlayın ve dilediğiniz gibi değiştirin.",
+      "blank": "Boş form",
+      "loading": "Şablonlar yükleniyor",
+      "loadFailed": "Şablonlar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Kullanılabilir şablon yok.",
+      "category": {
+        "lead": "Potansiyel müşteri toplama",
+        "contact": "Kişi",
+        "event": "Etkinlik",
+        "order": "Sipariş",
+        "survey": "Anket"
+      },
+      "fields": "Bu şablondaki alanlar",
+      "more": "+{count} daha",
+      "use": "Bu şablonu kullan"
+    }
+  }
+}

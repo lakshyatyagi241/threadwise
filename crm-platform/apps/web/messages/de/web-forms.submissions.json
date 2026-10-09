@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Übermittlungen",
+      "backToForm": "Zurück zu {name}",
+      "formFallback": "Formular",
+      "count": "{count, plural, =0 {Keine Übermittlungen} one {1 Übermittlung} other {# Übermittlungen}} geladen",
+      "moreAvailable": "Weitere sind verfügbar",
+      "tabsLabel": "Übermittlungsgruppen",
+      "tabs": {
+        "all": "Alle",
+        "needs_attention": "Benötigt Aufmerksamkeit",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Suchen",
+        "searchPlaceholder": "Name, E-Mail oder Telefon",
+        "status": "Status",
+        "allStatuses": "Beliebiger Status",
+        "from": "Von",
+        "to": "Bis",
+        "clear": "Filter zurücksetzen"
+      },
+      "status": {
+        "received": "Eingegangen",
+        "created": "Kontakt angelegt",
+        "updated": "Kontakt aktualisiert",
+        "needs_review": "Prüfung erforderlich",
+        "awaiting_payment": "Zahlung ausstehend",
+        "paid": "Bezahlt",
+        "failed": "Fehlgeschlagen",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Grund",
+        "todo": "Was zu tun ist",
+        "no_contact_point": {
+          "what": "Der Besucher hat keine verwendbare E-Mail-Adresse oder Telefonnummer angegeben, daher konnte kein Kontakt angelegt werden.",
+          "todo": "Öffnen Sie die Antworten, ergänzen Sie den fehlenden Wert manuell im Kontakt oder korrigieren Sie die Zuordnung des Formulars und versuchen Sie es erneut."
+        },
+        "invalid_phone": {
+          "what": "Die Telefonnummer konnte nicht als gültige Nummer gelesen werden.",
+          "todo": "Öffnen Sie die Antworten, prüfen Sie die Nummer und versuchen Sie es erneut, sobald das Formular sie akzeptiert, oder legen Sie den Kontakt manuell an."
+        },
+        "plan_limit_reached": {
+          "what": "Das Kontaktlimit Ihres Tarifs wurde erreicht, daher wurde kein neuer Kontakt angelegt.",
+          "todo": "Geben Sie Kontakte frei oder aktualisieren Sie Ihren Tarif und versuchen Sie es dann erneut."
+        },
+        "submissions_cap": {
+          "what": "Das monatliche Übermittlungslimit Ihres Tarifs wurde erreicht, daher wurde dies zur Prüfung gespeichert.",
+          "todo": "Aktualisieren Sie Ihren Tarif oder warten Sie bis zum nächsten Monat und versuchen Sie es dann erneut."
+        },
+        "spam_score": {
+          "what": "Die Übermittlung sah nach Spam aus und wurde beiseitegelegt.",
+          "todo": "Handelt es sich um eine echte Person, öffnen Sie die Übermittlung und legen Sie sie manuell als Kontakt an."
+        },
+        "too_fast": {
+          "what": "Sie wurde schneller abgesendet, als ein Mensch das Formular ausfüllen kann, daher wurde sie als Spam beiseitegelegt.",
+          "todo": "Handelt es sich um eine echte Person, öffnen Sie die Übermittlung und legen Sie sie manuell als Kontakt an."
+        },
+        "internal_error": {
+          "what": "Bei der Verarbeitung ist auf unserer Seite ein Fehler aufgetreten. Die Antworten bleiben erhalten.",
+          "todo": "Versuchen Sie es erneut. Schlägt es wieder fehl, wenden Sie sich mit der Übermittlungszeit an den Support."
+        },
+        "unknown": {
+          "what": "Diese Übermittlung wurde aus einem Grund beiseitegelegt, den diese Version der App nicht erkennt.",
+          "todo": "Öffnen Sie sie, um die Details zu sehen, und versuchen Sie es dann erneut oder bearbeiten Sie sie manuell."
+        }
+      },
+      "table": {
+        "received": "Eingegangen",
+        "visitor": "Besucher",
+        "status": "Status",
+        "contact": "Kontakt",
+        "company": "Unternehmen",
+        "version": "Version",
+        "open": "Übermittlung von {who} öffnen"
+      },
+      "anonymous": "Kein Name angegeben",
+      "answersRemovedShort": "Antworten entfernt",
+      "versionShort": "v{n}",
+      "noLink": "Keine",
+      "unnamedContact": "Kontakt öffnen",
+      "unnamedCompany": "Unternehmen öffnen",
+      "drawer": {
+        "title": "Übermittlung von {who}",
+        "close": "Schließen",
+        "loading": "Übermittlung wird geöffnet",
+        "errorTitle": "Diese Übermittlung konnte nicht geöffnet werden.",
+        "errorBody": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "retryLoad": "Erneut versuchen",
+        "auditNote": "Das Öffnen der Antworten einer Übermittlung wird im Änderungsprotokoll erfasst.",
+        "answers": "Antworten",
+        "noAnswers": "Diese Übermittlung enthält keine Antworten.",
+        "emptyAnswer": "Keine Antwort",
+        "yes": "Ja",
+        "no": "Nein",
+        "removedTitle": "Antworten wurden entfernt",
+        "removedBody": "Die Antworten wurden gelöscht oder bereinigt. Nur dieser Datensatz bleibt erhalten, und der Kontakt wurde behalten.",
+        "summary": "Zusammenfassung",
+        "receivedAt": "Eingegangen",
+        "formVersion": "Formularversion",
+        "spamScore": "Spam-Bewertung",
+        "error": "Fehler",
+        "attribution": "Herkunft",
+        "noAttribution": "Es wurden keine Quelldetails erfasst.",
+        "utm": "Kampagnen-Tags",
+        "referrer": "Referrer",
+        "pageUrl": "Seite",
+        "userAgent": "Browser",
+        "consent": "Einwilligung",
+        "consentGiven": "Einwilligung erteilt",
+        "consentText": "Vom Besucher gesehener Text",
+        "consentVersion": "Textversion",
+        "consentAt": "Erteilt am",
+        "noConsent": "Dieses Formular hat keine Einwilligung abgefragt.",
+        "links": "Datensätze",
+        "actions": "Aktionen"
+      },
+      "actions": {
+        "retry": "Erneut versuchen",
+        "retrying": "Wird erneut versucht",
+        "delete": "Antworten löschen",
+        "deleting": "Wird gelöscht",
+        "export": "CSV exportieren",
+        "exporting": "Wird exportiert",
+        "exportHintAttention": "Wählen Sie einen einzelnen Status für den Export aus dieser Gruppe oder verwenden Sie Alle.",
+        "exportHintSearch": "Der Export ignoriert den Suchtext.",
+        "notSpam": "Kein Spam: verarbeiten"
+      },
+      "confirmDelete": {
+        "title": "Diese Antworten löschen?",
+        "message": "Dies löscht die Antworten dieser Übermittlung endgültig. Eine Zeile bleibt in der Liste als Nachweis, dass sie stattgefunden hat, und der Kontakt wird nie gelöscht.",
+        "confirm": "Antworten löschen",
+        "cancel": "Abbrechen"
+      },
+      "toast": {
+        "retried": "Erneut versucht. Die Übermittlung hat jetzt den Status: {status}.",
+        "notRetryable": "Nur Übermittlungen, die Prüfung benötigen oder fehlgeschlagen sind, können erneut versucht werden.",
+        "purged": "Die Antworten wurden bereits entfernt, daher gibt es nichts erneut zu versuchen.",
+        "retryFailed": "Der erneute Versuch war nicht erfolgreich. Bitte versuchen Sie es erneut.",
+        "deleted": "Die Antworten wurden gelöscht. Der Kontakt wurde behalten.",
+        "deleteFailed": "Die Antworten konnten nicht gelöscht werden. Bitte versuchen Sie es erneut.",
+        "exported": "Die CSV-Datei wurde heruntergeladen.",
+        "exportTruncated": "Der Export wurde bei den neuesten {max} Zeilen abgeschnitten. Engen Sie die Daten ein, um den Rest zu erhalten.",
+        "exportFailed": "Der Export konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+      },
+      "state": {
+        "loading": "Übermittlungen werden geladen",
+        "errorTitle": "Übermittlungen konnten nicht geladen werden.",
+        "errorBody": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "retry": "Erneut versuchen",
+        "lockedTitle": "Formulare sind nicht Teil Ihres Tarifs",
+        "lockedBody": "Fügen Sie die App Formulare zu Ihrem Arbeitsbereich hinzu, um Übermittlungen zu sammeln und zu prüfen.",
+        "upgrade": "Tarife ansehen",
+        "emptyTitle": "Noch keine Übermittlungen",
+        "emptyBody": "Teilen Sie den Link des Formulars oder betten Sie es auf Ihrer Website ein. Jede Übermittlung erscheint hier, sobald jemand sie absendet.",
+        "emptyShare": "Dieses Formular teilen",
+        "emptyFilteredTitle": "Keine passenden Übermittlungen",
+        "emptyFilteredBody": "Nichts passt zu diesen Filtern. Setzen Sie sie zurück, um alles zu sehen.",
+        "loadMore": "Mehr laden",
+        "loadingMore": "Weitere werden geladen…"
+      },
+      "cap": {
+        "notice": "Einige Übermittlungen wurden zur Prüfung gespeichert, weil das monatliche Übermittlungslimit Ihres Tarifs erreicht wurde.",
+        "upgrade": "Tarif aktualisieren"
+      }
+    }
+  }
+}

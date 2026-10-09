@@ -42,6 +42,7 @@ run "lint"          pnpm lint
 run "typecheck"     pnpm typecheck
 run "architecture boundaries" pnpm arch:check
 run "unit tests"    pnpm test
+run "translations (21 locales)" bash .claude/skills/i18n-translate-sync/scripts/check.sh
 
 if touches '^packages/db/(migrations|src/schema)/'; then
   step "Migrations or schema changed — checking they apply, match the journal and match Drizzle"

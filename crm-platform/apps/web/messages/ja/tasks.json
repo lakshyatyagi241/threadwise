@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "タスク"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "hub": {
+      "title": "タスク",
+      "subtitle": "フォローアップと ToDo。担当者を割り当て、優先度と期限を設定して、完了をチェックします。",
+      "newTask": "新規タスク",
+      "tableLabel": "タスク",
+      "loading": "タスクを読み込んでいます",
+      "useSampleData": "サンプルデータを使用（開発用）",
+      "emptyFilteredTitle": "一致するタスクはありません",
+      "emptyFiltered": "別の検索語を試すか、絞り込みを解除してください。",
+      "resetFilters": "絞り込みを解除",
+      "empty": {
+        "mine": {
+          "title": "お客様に割り当てられたタスクはありません",
+          "message": "お客様に割り当てられたタスクがここに表示されます。上で追加するか、すべてのタスクを確認してください。"
+        },
+        "all": {
+          "title": "タスクはまだありません",
+          "message": "上の入力欄からフォローアップや ToDo を追加すると、ここに表示されます。"
+        },
+        "overdue": {
+          "title": "期限切れのタスクはありません",
+          "message": "未完了のタスクはすべて期限内です。"
+        },
+        "today": {
+          "title": "今日が期限のタスクはありません",
+          "message": "今日残りの時間に期限が来る未完了のタスクはありません。"
+        },
+        "upcoming": {
+          "title": "今後のタスクはありません",
+          "message": "後日が期限の未完了タスクがここに表示されます。"
+        },
+        "completed": {
+          "title": "完了したタスクはまだありません",
+          "message": "完了にしたタスクが、新しい順にここに表示されます。"
+        }
+      },
+      "showing": "{count, plural, other {# 件のタスクを読み込みました}}",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "すべてのタスクを読み込みました",
+      "deleteTitle": "このタスクを削除しますか？",
+      "deleteMessage": "「{title}」は全員から削除されます。この操作は元に戻せません。",
+      "delete": "削除",
+      "keep": "残す"
+    },
+    "tabs": {
+      "label": "タスク一覧",
+      "mine": "自分のタスク",
+      "all": "すべてのタスク",
+      "overdue": "期限切れ",
+      "today": "今日",
+      "upcoming": "今後",
+      "completed": "完了",
+      "count": "{count, plural, other {# 件のタスク}}"
+    },
+    "toolbar": {
+      "label": "タスクの絞り込み",
+      "search": "タスクを検索",
+      "status": "ステータス",
+      "statusOpen": "未完了",
+      "statusDone": "完了",
+      "statusAll": "未完了と完了",
+      "priority": "優先度",
+      "allPriorities": "すべての優先度",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "assignee": "担当者",
+      "allAssignees": "すべての担当者",
+      "unassigned": "未割り当て",
+      "linked": "関連先",
+      "anyLink": "すべてのレコード",
+      "linkContact": "連絡先",
+      "linkDeal": "案件",
+      "clear": "解除",
+      "modifyColumns": "列を変更",
+      "resetColumns": "列をリセット",
+      "columns": {
+        "title": "タスク",
+        "priority": "優先度",
+        "due": "期限",
+        "assignee": "担当者",
+        "contact": "連絡先",
+        "deal": "案件",
+        "created": "作成日",
+        "completed": "完了日"
+      },
+      "refresh": "更新",
+      "shortcuts": "キーボードショートカット",
+      "view": "表示形式",
+      "views": {
+        "list": "リスト",
+        "board": "期限日別のボード"
+      }
+    },
+    "table": {
+      "scrollArea": "タスクの表",
+      "selectAll": "読み込み済みのタスクをすべて選択",
+      "selectRow": "{title} を選択",
+      "columns": {
+        "title": "タスク",
+        "priority": "優先度",
+        "due": "期限",
+        "assignee": "担当者",
+        "contact": "連絡先",
+        "deal": "案件",
+        "created": "作成日",
+        "completed": "完了日"
+      }
+    },
+    "row": {
+      "complete": "完了にする",
+      "reopen": "再開",
+      "completeNamed": "「{title}」を完了にする",
+      "reopenNamed": "「{title}」を再開",
+      "moreFor": "{title} のその他の操作",
+      "open": "開く",
+      "edit": "編集",
+      "delete": "削除",
+      "unassigned": "未割り当て"
+    },
+    "bulk": {
+      "label": "選択したタスクの操作",
+      "selected": "{count, plural, other {# 件のタスクを選択中}}",
+      "working": "処理中",
+      "complete": "完了",
+      "assign": "割り当て",
+      "assignTo": "担当者を設定",
+      "me": "{name}（自分）",
+      "unassign": "割り当てを解除",
+      "delete": "削除",
+      "clear": "選択を解除",
+      "failed": "処理できませんでした。",
+      "someFailed": "{count, plural, other {# 件のタスクを変更できませんでした。}}",
+      "completed": "{count, plural, other {# 件のタスクを完了しました。}}",
+      "assigned": "{count, plural, other {# 件のタスクを {name} に割り当てました。}}",
+      "unassigned": "{count, plural, other {# 件のタスクの割り当てを解除しました。}}",
+      "deleted": "{count, plural, other {# 件のタスクを削除しました。}}",
+      "deleteTitle": "選択したタスクを削除しますか？",
+      "deleteMessage": "{count, plural, other {# 件のタスクを全員から削除します。この操作は元に戻せません。}}",
+      "keep": "残す"
+    },
+    "quick": {
+      "label": "タスクを追加",
+      "placeholder": "タスクを入力して Enter を押してください",
+      "priority": "優先度",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "due": "期限の日時",
+      "add": "追加",
+      "dueRequired": "期限の日時を選択してください。",
+      "titleRequired": "やることを入力してください。",
+      "options": "その他のオプション（優先度と期限）"
+    },
+    "form": {
+      "eyebrow": "タスク",
+      "newTitle": "新規タスク",
+      "editTitle": "タスクを編集",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "create": "タスクを作成",
+      "save": "変更を保存",
+      "title": "タスク",
+      "titlePlaceholder": "例: Acme に更新の件で電話する",
+      "priority": "優先度",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "assignee": "担当者",
+      "unassigned": "担当者なし",
+      "me": "{name}（自分）",
+      "due": "期限",
+      "presets": {
+        "today": "今日",
+        "tomorrow": "明日",
+        "nextWeek": "来週"
+      },
+      "clearDue": "日付をクリア",
+      "contact": "連絡先",
+      "deal": "案件",
+      "notes": "メモ",
+      "reminderHint": "タスクの期限になると、担当者にリマインダーが届きます。",
+      "assigneePick": "このタスクの担当者を選択してください。",
+      "problems": {
+        "dueRequired": "期限の日時を選択してください。",
+        "priorityRequired": "優先度を選択してください。",
+        "assigneeRequired": "このタスクの担当者を選択してください。",
+        "titleRequired": "やることを入力してください。",
+        "titleTooLong": "タスクが長すぎます（255 文字以内）。",
+        "notesTooLong": "メモが長すぎます（5000 文字以内）。",
+        "dueInvalid": "その日付は無効です。",
+        "assigneeInvalid": "その担当者は、このワークスペースの有効なメンバーではありません。"
+      }
+    },
+    "drawer": {
+      "loading": "タスクを読み込んでいます",
+      "close": "閉じる",
+      "eyebrow": "タスク",
+      "name": "タスク名",
+      "titleRequired": "タスク名を入力してください。",
+      "statusOpen": "未完了",
+      "statusDone": "完了",
+      "complete": "完了にする",
+      "reopen": "再開",
+      "edit": "編集",
+      "delete": "削除",
+      "details": "詳細",
+      "notes": "メモ",
+      "notesPlaceholder": "この作業を引き継ぐ人向けの補足を追加",
+      "linked": "リンク済みのレコード",
+      "company": "会社",
+      "noLinks": "連絡先や案件にはリンクされていません。",
+      "activity": "アクティビティ",
+      "events": {
+        "created": "タスクを作成しました",
+        "createdBy": "作成者: {name}",
+        "reminded": "期限のリマインダーを送信しました",
+        "completed": "完了にしました"
+      },
+      "deleteTitle": "このタスクを削除しますか？",
+      "deleteMessage": "「{title}」は全員から削除されます。この操作は元に戻せません。",
+      "cancel": "残す"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "期限切れ",
+        "today": "今日",
+        "upcoming": "今後",
+        "no_date": "日付なし"
+      },
+      "empty": "ここには何もありません。"
+    },
+    "due": {
+      "none": "日付なし",
+      "overdue": "期限切れ",
+      "today": "今日 {time}",
+      "tomorrow": "明日 {time}",
+      "yesterday": "昨日 {time}",
+      "date": "{date} {time}"
+    },
+    "priority": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "link": {
+      "unnamedContact": "名前のない連絡先",
+      "unnamedDeal": "案件"
+    },
+    "picker": {
+      "searchContact": "連絡先を検索",
+      "searchDeal": "案件を検索",
+      "results": "検索結果",
+      "searching": "検索中",
+      "unavailable": "現在、検索は利用できません。",
+      "none": "一致する項目はありません。",
+      "unlink": "リンクを解除"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。続行するには再度サインインしてください。",
+      "conflict": "このタスクは別のユーザーによって変更されました。再読み込みして、もう一度お試しください。",
+      "validation": "一部の入力内容が正しくありません。",
+      "unavailable": "このサーバーではタスク機能はまだ利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "そのタスクは見つかりませんでした。削除された可能性があります。",
+      "planDisabled": "ご利用のプランにはタスク機能が含まれていません。アップグレードするとご利用いただけます。",
+      "assigneeInvalid": "その人はこのワークスペースの有効なメンバーではありません。",
+      "unexpected": "問題が発生しました。しばらくしてから、もう一度お試しください。",
+      "requestId": "リクエスト ID",
+      "retry": "再試行"
+    },
+    "toast": {
+      "completed": "タスクを完了しました。",
+      "reopened": "タスクを再開しました。",
+      "created": "タスクを作成しました。",
+      "saved": "タスクを保存しました。",
+      "deleted": "タスクを削除しました。",
+      "conflict": "このタスクは別のユーザーによって変更されました。リストを再読み込みしました。もう一度お試しください。",
+      "failed": "タスクを更新できませんでした。",
+      "saveFailed": "タスクを保存できませんでした。",
+      "deleteFailed": "タスクを削除できませんでした。",
+      "createFailed": "タスクを作成できませんでした。"
+    },
+    "shortcuts": {
+      "title": "キーボードショートカット",
+      "close": "閉じる",
+      "intro": "マウスを使わずにリストを操作できます。フィールドに入力している間は、ショートカットは一時停止します。",
+      "actions": {
+        "next": "次のタスク",
+        "prev": "前のタスク",
+        "open": "タスクを開く",
+        "toggleComplete": "完了または再開",
+        "toggleSelect": "選択または選択解除",
+        "newTask": "新しいタスク",
+        "focusSearch": "検索",
+        "clearSelection": "選択を解除",
+        "help": "このリストを表示"
+      }
+    },
+    "linked": {
+      "title": "タスク",
+      "addPlaceholder": "タスク名を入力し、「追加」を押して詳細を入力します",
+      "viewAll": "すべて表示",
+      "loading": "タスクを読み込んでいます",
+      "unavailableTitle": "タスクはまだ利用できません",
+      "unavailable": "このサーバーではタスク機能はまだ利用できません。",
+      "empty": "未完了のタスクはありません。",
+      "loadMore": "さらに読み込む",
+      "loadMoreDone": "完了済みをさらに読み込む",
+      "showDone": "完了済みを表示",
+      "hideDone": "完了済みを非表示"
+    }
+  }
+}

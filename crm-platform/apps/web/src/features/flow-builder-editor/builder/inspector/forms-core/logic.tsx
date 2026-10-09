@@ -4,12 +4,14 @@ import {
   FLB_COND_MAX_DEPTH,
   FLB_COND_MAX_RULES,
   flbCondProblems,
-  flbCondSummary,
   flbIsCondGroup,
   type FlbCondGroup,
   type FlbCondRule,
 } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { useTranslations } from 'next-intl';
+import { condSummary } from '../../../lib/contract-text';
+import { useFlb } from '../../../lib/msg';
 import type { ReactNode } from 'react';
 import {
   Check,
@@ -50,15 +52,16 @@ import {
 } from './helpers';
 import { AddLink, InfoBox, Link, smallInputClass, V } from './parts';
 
+/** The operator ids; their labels are the messages `logic.operator.<id>`. */
 const OPERATOR_CHOICES = [
-  { v: 'equals', l: 'Equal to' },
-  { v: 'not_equals', l: 'Not equal to' },
-  { v: 'contains', l: 'Contains' },
-  { v: 'not_contains', l: 'Does not contain' },
-  { v: 'gt', l: 'Greater than' },
-  { v: 'lt', l: 'Less than' },
-  { v: 'exists', l: 'Is set' },
-];
+  'equals',
+  'not_equals',
+  'contains',
+  'not_contains',
+  'gt',
+  'lt',
+  'exists',
+] as const;
 
 const joinerClass = (active: boolean, or: boolean) =>
   cn(
@@ -83,6 +86,7 @@ function RuleCard({
   onRemove: () => void;
   flagged: boolean;
 }) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const operator = rule.operator || 'equals';
   return (
     <div
@@ -94,7 +98,7 @@ function RuleCard({
       <div className="mb-1 flex items-center gap-2">
         <span className="font-mono text-[10px] text-muted-foreground">{label}</span>
         <div className="flex-1" />
-        <IconButton title="Remove rule" danger onClick={onRemove}>
+        <IconButton title={t('removeRule')} danger onClick={onRemove}>
           <XIcon />
         </IconButton>
       </div>
@@ -102,11 +106,11 @@ function RuleCard({
         type="text"
         value={str(rule.variable)}
         onChange={(e) => onPatch({ variable: e.target.value })}
-        placeholder="Variable name (e.g. plan)"
+        placeholder={t('variablePlaceholder')}
         className={cn(controlClass, 'mb-1.5')}
       />
       {flagged ? (
-        <div className="mb-1.5 text-[11px] text-[#E87A5D]">Pick the variable to test.</div>
+        <div className="mb-1.5 text-[11px] text-[#E87A5D]">{t('pickVariable')}</div>
       ) : null}
       <select
         value={operator}
@@ -114,8 +118,8 @@ function RuleCard({
         className={cn(controlClass, 'mb-1.5')}
       >
         {OPERATOR_CHOICES.map((o) => (
-          <option key={o.v} value={o.v}>
-            {o.l}
+          <option key={o} value={o}>
+            {t(`operator.${o}`)}
           </option>
         ))}
       </select>
@@ -124,7 +128,7 @@ function RuleCard({
           type="text"
           value={str(rule.value)}
           onChange={(e) => onPatch({ value: e.target.value })}
-          placeholder="Compare against…"
+          placeholder={t('comparePlaceholder')}
           className={controlClass}
         />
       ) : null}
@@ -143,6 +147,8 @@ function GroupEditor({
   path: CondPath;
   onChange: (next: FlbCondGroup) => void;
 }) {
+  const t = useTranslations('flb.builder.formsCore.logic');
+  const tf = useFlb();
   const isRoot = path.length === 0;
   const depth = depthAt(path);
   const canRule = canAddRule(root);
@@ -160,21 +166,25 @@ function GroupEditor({
             onClick={() => onChange(setGroupOp(root, path, 'and'))}
             className={joinerClass(!or, false)}
           >
-            AND
+            {t('joinerAnd')}
           </button>
           <button
             type="button"
             onClick={() => onChange(setGroupOp(root, path, 'or'))}
             className={joinerClass(or, true)}
           >
-            OR
+            {t('joinerOr')}
           </button>
         </div>
         <span className="min-w-0 flex-1 truncate text-[11px] text-muted-foreground">
-          {group.items.length === 0 ? 'Empty group: always false' : flbCondSummary(group)}
+          {group.items.length === 0 ? t('emptyGroupSummary') : condSummary(tf, group)}
         </span>
         {!isRoot ? (
-          <IconButton title="Remove group" danger onClick={() => onChange(removeAt(root, path))}>
+          <IconButton
+            title={t('removeGroup')}
+            danger
+            onClick={() => onChange(removeAt(root, path))}
+          >
             <XIcon />
           </IconButton>
         ) : null}
@@ -187,7 +197,7 @@ function GroupEditor({
           <RuleCard
             key={i}
             rule={item}
-            label={`Rule ${i + 1}`}
+            label={t('ruleLabel', { n: i + 1 })}
             flagged={!item.variable.trim()}
             onPatch={(patch) => onChange(patchRule(root, childPath, patch))}
             onRemove={() => onChange(removeAt(root, childPath))}
@@ -195,16 +205,14 @@ function GroupEditor({
         );
       })}
       {group.items.length === 0 ? (
-        <div className="mb-2 text-[11px] text-[#E87A5D]">
-          This group has no rules, so it is always false. Add a rule or remove the group.
-        </div>
+        <div className="mb-2 text-[11px] text-[#E87A5D]">{t('emptyGroupWarning')}</div>
       ) : null}
       <div className="flex gap-3">
         <GroupAction disabled={!canRule} onClick={() => onChange(addRule(root, path))}>
-          Add rule
+          {t('addRule')}
         </GroupAction>
         <GroupAction disabled={!canGroup} onClick={() => onChange(addGroup(root, path))}>
-          Add group
+          {t('addGroup')}
         </GroupAction>
       </div>
     </div>
@@ -232,12 +240,20 @@ function GroupAction({
   );
 }
 
+/** Rich tags of the two condition info boxes: bold AND/OR and the coloured port names. */
+const conditionRich = {
+  b: (chunks: ReactNode) => <b>{chunks}</b>,
+  ifPort: (chunks: ReactNode) => <span className="font-mono text-brand">{chunks}</span>,
+  elsePort: (chunks: ReactNode) => <span className="font-mono text-[#E87A5D]">{chunks}</span>,
+};
+
 /**
  * The Condition inspector. A node edits a nested tree of AND/OR groups (`conditionGroup`, beyond WaDesk); a node that only has the
  * flat chain is shown as the equal tree and saved as `conditionGroup` on its first edit (the flat arrays are left as they were and
  * ignored by the runtime). A flat chain too long or too alternating for the tree limits keeps the flat editor.
  */
 export function ConditionForm(props: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const model = conditionTreeOf(props.data);
   if (!model) return <FlatConditionForm {...props} />;
   const { tree, from } = model;
@@ -245,12 +261,12 @@ export function ConditionForm(props: FormProps) {
   return (
     <>
       <InfoBox>
-        Rules are grouped. Each group combines its rules and sub-groups with <b>AND</b> (all must
-        match) or <b>OR</b> (any can match). The whole tree either evaluates to TRUE (then the{' '}
-        <span className="font-mono text-brand">IF · true</span> port fires) or FALSE (then the{' '}
-        <span className="font-mono text-[#E87A5D]">ELSE · false</span> port fires). Groups nest up
-        to {FLB_COND_MAX_DEPTH} levels, with at most {FLB_COND_MAX_RULES} rules in total.
-        {from === 'flat' ? ' This node still uses the old flat list until you edit it here.' : ''}
+        {t.rich('conditionTreeInfo', {
+          ...conditionRich,
+          depth: FLB_COND_MAX_DEPTH,
+          rules: FLB_COND_MAX_RULES,
+          flat: from === 'flat' ? 'true' : 'false',
+        })}
       </InfoBox>
       <GroupEditor
         root={tree}
@@ -260,10 +276,14 @@ export function ConditionForm(props: FormProps) {
       />
       {problems.incompleteRules + problems.emptyGroups > 0 ? (
         <div className="mt-2 text-[11px] text-[#E87A5D]">
-          {problems.incompleteRules > 0
-            ? `${problems.incompleteRules} rule(s) have no variable. `
-            : ''}
-          {problems.emptyGroups > 0 ? `${problems.emptyGroups} empty group(s).` : ''}
+          {[
+            problems.incompleteRules > 0
+              ? t('problemRules', { count: problems.incompleteRules })
+              : '',
+            problems.emptyGroups > 0 ? t('problemGroups', { count: problems.emptyGroups }) : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
         </div>
       ) : null}
     </>
@@ -271,6 +291,7 @@ export function ConditionForm(props: FormProps) {
 }
 
 function FlatConditionForm({ data: d, setMany }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const conds = asArray(d.conditions).map(asRecord) as ConditionRow[];
   const ops = asArray(d.operators).map(String);
   const updateRow = (i: number, patch: Partial<ConditionRow>) =>
@@ -282,13 +303,7 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
   };
   return (
     <>
-      <InfoBox>
-        All the rules below are combined into ONE expression using the <b>AND</b> / <b>OR</b>{' '}
-        toggles. The whole expression either evaluates to TRUE (then the{' '}
-        <span className="font-mono text-brand">IF · true</span> port fires) or FALSE (then the{' '}
-        <span className="font-mono text-[#E87A5D]">ELSE · false</span> port fires). Add rules to
-        make it more specific; chain with <b>AND</b> (all must match) or <b>OR</b> (any can match).
-      </InfoBox>
+      <InfoBox>{t.rich('flatInfo', conditionRich)}</InfoBox>
       {conds.map((c, i) => {
         const joiner = ops[i - 1] || 'AND';
         const operator = c.operator || 'equals';
@@ -307,7 +322,7 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
                         : 'text-foreground/70 hover:bg-background',
                     )}
                   >
-                    AND
+                    {t('joinerAnd')}
                   </button>
                   <button
                     type="button"
@@ -319,18 +334,20 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
                         : 'text-foreground/70 hover:bg-background',
                     )}
                   >
-                    OR
+                    {t('joinerOr')}
                   </button>
                 </div>
               </div>
             ) : null}
             <div className="mb-2 rounded-lg border border-border bg-background p-2">
               <div className="mb-1 flex items-center gap-2">
-                <span className="font-mono text-[10px] text-muted-foreground">Rule {i + 1}</span>
+                <span className="font-mono text-[10px] text-muted-foreground">
+                  {t('ruleLabel', { n: i + 1 })}
+                </span>
                 <div className="flex-1" />
                 {conds.length > 1 ? (
                   <IconButton
-                    title="Remove"
+                    title={t('remove')}
                     danger
                     onClick={() => setMany(removeConditionRow(conds, ops, i))}
                   >
@@ -342,7 +359,7 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
                 type="text"
                 value={str(c.variable)}
                 onChange={(e) => updateRow(i, { variable: e.target.value })}
-                placeholder="Variable name (e.g. plan)"
+                placeholder={t('variablePlaceholder')}
                 className={cn(controlClass, 'mb-1.5')}
               />
               <select
@@ -351,8 +368,8 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
                 className={cn(controlClass, 'mb-1.5')}
               >
                 {OPERATOR_CHOICES.map((o) => (
-                  <option key={o.v} value={o.v}>
-                    {o.l}
+                  <option key={o} value={o}>
+                    {t(`operator.${o}`)}
                   </option>
                 ))}
               </select>
@@ -361,7 +378,7 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
                   type="text"
                   value={str(c.value)}
                   onChange={(e) => updateRow(i, { value: e.target.value })}
-                  placeholder="Compare against…"
+                  placeholder={t('comparePlaceholder')}
                   className={controlClass}
                 />
               ) : null}
@@ -369,25 +386,26 @@ function FlatConditionForm({ data: d, setMany }: FormProps) {
           </div>
         );
       })}
-      <AddLink onClick={() => setMany(addConditionRow(conds, ops))}>Add rule</AddLink>
+      <AddLink onClick={() => setMany(addConditionRow(conds, ops))}>{t('addRule')}</AddLink>
     </>
   );
 }
 
 export function DelayForm({ data: d, set }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   return (
     <>
-      <Field label="Amount">
+      <Field label={t('delayAmount')}>
         <NumberInput value={d.amount} placeholder="5" onChange={(v) => set('amount', v)} />
       </Field>
-      <Field label="Unit">
+      <Field label={t('delayUnit')}>
         <SelectInput
           value={d.unit}
           options={[
-            { v: 'sec', l: 'seconds' },
-            { v: 'min', l: 'minutes' },
-            { v: 'hour', l: 'hours' },
-            { v: 'day', l: 'days' },
+            { v: 'sec', l: t('unitSec') },
+            { v: 'min', l: t('unitMin') },
+            { v: 'hour', l: t('unitHour') },
+            { v: 'day', l: t('unitDay') },
           ]}
           onChange={(v) => set('unit', v)}
         />
@@ -402,45 +420,43 @@ interface Header {
 }
 
 export function WebhookForm({ data: d, set }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const hdrs = asArray(d.headers).map(asRecord) as Header[];
   return (
     <>
-      <Field label="Method">
+      <Field label={t('webhookMethod')}>
         <SelectInput
           value={d.method}
           options={['POST', 'GET', 'PUT', 'PATCH', 'DELETE'].map((m) => ({ v: m, l: m }))}
           onChange={(v) => set('method', v)}
         />
       </Field>
-      <Field label="URL">
+      <Field label={t('webhookUrl')}>
         <TextInput
           value={d.url}
           placeholder="https://api.example.com/stock?field={{field}}"
           onChange={(v) => set('url', v)}
         />
       </Field>
-      <Field
-        label="Headers"
-        hint="e.g. Authorization → Bearer {{api_token}}. Values can use {{variables}}."
-      >
+      <Field label={t('webhookHeaders')} hint={t('webhookHeadersHint')}>
         {hdrs.map((h, i) => (
           <div key={i} className="mb-1.5 flex items-center gap-2">
             <input
               type="text"
               value={str(h.key)}
               onChange={(e) => set('headers', patchItem(hdrs, i, { key: e.target.value }))}
-              placeholder="Header"
+              placeholder={t('webhookHeaderName')}
               className={cn(smallInputClass, '!w-2/5')}
             />
             <TextInput
               value={h.value}
               onChange={(v) => set('headers', patchItem(hdrs, i, { value: v }))}
-              placeholder="Value"
+              placeholder={t('webhookHeaderValue')}
               className={cn(smallInputClass, 'flex-1')}
             />
             <button
               type="button"
-              title="Remove"
+              title={t('remove')}
               onClick={() =>
                 set(
                   'headers',
@@ -454,21 +470,21 @@ export function WebhookForm({ data: d, set }: FormProps) {
           </div>
         ))}
         <AddLink onClick={() => set('headers', [...hdrs, { key: '', value: '' }])}>
-          Add header
+          {t('webhookAddHeader')}
         </AddLink>
       </Field>
-      <Field label="Content type">
+      <Field label={t('webhookContentType')}>
         <SelectInput
           value={d.contentType}
           options={[
-            { v: 'application/json', l: 'JSON' },
-            { v: 'application/x-www-form-urlencoded', l: 'Form URL-encoded' },
-            { v: 'text/plain', l: 'Plain text' },
+            { v: 'application/json', l: t('contentJson') },
+            { v: 'application/x-www-form-urlencoded', l: t('contentForm') },
+            { v: 'text/plain', l: t('contentPlain') },
           ]}
           onChange={(v) => set('contentType', v)}
         />
       </Field>
-      <Field label="Body" hint="Sent for POST/PUT/PATCH. {{variables}} are substituted.">
+      <Field label={t('webhookBody')} hint={t('webhookBodyHint')}>
         <TextArea
           value={d.body}
           placeholder={'{ "field": "{{field}}" }'}
@@ -477,13 +493,8 @@ export function WebhookForm({ data: d, set }: FormProps) {
         />
       </Field>
       <Field
-        label="Save response to"
-        hint={
-          <>
-            The API&apos;s response is stored in this variable for later nodes (e.g. <V>response</V>
-            ).
-          </>
-        }
+        label={t('webhookSave')}
+        hint={t.rich('webhookSaveHint', { v: (chunks) => <V>{chunks}</V> })}
       >
         <TextInput value={d.save} placeholder="response" onChange={(v) => set('save', v)} />
       </Field>
@@ -491,18 +502,17 @@ export function WebhookForm({ data: d, set }: FormProps) {
   );
 }
 
-const codeVar = (t: string) => <span className="font-mono text-[#7CF3C4]">{t}</span>;
+const codeVar = (chunks: ReactNode) => <span className="font-mono text-[#7CF3C4]">{chunks}</span>;
 
 export function CodeForm({ data: d, set }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const save = str(d.save) || 'result';
   return (
     <>
       <div className="mb-1 rounded-lg border border-border bg-[#1E2A33] p-2.5 text-[11px] leading-relaxed text-[#C7D2CC]">
-        Runs sandboxed JavaScript. Available: {codeVar('previousResponse')},{' '}
-        {codeVar('allResponses')}, {codeVar('functionArgs')}. {codeVar('return')} an object to save
-        it.
+        {t.rich('codeInfo', { code: codeVar })}
       </div>
-      <Field label="JavaScript" hint="No file / network / require access. CPU + memory are capped.">
+      <Field label={t('codeLabel')} hint={t('codeHint')}>
         <textarea
           value={str(d.code)}
           onChange={(e) => set('code', e.target.value)}
@@ -515,12 +525,12 @@ export function CodeForm({ data: d, set }: FormProps) {
         />
       </Field>
       <Field
-        label="Save return value to"
-        hint={
-          <>
-            Later nodes read it as <V>{save}</V> (or <V>{`${save}.FIELD`}</V> for object fields).
-          </>
-        }
+        label={t('codeSave')}
+        hint={t.rich('codeSaveHint', {
+          v: (chunks) => <V>{chunks}</V>,
+          save,
+          path: `${save}.FIELD`,
+        })}
       >
         <TextInput value={d.save} placeholder="result" onChange={(v) => set('save', v)} />
       </Field>
@@ -529,39 +539,38 @@ export function CodeForm({ data: d, set }: FormProps) {
 }
 
 export function MysqlForm({ data: d, set }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   return (
     <>
       <div className="mb-1 rounded-lg border border-border bg-muted/60 p-2.5 text-[11px] text-foreground/70">
-        Read-only — only <span className="font-mono text-brand">SELECT</span> queries run.
-        Credentials are stored encrypted and only used to fetch data for the reply.
+        {t.rich('mysqlInfo', {
+          code: (chunks) => <span className="font-mono text-brand">{chunks}</span>,
+        })}
       </div>
-      <Field label="Host">
+      <Field label={t('mysqlHost')}>
         <TextInput value={d.host} placeholder="db.yoursite.com" onChange={(v) => set('host', v)} />
       </Field>
-      <Field label="Port">
+      <Field label={t('mysqlPort')}>
         <TextInput value={d.port} placeholder="3306" onChange={(v) => set('port', v)} />
       </Field>
-      <Field label="Database">
+      <Field label={t('mysqlDatabase')}>
         <TextInput
           value={d.database}
           placeholder="my_database"
           onChange={(v) => set('database', v)}
         />
       </Field>
-      <Field label="Username">
+      <Field label={t('mysqlUsername')}>
         <TextInput value={d.username} placeholder="db_user" onChange={(v) => set('username', v)} />
       </Field>
-      <Field label="Password">
+      <Field label={t('mysqlPassword')}>
         <PasswordInput
           value={d.password}
           placeholder="••••••••"
           onChange={(v) => set('password', v)}
         />
       </Field>
-      <Field
-        label="SQL query"
-        hint="SELECT only. Use {{variables}} from earlier nodes (e.g. an AI-extracted field code)."
-      >
+      <Field label={t('mysqlSql')} hint={t('mysqlSqlHint')}>
         <TextArea
           value={d.sql}
           placeholder="SELECT qty FROM stock WHERE field = {{field}}"
@@ -570,13 +579,8 @@ export function MysqlForm({ data: d, set }: FormProps) {
         />
       </Field>
       <Field
-        label="Save rows to"
-        hint={
-          <>
-            Returned rows (JSON) are stored here — an AI / message node can then read <V>rows</V>{' '}
-            and answer the customer.
-          </>
-        }
+        label={t('mysqlSave')}
+        hint={t.rich('mysqlSaveHint', { v: (chunks) => <V>{chunks}</V> })}
       >
         <TextInput value={d.save} placeholder="rows" onChange={(v) => set('save', v)} />
       </Field>
@@ -585,136 +589,109 @@ export function MysqlForm({ data: d, set }: FormProps) {
 }
 
 export function AiForm({ data: d, set, env }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
   const { aiModels, assistants } = env.ctx;
   const modelOpts = withCurrent(
     aiModels.length
-      ? [{ v: '', l: '— pick model —' }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
-      : [{ v: '', l: 'No AI models enabled — ask admin to switch one on' }],
+      ? [{ v: '', l: t('aiModelPick') }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
+      : [{ v: '', l: t('aiModelNone') }],
     d.model,
-    (v) => `${v} (not enabled)`,
+    (v) => t('aiModelNotEnabled', { value: v }),
   );
   const assistantOpts = withCurrent(
     [
-      { v: '', l: '— none (use the prompt above only) —' },
+      { v: '', l: t('aiAssistantNone') },
       ...assistants.map((a) => ({
         v: a.id,
-        l: `${a.name} · ${a.sources} source${a.sources === 1 ? '' : 's'}`,
+        l: t('aiAssistantOption', { name: a.name, count: a.sources }),
       })),
     ],
     d.assistant,
-    (v) => `(assistant ${v.slice(0, 8)})`,
+    (v) => t('aiAssistantMissing', { id: v.slice(0, 8) }),
   );
   const picked = assistants.find((a) => a.id === str(d.assistant));
   const aiSave = str(d.save) || 'reply';
-
-  const assistantHint = !assistants.length ? (
-    <>
-      No knowledge bases yet. Create one in{' '}
-      <Link href="/ai-training" newTab>
-        AI Training
-      </Link>
-      , then press Refresh list to pick it here.
-    </>
-  ) : picked && picked.sources === 0 ? (
-    <>
-      Note: this assistant has 0 trained sources. Add some in{' '}
-      <Link href="/ai-training" newTab>
-        AI Training
-      </Link>{' '}
-      or the reply uses the prompt only.
-    </>
-  ) : (
-    <>
-      Pulls the chosen assistant&apos;s trained content into this reply.{' '}
-      <Link href="/ai-training" newTab>
-        Manage knowledge →
-      </Link>
-    </>
+  const trainingLink = (chunks: ReactNode) => (
+    <Link href="/ai-training" newTab>
+      {chunks}
+    </Link>
   );
+  const v = (chunks: ReactNode) => <V>{chunks}</V>;
+
+  const assistantHint = !assistants.length
+    ? t.rich('aiAssistantHintNone', { link: trainingLink })
+    : picked && picked.sources === 0
+      ? t.rich('aiAssistantHintEmpty', { link: trainingLink })
+      : t.rich('aiAssistantHint', { link: trainingLink });
 
   return (
     <>
       <Field
-        label="Model"
+        label={t('aiModelLabel')}
         hint={
-          aiModels.length ? (
-            'Models the admin enabled — plus any provider you added your own key for (Settings → AI keys, on BYOK plans).'
-          ) : (
-            <>
-              No provider available yet. Add your own key in{' '}
-              <Link href="/settings">Settings → AI keys</Link> (BYOK plans), or ask your admin to
-              enable one.
-            </>
-          )
+          aiModels.length
+            ? t('aiModelHint')
+            : t.rich('aiModelHintNone', {
+                link: (chunks) => <Link href="/settings">{chunks}</Link>,
+              })
         }
       >
-        <SelectInput value={d.model} options={modelOpts} onChange={(v) => set('model', v)} />
+        <SelectInput value={d.model} options={modelOpts} onChange={(x) => set('model', x)} />
       </Field>
-      <Field label="System prompt">
-        <TextArea value={d.prompt} rows={5} onChange={(v) => set('prompt', v)} />
+      <Field label={t('aiPrompt')}>
+        <TextArea value={d.prompt} rows={5} onChange={(x) => set('prompt', x)} />
       </Field>
       <Field
-        label="Save response to"
-        hint={
-          <>
-            Later nodes read it as <V>{aiSave}</V> — or <V>{`${aiSave}.FIELD`}</V> when extracting.
-          </>
-        }
+        label={t('aiSave')}
+        hint={t.rich('aiSaveHint', { v, save: aiSave, path: `${aiSave}.FIELD` })}
       >
-        <TextInput value={d.save} placeholder="reply" onChange={(v) => set('save', v)} />
+        <TextInput value={d.save} placeholder="reply" onChange={(x) => set('save', x)} />
       </Field>
-      <Field label="Knowledge base (optional)" hint={assistantHint}>
+      <Field label={t('aiAssistantLabel')} hint={assistantHint}>
         <SelectInput
           value={d.assistant}
           options={assistantOpts}
-          onChange={(v) => set('assistant', v)}
+          onChange={(x) => set('assistant', x)}
         />
         <KnowledgeBaseActions refresh={() => env.refresh()} />
       </Field>
       <div className="mb-1 mt-1">
-        <Check checked={!!d.extract} onChange={(v) => set('extract', v)}>
-          <strong>Extract structured data (JSON)</strong> — turn the message into fields
+        <Check checked={!!d.extract} onChange={(x) => set('extract', x)}>
+          {t.rich('aiExtract', { strong: (chunks) => <strong>{chunks}</strong> })}
         </Check>
       </div>
       {d.extract ? (
         <Field
-          label="Fields to extract"
-          hint={
-            <>
-              Comma-separated keys. The AI returns ONE JSON object; each key becomes{' '}
-              <V>{`${aiSave}.KEY`}</V> (and <V>{`${aiSave}.__rows`}</V> when several records are
-              detected — e.g. for a Google Sheets node).
-            </>
-          }
+          label={t('aiFields')}
+          hint={t.rich('aiFieldsHint', {
+            v,
+            key: `${aiSave}.KEY`,
+            rows: `${aiSave}.__rows`,
+          })}
         >
           <TextInput
             value={d.fields}
             placeholder="FARM, DATE, NAME, FIELD, RATE, VOLUME, EARNINGS"
-            onChange={(v) => set('fields', v)}
+            onChange={(x) => set('fields', x)}
           />
         </Field>
       ) : null}
       <div className="mt-1">
-        <Check checked={!!d.silent} onChange={(v) => set('silent', v)}>
-          <strong>Silent</strong> — don&apos;t send a reply to the customer (extraction only)
+        <Check checked={!!d.silent} onChange={(x) => set('silent', x)}>
+          {t.rich('aiSilent', { strong: (chunks) => <strong>{chunks}</strong> })}
         </Check>
       </div>
       <div className="mt-2">
-        <Check checked={!!d.conversational} onChange={(v) => set('conversational', v)}>
-          <strong>Conversation mode</strong> — the AI keeps replying to every message (drives the
-          whole chat) instead of answering once
+        <Check checked={!!d.conversational} onChange={(x) => set('conversational', x)}>
+          {t.rich('aiConversation', { strong: (chunks) => <strong>{chunks}</strong> })}
         </Check>
       </div>
       {d.conversational ? (
-        <Field
-          label="Exit keyword (optional)"
-          className="mt-4"
-          hint="When the customer types exactly this, the AI hands back and the flow continues to the next node. Leave blank to let the AI run the whole conversation."
-        >
+        <Field label={t('aiExit')} className="mt-4" hint={t('aiExitHint')}>
           <TextInput
             value={d.exit_keyword}
             placeholder="menu"
-            onChange={(v) => set('exit_keyword', v)}
+            onChange={(x) => set('exit_keyword', x)}
           />
         </Field>
       ) : null}
@@ -723,31 +700,27 @@ export function AiForm({ data: d, set, env }: FormProps) {
 }
 
 export function SubflowForm({ data: d, set, env }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.logic');
+  const th = useTranslations('flb.builder.formsCore.helpers');
   const opts = withCurrent(
     [
-      { v: '', l: env.loading ? 'Loading flows…' : '— pick flow —' },
+      { v: '', l: env.loading ? t('subflowLoading') : t('subflowPick') },
       // A flow cannot run itself: the flow being edited is not offered.
       ...env.ctx.flows
         .filter((f) => f.id !== env.flowId)
-        .map((f) => ({ v: f.id, l: subflowLabel(f.name, f.isPublished) })),
+        .map((f) => ({ v: f.id, l: subflowLabel(th, f.name, f.isPublished) })),
     ],
     d.flow,
-    (v) => `Flow ${v.slice(0, 8)} (not in workspace)`,
+    (v) => t('subflowMissing', { id: v.slice(0, 8) }),
   );
   return (
-    <Field
-      label="Flow to run"
-      hint="Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here."
-    >
+    <Field label={t('subflowLabel')} hint={t('subflowHint')}>
       <SelectInput value={d.flow} options={opts} onChange={(v) => set('flow', v)} />
     </Field>
   );
 }
 
 export function EndForm() {
-  return (
-    <div className="text-[12.5px] leading-relaxed text-foreground/80">
-      This node terminates the flow. Anything connected after it won&apos;t run.
-    </div>
-  );
+  const t = useTranslations('flb.builder.formsCore.logic');
+  return <div className="text-[12.5px] leading-relaxed text-foreground/80">{t('endInfo')}</div>;
 }

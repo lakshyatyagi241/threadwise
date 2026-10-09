@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Einrichtungsassistent",
+      "brand": "CRM",
+      "railEyebrow": "Einrichtungsassistent",
+      "railTitle": "Ihre <i>WhatsApp-Suite</i>, in wenigen Minuten einsatzbereit.",
+      "railFooter": "Plattform-Installer · v{version}",
+      "stepsLabel": "Einrichtungsschritte",
+      "stepOf": "Schritt {n} von {total}",
+      "mobileStep": "Schritt {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Willkommen",
+        "requirements": "Voraussetzungen",
+        "database": "Datenbank",
+        "application": "Anwendung",
+        "admin": "Administratorkonto",
+        "node": "Node-Bridge",
+        "install": "Installation"
+      },
+      "screens": {
+        "licence": "Lizenz"
+      },
+      "disabled": "Die Einrichtung ist deaktiviert, da auf dem Server kein Einrichtungstoken konfiguriert ist. Setzen Sie SETUP_TOKEN oder legen Sie den ersten Operator über die Kommandozeile an.",
+      "unavailable": "Der Einrichtungsstatus konnte nicht gelesen werden. Prüfen Sie, ob die API läuft, und laden Sie diese Seite dann neu.",
+      "welcome": {
+        "eyebrow": "Willkommen",
+        "title": "Bringen wir <i>{app}</i> zum Laufen.",
+        "intro": "Sieben einfache Schritte, insgesamt etwa drei Minuten. Wir prüfen Ihren Server, kontrollieren Ihre Datenbank, bestätigen alle Standardwerte, die die Admin-Konsole benötigt, verbinden die Node-Bridge und legen Ihren ersten Super-Admin-Login an.",
+        "tiles": {
+          "database": "Datenbank",
+          "security": "Sicherheit",
+          "translations": "Übersetzungen",
+          "admin": "Admin"
+        },
+        "beforeTitle": "Bevor Sie beginnen",
+        "before": {
+          "database": "Eine PostgreSQL-16-Datenbank, die diese Bereitstellung erreichen kann, mit angewendeten Migrationen.",
+          "runtime": "Node.js 22 oder neuer und Redis neben der API.",
+          "token": "Das Einrichtungstoken aus Ihrer Bereitstellungskonfiguration (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Einrichtungstoken",
+        "tokenHint": "Belegt, dass Sie diese Bereitstellung kontrollieren. Es wird bei jedem Schritt erneut geprüft.",
+        "begin": "Installation starten"
+      },
+      "licence": {
+        "eyebrow": "Lizenz",
+        "title": "Überprüfen Sie Ihren <i>Kauf</i>.",
+        "intro": "Geben Sie Ihren CodeCanyon-Kaufcode ein. Wir prüfen ihn vor der Installation bei Envato. Ohne gültigen Code kann die Installation nicht fortgesetzt werden.",
+        "label": "Kaufcode",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Sie finden ihn in Ihrem CodeCanyon-Konto unter <b>Downloads</b> → <b>Lizenzzertifikat und Kaufcode</b>.",
+        "verified": "Kauf bereits verifiziert. Sie können fortfahren.",
+        "submit": "Verifizieren und fortfahren"
+      },
+      "requirements": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "Server-<i>Voraussetzungen</i>.",
+        "intro": "Wir prüfen, ob der Host die Mindestanforderungen erfüllt, bevor wir installieren.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "erfüllt die Anforderung {required}+",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "{app} benötigt Node.js {required} oder neuer.",
+        "modules": "Laufzeitmodule",
+        "services": "Dienste",
+        "directories": "Verzeichnisse",
+        "database": "Datenbank",
+        "noDatabase": "Keine Datenbank erkannt.",
+        "databaseRequired": "PostgreSQL ist erforderlich.",
+        "extensionMissing": "Fehlende Datenbankerweiterung: {name}.",
+        "tiles": {
+          "database": "Datenbank",
+          "redis": "Redis",
+          "migrations": "Migrationen",
+          "permissions": "Berechtigungen",
+          "temp": "Temporäre Dateien",
+          "migrationsDir": "Migrationen"
+        },
+        "fixNotice": "Beheben Sie die in Korallenrot markierten Punkte, bevor Sie fortfahren. Die Schaltfläche „Weiter“ bleibt deaktiviert, bis alles bestanden ist.",
+        "recheck": "Erneut prüfen",
+        "checking": "Wird geprüft…",
+        "loadFailed": "Die Voraussetzungen konnten nicht geprüft werden."
+      },
+      "database": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "Datenbank-<i>Verbindung</i>.",
+        "intro": "Prüfen Sie die PostgreSQL-Datenbank, auf der diese Plattform läuft. Wir prüfen die Verbindung, bevor es weitergeht.",
+        "driver": "Datenbanktreiber",
+        "driverName": "PostgreSQL",
+        "host": "Host",
+        "port": "Port",
+        "name": "Datenbankname",
+        "namePlaceholder": "crm",
+        "user": "Benutzername",
+        "userPlaceholder": "postgres",
+        "password": "Passwort",
+        "passwordHint": "Leer lassen, um das eigene Passwort dieser Bereitstellung zu verwenden. Die Verbindung selbst wird in der Serverumgebung festgelegt. Dieser Schritt testet sie nur.",
+        "test": "Verbindung testen",
+        "testing": "Wird getestet…",
+        "ok": "Verbindung erfolgreich.",
+        "unreachable": "PostgreSQL ist über keinen Weg erreichbar. Verwenden Sie den genauen Host aus Ihrem Hosting-Panel, prüfen Sie den Port, bestätigen Sie, dass Datenbank und Benutzer existieren und der Server Verbindungen von diesem Rechner akzeptiert, und versuchen Sie es dann erneut.",
+        "networkError": "Netzwerkfehler: {detail}"
+      },
+      "application": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "Grundlagen der <i>Anwendung</i>.",
+        "intro": "Benennen Sie Ihre Installation, legen Sie die öffentliche URL fest und wählen Sie eine Zeitzone und die Standardsprache.",
+        "name": "Anwendungsname",
+        "url": "Anwendungs-URL",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Zeitzone",
+        "timezonePlaceholder": "Zeitzonen suchen…",
+        "timezoneEmpty": "Keine Zeitzone passt.",
+        "locale": "Standardsprache"
+      },
+      "admin": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "<i>Administrator</i>-Konto.",
+        "intro": "Ihr erster Super-Admin-Login und Ihr privater Workspace. Weitere Teammitglieder können Sie später in der Konsole hinzufügen.",
+        "fullName": "Vollständiger Name",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "E-Mail",
+        "emailPlaceholder": "name@ihredomain.de",
+        "password": "Passwort",
+        "confirm": "Passwort bestätigen",
+        "workspace": "Workspace-Name",
+        "workspacePlaceholder": "Mein Team",
+        "note": "Mind. 12 Zeichen mit Groß- und Kleinbuchstaben, Zahl und Symbol · argon2id-gehasht. Diese Plattform ist mandantenfähig, ein privater Workspace ist vorkonfiguriert. Benennen Sie ihn später unter Workspaces um. Ihr Passwort wird nie im Klartext gespeichert und muss beim ersten Login mit der Zwei-Faktor-Anmeldung kombiniert werden."
+      },
+      "node": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "<i>Node</i>-Bridge.",
+        "intro": "WhatsApp wird über einen kleinen Node-Dienst gesendet. Verbinden Sie die Plattform damit und legen Sie das gemeinsame Token fest. Der Installer speichert es für beide Seiten.",
+        "url": "Node-Server-URL",
+        "urlHint": "Hier lauscht Ihre Node-Bridge. Die API ruft diese Adresse auf, um Nachrichten zu senden.",
+        "port": "Node-Port",
+        "portHint": "Der Port, an den die Node-Bridge gebunden wird.",
+        "token": "Gemeinsames Node-Token",
+        "tokenHint": "Automatisch ausgefüllt. Muss in der API und der Node-Bridge übereinstimmen. Der Installer speichert es einmal verschlüsselt.",
+        "generate": "Erzeugen",
+        "info": "Diese Werte werden in den Plattform-Einstellungen gespeichert, nicht in .env-Dateien. Das Token wird als NODE_WEBHOOK_TOKEN mit der Node-Bridge geteilt.",
+        "submit": "Weiter und installieren"
+      },
+      "install": {
+        "eyebrow": "Schritt {n} von {total}",
+        "title": "<i>{app}</i> wird installiert.",
+        "intro": "Einen Moment, wir konfigurieren alles. Das dauert meist nur wenige Sekunden.",
+        "preparing": "Wird vorbereitet…",
+        "complete": "Abgeschlossen",
+        "failed": "Fehlgeschlagen, siehe unten",
+        "paused": "Installation pausiert",
+        "retry": "Ab fehlgeschlagenem Schritt wiederholen",
+        "success": "Installation abgeschlossen, Weiterleitung…",
+        "rows": {
+          "configuration": {
+            "done": "Konfiguration gespeichert",
+            "active": "Anwendungs- und Node-Bridge-Konfiguration wird gespeichert…"
+          },
+          "migrations": {
+            "done": "Datenbankmigrationen geprüft",
+            "active": "Datenbankmigrationen werden geprüft…"
+          },
+          "defaults": {
+            "done": "Grunddaten geprüft",
+            "active": "Rollen, Berechtigungen und Standardwerte werden geprüft…"
+          },
+          "account": {
+            "done": "Administrator und Workspace bereit",
+            "active": "Administratorkonto und privater Workspace werden angelegt…"
+          },
+          "storage": {
+            "done": "Speicher bereit",
+            "active": "Speicher und temporäre Verzeichnisse werden geprüft…"
+          },
+          "finalize": {
+            "done": "Installation abgeschlossen",
+            "active": "Einrichtung wird gesperrt und die Installation protokolliert…"
+          }
+        }
+      },
+      "completed": {
+        "body": "Die Einrichtung wurde auf dieser Bereitstellung bereits abgeschlossen.",
+        "login": "Zur Anmeldung"
+      },
+      "back": "Zurück",
+      "continue": "Weiter",
+      "show": "Anzeigen",
+      "hide": "Ausblenden",
+      "working": "Wird bearbeitet",
+      "problems": {
+        "token": "Dieses Einrichtungstoken ist nicht korrekt.",
+        "disabled": "Die Einrichtung ist auf diesem Server deaktiviert.",
+        "outOfOrder": "Ein Schritt wurde außer der Reihe ausgeführt. Laden Sie die Seite neu und starten Sie erneut.",
+        "step": "Ein Installationsschritt ist fehlgeschlagen. Prüfen Sie Ihre Angaben und die Serverprotokolle und versuchen Sie es erneut.",
+        "unknown": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+        "requestId": "Anfrage-ID {id}",
+        "prerequisites": "Der Server ist für die Einrichtung nicht bereit: {items}.",
+        "licence": {
+          "empty": "Geben Sie Ihren CodeCanyon-Kaufcode ein.",
+          "not_configured": "Die Lizenzprüfung ist nicht konfiguriert (Envato-Token fehlt).",
+          "unreachable": "Envato konnte den Code nicht prüfen. Prüfen Sie die Internetverbindung des Servers.",
+          "not_found": "Ungültiger Kaufcode. Envato hat dafür keinen Verkauf verzeichnet.",
+          "http_error": "Die Envato-Prüfung ist fehlgeschlagen.",
+          "other_product": "Dieser Kaufcode gehört zu einem anderen Produkt.",
+          "unknown": "Der Kaufcode konnte nicht geprüft werden."
+        },
+        "keys": {
+          "runtime": "Node.js-Version",
+          "database": "Datenbank",
+          "redis": "Redis",
+          "migrations": "Datenbankmigrationen",
+          "permissions": "Berechtigungsdefinitionen",
+          "temp": "temporäres Verzeichnis",
+          "storage": "Speicher",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Das Einrichtungstoken muss mindestens {min} Zeichen lang sein.",
+        "dbHost": "Geben Sie den Datenbank-Host ein.",
+        "dbPort": "Geben Sie einen Port zwischen 1 und 65535 ein.",
+        "dbName": "Geben Sie den Datenbanknamen ein.",
+        "dbUser": "Geben Sie den Datenbank-Benutzernamen ein.",
+        "appNameRequired": "Geben Sie den Anwendungsnamen ein.",
+        "appNameLong": "Der Anwendungsname darf höchstens {max} Zeichen lang sein.",
+        "appUrl": "Geben Sie eine vollständige URL ein, die mit http:// oder https:// beginnt.",
+        "timezone": "Wählen Sie eine Zeitzone aus der Liste.",
+        "locale": "Wählen Sie eine Sprache aus der Liste.",
+        "fullNameRequired": "Geben Sie Ihren vollständigen Namen ein.",
+        "fullNameLong": "Der vollständige Name darf höchstens {max} Zeichen lang sein.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "passwordMismatch": "Die Passwort-Bestätigung stimmt nicht überein.",
+        "workspaceRequired": "Geben Sie einen Workspace-Namen mit mindestens 2 Zeichen ein.",
+        "workspaceLong": "Der Workspace-Name darf höchstens {max} Zeichen lang sein.",
+        "nodeUrl": "Geben Sie die Node-Server-URL ein, beginnend mit http:// oder https://.",
+        "nodePort": "Geben Sie einen Port zwischen 1 und 65535 ein.",
+        "nodeToken": "Das gemeinsame Token muss mindestens {min} Zeichen lang sein.",
+        "password": {
+          "length": "Das Passwort braucht mindestens 12 Zeichen.",
+          "upper": "Das Passwort braucht einen Großbuchstaben.",
+          "lower": "Das Passwort braucht einen Kleinbuchstaben.",
+          "number": "Das Passwort braucht eine Zahl.",
+          "symbol": "Das Passwort braucht ein Sonderzeichen.",
+          "personal": "Das Passwort darf weder Ihren Namen noch Ihre E-Mail-Adresse enthalten."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "System",
+        "item": "Aktualisierung"
+      },
+      "title": "Anwendungsaktualisierung",
+      "titleRich": "<i>Aktualisierung</i> der Anwendung.",
+      "titleAccent": "Aktualisierung",
+      "kicker": "Admin · Wartung",
+      "description": "Prüfen Sie Ihren Kauf und sehen Sie genau, welche Version diese Bereitstellung ausführt. Updates kommen als neues Image, und Migrationen laufen, bevor es startet. Ihre Datenbank, Ihr Speicher und Ihre Uploads werden auf dieser Seite nie verändert.",
+      "crumbAdmin": "Admin",
+      "crumbSettings": "Einstellungen",
+      "crumbUpdater": "Aktualisierung",
+      "version": "v{version} · Build {build}",
+      "buildNone": "k. A.",
+      "allSettings": "Alle Einstellungen",
+      "refresh": "Aktualisieren",
+      "loading": "Wird geladen",
+      "errorForbidden": "Sie dürfen diese Seite nicht ansehen.",
+      "errorUnexpected": "Die Aktualisierung konnte nicht geladen werden.",
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen",
+      "licence": {
+        "kicker": "Schritt 1 · Lizenz",
+        "title": "Kauf verifizieren",
+        "intro": "Geben Sie Ihren CodeCanyon-Kaufcode ein. Er wird bei Envato geprüft, bevor eine Aktualisierung ausgeführt werden kann.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Verifizieren",
+        "verifying": "Wird verifiziert…",
+        "verified": "Kauf verifiziert. Sie können fortfahren.",
+        "verifiedAt": "Verifiziert am {date}.",
+        "notVerified": "Noch nicht verifiziert.",
+        "notEnabled": "Diese Bereitstellung erzwingt keinen Kaufcode, daher gibt es hier nichts zu prüfen.",
+        "superAdminOnly": "Nur ein Super-Admin kann den Kaufcode verifizieren.",
+        "reasons": {
+          "empty": "Geben Sie Ihren CodeCanyon-Kaufcode ein.",
+          "not_configured": "Die Lizenzprüfung ist nicht konfiguriert (Envato-Token fehlt).",
+          "unreachable": "Envato konnte den Code nicht prüfen. Prüfen Sie die Internetverbindung des Servers.",
+          "not_found": "Ungültiger Kaufcode. Envato hat dafür keinen Verkauf verzeichnet.",
+          "http_error": "Die Envato-Prüfung ist fehlgeschlagen.",
+          "other_product": "Dieser Kaufcode gehört zu einem anderen Produkt.",
+          "unknown": "Der Kaufcode konnte nicht geprüft werden."
+        }
+      },
+      "process": {
+        "kicker": "Aktualisierungsprozess",
+        "title": "Updates kommen als Image",
+        "step2": {
+          "title": "Datenbank sichern",
+          "body": "Erstellen Sie vor dem Deployment ein Datenbank-Backup (pg_dump oder Point-in-Time-Recovery). Backups sind hier eine Infrastrukturaufgabe und kein Button."
+        },
+        "step3": {
+          "title": "Neues Image ausrollen",
+          "body": "Rollen Sie das neue Container-Image aus. Die laufende Version und der Build werden unten angezeigt."
+        },
+        "step4": {
+          "title": "Migrationen ausführen",
+          "body": "pnpm db:migrate legt neue Tabellen und Spalten an und entfernt nie Daten. Das Protokoll unten listet jede Migration und ihren Status auf."
+        },
+        "step5": {
+          "title": "Systemprüfung",
+          "body": "Abhängigkeiten werden unten live geprüft. Laden Sie diese Seite nach dem Deployment neu, um sicherzugehen, dass alles läuft."
+        }
+      },
+      "release": {
+        "kicker": "diese Bereitstellung",
+        "title": "Release",
+        "version": "Version",
+        "gitSha": "Build-Commit",
+        "buildNumber": "Build-Nummer",
+        "builtAt": "Gebaut am",
+        "environment": "Umgebung",
+        "uptime": "Laufzeit",
+        "none": "Nicht erfasst",
+        "demo": "Demo-Modus ist aktiv. Schreibvorgänge werden verweigert, sofern sie nicht freigegeben sind."
+      },
+      "setup": {
+        "title": "Ersteinrichtung",
+        "open": "Öffnen",
+        "completed": "Abgeschlossen",
+        "completedAt": "Abgeschlossen am {date} bei Version {version}"
+      },
+      "checks": {
+        "kicker": "Zustand",
+        "title": "Systemprüfung",
+        "database": "Datenbank",
+        "redis": "Redis",
+        "migrations": "Migrationen",
+        "up": "Aktiv",
+        "down": "Inaktiv",
+        "degraded": "Beeinträchtigt",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "Protokoll",
+        "title": "Migrationen",
+        "summary": "{count} angewendet",
+        "status": {
+          "current": "Aktuell",
+          "pending": "Ausstehende Migrationen",
+          "drift": "Eine Migrationsdatei wurde nach ihrer Anwendung geändert",
+          "unknown": "Migrationsdateien sind in diesem Build nicht enthalten"
+        },
+        "state": {
+          "applied": "Angewendet",
+          "pending": "Ausstehend",
+          "modified": "Geändert",
+          "missing-file": "Datei fehlt"
+        },
+        "id": "Migration",
+        "stateLabel": "Status",
+        "appliedAt": "Angewendet am"
+      },
+      "breadcrumb": "Navigationspfad"
+    }
+  }
+}

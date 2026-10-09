@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Zamówienia",
+      "coupons": "Kupony"
+    },
+    "settingsTile": {
+      "label": "Bramki płatności",
+      "description": "Jedna bramka używana przez kasę sklepu i faktury w Sprzedaży do przyjmowania płatności online.",
+      "keywords": "bramka płatności, razorpay, stripe, kasa, link do płatności, płatność online, karta, upi"
+    },
+    "common": {
+      "noAccessTitle": "Nie masz dostępu do tej strony",
+      "noAccessMessage": "Poproś administratora przestrzeni roboczej o nadanie Twojej roli odpowiedniego uprawnienia.",
+      "loading": "Wczytywanie",
+      "loadMore": "Wczytaj więcej",
+      "cancel": "Anuluj",
+      "close": "Zamknij",
+      "save": "Zapisz",
+      "saving": "Zapisywanie",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "remove": "Usuń",
+      "open": "Otwórz",
+      "view": "Zobacz",
+      "search": "Szukaj",
+      "clear": "Wyczyść",
+      "all": "Wszystkie",
+      "no": "Nie",
+      "none": "Brak",
+      "actions": "Działania",
+      "retry": "Spróbuj ponownie",
+      "dismiss": "Odrzuć",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "viewContact": "Zobacz kontakt",
+      "allShops": "Wszystkie sklepy",
+      "shop": "Sklep"
+    },
+    "status": {
+      "new": "Nowe",
+      "pending": "Oczekujące",
+      "confirmed": "Potwierdzone",
+      "paid": "Opłacone",
+      "processing": "W realizacji",
+      "completed": "Zakończone",
+      "shipped": "Wysłane",
+      "cancelled": "Anulowane"
+    },
+    "paymentStatus": {
+      "paid": "Opłacone",
+      "awaiting": "Oczekuje na płatność",
+      "cod": "Płatność przy odbiorze",
+      "unpaid": "Nieopłacone"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Witryna sklepowa",
+      "twilio": "Twilio",
+      "manual": "Ręcznie",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "Identyfikator żądania",
+      "retry": "Spróbuj ponownie",
+      "network": {
+        "title": "Nie można połączyć się z serwerem",
+        "message": "Sprawdź połączenie i spróbuj ponownie."
+      },
+      "forbidden": {
+        "title": "Brak dostępu",
+        "message": "Twoja rola na to nie pozwala."
+      },
+      "signedOut": {
+        "title": "Zostałeś wylogowany",
+        "message": "Zaloguj się ponownie, aby kontynuować."
+      },
+      "conflict": {
+        "title": "Zmienione przez kogoś innego",
+        "message": "Ten rekord zmienił się, gdy był otwarty. Wczytaj go ponownie i spróbuj jeszcze raz."
+      },
+      "validation": {
+        "title": "Sprawdź formularz",
+        "message": "Niektóre wartości są nieprawidłowe. Sprawdź zaznaczone pola."
+      },
+      "unavailable": {
+        "title": "Jeszcze niedostępne",
+        "message": "Ta część sklepu nie jest jeszcze dostępna na tym serwerze."
+      },
+      "rateLimited": {
+        "title": "Zbyt wiele żądań",
+        "message": "Poczekaj chwilę i spróbuj ponownie."
+      },
+      "notFound": {
+        "title": "Nie znaleziono",
+        "message": "Został usunięty lub nigdy nie istniał."
+      },
+      "planLocked": {
+        "title": "Poza Twoim planem",
+        "message": "Twój plan nie obejmuje sklepu. Zmień plan na wyższy, aby z niego korzystać."
+      },
+      "couponCodeTaken": {
+        "title": "Kod jest już używany",
+        "message": "Inny kupon używa już tego kodu. Wybierz inny."
+      },
+      "groupCodeTaken": {
+        "title": "Kod jest już używany",
+        "message": "Inna grupa używa już tego kodu zamówień."
+      },
+      "orderNoPhone": {
+        "title": "Brak numeru telefonu",
+        "message": "To zamówienie nie ma numeru telefonu kupującego, więc nic nie można wysłać."
+      },
+      "gatewayNotConfigured": {
+        "title": "Nie skonfigurowano bramki płatności",
+        "message": "Najpierw skonfiguruj bramkę płatności. Brakuje jej kluczy lub jest wyłączona."
+      },
+      "gatewayUnavailable": {
+        "title": "Bramka niedostępna",
+        "message": "Ta bramka nie może utworzyć linku do płatności, który kupujący może otworzyć."
+      },
+      "paymentLinkFailed": {
+        "title": "Bramka odrzuciła link",
+        "message": "Sprawdź klucze i czy kwota jest wyższa niż minimum bramki."
+      },
+      "unexpected": {
+        "title": "Coś poszło nie tak",
+        "message": "Spróbuj ponownie. Jeśli problem się powtarza, podaj identyfikator żądania pomocy technicznej."
+      }
+    }
+  }
+}

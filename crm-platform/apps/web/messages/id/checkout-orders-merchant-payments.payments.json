@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Toko / Pembayaran",
+      "title": "Pembayaran",
+      "subtitle": "Sisi keuangan pesanan toko Anda: apa yang sudah dibayar, apa yang menunggu, dan apa yang bayar di tempat.",
+      "listTitle": "Daftar pembayaran",
+      "loading": "Memuat pembayaran",
+      "emptyFilteredTitle": "Tidak ada pembayaran yang cocok",
+      "emptyFilteredMessage": "Ubah filter atau reset untuk melihat semua pembayaran.",
+      "resetFilters": "Reset filter",
+      "emptyTitle": "Belum ada pembayaran",
+      "emptyMessage": "Pembayaran muncul di sini begitu pesanan toko dibuat. Buka Pesanan untuk melihat pesanan Anda atau tambahkan secara manual.",
+      "goToOrders": "Ke pesanan",
+      "summary": {
+        "loading": "Memuat total pembayaran",
+        "orders": "pesanan",
+        "collected": "Terkumpul",
+        "collectedNone": "Belum ada yang terkumpul."
+      },
+      "filters": {
+        "search": "Cari",
+        "searchPlaceholder": "Nomor pesanan, pelanggan, atau referensi",
+        "status": "Status",
+        "allStatuses": "Semua status",
+        "method": "Metode",
+        "allMethods": "Semua metode",
+        "prepaid": "Prabayar",
+        "cod": "Bayar di tempat",
+        "gatewayOption": "Sebuah gateway...",
+        "gatewayCode": "Kode gateway",
+        "gatewayCodePlaceholder": "mis. razorpay",
+        "from": "Dari",
+        "to": "Sampai",
+        "rangeInverted": "Tanggal mulai setelah tanggal akhir, sehingga rentang tanggal diabaikan.",
+        "reset": "Reset filter"
+      },
+      "table": {
+        "caption": "Pembayaran pesanan toko, terbaru lebih dulu",
+        "order": "Pesanan",
+        "customer": "Pelanggan",
+        "status": "Status",
+        "method": "Metode",
+        "paidVia": "Dibayar via",
+        "reference": "Referensi",
+        "amount": "Jumlah",
+        "shop": "Toko",
+        "date": "Tanggal",
+        "methodPrepaid": "Prabayar",
+        "methodCod": "Bayar di tempat",
+        "via": {
+          "razorpay_link": "Tautan Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay di obrolan",
+        "intro": "Biarkan pembeli membayar pesanan tanpa meninggalkan WhatsApp (UPI, kartu, netbanking, dompet) dan terima uangnya di akun Razorpay, PayU, BillDesk, atau Zaakpay Anda sendiri.",
+        "indiaOnly": "India adalah satu-satunya pasar yang didukung saat ini: negara dan mata uang ditetapkan ke India dan INR.",
+        "viewOnly": "Anda dapat melihat konfigurasi WhatsApp Pay tetapi tidak dapat mengubahnya. Minta izin mengelola pembayaran kepada admin workspace.",
+        "howTitle": "Cara menyiapkannya",
+        "how1": "Di WhatsApp Manager, pada Payments for India, buat Direct Pay Method dan tautkan akun gateway Anda.",
+        "how2": "Beri nama dan salin nama itu ke sini. Tidak dapat dibuat dari aplikasi ini, ini adalah langkah di sisi Meta.",
+        "how3": "Simpan konfigurasi, lalu buka Pesanan dan minta pembayaran di WhatsApp pada pesanan mana pun.",
+        "how4": "Pembeli mengetuk Review and Pay, membayar di obrolan, dan pesanan ditandai dibayar setelah Meta mengonfirmasi.",
+        "listTitle": "Konfigurasi Anda",
+        "loading": "Memuat konfigurasi",
+        "emptyTitle": "Belum ada konfigurasi pembayaran",
+        "emptyMessage": "Tambahkan satu di halaman ini untuk mulai menerima pembayaran di obrolan.",
+        "emptyMessageReadOnly": "Belum ada yang menambahkan.",
+        "market": "India · INR",
+        "autoChargeOn": "Tagih otomatis aktif",
+        "active": "Aktif",
+        "off": "Nonaktif",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Konfigurasi disimpan",
+          "removed": "Konfigurasi dihapus"
+        },
+        "addTitle": "Tambah konfigurasi pembayaran",
+        "editTitle": "Edit {name}",
+        "name": "Nama konfigurasi",
+        "nameLocked": "Nama mengidentifikasi konfigurasi. Untuk mengganti nama, hapus lalu tambahkan lagi.",
+        "updatesExisting": "Konfigurasi dengan nama ini sudah ada: menyimpan akan memperbaruinya.",
+        "nameHint": "Harus sama persis dengan nama Direct Pay Method di WhatsApp Manager (Payments, India).",
+        "nameInvalid": "Masukkan nama 1 sampai {max} karakter.",
+        "namePlaceholder": "mis. my-razorpay-pay",
+        "gateway": "Gateway",
+        "activeLabel": "Aktif",
+        "autoCharge": "Tagih otomatis pesanan baru",
+        "autoChargeHint": "Kirim permintaan bayar di obrolan secara otomatis begitu pesanan dibuat.",
+        "save": "Simpan konfigurasi",
+        "cancelEdit": "Batal edit",
+        "removeTitle": "Hapus {name}?",
+        "removeMessage": "Pesanan tidak dapat lagi ditagih di obrolan dengan konfigurasi ini. Direct Pay Method di WhatsApp Manager tidak diubah.",
+        "removeConfirm": "Hapus konfigurasi"
+      }
+    }
+  }
+}

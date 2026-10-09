@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Platforminstellingen",
+      "hub": "Instellingenoverzicht",
+      "general": "Algemeen",
+      "appearance": "Uiterlijk en kleuren",
+      "siteInfo": "Siteinformatie",
+      "footer": "Voettekst",
+      "mail": "E-mail",
+      "seo": "SEO",
+      "privacy": "Privacy, AVG en ADA",
+      "analytics": "Analyse",
+      "custom": "Aangepaste code",
+      "pwa": "PWA",
+      "storage": "Cloudopslag",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Campagnes",
+      "googleCalendar": "Google Agenda",
+      "flowBuilder": "Flowbouwer"
+    },
+    "hub": {
+      "kicker": "Beheer - Projectinstellingen",
+      "title": "Projectinstellingen",
+      "description": "Configureer app-identiteit, berichtproviders, e-mail, e-commerceintegraties, storefront-metadata, voettekstinhoud, PWA, SEO en aangepaste code.",
+      "export": "Config exporteren",
+      "exporting": "Exporteren",
+      "exportHint": "Downloadt alle opgeslagen instellingen. Geheimen en accountidentificaties worden vervangen.",
+      "tiles": {
+        "saved": "Opgeslagen instellingen",
+        "savedHint": "groepen van {total} opgeslagen",
+        "healthy": "Gezond",
+        "healthyHint": "met een niet-lege waarde",
+        "needsTest": "Moet getest worden",
+        "needsTestNone": "allemaal geverifieerd",
+        "secrets": "Geheime velden",
+        "secretsHint": "versleuteld / gemaskeerd",
+        "lastUpdated": "Laatst bijgewerkt",
+        "lastUpdatedNone": "nog geen wijzigingen",
+        "lastUpdatedHint": "meest recente opslag"
+      },
+      "card": {
+        "saved": "Opgeslagen",
+        "defaults": "Standaardwaarden",
+        "needsTest": "Moet getest worden",
+        "updated": "Bijgewerkt {when}",
+        "open": "Openen"
+      },
+      "others": "Valuta's, catalogus, Shopify, WooCommerce, HubSpot, Google, Slack, mobiele push- en Trello-instellingen verschijnen hier zodra hun modules zijn geïnstalleerd.",
+      "actions": {
+        "addons": "Add-ons",
+        "updater": "Updater",
+        "legal": "Juridische pagina's",
+        "general": "Algemeen openen"
+      }
+    },
+    "common": {
+      "save": "Wijzigingen opslaan",
+      "saving": "Opslaan",
+      "saved": "{count, plural, one {1 wijziging opgeslagen.} other {# wijzigingen opgeslagen.}}",
+      "rejected": "{count, plural, one {1 veld heeft aandacht nodig} other {# velden hebben aandacht nodig}}",
+      "conflict": "Iemand anders heeft deze instellingen opgeslagen nadat jij ze opende. Laad de pagina opnieuw om hun wijzigingen te zien en pas daarna die van jou opnieuw toe.",
+      "reload": "Instellingen opnieuw laden",
+      "unexpected": "Er ging iets mis en er is niets opgeslagen.",
+      "requestId": "Verzoek-id",
+      "readOnly": "Je kunt deze instellingen lezen, maar alleen een super-admin kan ze wijzigen.",
+      "secretSet": "Opgeslagen. Laat leeg om te behouden.",
+      "secretUnset": "Niet ingesteld.",
+      "secretClear": "Verwijder de opgeslagen waarde",
+      "secretShow": "Tonen",
+      "secretHide": "Verbergen",
+      "numberRequired": "Voer een geheel getal in.",
+      "numberInteger": "Gebruik een geheel getal.",
+      "updated": "Laatst opgeslagen {when}",
+      "neverSaved": "Nooit opgeslagen: standaardwaarden worden getoond.",
+      "back": "Alle instellingen",
+      "invalidGroup": "Deze instellingenpagina bestaat niet.",
+      "eyebrow": "Beheer - Projectinstellingen",
+      "guide": "Snelle gids",
+      "resetDraft": "Concept resetten",
+      "cancel": "Annuleren",
+      "applyAfterSave": "Wijzigingen worden pas toegepast nadat je opslaat.",
+      "saveAndTest": "Opslaan en verbinding testen",
+      "custom": "aangepast",
+      "manageLanguages": "Talen beheren"
+    },
+    "test": {
+      "title": "Stuur een testmail",
+      "saveFirst": "Sla je wijzigingen eerst op: de controle gebruikt de opgeslagen instellingen.",
+      "mailTo": "Stuur de testmail naar",
+      "mailRun": "Testmail versturen",
+      "run": "Verbinding testen",
+      "running": "Bezig met testen",
+      "ok": "Geslaagd",
+      "failed": "Mislukt",
+      "lastOk": "Laatste geslaagde controle {when}",
+      "neverTested": "Nog niet gecontroleerd."
+    },
+    "groups": {
+      "general": {
+        "title": "Algemene instellingen",
+        "description": "App-identiteit, platformstandaarden en de onderhoudsschakelaar.",
+        "sections": {
+          "identity": {
+            "title": "App-identiteit"
+          },
+          "defaults": {
+            "title": "Platformstandaarden"
+          },
+          "platform": {
+            "title": "Platformschakelaars"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "App-naam",
+            "hint": "Wordt getoond in paginatitels, e-mails en het browsertabblad."
+          },
+          "appUrl": {
+            "label": "App-URL"
+          },
+          "supportEmail": {
+            "label": "Support-e-mail",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "Afzender-e-mail",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "Contactnummer",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Adres"
+          },
+          "mapIframeUrl": {
+            "label": "Kaart-iframe-URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Platformvoettekst",
+            "hint": "Wordt toegevoegd aan uitgaande platformberichten. Laat leeg voor geen."
+          },
+          "defaultTimezone": {
+            "label": "Standaard tijdzone",
+            "hint": "Wordt gebruikt wanneer een werkruimte of persoon er geen heeft gekozen."
+          },
+          "defaultLanguage": {
+            "label": "Standaardtaal"
+          },
+          "defaultCurrency": {
+            "label": "Standaardvaluta"
+          },
+          "defaultCountryCode": {
+            "label": "Standaard landcode",
+            "hint": "Netnummer met plusteken, bijvoorbeeld +91."
+          },
+          "defaultCountryIso": {
+            "label": "Standaardland (telefoonkiezers)",
+            "hint": "Geldt voor elke telefoonkiezer op het platform."
+          },
+          "fontFamily": {
+            "label": "Lettertypefamilie"
+          },
+          "maintenanceMode": {
+            "label": "Onderhoudsmodus",
+            "hint": "Haalt de klantenapp offline met een 503. Operators, inloggen en machine-callbacks blijven werken."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Standaardthema"
+          }
+        }
+      },
+      "branding": {
+        "title": "Branding en uiterlijk",
+        "description": "Favicon, logo's per thema, kleurtokens en interfacegrootte.",
+        "sections": {
+          "assets": {
+            "title": "Merkbestanden"
+          },
+          "colors": {
+            "title": "Kleurtokens"
+          },
+          "interface": {
+            "title": "Interface"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "Favicon-URL"
+          },
+          "logos": {
+            "paper": {
+              "label": "Papier"
+            },
+            "bright": {
+              "label": "Helder"
+            },
+            "dark": {
+              "label": "Donker"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Primair",
+              "hint": "Als je de primaire kleur instelt, worden ook de teal-, groene, mint- en bubbeltinten opnieuw gekleurd, tenzij je die ook instelt."
+            },
+            "wa-teal": {
+              "label": "Primair (hover)"
+            },
+            "wa-green": {
+              "label": "Accent / succes"
+            },
+            "wa-mint": {
+              "label": "Zachte accentvulling"
+            },
+            "wa-bubble": {
+              "label": "Chatbubbel"
+            },
+            "paper-0": {
+              "label": "Paginachtergrond"
+            },
+            "paper-50": {
+              "label": "Kaart- / gedempte achtergrond"
+            },
+            "paper-100": {
+              "label": "Hover-achtergrond"
+            },
+            "paper-200": {
+              "label": "Randen"
+            },
+            "ink-500": {
+              "label": "Gedempte tekst"
+            },
+            "ink-700": {
+              "label": "Broodtekst"
+            },
+            "ink-900": {
+              "label": "Koppen"
+            },
+            "accent-coral": {
+              "label": "Accent - koraal"
+            },
+            "accent-amber": {
+              "label": "Accent - amber"
+            },
+            "accent-plum": {
+              "label": "Accent - pruim"
+            },
+            "accent-sky": {
+              "label": "Accent - hemelsblauw"
+            }
+          },
+          "fontScale": {
+            "label": "Lettergrootte",
+            "hint": "Tekstgrootte van de hele interface in procent, 80 tot 130."
+          },
+          "uiOpacity": {
+            "label": "Dekking",
+            "hint": "Dekking van de hele interface in procent, 55 tot 100."
+          },
+          "dashboardLayout": {
+            "label": "Navigatie-indeling"
+          },
+          "sidebarColor": {
+            "label": "Achtergrond"
+          },
+          "sidebarTextColor": {
+            "label": "Tekstkleur"
+          },
+          "sidebarAccentColor": {
+            "label": "Accentkleur"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Bovenbalk",
+            "sidebar": "Zijbalk"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Huidig: menu bovenaan plus een Meer-pagina voor overloop.",
+            "sidebar": "Linker navigatiebalk in beheerstijl met alle functies gegroepeerd. Geen bovenmenu."
+          }
+        }
+      },
+      "site": {
+        "title": "Siteinformatie",
+        "description": "Bedrijfsgegevens, contactadressen, socialeprofielen en de publieke voettekst.",
+        "sections": {
+          "company": {
+            "title": "Bedrijf"
+          },
+          "contact": {
+            "title": "Contactadressen"
+          },
+          "social": {
+            "title": "Socialeprofielen"
+          },
+          "footer": {
+            "title": "Publieke voettekst"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Bedrijfsnaam"
+          },
+          "tagline": {
+            "label": "Slogan"
+          },
+          "foundedYear": {
+            "label": "Oprichtingsjaar"
+          },
+          "address": {
+            "label": "Adres"
+          },
+          "cityCountry": {
+            "label": "Stad, land"
+          },
+          "emailGeneral": {
+            "label": "E-mail algemeen"
+          },
+          "emailSupport": {
+            "label": "E-mail support"
+          },
+          "emailSales": {
+            "label": "E-mail verkoop"
+          },
+          "emailSecurity": {
+            "label": "E-mail beveiliging"
+          },
+          "emailCareers": {
+            "label": "E-mail vacatures"
+          },
+          "phone": {
+            "label": "Telefoon"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "Social X"
+          },
+          "socialLinkedin": {
+            "label": "Social LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Social Instagram"
+          },
+          "socialYoutube": {
+            "label": "Social YouTube"
+          },
+          "socialFacebook": {
+            "label": "Social Facebook"
+          },
+          "socialGithub": {
+            "label": "Social GitHub"
+          },
+          "footerTitle": {
+            "label": "Titel voettekst"
+          },
+          "footerDescription": {
+            "label": "Beschrijving voettekst"
+          },
+          "footerCopyright": {
+            "label": "Copyright voettekst"
+          }
+        }
+      },
+      "mail": {
+        "title": "E-mailinstellingen",
+        "description": "Uitgaande e-mail. Opgeslagen waarden overschrijven de serverstandaarden bij elke verzending.",
+        "sections": {
+          "sender": {
+            "title": "Afzender"
+          },
+          "smtp": {
+            "title": "Mailserver"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Naam afzender",
+            "placeholder": "Acme Inc.",
+            "hint": "Wordt aan ontvangers getoond als de naam bij \"Van\"."
+          },
+          "fromAddress": {
+            "label": "E-mailadres afzender",
+            "placeholder": "hello@jouwdomein.nl",
+            "hint": "Het domein moet geldige SPF + DKIM hebben, anders belandt de mail in de spam."
+          },
+          "mailer": {
+            "label": "Mailer",
+            "hint": "SMTP en de logmailer werken nu; API-mailers zijn nog niet aangesloten."
+          },
+          "host": {
+            "label": "Host",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Laat leeg om de serverstandaard te behouden."
+          },
+          "port": {
+            "label": "Poort",
+            "hint": "587 voor TLS, 465 voor SSL, 25 (liever niet)."
+          },
+          "encryption": {
+            "label": "Versleuteling",
+            "hint": "ssl betekent impliciete TLS (meestal poort 465); tls en starttls upgraden op poort 587."
+          },
+          "username": {
+            "label": "Gebruikersnaam",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Wachtwoord",
+            "placeholder": "Voer het SMTP-wachtwoord in",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (poort 587)",
+            "ssl": "ssl (poort 465)",
+            "starttls": "starttls",
+            "none": "geen"
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO-instellingen",
+        "description": "Zoek- en social-sharing-tags voor de publieke site.",
+        "sections": {
+          "search": {
+            "title": "Zoekresultaten"
+          },
+          "social": {
+            "title": "Delen op social media"
+          },
+          "verification": {
+            "title": "Siteverificatie"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Meta-titel",
+            "hint": "Begin met het merk."
+          },
+          "metaDescription": {
+            "label": "Meta-beschrijving",
+            "hint": "Wordt onder de titel in Google getoond.",
+            "placeholder": "Een pitch van 1–2 zinnen die onder de titel in Google wordt getoond."
+          },
+          "metaKeywords": {
+            "label": "Meta-trefwoorden",
+            "placeholder": "whatsapp marketing, whatsapp crm, campagnes, automatisering, inbox"
+          },
+          "robots": {
+            "label": "Robots-richtlijn",
+            "hint": "Vertel zoekrobots of ze links moeten indexeren en volgen."
+          },
+          "canonical": {
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Auteur"
+          },
+          "ogTitle": {
+            "label": "Open Graph-titel",
+            "placeholder": "Standaard de meta-titel"
+          },
+          "ogDescription": {
+            "label": "Open Graph-beschrijving",
+            "placeholder": "Standaard de meta-beschrijving"
+          },
+          "ogType": {
+            "label": "Open Graph-type"
+          },
+          "ogUrl": {
+            "label": "Open Graph-URL",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Open Graph-afbeelding",
+            "hint": "Aanbevolen 1200x630. Gebruikt door Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Twitterkaart"
+          },
+          "twitterSite": {
+            "label": "Twitter-site",
+            "placeholder": "@jouwmerk"
+          },
+          "twitterCreator": {
+            "label": "Twitter-maker",
+            "placeholder": "@auteur"
+          },
+          "googleVerification": {
+            "label": "Google-verificatie",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Bing-verificatie",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Index, follow — publieke site",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — verbergen voor zoekmachines"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy en cookies",
+        "description": "De cookietoestemmingsbanner, juridische links en compliancevlaggen.",
+        "sections": {
+          "banner": {
+            "title": "Cookiebanner"
+          },
+          "links": {
+            "title": "Juridische links"
+          },
+          "compliance": {
+            "title": "Compliancevlaggen"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Banner ingeschakeld"
+          },
+          "cookieBannerStyle": {
+            "label": "Bannerstijl"
+          },
+          "cookieMessage": {
+            "label": "Toestemmingsbericht"
+          },
+          "respectDoNotTrack": {
+            "label": "Do-Not-Track respecteren",
+            "hint": "Browser stuurt DNT=1 → alles weigeren"
+          },
+          "policyUrl": {
+            "label": "URL privacybeleid",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL servicevoorwaarden",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL cookiebeleid (Meer informatie)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "AVG-naleving (EU)",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          },
+          "ccpaCompliance": {
+            "label": "CCPA-naleving (Californië)",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          },
+          "adaSkipLink": {
+            "label": "Link naar de inhoud overslaan",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          },
+          "adaHighContrast": {
+            "label": "Modus met hoog contrast aanbieden",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          },
+          "adaLargeText": {
+            "label": "Modus met grote tekst aanbieden",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          },
+          "adaReducedMotion": {
+            "label": "prefers-reduced-motion respecteren",
+            "hint": "Opgeslagen voor je administratie. Verandert het gedrag nog niet."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Onderste vaste balk — aanbevolen",
+            "top-bar": "Bovenste vaste balk",
+            "modal": "Gecentreerd modaal venster"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analyse",
+        "description": "Tracker-id's. Trackers laden pas nadat een bezoeker toestemming geeft.",
+        "sections": {
+          "trackers": {
+            "title": "Tracker-id's"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta-pixel"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok-pixel"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn-partner"
+          },
+          "twitterPixel": {
+            "label": "Twitter-pixel"
+          },
+          "plausibleDomain": {
+            "label": "Plausible-domein"
+          },
+          "posthogKey": {
+            "label": "PostHog-sleutel"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel-token"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar-site-ID"
+          },
+          "posthogHost": {
+            "label": "PostHog-host"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Aangepaste code",
+        "description": "CSS en JavaScript die in de publieke site worden ingevoegd.",
+        "sections": {
+          "code": {
+            "title": "Aangepaste code"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Invoegen in productie",
+            "hint": "Niets hieronder wordt uitgevoerd op de publieke site zolang dit niet aan staat."
+          },
+          "css": {
+            "label": "Aangepaste CSS"
+          },
+          "js": {
+            "label": "Aangepaste JS",
+            "hint": "Wordt voor elke bezoeker uitgevoerd. Plak alleen code die je vertrouwt."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Installeerbare app",
+        "description": "Webapp-manifest en installatiegedrag.",
+        "sections": {
+          "app": {
+            "title": "Installeerbare app"
+          },
+          "look": {
+            "title": "Uitstraling en gedrag"
+          },
+          "install": {
+            "title": "Installeren en offline"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Ingeschakeld"
+          },
+          "appName": {
+            "label": "App-naam"
+          },
+          "shortName": {
+            "label": "Korte naam"
+          },
+          "description": {
+            "label": "Beschrijving"
+          },
+          "startUrl": {
+            "label": "Start-URL"
+          },
+          "scope": {
+            "label": "Bereik"
+          },
+          "display": {
+            "label": "Weergave"
+          },
+          "orientation": {
+            "label": "Oriëntatie"
+          },
+          "themeColor": {
+            "label": "Themakleur"
+          },
+          "backgroundColor": {
+            "label": "Achtergrondkleur"
+          },
+          "icon192": {
+            "label": "Icoon 192"
+          },
+          "icon512": {
+            "label": "Icoon 512"
+          },
+          "installPrompt": {
+            "label": "Installatieprompt"
+          },
+          "offlineEnabled": {
+            "label": "Offline ingeschakeld"
+          }
+        }
+      },
+      "storage": {
+        "title": "Cloudopslag",
+        "description": "S3-compatibele bucket voor media. Test de verbinding voordat je deze inschakelt.",
+        "sections": {
+          "provider": {
+            "title": "Provider"
+          },
+          "credentials": {
+            "title": "Bucket-inloggegevens"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Ingeschakeld"
+          },
+          "provider": {
+            "label": "Provider"
+          },
+          "visibility": {
+            "label": "Zichtbaarheid bestanden",
+            "hint": "Privé-objecten hebben ondertekende links nodig; gebruik publiek of een CDN-URL voor media die mensen direct openen."
+          },
+          "basePath": {
+            "label": "Basismappad (optioneel)",
+            "hint": "Voorvoegsel voor het testobject. Uploads gebruiken dit zodra de bestandsmodule er is."
+          },
+          "accessKeyId": {
+            "label": "Access key ID *"
+          },
+          "secret": {
+            "label": "Secret access key *",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond.",
+            "placeholder": "plak geheim"
+          },
+          "region": {
+            "label": "Regio",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Bucket *"
+          },
+          "endpoint": {
+            "label": "Endpoint",
+            "hint": "Vereist voor Spaces, R2 en MinIO. Een afsluitende /bucket wordt verwijderd.",
+            "placeholder": "https://… (vereist voor Spaces / R2 / MinIO; automatisch voor Wasabi & Bunny)"
+          },
+          "cdnUrl": {
+            "label": "Publieke / CDN-URL (optioneel)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Gebruik path-style endpoint (MinIO / sommige S3-compatibele opslag)"
+          },
+          "storageZone": {
+            "label": "Opslagzone",
+            "hint": "Alleen Bunny."
+          },
+          "storagePassword": {
+            "label": "Opslagwachtwoord (access key)",
+            "hint": "Alleen Bunny: het wachtwoord van de opslagzone. Versleuteld opgeslagen.",
+            "placeholder": "plak wachtwoord"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatibel"
+          },
+          "visibility": {
+            "private": "Privé (ondertekende URL's)",
+            "public": "Publiek"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp-instellingen",
+        "description": "De Meta-app en Interakt-partner die worden gebruikt om WhatsApp-nummers aan te melden.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt-route"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App-ID",
+            "hint": "Leeg valt terug op de serveromgeving."
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "Versleuteld opgeslagen, nooit meer getoond. Laat leeg om het opgeslagen geheim te behouden."
+          },
+          "configId": {
+            "label": "Embedded Signup Config-ID",
+            "hint": "Leeg betekent dat werkruimtes een token handmatig plakken."
+          },
+          "graphVersion": {
+            "label": "Graph API-versie",
+            "hint": "Ziet eruit als v25.0. Leeg houdt de serverstandaard aan."
+          },
+          "coexistence": {
+            "label": "Coexistentie",
+            "hint": "Bied \"Mijn bestaande Business App-nummer verbinden\" aan in Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Standaardroute",
+            "hint": "Welke API nieuw verbonden nummers gebruiken."
+          },
+          "solutionId": {
+            "label": "Interakt-oplossings-ID",
+            "hint": "Naar Meta gestuurd als extras.setup.solutionID en naar Interakt bij registratie."
+          },
+          "partnerAuthKey": {
+            "label": "Interakt-partnersleutel",
+            "hint": "De gedeelde tech-partnersleutel. Versleuteld opgeslagen."
+          },
+          "systemUserId": {
+            "label": "Systeemgebruiker-ID",
+            "hint": "Wordt aan elk verbonden WABA toegewezen met de taak MANAGE."
+          },
+          "systemUserToken": {
+            "label": "Systeemgebruikerstoken",
+            "hint": "Gebruikt om tokens te controleren en de systeemgebruiker toe te wijzen. Versleuteld opgeslagen."
+          },
+          "businessId": {
+            "label": "Business-ID",
+            "hint": "Terugvaloptie om een WABA te vinden wanneer het token er geen toont."
+          },
+          "verifyToken": {
+            "label": "Webhook-verificatietoken",
+            "hint": "Willekeurige tekst. Laat leeg om het hierboven getoonde gegenereerde token te gebruiken."
+          },
+          "requireSignature": {
+            "label": "Vereis een handtekening bij elke webhook",
+            "hint": "Weigert door Interakt doorgestuurde events zonder geldige Meta-handtekening. Alleen aanzetten als Interakt ze ondertekent."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (Meta-proxy)",
+            "meta": "Meta (direct)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Campagnes",
+        "description": "Hoe een campagne een mislukt bericht opnieuw probeert en wanneer een niet-afgeronde campagne eindigt.",
+        "sections": {
+          "retry": {
+            "title": "Pogingen"
+          },
+          "expiry": {
+            "title": "Automatisch beëindigen"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Aantal pogingen",
+            "hint": "Pogingen per ontvanger voordat hij als mislukt wordt gemarkeerd (0 tot 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Wachttijd tussen pogingen (seconden)",
+            "hint": "De pauze voor de volgende poging; die wordt bij elke poging langer."
+          },
+          "autoExpiryEnabled": {
+            "label": "Niet-afgeronde campagnes beëindigen",
+            "hint": "Beëindigt een campagne die na onderstaande uren nog loopt."
+          },
+          "defaultExpiryHours": {
+            "label": "Beëindigen na (uren)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "description": "De Google OAuth-client waarmee elke werkruimte haar agenda verbindt.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Werkruimtes toestaan Google Agenda te verbinden",
+            "hint": "Uit: geen enkele werkruimte kan verbinden en er wordt niets naar of uit een agenda geschreven of gelezen."
+          },
+          "clientId": {
+            "label": "Client-ID",
+            "hint": "Vanuit Google Cloud, Credentials, OAuth 2.0 Client-ID (Webapplicatie). Leeg gebruikt GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheim",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond. Leeg behoudt het opgeslagen geheim; GOOGLE_CALENDAR_CLIENT_SECRET is de terugval."
+          },
+          "redirectUri": {
+            "label": "Overschrijving redirect-URI",
+            "hint": "Laat leeg om het adres hierboven te gebruiken. Het moet exact overeenkomen met een geautoriseerde redirect-URI van de client."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Flowbouwer",
+        "description": "Welke flowbouwers werkruimtes krijgen aangeboden.",
+        "sections": {
+          "mode": {
+            "title": "Bouwer"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Standaardbouwer voor werkruimtes",
+            "hint": "Simpel is de stap-voor-stap-lijstbouwer, Geavanceerd is de canvasbouwer. Een werkruimte kan dit op haar Flows-pagina overschrijven."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Alleen simpel",
+            "advanced": "Alleen geavanceerd"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Uiterlijk en kleuren",
+        "description": "Kleur elke pagina van de gebruikers- en beheerdersdashboards opnieuw in: merk, oppervlakken, tekst en accenten. Wordt direct toegepast.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Algemene instellingen",
+        "description": "App-naam, contactgegevens, logo's, URL, adres en globale servicewisselaars.",
+        "tags": "APP_NAME / APP_URL / logo's"
+      },
+      "paymentGateways": {
+        "title": "Betaalgateways",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave en meer: sleutels, valuta's en live-schakelaars.",
+        "tags": "Live / sandbox - sleutels per gateway"
+      },
+      "aiKeys": {
+        "title": "AI- / API-sleutels",
+        "description": "Providerreferenties voor OpenAI, Anthropic, Google en andere. Stuurt alle AI-functies op het platform aan.",
+        "tags": "BYOK / standaardmodellen"
+      },
+      "mail": {
+        "title": "E-mailinstellingen",
+        "description": "SMTP-driver, host, poort, afzendernaam, versleuteling en testverzending.",
+        "tags": "SMTP / verifiëren / welkom"
+      },
+      "auditLog": {
+        "title": "Auditlog",
+        "description": "Doorzoekbare geschiedenis van elke beheerdersactie: werkruimtewijzigingen, gebruikerswijzigingen, factureringsgebeurtenissen, beveiligingsincidenten, instellingenwijzigingen.",
+        "tags": "Filter / detail / CSV-export"
+      },
+      "privacy": {
+        "title": "Privacy, AVG & ADA",
+        "description": "Cookietoestemmingsbanner, AVG / CCPA-naleving, ADA / WCAG-toegankelijkheidsschakelaars en beleids-URL's.",
+        "tags": "Toestemming / beleid / ally"
+      },
+      "menuOrder": {
+        "title": "Menuvolgorde",
+        "description": "Stel de volgorde in van de bovenste navigatie-items in elke werkruimte.",
+        "tags": "Herordenen"
+      },
+      "authPages": {
+        "title": "Authenticatiepagina's",
+        "description": "Bewerk de inlog-, registratie- en wachtwoord-vergeten-pagina's: kop, subtekst, accentkleur en de zijafbeelding of -video. Live voorbeeld.",
+        "tags": "Inloggen / registreren / wachtwoord vergeten"
+      },
+      "analytics": {
+        "title": "Analyse-integraties",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: plak het ID, wij renderen het script.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO-instellingen",
+        "description": "Meta-titel, beschrijving, OpenGraph, Twitter-kaarten, robots, canonical en verificatie voor Google en Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Talen",
+        "description": "Beschikbare talen, standaardtaal, RTL-vlag en de schakelaar per taal. Stuurt de taalkiezer aan.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA-instellingen",
+        "description": "App-naam, installatie-iconen, themakleur, achtergrondkleur, weergavemodus en de PWA-schakelaar.",
+        "tags": "Iconen / kleuren / installatie"
+      },
+      "footer": {
+        "title": "Voettekstinstellingen",
+        "description": "Titel van de voettekst, social-links, copyrighttekst en de beschrijving van de publieke voettekst.",
+        "tags": "Logo / socials / copyright"
+      },
+      "siteInfo": {
+        "title": "Siteinformatie",
+        "description": "Contact-e-mails, telefoon, WhatsApp, adres en social-links die worden gedeeld op de publieke voettekst, contact- en over-pagina's.",
+        "tags": "e-mails / telefoon / socials"
+      },
+      "socialLogin": {
+        "title": "Social login & captcha",
+        "description": "Schakel Google- en Facebook-aanmelding op de inlog- en registratiepagina's in, plak OAuth-sleutels en schakel reCAPTCHA in.",
+        "tags": "niet geconfigureerd"
+      },
+      "registration": {
+        "title": "Registratie",
+        "description": "Openbare aanmelding, e-mailverificatie, standaardabonnement en proefperiodelengte voor nieuwe werkruimtes.",
+        "tags": "Aanmelding / proef / abonnement"
+      },
+      "custom": {
+        "title": "Aangepaste code",
+        "description": "Productie-CSS en JavaScript die in de publieke pagina's worden ingevoegd wanneer de schakelaar aan staat.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Cloudopslag",
+        "description": "Stuur clientmedia naar je eigen bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 of MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "De Meta-app waarmee elke werkruimte haar WhatsApp-nummers verbindt: app-ID en -geheim, Embedded Signup, webhook en de Interakt-route.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Campagnes",
+        "description": "Pogingen en het automatisch beëindigen van een campagne die nooit is afgerond.",
+        "tags": "Herhaling / verlopen"
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "description": "De Google OAuth-client waarmee werkruimtes hun agenda verbinden voor afspraken en bezette tijden.",
+        "tags": "Google / OAuth / Agenda"
+      },
+      "flowBuilder": {
+        "title": "Flowbouwer",
+        "description": "De standaard flowbouwer voor elke werkruimte: Simpel stap voor stap of Geavanceerd canvas. Een werkruimte kan dit overschrijven.",
+        "tags": "Simpel / Geavanceerd / Automatisering"
+      }
+    },
+    "signup": {
+      "body": "Openbare registratie, automatische e-mailverificatie, het standaardabonnement voor nieuwe aanmeldingen en de lengte van de gratis proefperiode worden bewerkt op de pagina Registratie.",
+      "link": "Registratie-instellingen openen"
+    },
+    "brandAssets": {
+      "intro": "Het favicon is gedeeld over alle thema's. Het logo is per thema: upload een omgekeerde of lichte variant voor de donkere modus, een doodle-variant voor het doodle-thema.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Getoond in browsertabbladen en bookmarks. Aanbevolen 35x35 px. PNG, ICO, JPG, SVG of WebP, maximaal 512 KB. Uploaden vervangt het."
+      },
+      "logos": {
+        "title": "Logo per thema",
+        "note": "Elk thema gebruikt zijn eigen logo. Valt terug op Papier als er geen themaspecifiek logo is geüpload."
+      },
+      "themes": {
+        "paper": {
+          "label": "Papier (standaard)",
+          "note": "Licht, gebroken wit. De standaardlook."
+        },
+        "bright": {
+          "label": "Helderwit",
+          "note": "Witte achtergrond met hoger contrast."
+        },
+        "dark": {
+          "label": "Donker (beta)",
+          "note": "Gebruik een lichte of omgekeerde versie van je logo."
+        },
+        "doodle": {
+          "label": "Doodle (speels)",
+          "note": "Pastelmintachtergrond."
+        }
+      },
+      "noFile": "Geen bestand",
+      "upload": "Uploaden",
+      "uploading": "Uploaden",
+      "remove": "Verwijderen",
+      "loading": "Laden",
+      "loadFailed": "De merkbestanden konden niet worden geladen.",
+      "failed": "De upload is mislukt.",
+      "tooLarge": "Dit bestand is groter dan {kb} KB.",
+      "wrongType": "Dit bestandstype is hier niet toegestaan."
+    },
+    "teamInbox": {
+      "intro": "Een aparte installeerbare app voor de Teamchat. Medewerkers openen de link, zetten die op hun beginscherm en ontvangen pushmeldingen bij nieuwe berichten, ook als de app gesloten is.",
+      "enabled": {
+        "label": "De Teamchat-app inschakelen",
+        "hint": "Schakelt het aparte manifest, de installatieprompt en meldingen op /team-inbox in."
+      },
+      "name": {
+        "label": "App-naam"
+      },
+      "shortName": {
+        "label": "Korte naam",
+        "hint": "Tot 12 tekens."
+      },
+      "icon192": {
+        "label": "App-icoon (192x192 PNG)",
+        "note": "Gebruikt het app-icoon als leeg. Icoon op het beginscherm voor de inbox-app."
+      },
+      "icon512": {
+        "label": "Groot icoon / splash (512x512 PNG)",
+        "note": "Gebruikt het app-icoon als leeg. Installatiescherm en schermen met hoge resolutie."
+      },
+      "push": {
+        "ready": {
+          "title": "Pushmeldingen: klaar",
+          "body": "Sleutels zijn gegenereerd. Medewerkers kunnen meldingen in de inbox aanzetten."
+        },
+        "todo": {
+          "title": "Pushmeldingen: nog één stap",
+          "body": "Klik op Sleutels genereren om push in te stellen. Geen servertoegang nodig."
+        },
+        "generate": "Sleutels genereren",
+        "generating": "Genereren",
+        "generated": "Push-sleutels gegenereerd."
+      },
+      "manifestLink": "Teamchat-manifest",
+      "save": "Teamchat-app opslaan",
+      "saving": "Opslaan",
+      "saved": "Teamchat-app opgeslagen.",
+      "conflict": "Iemand anders heeft dit opgeslagen nadat jij het opende. Laad de pagina opnieuw en probeer het nog eens.",
+      "failed": "Er ging iets mis en er is niets opgeslagen.",
+      "loading": "Laden",
+      "loadFailed": "De instellingen van de Teamchat-app konden niet worden geladen."
+    },
+    "seoPreview": {
+      "google": "Google-resultaat",
+      "noDescription": "Nog geen meta-beschrijving.",
+      "noImage": "Geen OG-afbeelding",
+      "sitemapKicker": "Sitemap & robots",
+      "sitemapTitle": "Crawlerbestanden",
+      "sitemapFile": "Automatisch gegenereerd uit publieke pagina's en gepubliceerde blogberichten. Dien /sitemap.xml in bij Google Search Console.",
+      "download": "sitemap.xml downloaden"
+    },
+    "pages": {
+      "general": {
+        "title": "Algemene instellingen",
+        "description": "Kern-app-identiteit, contactgegevens, standaardtaal en -valuta en platformbrede servicewisselaars.",
+        "sections": {
+          "identity": {
+            "title": "App-identiteit"
+          },
+          "brandAssets": {
+            "title": "Merkbestanden"
+          },
+          "platform": {
+            "title": "Platformschakelaars"
+          },
+          "signup": {
+            "title": "Aanmeldingen & gratis proefperiode"
+          }
+        },
+        "guide": {
+          "title": "Waar dingen naartoe gaan",
+          "items": {
+            "appName": {
+              "title": "App-naam",
+              "body": "Gebruikt in paginatitels, e-mails en de merkweergave in de app. Houd het kort: idealiter één of twee woorden."
+            },
+            "appUrl": {
+              "title": "App-URL",
+              "body": "Het canonieke adres. Alle callbacks, e-mails en OAuth-redirects worden hiervan afgeleid."
+            },
+            "language": {
+              "title": "Standaardtaal",
+              "body": "Wordt toegepast op nieuwe accounts. Bestaande gebruikers behouden hun keuze."
+            },
+            "currency": {
+              "title": "Standaardvaluta",
+              "body": "Gebruikt voor facturen en portemonnees zonder eigen overschrijving."
+            },
+            "maintenance": {
+              "title": "Onderhoudsmodus",
+              "body": "Wanneer AAN toont elke niet-beheerdersroute een tijdelijke pagina. Beheerders kunnen de console nog steeds bereiken."
+            }
+          }
+        },
+        "tip": {
+          "title": "Regel voor productie",
+          "body": "Sla alleen op nadat je de betreffende gebruikersstroom hebt getest. Wijzigingen aan identiteit worden doorgevoerd in facturen en uitgaande e-mails."
+        }
+      },
+      "appearance": {
+        "title": "Dashboardkleuren",
+        "description": "Kleur de hele app opnieuw in, elke pagina van het gebruikersdashboard en het beheerpaneel, door deze themakleuren te wijzigen. Opslaan werkt direct voor iedereen; laat een kleur op de standaard staan om de geleverde look te behouden.",
+        "sections": {
+          "layout": {
+            "title": "Navigatie-indeling",
+            "description": "Kies hoe het gebruikersdashboard is ingedeeld. Zijbalk zet alle menu's in een linker navigatiebalk (geen bovenbalk, geen Meer-pagina)."
+          },
+          "sidebar": {
+            "title": "Zijbalkkleur",
+            "description": "De donkere achtergrond van de linker navigatiebalk (alleen zijbalk-indeling). Laat de standaard staan voor het geleverde bijna-zwart."
+          },
+          "interface": {
+            "title": "Interface"
+          },
+          "brand": {
+            "title": "Merk"
+          },
+          "surfaces": {
+            "title": "Oppervlakken"
+          },
+          "text": {
+            "title": "Tekst"
+          },
+          "accents": {
+            "title": "Accenten"
+          }
+        },
+        "guide": {
+          "title": "Hoe kleuren werken",
+          "items": {
+            "how": {
+              "title": "Werkt direct",
+              "body": "Opslaan herschrijft de live themawaarden voor iedereen."
+            },
+            "tokens": {
+              "title": "Eén token, één taak",
+              "body": "Elk kleurvak koppelt aan één CSS-variabele die in het gebruikersdashboard en het beheerpaneel wordt gebruikt."
+            },
+            "primary": {
+              "title": "Wijzig Primair, de rest volgt",
+              "body": "Primair (hover), accent, zachte vulling en chatbubbel worden van Primair afgeleid tenzij je ze zelf instelt."
+            },
+            "defaults": {
+              "title": "Laat standaarden met rust",
+              "body": "Elke kleur die op de geleverde waarde staat, behoudt de oorspronkelijke look; alleen gewijzigde tokens worden overschreven."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Controleer het contrast na grote wijzigingen. Tekst- en achtergrondkleuren komen beide uit deze tokens."
+        },
+        "eyebrow": "Beheer - Uiterlijk"
+      },
+      "siteInfo": {
+        "title": "Siteinformatie",
+        "description": "Contactgegevens en social-links die worden gedeeld over de voettekst, contact- en over-pagina's. Eén keer bewerken, overal bijgewerkt.",
+        "sections": {
+          "company": {
+            "title": "Bedrijf"
+          },
+          "contact": {
+            "title": "Contact-e-mails"
+          },
+          "phone": {
+            "title": "Telefoon & WhatsApp"
+          },
+          "social": {
+            "title": "Social-links"
+          }
+        },
+        "guide": {
+          "title": "Waar wat naartoe gaat",
+          "items": {
+            "shared": {
+              "title": "Overal gedeeld",
+              "body": "Deze waarden voeden de publieke voettekst, de contactpagina en de juridische pagina's."
+            },
+            "frontend": {
+              "title": "Paginatekst en kleuren",
+              "body": "Worden bewerkt in de Frontend-editor, niet hier."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Voettekstinstellingen",
+        "description": "Titel van de voettekst, social-links, copyrighttekst en de beschrijving van de publieke voettekst.",
+        "sections": {
+          "footer": {
+            "title": "Publieke voettekst"
+          }
+        },
+        "guide": {
+          "title": "Waar wat naartoe gaat",
+          "items": {
+            "what": {
+              "title": "Titel voettekst en copyright",
+              "body": "Lege titel gebruikt de platformnaam. Lege copyrighttekst wordt gegenereerd uit het jaar en het merk."
+            },
+            "social": {
+              "title": "Social-URL's",
+              "body": "Lege velden verbergen het icoon. Deze delen de social-links van Siteinformatie: wijzigen hier werkt ze overal bij."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "E-mailinstellingen",
+        "description": "SMTP-host, poort, versleuteling en inloggegevens. Opgeslagen waarden worden bij elke verzending toegepast, zodat welkom-, verificatie-, factuur- en supportmail ze gebruiken zonder herstart.",
+        "sections": {
+          "smtp": {
+            "title": "SMTP-inloggegevens"
+          }
+        },
+        "guide": {
+          "title": "Veelgebruikte providerhosts",
+          "items": {
+            "hosts": {
+              "title": "Typische instellingen",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls met een app-wachtwoord."
+            },
+            "used": {
+              "title": "Mailables in het systeem",
+              "body": "Welkom- en verificatiemails, wachtwoord resetten, facturen en bonnen, supportantwoorden, beveiligingsmeldingen en werkruimte-uitnodigingen."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Stuur na elke wijziging altijd een test. Eén typefout in de host of poort breekt stilzwijgend elke transactionele e-mail op het platform."
+        }
+      },
+      "seo": {
+        "title": "SEO-instellingen",
+        "description": "Standaard meta-tags voor de hele site: titel, beschrijving, OpenGraph, Twitter-kaarten, robots, canonical en zoekmachineverificatie.",
+        "sections": {
+          "search": {
+            "title": "Meta-tags"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter-kaarten"
+          },
+          "verification": {
+            "title": "Siteverificatie"
+          },
+          "preview": {
+            "title": "Live voorbeeld"
+          }
+        },
+        "guide": {
+          "title": "SEO-basis",
+          "items": {
+            "basics": {
+              "title": "Titels en beschrijvingen",
+              "body": "Meta-titel: begin met het merk en één sterke omschrijving, 50-60 tekens. Meta-beschrijving: een pitch van 1-2 zinnen, 140-160 tekens."
+            },
+            "where": {
+              "title": "Waar dit wordt getoond",
+              "body": "Beheerpagina's, ingelogde pagina's, publieke pagina's en linkvoorbeelden (WhatsApp, Slack, Discord, X). Robots: gebruik noindex voor staging of privé-implementaties."
+            },
+            "sitemap": {
+              "title": "Valideren",
+              "body": "opengraph.xyz, de Google Rich Results-test en de Twitter Card-validator."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privacy, AVG & ADA",
+        "eyebrow": "Beheer - Naleving",
+        "description": "Cookietoestemmingsbanner, beleids-URL's, AVG/CCPA-naleving en WCAG-toegankelijkheidsschakelaars. Dezelfde instelling voedt de toestemmings-UI en bewaakt elke analyse-integratie.",
+        "sections": {
+          "banner": {
+            "title": "Banner & beleid"
+          },
+          "compliance": {
+            "title": "AVG & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "Voorzieningen naar het Amerikaanse ADA + WCAG 2.1 AA-niveau die bezoekers kunnen aan- en uitzetten."
+          }
+        },
+        "guide": {
+          "title": "Hoe toestemming werkt",
+          "items": {
+            "order": {
+              "title": "Volgorde van uitvoering",
+              "body": "1. De bezoeker landt en de cookiebanner opent (overgeslagen wanneer Do-Not-Track wordt gerespecteerd). 2. De keuze wordt één jaar opgeslagen in de cookie crm_cookie_consent. 3. Alleen de toegestane trackers worden geladen. 4. De bezoeker kan de voorkeuren opnieuw openen via elk element met data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Gekoppelde instellingen",
+              "body": "Analyse-integraties (GA4, GTM, Pixel, Clarity en meer) en PWA-instellingen."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analyse-integraties",
+        "eyebrow": "Beheer - Tracking",
+        "description": "Plak elke provider-ID één keer. Het officiële snippet van de leverancier wordt op elke publieke pagina gerenderd, maar pas nadat de bezoeker toestemming heeft gegeven voor de bijbehorende cookiecategorie.",
+        "sections": {
+          "site": {
+            "title": "Site-analyse"
+          },
+          "marketing": {
+            "title": "Advertentiepixels"
+          }
+        },
+        "guide": {
+          "title": "Tracker -> categorie",
+          "items": {
+            "categories": {
+              "title": "Wanneer elke wordt geactiveerd",
+              "body": "Analyse: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Marketing: Meta Pixel, TikTok, LinkedIn, X Pixel. GTM-containerscripts kunnen extra trackers bevatten; pauzeer die met categorietriggers binnen GTM."
+            },
+            "where": {
+              "title": "Waar geladen",
+              "body": "Publieke en inlogpagina's. Beheerpagina's staan bewust uit."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Aangepaste code",
+        "description": "Productie-aangepaste stijlen en scripts voor geavanceerde branding en gedrag. Worden in publieke pagina's ingevoegd wanneer ingeschakeld.",
+        "sections": {
+          "code": {
+            "title": "Aangepaste code"
+          }
+        },
+        "guide": {
+          "title": "Vuistregels",
+          "items": {
+            "scope": {
+              "title": "Scope je CSS",
+              "body": "Omring regels met een merkklasse. Vermijd body, *, of utility-klassen van het framework."
+            },
+            "block": {
+              "title": "Niet blokkeren",
+              "body": "Plaats JS in DOMContentLoaded. Geen synchrone netwerkaanroepen."
+            },
+            "dark": {
+              "title": "Test de donkere modus",
+              "body": "Schakel het thema om en controleer de selectors html[data-theme=\"dark\"] voordat je opslaat."
+            },
+            "sensitive": {
+              "title": "Gevoelig voor productie",
+              "body": "Een foute opslag bereikt meteen elke publieke pagina. Laat een collega grote wijzigingen nakijken."
+            }
+          }
+        },
+        "tip": {
+          "title": "Let op",
+          "body": "Aangepaste code draait op elke publieke pagina en kan niet worden afgeschermd. Alleen een super-admin kan dit wijzigen."
+        }
+      },
+      "pwa": {
+        "title": "PWA-instellingen",
+        "description": "Manifest van de installeerbare app: naam, iconen, kleuren en weergavemodus. Stuurt het manifest en de installatieprompt aan.",
+        "sections": {
+          "app": {
+            "title": "PWA-manifest"
+          },
+          "teamInbox": {
+            "title": "Teamchat-PWA"
+          }
+        },
+        "guide": {
+          "title": "Installeerbare app",
+          "items": {
+            "manifest": {
+              "title": "Live manifest",
+              "body": "Het manifest wordt aangeboden op /api/v2/public/manifest.webmanifest en bestaat alleen zolang de schakelaar aan staat."
+            },
+            "install": {
+              "title": "Iconen",
+              "body": "Upload vierkante PNG-iconen op de pagina Uiterlijk of plak gehoste URL's. 192 px voor het beginscherm, 512 px voor de splash."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Cloudopslag",
+        "eyebrow": "Beheer - Mediaopslag",
+        "description": "Stuur alle clientmediabijlagen naar je eigen bucket — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 of een willekeurige S3-compatibele opslag — in plaats van de appserver. Wanneer uit, blijven media op de lokale schijf, dus er breekt niets totdat je het aanzet.",
+        "status": {
+          "active": "Actief: {provider}. Nieuwe uploads gaan naar je bucket.",
+          "configured": "Ingesteld maar uitgeschakeld. Media staan nog op de lokale schijf. Test en schakel dan in.",
+          "local": "Lokale schijf (nog geen cloudprovider ingesteld).",
+          "enabled": "Ingeschakeld",
+          "disabled": "Uitgeschakeld"
+        },
+        "sections": {
+          "provider": {
+            "title": "Routering van cloudmedia"
+          },
+          "credentials": {
+            "title": "Bucketverbinding"
+          }
+        },
+        "guide": {
+          "title": "Instellen",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Access key + secret + regio + bucket. Het Wasabi-endpoint wordt afgeleid van de regio."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Gebruik de Bunny-velden: opslagzone en wachtwoord. Regio is de regio van de zone (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Vul de S3-velden in en plak de Endpoint-URL. Vink path-style aan voor MinIO."
+            },
+            "test": {
+              "title": "Altijd eerst testen",
+              "body": "\"Opslaan en verbinding testen\" schrijft en verwijdert een testbestand voordat je Ingeschakeld aanzet."
+            }
+          }
+        },
+        "tip": {
+          "title": "Standaard veilig",
+          "body": "Bestaande bestanden blijven waar ze zijn. Alleen nieuwe uploads gaan naar de bucket; niets wordt verplaatst of verwijderd."
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp-instellingen",
+        "eyebrow": "Beheer - Instellingen - Kanalen - WhatsApp",
+        "description": "De ene Meta-app (en Interakt-partner) waarmee alle WhatsApp-nummers van werkruimtes worden aangemeld. Zonder app-ID en -geheim werken Embedded Signup en tokenvernieuwing niet; zonder config-ID moeten werkruimtes een token handmatig plakken. Opgeslagen waarden overschrijven de serverstandaarden binnen enkele seconden, in elk proces.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Metas officiële Cloud API. Vereist voor verkeer met hoog volume, sjabloonberichten en een geverifieerd bedrijfsprofiel. Ondersteunt zowel handmatig tokens plakken als Embedded Signup (WhatsApp-login)."
+          },
+          "interakt": {
+            "title": "Interakt-route",
+            "description": "Nummers die via Embedded Signup zijn verbonden, worden standaard verzonden en ontvangen via de Meta-proxy van Interakt. Schakel over naar Meta (direct) om Interakt over te slaan. Bestaande nummers behouden de route waarmee ze zijn verbonden."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Metas officiële Cloud API. Vereist voor verkeer met hoog volume, sjabloonberichten en een geverifieerd bedrijfsprofiel. Ondersteunt zowel handmatig tokens plakken als Embedded Signup (WhatsApp-login)."
+            },
+            "app": {
+              "title": "Facebook-app-ID + -geheim",
+              "body": "developers.facebook.com/apps, Basisinstellingen. Het wijzigen van de app maakt tokens van de oude app ongeldig, dus werkruimtes moeten opnieuw verbinden."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App-dashboard, WhatsApp, Configuratie: plak de Callback-URL en het Verify-token van deze pagina en abonneer daarna op messages en message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Per werkruimte",
+              "body": "Elke werkruimte verbindt haar eigen nummer via Kanalen, WhatsApp-nummers. Telefoonnummer-ID en een permanent token worden daar verzameld."
+            },
+            "login": {
+              "title": "WABA-login (optioneel)",
+              "body": "Vul de Embedded Signup Config-ID in om eenklik Inloggen met Meta in te schakelen. Vereist de rol Tech Provider op de app. Laat leeg om alleen handmatig plakken te gebruiken."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tip",
+          "body": "Wisselen van standaardroute of app tijdens verkeer raakt alleen nummers die daarna worden verbonden. Pauzeer campagnes voordat je de Meta-app wijzigt."
+        }
+      },
+      "campaigns": {
+        "title": "Campagnelevering",
+        "eyebrow": "Beheer - Campagnes",
+        "description": "Platformbrede regels voor de campagnes van elke werkruimte: hoe vaak een mislukt bericht opnieuw wordt geprobeerd en wanneer een niet-afgeronde campagne wordt beëindigd.",
+        "sections": {
+          "retry": {
+            "title": "Pogingen"
+          },
+          "expiry": {
+            "title": "Automatisch beëindigen"
+          }
+        },
+        "guide": {
+          "title": "Hoe het werkt",
+          "items": {
+            "retry": {
+              "title": "Pogingen",
+              "body": "Een ontvanger wiens verzending mislukt, wordt na de wachttijd opnieuw geprobeerd, tot het hier ingestelde aantal pogingen."
+            },
+            "expiry": {
+              "title": "Automatisch beëindigen",
+              "body": "Een campagne die na de hier ingestelde uren nog loopt, wordt beëindigd zodat die nooit een verzender kan blokkeren."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "eyebrow": "Beheer - Afspraken",
+        "description": "Eén Google Cloud OAuth-client voor het hele platform. Elke werkruimte verbindt daarna haar eigen Google-account via Afspraken, Instellingen; een werkruimte ziet het client-ID of -geheim nooit.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth-client",
+            "description": "Zonder client-ID en -geheim zien werkruimtes Google Agenda als niet beschikbaar en lopen afspraken door zonder agenda."
+          }
+        },
+        "guide": {
+          "title": "Instellen in Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Project en API",
+              "body": "Maak in de Google Cloud Console een project aan en schakel de Google Calendar API in."
+            },
+            "redirect": {
+              "title": "2. OAuth-client",
+              "body": "Maak een OAuth 2.0 Client-ID van het type Webapplicatie en voeg de redirect-URI die op deze pagina staat toe onder Geautoriseerde redirect-URI's."
+            },
+            "consent": {
+              "title": "3. Toestemmingsscherm",
+              "body": "Voeg de scopes calendar.events, calendar.freebusy en calendar.calendarlist.readonly toe en publiceer daarna de app: in Testing beëindigt Google elke toestemming na 7 dagen en moeten werkruimtes opnieuw verbinden."
+            },
+            "workspaces": {
+              "title": "4. Werkruimtes verbinden",
+              "body": "Plak het client-ID en -geheim hier en sla op. Beheerders verbinden daarna via Afspraken, Instellingen, Google Agenda."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Flowbouwer",
+        "eyebrow": "Beheer - Automatisering",
+        "description": "Kies de standaard flowbouwer voor elke werkruimte: de Simpele stap-voor-stap-bouwer of de Geavanceerde canvasbouwer. Een werkruimte kan dit overschrijven op haar Flows-pagina.",
+        "sections": {
+          "mode": {
+            "title": "Bouwer"
+          }
+        },
+        "guide": {
+          "title": "Hoe het werkt",
+          "items": {
+            "modes": {
+              "title": "De twee bouwers",
+              "body": "Simpel toont een flow als stappen onder elkaar, met een plusteken tussen stappen. Geavanceerd is het canvas met knooppunten en verbindingen. Beide slaan dezelfde flow op, dus de flow draait op dezelfde manier."
+            },
+            "existing": {
+              "title": "Bestaande flows",
+              "body": "Het wijzigen van deze instelling verandert of verwijdert nooit een flow. Een flow blijft werken; hij wordt alleen geopend in de bouwer die aan staat. Een werkruimte die zelf een bouwer koos, houdt die tot ze weer de platformstandaard kiest."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Wij gebruiken cookies",
+      "learnMore": "Meer informatie",
+      "decline": "Weigeren",
+      "customize": "Aanpassen",
+      "acceptAll": "Alles accepteren",
+      "rejectAll": "Alles weigeren",
+      "save": "Voorkeuren opslaan",
+      "preferences": "Cookievoorkeuren",
+      "categories": {
+        "necessary": {
+          "title": "Strikt noodzakelijk",
+          "body": "Nodig om de site te laten werken: inloggen, beveiliging en je keuzes. Altijd aan."
+        },
+        "analytics": {
+          "title": "Analysecookies",
+          "body": "Help ons begrijpen hoe de site wordt gebruikt, zodat we die kunnen verbeteren."
+        },
+        "marketing": {
+          "title": "Marketingcookies",
+          "body": "Gebruikt om advertenties te meten en je elders relevante campagnes te tonen."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Live voorbeeld",
+      "previewTitle": "Voordat je opslaat",
+      "previewNote": "Kleuren, grootte en dekking werken direct bij als je schuift. Niets wordt bij iemand toegepast tot je opslaat.",
+      "resetTitle": "Terugzetten naar standaard",
+      "resetBody": "Wist alle overschrijvingen en herstelt het oorspronkelijke palet.",
+      "reset": "Alle kleuren resetten",
+      "tokens": "{count} tokens",
+      "controls": "{count} bedieningselementen",
+      "primary": "Primair",
+      "cancel": "Annuleren",
+      "active": "Actief"
+    },
+    "wabaCallback": {
+      "loading": "Webhookdetails laden…",
+      "unavailable": "Webhookdetails worden alleen aan super-admins getoond.",
+      "webhookUrl": "Webhook-URL",
+      "noUrl": "Stel APP_URL of WABA_WEBHOOK_PUBLIC_URL in",
+      "webhookHint": "Plak in de Meta-app (WhatsApp, Configuratie, Callback-URL). Abonneer op: {fields}.",
+      "verifyToken": "Verify-token",
+      "verifyHint": "Plak op hetzelfde scherm als het Verify-token.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "connected": "Verbonden WABA's (alle werkruimtes)",
+      "fieldsTitle": "Webhookvelden (coexistentie en groepen)",
+      "fieldsHint": "Coexistentie vereist dat de Meta-app is geabonneerd op messages, smb_message_echoes, smb_app_state_sync en history. WhatsApp-groepen vereisen group_lifecycle_update, group_participants_update, group_settings_update en group_status_update.",
+      "fieldsCheck": "Webhookvelden controleren",
+      "fieldsChecking": "Meta wordt gevraagd…",
+      "fieldsOk": "Alle velden zijn geabonneerd: antwoorden die op de telefoon worden getypt, worden gesynchroniseerd en WhatsApp-groepsgebeurtenissen komen binnen.",
+      "fieldsMissing": "Sommige velden zijn nog niet geabonneerd.",
+      "fieldsSubscribed": "Geabonneerd. Antwoorden die op de telefoon worden getypt, worden nu gesynchroniseerd en WhatsApp-groepsgebeurtenissen komen binnen.",
+      "fieldsMissingTag": "ONTBREKEND",
+      "fieldsGroupTag": "Groepen",
+      "fieldsSubscribe": "Ontbrekende velden abonneren",
+      "fieldsSubscribing": "Abonneren…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect-URI",
+      "redirectHint": "Registreer dit exacte adres als Geautoriseerde redirect-URI bij de OAuth-client. Hier stuurt Google de browser naartoe nadat een beheerder van de werkruimte akkoord is gegaan.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd"
+    }
+  }
+}

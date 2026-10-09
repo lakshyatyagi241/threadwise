@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Szablony"
+    },
+    "common": {
+      "dismiss": "Odrzuć",
+      "requestId": "Identyfikator żądania"
+    },
+    "status": {
+      "draft": "Wersja robocza",
+      "pending": "W weryfikacji",
+      "approved": "Zatwierdzony",
+      "rejected": "Odrzucony",
+      "paused": "Wstrzymany",
+      "disabled": "Wyłączony",
+      "deleted": "Brak w Meta"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Użytkowy",
+      "AUTHENTICATION": "Uwierzytelnianie"
+    },
+    "quality": {
+      "GREEN": "Wysoka jakość",
+      "YELLOW": "Średnia jakość",
+      "RED": "Niska jakość",
+      "UNKNOWN": "Jakość w toku"
+    },
+    "errors": {
+      "generic": "Coś poszło nie tak. Spróbuj ponownie, a jeśli problem się powtarza, podaj identyfikator żądania.",
+      "TPL_NOT_FOUND": "Ten szablon już nie istnieje.",
+      "TPL_NAME_TAKEN": "Szablon o tej nazwie i języku już istnieje dla tego numeru. Wybierz inną nazwę lub język.",
+      "TPL_LINT_FAILED": "Sprawdzenie wykryło problemy, które Meta by odrzuciła. Nic nie zostało wysłane. Popraw błędy wymienione po prawej.",
+      "TPL_META_REJECTED": "Meta odrzuciła szablon. Powód jest poniżej; szablon został zachowany jako wersja robocza, abyś mógł go poprawić i spróbować ponownie.",
+      "TPL_NO_CONNECTION": "Ten szablon nie ma połączonego numeru WhatsApp, przez który można go wysłać. Najpierw połącz numer.",
+      "TPL_IN_USE": "Tego szablonu nie można usunąć, ponieważ używa go trwająca lub zaplanowana wiadomość masowa.",
+      "TPL_NOT_EDITABLE": "Edytować można tylko szablon, którego Meta jeszcze nie zatwierdziła, lub odrzucony.",
+      "ROW_VERSION_CONFLICT": "Ktoś zmienił ten szablon, gdy go edytowałeś. Wczytaj ponownie, aby zobaczyć najnowszą wersję, a następnie zastosuj zmianę jeszcze raz.",
+      "VALIDATION_FAILED": "Niektóre pola są nieprawidłowe. Sprawdź pola poniżej.",
+      "INTERNAL": "Serwer nie mógł obsłużyć tego żądania. Spróbuj ponownie za chwilę."
+    },
+    "preview": {
+      "title": "Podgląd",
+      "headerImageAlt": "Przykład obrazu nagłówka",
+      "header": {
+        "image": "Obraz",
+        "video": "Wideo",
+        "document": "Dokument",
+        "location": "Lokalizacja"
+      },
+      "authBody": "to Twój kod weryfikacyjny.",
+      "authExpiry": "{count, plural, one {Ten kod wygasa za # minutę.} few {Ten kod wygasa za # minuty.} many {Ten kod wygasa za # minut.} other {Ten kod wygasa za # minuty.}}",
+      "bodyEmpty": "Tutaj pojawi się treść wiadomości.",
+      "time": "10:30",
+      "copyCode": "Kopiuj kod",
+      "buttonUnnamed": "Przycisk",
+      "moreButtons": "{count, plural, one {+# kolejny przycisk} few {+# kolejne przyciski} many {+# kolejnych przycisków} other {+# kolejnego przycisku}}"
+    },
+    "card": {
+      "rejected": "Odrzucone: {reason}",
+      "view": "Wyświetl",
+      "edit": "Edytuj",
+      "delete": "Usuń"
+    },
+    "library": {
+      "title": "Biblioteka szablonów",
+      "intro": "Szablony wiadomości WhatsApp: twórz je, wysyłaj do weryfikacji w Meta i śledź ich status tutaj.",
+      "sync": "Synchronizuj z Meta",
+      "syncing": "Synchronizowanie...",
+      "syncHint": "Pobierz szablony z Meta",
+      "syncDone": "Zsynchronizowano z Meta: {created} nowych, {updated} zaktualizowanych, {missing} już nieobecnych w Meta.",
+      "syncNone": "Na tym koncie WhatsApp Business nie znaleziono jeszcze szablonów.",
+      "syncFailed": "Synchronizacja z Meta nie powiodła się. Sprawdź połączenie numeru i spróbuj ponownie.",
+      "syncPartial": "{count, plural, one {# numeru nie udało się zsynchronizować.} few {# numery nie udało się zsynchronizować.} many {# numerów nie udało się zsynchronizować.} other {# numeru nie udało się zsynchronizować.}}",
+      "new": "Nowy szablon",
+      "filters": "Filtruj szablony",
+      "search": "Szukaj",
+      "searchPlaceholder": "Nazwa szablonu",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "category": "Kategoria",
+      "allCategories": "Wszystkie kategorie",
+      "connection": "Numer WhatsApp",
+      "allConnections": "Wszystkie numery",
+      "loading": "Wczytywanie szablonów",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak szablonów",
+      "emptyBody": "Utwórz szablon i wyślij go do Meta, albo zsynchronizuj te, które masz już w Meta Business Manager.",
+      "emptyFilteredTitle": "Brak pasujących szablonów",
+      "emptyFilteredBody": "Zmień lub wyczyść filtry, aby zobaczyć więcej szablonów.",
+      "clearFilters": "Wyczyść filtry",
+      "loadMore": "Wczytaj więcej"
+    },
+    "delete": {
+      "title": "Usuń szablon",
+      "message": "Usunąć „{name}”? Szablon zostanie usunięty tutaj i w Meta, i nie będzie można go już wysłać.",
+      "confirm": "Usuń szablon",
+      "cancel": "Anuluj",
+      "done": "Usunięto „{name}”.",
+      "inUseHelp": "Otwórz wiadomość masową, która używa tego szablonu, i anuluj ją albo wybierz inny szablon, a następnie usuń ten."
+    },
+    "lint": {
+      "title": "Sprawdzenie przed wysłaniem",
+      "checking": "Sprawdzanie",
+      "unavailable": "Sprawdzenia nie mogły się teraz uruchomić. Weryfikacja Meta nadal obowiązuje, a serwer sprawdzi ponownie przy wysyłaniu.",
+      "clean": "Nie wykryto problemów.",
+      "summary": "{errors, plural, one {# błąd} few {# błędy} many {# błędów} other {# błędu}}, {warnings, plural, one {# ostrzeżenie} few {# ostrzeżenia} many {# ostrzeżeń} other {# ostrzeżenia}}",
+      "severity": {
+        "error": "Błąd",
+        "warning": "Ostrzeżenie"
+      },
+      "field": {
+        "name": "Nazwa",
+        "language": "Język",
+        "header": "Nagłówek",
+        "body": "Treść",
+        "footer": "Stopka",
+        "buttons": "Przyciski",
+        "template": "Szablon"
+      }
+    },
+    "form": {
+      "loading": "Wczytywanie",
+      "retry": "Spróbuj ponownie",
+      "backToLibrary": "Powrót do biblioteki",
+      "noPermission": "Nie masz uprawnień do tworzenia ani edytowania szablonów.",
+      "notEditableTitle": "Tego szablonu nie można już edytować",
+      "notEditableBody": "Edytować można tylko szablon, którego Meta jeszcze nie zatwierdziła, lub odrzucony. Aby zmienić zatwierdzony, utwórz nowy szablon.",
+      "viewTemplate": "Wyświetl szablon",
+      "breadcrumb": "Ścieżka nawigacji",
+      "breadcrumbLibrary": "Szablony",
+      "breadcrumbNew": "Nowy",
+      "breadcrumbEdit": "Edytuj",
+      "titleNew": "Nowy szablon",
+      "titleEdit": "Edytuj {name}",
+      "saveDraft": "Zapisz wersję roboczą",
+      "submit": "Wyślij do Meta",
+      "reload": "Wczytaj szablon ponownie",
+      "aside": "Podgląd i sprawdzenie",
+      "why": {
+        "connection": "Wybierz numer WhatsApp, przez który wysłać.",
+        "name": "Podaj nazwę szablonu.",
+        "fields": "Niektóre pola są nieprawidłowe.",
+        "errors": "Popraw błędy przed wysłaniem.",
+        "checking": "Sprawdzanie szablonu."
+      },
+      "toast": {
+        "submitted": "Szablon wysłano do Meta w celu weryfikacji.",
+        "saved": "Szablon zapisano jako wersję roboczą."
+      },
+      "errors": {
+        "name": "Podaj nazwę szablonu.",
+        "header": "Nagłówek może mieć najwyżej 60 znaków.",
+        "body": "Treść może mieć najwyżej {max} znaków.",
+        "footer": "Stopka może mieć najwyżej 60 znaków."
+      },
+      "identity": {
+        "title": "Tożsamość",
+        "connection": "Numer WhatsApp",
+        "connectionHint": "Multimedia i wysyłka muszą używać tego samego numeru, inaczej Meta odrzuci szablon.",
+        "connectionUnknown": "Numer nie jest już dostępny",
+        "noConnection": "Brak połączonego numeru WhatsApp do wysłania.",
+        "connectNumber": "Połącz numer",
+        "category": "Kategoria",
+        "categoryHint": "Meta weryfikuje szablon i wycenia go według kategorii.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Użytkowy",
+          "AUTHENTICATION": "Uwierzytelnianie"
+        },
+        "name": "Nazwa szablonu",
+        "nameHint": "Tylko litery a–z, cyfry 0–9 i _, do 60 znaków.",
+        "nameTaken": "Ta nazwa jest już używana dla tego języka w tym numerze.",
+        "language": "Język"
+      },
+      "auth": {
+        "title": "Jednorazowy kod dostępu",
+        "hint": "Meta tworzy treść wiadomości i przycisk Kopiuj kod szablonu uwierzytelniania.",
+        "expiry": "Kod wygasa po (minutach)",
+        "expiryHint": "Opcjonalnie. Od {min} do {max} minut.",
+        "expiryInvalid": "Podaj liczbę całkowitą od {min} do {max}.",
+        "fixedBody": "Wiadomość brzmi: kod, po którym następuje „to Twój kod weryfikacyjny” oraz przypomnienie o bezpieczeństwie. Nie można jej zmienić."
+      },
+      "header": {
+        "title": "Nagłówek",
+        "hint": "Opcjonalnie. Tekst albo jeden obraz, wideo, dokument lub lokalizacja.",
+        "type": "Typ nagłówka",
+        "kind": {
+          "none": "Brak",
+          "text": "Tekst",
+          "image": "Obraz",
+          "video": "Wideo",
+          "document": "Dokument",
+          "location": "Lokalizacja"
+        },
+        "text": "Tekst nagłówka",
+        "textHint": "{used}/{max}. Najwyżej jedna zmienna.",
+        "sample": "Plik przykładowy",
+        "uploading": "Przesyłanie",
+        "keptSample": "Zapisany przykład zostaje. Wybierz plik, aby go zastąpić.",
+        "noFile": "Nie wybrano pliku",
+        "limits": "Obraz do 5 MB, wideo do 16 MB, PDF do 100 MB.",
+        "replace": "Zastąp plik",
+        "choose": "Wybierz plik przykładowy",
+        "tooBig": "Ten plik ({kind}) ma {size} MB. WhatsApp przyjmuje do {max} MB. Wybierz mniejszy plik.",
+        "wrongType": "Ten typ pliku nie jest akceptowany w tym nagłówku.",
+        "emptyFile": "Ten plik jest pusty.",
+        "locationHelp": "Lokalizacja jest uzupełniana przy wysyłaniu wiadomości. Meta musi wiedzieć tylko, że nagłówek to lokalizacja."
+      },
+      "body": {
+        "title": "Treść",
+        "hint": "Tekst wiadomości. Używaj zmiennych w stylu '{{name}}'; przy zapisie są numerowane dla Meta.",
+        "toolbar": "Formatowanie tekstu",
+        "format": {
+          "bold": "Pogrubienie",
+          "italic": "Kursywa",
+          "strike": "Przekreślenie",
+          "code": "Kod"
+        },
+        "variable": "Dodaj zmienną",
+        "label": "Tekst treści",
+        "counter": "{used}/{max}",
+        "wrapSample": "tekst"
+      },
+      "variables": {
+        "title": "Mapowanie zmiennych",
+        "empty": "Brak zmiennych. Wpisz symbol zastępczy, np. '{{name}}', w treści albo użyj opcji Dodaj zmienną.",
+        "help": "Dla każdej zmiennej podaj atrybut kontaktu, który ją wypełni przy wysyłaniu, oraz przykładową wartość do weryfikacji przez Meta.",
+        "attribute": "Atrybut kontaktu",
+        "sample": "Wartość przykładowa",
+        "header": "nagłówek",
+        "body": "treść"
+      },
+      "footer": {
+        "title": "Stopka",
+        "label": "Tekst stopki",
+        "hint": "Opcjonalnie. {used}/{max}. Bez zmiennych."
+      },
+      "buttons": {
+        "title": "Przyciski",
+        "hint": "Opcjonalnie. Szybkie odpowiedzi muszą być razem na początku lub na końcu.",
+        "add": {
+          "quick_reply": "Szybka odpowiedź",
+          "url": "Odwiedź stronę",
+          "phone": "Zadzwoń",
+          "copy_code": "Kopiuj kod"
+        },
+        "kind": {
+          "quick_reply": "Szybka odpowiedź",
+          "url": "Odwiedź stronę",
+          "phone": "Zadzwoń",
+          "copy_code": "Kopiuj kod",
+          "other": "Inne"
+        },
+        "count": "{used}/{max} przycisków",
+        "limitReached": "Najwyżej {max} tego rodzaju.",
+        "empty": "Brak przycisków. Dodaj je za pomocą przycisków powyżej.",
+        "moveUp": "Przesuń przycisk {n} w górę",
+        "moveDown": "Przesuń przycisk {n} w dół",
+        "remove": "Usuń przycisk {n}",
+        "keptAsIs": "„{text}” zostaje bez zmian. Ten edytor go nie zmienia.",
+        "text": "Tekst przycisku",
+        "textHint": "{used}/25",
+        "url": "Adres strony",
+        "urlHint": "Dodaj '{{1}}' na końcu dla części dynamicznej.",
+        "urlExample": "Przykład dla zmiennej",
+        "phone": "Numer telefonu",
+        "phoneHint": "Z numerem kierunkowym kraju.",
+        "code": "Przykładowy kod",
+        "codeHint": "Na przykład PROMO50.",
+        "limits": "Meta dopuszcza do {quick} szybkich odpowiedzi, {url} przycisków strony, {phone} przycisk telefonu i {copy} przycisk kopiowania kodu.",
+        "allUsed": "Każdy rodzaj przycisku osiągnął limit.",
+        "issue": {
+          "textRequired": "Podaj tekst przycisku.",
+          "textTooLong": "Najwyżej {max} znaków.",
+          "urlRequired": "Podaj adres URL.",
+          "urlInvalid": "Adres URL musi zaczynać się od http:// lub https://.",
+          "phoneRequired": "Podaj numer telefonu.",
+          "codeRequired": "Podaj przykładowy kod.",
+          "quickReplyVariable": "Szybka odpowiedź nie może zawierać zmiennej.",
+          "urlExampleRequired": "Podaj przykładową wartość dla zmiennej w adresie URL.",
+          "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków."
+        }
+      },
+      "result": {
+        "metaRefused": "Zapisano, ale Meta odrzuciła szablon.",
+        "metaRefusedHelp": "Szablon zachowano jako wersję roboczą. Popraw to, co wskazała Meta, i wyślij ponownie. Formularz pozostaje bez zmian.",
+        "submitted": "Wysłano do Meta w celu weryfikacji.",
+        "saved": "Zapisano jako wersję roboczą.",
+        "warnings": "Warto sprawdzić przed weryfikacją przez Meta:",
+        "open": "Otwórz szablon"
+      }
+    },
+    "detail": {
+      "loading": "Wczytywanie szablonu",
+      "retry": "Spróbuj ponownie",
+      "back": "Powrót do biblioteki",
+      "breadcrumb": "Ścieżka nawigacji",
+      "refresh": "Odśwież status",
+      "retrySubmit": "Wyślij do Meta",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "refreshed": "Status odświeżono z Meta.",
+      "submittedToast": "Szablon wysłano do Meta w celu weryfikacji.",
+      "never": "Nigdy",
+      "none": "Brak",
+      "banner": {
+        "metaFailed": "Meta odrzuciła szablon",
+        "draft": "Ten szablon nie został jeszcze wysłany do Meta. Wyślij go, aby rozpocząć weryfikację.",
+        "pending": "Wysłano do weryfikacji Meta. Ta strona sprawdza odpowiedź co 15 sekund.",
+        "pendingMeta": "Wysłano {submitted}. Ostatnio sprawdzono {checked}.",
+        "polling": "Możesz zostawić tę stronę otwartą lub wrócić później.",
+        "rejected": "Odrzucone przez Meta",
+        "rejectedHelp": "Edytuj szablon, aby uwzględnić powód, a następnie wyślij go ponownie.",
+        "paused": "Wstrzymane przez Meta. Nie można go wysłać, dopóki Meta nie zniesie wstrzymania.",
+        "pausedUntil": "Wstrzymane przez Meta do {when}.",
+        "disabled": "Wyłączone przez Meta. Nie można go wysłać.",
+        "deleted": "Meta nie wymienia już tego szablonu. Jest zachowany tutaj; zsynchronizuj ponownie lub go usuń."
+      },
+      "facts": {
+        "title": "Synchronizacja z Meta",
+        "status": "Status w Meta",
+        "quality": "Jakość",
+        "category": "Kategoria w Meta",
+        "metaId": "Identyfikator szablonu",
+        "number": "Numer WhatsApp",
+        "numberUnknown": "Numer nie jest już dostępny",
+        "submitted": "Wysłano",
+        "approved": "Zatwierdzony",
+        "synced": "Ostatnio zsynchronizowano"
+      },
+      "components": {
+        "title": "Komponenty",
+        "header": "Nagłówek",
+        "media": "Multimedia nagłówka",
+        "body": "Treść",
+        "footer": "Stopka",
+        "buttons": "Przyciski",
+        "expiry": "Wygaśnięcie kodu",
+        "expiryValue": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}"
+      },
+      "attachment": {
+        "none": "Brak",
+        "image": "Obraz",
+        "video": "Wideo",
+        "document": "Dokument",
+        "location": "Lokalizacja"
+      },
+      "lint": {
+        "title": "Sprawdzenia",
+        "clean": "Nie wykryto problemów."
+      },
+      "payload": {
+        "title": "Dane wysyłane do Meta",
+        "hint": "Co dokładnie jest wysyłane do Meta do weryfikacji, w postaci zbudowanej.",
+        "empty": "Nic jeszcze nie zbudowano."
+      }
+    }
+  }
+}

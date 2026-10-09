@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Tienda / Grupos",
+      "title": "Grupos de WhatsApp",
+      "subtitle": "Grupos a los que pertenece tu número conectado. Cuando se confirma un pedido, se publica en el grupo del cliente y se le @menciona. Asigna un código de pedido a un grupo para que los clientes puedan pedir desde él.",
+      "loading": "Cargando grupos",
+      "summary": {
+        "groups": "Grupos sincronizados",
+        "coded": "Con código de pedido",
+        "bot": "Número del bot",
+        "noBot": "No hay ningún número de WhatsApp conectado.",
+        "connect": "Conecta un número en Canales",
+        "copyNumber": "Copiar número"
+      },
+      "search": {
+        "label": "Buscar grupos",
+        "placeholder": "Buscar nombre del grupo..."
+      },
+      "columns": {
+        "group": "Grupo",
+        "members": "Miembros",
+        "device": "Dispositivo del bot",
+        "synced": "Sincronizado",
+        "code": "Código de pedido"
+      },
+      "row": {
+        "unnamed": "(grupo sin nombre)",
+        "noCode": "Sin código",
+        "placeholder": "p. ej., ACME",
+        "label": "Código de pedido de {name}",
+        "copyLink": "Copiar enlace de pedido",
+        "saved": "Código de pedido guardado.",
+        "cleared": "Código de pedido borrado.",
+        "tooLong": "Usa {max} caracteres o menos.",
+        "badChars": "Usa solo letras, números, puntos, guiones y guiones bajos.",
+        "taken": "Otro grupo ya usa este código."
+      },
+      "empty": {
+        "title": "Aún no hay grupos",
+        "message": "La lista de grupos se copia de tu sesión de WhatsApp conectada. Los grupos aparecen aquí cuando esa sesión los ha sincronizado; aún no se promete ningún plazo.",
+        "action": "Abrir Canales"
+      },
+      "noMatch": {
+        "title": "Ningún grupo coincide con tu búsqueda",
+        "message": "Prueba con otra parte del nombre del grupo, o borra la búsqueda."
+      },
+      "how": {
+        "title": "Cómo funcionan los códigos de pedido",
+        "body": "Asigna a un grupo un código corto (por ejemplo, ACME) y comparte su enlace de pedido. Cuando un cliente lo toca y confirma un pedido, este se publica directamente en ese grupo exacto y se @menciona al cliente, aunque pertenezca a varios grupos."
+      }
+    }
+  }
+}

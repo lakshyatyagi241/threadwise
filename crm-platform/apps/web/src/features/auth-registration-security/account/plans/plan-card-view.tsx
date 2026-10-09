@@ -45,7 +45,7 @@ export function PlanCardView({
     >
       {card.highlighted && (
         <span className="absolute -top-2 start-3 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 font-mono rtl:font-sans text-[10px] uppercase text-primary-foreground">
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-[#25d366]" />
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-[#7c3aed]" />
           {t('popular')}
         </span>
       )}

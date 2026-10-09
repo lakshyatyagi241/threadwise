@@ -186,21 +186,102 @@ export function MessageBubble({
   );
 }
 
-/** A phone-shaped frame around the bubble, for the form and the detail page. */
+/**
+ * A phone around the bubble that looks like WhatsApp: status bar, chat header (back, avatar, business name, call icons), the chat
+ * wallpaper with a date chip, the message bubble, and the input bar. Display only; it shows what the template holds.
+ */
 export function PhonePreview({ model }: { model: PreviewModel }) {
   const t = useTranslations('message-templates.preview');
   return (
     <section
       aria-label={t('title')}
-      className="rounded-2xl border border-border bg-muted p-3"
+      className="mx-auto w-full max-w-[340px]"
       data-testid="phone-preview"
     >
       <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-        <span className="font-medium">{t('title')}</span>
-        <span className="rounded-full bg-background px-2 py-0.5 font-mono">{model.language}</span>
+        <span className="font-medium">{t('live')}</span>
+        <span className="rounded-full bg-muted px-2 py-0.5 font-mono">{model.language}</span>
       </div>
-      <div className="min-h-40 rounded-xl bg-muted/60 p-2">
-        <MessageBubble model={model} />
+      <div className="rounded-[2.4rem] bg-neutral-900 p-2 shadow-xl ring-1 ring-black/20">
+        <div className="relative flex h-[min(34rem,calc(100dvh-16rem))] min-h-[26rem] flex-col overflow-hidden rounded-[2rem] bg-[#efeae2] dark:bg-[#0b141a]">
+          <div className="absolute top-1.5 left-1/2 z-10 h-4 w-20 -translate-x-1/2 rounded-full bg-neutral-900" />
+          <div className="flex items-center justify-between bg-[#008069] px-5 pt-2 pb-1 text-[10px] font-medium text-white dark:bg-[#202c33]">
+            <span>{t('time')}</span>
+            <span className="flex items-center gap-1" aria-hidden="true">
+              <svg viewBox="0 0 16 10" className="h-2.5 w-3.5" fill="currentColor">
+                <rect x="0" y="6" width="3" height="4" rx="0.5" />
+                <rect x="4.3" y="4" width="3" height="6" rx="0.5" />
+                <rect x="8.6" y="2" width="3" height="8" rx="0.5" />
+                <rect x="12.9" y="0" width="3" height="10" rx="0.5" />
+              </svg>
+              <svg viewBox="0 0 24 12" className="h-2.5 w-5" fill="none" stroke="currentColor">
+                <rect x="1" y="1" width="19" height="10" rx="2.5" />
+                <rect x="3" y="3" width="13" height="6" rx="1" fill="currentColor" stroke="none" />
+                <rect
+                  x="21"
+                  y="4"
+                  width="2"
+                  height="4"
+                  rx="0.8"
+                  fill="currentColor"
+                  stroke="none"
+                />
+              </svg>
+            </span>
+          </div>
+          <div className="flex items-center gap-2 bg-[#008069] px-2 py-2 text-white dark:bg-[#202c33]">
+            <svg
+              viewBox="0 0 24 24"
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+            <span className="grid size-8 place-items-center rounded-full bg-white/90 text-xs font-bold text-[#008069]">
+              {t('business').slice(0, 1)}
+            </span>
+            <div className="min-w-0 flex-1 leading-tight">
+              <p className="truncate text-sm font-medium">{t('business')}</p>
+              <p className="text-[10px] opacity-80">{t('online')}</p>
+            </div>
+            <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden="true">
+              <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z" />
+            </svg>
+            <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden="true">
+              <path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.6 3.6a1 1 0 0 1-.25 1z" />
+            </svg>
+            <svg viewBox="0 0 24 24" className="size-5" fill="currentColor" aria-hidden="true">
+              <circle cx="12" cy="5" r="1.8" />
+              <circle cx="12" cy="12" r="1.8" />
+              <circle cx="12" cy="19" r="1.8" />
+            </svg>
+          </div>
+          <div className="flex-1 space-y-2 overflow-y-auto p-3 [background-image:radial-gradient(rgba(0,0,0,0.045)_1px,transparent_1px)] [background-size:14px_14px] dark:[background-image:radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)]">
+            <p className="mx-auto w-fit rounded-md bg-white/90 px-2.5 py-1 text-[10px] font-medium tracking-wide text-[#54656f] shadow-sm dark:bg-[#182229] dark:text-[#8696a0]">
+              TODAY
+            </p>
+            <MessageBubble
+              model={model}
+              className="max-w-[92%] bg-white text-[#111b21] dark:bg-[#202c33] dark:text-[#e9edef]"
+            />
+          </div>
+          <div
+            className="flex items-center gap-2 bg-[#f0f2f5] px-2 py-2 dark:bg-[#202c33]"
+            aria-hidden="true"
+          >
+            <span className="flex-1 rounded-full bg-white px-3 py-1.5 text-xs text-[#667781] dark:bg-[#2a3942] dark:text-[#8696a0]">
+              Message
+            </span>
+            <span className="grid size-8 place-items-center rounded-full bg-[#008069] text-white">
+              <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
+                <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1A7 7 0 0 0 19 12z" />
+              </svg>
+            </span>
+          </div>
+        </div>
       </div>
     </section>
   );

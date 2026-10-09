@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "सूचनाएँ",
+      "labelUnread": "सूचनाएँ, {count} बिना पढ़ी",
+      "title": "सूचनाएँ",
+      "markAll": "सभी को पढ़ा हुआ चिह्नित करें",
+      "empty": "अभी कोई सूचना नहीं है।",
+      "loading": "सूचनाएँ लोड हो रही हैं",
+      "failed": "सूचनाएँ लोड नहीं हो सकीं।",
+      "retry": "फिर से कोशिश करें",
+      "unread": "बिना पढ़ी",
+      "settings": "अलर्ट सेटिंग",
+      "sound": "नई चैट और संदेशों के लिए आवाज़ चलाएँ",
+      "soundOn": "आवाज़: चालू",
+      "soundOff": "आवाज़: बंद",
+      "desktopEnable": "डेस्कटॉप अलर्ट चालू करें",
+      "desktopOn": "डेस्कटॉप अलर्ट: चालू",
+      "desktopOff": "डेस्कटॉप अलर्ट: बंद",
+      "desktopBlocked": "आपके ब्राउज़र सेटिंग में डेस्कटॉप अलर्ट ब्लॉक हैं।",
+      "desktopHint": "संपर्क का नाम तभी दिखाता है जब यह टैब बैकग्राउंड में हो।",
+      "preferences": "सूचना सेटिंग"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "आपको सौंपा गया कार्य",
+        "body": "{actor} ने आपको सौंपा: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "कार्य की नियत तिथि",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "कार्य पूर्ण",
+        "body": "{actor} ने पूरा किया: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "नई लीड",
+        "titleReturning": "लीड फिर से आई",
+        "body": "{name} {platform} से आए",
+        "bodyReturning": "{name} ने {platform} से एक और लीड भेजी",
+        "bodyNoActor": "{name} आए"
+      },
+      "new_chat": {
+        "title": "{name} की नई चैट",
+        "titleNoName": "नई चैट",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {{name} का नया संदेश} other {{name} के # नए संदेश}}",
+        "titleNoName": "{count, plural, one {नया संदेश} other {# नए संदेश}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "{name} को अभी तक किसी ने जवाब नहीं दिया है",
+        "titleNoName": "एक चैट अभी भी जवाब का इंतज़ार कर रही है",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} आपको सौंपा गया",
+        "titleNoName": "एक चैट आपको सौंपी गई",
+        "titleTeam": "{name} आपकी टीम को सौंपा गया",
+        "titleTeamNoName": "एक चैट आपकी टीम को सौंपी गई",
+        "body": "{actor} द्वारा सौंपा गया",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} ने आपका ज़िक्र किया",
+        "titleNoName": "एक नोट में आपका ज़िक्र किया गया",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} कनेक्ट हो गया",
+        "titleNoName": "आपका WhatsApp नंबर कनेक्ट हो गया है"
+      },
+      "device_disconnected": {
+        "title": "{name} डिस्कनेक्ट हो गया",
+        "titleNoName": "एक WhatsApp नंबर डिस्कनेक्ट हो गया",
+        "body": "फिर से कनेक्ट करने के लिए डिवाइस खोलें।"
+      },
+      "device_logged_out": {
+        "title": "{name} लॉग आउट हो गया",
+        "titleNoName": "एक WhatsApp नंबर लॉग आउट हो गया",
+        "body": "फिर से कनेक्ट करने के लिए QR कोड दोबारा स्कैन करें।"
+      },
+      "broadcast_completed": {
+        "title": "ब्रॉडकास्ट “{name}” पूर्ण हुआ",
+        "titleNoName": "एक ब्रॉडकास्ट पूर्ण हुआ",
+        "bodySent": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}",
+        "bodySentFailed": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}, {failed, plural, one {# विफल} other {# विफल}}"
+      },
+      "broadcast_failed": {
+        "title": "ब्रॉडकास्ट “{name}” विफल हुआ",
+        "titleNoName": "एक ब्रॉडकास्ट विफल हुआ",
+        "body": "{reason}",
+        "bodyNoReason": "क्या गलत हुआ, यह देखने के लिए इसे खोलें।"
+      },
+      "campaign_completed": {
+        "title": "अभियान “{name}” पूर्ण हुआ",
+        "titleNoName": "एक अभियान पूर्ण हुआ",
+        "bodySent": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}",
+        "bodySentFailed": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}, {failed, plural, one {# विफल} other {# विफल}}"
+      },
+      "campaign_failed": {
+        "title": "अभियान “{name}” विफल हुआ",
+        "titleNoName": "एक अभियान विफल हुआ",
+        "body": "{reason}",
+        "bodyNoReason": "क्या गलत हुआ, यह देखने के लिए इसे खोलें।"
+      },
+      "scheduled_completed": {
+        "title": "शेड्यूल्ड भेजना “{name}” भेज दिया गया",
+        "titleNoName": "एक शेड्यूल्ड भेजना भेज दिया गया",
+        "bodySent": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}",
+        "bodySentFailed": "{sent, plural, one {# संदेश भेजा गया} other {# संदेश भेजे गए}}, {failed, plural, one {# विफल} other {# विफल}}"
+      },
+      "scheduled_failed": {
+        "title": "शेड्यूल्ड भेजना “{name}” विफल हुआ",
+        "titleNoName": "एक शेड्यूल्ड भेजना विफल हुआ",
+        "body": "{reason}",
+        "bodyNoReason": "क्या गलत हुआ, यह देखने के लिए इसे खोलें।"
+      },
+      "teamchat_mention": {
+        "title": "{author} ने {channel} में आपका ज़िक्र किया",
+        "titleNoChannel": "{author} ने टीम चैट में आपका ज़िक्र किया",
+        "titleNoName": "टीम चैट में आपका ज़िक्र किया गया"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {{author} का नया संदेश} other {{author} के # नए संदेश}}",
+        "titleNoName": "{count, plural, one {नया सीधा संदेश} other {# नए सीधे संदेश}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {कोई {name} में शामिल होना चाहता है} other {# लोग {name} में शामिल होना चाहते हैं}}",
+        "titleNoName": "{count, plural, one {कोई WhatsApp समूह में शामिल होना चाहता है} other {# लोग WhatsApp समूह में शामिल होना चाहते हैं}}",
+        "body": "स्वीकृत या अस्वीकार करने के लिए समूह खोलें।"
+      },
+      "waba_group_suspended": {
+        "title": "{name} निलंबित किया गया",
+        "titleNoName": "एक WhatsApp समूह निलंबित किया गया",
+        "body": "WhatsApp ने इस समूह को निलंबित किया है। बहाल होने तक आप इसे संदेश नहीं भेज सकते।"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} फिर से सक्रिय है",
+        "titleNoName": "एक WhatsApp समूह फिर से सक्रिय है",
+        "body": "WhatsApp ने इस समूह को बहाल किया है। अब आप फिर से संदेश भेज सकते हैं।"
+      }
+    },
+    "live": {
+      "open": "खोलें",
+      "dismiss": "खारिज करें",
+      "toastRegion": "सूचनाएँ",
+      "summary": "{count} नई सूचनाएँ",
+      "announceMany": "{count} नई सूचनाएँ",
+      "desktop": {
+        "new_chat": "नई चैट",
+        "new_message": "नया संदेश",
+        "chat_waiting": "जवाब का इंतज़ार",
+        "conversation_assigned": "आपको सौंपा गया",
+        "mention": "आपका ज़िक्र किया",
+        "fallbackTitle": "नई सूचना",
+        "device_connected": "WhatsApp नंबर कनेक्ट हुआ",
+        "device_disconnected": "WhatsApp नंबर डिस्कनेक्ट हुआ",
+        "device_logged_out": "WhatsApp नंबर लॉग आउट हुआ",
+        "broadcast_completed": "ब्रॉडकास्ट पूर्ण हुआ",
+        "broadcast_failed": "ब्रॉडकास्ट विफल हुआ",
+        "campaign_completed": "अभियान पूर्ण हुआ",
+        "campaign_failed": "अभियान विफल हुआ",
+        "scheduled_completed": "शेड्यूल्ड भेजना भेज दिया गया",
+        "scheduled_failed": "शेड्यूल्ड भेजना विफल हुआ",
+        "teamchat_mention": "टीम चैट में आपका ज़िक्र किया",
+        "teamchat_message": "नया सीधा संदेश",
+        "waba_group_join_request": "समूह में शामिल होने का अनुरोध",
+        "waba_group_suspended": "WhatsApp समूह निलंबित",
+        "waba_group_suspension_cleared": "WhatsApp समूह फिर से सक्रिय"
+      }
+    },
+    "prefs": {
+      "title": "सूचना प्राथमिकताएँ",
+      "description": "चुनें कि हर इवेंट आप तक कैसे पहुँचे। ये चुनाव सिर्फ़ आपके हैं; आपका वर्कस्पेस तय करता है कि कौन से इवेंट शुरू से चालू हों।",
+      "columns": {
+        "event": "इवेंट",
+        "bell": "घंटी",
+        "toast": "पॉप-अप",
+        "sound": "आवाज़",
+        "push": "पुश"
+      },
+      "groups": {
+        "conversations": "चैट",
+        "tasks": "कार्य",
+        "leads": "लीड और फ़ॉर्म",
+        "documents": "बिक्री दस्तावेज़",
+        "wallet": "वॉलेट",
+        "devices": "WhatsApp नंबर",
+        "broadcasts": "ब्रॉडकास्ट और अभियान",
+        "team_chat": "टीम चैट",
+        "whatsapp_groups": "WhatsApp समूह"
+      },
+      "types": {
+        "new_chat": {
+          "label": "नई चैट",
+          "hint": "जिस बातचीत का अभी कोई मालिक नहीं है, उसे पहला संदेश मिलने पर।"
+        },
+        "new_message": {
+          "label": "मेरी चैट पर नया संदेश",
+          "hint": "जब कोई ग्राहक आपको सौंपी गई चैट पर लिखता है।"
+        },
+        "chat_waiting": {
+          "label": "चैट अभी भी जवाब का इंतज़ार कर रही है",
+          "hint": "जिस चैट का कोई मालिक नहीं है, उसमें ग्राहक का संदेश कुछ मिनट से बिना जवाब के है। इसकी सूचना आपको एक बार मिलती है।"
+        },
+        "conversation_assigned": {
+          "label": "मुझे सौंपी गई चैट",
+          "hint": "जब कोई चैट आपको या आपकी टीम को सौंपी जाती है।"
+        },
+        "mention": {
+          "label": "नोट में ज़िक्र",
+          "hint": "जब कोई सहकर्मी बातचीत के नोट में आपका ज़िक्र करता है।"
+        },
+        "teamchat_mention": {
+          "label": "टीम चैट में ज़िक्र",
+          "hint": "जब कोई सहकर्मी टीम चैट चैनल में आपका ज़िक्र करता है।"
+        },
+        "teamchat_message": {
+          "label": "सीधा संदेश",
+          "hint": "जब कोई सहकर्मी टीम चैट में आपको लिखता है।"
+        },
+        "device_connected": {
+          "label": "नंबर कनेक्ट हुआ",
+          "hint": "जब एक निजी WhatsApp नंबर का कनेक्शन पूरा होता है।"
+        },
+        "device_disconnected": {
+          "label": "नंबर डिस्कनेक्ट हुआ",
+          "hint": "जब एक निजी WhatsApp नंबर का कनेक्शन टूट जाता है।"
+        },
+        "device_logged_out": {
+          "label": "नंबर लॉग आउट हुआ",
+          "hint": "जब फ़ोन से एक निजी WhatsApp नंबर लॉग आउट कर दिया जाता है।"
+        },
+        "broadcast_completed": {
+          "label": "ब्रॉडकास्ट पूर्ण हुआ",
+          "hint": "आपके शुरू किया हुआ ब्रॉडकास्ट भेज दिया गया है।"
+        },
+        "broadcast_failed": {
+          "label": "ब्रॉडकास्ट विफल हुआ",
+          "hint": "आपका शुरू किया हुआ ब्रॉडकास्ट विफल हुआ।"
+        },
+        "campaign_completed": {
+          "label": "अभियान पूर्ण हुआ",
+          "hint": "आपका शुरू किया हुआ अभियान भेज दिया गया है।"
+        },
+        "campaign_failed": {
+          "label": "अभियान विफल हुआ",
+          "hint": "आपका शुरू किया हुआ अभियान विफल हुआ।"
+        },
+        "scheduled_completed": {
+          "label": "शेड्यूल्ड भेजना भेज दिया गया",
+          "hint": "आपका सेट किया हुआ शेड्यूल्ड भेजना भेज दिया गया।"
+        },
+        "scheduled_failed": {
+          "label": "शेड्यूल्ड भेजना विफल हुआ",
+          "hint": "आपका सेट किया हुआ शेड्यूल्ड भेजना विफल हुआ।"
+        },
+        "task_assigned": {
+          "label": "मुझे सौंपा गया कार्य",
+          "hint": "आपको एक कार्य सौंपा गया है।"
+        },
+        "task_due": {
+          "label": "कार्य की नियत तिथि",
+          "hint": "आपके किसी कार्य की नियत तिथि है।"
+        },
+        "task_completed": {
+          "label": "कार्य पूर्ण",
+          "hint": "आपका बनाया गया कोई कार्य पूर्ण हुआ।"
+        },
+        "new_lead": {
+          "label": "नई लीड",
+          "hint": "किसी लीड स्रोत से एक लीड आई।"
+        },
+        "form_submission": {
+          "label": "फ़ॉर्म जमा हुआ",
+          "hint": "किसी ने आपका एक फ़ॉर्म जमा किया।"
+        },
+        "form_needs_review": {
+          "label": "फ़ॉर्म की समीक्षा चाहिए",
+          "hint": "किसी जमा किए गए फ़ॉर्म को देखने की ज़रूरत है।"
+        },
+        "wallet_low_balance": {
+          "label": "वॉलेट बैलेंस कम",
+          "hint": "वर्कस्पेस वॉलेट का बैलेंस कम हो रहा है।"
+        },
+        "sales_doc_decided": {
+          "label": "बिक्री दस्तावेज़ का फ़ैसला हुआ",
+          "hint": "कोई कोटेशन या इनवॉइस स्वीकार या अस्वीकार किया गया।"
+        },
+        "wallet_credited": {
+          "label": "वॉलेट में राशि जोड़ी गई",
+          "hint": "वर्कस्पेस वॉलेट में राशि जमा की गई।"
+        },
+        "waba_group_join_request": {
+          "label": "समूह में शामिल होने का अनुरोध",
+          "hint": "लोग आपके बिज़नेस नंबर के WhatsApp समूह में शामिल होने का अनुरोध करते हैं। दस अनुरोध एक पंक्ति बनाते हैं।"
+        },
+        "waba_group_suspended": {
+          "label": "समूह निलंबित",
+          "hint": "WhatsApp ने आपका एक समूह निलंबित किया है।"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "समूह फिर से सक्रिय",
+          "hint": "WhatsApp ने निलंबित किया गया एक समूह बहाल किया है। केवल तभी जब आपको निलंबन की सूचना दी गई थी।"
+        }
+      },
+      "loading": "आपकी प्राथमिकताएँ लोड हो रही हैं",
+      "failed": "आपकी प्राथमिकताएँ लोड नहीं हो सकीं।",
+      "retry": "फिर से कोशिश करें",
+      "saveFailed": "वह बदलाव सहेजा नहीं जा सका। उसे वापस कर दिया गया है।",
+      "saved": "सहेजा गया",
+      "dismiss": "खारिज करें",
+      "resetRow": "डिफ़ॉल्ट पर रीसेट करें",
+      "resetRowFor": "{event} को डिफ़ॉल्ट पर रीसेट करें",
+      "resetAll": "सब कुछ डिफ़ॉल्ट पर रीसेट करें",
+      "resetAllDone": "सभी प्राथमिकताएँ डिफ़ॉल्ट पर लौट आई हैं।",
+      "customised": "बदला गया",
+      "usingDefault": "डिफ़ॉल्ट",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "आपके वर्कस्पेस ने बंद किया है",
+      "workspaceOffHelp": "आपके वर्कस्पेस ने इसे बंद रखा है; आपका चुनाव फिर भी आप पर लागू होता है।",
+      "bellOffHelp": "पॉप-अप, आवाज़ या पुश चुनने के लिए घंटी चालू करें।",
+      "notAvailable": "उपलब्ध नहीं",
+      "defaultSummary": "डिफ़ॉल्ट: {bell}, {toast}, {sound}",
+      "on": "चालू",
+      "off": "बंद",
+      "channelNames": {
+        "bell": "घंटी",
+        "toast": "पॉप-अप",
+        "sound": "आवाज़",
+        "push": "पुश"
+      },
+      "browser": {
+        "title": "यह ब्राउज़र",
+        "description": "आवाज़ और डेस्कटॉप अलर्ट हर ब्राउज़र के लिए सेट होते हैं, खाते के लिए नहीं।"
+      },
+      "empty": "सेट करने के लिए अभी कोई सूचना प्रकार नहीं है।",
+      "defaultSummaryPush": "डिफ़ॉल्ट: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "ब्राउज़र सूचनाएँ",
+        "description": "CRM बंद होने पर भी, नीचे पुश कॉलम में चुने गए इवेंट के लिए आपके ब्राउज़र से सूचना पाएँ। आप नीचे पुश कॉलम में चुनते हैं कि कौन से इवेंट।",
+        "state": {
+          "on": "इस डिवाइस के लिए चालू",
+          "off": "बंद",
+          "blocked": "ब्लॉक",
+          "unavailable": "उपलब्ध नहीं"
+        },
+        "checking": "यह ब्राउज़र जाँचा जा रहा है",
+        "unsupported": "यह ब्राउज़र CRM बंद होने पर सूचनाएँ नहीं दिखा सकता। किसी सुरक्षित (https) पेज पर अपडेटेड Chrome, Edge, Firefox या Safari आज़माएँ।",
+        "needsInstall": "iPhone और iPad पर ब्राउज़र सूचनाएँ केवल उस ऐप के लिए काम करती हैं जो होम स्क्रीन पर जोड़ा गया हो।",
+        "needsInstallSteps": "यह पेज Safari में खोलें, Share दबाएँ, होम स्क्रीन पर जोड़ें चुनें, फिर नए आइकन से CRM खोलें और यहाँ वापस आएँ। इसके लिए iOS या iPadOS 16.4 या उसके बाद का संस्करण चाहिए।",
+        "blocked": "आपके ब्राउज़र में इस साइट के लिए सूचनाएँ ब्लॉक हैं।",
+        "blockedHelp": "इसे केवल आपका ब्राउज़र पलट सकता है: साइट सेटिंग खोलें (पते के बगल का आइकन), सूचनाएँ को अनुमति दें पर सेट करें, फिर इस पेज पर वापस आएँ।",
+        "offHelp": "इस डिवाइस पर चालू नहीं है। सक्षम करें दबाने पर आपका ब्राउज़र अनुमति माँगेगा।",
+        "enable": "इस डिवाइस पर सक्षम करें",
+        "enabling": "सक्षम हो रहा है...",
+        "onHelp": "जब आप CRM नहीं देख रहे हों, तब इस डिवाइस को नीचे चालू किए गए इवेंट के लिए ब्राउज़र सूचना मिलती है।",
+        "howItWorks": "CRM खुला और आपके सामने होने पर आपको सूचना नहीं मिलती (यह घंटी और पॉप-अप से पूरा होता है)। सूचना में कौन और किस तरह का इवेंट है, यह दिखता है, संदेश का पाठ कभी नहीं।",
+        "test": "परीक्षण सूचना भेजें",
+        "testing": "भेजा जा रहा है...",
+        "disable": "इस डिवाइस पर बंद करें",
+        "disabling": "बंद हो रहा है...",
+        "testResult": {
+          "sent": "भेज दिया गया। CRM बंद होने पर भी यह कुछ ही पलों में आपके डिवाइस पर दिखना चाहिए।",
+          "none_reachable": "अभी आपके ब्राउज़र या उसकी पुश सेवा तक पहुँच नहीं हो सकी। थोड़ी देर बाद फिर कोशिश करें; जो डिवाइस अब मौजूद नहीं है, वह अपने आप हटा दिया जाता है।",
+          "no_device": "भेजने के लिए कोई डिवाइस नहीं है। पहले इस डिवाइस पर सूचनाएँ सक्षम करें।",
+          "wait": "अभी एक परीक्षण भेजा गया है। कोई और भेजने से पहले कुछ सेकंड इंतज़ार करें।"
+        },
+        "problem": {
+          "enable_failed": "इस डिवाइस पर सूचनाएँ सक्षम नहीं हो सकीं। फिर से कोशिश करें।",
+          "disable_failed": "इस डिवाइस पर सूचनाएँ बंद नहीं हो सकीं। फिर से कोशिश करें।",
+          "remove_failed": "वह डिवाइस हटाया नहीं जा सका। फिर से कोशिश करें।",
+          "test_failed": "परीक्षण नहीं भेजा जा सका। फिर से कोशिश करें।"
+        },
+        "devicesFailed": "आपके डिवाइस लोड नहीं हो सके।",
+        "devices": {
+          "title": "आपके डिवाइस",
+          "thisDevice": "यह डिवाइस",
+          "added": "{date} को जोड़ा गया",
+          "lastUsed": "अंतिम बार सूचित किया गया {date}",
+          "neverUsed": "अभी तक सूचित नहीं किया गया",
+          "remove": "हटाएँ",
+          "removeFor": "{device} हटाएँ"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "सूचनाएँ"
+    }
+  }
+}

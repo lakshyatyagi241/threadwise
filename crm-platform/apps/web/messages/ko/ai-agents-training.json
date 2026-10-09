@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "AI 학습"
+    },
+    "common": {
+      "dismiss": "닫기"
+    },
+    "paywall": {
+      "kicker": "요금제",
+      "title": "AI 학습이 요금제에 포함되어 있지 않습니다",
+      "body": "현재 요금제에는 AI 어시스턴트가 포함되어 있지 않습니다. 업그레이드하여 이 기능을 사용하세요.",
+      "upgrade": "요금제 보기"
+    },
+    "responder": {
+      "title": "WhatsApp에 누가 응답하나요?",
+      "body": "Meta 자체 비즈니스 에이전트를 켜면 이 워크스페이스에서는 자체 AI와 키워드 자동 응답이 중단되므로 고객이 같은 메시지에 두 번 답변을 받는 일이 없습니다.",
+      "metaCheck": "Meta 비즈니스 에이전트를 사용합니다",
+      "mode": {
+        "wadesk_only": {
+          "label": "자체 AI가 응답",
+          "desc": "자체 AI와 키워드 자동 응답이 채팅을 처리합니다 (기본값)."
+        },
+        "meta_agent_only": {
+          "label": "Meta 에이전트가 응답",
+          "desc": "Meta의 비즈니스 에이전트가 응답합니다. 스레드는 기록만 하며 자체 AI는 응답하지 않습니다."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta 에이전트 후 인계",
+          "desc": "Meta가 첫 질문을 처리합니다. 에스컬레이션되면 채팅이 팀 인박스로 들어와 담당자가 응대합니다. 자동 AI는 응답하지 않습니다."
+        }
+      },
+      "save": "저장",
+      "hint": "Meta 에이전트에는 WhatsApp Business (Cloud API) 번호가 필요합니다. 비공식 엔진의 번호는 항상 자체 AI를 사용합니다.",
+      "readOnly": "이 설정을 볼 수는 있지만 변경할 수는 없습니다.",
+      "saved": "AI 응답 모드를 저장했습니다.",
+      "saveFailed": "응답 모드를 저장할 수 없습니다.",
+      "loadError": "응답 모드를 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "loading": "응답 모드 불러오는 중"
+    },
+    "list": {
+      "tip": "팁",
+      "tipBody": "스마트 에이전트는 <link>챗봇 위젯</link>과 플로우의 AI 단계를 구동합니다. 5단계 빌더에서 정체성, 페르소나, 두뇌, 안전, 지식을 차례로 설정합니다.",
+      "statusViews": "에이전트 상태",
+      "view": {
+        "all": "모든 에이전트",
+        "active": "활성",
+        "paused": "일시중지됨"
+      },
+      "status": {
+        "all": "전체",
+        "active": "활성",
+        "paused": "일시중지됨"
+      },
+      "knowledgeTip": "지식 팁",
+      "knowledgeTipBody": "FAQ 질문과 답변 하나만으로도 충분한 경우가 많습니다. 도움말 페이지 URL 몇 개로 대부분의 지원 질문을 다룰 수 있으므로 사이트 전체를 불러올 필요가 없습니다.",
+      "workspace": "워크스페이스",
+      "title": "AI",
+      "titleAccent": "학습",
+      "intro": "브랜드의 목소리로 말하는 스마트 에이전트를 만드세요. URL, 텍스트, Q&A 쌍, 파일로 학습시킬 수 있습니다.",
+      "activePill": "활성 {count}개",
+      "newAgent": "새 스마트 에이전트",
+      "card": {
+        "total": "전체 에이전트",
+        "knowledge": "지식 항목",
+        "avg": "에이전트당 평균",
+        "health": "상태",
+        "activeHint": "활성 {count}개",
+        "indexedHint": "색인됨 {count}개",
+        "entriesUnit": "항목"
+      },
+      "health": {
+        "healthy": "정상",
+        "empty": "비어 있음",
+        "attention": "주의"
+      },
+      "col": {
+        "agent": "에이전트",
+        "provider": "프로바이더",
+        "knowledge": "지식",
+        "tone": "어조",
+        "updated": "업데이트",
+        "actions": "작업"
+      },
+      "search": "이름 또는 슬러그로 검색…",
+      "loading": "에이전트 불러오는 중",
+      "loadError": "에이전트를 불러올 수 없습니다",
+      "retry": "다시 시도",
+      "emptyTitle": "아직 스마트 에이전트가 없습니다",
+      "emptyBody": "첫 에이전트를 만드세요. 5단계 빌더에서 정체성, 페르소나, 두뇌, 안전, 그리고 갖춰야 할 지식을 차례로 설정합니다.",
+      "buildAgent": "스마트 에이전트 만들기",
+      "noMatch": "검색어 또는 상태 보기와 일치하는 에이전트가 없습니다.",
+      "entries": "{count, plural, other {항목 #개}}",
+      "edit": "에이전트 수정",
+      "editNamed": "{name} 수정",
+      "duplicate": "에이전트 복제",
+      "duplicateNamed": "{name} 복제",
+      "deleteAgent": "에이전트 삭제",
+      "deleteNamed": "{name} 삭제",
+      "deleteTitle": "\"{name}\" 삭제할까요?",
+      "deleteBody": "에이전트와 지식 항목이 제거됩니다. 이 에이전트를 사용하는 위젯과 플로우는 다른 에이전트를 선택할 때까지 응답하지 않습니다.",
+      "delete": "에이전트 삭제",
+      "keep": "유지",
+      "deleted": "에이전트를 삭제했습니다.",
+      "deleteFailed": "삭제 실패: {reason}",
+      "duplicateFailed": "에이전트를 복제할 수 없습니다.",
+      "networkError": "네트워크 오류",
+      "showing": "표시 중",
+      "of": "/",
+      "agentsCount": "{count, plural, other {에이전트 #개}}",
+      "loadMore": "더 보기"
+    },
+    "builder": {
+      "back": "AI 학습으로 돌아가기",
+      "crumb": "AI 학습",
+      "crumbNew": "새로 만들기",
+      "crumbEdit": "수정",
+      "titleNew": "스마트",
+      "titleEdit": "스마트",
+      "titleAccent": "에이전트 만들기",
+      "stateSaved": "저장됨",
+      "stateDraft": "초안 / 저장 안 됨",
+      "saveDraft": "초안 저장",
+      "stepper": "빌더 단계",
+      "steps": {
+        "identity": "정체성",
+        "persona": "페르소나",
+        "brain": "두뇌",
+        "safety": "안전",
+        "knowledge": "지식"
+      },
+      "stepOf": "{total}단계 중 {n}단계",
+      "previous": "이전",
+      "next": "다음",
+      "finish": "완료 후 닫기",
+      "loading": "에이전트 불러오는 중",
+      "loadError": "에이전트를 불러올 수 없습니다",
+      "notFoundTitle": "에이전트를 찾을 수 없음",
+      "notFoundBody": "이 에이전트는 워크스페이스에 없거나 삭제되었습니다.",
+      "backToList": "AI 학습으로 돌아가기",
+      "saved": "에이전트를 저장했습니다.",
+      "saveFailed": "저장하지 못했습니다. 필드를 확인하고 다시 시도하세요.",
+      "conflict": "이 에이전트가 다른 곳에서 변경되었습니다. 페이지를 새로고침하여 최신 버전을 받은 다음 다시 저장하세요.",
+      "problem": {
+        "name": "어시스턴트 이름을 지정하세요.",
+        "greeting": "첫 인사말을 작성하세요.",
+        "model": "모델을 선택하세요.",
+        "tokens": "응답 길이는 50~4000 토큰이어야 합니다.",
+        "temperature": "창의성은 0에서 2 사이여야 합니다."
+      },
+      "identity": {
+        "title": "에이전트 정체성",
+        "required": "필수",
+        "name": "에이전트 표시 이름",
+        "namePlaceholder": "예: 요금 안내 도우미",
+        "nameHint": "내부 기록용입니다. 방문자에게는 이 라벨이 보이지 않습니다.",
+        "status": "배포 상태",
+        "statusActive": "라이브: 위젯과 플로우에서 이 에이전트 선택 가능",
+        "statusPaused": "일시중지: 선택 목록에서 숨김",
+        "statusHint": "일시중지된 에이전트는 목록에 남아 있지만 새 위젯에 연결할 수 없습니다.",
+        "language": "선호 언어",
+        "languageHint": "ISO 639-1 코드입니다. 방문자의 언어가 다를 때 방문자의 언어에 맞춥니다.",
+        "tone": "대화 어조",
+        "toneHint": "페르소나 설명과 별개로 문체를 정합니다.",
+        "tones": {
+          "helpful": "도움형 · 차분하고 핵심적",
+          "friendly": "친근형 · 따뜻하고 편안함",
+          "formal": "격식형 · 중립적이고 정확함",
+          "playful": "유쾌형 · 가볍고 재치 있음"
+        }
+      },
+      "persona": {
+        "title": "페르소나 및 첫 인사말",
+        "tag": "콘텐츠",
+        "greeting": "첫 인사말",
+        "greetingPlaceholder": "안녕하세요! 도와드리겠습니다. 요금이나 요금제에 대해 무엇이든 물어보세요.",
+        "greetingHint": "방문자에게 표시됩니다. 채팅이 열릴 때 첫 말풍선으로 나타납니다.",
+        "brief": "캐릭터 설명 (시스템 지침)",
+        "briefPlaceholder": "당신은 Acme Inc.의 친절한 지원 상담원입니다. 항상 짧은 문장으로 답하고, 환불에 관한 내용은 담당자에게 넘기세요.",
+        "briefHint": "내부용이며 방문자에게 표시되지 않습니다. 해야 할 일, 하지 말아야 할 일, 에스컬레이션 규칙을 포함하세요."
+      },
+      "brain": {
+        "title": "모델 및 응답 설정",
+        "tag": "두뇌",
+        "provider": "모델 프로바이더",
+        "providerHint": "프로바이더 키는 관리자가 설정합니다. 허용되는 요금제에서는 직접 키를 추가한 프로바이더도 표시됩니다.",
+        "notEnabled": "{name} (사용 안 함)",
+        "model": "모델 이름",
+        "modelHint": "사용 가능한 모델 중에서 선택하거나 다른 모델 ID를 입력하세요.",
+        "noModels": "워크스페이스에서 사용 설정된 AI 모델이 아직 없습니다. 관리자에게 켜 달라고 요청하거나 설정의 AI 키에서 직접 키를 추가하세요.",
+        "tokens": "응답 길이 한도 (토큰)",
+        "tokensHint": "대략 1토큰은 4글자입니다. 400이면 한 문단 정도입니다.",
+        "temperature": "창의성 (0 = 엄격, 2 = 자유분방)",
+        "temperatureHint": "낮을수록 일관되고 사실적이며, 높을수록 표현이 다양해집니다."
+      },
+      "safety": {
+        "title": "대체 응답 및 상담원 인계",
+        "tag": "안전",
+        "fallback": "대체 응답 (모델 오류 시 사용)",
+        "fallbackPlaceholder": "담당자가 곧 연락드리겠습니다. 기다려 주셔서 감사합니다.",
+        "fallbackHint": "모델이 아무것도 반환하지 않거나 호출이 실패하면 작성한 그대로 전송됩니다.",
+        "handoff": "담당자 인계 사용",
+        "handoffHint": "방문자가 트리거 문구를 입력하면 에이전트가 응답을 멈추고 팀 인박스에 알림이 켜집니다.",
+        "keyword": "트리거 문구",
+        "keywordPlaceholder": "상담원 연결",
+        "keywordHint": "방문자가 메시지의 어느 위치에든 이 문구를 입력하면 인계가 실행됩니다.",
+        "ack": "인계 안내 메시지",
+        "ackPlaceholder": "네, 지금 담당자를 연결해 드리겠습니다. 잠시만 기다려 주세요.",
+        "ackHint": "에이전트가 응답을 멈추기 전 마지막 메시지입니다."
+      }
+    },
+    "knowledge": {
+      "title": "에이전트 학습",
+      "tag": "지식",
+      "saveFirst": "먼저 에이전트를 저장하세요. 지식 항목은 저장된 에이전트에 연결됩니다.",
+      "addLabel": "지식 추가",
+      "add": {
+        "url": {
+          "title": "라이브 URL",
+          "body": "공개 페이지를 가져와 텍스트를 저장합니다."
+        },
+        "text": {
+          "title": "자유 텍스트",
+          "body": "도움말 스니펫이나 정책을 붙여넣습니다."
+        },
+        "qa": {
+          "title": "Q&A 쌍",
+          "body": "질문 하나와 표준 답변."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT 등",
+          "body": "파일을 업로드하세요. 텍스트가 자동으로 추출됩니다."
+        }
+      },
+      "panel": {
+        "url": "공개 URL 가져오기",
+        "text": "일반 텍스트 붙여넣기",
+        "qa": "단일 Q&A",
+        "file": "지식 파일 업로드"
+      },
+      "label": "라벨",
+      "url": "URL",
+      "content": "텍스트",
+      "question": "질문",
+      "answer": "답변",
+      "file": "파일",
+      "placeholder": {
+        "label": {
+          "url": "라벨 (예: 요금 페이지)",
+          "text": "라벨 (예: 환불 정책 요약)",
+          "qa": "라벨 (예: 환불 소요 시간)",
+          "file": "라벨 (예: 제품 안내서)"
+        },
+        "content": "에이전트가 알아야 할 텍스트를 붙여넣으세요…",
+        "question": "질문 (예: 환불에는 얼마나 걸리나요?)",
+        "answer": "답변 (예: 환불은 영업일 기준 3~5일 내에 처리됩니다.)"
+      },
+      "urlHint": "공개 http 및 https 페이지만 읽습니다. 페이지는 백그라운드에서 가져오므로 항목이 잠시 처리 중으로 표시됩니다.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV 또는 HTML, 최대 10 MB. 텍스트가 자동으로 추출됩니다.",
+      "uploading": "업로드 진행률",
+      "submit": {
+        "url": "가져오기 및 학습",
+        "text": "텍스트 저장",
+        "qa": "쌍 저장",
+        "file": "업로드"
+      },
+      "cancel": "취소",
+      "added": "지식을 추가했습니다.",
+      "addFailed": "항목을 추가할 수 없습니다.",
+      "problem": {
+        "label": "나중에 이 항목을 찾을 수 있도록 라벨을 추가하세요.",
+        "url": "페이지 주소를 추가하세요.",
+        "content": "먼저 텍스트를 붙여넣으세요.",
+        "question": "질문을 추가하세요.",
+        "answer": "답변을 추가하세요.",
+        "file": "파일을 선택하세요 (PDF, DOCX, TXT, Markdown, CSV 또는 HTML).",
+        "file_type": "허용되는 파일 형식: TXT, Markdown, CSV, HTML, PDF, DOCX. 그 외에는 텍스트를 붙여넣어 텍스트 항목으로 추가하세요.",
+        "file_legacyDoc": "이전 .doc 파일은 지원되지 않습니다. .docx로 다시 저장하거나 .pdf로 내보낸 후 다시 업로드하세요.",
+        "file_size": "파일이 10 MB를 초과합니다.",
+        "file_empty": "파일이 비어 있습니다.",
+        "tooLarge": "한 번에 붙여넣기에는 텍스트가 너무 많습니다. 파일로 업로드하세요."
+      },
+      "col": {
+        "kind": "종류",
+        "label": "라벨",
+        "state": "상태",
+        "actions": "작업"
+      },
+      "kind": {
+        "url": "url",
+        "text": "텍스트",
+        "qa": "q&a",
+        "file": "파일"
+      },
+      "state": {
+        "ready": "준비됨",
+        "processing": "처리 중",
+        "failed": "실패"
+      },
+      "tokens": "약 {count} 토큰",
+      "workspaceWide": "워크스페이스 전체",
+      "loading": "항목 불러오는 중",
+      "loadError": "항목을 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "empty": "아직 지식이 없습니다. 위에서 종류를 선택해 첫 항목을 추가하세요.",
+      "remove": "제거",
+      "removeNamed": "{label} 제거",
+      "removeTitle": "이 지식 항목을 제거할까요?",
+      "removeBody": "에이전트가 새 답변에 이 항목을 사용하지 않습니다. 이전 대화는 그대로 유지됩니다.",
+      "keep": "유지",
+      "removed": "제거했습니다.",
+      "removeFailed": "제거하지 못했습니다."
+    }
+  }
+}

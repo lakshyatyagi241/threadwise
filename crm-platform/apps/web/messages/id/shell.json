@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Platform",
+      "inbox": "Inbox & Chat",
+      "audience": "CRM",
+      "sales": "Penjualan",
+      "campaigns": "Kampanye",
+      "automation": "Otomatisasi",
+      "store": "Toko",
+      "apps": "Marketplace",
+      "help": "Dukungan & Bantuan",
+      "settings": "Pengaturan"
+    },
+    "locked": "Tingkatkan",
+    "language": "Bahasa",
+    "theme": "Tema",
+    "themeLight": "Terang",
+    "themeDark": "Gelap",
+    "logout": "Keluar",
+    "openMenu": "Buka menu",
+    "admin": {
+      "title": "Konsol platform",
+      "note": "Layar admin platform akan muncul di sini setelah aktor super-admin tersedia."
+    },
+    "soon": "Segera",
+    "new": "Baru",
+    "comingSoon": "Segera hadir",
+    "appGate": {
+      "title": "{app} tidak termasuk dalam workspace Anda",
+      "body": "{app} adalah aplikasi opsional. Tambahkan dari Marketplace dan aplikasi akan muncul di menu Anda.",
+      "bodyNoMarketplace": "{app} adalah aplikasi opsional yang tidak dimiliki workspace ini. Minta admin workspace untuk menambahkannya dari Marketplace.",
+      "browse": "Jelajahi Marketplace",
+      "back": "Kembali ke dasbor",
+      "unofficialTitle": "{app} tidak tersedia",
+      "unofficialBody": "{app} hanya digunakan dengan nomor WhatsApp pribadi yang dipasangkan lewat kode QR, yang tidak diaktifkan untuk workspace Anda. WhatsApp terhubung melalui WhatsApp Business API resmi."
+    },
+    "closeMenu": "Tutup menu",
+    "mainMenu": "Menu utama",
+    "userMenu": "Menu akun",
+    "account": "Akun",
+    "balance": "Saldo",
+    "pageSettings": {
+      "label": "Pengaturan untuk halaman ini",
+      "hint": "Pengaturan ini hanya ditampilkan karena peran Anda mengizinkan perubahan."
+    },
+    "notifications": "Notifikasi",
+    "settings": "Pengaturan",
+    "pinned": "Bantuan dan pengaturan",
+    "nav": {
+      "analytics": "Analitik",
+      "notifications": "Notifikasi",
+      "inbox": "Inbox",
+      "quickChat": "Chat cepat",
+      "callLogs": "Log panggilan",
+      "teamChat": "Chat tim",
+      "leadFinder": "Pencari lead",
+      "campaigns": "Kampanye",
+      "broadcasts": "Broadcast",
+      "scheduled": "Terjadwal",
+      "templates": "Template",
+      "history": "Riwayat",
+      "flows": "Alur",
+      "aiAssistants": "Asisten AI",
+      "appointments": "Janji temu",
+      "crmDashboard": "Dasbor CRM",
+      "store": "Toko",
+      "catalog": "Katalog",
+      "support": "Dukungan",
+      "guidebook": "Panduan",
+      "pipelines": "Pipeline",
+      "tasks": "Tugas",
+      "companies": "Perusahaan",
+      "emailTemplates": "Template email",
+      "proposals": "Proposal",
+      "estimates": "Perkiraan",
+      "invoices": "Faktur",
+      "payments": "Pembayaran"
+    },
+    "help": "Bantuan",
+    "unreadCount": "{count, plural, other {# belum dibaca}}"
+  }
+}

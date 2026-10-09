@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Wird live geschaltet…",
+        "live": "Live",
+        "liveTitle": "Live auf Geta",
+        "push": "Live schalten",
+        "pushHint": "Hier veröffentlicht; jetzt auf Geta live schalten",
+        "failed": "Fehlgeschlagen",
+        "failedConfiguration": "Fehlgeschlagen bei der Konfigurationsaktualisierung",
+        "failedPublish": "Fehlgeschlagen bei der Veröffentlichung",
+        "retry": "Erneut versuchen",
+        "retrying": "Wird erneut versucht…",
+        "reasonLabel": "Grund",
+        "failedNote": "Der Flow ist hier weiterhin veröffentlicht. Der erneute Versuch setzt am fehlgeschlagenen Schritt fort.",
+        "notConfigured": "Hier veröffentlicht; richten Sie die Veröffentlichung auf Geta in den Einstellungen ein, um ihn live zu schalten.",
+        "openSettings": "Einstellungen öffnen",
+        "dismiss": "Ausblenden"
+      },
+      "settings": {
+        "title": "Veröffentlichung auf Geta",
+        "intro": "Wenn Sie im Flow-Editor auf Veröffentlichen klicken, wird Ihr Bot auch auf der Geta-Konsole live geschaltet. Geben Sie die Verbindungsdaten einmal für diesen Arbeitsbereich ein. Geheimnisse werden verschlüsselt gespeichert und nie erneut angezeigt.",
+        "viewOnly": "Sie können den Status dieser Einstellungen sehen, aber nicht ändern.",
+        "loading": "Wird geladen…",
+        "loadFailed": "Die Einstellungen konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "fixtureNotice": "Dieser Server läuft im Fixture-Modus: Die Veröffentlichung ist simuliert, und es wird nichts an Geta gesendet.",
+        "ready": "Bereit",
+        "incomplete": "Nicht vollständig",
+        "readyNote": "Das Veröffentlichen eines Flows schaltet Ihren Bot auch auf Geta live.",
+        "incompleteNote": "Füllen Sie alle Felder unten aus, um veröffentlichte Flows auf Geta live zu schalten.",
+        "baseUrl": {
+          "label": "Basis-URL",
+          "hint": "Die Geta-API-Adresse, z. B. https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Konsolen-Ursprung (optional)",
+          "hint": "Wird als Origin und Referer jeder Anfrage gesendet. Leer lassen, um keines von beiden zu senden."
+        },
+        "authorization": {
+          "label": "Autorisierungstoken",
+          "hint": "Wird genau so gesendet, wie Sie es eingeben, ohne „Bearer “ davor."
+        },
+        "getaHost": {
+          "label": "geta-host-Token",
+          "hint": "Wird im Header geta-host gesendet."
+        },
+        "secretKept": "Gespeichert. Lassen Sie das Feld leer, um es beizubehalten, oder geben Sie einen neuen Wert ein, um es zu ersetzen.",
+        "secretPlaceholder": "Gespeichert (verborgen)",
+        "show": "Anzeigen",
+        "hide": "Ausblenden",
+        "remove": "Entfernen",
+        "record": {
+          "label": "Geta-Chatbot-Eintrag",
+          "paste": "Chatbot-Eintrag (JSON) einfügen",
+          "replace": "Chatbot-Eintrag (JSON) ersetzen",
+          "hint": "Das Chatbot-Objekt genau so, wie es an Geta gesendet werden soll, oder der gesamte Anfragetext mit einem chatbot-Schlüssel. Es werden mindestens id und bot_id benötigt. Nur modified_time wird beim Senden aktualisiert.",
+          "keepPlaceholder": "Leer lassen, um den gespeicherten Eintrag beizubehalten",
+          "id": "Chatbot-ID",
+          "name": "Name",
+          "botId": "Bot-ID",
+          "remove": "Gespeicherten Eintrag entfernen"
+        },
+        "saved": "Gespeichert",
+        "notSet": "Nicht festgelegt",
+        "save": "Speichern",
+        "saving": "Wird gespeichert…",
+        "saveFailed": "Konnte nicht gespeichert werden.",
+        "removed": "Entfernt.",
+        "clear": "Alles löschen",
+        "cleared": "Geta-Veröffentlichungseinstellungen gelöscht.",
+        "clearConfirm": {
+          "title": "Geta-Veröffentlichung löschen?",
+          "message": "Dadurch werden Basis-URL, beide Token und der Chatbot-Eintrag entfernt. Veröffentlichte Flows bleiben hier veröffentlicht, werden aber nicht mehr an Geta übertragen.",
+          "confirm": "Alles löschen",
+          "cancel": "Abbrechen"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "プラットフォーム設定",
+      "hub": "設定ハブ",
+      "general": "一般",
+      "appearance": "外観と配色",
+      "siteInfo": "サイト情報",
+      "footer": "フッター",
+      "mail": "メール",
+      "seo": "SEO",
+      "privacy": "プライバシー、GDPR、ADA",
+      "analytics": "アナリティクス",
+      "custom": "カスタムコード",
+      "pwa": "PWA",
+      "storage": "クラウドストレージ",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "キャンペーン",
+      "googleCalendar": "Google カレンダー",
+      "flowBuilder": "フロービルダー"
+    },
+    "hub": {
+      "kicker": "管理者 - プロジェクト設定",
+      "title": "プロジェクト設定",
+      "description": "アプリのアイデンティティ、メッセージングプロバイダー、メール、EC連携、ストアフロントのメタデータ、フッターの内容、PWA、SEO、カスタムコードを設定します。",
+      "export": "設定をエクスポート",
+      "exporting": "エクスポート中",
+      "exportHint": "保存済みのすべての設定をダウンロードします。シークレットとアカウント識別子は置き換えられます。",
+      "tiles": {
+        "saved": "保存済みの設定",
+        "savedHint": "保存済みのグループ(全 {total} 件)",
+        "healthy": "正常",
+        "healthyHint": "値が入力済み",
+        "needsTest": "テストが必要",
+        "needsTestNone": "すべて検証済み",
+        "secrets": "シークレット項目",
+        "secretsHint": "暗号化 / マスク済み",
+        "lastUpdated": "最終更新",
+        "lastUpdatedNone": "まだ編集されていません",
+        "lastUpdatedHint": "最新の保存"
+      },
+      "card": {
+        "saved": "保存済み",
+        "defaults": "初期値",
+        "needsTest": "テストが必要",
+        "updated": "{when} に更新",
+        "open": "開く"
+      },
+      "others": "通貨、カタログ、Shopify、WooCommerce、HubSpot、Google、Slack、モバイルプッシュ、Trello の設定は、対応モジュールがインストールされると表示されます。",
+      "actions": {
+        "addons": "アドオン",
+        "updater": "アップデーター",
+        "legal": "法的ページ",
+        "general": "一般を開く"
+      }
+    },
+    "common": {
+      "save": "変更を保存",
+      "saving": "保存中",
+      "saved": "{count, plural, other {#件の変更を保存しました。}}",
+      "rejected": "{count, plural, other {#件の項目に確認が必要です}}",
+      "conflict": "この設定を開いた後に他の方が保存しました。再読み込みして変更内容を確認してから、もう一度適用してください。",
+      "reload": "設定を再読み込み",
+      "unexpected": "問題が発生したため、何も保存されませんでした。",
+      "requestId": "リクエストID",
+      "readOnly": "これらの設定は閲覧できますが、変更できるのはスーパー管理者のみです。",
+      "secretSet": "保存済みです。空欄のままにすると現在の値を維持します。",
+      "secretUnset": "未設定です。",
+      "secretClear": "保存済みの値を削除",
+      "secretShow": "表示",
+      "secretHide": "非表示",
+      "numberRequired": "整数を入力してください。",
+      "numberInteger": "整数を使用してください。",
+      "updated": "最終保存 {when}",
+      "neverSaved": "未保存のため、初期値を表示しています。",
+      "back": "すべての設定",
+      "invalidGroup": "その設定ページは存在しません。",
+      "eyebrow": "管理者 - プロジェクト設定",
+      "guide": "クイックガイド",
+      "resetDraft": "下書きをリセット",
+      "cancel": "キャンセル",
+      "applyAfterSave": "変更は保存後にのみ反映されます。",
+      "saveAndTest": "保存して接続をテスト",
+      "custom": "カスタム",
+      "manageLanguages": "言語を管理"
+    },
+    "test": {
+      "title": "テストメールを送信",
+      "saveFirst": "先に変更を保存してください。確認には保存済みの設定が使われます。",
+      "mailTo": "テストメールの送信先",
+      "mailRun": "テストメールを送信",
+      "run": "接続をテスト",
+      "running": "テスト中",
+      "ok": "成功",
+      "failed": "失敗",
+      "lastOk": "最後に成功した確認 {when}",
+      "neverTested": "まだ確認していません。"
+    },
+    "groups": {
+      "general": {
+        "title": "一般設定",
+        "description": "アプリのアイデンティティ、プラットフォームの初期値、メンテナンススイッチ。",
+        "sections": {
+          "identity": {
+            "title": "アプリのアイデンティティ"
+          },
+          "defaults": {
+            "title": "プラットフォームの初期値"
+          },
+          "platform": {
+            "title": "プラットフォームのスイッチ"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "アプリ名",
+            "hint": "ページタイトル、メール、ブラウザのタブに表示されます。"
+          },
+          "appUrl": {
+            "label": "アプリ URL"
+          },
+          "supportEmail": {
+            "label": "サポートメール",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "送信元メール",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "連絡先番号",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "住所"
+          },
+          "mapIframeUrl": {
+            "label": "地図の iframe URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "プラットフォームのフッター",
+            "hint": "プラットフォームから送信されるメッセージに追加されます。不要な場合は空欄にしてください。"
+          },
+          "defaultTimezone": {
+            "label": "既定のタイムゾーン",
+            "hint": "ワークスペースや個人が選択していない場合に使用されます。"
+          },
+          "defaultLanguage": {
+            "label": "既定の言語"
+          },
+          "defaultCurrency": {
+            "label": "既定の通貨"
+          },
+          "defaultCountryCode": {
+            "label": "既定の国コード",
+            "hint": "プラス記号付きの国番号を入力します(例: +91)。"
+          },
+          "defaultCountryIso": {
+            "label": "既定の国(電話番号選択)",
+            "hint": "プラットフォーム上のすべての電話番号入力欄に適用されます。"
+          },
+          "fontFamily": {
+            "label": "フォントファミリー"
+          },
+          "maintenanceMode": {
+            "label": "メンテナンスモード",
+            "hint": "顧客向けアプリを 503 で停止します。運用者のサインインとマシンからのコールバックは引き続き動作します。"
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "テーマの既定値"
+          }
+        }
+      },
+      "branding": {
+        "title": "ブランディングと外観",
+        "description": "ファビコン、テーマごとのロゴ、カラートークン、インターフェースのサイズ。",
+        "sections": {
+          "assets": {
+            "title": "ブランド素材"
+          },
+          "colors": {
+            "title": "カラートークン"
+          },
+          "interface": {
+            "title": "インターフェース"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "ファビコン URL"
+          },
+          "logos": {
+            "paper": {
+              "label": "ペーパー"
+            },
+            "bright": {
+              "label": "ブライト"
+            },
+            "dark": {
+              "label": "ダーク"
+            },
+            "doodle": {
+              "label": "ドゥードゥル"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "プライマリ",
+              "hint": "プライマリを設定すると、ティール、グリーン、ミント、バブルの色も変わります。個別に設定した場合を除きます。"
+            },
+            "wa-teal": {
+              "label": "プライマリ(ホバー)"
+            },
+            "wa-green": {
+              "label": "アクセント / 成功"
+            },
+            "wa-mint": {
+              "label": "ソフトなアクセントの塗り"
+            },
+            "wa-bubble": {
+              "label": "チャットの吹き出し"
+            },
+            "paper-0": {
+              "label": "ページの背景"
+            },
+            "paper-50": {
+              "label": "カード / 控えめな背景"
+            },
+            "paper-100": {
+              "label": "ホバー時の背景"
+            },
+            "paper-200": {
+              "label": "境界線"
+            },
+            "ink-500": {
+              "label": "控えめなテキスト"
+            },
+            "ink-700": {
+              "label": "本文テキスト"
+            },
+            "ink-900": {
+              "label": "見出し"
+            },
+            "accent-coral": {
+              "label": "アクセント - コーラル"
+            },
+            "accent-amber": {
+              "label": "アクセント - アンバー"
+            },
+            "accent-plum": {
+              "label": "アクセント - プラム"
+            },
+            "accent-sky": {
+              "label": "アクセント - スカイ"
+            }
+          },
+          "fontScale": {
+            "label": "フォントサイズ",
+            "hint": "画面全体のテキストサイズ(%)。80 〜 130。"
+          },
+          "uiOpacity": {
+            "label": "不透明度",
+            "hint": "画面全体の不透明度(%)。55 〜 100。"
+          },
+          "dashboardLayout": {
+            "label": "ナビゲーションのレイアウト"
+          },
+          "sidebarColor": {
+            "label": "背景"
+          },
+          "sidebarTextColor": {
+            "label": "テキストの色"
+          },
+          "sidebarAccentColor": {
+            "label": "アクセントの色"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "上部バー",
+            "sidebar": "サイドバー"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "現在の設定: 上部にメニューを表示し、収まらない項目は「その他」ページに表示します。",
+            "sidebar": "管理画面風の左側レールに機能をグループ分けして表示します。上部メニューはありません。"
+          }
+        }
+      },
+      "site": {
+        "title": "サイト情報",
+        "description": "会社情報、連絡先住所、SNS プロフィール、公開フッター。",
+        "sections": {
+          "company": {
+            "title": "会社"
+          },
+          "contact": {
+            "title": "連絡先住所"
+          },
+          "social": {
+            "title": "SNS プロフィール"
+          },
+          "footer": {
+            "title": "公開フッター"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "会社名"
+          },
+          "tagline": {
+            "label": "キャッチフレーズ"
+          },
+          "foundedYear": {
+            "label": "設立年"
+          },
+          "address": {
+            "label": "住所"
+          },
+          "cityCountry": {
+            "label": "都市・国"
+          },
+          "emailGeneral": {
+            "label": "一般メール"
+          },
+          "emailSupport": {
+            "label": "サポートメール"
+          },
+          "emailSales": {
+            "label": "営業メール"
+          },
+          "emailSecurity": {
+            "label": "セキュリティメール"
+          },
+          "emailCareers": {
+            "label": "採用メール"
+          },
+          "phone": {
+            "label": "電話番号"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "フッターのタイトル"
+          },
+          "footerDescription": {
+            "label": "フッターの説明"
+          },
+          "footerCopyright": {
+            "label": "フッターの著作権表示"
+          }
+        }
+      },
+      "mail": {
+        "title": "メール設定",
+        "description": "送信メール。保存された値は、送信のたびにサーバーの既定値より優先されます。",
+        "sections": {
+          "sender": {
+            "title": "送信者"
+          },
+          "smtp": {
+            "title": "メールサーバー"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "送信者名",
+            "placeholder": "Acme Inc.",
+            "hint": "受信者に「送信者」名として表示されます。"
+          },
+          "fromAddress": {
+            "label": "送信元アドレス",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "ドメインに有効な SPF と DKIM を設定しないと、メールが迷惑メールに振り分けられます。"
+          },
+          "mailer": {
+            "label": "メーラー",
+            "hint": "現在 SMTP とログメーラーが利用できます。API ベースのメーラーはまだ連携されていません。"
+          },
+          "host": {
+            "label": "ホスト",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "空欄にするとサーバーの既定値を使用します。"
+          },
+          "port": {
+            "label": "ポート",
+            "hint": "TLS は 587、SSL は 465、25 は非推奨です。"
+          },
+          "encryption": {
+            "label": "暗号化",
+            "hint": "ssl は暗黙的 TLS を意味します(通常はポート 465)。tls と starttls はポート 587 で接続をアップグレードします。"
+          },
+          "username": {
+            "label": "ユーザー名",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "パスワード",
+            "placeholder": "SMTP パスワードを入力",
+            "hint": "暗号化して保存され、再表示されません。"
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls(ポート 587)",
+            "ssl": "ssl(ポート 465)",
+            "starttls": "starttls",
+            "none": "なし"
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO 設定",
+        "description": "公開サイトの検索およびSNS共有用タグ。",
+        "sections": {
+          "search": {
+            "title": "検索結果"
+          },
+          "social": {
+            "title": "SNS 共有"
+          },
+          "verification": {
+            "title": "サイト所有権の確認"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "メタタイトル",
+            "hint": "ブランド名を先頭に置いてください。"
+          },
+          "metaDescription": {
+            "label": "メタディスクリプション",
+            "hint": "Google でタイトルの下に表示されます。",
+            "placeholder": "Google でタイトルの下に表示される、1〜2 文の紹介文。"
+          },
+          "metaKeywords": {
+            "label": "メタキーワード",
+            "placeholder": "WhatsApp マーケティング, WhatsApp CRM, キャンペーン, 自動化, 受信箱"
+          },
+          "robots": {
+            "label": "robots 指令",
+            "hint": "検索クローラーにページの掲載とリンクの追跡可否を指示します。"
+          },
+          "canonical": {
+            "label": "カノニカル",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "作成者"
+          },
+          "ogTitle": {
+            "label": "Open Graph タイトル",
+            "placeholder": "初期値はメタタイトル"
+          },
+          "ogDescription": {
+            "label": "Open Graph の説明",
+            "placeholder": "初期値はメタディスクリプション"
+          },
+          "ogType": {
+            "label": "Open Graph の種類"
+          },
+          "ogUrl": {
+            "label": "Open Graph URL",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Open Graph 画像",
+            "hint": "推奨 1200x630。Slack、X、WhatsApp、Discord で使用されます。",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Twitter カード"
+          },
+          "twitterSite": {
+            "label": "Twitter サイト",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Twitter 作成者",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Google 所有権確認",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Bing 所有権確認",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "インデックス、リンクをたどる — 公開サイト",
+            "index, nofollow": "インデックス、nofollow",
+            "noindex, follow": "noindex、リンクをたどる",
+            "noindex, nofollow": "noindex、nofollow — 検索から非表示"
+          }
+        }
+      },
+      "privacy": {
+        "title": "プライバシーと Cookie",
+        "description": "Cookie 同意バナー、法的リンク、コンプライアンスの設定。",
+        "sections": {
+          "banner": {
+            "title": "Cookie バナー"
+          },
+          "links": {
+            "title": "法的リンク"
+          },
+          "compliance": {
+            "title": "コンプライアンスの設定"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "バナーを有効化"
+          },
+          "cookieBannerStyle": {
+            "label": "バナーのスタイル"
+          },
+          "cookieMessage": {
+            "label": "同意メッセージ"
+          },
+          "respectDoNotTrack": {
+            "label": "Do-Not-Track を尊重",
+            "hint": "ブラウザが DNT=1 を送信 → すべて拒否"
+          },
+          "policyUrl": {
+            "label": "プライバシーポリシー URL",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "利用規約 URL",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "Cookie ポリシー URL(詳細)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "GDPR 準拠(EU)",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          },
+          "ccpaCompliance": {
+            "label": "CCPA 準拠(カリフォルニア州)",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          },
+          "adaSkipLink": {
+            "label": "コンテンツへスキップするリンク",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          },
+          "adaHighContrast": {
+            "label": "ハイコントラストモードを提供",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          },
+          "adaLargeText": {
+            "label": "大きな文字モードを提供",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          },
+          "adaReducedMotion": {
+            "label": "prefers-reduced-motion を尊重",
+            "hint": "記録用に保存されます。現時点では動作は変わりません。"
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "下部固定バー — 推奨",
+            "top-bar": "上部固定バー",
+            "modal": "中央のモーダル"
+          }
+        }
+      },
+      "analytics": {
+        "title": "アナリティクス",
+        "description": "トラッカー ID。トラッカーは訪問者が同意した後にのみ読み込まれます。",
+        "sections": {
+          "trackers": {
+            "title": "トラッカー ID"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta ピクセル"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok ピクセル"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn パートナー"
+          },
+          "twitterPixel": {
+            "label": "Twitter ピクセル"
+          },
+          "plausibleDomain": {
+            "label": "Plausible ドメイン"
+          },
+          "posthogKey": {
+            "label": "PostHog キー"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel トークン"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar サイト ID"
+          },
+          "posthogHost": {
+            "label": "PostHog ホスト"
+          }
+        }
+      },
+      "customCode": {
+        "title": "カスタムコード",
+        "description": "公開サイトに挿入される CSS と JavaScript。",
+        "sections": {
+          "code": {
+            "title": "カスタムコード"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "本番環境に挿入",
+            "hint": "これを有効にするまで、以下のコードは公開サイトで実行されません。"
+          },
+          "css": {
+            "label": "カスタム CSS"
+          },
+          "js": {
+            "label": "カスタム JS",
+            "hint": "すべての訪問者に対して実行されます。信頼できるコードのみを貼り付けてください。"
+          }
+        }
+      },
+      "pwa": {
+        "title": "インストール可能なアプリ",
+        "description": "Web アプリマニフェストとインストール時の動作。",
+        "sections": {
+          "app": {
+            "title": "インストール可能なアプリ"
+          },
+          "look": {
+            "title": "見た目と動作"
+          },
+          "install": {
+            "title": "インストールとオフライン"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "有効"
+          },
+          "appName": {
+            "label": "アプリ名"
+          },
+          "shortName": {
+            "label": "短い名前"
+          },
+          "description": {
+            "label": "説明"
+          },
+          "startUrl": {
+            "label": "開始 URL"
+          },
+          "scope": {
+            "label": "スコープ"
+          },
+          "display": {
+            "label": "表示モード"
+          },
+          "orientation": {
+            "label": "画面の向き"
+          },
+          "themeColor": {
+            "label": "テーマカラー"
+          },
+          "backgroundColor": {
+            "label": "背景色"
+          },
+          "icon192": {
+            "label": "アイコン 192"
+          },
+          "icon512": {
+            "label": "アイコン 512"
+          },
+          "installPrompt": {
+            "label": "インストール案内"
+          },
+          "offlineEnabled": {
+            "label": "オフラインを有効化"
+          }
+        }
+      },
+      "storage": {
+        "title": "クラウドストレージ",
+        "description": "メディア用の S3 互換バケット。有効にする前に接続をテストしてください。",
+        "sections": {
+          "provider": {
+            "title": "プロバイダー"
+          },
+          "credentials": {
+            "title": "バケットの認証情報"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "有効"
+          },
+          "provider": {
+            "label": "プロバイダー"
+          },
+          "visibility": {
+            "label": "ファイルの公開範囲",
+            "hint": "非公開オブジェクトには署名付きリンクが必要です。直接開かれるメディアには公開または CDN の URL を使用してください。"
+          },
+          "basePath": {
+            "label": "基準フォルダーのパス(任意)",
+            "hint": "接続確認用オブジェクトのプレフィックス。ファイルモジュールの導入後はアップロードでも使用されます。"
+          },
+          "accessKeyId": {
+            "label": "アクセスキー ID *"
+          },
+          "secret": {
+            "label": "シークレットアクセスキー *",
+            "hint": "暗号化して保存され、再表示されません。",
+            "placeholder": "シークレットを貼り付け"
+          },
+          "region": {
+            "label": "リージョン",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "バケット *"
+          },
+          "endpoint": {
+            "label": "エンドポイント",
+            "hint": "Spaces、R2、MinIO では必須です。末尾の /bucket は削除されます。",
+            "placeholder": "https://… (Spaces / R2 / MinIO では必須。Wasabi と Bunny は自動)"
+          },
+          "cdnUrl": {
+            "label": "公開 / CDN URL(任意)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "パススタイルのエンドポイントを使用(MinIO / 一部の S3 互換ストア)"
+          },
+          "storageZone": {
+            "label": "ストレージゾーン",
+            "hint": "Bunny のみ。"
+          },
+          "storagePassword": {
+            "label": "ストレージのパスワード(アクセスキー)",
+            "hint": "Bunny のみ: ストレージゾーンのパスワード。暗号化して保存されます。",
+            "placeholder": "パスワードを貼り付け"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatible"
+          },
+          "visibility": {
+            "private": "非公開(署名付き URL)",
+            "public": "公開"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp 設定",
+        "description": "WhatsApp 番号の登録に使用する Meta アプリと Interakt パートナー。",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt 経由"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "空欄の場合はサーバー環境の値を使用します。"
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "暗号化して保存され、再表示されません。空欄のままにすると保存済みのシークレットを維持します。"
+          },
+          "configId": {
+            "label": "Embedded Signup 設定 ID",
+            "hint": "空欄の場合、ワークスペースはトークンを手動で貼り付けます。"
+          },
+          "graphVersion": {
+            "label": "Graph API バージョン",
+            "hint": "例: v25.0。空欄の場合はサーバーの既定値を使用します。"
+          },
+          "coexistence": {
+            "label": "共存",
+            "hint": "Embedded Signup で「既存の Business App 番号を接続」を表示します。"
+          },
+          "defaultProvider": {
+            "label": "既定の経路",
+            "hint": "新しく接続された番号が使用する API。"
+          },
+          "solutionId": {
+            "label": "Interakt ソリューション ID",
+            "hint": "登録時に extras.setup.solutionID として Meta に、また Interakt に送信されます。"
+          },
+          "partnerAuthKey": {
+            "label": "Interakt パートナーキー",
+            "hint": "共有のテクノロジーパートナーキー。暗号化して保存されます。"
+          },
+          "systemUserId": {
+            "label": "システムユーザー ID",
+            "hint": "接続された各 WABA に MANAGE タスク付きで割り当てられます。"
+          },
+          "systemUserToken": {
+            "label": "システムユーザートークン",
+            "hint": "トークンの検査とシステムユーザーの割り当てに使用されます。暗号化して保存されます。"
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "トークンに WABA が含まれない場合に、WABA を検索するために使用されます。"
+          },
+          "verifyToken": {
+            "label": "Webhook 検証トークン",
+            "hint": "任意のランダムな文字列。空欄の場合は上に表示されている生成済みの値を使用します。"
+          },
+          "requireSignature": {
+            "label": "すべての Webhook に署名を必須にする",
+            "hint": "有効な Meta 署名のない Interakt 転送イベントを拒否します。Interakt が署名する場合のみ有効にしてください。"
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (Meta プロキシ)",
+            "meta": "Meta(直接)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "キャンペーン",
+        "description": "キャンペーンが失敗したメッセージを再試行する方法と、未完了のキャンペーンを終了するタイミング。",
+        "sections": {
+          "retry": {
+            "title": "再試行"
+          },
+          "expiry": {
+            "title": "自動終了"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "再試行回数",
+            "hint": "失敗とマークされるまでの受信者ごとの試行回数(0 〜 10)。"
+          },
+          "retryBackoffSec": {
+            "label": "再試行までの待機(秒)",
+            "hint": "次の試行までの待機時間。試行ごとに長くなります。"
+          },
+          "autoExpiryEnabled": {
+            "label": "未完了のキャンペーンを終了",
+            "hint": "以下の時間を過ぎても実行中のキャンペーンを終了します。"
+          },
+          "defaultExpiryHours": {
+            "label": "終了までの時間(時間)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google カレンダー",
+        "description": "各ワークスペースがカレンダーを接続する際に使用する Google OAuth クライアント。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth クライアント"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ワークスペースによる Google カレンダーの接続を許可",
+            "hint": "オフ: どのワークスペースも接続できず、カレンダーへの読み書きは行われません。"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Google Cloud の「認証情報」から OAuth 2.0 クライアント ID(ウェブアプリケーション)を取得します。空欄の場合は GOOGLE_CALENDAR_CLIENT_ID を使用します。"
+          },
+          "clientSecret": {
+            "label": "クライアントシークレット",
+            "hint": "暗号化して保存され、再表示されません。空欄の場合は保存済みの値を維持します。GOOGLE_CALENDAR_CLIENT_SECRET が代替として使われます。"
+          },
+          "redirectUri": {
+            "label": "リダイレクト URI の上書き",
+            "hint": "空欄の場合は上記のアドレスを使用します。クライアントの承認済みリダイレクト URI と完全に一致させる必要があります。"
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "フロービルダー",
+        "description": "ワークスペースに提供されるフロービルダー。",
+        "sections": {
+          "mode": {
+            "title": "ビルダー"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "ワークスペースの既定のビルダー",
+            "hint": "シンプルはステップ形式のリストビルダー、詳細はキャンバス型のビルダーです。ワークスペースはフローのページでこの設定を上書きできます。"
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "シンプルのみ",
+            "advanced": "詳細のみ"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "外観と配色",
+        "description": "ユーザー画面と管理画面のすべてのページの配色(ブランド、サーフェス、テキスト、アクセント)を変更します。即時反映されます。",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "一般設定",
+        "description": "アプリ名、連絡先、ロゴ、URL、住所、サービス全体のスイッチ。",
+        "tags": "APP_NAME / APP_URL / logos"
+      },
+      "paymentGateways": {
+        "title": "決済ゲートウェイ",
+        "description": "Stripe、Razorpay、PayPal、Paystack、Flutterwave など: キー、通貨、本番環境のスイッチ。",
+        "tags": "本番 / サンドボックス - ゲートウェイごとのキー"
+      },
+      "aiKeys": {
+        "title": "AI / API キー",
+        "description": "OpenAI、Anthropic、Google などのプロバイダー認証情報。プラットフォームのすべての AI 機能を動かします。",
+        "tags": "BYOK / 既定のモデル"
+      },
+      "mail": {
+        "title": "メール設定",
+        "description": "SMTP ドライバー、ホスト、ポート、送信者名、暗号化、テスト送信。",
+        "tags": "SMTP / 認証 / ウェルカム"
+      },
+      "auditLog": {
+        "title": "監査ログ",
+        "description": "すべての管理操作の検索可能な履歴: ワークスペースの編集、ユーザーの変更、請求イベント、セキュリティインシデント、設定の更新。",
+        "tags": "絞り込み / 詳細 / CSV エクスポート"
+      },
+      "privacy": {
+        "title": "プライバシー、GDPR、ADA",
+        "description": "Cookie 同意バナー、GDPR / CCPA 準拠、ADA / WCAG のアクセシビリティ設定、ポリシーの URL。",
+        "tags": "同意 / ポリシー / アクセシビリティ"
+      },
+      "menuOrder": {
+        "title": "メニューの順序",
+        "description": "すべてのユーザーのワークスペースに表示される上部ナビゲーション項目の順序を設定します。",
+        "tags": "並べ替え"
+      },
+      "authPages": {
+        "title": "認証ページ",
+        "description": "ログイン、登録、パスワードを忘れた場合のページを編集します。見出し、サブテキスト、アクセントカラー、横の画像または動画を設定できます。ライブプレビュー付き。",
+        "tags": "ログイン / 登録 / パスワード再設定"
+      },
+      "analytics": {
+        "title": "アナリティクス連携",
+        "description": "Google Analytics、GTM、Meta Pixel、Clarity、Plausible、PostHog、Hotjar、TikTok、LinkedIn、X: ID を貼り付けると、スクリプトを出力します。",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO 設定",
+        "description": "メタタイトル、説明、OpenGraph、Twitter カード、robots、カノニカル、Google と Bing のサイト所有権確認。",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "言語",
+        "description": "利用可能なロケール、既定の言語、RTL フラグ、言語ごとの有効化スイッチ。言語選択メニューを制御します。",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA 設定",
+        "description": "アプリ名、インストールアイコン、テーマカラー、背景色、表示モード、PWA の有効化スイッチ。",
+        "tags": "アイコン / 色 / インストール"
+      },
+      "footer": {
+        "title": "フッター設定",
+        "description": "フッターのタイトル、SNS リンク、著作権表示、公開フッターの説明。",
+        "tags": "ロゴ / SNS / 著作権"
+      },
+      "siteInfo": {
+        "title": "サイト情報",
+        "description": "公開フッター、お問い合わせ、会社概要ページで共有される連絡先メール、電話、WhatsApp、住所、SNS リンク。",
+        "tags": "メール / 電話 / SNS"
+      },
+      "socialLogin": {
+        "title": "SNS ログインと CAPTCHA",
+        "description": "ログインと登録ページで Google と Facebook のサインインを切り替え、OAuth キーを貼り付け、reCAPTCHA を有効にします。",
+        "tags": "未設定"
+      },
+      "registration": {
+        "title": "登録",
+        "description": "公開サインアップ、メール認証、新しいワークスペースの既定のプランとトライアル期間。",
+        "tags": "サインアップ / トライアル / プラン"
+      },
+      "custom": {
+        "title": "カスタムコード",
+        "description": "スイッチをオンにすると、本番の CSS と JavaScript が公開ページに挿入されます。",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "クラウドストレージ",
+        "description": "顧客のメディアを独自のバケットに保存します: Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2、MinIO。",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "各ワークスペースが WhatsApp 番号を接続する Meta アプリ: アプリ ID とシークレット、Embedded Signup、Webhook、Interakt 経由の設定。",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "キャンペーン",
+        "description": "再試行と、完了しなかったキャンペーンの自動終了。",
+        "tags": "再試行 / 期限切れ"
+      },
+      "googleCalendar": {
+        "title": "Google カレンダー",
+        "description": "予約と予定の空き状況のためにワークスペースがカレンダーを接続する Google OAuth クライアント。",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "フロービルダー",
+        "description": "すべてのワークスペースの既定のフロービルダー: ステップ形式のシンプル、またはキャンバス型の詳細。ワークスペースは上書きできます。",
+        "tags": "シンプル / 詳細 / 自動化"
+      }
+    },
+    "signup": {
+      "body": "公開登録、メールの自動認証、新規登録の既定のプラン、無料トライアル期間は登録ページで編集します。",
+      "link": "登録設定を開く"
+    },
+    "brandAssets": {
+      "intro": "ファビコンはすべてのテーマで共通です。ロゴはテーマごとに設定します: ダークモード用に反転または明るいバリアント、ドゥードゥルテーマ用にドゥードゥルに合うバリアントをアップロードしてください。",
+      "favicon": {
+        "title": "ファビコン",
+        "note": "ブラウザのタブとブックマークに表示されます。推奨 35x35 px。PNG、ICO、JPG、SVG、WebP、最大 512 KB。アップロードすると置き換えられます。"
+      },
+      "logos": {
+        "title": "テーマごとのロゴ",
+        "note": "テーマごとに個別のロゴを使用します。テーマ専用のロゴがアップロードされていない場合は、ペーパーのロゴを使用します。"
+      },
+      "themes": {
+        "paper": {
+          "label": "ペーパー(既定)",
+          "note": "明るいオフホワイト。既定の見た目です。"
+        },
+        "bright": {
+          "label": "明るい白",
+          "note": "コントラストの高い白い背景。"
+        },
+        "dark": {
+          "label": "ダーク(ベータ)",
+          "note": "ロゴの明るいバージョンまたは反転バージョンを使用してください。"
+        },
+        "doodle": {
+          "label": "ドゥードゥル(装飾的)",
+          "note": "パステルミント色の背景。"
+        }
+      },
+      "noFile": "ファイルなし",
+      "upload": "アップロード",
+      "uploading": "アップロード中",
+      "remove": "削除",
+      "loading": "読み込み中",
+      "loadFailed": "ブランドファイルを読み込めませんでした。",
+      "failed": "アップロードに失敗しました。",
+      "tooLarge": "このファイルは {kb} KB を超えています。",
+      "wrongType": "このファイル形式はここでは使用できません。"
+    },
+    "teamInbox": {
+      "intro": "チーム受信箱専用の、別にインストール可能なアプリです。エージェントはリンクを開いてホーム画面に追加すると、アプリを閉じていても新着メッセージのプッシュ通知を受け取れます。",
+      "enabled": {
+        "label": "チーム受信箱アプリを有効化",
+        "hint": "/team-inbox 用の個別マニフェスト、インストール案内、通知を有効にします。"
+      },
+      "name": {
+        "label": "アプリ名"
+      },
+      "shortName": {
+        "label": "短い名前",
+        "hint": "12 文字まで。"
+      },
+      "icon192": {
+        "label": "アプリアイコン(192x192 PNG)",
+        "note": "空欄の場合はアプリアイコンを使用します。受信箱アプリのホーム画面アイコンです。"
+      },
+      "icon512": {
+        "label": "大きいアイコン / スプラッシュ(512x512 PNG)",
+        "note": "空欄の場合はアプリアイコンを使用します。インストール時のスプラッシュと高解像度画面に使用されます。"
+      },
+      "push": {
+        "ready": {
+          "title": "プッシュ通知: 準備完了",
+          "body": "キーは生成済みです。エージェントは受信箱から通知を有効にできます。"
+        },
+        "todo": {
+          "title": "プッシュ通知: あと 1 ステップ",
+          "body": "「キーを生成」をクリックしてプッシュを設定します。サーバーへのアクセスは不要です。"
+        },
+        "generate": "キーを生成",
+        "generating": "生成中",
+        "generated": "プッシュキーを生成しました。"
+      },
+      "manifestLink": "チーム受信箱のマニフェスト",
+      "save": "チーム受信箱アプリを保存",
+      "saving": "保存中",
+      "saved": "チーム受信箱アプリを保存しました。",
+      "conflict": "この画面を開いた後に他の方が保存しました。ページを再読み込みして、もう一度お試しください。",
+      "failed": "問題が発生したため、何も保存されませんでした。",
+      "loading": "読み込み中",
+      "loadFailed": "チーム受信箱アプリの設定を読み込めませんでした。"
+    },
+    "seoPreview": {
+      "google": "Google の検索結果",
+      "noDescription": "メタディスクリプションはまだありません。",
+      "noImage": "OG 画像なし",
+      "sitemapKicker": "サイトマップと robots",
+      "sitemapTitle": "クローラー用ファイル",
+      "sitemapFile": "公開ページと公開済みブログ記事から自動生成されます。/sitemap.xml を Google Search Console に送信してください。",
+      "download": "sitemap.xml をダウンロード"
+    },
+    "pages": {
+      "general": {
+        "title": "一般設定",
+        "description": "アプリの基本情報、連絡先、既定のロケールと通貨、プラットフォームレベルのサービス設定。",
+        "sections": {
+          "identity": {
+            "title": "アプリのアイデンティティ"
+          },
+          "brandAssets": {
+            "title": "ブランド素材"
+          },
+          "platform": {
+            "title": "プラットフォームのスイッチ"
+          },
+          "signup": {
+            "title": "サインアップと無料トライアル"
+          }
+        },
+        "guide": {
+          "title": "各項目の反映先",
+          "items": {
+            "appName": {
+              "title": "アプリ名",
+              "body": "ページタイトル、メール、アプリ内のブランド名に使用されます。短くしてください。理想は 1〜2 語です。"
+            },
+            "appUrl": {
+              "title": "アプリ URL",
+              "body": "正規のアドレス。すべてのコールバック、メール、OAuth リダイレクトはこれに基づきます。"
+            },
+            "language": {
+              "title": "既定の言語",
+              "body": "新しいアカウントに適用されます。既存のユーザーは選択済みの言語をそのまま使用します。"
+            },
+            "currency": {
+              "title": "既定の通貨",
+              "body": "個別の上書きがない請求書とウォレットに使用されます。"
+            },
+            "maintenance": {
+              "title": "メンテナンスモード",
+              "body": "オンの場合、管理者以外のすべてのルートにプレースホルダーを表示します。管理者はコンソールにアクセスできます。"
+            }
+          }
+        },
+        "tip": {
+          "title": "本番環境のルール",
+          "body": "影響するユーザーフローをテストしてから保存してください。アイデンティティの変更は請求書と送信メールに反映されます。"
+        }
+      },
+      "appearance": {
+        "title": "ダッシュボードの配色",
+        "description": "これらのテーマカラーを変更すると、アプリ全体、ユーザーダッシュボードのすべてのページ、管理パネルの配色が変わります。保存するとすべてのユーザーに即時反映されます。出荷時の見た目を維持するには、色を既定値のままにしてください。",
+        "sections": {
+          "layout": {
+            "title": "ナビゲーションのレイアウト",
+            "description": "ユーザーダッシュボードのレイアウトを選択します。サイドバーはすべてのメニューを左側のレールに移動します(上部ヘッダーや「その他」ページはありません)。"
+          },
+          "sidebar": {
+            "title": "サイドバーの色",
+            "description": "左側レールのダーク背景(サイドバーレイアウトのみ)。出荷時のほぼ黒の色を使う場合は既定値のままにしてください。"
+          },
+          "interface": {
+            "title": "インターフェース"
+          },
+          "brand": {
+            "title": "ブランド"
+          },
+          "surfaces": {
+            "title": "サーフェス"
+          },
+          "text": {
+            "title": "テキスト"
+          },
+          "accents": {
+            "title": "アクセント"
+          }
+        },
+        "guide": {
+          "title": "配色の仕組み",
+          "items": {
+            "how": {
+              "title": "即時反映",
+              "body": "保存すると、全員のテーマトークンが即座に書き換えられます。"
+            },
+            "tokens": {
+              "title": "1 トークン、1 役割",
+              "body": "各カラーは、ユーザーダッシュボードと管理パネルで使われる 1 つの CSS 変数に対応します。"
+            },
+            "primary": {
+              "title": "プライマリを変更すると、他の色も追従します",
+              "body": "プライマリ(ホバー)、アクセント、ソフトな塗り、チャットの吹き出しは、個別に設定しない限りプライマリから導出されます。"
+            },
+            "defaults": {
+              "title": "既定値はそのままにする",
+              "body": "出荷時の値のままの色は元の見た目を保ちます。変更したトークンのみが上書きされます。"
+            }
+          }
+        },
+        "tip": {
+          "title": "ヒント",
+          "body": "大きく変更した後はコントラストを確認してください。テキストと背景の色はどちらもこれらのトークンから設定されます。"
+        },
+        "eyebrow": "管理者 - 外観"
+      },
+      "siteInfo": {
+        "title": "サイト情報",
+        "description": "フッター、お問い合わせ、会社概要ページで共有される連絡先と SNS リンク。一度編集すれば、すべての場所に反映されます。",
+        "sections": {
+          "company": {
+            "title": "会社"
+          },
+          "contact": {
+            "title": "連絡先メール"
+          },
+          "phone": {
+            "title": "電話と WhatsApp"
+          },
+          "social": {
+            "title": "SNS リンク"
+          }
+        },
+        "guide": {
+          "title": "各項目の反映先",
+          "items": {
+            "shared": {
+              "title": "すべてで共有",
+              "body": "これらの値は、公開フッター、お問い合わせページ、法的ページに使用されます。"
+            },
+            "frontend": {
+              "title": "ページのテキストと色",
+              "body": "ここではなく、フロントエンドエディターで編集します。"
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "フッター設定",
+        "description": "フッターのタイトル、SNS リンク、著作権表示、公開フッターの説明。",
+        "sections": {
+          "footer": {
+            "title": "公開フッター"
+          }
+        },
+        "guide": {
+          "title": "各項目の反映先",
+          "items": {
+            "what": {
+              "title": "フッターのタイトルと著作権表示",
+              "body": "タイトルが空欄の場合はプラットフォーム名を使用します。著作権表示が空欄の場合は、年とブランド名から生成されます。"
+            },
+            "social": {
+              "title": "SNS の URL",
+              "body": "空欄の項目はアイコンを非表示にします。これらはサイト情報の SNS リンクと共有されます。ここで編集するとすべての場所に反映されます。"
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "メール設定",
+        "description": "SMTP のホスト、ポート、暗号化、認証情報。保存された値は送信のたびに適用されるため、ウェルカム、認証、領収書、サポートのメールは再起動なしで反映されます。",
+        "sections": {
+          "smtp": {
+            "title": "SMTP の認証情報"
+          }
+        },
+        "guide": {
+          "title": "主なプロバイダーのホスト",
+          "items": {
+            "hosts": {
+              "title": "一般的な設定",
+              "body": "Mailgun smtp.mailgun.org 587 / tls。SendGrid smtp.sendgrid.net 587 / tls。Amazon SES email-smtp.REGION.amazonaws.com 587 / tls。Postmark smtp.postmarkapp.com 587 / tls。Resend smtp.resend.com 587 / tls。Gmail smtp.gmail.com 587 / tls(アプリパスワードを使用)。"
+            },
+            "used": {
+              "title": "システム内のメール",
+              "body": "ウェルカムメールと認証メール、パスワードリセット、請求書と領収書、サポートの返信、セキュリティアラート、ワークスペースへの招待。"
+            }
+          }
+        },
+        "tip": {
+          "title": "ヒント",
+          "body": "編集後は必ずテスト送信してください。ホストやポートのわずかな誤りでも、プラットフォームのすべてのトランザクションメールが静かに機能しなくなります。"
+        }
+      },
+      "seo": {
+        "title": "SEO 設定",
+        "description": "サイト全体の既定のメタタグ: タイトル、説明、OpenGraph、Twitter カード、robots、カノニカル、検索エンジンの所有権確認。",
+        "sections": {
+          "search": {
+            "title": "メタタグ"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter カード"
+          },
+          "verification": {
+            "title": "サイト所有権の確認"
+          },
+          "preview": {
+            "title": "ライブプレビュー"
+          }
+        },
+        "guide": {
+          "title": "SEO の基本",
+          "items": {
+            "basics": {
+              "title": "タイトルと説明",
+              "body": "メタタイトル: ブランド名と力強い説明語を 1 つ、50〜60 文字で先頭に置きます。メタディスクリプション: 1〜2 文の紹介文、140〜160 文字。"
+            },
+            "where": {
+              "title": "表示される場所",
+              "body": "管理ページ、ログイン後のページ、公開ページ、リンクプレビュー(WhatsApp、Slack、Discord、X)に表示されます。robots: ステージング環境や非公開の環境では noindex を使用してください。"
+            },
+            "sitemap": {
+              "title": "検証",
+              "body": "opengraph.xyz、Google リッチリザルトテスト、Twitter Card バリデーター。"
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "プライバシー、GDPR、ADA",
+        "eyebrow": "管理者 - コンプライアンス",
+        "description": "Cookie 同意バナー、ポリシー URL、GDPR/CCPA 準拠、WCAG のアクセシビリティ設定。同じ設定が同意 UI に反映され、すべてのアナリティクス連携を制御します。",
+        "sections": {
+          "banner": {
+            "title": "バナーとポリシー"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "米国障害者法(ADA)と WCAG 2.1 AA レベルの、訪問者が切り替え可能な機能。"
+          }
+        },
+        "guide": {
+          "title": "同意の仕組み",
+          "items": {
+            "order": {
+              "title": "処理の順序",
+              "body": "1. 訪問者がページを開くと Cookie バナーが表示されます(Do-Not-Track を尊重する場合は省略)。2. 選択内容は crm_cookie_consent Cookie に 1 年間保存されます。3. 許可されたトラッカーのみ読み込まれます。4. 訪問者は data-cookie-prefs-open を持つ要素から設定画面を再度開けます。"
+            },
+            "linked": {
+              "title": "関連する設定",
+              "body": "アナリティクス連携(GA4、GTM、Pixel、Clarity など)と PWA 設定。"
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "アナリティクス連携",
+        "eyebrow": "管理者 - トラッキング",
+        "description": "各プロバイダーの ID を一度貼り付けてください。公式のベンダースニペットは公開ページのすべてに出力されますが、訪問者が該当する Cookie カテゴリーに同意した後にのみ読み込まれます。",
+        "sections": {
+          "site": {
+            "title": "サイトのアナリティクス"
+          },
+          "marketing": {
+            "title": "広告ピクセル"
+          }
+        },
+        "guide": {
+          "title": "トラッカー → カテゴリー",
+          "items": {
+            "categories": {
+              "title": "各トラッカーの発火タイミング",
+              "body": "アナリティクス: GA4、GTM、Clarity、Plausible、PostHog、Hotjar、Mixpanel。マーケティング: Meta Pixel、TikTok、LinkedIn、X Pixel。GTM コンテナのスクリプトにはさらにトラッカーが含まれる場合があります。その場合は GTM 内のカテゴリートリガーで停止してください。"
+            },
+            "where": {
+              "title": "読み込まれる場所",
+              "body": "公開ページとサインインページ。管理ページでは意図的に無効になっています。"
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "カスタムコード",
+        "description": "高度なブランディングと動作のための本番用カスタムスタイルとスクリプト。有効にすると公開ページに挿入されます。",
+        "sections": {
+          "code": {
+            "title": "カスタムコード"
+          }
+        },
+        "guide": {
+          "title": "基本ルール",
+          "items": {
+            "scope": {
+              "title": "CSS のスコープを限定する",
+              "body": "ルールをブランド用クラスで囲んでください。body、*、フレームワークのユーティリティクラスには触れないでください。"
+            },
+            "block": {
+              "title": "処理を妨げない",
+              "body": "JS は DOMContentLoaded で囲んでください。同期的なネットワーク呼び出しは行わないでください。"
+            },
+            "dark": {
+              "title": "ダークモードをテストする",
+              "body": "保存前にテーマを切り替え、html[data-theme=\"dark\"] のセレクターを確認してください。"
+            },
+            "sensitive": {
+              "title": "本番環境への影響が大きい",
+              "body": "誤った保存は即座にすべての公開ページに反映されます。大きな変更はチームメンバーにレビューしてもらってください。"
+            }
+          }
+        },
+        "tip": {
+          "title": "注意",
+          "body": "カスタムコードはすべての公開ページで実行され、サンドボックス化できません。変更できるのはスーパー管理者のみです。"
+        }
+      },
+      "pwa": {
+        "title": "PWA 設定",
+        "description": "インストール可能なアプリのマニフェスト: 名前、アイコン、色、表示モード。マニフェストとインストール案内を制御します。",
+        "sections": {
+          "app": {
+            "title": "PWA マニフェスト"
+          },
+          "teamInbox": {
+            "title": "チーム受信箱 PWA"
+          }
+        },
+        "guide": {
+          "title": "インストール可能なアプリ",
+          "items": {
+            "manifest": {
+              "title": "公開中のマニフェスト",
+              "body": "マニフェストは /api/v2/public/manifest.webmanifest で配信され、スイッチがオンの間のみ存在します。"
+            },
+            "install": {
+              "title": "アイコン",
+              "body": "外観ページで正方形の PNG アイコンをアップロードするか、ホスト済みの URL を貼り付けてください。ホーム画面用は 192 px、スプラッシュ用は 512 px。"
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "クラウドストレージ",
+        "eyebrow": "管理者 - メディアストレージ",
+        "description": "顧客のメディア添付ファイルをすべて、アプリサーバーではなく独自のバケット(Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2、その他の S3 互換ストア)に送信します。オフの場合、メディアはローカルディスクに残るため、有効にするまで何も壊れません。",
+        "status": {
+          "active": "有効: {provider}。新しいアップロードは独自のバケットに保存されます。",
+          "configured": "設定済みですがオフです。メディアは引き続きローカルディスクにあります。テストしてから有効にしてください。",
+          "local": "ローカルディスク(クラウドプロバイダーはまだ設定されていません)。",
+          "enabled": "有効",
+          "disabled": "無効"
+        },
+        "sections": {
+          "provider": {
+            "title": "クラウドメディアの振り分け"
+          },
+          "credentials": {
+            "title": "バケットの接続"
+          }
+        },
+        "guide": {
+          "title": "設定する",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "アクセスキー + シークレット + リージョン + バケット。Wasabi のエンドポイントはリージョンから導出されます。"
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Bunny の項目(ストレージゾーンとパスワード)を使用してください。リージョンはゾーンのリージョン(de、ny、la など)です。"
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "S3 の項目を入力し、エンドポイント URL を貼り付けてください。MinIO の場合はパススタイルにチェックを入れてください。"
+            },
+            "test": {
+              "title": "必ず先にテストする",
+              "body": "「保存して接続をテスト」は、有効にする前にテスト用ファイルの書き込みと削除を行います。"
+            }
+          }
+        },
+        "tip": {
+          "title": "初期状態で安全",
+          "body": "既存のファイルはそのままです。新しいアップロードのみがバケットに保存されます。移行や削除は行われません。"
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp 設定",
+        "eyebrow": "管理者 - 設定 - チャネル - WhatsApp",
+        "description": "すべてのワークスペースの WhatsApp 番号を登録する、単一の Meta アプリ(および Interakt パートナー)です。アプリ ID とシークレットがないと、Embedded Signup とトークンの更新は機能しません。設定 ID がない場合、ワークスペースはトークンを手動で貼り付けます。保存された値は数秒以内にすべてのプロセスでサーバーの既定値より優先されます。",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Meta の公式 Cloud API です。大量のトラフィック、テンプレートメッセージ、認証済みのビジネスプロフィールに必要です。トークンの手動貼り付けと Embedded Signup(WhatsApp ログイン)の両方に対応します。"
+          },
+          "interakt": {
+            "title": "Interakt 経由",
+            "description": "Embedded Signup で接続された番号は、既定で Interakt の Meta プロキシを経由して送受信されます。Interakt を経由させない場合は Meta(直接)に切り替えてください。既存の番号は接続時の経路を維持します。"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Meta の公式 Cloud API です。大量のトラフィック、テンプレートメッセージ、認証済みのビジネスプロフィールに必要です。トークンの手動貼り付けと Embedded Signup(WhatsApp ログイン)の両方に対応します。"
+            },
+            "app": {
+              "title": "Facebook アプリ ID + シークレット",
+              "body": "developers.facebook.com/apps の「基本設定」。アプリを変更すると、古いアプリで発行されたトークンは無効になるため、ワークスペースは再接続が必要です。"
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "アプリのダッシュボード、WhatsApp、設定: このページのコールバック URL と検証トークンを貼り付けてから、messages と message_template_status_update を購読してください。"
+            },
+            "perWorkspace": {
+              "title": "ワークスペースごと",
+              "body": "各ワークスペースは、チャネルの「WhatsApp 番号」から自身の番号を接続します。電話番号 ID と永続トークンはそこで入力します。"
+            },
+            "login": {
+              "title": "WABA ログイン(任意)",
+              "body": "Embedded Signup 設定 ID を入力すると、ワンクリックの「Meta でサインイン」が有効になります。アプリでテクノロジープロバイダーのロールが必要です。空欄の場合は手動の貼り付けのみ使用します。"
+            }
+          }
+        },
+        "tip": {
+          "title": "ヒント",
+          "body": "トラフィックの途中で既定の経路またはアプリを切り替えると、その後に接続された番号のみに影響します。Meta アプリを変更する前にキャンペーンを一時停止してください。"
+        }
+      },
+      "campaigns": {
+        "title": "キャンペーンの配信",
+        "eyebrow": "管理者 - キャンペーン",
+        "description": "すべてのワークスペースのキャンペーンに適用されるプラットフォーム全体のルール: 失敗したメッセージを再試行する頻度と、未完了のキャンペーンを終了するタイミング。",
+        "sections": {
+          "retry": {
+            "title": "再試行"
+          },
+          "expiry": {
+            "title": "自動終了"
+          }
+        },
+        "guide": {
+          "title": "仕組み",
+          "items": {
+            "retry": {
+              "title": "再試行",
+              "body": "送信に失敗した受信者には、待機後にここで設定した回数まで再試行します。"
+            },
+            "expiry": {
+              "title": "自動終了",
+              "body": "ここで設定した時間を過ぎても実行中のキャンペーンは終了され、送信者を無期限に占有しないようにします。"
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google カレンダー",
+        "eyebrow": "管理者 - 予約",
+        "description": "プラットフォーム全体で使用する Google Cloud OAuth クライアントは 1 つです。各ワークスペースは、予約の設定から自身の Google アカウントを接続します。ワークスペースがクライアント ID やシークレットを見ることはありません。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth クライアント",
+            "description": "クライアント ID とシークレットがない場合、ワークスペースには Google カレンダーが利用できないと表示され、予約はカレンダーなしで続行されます。"
+          }
+        },
+        "guide": {
+          "title": "Google Cloud で設定する",
+          "items": {
+            "project": {
+              "title": "1. プロジェクトと API",
+              "body": "Google Cloud Console でプロジェクトを作成し、Google Calendar API を有効にします。"
+            },
+            "redirect": {
+              "title": "2. OAuth クライアント",
+              "body": "種類が「ウェブアプリケーション」の OAuth 2.0 クライアント ID を作成し、このページに表示されているリダイレクト URI を「承認済みのリダイレクト URI」に追加します。"
+            },
+            "consent": {
+              "title": "3. 同意画面",
+              "body": "calendar.events、calendar.freebusy、calendar.calendarlist.readonly のスコープを追加してから、アプリを公開してください。テスト中の場合、Google はすべての許可を 7 日後に失効させ、ワークスペースは再接続が必要になります。"
+            },
+            "workspaces": {
+              "title": "4. ワークスペースの接続",
+              "body": "ここにクライアント ID とシークレットを貼り付けて保存してください。その後、管理者は予約の設定から Google カレンダーを接続します。"
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "フロービルダー",
+        "eyebrow": "管理者 - 自動化",
+        "description": "すべてのワークスペースの既定のフロービルダーを選択します: ステップ形式のシンプルビルダーまたはキャンバス型の詳細ビルダー。ワークスペースはフローのページで上書きできます。",
+        "sections": {
+          "mode": {
+            "title": "ビルダー"
+          }
+        },
+        "guide": {
+          "title": "仕組み",
+          "items": {
+            "modes": {
+              "title": "2 つのビルダー",
+              "body": "シンプルでは、フローをステップごとに縦に並べ、ステップ間にプラス記号を表示します。詳細は、ノードと線で構成されるキャンバスです。どちらも同じフローを保存するため、フローは同じように実行されます。"
+            },
+            "existing": {
+              "title": "既存のフロー",
+              "body": "この設定を変更しても、フローが変更または削除されることはありません。フローは引き続き動作し、有効になっているビルダーで開かれるだけです。独自のビルダーを選んだワークスペースは、プラットフォームの既定値を再び選ぶまでその設定を維持します。"
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "当サイトは Cookie を使用しています",
+      "learnMore": "詳細を見る",
+      "decline": "拒否",
+      "customize": "カスタマイズ",
+      "acceptAll": "すべて承諾",
+      "rejectAll": "すべて拒否",
+      "save": "設定を保存",
+      "preferences": "Cookie の設定",
+      "categories": {
+        "necessary": {
+          "title": "必須",
+          "body": "サイトが機能するために必要です: サインイン、セキュリティ、お客様の選択。常に有効です。"
+        },
+        "analytics": {
+          "title": "アナリティクス Cookie",
+          "body": "サイトの利用状況を把握し、改善に役立てるために使用します。"
+        },
+        "marketing": {
+          "title": "マーケティング Cookie",
+          "body": "広告の効果を測定し、他のサイトで関連するキャンペーンを表示するために使用します。"
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "ライブプレビュー",
+      "previewTitle": "保存する前に",
+      "previewNote": "ドラッグすると色、サイズ、不透明度が更新されます。保存するまで、誰にも適用されません。",
+      "resetTitle": "既定値に戻す",
+      "resetBody": "すべての上書きを消去し、元のパレットに戻します。",
+      "reset": "すべての色をリセット",
+      "tokens": "トークン {count} 件",
+      "controls": "コントロール {count} 件",
+      "primary": "プライマリ",
+      "cancel": "キャンセル",
+      "active": "有効"
+    },
+    "wabaCallback": {
+      "loading": "Webhook の詳細を読み込み中…",
+      "unavailable": "Webhook の詳細はスーパー管理者のみに表示されます。",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "APP_URL または WABA_WEBHOOK_PUBLIC_URL を設定してください",
+      "webhookHint": "Meta アプリ(WhatsApp、設定、コールバック URL)に貼り付けます。購読するフィールド: {fields}。",
+      "verifyToken": "検証トークン",
+      "verifyHint": "検証トークンと同じ画面に貼り付けてください。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "connected": "接続済みの WABA(すべてのワークスペース)",
+      "fieldsTitle": "Webhook のフィールド(共存とグループ)",
+      "fieldsHint": "共存には、Meta アプリが messages、smb_message_echoes、smb_app_state_sync、history を購読している必要があります。WhatsApp グループには group_lifecycle_update、group_participants_update、group_settings_update、group_status_update が必要です。",
+      "fieldsCheck": "Webhook のフィールドを確認",
+      "fieldsChecking": "Meta に問い合わせ中…",
+      "fieldsOk": "すべてのフィールドを購読済みです。スマートフォンで入力された返信が同期され、WhatsApp グループのイベントが届きます。",
+      "fieldsMissing": "まだ購読していないフィールドがあります。",
+      "fieldsSubscribed": "購読しました。スマートフォンで入力された返信が同期され、WhatsApp グループのイベントが届くようになります。",
+      "fieldsMissingTag": "未設定",
+      "fieldsGroupTag": "グループ",
+      "fieldsSubscribe": "未購読のフィールドを購読",
+      "fieldsSubscribing": "購読中…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "このアドレスを OAuth クライアントの承認済みリダイレクト URI として正確に登録してください。ワークスペースの管理者が同意した後、Google がブラウザをこのアドレスに戻します。",
+      "copy": "コピー",
+      "copied": "コピーしました"
+    }
+  }
+}

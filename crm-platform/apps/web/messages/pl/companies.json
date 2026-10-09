@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Firmy"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "errors": {
+      "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
+      "conflict": "Ktoś inny zmienił tę firmę podczas Twojej edycji. Jego zmiany zostały wczytane; Twoje edycje zachowano, więc przejrzyj je i zapisz ponownie.",
+      "validation": "Część wprowadzonych danych jest nieprawidłowa. Sprawdź pola i spróbuj ponownie.",
+      "unavailable": "Firmy nie są jeszcze dostępne na tym serwerze.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "notFound": "Ta firma już nie istnieje.",
+      "planDisabled": "Twój plan nie obejmuje firm. Zmień plan na wyższy, aby je odblokować.",
+      "ownerInvalid": "Właściciel musi być aktywnym członkiem tej przestrzeni roboczej.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "requestId": "Identyfikator żądania",
+      "retry": "Spróbuj ponownie"
+    },
+    "list": {
+      "eyebrow": "CRM · Organizacje",
+      "title": "Firmy",
+      "subtitle": "Grupuj kontakty i transakcje w organizacji — zobacz wszystkie kontakty, otwarte transakcje i wygrany przychód w jednym miejscu.",
+      "newCompany": "Nowa firma",
+      "tiles": {
+        "companies": "Firmy",
+        "withDeals": "Z otwartymi transakcjami",
+        "wonRevenue": "Wygrany przychód"
+      },
+      "bulk": {
+        "label": "Działania zbiorcze",
+        "selected": "{count, plural, one {Wybrano # firmę} few {Wybrano # firmy} many {Wybrano # firm} other {Wybrano # firmy}}",
+        "delete": "Usuń",
+        "clear": "Wyczyść zaznaczenie"
+      },
+      "loading": "Wczytywanie firm",
+      "unavailableTitle": "Firmy są niedostępne",
+      "unavailable": "Usługa firm nie jest jeszcze wdrożona na tym serwerze.",
+      "emptyFilteredTitle": "Brak pasujących firm",
+      "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+      "clearFilters": "Wyczyść filtry",
+      "emptyTitle": "Brak firm",
+      "empty": "Brak firm. Utwórz pierwszą.",
+      "showing": "{count, plural, one {Wczytano # firmę} few {Wczytano # firmy} many {Wczytano # firm} other {Wczytano # firmy}}",
+      "loadMore": "Wczytaj więcej",
+      "allLoaded": "Wczytano wszystkie firmy",
+      "deleteTitle": "Usuń firmę",
+      "deleteMessage": "Usunąć tę firmę? Jej kontakty i transakcje zostaną zachowane, tylko odłączone.",
+      "deleteManyTitle": "Usuń firmy",
+      "deleteManyMessage": "{count, plural, one {Usunąć tę firmę? Jej kontakty i transakcje zostaną zachowane, tylko odłączone.} few {Usunąć te # firmy? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.} many {Usunąć tych # firm? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.} other {Usunąć te # firmy? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.}}",
+      "delete": "Usuń",
+      "keep": "Zachowaj"
+    },
+    "toolbar": {
+      "label": "Filtruj firmy",
+      "search": "Szukaj firm…",
+      "industry": "Branża",
+      "allIndustries": "Wszystkie branże",
+      "owner": "Właściciel",
+      "allOwners": "Wszyscy właściciele",
+      "noOwner": "Brak właściciela",
+      "withOpenDeals": "Z otwartymi transakcjami",
+      "sort": "Kolejność",
+      "sorts": {
+        "created": "Od najnowszych",
+        "name": "Nazwa od A do Z"
+      },
+      "clear": "Wyczyść",
+      "refresh": "Odśwież"
+    },
+    "table": {
+      "label": "Firmy",
+      "selectAll": "Zaznacz wszystkie wczytane firmy",
+      "select": "Zaznacz: {name}",
+      "company": "Firma",
+      "industry": "Branża",
+      "contacts": "Kontakty",
+      "openDeals": "Otwarte transakcje",
+      "wonValue": "Wartość wygranych",
+      "actions": "Działania",
+      "delete": "Usuń firmę",
+      "deleteNamed": "Usuń firmę {name}"
+    },
+    "form": {
+      "eyebrow": "Firma",
+      "newTitle": "Nowa firma",
+      "editTitle": "Edytuj firmę",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "create": "Utwórz",
+      "save": "Zapisz zmiany",
+      "name": "Nazwa firmy *",
+      "namePlaceholder": "Acme Sp. z o.o.",
+      "industry": "Branża",
+      "website": "Strona internetowa",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "notes": "Notatki",
+      "moreDetails": "Więcej szczegółów",
+      "sizeRange": "Wielkość",
+      "sizeHint": "Na przykład 1-10 lub 11-50.",
+      "owner": "Właściciel",
+      "noOwner": "Brak właściciela",
+      "me": "{name} (Ty)",
+      "address": "Adres",
+      "problems": {
+        "required": "Nazwa firmy jest wymagana.",
+        "tooLong": "Za długie: maksymalnie {limit} znaków.",
+        "email": "Wpisz prawidłowy adres e-mail.",
+        "invalid": "Część wprowadzonych danych jest nieprawidłowa.",
+        "ownerInvalid": "Właściciel musi być aktywnym członkiem tej przestrzeni roboczej."
+      }
+    },
+    "toast": {
+      "created": "Firma utworzona.",
+      "updated": "Firma zaktualizowana.",
+      "deleted": "{count, plural, one {Firma usunięta.} few {Usunięto # firmy.} many {Usunięto # firm.} other {Usunięto # firmy.}}",
+      "deletedSome": "{count, plural, one {Usunięto # firmę} few {Usunięto # firmy} many {Usunięto # firm} other {Usunięto # firmy}}, {failed, plural, one {nie udało się usunąć #.} few {nie udało się usunąć #.} many {nie udało się usunąć #.} other {nie udało się usunąć #.}}",
+      "deleteFailed": "Nie udało się usunąć. Spróbuj ponownie.",
+      "contactUnlinked": "Kontakt usunięty z firmy.",
+      "contactAlreadyOut": "Tego kontaktu nie ma już w tej firmie.",
+      "contactUnlinkFailed": "Nie udało się usunąć kontaktu. Spróbuj ponownie.",
+      "contactsLinked": "{count, plural, one {Dodano # kontakt do firmy.} few {Dodano # kontakty do firmy.} many {Dodano # kontaktów do firmy.} other {Dodano # kontaktu do firmy.}}",
+      "contactsLinkedSome": "{count, plural, one {Dodano # kontakt} few {Dodano # kontakty} many {Dodano # kontaktów} other {Dodano # kontaktu}}, {failed, plural, one {nie udało się dodać #.} few {nie udało się dodać #.} many {nie udało się dodać #.} other {nie udało się dodać #.}}",
+      "contactsLinkFailed": "Nie udało się dodać kontaktów. Spróbuj ponownie."
+    },
+    "detail": {
+      "back": "Wszystkie firmy",
+      "loading": "Wczytywanie firmy",
+      "notFoundTitle": "Nie znaleziono firmy",
+      "notFound": "Ta firma nie istnieje lub została usunięta.",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "keep": "Zachowaj",
+      "tiles": {
+        "contacts": "Kontakty",
+        "openDeals": "Otwarte transakcje",
+        "wonRevenue": "Wygrany przychód"
+      },
+      "notes": "Notatki",
+      "deleteTitle": "Usuń firmę",
+      "deleteMessage": "Usunąć tę firmę? Jej kontakty i transakcje zostaną zachowane, tylko odłączone.",
+      "details": "Szczegóły",
+      "owner": "Właściciel",
+      "sizeRange": "Wielkość",
+      "address": "Adres",
+      "createdBy": "Utworzona przez",
+      "created": "Utworzono",
+      "updated": "Ostatnia zmiana"
+    },
+    "contacts": {
+      "title": "Kontakty",
+      "add": "Dodaj kontakty",
+      "loading": "Wczytywanie kontaktów",
+      "empty": "Żadne kontakty nie są powiązane z tą firmą.",
+      "unnamed": "(bez nazwy)",
+      "unlink": "Usuń z firmy",
+      "unlinkNamed": "Usuń {name} z firmy",
+      "loadMore": "Wczytaj więcej",
+      "addModal": {
+        "title": "Dodaj kontakty do firmy",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "add": "{count, plural, one {Dodaj # kontakt} few {Dodaj # kontakty} many {Dodaj # kontaktów} other {Dodaj # kontaktu}}",
+        "search": "Szukaj kontaktów po nazwie, e-mailu lub numerze",
+        "loading": "Wyszukiwanie kontaktów",
+        "noneTitle": "Nie znaleziono kontaktów",
+        "none": "Żaden kontakt nie pasuje. Spróbuj innej nazwy, e-maila lub numeru.",
+        "unnamed": "(bez nazwy)",
+        "already": "Już tutaj",
+        "willMove": "W innej firmie",
+        "hint": "Kontakt może należeć do jednej firmy. Dodanie kontaktu z innej firmy przenosi go tutaj."
+      }
+    },
+    "deals": {
+      "title": "Transakcje",
+      "loading": "Wczytywanie transakcji",
+      "empty": "Brak transakcji dla tej firmy.",
+      "loadMore": "Wczytaj więcej",
+      "status": {
+        "open": "Otwarta",
+        "won": "Wygrana",
+        "lost": "Przegrana"
+      }
+    },
+    "activity": {
+      "title": "Aktywność",
+      "loading": "Wczytywanie aktywności",
+      "none": "Nic jeszcze nie wydarzyło się w tej firmie.",
+      "loadMore": "Wczytaj więcej",
+      "empty": "puste",
+      "system": "System",
+      "actions": {
+        "insert": "utworzył(a) firmę",
+        "update": "zmienił(a) firmę",
+        "delete": "usunął(-ęła) firmę"
+      },
+      "contactLinked": "Dodano kontakt",
+      "contactUnlinked": "Usunięto kontakt",
+      "deletedContact": "usunięty kontakt",
+      "fields": {
+        "name": "Nazwa",
+        "website": "Strona internetowa",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "industry": "Branża",
+        "sizeRange": "Wielkość",
+        "address": "Adres",
+        "notes": "Notatki",
+        "owner": "Właściciel"
+      }
+    }
+  }
+}

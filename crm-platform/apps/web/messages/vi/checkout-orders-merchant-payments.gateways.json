@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Cửa hàng / Cổng thanh toán",
+      "title": "Cổng thanh toán",
+      "subtitle": "Thêm khóa cổng thanh toán của riêng bạn để tiền thanh toán vào tài khoản của bạn. Dán các khóa mà cổng thanh toán nêu trong trang quản trị của nó.",
+      "banner": "Một thiết lập cổng thanh toán được dùng cho thanh toán cửa hàng và hóa đơn Bán hàng của bạn.",
+      "viewOnly": "Bạn có thể xem thiết lập cổng thanh toán nhưng không thể thay đổi. Hãy nhờ quản trị viên không gian làm việc cấp quyền quản lý cổng thanh toán.",
+      "scope": {
+        "label": "Phạm vi áp dụng của các cài đặt này",
+        "workspace": "Không gian làm việc (tất cả cửa hàng)",
+        "workspaceHint": "Dùng cho mọi cửa hàng và hóa đơn Bán hàng, trừ khi cửa hàng có thiết lập ghi đè riêng.",
+        "store": "Chỉ cửa hàng này (ghi đè)",
+        "storeHint": "Chỉ dùng cho thanh toán của {shop}. Thiết lập này được ưu tiên hơn thiết lập của không gian làm việc.",
+        "storeNamed": "Cửa hàng: {shop}",
+        "noShop": "Hãy tạo cửa hàng trước để thiết lập ghi đè.",
+        "shop": "Cửa hàng"
+      },
+      "resolved": {
+        "used": "Đang dùng: {name} (nguồn: {source})",
+        "none": "Chưa thiết lập cổng thanh toán",
+        "noneHint": "Hãy thiết lập một cổng thanh toán bên dưới và bật lên. Cho đến lúc đó, người mua không thể thanh toán trực tuyến và hóa đơn không có nút thanh toán.",
+        "source": {
+          "store_override": "ghi đè cửa hàng",
+          "workspace_default": "mặc định không gian làm việc",
+          "legacy_storefront": "khóa cửa hàng"
+        }
+      },
+      "mode": {
+        "live": "Chính thức",
+        "test": "Thử nghiệm"
+      },
+      "catalogue": {
+        "title": "Cổng thanh toán",
+        "count": "{count, plural, other {# cổng thanh toán}}",
+        "search": "Tìm cổng thanh toán",
+        "searchPlaceholder": "Tìm theo tên, quốc gia hoặc tiền tệ",
+        "loading": "Đang tải cổng thanh toán",
+        "noDriversTitle": "Không có cổng thanh toán nào",
+        "noDriversMessage": "Máy chủ này chưa có cổng thanh toán nào để thiết lập.",
+        "noMatchTitle": "Không có cổng thanh toán phù hợp",
+        "noMatchMessage": "Hãy thử tên, quốc gia hoặc mã tiền tệ khác.",
+        "clearSearch": "Xóa tìm kiếm"
+      },
+      "card": {
+        "available": "Khả dụng",
+        "unavailable": "Chưa khả dụng",
+        "paymentLinks": "Liên kết thanh toán",
+        "unavailableNote": "Cổng thanh toán này có trong danh sách nhưng chưa thể nhận thanh toán ở phiên bản này.",
+        "active": "Đang hoạt động",
+        "off": "Tắt",
+        "incomplete": "Khóa chưa đầy đủ",
+        "default": "Mặc định",
+        "migrated": "Được chuyển từ khóa cửa hàng của bạn. Hãy lưu một lần tại đây để giữ chúng trong thiết lập mới.",
+        "webhookMissing": "Thiếu webhook secret: thông báo thanh toán từ cổng này sẽ bị từ chối cho đến khi bạn thêm.",
+        "notSetUp": "Chưa được thiết lập cho phạm vi này.",
+        "configure": "Cấu hình",
+        "edit": "Sửa",
+        "test": "Kiểm tra kết nối",
+        "testing": "Đang kiểm tra",
+        "setDefault": "Đặt làm mặc định",
+        "activeSwitch": "{name} đang bật",
+        "remove": "Xóa",
+        "removeTitle": "Xóa {name}?",
+        "removeMessage": "Các khóa đã lưu của cổng này sẽ bị xóa cho phạm vi này ({scope}). Người mua không còn thanh toán qua cổng này được và các thanh toán đang diễn ra có thể không được xác nhận.",
+        "removeConfirm": "Xóa cổng thanh toán"
+      },
+      "toast": {
+        "saved": "Đã lưu cổng thanh toán",
+        "switchedOn": "Đã bật {name}",
+        "switchedOff": "Đã tắt {name}",
+        "defaultSet": "{name} hiện là mặc định",
+        "removed": "Đã xóa {name}"
+      },
+      "test": {
+        "verified": "Nhà cung cấp đã chấp nhận các khóa.",
+        "fieldsTitle": "Các trường bắt buộc đã được điền",
+        "fieldsOnly": "Chỉ kiểm tra các trường bắt buộc: cổng này không có lệnh kiểm tra nhanh, nên một giao dịch thanh toán mới là phép thử thực sự.",
+        "missingTitle": "Khóa chưa đầy đủ",
+        "missing": "Các trường bắt buộc sau đang trống: {fields}.",
+        "rejected": "Nhà cung cấp không chấp nhận các khóa.",
+        "providerSaid": "Nhà cung cấp báo: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Cấu hình cổng thanh toán",
+        "save": "Lưu cổng thanh toán",
+        "appliesTo": "Áp dụng cho: {scope}",
+        "credentials": "Thông tin xác thực",
+        "noFields": "Cổng thanh toán này không cần khóa.",
+        "secretsNote": "Các khóa đã lưu không bao giờ hiển thị lại. Chỉ phần cuối của mỗi khóa được hiển thị để nhắc nhớ.",
+        "requiredField": "{field} là bắt buộc.",
+        "invalidOption": "Hãy chọn một trong các tùy chọn có sẵn cho {field}.",
+        "mode": "Chế độ",
+        "modeHint": "Dùng Thử nghiệm khi bạn dùng thử cổng bằng khóa thử nghiệm, và Chính thức để nhận thanh toán thật.",
+        "active": "Hoạt động",
+        "activeHint": "Cổng thanh toán đang tắt sẽ không bao giờ được dùng khi thanh toán hay trong hóa đơn.",
+        "webhookTitle": "Địa chỉ webhook",
+        "webhookHint": "Dán địa chỉ này vào trang quản trị {name} của bạn để thanh toán được xác nhận tự động.",
+        "webhookAfterSave": "Địa chỉ webhook sẽ xuất hiện tại đây sau lần lưu đầu tiên.",
+        "willClear": "Giá trị đã lưu sẽ bị xóa khi bạn lưu.",
+        "keepBlank": "Để trống để giữ giá trị đã lưu.",
+        "requiredMark": "(bắt buộc)",
+        "stored": "Đã lưu: {mask}",
+        "keepOption": "Giữ giá trị đã lưu",
+        "chooseOption": "Chọn một tùy chọn",
+        "clear": "Xóa giá trị đã lưu",
+        "show": "Hiện giá trị",
+        "hide": "Ẩn giá trị"
+      }
+    }
+  }
+}

@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "integrations": "Entegrasyonlar",
+      "back": "Geri",
+      "docs": "Belgeleri görüntüle",
+      "loadError": "Bu sayfa yüklenemedi. Tekrar deneyin.",
+      "support": "Destekle iletişime geç",
+      "integration": "Entegrasyon",
+      "notConnected": "Bağlı değil",
+      "setupSteps": "Kurulum adımları",
+      "needHelp": "Yardım mı gerekiyor?",
+      "none": "yok",
+      "optional": "isteğe bağlı",
+      "yes": "Evet"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Bağlan",
+        "accent": "Shopify",
+        "intro": "Sipariş, gönderim, iade ve sepet olaylarının otomatik olarak WhatsApp mesajlarını tetiklemesi ve panonun sipariş, ürün ve müşteri sayılarınızı göstermesi için Shopify mağazanızı bağlayın.",
+        "step1": "Yönetici Shopify uygulamasını etkinleştirir",
+        "step2": "Mağaza alan adınızı girin",
+        "step3": "Shopify'da kapsamları onaylayın",
+        "step4": "Olayları WhatsApp şablonlarıyla eşleştirin",
+        "help": "Webhook'lar bağlandıktan sonra otomatik kurulur - elle adım yok. Kimlik bilgilerinde mi takıldınız?",
+        "disabledTitle": "Shopify henüz etkin değil",
+        "disabledBody": "Herhangi bir çalışma alanı mağaza bağlayabilmeden önce bir yöneticinin Shopify uygulaması kimlik bilgilerini eklemesi gerekir. Bu yapıldığında aşağıdaki form etkinleşir.",
+        "formStep": "Adım 2",
+        "formTitle": "Mağaza alan adı",
+        "urlLabel": "Shopify mağaza URL'si",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Yalnızca mağaza adını girin veya tam URL'yi yapıştırın, biz düzenleyeceğiz.",
+        "webhookLabel": "Webhook URL'si · bağlandıktan sonra otomatik yapılandırılır",
+        "cancel": "İptal",
+        "continue": "Shopify'a devam et",
+        "continuing": "Yönlendiriliyor…",
+        "guideKicker": "Kurulum kılavuzu",
+        "guideTitle": "Sonraki adımlar",
+        "guide1": "İstenen izinleri onaylamanız için sizi Shopify'a yönlendiriyoruz.",
+        "guide2": "Shopify, HMAC ile imzalanmış kalıcı bir erişim anahtarını bize geri gönderir.",
+        "guide3": "{count} etkinlik için webhook'lar mağazanıza otomatik kaydedilir.",
+        "guide4": "Her etkinliği bir WhatsApp şablonuna eşlemek için buraya geri dönersiniz.",
+        "scopes": "İstenen izinler",
+        "failed": "Shopify bağlantısı başlatılamadı.",
+        "connected": "Shopify bağlandı.",
+        "returnedError": "Shopify bağlanamadı."
+      },
+      "woocommerce": {
+        "title": "Bağla",
+        "accent": "WooCommerce",
+        "intro": "WooCommerce siparişlerini, iadelerini, ürünlerini ve müşteri etkinliklerini sohbet akışlarına çekin. CRM'den çıkmadan WhatsApp üzerinden siparişleri onaylayın, kargo güncellemeleri gönderin ve terk edilmiş sepetleri geri kazanın.",
+        "step1": "Yönetici WooCommerce'i etkinleştirir",
+        "step2": "WC yönetim panelinde API anahtarları oluşturun",
+        "step3": "Aşağıya mağaza URL'sini ve anahtarları yapıştırın",
+        "step4": "Etkinlikleri → WhatsApp şablonlarıyla eşleyin",
+        "help": "Bağlandıktan sonra webhook'lar otomatik kurulur, WC içinde manuel adım yoktur. Anahtarlarda takıldınız mı?",
+        "disabledTitle": "WooCommerce henüz etkinleştirilmedi",
+        "disabledBody": "Bir çalışma alanının mağaza bağlayabilmesi için önce bir yöneticinin WooCommerce entegrasyonunu etkinleştirmesi gerekir.",
+        "formStep": "2. adım",
+        "formTitle": "Mağaza kimlik bilgileri",
+        "urlLabel": "Mağaza URL'si",
+        "urlHint": "Temel Kimlik Doğrulama için HTTPS gerekir. WP REST'i otomatik algılarız.",
+        "keyLabel": "Tüketici Anahtarı",
+        "secretLabel": "Tüketici Gizli Anahtarı",
+        "secretHint": "Depolamada şifrelenir. Yalnızca mağazanızın REST API'sini çağırmak için kullanılır.",
+        "webhookLabel": "Webhook URL'si · bağlandıktan sonra otomatik yapılandırılır",
+        "test": "Bağlantıyı test et",
+        "testing": "Test ediliyor…",
+        "connect": "Mağazayı bağla",
+        "connecting": "Bağlanıyor…",
+        "guideKicker": "Anahtarlar nasıl oluşturulur",
+        "guideTitle": "WooCommerce yönetim panelinizde",
+        "g1": "WooCommerce → Ayarlar → Gelişmiş → REST API bölümünü açın.",
+        "g2": "Anahtar ekle'ye tıklayın. “CRM” gibi bir açıklama verin.",
+        "g3": "Bir kullanıcı seçin (yönetici olabilir) ve İzinler'i Okuma/Yazma olarak ayarlayın.",
+        "g4": "API anahtarı oluştur'a tıklayın. İki anahtarı da kopyalayın, gizli anahtar yalnızca bir kez gösterilir.",
+        "g5": "Bunları soldaki forma yapıştırın ve Bağlantıyı test et'e tıklayın.",
+        "httpsTitle": "Yalnızca HTTPS",
+        "httpsBody": "Temel Kimlik Doğrulama HTTPS gerektirir. Mağazanız yalnızca HTTP kullanıyorsa önce bir SSL sertifikası kurun (Let's Encrypt ücretsizdir).",
+        "connected": "WooCommerce bağlandı.",
+        "failed": "Bağlantı başarısız.",
+        "networkError": "Ağ hatası."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Etkin",
+        "error": "Hata",
+        "other": "{status}"
+      },
+      "plan": "Plan:",
+      "store": "Mağaza",
+      "related": "İlgili",
+      "allIntegrations": "Tüm entegrasyonlar",
+      "disconnect": "Bağlantıyı kes",
+      "disconnectTitle": "{name} bağlantısı kesilsin mi?",
+      "disconnectShopify": "Kayıtlı webhook'lar silinir ancak ayarlarınız korunur.",
+      "disconnectWoo": "Kayıtlı webhook'lar kaldırılır.",
+      "disconnectDone": "Mağazanın bağlantısı kesildi.",
+      "healthy": "Webhook'lar sağlıklı",
+      "noRecent": "Yakın zamanda etkinlik yok",
+      "lastEvent": "Son etkinlik:",
+      "triggerShopify": "Shopify'da bir işlem tetikleyin, burada görünecek.",
+      "triggerWoo": "WooCommerce'de bir sipariş oluşturun, burada görünecek.",
+      "sync": "Şimdi eşitle",
+      "syncing": "Eşitleniyor…",
+      "syncQueued": "Eşitleme başladı. Yeni veriler birazdan görünür.",
+      "syncFailed": "Eşitleme başarısız.",
+      "tabs": {
+        "overview": "Genel bakış",
+        "orders": "Siparişler",
+        "products": "Ürünler",
+        "offers": "Teklif gönder",
+        "customers": "Müşteriler",
+        "events": "Otomasyonlar",
+        "analytics": "Analitik",
+        "invoices": "Faturalar",
+        "logs": "Etkinlik",
+        "settings": "Ayarlar"
+      },
+      "offersWoo": "Teklifler",
+      "desc": {
+        "shopify": {
+          "overview": "Shopify'dan eşitlenen mağazanızın anlık görünümü.",
+          "orders": "Siparişler Shopify'dan eşitlendi.",
+          "products": "Eşitlenen kataloğunuza göz atın. Herhangi bir ürünü gönderin veya WhatsApp üzerinden teklif iletin.",
+          "offers": "Ürünleri ve bir kupon seçin, müşteri segmentini belirleyin ve teklifi WhatsApp üzerinden toplu gönderin.",
+          "customers": "Müşteriler Shopify'dan kişilerinize eşitlendi.",
+          "events": "Pazarlama otomasyonları: birini açın, bir şablon seçin; eşleşen mağaza etkinliğinde otomatik çalışır.",
+          "analytics": "Bu mağaza için gelir, sipariş eğilimi ve mesaj performansı.",
+          "logs": "Bu mağaza için webhook teslim günlüğü.",
+          "settings": "Bağlantıyı yönetin: yeniden eşitleyin, izinleri görüntüleyin veya bağlantıyı kesin.",
+          "invoices": "Shopify siparişleriniz için düzenlenen faturalar."
+        },
+        "woocommerce": {
+          "overview": "WooCommerce REST API'nizden alınan anlık görünüm.",
+          "orders": "Mağazadan alınan son 10 sipariş.",
+          "products": "Katalogdaki en son ürünler.",
+          "offers": "Bir ürün teklifi toplu gönderin veya pasifleşen müşterileri geri kazanın.",
+          "customers": "Müşteri hesapları son etkinliğe göre sıralanmış.",
+          "events": "Sipariş, kapıda ödeme, sepet ve stok otomasyonlarını açın veya kapatın.",
+          "analytics": "Bu mağaza için gelir, mesaj hacmi ve kapıda ödeme etkisi.",
+          "logs": "Bu mağaza için webhook teslim günlüğü.",
+          "settings": "Bağlantı ayrıntıları: yeniden doğrulayın veya bağlantıyı kesin.",
+          "invoices": "WooCommerce siparişleriniz için düzenlenen faturalar."
+        }
+      },
+      "loading": "Mağaza yükleniyor…",
+      "flash": {
+        "success": "Tamamlandı.",
+        "error": "Bir şeyler ters gitti."
+      },
+      "cancel": "İptal"
+    },
+    "overview": {
+      "revenueRecent": "Gelir (son)",
+      "revenueRecentHint": "son eşitlenen siparişler genelinde",
+      "ordersTotal": "Toplam sipariş",
+      "ordersMirrorHint": "CRM'e eşitlendi",
+      "products": "Ürünler",
+      "productsHint": "eşitlenen katalog boyutu",
+      "customers": "Müşteriler",
+      "activeAutomations": "{count} aktif otomasyon",
+      "revenue30": "Gelir · 30 gün",
+      "revenue30Hint": "WC satış raporundan",
+      "orders30": "Sipariş · 30 gün",
+      "ordersAllTime": "{count} toplam, tüm zamanlar",
+      "customersNew": "Son 30 günde {count} yeni",
+      "itemsSold": "Satılan ürün · 30 gün",
+      "recentOrders": "Son siparişler",
+      "viewAll": "Tümünü gör →",
+      "noOrders": "Henüz sipariş yok. Şimdi eşitle'ye tıklayın.",
+      "recentActivity": "Son webhook etkinliği",
+      "noActivity": "Henüz webhook etkinliği alınmadı."
+    },
+    "orders": {
+      "order": "Sipariş",
+      "customer": "Müşteri",
+      "status": "Durum",
+      "total": "Toplam",
+      "placed": "Verildi",
+      "none": "Sipariş bulunamadı."
+    },
+    "products": {
+      "search": "Ürünlerde ara…",
+      "offers": "Özel teklifler",
+      "catalog": "Katalog gönder →",
+      "newArrivals": "Yeni gelenler",
+      "all": "Tüm ürünler",
+      "none": "Henüz ürün yok. Bir mağaza bağlayın veya Şimdi eşitle'ye tıklayın.",
+      "noImage": "görsel yok",
+      "save": "%{pct} TASARRUF",
+      "send": "Gönder",
+      "offer": "Teklif",
+      "noMatch": "Eşleşen ürün yok.",
+      "wooNone": "Ürün bulunamadı.",
+      "inStock": "Stokta",
+      "outOfStock": "Stokta yok"
+    },
+    "offers": {
+      "choose": "Ürün seçin",
+      "selected": "{count} seçildi",
+      "noProducts": "Henüz eşitlenmiş ürün yok.",
+      "template": "Mesaj şablonu",
+      "pickTemplate": "Bir şablon seçin",
+      "tokens": "Kullanabileceğiniz değişkenler:",
+      "segment": "Segmente gönder",
+      "pickGroup": "Bir kişi grubu seçin",
+      "coupon": "Kupon (isteğe bağlı)",
+      "noCoupon": "Kupon yok",
+      "couponPercent": "%{amount}",
+      "send": "Teklifi gönder",
+      "sending": "Gönderiliyor…",
+      "pickTemplateFirst": "Önce bir şablon seçin.",
+      "pickSegmentFirst": "Önce bir segment seçin.",
+      "note": "Yalnızca segmentteki onay vermiş kişilere mesaj gönderilir. WABA gönderimleri onaylı bir şablon gerektirir; Resmi Olmayan API bunu metin + düğmeler olarak gösterir.",
+      "queued": "{total} kişi için sıraya alındı. Bitince sayılar Etkinlik sekmesinde görünür.",
+      "failed": "Gönderim başarısız.",
+      "wooTitle": "Ürün teklifi toplu gönderimi",
+      "wooIntro": "Segmentteki onay vermiş her kişiye onaylı bir şablon gönderin. Bir ürün ve kupon ekleyin.",
+      "wooTemplate": "Şablon",
+      "choose2": "seçin",
+      "wooSegment": "Segment (kişi grubu)",
+      "wooProduct": "Öne çıkan ürün",
+      "wooCoupon": "Kupon kodu",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Akıllı segment toplu gönderimi",
+      "winIntro": "Müşterileri sipariş geçmişine göre hedefleyin: son etkinlik (geri kazanım), sipariş sayısı ve toplam harcama (VIP). Abonelikten çıkmış kişiler atlanır.",
+      "winLast": "Son sipariş",
+      "winAny": "Herhangi bir zaman",
+      "winDays": "> {days} gün önce",
+      "winMonths": "> 6 ay",
+      "winYear": "> 1 yıl",
+      "winMinOrders": "Minimum sipariş",
+      "winAnyOrders": "Herhangi",
+      "winMinSpend": "Minimum harcama ({currency})",
+      "winTemplate": "Şablon",
+      "winPick": "Seç",
+      "winCoupon": "Kupon",
+      "winNone": "Yok",
+      "winSend": "Geri kazanım gönder",
+      "winConfirm": "Bu toplu gönderim segmentteki herkese gönderilsin mi?",
+      "winQueued": "{total} pasif müşteri için sıraya alındı. Bitince sayılar Etkinlik sekmesinde görünür.",
+      "wooWinTitle": "Akıllı segment toplu gönderimi",
+      "wooWinIntro": "Sipariş geçmişine göre hedefleyin: pasif alıcıları geri kazanın veya en iyi müşterilerinizi ödüllendirin.",
+      "wooLapsed": "Pasif > gün",
+      "wooWinNote": "Gün = 0 her zamanı hedefler (saf segment). Harcama mağaza para biriminde gösterilir. Abonelikten çıkan kişiler her zaman atlanır.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Toplu gönderim gönder",
+      "optional": "isteğe bağlı",
+      "none": "yok",
+      "cancel": "İptal"
+    },
+    "customers": {
+      "name": "Ad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "orders": "Siparişler",
+      "spent": "Harcama",
+      "none": "Henüz müşteri alınmadı.",
+      "noneWoo": "Henüz müşteri yok."
+    },
+    "events": {
+      "noTemplates": "Henüz onaylı WhatsApp şablonunuz yok. Bir otomasyonu açmak için Şablonlar bölümünde bir şablon oluşturun.",
+      "templatesLink": "Şablonlar",
+      "sendFrom": "Gönderen",
+      "sendFromHint": "Bu otomasyonları hangi bağlı numaranın göndereceği.",
+      "auto": "Otomatik: bağlı herhangi bir numara",
+      "fired": "{count} tetiklendi",
+      "logged": "{count} kaydedildi",
+      "template": "Şablon",
+      "pickTemplate": "Bir şablon seçin",
+      "noneOption": "yok",
+      "sendTo": "Gönderilecek",
+      "customer": "Müşteri",
+      "admin": "Yalnızca yönetici",
+      "both": "İkisi de",
+      "adminNumber": "Yönetici numarası",
+      "delay": "Gecikme",
+      "on": "Açık",
+      "immediate": "Hemen",
+      "min": "{n} dk",
+      "hour": "{n} sa",
+      "day": "{n, plural, other {# gün}}",
+      "mapTitle": "Şablon değişkenlerini → sipariş alanlarıyla eşleyin",
+      "param": "Parametre {n}",
+      "blank": "— boş —",
+      "field": {
+        "name": "Müşteri adı",
+        "first_name": "Ad",
+        "order_name": "Sipariş no (örn. #1001)",
+        "order_number": "Sipariş numarası",
+        "total": "Toplam + para birimi",
+        "total_price": "Toplam (yalnızca tutar)",
+        "currency": "Para birimi",
+        "email": "Müşteri e-postası",
+        "store_name": "Mağaza adı",
+        "financial_status": "Ödeme durumu",
+        "fulfillment_status": "Karşılama durumu"
+      },
+      "advanced": "Gelişmiş · değişken sırası",
+      "advancedHint": "Numaralı şablon yer tutucularınıza sırayla eşlenecek, virgülle ayrılmış alanlar. Akıllı varsayılan için boş bırakın: ad, sipariş, toplam.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Otomasyonları kaydet",
+      "saving": "Kaydediliyor…",
+      "saved": "✓ Kaydedildi",
+      "saveFailed": "Kaydetme başarısız",
+      "needTemplate": "Açtığınız her otomasyon için bir şablon seçin."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Sipariş yaşam döngüsü",
+        "desc": "İşlem güncellemeleri: mağaza etkinliklerinde otomatik tetiklenir."
+      },
+      "recovery": {
+        "name": "Gelir geri kazanımı",
+        "desc": "Kaybedilen satışları geri getirin."
+      },
+      "marketing": {
+        "name": "Yaşam döngüsü pazarlaması",
+        "desc": "Müşterilerinizi büyütün ve elde tutun."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Sipariş onayı",
+          "desc": "Müşteri sipariş verdiği anda ona teşekkür edin."
+        },
+        "orders_paid": {
+          "name": "Ödeme alındı",
+          "desc": "Ödeme tamamlandığında onaylayın."
+        },
+        "orders_fulfilled": {
+          "name": "Kargoya verildi / Dağıtımda",
+          "desc": "Sevk notu gönderin. Canlı takip bağlantısı için '{{'tracking_url'}}' kullanın."
+        },
+        "order_delivered": {
+          "name": "Teslim edildi",
+          "desc": "Teslimatı onaylayın (şablonunuzda varsa değerlendirme ister). Kurye teslim edildi olarak işaretlediğinde tetiklenir."
+        },
+        "orders_cancelled": {
+          "name": "Sipariş iptal edildi",
+          "desc": "Müşteriye siparişin iptal edildiğini bildirin."
+        },
+        "refunds_create": {
+          "name": "İade yapıldı",
+          "desc": "İadenin işleme alındığını onaylayın."
+        },
+        "orders_updated": {
+          "name": "Sipariş güncellendi",
+          "desc": "Mevcut bir siparişteki her değişiklikte tetiklenir."
+        },
+        "checkouts_create": {
+          "name": "Terk edilmiş sepet · 1. adım",
+          "desc": "Ödeme yarıda bırakıldıktan hemen sonra tetiklenir. Geri döndürmek için '{{'checkout_url'}}' ekleyin."
+        },
+        "cart_step2": {
+          "name": "Terk edilmiş sepet · 2. adım",
+          "desc": "Zamanlanmış takip (gecikmeyi ayarlayın, örn. 1 saat). Satın alırlarsa otomatik iptal edilir."
+        },
+        "cart_step3": {
+          "name": "Terk edilmiş sepet · 3. adım",
+          "desc": "Son hatırlatma (örn. 24 saat). Satışı tamamlamak için şablona bir kupon ekleyin."
+        },
+        "cod_confirm": {
+          "name": "Kapıda ödeme sipariş onayı",
+          "desc": "Kapıda ödeme müşterilerinden Evet/Hayır yanıtıyla onay isteyin. Sahte siparişleri ve iadeleri (RTO) azaltır."
+        },
+        "cod_prepaid": {
+          "name": "Kapıda ödeme → Ön ödemeli teklif",
+          "desc": "Kapıda ödeme müşterilerini hemen çevrimiçi ödemeye yönlendirin ('{{'order_url'}}' ve şablonda bir indirim kullanın). Daha az iade, daha hızlı nakit."
+        },
+        "stock_back": {
+          "name": "Stok geri geldi uyarısı",
+          "desc": "Tükenmiş bir ürünle ilgili mesaj gönderen müşteriler, ürün tekrar stoklandığında otomatik bilgilendirilir."
+        },
+        "customers_create": {
+          "name": "Yeni müşteriye hoş geldin",
+          "desc": "İlk kez alışveriş yapan bir müşteriyi sıcak bir dille karşılayın."
+        },
+        "customers_update": {
+          "name": "Müşteri güncellendi",
+          "desc": "Bir müşteri profili değiştiğinde tetiklenir."
+        },
+        "products_update": {
+          "name": "Ürün güncellendi",
+          "desc": "Fiyat / stok değişikliğinde dahili tetikleyici."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Sipariş verildi",
+          "desc": "Yeni bir sipariş geldiği anda gönderilir."
+        },
+        "order_processing": {
+          "name": "Sipariş onaylandı",
+          "desc": "Ödeme alındı, sipariş hazırlanıyor."
+        },
+        "order_completed": {
+          "name": "Sipariş teslim edildi",
+          "desc": "WooCommerce'de sipariş tamamlandı olarak işaretlendi."
+        },
+        "order_on_hold": {
+          "name": "Sipariş beklemede",
+          "desc": "Ödeme veya stok bekleniyor. Alıcıyı bilgilendirin."
+        },
+        "order_cancelled": {
+          "name": "Sipariş iptal edildi",
+          "desc": "Sipariş iptal edildi."
+        },
+        "order_refunded": {
+          "name": "Sipariş iade edildi",
+          "desc": "Bir iade yapıldı."
+        },
+        "cod_confirm": {
+          "name": "Kapıda ödeme çift onayı",
+          "desc": "Kargoya vermeden önce kapıda ödeme alıcılarından Evet / Hayır onayı isteyin. RTO'yu azaltmanın en etkili yolu."
+        },
+        "cod_prepaid": {
+          "name": "Kapıda ödeme → Ön ödeme hatırlatması",
+          "desc": "Kapıda ödeme alıcılarına çevrimiçi ödeme bağlantısı sunun (şablon '{{'order_url'}}' ve bir teşvik içerebilir)."
+        },
+        "checkout_created": {
+          "name": "Terk edilmiş sepet · 1. adım",
+          "desc": "Ödeme başladığında ancak sipariş oluşmadığında ilk hatırlatma. WooCommerce eklentisi gerektirir."
+        },
+        "cart_step2": {
+          "name": "Terk edilmiş sepet · 2. adım",
+          "desc": "Aşağıdaki gecikmeden sonra zamanlanmış takip."
+        },
+        "cart_step3": {
+          "name": "Terk edilmiş sepet · 3. adım",
+          "desc": "Son hatırlatma. Şablona bir indirim ekleyin."
+        },
+        "stock_back": {
+          "name": "Stokta yeniden",
+          "desc": "Tükenmiş bir ürün yeniden stoklandığında bekleme listesindeki herkese mesaj gönderin."
+        },
+        "subscription_payment_failed": {
+          "name": "Abonelik ödeme hatırlatması",
+          "desc": "Abonelik yenileme ödemesi başarısız olduğunda tek dokunuşla “ödeme bilgilerini güncelle” bağlantısı gönderin. WooCommerce eklentisi gerektirir."
+        },
+        "customer_created": {
+          "name": "Yeni müşteriye hoş geldin",
+          "desc": "Mağazaya ilk kez kayıt olan bir müşteriyi karşılayın."
+        },
+        "review_reward": {
+          "name": "Değerlendirmeye bağlı kupon",
+          "desc": "Yakın zamanda alışveriş yapan bir alıcı olumlu bir puanla (4–5 / “harika”) yanıt verdiğinde bu ödül şablonunu otomatik gönderin. İçine bir kupon koyun. Puan vermelerini isteyen bir “Sipariş teslim edildi” şablonuyla eşleştirin."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Gelir",
+      "orders": "Siparişler",
+      "avgOrder": "Ort. sipariş",
+      "messagesSent": "Gönderilen mesajlar",
+      "offersSent": "Gönderilen teklifler",
+      "codProtected": "Korunan kapıda ödeme geliri",
+      "codConfirmed": "{count} kapıda ödeme siparişi onaylandı",
+      "rtoAvoided": "Önlenen RTO",
+      "codCancelled": "{count} sahte/kapıda ödeme siparişi durduruldu",
+      "recovery": "Geri kazanım mesajları",
+      "recoveryHint": "sepet / teklif / geri kazanım / stok",
+      "avgValue": "Ort. sipariş değeri",
+      "trend": "Gelir · son 14 gün",
+      "perf": "Otomasyon performansı",
+      "event": "Etkinlik",
+      "fired": "Tetiklendi",
+      "noActivity": "Henüz otomasyon etkinliği yok.",
+      "revenueMirrored": "Gelir · yansıtılmış",
+      "ordersSynced": "{count} sipariş eşitlendi",
+      "perOrder": "sipariş başına",
+      "offerBroadcasts": "{count} teklif toplu gönderimi",
+      "recoverySends": "Geri kazanım gönderimleri",
+      "recoverySendsHint": "Kapıda ödeme / sepet / stok / teklifler",
+      "wouldBeRto": "erken iptal edilen olası RTO'lar",
+      "activeAutomations": "Aktif otomasyonlar",
+      "firingOn": "mağaza etkinliklerinde tetikleniyor"
+    },
+    "logs": {
+      "processed": "İşlendi",
+      "sent": "Gönderildi",
+      "skipped": "Atlandı",
+      "failed": "Başarısız",
+      "event": "Etkinlik",
+      "recipient": "Alıcı",
+      "status": "Durum",
+      "when": "Ne zaman",
+      "none": "Bu mağaza için henüz webhook etkinliği gelmedi."
+    },
+    "settings": {
+      "storeUrl": "Mağaza URL'si",
+      "connectedAt": "Bağlanma zamanı",
+      "lastVerified": "Son doğrulama",
+      "scopes": "Verilen izinler",
+      "wooVersion": "WooCommerce sürümü",
+      "webhookUrl": "Webhook URL'si",
+      "registered": "Kayıtlı webhook'lar",
+      "registeredCount": "{count, plural, other {# aktif abonelik}}",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "plugin": {
+        "title": "WordPress eklentisi",
+        "body": "Sipariş oluşmadan terk edilmiş sepetleri geri kazanmak ve başarısız abonelik ödemelerini ile özel sipariş durumlarını iletmek için bu küçük eklentiyi mağazanıza kurun.",
+        "step1": "Aşağıdan eklentiyi indirin. Bu mağaza için hazırlanmıştır.",
+        "step2": "WordPress'te Eklentiler, Yeni ekle, Eklenti yükle bölümünü açın, zip dosyasını seçin ve etkinleştirin.",
+        "step3": "Sitenizde WP-Cron'un çalıştığından emin olun. Eklenti boşta kalan sepetleri her 5 dakikada bir kontrol eder.",
+        "download": "Eklentiyi indir (.zip)",
+        "preparing": "Eklenti hazırlanıyor…",
+        "started": "Eklenti indirildi.",
+        "secretNote": "Dosya bu mağazanın gizli anahtarını içerir. Gizli tutun.",
+        "forbidden": "Eklentiyi indirme izniniz yok.",
+        "failed": "Eklenti indirilemedi. Tekrar deneyin."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Bağlı",
+      "notConnected": "Bağlı değil",
+      "store": "Mağaza",
+      "plan": "Shopify planı",
+      "lastVerified": "Son doğrulama",
+      "openApp": "Uygulamayı aç",
+      "openToConnect": "Bağlanmak için uygulamayı açın",
+      "invalid": "Shopify oturumu geçerli değil. Uygulamayı Shopify yönetim panelinizden yeniden yükleyin.",
+      "off": "Bu kurulumda Shopify entegrasyonu etkin değil. Destekle iletişime geçin.",
+      "error": "Bir şeyler ters gitti. Uygulamayı Shopify yönetim panelinizden yeniden yükleyin."
+    },
+    "invoices": {
+      "policyTitle": "Otomatik faturalar",
+      "autoInvoice": "Bu mağazanın siparişlerini otomatik faturalandır",
+      "autoInvoiceHint": "Her fatura alıcıya WhatsApp üzerinden, telefon numarası yoksa e-postayla sıraya alınır. Siz açana kadar kapalıdır.",
+      "trigger": "Faturala, sipariş şu durumdayken:",
+      "on_placed": "Verildi",
+      "on_paid": "Ödendi",
+      "on_fulfilled": "Karşılandı",
+      "saved": "Fatura ayarları kaydedildi.",
+      "saveFailed": "Fatura ayarları kaydedilemedi.",
+      "policyLoadFailed": "Fatura ayarları yüklenemedi.",
+      "listTitle": "Bu mağazadan faturalar",
+      "number": "Numara",
+      "buyer": "Alıcı",
+      "type": "Tür",
+      "status": "Durum",
+      "total": "Toplam",
+      "issued": "Düzenlendi",
+      "draft": "Taslak",
+      "tax_invoice": "Vergi faturası",
+      "receipt": "Makbuz",
+      "proforma": "Proforma",
+      "status_draft": "Taslak",
+      "status_issued": "Düzenlendi",
+      "status_partially_paid": "Kısmen ödendi",
+      "status_paid": "Ödendi",
+      "status_overdue": "Gecikmiş",
+      "status_void": "İptal",
+      "loading": "Faturalar yükleniyor…",
+      "none": "Bu mağazadan henüz fatura yok. Yukarıdaki otomatik faturaları açın; bir sonraki ödenen sipariş için fatura oluşturulur.",
+      "error": "Faturalar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "forbidden": "Faturalara erişiminiz yok.",
+      "viewAll": "Tüm faturaları aç"
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Trình hướng dẫn thiết lập",
+      "brand": "CRM",
+      "railEyebrow": "Trình hướng dẫn thiết lập",
+      "railTitle": "<i>Bộ công cụ WhatsApp</i> của bạn, sẵn sàng trong vài phút.",
+      "railFooter": "Trình cài đặt nền tảng · v{version}",
+      "stepsLabel": "Các bước thiết lập",
+      "stepOf": "Bước {n} trên {total}",
+      "mobileStep": "Bước {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Chào mừng",
+        "requirements": "Yêu cầu hệ thống",
+        "database": "Cơ sở dữ liệu",
+        "application": "Ứng dụng",
+        "admin": "Tài khoản quản trị",
+        "node": "Node bridge",
+        "install": "Cài đặt"
+      },
+      "screens": {
+        "licence": "Giấy phép"
+      },
+      "disabled": "Thiết lập đang tắt vì máy chủ chưa cấu hình setup token. Hãy đặt SETUP_TOKEN, hoặc tạo người vận hành đầu tiên từ dòng lệnh.",
+      "unavailable": "Không đọc được trạng thái thiết lập. Hãy kiểm tra API đang chạy, rồi tải lại trang.",
+      "welcome": {
+        "eyebrow": "Chào mừng",
+        "title": "Hãy khởi chạy <i>{app}</i>.",
+        "intro": "Bảy bước đơn giản, khoảng ba phút tổng cộng. Chúng tôi sẽ kiểm tra máy chủ, xác minh cơ sở dữ liệu, xác nhận mọi giá trị mặc định mà bảng quản trị cần, liên kết Node bridge và tạo tài khoản quản trị viên cấp cao đầu tiên.",
+        "tiles": {
+          "database": "Cơ sở dữ liệu",
+          "security": "Bảo mật",
+          "translations": "Bản dịch",
+          "admin": "Quản trị"
+        },
+        "beforeTitle": "Trước khi bắt đầu",
+        "before": {
+          "database": "Một cơ sở dữ liệu PostgreSQL 16 mà triển khai này truy cập được, đã áp dụng migration.",
+          "runtime": "Node.js 22 trở lên và Redis chạy cạnh API.",
+          "token": "Setup token từ cấu hình triển khai của bạn (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Setup token",
+        "tokenHint": "Xác nhận bạn kiểm soát triển khai này. Token được kiểm tra lại ở mỗi bước.",
+        "begin": "Bắt đầu cài đặt"
+      },
+      "licence": {
+        "eyebrow": "Giấy phép",
+        "title": "Xác minh <i>giao dịch mua</i> của bạn.",
+        "intro": "Nhập mã mua hàng CodeCanyon. Chúng tôi xác thực với Envato trước khi cài đặt — không thể tiếp tục nếu mã không hợp lệ.",
+        "label": "Mã mua hàng",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Tìm trong tài khoản CodeCanyon → <b>Downloads</b> → <b>License certificate & purchase code</b>.",
+        "verified": "Giao dịch mua đã được xác minh — bạn có thể tiếp tục.",
+        "submit": "Xác minh & tiếp tục"
+      },
+      "requirements": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "<i>Yêu cầu</i> máy chủ.",
+        "intro": "Chúng tôi đang kiểm tra máy chủ đáp ứng mức tối thiểu trước khi cài đặt.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— đáp ứng yêu cầu {required}+",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} cần Node.js {required} trở lên.",
+        "modules": "Module runtime",
+        "services": "Dịch vụ",
+        "directories": "Thư mục",
+        "database": "Cơ sở dữ liệu",
+        "noDatabase": "Không phát hiện cơ sở dữ liệu.",
+        "databaseRequired": "Yêu cầu PostgreSQL.",
+        "extensionMissing": "Thiếu tiện ích mở rộng cơ sở dữ liệu: {name}.",
+        "tiles": {
+          "database": "cơ sở dữ liệu",
+          "redis": "redis",
+          "migrations": "migration",
+          "permissions": "quyền",
+          "temp": "tệp tạm",
+          "migrationsDir": "migration"
+        },
+        "fixNotice": "Hãy sửa các mục được đánh dấu màu san hô trước khi tiếp tục. Nút Tiếp tục sẽ bị vô hiệu hóa cho đến khi mọi mục đều đạt.",
+        "recheck": "Kiểm tra lại",
+        "checking": "Đang kiểm tra…",
+        "loadFailed": "Không thể chạy kiểm tra yêu cầu."
+      },
+      "database": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "<i>Kết nối</i> cơ sở dữ liệu.",
+        "intro": "Kiểm tra cơ sở dữ liệu PostgreSQL mà nền tảng này chạy trên. Chúng tôi sẽ xác minh kết nối trước khi chuyển bước.",
+        "driver": "Trình điều khiển cơ sở dữ liệu",
+        "driverName": "PostgreSQL",
+        "host": "Máy chủ",
+        "port": "Cổng",
+        "name": "Tên cơ sở dữ liệu",
+        "namePlaceholder": "crm",
+        "user": "Tên người dùng",
+        "userPlaceholder": "postgres",
+        "password": "Mật khẩu",
+        "passwordHint": "Để trống để dùng mật khẩu của triển khai này. Kết nối được đặt trong môi trường máy chủ; bước này chỉ kiểm tra kết nối.",
+        "test": "Kiểm tra kết nối",
+        "testing": "Đang kiểm tra…",
+        "ok": "Kết nối thành công.",
+        "unreachable": "Không thể kết nối PostgreSQL qua bất kỳ đường nào. Hãy dùng đúng máy chủ mà bảng điều khiển hosting hiển thị, kiểm tra cổng, xác nhận cơ sở dữ liệu và người dùng tồn tại và máy chủ cho phép kết nối từ máy này, rồi thử lại.",
+        "networkError": "Lỗi mạng: {detail}"
+      },
+      "application": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "<i>Thiết lập cơ bản</i> của ứng dụng.",
+        "intro": "Đặt tên cho bản cài đặt, thiết lập URL công khai, và chọn múi giờ cùng ngôn ngữ mặc định.",
+        "name": "Tên ứng dụng",
+        "url": "URL ứng dụng",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Múi giờ",
+        "timezonePlaceholder": "Tìm múi giờ…",
+        "timezoneEmpty": "Không có múi giờ nào khớp.",
+        "locale": "Ngôn ngữ mặc định"
+      },
+      "admin": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "<i>Tài khoản</i> quản trị.",
+        "intro": "Đăng nhập quản trị viên cấp cao đầu tiên và không gian làm việc riêng. Thêm thành viên sau từ bảng điều khiển.",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "Email",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "Mật khẩu",
+        "confirm": "Xác nhận mật khẩu",
+        "workspace": "Tên không gian làm việc",
+        "workspacePlaceholder": "Nhóm của tôi",
+        "note": "Tối thiểu 12 ký tự gồm chữ hoa, chữ thường, số và ký hiệu · băm bằng argon2id. Nền tảng này là đa thuê bao — một không gian làm việc riêng đã được cấu hình sẵn; bạn có thể đổi tên sau trong mục Không gian làm việc. Mật khẩu không bao giờ được lưu dạng văn bản thuần, và phải kết hợp đăng nhập xác thực hai yếu tố ở lần đăng nhập đầu tiên."
+      },
+      "node": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "<i>Node bridge</i>.",
+        "intro": "WhatsApp được gửi qua một dịch vụ Node nhỏ. Trỏ nền tảng tới dịch vụ đó và đặt token dùng chung — trình cài đặt sẽ lưu cho cả hai phía.",
+        "url": "URL máy chủ Node",
+        "urlHint": "Nơi Node bridge lắng nghe. API gọi địa chỉ này để gửi tin nhắn.",
+        "port": "Cổng Node",
+        "portHint": "Cổng mà Node bridge sử dụng.",
+        "token": "Token dùng chung của Node",
+        "tokenHint": "Tự điền. Phải khớp giữa API và Node bridge — trình cài đặt lưu một lần, được mã hóa.",
+        "generate": "Tạo",
+        "info": "Các giá trị này được lưu trong cài đặt nền tảng, không phải tệp .env. Token được chia sẻ với Node bridge dưới tên NODE_WEBHOOK_TOKEN.",
+        "submit": "Tiếp tục & cài đặt"
+      },
+      "install": {
+        "eyebrow": "Bước {n} trên {total}",
+        "title": "Đang cài đặt <i>{app}</i>.",
+        "intro": "Vui lòng chờ — chúng tôi đang cấu hình mọi thứ. Thường chỉ mất vài giây.",
+        "preparing": "Đang chuẩn bị…",
+        "complete": "Hoàn tất",
+        "failed": "Thất bại — xem bên dưới",
+        "paused": "Đã tạm dừng cài đặt",
+        "retry": "Thử lại từ bước lỗi",
+        "success": "Cài đặt hoàn tất — đang chuyển hướng…",
+        "rows": {
+          "configuration": {
+            "done": "Đã lưu cấu hình",
+            "active": "Đang lưu cấu hình ứng dụng và Node bridge…"
+          },
+          "migrations": {
+            "done": "Đã xác minh migration cơ sở dữ liệu",
+            "active": "Đang kiểm tra migration cơ sở dữ liệu…"
+          },
+          "defaults": {
+            "done": "Đã xác minh dữ liệu thiết yếu",
+            "active": "Đang kiểm tra vai trò, quyền và giá trị mặc định…"
+          },
+          "account": {
+            "done": "Quản trị & không gian làm việc đã sẵn sàng",
+            "active": "Đang tạo tài khoản quản trị và không gian làm việc riêng…"
+          },
+          "storage": {
+            "done": "Bộ nhớ đã sẵn sàng",
+            "active": "Đang kiểm tra bộ nhớ và thư mục tạm…"
+          },
+          "finalize": {
+            "done": "Đã hoàn tất cài đặt",
+            "active": "Đang khóa thiết lập và ghi nhận bản cài đặt…"
+          }
+        }
+      },
+      "completed": {
+        "body": "Thiết lập đã được hoàn tất trên triển khai này.",
+        "login": "Đến trang đăng nhập"
+      },
+      "back": "Quay lại",
+      "continue": "Tiếp tục",
+      "show": "Hiện",
+      "hide": "Ẩn",
+      "working": "Đang xử lý",
+      "problems": {
+        "token": "Setup token không đúng.",
+        "disabled": "Thiết lập đã bị tắt trên máy chủ này.",
+        "outOfOrder": "Một bước chạy sai thứ tự. Hãy tải lại trang và bắt đầu lại.",
+        "step": "Bước cài đặt thất bại. Hãy kiểm tra thông tin và nhật ký máy chủ, rồi thử lại.",
+        "unknown": "Đã xảy ra lỗi. Hãy thử lại.",
+        "requestId": "Mã yêu cầu {id}",
+        "prerequisites": "Máy chủ chưa sẵn sàng để thiết lập: {items}.",
+        "licence": {
+          "empty": "Nhập mã mua hàng CodeCanyon của bạn.",
+          "not_configured": "Chưa cấu hình kiểm tra giấy phép (thiếu token Envato).",
+          "unreachable": "Không thể kết nối Envato để xác minh mã. Hãy kiểm tra kết nối internet của máy chủ.",
+          "not_found": "Mã mua hàng không hợp lệ — Envato không có giao dịch nào cho mã này.",
+          "http_error": "Xác minh Envato thất bại.",
+          "other_product": "Mã mua hàng này dành cho sản phẩm khác.",
+          "unknown": "Không thể xác minh mã mua hàng."
+        },
+        "keys": {
+          "runtime": "Phiên bản Node.js",
+          "database": "cơ sở dữ liệu",
+          "redis": "Redis",
+          "migrations": "migration cơ sở dữ liệu",
+          "permissions": "định nghĩa quyền",
+          "temp": "thư mục tạm",
+          "storage": "bộ nhớ",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Setup token có ít nhất {min} ký tự.",
+        "dbHost": "Nhập máy chủ cơ sở dữ liệu.",
+        "dbPort": "Nhập cổng từ 1 đến 65535.",
+        "dbName": "Nhập tên cơ sở dữ liệu.",
+        "dbUser": "Nhập tên người dùng cơ sở dữ liệu.",
+        "appNameRequired": "Nhập tên ứng dụng.",
+        "appNameLong": "Tên ứng dụng tối đa {max} ký tự.",
+        "appUrl": "Nhập URL đầy đủ bắt đầu bằng http:// hoặc https://.",
+        "timezone": "Chọn một múi giờ trong danh sách.",
+        "locale": "Chọn một ngôn ngữ trong danh sách.",
+        "fullNameRequired": "Nhập họ và tên của bạn.",
+        "fullNameLong": "Họ và tên tối đa {max} ký tự.",
+        "email": "Nhập địa chỉ email hợp lệ.",
+        "passwordMismatch": "Xác nhận mật khẩu không khớp.",
+        "workspaceRequired": "Nhập tên không gian làm việc ít nhất 2 ký tự.",
+        "workspaceLong": "Tên không gian làm việc tối đa {max} ký tự.",
+        "nodeUrl": "Nhập URL máy chủ Node, bắt đầu bằng http:// hoặc https://.",
+        "nodePort": "Nhập cổng từ 1 đến 65535.",
+        "nodeToken": "Token dùng chung có ít nhất {min} ký tự.",
+        "password": {
+          "length": "Mật khẩu cần ít nhất 12 ký tự.",
+          "upper": "Mật khẩu cần có chữ hoa.",
+          "lower": "Mật khẩu cần có chữ thường.",
+          "number": "Mật khẩu cần có chữ số.",
+          "symbol": "Mật khẩu cần có ký hiệu.",
+          "personal": "Mật khẩu không được chứa họ tên hoặc email của bạn."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "Hệ thống",
+        "item": "Trình cập nhật"
+      },
+      "title": "Trình cập nhật ứng dụng",
+      "titleRich": "<i>Trình cập nhật</i> ứng dụng.",
+      "titleAccent": "trình cập nhật",
+      "kicker": "Quản trị · Bảo trì",
+      "description": "Xác minh giao dịch mua và xem chính xác triển khai này đang chạy gì. Bản cập nhật được phát hành dưới dạng image mới và migration chạy trước khi khởi động — cơ sở dữ liệu, bộ nhớ và tệp tải lên không bao giờ bị thay đổi từ trang này.",
+      "crumbAdmin": "Quản trị",
+      "crumbSettings": "Cài đặt",
+      "crumbUpdater": "Trình cập nhật",
+      "version": "v{version} · bản dựng {build}",
+      "buildNone": "n/a",
+      "allSettings": "Tất cả cài đặt",
+      "refresh": "Làm mới",
+      "loading": "Đang tải",
+      "errorForbidden": "Bạn không có quyền xem trang này.",
+      "errorUnexpected": "Không tải được trình cập nhật.",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại",
+      "licence": {
+        "kicker": "bước 1 · giấy phép",
+        "title": "Xác minh giao dịch mua",
+        "intro": "Nhập mã mua hàng CodeCanyon. Mã được xác thực với Envato trước khi có thể chạy bất kỳ bản cập nhật nào.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Xác minh",
+        "verifying": "Đang xác minh…",
+        "verified": "Đã xác minh giao dịch mua — bạn có thể tiếp tục.",
+        "verifiedAt": "Đã xác minh {date}.",
+        "notVerified": "Chưa xác minh.",
+        "notEnabled": "Triển khai này không yêu cầu mã mua hàng nên không có gì để xác minh tại đây.",
+        "superAdminOnly": "Chỉ quản trị viên cấp cao mới có thể xác minh mã mua hàng.",
+        "reasons": {
+          "empty": "Nhập mã mua hàng CodeCanyon của bạn.",
+          "not_configured": "Chưa cấu hình kiểm tra giấy phép (thiếu token Envato).",
+          "unreachable": "Không thể kết nối Envato để xác minh mã. Hãy kiểm tra kết nối internet của máy chủ.",
+          "not_found": "Mã mua hàng không hợp lệ — Envato không có giao dịch nào cho mã này.",
+          "http_error": "Xác minh Envato thất bại.",
+          "other_product": "Mã mua hàng này dành cho sản phẩm khác.",
+          "unknown": "Không thể xác minh mã mua hàng."
+        }
+      },
+      "process": {
+        "kicker": "quy trình cập nhật",
+        "title": "Bản cập nhật được phát hành dưới dạng image",
+        "step2": {
+          "title": "Sao lưu cơ sở dữ liệu",
+          "body": "Tạo bản sao lưu cơ sở dữ liệu (pg_dump hoặc point-in-time recovery) trước khi triển khai. Sao lưu là công việc hạ tầng ở đây, không phải một nút bấm."
+        },
+        "step3": {
+          "title": "Triển khai image mới",
+          "body": "Đưa container image mới vào chạy. Phiên bản và bản dựng đang chạy được hiển thị bên dưới."
+        },
+        "step4": {
+          "title": "Chạy migration",
+          "body": "pnpm db:migrate thêm bảng và cột mới và không bao giờ xóa dữ liệu. Sổ cái bên dưới liệt kê mọi migration và trạng thái của chúng."
+        },
+        "step5": {
+          "title": "Kiểm tra sức khỏe",
+          "body": "Các phụ thuộc được kiểm tra trực tiếp bên dưới. Hãy làm mới trang sau khi triển khai để xác nhận mọi thứ đã hoạt động."
+        }
+      },
+      "release": {
+        "kicker": "triển khai này",
+        "title": "Bản phát hành",
+        "version": "Phiên bản",
+        "gitSha": "Commit bản dựng",
+        "buildNumber": "Số bản dựng",
+        "builtAt": "Thời điểm dựng",
+        "environment": "Môi trường",
+        "uptime": "Thời gian hoạt động",
+        "none": "Chưa ghi nhận",
+        "demo": "Chế độ demo đang bật: mọi thao tác ghi bị từ chối trừ khi nằm trong danh sách cho phép."
+      },
+      "setup": {
+        "title": "Thiết lập lần đầu",
+        "open": "Mở",
+        "completed": "Đã hoàn thành",
+        "completedAt": "Đã hoàn thành {date} ở phiên bản {version}"
+      },
+      "checks": {
+        "kicker": "sức khỏe",
+        "title": "Kiểm tra sức khỏe",
+        "database": "Cơ sở dữ liệu",
+        "redis": "Redis",
+        "migrations": "Migration",
+        "up": "Hoạt động",
+        "down": "Ngừng",
+        "degraded": "Suy giảm",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "sổ cái",
+        "title": "Migration",
+        "summary": "Đã áp dụng {count}",
+        "status": {
+          "current": "Đã cập nhật",
+          "pending": "Migration đang chờ",
+          "drift": "Tệp migration đã thay đổi sau khi được áp dụng",
+          "unknown": "Bản dựng này không đi kèm tệp migration"
+        },
+        "state": {
+          "applied": "Đã áp dụng",
+          "pending": "Đang chờ",
+          "modified": "Đã sửa đổi",
+          "missing-file": "Thiếu tệp"
+        },
+        "id": "Migration",
+        "stateLabel": "Trạng thái",
+        "appliedAt": "Áp dụng lúc"
+      },
+      "breadcrumb": "Breadcrumb"
+    }
+  }
+}

@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "閉じる",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。"
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "このワークスペースに接続されているWhatsApp Business番号です。この番号宛に届いたお客様のメッセージは受信トレイに表示され、返信はこの番号から送信されます。",
+      "add": "WhatsApp番号を追加",
+      "readOnly": "接続済みの番号は確認できます。番号の追加、変更、削除ができるのはチャネルを管理する権限を持つユーザーのみです。",
+      "helpNote": "番号の接続手順を説明したガイドがリポジトリにあります:",
+      "providerLine": "お客様の番号は、プラットフォームのWhatsAppプロバイダー経由で提供されます。",
+      "loading": "WhatsApp番号を読み込み中",
+      "retry": "再試行",
+      "listLabel": "接続済みのWhatsApp番号",
+      "empty": {
+        "title": "WhatsApp番号はまだ接続されていません",
+        "message": "番号を接続すると、お客様が受信トレイでチャットを始められます。簡単な3ステップで完了します。",
+        "messageReadOnly": "WhatsApp番号はまだ接続されていません。チャネルを管理するユーザーに追加を依頼してください。"
+      }
+    },
+    "state": {
+      "connected": "接続済み",
+      "needs_reconnect": "再接続が必要",
+      "error": "エラー",
+      "not_connected": "未接続",
+      "help": {
+        "needs_reconnect": "WhatsAppがこの番号の認証情報を受け付けなくなったため、メッセージの送受信ができません。再接続して続行してください。",
+        "error": "この番号に問題があります。ヘルスチェックを実行して内容を確認してください。",
+        "not_connected": "この番号はオフになっているか、最初のチェックにまだ合格していません。この番号ではメッセージは送信されません。"
+      }
+    },
+    "quality": {
+      "green": "高",
+      "yellow": "中",
+      "red": "低",
+      "unrated": "未評価"
+    },
+    "tier": {
+      "limited": "1日あたり{label}人のお客様",
+      "unlimited": "無制限"
+    },
+    "card": {
+      "verifiedName": "認証済みの名前: {name}",
+      "phoneId": "電話番号ID",
+      "wabaId": "ビジネスアカウントID",
+      "quality": "品質評価",
+      "tier": "メッセージ送信上限",
+      "lastCheck": "最終ヘルスチェック",
+      "neverChecked": "未チェック",
+      "lastActivity": "最終アクティビティ",
+      "noActivity": "まだありません",
+      "token": "アクセストークン",
+      "tokenEnds": "末尾: {hint}",
+      "none": "利用不可",
+      "providerChanged": {
+        "title": "この番号のプロバイダーが変更されました",
+        "message": "プラットフォームがこの番号を別のWhatsAppプロバイダーに移行しました。ヘルスチェックを実行して動作を確認する以外、対応は不要です。"
+      },
+      "actions": {
+        "check": "ヘルスチェック",
+        "checking": "チェック中",
+        "edit": "認証情報を編集",
+        "reconnect": "再接続",
+        "editDetails": "詳細を編集",
+        "more": "その他",
+        "moreLabel": "{name}のその他の操作",
+        "subscribe": "受信メッセージを修復",
+        "rotate": "新しい検証トークン",
+        "switchOff": "オフにする",
+        "switchOn": "オンにする",
+        "remove": "削除"
+      }
+    },
+    "health": {
+      "issuesTitle": "チェック結果",
+      "severity": {
+        "critical": "問題",
+        "warning": "警告",
+        "info": "メモ"
+      },
+      "phoneStatus": "番号のステータス",
+      "webhook": "受信メッセージ",
+      "subscribed": "購読中",
+      "notSubscribed": "未購読",
+      "token": "アクセストークン",
+      "tokenValid": "有効",
+      "tokenInvalid": "無効",
+      "tokenExpires": "トークンの有効期限",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "アクセストークンが無効になっています",
+          "detail": "Metaのビジネス設定で、新しい永続トークンに置き換えてください。"
+        },
+        "TOKEN_EXPIRED": {
+          "title": "アクセストークンの有効期限が切れています",
+          "detail": "期限切れにならない永続システムユーザートークンに置き換えてください。"
+        },
+        "TOKEN_EXPIRING": {
+          "title": "アクセストークンは7日以内に期限切れになります",
+          "detail": "送信が止まらないよう、永続システムユーザートークンを使用してください。"
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "このトークンではメッセージを送信できません",
+          "detail": "whatsapp_business_messaging 権限を含むトークンを生成してください。"
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "このトークンではアカウントを管理できません",
+          "detail": "Webhookとテンプレートを設定できるよう、whatsapp_business_management 権限を追加してください。"
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "受信メッセージが受信トレイに届いていません",
+          "detail": "アプリがこのアカウントに登録されていません。カードのメニューから「受信メッセージを修復」を使用してください。"
+        },
+        "QUALITY_RED": {
+          "title": "メッセージ品質が低です",
+          "detail": "WhatsAppにより、メッセージを送れるお客様の数が制限される場合があります。一方的なメッセージの送信を減らしてください。"
+        },
+        "QUALITY_YELLOW": {
+          "title": "メッセージ品質が中です",
+          "detail": "注意してください。お客様がこの番号をブロックまたは報告すると、品質が下がります。"
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "この番号は認証されていません",
+          "detail": "WhatsApp Managerでこの番号の認証を完了してください。"
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "この番号はまだ旧WhatsApp APIを使用しています",
+          "detail": "WhatsApp ManagerでCloud APIに登録してから、もう一度接続してください。"
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "ビジネスアカウントIDが保存されていません",
+          "detail": "アカウントとそのWebhookを確認できるよう、「認証情報を編集」から追加してください。"
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsAppがアクセストークンを受け付けません。期限切れ、失効、またはコピーが不完全な可能性があります。",
+      "permissionMissing": "アクセストークンに必要な権限がないか、この番号にアクセスできません。",
+      "idNotFound": "WhatsAppがこの電話番号IDを認識していないか、トークンから参照できません。2つのIDを確認してください。",
+      "appSecretInvalid": "アプリシークレットがアプリと一致しません。アプリ設定からもう一度コピーしてください。",
+      "accountRestricted": "WhatsAppアカウントが制限またはロックされています。WhatsApp Managerでステータスを確認してください。",
+      "numberNotRegistered": "この番号はまだWhatsApp Cloud APIに登録されていません。先にWhatsApp Managerで登録してください。",
+      "rateLimited": "現在、WhatsAppがリクエストを制限しています。数分待ってからもう一度お試しください。",
+      "providerUnavailable": "WhatsAppに接続できないか、一時的な問題が発生しました。しばらくしてからもう一度お試しください。",
+      "healthFailed": "WhatsAppでのチェックに失敗したため、この番号をオンにできませんでした。",
+      "alreadyConnected": "このWhatsApp番号は、このワークスペースにすでに接続されています。",
+      "kindUnavailable": "このワークスペースでは、WhatsApp接続がまだ有効になっていません。プラットフォーム管理者に問い合わせてください。",
+      "inUse": "この番号にはまだ会話があるため、削除できません。",
+      "conflict": "他のユーザーが先にこの番号を変更しました。再読み込みしたので、内容を確認してもう一度お試しください。",
+      "forbidden": "チャネルを管理する権限がありません。",
+      "validation": "入力内容の一部が無効です。強調表示されている項目を確認してください。",
+      "notFound": "この番号は存在しません。一覧を更新しました。",
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "genericWithId": "問題が発生しました。もう一度お試しください。参照ID: {id}",
+      "detail": "詳細: {detail}",
+      "fix": {
+        "tokenInvalid": "Metaのビジネス設定で永続システムユーザートークンを作成し、「認証情報を編集」に貼り付けてください。",
+        "permissionMissing": "whatsapp_business_messaging と whatsapp_business_management を付与してトークンを生成し、システムユーザーがアカウントにアクセスできることを確認してください。",
+        "idNotFound": "どちらのIDも、Metaアプリの「WhatsApp」内にある「API設定」ページに表示されます。2つは別の番号です。",
+        "appSecretInvalid": "Metaアプリ設定の「ベーシック」ページにあります。",
+        "accountRestricted": "WhatsApp Managerを開き、アカウントを選択して、上部の通知を確認してください。",
+        "numberNotRegistered": "WhatsApp Managerでこの番号を開き、登録を完了してください。"
+      }
+    },
+    "fieldErrors": {
+      "required": "この項目は必須です。",
+      "digits": "5〜32桁の数字のみを使用してください。",
+      "tokenShort": "アクセストークンとしては短すぎるようです。",
+      "tokenLong": "アクセストークンとしては長すぎます。",
+      "secretShort": "アプリシークレットは8文字以上で入力してください。",
+      "secretLong": "アプリシークレットとしては長すぎます。",
+      "nameLong": "120文字以内で入力してください。",
+      "addressLong": "40文字以内で入力してください。",
+      "sameAsPhoneId": "電話番号IDと同じ値です。2つは別のIDです。"
+    },
+    "credentials": {
+      "name": {
+        "label": "名前",
+        "hint": "あなたとチームがこの番号を呼ぶ名前です。",
+        "placeholder": "サポート窓口"
+      },
+      "displayAddress": {
+        "label": "電話番号",
+        "hint": "任意。番号を見分けやすいよう、一覧に表示されます。",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "電話番号ID",
+        "hint": "WhatsApp Managerの「API設定」で確認できます。",
+        "placeholder": "533524166787123",
+        "current": "現在の値: {value}。変更しない場合は空欄のままにしてください。"
+      },
+      "businessAccountId": {
+        "label": "WhatsApp BusinessアカウントID",
+        "hint": "同じページの電話番号IDの隣にあります。",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "アクセストークン",
+        "hint": "システムユーザーの永続トークン。暗号化して保存され、再表示されることはありません。",
+        "placeholder": "EAA...",
+        "current": "現在のトークンの末尾: {hint}。変更しない場合は空欄のままにしてください。",
+        "unusual": "Metaのアクセストークンは通常EAAで始まります。別の文字列ではなく、トークンをコピーしたか確認してください。"
+      },
+      "appSecret": {
+        "label": "アプリシークレット",
+        "hint": "Metaアプリ設定の「ベーシック」ページにあります。Metaから届くメッセージの署名に使われます。",
+        "placeholder": "0123456789abcdef...",
+        "current": "現在のシークレットの末尾: {hint}。変更しない場合は空欄のままにしてください。"
+      },
+      "keepPlaceholder": "変更なし",
+      "show": "表示",
+      "hide": "非表示",
+      "privacy": "シークレットは暗号化して保存され、再表示されることはありません。一緒に貼り付けたスペース、改行、引用符は自動的に削除されます。",
+      "privacyPlatform": "必要なのはこれらの詳細だけです。認証情報はプラットフォームが管理します。"
+    },
+    "wizard": {
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "back": "戻る",
+      "stepsLabel": "ステップ",
+      "stepOf": "ステップ {current} / {total}",
+      "steps": {
+        "before": "開始前の準備",
+        "credentials": "お客様の番号",
+        "webhook": "Webhookを接続",
+        "webhookAutomatic": "接続をテスト"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "番号を接続するには、先にMeta側でいくつか準備が必要です。一度設定してから、ここに戻ってきてください。完了したらチェックを付けてください。チェックボックスはご自身の確認用です。",
+          "platform_token": "番号を追加するには、WhatsApp BusinessアカウントのIDと電話番号のIDの2つが必要です。完了したらチェックを付けてください。チェックボックスはご自身の確認用です。"
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "WhatsAppを追加したMetaアプリ",
+              "detail": "developers.facebook.comでタイプ「ビジネス」のアプリを作成し、WhatsAppプロダクトを追加します。このアプリがメッセージの送受信を行います。"
+            },
+            "number": {
+              "title": "WhatsApp Businessアカウントと番号",
+              "detail": "この番号は、通常のWhatsAppアプリで使用されていない必要があります。まず試してみたい場合は、新しいアプリごとにMetaが提供する無料のテスト番号を使用してください。"
+            },
+            "token": {
+              "title": "永続アクセストークン",
+              "detail": "Metaビジネス設定でシステムユーザーを追加し、アプリとWhatsAppアカウントを割り当てて、whatsapp_business_messaging と whatsapp_business_management を付与したトークンを生成します。有効期限は「なし」を選択してください。24時間トークンは翌日には使えなくなります。"
+            },
+            "values": {
+              "title": "コピーする3つの値",
+              "detail": "電話番号IDとビジネスアカウントID(WhatsApp、API設定)、およびアプリシークレット(アプリ設定、ベーシック)。"
+            },
+            "webhook": {
+              "title": "アプリのWebhook設定へのアクセス",
+              "detail": "最後のステップで、アドレスと検証トークンが表示されます。それをMetaアプリの「WhatsApp」→「設定」に貼り付けます。"
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "WhatsApp Businessアカウント",
+              "detail": "お持ちでない場合は、Meta Business Suiteで作成してください。番号とメッセージテンプレートはこのアカウントで管理されます。"
+            },
+            "number": {
+              "title": "WhatsApp Businessで使用できる番号",
+              "detail": "この番号は、通常のWhatsAppアプリで使用されていない必要があります。使用している場合は、先にそちらから削除してください。"
+            },
+            "ids": {
+              "title": "コピーする2つのID",
+              "detail": "電話番号IDとビジネスアカウントID。どちらもWhatsApp Managerの「API設定」ページにあります。"
+            }
+          }
+        },
+        "providerLine": "お客様の番号は、プラットフォームのWhatsAppプロバイダー経由で提供されます。アクセストークンは不要です。",
+        "runbook": "開くメニューなどの詳しい手順は、リポジトリのガイドをご覧ください:",
+        "continue": "続行"
+      },
+      "embedded": {
+        "button": "Facebookで接続(エンベデッドサインアップ)",
+        "soon": "近日公開",
+        "help": "まもなく、IDをコピーしなくても、Facebookでログインして番号を選べるようになります。それまでは、下に2つのIDを入力してください。"
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "番号の詳細を入力してください。Metaから直接貼り付けて構いません。スペースや改行は自動的に取り除かれます。",
+          "platform_token": "接続したい番号の2つのIDを入力してください。"
+        },
+        "save": "保存して続行",
+        "saving": "保存中"
+      },
+      "webhook": {
+        "done": "完了",
+        "finishLater": "後で完了する",
+        "test": {
+          "button": "接続をテスト",
+          "running": "テスト中",
+          "again": "もう一度テスト",
+          "passedToast": "接続テストに合格しました。"
+        }
+      }
+    },
+    "webhook": {
+      "intro": "最後のステップ: メッセージの送信先をWhatsAppに伝えます。番号はすでに保存されていますが、この設定を行って下のテストに合格するまで、未接続のままです。",
+      "callbackUrl": "コールバックURL",
+      "verifyToken": "検証トークン",
+      "onceWarning": "このトークンは今回のみ表示されます。このウィンドウを閉じる前にコピーしてください。紛失した場合は、番号のメニューから新しいトークンを発行できます。",
+      "placeholderWarning": "このアドレスはプレースホルダーです。NEXT_PUBLIC_API_PUBLIC_URL にAPIの公開アドレスを設定して再読み込みするか、プラットフォーム管理者から案内されたアドレスをコピーしてください。",
+      "localWarning": "このアドレスはお客様自身のネットワーク内のマシンを指しているため、WhatsAppから到達できません。APIの公開アドレスを使用してください。",
+      "httpWarning": "WhatsAppはhttpsで始まるアドレスのみ受け付けます。",
+      "tokenMissing": "検証トークンが返されませんでした。番号のメニューから新しいトークンを発行してください。",
+      "steps": {
+        "open": "Meta for DevelopersでアプリをWhatsApp、設定の順に開きます。",
+        "paste": "「Webhook」で「編集」を選択し、コールバックURLと検証トークンを貼り付けて、「確認して保存」を選択します。",
+        "subscribe": "「Webhookフィールド」で、messagesを購読します。",
+        "test": "ここに戻って、「接続をテスト」を選択します。"
+      },
+      "testTitle": "接続をテスト",
+      "automatic": {
+        "title": "メッセージ配信は自動で設定されます",
+        "message": "プラットフォームがこの番号を自動的に受信トレイに接続します。貼り付けるアドレスやトークンはありません。テストを実行して、番号が動作することを確認してください。"
+      },
+      "test": {
+        "hint": "テストではWhatsAppにこの番号について問い合わせ、その回答を表示します。",
+        "running": "WhatsAppにこの番号を問い合わせ中",
+        "okTitle": "番号が接続されました",
+        "okMessage": "WhatsAppから応答があり、この番号を使用できます。",
+        "verifiedName": "認証済みの名前",
+        "quality": "品質評価",
+        "tier": "メッセージ送信上限",
+        "unknown": "報告なし"
+      }
+    },
+    "edit": {
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "save": "保存して確認",
+      "saving": "保存中",
+      "nothing": "変更はありません。保存するには新しい値を入力してください。",
+      "title": {
+        "channel_token": "認証情報を編集",
+        "platform_token": "詳細を編集"
+      },
+      "intro": {
+        "channel_token": "更新されたトークンや再発行されたシークレットを置き換えます。空欄の項目は保存済みの値が維持されます。保存後、番号がチェックされ、再びオンになります。",
+        "platform_token": "この番号の名前またはIDを変更します。空欄の項目は保存済みの値が維持されます。保存後、番号がチェックされます。"
+      }
+    },
+    "rotate": {
+      "title": "新しい検証トークンを発行しますか?",
+      "message": "{name}の現在の検証トークンはすぐに使えなくなります。新しいトークンをMetaアプリに貼り付けて、Webhookをもう一度確認する必要があります。",
+      "confirm": "新しいトークンを発行",
+      "cancel": "キャンセル",
+      "close": "閉じる",
+      "done": "完了",
+      "resultTitle": "新しい検証トークン",
+      "resultIntro": "両方の値をMetaアプリの「WhatsApp」→「設定」に貼り付け、「確認して保存」を選択してください。"
+    },
+    "remove": {
+      "title": "この番号を削除しますか?",
+      "message": "{name}はこのワークスペースから削除されます。この番号でメッセージの送受信ができなくなります。",
+      "note": "この操作は元に戻せません。番号は後から再度追加できます。",
+      "confirm": "番号を削除",
+      "cancel": "キャンセル",
+      "inUse": {
+        "title": "この番号には会話があります",
+        "message": "{name}にはまだ会話があるため、削除できません。削除すると、会話が番号のない状態になります。",
+        "hint": "代わりに、この番号をオフにできます。すべての会話は保持され、この番号では何も送信されません。後でもう一度オンにできます。",
+        "switchOff": "代わりにオフにする"
+      }
+    },
+    "switchOff": {
+      "title": "この番号をオフにしますか?",
+      "message": "{name}がオフの間は、この番号でメッセージの送受信は行われません。会話は保持され、もう一度オンにできます。",
+      "confirm": "オフにする",
+      "cancel": "キャンセル"
+    },
+    "toasts": {
+      "checkPassed": "{name}はヘルスチェックに合格しました。",
+      "saved": "{name}の変更を保存しました。",
+      "reconnected": "{name}が再接続されました。",
+      "switchedOn": "{name}をオンにしました。",
+      "switchedOff": "{name}をオフにしました。",
+      "removed": "{name}を削除しました。",
+      "subscribed": "{name}を受信メッセージに登録しました。"
+    },
+    "inbox": {
+      "templatesSoon": "テンプレート機能は近日公開予定です。公開後は、ここからこのお客様に再度連絡できるようになります。",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "このWhatsApp番号は再接続が必要です。",
+          "message": "WhatsAppが{name}の認証情報を受け付けなくなったため、返信を送信できません。社内メモは引き続き使用できます。"
+        },
+        "error": {
+          "title": "このWhatsApp番号に接続の問題があります。",
+          "message": "{name}はエラー状態のため、返信を送信できません。社内メモは引き続き使用できます。"
+        },
+        "not_connected": {
+          "title": "このWhatsApp番号はオフになっています。",
+          "message": "{name}は接続されていないため、返信を送信できません。社内メモは引き続き使用できます。"
+        },
+        "open": "WhatsApp設定を開く",
+        "askAdmin": "チャネルを管理するユーザーに再接続を依頼してください。"
+      },
+      "failure": {
+        "openSettings": "WhatsApp設定を開く",
+        "windowClosed": {
+          "title": "24時間の返信ウィンドウが終了しました。",
+          "hint": "WhatsAppでは、お客様の最後のメッセージから24時間以内のみ、自由形式の返信が許可されています。お客様が再度メッセージを送るまでお待ちください。"
+        },
+        "undeliverable": {
+          "title": "WhatsAppがこのメッセージを配信できませんでした。",
+          "hint": "この番号がWhatsAppを使用していないか、お客様が最新の利用規約に同意していない可能性があります。"
+        },
+        "recipientNotAllowed": {
+          "title": "この番号にはここからメッセージを送れません。",
+          "hint": "送信元自身の番号か、テスト受信者のリストに含まれていない番号です。"
+        },
+        "rateLimit": {
+          "title": "WhatsAppにより送信速度が制限されています。",
+          "hint": "数分待ってから、「再試行」を使用してください。"
+        },
+        "spamLimited": {
+          "title": "スパムとして報告されたメッセージが多すぎるため、送信が制限されています。",
+          "hint": "しばらく待ってから送信を再開し、メッセージを希望するお客様にのみ送信してください。"
+        },
+        "engagementBlocked": {
+          "title": "WhatsAppがこのメッセージの配信を見送りました。",
+          "hint": "お客様が望まないメッセージから保護するための動作です。"
+        },
+        "tokenExpired": {
+          "title": "WhatsAppがこの番号のアクセストークンを拒否しました。",
+          "hint": "期限切れか、権限が失われています。番号を再接続してから、「再試行」を使用してください。"
+        },
+        "accountRestricted": {
+          "title": "WhatsAppアカウントに問題があります。",
+          "hint": "制限、ロック、または未登録の状態です。WhatsApp Managerで確認してください。"
+        },
+        "mediaRejected": {
+          "title": "WhatsAppがこのファイルまたはメッセージタイプを使用できませんでした。",
+          "hint": "別のファイルを試すか、内容をテキストで送信してください。"
+        },
+        "templateProblem": {
+          "title": "テンプレートを送信できませんでした。",
+          "hint": "テンプレートが見つからない、一時停止または却下された、あるいは変数が一致していません。"
+        },
+        "providerDown": {
+          "title": "WhatsAppで一時的な問題が発生しました。",
+          "hint": "しばらくしてから「再試行」を使用してください。"
+        },
+        "sendPaused": {
+          "title": "プラットフォーム全体で送信が一時停止されています。",
+          "hint": "再開されたら「再試行」を使用してください。"
+        },
+        "channelOff": {
+          "title": "この番号は接続されていません。",
+          "hint": "再接続してから、「再試行」を使用してください。"
+        },
+        "planLimit": {
+          "title": "プランの月間メッセージ上限に達しました。",
+          "hint": "プランをアップグレードするか、次の期間までお待ちください。その後「再試行」を使用してください。"
+        },
+        "groupSendUnavailable": {
+          "title": "WhatsAppグループへの送信はまだ利用できません。",
+          "hint": "WhatsApp Businessアプリから返信してください。"
+        }
+      },
+      "media": {
+        "downloading": "ファイルをダウンロード中",
+        "failed": "このファイルをダウンロードできませんでした",
+        "retry": "再試行",
+        "retrying": "再試行中",
+        "reason": {
+          "expired": "WhatsApp側にファイルが残っていません。ファイルは約30日間保持されます。",
+          "auth": "WhatsAppがこの番号のアクセストークンを拒否しました。番号を再接続してから、再試行してください。",
+          "tooLarge": "ファイルがこのチャネルの許容サイズを超えています。",
+          "rejected": "安全でない種類のファイルのため、拒否されました。",
+          "download": "WhatsAppが時間内に応答しませんでした。もう一度試すと成功することが多いです。"
+        }
+      },
+      "interactive": {
+        "button": "ボタンを選択しました",
+        "list": "リストから選択しました"
+      },
+      "contact": {
+        "unnamed": "共有された連絡先",
+        "shared": "連絡先カード"
+      },
+      "attach": {
+        "limit": {
+          "image": "画像は最大{mb} MB",
+          "video": "動画は最大{mb} MB",
+          "audio": "音声は最大{mb} MB",
+          "document": "ドキュメントは最大{mb} MB"
+        },
+        "kind": {
+          "image": "画像",
+          "video": "動画",
+          "audio": "音声ファイル",
+          "document": "ドキュメント"
+        },
+        "errors": {
+          "tooLarge": "WhatsAppでは{kind}は最大{mb} MBまでです。より小さいファイルを選択してください。",
+          "kindNotAllowed": "この番号では{kind}を送信できません。",
+          "unsupportedType": "WhatsAppはこの種類のファイルを受け付けません。対応形式は、JPEGとPNGの画像、MP4と3GPの動画、AAC、MP3、AMR、M4A、OGGの音声、PDF、Office、テキストのドキュメントです。",
+          "empty": "ファイルが空です。"
+        }
+      }
+    }
+  }
+}

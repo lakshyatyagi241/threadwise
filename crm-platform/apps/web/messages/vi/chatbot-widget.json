@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Widget trò chuyện"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "paywall": {
+      "kicker": "Gói",
+      "title": "Gói của bạn không có widget chatbot",
+      "body": "Gói của bạn không bao gồm widget chatbot. Hãy nâng cấp để mở khóa tính năng này.",
+      "upgrade": "Xem các gói"
+    },
+    "list": {
+      "tip": "Mẹo",
+      "tipBody": "Chỉ cần dán một đoạn mã một dòng vào bất kỳ trang web nào để hiển thị bong bóng trò chuyện nổi. Mỗi widget có thể chạy bằng một tác nhân thông minh, chuyển đến WhatsApp, hoặc cả hai. Cuộc trò chuyện của khách truy cập sẽ vào hộp thư của nhóm bạn.",
+      "statusViews": "Trạng thái widget",
+      "view": {
+        "all": "Tất cả widget",
+        "active": "Đang hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "status": {
+        "all": "Tất cả",
+        "active": "Đang hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "trainFirst": "Huấn luyện trước",
+      "trainBody": "Hãy tạo một tác nhân thông minh và thêm kiến thức trong <link>Huấn luyện AI</link>, rồi gắn vào đây để widget trả lời theo giọng của bạn.",
+      "workspace": "Không gian làm việc",
+      "title": "Chatbot",
+      "titleAccent": "widget",
+      "intro": "Nhúng bong bóng trò chuyện nổi vào bất kỳ trang nào. Tác nhân thông minh trả lời ngay trong trình duyệt, chuyển sang Hộp thư hợp nhất khi cần.",
+      "activePill": "{count} đang hoạt động",
+      "newWidget": "Widget mới",
+      "card": {
+        "total": "Tổng số widget",
+        "visitors": "Khách truy cập",
+        "avg": "TB / widget",
+        "health": "Tình trạng",
+        "activeHint": "{count} đang hoạt động",
+        "allTime": "từ trước đến nay",
+        "visitorsUnit": "khách truy cập"
+      },
+      "health": {
+        "healthy": "tốt",
+        "empty": "trống",
+        "attention": "cần chú ý"
+      },
+      "search": "Tìm theo tên hoặc slug…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Công cụ",
+        "agent": "Tác nhân thông minh",
+        "visitors": "Khách truy cập",
+        "updated": "Cập nhật",
+        "actions": "Thao tác"
+      },
+      "loading": "Đang tải widget",
+      "loadError": "Không thể tải các widget.",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có widget nào",
+      "emptyBody": "Hãy tạo widget trò chuyện đầu tiên. Nó sẽ hiển thị dưới dạng bong bóng nổi trên trang bạn nhúng vào.",
+      "createWidget": "Tạo widget",
+      "noMatch": "Không có widget nào trên trang này khớp với tìm kiếm của bạn.",
+      "showing": "Hiển thị",
+      "of": "trên",
+      "widgetsCount": "{count} widget",
+      "loadMore": "Tải thêm",
+      "pill": {
+        "active": "Đang hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "action": {
+        "preview": "Mở bản xem trước độc lập",
+        "copy": "Sao chép đoạn mã nhúng",
+        "edit": "Sửa widget",
+        "rotate": "Đổi token nhúng",
+        "duplicate": "Nhân bản widget",
+        "delete": "Xóa widget"
+      },
+      "copied": "Đã sao chép đoạn mã. Hãy dán trước {tag} trên trang web của bạn.",
+      "duplicateFailed": "Không thể nhân bản widget.",
+      "rotated": "Đã đổi token. Hãy sao chép đoạn mã mới.",
+      "rotateFailed": "Đổi token thất bại: {reason}",
+      "networkError": "lỗi mạng",
+      "deleted": "Đã xóa widget.",
+      "deleteFailed": "Xóa thất bại: {reason}",
+      "rotateTitle": "Đổi token nhúng của widget này?",
+      "rotateBody": "Đoạn mã hiện tại trên trang web của bạn sẽ ngừng hoạt động ngay lập tức. Bạn cần sao chép và dán đoạn mã mới.",
+      "rotate": "Đổi token",
+      "cancel": "Hủy",
+      "deleteTitle": "Xóa \"{name}\"?",
+      "deleteBody": "Đoạn mã nhúng trên trang web của bạn sẽ ngừng hoạt động ngay lập tức. Các cuộc trò chuyện trước đó vẫn nằm trong hộp thư của nhóm bạn.",
+      "delete": "Xóa widget",
+      "keep": "Giữ lại",
+      "copyManuallyTitle": "Hãy sao chép thủ công",
+      "gotIt": "Đã hiểu",
+      "close": "Đóng"
+    },
+    "builder": {
+      "loading": "Đang tải widget",
+      "notFoundTitle": "Không tìm thấy widget",
+      "notFoundBody": "Widget này không tồn tại trong không gian làm việc của bạn.",
+      "loadError": "Không thể tải widget.",
+      "backToWidgets": "Quay lại danh sách widget",
+      "back": "Quay lại danh sách widget",
+      "crumb": "Widget chatbot",
+      "crumbEdit": "Sửa",
+      "crumbNew": "Mới",
+      "titleNew": "Tạo chatbot",
+      "titleEdit": "Sửa chatbot",
+      "titleAccent": "widget",
+      "stateSaved": "Đã lưu",
+      "stateDraft": "Bản nháp / chưa lưu",
+      "saveDraft": "Lưu bản nháp",
+      "stepper": "Các bước trình tạo",
+      "steps": {
+        "setup": "Thiết lập",
+        "look": "Giao diện",
+        "voice": "Giọng điệu",
+        "launch": "Khởi chạy"
+      },
+      "previous": "Trước",
+      "next": "Tiếp",
+      "stepOf": "Bước {n}/{total}",
+      "launchWidget": "Khởi chạy widget",
+      "draftSaved": "Đã lưu bản nháp.",
+      "savedEmbed": "Đã lưu. Mã nhúng sẵn sàng để sao chép.",
+      "saveFailed": "Lưu thất bại. Hãy kiểm tra bước được đánh dấu.",
+      "snippetCopied": "Đã sao chép đoạn mã.",
+      "clipboardBlocked": "Clipboard bị chặn. Hãy chọn đoạn mã thủ công.",
+      "problem": {
+        "name": "Hãy đặt tên cho widget.",
+        "assistant": "Liên kết một tác nhân thông minh, hoặc chuyển công cụ sang liên kết WhatsApp.",
+        "whatsapp": "Hãy thêm số WhatsApp đầy đủ gồm mã quốc gia và các chữ số.",
+        "launcherColour": "Màu nền nút phải là mã màu hex (ví dụ #075E54).",
+        "headerTitle": "Hãy đặt tiêu đề cho cửa sổ trò chuyện.",
+        "welcome": "Hãy viết một câu mở đầu.",
+        "bgImage": "Hãy thêm URL ảnh nền hoặc chuyển sang màu đơn sắc."
+      },
+      "setup": {
+        "title": "Thiết lập widget",
+        "required": "bắt buộc",
+        "name": "Tên nội bộ",
+        "namePlaceholder": "vd: Widget trang bảng giá",
+        "nameHint": "Dành cho nhóm của bạn. Khách truy cập không thấy nhãn này.",
+        "position": "Vị trí nút",
+        "bottomRight": "Góc dưới bên phải",
+        "bottomLeft": "Góc dưới bên trái",
+        "positionHint": "Nơi bong bóng trò chuyện tròn nổi trên trang web của bạn.",
+        "engine": "Công cụ hội thoại",
+        "mode": {
+          "ai": {
+            "title": "Tác nhân thông minh",
+            "body": "AI đã huấn luyện trả lời ngay trong trình duyệt."
+          },
+          "whatsapp": {
+            "title": "Liên kết WhatsApp",
+            "body": "Đưa khách truy cập vào ứng dụng WhatsApp để trò chuyện."
+          },
+          "both": {
+            "title": "Thông minh + WhatsApp",
+            "body": "Khách chọn: trò chuyện tại đây hoặc mở WhatsApp."
+          }
+        },
+        "agent": "Tác nhân thông minh (bộ não)",
+        "agentPlaceholder": "— Chọn một tác nhân thông minh đã lưu —",
+        "agentHintBefore": "Không thấy tác nhân nào?",
+        "agentBuild": "Tạo tác nhân thông minh",
+        "agentHintAfter": "trước.",
+        "whatsapp": "Số WhatsApp",
+        "country": "Quốc gia",
+        "phonePlaceholder": "Số của bạn không có mã quốc gia",
+        "whatsappHint": "Chọn cờ quốc gia. Mã vùng sẽ được thêm tự động.",
+        "prefilled": "Tin nhắn soạn sẵn (hiển thị trong WhatsApp)",
+        "prefilledPlaceholder": "Xin chào, tôi muốn biết thêm về bảng giá.",
+        "prefilledHint": "Khách truy cập vào WhatsApp với tin nhắn này đã được soạn sẵn."
+      },
+      "look": {
+        "title": "Kiểu dáng nút và cửa sổ",
+        "tag": "thương hiệu",
+        "launcherFill": "Màu nền nút",
+        "launcherFillHint": "Màu nền của bong bóng tròn.",
+        "headerTint": "Màu tiêu đề cửa sổ",
+        "headerTintHint": "Dải trên cùng của cửa sổ trò chuyện.",
+        "headerInk": "Màu chữ tiêu đề",
+        "headerInkHint": "Màu chữ/biểu tượng cho tiêu đề.",
+        "windowTitle": "Tiêu đề cửa sổ (hiển thị ở phần đầu)",
+        "windowTitlePlaceholder": "Trò chuyện với nhóm của chúng tôi",
+        "windowTitleHint": "Giữ dưới khoảng 30 ký tự.",
+        "icon": "URL biểu tượng nút tùy chỉnh",
+        "optional": "tùy chọn",
+        "iconHint": "PNG / SVG · khuyến nghị 80×80 px · nền trong suốt."
+      },
+      "voice": {
+        "title": "Tin nhắn mở đầu và giao diện trò chuyện",
+        "tag": "nội dung",
+        "opening": "Câu mở đầu",
+        "openingPlaceholder": "Xin chào! Chúng tôi có thể giúp gì cho bạn hôm nay?",
+        "openingHint": "Bong bóng đầu tiên hiển thị khi mở cuộc trò chuyện.",
+        "bubbleFill": "Màu nền bong bóng đến",
+        "bubbleFillHint": "Màu của các bong bóng từ phía bạn.",
+        "bubbleInk": "Màu chữ bong bóng đến",
+        "bubbleInkHint": "Màu chữ bên trong bong bóng.",
+        "canvas": "Nền cửa sổ",
+        "canvasKind": {
+          "color": "Màu đơn sắc",
+          "image": "Ảnh lặp"
+        },
+        "canvasColour": "Màu nền cửa sổ",
+        "canvasImage": "URL ảnh nền cửa sổ",
+        "canvasImageHint": "PNG có thể lặp sẽ cho kết quả tốt nhất.",
+        "autoOpen": "Tự động mở",
+        "autoOpenHint": "Mở cuộc trò chuyện khoảng 1,2 giây sau khi trang tải xong.",
+        "intake": "Thông tin khách truy cập",
+        "intakeHint": "Các trường trước khi trò chuyện hiển thị trước khi cuộc trò chuyện bắt đầu. Bỏ qua tất cả để trò chuyện ẩn danh.",
+        "intakeField": {
+          "name": "Tên hiển thị",
+          "email": "Địa chỉ email",
+          "phone": "Số điện thoại"
+        }
+      },
+      "launch": {
+        "title": "Nút gửi và đoạn mã nhúng",
+        "tag": "khởi chạy",
+        "label": "Nhãn nút gửi",
+        "labelPlaceholder": "Gửi tin nhắn",
+        "labelHint": "Tránh dùng \"Submit\". Hãy thử \"Gửi tin nhắn\" hoặc \"Hỏi nhóm của chúng tôi\".",
+        "fill": "Màu nền nút gửi",
+        "ink": "Màu chữ nút gửi",
+        "ready": "Sẵn sàng. Dán đoạn mã này ngay trước <code>{tag}</code> trên trang bạn muốn đặt widget.",
+        "copy": "Sao chép vào clipboard",
+        "preview": "Mở bản xem trước độc lập"
+      },
+      "preview": {
+        "title": "Xem trước trực tiếp",
+        "chat": "Trò chuyện",
+        "hi": "Xin chào!",
+        "send": "Gửi",
+        "engine": {
+          "ai": "Tác nhân thông minh",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "Công cụ",
+        "metaPlacement": "Vị trí",
+        "metaAutoOpen": "Tự động mở",
+        "metaIntake": "Thông tin đầu vào",
+        "left": "Trái",
+        "right": "Phải",
+        "on": "Bật",
+        "off": "Tắt",
+        "none": "Không có"
+      },
+      "colorSwatch": "{label} (mẫu màu)"
+    },
+    "whatsappBuilder": {
+      "crumb": "Widget WhatsApp",
+      "title": "Widget WhatsApp",
+      "titleAccent": "Cài đặt và tùy chỉnh",
+      "type": "Loại widget",
+      "nameHint": "Chỉ bạn thấy tên này. Đây cũng là tên doanh nghiệp hiển thị trong messenger.",
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu thay đổi. Widget của bạn đã hoạt động.",
+      "card": {
+        "1": {
+          "title": "Tạo kiểu cho nút trò chuyện WhatsApp",
+          "subtitle": "Chọn thiết kế nút trò chuyện đẹp phù hợp nhất với trang web của bạn",
+          "buttonType": "Loại nút",
+          "type": {
+            "pill": "Nút Trò chuyện với chúng tôi",
+            "icon": "Nút tròn chỉ có biểu tượng"
+          },
+          "iconOnly": "Chỉ biểu tượng",
+          "buttonColor": "Màu nút",
+          "pickCustom": "Chọn màu tùy chỉnh",
+          "custom": "Tùy chỉnh {hex}"
+        },
+        "2": {
+          "title": "Thiết kế messenger của bạn",
+          "subtitle": "Chọn một hình ảnh đẹp cho messenger của bạn",
+          "image": "Hình ảnh messenger",
+          "names": {
+            "support": "Hỗ trợ",
+            "store": "Cửa hàng",
+            "chat": "Trò chuyện",
+            "person": "Người"
+          },
+          "url": "Hoặc dùng địa chỉ ảnh của riêng bạn",
+          "urlHint": "Dán địa chỉ của ảnh vuông (https://...). Chưa hỗ trợ tải tệp lên."
+        },
+        "3": {
+          "title": "Đặt lời chào mừng",
+          "subtitle": "Chào đón khách hàng của bạn",
+          "greeting": "Lời chào",
+          "greetingHint": "Chào khách hàng khi họ mở messenger",
+          "intro": "Tin nhắn giới thiệu",
+          "introHint": "Giới thiệu doanh nghiệp của bạn và cho khách hàng biết bạn có thể giúp gì"
+        },
+        "4": {
+          "title": "Đặt vị trí nút trò chuyện",
+          "subtitle": "Điều chỉnh vị trí nút trên máy tính và thiết bị di động",
+          "preview": "Xem trước nút trò chuyện",
+          "desktopPreview": "Xem trước trên máy tính",
+          "mobilePreview": "Xem trước trên thiết bị di động",
+          "desktopPosition": "Vị trí nút trên máy tính",
+          "mobilePosition": "Vị trí nút trên thiết bị di động",
+          "left": "Trái",
+          "right": "Phải",
+          "desktopSideSpacing": "Khoảng cách cạnh trên máy tính",
+          "desktopBottomSpacing": "Khoảng cách đáy trên máy tính",
+          "mobileSideSpacing": "Khoảng cách cạnh trên thiết bị di động",
+          "mobileBottomSpacing": "Khoảng cách đáy trên thiết bị di động",
+          "px": "px"
+        },
+        "5": {
+          "title": "Cấu hình số WhatsApp của bạn",
+          "subtitle": "Kết nối số WhatsApp với messenger",
+          "number": "Số WhatsApp",
+          "numberHint": "Messenger sẽ đưa khách hàng của bạn đến số WhatsApp này",
+          "prefilled": "Tin nhắn điền sẵn",
+          "prefilledHint": "Đây sẽ là nội dung tin nhắn mặc định đầu tiên"
+        }
+      },
+      "install": {
+        "title": "Cài đặt trên trang web của bạn",
+        "body": "Dán thẻ này ngay trước thẻ đóng body của mọi trang cần hiển thị widget.",
+        "copy": "Sao chép mã"
+      },
+      "problem": {
+        "name": "Hãy đặt tên cho widget.",
+        "avatar": "Dùng ảnh có sẵn hoặc địa chỉ ảnh http(s).",
+        "greeting": "Hãy thêm lời chào.",
+        "intro": "Hãy thêm tin nhắn giới thiệu.",
+        "spacing": "Khoảng cách phải là số nguyên pixel từ 0 đến 500.",
+        "whatsapp": "Hãy thêm số WhatsApp đầy đủ: mã quốc gia và các chữ số."
+      },
+      "preview": {
+        "title": "Xem trước trực tiếp",
+        "desktop": "Máy tính",
+        "mobile": "Thiết bị di động",
+        "frameTitle": "Xem trước trực tiếp widget WhatsApp của bạn",
+        "hint": "Thu gọn bảng bằng nút tròn, mở lại từ nút trò chuyện và thử Bắt đầu cuộc trò chuyện.",
+        "businessName": "Doanh nghiệp của bạn"
+      }
+    }
+  }
+}

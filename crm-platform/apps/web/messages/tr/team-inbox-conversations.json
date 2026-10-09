@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Gelen kutusu"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "screen": {
+      "listRegion": "Konuşmalar",
+      "panelRegion": "Kişi ve notlar",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "conflict": "Bu konuşmayı önce başka biri değiştirdi. Yenilendi; yeniden deneyin.",
+      "assigned": "Konuşma atandı.",
+      "assignedToYou": "Size atandı.",
+      "unassigned": "Konuşmanın ataması kaldırıldı.",
+      "resolved": "Konuşma çözüldü.",
+      "reopened": "Konuşma yeniden açıldı.",
+      "deleteNoteTitle": "Bu not silinsin mi?",
+      "deleteNoteMessage": "Not, ekibinizdeki herkesten kaldırılacak. Bu işlem geri alınamaz.",
+      "deleteNoteConfirm": "Notu sil",
+      "pickTitle": "Bir konuşma seçin",
+      "pickMessage": "Okumak ve yanıtlamak için listeden bir konuşma seçin. Yeni mesajlar otomatik olarak burada görünür.",
+      "shortcuts": "Kısayollar: listede gezinmek için j ve k, çözmek için e, aramak için / kullanın.",
+      "teamChanged": "Ekip güncellendi."
+    },
+    "list": {
+      "title": "Gelen kutusu",
+      "refresh": "Listeyi yenile",
+      "openSimulator": "Müşteri simülatörünü aç",
+      "search": "Konuşmalarda ara",
+      "searchPlaceholder": "Ad veya numarada ara",
+      "tabsLabel": "Konuşma görünümleri",
+      "tabs": {
+        "all": "Tümü",
+        "mine": "Benim",
+        "unassigned": "Atanmamış",
+        "unread": "Okunmamış"
+      },
+      "statusFilter": "Durum",
+      "statusOpen": "Açık",
+      "statusAll": "Tüm durumlar",
+      "status": {
+        "open": "Açık",
+        "pending": "Beklemede",
+        "snoozed": "Ertelendi",
+        "resolved": "Çözüldü",
+        "closed": "Çözüldü",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Düşük",
+        "normal": "Normal",
+        "high": "Yüksek",
+        "urgent": "Acil"
+      },
+      "channelFilter": "Kanal",
+      "allChannels": "Tüm kanallar",
+      "archived": "Arşivlendi",
+      "backToInbox": "Gelen kutusuna dön",
+      "loading": "Konuşmalar yükleniyor",
+      "retry": "Yeniden dene",
+      "listLabel": "Konuşmalar",
+      "loadMore": "Daha fazla yükle",
+      "moreFailed": "Daha fazla konuşma yüklenemedi.",
+      "unreadCount": "{count, plural, other {# okunmamış mesaj}}",
+      "you": "Siz:",
+      "noMessages": "Henüz mesaj yok",
+      "windowClosed": "Pencere kapandı",
+      "windowLeftHours": "{hours} sa {minutes} dk kaldı",
+      "windowLeftMinutes": "{minutes} dk kaldı",
+      "unassigned": "Atanmamış",
+      "needsContact": "Kişi kaydı yok",
+      "gettingStarted": {
+        "title": "Başlamak için bir kanal bağlayın",
+        "message": "Müşteriler bağlı bir kanala yazdığında gelen kutunuz dolar. Bir kanal bağlayın; her konuşma burada görünür.",
+        "connect": "Kanal bağla"
+      },
+      "emptyFiltered": {
+        "title": "Eşleşen konuşma yok",
+        "message": "Bu filtrelere uyan bir şey yok. Tüm konuşmaları yeniden görmek için filtreleri temizleyin.",
+        "clear": "Filtreleri temizle"
+      },
+      "empty": {
+        "all": {
+          "title": "Henüz konuşma yok",
+          "message": "Bir müşteri kanallarınızdan birine yazdığında konuşma burada görünür."
+        },
+        "mine": {
+          "title": "Size atanmış bir şey yok",
+          "message": "Size atanan konuşmalar burada görünür. Tümü'nden birini açıp kendinize atayın."
+        },
+        "unassigned": {
+          "title": "Her konuşmanın bir sahibi var",
+          "message": "Henüz kimsenin almadığı yeni konuşmalar burada listelenir."
+        },
+        "unread": {
+          "title": "Her şey güncel",
+          "message": "Müşterilerden yeni mesaj alan konuşmalar burada listelenir."
+        }
+      }
+    },
+    "status": {
+      "received": "Alındı",
+      "queued": "Gönderiliyor",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "read": "Okundu",
+      "failed": "Gönderilmedi"
+    },
+    "errors": {
+      "conflict": "Bunu önce başka biri değiştirdi. Yenilendi; yeniden deneyin.",
+      "windowClosed": "24 saatlik yanıt penceresi kapandığı için serbest biçimli mesaj gönderilemez.",
+      "planLimit": "Planınızın aylık mesaj limitine ulaşıldı.",
+      "channelDisconnected": "Bu kanalın bağlantısı kesildi. Mesaj göndermek için yeniden bağlayın.",
+      "sendHalted": "Gönderim şu anda tüm platform için duraklatıldı. Daha sonra yeniden deneyin.",
+      "notFound": "Bu konuşma artık yok veya görüntüleyemiyorsunuz.",
+      "notRetryable": "Yalnızca gönderilemeyen bir mesaj yeniden gönderilebilir.",
+      "mediaNotFound": "Ekin süresi doldu veya kaldırıldı. Yeniden ekleyin.",
+      "statusInvalid": "Bu değişikliğe konuşmanın mevcut durumundan izin verilmiyor.",
+      "assigneeInvalid": "Bu kişiye bu konuşma atanamaz.",
+      "forbidden": "Bunu yapmak için yetkiniz yok.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip yeniden deneyin.",
+      "simulatorDisabled": "Kanal simülatörü bu sunucuda kapalı.",
+      "channelInUse": "Bu kanalda hâlâ konuşmalar var. Kaldırmak yerine bağlantısını kesin.",
+      "validation": "Girdiğiniz bazı bilgiler geçerli değil.",
+      "tooLarge": "Bu dosya çok büyük.",
+      "unsupported": "Bu kanal bu türde mesaj veya dosya gönderemez.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "generic": "Bir sorun oluştu. Yeniden deneyin.",
+      "genericWithId": "Bir sorun oluştu. Yeniden deneyin. Referans: {id}",
+      "templateNotSendable": "Bu şablon bu konuşmaya gönderilemez. Başka bir şablon seçin.",
+      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Fotoğraf",
+        "text": "Mesaj",
+        "attachment": "Ek"
+      },
+      "template": "Şablon mesajı: {name}",
+      "unavailable": "Mesaj kullanılamıyor",
+      "sentIn": "{lang} dilinde gönderildi. Yazdığınız metni göster",
+      "translatedFrom": "{lang} dilinden çevrildi. Orijinali göster",
+      "bot": "Bot",
+      "broadcast": "Toplu gönderim",
+      "reacted": "Tepki {emoji}",
+      "edited": "Düzenlendi",
+      "failed": "Bu mesaj teslim edilmedi.",
+      "retry": "Yeniden dene",
+      "sending": "Gönderiliyor",
+      "dismiss": "Kapat",
+      "noteLabel": "Dahili not",
+      "unknownAuthor": "Bir ekip arkadaşı",
+      "deleteNote": "Bu notu sil",
+      "templateHeader": {
+        "image": "Görsel",
+        "video": "Video",
+        "document": "Belge",
+        "location": "Konum"
+      },
+      "templateCopyCode": "Kodu kopyala",
+      "templateButtonUnnamed": "Düğme",
+      "templateButtonPrefix": "Düğme: "
+    },
+    "media": {
+      "openImage": "{name} görselini aç",
+      "video": "Video",
+      "voice": "Sesli mesaj",
+      "audio": "Ses",
+      "document": "Belge",
+      "download": "{name} dosyasını indir",
+      "location": "Paylaşılan konum",
+      "openMap": "OpenStreetMap'te aç"
+    },
+    "thread": {
+      "title": "Konuşma",
+      "back": "Konuşma listesine dön",
+      "loading": "Konuşma yükleniyor",
+      "retry": "Yeniden dene",
+      "notFound": {
+        "title": "Konuşma bulunamadı",
+        "message": "Kaldırılmış veya görüntüleyebileceğiniz bir konuşma değil. Listeden başka bir konuşma seçin."
+      },
+      "status": {
+        "resolved": "Çözüldü",
+        "closed": "Kapalı",
+        "spam": "Spam",
+        "snoozed": "Ertelendi"
+      },
+      "assignToMe": "Bana ata",
+      "resolve": "Çöz",
+      "reopen": "Yeniden aç",
+      "resolveShortcut": "Çöz veya yeniden aç (e)",
+      "showPanel": "Kişiyi ve notları göster",
+      "hidePanel": "Kişiyi ve notları gizle",
+      "window": {
+        "closed": "Pencere kapandı",
+        "closesInHours": "{hours} sa {minutes} dk içinde kapanır",
+        "closesInMinutes": "{minutes} dk içinde kapanır"
+      },
+      "windowBanner": {
+        "title": "24 saatlik yanıt penceresi kapandı.",
+        "message": "Bu kanal, müşterinin son mesajından 24 saat sonra yalnızca onaylı bir şablon mesajına izin verir. Dahili not eklemeye devam edebilirsiniz. Müşterinin yeni bir mesajı pencereyi yeniden açar.",
+        "sendTemplate": "Şablon gönder"
+      },
+      "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
+      "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
+      "messagesLabel": "Mesajlar",
+      "loadOlder": "Önceki mesajları yükle",
+      "empty": "Bu konuşmada henüz mesaj yok.",
+      "newMessageAnnounce": "Yeni mesaj: {text}",
+      "attachment": "bir ek",
+      "jumpLatest": "En yeniye git",
+      "jumpLatestNew": "{count, plural, other {# yeni mesaj}}"
+    },
+    "composer": {
+      "modeLabel": "Mesaj türü",
+      "mode": {
+        "reply": "Yanıt",
+        "note": "Dahili not"
+      },
+      "attach": "Dosya ekle",
+      "removeAttachment": "Eki kaldır",
+      "replyLabel": "Müşteriye yanıt ver",
+      "noteLabel": "Dahili not",
+      "replyPlaceholder": "Bir mesaj yazın",
+      "notePlaceholder": "Yalnızca ekibinizin görebileceği bir not yazın",
+      "replyDisabledPlaceholder": "Bu konuşma için yanıtlar kapalı",
+      "send": "Gönder",
+      "addNote": "Not ekle",
+      "hint": "Enter gönderir. Shift+Enter yeni satır ekler.",
+      "template": "Şablon gönder",
+      "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın."
+    },
+    "panel": {
+      "tabsLabel": "Notlar ve zaman çizelgesi",
+      "contact": "Kişi",
+      "openContact": "Kişiyi aç",
+      "needsContact": "Kişi limitinize ulaşıldığı için bu numaranın kişi kaydı yok.",
+      "noContact": "Bu konuşma bir kişiyle bağlantılı değil.",
+      "email": "E-posta",
+      "stage": "Aşama",
+      "status": "Durum",
+      "source": "Kaynak",
+      "since": "Kişi olma tarihi",
+      "optedOut": "Pazarlama iletişimlerinden çıktı",
+      "resolve": "Çöz",
+      "reopen": "Yeniden aç",
+      "assignee": {
+        "title": "Atanan",
+        "unknown": "Bilinmeyen ekip arkadaşı",
+        "none": "Bu konuşma kimsede değil",
+        "team": "Ekip: {name}",
+        "pick": "Bu konuşmayı kimin yöneteceğini seçin",
+        "unassigned": "Atanmamış",
+        "you": "siz",
+        "loadFailed": "Ekip arkadaşı listesi yüklenemedi.",
+        "assignToMe": "Bana ata",
+        "unassign": "Atamayı kaldır",
+        "open": "{count} açık",
+        "pickTeam": "Bu konuşma için bir ekip seçin",
+        "noTeam": "Ekip yok"
+      },
+      "presence": {
+        "online": "Çevrimiçi",
+        "away": "Uzakta",
+        "busy": "Meşgul",
+        "offline": "Çevrimdışı"
+      },
+      "notes": {
+        "tab": "Notlar",
+        "label": "Yeni dahili not",
+        "placeholder": "Yalnızca ekibinizin görebileceği bir not yazın",
+        "hint": "Ctrl+Enter notu ekler.",
+        "add": "Not ekle",
+        "addFailed": "Not kaydedilemedi.",
+        "loading": "Notlar yükleniyor",
+        "empty": "Henüz not yok.",
+        "unknownAuthor": "Bir ekip arkadaşı",
+        "delete": "Bu notu sil"
+      },
+      "timeline": {
+        "tab": "Zaman çizelgesi",
+        "loading": "Zaman çizelgesi yükleniyor",
+        "failed": "Zaman çizelgesi yüklenemedi.",
+        "retry": "Yeniden dene",
+        "empty": "Bu konuşmada henüz bir şey olmadı.",
+        "events": {
+          "created": "Konuşma başladı",
+          "assigned": "{actor} tarafından atandı",
+          "reassigned": "{actor} tarafından yeniden atandı",
+          "unassigned": "{actor} tarafından atama kaldırıldı",
+          "ai_handoff": "{actor} tarafından bir kişiye devredildi",
+          "resolved": "{actor} tarafından çözüldü",
+          "closed": "{actor} tarafından kapatıldı",
+          "reopened": "{actor} tarafından yeniden açıldı",
+          "status_changed": "Durum {actor} tarafından değiştirildi",
+          "note_added": "Not {actor} tarafından eklendi",
+          "snoozed": "{actor} tarafından ertelendi",
+          "auto_unsnoozed": "Erteleme sona erdi",
+          "priority_changed": "Öncelik {actor} tarafından değiştirildi",
+          "tag_added": "Etiket {actor} tarafından eklendi",
+          "tag_removed": "Etiket {actor} tarafından kaldırıldı",
+          "first_response": "İlk yanıt gönderildi",
+          "sla_breach": "Yanıt süresi kaçırıldı",
+          "unknown": "{actor} tarafından: {what}"
+        },
+        "actors": {
+          "user": "Bir ekip arkadaşı",
+          "system": "Sistem",
+          "bot": "Bir bot",
+          "flow": "Bir otomasyon",
+          "ai": "AI Asistan"
+        }
+      },
+      "owner": "Sahip",
+      "past": {
+        "title": "Geçmiş konuşmalar",
+        "noMessages": "Mesaj yok",
+        "status": {
+          "open": "Açık",
+          "pending": "Beklemede",
+          "snoozed": "Ertelendi",
+          "resolved": "Çözüldü",
+          "closed": "Kapalı",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Müşteri simülatörü",
+      "close": "Simülatörü kapat",
+      "devOnly": "Yalnızca geliştirme. Simüle edilmiş bir kanalda müşteri gibi davranır; hiçbir şey gerçek bir telefona ulaşmaz.",
+      "noChannel": "Henüz simülatör kanalı yok.",
+      "createChannel": "Simülatör kanalı oluştur",
+      "disabled": "Simülatör bu sunucuda kapalı.",
+      "channel": "Simülatör kanalı",
+      "customer": "Müşteri",
+      "name": "Ad",
+      "number": "Numara",
+      "numberHint": "Yalnızca rakam, 5 ila 15 haneli.",
+      "kind": "Mesaj türü",
+      "kinds": {
+        "text": "Metin",
+        "image": "Görsel",
+        "document": "Belge",
+        "audio": "Ses",
+        "video": "Video",
+        "location": "Konum"
+      },
+      "file": "Dosya",
+      "fileHint": "İsteğe bağlı. Adı ve türü kullanılır; aksi halde örnek bir dosya gönderilir.",
+      "message": "Mesaj",
+      "caption": "Açıklama",
+      "placeName": "Yer adı",
+      "send": "Müşteri olarak gönder",
+      "sent": "{count, plural, other {# kez teslim edildi, yalnızca bir kez saklandı.}}",
+      "duplicate": "Yinelenen teslim",
+      "duplicateHint": "Aynı mesajı üç kez teslim eder; bir kez saklandığını doğrular.",
+      "nextSend": "Bir sonraki yanıtınız",
+      "nextSendHint": "Yazı alanından göndereceğiniz bir sonraki mesaja uygulanır, ardından normale döner.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Başarısız olur",
+        "flaky": "İki kez başarısız olur, sonra çalışır",
+        "slow": "Yavaş (10 sn)",
+        "ooo": "Teslim bildirimleri sırasız"
+      },
+      "window": "24 saatlik pencere",
+      "windows": {
+        "auto": "Otomatik",
+        "open": "Zorla aç",
+        "closed": "Zorla kapat"
+      },
+      "windowHint": "Kapalı, yalnızca şablon gönderilebildiğinde yazı alanının nasıl davrandığını gösterir."
+    },
+    "channels": {
+      "title": "Kanallar",
+      "intro": "Müşterilerin size ulaştığı hesaplar. Her biri gelen kutusunu besler.",
+      "backToInbox": "Gelen kutusuna dön",
+      "simulatorNote": "Geliştirme: Gerçek bir hesap olmadan gelen kutusunu denemek için simüle edilmiş bir kanal ekleyin.",
+      "addSimulator": "Simülatör kanalı ekle",
+      "simulatorAdded": "Simülatör kanalı eklendi.",
+      "simulatorDisabled": "Simülatör bu sunucuda kapalı.",
+      "loading": "Kanallar yükleniyor",
+      "loadFailed": "Kanallar yüklenemedi.",
+      "retry": "Yeniden dene",
+      "empty": {
+        "title": "Bağlı kanal yok",
+        "message": "Bir kanal bağlayın; müşteri mesajları gelen kutusuna gelmeye başlar."
+      },
+      "listLabel": "Bağlı kanallar",
+      "status": {
+        "connected": "Bağlı",
+        "disconnected": "Bağlantı kesildi",
+        "error": "Hata"
+      },
+      "capWindow": "{hours} saatlik yanıt penceresi",
+      "capTemplates": "Şablonlar",
+      "capMedia": "Medya",
+      "capReceipts": "Teslim bildirimleri",
+      "lastEvent": "Son etkinlik: {when}",
+      "noEvents": "Henüz etkinlik yok",
+      "remove": "Kaldır",
+      "removeTitle": "Bu kanal kaldırılsın mı?",
+      "removeMessage": "{name} kaldırılacak. Hâlâ konuşması olan bir kanal kaldırılamaz; bunun yerine bağlantısını kesin.",
+      "removeConfirm": "Kanalı kaldır",
+      "cancel": "İptal"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Şablon gönder",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "back": "Şablonlara dön",
+      "search": "Ad veya metne göre ara",
+      "searchLabel": "Şablonlarda ara",
+      "loading": "Şablonlar yükleniyor",
+      "loadError": "Şablonlar yüklenemedi.",
+      "retry": "Yeniden dene",
+      "empty": "Bu WhatsApp numarası için henüz onaylı şablon yok. Şablonlar bölümünde bir şablon oluşturun ve Meta onayını bekleyin.",
+      "noResults": "Aramanızla eşleşen şablon yok.",
+      "windowHint": "Şablon, 24 saatlik yanıt penceresi kapansa bile çalışır.",
+      "variables": "Değişkenleri doldurun",
+      "preview": "Müşterinin okuyacakları",
+      "send": "Şablonu gönder",
+      "sending": "Gönderiliyor",
+      "sent": "Şablon gönderildi",
+      "problem": {
+        "required": "{label} zorunludur.",
+        "format": "{label} satır sonu, sekme veya art arda dört boşluk içeremez."
+      },
+      "reason": {
+        "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
+        "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
+        "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",
+        "dynamic_button": "Değişken içeren bir düğme bağlantısı var; bu, gelen kutusundan henüz doldurulamıyor.",
+        "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
+        "named_variables": "Gelen kutusunun henüz desteklemediği adlandırılmış değişkenler kullanır."
+      },
+      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın."
+    }
+  }
+}

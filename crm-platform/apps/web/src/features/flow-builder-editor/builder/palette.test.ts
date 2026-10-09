@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { filterPalette } from './palette';
+import { translator } from '../test-utils/intl';
+
+const tf = translator('flb');
 
 const ids = (mode: Parameters<typeof filterPalette>[0], q = '') =>
-  filterPalette(mode, q).flatMap(([, items]) => items.map((d) => d.id));
+  filterPalette(mode, q, tf).flatMap(([, items]) => items.map((d) => d.id));
 
 describe('palette (WD-FLB-016)', () => {
   it('a WhatsApp flow lists the 35 WaDesk nodes plus Ask for file / location and the workflow additions, in WaDesk group order, Template / List / Sequence / MySQL / Google included', () => {
-    const groups = filterPalette('chat', '');
-    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(44);
+    const groups = filterPalette('chat', '', tf);
+    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(45); // 44 + API (from library), the owner-requested node
     expect(groups.map(([g]) => g)).toEqual([
       'Start',
       'Send',
@@ -89,6 +92,7 @@ describe('palette (WD-FLB-016)', () => {
     expect(ids('chat', 'SHEET')).toEqual(['google_sheets', 'sheet_check', 'sheet_contact']);
     expect(ids('chat', 'tap-to-pick')).toEqual(['buttons']);
     expect(ids('chat', 'integrations').sort()).toEqual([
+      'api_library',
       'google_docs',
       'google_form',
       'google_sheets',
@@ -101,6 +105,6 @@ describe('palette (WD-FLB-016)', () => {
   it('QUIRK: the query is not trimmed, a padded query matches nothing', () => {
     expect(ids('chat', 'sheet')).toEqual(['google_sheets', 'sheet_check', 'sheet_contact']);
     expect(ids('chat', '  sheet  ')).toEqual([]);
-    expect(ids('chat', ' ').length).toBe(44); // every description holds a space
+    expect(ids('chat', ' ').length).toBe(45); // every description holds a space
   });
 });

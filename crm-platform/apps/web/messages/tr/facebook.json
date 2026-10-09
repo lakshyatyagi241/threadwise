@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook gönderileri",
+      "setup": "Messenger kurulumu",
+      "broadcasts": "Messenger toplu gönderimleri"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "cancel": "İptal"
+    },
+    "hub": {
+      "kicker": "Kanal · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Sayfalar",
+      "intro": "Bir kez Facebook ile giriş yapın; hesabınızın yönettiği her Sayfa eklenir. Ardından gelen kutunuzdan gönderi yayınlayın, yorumlara yanıt verin ve Messenger'ı çalıştırın.",
+      "teamInbox": "Ekip gelen kutusu",
+      "posts": "Gönderiler",
+      "setup": "Messenger kurulumu",
+      "broadcasts": "Messenger toplu gönderimleri",
+      "loadError": "Bağlı Sayfalar yüklenemedi. Tekrar deneyin.",
+      "notConfigured": "Bu kurulumda Facebook henüz yapılandırılmadı. Bir Sayfa bağlanabilmesi için bir yöneticinin Meta uygulamasını eklemesi gerekir.",
+      "connectedCount": "{count, plural, other {# Sayfa bağlandı}}",
+      "notConnected": "Bağlı değil",
+      "cardTitle": "Facebook hesabınızı bağlayın",
+      "cardBody": "Bir kez Facebook ile giriş yapın. Hesabınızın yönettiği her Sayfa kendi erişimiyle otomatik eklenir. Ya da erişim anahtarıyla tek bir Sayfa ekleyin.",
+      "connect": "Bir Sayfa bağlayın",
+      "connectAnother": "Başka bir hesap bağlayın",
+      "connectedPages": "Bağlı Sayfalar",
+      "webhookTitle": "Webhook adresi",
+      "webhookBody": "Messenger mesajlarının ve yorumlarının gelen kutunuza ulaşması için bu adresi Meta uygulamanızın webhook ayarlarına (geri çağırma URL'si) yapıştırın. Ayrı bir Facebook doğrulama anahtarı ayarlanmadıysa WhatsApp ile aynı doğrulama anahtarını kullanır."
+    },
+    "connect": {
+      "close": "Kapat",
+      "kicker": "Facebook",
+      "title": "Facebook hesabınızı bağlayın",
+      "intro": "Bir kez Facebook ile giriş yapın. Hesabınızın yönettiği her Sayfa otomatik eklenir. Ardından gelen kutunuzdan gönderi yayınlayabilir, yorumlara yanıt verebilir ve Messenger'ı çalıştırabilirsiniz.",
+      "continue": "Facebook ile devam et",
+      "or": "veya",
+      "manualToggle": "Bir erişim anahtarıyla Sayfayı elle ekleyin",
+      "tokenLabel": "Sayfa erişim anahtarı",
+      "tokenHint": "Meta → İş ayarları → Sistem kullanıcıları veya Graph API Explorer üzerinden alın. Sayfayı anahtardan biz belirleriz.",
+      "connectPage": "Sayfayı bağla",
+      "tokenShape": "Bu bir Sayfa erişim anahtarına benzemiyor.",
+      "failed": "Bağlanılamadı. Tekrar deneyin.",
+      "footerLeft": "Gelen kutunuza anında yönlendirilir",
+      "footerRight": "şifreli"
+    },
+    "page": {
+      "facebookPage": "Facebook Sayfası",
+      "failed": "İşlem başarısız oldu. Tekrar deneyin.",
+      "live": "Canlı",
+      "reconnect": "Yeniden bağla",
+      "followers": "{count} takipçi",
+      "liveNoCount": "canlı",
+      "dataAccess": "Meta veri erişimi {when} sona eriyor",
+      "refresh": "Profili yenile",
+      "refreshed": "Facebook Sayfası yenilendi.",
+      "inboundFixed": "Bu Sayfa için Facebook webhook'ları yeniden abone edildi.",
+      "fixInbound": "Gelen mesajları düzelt",
+      "remove": "Bağlantıyı kes",
+      "removeConfirm": "Bu Facebook Sayfasının bağlantısı kesilsin mi? Gelen kutusu konuşmaları kalır ancak yeniden bağlanana kadar gönderim durur.",
+      "cancel": "İptal",
+      "removed": "Facebook Sayfasının bağlantısı kesildi."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Toplu gönderimler",
+      "title": "Messenger",
+      "titleAccent": "toplu gönderimler",
+      "intro": "Son zamanlarda Sayfanızla sohbet eden kişilere mesaj gönderin. Meta, bir Sayfanın kişiye son mesajından itibaren yalnızca 24 saat içinde mesaj göndermesine izin verir. Aşağıdaki liste şu anda ulaşabileceğiniz kitledir.",
+      "inbox": "Gelen kutusu",
+      "loadError": "Toplu gönderimler yüklenemedi. Tekrar deneyin.",
+      "connectFirst": "Önce bir Facebook Sayfası bağlayın.",
+      "connectPage": "Bir Sayfa bağlayın",
+      "none": "Henüz toplu gönderim yok. Sağdan bir tane oluşturun.",
+      "recipients": "{count, plural, other {# alıcı}}",
+      "status": {
+        "sending": "Gönderiliyor",
+        "done": "Tamamlandı",
+        "failed": "Başarısız",
+        "draft": "Taslak"
+      },
+      "counts": "{sent} gönderildi · {failed} başarısız · {blocked} engellendi",
+      "start": "Göndermeyi başlat",
+      "started": "Gönderim başladı. Bu sayfadan ayrılsanız bile devam eder.",
+      "pause": "Duraklat",
+      "paused": "Duraklatıldı. Kalan alıcılar hâlâ sırada.",
+      "retry": "Başarısızları yeniden dene",
+      "retried": "{count, plural, other {# alıcı}} yeniden sıraya alındı. Göndermeyi başlat'a basın.",
+      "delete": "Sil",
+      "deleted": "Toplu gönderim silindi.",
+      "deleteConfirm": "Bu toplu gönderim silinsin mi?",
+      "cancel": "İptal",
+      "newBroadcast": "Yeni toplu gönderim",
+      "name": "Ad",
+      "namePlaceholder": "örn. Hafta sonu indirimi",
+      "page": "Sayfa",
+      "template": "Şablon (isteğe bağlı)",
+      "templateHint": "Mesajı önceden doldurur ve şablonun düğmelerini gönderir.",
+      "templateNone": "— yok (kendiniz yazın) —",
+      "buttons": "{count, plural, other {# düğme}}",
+      "message": "Mesaj",
+      "messageHint": "Kişiselleştirmek için '{name}' kullanın.",
+      "messagePlaceholder": "Merhaba '{name}'! …",
+      "recipientsLabel": "Alıcılar",
+      "within24": "(24 saat içinde)",
+      "selectAll": "Tümünü seç",
+      "noAudience": "Şu anda 24 saatlik pencerede kimse yok. Önce birinin bu Sayfaya mesaj göndermesi gerekir.",
+      "messengerUser": "Messenger kullanıcısı",
+      "selected": "{count} seçildi",
+      "create": "Toplu gönderim oluştur",
+      "created": "{count, plural, other {# alıcı}} ile toplu gönderim oluşturuldu. Hazır olduğunda Göndermeyi başlat'a basın.",
+      "failed": "İşlem başarısız oldu. Tekrar deneyin."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "kurulum",
+      "intro": "Messenger sohbetinizin müşterileri nasıl karşılayıp yönlendireceğini ayarlayın: Başlayın düğmesi, karşılama mesajı, her zaman açık menü ve dokunmatik SSS'ler. Bir özellik seçin, ne yaptığını okuyun, sonra doldurun. Değişiklikler doğrudan Facebook'a kaydedilir.",
+      "pagePicker": "Sayfa",
+      "composer": "Düzenleyici",
+      "loadError": "Messenger profili yüklenemedi. Tekrar deneyin.",
+      "noPage": "Henüz bağlı bir Facebook Sayfası yok.",
+      "connect": "Bir Facebook hesabı bağlayın",
+      "profile": "Messenger profili",
+      "tabs": {
+        "getstarted": "Başlayın düğmesi",
+        "greeting": "Karşılama",
+        "menu": "Kalıcı menü",
+        "icebreakers": "Buz kırıcılar"
+      },
+      "isSet": "Kur",
+      "notSet": "Kurulmadı",
+      "failed": "İşlem başarısız oldu. Tekrar deneyin.",
+      "footnote": "Bu ayarlar Graph API üzerinden Facebook Messenger profiline yazılır ve yeni konuşmalara uygulanır. Meta değişiklikleri yansıtması biraz zaman alabilir.",
+      "frame": {
+        "preview": "Önizleme",
+        "yourPage": "Sayfanız",
+        "activeNow": "Şimdi aktif"
+      },
+      "explainer": {
+        "what": "Nedir",
+        "customer": "Müşterileriniz bunu nasıl kullanır",
+        "how": "Nasıl kurulur"
+      },
+      "getstarted": {
+        "title": "Başlayın düğmesi",
+        "subtitle": "Yeni bir müşterinin sohbeti başlatmak için dokunduğu düğme.",
+        "what": "Biri Messenger'ınızı açtığında ilk gördüğü şeydir: karşılama ekranında tek bir “Başlayın” düğmesi.",
+        "customer": "Bir kez dokunurlar ve konuşma başlar. Yalnızca ilk mesajdan önce görünür.",
+        "how": "Bir yük (GET_STARTED gibi bir anahtar sözcük) verin. Ardından Akışlar bölümünde bu yükü dinleyen bir Tetikleyici ekleyin; böylece Karşılama akışı dokunduğu anda çalışır.",
+        "payload": "Yük",
+        "payloadHint": "Düğmeye dokunulduğunda bu sözcük size gönderilir. Otomasyonu başlatmak için bir Akış tetikleyicisinde eşleştirin.",
+        "remove": "Kaldır",
+        "removeConfirm": "Başlayın düğmesi kaldırılsın mı?",
+        "save": "Kaydet",
+        "yourPage": "Sayfanız",
+        "typically": "Genellikle anında yanıt verir",
+        "button": "Başlayın"
+      },
+      "greeting": {
+        "title": "Karşılama",
+        "subtitle": "Kimse yazmadan önce gösterilen samimi karşılama satırı.",
+        "what": "Sohbetinizin ilk ekranında, Sayfa adınızın hemen altında kısa bir karşılama mesajı.",
+        "customer": "Messenger'ı açtıkları anda okurlar. Tonu belirler ve nasıl yardımcı olabileceğinizi söyler.",
+        "how": "Tek bir samimi satırla sınırlı tutun (en fazla 160 karakter). İpucu: ad etiketi ekleyin, Messenger her müşteriyi adıyla karşılar.",
+        "welcomeText": "Karşılama metni",
+        "placeholder": "Merhaba! Bugün size nasıl yardımcı olabiliriz?",
+        "remove": "Kaldır",
+        "removeConfirm": "Karşılama kaldırılsın mı?",
+        "save": "Kaydet",
+        "yourPage": "Sayfanız",
+        "sample": "Merhaba! Bugün size nasıl yardımcı olabiliriz?"
+      },
+      "menu": {
+        "title": "Kalıcı menü",
+        "subtitle": "Mesaj çubuğunun içinde her zaman açık kısayol menüsü.",
+        "what": "Sohbet boyunca erişilebilir kalan bir menü (metin kutusunun yanındaki ☰ simgesi). En fazla 3 kısayol.",
+        "customer": "İstedikleri yere doğrudan gitmek için istedikleri zaman ☰ simgesine dokunurlar: “Bir temsilciyle konuş”, “Siparişimi takip et”, “Mağazayı ziyaret et”.",
+        "how": "En fazla 3 öğe ekleyin. Her biri ya bir Akış çalıştırır (yük gönderir) ya da bir bağlantı (URL) açar. İsterseniz insanlar yalnızca menüyü kullansın diye metin kutusunu gizleyin.",
+        "sample1": "Bize ulaşın",
+        "sample2": "Siparişimi takip et",
+        "sample3": "Mağazayı ziyaret et",
+        "menuLabel": "Menü",
+        "menuItem": "Menü öğesi",
+        "titleLabel": "Başlık",
+        "titlePlaceholder": "Bize ulaşın",
+        "action": "İşlem",
+        "actionFlow": "Bir akış çalıştır (yük gönder)",
+        "actionLink": "Bir bağlantı aç (URL)",
+        "url": "URL",
+        "payload": "Yük",
+        "removeItem": "Öğeyi kaldır",
+        "add": "Menü öğesi ekle",
+        "hideComposer": "Metin kutusunu gizle (yalnızca menü)",
+        "remove": "Menüyü kaldır",
+        "removeConfirm": "Kalıcı menü kaldırılsın mı?",
+        "save": "Menüyü kaydet"
+      },
+      "ice": {
+        "title": "Buz kırıcılar",
+        "subtitle": "İlk mesajdan önce gösterilen önerilen sorular.",
+        "what": "Karşılama ekranında en fazla 4 dokunmatik soru. İnsanların sık sorduğu şeyler, yazmak yerine dokunmaya hazır.",
+        "customer": "Ne yazacaklarını düşünmek yerine “Çalışma saatleriniz nedir?” gibi bir soruya dokunur ve anında yanıt alırlar.",
+        "how": "En sık sorulan sorularınızı ekleyin. Her dokunuş yükünü gönderir. Otomatik yanıtlamak için bu yükü bir Akış tetikleyicisinde eşleştirin.",
+        "sample1": "Çalışma saatleriniz nedir?",
+        "sample2": "Nereye gönderim yapıyorsunuz?",
+        "sample3": "Bir temsilciyle konuş",
+        "yourPage": "Sayfanız",
+        "question": "Soru",
+        "questionLabel": "Soru",
+        "questionPlaceholder": "Çalışma saatleriniz nedir?",
+        "payload": "Yük",
+        "removeItem": "Buz kırıcıyı kaldır",
+        "add": "Buz kırıcı ekle",
+        "remove": "Tümünü kaldır",
+        "removeConfirm": "Tüm buz kırıcılar kaldırılsın mı?",
+        "save": "Buz kırıcıları kaydet"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Gönderiler",
+      "title": "Facebook",
+      "titleAccent": "gönderi",
+      "intro": "Buradan oluşturduğunuz, zamanladığınız veya yayınladığınız her şey. Durumu takip edin, başarısız işlemleri yeniden deneyin ve kuyruğunuzu yönetin.",
+      "allPages": "Tüm Sayfalar",
+      "pagePicker": "Sayfa",
+      "myPosts": "Gönderilerim",
+      "insights": "Öngörüler",
+      "create": "Gönderi oluştur",
+      "loadError": "Gönderiler yüklenemedi. Tekrar deneyin.",
+      "noPage": "Henüz bağlı bir Facebook Sayfası yok",
+      "noPageHint": "Sayfa gönderileri yayınlamak ve zamanlamak için bir Facebook hesabı bağlayın.",
+      "connect": "Bir Facebook hesabı bağlayın",
+      "kpi": {
+        "total": "Toplam gönderi",
+        "scheduled": "Zamanlanmış",
+        "published": "Yayınlandı",
+        "failed": "Başarısız"
+      },
+      "tabs": {
+        "all": "Tümü",
+        "scheduled": "Zamanlanmış",
+        "published": "Yayınlandı",
+        "failed": "Başarısız"
+      },
+      "ranges": {
+        "all": "Tüm zamanlar",
+        "7d": "7g",
+        "30d": "30g",
+        "90d": "90g"
+      },
+      "search": "Gönderilerde ara…",
+      "cols": {
+        "post": "Gönderi",
+        "page": "Sayfa",
+        "type": "Tür",
+        "status": "Durum",
+        "when": "Ne zaman",
+        "actions": "İşlemler"
+      },
+      "status": {
+        "scheduled": "Zamanlanmış",
+        "published": "Yayınlandı",
+        "failed": "Başarısız",
+        "draft": "Taslak"
+      },
+      "publishNow": "Şimdi yayınla",
+      "delete": "Sil",
+      "noMatch": "Bu filtrelerle eşleşen gönderi yok",
+      "none": "Henüz gönderi yok",
+      "noneHint": "İlk gönderinizi oluşturun. Hemen yayınlayın veya zamanlayın.",
+      "pageOf": "Sayfa {page} / {last}",
+      "prev": "Önceki",
+      "next": "Sonraki",
+      "deleteTitle": "Gönderiyi sil",
+      "deleteLive": "Bu, gönderiyi Facebook'tan da siler. Geri alınamaz.",
+      "deleteLocal": "Bu gönderi kaldırılsın mı?",
+      "deleteYes": "Evet, sil",
+      "cancel": "İptal",
+      "rejected": "Facebook gönderiyi reddetti: {error}",
+      "published": "Gönderi Facebook'ta yayınlandı.",
+      "removed": "Gönderi kaldırıldı.",
+      "failed": "İşlem başarısız oldu. Tekrar deneyin."
+    },
+    "compose": {
+      "kicker": "Facebook · Oluştur",
+      "title": "Bir",
+      "titleAccent": "gönderi oluşturun",
+      "intro": "Fotoğraf, albüm, bağlantı, video ve reels oluşturun. Hemen yayınlayın veya doğrudan bağlı Sayfalarınıza zamanlayın. Canlı önizlemede nasıl oluştuğunu izleyin.",
+      "posts": "Gönderiler",
+      "myPosts": "Gönderilerim",
+      "insights": "Öngörüler",
+      "loadError": "Sayfalar yüklenemedi. Tekrar deneyin.",
+      "noPage": "Henüz bağlı bir Facebook Sayfası yok",
+      "noPageHint": "Sayfa gönderileri yayınlamak ve zamanlamak için bir Facebook hesabı bağlayın.",
+      "noAccess": "Gönderi oluşturamazsınız",
+      "noAccessHint": "Facebook gönderisi oluşturma izni için bir yöneticiye başvurun.",
+      "connect": "Bir Facebook hesabı bağlayın",
+      "required": "zorunlu",
+      "steps": {
+        "page": "Sayfa",
+        "type": "Gönderi türü",
+        "media": "Medya",
+        "message": "Mesaj",
+        "when": "Ne zaman paylaşılsın"
+      },
+      "types": {
+        "photo": {
+          "label": "Fotoğraf",
+          "hint": "Tek fotoğraflı gönderi."
+        },
+        "multi_photo": {
+          "label": "Albüm",
+          "hint": "Tek gönderide 2–10 fotoğraf."
+        },
+        "link": {
+          "label": "Bağlantı",
+          "hint": "Önizlemeli bir bağlantı paylaşın."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "Akış videosu (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reels",
+          "hint": "Dikey kısa video reels."
+        }
+      },
+      "photoUrls": "Herkese açık görsel URL'lerini yapıştırın",
+      "photoHint": "Satır başına bir tane, en fazla 10. Dosya yüklemek depolama hizmeti gerektirir, bu henüz bağlı değil. Bu yüzden herkese açık görsel adreslerini kullanın.",
+      "linkUrl": "Bağlantı URL'si",
+      "linkHint": "Facebook bağlantıdan bir önizleme kartı oluşturur. Bir gönderide bağlantı veya fotoğraf olabilir, ikisi birden olamaz.",
+      "videoUrl": "Herkese açık bir HTTPS video URL'si yapıştırın",
+      "reelNote": "Reels dikey kısa videolardır. Aşağıdaki mesaj reels açıklaması olarak kullanılır.",
+      "videoNote": "Meta dosyayı herkese açık HTTPS üzerinden çeker. Aşağıdaki mesaj video açıklaması olarak kullanılır.",
+      "messagePlaceholder": "Gönderinizi yazın…",
+      "ai": {
+        "title": "Yapay zekâ düzenleyici araçları",
+        "caption": "Açıklama",
+        "repurpose": "Yeniden kullan",
+        "review": "Gözden geçir",
+        "bestTime": "En iyi zaman",
+        "image": "Görsel",
+        "unavailable": "Yapay zekâ araçları henüz kullanılamıyor. Yapay zekâ sağlayıcı ayarlarını bekliyorlar."
+      },
+      "when": {
+        "now": "Şimdi yayınla",
+        "later": "Sonra için zamanla",
+        "label": "Gönderim tarihi ve saati",
+        "hint": "Şu andan itibaren 10 dakika ile 75 gün arasında, saat diliminizde ({tz}). Facebook bunu sıraya alır ve zamanı geldiğinde yayınlar."
+      },
+      "submit": {
+        "publish": "Yayınla",
+        "schedule": "Zamanla"
+      },
+      "preview": {
+        "live": "Canlı önizleme",
+        "facebook": "Facebook",
+        "yourPage": "Sayfanız",
+        "justNow": "Az önce",
+        "empty": "Gönderinizin metni burada görünecek…",
+        "reel": "Reels",
+        "video": "Video",
+        "like": "Beğen",
+        "comment": "Yorum",
+        "share": "Paylaş",
+        "note": "Canlı önizleme. Gerçek gönderi Facebook'ta biraz farklı görünebilir."
+      },
+      "help": {
+        "label": "Yardım - {n}",
+        "help1": {
+          "title": "Ne paylaşabilirim?",
+          "body": "Fotoğraflar, albümler, bağlantılar, akış videoları ve reels, Graph API üzerinden doğrudan bağlı Sayfanıza yayınlanır."
+        },
+        "help2": {
+          "title": "Zamanlama nasıl çalışır?",
+          "body": "10 dakika ile 75 gün arasında bir zaman seçin, Facebook sıraya alır. Zamanı geldiğinde otomatik yayınlanır. Ya da hemen yayınlayın."
+        },
+        "help3": {
+          "title": "Bir gönderi başarısız oldu. Neden?",
+          "body": "Genellikle medya URL'si herkese açık HTTPS değildi ya da Sayfa yeniden bağlandı. Satırdaki hataya bakın, sonra Şimdi yayınla ile yeniden deneyin."
+        }
+      },
+      "problem": {
+        "noPage": "Bağlı bir Facebook Sayfası seçin.",
+        "scheduleMissing": "Gönderiyi zamanlamak için bir tarih ve saat seçin.",
+        "scheduleInvalid": "Bu tarih ve saat okunamadı."
+      },
+      "rejected": "Facebook gönderiyi reddetti: {error}",
+      "scheduled": "Gönderi zamanlandı.",
+      "published": "Gönderi Facebook'ta yayınlandı.",
+      "failed": "İşlem başarısız oldu. Tekrar deneyin."
+    },
+    "grid": {
+      "kicker": "Facebook · Gönderilerim",
+      "title": "Sizin",
+      "titleAccent": "ızgaranız",
+      "intro": "Son yayınlanan Sayfa gönderileriniz, doğrudan Facebook'tan. Önizlemek için bir gönderiye dokunun.",
+      "posts": "Gönderiler",
+      "newPost": "Yeni gönderi",
+      "pagePicker": "Sayfa",
+      "loadError": "Gönderiler yüklenemedi. Tekrar deneyin.",
+      "noPage": "Bağlı Facebook Sayfası yok",
+      "noPageHint": "Izgaranızı burada görmek için bir tane bağlayın.",
+      "goHub": "Facebook'a git",
+      "empty": "Henüz burada bir şey yok",
+      "emptyHint": "Yayınladığınız gönderiler burada görünecek.",
+      "firstPost": "İlk gönderinizi oluşturun",
+      "noCaption": "(açıklama yok)",
+      "view": "Gönderiyi görüntüle",
+      "close": "Kapat",
+      "postTitle": "Gönderi",
+      "noImage": "Görsel yok",
+      "viewOnFacebook": "Facebook'ta görüntüle"
+    },
+    "insights": {
+      "kicker": "Facebook · Analitik",
+      "title": "Sayfa",
+      "titleAccent": "öngörüler",
+      "intro": "Erişim ve etkileşim (28 günlük, doğrudan Facebook'tan) Messenger etkinliğiniz ve buradan yayınlanan gönderilerle birlikte.",
+      "create": "Gönderi oluştur",
+      "myPosts": "Gönderilerim",
+      "loadError": "Öngörüler yüklenemedi. Tekrar deneyin.",
+      "noPage": "Henüz bağlı bir Facebook Sayfası yok.",
+      "connect": "Bir Facebook hesabı bağlayın",
+      "connected": "Bağlı",
+      "viewing": "Görüntülenen hesap",
+      "cards": {
+        "followers": "Takipçiler",
+        "followersSub": "toplam kitle",
+        "reach": "Erişim · 28 gün",
+        "reachSub": "ulaşılan kişi",
+        "impressions": "Gösterim · 28 gün",
+        "impressionsSub": "gösterilme sayısı",
+        "engagements": "Etkileşim · 28 gün",
+        "engagementsSub": "etkileşim",
+        "convos": "Konuşmalar",
+        "convosSub": "{n} açık",
+        "messagesIn": "Gelen mesajlar · 28 gün",
+        "messagesInSub": "{n} geri gönderildi",
+        "published": "Yayınlanan gönderiler",
+        "publishedSub": "{n} zamanlandı",
+        "rate": "Etkileşim oranı",
+        "rateSub": "etkileşim ÷ erişim"
+      },
+      "liveFromFacebook": "Doğrudan Facebook'tan",
+      "fromHere": "Bu çalışma alanından",
+      "activity": "Messenger etkinliği · son 14 gün",
+      "received": "Alınan",
+      "sent": "Gönderilen",
+      "mix": {
+        "title": "İçerik dağılımı",
+        "posts": "{n} gönderi",
+        "none": "Buradan henüz gönderi yayınlanmadı.",
+        "first": "İlk gönderinizi oluşturun"
+      },
+      "types": {
+        "photo": "Fotoğraf",
+        "multi_photo": "Albüm",
+        "link": "Bağlantı",
+        "video": "Video",
+        "reel": "Reels"
+      },
+      "convos": {
+        "title": "Konuşmalar",
+        "total": "{n} toplam",
+        "open": "Ekip gelen kutusunu aç",
+        "none": "Henüz Facebook konuşması yok. İnsanlar Sayfanıza mesaj gönderdiğinde burada görünür."
+      },
+      "status": {
+        "open": "Açık",
+        "pending": "Beklemede",
+        "resolved": "Çözüldü",
+        "closed": "Kapalı",
+        "snoozed": "Ertelendi"
+      },
+      "recent": {
+        "title": "Son gönderiler",
+        "none": "Henüz gönderi yok veya öngörüler hâlâ hazırlanıyor.",
+        "noCaption": "(açıklama yok)",
+        "impressions": "gösterim",
+        "engaged": "etkileşim",
+        "view": "Görüntüle"
+      },
+      "legendLive": "Doğrudan Facebook'tan. Kullanımdan kalkmış ölçümler — olarak gösterilebilir.",
+      "legendHere": "Bu çalışma alanından: Messenger ve yayınlanan gönderiler."
+    }
+  }
+}

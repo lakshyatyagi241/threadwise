@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Programmato",
+      "warmer": "Warmer"
+    },
+    "common": {
+      "dismiss": "Ignora"
+    },
+    "status": {
+      "scheduled": "In coda",
+      "running": "In esecuzione",
+      "paused": "In pausa",
+      "completed": "Completato",
+      "failed": "Non riuscito",
+      "cancelled": "Annullato"
+    },
+    "type": {
+      "plain": "Testo semplice",
+      "template": "Template",
+      "media": "Media",
+      "location": "Posizione"
+    },
+    "errors": {
+      "generic": "Qualcosa non ha funzionato. Riprova.",
+      "FORBIDDEN": "Non hai i permessi per eseguire questa operazione.",
+      "VALIDATION_FAILED": "Alcuni campi richiedono attenzione.",
+      "ROW_VERSION_CONFLICT": "Nel frattempo questa programmazione è cambiata. Ricarica e riprova.",
+      "PLAN_FEATURE_LOCKED": "Il tuo piano non include questa funzionalità.",
+      "PLAN_LIMIT_REACHED": "Hai raggiunto il limite del tuo piano.",
+      "WA_UNOFFICIAL_DISABLED": "L’invio tramite numeri WhatsApp personali (API non ufficiale) non è attivo per il tuo Workspace. Scegli un numero dell’API ufficiale WhatsApp Business.",
+      "AUTH_SEND_HALTED": "L’invio è bloccato per questo Workspace.",
+      "upgrade": "Vedi i piani e fai l’upgrade",
+      "requestId": "Richiesta {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Programmazione in pausa.",
+        "resume": "Programmazione ripresa.",
+        "cancel": "Programmazione annullata.",
+        "run-now": "La programmazione è in esecuzione.",
+        "destroy": "Programmazione eliminata.",
+        "retry": "Programmazione rimessa in coda con il nuovo orario."
+      }
+    },
+    "confirm": {
+      "yes": "Sì, procedi",
+      "keep": "Mantienila",
+      "cancel": {
+        "title": "Annullare questa programmazione?",
+        "body": "«{name}» non verrà inviato. L’operazione non può essere annullata."
+      },
+      "run-now": {
+        "title": "Eseguire ora questa programmazione?",
+        "body": "«{name}» inizierà subito a inviare, invece che all’orario impostato."
+      },
+      "destroy": {
+        "title": "Eliminare questa programmazione?",
+        "body": "«{name}» e il relativo elenco di destinatari verranno rimossi."
+      }
+    },
+    "retry": {
+      "title": "Riprova con nuovo orario",
+      "body": "Scegli un nuovo orario di invio per «{name}». Tornerà in coda.",
+      "date": "Data di invio",
+      "time": "Ora",
+      "timezone": "Fuso orario",
+      "keep": "Mantieni non riuscito",
+      "confirm": "Riprova ora"
+    },
+    "list": {
+      "crumb": "Campagne / Messaggi programmati",
+      "title": "Messaggi programmati",
+      "queued": "{n} in coda",
+      "create": "Programma messaggio",
+      "stats": {
+        "total": "Totale programmati",
+        "totalHint": "in tutti gli stati",
+        "active": "Coda attiva",
+        "activeHint": "in attesa di invio",
+        "sent": "Totale inviati",
+        "sentHint": "messaggi inviati (questa pagina)",
+        "delivery": "Tasso di consegna",
+        "deliveryHint": "sui completati (questa pagina)"
+      },
+      "upNext": {
+        "eyebrow": "Prossimo",
+        "title": "Prossimo invio",
+        "pending": "{n} in attesa",
+        "empty": "Nessuna programmazione per ora.",
+        "createOne": "Creane una →",
+        "recurring": "ricorrente",
+        "queued": "in coda"
+      },
+      "tip": {
+        "eyebrow": "Suggerimento",
+        "title": "Invia quando leggono",
+        "body": "Le aperture raggiungono il picco tra le 9:00 e le 11:00 e tra le 18:00 e le 20:00, nel fuso orario locale dei tuoi contatti. Scegli un orario di invio adatto al gruppo di destinatari: le programmazioni ricorrenti ti permettono di impostarlo una volta sola.",
+        "cta": "Programmane uno"
+      },
+      "tabs": {
+        "all": "Tutti",
+        "upcoming": "Prossimi",
+        "running": "In esecuzione",
+        "paused": "In pausa",
+        "completed": "Completati",
+        "failed": "Non riusciti"
+      },
+      "search": "Cerca per nome…",
+      "cols": {
+        "schedule": "Programmazione",
+        "type": "Tipo",
+        "recipients": "Destinatari",
+        "sendTime": "Orario di invio",
+        "repeat": "Ripeti",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "recipients": {
+        "group": "Gruppo",
+        "tag": "Tag",
+        "queue": "Coda",
+        "number": "Numeri"
+      },
+      "when": {
+        "overdue": "in ritardo",
+        "now": "ora",
+        "minutes": "tra {n} min",
+        "hours": "tra {n} h",
+        "tomorrow": "domani",
+        "date": "più tardi"
+      },
+      "completedAt": "completato {when}",
+      "once": "una volta",
+      "actions": {
+        "open": "Apri",
+        "pause": "Metti in pausa",
+        "resume": "Riprendi",
+        "runNow": "Esegui ora",
+        "cancel": "Annulla",
+        "retry": "Riprova con nuovo orario",
+        "delete": "Elimina",
+        "deleteHistory": "Elimina dalla cronologia"
+      },
+      "empty": {
+        "title": "Nessuna programmazione",
+        "none": "Programma il tuo primo messaggio.",
+        "filtered": "Nessuna programmazione corrisponde ai filtri attuali. Prova a rimuovere i filtri oppure a programmare il tuo primo messaggio.",
+        "reset": "Reimposta filtri"
+      },
+      "page": "Pagina {page} di {pages}",
+      "prev": "Precedente",
+      "next": "Successiva"
+    },
+    "composer": {
+      "crumb": "Programmati / Nuovo",
+      "title": "Programma un messaggio",
+      "back": "Indietro",
+      "forbidden": "Non hai i permessi per programmare messaggi.",
+      "steps": "Passaggi",
+      "stepNames": {
+        "basics": "Nozioni di base",
+        "audience": "Destinatari",
+        "message": "Messaggio",
+        "when": "Quando",
+        "review": "Verifica"
+      },
+      "required": "obbligatorio",
+      "previous": "Precedente",
+      "next": "Avanti",
+      "submit": "Programma messaggio",
+      "stepOf": "Passaggio {n} di {total}",
+      "engine": {
+        "baileys": "API non ufficiale",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Testo semplice",
+          "hint": "Solo testo ed emoji.",
+          "pill": "testo semplice"
+        },
+        "template": {
+          "title": "Template",
+          "hint": "Template WhatsApp approvato.",
+          "pill": "template"
+        },
+        "media": {
+          "title": "Con media",
+          "hint": "Immagine, video, documento, audio.",
+          "pill": "media"
+        },
+        "location": {
+          "title": "Posizione",
+          "hint": "Pin con latitudine e longitudine.",
+          "pill": "posizione"
+        }
+      },
+      "basics": {
+        "title": "Nozioni di base della programmazione",
+        "name": "Nome della programmazione",
+        "nameHint": "Solo etichetta interna: i destinatari non la vedono.",
+        "namePlaceholder": "es. Promo primavera / segmento VIP",
+        "sender": "Mittente",
+        "senders": "Mittenti",
+        "tickAll": "Seleziona tutti quelli che servono",
+        "noSenders": "Nessun mittente collegato. Collega prima un numero.",
+        "warming": "Warming",
+        "splitHint": "Ogni mittente selezionato esegue la propria programmazione con una quota equa del pubblico.",
+        "messageType": "Tipo di messaggio"
+      },
+      "audience": {
+        "title": "Destinatari",
+        "source": "Origine dei destinatari",
+        "sources": {
+          "group": {
+            "title": "Gruppo",
+            "hint": "Scegli uno o più gruppi di contatti salvati."
+          },
+          "tag": {
+            "title": "Tag",
+            "hint": "Tutti quelli con un tag"
+          },
+          "queue": {
+            "title": "Coda del pubblico",
+            "hint": "Ripropone i destinatari di un broadcast passato."
+          },
+          "number": {
+            "title": "Numeri",
+            "hint": "Incolla manualmente un elenco."
+          }
+        },
+        "chooseGroups": "Scegli gruppo/i",
+        "chooseTags": "Scegli uno o più tag",
+        "chooseQueues": "Scegli uno o più broadcast passati",
+        "tickAny": "(seleziona quanti ne vuoi)",
+        "noGroups": "Nessun gruppo per ora",
+        "noTags": "Nessun tag per ora",
+        "noQueues": "Nessun broadcast completato per ora",
+        "contacts": "Vai ai contatti",
+        "broadcast": "Vai ai broadcast",
+        "tagsHint": "I destinatari vengono ricalcolati all’invio della programmazione, quindi vengono inclusi anche i contatti taggati di recente.",
+        "queuesHint": "Seleziona quanti broadcast vuoi. I destinatari vengono deduplicati automaticamente prima dell’invio.",
+        "paste": "Incolla numeri",
+        "pasteHint": "Prima il prefisso internazionale, senza +. Le voci sono separate da a capo o da virgole.",
+        "pastePlaceholder": "Un numero per riga — con prefisso internazionale, senza il segno +",
+        "total": "Destinatari totali:",
+        "optedOut": "{n} esclusi: disiscritti o archiviati"
+      },
+      "message": {
+        "title": "Componi messaggio",
+        "content": "Contenuto del messaggio",
+        "caption": "Didascalia",
+        "placeholder": "Ciao '{name}', è arrivato il tuo aggiornamento programmato…",
+        "personalise": "Usa '{name}', '{phone}', '{email}' per la personalizzazione.",
+        "template": "Template approvato",
+        "chooseTemplate": "Scegli un template approvato",
+        "browse": "Clicca per sfogliare i tuoi template",
+        "approved": "APPROVATO",
+        "change": "Cambia",
+        "mediaLink": "Link al media",
+        "mediaHint": "Un link al file (https://…). Immagine, video, audio o documento.",
+        "pin": "Posiziona pin",
+        "latitude": "Latitudine",
+        "longitude": "Longitudine",
+        "estimate": "Tempo di invio stimato",
+        "minutes": "circa {n} min",
+        "estimateHint": "a 60 msg/min",
+        "estimateEmpty": "scegli prima i destinatari.",
+        "variables": "Variabili nel messaggio",
+        "variablesHint": "segnaposto rilevati.",
+        "pickerEyebrow": "template",
+        "pickerTitle": "Scegli un template",
+        "pickerHint": "Vengono mostrati solo i template approvati e attivi.",
+        "pickerSearch": "Cerca per nome o lingua…",
+        "pickerEmpty": "Nessun template corrisponde.",
+        "manageTemplates": "Gestisci template →",
+        "cancel": "Annulla"
+      },
+      "when": {
+        "title": "Quando inviare",
+        "modes": {
+          "once": {
+            "title": "Invio singolo",
+            "hint": "Un unico invio alla data e all’ora scelte."
+          },
+          "recurring": {
+            "title": "Ricorrente",
+            "hint": "Ripeti ogni giorno, ogni settimana o ogni mese con una cadenza fissa."
+          }
+        },
+        "date": "Data di invio",
+        "time": "Ora",
+        "timezone": "Fuso orario",
+        "recurrence": "Ricorrenza",
+        "every": "Ripeti ogni",
+        "interval": "Intervallo",
+        "intervals": {
+          "daily": "giorno/i",
+          "weekly": "settimana/e",
+          "monthly": "mese/i"
+        },
+        "end": "Fine",
+        "endNever": "Mai",
+        "endDate": "In una data specifica",
+        "endOn": "Ultimo giorno",
+        "days": "Giorni della settimana",
+        "daysHint": "Clicca un giorno per attivarlo o disattivarlo. Le programmazioni settimanali richiedono almeno un giorno.",
+        "lead": "Una programmazione deve essere almeno {n} minuti nel futuro."
+      },
+      "review": {
+        "title": "Verifica e programma",
+        "final": "finale",
+        "schedule": "Programmazione",
+        "name": "Nome",
+        "sender": "Mittente",
+        "type": "Tipo",
+        "mode": "Modalità",
+        "at": "Primo invio",
+        "once": "Invio singolo",
+        "recurring": "Ogni {n} {interval}",
+        "delivery": "Consegna",
+        "source": "Origine dei destinatari",
+        "recipients": "Destinatari",
+        "estimated": "Tempo stimato",
+        "testTitle": "Invia prima una prova",
+        "testHint": "Ricevi un messaggio di anteprima su un numero che inserisci prima dell’invio completo.",
+        "testNumber": "Invia una prova a questo numero",
+        "testNumberHint": "Prima il prefisso internazionale, senza +."
+      },
+      "preview": {
+        "title": "Anteprima in tempo reale",
+        "channel": "WhatsApp",
+        "empty": "Il tuo messaggio apparirà qui…",
+        "media": "[ media allegato ]",
+        "pin": "Pin posizione",
+        "noTemplate": "Nessun template scelto"
+      },
+      "errors": {
+        "nameRequired": "Assegna un nome alla programmazione.",
+        "senderRequired": "Scegli almeno un mittente.",
+        "wabaTemplate": "I numeri WhatsApp Cloud API non possono inviare programmazioni con template. Deselezionali oppure scegli un altro tipo di messaggio.",
+        "audienceRequired": "Scegline almeno uno.",
+        "numbersRequired": "Incolla almeno un numero.",
+        "messageRequired": "Scrivi il messaggio.",
+        "messageTooLong": "Il messaggio supera i 1024 caratteri.",
+        "templateRequired": "Scegli un template.",
+        "mediaLink": "Inserisci un link che inizi con http:// o https://.",
+        "latitude": "Inserisci una latitudine compresa tra -90 e 90.",
+        "longitude": "Inserisci una longitudine compresa tra -180 e 180.",
+        "dateRequired": "Scegli una data.",
+        "timeRequired": "Inserisci un’ora, ad esempio 14:30.",
+        "timezoneRequired": "Scegli un fuso orario.",
+        "tooSoon": "Scegli un orario almeno a qualche minuto da adesso.",
+        "repeatEvery": "Inserisci un numero intero da 1 a 365.",
+        "daysRequired": "Scegli i giorni della settimana.",
+        "endDateRequired": "Scegli l’ultimo giorno.",
+        "endBeforeStart": "La data di fine è precedente al primo invio.",
+        "testNumber": "Inserisci il numero con il prefisso internazionale."
+      }
+    },
+    "detail": {
+      "crumb": "Programmati / Analisi",
+      "title": "Analisi della programmazione",
+      "back": "Torna ai messaggi programmati",
+      "eyebrow": "Messaggio programmato",
+      "untitled": "Senza titolo",
+      "recurs": "Ricorre · {interval} × {n}",
+      "fires": "Invio {when}",
+      "actions": {
+        "pause": "Metti in pausa",
+        "resume": "Riprendi",
+        "runNow": "Esegui ora",
+        "cancel": "Annulla",
+        "retry": "Riprova con nuovo orario",
+        "delete": "Elimina"
+      },
+      "kpi": {
+        "recipients": "Destinatari",
+        "delivered": "Consegnati",
+        "read": "Letti",
+        "sent": "Inviati",
+        "status": "Stato",
+        "ofSent": "degli inviati",
+        "failedCount": "{n} non riusciti",
+        "pendingCount": "{n} in attesa",
+        "fires": "invio {when}",
+        "paused": "in pausa",
+        "done": "completato {when}"
+      },
+      "funnel": {
+        "eyebrow": "Imbuto di consegna",
+        "title": "Dall’invio all’azione",
+        "recipients": "Destinatari",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "read": "Letti",
+        "failed": "Non riusciti"
+      },
+      "mix": {
+        "eyebrow": "Distribuzione degli stati",
+        "title": "Stato di consegna",
+        "empty": "Nessuna attività di invio per ora.",
+        "delivered": "Consegnato",
+        "sentOnly": "Inviato · non consegnato",
+        "failed": "Non riuscito",
+        "pending": "In attesa"
+      },
+      "recipients": {
+        "eyebrow": "Destinatari",
+        "title": "Chi ha ricevuto cosa",
+        "none": "Nessun destinatario registrato per questa programmazione.",
+        "emptyTab": "Nessun destinatario in questa scheda per ora.",
+        "truncated": "Vengono mostrati i primi {n} destinatari su {total}.",
+        "tabs": {
+          "all": "Tutti",
+          "sent": "Inviati",
+          "delivered": "Consegnati",
+          "read": "Letti",
+          "failed": "Non riusciti",
+          "pending": "In attesa"
+        },
+        "cols": {
+          "recipient": "Destinatario",
+          "phone": "Telefono",
+          "status": "Stato",
+          "when": "Quando",
+          "note": "Nota"
+        },
+        "status": {
+          "pending": "In attesa",
+          "processing": "In attesa",
+          "sent": "Inviato",
+          "delivered": "Consegnato",
+          "read": "Letto",
+          "failed": "Non riuscito"
+        }
+      },
+      "config": {
+        "eyebrow": "Dettagli della programmazione",
+        "title": "Configurazione",
+        "scheduleType": "Tipo di programmazione",
+        "messageType": "Tipo di messaggio",
+        "scheduledAt": "Programmato per",
+        "nextRun": "Prossima esecuzione",
+        "lastRun": "Ultima esecuzione",
+        "repeats": "Si ripete ogni",
+        "until": "fino al {date}",
+        "sender": "Dal mittente",
+        "provider": "Motore",
+        "attempts": "Tentativi di invio"
+      },
+      "preview": {
+        "eyebrow": "Anteprima del messaggio",
+        "title": "Ciò che vedono i destinatari",
+        "empty": "(corpo vuoto)"
+      },
+      "another": "Programma un’altra"
+    },
+    "warmer": {
+      "warming": "{n} in warming",
+      "name": "WhatsApp Warmer",
+      "tagline": "Riscaldamento dei numeri",
+      "how": {
+        "title": "Come funziona",
+        "one": "Attiva il warming per un numero.",
+        "two": "Ogni giorno può inviare un po’ di più del giorno precedente.",
+        "three": "I messaggi vengono inviati lentamente, solo nelle fasce orarie che scegli.",
+        "four": "Campagne, broadcast e invii programmati rispettano tutti il limite."
+      },
+      "good": {
+        "title": "Da sapere",
+        "body": "Il warming riduce il rischio di blocco per i numeri dell’API non ufficiale, ma non è una garanzia. Per volumi elevati usa un numero WhatsApp Business (Cloud API) ufficiale, che non richiede warming."
+      },
+      "crumb": "Campagne / Warmer",
+      "heading": "Riscalda i tuoi numeri",
+      "lead": "Aumenta gradualmente il limite giornaliero di invio di ogni numero dell’API non ufficiale, con pause e fasce orarie naturali, per ridurre il rischio di blocco. Ogni numero segue una propria programmazione di warming.",
+      "tiles": {
+        "warming": "Numeri in warming",
+        "warmingHint": "su {n} collegati",
+        "budget": "Budget di oggi",
+        "budgetHint": "messaggi consentiti oggi",
+        "sent": "Inviati oggi",
+        "sentHint": "conteggiati nel warming",
+        "health": "Salute media",
+        "healthHint": "su tutti i numeri"
+      },
+      "empty": "Nessun numero collegato per ora.",
+      "connect": "Collega un numero",
+      "number": "Numero",
+      "engines": {
+        "baileys": "API non ufficiale",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Salute {n}",
+      "healthTitle": "Punteggio di salute (più alto = più sicuro aumentare)",
+      "switch": "In warming",
+      "budgetToday": "Budget di oggi",
+      "remaining": "Rimanenti oggi",
+      "sentToday": "Inviati oggi",
+      "fields": {
+        "dailyBase": "Budget iniziale/giorno",
+        "stepPct": "Aumento +% / passo",
+        "stepDays": "Aumento ogni (giorni)",
+        "maxDaily": "Budget massimo/giorno",
+        "gapMin": "Pausa minima (sec)",
+        "gapMax": "Pausa massima (sec)",
+        "activeStart": "Attivo dalle (ore)",
+        "activeEnd": "Attivo fino alle (ore)"
+      },
+      "hints": {
+        "dailyBase": "Quanti messaggi può inviare questo numero il primo giorno.",
+        "stepPct": "Aumenta questo limite giornaliero della percentuale indicata a ogni passo.",
+        "stepDays": "Ogni quanto cresce il limite (ogni N giorni).",
+        "maxDaily": "Il valore massimo raggiunto dal limite giornaliero.",
+        "gapMin": "Attesa minima tra due messaggi.",
+        "gapMax": "Attesa massima tra due messaggi.",
+        "activeStart": "Inizia a inviare solo dopo quest’ora (formato 24 ore).",
+        "activeEnd": "Smetti di inviare dopo quest’ora."
+      },
+      "spintax": {
+        "title": "Varietà Spintax",
+        "hint": "Invia a ogni persona una formulazione leggermente diversa, così i messaggi non sembrano identici. Scrivi qui le alternative come '{Ciao|Salve|Hey}'."
+      },
+      "save": "Salva warming",
+      "saved": "Warming salvato."
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} API-Referenz",
+    "metaDescription": "Die REST-API-Referenz von {brand}: Authentifizierung, Ratenlimits und jeder Endpunkt mit Beispielen für Anfrage und Antwort.",
+    "common": {
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Kopieren nicht möglich. Markieren Sie den Text und kopieren Sie ihn von Hand."
+    },
+    "topbar": {
+      "home": "{brand} Startseite",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI-Spezifikation",
+      "getKey": "API-Schlüssel erhalten"
+    },
+    "sidebar": {
+      "label": "Referenznavigation",
+      "filterLabel": "Endpunkte filtern",
+      "filterPlaceholder": "Endpunkte filtern…",
+      "startHere": "Hier starten",
+      "intro": "Einführung",
+      "auth": "Authentifizierung",
+      "webhooks": "Webhooks"
+    },
+    "hero": {
+      "eyebrow": "Entwicklerreferenz",
+      "title": "Die <em>REST-API</em> von {brand}",
+      "lead": "Eine einzige REST-API, um WhatsApp-Nachrichten zu senden, Broadcasts und Kampagnen auszuführen, Kontakte und Vorlagen zu verwalten, Automatisierungs-Flows auszulösen und Ihr Konto auszulesen, alles, was Ihr CRM, Ihre Automatisierungsplattform oder App braucht.",
+      "baseUrl": "Basis-URL",
+      "copyBaseUrl": "Basis-URL kopieren"
+    },
+    "capabilities": {
+      "title": "Was Sie tun können",
+      "send": {
+        "title": "Nachrichten senden",
+        "body": "Einzelsendungen, Broadcasts, Kampagnen und geplante Sendungen"
+      },
+      "receive": {
+        "title": "Nachrichten empfangen",
+        "body": "Eingehende Konversationen und ihre Nachrichten lesen"
+      },
+      "contacts": {
+        "title": "Kontakte und Leads",
+        "body": "Vollständiges Erstellen, Lesen, Aktualisieren und Löschen, Gruppen und benutzerdefinierte Attribute"
+      },
+      "templates": {
+        "title": "Vorlagen",
+        "body": "WhatsApp-Vorlagen erstellen, aktualisieren und auflisten"
+      },
+      "flows": {
+        "title": "Automatisierungs-Flows",
+        "body": "Einen Kontakt per API in einen Flow aufnehmen"
+      },
+      "status": {
+        "title": "Zustellstatus",
+        "body": "Pro Nachricht gesendet, zugestellt, gelesen und fehlgeschlagen"
+      },
+      "devices": {
+        "title": "Geräte",
+        "body": "Verbundene Nummern und ihren Status auflisten"
+      },
+      "account": {
+        "title": "Konto und Nutzung",
+        "body": "Tarif, Limits und Nachrichten-Credits"
+      }
+    },
+    "auth": {
+      "title": "Authentifizierung",
+      "intro": "Jede Anfrage wird mit einem <strong>API-Schlüssel</strong> des Arbeitsbereichs authentifiziert. Erstellen Sie einen im Dashboard unter <strong>Einstellungen, REST-API</strong>. Senden Sie ihn als Bearer-Token:",
+      "copyHeader": "Header kopieren",
+      "alt": "Alternativ übergeben Sie ihn in einem <code>X-Api-Key</code>-Header. Schlüssel gehören zu genau einem Arbeitsbereich und nur ihr Hash wird gespeichert, kopieren Sie also einen Schlüssel beim Erstellen: Er kann nicht erneut angezeigt werden. Schlüssel können jederzeit widerrufen werden und funktionieren dann sofort nicht mehr."
+    },
+    "webhooks": {
+      "title": "Webhooks und Echtzeit-Ereignisse",
+      "comingTitle": "Webhook-Zustellung kommt bald",
+      "comingBody": "Das Registrieren eines Webhooks und der Empfang von Ereignissen unter Ihrer eigenen URL sind noch nicht verfügbar. Derzeit werden keine Ereignisse an Ihren Server gesendet, daher gibt es nichts zu abonnieren. Diese Karte listet die Ereignisse und den Signatur-Header auf, sobald die Zustellung live geht.",
+      "rateLabel": "Ratenlimits",
+      "rate": "Jeder Schlüssel unterliegt dem Limit pro Minute des Tarifs des Arbeitsbereichs; legt der Tarif keines fest, gilt der Plattformstandard von {limit} Anfragen pro Minute. Jede Antwort enthält <code>X-RateLimit-Limit</code> und <code>X-RateLimit-Remaining</code>, und eine Anfrage über dem Limit wird mit HTTP 429 und einem <code>Retry-After</code>-Header beantwortet. Ausgehende Sendungen verbrauchen außerdem die Nachrichten-Credits Ihres Tarifs."
+    },
+    "reference": {
+      "title": "Endpunkte",
+      "count": "{count, plural, one {# Endpunkt} other {# Endpunkte}}",
+      "noMatch": "Kein Endpunkt entspricht „{query}“.",
+      "clearFilter": "Filter löschen",
+      "empty": "Noch keine Endpunkte veröffentlicht. Schauen Sie bald wieder vorbei.",
+      "unavailableTitle": "Die Endpunktreferenz konnte nicht geladen werden",
+      "unavailableBody": "Die API-Spezifikation ist derzeit nicht erreichbar. Die Einführung oben gilt weiterhin. Versuchen Sie es gleich noch einmal.",
+      "retry": "Erneut versuchen",
+      "general": "Allgemein",
+      "toggle": "Details zu {method} {path} ein- oder ausblenden",
+      "parameters": "Parameter",
+      "bodyParameters": "Body-Parameter",
+      "name": "Name",
+      "field": "Feld",
+      "description": "Beschreibung",
+      "required": "erforderlich",
+      "exampleRequest": "Beispielanfrage",
+      "requestBody": "Anfrage-Body",
+      "responses": "Antworten",
+      "copyCurl": "Anfrage kopieren",
+      "copyJson": "JSON kopieren",
+      "noExample": "Die Spezifikation enthält kein Beispiel für diese Antwort."
+    },
+    "footer": "{brand} REST-API · v1 · aus der Live-OpenAPI-Spezifikation generiert"
+  }
+}

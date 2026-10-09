@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Zgłoszenia",
+      "backToForm": "Wróć do {name}",
+      "formFallback": "Formularz",
+      "count": "{count, plural, =0 {Brak zgłoszeń} one {1 zgłoszenie} few {# zgłoszenia} many {# zgłoszeń} other {# zgłoszenia}} wczytano",
+      "moreAvailable": "Dostępne są kolejne",
+      "tabsLabel": "Grupy zgłoszeń",
+      "tabs": {
+        "all": "Wszystkie",
+        "needs_attention": "Wymaga uwagi",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Szukaj",
+        "searchPlaceholder": "Nazwa, e-mail lub telefon",
+        "status": "Status",
+        "allStatuses": "Dowolny status",
+        "from": "Od",
+        "to": "Do",
+        "clear": "Wyczyść filtry"
+      },
+      "status": {
+        "received": "Otrzymano",
+        "created": "Utworzono kontakt",
+        "updated": "Zaktualizowano kontakt",
+        "needs_review": "Wymaga przeglądu",
+        "awaiting_payment": "Oczekuje na płatność",
+        "paid": "Opłacono",
+        "failed": "Nieudane",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Powód",
+        "todo": "Co zrobić",
+        "no_contact_point": {
+          "what": "Odwiedzający nie podał użytecznego e-maila ani telefonu, więc nie udało się utworzyć kontaktu.",
+          "todo": "Otwórz odpowiedzi, dodaj brakujący szczegół do kontaktu ręcznie albo popraw mapowanie formularza i ponów."
+        },
+        "invalid_phone": {
+          "what": "Nie udało się odczytać numeru telefonu jako prawidłowego numeru.",
+          "todo": "Otwórz odpowiedzi, sprawdź numer i ponów, gdy formularz go zaakceptuje, albo dodaj kontakt ręcznie."
+        },
+        "plan_limit_reached": {
+          "what": "Osiągnięto limit kontaktów w Twoim planie, więc nowy kontakt nie został utworzony.",
+          "todo": "Zwolnij miejsce w kontaktach lub zmień plan, a potem ponów."
+        },
+        "submissions_cap": {
+          "what": "Osiągnięto miesięczny limit zgłoszeń w Twoim planie, więc zapisano je do przeglądu.",
+          "todo": "Zmień plan albo poczekaj na następny miesiąc, a potem ponów."
+        },
+        "spam_score": {
+          "what": "Zgłoszenie wyglądało na spam i zostało odłożone.",
+          "todo": "Jeśli to prawdziwa osoba, otwórz je i dodaj ją jako kontakt ręcznie."
+        },
+        "too_fast": {
+          "what": "Zostało wysłane szybciej, niż człowiek jest w stanie wypełnić formularz, więc odłożono je jako spam.",
+          "todo": "Jeśli to prawdziwa osoba, otwórz je i dodaj ją jako kontakt ręcznie."
+        },
+        "internal_error": {
+          "what": "Podczas przetwarzania wystąpił błąd po naszej stronie. Odpowiedzi zostały zachowane.",
+          "todo": "Ponów. Jeśli znów się nie uda, skontaktuj się z pomocą techniczną, podając czas zgłoszenia."
+        },
+        "unknown": {
+          "what": "To zgłoszenie zostało odłożone z powodu, którego ta wersja aplikacji nie rozpoznaje.",
+          "todo": "Otwórz je, aby zobaczyć szczegóły, a potem ponów albo obsłuż ręcznie."
+        }
+      },
+      "table": {
+        "received": "Otrzymano",
+        "visitor": "Odwiedzający",
+        "status": "Status",
+        "contact": "Kontakt",
+        "company": "Firma",
+        "version": "Wersja",
+        "open": "Otwórz zgłoszenie od {who}"
+      },
+      "anonymous": "Nie podano imienia",
+      "answersRemovedShort": "Odpowiedzi usunięte",
+      "versionShort": "v{n}",
+      "noLink": "Brak",
+      "unnamedContact": "Otwórz kontakt",
+      "unnamedCompany": "Otwórz firmę",
+      "drawer": {
+        "title": "Zgłoszenie od {who}",
+        "close": "Zamknij",
+        "loading": "Otwieranie zgłoszenia",
+        "errorTitle": "Nie udało się otworzyć tego zgłoszenia.",
+        "errorBody": "Sprawdź połączenie i spróbuj ponownie.",
+        "retryLoad": "Spróbuj ponownie",
+        "auditNote": "Otwarcie odpowiedzi zgłoszenia jest zapisywane w dzienniku audytu.",
+        "answers": "Odpowiedzi",
+        "noAnswers": "To zgłoszenie nie ma odpowiedzi.",
+        "emptyAnswer": "Brak odpowiedzi",
+        "yes": "Tak",
+        "no": "Nie",
+        "removedTitle": "Odpowiedzi usunięte",
+        "removedBody": "Odpowiedzi zostały wymazane lub trwale usunięte. Pozostał tylko ten wpis, a kontakt zachowano.",
+        "summary": "Podsumowanie",
+        "receivedAt": "Otrzymano",
+        "formVersion": "Wersja formularza",
+        "spamScore": "Wynik spamu",
+        "error": "Błąd",
+        "attribution": "Skąd pochodzi",
+        "noAttribution": "Nie zarejestrowano szczegółów źródła.",
+        "utm": "Tagi kampanii",
+        "referrer": "Strona odsyłająca",
+        "pageUrl": "Strona",
+        "userAgent": "Przeglądarka",
+        "consent": "Zgoda",
+        "consentGiven": "Wyrażono zgodę",
+        "consentText": "Tekst, który widział odwiedzający",
+        "consentVersion": "Wersja tekstu",
+        "consentAt": "Udzielono",
+        "noConsent": "Ten formularz nie pytał o zgodę.",
+        "links": "Wpisy",
+        "actions": "Działania"
+      },
+      "actions": {
+        "retry": "Ponów",
+        "retrying": "Przetwarzanie…",
+        "delete": "Usuń odpowiedzi",
+        "deleting": "Przetwarzanie…",
+        "export": "Eksportuj CSV",
+        "exporting": "Przetwarzanie…",
+        "exportHintAttention": "Wybierz pojedynczy status, aby wyeksportować go z tej grupy, albo użyj opcji Wszystkie.",
+        "exportHintSearch": "Eksport ignoruje tekst wyszukiwania.",
+        "notSpam": "Nie spam: przetwórz"
+      },
+      "confirmDelete": {
+        "title": "Usunąć te odpowiedzi?",
+        "message": "Trwale wymazuje odpowiedzi tego zgłoszenia. Wiersz pozostaje na liście jako zapis, że zdarzenie miało miejsce, a kontakt nigdy nie jest usuwany.",
+        "confirm": "Usuń odpowiedzi",
+        "cancel": "Anuluj"
+      },
+      "toast": {
+        "retried": "Ponowiono. Zgłoszenie ma teraz status: {status}.",
+        "notRetryable": "Ponowić można tylko zgłoszenia wymagające przeglądu lub nieudane.",
+        "purged": "Odpowiedzi zostały już usunięte, więc nie ma czego ponawiać.",
+        "retryFailed": "Ponowienie się nie powiodło. Spróbuj ponownie.",
+        "deleted": "Odpowiedzi zostały usunięte. Kontakt zachowano.",
+        "deleteFailed": "Nie udało się usunąć odpowiedzi. Spróbuj ponownie.",
+        "exported": "Plik CSV został pobrany.",
+        "exportTruncated": "Eksport został ucięty do {max} najnowszych wierszy. Zawęż daty, aby pobrać resztę.",
+        "exportFailed": "Nie udało się wykonać eksportu. Spróbuj ponownie."
+      },
+      "state": {
+        "loading": "Wczytywanie zgłoszeń",
+        "errorTitle": "Nie udało się wczytać zgłoszeń.",
+        "errorBody": "Sprawdź połączenie i spróbuj ponownie.",
+        "retry": "Spróbuj ponownie",
+        "lockedTitle": "Formularze nie są częścią Twojego planu",
+        "lockedBody": "Dodaj aplikację Formularze do przestrzeni roboczej, aby zbierać i przeglądać zgłoszenia.",
+        "upgrade": "Zobacz plany",
+        "emptyTitle": "Brak zgłoszeń",
+        "emptyBody": "Udostępnij link do formularza albo osadź go na swojej stronie. Każde zgłoszenie pojawi się tutaj, gdy ktoś je wyśle.",
+        "emptyShare": "Udostępnij ten formularz",
+        "emptyFilteredTitle": "Brak pasujących zgłoszeń",
+        "emptyFilteredBody": "Nic nie pasuje do tych filtrów. Wyczyść je, aby zobaczyć wszystko.",
+        "loadMore": "Wczytaj więcej",
+        "loadingMore": "Wczytywanie kolejnych"
+      },
+      "cap": {
+        "notice": "Część zgłoszeń zapisano do przeglądu, bo osiągnięto miesięczny limit zgłoszeń w Twoim planie.",
+        "upgrade": "Zmień plan"
+      }
+    }
+  }
+}

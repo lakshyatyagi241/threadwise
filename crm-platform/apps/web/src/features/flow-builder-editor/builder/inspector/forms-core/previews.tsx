@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import type { CSSProperties, ReactNode } from 'react';
 import type { FlbBuilderContext } from '@crm/contracts';
 import { renderWaText, WaBubble, WaPreview } from '../kit';
@@ -65,9 +66,10 @@ const ListIcon = () => (
 );
 
 export function MessagePreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const text = str(d.text).trim()
     ? renderWaText(d.text)
-    : '<i style="opacity:0.55">Your message will appear here</i>';
+    : `<i style="opacity:0.55">${t('messageEmpty')}</i>`;
   return (
     <WaPreview>
       <WaBubble html={text} />
@@ -83,6 +85,7 @@ function iconForButton(b: Record<string, unknown>): string {
 }
 
 export function TemplatePreview({ d, templates }: { d: Data; templates: Template[] }) {
+  const tr = useTranslations('flb.builder.formsCore.previews');
   const name = str(d.tpl);
   const t = templates.find((x) => x.name === name);
   if (!t) {
@@ -91,10 +94,10 @@ export function TemplatePreview({ d, templates }: { d: Data; templates: Template
         <WaBubble>
           {name ? (
             <i style={{ opacity: 0.55 }}>
-              Template <code>{name}</code> not found in workspace
+              {tr.rich('templateMissing', { name, code: (chunks) => <code>{chunks}</code> })}
             </i>
           ) : (
-            <i style={{ opacity: 0.55 }}>Pick an approved template to preview</i>
+            <i style={{ opacity: 0.55 }}>{tr('templatePick')}</i>
           )}
         </WaBubble>
       </WaPreview>
@@ -124,7 +127,7 @@ export function TemplatePreview({ d, templates }: { d: Data; templates: Template
               className="mb-1 flex h-[60px] items-center justify-center rounded-[5px] font-mono text-[10.5px]"
               style={{ background: '#DFF1ED', color: GREEN_TEXT }}
             >
-              {kind} attachment
+              {tr('attachment', { kind })}
             </div>
           )
         ) : null}
@@ -174,6 +177,7 @@ export function TemplatePreview({ d, templates }: { d: Data; templates: Template
 const mediaBox: CSSProperties = { background: '#D9FDD3', color: '#111B21' };
 
 export function MediaPreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const kind = str(d.kind) || 'image';
   const url = str(d.url);
   let top: ReactNode;
@@ -198,7 +202,9 @@ export function MediaPreview({ d }: { d: Data }) {
         <span className="grid h-7 w-7 place-items-center rounded-md bg-brand font-mono text-[9px] text-white">
           PDF
         </span>
-        <div className="flex-1 truncate text-[12px]">{str(d.filename) || 'document.pdf'}</div>
+        <div className="flex-1 truncate text-[12px]">
+          {str(d.filename) || t('documentFallback')}
+        </div>
       </div>
     );
   } else if (kind === 'audio') {
@@ -208,7 +214,7 @@ export function MediaPreview({ d }: { d: Data }) {
         style={mediaBox}
       >
         <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-white">▶</span>
-        <div className="flex-1 text-[11.5px]">Voice / audio</div>
+        <div className="flex-1 text-[11.5px]">{t('voice')}</div>
       </div>
     );
   } else {
@@ -217,7 +223,7 @@ export function MediaPreview({ d }: { d: Data }) {
         className="mb-1 ml-auto grid min-h-[80px] max-w-[88%] place-items-center rounded-lg px-2.5 py-2 text-[11px]"
         style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}
       >
-        ({kind} preview will appear here)
+        {t('kindPreview', { kind })}
       </div>
     );
   }
@@ -230,12 +236,13 @@ export function MediaPreview({ d }: { d: Data }) {
 }
 
 export function ButtonsPreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const opts = asArray(d.options).slice(0, 3);
   const prompt = str(d.prompt).trim()
     ? renderWaText(d.prompt)
-    : '<i style="opacity:0.55">Button prompt</i>';
+    : `<i style="opacity:0.55">${t('buttonPrompt')}</i>`;
   return (
-    <WaPreview label={`Preview · WhatsApp · ${opts.length} button(s)`}>
+    <WaPreview label={t('buttonsLabel', { count: opts.length })}>
       <WaBubble html={prompt} />
       {opts.length ? (
         <Tiles>
@@ -252,14 +259,15 @@ export function ButtonsPreview({ d }: { d: Data }) {
 }
 
 export function ListPreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const prompt = str(d.prompt).trim()
     ? renderWaText(d.prompt)
-    : '<i style="opacity:0.55">List prompt</i>';
-  const btnLabel = str(d.button).trim() || 'View options';
+    : `<i style="opacity:0.55">${t('listPrompt')}</i>`;
+  const btnLabel = str(d.button).trim() || t('listButton');
   const items = listItems(d.options).slice(0, 10);
   const groups = groupBySection(items);
   return (
-    <WaPreview label={`Preview · WhatsApp · ${items.length} item(s)`}>
+    <WaPreview label={t('listLabel', { count: items.length })}>
       <WaBubble html={prompt} />
       <Tiles>
         <Tile>
@@ -275,7 +283,7 @@ export function ListPreview({ d }: { d: Data }) {
           className="mb-1.5 text-center font-mono text-[9.5px] uppercase tracking-[0.14em]"
           style={{ color: 'rgba(255,255,255,0.55)' }}
         >
-          After tap · bottom sheet
+          {t('bottomSheet')}
         </div>
         <div className="mx-auto max-w-[96%] overflow-hidden rounded-t-xl bg-white">
           <div className="py-1.5 pb-0.5 text-center">
@@ -325,7 +333,7 @@ export function ListPreview({ d }: { d: Data }) {
               className="p-3.5 text-center text-[11px] italic"
               style={{ color: 'rgba(0,0,0,0.5)' }}
             >
-              Add items in the Options field below
+              {t('listEmpty')}
             </div>
           )}
         </div>
@@ -338,16 +346,13 @@ const ctaGlyph = (t: string): string =>
   t === 'phone' || t === 'call_now' ? '☏' : t === 'copy' ? '⧉' : '↗';
 
 export function CtaPreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const acts = ctaActions(d);
   const hasCopy = acts.some((a) => (a.type || 'url') === 'copy');
   return (
-    <WaPreview label={`Preview · WhatsApp · ${acts.length} button(s)`}>
+    <WaPreview label={t('buttonsLabel', { count: acts.length })}>
       <WaBubble>
-        <div className="text-[12.5px]">
-          {hasCopy
-            ? 'Tap a button below — or long-press a code to copy.'
-            : 'Tap a button below to continue.'}
-        </div>
+        <div className="text-[12.5px]">{hasCopy ? t('ctaTapCopy') : t('ctaTap')}</div>
         {acts.map((a, i) =>
           (a.type || 'url') === 'copy' && a.value ? (
             <div
@@ -363,17 +368,17 @@ export function CtaPreview({ d }: { d: Data }) {
       {acts.length ? (
         <Tiles>
           {acts.slice(0, 3).map((a, i) => {
-            const t = a.type || 'url';
+            const type = a.type || 'url';
             const lbl =
               a.label ||
-              (t === 'copy'
-                ? 'Copy code'
-                : t === 'phone' || t === 'call_now'
-                  ? 'Call us'
-                  : 'Visit');
+              (type === 'copy'
+                ? t('ctaCopy')
+                : type === 'phone' || type === 'call_now'
+                  ? t('ctaCall')
+                  : t('ctaVisit'));
             return (
               <Tile key={i}>
-                {lbl} {ctaGlyph(t)}
+                {lbl} {ctaGlyph(type)}
               </Tile>
             );
           })}
@@ -384,12 +389,13 @@ export function CtaPreview({ d }: { d: Data }) {
 }
 
 export function LocationPreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const lat = str(d.lat);
   const lng = str(d.lng);
   return (
     <WaPreview>
       <WaBubble>
-        <div className="text-[11.5px] font-semibold">{str(d.title) || 'Pinned location'}</div>
+        <div className="text-[11.5px] font-semibold">{str(d.title) || t('locationFallback')}</div>
         <div className="text-[11px] opacity-75">{str(d.address)}</div>
         <div
           className="relative mt-1 h-16 overflow-hidden rounded-md"
@@ -430,7 +436,8 @@ export function LocationPreview({ d }: { d: Data }) {
 }
 
 export function PollPreview({ d }: { d: Data }) {
-  const q = str(d.question) || 'Poll';
+  const t = useTranslations('flb.builder.formsCore.previews');
+  const q = str(d.question) || t('pollFallback');
   return (
     <WaPreview>
       <WaBubble>
@@ -454,17 +461,18 @@ export function PollPreview({ d }: { d: Data }) {
 }
 
 export function SequencePreview({ d }: { d: Data }) {
+  const t = useTranslations('flb.builder.formsCore.previews');
   const replies = asArray(d.replies).map(asRecord);
   return (
-    <WaPreview label={`Preview · WhatsApp · ${replies.length} reply(s)`}>
+    <WaPreview label={t('repliesLabel', { count: replies.length })}>
       {replies.length ? (
         replies.map((r, i) => {
           const kind = str(r.type) || 'text';
           if (kind === 'text') {
-            const t = str(r.text).trim()
+            const html = str(r.text).trim()
               ? renderWaText(r.text)
-              : '<i style="opacity:0.55">empty text</i>';
-            return <WaBubble key={i} html={t} />;
+              : `<i style="opacity:0.55">${t('emptyText')}</i>`;
+            return <WaBubble key={i} html={html} />;
           }
           let media: ReactNode;
           const url = str(r.url);
@@ -482,7 +490,7 @@ export function SequencePreview({ d }: { d: Data }) {
                 className="mb-[5px] ml-auto flex h-[120px] max-w-[88%] items-center justify-center rounded-lg text-[11px] tracking-[0.05em] text-white"
                 style={{ background: '#0B1F1C' }}
               >
-                ▶ video
+                {t('videoTile')}
               </div>
             );
           } else if (kind === 'audio') {
@@ -494,7 +502,9 @@ export function SequencePreview({ d }: { d: Data }) {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#075E54] text-[11px] text-white">
                   ►
                 </span>
-                <span className="flex-1 text-[11.5px]">{str(r.filename) || 'audio'}</span>
+                <span className="flex-1 text-[11.5px]">
+                  {str(r.filename) || t('audioFallback')}
+                </span>
               </div>
             );
           } else if (kind === 'document') {
@@ -506,7 +516,7 @@ export function SequencePreview({ d }: { d: Data }) {
                 <span className="flex h-7 w-7 items-center justify-center rounded bg-[#075E54] font-mono text-[9px] text-white">
                   DOC
                 </span>
-                <span className="flex-1 text-[11.5px]">{str(r.filename) || 'document'}</span>
+                <span className="flex-1 text-[11.5px]">{str(r.filename) || t('documentName')}</span>
               </div>
             );
           } else {
@@ -515,7 +525,7 @@ export function SequencePreview({ d }: { d: Data }) {
                 className="mb-[5px] ml-auto max-w-[88%] rounded-lg px-2.5 py-2 text-center text-[11px]"
                 style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}
               >
-                {kind} preview will appear here
+                {t('kindPreviewInline', { kind })}
               </div>
             );
           }
@@ -531,7 +541,7 @@ export function SequencePreview({ d }: { d: Data }) {
           className="py-6 text-center text-[11px] italic"
           style={{ color: 'rgba(255,255,255,0.55)' }}
         >
-          No replies yet
+          {t('noReplies')}
         </div>
       )}
     </WaPreview>

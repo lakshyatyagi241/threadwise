@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "connect": {
+      "title": "Telegram-bot koppelen",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "submit": "Bot koppelen",
+      "intro": "Voer je bottoken van de HTTP API in om de webhook in te stellen en Telegram-chats af te handelen.",
+      "tokenLabel": "Bottoken *",
+      "tokenPlaceholder": "bijv. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Dit lijkt niet op een BotFather-token.",
+      "connected": "Telegram-bot gekoppeld.",
+      "savedNeedsAttention": "De bot is opgeslagen, maar Telegram heeft de webhook niet geaccepteerd.",
+      "failed": "De bot kon niet worden gekoppeld. Probeer het opnieuw.",
+      "howTitle": "Hoe krijg je een bottoken?",
+      "how1a": "Open Telegram en zoek naar het geverifieerde",
+      "how1b": "account.",
+      "how2a": "Verzenden",
+      "how2b": "en kies een weergavenaam en gebruikersnaam.",
+      "how3": "Kopieer het gegenereerde HTTP API-token en plak het hierboven."
+    },
+    "bot": {
+      "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+      "webhookFixed": "Inkomende berichten zijn weer actief.",
+      "live": "Actief",
+      "paused": "Gepauzeerd",
+      "needsAttention": "Vraagt aandacht",
+      "lastMessage": "Laatste bericht {when}",
+      "payments": "Betalingen",
+      "on": "aan",
+      "paymentsSaved": "Betaalinstellingen opgeslagen.",
+      "paymentsHint": "Plak een betaalprovider-token van @BotFather (/mybots → Payments) om de Payment flow-node in te schakelen: native facturen in de chat.",
+      "paymentsSavedPlaceholder": "•••••••• (opgeslagen — laat leeg om te behouden)",
+      "paymentsToken": "Token van betaalprovider",
+      "removeToken": "Token verwijderen",
+      "save": "Opslaan",
+      "webhook": "Webhook",
+      "fixInbound": "Inkomende berichten repareren (webhook opnieuw registreren)",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "pausedDone": "Bot gepauzeerd.",
+      "resumedDone": "Bot hervat.",
+      "disconnect": "Loskoppelen",
+      "disconnectConfirm": "Deze Telegram-bot loskoppelen? De inboxthreads blijven bewaard, maar hij stopt met verzenden en ontvangen.",
+      "cancel": "Annuleren",
+      "disconnected": "Bot losgekoppeld."
+    },
+    "hub": {
+      "kicker": "Kanaal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Koppelen",
+      "intro": "Zet een Telegram-bot in om berichtenworkflows te automatiseren, klantenservice af te handelen en updates naar je abonnees wereldwijd te versturen.",
+      "teamInbox": "Teaminbox",
+      "flows": "Flows",
+      "broadcasts": "Broadcasts",
+      "telegramBroadcasts": "Telegram-broadcasts",
+      "loadError": "Je Telegram-bots konden niet worden geladen.",
+      "connectedCount": "{count} gekoppeld",
+      "notConnected": "Niet gekoppeld",
+      "botCardTitle": "Telegram-botkoppeling",
+      "botCardBody": "Plak een bottoken van @BotFather om berichten te automatiseren, klantenservice af te handelen en broadcasts naar je abonnees te sturen.",
+      "connectAnother": "Een andere bot koppelen",
+      "connectBot": "Bot koppelen",
+      "accountCardTitle": "Telegram-accountkoppeling",
+      "accountCardBody": "Koppel je Telegram-account om hier direct bots te maken: scan een QR-code of gebruik je telefoonnummer, net als bij WhatsApp.",
+      "connectAccount": "Account koppelen",
+      "accountUnavailable": "Nog niet beschikbaar: hiervoor is de Telegram-accountservice nodig, die in deze workspace niet is ingesteld.",
+      "connectedBots": "Gekoppelde bots",
+      "guideTitle": "Installatiegids voor Telegram-bot",
+      "guideBody": "Doorloop deze stappen om je Telegram-kanaal te koppelen en geautomatiseerde workflows in te schakelen.",
+      "prerequisites": "Vereisten",
+      "pre": {
+        "account": "Een actief Telegram-account",
+        "name": "Een unieke naam voor je bot",
+        "app": "Toegang tot Telegram Web/app"
+      },
+      "stepsTitle": "Koppelstappen",
+      "step": "Stap {n}",
+      "steps": {
+        "locate": {
+          "title": "BotFather zoeken",
+          "body": "Open Telegram en zoek naar het officiële @BotFather-account (let op het geverifieerde label)."
+        },
+        "create": {
+          "title": "Een nieuwe bot maken",
+          "body": "Stuur /newbot naar @BotFather en volg de stappen om je bot een naam en gebruikersnaam te geven."
+        },
+        "token": {
+          "title": "API-token ophalen",
+          "body": "BotFather genereert een HTTP API-token (bijv. 123456789:ABC…). Kopieer het veilig."
+        },
+        "connect": {
+          "title": "De bot hier koppelen",
+          "body": "Klik op \"Bot koppelen\", plak je token in het veld en verstuur om de koppeling af te ronden."
+        }
+      },
+      "unlockedTitle": "Wat wordt ontgrendeld?",
+      "unlocked": {
+        "support": {
+          "title": "Support automatiseren",
+          "body": "Laat AI-bots veelgestelde vragen afhandelen en gesprekken dag en nacht doorsturen."
+        },
+        "broadcast": {
+          "title": "Broadcastcampagnes",
+          "body": "Stuur promoties, meldingen en nieuwsbrieven tegelijk naar alle abonnees."
+        },
+        "media": {
+          "title": "Rijke interactieve media",
+          "body": "Betrek gebruikers met knoppen, menu's, facturen en afbeeldingen."
+        }
+      },
+      "tipTitle": "Configuratietip",
+      "tipBody": "Deel je bot-API-token nooit openbaar. Als het is gecompromitteerd, stuur dan een bericht naar @BotFather en voer /revoke uit om meteen een nieuwe te krijgen. Op localhost verandert het adres van een tunnel bij elke herstart; klik op \"Inbound repareren\" om opnieuw te registreren."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Broadcasts",
+      "title": "Telegram",
+      "titleAccent": "broadcasts",
+      "intro": "Stuur een bericht naar iedereen die met je bot heeft gechat en volg per broadcast wat is verzonden, mislukt en geblokkeerd.",
+      "bots": "Bots",
+      "newBroadcast": "Nieuwe broadcast",
+      "connectFirst": "Koppel eerst een Telegram-bot.",
+      "connectBot": "Een bot koppelen",
+      "tile": {
+        "sent": "Verzonden",
+        "audience": "Doelgroep",
+        "failed": "Mislukt",
+        "blocked": "Geblokkeerd",
+        "sending": "Verzenden",
+        "broadcasts": "{count} broadcasts",
+        "audienceHint": "ontvangers in totaal",
+        "failedHint": "bezorgfouten",
+        "blockedHint": "bot geblokkeerd door gebruiker",
+        "sendingHint": "onderweg"
+      },
+      "listKicker": "Broadcastlijst",
+      "listTitle": "Recente broadcasts",
+      "col": {
+        "broadcast": "Broadcast",
+        "bot": "Bot",
+        "recipients": "Ontvangers",
+        "progress": "Voortgang",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "counts": "{sent} verzonden · {failed} mislukt · {blocked} geblokkeerd",
+      "status": {
+        "draft": "Concept",
+        "sending": "Verzenden",
+        "done": "Klaar",
+        "failed": "Mislukt"
+      },
+      "start": "Starten",
+      "pause": "Pauzeren",
+      "retry": "Opnieuw proberen",
+      "delete": "Verwijderen",
+      "deleteConfirm": "Deze broadcast verwijderen?",
+      "cancel": "Annuleren",
+      "empty": "Nog geen broadcasts.",
+      "createFirst": "Maak je eerste aan",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+      "started": "Verzenden gestart.",
+      "paused": "Gepauzeerd. Niet-verzonden chats blijven in behandeling.",
+      "retried": "{count} mislukte chats kunnen opnieuw worden verzonden. Klik op Starten.",
+      "deleted": "Broadcast verwijderd."
+    },
+    "compose": {
+      "kicker": "Telegram · Nieuwe broadcast",
+      "title": "Stel een",
+      "titleAccent": "broadcast op",
+      "back": "Terug",
+      "loadError": "De bots en sjablonen konden niet worden geladen.",
+      "noPermission": "Je kunt deze pagina bekijken, maar je mag geen broadcasts aanmaken.",
+      "setup": "Broadcastinstellingen",
+      "name": "Broadcastnaam",
+      "namePlaceholder": "bijv. Weekendactie",
+      "bot": "Bot",
+      "template": "Sjabloon (optioneel)",
+      "templateHint": "Vult het bericht vooraf in en verstuurt de knoppen van het sjabloon.",
+      "templateNone": "— geen (schrijf je eigen) —",
+      "buttonCount": "{count} knop(pen)",
+      "message": "Bericht",
+      "messageHint": "Gebruik '{name}' om te personaliseren.",
+      "messagePlaceholder": "Hoi '{name}'! …",
+      "attachment": "Bijlage (optioneel)",
+      "attachmentHint": "Een openbaar adres naar een afbeelding, video, audiobestand of document. Een bestand uploaden vereist de opslagservice.",
+      "attachmentInvalid": "Voer een volledig adres in dat begint met http:// of https://.",
+      "recipients": "Ontvangers",
+      "selectAll": "Alles selecteren",
+      "clearAll": "Alles wissen",
+      "noChats": "Nog niemand heeft met deze bot gechat.",
+      "type": {
+        "private": "privé",
+        "group": "groep",
+        "channel": "kanaal"
+      },
+      "selected": "{count} geselecteerd",
+      "submit": "Broadcast aanmaken",
+      "preview": "Live voorbeeld",
+      "previewEmpty": "Voorbeeld van je bericht…",
+      "previewNote": "Zo ziet je broadcast eruit in de chat van elke ontvanger.",
+      "created": "Broadcast aangemaakt voor {count} ontvangers. Klik op Verzenden starten wanneer je klaar bent.",
+      "failed": "De broadcast kon niet worden aangemaakt. Probeer het opnieuw."
+    }
+  }
+}

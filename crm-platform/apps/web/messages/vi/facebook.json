@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Bài đăng Facebook",
+      "setup": "Thiết lập Messenger",
+      "broadcasts": "Gửi hàng loạt Messenger"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "cancel": "Hủy"
+    },
+    "hub": {
+      "kicker": "Kênh · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Trang",
+      "intro": "Đăng nhập Facebook một lần và mọi Trang mà tài khoản của bạn quản lý sẽ được thêm vào. Sau đó bạn có thể đăng bài, trả lời bình luận và chạy Messenger từ hộp thư đến.",
+      "teamInbox": "Hộp thư nhóm",
+      "posts": "Bài đăng",
+      "setup": "Thiết lập Messenger",
+      "broadcasts": "Gửi hàng loạt Messenger",
+      "loadError": "Không thể tải các Trang đã kết nối. Vui lòng thử lại.",
+      "notConfigured": "Facebook chưa được cấu hình trên bản cài đặt này — quản trị viên cần thêm ứng dụng Meta trước khi có thể kết nối Trang.",
+      "connectedCount": "{count, plural, other {Đã kết nối # Trang}}",
+      "notConnected": "Chưa kết nối",
+      "cardTitle": "Kết nối tài khoản Facebook của bạn",
+      "cardBody": "Đăng nhập Facebook một lần — mọi Trang tài khoản của bạn quản lý sẽ được thêm tự động, mỗi Trang với quyền truy cập riêng. Hoặc thêm một Trang đơn lẻ bằng mã truy cập của Trang đó.",
+      "connect": "Kết nối một Trang",
+      "connectAnother": "Kết nối tài khoản khác",
+      "connectedPages": "Các Trang đã kết nối",
+      "webhookTitle": "Địa chỉ Webhook",
+      "webhookBody": "Dán địa chỉ này vào cài đặt webhook của ứng dụng Meta (URL callback) để tin nhắn và bình luận Messenger đến hộp thư của bạn. Dùng cùng mã xác minh với WhatsApp trừ khi đã đặt mã riêng cho Facebook."
+    },
+    "connect": {
+      "close": "Đóng",
+      "kicker": "Facebook",
+      "title": "Kết nối tài khoản Facebook của bạn",
+      "intro": "Đăng nhập Facebook một lần — mọi Trang tài khoản của bạn quản lý sẽ được thêm tự động. Sau đó bạn có thể đăng bài, trả lời bình luận và chạy Messenger từ hộp thư đến.",
+      "continue": "Tiếp tục với Facebook",
+      "or": "hoặc",
+      "manualToggle": "Thêm một Trang thủ công bằng mã truy cập",
+      "tokenLabel": "Mã truy cập Trang",
+      "tokenHint": "Lấy từ Meta → Cài đặt doanh nghiệp → Người dùng hệ thống, hoặc Graph API Explorer. Chúng tôi xác định Trang từ mã này.",
+      "connectPage": "Kết nối Trang",
+      "tokenShape": "Đây không giống mã truy cập Trang.",
+      "failed": "Không thể kết nối. Vui lòng thử lại.",
+      "footerLeft": "Chuyển vào hộp thư ngay lập tức",
+      "footerRight": "đã mã hóa"
+    },
+    "page": {
+      "facebookPage": "Trang Facebook",
+      "failed": "Không thành công. Vui lòng thử lại.",
+      "live": "Đang hoạt động",
+      "reconnect": "Kết nối lại",
+      "followers": "{count} người theo dõi",
+      "liveNoCount": "đang hoạt động",
+      "dataAccess": "Quyền truy cập dữ liệu của Meta kết thúc {when}",
+      "refresh": "Làm mới hồ sơ",
+      "refreshed": "Đã làm mới Trang Facebook.",
+      "inboundFixed": "Webhook Facebook đã được đăng ký lại cho Trang này.",
+      "fixInbound": "Sửa tin đến",
+      "remove": "Ngắt kết nối",
+      "removeConfirm": "Ngắt kết nối Trang Facebook này? Các luồng hộp thư vẫn được giữ, nhưng việc gửi sẽ dừng cho đến khi bạn kết nối lại.",
+      "cancel": "Hủy",
+      "removed": "Đã ngắt kết nối Trang Facebook."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Gửi hàng loạt",
+      "title": "Messenger",
+      "titleAccent": "chương trình gửi",
+      "intro": "Nhắn tin cho những người đã trò chuyện với Trang của bạn gần đây. Meta chỉ cho phép Trang nhắn tin trong vòng 24 giờ kể từ tin nhắn cuối cùng của người đó — danh sách bên dưới là đối tượng bạn có thể tiếp cận ngay bây giờ.",
+      "inbox": "Hộp thư đến",
+      "loadError": "Không thể tải các chương trình gửi. Vui lòng thử lại.",
+      "connectFirst": "Hãy kết nối một Trang Facebook trước.",
+      "connectPage": "Kết nối một Trang",
+      "none": "Chưa có chương trình gửi nào. Soạn một chương trình ở bên phải.",
+      "recipients": "{count, plural, other {# người nhận}}",
+      "status": {
+        "sending": "Đang gửi",
+        "done": "Xong",
+        "failed": "Thất bại",
+        "draft": "Nháp"
+      },
+      "counts": "{sent} đã gửi · {failed} thất bại · {blocked} bị chặn",
+      "start": "Bắt đầu gửi",
+      "started": "Đã bắt đầu gửi. Việc gửi vẫn tiếp tục ngay cả khi bạn rời khỏi trang này.",
+      "pause": "Tạm dừng",
+      "paused": "Đã tạm dừng. Những người nhận còn lại vẫn đang chờ trong hàng đợi.",
+      "retry": "Thử lại các lỗi",
+      "retried": "Đã xếp lại {count, plural, other {# người nhận}}. Nhấn Bắt đầu gửi.",
+      "delete": "Xóa",
+      "deleted": "Đã xóa chương trình gửi.",
+      "deleteConfirm": "Xóa chương trình gửi này?",
+      "cancel": "Hủy",
+      "newBroadcast": "Chương trình gửi mới",
+      "name": "Tên",
+      "namePlaceholder": "ví dụ: Khuyến mãi cuối tuần",
+      "page": "Trang",
+      "template": "Mẫu (không bắt buộc)",
+      "templateHint": "Điền sẵn nội dung tin nhắn và gửi kèm các nút của mẫu.",
+      "templateNone": "— không có (tự viết) —",
+      "buttons": "{count, plural, other {# nút}}",
+      "message": "Tin nhắn",
+      "messageHint": "Dùng '{name}' để cá nhân hóa.",
+      "messagePlaceholder": "Chào '{name}'! …",
+      "recipientsLabel": "Người nhận",
+      "within24": "(trong 24 giờ)",
+      "selectAll": "Chọn tất cả",
+      "noAudience": "Hiện không có ai trong cửa sổ 24 giờ — phải có người nhắn tin cho Trang này trước.",
+      "messengerUser": "Người dùng Messenger",
+      "selected": "Đã chọn {count}",
+      "create": "Tạo chương trình gửi",
+      "created": "Đã tạo chương trình gửi với {count, plural, other {# người nhận}}. Nhấn Bắt đầu gửi khi sẵn sàng.",
+      "failed": "Không thành công. Vui lòng thử lại."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "thiết lập",
+      "intro": "Thiết lập cách cuộc trò chuyện Messenger chào đón và hướng dẫn khách hàng — nút Bắt đầu, lời chào, menu luôn hiển thị và các câu hỏi thường gặp có thể chạm. Chọn một tính năng, đọc mô tả và điền thông tin. Thay đổi được lưu thẳng lên Facebook.",
+      "pagePicker": "Trang",
+      "composer": "Trình soạn",
+      "loadError": "Không thể tải hồ sơ Messenger. Vui lòng thử lại.",
+      "noPage": "Chưa có Trang Facebook nào được kết nối.",
+      "connect": "Kết nối tài khoản Facebook",
+      "profile": "Hồ sơ Messenger",
+      "tabs": {
+        "getstarted": "Nút Bắt đầu",
+        "greeting": "Lời chào",
+        "menu": "Menu cố định",
+        "icebreakers": "Câu hỏi gợi ý"
+      },
+      "isSet": "Thiết lập",
+      "notSet": "Chưa thiết lập",
+      "failed": "Không thành công. Vui lòng thử lại.",
+      "footnote": "Các cài đặt này ghi vào hồ sơ Messenger của Facebook qua Graph API và áp dụng cho các cuộc trò chuyện mới. Meta có thể mất chút thời gian để cập nhật thay đổi.",
+      "frame": {
+        "preview": "Xem trước",
+        "yourPage": "Trang của bạn",
+        "activeNow": "Đang hoạt động"
+      },
+      "explainer": {
+        "what": "Đây là gì",
+        "customer": "Khách hàng sử dụng như thế nào",
+        "how": "Cách thiết lập"
+      },
+      "getstarted": {
+        "title": "Nút Bắt đầu",
+        "subtitle": "Nút mà khách hàng mới nhấn để bắt đầu trò chuyện.",
+        "what": "Đây là thứ đầu tiên người dùng thấy khi mở Messenger của bạn — một nút “Bắt đầu” duy nhất trên màn hình chào mừng.",
+        "customer": "Họ nhấn một lần và cuộc trò chuyện bắt đầu. Nút chỉ hiện trước tin nhắn đầu tiên.",
+        "how": "Đặt một payload (từ khóa như GET_STARTED). Sau đó trong Luồng, thêm một Trigger lắng nghe payload đó để luồng Chào mừng chạy ngay khi họ nhấn.",
+        "payload": "Payload",
+        "payloadHint": "Từ này được gửi đến bạn khi nút được nhấn. Khớp với nó trong trigger của luồng để bắt đầu tự động hóa.",
+        "remove": "Xóa",
+        "removeConfirm": "Xóa nút Bắt đầu?",
+        "save": "Lưu",
+        "yourPage": "Trang của bạn",
+        "typically": "Thường trả lời ngay lập tức",
+        "button": "Bắt đầu"
+      },
+      "greeting": {
+        "title": "Lời chào",
+        "subtitle": "Lời chào thân thiện hiện trước khi ai đó nhập gì.",
+        "what": "Tin chào ngắn hiện trên màn hình đầu tiên của cuộc trò chuyện, ngay dưới tên Trang của bạn.",
+        "customer": "Họ đọc ngay khi mở Messenger — nó tạo ấn tượng và cho biết bạn có thể giúp gì.",
+        "how": "Giữ một dòng ấm áp (tối đa 160 ký tự). Mẹo: thêm thẻ tên và Messenger sẽ chào từng khách hàng bằng tên.",
+        "welcomeText": "Nội dung lời chào",
+        "placeholder": "Xin chào! Hôm nay chúng tôi có thể giúp gì cho bạn?",
+        "remove": "Xóa",
+        "removeConfirm": "Xóa lời chào?",
+        "save": "Lưu",
+        "yourPage": "Trang của bạn",
+        "sample": "Xin chào! Hôm nay chúng tôi có thể giúp gì cho bạn?"
+      },
+      "menu": {
+        "title": "Menu cố định",
+        "subtitle": "Menu tắt luôn hiển thị trong thanh tin nhắn.",
+        "what": "Một menu (biểu tượng ☰ cạnh ô nhập) luôn sẵn sàng trong suốt cuộc trò chuyện — tối đa 3 lối tắt.",
+        "customer": "Họ chạm ☰ bất cứ lúc nào để đi thẳng đến điều cần — “Nói chuyện với nhân viên”, “Theo dõi đơn hàng”, “Ghé cửa hàng”.",
+        "how": "Thêm tối đa 3 mục. Mỗi mục sẽ chạy một Luồng (gửi payload) hoặc mở một liên kết (URL). Có thể ẩn ô nhập để người dùng chỉ dùng menu.",
+        "sample1": "Liên hệ chúng tôi",
+        "sample2": "Theo dõi đơn hàng",
+        "sample3": "Ghé cửa hàng",
+        "menuLabel": "Menu",
+        "menuItem": "Mục menu",
+        "titleLabel": "Tiêu đề",
+        "titlePlaceholder": "Liên hệ chúng tôi",
+        "action": "Hành động",
+        "actionFlow": "Chạy một luồng (gửi payload)",
+        "actionLink": "Mở một liên kết (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Xóa mục",
+        "add": "Thêm mục menu",
+        "hideComposer": "Ẩn ô nhập (chỉ menu)",
+        "remove": "Xóa menu",
+        "removeConfirm": "Xóa menu cố định?",
+        "save": "Lưu menu"
+      },
+      "ice": {
+        "title": "Câu hỏi gợi ý",
+        "subtitle": "Câu hỏi gợi ý hiện trước tin nhắn đầu tiên.",
+        "what": "Tối đa 4 câu hỏi có thể chạm trên màn hình chào mừng — những câu hỏi phổ biến, sẵn sàng để chạm thay vì gõ.",
+        "customer": "Thay vì nghĩ phải viết gì, họ chạm vào câu hỏi như “Các bạn mở cửa mấy giờ?” và nhận câu trả lời ngay.",
+        "how": "Thêm các câu hỏi thường gặp nhất. Mỗi lần chạm sẽ gửi payload của nó — khớp payload đó trong trigger của Luồng để trả lời tự động.",
+        "sample1": "Các bạn mở cửa mấy giờ?",
+        "sample2": "Các bạn có giao hàng đến đâu?",
+        "sample3": "Nói chuyện với nhân viên",
+        "yourPage": "Trang của bạn",
+        "question": "Câu hỏi",
+        "questionLabel": "Câu hỏi",
+        "questionPlaceholder": "Các bạn mở cửa mấy giờ?",
+        "payload": "Payload",
+        "removeItem": "Xóa câu hỏi gợi ý",
+        "add": "Thêm câu hỏi gợi ý",
+        "remove": "Xóa tất cả",
+        "removeConfirm": "Xóa tất cả câu hỏi gợi ý?",
+        "save": "Lưu câu hỏi gợi ý"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Bài đăng",
+      "title": "Facebook",
+      "titleAccent": "bài đăng",
+      "intro": "Mọi nội dung bạn đã tạo, lên lịch hoặc đăng từ đây — theo dõi trạng thái, thử lại lỗi và quản lý hàng đợi.",
+      "allPages": "Tất cả Trang",
+      "pagePicker": "Trang",
+      "myPosts": "Bài của tôi",
+      "insights": "Thống kê",
+      "create": "Tạo bài đăng",
+      "loadError": "Không thể tải bài đăng. Vui lòng thử lại.",
+      "noPage": "Chưa kết nối Trang Facebook nào",
+      "noPageHint": "Kết nối tài khoản Facebook để đăng và lên lịch bài cho Trang.",
+      "connect": "Kết nối tài khoản Facebook",
+      "kpi": {
+        "total": "Tổng bài đăng",
+        "scheduled": "Đã lên lịch",
+        "published": "Đã đăng",
+        "failed": "Thất bại"
+      },
+      "tabs": {
+        "all": "Tất cả",
+        "scheduled": "Đã lên lịch",
+        "published": "Đã đăng",
+        "failed": "Thất bại"
+      },
+      "ranges": {
+        "all": "Mọi thời điểm",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "90d": "90 ngày"
+      },
+      "search": "Tìm bài đăng…",
+      "cols": {
+        "post": "Bài đăng",
+        "page": "Trang",
+        "type": "Loại",
+        "status": "Trạng thái",
+        "when": "Thời gian",
+        "actions": "Thao tác"
+      },
+      "status": {
+        "scheduled": "Đã lên lịch",
+        "published": "Đã đăng",
+        "failed": "Thất bại",
+        "draft": "Nháp"
+      },
+      "publishNow": "Đăng ngay",
+      "delete": "Xóa",
+      "noMatch": "Không có bài đăng nào khớp với bộ lọc",
+      "none": "Chưa có bài đăng nào",
+      "noneHint": "Soạn bài đăng đầu tiên — đăng ngay hoặc lên lịch.",
+      "pageOf": "Trang {page} / {last}",
+      "prev": "Trước",
+      "next": "Tiếp",
+      "deleteTitle": "Xóa bài đăng",
+      "deleteLive": "Thao tác này cũng xóa bài đăng khỏi Facebook — không thể hoàn tác.",
+      "deleteLocal": "Xóa bài đăng này?",
+      "deleteYes": "Có, xóa",
+      "cancel": "Hủy",
+      "rejected": "Facebook từ chối bài đăng: {error}",
+      "published": "Đã đăng bài lên Facebook.",
+      "removed": "Đã xóa bài đăng.",
+      "failed": "Không thành công. Vui lòng thử lại."
+    },
+    "compose": {
+      "kicker": "Facebook · Tạo",
+      "title": "Tạo một",
+      "titleAccent": "bài đăng",
+      "intro": "Soạn ảnh, album, liên kết, video và reel — đăng ngay hoặc lên lịch trực tiếp tới các Trang đã kết nối. Xem bài đang hình thành trong bản xem trước trực tiếp.",
+      "posts": "Bài đăng",
+      "myPosts": "Bài của tôi",
+      "insights": "Thống kê",
+      "loadError": "Không thể tải các Trang. Vui lòng thử lại.",
+      "noPage": "Chưa kết nối Trang Facebook nào",
+      "noPageHint": "Kết nối tài khoản Facebook để đăng và lên lịch bài cho Trang.",
+      "noAccess": "Bạn không thể tạo bài đăng",
+      "noAccessHint": "Hãy xin quản trị viên cấp quyền soạn bài đăng Facebook.",
+      "connect": "Kết nối tài khoản Facebook",
+      "required": "bắt buộc",
+      "steps": {
+        "page": "Trang",
+        "type": "Loại bài đăng",
+        "media": "Phương tiện",
+        "message": "Nội dung",
+        "when": "Thời điểm đăng"
+      },
+      "types": {
+        "photo": {
+          "label": "Ảnh",
+          "hint": "Bài đăng một ảnh."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2–10 ảnh trong một bài đăng."
+        },
+        "link": {
+          "label": "Liên kết",
+          "hint": "Chia sẻ liên kết kèm xem trước."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "Video trong bảng tin (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Video ngắn dọc dạng reel."
+        }
+      },
+      "photoUrls": "Dán URL ảnh công khai",
+      "photoHint": "Mỗi dòng một URL, tối đa 10. Tải tệp lên cần dịch vụ lưu trữ, hiện chưa được kết nối, nên hãy dùng địa chỉ ảnh công khai.",
+      "linkUrl": "URL liên kết",
+      "linkHint": "Facebook tạo thẻ xem trước từ liên kết. Một bài đăng chỉ có thể có liên kết hoặc ảnh, không cả hai.",
+      "videoUrl": "Dán URL video HTTPS công khai",
+      "reelNote": "Reel là video ngắn dọc. Nội dung tin nhắn bên dưới được dùng làm mô tả reel.",
+      "videoNote": "Meta tải tệp qua HTTPS công khai. Nội dung tin nhắn bên dưới được dùng làm mô tả video.",
+      "messagePlaceholder": "Viết bài đăng của bạn…",
+      "ai": {
+        "title": "Công cụ soạn bằng AI",
+        "caption": "Chú thích",
+        "repurpose": "Tái sử dụng",
+        "review": "Xem lại",
+        "bestTime": "Thời điểm tốt nhất",
+        "image": "Ảnh",
+        "unavailable": "Công cụ AI chưa khả dụng: cần chờ cài đặt nhà cung cấp AI."
+      },
+      "when": {
+        "now": "Đăng ngay",
+        "later": "Lên lịch sau",
+        "label": "Ngày & giờ gửi",
+        "hint": "Từ 10 phút đến 75 ngày kể từ bây giờ, theo múi giờ của bạn ({tz}). Facebook sẽ xếp hàng và đăng khi đến giờ."
+      },
+      "submit": {
+        "publish": "Đăng",
+        "schedule": "Lên lịch"
+      },
+      "preview": {
+        "live": "Xem trước trực tiếp",
+        "facebook": "Facebook",
+        "yourPage": "Trang của bạn",
+        "justNow": "Vừa xong",
+        "empty": "Nội dung bài đăng sẽ hiện ở đây…",
+        "reel": "Reel",
+        "video": "Video",
+        "like": "Thích",
+        "comment": "Bình luận",
+        "share": "Chia sẻ",
+        "note": "Xem trước trực tiếp — bài đăng thực tế trên Facebook có thể trông hơi khác."
+      },
+      "help": {
+        "label": "Trợ giúp - {n}",
+        "help1": {
+          "title": "Tôi có thể đăng gì?",
+          "body": "Ảnh, album, liên kết, video trong bảng tin và reel được đăng trực tiếp lên Trang đã kết nối của bạn qua Graph API."
+        },
+        "help2": {
+          "title": "Lên lịch hoạt động thế nào?",
+          "body": "Chọn thời điểm từ 10 phút đến 75 ngày sau và Facebook sẽ xếp hàng — bài tự đăng khi đến giờ. Hoặc đăng ngay."
+        },
+        "help3": {
+          "title": "Một bài đăng bị lỗi — vì sao?",
+          "body": "Thường là URL phương tiện không phải HTTPS công khai, hoặc Trang đã được kết nối lại. Đọc lỗi ở dòng đó rồi thử lại bằng Đăng ngay."
+        }
+      },
+      "problem": {
+        "noPage": "Chọn một Trang Facebook đã kết nối.",
+        "scheduleMissing": "Chọn ngày và giờ để lên lịch bài đăng.",
+        "scheduleInvalid": "Không đọc được ngày và giờ đó."
+      },
+      "rejected": "Facebook từ chối bài đăng: {error}",
+      "scheduled": "Đã lên lịch bài đăng.",
+      "published": "Đã đăng bài lên Facebook.",
+      "failed": "Không thành công. Vui lòng thử lại."
+    },
+    "grid": {
+      "kicker": "Facebook · Bài của tôi",
+      "title": "Lưới",
+      "titleAccent": "bài đăng của bạn",
+      "intro": "Các bài đăng trên Trang gần đây của bạn — trực tiếp từ Facebook. Chạm vào bất kỳ bài nào để xem trước.",
+      "posts": "Bài đăng",
+      "newPost": "Bài mới",
+      "pagePicker": "Trang",
+      "loadError": "Không thể tải bài đăng. Vui lòng thử lại.",
+      "noPage": "Chưa kết nối Trang Facebook",
+      "noPageHint": "Kết nối một Trang để xem lưới ở đây.",
+      "goHub": "Đi đến Facebook",
+      "empty": "Chưa có gì ở đây",
+      "emptyHint": "Các bài bạn đăng sẽ hiển thị tại đây.",
+      "firstPost": "Tạo bài đăng đầu tiên",
+      "noCaption": "(không có chú thích)",
+      "view": "Xem bài đăng",
+      "close": "Đóng",
+      "postTitle": "Bài đăng",
+      "noImage": "Không có ảnh",
+      "viewOnFacebook": "Xem trên Facebook"
+    },
+    "insights": {
+      "kicker": "Facebook · Thống kê",
+      "title": "Trang",
+      "titleAccent": "số liệu",
+      "intro": "Phạm vi tiếp cận và tương tác (28 ngày, trực tiếp từ Facebook) kết hợp với hoạt động Messenger và các bài đã đăng từ đây.",
+      "create": "Tạo bài đăng",
+      "myPosts": "Bài của tôi",
+      "loadError": "Không thể tải số liệu. Vui lòng thử lại.",
+      "noPage": "Chưa kết nối Trang Facebook nào.",
+      "connect": "Kết nối tài khoản Facebook",
+      "connected": "Đã kết nối",
+      "viewing": "Tài khoản đang xem",
+      "cards": {
+        "followers": "Người theo dõi",
+        "followersSub": "tổng lượng khán giả",
+        "reach": "Tiếp cận · 28 ngày",
+        "reachSub": "người đã tiếp cận",
+        "impressions": "Lượt hiển thị · 28 ngày",
+        "impressionsSub": "lần được hiển thị",
+        "engagements": "Tương tác · 28 ngày",
+        "engagementsSub": "lượt tương tác",
+        "convos": "Cuộc trò chuyện",
+        "convosSub": "{n} đang mở",
+        "messagesIn": "Tin nhắn nhận · 28 ngày",
+        "messagesInSub": "{n} đã gửi lại",
+        "published": "Bài đã đăng",
+        "publishedSub": "{n} đã lên lịch",
+        "rate": "Tỷ lệ tương tác",
+        "rateSub": "tương tác ÷ tiếp cận"
+      },
+      "liveFromFacebook": "Trực tiếp từ Facebook",
+      "fromHere": "Từ không gian làm việc này",
+      "activity": "Hoạt động Messenger · 14 ngày qua",
+      "received": "Đã nhận",
+      "sent": "Đã gửi",
+      "mix": {
+        "title": "Cơ cấu nội dung",
+        "posts": "{n} bài",
+        "none": "Chưa có bài nào được đăng từ đây.",
+        "first": "Tạo bài đăng đầu tiên"
+      },
+      "types": {
+        "photo": "Ảnh",
+        "multi_photo": "Album",
+        "link": "Liên kết",
+        "video": "Video",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Cuộc trò chuyện",
+        "total": "{n} tổng",
+        "open": "Mở Hộp thư nhóm",
+        "none": "Chưa có cuộc trò chuyện Facebook nào. Chúng sẽ hiện ở đây khi mọi người nhắn tin cho Trang của bạn."
+      },
+      "status": {
+        "open": "Đang mở",
+        "pending": "Đang chờ",
+        "resolved": "Đã xử lý",
+        "closed": "Đã đóng",
+        "snoozed": "Đã tạm ẩn"
+      },
+      "recent": {
+        "title": "Bài đăng gần đây",
+        "none": "Chưa có bài đăng nào, hoặc số liệu vẫn đang được cập nhật.",
+        "noCaption": "(không có chú thích)",
+        "impressions": "lượt hiển thị",
+        "engaged": "tương tác",
+        "view": "Xem"
+      },
+      "legendLive": "Trực tiếp từ Facebook — các chỉ số đã ngừng hỗ trợ có thể hiển thị là —.",
+      "legendHere": "Từ không gian làm việc này — tin nhắn Messenger và bài đã đăng."
+    }
+  }
+}

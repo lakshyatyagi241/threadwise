@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Puoi visualizzare queste impostazioni ma non modificarle.",
+      "clipboardBlocked": "Il browser ha bloccato la copia. Seleziona il testo e copialo manualmente.",
+      "copied": "Copiato",
+      "status": {
+        "archived": {
+          "title": "Questo modulo è archiviato",
+          "body": "Il link pubblico e gli eventuali embed sono chiusi. Ripristina il modulo per usarli di nuovo."
+        },
+        "draft": {
+          "title": "Pubblica il modulo per attivare questo link",
+          "body": "Nessuno può aprire il link o l’embed finché il modulo non è stato pubblicato almeno una volta."
+        },
+        "paused": {
+          "title": "Questo modulo è chiuso",
+          "body": "Il link e gli embed mostrano un messaggio di chiusura e non accettano risposte. Riprendi il modulo per riaprirlo."
+        },
+        "live": {
+          "title": "Questo modulo è attivo",
+          "body": "I visitatori vedono la versione {version}. Le modifiche apportate nel builder raggiungono i visitatori solo quando pubblichi."
+        }
+      },
+      "hosted": {
+        "title": "Link pubblico",
+        "description": "Condividi questo indirizzo ovunque: in un messaggio, in un’email, nella bio di un social. Apre il modulo nella sua pagina.",
+        "label": "Indirizzo del modulo",
+        "copy": "Copia link",
+        "copiedToast": "Link copiato.",
+        "open": "Apri",
+        "newTab": "(si apre in una nuova scheda)"
+      },
+      "qr": {
+        "title": "Codice QR",
+        "description": "Per stampa, poster e confezioni. La scansione apre il link pubblico.",
+        "alt": "Codice QR che apre il modulo",
+        "tracking": "Il codice aggiunge utm_source=qr all’indirizzo, così gli invii provenienti da qui risultano come QR nell’attribuzione.",
+        "downloadPng": "Scarica PNG",
+        "downloadSvg": "Scarica SVG",
+        "downloadFailed": "Impossibile scaricare il codice QR. Riprova."
+      },
+      "embed": {
+        "title": "Inserisci il modulo sul tuo sito",
+        "description": "Incolla uno di questi codici dove vuoi che il modulo compaia. L’embed funziona solo sui siti elencati in «Siti consentiti» qui sotto.",
+        "copy": "Copia codice",
+        "copiedToast": "{name} copiato.",
+        "script": {
+          "title": "Embed script",
+          "description": "Consigliato. Il modulo si adatta da solo alla pagina e può reindirizzare dopo l’invio."
+        },
+        "iframe": {
+          "title": "Embed iframe",
+          "description": "Un riquadro semplice per i builder che non consentono script. L’altezza la imposti tu."
+        }
+      },
+      "domains": {
+        "title": "Siti consentiti",
+        "description": "Solo i siti elencati qui possono incorporare questo modulo e inviare risposte da un browser.",
+        "none": "Non è ancora consentito nessun sito, quindi il modulo funziona solo tramite il link pubblico e non può essere incorporato.",
+        "label": "Aggiungi un sito",
+        "hint": "Usa l’indirizzo esatto, ad esempio https://www.example.com. È consentito un livello di jolly, ad esempio https://*.example.com. Il protocollo http è ammesso solo per localhost.",
+        "count": "{count} di {max}",
+        "add": "Aggiungi",
+        "remove": "Rimuovi {value}",
+        "empty": "Nessun sito aggiunto.",
+        "issues": {
+          "empty": "Inserisci prima un indirizzo di sito.",
+          "invalid": "Indirizzo non valido. Usa il formato https://example.com o https://*.example.com, senza percorso.",
+          "duplicate": "Questo sito è già nell’elenco.",
+          "max": "Puoi consentire al massimo {max} siti."
+        }
+      },
+      "rotate": {
+        "title": "Ruota la chiave pubblica",
+        "description": "Crea una nuova chiave per questo modulo. Usala se il link o il codice di embed è stato divulgato o se vuoi ritirarlo.",
+        "button": "Ruota chiave",
+        "readOnly": "Non puoi modificare questo modulo",
+        "confirmTitle": "Ruotare la chiave pubblica?",
+        "confirmMessage": "Il vecchio link, i codici QR e il codice di embed smettono di funzionare subito. Dovrai condividere il nuovo link e sostituire il codice su ogni sito che incorpora il modulo.",
+        "confirmButton": "Ruota chiave",
+        "cancel": "Annulla",
+        "success": "La chiave è stata ruotata. Copia il nuovo link e il nuovo codice.",
+        "failed": "Impossibile ruotare la chiave. Non è cambiato nulla. Riprova.",
+        "conflict": "Qualcun altro ha modificato questo modulo. Ricarica la pagina per vedere l’ultima versione, poi riprova."
+      }
+    },
+    "settings": {
+      "readOnly": "Puoi visualizzare queste impostazioni ma non modificarle.",
+      "usersFailed": "Impossibile caricare l’elenco dei membri del team, quindi al momento non è possibile scegliere i responsabili.",
+      "form": {
+        "title": "Modulo",
+        "description": "Il nome visibile nell’elenco e le informazioni di base che vedono i visitatori.",
+        "name": "Nome del modulo",
+        "nameHint": "Solo il tuo team vede questo nome.",
+        "issues": {
+          "nameRequired": "Assegna un nome al modulo.",
+          "submit_empty": "Il pulsante deve avere un’etichetta.",
+          "submit_too_long": "Mantieni l’etichetta del pulsante entro {max} caratteri."
+        },
+        "language": "Lingua del modulo",
+        "languageHint": "Imposta la lingua dei testi integrati e il verso di lettura (l’arabo si legge da destra a sinistra).",
+        "languages": {
+          "en": "Inglese",
+          "ar": "Arabo"
+        },
+        "submitLabel": "Etichetta del pulsante di invio",
+        "submitLabelHint": "Da 1 a {max} caratteri."
+      },
+      "after": {
+        "title": "Dopo l’invio",
+        "description": "Cosa vede il visitatore una volta inviate le sue risposte.",
+        "mode": "Cosa succede",
+        "modes": {
+          "message": "Mostra un messaggio",
+          "redirect": "Vai a un’altra pagina"
+        },
+        "modeHints": {
+          "message": "Il modulo viene sostituito dal tuo messaggio di ringraziamento.",
+          "redirect": "Il visitatore viene inviato a una tua pagina, ad esempio una pagina di ringraziamento o di prenotazione."
+        },
+        "message": "Messaggio di ringraziamento",
+        "messageHint": "Testo semplice. Sono consentiti questi tag: b, i, u, br, ul, ol, li e a. Fino a {max} caratteri.",
+        "messageTooLong": "Il messaggio supera {max} caratteri.",
+        "redirect": "Indirizzo di reindirizzamento",
+        "redirectHint": "Deve iniziare con https://. Una pagina che non è https non viene mai aperta.",
+        "redirectIssues": {
+          "required": "Inserisci l’indirizzo a cui inviare i visitatori.",
+          "https": "Usa un indirizzo che inizi con https://."
+        },
+        "redirectKeepsMessage": "Il messaggio di ringraziamento viene conservato nel modulo e non viene mostrato mentre è impostato un reindirizzamento."
+      },
+      "consent": {
+        "title": "Consenso",
+        "description": "Una casella di spunta che registra a cosa il visitatore ha acconsentito, con il testo esatto, la sua versione e l’ora.",
+        "enabled": "Richiedi il consenso",
+        "enabledHint": "Mostra la riga di consenso sopra il pulsante di invio.",
+        "text": "Testo del consenso",
+        "textHint": "Fino a {max} caratteri. I visitatori vedono esattamente questo testo.",
+        "textRequired": "Scrivi il testo del consenso oppure disattiva il consenso.",
+        "textTooLong": "Il testo supera {max} caratteri.",
+        "version": "Versione del testo {version}",
+        "versionHintPublished": "Una volta pubblicato il modulo, modificare il testo avvia automaticamente una nuova versione. Gli invii precedenti mantengono la versione a cui hanno acconsentito.",
+        "versionHintDraft": "La versione resta 1 finché il modulo non viene pubblicato. Dopo, una modifica del testo avvia una nuova versione.",
+        "privacyUrl": "Link all’informativa sulla privacy",
+        "privacyUrlHint": "Facoltativo. Mostrato accanto al testo del consenso. Deve iniziare con https://.",
+        "privacyUrlHttps": "Usa un indirizzo che inizi con https://.",
+        "required": "Da spuntare per inviare",
+        "requiredHint": "Disattiva se il consenso è facoltativo.",
+        "marketing": "Adesione al marketing",
+        "marketingHint": "Spuntando la casella il consenso al marketing viene registrato sul contatto. Una casella non spuntata non iscrive mai nessuno."
+      },
+      "crm": {
+        "title": "Nel CRM",
+        "description": "Cosa fa ogni invio al contatto che crea o aggiorna.",
+        "company": "Collega azienda",
+        "companyOptions": {
+          "none": "Non collegare",
+          "email_domain": "Per dominio email",
+          "name_or_domain": "Per nome o dominio"
+        },
+        "companyHints": {
+          "none": "Le risposte sull’azienda non vengono usate per collegare un’azienda.",
+          "email_domain": "Collega il contatto all’azienda che possiede il dominio del suo indirizzo email.",
+          "name_or_domain": "Collega l’azienda per nome o dominio del sito web, e la crea se non ne trova nessuna."
+        },
+        "lifecycle": "Fase del ciclo di vita",
+        "lifecycleHint": "Impostata sul contatto quando il modulo viene inviato.",
+        "lifecycleNone": "Non impostare",
+        "stages": {
+          "new": "Nuovo",
+          "contacted": "Contattato",
+          "qualified": "Qualificato",
+          "application_started": "Domanda avviata",
+          "application_submitted": "Domanda inviata",
+          "interview_scheduled": "Colloquio fissato",
+          "offer_received": "Offerta ricevuta",
+          "admission_confirmed": "Ammissione confermata",
+          "enrolled": "Iscritto",
+          "lost": "Perso"
+        },
+        "tags": "Tag da aggiungere",
+        "tagsHint": "Aggiunti a ogni contatto che invia questo modulo. Fino a {max} tag di 1–60 caratteri.",
+        "tagsPlaceholder": "Ad esempio: webinar",
+        "tagsCount": "{count} di {max}",
+        "tagAdd": "Aggiungi tag",
+        "tagRemove": "Rimuovi tag {value}",
+        "tagsNone": "Nessun tag.",
+        "tagIssues": {
+          "empty": "Inserisci prima un tag.",
+          "too_long": "Un tag può avere al massimo 60 caratteri.",
+          "duplicate": "Questo tag è già nell’elenco.",
+          "max": "Puoi aggiungere al massimo {max} tag."
+        },
+        "owner": "Responsabile dei nuovi contatti",
+        "ownerHint": "Chi si occupa del contatto creato da questo modulo.",
+        "ownerMode": "Regola del responsabile",
+        "ownerModes": {
+          "unassigned": "Nessun responsabile",
+          "fixed": "Una persona",
+          "round_robin": "A turno"
+        },
+        "ownerModeHints": {
+          "unassigned": "Il contatto non ha un responsabile finché qualcuno non se ne fa carico.",
+          "fixed": "Ogni contatto va alla stessa persona.",
+          "round_robin": "I contatti vanno alle persone scelte a turno. Le persone non più attive vengono saltate."
+        },
+        "ownerFixed": "Responsabile",
+        "ownerRoundRobin": "Persone a turno",
+        "ownerRoundRobinHint": "Scegli almeno due persone.",
+        "chooseUser": "Scegli una persona",
+        "unknownUser": "Una persona non più disponibile",
+        "pickUsers": "Scegli persone",
+        "noUsers": "Nessuna persona corrispondente",
+        "removeUser": "Rimuovi {name}",
+        "ownerIssues": {
+          "fixed_one": "Scegli esattamente una persona.",
+          "round_robin_two": "La rotazione richiede almeno due persone.",
+          "unassigned_none": "Una regola senza assegnazione non può avere persone. Scegli un’altra regola oppure svuota l’elenco.",
+          "too_many": "Puoi scegliere al massimo 50 persone."
+        }
+      },
+      "notify": {
+        "title": "Notifiche",
+        "description": "Chi viene avvisato quando arriva un invio.",
+        "owner": "Avvisa il responsabile del contatto",
+        "ownerHint": "Il responsabile riceve una notifica per ogni invio.",
+        "users": "Avvisa anche queste persone",
+        "usersHint": "Fino a {max} membri del team ricevono anche la notifica.",
+        "emails": "Invia email anche a questi indirizzi",
+        "emailsHint": "Fino a {max} indirizzi ricevono un’email per ogni invio. Possono appartenere a persone esterne al team.",
+        "emailPlaceholder": "nome@example.com",
+        "emailsCount": "{count} di {max}",
+        "emailAdd": "Aggiungi email",
+        "emailRemove": "Rimuovi {value}",
+        "emailsNone": "Nessun indirizzo aggiuntivo.",
+        "emailIssues": {
+          "empty": "Inserisci prima un indirizzo email.",
+          "invalid": "Indirizzo email non valido.",
+          "duplicate": "Questo indirizzo è già nell’elenco.",
+          "max": "Puoi aggiungere al massimo {max} indirizzi."
+        }
+      },
+      "protection": {
+        "title": "Protezione",
+        "description": "Tiene lontano lo spam e decide per quanto tempo vengono conservate le risposte.",
+        "honeypot": "Campo trappola nascosto",
+        "honeypotHint": "Aggiunge un campo che le persone non vedono. I bot lo compilano e i loro invii vengono contrassegnati come spam.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Segui l’impostazione della piattaforma",
+          "on": "Sempre attivo",
+          "off": "Disattivo"
+        },
+        "captchaHints": {
+          "inherit": "Usa ciò che il tuo workspace ha impostato per i moduli pubblici.",
+          "on": "I visitatori devono superare la verifica prima di poter inviare.",
+          "off": "Nessuna verifica. Affidati al campo trappola nascosto e ai limiti di frequenza."
+        },
+        "retention": "Conserva le risposte per (giorni)",
+        "retentionHint": "Dopo questo numero di giorni le risposte vengono eliminate. Aiuta a rispettare norme sulla protezione dei dati come il GDPR. Tra 30 e 3650.",
+        "range": "Inserisci un numero intero da {min} a {max}.",
+        "keepForever": "Conserva finché non le elimino",
+        "keepForeverHint": "Le risposte restano finché una persona non le elimina. Scegli questa opzione solo se hai un motivo legale per conservarle.",
+        "advanced": "Avanzate: limiti di frequenza",
+        "advancedHint": "Limiti che rallentano gli invii massicci. I valori predefiniti vanno bene per la maggior parte dei moduli.",
+        "rate": {
+          "perIpPerMinute": "Per indirizzo, al minuto",
+          "perIpPerMinuteHint": "Invii da un indirizzo internet.",
+          "perFormPerMinute": "Per modulo, al minuto",
+          "perFormPerMinuteHint": "Invii a questo modulo da qualsiasi luogo.",
+          "perContactPerHour": "Per contatto, all’ora",
+          "perContactPerHourHint": "Invii con lo stesso indirizzo email o numero di telefono."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Roles y permisos",
+      "roles": "Roles",
+      "permissions": "Permisos",
+      "staff": "Roles de personal"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Ruta de navegación",
+      "loading": "Cargando…",
+      "retry": "Reintentar",
+      "requestId": "ID de la solicitud",
+      "cancel": "Cancelar",
+      "noAccess": {
+        "title": "No tienes acceso a esta pantalla",
+        "body": "Tus roles no incluyen el permiso de plataforma que necesita esta pantalla. Pide a un superadministrador que lo conceda.",
+        "bodyWithKey": "Esta pantalla necesita el permiso de plataforma {permission}. Pide a un superadministrador que lo añada a uno de tus roles.",
+        "back": "Volver a la consola"
+      },
+      "errors": {
+        "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo; si sigue ocurriendo, indica el ID de la solicitud.",
+        "request": "No se pudo completar la solicitud.",
+        "validation": "Revisa el formulario e inténtalo de nuevo.",
+        "validationField": "{message}",
+        "conflict": "Otra persona cambió este rol mientras editabas. Recarga para ver su versión y vuelve a aplicar tus cambios.",
+        "noAccess": "Para esto necesitas el permiso de plataforma {permission}.",
+        "nameTaken": "Ese nombre ya está en uso.",
+        "nameRequired": "El nombre del rol es obligatorio.",
+        "permissionNameRequired": "El nombre del permiso es obligatorio.",
+        "permissionNameFormat": "Usa letras minúsculas, dígitos y guiones bajos, con puntos entre las partes.",
+        "locked": "Superadministrador está bloqueado por el sistema: no se puede renombrar, quitarle permisos ni eliminar.",
+        "lockedDelete": "El rol Superadministrador está bloqueado por el sistema y no puede eliminarse.",
+        "permissionSystem": "La plataforma comprueba este permiso y no puede eliminarse.",
+        "permissionUnknown": "Estos permisos no están en el catálogo: {names}.",
+        "reassignSame": "Elige otro rol al que mover a los usuarios.",
+        "lastSuperAdmin": "Debe haber al menos un superadministrador activo.",
+        "privilegedRole": "Solo un superadministrador puede conceder o revocar el rol de superadministrador.",
+        "notFound": "Este elemento ya no existe. Puede que se haya eliminado."
+      }
+    },
+    "list": {
+      "crumb": "Roles",
+      "eyebrow": "Admin · Usuarios y acceso · Roles",
+      "titleLead": "Roles y",
+      "titleAccent": "permisos",
+      "description": "Define lo que puede hacer cada rol en toda la plataforma. Cada usuario tiene un rol asignado, y los permisos se agrupan por rol.",
+      "managePermissions": "Gestionar permisos",
+      "addRole": "Añadir rol",
+      "kpi": {
+        "label": "Totales de roles",
+        "total": "Roles totales",
+        "totalHint": "{system} del sistema · {custom} personalizados",
+        "permissions": "Permisos totales",
+        "permissionsHint": "en todos los módulos",
+        "users": "Usuarios con el rol",
+        "usersHint": "en todos los roles",
+        "noUsers": "Roles sin usuarios",
+        "noUsersHint": "considera archivarlos"
+      },
+      "filter": {
+        "label": "Filtrar roles por tipo",
+        "all": "Todos",
+        "system": "Sistema",
+        "custom": "Personalizado",
+        "search": "Buscar roles…",
+        "searchLabel": "Buscar roles"
+      },
+      "table": {
+        "caption": "Roles de la plataforma",
+        "index": "#",
+        "name": "Nombre del rol",
+        "type": "Tipo",
+        "users": "Usuarios",
+        "permissions": "Permisos",
+        "lastEdited": "Última edición",
+        "actions": "Acciones"
+      },
+      "systemRole": "Rol del sistema",
+      "customRole": "Rol personalizado",
+      "systemBadge": "Sistema",
+      "customBadge": "Personalizado",
+      "row": {
+        "menu": "Acciones para {name}",
+        "edit": "Editar rol",
+        "delete": "Eliminar"
+      },
+      "footer": {
+        "showing": "Mostrando {shown} de {total} roles",
+        "add": "+ Añadir rol"
+      },
+      "empty": {
+        "none": "Todavía no hay roles definidos. <link>Crea el primer rol</link>.",
+        "noMatch": "Ningún rol coincide con tus filtros.",
+        "clear": "Limpiar filtros"
+      },
+      "delete": {
+        "title": "Eliminar rol",
+        "message": "¿Eliminar el rol {name}? Los usuarios asignados a este rol perderán todos sus permisos. Esta acción no se puede deshacer.",
+        "confirm": "Sí, eliminar",
+        "cancel": "Cancelar"
+      },
+      "toasts": {
+        "deleted": "Rol \"{name}\" eliminado."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Roles",
+      "crumbNew": "Nuevo",
+      "eyebrowNew": "Admin · Roles · Nuevo",
+      "eyebrowEdit": "Admin · Editando rol",
+      "titleLead": "Crear un nuevo",
+      "titleAccent": "rol",
+      "description": "Elige un nombre y marca las casillas para dar a este rol acceso a módulos concretos. Puedes editarlo en cualquier momento.",
+      "summary": "{count} / {total} permisos · última edición {date}.",
+      "userChip": "{count, plural, one {# usuario} other {# usuarios}}",
+      "save": "Guardar cambios",
+      "create": "Crear rol",
+      "saving": "Guardando…",
+      "reload": "Recargar el rol",
+      "discard": "Tienes cambios sin guardar. ¿Salir sin guardar?",
+      "duplicatedBanner": "Rol duplicado como \"{name}\". Edita la copia de abajo.",
+      "lockedNotice": "{name} está bloqueado por el sistema: no se puede renombrar, quitarle permisos ni eliminar.",
+      "details": "Detalles del rol",
+      "name": "Nombre del rol",
+      "namePlaceholder": "p. ej., Responsable de ventas",
+      "template": "Partir de una plantilla",
+      "templateBlank": "En blanco · sin permisos",
+      "templateOption": "{name} · {count, plural, one {# permiso} other {# permisos}}",
+      "templateBusy": "Cargando la plantilla…",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "¿Qué hace este rol? Lo ven los administradores.",
+      "toasts": {
+        "created": "Rol \"{name}\" creado.",
+        "updated": "Rol \"{name}\" actualizado."
+      }
+    },
+    "matrix": {
+      "title": "Asignar permisos",
+      "counter": "{count, number} / {total, number} seleccionados",
+      "selectAll": "Seleccionar todos los permisos",
+      "module": "Módulo",
+      "selectAllColumn": "Seleccionar todo",
+      "available": "Permisos disponibles",
+      "selectAllModule": "Seleccionar todo",
+      "selectAllOf": "Seleccionar todos los permisos de {module}",
+      "empty": "Todavía no hay permisos definidos. <link>Crea uno</link>.",
+      "emptyPlain": "Todavía no hay permisos definidos."
+    },
+    "dangerZone": {
+      "title": "Zona de peligro",
+      "irreversible": "irreversible",
+      "duplicate": {
+        "title": "Duplicar rol",
+        "hint": "Crea una copia con los mismos permisos",
+        "action": "Duplicar",
+        "busy": "Duplicando…"
+      },
+      "reassign": {
+        "title": "Reasignar todos los usuarios",
+        "hint": "Mover {count, plural, one {# usuario} other {# usuarios}} a otro rol",
+        "targetLabel": "Mover usuarios a",
+        "placeholder": "A…",
+        "action": "Mover",
+        "busy": "Moviendo…"
+      },
+      "moved": "{count} usuario(s) movido(s) de \"{from}\" a \"{to}\".",
+      "delete": {
+        "title": "Eliminar rol",
+        "hint": "Elimina el rol y desvincula a todos los usuarios.",
+        "action": "Eliminar",
+        "dialogTitle": "Eliminar rol",
+        "dialogMessage": "¿Eliminar el rol {name}? Los usuarios asignados a este rol perderán todos sus permisos. Esta acción no se puede deshacer.",
+        "confirm": "Sí, eliminar",
+        "cancel": "Cancelar"
+      },
+      "deleted": "Rol \"{name}\" eliminado."
+    },
+    "permissions": {
+      "crumb": "Permisos",
+      "eyebrow": "Admin · Usuarios y acceso · Permisos",
+      "titleLead": "Todos",
+      "titleAccent": "permisos",
+      "description": "Cada indicador de permiso que reconoce la plataforma, agrupado por módulo. Añade aquí un indicador nuevo y luego asígnalo a los roles en el editor de roles.",
+      "backToRoles": "Volver a roles",
+      "add": "Añadir permiso",
+      "kpi": {
+        "label": "Totales de permisos",
+        "total": "Permisos totales",
+        "totalHint": "en {modules, plural, one {# módulo} other {# módulos}}",
+        "used": "Usados en roles",
+        "usedHint": "asignados a ≥ 1 rol",
+        "orphans": "Permisos huérfanos",
+        "orphansHint": "asignados a 0 roles",
+        "last": "Último añadido"
+      },
+      "filter": {
+        "search": "Buscar nombre de permiso…",
+        "searchLabel": "Buscar nombre de permiso",
+        "moduleLabel": "Módulo",
+        "allModules": "Todos los módulos",
+        "count": "{count, plural, one {# permiso} other {# permisos}} en {modules, plural, one {# módulo} other {# módulos}}"
+      },
+      "groupsLabel": "Permisos por módulo",
+      "groupCount": "{count, plural, one {# permiso} other {# permisos}}",
+      "orphan": "huérfano",
+      "system": "sistema",
+      "systemHint": "Lo comprueba la plataforma, por lo que no puede eliminarse.",
+      "inRoles": "en {count, plural, one {# rol} other {# roles}}",
+      "deleteName": "Eliminar permiso {name}",
+      "empty": {
+        "none": "Todavía no hay permisos definidos. <link>Crea el primero</link>.",
+        "noMatch": "Ningún permiso coincide con tu búsqueda."
+      },
+      "delete": {
+        "action": "Eliminar",
+        "title": "Eliminar permiso",
+        "message": "¿Eliminar el permiso {name}? Cualquier rol que lo use perderá esa capacidad de inmediato.",
+        "confirm": "Sí, eliminar",
+        "cancel": "Cancelar"
+      },
+      "toasts": {
+        "deleted": "Permiso \"{name}\" eliminado."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Permisos",
+      "crumbNew": "Nuevo",
+      "eyebrow": "Admin · Permisos · Nuevo",
+      "titleLead": "Crear un nuevo",
+      "titleAccent": "permiso",
+      "description": "Añade un indicador de capacidad granular. Una vez creado, asígnalo a uno o más roles en el editor de roles.",
+      "create": "Crear permiso",
+      "creating": "Creando…",
+      "details": "Detalles del permiso",
+      "module": "Módulo",
+      "modulePlaceholder": "Elige un módulo",
+      "moduleHint": "Los permisos se agrupan por módulo en el editor de roles.",
+      "action": "Acción",
+      "actionHint": "En minúsculas, sin espacios. Se combinará como",
+      "actionPlaceholder": "p. ej., exportar · reembolsar · aprobar",
+      "name": "Nombre del permiso",
+      "namePlaceholder": "módulo.acción — se rellena automáticamente con lo anterior",
+      "nameHint": "Se rellena a partir del módulo y la acción. Edítalo solo si necesitas una cadena personalizada.",
+      "tip": "<b>Convención de nombres:</b> usa <code>módulo.acción</code> en minúsculas. Ejemplos: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Vista previa del permiso",
+        "appearsUnder": "Aparecerá en <b>{module}</b> en el editor de roles.",
+        "selectedModule": "módulo seleccionado"
+      },
+      "code": {
+        "title": "Referencia de código",
+        "hint": "Usa <code>@PlatformPermission()</code> en una ruta de la plataforma para exigir este permiso."
+      },
+      "tipCard": "<b>Consejo:</b> los permisos con nombre tipo <code>módulo.acción</code> se agrupan automáticamente en el editor de roles.",
+      "toasts": {
+        "created": "Permiso \"{name}\" creado."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Roles",
+      "crumb": "Roles de personal",
+      "eyebrow": "Admin · Usuarios y acceso · Roles de personal",
+      "titleLead": "Personal",
+      "titleAccent": "roles",
+      "description": "Asigna a cada operador de esta consola los roles de plataforma que determinan lo que puede hacer. Al guardar, los roles del operador se reemplazan exactamente por los marcados.",
+      "backToRoles": "Volver a roles",
+      "caption": "Operadores y sus roles de plataforma",
+      "table": {
+        "operator": "Operador",
+        "tier": "Acceso a la consola",
+        "status": "Estado",
+        "roles": "Roles de plataforma",
+        "actions": "Acciones"
+      },
+      "tier": {
+        "super_admin": "Superadministrador",
+        "support": "Soporte",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Activo",
+        "suspended": "Suspendido"
+      },
+      "noRoles": "Sin roles",
+      "rolesOf": "Roles de {name}",
+      "assign": "Asignar roles",
+      "assignFor": "Asignar roles a {name}",
+      "empty": "Todavía no hay operadores.",
+      "dialog": {
+        "title": "Asignar roles a {name}",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "save": "Guardar roles",
+        "saving": "Guardando…",
+        "hint": "Marca todos los roles que debe tener este operador.",
+        "superOnly": "Solo un superadministrador puede conceder o revocar este rol.",
+        "count": "{count, plural, =0 {Ningún rol seleccionado} one {# rol seleccionado} other {# roles seleccionados}}"
+      },
+      "toasts": {
+        "saved": "Roles actualizados para \"{name}\"."
+      }
+    }
+  }
+}

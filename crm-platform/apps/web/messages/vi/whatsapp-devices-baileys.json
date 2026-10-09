@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "WhatsApp cá nhân"
+    },
+    "area": {
+      "title": "API WhatsApp không chính thức",
+      "numbers": "Số",
+      "warmer": "Trình làm nóng"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "requestId": "Yêu cầu {id}",
+      "unofficial": "Không chính thức",
+      "reminder": "Kết nối không chính thức. WhatsApp có thể hạn chế số này.",
+      "readGuide": "Đọc hướng dẫn",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "back": "Quay lại"
+    },
+    "list": {
+      "title": "Số WhatsApp cá nhân",
+      "subtitle": "Liên kết số WhatsApp bằng mã QR hoặc mã ghép nối. Các cuộc trò chuyện trên đó xuất hiện trong hộp thư dùng chung.",
+      "connect": "Kết nối một số",
+      "capCount": "{used} trên {limit} số",
+      "capUnlimited": "{used, plural, other {# số}}",
+      "capFull": "Không gian làm việc của bạn có thể có {limit, plural, other {# số}} trên engine này. Xóa một số để kết nối số khác.",
+      "capLabel": "Số đang dùng",
+      "loading": "Đang tải số của bạn...",
+      "retry": "Thử lại",
+      "searchLabel": "Tìm theo tên hoặc số",
+      "searchPlaceholder": "Tìm tên hoặc số",
+      "tabs": {
+        "all": "Tất cả",
+        "connected": "Đã kết nối",
+        "disconnected": "Đã ngắt kết nối"
+      },
+      "noMatch": "Không có số nào khớp. Xóa tìm kiếm hoặc chọn thẻ khác.",
+      "empty": {
+        "title": "Chưa liên kết số WhatsApp cá nhân nào",
+        "message": "Liên kết số WhatsApp bạn đang dùng. Cách này hoạt động giống WhatsApp Web, nên không phải là cách được phép để tự động hóa WhatsApp và WhatsApp có thể hạn chế số. Với mục đích sử dụng nghiêm túc hoặc lâu dài, tuyến WhatsApp Business chính thức có rủi ro thấp hơn.",
+        "action": "Kết nối một số",
+        "noPermission": "Nhờ quản trị viên không gian làm việc kết nối một số."
+      },
+      "columns": {
+        "name": "Tên",
+        "lastSeen": "Lần cuối hoạt động"
+      },
+      "lastSeenNever": "Chưa bao giờ",
+      "assignedTo": "Do {name} xử lý",
+      "noticeChanged": {
+        "title": "Thông báo của chúng tôi đã thay đổi",
+        "body": "Thông báo rủi ro cho số cá nhân đã được cập nhật. Các số đã kết nối vẫn hoạt động. Bạn sẽ được yêu cầu đọc lại khi kết nối số tiếp theo.",
+        "action": "Đọc thông báo"
+      },
+      "action": {
+        "link": "Kết nối",
+        "reconnect": "Kết nối lại",
+        "relink": "Liên kết lại",
+        "retry": "Thử lại",
+        "details": "Chi tiết",
+        "disconnect": "Ngắt kết nối",
+        "rename": "Đổi tên",
+        "delete": "Xóa"
+      },
+      "sendingToggle": "Dùng {name} để gửi",
+      "sendingOn": "Đang dùng để gửi",
+      "sendingOff": "Không dùng để gửi",
+      "done": {
+        "disconnected": "Đã ngắt kết nối {name}.",
+        "disconnectedNotUnlinked": "{name} đã được ngắt kết nối ở đây. Đồng thời xóa thiết bị này trong WhatsApp, mục Thiết bị đã liên kết.",
+        "deleted": "Đã xóa {name}. Các cuộc trò chuyện vẫn nằm trong hộp thư đến.",
+        "renamed": "Đã đổi tên thành {name}.",
+        "sendingSaved": "Đã lưu."
+      },
+      "workerDown": "Dịch vụ kết nối không chạy. Các số không thể kết nối cho đến khi dịch vụ hoạt động lại."
+    },
+    "state": {
+      "created": "Chưa liên kết",
+      "awaiting_qr": "Đang chờ quét",
+      "awaiting_pairing_code": "Đang chờ mã",
+      "connecting": "Đang kết nối",
+      "connected": "Đã kết nối",
+      "disconnected": "Đã ngắt kết nối",
+      "logged_out": "WhatsApp đã kết thúc liên kết",
+      "error": "Không thể kết nối",
+      "unknown": "Không rõ"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp đã kết thúc liên kết với số này. Điều này xảy ra khi thiết bị bị xóa trong WhatsApp, mục Thiết bị đã liên kết, và cũng khi WhatsApp hạn chế số. Các cuộc trò chuyện ở đây vẫn được giữ lại. Bạn có thể liên kết lại.",
+      "forbidden": "WhatsApp từ chối kết nối. Điều này có thể nghĩa là số đã bị hạn chế. Các cuộc trò chuyện ở đây vẫn được giữ lại.",
+      "qr_timeout": "Mã chưa được quét kịp thời.",
+      "pair_failed": "WhatsApp không thể hoàn tất liên kết số này.",
+      "code_failed": "Mã ghép nối không được chấp nhận.",
+      "mismatch": "Điện thoại đã quét không phải là số bạn nhập. Kiểm tra lại số và thử lại.",
+      "proxy_unreachable": "Proxy không phản hồi. Số sẽ ngoại tuyến cho đến khi proxy hoạt động.",
+      "session_conflict": "Cùng một số đang được liên kết ở nơi khác và hai bên liên tục ghi đè nhau. Hãy xóa liên kết kia, rồi kết nối lại.",
+      "device_limit_reached": "WhatsApp cho phép 4 thiết bị liên kết. Hãy xóa một thiết bị trong WhatsApp, mục Thiết bị đã liên kết, rồi thử lại.",
+      "worker_unavailable": "Dịch vụ kết nối không khả dụng. Hãy thử lại sau vài phút.",
+      "worker_silent": "Dịch vụ kết nối đã ngừng phản hồi cho số này. Dịch vụ sẽ tự kết nối lại khi hoạt động trở lại.",
+      "user": "Đã ngắt kết nối khỏi không gian làm việc này.",
+      "session_incomplete": "Phiên đã lưu chưa hoàn tất. Hãy liên kết lại số."
+    },
+    "notice": {
+      "title": "Trước khi kết nối",
+      "intro": "Hãy đọc. Nội dung ngắn gọn và chính xác.",
+      "listLabel": "Hãy xác nhận từng điểm",
+      "notesTitle": "Điều nên biết",
+      "version": "Phiên bản thông báo {version}",
+      "accept": "Tôi chấp nhận và tiếp tục",
+      "accepting": "Đang lưu...",
+      "mustTick": "Đánh dấu cả ba ô để tiếp tục.",
+      "pageTitle": "Thông báo rủi ro cho số WhatsApp cá nhân",
+      "pageIntro": "Đây là thông báo bạn chấp nhận trước khi kết nối số WhatsApp cá nhân.",
+      "acceptedOn": "Bạn đã chấp nhận phiên bản {version} vào {date}.",
+      "notAccepted": "Bạn chưa chấp nhận phiên bản hiện tại. Bạn sẽ được hỏi khi kết nối một số.",
+      "backToList": "Quay lại danh sách số",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Tôi hiểu rằng việc này kết nối WhatsApp của tôi giống như WhatsApp Web. Đây không phải cách được phép để tự động hóa WhatsApp và trái với điều khoản của WhatsApp. WhatsApp có thể hạn chế hoặc cấm vĩnh viễn số này bất cứ lúc nào, kể cả khi sử dụng bình thường, và chúng tôi không thể ngăn chặn hay khôi phục số.",
+            "own_number_expected_contacts": "Tôi chỉ kết nối số mà tôi sở hữu hoặc có sự cho phép của chủ số, và tôi có thể chấp nhận mất số. Tôi chỉ nhắn tin cho những người mong đợi nhận tin từ tôi.",
+            "shared_inbox_disclosure": "Tôi hiểu rằng ngay khi được liên kết, mọi cuộc trò chuyện riêng trên số này (không chỉ các cuộc trò chuyện kinh doanh) sẽ xuất hiện trong hộp thư dùng chung của không gian làm việc, cho các thành viên có quyền xem hộp thư, và các tin nhắn tôi gõ trên điện thoại cũng sẽ được sao chép tới đó."
+          },
+          "notes": {
+            "official_route_lower_risk": "Tuyến WhatsApp Business chính thức có rủi ro thấp hơn cho mục đích sử dụng nghiêm túc hoặc lâu dài.",
+            "warm_up": "Làm nóng số từ từ và giữ khối lượng gửi thấp.",
+            "no_ban_support": "Số bị hạn chế hoặc cấm không được hỗ trợ: chúng tôi không điều tra, khôi phục hay hoàn tiền cho số đó.",
+            "shared_addresses": "Trong giai đoạn thí điểm này, số được kết nối từ địa chỉ dùng chung của máy chủ (không qua proxy), nên việc hạn chế một số có thể liên đới đến các số khác.",
+            "disconnect_keeps_chats": "Ngắt kết nối tại đây sẽ xóa liên kết và phiên đã lưu, nhưng không xóa các cuộc trò chuyện khỏi hộp thư đến."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Kết nối một số",
+      "relinkTitle": "Liên kết {name}",
+      "stepOf": "Bước {step} trên {total}",
+      "continue": "Tiếp tục",
+      "creating": "Đang lưu...",
+      "number": {
+        "title": "Số nào?",
+        "name": "Tên",
+        "namePlaceholder": "Ví dụ: Đường dây bán hàng",
+        "nameHelp": "Chỉ nhóm của bạn thấy tên này.",
+        "phone": "Số WhatsApp",
+        "phoneHelp": "Nhập số bạn sẽ liên kết, kèm mã quốc gia. Đây phải là số của điện thoại sẽ quét hoặc nhập mã.",
+        "activate": "Dùng để gửi sau khi liên kết",
+        "activateHelp": "Chiến dịch, tin nhắn đã lên lịch và luồng có thể dùng số này sau khi được liên kết.",
+        "nameError": {
+          "required": "Hãy nhập tên.",
+          "short": "Tên cần ít nhất 2 ký tự.",
+          "long": "Tên quá dài (tối đa 191 ký tự)."
+        },
+        "phoneError": {
+          "empty": "Hãy nhập số.",
+          "invalid": "Số này không hợp lệ với quốc gia đã chọn."
+        },
+        "openExisting": "Mở số đã có"
+      },
+      "link": {
+        "title": "Liên kết điện thoại",
+        "choose": "Bạn muốn liên kết bằng cách nào?",
+        "methodLabel": "Phương thức liên kết",
+        "qr": "Quét mã QR",
+        "qrHelp": "Quét bằng điện thoại có số này.",
+        "code": "Dùng mã ghép nối",
+        "codeHelp": "Nhập mã 8 ký tự trên điện thoại. Hữu ích khi bạn không thể quét.",
+        "numberLine": "Số: {phone}",
+        "startQr": "Hiện mã QR",
+        "startCode": "Lấy mã ghép nối",
+        "starting": "Đang bắt đầu...",
+        "needCountryCode": "Thêm mã quốc gia để dùng mã ghép nối.",
+        "someoneElse": "Chỉ nhập mã này trên điện thoại của số bạn đang kết nối. Không bao giờ chia sẻ với người khác. Nếu nhập mã trên điện thoại của người khác, toàn bộ tài khoản WhatsApp của người đó sẽ được liên kết với không gian làm việc này.",
+        "qrSteps": {
+          "one": "Mở WhatsApp trên điện thoại.",
+          "two": "Vào Thiết bị đã liên kết, rồi chọn Liên kết thiết bị.",
+          "three": "Hướng camera vào mã này."
+        },
+        "codeSteps": {
+          "one": "Mở WhatsApp trên điện thoại.",
+          "two": "Vào Thiết bị đã liên kết, rồi chọn Liên kết thiết bị, sau đó chọn Liên kết bằng số điện thoại.",
+          "three": "Nhập mã này."
+        },
+        "qrAlt": "Mã QR để liên kết số",
+        "qrRefresh": "Mã mới sau {seconds} giây",
+        "qrExpires": "Hết hạn sau {time}",
+        "codeValid": "Mã có hiệu lực khoảng 3 phút.",
+        "codeExpires": "Còn hiệu lực trong {time}",
+        "codeLabel": "Mã ghép nối",
+        "copy": "Sao chép mã",
+        "copied": "Đã sao chép",
+        "copyFailed": "Không sao chép được. Chọn mã và sao chép.",
+        "strip": {
+          "shown": "Đã hiển thị mã",
+          "scanned": "Đã quét",
+          "ready": "Sẵn sàng"
+        },
+        "stripLabel": "Tiến trình",
+        "linking": "Đang liên kết. WhatsApp đang đồng bộ, việc này có thể mất một lúc.",
+        "cancelAttempt": "Dừng và chọn cách khác",
+        "reading": "Đang chờ mã đầu tiên...",
+        "relinkAction": "Quên phiên đã lưu và liên kết lại"
+      },
+      "result": {
+        "connectedTitle": "Đã kết nối",
+        "connectedBody": "{phone} đã được liên kết. Các cuộc trò chuyện trên số này giờ xuất hiện trong hộp thư chung.",
+        "warmer": "Thiết lập làm nóng",
+        "inbox": "Mở hộp thư",
+        "list": "Quay lại danh sách số",
+        "timedOutTitle": "Mã chưa được quét kịp thời",
+        "timedOutBody": "Chưa có gì được liên kết. Nếu điện thoại ngoại tuyến hoặc bị khóa, hãy đưa điện thoại trực tuyến rồi bắt đầu lại.",
+        "phoneOfflineTitle": "Không thể kết nối tới điện thoại",
+        "phoneOfflineBody": "Kiểm tra điện thoại có trực tuyến không, rồi bắt đầu lại.",
+        "loggedOutTitle": "WhatsApp đã kết thúc liên kết",
+        "loggedOutBody": "Điều này xảy ra khi thiết bị bị gỡ trong WhatsApp, ở mục Thiết bị được liên kết, và cũng khi WhatsApp hạn chế một số. Các cuộc trò chuyện ở đây vẫn được giữ. Bạn có thể liên kết lại.",
+        "replacedTitle": "Một phiên khác đã thay thế phiên này",
+        "replacedBody": "Số này đang được liên kết ở nơi khác. Hãy gỡ liên kết kia rồi kết nối lại.",
+        "mismatchTitle": "Đây không phải số bạn đã nhập",
+        "mismatchBody": "Điện thoại đã quét không phải số bạn đã nhập. Kiểm tra lại số và thử lại.",
+        "limitTitle": "Điện thoại có quá nhiều thiết bị được liên kết",
+        "limitBody": "WhatsApp cho phép tối đa 4 thiết bị được liên kết. Gỡ một thiết bị trong WhatsApp, ở mục Thiết bị được liên kết, rồi thử lại.",
+        "proxyTitle": "Máy chủ proxy không phản hồi",
+        "proxyBody": "Số này sẽ ngoại tuyến cho đến khi proxy hoạt động.",
+        "serviceTitle": "Dịch vụ kết nối hiện không khả dụng",
+        "serviceBody": "Thử lại sau vài phút.",
+        "failedTitle": "Không thể liên kết số",
+        "failedBody": "WhatsApp chưa hoàn tất liên kết. Chưa có gì được liên kết. Thử lại.",
+        "tryAgain": "Thử lại"
+      },
+      "discard": {
+        "title": "Dừng kết nối?",
+        "message": "Bạn chưa hoàn tất. Nếu rời đi bây giờ, nội dung đã nhập sẽ bị mất và liên kết đang thực hiện sẽ bị hủy.",
+        "stay": "Tiếp tục",
+        "leave": "Rời đi"
+      }
+    },
+    "detail": {
+      "back": "Tất cả số",
+      "loading": "Đang tải số...",
+      "notFound": "Số này không tồn tại hoặc đã bị xóa.",
+      "status": "Trạng thái",
+      "lastSeen": "Lần hoạt động gần nhất",
+      "linkedSince": "Ở trạng thái này từ",
+      "number": "Số",
+      "numberLocked": "Không thể đổi số khi đang có liên kết. Hãy ngắt kết nối trước.",
+      "assignedTo": "Được xử lý bởi",
+      "createdBy": "Được thêm bởi",
+      "sending": "Dùng để gửi tin",
+      "editTitle": "Chỉnh sửa",
+      "name": "Tên",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "saved": "Đã lưu.",
+      "dangerTitle": "Ngắt kết nối hoặc xóa",
+      "disconnectHelp": "Hủy liên kết số và xóa phiên đã lưu. Bạn có thể liên kết lại sau.",
+      "deleteHelp": "Xóa số khỏi không gian làm việc này. Các cuộc trò chuyện vẫn ở trong hộp thư.",
+      "warmerLink": "Thiết lập làm nóng cho số này"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "Ngắt kết nối {name}?",
+        "message": "Thao tác này hủy liên kết số và xóa phiên đã lưu. Các cuộc trò chuyện vẫn xem được nhưng không thể trả lời từ số này cho đến khi bạn liên kết lại.",
+        "confirm": "Ngắt kết nối"
+      },
+      "delete": {
+        "title": "Xóa {name}?",
+        "message": "Thao tác này hủy liên kết số và xóa phiên đã lưu. Các cuộc trò chuyện vẫn xem được trong hộp thư nhưng không thể trả lời từ số này. Không thể hoàn tác.",
+        "confirm": "Xóa số"
+      },
+      "rename": {
+        "title": "Đổi tên số",
+        "label": "Tên",
+        "confirm": "Lưu"
+      },
+      "cancel": "Hủy"
+    },
+    "errors": {
+      "generic": "Đã xảy ra lỗi. Thử lại.",
+      "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+      "UNAUTHENTICATED": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại.",
+      "NOT_FOUND": "Số này không tồn tại hoặc đã bị xóa.",
+      "VALIDATION_FAILED": "Một số trường cần được kiểm tra.",
+      "ROW_VERSION_CONFLICT": "Có người đã thay đổi số này. Tải lại và thử lại.",
+      "WA_UNOFFICIAL_DISABLED": "Tính năng này không còn được bật cho không gian làm việc của bạn.",
+      "PLAN_FEATURE_LOCKED": "Gói của bạn không bao gồm tính năng này.",
+      "PLAN_LIMIT_REACHED": "Gói của bạn cho phép tối đa {limit, plural, other {# số WhatsApp}} tại đây. Xóa bớt một số hoặc nâng cấp để thêm số khác.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Gói của bạn không cho phép thêm số nào nữa tại đây. Xóa bớt một số hoặc nâng cấp để thêm số khác.",
+      "DEVICE_ALREADY_EXISTS": "Đã có thiết bị với số điện thoại đó trong không gian làm việc này.",
+      "DEVICE_PHONE_INVALID": "Thêm mã quốc gia để dùng mã ghép đôi.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Hãy đọc và chấp nhận thông báo trước.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Quá nhiều lần thử với số này. Thử lại sau.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Quá nhiều lần thử với số này. Thử lại sau {minutes, plural, other {# phút}}.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Ai đó vừa bắt đầu một kết nối. Hãy đợi kết nối hoàn tất hoặc kết thúc.",
+      "DEVICE_NOT_PAIRABLE": "Hiện không thể liên kết số này. Hãy ngắt kết nối trước.",
+      "WA_WORKER_UNAVAILABLE": "Dịch vụ kết nối hiện không khả dụng. Thử lại sau vài phút.",
+      "RATE_LIMITED": "Quá nhiều yêu cầu. Vui lòng đợi một lát.",
+      "upgrade": "Xem các gói và nâng cấp",
+      "requestId": "Yêu cầu {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Không gian làm việc của bạn đã đạt số lượng số WhatsApp cá nhân được phép trong giai đoạn thử nghiệm. Xóa một số để kết nối số khác.",
+      "DEVICE_CREATE_RATE_LIMITED": "Đã thêm quá nhiều số trong giờ vừa qua. Thử lại sau.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Đã thêm quá nhiều số trong giờ vừa qua. Thử lại sau {minutes, plural, other {# phút}}.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} vừa bắt đầu một kết nối. Hãy đợi kết nối hoàn tất.",
+      "DEVICE_NO_PAIRING": "Lần kết nối này đã kết thúc. Hãy bắt đầu lại.",
+      "DEVICE_NUMBER_LOCKED": "Không thể đổi số khi đang có liên kết. Hãy ngắt kết nối trước.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp không phản hồi kịp thời. Thử lại.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Số này đã được liên kết. Hãy ngắt kết nối trước, rồi kết nối lại.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Số này vẫn còn phiên WhatsApp đã lưu. Liên kết lại từ đầu để quên phiên đã lưu và bắt đầu lại.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Đang có một kết nối đang thực hiện cho số này. Liên kết lại từ đầu để bắt đầu lại."
+    }
+  }
+}

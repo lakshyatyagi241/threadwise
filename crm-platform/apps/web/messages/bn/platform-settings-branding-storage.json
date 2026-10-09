@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "প্ল্যাটফর্ম সেটিংস",
+      "hub": "সেটিংস হাব",
+      "general": "সাধারণ",
+      "appearance": "চেহারা ও রং",
+      "siteInfo": "সাইটের তথ্য",
+      "footer": "ফুটার",
+      "mail": "মেইল",
+      "seo": "SEO",
+      "privacy": "গোপনীয়তা, GDPR ও ADA",
+      "analytics": "অ্যানালিটিক্স",
+      "custom": "কাস্টম কোড",
+      "pwa": "PWA",
+      "storage": "ক্লাউড স্টোরেজ",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "ক্যাম্পেইন",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "Flow builder"
+    },
+    "hub": {
+      "kicker": "অ্যাডমিন - প্রজেক্ট সেটিংস",
+      "title": "প্রজেক্ট সেটিংস",
+      "description": "অ্যাপের পরিচয়, মেসেজিং প্রোভাইডার, মেইল, ই-কমার্স ইন্টিগ্রেশন, স্টোরফ্রন্টের মেটাডেটা, ফুটারের কন্টেন্ট, PWA, SEO ও কাস্টম কোড কনফিগার করুন।",
+      "export": "কনফিগ এক্সপোর্ট করুন",
+      "exporting": "এক্সপোর্ট হচ্ছে",
+      "exportHint": "সংরক্ষিত সব সেটিংস ডাউনলোড করে। গোপন তথ্য ও অ্যাকাউন্ট শনাক্তকারী বদলে দেওয়া হয়।",
+      "tiles": {
+        "saved": "সংরক্ষিত সেটিংস",
+        "savedHint": "{total}টির মধ্যে গ্রুপ সংরক্ষিত",
+        "healthy": "সুস্থ",
+        "healthyHint": "মান আছে এমন",
+        "needsTest": "পরীক্ষা প্রয়োজন",
+        "needsTestNone": "সব যাচাই করা হয়েছে",
+        "secrets": "গোপন ফিল্ড",
+        "secretsHint": "এনক্রিপ্টেড / মাস্ক করা",
+        "lastUpdated": "সর্বশেষ আপডেট",
+        "lastUpdatedNone": "এখনও কোনো পরিবর্তন হয়নি",
+        "lastUpdatedHint": "সর্বশেষ সংরক্ষণ"
+      },
+      "card": {
+        "saved": "সংরক্ষিত",
+        "defaults": "ডিফল্ট",
+        "needsTest": "পরীক্ষা প্রয়োজন",
+        "updated": "আপডেট হয়েছে {when}",
+        "open": "খুলুন"
+      },
+      "others": "মডিউল ইনস্টল করা থাকলে এখানে মুদ্রা, ক্যাটালগ, Shopify, WooCommerce, HubSpot, Google, Slack, মোবাইল পুশ ও Trello-র সেটিংস দেখা যাবে।",
+      "actions": {
+        "addons": "অ্যাড-অন",
+        "updater": "আপডেটার",
+        "legal": "আইনি পৃষ্ঠা",
+        "general": "সাধারণ খুলুন"
+      }
+    },
+    "common": {
+      "save": "পরিবর্তন সংরক্ষণ করুন",
+      "saving": "সংরক্ষণ হচ্ছে",
+      "saved": "{count, plural, one {১টি পরিবর্তন সংরক্ষিত হয়েছে।} other {#টি পরিবর্তন সংরক্ষিত হয়েছে।}}",
+      "rejected": "{count, plural, one {১টি ফিল্ডে মনোযোগ দরকার} other {#টি ফিল্ডে মনোযোগ দরকার}}",
+      "conflict": "আপনি খোলার পরে অন্য কেউ এই সেটিংসগুলো সংরক্ষণ করেছেন। তাঁর পরিবর্তন দেখতে পুনরায় লোড করুন, তারপর আপনার পরিবর্তন আবার প্রয়োগ করুন।",
+      "reload": "সেটিংস পুনরায় লোড করুন",
+      "unexpected": "কিছু একটা ভুল হয়েছে এবং কিছুই সংরক্ষণ হয়নি।",
+      "requestId": "অনুরোধ আইডি",
+      "readOnly": "আপনি এই সেটিংসগুলো দেখতে পারবেন, তবে শুধু সুপার অ্যাডমিন পরিবর্তন করতে পারবেন।",
+      "secretSet": "সংরক্ষিত। রাখতে চাইলে ফাঁকা রাখুন।",
+      "secretUnset": "সেট করা নেই।",
+      "secretClear": "সংরক্ষিত মান মুছুন",
+      "secretShow": "দেখান",
+      "secretHide": "লুকান",
+      "numberRequired": "একটি পূর্ণসংখ্যা লিখুন।",
+      "numberInteger": "একটি পূর্ণসংখ্যা ব্যবহার করুন।",
+      "updated": "সর্বশেষ সংরক্ষিত {when}",
+      "neverSaved": "কখনো সংরক্ষিত হয়নি: ডিফল্ট দেখানো হচ্ছে।",
+      "back": "সব সেটিংস",
+      "invalidGroup": "সেই সেটিংস পৃষ্ঠাটি নেই।",
+      "eyebrow": "অ্যাডমিন - প্রজেক্ট সেটিংস",
+      "guide": "দ্রুত নির্দেশিকা",
+      "resetDraft": "ড্রাফট রিসেট করুন",
+      "cancel": "বাতিল",
+      "applyAfterSave": "সংরক্ষণ করার পরেই পরিবর্তন কার্যকর হবে।",
+      "saveAndTest": "সংরক্ষণ ও সংযোগ পরীক্ষা করুন",
+      "custom": "কাস্টম",
+      "manageLanguages": "ভাষা পরিচালনা করুন"
+    },
+    "test": {
+      "title": "পরীক্ষামূলক ইমেইল পাঠান",
+      "saveFirst": "আগে আপনার পরিবর্তন সংরক্ষণ করুন: যাচাইয়ে সংরক্ষিত সেটিংস ব্যবহৃত হয়।",
+      "mailTo": "পরীক্ষামূলক ইমেইল পাঠান এই ঠিকানায়",
+      "mailRun": "পরীক্ষামূলক ইমেইল পাঠান",
+      "run": "সংযোগ পরীক্ষা করুন",
+      "running": "পরীক্ষা হচ্ছে",
+      "ok": "উত্তীর্ণ",
+      "failed": "ব্যর্থ",
+      "lastOk": "সর্বশেষ সফল যাচাই {when}",
+      "neverTested": "এখনও যাচাই করা হয়নি।"
+    },
+    "groups": {
+      "general": {
+        "title": "সাধারণ সেটিংস",
+        "description": "অ্যাপের পরিচয়, প্ল্যাটফর্মের ডিফল্ট এবং রক্ষণাবেক্ষণ মোড সুইচ।",
+        "sections": {
+          "identity": {
+            "title": "অ্যাপের পরিচয়"
+          },
+          "defaults": {
+            "title": "প্ল্যাটফর্মের ডিফল্ট"
+          },
+          "platform": {
+            "title": "প্ল্যাটফর্মের সুইচ"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "অ্যাপের নাম",
+            "hint": "পৃষ্ঠার শিরোনাম, ইমেইল ও ব্রাউজার ট্যাবে দেখানো হয়।"
+          },
+          "appUrl": {
+            "label": "অ্যাপ URL"
+          },
+          "supportEmail": {
+            "label": "সাপোর্ট ইমেইল",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "প্রেরকের ইমেইল",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "যোগাযোগের নম্বর",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "ঠিকানা"
+          },
+          "mapIframeUrl": {
+            "label": "ম্যাপ iframe URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "প্ল্যাটফর্ম ফুটার",
+            "hint": "প্ল্যাটফর্মের বাইরে যাওয়া বার্তায় যোগ হয়। না চাইলে ফাঁকা রাখুন।"
+          },
+          "defaultTimezone": {
+            "label": "ডিফল্ট টাইমজোন",
+            "hint": "কোনো ওয়ার্কস্পেস বা ব্যবহারকারী নির্বাচন না করলে এটি ব্যবহৃত হয়।"
+          },
+          "defaultLanguage": {
+            "label": "ডিফল্ট ভাষা"
+          },
+          "defaultCurrency": {
+            "label": "ডিফল্ট মুদ্রা"
+          },
+          "defaultCountryCode": {
+            "label": "ডিফল্ট কান্ট্রি কোড",
+            "hint": "প্লাস চিহ্নসহ ডায়াল কোড, যেমন +91।"
+          },
+          "defaultCountryIso": {
+            "label": "ডিফল্ট দেশ (ফোন বাছাইকারী)",
+            "hint": "প্ল্যাটফর্মের সব ফোন-ইনপুট বাছাইকারীতে প্রযোজ্য।"
+          },
+          "fontFamily": {
+            "label": "ফন্ট পরিবার"
+          },
+          "maintenanceMode": {
+            "label": "রক্ষণাবেক্ষণ মোড",
+            "hint": "গ্রাহক অ্যাপ 503 দিয়ে অফলাইন করে দেয়। অপারেটর, সাইন-ইন ও মেশিন কলব্যাক চালু থাকে।"
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "থিমের ডিফল্ট"
+          }
+        }
+      },
+      "branding": {
+        "title": "ব্র্যান্ডিং ও চেহারা",
+        "description": "ফ্যাভিকন, প্রতি থিমের লোগো, রং টোকেন ও ইন্টারফেসের আকার।",
+        "sections": {
+          "assets": {
+            "title": "ব্র্যান্ড অ্যাসেট"
+          },
+          "colors": {
+            "title": "রং টোকেন"
+          },
+          "interface": {
+            "title": "ইন্টারফেস"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "Favicon URL"
+          },
+          "logos": {
+            "paper": {
+              "label": "Paper"
+            },
+            "bright": {
+              "label": "উজ্জ্বল"
+            },
+            "dark": {
+              "label": "ডার্ক"
+            },
+            "doodle": {
+              "label": "ডুডল"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "প্রাথমিক",
+              "hint": "প্রাথমিক রং সেট করলে টিল, সবুজ, মিন্ট ও বাবল শেডগুলোও বদলে যাবে, যদি না আপনি সেগুলোও সেট করেন।"
+            },
+            "wa-teal": {
+              "label": "প্রাথমিক (হোভার)"
+            },
+            "wa-green": {
+              "label": "অ্যাকসেন্ট / সফলতা"
+            },
+            "wa-mint": {
+              "label": "হালকা অ্যাকসেন্ট ফিল"
+            },
+            "wa-bubble": {
+              "label": "চ্যাট বাবল"
+            },
+            "paper-0": {
+              "label": "পৃষ্ঠার ব্যাকগ্রাউন্ড"
+            },
+            "paper-50": {
+              "label": "কার্ড / মিউটেড ব্যাকগ্রাউন্ড"
+            },
+            "paper-100": {
+              "label": "হোভার ব্যাকগ্রাউন্ড"
+            },
+            "paper-200": {
+              "label": "বর্ডার"
+            },
+            "ink-500": {
+              "label": "মিউটেড টেক্সট"
+            },
+            "ink-700": {
+              "label": "মূল টেক্সট"
+            },
+            "ink-900": {
+              "label": "শিরোনাম"
+            },
+            "accent-coral": {
+              "label": "অ্যাকসেন্ট - কোরাল"
+            },
+            "accent-amber": {
+              "label": "অ্যাকসেন্ট - অ্যাম্বার"
+            },
+            "accent-plum": {
+              "label": "অ্যাকসেন্ট - প্লাম"
+            },
+            "accent-sky": {
+              "label": "অ্যাকসেন্ট - স্কাই"
+            }
+          },
+          "fontScale": {
+            "label": "ফন্টের আকার",
+            "hint": "পুরো ইন্টারফেসের টেক্সটের আকার শতাংশে, ৮০ থেকে ১৩০।"
+          },
+          "uiOpacity": {
+            "label": "স্বচ্ছতা",
+            "hint": "পুরো ইন্টারফেসের স্বচ্ছতা শতাংশে, ৫৫ থেকে ১০০।"
+          },
+          "dashboardLayout": {
+            "label": "নেভিগেশন লেআউট"
+          },
+          "sidebarColor": {
+            "label": "ব্যাকগ্রাউন্ড"
+          },
+          "sidebarTextColor": {
+            "label": "টেক্সটের রং"
+          },
+          "sidebarAccentColor": {
+            "label": "অ্যাকসেন্ট রং"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "উপরের বার",
+            "sidebar": "সাইডবার"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "বর্তমান: উপরে মেনু, আর বাকিগুলোর জন্য একটি More পৃষ্ঠা।",
+            "sidebar": "অ্যাডমিনের মতো বাঁ দিকের রেল, সব ফিচার গ্রুপ করা। উপরে কোনো মেনু নেই।"
+          }
+        }
+      },
+      "site": {
+        "title": "সাইটের তথ্য",
+        "description": "কোম্পানির বিবরণ, যোগাযোগের ঠিকানা, সোশ্যাল প্রোফাইল ও পাবলিক ফুটার।",
+        "sections": {
+          "company": {
+            "title": "কোম্পানি"
+          },
+          "contact": {
+            "title": "যোগাযোগের ঠিকানা"
+          },
+          "social": {
+            "title": "সোশ্যাল প্রোফাইল"
+          },
+          "footer": {
+            "title": "পাবলিক ফুটার"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "কোম্পানির নাম"
+          },
+          "tagline": {
+            "label": "ট্যাগলাইন"
+          },
+          "foundedYear": {
+            "label": "প্রতিষ্ঠার বছর"
+          },
+          "address": {
+            "label": "ঠিকানা"
+          },
+          "cityCountry": {
+            "label": "শহর, দেশ"
+          },
+          "emailGeneral": {
+            "label": "সাধারণ ইমেইল"
+          },
+          "emailSupport": {
+            "label": "সাপোর্ট ইমেইল"
+          },
+          "emailSales": {
+            "label": "সেলস ইমেইল"
+          },
+          "emailSecurity": {
+            "label": "নিরাপত্তা ইমেইল"
+          },
+          "emailCareers": {
+            "label": "ক্যারিয়ার ইমেইল"
+          },
+          "phone": {
+            "label": "ফোন"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "ফুটারের শিরোনাম"
+          },
+          "footerDescription": {
+            "label": "ফুটারের বিবরণ"
+          },
+          "footerCopyright": {
+            "label": "ফুটারের কপিরাইট"
+          }
+        }
+      },
+      "mail": {
+        "title": "মেইল সেটিংস",
+        "description": "বাইরে যাওয়া ইমেইল। সংরক্ষিত মান প্রতিটি পাঠানোর সময় সার্ভারের ডিফল্টকে ছাপিয়ে যায়।",
+        "sections": {
+          "sender": {
+            "title": "প্রেরক"
+          },
+          "smtp": {
+            "title": "মেইল সার্ভার"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "প্রেরকের নাম",
+            "placeholder": "Acme Inc.",
+            "hint": "প্রাপকের কাছে “From” নাম হিসেবে দেখায়।"
+          },
+          "fromAddress": {
+            "label": "প্রেরকের ঠিকানা",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "ডোমেইনে বৈধ SPF + DKIM থাকতে হবে, নইলে মেইল স্প্যামে যাবে।"
+          },
+          "mailer": {
+            "label": "মেইলার",
+            "hint": "SMTP ও লগ মেইলার এখন কাজ করে; API-ভিত্তিক মেইলার এখনও যুক্ত করা হয়নি।"
+          },
+          "host": {
+            "label": "হোস্ট",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "সার্ভারের ডিফল্ট রাখতে ফাঁকা রাখুন।"
+          },
+          "port": {
+            "label": "পোর্ট",
+            "hint": "TLS-এর জন্য 587, SSL-এর জন্য 465, 25 (এড়িয়ে চলুন)।"
+          },
+          "encryption": {
+            "label": "এনক্রিপশন",
+            "hint": "ssl মানে ইমপ্লিসিট TLS (সাধারণত পোর্ট 465); tls ও starttls পোর্ট 587-এ আপগ্রেড করে।"
+          },
+          "username": {
+            "label": "ইউজারনেম",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "পাসওয়ার্ড",
+            "placeholder": "SMTP পাসওয়ার্ড লিখুন",
+            "hint": "এনক্রিপ্টেড অবস্থায় সংরক্ষিত, আর কখনো দেখানো হবে না।"
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (পোর্ট 587)",
+            "ssl": "ssl (পোর্ট 465)",
+            "starttls": "starttls",
+            "none": "কিছু নয়"
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO সেটিংস",
+        "description": "পাবলিক সাইটের জন্য সার্চ ও সোশ্যাল শেয়ারিং ট্যাগ।",
+        "sections": {
+          "search": {
+            "title": "সার্চ ফলাফল"
+          },
+          "social": {
+            "title": "সোশ্যাল শেয়ারিং"
+          },
+          "verification": {
+            "title": "সাইট যাচাইকরণ"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "মেটা শিরোনাম",
+            "hint": "ব্র্যান্ড দিয়ে শুরু করুন।"
+          },
+          "metaDescription": {
+            "label": "মেটা বিবরণ",
+            "hint": "Google-এ শিরোনামের নিচে দেখায়।",
+            "placeholder": "Google-এ শিরোনামের নিচে দেখানো ১–২ বাক্যের একটি পরিচিতি।"
+          },
+          "metaKeywords": {
+            "label": "মেটা কীওয়ার্ড",
+            "placeholder": "whatsapp marketing, whatsapp crm, campaigns, automation, inbox"
+          },
+          "robots": {
+            "label": "Robots নির্দেশনা",
+            "hint": "সার্চ ক্রলারকে জানান লিংক তালিকাভুক্ত ও অনুসরণ করবে কি না।"
+          },
+          "canonical": {
+            "label": "ক্যানোনিক্যাল",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "লেখক"
+          },
+          "ogTitle": {
+            "label": "Open Graph শিরোনাম",
+            "placeholder": "ডিফল্ট মেটা শিরোনাম"
+          },
+          "ogDescription": {
+            "label": "Open Graph বিবরণ",
+            "placeholder": "ডিফল্ট মেটা বিবরণ"
+          },
+          "ogType": {
+            "label": "Open Graph ধরন"
+          },
+          "ogUrl": {
+            "label": "Open Graph URL",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Open Graph ছবি",
+            "hint": "প্রস্তাবিত 1200x630। Slack, X, WhatsApp, Discord-এ ব্যবহৃত হয়।",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Twitter কার্ড"
+          },
+          "twitterSite": {
+            "label": "Twitter সাইট",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Twitter নির্মাতা",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Google যাচাইকরণ",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Bing যাচাইকরণ",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "ইনডেক্স, অনুসরণ — পাবলিক সাইট",
+            "index, nofollow": "ইনডেক্স, nofollow",
+            "noindex, follow": "Noindex, অনুসরণ",
+            "noindex, nofollow": "Noindex, nofollow — সার্চ থেকে লুকান"
+          }
+        }
+      },
+      "privacy": {
+        "title": "গোপনীয়তা ও কুকি",
+        "description": "কুকি সম্মতির ব্যানার, আইনি লিংক ও কমপ্লায়েন্স ফ্ল্যাগ।",
+        "sections": {
+          "banner": {
+            "title": "কুকি ব্যানার"
+          },
+          "links": {
+            "title": "আইনি লিংক"
+          },
+          "compliance": {
+            "title": "কমপ্লায়েন্স ফ্ল্যাগ"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "ব্যানার চালু"
+          },
+          "cookieBannerStyle": {
+            "label": "ব্যানারের ধরন"
+          },
+          "cookieMessage": {
+            "label": "সম্মতির বার্তা"
+          },
+          "respectDoNotTrack": {
+            "label": "Do-Not-Track মেনে চলুন",
+            "hint": "ব্রাউজার DNT=1 পাঠালে → সব প্রত্যাখ্যান"
+          },
+          "policyUrl": {
+            "label": "গোপনীয়তা নীতির URL",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "সেবার শর্তাবলির URL",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "কুকি নীতির URL (আরও জানুন)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "GDPR কমপ্লায়েন্স (EU)",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          },
+          "ccpaCompliance": {
+            "label": "CCPA কমপ্লায়েন্স (ক্যালিফোর্নিয়া)",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          },
+          "adaSkipLink": {
+            "label": "সরাসরি কনটেন্টে যাওয়ার লিংক",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          },
+          "adaHighContrast": {
+            "label": "হাই-কনট্রাস্ট মোড দিন",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          },
+          "adaLargeText": {
+            "label": "বড় টেক্সট মোড দিন",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          },
+          "adaReducedMotion": {
+            "label": "prefers-reduced-motion মেনে চলুন",
+            "hint": "আপনার রেকর্ডের জন্য সংরক্ষিত। এটি এখনও আচরণ বদলায় না।"
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "নিচের স্টিকি বার — প্রস্তাবিত",
+            "top-bar": "উপরের স্টিকি বার",
+            "modal": "মাঝখানের মডাল"
+          }
+        }
+      },
+      "analytics": {
+        "title": "অ্যানালিটিক্স",
+        "description": "ট্র্যাকার আইডি। দর্শক সম্মতি দেওয়ার পরেই ট্র্যাকার লোড হয়।",
+        "sections": {
+          "trackers": {
+            "title": "ট্র্যাকার আইডি"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta পিক্সেল"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok পিক্সেল"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn পার্টনার"
+          },
+          "twitterPixel": {
+            "label": "Twitter পিক্সেল"
+          },
+          "plausibleDomain": {
+            "label": "Plausible ডোমেইন"
+          },
+          "posthogKey": {
+            "label": "PostHog কী"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel টোকেন"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar সাইট ID"
+          },
+          "posthogHost": {
+            "label": "PostHog হোস্ট"
+          }
+        }
+      },
+      "customCode": {
+        "title": "কাস্টম কোড",
+        "description": "পাবলিক সাইটে CSS ও JavaScript যোগ করা হয়।",
+        "sections": {
+          "code": {
+            "title": "কাস্টম কোড"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "প্রোডাকশনে যোগ করুন",
+            "hint": "এটি চালু না করা পর্যন্ত নিচের কিছুই পাবলিক সাইটে চলবে না।"
+          },
+          "css": {
+            "label": "কাস্টম CSS"
+          },
+          "js": {
+            "label": "কাস্টম JS",
+            "hint": "প্রত্যেক দর্শকের জন্য চলে। শুধু বিশ্বাসযোগ্য কোড বসান।"
+          }
+        }
+      },
+      "pwa": {
+        "title": "ইনস্টলযোগ্য অ্যাপ",
+        "description": "ওয়েব অ্যাপ ম্যানিফেস্ট ও ইনস্টলের আচরণ।",
+        "sections": {
+          "app": {
+            "title": "ইনস্টলযোগ্য অ্যাপ"
+          },
+          "look": {
+            "title": "চেহারা ও আচরণ"
+          },
+          "install": {
+            "title": "ইনস্টল ও অফলাইন"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "সক্রিয়"
+          },
+          "appName": {
+            "label": "অ্যাপের নাম"
+          },
+          "shortName": {
+            "label": "সংক্ষিপ্ত নাম"
+          },
+          "description": {
+            "label": "বিবরণ"
+          },
+          "startUrl": {
+            "label": "Start URL"
+          },
+          "scope": {
+            "label": "Scope"
+          },
+          "display": {
+            "label": "ডিসপ্লে"
+          },
+          "orientation": {
+            "label": "ওরিয়েন্টেশন"
+          },
+          "themeColor": {
+            "label": "থিমের রং"
+          },
+          "backgroundColor": {
+            "label": "ব্যাকগ্রাউন্ডের রং"
+          },
+          "icon192": {
+            "label": "Icon192"
+          },
+          "icon512": {
+            "label": "Icon512"
+          },
+          "installPrompt": {
+            "label": "ইনস্টলের প্রম্পট"
+          },
+          "offlineEnabled": {
+            "label": "অফলাইন চালু"
+          }
+        }
+      },
+      "storage": {
+        "title": "ক্লাউড স্টোরেজ",
+        "description": "মিডিয়ার জন্য S3-সামঞ্জস্যপূর্ণ বাকেট। চালু করার আগে সংযোগ পরীক্ষা করুন।",
+        "sections": {
+          "provider": {
+            "title": "প্রোভাইডার"
+          },
+          "credentials": {
+            "title": "বাকেট ক্রেডেনশিয়াল"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "সক্রিয়"
+          },
+          "provider": {
+            "label": "প্রোভাইডার"
+          },
+          "visibility": {
+            "label": "ফাইলের দৃশ্যমানতা",
+            "hint": "ব্যক্তিগত অবজেক্টের জন্য সাইন করা লিংক লাগে; যে মিডিয়া মানুষ সরাসরি খোলে তার জন্য পাবলিক বা CDN URL ব্যবহার করুন।"
+          },
+          "basePath": {
+            "label": "বেস ফোল্ডার পাথ (ঐচ্ছিক)",
+            "hint": "প্রোব অবজেক্টের প্রিফিক্স। ফাইল মডিউল যুক্ত হলে আপলোডে এটি ব্যবহৃত হবে।"
+          },
+          "accessKeyId": {
+            "label": "Access key ID *"
+          },
+          "secret": {
+            "label": "Secret access key *",
+            "hint": "এনক্রিপ্টেড অবস্থায় সংরক্ষিত, আর কখনো দেখানো হবে না।",
+            "placeholder": "সিক্রেট পেস্ট করুন"
+          },
+          "region": {
+            "label": "রিজিয়ন",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "বাকেট *"
+          },
+          "endpoint": {
+            "label": "এন্ডপয়েন্ট",
+            "hint": "Spaces, R2 ও MinIO-র জন্য প্রয়োজন। শেষের /bucket মুছে ফেলা হয়।",
+            "placeholder": "https://… (Spaces / R2 / MinIO-র জন্য প্রয়োজন; Wasabi ও Bunny-র জন্য স্বয়ংক্রিয়)"
+          },
+          "cdnUrl": {
+            "label": "পাবলিক / CDN URL (ঐচ্ছিক)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "path-style এন্ডপয়েন্ট ব্যবহার করুন (MinIO / কিছু S3-সামঞ্জস্যপূর্ণ স্টোর)"
+          },
+          "storageZone": {
+            "label": "স্টোরেজ জোন",
+            "hint": "শুধু Bunny-র জন্য।"
+          },
+          "storagePassword": {
+            "label": "স্টোরেজ পাসওয়ার্ড (access key)",
+            "hint": "শুধু Bunny-র জন্য: স্টোরেজ জোনের পাসওয়ার্ড। এনক্রিপ্টেড অবস্থায় সংরক্ষিত।",
+            "placeholder": "পাসওয়ার্ড পেস্ট করুন"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatible"
+          },
+          "visibility": {
+            "private": "ব্যক্তিগত (সাইন করা URL)",
+            "public": "পাবলিক"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp সেটিংস",
+        "description": "WhatsApp নম্বর অনবোর্ড করতে ব্যবহৃত Meta অ্যাপ ও Interakt পার্টনার।",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt রুট"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "ফাঁকা থাকলে সার্ভারের এনভায়রনমেন্ট ব্যবহৃত হয়।"
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "এনক্রিপ্টেড অবস্থায় সংরক্ষিত, আর কখনো দেখানো হবে না। সংরক্ষিত সিক্রেট রাখতে ফাঁকা রাখুন।"
+          },
+          "configId": {
+            "label": "Embedded Signup Config ID",
+            "hint": "ফাঁকা মানে ওয়ার্কস্পেস নিজে টোকেন পেস্ট করবে।"
+          },
+          "graphVersion": {
+            "label": "Graph API ভার্সন",
+            "hint": "যেমন v25.0। ফাঁকা থাকলে সার্ভারের ডিফল্ট থাকবে।"
+          },
+          "coexistence": {
+            "label": "কো-এক্সিস্টেন্স",
+            "hint": "Embedded Signup-এ “আমার বিদ্যমান Business App নম্বর সংযুক্ত করুন” অপশন দিন।"
+          },
+          "defaultProvider": {
+            "label": "ডিফল্ট রুট",
+            "hint": "নতুন সংযুক্ত নম্বরগুলো কোন API ব্যবহার করবে।"
+          },
+          "solutionId": {
+            "label": "Interakt solution ID",
+            "hint": "নিবন্ধনের সময় Meta-তে extras.setup.solutionID এবং Interakt-এ পাঠানো হয়।"
+          },
+          "partnerAuthKey": {
+            "label": "Interakt partner key",
+            "hint": "শেয়ার করা টেক-পার্টনার কী। এনক্রিপ্টেড অবস্থায় সংরক্ষিত।"
+          },
+          "systemUserId": {
+            "label": "সিস্টেম ইউজার ID",
+            "hint": "MANAGE টাস্কসহ প্রতিটি সংযুক্ত WABA-তে নির্ধারিত হয়।"
+          },
+          "systemUserToken": {
+            "label": "সিস্টেম ইউজার টোকেন",
+            "hint": "টোকেন যাচাই ও সিস্টেম ইউজার নির্ধারণে ব্যবহৃত হয়। এনক্রিপ্টেড অবস্থায় সংরক্ষিত।"
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "টোকেনে WABA তালিকা না থাকলে WABA খুঁজতে এটি বিকল্প হিসেবে ব্যবহৃত হয়।"
+          },
+          "verifyToken": {
+            "label": "Webhook যাচাই টোকেন",
+            "hint": "যেকোনো এলোমেলো স্ট্রিং। উপরে দেখানো তৈরি করা মানটি ব্যবহার করতে ফাঁকা রাখুন।"
+          },
+          "requireSignature": {
+            "label": "প্রতিটি webhook-এ সিগনেচার বাধ্যতামূলক করুন",
+            "hint": "বৈধ Meta সিগনেচার ছাড়া Interakt-এর পাঠানো ইভেন্ট প্রত্যাখ্যান করে। Interakt সিগনেচার দিলেই চালু করুন।"
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (Meta প্রক্সি)",
+            "meta": "Meta (সরাসরি)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "ক্যাম্পেইন",
+        "description": "ক্যাম্পেইন ব্যর্থ বার্তা কীভাবে আবার চেষ্টা করবে এবং অসমাপ্ত ক্যাম্পেইন কখন শেষ হবে।",
+        "sections": {
+          "retry": {
+            "title": "পুনরায় চেষ্টা"
+          },
+          "expiry": {
+            "title": "স্বয়ংক্রিয় শেষ"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "পুনরায় চেষ্টার সংখ্যা",
+            "hint": "ব্যর্থ হিসেবে চিহ্নিত হওয়ার আগে প্রতি প্রাপকের জন্য চেষ্টার সংখ্যা (০ থেকে ১০)।"
+          },
+          "retryBackoffSec": {
+            "label": "পুনরায় চেষ্টার অপেক্ষা (সেকেন্ড)",
+            "hint": "পরের চেষ্টার আগের বিরতি; প্রতিবার এটি বাড়তে থাকে।"
+          },
+          "autoExpiryEnabled": {
+            "label": "অসমাপ্ত ক্যাম্পেইন শেষ করুন",
+            "hint": "নিচের ঘণ্টার পরেও চলতে থাকা ক্যাম্পেইন শেষ করে।"
+          },
+          "defaultExpiryHours": {
+            "label": "শেষ হবে (ঘণ্টা পরে)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "যে Google OAuth ক্লায়েন্টের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তার ক্যালেন্ডার সংযুক্ত করে।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ওয়ার্কস্পেসকে Google Calendar সংযুক্ত করার অনুমতি দিন",
+            "hint": "বন্ধ: কোনো ওয়ার্কস্পেস সংযুক্ত করতে পারবে না, এবং কোনো ক্যালেন্ডারে লেখা বা পড়া হবে না।"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Google Cloud-এর Credentials থেকে, OAuth 2.0 Client ID (Web application)। ফাঁকা থাকলে GOOGLE_CALENDAR_CLIENT_ID ব্যবহৃত হয়।"
+          },
+          "clientSecret": {
+            "label": "ক্লায়েন্ট সিক্রেট",
+            "hint": "এনক্রিপ্টেড অবস্থায় সংরক্ষিত, আর কখনো দেখানো হবে না। ফাঁকা থাকলে সংরক্ষিতটি থাকবে; GOOGLE_CALENDAR_CLIENT_SECRET বিকল্প।"
+          },
+          "redirectUri": {
+            "label": "Redirect URI ওভাররাইড",
+            "hint": "উপরের ঠিকানা ব্যবহার করতে ফাঁকা রাখুন। ক্লায়েন্টের Authorised redirect URI-এর সঙ্গে হুবহু মিলতে হবে।"
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Flow builder",
+        "description": "ওয়ার্কস্পেসগুলোকে কোন Flow builder দেওয়া হবে।",
+        "sections": {
+          "mode": {
+            "title": "বিল্ডার"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "ওয়ার্কস্পেসের ডিফল্ট বিল্ডার",
+            "hint": "Simple হলো ধাপে ধাপে তালিকা বিল্ডার, Advanced হলো ক্যানভাস বিল্ডার। ওয়ার্কস্পেস তার Flows পৃষ্ঠায় এটি বদলাতে পারে।"
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "শুধু Simple",
+            "advanced": "শুধু Advanced"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "চেহারা ও রং",
+        "description": "ব্যবহারকারী ও অ্যাডমিন ড্যাশবোর্ডের প্রতিটি পৃষ্ঠার রং বদলান: ব্র্যান্ড, সারফেস, টেক্সট ও অ্যাকসেন্ট। সরাসরি কার্যকর হয়।",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "সাধারণ সেটিংস",
+        "description": "অ্যাপের নাম, যোগাযোগের বিবরণ, লোগো, URL, ঠিকানা ও সার্বজনীন সার্ভিস সুইচ।",
+        "tags": "APP_NAME / APP_URL / logos"
+      },
+      "paymentGateways": {
+        "title": "পেমেন্ট গেটওয়ে",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave ও আরও: কী, মুদ্রা ও লাইভ সুইচ।",
+        "tags": "লাইভ / স্যান্ডবক্স - প্রতি গেটওয়ের কী"
+      },
+      "aiKeys": {
+        "title": "AI / API কী",
+        "description": "OpenAI, Anthropic, Google ও অন্যদের প্রোভাইডার ক্রেডেনশিয়াল। প্ল্যাটফর্মের প্রতিটি AI ফিচার এটির উপর নির্ভর করে।",
+        "tags": "BYOK / ডিফল্ট মডেল"
+      },
+      "mail": {
+        "title": "মেইল সেটিংস",
+        "description": "SMTP ড্রাইভার, হোস্ট, পোর্ট, প্রেরকের নাম, এনক্রিপশন ও পরীক্ষামূলক পাঠানো।",
+        "tags": "SMTP / যাচাই / স্বাগত"
+      },
+      "auditLog": {
+        "title": "অডিট লগ",
+        "description": "প্রতিটি অ্যাডমিন কাজের খোঁজযোগ্য ইতিহাস: ওয়ার্কস্পেস সম্পাদনা, ব্যবহারকারীর পরিবর্তন, বিলিং ইভেন্ট, নিরাপত্তা ঘটনা, সেটিংস আপডেট।",
+        "tags": "ফিল্টার / বিস্তারিত / CSV এক্সপোর্ট"
+      },
+      "privacy": {
+        "title": "গোপনীয়তা, GDPR ও ADA",
+        "description": "কুকি সম্মতির ব্যানার, GDPR / CCPA কমপ্লায়েন্স, ADA / WCAG অ্যাক্সেসিবিলিটি সুইচ ও নীতির URL।",
+        "tags": "সম্মতি / নীতি / অ্যালি"
+      },
+      "menuOrder": {
+        "title": "মেনুর ক্রম",
+        "description": "প্রতিটি ব্যবহারকারী ওয়ার্কস্পেসে দেখানো উপরের নেভিগেশন আইটেমের ক্রম ঠিক করুন।",
+        "tags": "ক্রম বদলান"
+      },
+      "authPages": {
+        "title": "অথ পৃষ্ঠা",
+        "description": "লগইন, নিবন্ধন ও পাসওয়ার্ড ভুলে যাওয়ার পৃষ্ঠা সম্পাদনা করুন: শিরোনাম, উপ-লেখা, অ্যাকসেন্ট রং, এবং পাশের ছবি বা ভিডিও। লাইভ প্রিভিউ।",
+        "tags": "লগইন / নিবন্ধন / ভুলে গেছি"
+      },
+      "analytics": {
+        "title": "অ্যানালিটিক্স ইন্টিগ্রেশন",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: আইডি পেস্ট করুন, আমরা স্ক্রিপ্ট রেন্ডার করব।",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO সেটিংস",
+        "description": "মেটা শিরোনাম, বিবরণ, OpenGraph, Twitter কার্ড, robots, ক্যানোনিক্যাল এবং Google + Bing সাইট যাচাইকরণ।",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "ভাষা",
+        "description": "উপলব্ধ লোকেল, ডিফল্ট ভাষা, RTL ফ্ল্যাগ এবং প্রতি ভাষার চালু/বন্ধ সুইচ। ভাষা বাছাইকারী নিয়ন্ত্রণ করে।",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA সেটিংস",
+        "description": "অ্যাপের নাম, ইনস্টল আইকন, থিমের রং, ব্যাকগ্রাউন্ডের রং, ডিসপ্লে মোড এবং PWA চালুর সুইচ।",
+        "tags": "আইকন / রং / ইনস্টল"
+      },
+      "footer": {
+        "title": "ফুটার সেটিংস",
+        "description": "ফুটারের শিরোনাম, সোশ্যাল লিংক, কপিরাইট টেক্সট এবং পাবলিক ফুটারের বিবরণ।",
+        "tags": "লোগো / সোশ্যাল / কপিরাইট"
+      },
+      "siteInfo": {
+        "title": "সাইটের তথ্য",
+        "description": "যোগাযোগের ইমেইল, ফোন, WhatsApp, ঠিকানা এবং সোশ্যাল লিংক, যা পাবলিক ফুটার, যোগাযোগ ও about পৃষ্ঠায় শেয়ার হয়।",
+        "tags": "ইমেইল / ফোন / সোশ্যাল"
+      },
+      "socialLogin": {
+        "title": "সোশ্যাল লগইন ও ক্যাপচা",
+        "description": "লগইন ও নিবন্ধন পৃষ্ঠায় Google ও Facebook সাইন-ইন চালু/বন্ধ করুন, OAuth কী পেস্ট করুন এবং reCAPTCHA চালু করুন।",
+        "tags": "কনফিগার করা নেই"
+      },
+      "registration": {
+        "title": "নিবন্ধন",
+        "description": "পাবলিক সাইন-আপ, ইমেইল যাচাই, নতুন ওয়ার্কস্পেসের ডিফল্ট প্ল্যান ও ট্রায়ালের মেয়াদ।",
+        "tags": "সাইন-আপ / ট্রায়াল / প্ল্যান"
+      },
+      "custom": {
+        "title": "কাস্টম কোড",
+        "description": "সুইচ চালু থাকলে পাবলিক পৃষ্ঠায় প্রোডাকশন CSS ও JavaScript যোগ হয়।",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "ক্লাউড স্টোরেজ",
+        "description": "ক্লায়েন্টের মিডিয়া আপনার নিজের বাকেটে পাঠান: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 বা MinIO।",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "যে Meta অ্যাপের মাধ্যমে প্রতিটি ওয়ার্কস্পেস WhatsApp নম্বর সংযুক্ত করে: অ্যাপ ID ও সিক্রেট, Embedded Signup, webhook এবং Interakt রুট।",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "ক্যাম্পেইন",
+        "description": "পুনরায় চেষ্টা এবং যে ক্যাম্পেইন শেষ হয়নি তার স্বয়ংক্রিয় সমাপ্তি।",
+        "tags": "পুনরায় চেষ্টা / মেয়াদ"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "বুকিং ও ব্যস্ত সময়ের জন্য ওয়ার্কস্পেস যে Google OAuth ক্লায়েন্ট দিয়ে ক্যালেন্ডার সংযুক্ত করে।",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "Flow builder",
+        "description": "প্রতিটি ওয়ার্কস্পেসের ডিফল্ট Flow builder: Simple ধাপে ধাপে বা Advanced ক্যানভাস। ওয়ার্কস্পেস এটি বদলাতে পারে।",
+        "tags": "Simple / Advanced / Automation"
+      }
+    },
+    "signup": {
+      "body": "পাবলিক নিবন্ধন, ইমেইল স্বয়ংক্রিয় যাচাই, নতুন সাইন-আপের ডিফল্ট প্ল্যান ও ফ্রি ট্রায়ালের মেয়াদ নিবন্ধন পৃষ্ঠায় সম্পাদনা করা হয়।",
+      "link": "নিবন্ধন সেটিংস খুলুন"
+    },
+    "brandAssets": {
+      "intro": "ফ্যাভিকন সব থিমে একই। লোগো প্রতি থিমে আলাদা: ডার্ক মোডের জন্য উল্টানো বা হালকা ভার্সন, ডুডল থিমের জন্য ডুডল-বান্ধব ভার্সন আপলোড করুন।",
+      "favicon": {
+        "title": "Favicon",
+        "note": "ব্রাউজার ট্যাব ও বুকমার্কে দেখানো হয়। প্রস্তাবিত 35x35 px। PNG, ICO, JPG, SVG বা WebP, সর্বোচ্চ 512 KB। আপলোড করলে এটি প্রতিস্থাপিত হবে।"
+      },
+      "logos": {
+        "title": "প্রতি থিমের লোগো",
+        "note": "প্রতিটি থিম নিজস্ব লোগো ব্যবহার করে। থিম-নির্দিষ্ট লোগো আপলোড না হলে Paper-এর লোগো ব্যবহৃত হয়।"
+      },
+      "themes": {
+        "paper": {
+          "label": "Paper (ডিফল্ট)",
+          "note": "হালকা, অফ-হোয়াইট। ডিফল্ট চেহারা।"
+        },
+        "bright": {
+          "label": "উজ্জ্বল সাদা",
+          "note": "বেশি কনট্রাস্টের সাদা ব্যাকগ্রাউন্ড।"
+        },
+        "dark": {
+          "label": "ডার্ক (বিটা)",
+          "note": "আপনার লোগোর হালকা বা উল্টানো ভার্সন ব্যবহার করুন।"
+        },
+        "doodle": {
+          "label": "ডুডল (ফ্যান্সি)",
+          "note": "পেস্টেল মিন্ট ব্যাকগ্রাউন্ড।"
+        }
+      },
+      "noFile": "কোনো ফাইল নেই",
+      "upload": "আপলোড",
+      "uploading": "আপলোড হচ্ছে",
+      "remove": "মুছুন",
+      "loading": "লোড হচ্ছে",
+      "loadFailed": "ব্র্যান্ড ফাইল লোড করা যায়নি।",
+      "failed": "আপলোড ব্যর্থ হয়েছে।",
+      "tooLarge": "এই ফাইলটি {kb} KB-এর বেশি।",
+      "wrongType": "এখানে এই ফাইলের ধরন অনুমোদিত নয়।"
+    },
+    "teamInbox": {
+      "intro": "Team Inbox-এর জন্য আলাদা একটি ইনস্টলযোগ্য অ্যাপ। এজেন্টরা লিংক খুলে হোম স্ক্রিনে যোগ করেন এবং অ্যাপ বন্ধ থাকলেও নতুন বার্তার পুশ বিজ্ঞপ্তি পান।",
+      "enabled": {
+        "label": "Team Inbox অ্যাপ চালু করুন",
+        "hint": "/team-inbox-এ আলাদা ম্যানিফেস্ট, ইনস্টল প্রম্পট ও বিজ্ঞপ্তি চালু করে।"
+      },
+      "name": {
+        "label": "অ্যাপের নাম"
+      },
+      "shortName": {
+        "label": "সংক্ষিপ্ত নাম",
+        "hint": "সর্বোচ্চ ১২টি অক্ষর।"
+      },
+      "icon192": {
+        "label": "অ্যাপ আইকন (192x192 PNG)",
+        "note": "ফাঁকা থাকলে অ্যাপ আইকন ব্যবহৃত হয়। ইনবক্স অ্যাপের হোম-স্ক্রিন আইকন।"
+      },
+      "icon512": {
+        "label": "বড় আইকন / স্প্ল্যাশ (512x512 PNG)",
+        "note": "ফাঁকা থাকলে অ্যাপ আইকন ব্যবহৃত হয়। ইনস্টল স্প্ল্যাশ ও হাই-DPI স্ক্রিনের জন্য।"
+      },
+      "push": {
+        "ready": {
+          "title": "পুশ বিজ্ঞপ্তি: প্রস্তুত",
+          "body": "কী তৈরি হয়েছে। এজেন্টরা ইনবক্স থেকে বিজ্ঞপ্তি চালু করতে পারেন।"
+        },
+        "todo": {
+          "title": "পুশ বিজ্ঞপ্তি: আর একটি ধাপ বাকি",
+          "body": "পুশ সেট করতে কী তৈরি করুন-এ ক্লিক করুন। সার্ভার অ্যাক্সেসের প্রয়োজন নেই।"
+        },
+        "generate": "কী তৈরি করুন",
+        "generating": "তৈরি হচ্ছে",
+        "generated": "পুশ কী তৈরি হয়েছে।"
+      },
+      "manifestLink": "Team Inbox ম্যানিফেস্ট",
+      "save": "Team Inbox অ্যাপ সংরক্ষণ করুন",
+      "saving": "সংরক্ষণ হচ্ছে",
+      "saved": "Team Inbox অ্যাপ সংরক্ষিত হয়েছে।",
+      "conflict": "আপনি খোলার পরে অন্য কেউ এটি সংরক্ষণ করেছেন। পৃষ্ঠাটি পুনরায় লোড করে আবার চেষ্টা করুন।",
+      "failed": "কিছু একটা ভুল হয়েছে এবং কিছুই সংরক্ষণ হয়নি।",
+      "loading": "লোড হচ্ছে",
+      "loadFailed": "Team Inbox অ্যাপের সেটিংস লোড করা যায়নি।"
+    },
+    "seoPreview": {
+      "google": "Google ফলাফল",
+      "noDescription": "এখনও কোনো মেটা বিবরণ নেই।",
+      "noImage": "কোনো OG ছবি নেই",
+      "sitemapKicker": "Sitemap ও robots",
+      "sitemapTitle": "ক্রলার ফাইল",
+      "sitemapFile": "পাবলিক পৃষ্ঠা ও প্রকাশিত ব্লগ পোস্ট থেকে স্বয়ংক্রিয়ভাবে তৈরি। /sitemap.xml Google Search Console-এ জমা দিন।",
+      "download": "sitemap.xml ডাউনলোড করুন"
+    },
+    "pages": {
+      "general": {
+        "title": "সাধারণ সেটিংস",
+        "description": "মূল অ্যাপের পরিচয়, যোগাযোগের তথ্য, ডিফল্ট লোকেল ও মুদ্রা, এবং প্ল্যাটফর্ম-স্তরের সার্ভিস সুইচ।",
+        "sections": {
+          "identity": {
+            "title": "অ্যাপের পরিচয়"
+          },
+          "brandAssets": {
+            "title": "ব্র্যান্ড অ্যাসেট"
+          },
+          "platform": {
+            "title": "প্ল্যাটফর্ম সুইচ"
+          },
+          "signup": {
+            "title": "সাইন-আপ ও ফ্রি ট্রায়াল"
+          }
+        },
+        "guide": {
+          "title": "কোথায় কী যায়",
+          "items": {
+            "appName": {
+              "title": "অ্যাপের নাম",
+              "body": "পৃষ্ঠার শিরোনাম, ইমেইল ও অ্যাপের ব্র্যান্ডে ব্যবহৃত হয়। সংক্ষিপ্ত রাখুন: আদর্শভাবে এক বা দুটি শব্দ।"
+            },
+            "appUrl": {
+              "title": "অ্যাপ URL",
+              "body": "মূল ঠিকানা। সব কলব্যাক, ইমেইল ও OAuth রিডাইরেক্ট এখান থেকে তৈরি হয়।"
+            },
+            "language": {
+              "title": "ডিফল্ট ভাষা",
+              "body": "নতুন অ্যাকাউন্টে প্রযোজ্য। বিদ্যমান ব্যবহারকারীরা যা বেছেছেন তা থাকবে।"
+            },
+            "currency": {
+              "title": "ডিফল্ট মুদ্রা",
+              "body": "স্পষ্ট ওভাররাইড ছাড়া ইনভয়েস ও ওয়ালেটে ব্যবহৃত হয়।"
+            },
+            "maintenance": {
+              "title": "রক্ষণাবেক্ষণ মোড",
+              "body": "চালু থাকলে অ্যাডমিন নয় এমন প্রতিটি রুটে একটি প্লেসহোল্ডার দেখায়। অ্যাডমিন এখনও কনসোলে যেতে পারেন।"
+            }
+          }
+        },
+        "tip": {
+          "title": "প্রোডাকশন নিয়ম",
+          "body": "প্রভাবিত ব্যবহারকারী-প্রবাহ পরীক্ষা করার পরেই সংরক্ষণ করুন। পরিচয়ের পরিবর্তন ইনভয়েস ও বাইরে যাওয়া ইমেইলে ছড়ায়।"
+        }
+      },
+      "appearance": {
+        "title": "ড্যাশবোর্ডের রং",
+        "description": "এই থিমের রংগুলো বদলে পুরো অ্যাপ, ব্যবহারকারী ড্যাশবোর্ডের প্রতিটি পৃষ্ঠা ও অ্যাডমিন প্যানেলের রং বদলান। সংরক্ষণ করলে সবার জন্য সঙ্গে সঙ্গে প্রযোজ্য হয়; মূল চেহারা রাখতে কোনো রং ডিফল্টে রাখুন।",
+        "sections": {
+          "layout": {
+            "title": "নেভিগেশন লেআউট",
+            "description": "ব্যবহারকারী ড্যাশবোর্ড কীভাবে সাজানো হবে বেছে নিন। Sidebar সব মেনু বাঁ দিকের রেলে নিয়ে যায় (উপরের হেডার ও More পৃষ্ঠা থাকে না)।"
+          },
+          "sidebar": {
+            "title": "সাইডবারের রং",
+            "description": "বাঁ দিকের গাঢ় রেলের ব্যাকগ্রাউন্ড (শুধু sidebar লেআউটে)। প্রায়-কালো ডিফল্ট রাখুন।"
+          },
+          "interface": {
+            "title": "ইন্টারফেস"
+          },
+          "brand": {
+            "title": "ব্র্যান্ড"
+          },
+          "surfaces": {
+            "title": "সারফেস"
+          },
+          "text": {
+            "title": "টেক্সট"
+          },
+          "accents": {
+            "title": "অ্যাকসেন্ট"
+          }
+        },
+        "guide": {
+          "title": "রং কীভাবে কাজ করে",
+          "items": {
+            "how": {
+              "title": "সঙ্গে সঙ্গে প্রযোজ্য",
+              "body": "সংরক্ষণ করলে সবার জন্য লাইভ থিম টোকেন নতুন করে লেখা হয়।"
+            },
+            "tokens": {
+              "title": "একটি টোকেন, একটি কাজ",
+              "body": "প্রতিটি রং ব্যবহারকারী ড্যাশবোর্ড ও অ্যাডমিন প্যানেলে ব্যবহৃত একটি CSS ভেরিয়েবলের সঙ্গে যুক্ত।"
+            },
+            "primary": {
+              "title": "প্রাথমিক বদলালে বাকিগুলো অনুসরণ করে",
+              "body": "আপনি নিজে সেট না করলে প্রাথমিক (হোভার), অ্যাকসেন্ট, হালকা ফিল ও চ্যাট বাবল প্রাথমিক থেকে তৈরি হয়।"
+            },
+            "defaults": {
+              "title": "ডিফল্ট অক্ষত রাখুন",
+              "body": "যে রং ডিফল্টে থাকবে তা মূল চেহারা রাখে; শুধু বদলানো টোকেনগুলো ওভাররাইড হয়।"
+            }
+          }
+        },
+        "tip": {
+          "title": "টিপ",
+          "body": "বড় পরিবর্তনের পর কনট্রাস্ট যাচাই করুন। টেক্সট ও ব্যাকগ্রাউন্ডের রং দুটোই এই টোকেন থেকে আসে।"
+        },
+        "eyebrow": "অ্যাডমিন - চেহারা"
+      },
+      "siteInfo": {
+        "title": "সাইটের তথ্য",
+        "description": "ফুটার, যোগাযোগ ও about পৃষ্ঠায় শেয়ার হওয়া যোগাযোগের বিবরণ ও সোশ্যাল লিংক। একবার সম্পাদনা করুন, সব জায়গায় আপডেট হবে।",
+        "sections": {
+          "company": {
+            "title": "কোম্পানি"
+          },
+          "contact": {
+            "title": "যোগাযোগের ইমেইল"
+          },
+          "phone": {
+            "title": "ফোন ও WhatsApp"
+          },
+          "social": {
+            "title": "সোশ্যাল লিংক"
+          }
+        },
+        "guide": {
+          "title": "কোথায় কী যায়",
+          "items": {
+            "shared": {
+              "title": "সব জায়গায় শেয়ার",
+              "body": "এই মানগুলো পাবলিক ফুটার, যোগাযোগ পৃষ্ঠা ও আইনি পৃষ্ঠায় যায়।"
+            },
+            "frontend": {
+              "title": "পৃষ্ঠার টেক্সট ও রং",
+              "body": "এখানে নয়, Frontend editor-এ সম্পাদনা হয়।"
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "ফুটার সেটিংস",
+        "description": "ফুটারের শিরোনাম, সোশ্যাল লিংক, কপিরাইট টেক্সট ও পাবলিক ফুটারের বিবরণ।",
+        "sections": {
+          "footer": {
+            "title": "পাবলিক ফুটার"
+          }
+        },
+        "guide": {
+          "title": "কোথায় কী যায়",
+          "items": {
+            "what": {
+              "title": "ফুটারের শিরোনাম ও কপিরাইট",
+              "body": "শিরোনাম ফাঁকা থাকলে প্ল্যাটফর্মের নাম ব্যবহৃত হয়। কপিরাইট টেক্সট ফাঁকা থাকলে বছর ও ব্র্যান্ড থেকে তৈরি হয়।"
+            },
+            "social": {
+              "title": "সোশ্যাল URL",
+              "body": "ফাঁকা ফিল্ড আইকন লুকিয়ে দেয়। এগুলো সাইটের তথ্যের সোশ্যাল লিংকের সঙ্গে শেয়ার হয়: এখানে বদলালে সব জায়গায় আপডেট হয়।"
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "মেইল সেটিংস",
+        "description": "SMTP হোস্ট, পোর্ট, এনক্রিপশন ও ক্রেডেনশিয়াল। সংরক্ষিত মান প্রতিটি পাঠানোর সময় প্রয়োগ হয়, তাই স্বাগত, যাচাই, রসিদ ও সাপোর্ট মেইল রিস্টার্ট ছাড়াই এগুলো ব্যবহার করে।",
+        "sections": {
+          "smtp": {
+            "title": "SMTP ক্রেডেনশিয়াল"
+          }
+        },
+        "guide": {
+          "title": "সাধারণ প্রোভাইডার হোস্ট",
+          "items": {
+            "hosts": {
+              "title": "সাধারণ সেটিংস",
+              "body": "Mailgun smtp.mailgun.org 587 / tls। SendGrid smtp.sendgrid.net 587 / tls। Amazon SES email-smtp.REGION.amazonaws.com 587 / tls। Postmark smtp.postmarkapp.com 587 / tls। Resend smtp.resend.com 587 / tls। Gmail smtp.gmail.com 587 / tls, অ্যাপ পাসওয়ার্ডসহ।"
+            },
+            "used": {
+              "title": "সিস্টেমের মেইলসমূহ",
+              "body": "স্বাগত ও যাচাই ইমেইল, পাসওয়ার্ড রিসেট, ইনভয়েস ও রসিদ, সাপোর্ট উত্তর, নিরাপত্তা সতর্কতা এবং ওয়ার্কস্পেস আমন্ত্রণ।"
+            }
+          }
+        },
+        "tip": {
+          "title": "টিপ",
+          "body": "সম্পাদনার পর সবসময় একটি পরীক্ষামূলক পাঠান। হোস্ট বা পোর্টের একটি ভুল বানান প্ল্যাটফর্মের সব লেনদেনমূলক ইমেইল নীরবে বন্ধ করে দেয়।"
+        }
+      },
+      "seo": {
+        "title": "SEO সেটিংস",
+        "description": "সাইট-জুড়ে ডিফল্ট মেটা ট্যাগ: শিরোনাম, বিবরণ, OpenGraph, Twitter কার্ড, robots, ক্যানোনিক্যাল ও সার্চ-ইঞ্জিন যাচাইকরণ।",
+        "sections": {
+          "search": {
+            "title": "মেটা ট্যাগ"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter কার্ড"
+          },
+          "verification": {
+            "title": "সাইট যাচাইকরণ"
+          },
+          "preview": {
+            "title": "লাইভ প্রিভিউ"
+          }
+        },
+        "guide": {
+          "title": "SEO-র মূল বিষয়",
+          "items": {
+            "basics": {
+              "title": "শিরোনাম ও বিবরণ",
+              "body": "মেটা শিরোনাম: ব্র্যান্ড ও একটি জোরালো বিবরণ দিয়ে শুরু করুন, ৫০–৬০ অক্ষর। মেটা বিবরণ: ১–২ বাক্যের পরিচিতি, ১৪০–১৬০ অক্ষর।"
+            },
+            "where": {
+              "title": "কোথায় দেখায়",
+              "body": "অ্যাডমিন পৃষ্ঠা, সাইন-ইন করা পৃষ্ঠা, পাবলিক পৃষ্ঠা ও লিংক প্রিভিউ (WhatsApp, Slack, Discord, X)। Robots: স্টেজিং বা ব্যক্তিগত ডিপ্লয়মেন্টে noindex ব্যবহার করুন।"
+            },
+            "sitemap": {
+              "title": "যাচাই করুন",
+              "body": "opengraph.xyz, Google Rich Results test এবং Twitter Card validator।"
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "গোপনীয়তা, GDPR ও ADA",
+        "eyebrow": "অ্যাডমিন - কমপ্লায়েন্স",
+        "description": "কুকি সম্মতির ব্যানার, নীতির URL, GDPR/CCPA কমপ্লায়েন্স ও WCAG অ্যাক্সেসিবিলিটি সুইচ। একই সেটিং সম্মতি UI-তে যায় এবং প্রতিটি অ্যানালিটিক্স ইন্টিগ্রেশন নিয়ন্ত্রণ করে।",
+        "sections": {
+          "banner": {
+            "title": "ব্যানার ও নীতি"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "US Americans-with-Disabilities-Act + WCAG 2.1 AA-স্তরের সুবিধা, যা দর্শকরা চালু/বন্ধ করতে পারেন।"
+          }
+        },
+        "guide": {
+          "title": "সম্মতি কীভাবে কাজ করে",
+          "items": {
+            "order": {
+              "title": "কাজের ক্রম",
+              "body": "১. দর্শক পৌঁছালে কুকি ব্যানার খোলে (Do-Not-Track মানা হলে এড়িয়ে যায়)। ২. পছন্দ এক বছরের জন্য crm_cookie_consent কুকিতে সংরক্ষিত হয়। ৩. শুধু অনুমোদিত ট্র্যাকার লোড হয়। ৪. data-cookie-prefs-open আছে এমন যেকোনো উপাদান থেকে দর্শক পছন্দের বাছাইকারী আবার খুলতে পারেন।"
+            },
+            "linked": {
+              "title": "সংযুক্ত সেটিংস",
+              "body": "অ্যানালিটিক্স ইন্টিগ্রেশন (GA4, GTM, Pixel, Clarity ও আরও) এবং PWA সেটিংস।"
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "অ্যানালিটিক্স ইন্টিগ্রেশন",
+        "eyebrow": "অ্যাডমিন - ট্র্যাকিং",
+        "description": "প্রতিটি প্রোভাইডারের আইডি একবার পেস্ট করুন। অফিশিয়াল ভেন্ডর স্নিপেট প্রতিটি পাবলিক পৃষ্ঠায় রেন্ডার হয়, তবে দর্শক সংশ্লিষ্ট কুকি বিভাগে সম্মতি দেওয়ার পরেই।",
+        "sections": {
+          "site": {
+            "title": "সাইট অ্যানালিটিক্স"
+          },
+          "marketing": {
+            "title": "বিজ্ঞাপন পিক্সেল"
+          }
+        },
+        "guide": {
+          "title": "ট্র্যাকার -> বিভাগ",
+          "items": {
+            "categories": {
+              "title": "কখন কোনটি চালু হয়",
+              "body": "অ্যানালিটিক্স: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel। মার্কেটিং: Meta Pixel, TikTok, LinkedIn, X Pixel। GTM কন্টেইনার স্ক্রিপ্টে আরও ট্র্যাকার থাকতে পারে; GTM-এর ভেতরে বিভাগ ট্রিগার দিয়ে সেগুলো থামান।"
+            },
+            "where": {
+              "title": "কোথায় লোড হয়",
+              "body": "পাবলিক ও সাইন-ইন পৃষ্ঠা। অ্যাডমিন পৃষ্ঠায় ইচ্ছাকৃতভাবে বন্ধ থাকে।"
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "কাস্টম কোড",
+        "description": "উন্নত ব্র্যান্ডিং ও আচরণের জন্য প্রোডাকশন কাস্টম স্টাইল ও স্ক্রিপ্ট। চালু থাকলে পাবলিক পৃষ্ঠায় যোগ হয়।",
+        "sections": {
+          "code": {
+            "title": "কাস্টম কোড"
+          }
+        },
+        "guide": {
+          "title": "সাধারণ নিয়ম",
+          "items": {
+            "scope": {
+              "title": "CSS-এর পরিধি সীমিত করুন",
+              "body": "নিয়মগুলো একটি ব্র্যান্ড ক্লাসে মুড়ে দিন। body, *, বা ফ্রেমওয়ার্কের ইউটিলিটি ক্লাস বদলানো এড়িয়ে চলুন।"
+            },
+            "block": {
+              "title": "ব্লক করবেন না",
+              "body": "JS-কে DOMContentLoaded-এ মুড়ে দিন। সিঙ্ক্রোনাস নেটওয়ার্ক কল নয়।"
+            },
+            "dark": {
+              "title": "ডার্ক মোড পরীক্ষা করুন",
+              "body": "সংরক্ষণের আগে থিম বদলে html[data-theme=\"dark\"] সিলেক্টরগুলো যাচাই করুন।"
+            },
+            "sensitive": {
+              "title": "প্রোডাকশনে সংবেদনশীল",
+              "body": "ভুল সংরক্ষণ সঙ্গে সঙ্গে প্রতিটি পাবলিক পৃষ্ঠায় পৌঁছায়। বড় পরিবর্তন একজন সহকর্মীকে দিয়ে যাচাই করিয়ে নিন।"
+            }
+          }
+        },
+        "tip": {
+          "title": "সতর্কতা",
+          "body": "কাস্টম কোড প্রতিটি পাবলিক পৃষ্ঠায় চলে এবং স্যান্ডবক্সে রাখা যায় না। শুধু সুপার অ্যাডমিন এটি বদলাতে পারেন।"
+        }
+      },
+      "pwa": {
+        "title": "PWA সেটিংস",
+        "description": "ইনস্টলযোগ্য অ্যাপ ম্যানিফেস্ট: নাম, আইকন, রং ও ডিসপ্লে মোড। ম্যানিফেস্ট ও ইনস্টল প্রম্পট নিয়ন্ত্রণ করে।",
+        "sections": {
+          "app": {
+            "title": "PWA ম্যানিফেস্ট"
+          },
+          "teamInbox": {
+            "title": "Team Inbox PWA"
+          }
+        },
+        "guide": {
+          "title": "ইনস্টলযোগ্য অ্যাপ",
+          "items": {
+            "manifest": {
+              "title": "লাইভ ম্যানিফেস্ট",
+              "body": "ম্যানিফেস্ট /api/v2/public/manifest.webmanifest-এ পরিবেশিত হয় এবং সুইচ চালু থাকলেই থাকে।"
+            },
+            "install": {
+              "title": "আইকন",
+              "body": "চেহারা পৃষ্ঠায় বর্গাকার PNG আইকন আপলোড করুন বা হোস্ট করা URL পেস্ট করুন। হোম স্ক্রিনের জন্য 192 px, স্প্ল্যাশের জন্য 512 px।"
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "ক্লাউড স্টোরেজ",
+        "eyebrow": "অ্যাডমিন - মিডিয়া স্টোরেজ",
+        "description": "ক্লায়েন্টের সব মিডিয়া সংযুক্তি অ্যাপ সার্ভারের বদলে আপনার নিজের বাকেটে পাঠান — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 বা যেকোনো S3-সামঞ্জস্যপূর্ণ স্টোর। বন্ধ থাকলে মিডিয়া লোকাল ডিস্কে থাকে, তাই আপনি চালু না করা পর্যন্ত কিছু ভাঙে না।",
+        "status": {
+          "active": "সক্রিয়: {provider}। নতুন আপলোড আপনার বাকেটে যায়।",
+          "configured": "কনফিগার করা আছে কিন্তু বন্ধ। মিডিয়া এখনও লোকাল ডিস্কে। পরীক্ষা করে তারপর চালু করুন।",
+          "local": "লোকাল ডিস্ক (এখনও কোনো ক্লাউড প্রোভাইডার সেট করা হয়নি)।",
+          "enabled": "সক্রিয়",
+          "disabled": "নিষ্ক্রিয়"
+        },
+        "sections": {
+          "provider": {
+            "title": "ক্লাউড মিডিয়া রাউটিং"
+          },
+          "credentials": {
+            "title": "বাকেট সংযোগ"
+          }
+        },
+        "guide": {
+          "title": "সেট আপ করুন",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Access key + secret + রিজিয়ন + বাকেট। Wasabi এন্ডপয়েন্ট রিজিয়ন থেকে তৈরি হয়।"
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Bunny-র ফিল্ড ব্যবহার করুন: স্টোরেজ জোন ও পাসওয়ার্ড। রিজিয়ন হলো জোনের রিজিয়ন (de, ny, la...)।"
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "S3 ফিল্ড পূরণ করুন এবং Endpoint URL পেস্ট করুন। MinIO-র জন্য path-style টিক দিন।"
+            },
+            "test": {
+              "title": "আগে সবসময় পরীক্ষা করুন",
+              "body": "“সংরক্ষণ ও সংযোগ পরীক্ষা করুন” সক্রিয় চালু করার আগে একটি প্রোব ফাইল লেখে ও মুছে ফেলে।"
+            }
+          }
+        },
+        "tip": {
+          "title": "ডিফল্টভাবে নিরাপদ",
+          "body": "বিদ্যমান ফাইল যেখানে আছে সেখানেই থাকে। শুধু নতুন আপলোড বাকেটে যায়; কিছু স্থানান্তর বা মুছে ফেলা হয় না।"
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp সেটিংস",
+        "eyebrow": "অ্যাডমিন - সেটিংস - চ্যানেল - WhatsApp",
+        "description": "একটিমাত্র Meta অ্যাপ (ও Interakt পার্টনার) যার মাধ্যমে প্রতিটি ওয়ার্কস্পেসের WhatsApp নম্বর অনবোর্ড হয়। অ্যাপ ID ও সিক্রেট ছাড়া Embedded Signup ও টোকেন নবায়ন কাজ করে না; কনফিগ ID ছাড়া ওয়ার্কস্পেস নিজে টোকেন পেস্ট করে। সংরক্ষিত মান সেকেন্ডের মধ্যে সব প্রক্রিয়ায় সার্ভারের ডিফল্টকে ছাপিয়ে যায়।",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Meta-এর অফিসিয়াল Cloud API। উচ্চ-ভলিউমের ট্রাফিক, টেমপ্লেট বার্তা ও যাচাই করা ব্যবসায়িক প্রোফাইলের জন্য প্রয়োজন। ম্যানুয়াল টোকেন পেস্ট ও Embedded Signup (WhatsApp লগইন) দুটোই সমর্থন করে।"
+          },
+          "interakt": {
+            "title": "Interakt রুট",
+            "description": "Embedded Signup-এর মাধ্যমে সংযুক্ত নম্বর ডিফল্টভাবে Interakt-এর Meta প্রক্সির মাধ্যমে পাঠানো ও গ্রহণ করা হয়। Interakt এড়াতে Meta (সরাসরি)-তে বদলান। বিদ্যমান নম্বর যে রুটে সংযুক্ত ছিল সেটিই রাখে।"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Meta-এর অফিসিয়াল Cloud API। উচ্চ-ভলিউমের ট্রাফিক, টেমপ্লেট বার্তা ও যাচাই করা ব্যবসায়িক প্রোফাইলের জন্য প্রয়োজন। ম্যানুয়াল টোকেন পেস্ট ও Embedded Signup (WhatsApp লগইন) দুটোই সমর্থন করে।"
+            },
+            "app": {
+              "title": "Facebook অ্যাপ ID + সিক্রেট",
+              "body": "developers.facebook.com/apps, Basic settings। অ্যাপ বদলালে পুরোনোটির টোকেন অবৈধ হয়ে যায়, তাই ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হবে।"
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App dashboard, WhatsApp, Configuration: এই পৃষ্ঠা থেকে Callback URL ও Verify token পেস্ট করুন, তারপর messages ও message_template_status_update-এ সাবস্ক্রাইব করুন।"
+            },
+            "perWorkspace": {
+              "title": "প্রতি ওয়ার্কস্পেস",
+              "body": "প্রতিটি ওয়ার্কস্পেস Channels, WhatsApp numbers থেকে নিজের নম্বর সংযুক্ত করে। সেখানে Phone number ID ও একটি স্থায়ী টোকেন নেওয়া হয়।"
+            },
+            "login": {
+              "title": "WABA লগইন (ঐচ্ছিক)",
+              "body": "এক-ক্লিকে Sign in with Meta চালু করতে Embedded Signup Config ID পূরণ করুন। অ্যাপে Tech Provider ভূমিকা থাকতে হবে। শুধু ম্যানুয়াল পেস্ট ব্যবহার করতে ফাঁকা রাখুন।"
+            }
+          }
+        },
+        "tip": {
+          "title": "টিপ",
+          "body": "ট্রাফিকের মাঝখানে ডিফল্ট রুট বা অ্যাপ বদলালে শুধু পরে সংযুক্ত নম্বরগুলো প্রভাবিত হয়। Meta অ্যাপ বদলানোর আগে ক্যাম্পেইন বিরতি দিন।"
+        }
+      },
+      "campaigns": {
+        "title": "ক্যাম্পেইন ডেলিভারি",
+        "eyebrow": "অ্যাডমিন - ক্যাম্পেইন",
+        "description": "প্রতিটি ওয়ার্কস্পেসের ক্যাম্পেইনের জন্য প্ল্যাটফর্ম-জুড়ে নিয়ম: ব্যর্থ বার্তা কতবার আবার চেষ্টা হবে এবং অসমাপ্ত ক্যাম্পেইন কখন শেষ হবে।",
+        "sections": {
+          "retry": {
+            "title": "পুনরায় চেষ্টা"
+          },
+          "expiry": {
+            "title": "স্বয়ংক্রিয় শেষ"
+          }
+        },
+        "guide": {
+          "title": "কীভাবে কাজ করে",
+          "items": {
+            "retry": {
+              "title": "পুনরায় চেষ্টা",
+              "body": "যে প্রাপকের কাছে পাঠানো ব্যর্থ হয়, অপেক্ষার পর এখানে নির্ধারিত সংখ্যা পর্যন্ত আবার চেষ্টা হয়।"
+            },
+            "expiry": {
+              "title": "স্বয়ংক্রিয় শেষ",
+              "body": "এখানে নির্ধারিত ঘণ্টার পরেও চলতে থাকা ক্যাম্পেইন শেষ করা হয়, যাতে এটি কোনো প্রেরককে অনির্দিষ্টকাল আটকে না রাখে।"
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "অ্যাডমিন - অ্যাপয়েন্টমেন্ট",
+        "description": "পুরো প্ল্যাটফর্মের জন্য একটিমাত্র Google Cloud OAuth ক্লায়েন্ট। এরপর প্রতিটি ওয়ার্কস্পেস অ্যাপয়েন্টমেন্ট, সেটিংস থেকে নিজের Google অ্যাকাউন্ট সংযুক্ত করে; ওয়ার্কস্পেস কখনও ক্লায়েন্ট ID বা সিক্রেট দেখে না।",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth client",
+            "description": "ক্লায়েন্ট ID ও সিক্রেট ছাড়া ওয়ার্কস্পেসে Google Calendar অনুপলব্ধ দেখায় এবং বুকিং ক্যালেন্ডার ছাড়াই চলতে থাকে।"
+          }
+        },
+        "guide": {
+          "title": "Google Cloud-এ সেট আপ করুন",
+          "items": {
+            "project": {
+              "title": "১. প্রজেক্ট ও API",
+              "body": "Google Cloud Console-এ একটি প্রজেক্ট তৈরি করুন এবং Google Calendar API চালু করুন।"
+            },
+            "redirect": {
+              "title": "২. OAuth ক্লায়েন্ট",
+              "body": "Web application ধরনের একটি OAuth 2.0 Client ID তৈরি করুন এবং এই পৃষ্ঠায় দেখানো redirect URI Authorised redirect URIs-এ যোগ করুন।"
+            },
+            "consent": {
+              "title": "৩. সম্মতি স্ক্রিন",
+              "body": "calendar.events, calendar.freebusy ও calendar.calendarlist.readonly স্কোপ যোগ করুন, তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়।"
+            },
+            "workspaces": {
+              "title": "৪. ওয়ার্কস্পেস সংযুক্ত করে",
+              "body": "ক্লায়েন্ট ID ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা অ্যাপয়েন্টমেন্ট, সেটিংস, Google Calendar থেকে সংযুক্ত করেন।"
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Flow builder",
+        "eyebrow": "অ্যাডমিন - অটোমেশন",
+        "description": "প্রতিটি ওয়ার্কস্পেসের ডিফল্ট Flow builder বেছে নিন: ধাপে ধাপে Simple বিল্ডার বা Advanced ক্যানভাস বিল্ডার। ওয়ার্কস্পেস তার Flows পৃষ্ঠায় এটি বদলাতে পারে।",
+        "sections": {
+          "mode": {
+            "title": "বিল্ডার"
+          }
+        },
+        "guide": {
+          "title": "কীভাবে কাজ করে",
+          "items": {
+            "modes": {
+              "title": "দুটি বিল্ডার",
+              "body": "Simple একটি flow-কে এক ধাপের নিচে আরেক ধাপ করে তালিকায় দেখায়, ধাপের মাঝে প্লাস থাকে। Advanced হলো নোড ও তারসহ ক্যানভাস। দুটোই একই flow সংরক্ষণ করে, তাই flow একইভাবে চলে।"
+            },
+            "existing": {
+              "title": "বিদ্যমান Flow",
+              "body": "এই সেটিং বদলালে কোনো flow কখনও বদলায় বা মোছা হয় না। flow চালু থাকে; শুধু চালু থাকা বিল্ডারে খোলে। যে ওয়ার্কস্পেস নিজের বিল্ডার বেছেছে, সে আবার প্ল্যাটফর্মের ডিফল্ট না বেছে নেওয়া পর্যন্ত সেটিই রাখে।"
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "আমরা কুকি ব্যবহার করি",
+      "learnMore": "আরও জানুন",
+      "decline": "প্রত্যাখ্যান",
+      "customize": "কাস্টমাইজ করুন",
+      "acceptAll": "সব মেনে নিন",
+      "rejectAll": "সব প্রত্যাখ্যান",
+      "save": "পছন্দ সংরক্ষণ করুন",
+      "preferences": "কুকি পছন্দ",
+      "categories": {
+        "necessary": {
+          "title": "একান্ত প্রয়োজনীয়",
+          "body": "সাইট চালানোর জন্য প্রয়োজন: সাইন-ইন, নিরাপত্তা ও আপনার পছন্দ। সবসময় চালু।"
+        },
+        "analytics": {
+          "title": "অ্যানালিটিক্স কুকি",
+          "body": "সাইট কীভাবে ব্যবহৃত হয় তা বুঝতে সাহায্য করুন, যাতে আমরা উন্নতি করতে পারি।"
+        },
+        "marketing": {
+          "title": "মার্কেটিং কুকি",
+          "body": "বিজ্ঞাপন পরিমাপ ও অন্যত্র আপনাকে প্রাসঙ্গিক ক্যাম্পেইন দেখাতে ব্যবহৃত হয়।"
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "লাইভ প্রিভিউ",
+      "previewTitle": "সংরক্ষণের আগে",
+      "previewNote": "টেনে আনার সময় রং, আকার ও স্বচ্ছতা আপডেট হয়। সংরক্ষণ না করা পর্যন্ত কারও জন্য কিছু প্রয়োগ হয় না।",
+      "resetTitle": "ডিফল্টে ফিরিয়ে নিন",
+      "resetBody": "সব ওভাররাইড মুছে মূল প্যালেট ফিরিয়ে আনে।",
+      "reset": "সব রং রিসেট করুন",
+      "tokens": "{count}টি টোকেন",
+      "controls": "{count}টি নিয়ন্ত্রণ",
+      "primary": "প্রাথমিক",
+      "cancel": "বাতিল",
+      "active": "সক্রিয়"
+    },
+    "wabaCallback": {
+      "loading": "Webhook-এর বিবরণ লোড হচ্ছে…",
+      "unavailable": "Webhook-এর বিবরণ শুধু সুপার অ্যাডমিনকে দেখানো হয়।",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "Set APP_URL or WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Meta অ্যাপে (WhatsApp, Configuration, Callback URL) পেস্ট করুন। এগুলোতে সাবস্ক্রাইব করুন: {fields}।",
+      "verifyToken": "Verify token",
+      "verifyHint": "Verify token-এর একই পর্দায় পেস্ট করুন।",
+      "copy": "কপি করুন",
+      "copied": "কপি হয়েছে",
+      "connected": "সংযুক্ত WABA (সব ওয়ার্কস্পেস)",
+      "fieldsTitle": "Webhook ফিল্ড (কো-এক্সিস্টেন্স ও Groups)",
+      "fieldsHint": "কো-এক্সিস্টেন্সের জন্য Meta অ্যাপকে messages, smb_message_echoes, smb_app_state_sync ও history-তে সাবস্ক্রাইব থাকতে হবে। WhatsApp Groups-এর জন্য group_lifecycle_update, group_participants_update, group_settings_update ও group_status_update লাগবে।",
+      "fieldsCheck": "Webhook ফিল্ড যাচাই করুন",
+      "fieldsChecking": "Meta-কে জিজ্ঞাসা করা হচ্ছে…",
+      "fieldsOk": "সব ফিল্ডে সাবস্ক্রাইব করা আছে: ফোনে লেখা উত্তর সিঙ্ক হবে এবং WhatsApp গ্রুপের ইভেন্ট আসবে।",
+      "fieldsMissing": "কিছু ফিল্ডে এখনও সাবস্ক্রাইব করা হয়নি।",
+      "fieldsSubscribed": "সাবস্ক্রাইব করা হয়েছে। ফোনে লেখা উত্তর এখন সিঙ্ক হবে এবং WhatsApp গ্রুপের ইভেন্ট আসবে।",
+      "fieldsMissingTag": "অনুপস্থিত",
+      "fieldsGroupTag": "গ্রুপ",
+      "fieldsSubscribe": "অনুপস্থিত ফিল্ডে সাবস্ক্রাইব করুন",
+      "fieldsSubscribing": "সাবস্ক্রাইব হচ্ছে…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "OAuth ক্লায়েন্টে এই হুবহু ঠিকানাটি Authorised redirect URI হিসেবে যোগ করুন। ওয়ার্কস্পেস অ্যাডমিন সম্মত হওয়ার পর Google ব্রাউজারকে এখানে পাঠায়।",
+      "copy": "কপি করুন",
+      "copied": "কপি হয়েছে"
+    }
+  }
+}

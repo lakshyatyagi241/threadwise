@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} API 参考",
+    "metaDescription": "{brand} REST API 参考：身份验证、速率限制以及每个端点的请求和响应示例。",
+    "common": {
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "无法复制。请选中文本后手动复制。"
+    },
+    "topbar": {
+      "home": "{brand} 首页",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI 规范",
+      "getKey": "获取 API 密钥"
+    },
+    "sidebar": {
+      "label": "参考导航",
+      "filterLabel": "筛选端点",
+      "filterPlaceholder": "筛选端点…",
+      "startHere": "从这里开始",
+      "intro": "简介",
+      "auth": "身份验证",
+      "webhooks": "Webhook"
+    },
+    "hero": {
+      "eyebrow": "开发者参考",
+      "title": "{brand} <em>REST API</em>",
+      "lead": "一个 REST API，即可发送 WhatsApp 消息、运行群发和营销活动、管理联系人和模板、触发自动化流程并读取您的账户信息，满足您的 CRM、自动化平台或应用所需的一切。",
+      "baseUrl": "基础 URL",
+      "copyBaseUrl": "复制基础 URL"
+    },
+    "capabilities": {
+      "title": "您可以做什么",
+      "send": {
+        "title": "发送消息",
+        "body": "单条发送、群发、营销活动和定时发送"
+      },
+      "receive": {
+        "title": "接收消息",
+        "body": "读取入站会话及其消息"
+      },
+      "contacts": {
+        "title": "联系人与线索",
+        "body": "完整的创建、读取、更新和删除，以及群组和自定义属性"
+      },
+      "templates": {
+        "title": "模板",
+        "body": "创建、更新和列出 WhatsApp 模板"
+      },
+      "flows": {
+        "title": "自动化流程",
+        "body": "通过 API 将联系人加入流程"
+      },
+      "status": {
+        "title": "送达状态",
+        "body": "每条消息的已发送、已送达、已读和失败状态"
+      },
+      "devices": {
+        "title": "设备",
+        "body": "列出已连接的号码及其状态"
+      },
+      "account": {
+        "title": "账户与用量",
+        "body": "套餐、限额和消息额度"
+      }
+    },
+    "auth": {
+      "title": "身份验证",
+      "intro": "每个请求都使用工作区的 <strong>API 密钥</strong>进行身份验证。请在仪表盘的<strong>设置，REST API</strong> 下创建。以 Bearer 令牌的形式发送：",
+      "copyHeader": "复制请求头",
+      "alt": "也可以通过 <code>X-Api-Key</code> 请求头传递。密钥属于单个工作区，且仅存储其哈希值，因此请在创建时复制密钥：之后无法再次显示。密钥可随时撤销，撤销后立即失效。"
+    },
+    "webhooks": {
+      "title": "Webhook 与实时事件",
+      "comingTitle": "Webhook 投递即将推出",
+      "comingBody": "目前尚不支持注册 Webhook 并在您自己的 URL 接收事件。目前不会向您的服务器发送任何事件，因此没有可订阅的内容。投递上线后，此卡片将列出事件和签名请求头。",
+      "rateLabel": "速率限制",
+      "rate": "每个密钥受工作区套餐的每分钟限额约束；若套餐未设置，则适用平台默认的每分钟 {limit} 次请求。每个响应都带有 <code>X-RateLimit-Limit</code> 和 <code>X-RateLimit-Remaining</code>，超出限额的请求将返回 HTTP 429 及 <code>Retry-After</code> 请求头。发出的消息还会消耗您套餐的消息额度。"
+    },
+    "reference": {
+      "title": "端点",
+      "count": "{count, plural, other {# 个端点}}",
+      "noMatch": "没有与“{query}”匹配的端点。",
+      "clearFilter": "清除筛选",
+      "empty": "尚未发布任何端点。请稍后再来查看。",
+      "unavailableTitle": "无法加载端点参考",
+      "unavailableBody": "目前无法访问 API 规范。上方的简介仍然适用。请稍后重试。",
+      "retry": "重试",
+      "general": "通用",
+      "toggle": "显示或隐藏 {method} {path} 的详情",
+      "parameters": "参数",
+      "bodyParameters": "请求体参数",
+      "name": "名称",
+      "field": "字段",
+      "description": "描述",
+      "required": "必填",
+      "exampleRequest": "请求示例",
+      "requestBody": "请求体",
+      "responses": "响应",
+      "copyCurl": "复制请求",
+      "copyJson": "复制 JSON",
+      "noExample": "规范中未给出此响应的示例。"
+    },
+    "footer": "{brand} REST API · v1 · 由实时 OpenAPI 规范生成"
+  }
+}

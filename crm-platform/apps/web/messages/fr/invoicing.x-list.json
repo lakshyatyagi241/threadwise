@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Virement bancaire",
+      "manual": "Manuel",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Boutique en ligne"
+    },
+    "toolbar": {
+      "currency": "Devise",
+      "currencyPlaceholder": "USD",
+      "issued": "Émises",
+      "issuedWindow": "Période d’émission",
+      "due": "Échéance",
+      "dueWindow": "Période d’échéance",
+      "dueFrom": "Échéance à partir du",
+      "dueTo": "Échéance jusqu’au",
+      "docType": "Type de document",
+      "anyDocType": "Tous les types",
+      "mine": "Mes factures",
+      "docTypes": {
+        "tax_invoice": "Facture",
+        "proforma": "Proforma",
+        "receipt": "Reçu"
+      }
+    },
+    "strip": {
+      "label": "Montant encore dû",
+      "outstanding": "Encours ({currency})",
+      "overdue": "Dont en retard"
+    },
+    "row": {
+      "creditNote": "Créer un avoir",
+      "downloadPdf": "Télécharger le PDF"
+    },
+    "bulk": {
+      "sendLink": "Marquer le lien comme envoyé",
+      "someSkipped": "{count, plural, one {# facture sélectionnée a été ignorée : elle n’accepte pas cette action.} other {# factures sélectionnées ont été ignorées : elles n’acceptent pas cette action.}}",
+      "done": {
+        "send": "{count, plural, one {# facture marquée comme envoyée.} other {# factures marquées comme envoyées.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# brouillon sera supprimé définitivement. Les factures qui ne sont pas des brouillons restent inchangées.} other {# brouillons seront supprimés définitivement. Les factures qui ne sont pas des brouillons restent inchangées.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Invalider les factures sélectionnées",
+        "close": "Fermer",
+        "keep": "Conserver les factures",
+        "confirm": "{count, plural, one {Invalider # facture} other {Invalider # factures}}",
+        "warning": "{count, plural, one {# facture sera invalidée. Elle conserve son numéro mais ne peut plus être payée ni modifiée.} other {# factures seront invalidées. Elles conservent leur numéro mais ne peuvent plus être payées ni modifiées.}}",
+        "skipped": "{count, plural, one {# facture sélectionnée est ignorée : seules les factures émises sans paiement ni avoir peuvent être invalidées.} other {# factures sélectionnées sont ignorées : seules les factures émises sans paiement ni avoir peuvent être invalidées.}}",
+        "reason": "Motif (conservé sur chaque facture)",
+        "reasonRequired": "Indiquez pourquoi ces factures sont invalidées."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Enregistré comme envoyé avec le lien.",
+        "email": "Facture envoyée par e-mail.",
+        "whatsapp": "Facture envoyée sur WhatsApp."
+      },
+      "markedPaid": "Marquée comme payée.",
+      "linkRegenerated": "Nouveau lien créé. L’ancien ne fonctionne plus.",
+      "linkRevoked": "Lien désactivé.",
+      "linkUnavailable": "Cette facture n’a pas de lien actif. Ouvrez la facture pour en créer un nouveau."
+    },
+    "voidDialog": {
+      "reasonHint": "Obligatoire. Conservé dans l’historique de la facture.",
+      "reasonRequired": "Indiquez pourquoi la facture est invalidée.",
+      "refundFirst": "Cette facture a reçu des paiements. Remboursez-les d’abord (depuis la liste des paiements de la facture), puis invalidez-la.",
+      "creditsFirst": "Cette facture a des avoirs. Invalidez d’abord les avoirs, puis la facture."
+    },
+    "sendDialog": {
+      "loading": "Chargement de la facture",
+      "channel": "Comment l’envoyer ?",
+      "channels": {
+        "link": "Partager moi-même le lien",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Marquer comme envoyée",
+        "email": "Envoyer par e-mail",
+        "whatsapp": "Envoyer sur WhatsApp"
+      },
+      "linkOff": "Cette facture n’a pas de lien actif. Créez-en un nouveau depuis la carte du lien sur la facture, puis partagez-le.",
+      "linkRecords": "Partager le lien vous-même ne fait qu’enregistrer son envoi.",
+      "noEmail": "Aucune adresse e-mail sur cette facture",
+      "noPhone": "Aucun numéro de téléphone sur cette facture",
+      "noEmailHelp": "Cette facture n’a pas d’e-mail acheteur. Fermez cette fenêtre, utilisez Modifier les détails pour en ajouter un, puis réessayez.",
+      "noPhoneHelp": "Cette facture n’a pas de numéro de téléphone acheteur. Fermez cette fenêtre, utilisez Modifier les détails pour en ajouter un, puis réessayez.",
+      "message": "Message",
+      "messageHint": "Facultatif. Ajouté au message qui accompagne la facture.",
+      "deliveryNote": "La facture est mise en file d’attente pour être remise à l’acheteur. L’historique indique quand elle a été envoyée."
+    },
+    "editDialog": {
+      "title": "Modifier les détails",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
+      "saved": "Détails de la facture enregistrés.",
+      "reload": "Recharger la facture",
+      "conflict": "Un autre utilisateur a modifié cette facture pendant votre saisie. Rechargez-la pour voir la dernière version, puis refaites votre modification.",
+      "intro": "Une facture émise conserve ses lignes, ses montants et sa numérotation. Ces coordonnées peuvent toujours être modifiées.",
+      "email": "E-mail de l’acheteur",
+      "phone": "Téléphone de l’acheteur",
+      "phoneHint": "Avec l’indicatif pays, par exemple +33612345678",
+      "contact": "Contact",
+      "owner": "Responsable",
+      "dueDate": "Date d’échéance",
+      "dueHint": "Allonger ou raccourcir les conditions de paiement.",
+      "reference": "Référence",
+      "notes": "Notes",
+      "terms": "Conditions"
+    },
+    "payDialog": {
+      "overpayNote": "Cela dépasse le solde de {extra}. Vous devrez confirmer avant que ce montant soit enregistré comme avoir.",
+      "overpayConfirm": "{extra} de plus que le solde seront enregistrés et affichés comme avoir sur la facture. Appuyez à nouveau sur le bouton pour confirmer.",
+      "problems": {
+        "tooMuch": "Ce montant dépasse ce que la facture doit encore."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Marquer comme payée",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "confirm": "Enregistrer un paiement",
+      "message": "Enregistrer le solde complet de {amount} comme reçu aujourd’hui ?",
+      "method": "Reçu par"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "La date de remboursement ne peut pas être dans le futur."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Rembourser",
+      "receipt": "Reçu",
+      "refundOf": "rembourse {receipt}",
+      "refundedSoFar": "{amount} remboursés à ce jour"
+    },
+    "activity": {
+      "none": "Rien ne s’est encore passé.",
+      "actors": {
+        "buyer": "L’acheteur",
+        "gateway": "Passerelle de paiement",
+        "system": "Système"
+      },
+      "events": {
+        "sent": "Envoyée à l’acheteur",
+        "overdue": "Passée en retard",
+        "partially_paid": "Partiellement payée",
+        "link_regenerated": "Lien public remplacé",
+        "link_revoked": "Lien public désactivé",
+        "pay_attempt": "Tentative de paiement en ligne",
+        "credit_note_issued": "Avoir"
+      }
+    },
+    "linked": {
+      "invoiced": "Facturé",
+      "paid": "Payé",
+      "outstanding": "Dû",
+      "overdue": "En retard",
+      "latest": "{count, plural, one {Affichage de la dernière facture.} other {Affichage des # dernières factures.}}"
+    },
+    "detail": {
+      "editDetails": "Modifier les détails",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Créer un avoir",
+      "linkOffBanner": "Le lien de l’acheteur est désactivé, l’acheteur ne peut donc pas ouvrir cette facture. Créez un nouveau lien dans la carte du lien.",
+      "refunded": "Remboursé",
+      "credited": "Crédité",
+      "credit": "Avoir",
+      "detailsLabel": "Détails de la facture",
+      "contact": "Contact",
+      "company": "Entreprise",
+      "quote": "Devis",
+      "salesOrder": "Commande client",
+      "recurring": "Échéancier récurrent",
+      "makeRecurring": "Rendre récurrente",
+      "reference": "Référence",
+      "owner": "Responsable",
+      "createdBy": "Créée par",
+      "overpaid": "Plus a été reçu ou crédité que ce que demande cette facture. Le trop-perçu apparaît comme un avoir.",
+      "voidNeedsRefund": "Pour invalider cette facture, remboursez d’abord ses paiements. Elle ne doit pas non plus avoir d’avoirs.",
+      "sources": {
+        "manual": "Créée manuellement",
+        "quote": "À partir d’un devis",
+        "order": "À partir d’une commande",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Boutique en ligne",
+        "api": "API",
+        "ai": "Assistant IA",
+        "recurring": "Facture récurrente",
+        "sales_order": "Commande client"
+      },
+      "creditNotes": {
+        "title": "Avoirs",
+        "create": "Créer un avoir",
+        "loading": "Chargement des avoirs",
+        "none": "Aucun avoir sur cette facture.",
+        "draft": "Brouillon",
+        "status": {
+          "draft": "Brouillon",
+          "issued": "Émise",
+          "void": "Invalider"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Lien public",
+      "address": "Adresse du lien",
+      "state": {
+        "active": "Actif",
+        "revoked": "Désactivé",
+        "expired": "Expiré"
+      },
+      "off": {
+        "revoked": "Le lien a été désactivé. L’acheteur voit une page indiquant que la facture n’est pas disponible.",
+        "expired": "Le lien a expiré. L’acheteur voit une page indiquant que la facture n’est pas disponible."
+      },
+      "copy": "Copier",
+      "copied": "Copié",
+      "expires": "Expire le",
+      "revokedAt": "Désactivé",
+      "views": "Nombre d’ouvertures",
+      "firstViewed": "Première ouverture",
+      "lastViewed": "Dernière ouverture",
+      "open": "Ouvrir la page de l’acheteur",
+      "regenerate": "Nouveau lien",
+      "revoke": "Désactiver",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "regenerateTitle": "Créer un nouveau lien",
+      "regenerateWarning": "Le lien actuel cesse de fonctionner immédiatement. Toute personne qui le possède verra que la facture n’est pas disponible.",
+      "regenerateConfirm": "Créer le lien",
+      "expiry": "Le nouveau lien est valable pendant",
+      "expiryNever": "Sans expiration",
+      "expiryDays": "{count, plural, one {# jour} other {# jours}}",
+      "revokeTitle": "Désactiver le lien ?",
+      "revokeMessage": "L’acheteur ne pourra plus ouvrir ni payer cette facture depuis ce lien. Vous pourrez créer un nouveau lien plus tard.",
+      "revokeConfirm": "Désactiver le lien"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Cette facture est déjà émise : ses lignes et ses montants ne peuvent plus être modifiés.",
+        "INV_NOT_ISSUED": "Seule une facture émise peut le faire. Émettez d’abord le brouillon.",
+        "INV_ALREADY_VOID": "Cette facture est déjà invalidée.",
+        "INV_HAS_PAYMENTS": "Cette facture comporte encore des paiements. Remboursez-les d’abord, puis invalidez la facture.",
+        "INV_HAS_CREDITS": "Des avoirs sont rattachés à cette facture. Invalidez d’abord les avoirs, puis la facture.",
+        "INV_NOT_DELETABLE": "Seul un brouillon peut être supprimé. Invalidez plutôt cette facture.",
+        "INV_NO_RECIPIENT": "La facture n’a pas d’adresse e-mail ni de numéro de téléphone pour ce canal. Ajoutez-en un via Modifier les détails, puis réessayez.",
+        "INV_LINK_UNAVAILABLE": "Cette facture n’a pas de lien actif. Créez-en un nouveau depuis la carte des liens.",
+        "INV_OWNER_INVALID": "Cette personne n’est pas membre actif de cet espace de travail. Choisissez un autre responsable.",
+        "PAY_OVERPAYMENT": "Ce montant dépasse le solde dû de la facture. Réduisez le montant ou confirmez que vous enregistrez un avoir.",
+        "PAY_FUTURE_DATE": "La date de paiement ne peut pas être dans le futur.",
+        "PAY_CURRENCY_MISMATCH": "Le paiement doit être dans la même devise que la facture.",
+        "PAY_REFUND_EXCEEDS": "Ce montant dépasse ce qui peut encore être remboursé sur ce paiement.",
+        "PAY_NOT_REFUNDABLE": "Cette écriture ne peut pas être remboursée. Seul un paiement dont un solde subsiste peut l’être.",
+        "PAY_NOTHING_TO_PAY": "Cette facture ne comporte plus de somme à payer.",
+        "ROW_VERSION_CONFLICT": "Quelqu’un d’autre vient de modifier cette facture. Rechargez la page pour voir la dernière version, puis réessayez."
+      }
+    }
+  }
+}

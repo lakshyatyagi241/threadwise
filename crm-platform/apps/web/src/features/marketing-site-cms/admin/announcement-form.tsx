@@ -201,7 +201,7 @@ function Editor({ row }: { row: Announcement | undefined }) {
             maxLength={500}
             value={f.linkUrl}
             onChange={(e) => set('linkUrl', e.target.value)}
-            placeholder="/pricing or https://..."
+            placeholder={t('linkUrlPlaceholder')}
           />
         </Field>
         <Field label={t('linkLabel')} htmlFor="an-label" hint={t('linkLabelHint')}>

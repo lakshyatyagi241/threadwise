@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "下一步",
+      "back": "上一步",
+      "sending": "发送中...",
+      "optional": "可选",
+      "selectPlaceholder": "请选择选项",
+      "stepOf": "第 {n} 步，共 {total} 步",
+      "summaryTitle": "{count, plural, other {请修正 # 个字段}}",
+      "successTitle": "谢谢",
+      "continue": "继续",
+      "previewNotice": "预览：此处不会发送任何内容。",
+      "honeypot": "请将此字段留空",
+      "privacyPolicy": "隐私政策",
+      "poweredBy": "由 {brand} 提供支持",
+      "brandName": "表单",
+      "captchaNeeded": "发送前请先完成下方验证。",
+      "rateLimited": "尝试次数过多，请稍候再试。",
+      "closed": "此表单目前不接受回复。",
+      "genericError": "出现错误，您的回复未发送。请重试。",
+      "notAvailableTitle": "此表单不可用",
+      "notAvailableBody": "链接可能有误，或表单已关闭。",
+      "errors": {
+        "required": "此字段为必填项。",
+        "consent_required": "请勾选此框以继续。",
+        "invalid_email": "请输入有效的邮箱地址。",
+        "invalid_phone": "请输入有效的电话号码，如可以请包含国家区号。",
+        "invalid_number": "请输入有效数字。",
+        "invalid_date": "请输入有效日期。",
+        "too_small": "请输入不小于 {min} 的值。",
+        "too_large": "请输入不大于 {max} 的值。",
+        "too_short": "请至少输入 {min} 个字符。",
+        "too_long": "最多输入 {max} 个字符。",
+        "pattern": "格式不符合要求。",
+        "invalid_option": "请选择列出的选项之一。"
+      },
+      "closedTitle": "此表单已关闭"
+    }
+  }
+}

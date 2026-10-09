@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "AI-training"
+    },
+    "common": {
+      "dismiss": "Negeren"
+    },
+    "paywall": {
+      "kicker": "Abonnement",
+      "title": "AI-training zit niet in je abonnement",
+      "body": "Je abonnement bevat geen AI-assistenten. Upgrade om deze functie te ontgrendelen.",
+      "upgrade": "Abonnementen bekijken"
+    },
+    "responder": {
+      "title": "Wie beantwoordt je WhatsApp?",
+      "body": "Als je de eigen Business Agent van Meta inschakelt, houden onze AI en automatische antwoorden op trefwoorden zich op deze workspace afzijdig, zodat je klant nooit twee antwoorden op hetzelfde bericht krijgt.",
+      "metaCheck": "Ik gebruik Meta Business Agent",
+      "mode": {
+        "wadesk_only": {
+          "label": "Onze AI antwoordt",
+          "desc": "Onze AI en automatische antwoorden op trefwoorden handelen chats af (standaard)."
+        },
+        "meta_agent_only": {
+          "label": "Meta-agent antwoordt",
+          "desc": "De Business Agent van Meta antwoordt. Wij loggen alleen de thread, onze AI blijft stil."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta-agent, daarna overdracht",
+          "desc": "Meta vangt de eerste vragen op. Als die escaleert, komt het gesprek in je teaminbox terecht voor een persoon. Onze automatische AI blijft stil."
+        }
+      },
+      "save": "Opslaan",
+      "hint": "De agent van Meta heeft een WhatsApp Business-nummer (Cloud API) nodig. Nummers op de onofficiële engine gebruiken altijd onze AI.",
+      "readOnly": "Je kunt deze instelling zien maar niet wijzigen.",
+      "saved": "Responder-modus opgeslagen.",
+      "saveFailed": "De responder-modus kon niet worden opgeslagen.",
+      "loadError": "De responder-modus kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "loading": "Responder-modus laden"
+    },
+    "list": {
+      "tip": "Tip",
+      "tipBody": "Slimme agents sturen je <link>chatbotwidgets</link> en de AI-stap van je flows aan. De bouwer in vijf stappen leidt je door identiteit, persona, brein, veiligheid en kennis.",
+      "statusViews": "Agentstatus",
+      "view": {
+        "all": "Alle agents",
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "status": {
+        "all": "Alle",
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "knowledgeTip": "Kennistip",
+      "knowledgeTipBody": "Eén FAQ-vraag met antwoord is vaak genoeg. Een paar URL's van helppagina's dekken de meeste supportvragen, dus je hoeft niet je hele site te laden.",
+      "workspace": "Workspace",
+      "title": "AI",
+      "titleAccent": "Training",
+      "intro": "Bouw slimme agents die in de stem van je merk spreken. Train ze op URL's, tekst, vraag-antwoordparen en bestanden.",
+      "activePill": "{count} actief",
+      "newAgent": "Nieuwe slimme agent",
+      "card": {
+        "total": "Totaal aantal agents",
+        "knowledge": "Kennisitems",
+        "avg": "Gem. / agent",
+        "health": "Status",
+        "activeHint": "{count} actief",
+        "indexedHint": "{count} geïndexeerd",
+        "entriesUnit": "items"
+      },
+      "health": {
+        "healthy": "gezond",
+        "empty": "leeg",
+        "attention": "aandacht"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Provider",
+        "knowledge": "Kennis",
+        "tone": "Toon",
+        "updated": "Bijgewerkt",
+        "actions": "Acties"
+      },
+      "search": "Zoeken op naam of slug…",
+      "loading": "Agents laden",
+      "loadError": "De agents konden niet worden geladen",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Nog geen slimme agents",
+      "emptyBody": "Bouw je eerste agent. De bouwer in vijf stappen leidt je door identiteit, persona, brein, veiligheid en de kennis die hij moet hebben.",
+      "buildAgent": "Slimme agent bouwen",
+      "noMatch": "Geen agent komt overeen met je zoekopdracht of statusweergave.",
+      "entries": "{count, plural, one {# item} other {# items}}",
+      "edit": "Agent bewerken",
+      "editNamed": "{name} bewerken",
+      "duplicate": "Agent dupliceren",
+      "duplicateNamed": "{name} dupliceren",
+      "deleteAgent": "Agent verwijderen",
+      "deleteNamed": "{name} verwijderen",
+      "deleteTitle": "„{name}” verwijderen?",
+      "deleteBody": "De agent en zijn kennisitems worden verwijderd. Widgets en flows die hem gebruiken, stoppen met antwoorden via deze agent totdat je een andere kiest.",
+      "delete": "Agent verwijderen",
+      "keep": "Behouden",
+      "deleted": "Agent verwijderd.",
+      "deleteFailed": "Verwijderen mislukt: {reason}",
+      "duplicateFailed": "De agent kon niet worden gedupliceerd.",
+      "networkError": "netwerkfout",
+      "showing": "Weergegeven:",
+      "of": "van",
+      "agentsCount": "{count, plural, one {# agent} other {# agents}}",
+      "loadMore": "Meer laden"
+    },
+    "builder": {
+      "back": "Terug naar AI-training",
+      "crumb": "AI-training",
+      "crumbNew": "Nieuw",
+      "crumbEdit": "Bewerken",
+      "titleNew": "Bouw een slimme",
+      "titleEdit": "Bewerk de slimme",
+      "titleAccent": "agent",
+      "stateSaved": "Opgeslagen",
+      "stateDraft": "Concept / niet opgeslagen",
+      "saveDraft": "Concept opslaan",
+      "stepper": "Bouwstappen",
+      "steps": {
+        "identity": "Identiteit",
+        "persona": "Persona",
+        "brain": "Brein",
+        "safety": "Veiligheid",
+        "knowledge": "Kennis"
+      },
+      "stepOf": "Stap {n} van {total}",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "finish": "Voltooien en sluiten",
+      "loading": "Agent laden",
+      "loadError": "De agent kon niet worden geladen",
+      "notFoundTitle": "Agent niet gevonden",
+      "notFoundBody": "Deze agent bestaat niet in je workspace of is verwijderd.",
+      "backToList": "Terug naar AI-training",
+      "saved": "Agent opgeslagen.",
+      "saveFailed": "Opslaan mislukt. Controleer de velden en probeer het opnieuw.",
+      "conflict": "Deze agent is elders gewijzigd. Laad de pagina opnieuw voor de nieuwste versie en sla daarna opnieuw op.",
+      "problem": {
+        "name": "Geef je assistent een naam.",
+        "greeting": "Schrijf een openingszin.",
+        "model": "Kies een model.",
+        "tokens": "De antwoordlengte moet tussen 50 en 4000 tokens liggen.",
+        "temperature": "Creativiteit moet tussen 0 en 2 liggen."
+      },
+      "identity": {
+        "title": "Agentidentiteit",
+        "required": "verplicht",
+        "name": "Weergavenaam van de agent",
+        "namePlaceholder": "bijv. Prijsconciërge",
+        "nameHint": "Voor je eigen administratie. Bezoekers zien dit label niet.",
+        "status": "Uitrolstatus",
+        "statusActive": "Live: kies deze agent in widgets en flows",
+        "statusPaused": "Gepauzeerd: verbergen in keuzelijsten",
+        "statusHint": "Gepauzeerde agents blijven in de lijst staan maar kunnen niet aan nieuwe widgets worden gekoppeld.",
+        "language": "Voorkeurstaal",
+        "languageHint": "ISO 639-1-code. Past zich aan de taal van de bezoeker aan als die afwijkt.",
+        "tone": "Gespreksstijl",
+        "toneHint": "Bepaalt de schrijfstijl, los van de persona-omschrijving.",
+        "tones": {
+          "helpful": "Behulpzaam · kalm en to the point",
+          "friendly": "Vriendelijk · warm en ontspannen",
+          "formal": "Formeel · neutraal en precies",
+          "playful": "Speels · luchtig en kwiek"
+        }
+      },
+      "persona": {
+        "title": "Persona en openingszin",
+        "tag": "inhoud",
+        "greeting": "Openingszin",
+        "greetingPlaceholder": "Hoi! Ik help je graag. Vraag me alles over prijzen of abonnementen.",
+        "greetingHint": "Zichtbaar voor bezoekers. Wordt getoond als eerste bubbel wanneer de chat opent.",
+        "brief": "Karakteromschrijving (systeeminstructies)",
+        "briefPlaceholder": "Je bent de vriendelijke supportmedewerker van Acme Inc. Antwoord altijd in korte zinnen en draag alles over terugbetalingen over aan een persoon.",
+        "briefHint": "Intern, nooit zichtbaar voor bezoekers. Neem wat wel en niet mag en escalatieregels op."
+      },
+      "brain": {
+        "title": "Model en antwoordinstellingen",
+        "tag": "brein",
+        "provider": "Modelprovider",
+        "providerHint": "Je beheerder stelt de providersleutels in. Providers waarvoor je een eigen sleutel hebt toegevoegd worden ook getoond, bij abonnementen die dat toestaan.",
+        "notEnabled": "{name} (niet ingeschakeld)",
+        "model": "Modelnaam",
+        "modelHint": "Kies een van de voor jou ingeschakelde modellen, of typ een andere model-id.",
+        "noModels": "Er is nog geen AI-model ingeschakeld voor je workspace. Vraag je beheerder er een in te schakelen, of voeg je eigen sleutel toe onder Instellingen, AI-sleutels.",
+        "tokens": "Budget voor antwoordlengte (tokens)",
+        "tokensHint": "Ongeveer 1 token is 4 tekens. 400 past bij een alinea.",
+        "temperature": "Creativiteit (0 = strikt, 2 = wild)",
+        "temperatureHint": "Lager is consistent en feitelijk. Hoger geeft meer gevarieerde formuleringen."
+      },
+      "safety": {
+        "title": "Terugvaloptie en overdracht aan een persoon",
+        "tag": "veiligheid",
+        "fallback": "Terugvalantwoord (gebruikt als het model een fout geeft)",
+        "fallbackPlaceholder": "Een collega neemt binnenkort contact met je op. Bedankt voor je geduld.",
+        "fallbackHint": "Wordt verzonden zoals geschreven als het model niets teruggeeft of de aanroep mislukt.",
+        "handoff": "Overdracht aan een persoon inschakelen",
+        "handoffHint": "De bezoeker typt de triggerzin, de agent stopt met antwoorden en je teaminbox licht op.",
+        "keyword": "Triggerzin",
+        "keywordPlaceholder": "met een mens praten",
+        "keywordHint": "Wanneer een bezoeker dit ergens in een bericht typt, wordt de overdracht gestart.",
+        "ack": "Bevestiging van overdracht",
+        "ackPlaceholder": "Natuurlijk, ik haal er nu een collega bij. Blijf aan de lijn.",
+        "ackHint": "Het laatste bericht voordat de agent stil wordt."
+      }
+    },
+    "knowledge": {
+      "title": "De agent trainen",
+      "tag": "kennis",
+      "saveFirst": "Sla de agent eerst op. Kennisitems worden gekoppeld aan een opgeslagen agent.",
+      "addLabel": "Kennis toevoegen",
+      "add": {
+        "url": {
+          "title": "Live URL",
+          "body": "Haal een openbare pagina op en bewaar de tekst ervan."
+        },
+        "text": {
+          "title": "Vrije tekst",
+          "body": "Plak een helpfragment of een beleidstekst."
+        },
+        "qa": {
+          "title": "Vraag-antwoordpaar",
+          "body": "Eén vraag met het bijbehorende standaardantwoord."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT en meer",
+          "body": "Upload een bestand. De tekst wordt voor je uitgelezen."
+        }
+      },
+      "panel": {
+        "url": "Een openbare URL ophalen",
+        "text": "Platte tekst plakken",
+        "qa": "Enkel vraag-antwoordpaar",
+        "file": "Een kennisbestand uploaden"
+      },
+      "label": "Label",
+      "url": "URL",
+      "content": "Tekst",
+      "question": "Vraag",
+      "answer": "Antwoord",
+      "file": "Bestand",
+      "placeholder": {
+        "label": {
+          "url": "Label (bijv. Prijzenpagina)",
+          "text": "Label (bijv. Samenvatting terugbetalingsbeleid)",
+          "qa": "Label (bijv. Termijn terugbetaling)",
+          "file": "Label (bijv. Producthandboek)"
+        },
+        "content": "Plak alle tekst die de agent moet kennen…",
+        "question": "Vraag, bijv. Hoe lang duren terugbetalingen?",
+        "answer": "Antwoord, bijv. Terugbetalingen worden binnen 3 tot 5 werkdagen verwerkt."
+      },
+      "urlHint": "Alleen openbare http- en https-pagina's worden gelezen. De pagina wordt op de achtergrond opgehaald, dus het item toont even Verwerken.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV of HTML, tot 10 MB. De tekst wordt automatisch uitgelezen.",
+      "uploading": "Uploadvoortgang",
+      "submit": {
+        "url": "Ophalen en trainen",
+        "text": "Tekst opslaan",
+        "qa": "Paar opslaan",
+        "file": "Uploaden"
+      },
+      "cancel": "Annuleren",
+      "added": "Kennis toegevoegd.",
+      "addFailed": "Het item kon niet worden toegevoegd.",
+      "problem": {
+        "label": "Voeg een label toe zodat je dit item later kunt terugvinden.",
+        "url": "Voeg het paginaadres toe.",
+        "content": "Plak eerst wat tekst.",
+        "question": "Voeg de vraag toe.",
+        "answer": "Voeg het antwoord toe.",
+        "file": "Kies een bestand (PDF, DOCX, TXT, Markdown, CSV of HTML).",
+        "file_type": "Geaccepteerde bestandstypen: TXT, Markdown, CSV, HTML, PDF, DOCX. Plak voor al het andere de tekst in een tekstitem.",
+        "file_legacyDoc": "Oude .doc-bestanden worden niet ondersteund. Sla opnieuw op als .docx (of exporteer naar .pdf) en upload opnieuw.",
+        "file_size": "Dat bestand is groter dan 10 MB.",
+        "file_empty": "Dat bestand is leeg.",
+        "tooLarge": "Dat is te veel tekst voor één keer plakken. Upload het in plaats daarvan als bestand."
+      },
+      "col": {
+        "kind": "Soort",
+        "label": "Label",
+        "state": "Status",
+        "actions": "Acties"
+      },
+      "kind": {
+        "url": "url",
+        "text": "tekst",
+        "qa": "v&a",
+        "file": "bestand"
+      },
+      "state": {
+        "ready": "gereed",
+        "processing": "verwerken",
+        "failed": "mislukt"
+      },
+      "tokens": "ongeveer {count} tokens",
+      "workspaceWide": "workspacebreed",
+      "loading": "Items laden",
+      "loadError": "De items konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": "Nog geen kennis. Kies hierboven een soort om het eerste item toe te voegen.",
+      "remove": "Verwijderen",
+      "removeNamed": "{label} verwijderen",
+      "removeTitle": "Dit kennisitem verwijderen?",
+      "removeBody": "De agent stopt met het gebruiken ervan voor nieuwe antwoorden. Oudere gesprekken blijven ongewijzigd.",
+      "keep": "Behouden",
+      "removed": "Verwijderd.",
+      "removeFailed": "Verwijderen mislukt."
+    }
+  }
+}

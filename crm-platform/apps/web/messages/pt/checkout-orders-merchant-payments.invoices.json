@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Loja / Faturas",
+      "title": "Faturas",
+      "subtitle": "Faturas criadas a partir de pedidos da loja. Gerencie-as em Vendas.",
+      "allInvoices": "Todas as faturas",
+      "loading": "Carregando faturas",
+      "searching": "Procurando mais faturas da loja...",
+      "search": {
+        "label": "Buscar faturas",
+        "placeholder": "Buscar por número, comprador ou referência..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "Todos os status"
+      },
+      "columns": {
+        "number": "Fatura",
+        "buyer": "Comprador",
+        "status": "Status",
+        "total": "Total",
+        "issued": "Emitida",
+        "due": "Vencimento",
+        "actions": "Ações"
+      },
+      "row": {
+        "draft": "Rascunho",
+        "openInSales": "Abrir em Vendas",
+        "openAria": "Abrir a fatura {number} em Vendas"
+      },
+      "empty": {
+        "title": "Ainda não há faturas de pedidos da loja",
+        "message": "Abra um pedido e selecione Criar fatura.",
+        "action": "Ir para pedidos"
+      },
+      "noMatch": {
+        "title": "Nenhuma fatura da loja corresponde",
+        "message": "Altere a busca ou o status para ver mais."
+      },
+      "capped": {
+        "title": "Nenhuma encontrada nas faturas mais recentes",
+        "message": "As faturas mais recentes de Vendas foram verificadas e nenhuma veio de um pedido da loja. Carregue mais para olhar mais atrás.",
+        "note": "Apenas as faturas mais recentes foram verificadas. Carregue mais para olhar mais atrás."
+      }
+    }
+  }
+}

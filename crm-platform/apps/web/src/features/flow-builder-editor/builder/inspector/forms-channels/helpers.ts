@@ -1,4 +1,8 @@
+import type { useTranslations } from 'next-intl';
 import type { FlbCommerceProduct } from '@crm/contracts';
+
+/** A translator over the `flb.builder.formsChannels.helpers` namespace (the label builders below take it from their caller). */
+export type HelperT = ReturnType<typeof useTranslations>;
 
 /**
  * What a commerce node stores per product: WaDesk's picker saves the whole product it listed (WaDesk's key names, kept so
@@ -92,20 +96,27 @@ export function withSavedOption(
 export const onUnlessFalse = (v: unknown): boolean => v !== false;
 
 /** A store option label: `Name · USD` when the store has a currency (WaDesk `name + (currency ? ' · ' + currency : '')`). */
-export const storeLabel = (name: string, currency: string | null | undefined): string =>
-  currency ? `${name} · ${currency}` : name;
+export const storeLabel = (
+  name: string,
+  currency: string | null | undefined,
+  t: HelperT,
+): string => (currency ? t('storeWithCurrency', { name, currency }) : name);
 
 /** A flow option label: `Name · live` / `Name · draft`, the way WaDesk's Sub-flow and hand-off pickers show a flow. */
-export const flowOptionLabel = (name: string, isPublished: boolean): string =>
-  `${name || 'Flow'}${isPublished ? ' · live' : ' · draft'}`;
+export const flowOptionLabel = (name: string, isPublished: boolean, t: HelperT): string =>
+  t(isPublished ? 'flowLive' : 'flowDraft', { name: name || t('flowFallback') });
 
 /** A booking service label: `Name (inactive) · 30 min` (inactive and duration parts only when they apply). */
-export const serviceLabel = (name: string, active: boolean, duration: number | null): string =>
-  `${name}${active ? '' : ' (inactive)'}${duration ? ` · ${duration} min` : ''}`;
+export const serviceLabel = (
+  name: string,
+  active: boolean,
+  duration: number | null,
+  t: HelperT,
+): string => t('service', { name, active: active ? 'yes' : 'no', minutes: duration || 0 });
 
 /** A form label: drafts are listed too and say so. */
-export const formLabel = (title: string, isPublished: boolean): string =>
-  `${title}${isPublished ? '' : ' (draft)'}`;
+export const formLabel = (title: string, isPublished: boolean, t: HelperT): string =>
+  t('form', { title, published: isPublished ? 'yes' : 'no' });
 
 /**
  * Pipeline stage labels. WaDesk has one pipeline per workspace and shows the bare stage name; when the workspace has more
@@ -113,12 +124,14 @@ export const formLabel = (title: string, isPublished: boolean): string =>
  */
 export function stageOptions(
   stages: ReadonlyArray<{ id: string; name: string; pipeline: string | null }>,
+  t: HelperT,
 ): { v: string; l: string }[] {
   const pipelines = new Set(stages.map((s) => s.pipeline ?? ''));
   const several = pipelines.size > 1;
   return stages.map((s) => ({
     v: s.id,
-    l: several && s.pipeline ? `${s.pipeline} · ${s.name}` : s.name,
+    l:
+      several && s.pipeline ? t('stageInPipeline', { pipeline: s.pipeline, name: s.name }) : s.name,
   }));
 }
 
@@ -136,8 +149,11 @@ export const agentOptionLabel = (
   provider: string | null | undefined,
   model: string | null | undefined,
   id: string,
-): string =>
-  `${name || `Agent ${id.slice(0, 8)}`}${provider && model ? ` · ${provider}/${model}` : ''}`;
+  t: HelperT,
+): string => {
+  const label = name || t('agentFallback', { id: id.slice(0, 8) });
+  return provider && model ? t('agentWithModel', { name: label, provider, model }) : label;
+};
 
 /** Where the Google Form node's Apps Script downloads from (same origin, the session cookie authorises it). */
 export const appsScriptHref = (formId: string): string =>

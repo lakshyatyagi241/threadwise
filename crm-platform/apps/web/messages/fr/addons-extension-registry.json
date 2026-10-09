@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Modules complémentaires et modules",
+      "packs": "Modules complémentaires (facturation)",
+      "extensions": "Modules complémentaires (code)",
+      "workspace": "Modules complémentaires"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "saving": "Enregistrement",
+      "close": "Fermer",
+      "dismiss": "Ignorer",
+      "admin": "Admin",
+      "settings": "Paramètres",
+      "optional": "facultatif",
+      "required": "obligatoire",
+      "readOnly": "Vous pouvez consulter cette page, mais seul un super administrateur peut la modifier.",
+      "requestId": "ID de requête",
+      "errors": {
+        "forbidden": "Vous n’avez pas accès à cette page.",
+        "request": "La requête n’a pas pu aboutir.",
+        "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
+        "conflict": "Quelqu’un d’autre vient de modifier cet élément. Rechargez la page et réessayez."
+      }
+    },
+    "packs": {
+      "crumbHere": "Modules complémentaires",
+      "eyebrow": "Admin · Facturation et forfaits · Modules complémentaires",
+      "titleLead": "Modules",
+      "titleAccent": "complémentaires",
+      "title": "Modules complémentaires",
+      "description": "Packs de fonctionnalités à la carte qu’un client achète en plus de son forfait, comme « Module Campagnes » ou « +1 numéro WhatsApp ». Chaque module complémentaire accorde les fonctionnalités et limites que vous définissez, ajoutées au forfait du client. Ils apparaissent sur la page Compte du client dès qu’il a un forfait actif.",
+      "new": "Nouveau module complémentaire",
+      "empty": {
+        "title": "Aucun module complémentaire pour le moment.",
+        "action": "Créez votre premier module complémentaire"
+      },
+      "table": {
+        "label": "Modules complémentaires",
+        "name": "Nom",
+        "price": "Prix",
+        "period": "Période",
+        "grants": "Accorde",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "price": {
+        "free": "Gratuit",
+        "lifetime": "paiement unique"
+      },
+      "period": {
+        "days": "{count} jours",
+        "weeks": "{count} semaines",
+        "months": "{count} mois",
+        "years": "{count} ans"
+      },
+      "grants": {
+        "none": "rien de défini",
+        "unlimited": "{name} illimité(e)",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Actif",
+        "off": "Désactivé"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "enable": "Activer",
+        "disable": "Désactiver",
+        "delete": "Supprimer"
+      },
+      "toasts": {
+        "created": "Module complémentaire créé.",
+        "updated": "Module complémentaire mis à jour.",
+        "activated": "{name} activé",
+        "deactivated": "{name} désactivé",
+        "deleted": "{name} supprimé"
+      },
+      "delete": {
+        "title": "Supprimer {name} ?",
+        "body": "Supprimer ce module complémentaire ? Les espaces de travail qui l’ont acheté le conservent jusqu’à son expiration.",
+        "confirm": "Supprimer",
+        "inUse": "{count, plural, one {# espace de travail possède ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.} other {# espaces de travail possèdent ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.}}"
+      },
+      "errors": {
+        "generic": "Le module complémentaire n’a pas pu être enregistré.",
+        "forbidden": "Seul un super administrateur peut modifier les modules complémentaires.",
+        "notFound": "Ce module complémentaire n’existe plus."
+      },
+      "editor": {
+        "crumbHere": "Modules complémentaires",
+        "crumbNew": "Nouveau",
+        "crumbEdit": "Modifier",
+        "eyebrowNew": "Admin · Modules complémentaires · Nouveau",
+        "eyebrowEdit": "Admin · Modules complémentaires · Modifier",
+        "titleNewLead": "Créer un",
+        "titleEditLead": "Modifier le",
+        "titleAccent": "module complémentaire",
+        "intro": "Un module complémentaire accorde UNIQUEMENT ce que vous activez, rien d’autre. Une limite laissée vide n’est pas modifiée, il n’y a donc aucun « illimité » accidentel.",
+        "fixTitle": "Veuillez corriger les points suivants :",
+        "cancel": "Annuler",
+        "create": "Créer le module complémentaire",
+        "saveChanges": "Enregistrer les modifications",
+        "basics": "Informations de base du module",
+        "features": "Fonctionnalités débloquées par ce module",
+        "featuresHint": "Cochez uniquement ce que ce module accorde. Tout ce qui reste décoché dépend du forfait du client.",
+        "coreFeature": "dans tous les forfaits",
+        "limits": "Augmentations de limites",
+        "limitsHint": "Vide = le module ne touche pas cette limite. Saisissez un nombre à AJOUTER au forfait (par exemple +2 appareils). Utilisez -1 pour illimité.",
+        "fields": {
+          "name": "Nom",
+          "namePlaceholder": "Module Campagnes",
+          "subtitle": "Sous-titre",
+          "subtitlePlaceholder": "Débloquer les campagnes",
+          "amount": "Prix",
+          "offerAmount": "Prix promotionnel (facultatif)",
+          "currency": "Devise",
+          "billingDuration": "Durée",
+          "billingUnit": "Unité",
+          "billingMode": "Facturation",
+          "sortOrder": "Ordre de tri",
+          "isActive": "Actif",
+          "isLifetime": "À vie (paiement unique)"
+        },
+        "modes": {
+          "one_time": "Paiement unique (rachat possible à l’expiration)",
+          "recurring": "Récurrent (renouvelé par prélèvement automatique)"
+        },
+        "units": {
+          "days": "Jours",
+          "weeks": "Semaines",
+          "months": "Mois",
+          "years": "Années"
+        },
+        "problems": {
+          "name": "Saisissez un nom.",
+          "amount": "Saisissez un montant tel que 19 ou 19.99.",
+          "offerAmount": "Le prix promotionnel doit être inférieur au prix.",
+          "currency": "Utilisez un code de devise à trois lettres.",
+          "billingDuration": "Saisissez un nombre entier supérieur ou égal à 1.",
+          "sortOrder": "Saisissez un nombre entier.",
+          "limits": "Les limites sont des nombres entiers, ou -1 pour illimité.",
+          "form": "Vérifiez les champs en surbrillance."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Modules complémentaires",
+      "eyebrow": "Admin · Modules complémentaires",
+      "titleLead": "Installer un",
+      "titleAccent": "module complémentaire",
+      "title": "Modules complémentaires",
+      "description": "Les modules complémentaires ajoutent des fonctionnalités à cette installation. Instagram est le premier. Vérifiez votre code d’achat, importez le package et il s’installe sur place. Vos données et paramètres ne sont pas modifiés.",
+      "coreVersion": "Cœur",
+      "packsLead": "Vous cherchez les packs de fonctionnalités payants que les clients achètent en plus d’un forfait ?",
+      "packsLink": "Ce sont les modules complémentaires de forfait (facturation)",
+      "packsTail": ". Cette page installe du code.",
+      "installed": {
+        "title": "Modules complémentaires installés",
+        "empty": "Aucun module complémentaire installé pour le moment. Vérifiez votre code d’achat ci-dessus, puis importez un package.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# fichier} other {# fichiers}}",
+        "inPlace": "Module sur place",
+        "filesKept": "fichiers conservés sur le disque",
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "inactive": "Inactif",
+        "enable": "Activer",
+        "disable": "Désactiver",
+        "remove": "Retirer",
+        "reactivate": "Réactiver",
+        "footnote": "Retirer un module complémentaire supprime uniquement les fichiers qu’il a installés, suivis depuis son ajout, donc les fichiers du cœur ne sont jamais touchés. Les données restent dans la base de données."
+      },
+      "verify": {
+        "title": "Vérifier votre code d’achat",
+        "body": "La même licence {brand} qui débloque les mises à jour. Les modules complémentaires y sont liés.",
+        "placeholder": "ex. 8f2c1a44-...",
+        "label": "Code d’achat",
+        "action": "Vérifier",
+        "checking": "Vérification…",
+        "empty": "Saisissez d’abord votre code d’achat.",
+        "failed": "Échec de la vérification."
+      },
+      "upload": {
+        "title": "Importer le package du module complémentaire",
+        "body": "Le ZIP est inspecté avant toute écriture. Un package mal formé ou incompatible est refusé sans toucher à votre installation.",
+        "choose": "Choisir un .zip de module complémentaire",
+        "max": "100 Mo max.",
+        "action": "Installer",
+        "installing": "Installation…",
+        "progress": "Importation et fusion en cours. Ne fermez pas cet onglet."
+      },
+      "confirm": {
+        "removeTitle": "Retirer {name} ?",
+        "removeBody": "Cela supprime les fichiers qu’il a installés. Ses données restent dans la base de données.",
+        "remove": "Retirer",
+        "moduleOffTitle": "Retirer {name} ?",
+        "moduleOffBody": "Cela désactive le module complémentaire, ses pages et automatisations cessent donc de fonctionner. Les fichiers sont conservés, vous pouvez donc le réactiver à tout moment. Rien n’est supprimé et ses données restent dans la base de données.",
+        "moduleOnTitle": "Réactiver {name} ?",
+        "moduleOnBody": "Cela réactive le module complémentaire. Ses fichiers sont toujours sur le disque, il fonctionne donc de nouveau immédiatement.",
+        "reactivate": "Réactiver"
+      },
+      "engines": {
+        "connected": "Connecté",
+        "notConnected": "Non connecté",
+        "connect": "Connecter",
+        "manage": "Gérer",
+        "disconnect": "Déconnecter",
+        "disconnectYes": "Oui, déconnecter",
+        "save": "Enregistrer et connecter",
+        "testing": "Connexion…",
+        "displayName": "Nom d’affichage",
+        "secret": "Jeton secret partagé",
+        "secretSaved": "•••••••• enregistré, laissez vide pour le conserver",
+        "secretNew": "collez le secret partagé",
+        "lastChecked": "Dernière vérification",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Fonctionne comme un déploiement {brand} distinct. Connexion par URL + secret, sans importation.",
+          "blocked": "Bloqué : module natif actif",
+          "blockedNote": "Le module Instagram natif est installé. Retirez-le ci-dessous pour connecter un {brand} distant.",
+          "modalTitle": "Connecter Instagram",
+          "modalBody": "Collez l’URL de votre déploiement {brand} et le jeton secret partagé. {app} vérifie la connexion via l’API. Rien n’est importé.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Affiché sur chaque libellé « Synchroniser depuis … », « Gérer sur … » et « URL … » de l’application.",
+          "disconnectTitle": "Déconnecter Instagram ?",
+          "disconnectBody": "Cela déconnecte Instagram de {app}. Instagram disparaîtra immédiatement du tableau de bord, des analyses, de la boîte de réception, des flux, des modèles et des réponses automatiques pour tous les espaces de travail, et rien ne sera utilisable tant que vous ne vous reconnectez pas. Continuer ?"
+        },
+        "email": {
+          "title": "E-mail",
+          "body": "La connexion relie la plateforme e-mail {brand} pour que les e-mails arrivent dans la boîte de réception de l’équipe, par URL + secret, sans importation.",
+          "modalTitle": "Connecter l’e-mail",
+          "modalBody": "Collez l’URL de votre déploiement {brand} et le jeton secret partagé. {app} vérifie la connexion via l’API. Rien n’est importé.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Affiché sur chaque libellé e-mail de l’application.",
+          "disconnectTitle": "Déconnecter l’e-mail ?",
+          "disconnectBody": "Cela déconnecte la plateforme e-mail de {app}. Les e-mails n’arrivent plus dans la boîte de réception de l’équipe pour tous les espaces de travail jusqu’à la reconnexion. Continuer ?"
+        }
+      },
+      "errors": {
+        "generic": "Cela n’a pas fonctionné.",
+        "forbidden": "Seul un super administrateur peut modifier les modules.",
+        "invalidPackage": "Le package n’est pas valide.",
+        "tooLarge": "Le package est trop volumineux.",
+        "coreTooOld": "Ce package nécessite une version du cœur plus récente.",
+        "engineConflict": "Instagram n’utilise qu’un seul moteur à la fois. Déconnectez d’abord l’autre."
+      }
+    },
+    "workspace": {
+      "title": "Modules complémentaires",
+      "description": "Packs de fonctionnalités supplémentaires à acheter en plus de votre abonnement.",
+      "needPlanTitle": "Un forfait actif est nécessaire pour les modules complémentaires",
+      "needPlanBody": "Les modules complémentaires sont des packs de fonctionnalités supplémentaires à acheter en plus de votre abonnement. Choisissez d’abord un forfait, puis revenez ici pour ajouter des fonctionnalités.",
+      "viewPlans": "Voir les forfaits",
+      "noneTitle": "Aucun module complémentaire disponible",
+      "noneBody": "Aucun module complémentaire n’est proposé actuellement. Revenez plus tard.",
+      "ownedTitle": "Vos modules complémentaires",
+      "ownedBody": "Packs actifs ajoutés à votre forfait actuel.",
+      "ends": "Se termine le {date}",
+      "lifetime": "À vie",
+      "autoRenews": "Renouvellement automatique",
+      "renewal": {
+        "cancel": "Annuler le renouvellement",
+        "confirmTitle": "Annuler le renouvellement ?",
+        "confirmBody": "Ce module complémentaire reste actif jusqu’à la fin de la période déjà payée, puis ne sera pas renouvelé.",
+        "confirm": "Annuler le renouvellement",
+        "keep": "Continuer à renouveler",
+        "forbidden": "Vous n’avez pas l’autorisation de modifier le forfait.",
+        "none": "Il n’y a aucun abonnement actif à annuler.",
+        "failed": "Nous n’avons pas pu annuler le renouvellement. Veuillez réessayer."
+      },
+      "active": "Actif",
+      "cardEyebrow": "Module complémentaire",
+      "catalogTitle": "Modules complémentaires",
+      "catalogBody": "Débloquez des fonctionnalités supplémentaires en plus de votre forfait actuel. Aucun changement de forfait nécessaire.",
+      "count": "{count, plural, one {# module complémentaire} other {# modules complémentaires}}",
+      "free": "Gratuit",
+      "lifetimePrice": "paiement unique",
+      "per": "/ {unit}",
+      "units": {
+        "days": "jours",
+        "weeks": "semaines",
+        "months": "mois",
+        "years": "ans"
+      },
+      "buy": "Ajouter au forfait",
+      "buyAgain": "Racheter",
+      "owned": "Possédé ×{count} · racheter en ajoute davantage",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} illimité(e)",
+        "add": "+{amount} {name}"
+      },
+      "error": "Les modules complémentaires n’ont pas pu être chargés."
+    },
+    "planFields": {
+      "fromModule": "depuis un module installé",
+      "unlimited": "Illimité"
+    }
+  }
+}

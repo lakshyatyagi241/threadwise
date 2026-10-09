@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "プラットフォーム",
+      "inbox": "受信箱とチャット",
+      "audience": "CRM",
+      "sales": "営業",
+      "campaigns": "キャンペーン",
+      "automation": "自動化",
+      "store": "ストア",
+      "apps": "マーケットプレイス",
+      "help": "サポートとヘルプ",
+      "settings": "設定"
+    },
+    "locked": "アップグレード",
+    "language": "言語",
+    "theme": "テーマ",
+    "themeLight": "ライト",
+    "themeDark": "ダーク",
+    "logout": "ログアウト",
+    "openMenu": "メニューを開く",
+    "admin": {
+      "title": "プラットフォームコンソール",
+      "note": "スーパー管理者のアクターが作成されると、プラットフォーム管理画面がここに表示されます。"
+    },
+    "soon": "近日公開",
+    "new": "新規",
+    "comingSoon": "近日公開",
+    "appGate": {
+      "title": "{app} はワークスペースに含まれていません",
+      "body": "{app} は任意のアプリです。マーケットプレイスから追加すると、メニューに表示されます。",
+      "bodyNoMarketplace": "{app} は任意のアプリで、このワークスペースにはありません。ワークスペース管理者にマーケットプレイスからの追加を依頼してください。",
+      "browse": "マーケットプレイスを見る",
+      "back": "ダッシュボードに戻る",
+      "unofficialTitle": "{app} は利用できません",
+      "unofficialBody": "{app} は、QR コードで連携された個人の WhatsApp 番号でのみ使用します。この番号はお使いのワークスペースでは有効になっていません。WhatsApp は公式の WhatsApp Business API を通じて接続されます。"
+    },
+    "closeMenu": "メニューを閉じる",
+    "mainMenu": "メインメニュー",
+    "userMenu": "アカウントメニュー",
+    "account": "アカウント",
+    "balance": "残高",
+    "pageSettings": {
+      "label": "このページの設定",
+      "hint": "これらの設定は、お客様のロールで変更が許可されているため表示されています。"
+    },
+    "notifications": "通知",
+    "settings": "設定",
+    "pinned": "ヘルプと設定",
+    "nav": {
+      "analytics": "分析",
+      "notifications": "通知",
+      "inbox": "受信箱",
+      "quickChat": "クイックチャット",
+      "callLogs": "通話履歴",
+      "teamChat": "チームチャット",
+      "leadFinder": "リード検索",
+      "campaigns": "キャンペーン",
+      "broadcasts": "一斉送信",
+      "scheduled": "予約送信",
+      "templates": "テンプレート",
+      "history": "履歴",
+      "flows": "フロー",
+      "aiAssistants": "AI アシスタント",
+      "appointments": "予約",
+      "crmDashboard": "CRM ダッシュボード",
+      "store": "ストア",
+      "catalog": "カタログ",
+      "support": "サポート",
+      "guidebook": "ガイドブック",
+      "pipelines": "パイプライン",
+      "tasks": "タスク",
+      "companies": "会社",
+      "emailTemplates": "メールテンプレート",
+      "proposals": "提案書",
+      "estimates": "見積書",
+      "invoices": "請求書",
+      "payments": "支払い"
+    },
+    "help": "ヘルプ",
+    "unreadCount": "{count, plural, other {# 件の未読}}"
+  }
+}

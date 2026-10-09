@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "通話",
+      "description": "番号ごとにWhatsApp通話のオン/オフを切り替えます。",
+      "keywords": "通話, 電話, 音声, 電話番号, whatsapp通話, 通話ボタン, call, calls, voice, phone, whatsapp calling, call button"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "button": {
+      "label": "通話",
+      "tooltip": "WhatsApp通話を開始",
+      "working": "処理中..."
+    },
+    "confirm": {
+      "title": "確認済みの通話許可がありません",
+      "body": "この連絡先の確認済みの通話許可が記録されていません。",
+      "callAnyway": "それでも通話する",
+      "callAnywayHint": "WhatsAppで相手がすでに「許可」をタップしていれば通話できます。",
+      "askPermission": "許可をリクエスト",
+      "askPermissionHint": "代わりに許可リクエストを送信します。通話は発信されません。",
+      "close": "閉じる"
+    },
+    "toast": {
+      "noPhone": "この連絡先には電話番号がありません。",
+      "noNumber": "どのWABA番号でも通話が有効になっていません。",
+      "alreadyPermitted": "この連絡先はすでに通話を許可しています。通話を開始しています...",
+      "permissionSent": "許可リクエストを送信しました。相手のWhatsAppに「承認/拒否」が表示されます。相手が応答したら、もう一度通話してください。",
+      "permissionFailed": "許可リクエストを送信できませんでした: {message}",
+      "startFailed": "通話を開始できませんでした: {message}",
+      "acceptInvalid": "通話に応答できませんでした。WhatsAppからの通話ペイロードが無効です。もう一度お試しください。",
+      "acceptFailed": "通話に応答できませんでした: {message}",
+      "alreadyAccepted": "通話はすでに他のチームメイトが応答しています。",
+      "recordingStarted": "録音を開始しました。通話終了時に通話ログへ保存されます。",
+      "recordingSaved": "通話の録音を通話ログに保存しました。",
+      "recordUnsupported": "このブラウザーは録音に対応していません。",
+      "noActiveCall": "録音する通話中の通話がありません。"
+    },
+    "incoming": {
+      "title": "WhatsAppの着信",
+      "caller": "発信者 +{digits}",
+      "accept": "応答",
+      "decline": "拒否",
+      "aiHandling": "AIがこの通話に対応しています..."
+    },
+    "panel": {
+      "label": "通話中",
+      "title": "通話中",
+      "ringing": "呼び出し中...",
+      "connected": "接続済み",
+      "timer": "通話時間",
+      "mute": "ミュート",
+      "muted": "ミュート中",
+      "end": "終了",
+      "record": "録音",
+      "recording": "録音中",
+      "recordTooltip": "この通話を録音",
+      "recordingTooltip": "この通話を録音中",
+      "recordingNotice": "この通話は録音されています"
+    },
+    "failures": {
+      "REJECTED": "顧客が通話を拒否しました。",
+      "BUSY": "顧客は別の通話中です。",
+      "NO_ANSWER": "応答なし。顧客が電話に出ませんでした。",
+      "MISSED": "顧客が通話に応答できませんでした。",
+      "CANCELLED": "通話はキャンセルされました。",
+      "MIC_BLOCKED": "マイクへのアクセスがブロックされています。相手にあなたの声が聞こえません。ブラウザーでマイクを許可して、再試行してください。",
+      "BUSY_SLOT": "このタブではすでに別の通話が進行中です。",
+      "INVALID_SDP": "SDPオファーが無効です。v=0またはメディア行がありません",
+      "LOCAL_SDP_EMPTY": "ローカルSDPが空です。ICE収集に失敗しました",
+      "ENDED_EARLY": "接続される前に通話が終了しました。",
+      "ANSWER_FAILED": "WhatsAppの応答を適用できませんでした"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "この番号はもうワークスペースにありません。ページを更新して、もう一度お試しください。",
+      "CALL_NOT_FOUND": "この通話が見つかりませんでした。すでに終了した可能性があります。",
+      "CALL_NOT_WABA": "通話はWhatsApp Cloud API番号でのみ利用できます。この番号は別の方法で接続されています。",
+      "CALL_NUMBER_NOT_CONNECTED": "この番号は現在WhatsApp Cloud APIに接続されていません。チャンネルで再接続してから、もう一度お試しください。",
+      "CALL_COEXISTENCE_UNSUPPORTED": "WhatsApp Businessアプリでも使用している番号では通話を受けられません。",
+      "CALL_NOT_ENABLED": "この番号の通話はオフになっています。先に「通話」でオンにしてください。",
+      "CALL_META_REFUSED": "WhatsAppがリクエストを拒否しました。しばらくしてからもう一度お試しください。",
+      "CALL_PERMISSION_REQUESTED": "許可リクエストを送信しました。相手のWhatsAppに「承認/拒否」が表示されます。相手が応答したら、もう一度通話してください。",
+      "CALL_STATE_CONFLICT": "通話はすでに他のチームメイトが応答しています。",
+      "CALL_RECORDING_FAILED": "録音を保存できませんでした。",
+      "FORBIDDEN": "通話機能を使用する権限がありません。",
+      "PLAN_FEATURE_LOCKED": "お使いのプランにはWhatsApp通話が含まれていません。",
+      "NETWORK": "ネットワークエラーです。もう一度お試しください。",
+      "UNEXPECTED": "問題が発生しました。もう一度お試しください。"
+    },
+    "settings": {
+      "title": "通話",
+      "intro": "番号のWhatsApp通話をオンにすると、受信トレイのその番号のチャットに緑の通話ボタンが表示されます。",
+      "cardTitle": "WhatsApp通話",
+      "numberFallback": "WhatsApp番号",
+      "connection": "接続: {status}",
+      "enabledStatus": "有効です。受信トレイのこの番号のチャットに緑の通話ボタンが表示されます。",
+      "enabledSince": "{date}に有効化",
+      "offStatus": "オフです。オンにすると、この番号のチャットに通話ボタンが表示されます。",
+      "enable": "通話を有効にする",
+      "disable": "通話をオフにする",
+      "asking": "WhatsAppに問い合わせ中...",
+      "enabledDone": "この番号の通話をオンにしました。",
+      "disabledDone": "この番号の通話をオフにしました。",
+      "loading": "番号を読み込み中",
+      "loadFailed": "番号を読み込めませんでした。",
+      "retry": "再試行",
+      "emptyTitle": "WhatsApp番号がまだありません",
+      "emptyMessage": "チャンネルでWhatsApp Cloud API番号を接続してから、戻って通話をオンにしてください。",
+      "viewOnly": "各番号の通話の状態を確認できます。オン/オフの切り替えには、通話管理の権限が必要です。"
+    }
+  }
+}

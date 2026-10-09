@@ -216,11 +216,13 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
     // all 15 outbound rows sit in one thread; two other threads only replied (never messaged in this window)
     expect(res.body.current.contactsMessaged).toBe(1);
     expect(res.body.current.contactsDelivered).toBe(1);
-    expect(res.body.current.contactsReplied).toBe(2);
+    // replied is a funnel stage: only threads messaged in the window count, so the two reply-only threads stay out of it
+    expect(res.body.current.contactsReplied).toBe(0);
+    expect(res.body.current.repliers).toBe(2);
     expect(res.body.funnel.contacts).toEqual({
       messaged: 1,
       delivered: 1,
-      replied: 2,
+      replied: 0,
       goalCompleted: 0,
     });
     expect(res.body.funnel.activity).toEqual({
@@ -228,7 +230,7 @@ describe('summary: the KPI cards (WD-DASH-002, 003, 004, 005, 018)', () => {
       respondingContacts: 2,
       repliesPerContact: 2.5,
     });
-    expect(res.body.funnel.replyRate).toBe(100);
+    expect(res.body.funnel.replyRate).toBe(0);
     expect(res.body.funnel.comparison).toBeNull();
     expect(res.body.previous.contactsMessaged).toBe(0);
   });

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { FlowEdge, FlowNode } from '@crm/contracts';
+import { translator } from '../test-utils/intl';
+import { renderMsg } from './msg';
 import {
   HISTORY_MAX,
   addNode,
@@ -24,6 +26,14 @@ import {
   zoomAround,
   type CanvasState,
 } from './graph-ops';
+
+/** The refusal of a canvas operation, in English (empty when it did not refuse). */
+const failText = (
+  r: { ok: boolean; message?: never } | { ok: false; message: Parameters<typeof renderMsg>[1] },
+): string =>
+  r.ok
+    ? ''
+    : renderMsg(translator('flb'), (r as { message: Parameters<typeof renderMsg>[1] }).message);
 
 const node = (
   id: string,
@@ -62,7 +72,7 @@ describe('adding nodes (WD-FLB-015)', () => {
   it('a second Trigger is refused with the toast text', () => {
     const a = addNode(empty, 'trigger', 0, 0);
     const b = addNode((a as { state: CanvasState }).state, 'trigger', 5, 5);
-    expect(b).toEqual({ ok: false, message: 'Trigger can only exist once.' });
+    expect(failText(b)).toBe('Trigger can only exist once.');
   });
 
   it('a node starts with the catalogue defaults and an id of the form n_xxxxxx', () => {
@@ -104,10 +114,7 @@ describe('duplicate, delete, pin (WD-FLB-015 rules 4, 5)', () => {
   });
 
   it('the Trigger cannot be duplicated', () => {
-    expect(duplicateNode(s, 'a')).toEqual({
-      ok: false,
-      message: 'Trigger can only exist once — can’t duplicate.',
-    });
+    expect(failText(duplicateNode(s, 'a'))).toBe('Trigger can only exist once — can’t duplicate.');
   });
 
   it('deleting a node removes all its incident edges', () => {
@@ -179,14 +186,14 @@ describe('options (WD-FLB-015 rule 9, WD-FLB-035..050)', () => {
   });
 
   it('buttons, ask and poll stop at 3 with their own message; lists go to 10', () => {
-    expect(addOption(buttons(3), 'b')).toEqual({ ok: false, message: 'Max 3 quick reply buttons' });
+    expect(failText(addOption(buttons(3), 'b'))).toBe('Max 3 quick reply buttons');
     const ask: CanvasState = { nodes: [node('a', 'ask', { options: ['1', '2', '3'] })], edges: [] };
-    expect(addOption(ask, 'a')).toEqual({ ok: false, message: 'Max 3 expected answers' });
+    expect(failText(addOption(ask, 'a'))).toBe('Max 3 expected answers');
     const poll: CanvasState = {
       nodes: [node('p', 'poll', { options: ['1', '2', '3'] })],
       edges: [],
     };
-    expect(addOption(poll, 'p')).toEqual({ ok: false, message: 'Max 3 poll options' });
+    expect(failText(addOption(poll, 'p'))).toBe('Max 3 poll options');
     const list: CanvasState = {
       nodes: [
         node('l', 'list', {
@@ -199,7 +206,7 @@ describe('options (WD-FLB-015 rule 9, WD-FLB-035..050)', () => {
       ],
       edges: [],
     };
-    expect(addOption(list, 'l')).toEqual({ ok: false, message: 'Max 10 items' });
+    expect(failText(addOption(list, 'l'))).toBe('Max 10 items');
   });
 
   it("a new option gets the type's default label; a list item inherits the last section", () => {

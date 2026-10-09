@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "예약"
+    },
+    "common": {
+      "dismiss": "닫기",
+      "loading": "로딩 중",
+      "cancel": "취소",
+      "save": "저장",
+      "close": "닫기",
+      "back": "뒤로",
+      "minutes": "{count, plural, other {#분}}",
+      "minShort": "{count}분",
+      "hoursMinutes": "{hours}시간 {minutes}분",
+      "hours": "{hours}시간"
+    },
+    "status": {
+      "pending": "대기 중",
+      "confirmed": "확정됨",
+      "cancelled": "취소됨",
+      "completed": "완료됨",
+      "no_show": "노쇼",
+      "declined": "거절됨"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 계속하려면 다시 로그인하세요.",
+      "conflict": "다른 사용자가 변경했습니다. 새로고침하여 최신 버전을 확인하세요.",
+      "validation": "일부 정보가 올바르지 않습니다. 강조 표시된 필드를 확인하세요.",
+      "unavailable": "이 서버에서는 아직 예약 기능을 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "notFound": "찾을 수 없습니다. 이미 삭제되었을 수 있습니다.",
+      "planDisabled": "예약 기능이 요금제에 포함되어 있지 않습니다.",
+      "slotTaken": "방금 해당 시간이 예약되었습니다. 다른 시간을 선택하세요.",
+      "gone": "이 예약은 더 이상 변경할 수 없습니다.",
+      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+      "requestId": "요청 ID",
+      "retry": "다시 시도",
+      "invalidTransition": "이 예약은 이 작업을 수행할 수 있는 상태가 아닙니다. 새로고침하여 현재 상태를 확인하세요.",
+      "notStarted": "예약이 시작된 후에만 수행할 수 있습니다.",
+      "alreadyStarted": "이 예약은 이미 시작되어 더 이상 변경할 수 없습니다.",
+      "bookingOff": "지금은 이 서비스를 예약할 수 없습니다.",
+      "notDeletable": "예정된 예약이 있는 동안에는 삭제할 수 없습니다."
+    },
+    "picker": {
+      "timeZone": "시간대",
+      "previousMonth": "이전 달",
+      "nextMonth": "다음 달",
+      "pickDay": "날짜 선택",
+      "times": "예약 가능 시간",
+      "timesAvailable": "{count, plural, other {예약 가능 시간 #개}}",
+      "seatsLeft": "{count}자리 남음",
+      "noTimes": "앞으로 며칠간 예약 가능한 시간이 없습니다.",
+      "noTimesDay": "이 날은 가능한 시간이 없습니다. 다른 날짜를 선택하세요.",
+      "loading": "시간 불러오는 중",
+      "loadFailed": "시간을 불러올 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "retry": "다시 시도",
+      "typeZone": "이 서비스는 {zone} 기준으로 운영됩니다."
+    },
+    "hours": {
+      "openDay": "{day} 영업",
+      "daySummary": "{hours}시간 {minutes}분",
+      "closed": "휴무",
+      "from": "{day}, 구간 {n}, 시작 시간",
+      "to": "{day}, 구간 {n}, 종료 시간",
+      "removeInterval": "{day} 구간 {n} 제거",
+      "addInterval": "구간 추가",
+      "copyTo": "{day} 시간을 다른 요일에 복사",
+      "copyDay": "복사 대상",
+      "copyWeekdays": "월요일~금요일",
+      "copyAll": "모든 요일",
+      "problems": {
+        "incomplete": "두 시간을 모두 입력하세요.",
+        "order": "종료 시간은 시작 시간보다 늦어야 합니다.",
+        "overlap": "다른 구간과 겹칩니다."
+      }
+    },
+    "hub": {
+      "breadcrumb": "이동 경로",
+      "integrations": "연동",
+      "appointments": "예약",
+      "title": "내 예약",
+      "subtitle": "고객이 채팅 안에서 예약할 수 있습니다. 서비스, 시간, 알림이 포함된 예약 유형을 만들면 고객이 시간대를 선택하고 자동으로 확정됩니다.",
+      "newType": "새 예약 유형",
+      "types": "예약 유형",
+      "settings": "설정",
+      "weekTitle": "주",
+      "monthTitle": "월",
+      "inRange": "{count, plural, =0 {예약 없음} other {예약 #개}} 표시 중",
+      "tableLabel": "예약",
+      "loading": "예약 불러오는 중",
+      "useSampleData": "샘플 데이터 사용 (개발)",
+      "empty": {
+        "upcoming": {
+          "title": "예정된 예약 없음",
+          "message": "서비스와 시간이 포함된 예약 유형을 만든 다음 아무 플로우에나 \"예약하기\" 노드를 추가하세요. 확정된 예약은 여기에 표시됩니다."
+        },
+        "past": {
+          "title": "지난 예약 없음",
+          "message": "이미 진행된 예약이 결과와 함께 여기에 표시됩니다."
+        },
+        "filtered": {
+          "title": "일치하는 예약 없음",
+          "message": "검색어 및 필터와 일치하는 항목이 없습니다. 필터를 지우면 모든 예약이 표시됩니다."
+        }
+      },
+      "resetFilters": "필터 지우기",
+      "truncated": "이 기간의 처음 {count}개 예약을 표시 중입니다. 나머지를 보려면 필터를 좁히세요.",
+      "showing": "{count, plural, other {예약 #개 표시 중}}",
+      "loadMore": "더 보기",
+      "endOfList": "목록 끝",
+      "cancelTitle": "이 예약을 취소할까요?",
+      "cancelMessage": "예약이 취소되고 해당 시간은 다시 비워집니다. 고객에게 안내되며 알림이 제거됩니다.",
+      "cancelConfirm": "예약 취소",
+      "keep": "유지",
+      "declineTitle": "이 요청을 거절할까요?",
+      "declineMessage": "고객에게 요청이 거절되었음이 안내되고 해당 시간은 다시 비워집니다.",
+      "declineConfirm": "요청 거절"
+    },
+    "tabs": {
+      "label": "예약 목록",
+      "upcoming": "예정",
+      "past": "지난 예약",
+      "count": "{count, plural, other {예약 #개}}"
+    },
+    "toolbar": {
+      "label": "필터 및 보기",
+      "search": "고객, 전화번호, 이메일 또는 서비스 검색",
+      "status": "상태",
+      "allStatuses": "모든 상태",
+      "type": "예약 유형",
+      "allTypes": "모든 예약 유형",
+      "clear": "지우기",
+      "navigate": "캘린더 탐색",
+      "previous": "이전",
+      "next": "다음",
+      "today": "오늘",
+      "refresh": "새로고침",
+      "view": "보기",
+      "views": {
+        "list": "목록",
+        "week": "주",
+        "month": "월"
+      }
+    },
+    "table": {
+      "when": "일시",
+      "customer": "고객",
+      "service": "서비스",
+      "status": "상태",
+      "actions": "작업",
+      "today": "오늘",
+      "tomorrow": "내일",
+      "yesterday": "어제",
+      "rowLabel": "예약 열기: {title}",
+      "noName": "이름 없음",
+      "needsReview": "검토 필요"
+    },
+    "row": {
+      "moreFor": "{title}에 대한 추가 작업",
+      "open": "열기",
+      "confirm": "확정",
+      "complete": "완료로 표시",
+      "noShow": "노쇼로 표시",
+      "reschedule": "일정 변경",
+      "copyLink": "관리 링크 복사",
+      "cancel": "취소",
+      "decline": "거절"
+    },
+    "calendar": {
+      "emptyWeek": "이번 주에는 예약이 없습니다.",
+      "monthGrid": "월 캘린더",
+      "more": "+{count}개 더",
+      "dayAgenda": "선택한 날짜의 예약",
+      "emptyDay": "이 날은 예약이 없습니다."
+    },
+    "drawer": {
+      "loading": "예약 불러오는 중",
+      "close": "닫기",
+      "noType": "삭제된 예약 유형",
+      "pendingHint": "확정 대기 중",
+      "minutes": "{count}분",
+      "customerTime": "고객 기준: {time} ({zone})",
+      "confirm": "확정",
+      "complete": "완료로 표시",
+      "noShow": "노쇼",
+      "reschedule": "일정 변경",
+      "cancel": "취소",
+      "customer": "고객",
+      "openContact": "연락처 열기",
+      "linkedContact": "연결된 연락처",
+      "noName": "이름 입력 안 됨",
+      "where": "장소",
+      "joinCall": "화상 통화 참여",
+      "answers": "예약 질문에 대한 답변",
+      "noAnswers": "이 서비스에는 질문이 없거나 고객이 답하지 않았습니다.",
+      "payment": "결제",
+      "depositPaid": "{amount} 결제됨",
+      "notes": "메모",
+      "notesPlaceholder": "이 예약에 대한 비공개 메모",
+      "saveNotes": "메모 저장",
+      "reminders": "알림",
+      "noReminders": "이 서비스에 설정된 알림이 없습니다.",
+      "before": "{count, plural, other {#분 전}}",
+      "reminder": {
+        "scheduled": "예약됨",
+        "skipped": "발송 안 됨",
+        "due": "시간 도달"
+      },
+      "manageLink": "관리 링크",
+      "manageHint": "이 링크를 고객과 공유하면 고객이 직접 일정을 변경하거나 취소할 수 있습니다.",
+      "copy": "복사",
+      "openLink": "관리 페이지 열기",
+      "noManageLink": "이 예약에는 관리 링크가 없습니다.",
+      "source": "예약 경로",
+      "bookedOn": "예약 일시",
+      "cancelTitle": "이 예약을 취소할까요?",
+      "cancelMessage": "예약이 취소되고 해당 시간은 다시 비워집니다. 고객에게 안내되며 알림이 제거됩니다.",
+      "cancelConfirm": "예약 취소",
+      "keep": "유지",
+      "decline": "거절",
+      "host": "호스트",
+      "needsReview": "종료됨, 아직 미표시",
+      "needsReviewHint": "이 예약은 종료되었지만 아무도 완료 또는 노쇼로 표시하지 않았습니다.",
+      "cancelledBy": "{who}이(가) 이 예약을 취소했습니다",
+      "cancelledByStaff": "직원",
+      "cancelledByInvitee": "고객",
+      "cancelledBySystem": "시스템",
+      "cancelReason": "사유",
+      "declineTitle": "이 요청을 거절할까요?",
+      "declineMessage": "고객에게 요청이 거절되었음이 안내되고 해당 시간은 다시 비워집니다.",
+      "declineConfirm": "요청 거절",
+      "remindersNote": "알림은 예약 유형을 따릅니다. 알림별 전달 여부는 추적되지 않습니다."
+    },
+    "source": {
+      "chat": "채팅 플로우",
+      "manual": "직원",
+      "api": "API",
+      "link": "예약 페이지"
+    },
+    "payment": {
+      "none": "결제 없음",
+      "pending": "결제 대기 중",
+      "paid": "결제 완료",
+      "refunded": "환불됨",
+      "partial": "일부 결제됨"
+    },
+    "reschedule": {
+      "eyebrow": "일정 변경",
+      "close": "닫기",
+      "cancel": "취소",
+      "confirm": "새 시간 확정",
+      "current": "현재: {day}, {time} {zone}",
+      "noType": "이 예약의 예약 유형이 삭제되어 이동할 수 있는 빈 시간이 없습니다.",
+      "taken": "방금 해당 시간이 예약되었습니다. 다른 시간을 선택하세요.",
+      "newTime": "새 시간: {day}, {time}",
+      "notify": "고객에게 새 시간 알리기"
+    },
+    "toast": {
+      "conflict": "다른 사용자가 이 예약을 변경하여 다시 불러왔습니다.",
+      "failed": "작동하지 않았습니다.",
+      "confirmed": "예약을 확정했습니다.",
+      "cancelled": "예약을 취소했습니다.",
+      "completed": "완료로 표시했습니다.",
+      "noShow": "노쇼로 표시했습니다.",
+      "notesSaved": "메모를 저장했습니다.",
+      "rescheduled": "예약을 새 시간으로 옮겼습니다.",
+      "linkCopied": "관리 링크를 복사했습니다.",
+      "copyFailed": "링크를 복사할 수 없습니다.",
+      "declined": "요청을 거절했습니다."
+    },
+    "typesList": {
+      "breadcrumb": "이동 경로",
+      "appointments": "예약",
+      "services": "서비스",
+      "title": "예약 유형",
+      "subtitle": "각 서비스에는 고유한 소요 시간, 가용 시간, 가격, 설문, 알림이 있습니다. 고객은 채팅 또는 전용 예약 페이지에서 예약할 수 있습니다.",
+      "newType": "새 예약 유형",
+      "allBookings": "모든 예약",
+      "settings": "설정",
+      "toolbar": "필터",
+      "search": "예약 유형 검색",
+      "statusFilter": "상태",
+      "allStatuses": "모든 상태",
+      "active": "활성",
+      "pausedLabel": "일시중지됨",
+      "clear": "지우기",
+      "tableLabel": "예약 유형",
+      "loading": "예약 유형 불러오는 중",
+      "useSampleData": "샘플 데이터 사용 (개발)",
+      "emptyFilteredTitle": "일치하는 예약 유형 없음",
+      "emptyFiltered": "검색어 및 필터와 일치하는 항목이 없습니다.",
+      "emptyTitle": "아직 예약 유형이 없습니다",
+      "emptyMessage": "첫 서비스를 만드세요. 소요 시간, 시간, 가격을 설정하면 고객이 채팅에서 예약할 수 있습니다.",
+      "name": "이름",
+      "details": "상세",
+      "price": "가격",
+      "booked": "예약 수",
+      "status": "상태",
+      "actions": "작업",
+      "minutes": "{count}분",
+      "location": {
+        "address": "대면",
+        "virtual": "가상",
+        "phone": "전화 통화",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, other {시간대당 #석}}",
+      "approval": "승인 필요",
+      "free": "무료",
+      "toggle": "활성: {name}",
+      "moreFor": "{name}에 대한 추가 작업",
+      "edit": "수정",
+      "copyLink": "공개 링크 복사",
+      "openPage": "예약 페이지 열기",
+      "duplicate": "복제",
+      "delete": "삭제",
+      "showing": "{count, plural, other {예약 유형 #개}}",
+      "deleteTitle": "\"{name}\" 삭제할까요?",
+      "deleteMessage": "이 예약 유형을 삭제할까요? 기존 예약은 유지됩니다.",
+      "deleteConfirm": "예약 유형 삭제",
+      "keep": "유지",
+      "activated": "\"{name}\"이(가) 활성 상태입니다.",
+      "paused": "\"{name}\"이(가) 일시중지되었습니다.",
+      "duplicated": "\"{name}\"을(를) 만들었습니다 (일시중지됨).",
+      "deleted": "\"{name}\"을(를) 삭제했습니다.",
+      "failed": "작동하지 않았습니다.",
+      "linkCopied": "공개 링크를 복사했습니다.",
+      "copyFailed": "링크를 복사할 수 없습니다.",
+      "copyLinkFor": "{name}의 공개 링크 복사",
+      "copyLinkPaused": "공개 링크를 받으려면 이 예약 유형을 활성화하세요"
+    },
+    "editor": {
+      "forbidden": "예약 유형을 만들거나 수정할 권한이 없습니다.",
+      "notFoundTitle": "예약 유형을 찾을 수 없음",
+      "notFound": "해당 예약 유형을 찾을 수 없습니다. 삭제되었을 수 있습니다.",
+      "loading": "예약 유형 불러오는 중",
+      "header": {
+        "back": "예약 유형으로 돌아가기",
+        "kickerNew": "예약 / 새로 만들기",
+        "kickerEdit": "예약 / 수정",
+        "titleNew": "예약 유형 만들기",
+        "titleEdit": "예약 유형 수정",
+        "draft": "초안 / 저장 안 됨",
+        "unsaved": "저장되지 않은 변경 사항"
+      },
+      "steps": {
+        "label": "단계",
+        "service": "서비스",
+        "timing": "시간",
+        "availability": "가용성",
+        "pricing": "가격",
+        "messaging": "메시지",
+        "hasProblem": "확인 필요",
+        "stepOf": "{total}단계 중 {n}단계: {name}"
+      },
+      "nav": {
+        "back": "뒤로",
+        "cancel": "취소",
+        "next": "다음",
+        "create": "예약 유형 만들기",
+        "save": "변경 사항 저장",
+        "saving": "저장 중"
+      },
+      "toast": {
+        "created": "예약 유형 \"{name}\"을(를) 만들었습니다.",
+        "updated": "예약 유형 \"{name}\"을(를) 업데이트했습니다."
+      },
+      "saveError": {
+        "conflict": "수정하는 동안 다른 사용자가 이 예약 유형을 변경했습니다. 새로고침하여 해당 버전을 확인하세요. 여기에서 저장하지 않은 수정 내용은 사라집니다.",
+        "reload": "최신 버전 불러오기"
+      },
+      "leave": {
+        "title": "변경 사항을 취소할까요?",
+        "message": "저장되지 않은 변경 사항이 있습니다. 지금 나가면 사라집니다.",
+        "discard": "변경 사항 취소",
+        "keep": "계속 수정"
+      },
+      "problems": {
+        "nameRequired": "이 예약 유형의 이름을 입력하세요.",
+        "nameTooLong": "이름은 최대 {nameMax}자까지 가능합니다.",
+        "slugInvalid": "소문자, 숫자, 하이픈 하나만 사용할 수 있으며 최대 {slugMax}자입니다.",
+        "durationInvalid": "소요 시간은 {durationMin}분에서 {durationMax}분 사이의 정수여야 합니다.",
+        "incrementInvalid": "시작 간격은 {incrementMin}분에서 {incrementMax}분 사이의 정수여야 합니다.",
+        "bufferInvalid": "0에서 {bufferMax} 사이의 정수(분)를 입력하세요.",
+        "minNoticeInvalid": "0에서 {minNoticeMax} 사이의 정수(분)를 입력하세요.",
+        "maxAdvanceInvalid": "{maxAdvanceMin}에서 {maxAdvanceMax} 사이의 정수(일)를 입력하세요.",
+        "maxPerDayInvalid": "제한이 없으면 비워 두고, 아니면 1에서 {maxPerDayMax} 사이의 숫자를 입력하세요.",
+        "capacityInvalid": "정원은 1에서 {capacityMax} 사이의 정수여야 합니다.",
+        "timezoneInvalid": "올바른 시간대를 선택하세요.",
+        "colorInvalid": "#075E54와 같은 16진수 색상을 사용하세요.",
+        "feeInvalid": "150.00과 같은 금액을 입력하세요.",
+        "taxInvalid": "소수점 둘째 자리까지, 0에서 100 사이의 백분율을 입력하세요.",
+        "depositInvalid": "0보다 큰 보증금 금액을 입력하세요.",
+        "depositTooHigh": "보증금은 총액(요금 + 세금)을 초과할 수 없습니다.",
+        "cancelFeeInvalid": "25.00과 같은 금액을 입력하세요.",
+        "cancelWindowInvalid": "0에서 {cancelWindowMax} 사이의 정수(분)를 입력하세요.",
+        "reminderInvalid": "시작 전 1에서 {reminderMax} 사이의 정수(분)를 입력하세요.",
+        "remindersDuplicate": "각 알림은 서로 다른 시간이어야 합니다.",
+        "remindersTooMany": "예약 유형에는 알림을 최대 {reminders}개까지 설정할 수 있습니다.",
+        "questionLabelRequired": "질문에 라벨을 지정하세요 (최대 {questionLabelMax}자).",
+        "questionsTooMany": "예약 유형에는 질문을 최대 {questions}개까지 설정할 수 있습니다.",
+        "questionOptionsRequired": "선택지를 한 줄에 하나씩 하나 이상 추가하세요.",
+        "hoursInvalid": "아래에 표시된 주간 시간을 수정하세요.",
+        "overridesInvalid": "날짜 예외 목록에 표시된 날짜를 수정하세요.",
+        "descriptionTooLong": "설명은 최대 {descriptionMax}자까지 가능합니다.",
+        "locationTooLong": "장소는 최대 {locationMax}자까지 가능합니다.",
+        "server": "서버가 이 값을 받아들이지 않았습니다. 확인한 후 다시 시도하세요."
+      },
+      "service": {
+        "title": "서비스 상세",
+        "hint": "서비스 이름과 진행 장소를 입력하세요.",
+        "name": "이름",
+        "namePlaceholder": "30분 데모",
+        "description": "설명",
+        "descriptionPlaceholder": "예약하는 내용이며 예약 페이지에 표시됩니다.",
+        "locationType": "장소 유형",
+        "locationTypes": {
+          "address": "대면 (주소)",
+          "virtual": "가상 (화상)",
+          "phone": "전화 통화",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "장소 / 주소",
+        "locationPlaceholders": {
+          "address": "도로명 주소",
+          "virtual": "화상 링크 (선택)",
+          "phone": "전화할 번호 (선택)",
+          "whatsapp": "WhatsApp 번호 (선택)"
+        },
+        "appearanceTitle": "색상",
+        "appearanceHint": "캘린더와 예약 페이지에서 이 서비스를 표시합니다.",
+        "color": "색상",
+        "colorSwatches": "색상 선택",
+        "linkTitle": "공개 링크",
+        "linkHint": "방문자가 이 주소에서 예약합니다. 예약 유형을 저장하고 활성화하면 작동합니다.",
+        "slug": "링크 이름",
+        "slugHint": "변경하기 전까지 이름에서 자동 생성됩니다. 소문자, 숫자, 하이픈.",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "공개 페이지",
+        "copy": "링크 복사",
+        "copied": "링크를 복사했습니다.",
+        "copyFailed": "링크를 복사할 수 없습니다. 선택하여 직접 복사하세요.",
+        "rulesTitle": "예약 규칙",
+        "requiresApproval": "승인 필요",
+        "requiresApprovalHint": "새 예약은 팀원이 확정할 때까지 대기 중 상태로 유지됩니다.",
+        "isActive": "활성",
+        "isActiveHint": "끄면 서비스가 일시중지되어 공개 페이지에서 예약을 받지 않습니다."
+      },
+      "timing": {
+        "title": "시간",
+        "hint": "각 예약의 진행 시간과 얼마나 먼 날짜까지 예약할 수 있는지 설정합니다.",
+        "duration": "소요 시간 (분)",
+        "durationHint": "예약 한 건의 길이입니다. 60 = 1시간.",
+        "increment": "시작 간격 (분)",
+        "incrementHint": "제공되는 시작 시간 사이의 간격입니다. 30이면 9:00, 9:30, 10:00을 제공합니다.",
+        "capacity": "정원 (시간대당)",
+        "capacityHint": "한 시간대를 함께 사용할 수 있는 인원입니다. 1:1은 1.",
+        "bufferBefore": "이전 여유 시간 (분)",
+        "bufferAfter": "이후 여유 시간 (분)",
+        "bufferHint": "각 예약 전후에 확보하는 비는 시간입니다.",
+        "minNotice": "최소 사전 예약 (분)",
+        "minNoticeHint": "시작 얼마 전까지 예약할 수 있는지 설정합니다. 240 = 4시간.",
+        "maxAdvance": "예약 가능 기간 (일)",
+        "maxAdvanceHint": "얼마나 먼 날짜까지 예약할 수 있는지 설정합니다. 30 = 한 달.",
+        "maxPerDay": "일일 최대",
+        "maxPerDayHint": "하루 최대 예약 수입니다. 제한이 없으면 비워 두세요.",
+        "noLimit": "제한 없음",
+        "zoneTitle": "시간대",
+        "zoneHint": "주간 시간과 날짜는 이 시간대 기준입니다. 방문자는 자신의 시간대로 시간을 봅니다.",
+        "zone": "이 서비스의 시간대",
+        "zoneSearch": "시간대 검색",
+        "zonePick": "시간대 선택",
+        "zoneNone": "검색과 일치하는 시간대가 없습니다."
+      },
+      "availability": {
+        "title": "주간 시간",
+        "hint": "매일 예약을 받는 시간을 추가하세요. 오른쪽 패널에서 실제 예약 가능한 시간대를 미리 볼 수 있습니다.",
+        "empty": "설정된 시간이 없어 아직 예약할 수 없습니다.",
+        "total": "주당 예약 가능 시간 {hours}시간 {minutes}분."
+      },
+      "overrides": {
+        "title": "날짜 예외 및 휴일",
+        "hint": "휴일에 하루를 닫거나 특정 날짜에 별도의 시간을 지정하세요. 나머지는 주간 시간을 따릅니다.",
+        "previousMonth": "이전 달",
+        "nextMonth": "다음 달",
+        "legend": "범례",
+        "status": {
+          "closed": "휴무",
+          "custom": "사용자 지정 시간",
+          "open": "영업 (주간 시간)",
+          "off": "휴무 (주간 시간)"
+        },
+        "clickHint": "날짜를 클릭하여 닫으세요. 표시된 날짜를 다시 클릭하면 주간 시간으로 돌아갑니다.",
+        "rangeTitle": "기간 닫기",
+        "rangeHint": "휴일 주간처럼 여러 날을 한 번에 닫습니다. 이미 예외가 있는 날은 그대로 유지됩니다.",
+        "rangeFrom": "시작",
+        "rangeTo": "종료 (선택)",
+        "reason": "사유",
+        "reasonPlaceholder": "사유 (선택)",
+        "rangeProblems": {
+          "invalid": "시작일과 그보다 앞서지 않는 종료일을 선택하세요.",
+          "tooLong": "기간은 최대 1년까지 가능합니다.",
+          "full": "날짜 예외 한도에 도달했습니다."
+        },
+        "closeRange": "이 날짜 닫기",
+        "listTitle": "예외",
+        "count": "{count, plural, =0 {날짜 없음} other {날짜 #개}}",
+        "limit": "{max}개 날짜 한도에 도달했습니다. 더 추가하려면 일부를 제거하세요.",
+        "empty": "아직 날짜가 없습니다. 캘린더에서 날짜를 클릭하여 닫으세요.",
+        "remove": "{date} 예외 제거",
+        "mode": "{date}: 휴무 또는 사용자 지정 시간",
+        "modeClosed": "하루 종일 휴무",
+        "modeCustom": "사용자 지정 시간",
+        "from": "{date}, 시작 시간",
+        "to": "{date}, 종료 시간",
+        "reasonOf": "{date}, 사유",
+        "problems": {
+          "incomplete": "두 시간을 모두 입력하세요.",
+          "order": "종료 시간은 시작 시간보다 늦어야 합니다.",
+          "dayClosedHours": "휴무일에는 시간이 없습니다."
+        }
+      },
+      "pricing": {
+        "title": "가격 (선택)",
+        "hint": "무료 예약은 요금을 0으로 두세요.",
+        "currency": "통화",
+        "currencyHint": "기본값은 워크스페이스 통화입니다.",
+        "fee": "요금 ({currency})",
+        "feeHint": "금액을 입력하세요. 예: {example}.",
+        "tax": "세금 %",
+        "taxHint": "요금에 추가로 부과됩니다.",
+        "deposit": "보증금",
+        "depositModes": {
+          "none": "선결제 없음",
+          "partial": "부분 보증금",
+          "full": "전액"
+        },
+        "depositAmount": "보증금 금액 ({currency})",
+        "paymentNote": "온라인 결제 수금이 아직 연결되지 않았습니다. 보증금은 각 예약과 함께 기록되지만 청구되지는 않습니다.",
+        "cancelFee": "취소 수수료 ({currency})",
+        "noShowFee": "노쇼 수수료 ({currency})",
+        "cancelWindow": "취소 가능 시간 (분)",
+        "cancelWindowHint": "시작 얼마 전까지 무료로 예약을 취소할 수 있는지 설정합니다. 1440 = 24시간.",
+        "recordedOnly": "취소 및 노쇼 수수료와 취소 가능 시간은 기록만 됩니다.",
+        "totalsLabel": "예약 비용",
+        "totalFee": "요금",
+        "totalTax": "세금",
+        "totalSum": "합계",
+        "totalDue": "지금 결제할 금액"
+      },
+      "calendar": {
+        "title": "Google 캘린더 (선택)",
+        "hint": "이 기능 없이도 예약은 작동합니다. 예약의 설정에서 Google 캘린더를 연결하면 바쁜 시간과 빈 시간을 동기화하고 Meet 링크를 추가할 수 있습니다.",
+        "unavailable": "이 플랫폼에는 아직 Google 캘린더가 설정되지 않았습니다. 설정되면 사용할 수 있도록 이 설정은 예약 유형과 함께 보관됩니다.",
+        "calendarId": "캘린더",
+        "calendarPlaceholder": "기본",
+        "spreadsheetId": "시트에 추가 (선택)",
+        "spreadsheetPlaceholder": "스프레드시트 ID",
+        "createMeet": "예약마다 Google Meet 링크 만들기",
+        "calendarDefault": "워크스페이스 캘린더"
+      },
+      "messages": {
+        "title": "수명 주기 메시지",
+        "hint": "예약이 확정, 알림, 취소 또는 변경될 때 고객에게 전송되는 내용입니다. 비워 두면 워크스페이스 기본값을 사용합니다.",
+        "placeholdersTitle": "사용 가능한 플레이스홀더",
+        "placeholdersHint": "편집 중인 메시지에서 커서가 있는 위치에 삽입하려면 클릭하세요 ({event}).",
+        "placeholderMeaning": {
+          "type": "예약 유형 이름",
+          "slot": "예약 날짜와 시간",
+          "name": "고객 이름",
+          "manage_link": "예약 관리 링크"
+        },
+        "events": {
+          "confirmation": "확정",
+          "reminder": "알림",
+          "cancellation": "취소",
+          "reschedule": "일정 변경"
+        },
+        "placeholders": {
+          "confirmation": "안녕하세요 {name}님, {type} 예약이 {slot}에 완료되었습니다. 여기에서 관리하세요: {manage_link}",
+          "reminder": "안녕하세요 {name}님, 알림드립니다. {type}이(가) {slot}에 예정되어 있습니다.",
+          "cancellation": "안녕하세요 {name}님, {slot}의 {type} 예약이 취소되었습니다.",
+          "reschedule": "안녕하세요 {name}님, {type} 일정이 {slot}(으)로 변경되었습니다. 상세 정보: {manage_link}"
+        },
+        "templatesNote": "승인된 WhatsApp 템플릿은 아직 선택할 수 없습니다. 메시지는 위의 일반 텍스트로 발송됩니다."
+      },
+      "reminders": {
+        "title": "알림",
+        "hint": "시간은 서로 달라야 합니다 (1440 = 24시간 전, 180 = 3시간 전). 최대 {max}개.",
+        "add": "알림 추가",
+        "quickAdd": "빠른 추가",
+        "quick": {
+          "h24": "24시간",
+          "h3": "3시간",
+          "h1": "1시간",
+          "m15": "15분"
+        },
+        "empty": "알림이 없습니다. 고객은 확정 메시지만 받습니다.",
+        "offsetOf": "알림 {n}, 시작 몇 분 전",
+        "minBefore": "분 전",
+        "labelPlaceholder": "24시간",
+        "labelOf": "알림 {n}, 라벨",
+        "remove": "알림 {n} 제거",
+        "count": "알림 {count}/{max}개"
+      },
+      "questions": {
+        "title": "설문",
+        "hint": "예약 시 고객에게 묻는 질문입니다. 최대 {max}개.",
+        "add": "질문 추가",
+        "intro": "소개 메시지",
+        "introHint": "질문 위에 표시됩니다.",
+        "empty": "질문이 없습니다. 고객은 이름, 이메일, 전화번호만 입력합니다.",
+        "labelPlaceholder": "질문 라벨",
+        "labelOf": "질문 {n}, 라벨",
+        "typeOf": "질문 {n}, 답변 유형",
+        "types": {
+          "text": "텍스트",
+          "textarea": "긴 텍스트",
+          "select": "선택",
+          "number": "숫자",
+          "email": "이메일",
+          "phone": "전화번호",
+          "date": "날짜"
+        },
+        "optionsOf": "질문 {n}, 선택지",
+        "optionsPlaceholder": "한 줄에 선택지 하나",
+        "optionsHint": "선택지는 최대 {max}개.",
+        "map": "답변 저장 위치",
+        "mapOf": "질문 {n}, 연락처 필드",
+        "mapNone": "없음",
+        "mapFields": {
+          "email": "이메일",
+          "name": "이름",
+          "mobile": "휴대전화"
+        },
+        "required": "필수",
+        "moveUp": "질문 {n} 위로 이동",
+        "moveDown": "질문 {n} 아래로 이동",
+        "remove": "질문 {n} 제거",
+        "count": "질문 {count}/{max}개"
+      },
+      "rail": {
+        "title": "실시간 요약",
+        "viewPublic": "공개 페이지 보기",
+        "cardLabel": "예약 카드 미리보기",
+        "newService": "새 서비스",
+        "needsApproval": "예약은 승인을 기다립니다.",
+        "fee": "요금",
+        "free": "무료",
+        "tax": "세금",
+        "total": "합계",
+        "dueNow": "지금 결제할 금액",
+        "slotsTitle": "시간대 미리보기",
+        "refresh": "새로고침",
+        "loading": "로딩 중",
+        "slotsIdle": "주간 시간, 소요 시간, 시간대를 설정하면 실제 예약 가능한 시간을 미리 볼 수 있습니다.",
+        "slotsFailed": "미리보기에 실패했습니다.",
+        "slotsNone": "이 설정으로는 앞으로 {days}일 동안 예약 가능한 시간이 없습니다.",
+        "slotsSummary": "{count, plural, other {시간대 #개}} · {zone} 기준 시간"
+      }
+    },
+    "public": {
+      "brandFallback": "온라인 예약",
+      "brandName": "CRM",
+      "poweredBy": "{brand} 제공",
+      "language": "언어",
+      "loading": "로딩 중",
+      "problem": {
+        "retry": "다시 시도",
+        "back": "모든 서비스 보기",
+        "notFoundOrg": {
+          "title": "이 예약 페이지를 찾을 수 없습니다",
+          "message": "주소가 잘못 입력되었거나 이 업체가 온라인 예약을 받지 않을 수 있습니다. 업체에 링크를 문의하세요."
+        },
+        "notFoundService": {
+          "title": "이 서비스는 이용할 수 없습니다",
+          "message": "일시중지되었거나 더 이상 제공되지 않을 수 있습니다. 이 업체의 다른 서비스를 확인해 보세요."
+        },
+        "notFoundLink": {
+          "title": "이 링크는 올바르지 않습니다",
+          "message": "예약이 삭제되었거나 링크가 불완전할 수 있습니다. 확정 메시지의 링크를 사용하거나 업체에 새 링크를 요청하세요."
+        },
+        "paused": {
+          "title": "이 서비스는 일시중지되었습니다",
+          "message": "현재 예약을 받지 않고 있습니다. 나중에 다시 시도하거나 이 업체의 다른 서비스를 확인해 보세요."
+        },
+        "closed": {
+          "title": "이 예약은 더 이상 변경할 수 없습니다",
+          "message": "이미 취소되었거나 완료되었습니다. 다른 문의가 있으면 업체에 연락하세요."
+        },
+        "rateLimited": {
+          "title": "요청이 너무 많습니다",
+          "message": "잠시 기다린 후 다시 시도해 주세요."
+        },
+        "unavailable": {
+          "title": "지금은 온라인 예약을 이용할 수 없습니다",
+          "message": "예약 서비스에 연결할 수 없습니다. 몇 분 후에 다시 시도해 주세요."
+        },
+        "network": {
+          "title": "이 페이지를 불러올 수 없습니다",
+          "message": "연결 상태를 확인하고 다시 시도하세요. 계속 발생하면 업체에 문의하세요."
+        }
+      },
+      "directory": {
+        "title": "예약하기",
+        "subtitle": "서비스를 선택하면 {name}의 예약 가능한 시간을 확인할 수 있습니다.",
+        "services": "서비스",
+        "choose": "시간 선택",
+        "empty": {
+          "title": "지금 예약할 수 있는 항목이 없습니다",
+          "message": "이 업체는 현재 온라인 예약이 가능한 서비스가 없습니다. 나중에 다시 확인해 주세요."
+        }
+      },
+      "location": {
+        "address": "대면",
+        "virtual": "화상 통화",
+        "phone": "전화 통화",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "모든 서비스",
+        "approvalNote": "업체가 각 예약을 확정합니다. 먼저 요청이 접수되고 이후 확정 안내를 받게 됩니다."
+      },
+      "step": {
+        "time": "날짜와 시간 선택",
+        "pickHint": "계속하려면 날짜를 선택한 다음 시간을 선택하세요.",
+        "continue": "계속",
+        "changeTime": "시간 변경",
+        "details": "내 정보"
+      },
+      "when": {
+        "atService": "서비스 기준 장소: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "화상 통화 참여",
+        "videoLater": "화상 통화",
+        "phone": "전화 통화 일시"
+      },
+      "form": {
+        "name": "이름",
+        "email": "이메일",
+        "phone": "전화번호",
+        "optional": "(선택)",
+        "choose": "옵션 선택",
+        "required": "필수 입력 항목입니다.",
+        "tooLong": "너무 깁니다.",
+        "serverInvalid": "받아들일 수 없습니다. 확인한 후 다시 시도하세요.",
+        "invalid": {
+          "text": "이 값을 확인하세요.",
+          "textarea": "이 값을 확인하세요.",
+          "email": "올바른 이메일 주소를 입력하세요.",
+          "phone": "올바른 전화번호를 입력하세요. 국내 번호가 아니면 국가 코드를 포함하세요.",
+          "number": "숫자를 입력하세요.",
+          "date": "올바른 날짜를 선택하세요.",
+          "select": "옵션 중 하나를 선택하세요."
+        }
+      },
+      "price": {
+        "title": "가격",
+        "inclTax": "세금 {pct}% 포함",
+        "fee": "요금",
+        "tax": "세금 ({pct}%)",
+        "total": "합계",
+        "dueNow": "예약 시 결제 금액",
+        "notCollected": "이 페이지에서는 아무것도 청구되지 않습니다. 온라인 결제는 아직 이용할 수 없습니다."
+      },
+      "book": {
+        "confirm": "예약 확정",
+        "request": "예약 요청",
+        "sending": "예약을 전송하는 중",
+        "slotTaken": "방금 해당 시간이 예약되었습니다. 다른 시간을 선택하세요.",
+        "slotTakenHint": "입력한 정보는 유지됩니다. 아래 시간은 최신 상태입니다.",
+        "notice": {
+          "validation": {
+            "title": "일부 정보를 받아들일 수 없습니다",
+            "message": "강조 표시된 필드를 확인하고 다시 시도하세요."
+          },
+          "rateLimited": {
+            "title": "요청이 너무 많습니다",
+            "message": "잠시 기다린 후 버튼을 다시 눌러 주세요."
+          },
+          "network": {
+            "title": "예약을 전송할 수 없습니다",
+            "message": "연결 상태를 확인하고 버튼을 다시 눌러 주세요. 중복 예약되지 않습니다."
+          },
+          "unavailable": {
+            "title": "이 서비스는 더 이상 이용할 수 없습니다",
+            "message": "일시중지되었을 수 있습니다. 서비스 목록으로 돌아가 다른 서비스를 선택하세요."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "예약이 확정되었습니다",
+        "confirmedMessage": "{name}에 예약이 접수되었습니다. 변경하거나 취소하려면 아래 링크를 보관하세요.",
+        "pendingTitle": "요청이 접수되었으며 확정 대기 중입니다",
+        "pendingMessage": "{name}에서 예약을 확정할 예정입니다. 상태를 확인하거나 변경 또는 취소하려면 아래 링크를 보관하세요.",
+        "pendingNote": "확정되기 전까지 해당 시간은 고객님을 위해 확보되지만 변경될 수 있습니다.",
+        "manage": "예약 관리",
+        "bookAnother": "다른 서비스 예약"
+      },
+      "calendar": {
+        "title": "캘린더에 추가",
+        "download": ".ics 파일 다운로드",
+        "google": "Google 캘린더",
+        "opensNewTab": "(새 탭에서 열림)"
+      },
+      "manageLink": {
+        "title": "내 예약 링크",
+        "hint": "이 링크를 저장하세요. 예약을 변경하거나 취소할 수 있는 유일한 방법이며, 링크를 가진 사람은 누구나 변경할 수 있습니다.",
+        "copy": "복사",
+        "copied": "복사됨"
+      },
+      "manage": {
+        "title": "내 예약",
+        "reschedule": "일정 변경",
+        "cancel": "취소",
+        "flash": {
+          "rescheduled": "예약 일정이 변경되었습니다.",
+          "cancelled": "예약이 취소되었습니다."
+        },
+        "failure": {
+          "closed": "이 예약은 더 이상 변경할 수 없습니다.",
+          "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+          "network": "예약을 변경할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요."
+        },
+        "confirmCancel": {
+          "title": "이 예약을 취소할까요?",
+          "message": "{what} 예약이 취소되고 해당 시간은 반환됩니다. 되돌릴 수 없습니다.",
+          "confirm": "예, 예약 취소",
+          "keep": "예약 유지"
+        },
+        "state": {
+          "pending": {
+            "title": "확정 대기 중",
+            "message": "업체가 아직 이 예약을 확정하지 않았습니다."
+          },
+          "cancelled": {
+            "title": "이 예약은 취소되었습니다",
+            "message": "더 이상 변경할 수 없습니다."
+          },
+          "no_show": {
+            "title": "이 예약은 미방문으로 표시되었습니다",
+            "message": "더 이상 변경할 수 없습니다. 잘못된 경우 업체에 연락하세요."
+          },
+          "completed": {
+            "title": "이 예약은 완료되었습니다",
+            "message": "더 이상 변경할 수 없습니다."
+          },
+          "passed": {
+            "title": "이 예약은 이미 시작되었습니다",
+            "message": "온라인으로는 더 이상 변경할 수 없습니다. 필요한 경우 업체에 연락하세요."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "일정 변경",
+        "back": "내 예약으로 돌아가기",
+        "backToBooking": "내 예약으로 돌아가기",
+        "current": "현재 시간",
+        "saving": "새 시간을 저장하는 중",
+        "confirm": "새 시간 확정 · {when}",
+        "failure": {
+          "slotTaken": "방금 해당 시간이 예약되었습니다. 다른 시간을 선택하세요.",
+          "closed": "이 예약은 더 이상 변경할 수 없습니다.",
+          "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+          "validation": "해당 시간을 받아들일 수 없습니다. 다른 시간을 선택하세요.",
+          "network": "새 시간을 저장할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요."
+        },
+        "closed": {
+          "closed": {
+            "title": "이 예약은 더 이상 변경할 수 없습니다",
+            "message": "이미 취소되었거나 완료되어 옮길 시간이 없습니다."
+          },
+          "passed": {
+            "title": "이 예약은 이미 시작되었습니다",
+            "message": "시작된 예약은 옮길 수 없습니다. 필요한 경우 업체에 연락하세요."
+          }
+        }
+      },
+      "meta": {
+        "book": "예약하기",
+        "manage": "내 예약",
+        "reschedule": "예약 일정 변경"
+      }
+    },
+    "settings": {
+      "title": "예약 설정",
+      "subtitle": "이 워크스페이스의 예약에 대한 기본값, 영업시간, 메시지입니다.",
+      "breadcrumb": {
+        "label": "이동 경로",
+        "integrations": "연동",
+        "appointments": "예약",
+        "settings": "설정"
+      },
+      "back": "예약으로 돌아가기",
+      "save": "설정 저장",
+      "saving": "저장 중...",
+      "saved": "예약 설정을 저장했습니다.",
+      "discard": "변경 사항 취소",
+      "unsaved": "저장되지 않은 변경 사항이 있습니다.",
+      "allSaved": "모든 변경 사항이 저장되었습니다.",
+      "loading": "설정 불러오는 중",
+      "forbidden": "예약 설정을 볼 권한이 없습니다.",
+      "readOnly": "이 설정을 볼 수는 있지만 변경할 수는 없습니다.",
+      "fixFirst": "먼저 강조 표시된 필드를 수정하세요.",
+      "issues": "{count, plural, other {저장하기 전에 필드 #개를 확인해야 합니다.}}",
+      "conflict": {
+        "message": "이 설정을 연 이후 다른 곳에서 변경되었습니다. 최신 버전을 확인하려면 새로고침하세요. 여기에서 수정한 내용은 대체됩니다.",
+        "reload": "최신 버전 불러오기"
+      },
+      "leave": {
+        "title": "저장하지 않고 나갈까요?",
+        "message": "예약 설정의 변경 사항이 저장되지 않았습니다.",
+        "leave": "나가기",
+        "stay": "계속 수정"
+      },
+      "calendar": {
+        "title": "캘린더 연동",
+        "description": "캘린더를 연결하여 예약과 바쁜 시간을 동기화하세요.",
+        "provider": "Google 캘린더",
+        "providerSub": "예약",
+        "status": {
+          "unavailable": "사용 불가",
+          "disconnected": "연결 안 됨",
+          "connected": "연결됨",
+          "needs_reconnect": "다시 연결 필요"
+        },
+        "loading": "연결 확인 중",
+        "unavailableTitle": "이 플랫폼에는 아직 Google 캘린더가 설정되지 않았습니다",
+        "unavailableBody": "워크스페이스가 연결하려면 플랫폼 관리자가 Google OAuth 클라이언트를 추가해야 합니다 (관리자, 설정, Google 캘린더). 예약에는 영향이 없습니다.",
+        "disconnectedBody": "연결되지 않았습니다. 연결하면 Google이 열리며 계정을 선택하고 캘린더 접근 공유에 동의하게 됩니다.",
+        "disconnectedReadOnly": "연결되지 않았습니다. 워크스페이스 관리자에게 연결을 요청하세요.",
+        "reconnectTitle": "Google이 연결을 더 이상 허용하지 않습니다",
+        "reconnectBody": "접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간도 읽지 않습니다. 다시 연결하여 재개하세요.",
+        "reconnectBodyAccount": "{account}의 접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간도 읽지 않습니다. 다시 연결하여 재개하세요.",
+        "account": "Google 계정",
+        "calendar": "캘린더",
+        "primaryCalendar": "기본 캘린더",
+        "connectedAgo": "{when} 연결됨",
+        "errors": {
+          "notConfigured": "이 플랫폼에는 Google 캘린더가 설정되지 않았습니다. 플랫폼 관리자에게 Google OAuth 클라이언트 추가를 요청하세요.",
+          "notConnected": "연결된 Google 캘린더가 없습니다. 페이지를 새로고침하고 다시 연결하세요.",
+          "providerFailed": "Google이 응답하지 않았습니다. 잠시 후 다시 시도하세요."
+        },
+        "loadingCalendars": "캘린더 불러오는 중",
+        "chooseLabel": "예약 기록 위치",
+        "chooseHint": "이 계정이 편집할 수 있는 캘린더만 표시됩니다. 이미 기록된 이벤트는 그대로 유지됩니다.",
+        "choosePlaceholder": "캘린더 선택",
+        "chooseOptionPrimary": "{name} (기본 캘린더)",
+        "chooseSave": "이 캘린더 사용",
+        "chooseCancel": "취소",
+        "saving": "저장 중",
+        "connect": "Google 캘린더 연결",
+        "reconnect": "Google 다시 연결",
+        "redirecting": "Google 여는 중",
+        "choose": "캘린더 선택",
+        "disconnect": "연결 해제",
+        "disconnected": "Google 캘린더 연결을 해제했습니다.",
+        "calendarSaved": "캘린더를 저장했습니다.",
+        "confirmOff": {
+          "title": "Google 캘린더 연결을 해제할까요?",
+          "message": "새 예약이 캘린더에 기록되지 않으며 바쁜 시간도 더 이상 읽지 않습니다. 이미 캘린더에 있는 이벤트는 그대로 유지되며 Google에 이 접근 권한을 철회하도록 요청합니다.",
+          "confirm": "연결 해제",
+          "cancel": "유지"
+        },
+        "outcome": {
+          "connected": "Google 캘린더가 연결되었습니다. 이제 확정된 예약이 캘린더에 기록됩니다.",
+          "denied": "Google에서 접근 권한이 허용되지 않아 아무것도 연결되지 않았습니다.",
+          "failed": "연결이 완료되지 않았습니다. 다시 시도하고, 계속 실패하면 플랫폼 관리자에게 Google 설정 확인을 요청하세요.",
+          "expired": "시도 시간이 너무 오래 걸렸습니다. 연결을 눌러 다시 시작하세요.",
+          "not_configured": "이 플랫폼에는 Google 캘린더가 설정되지 않았습니다. 플랫폼 관리자에게 Google OAuth 클라이언트 추가를 요청하세요.",
+          "missing_scope": "Google이 필요한 모든 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 체크박스를 선택한 상태로 유지하세요."
+        },
+        "whatTitle": "이 기능이 하는 일",
+        "what": {
+          "freeBusy": "캘린더에서 빈 시간과 바쁜 시간을 읽습니다.",
+          "nextSlots": "고객에게 다음 빈 시간대를 제안합니다.",
+          "writeBack": "확정된 예약을 이벤트로 캘린더에 기록하며, 서비스에서 요구하면 Meet 링크를 포함합니다."
+        },
+        "hint": "이 기능 없이도 예약은 작동합니다. 예약 가능한 시간은 아래의 영업시간과 예약 규칙을 따릅니다."
+      },
+      "timezone": {
+        "title": "시간대",
+        "description": "영업시간과 예약 시간을 해석하는 기준 시간대입니다.",
+        "label": "워크스페이스 시간대",
+        "hint": "고객은 자신의 시간대로 시간을 보며, 내 시간은 이 시간대로 표시됩니다."
+      },
+      "hours": {
+        "title": "영업시간",
+        "description": "고객이 예약할 수 있는 시간입니다. 요일을 끄면 휴무가 되며, 휴식 시간은 구간을 추가하세요.",
+        "noHours": "영업하는 요일이 없어 아무도 예약할 수 없습니다."
+      },
+      "defaults": {
+        "title": "예약 규칙",
+        "description": "이 워크스페이스 예약의 기본값입니다.",
+        "fields": {
+          "slotDurationMinutes": "시간대 길이 (분)",
+          "maxPerDay": "일일 최대 예약 수",
+          "bufferBeforeMinutes": "이전 여유 시간 (분)",
+          "bufferAfterMinutes": "이후 여유 시간 (분)",
+          "advanceDays": "사전 예약 가능 기간 (일)",
+          "reminderMinutesBefore": "알림 (몇 분 전)",
+          "defaultLocation": "기본 장소 (선택)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min}분에서 {max}분.",
+          "maxPerDay": "예약 {min}건에서 {max}건.",
+          "bufferBeforeMinutes": "{min}분에서 {max}분.",
+          "bufferAfterMinutes": "{min}분에서 {max}분.",
+          "advanceDays": "{min}일에서 {max}일 앞.",
+          "reminderMinutesBefore": "{min}분에서 {max}분. 0이면 알림이 꺼집니다."
+        },
+        "locationHint": "최대 191자.",
+        "locationPlaceholder": "예: 서울시 강남구 테헤란로 12"
+      },
+      "templates": {
+        "title": "메시지 템플릿",
+        "description": "고객이 받는 일반 텍스트 메시지입니다. 플레이스홀더는 예약마다 채워집니다.",
+        "placeholders": "플레이스홀더",
+        "placeholder": {
+          "type": "예약 유형 이름",
+          "slot": "날짜와 시간",
+          "name": "고객 이름",
+          "manage_link": "예약 관리 링크"
+        },
+        "events": {
+          "confirmation": "확정",
+          "reminder": "알림",
+          "cancellation": "취소",
+          "reschedule": "일정 변경"
+        },
+        "reset": "기본값으로 재설정",
+        "unknown": "알 수 없는 플레이스홀더이므로 작성한 그대로 전송됩니다: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "필수 입력 항목입니다.",
+        "notInteger": "정수를 입력하세요.",
+        "tooSmall": "{min} 이상이어야 합니다.",
+        "tooLarge": "{max} 이하여야 합니다.",
+        "tooLong": "최대 {max}자까지 가능합니다.",
+        "badZone": "목록에서 시간대를 선택하세요.",
+        "badHours": "영업시간에서 강조 표시된 시간을 수정하세요."
+      },
+      "notAvailable": "이 서버에서는 워크스페이스 전체 예약 설정을 사용할 수 없습니다. 대신 각 예약 유형이 고유한 시간, 시간대, 알림, 메시지를 가집니다.",
+      "openTypes": "예약 유형 열기"
+    },
+    "linked": {
+      "title": "예약",
+      "openBookings": "예약 열기",
+      "showPast": "지난 예약 표시",
+      "hidePast": "지난 예약 숨기기",
+      "empty": "예정된 예약이 없습니다.",
+      "emptyBoth": "아직 예약이 없습니다.",
+      "loading": "예약 불러오는 중",
+      "unavailable": "이 서버에서는 아직 예약 기능을 사용할 수 없습니다.",
+      "loadMore": "더 보기",
+      "loadMorePast": "지난 예약 더 보기",
+      "noType": "예약"
+    }
+  }
+}

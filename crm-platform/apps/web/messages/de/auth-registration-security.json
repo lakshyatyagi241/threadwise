@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Anmelden",
+            "title": "Willkommen",
+            "accent": "zurück",
+            "subtitle": "Geben Sie Ihre Daten ein, um wieder in Ihren Workspace zu gelangen."
+          },
+          "register": {
+            "eyebrow": "Schritt 1 von 3 / Konto erstellen",
+            "title": "Erstellen Sie Ihr",
+            "accent": "Konto",
+            "subtitle": "Ein paar Angaben und Ihr Workspace ist bereit."
+          },
+          "forgot": {
+            "eyebrow": "Passwort vergessen",
+            "title": "Setzen Sie Ihr",
+            "accent": "Passwort zurück",
+            "subtitle": "Sagen Sie uns, wo Sie sich anmelden, und wir senden Ihnen einen Einmal-Link."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Alles an einem Ort",
+            "hero_desc": "Chats, Kampagnen und Kontakte bleiben beisammen, damit niemand nach Zusammenhängen suchen muss.",
+            "stat1_num": "24/7",
+            "stat1_label": "gemeinsamer Team-Posteingang",
+            "stat2_num": "5 Min.",
+            "stat2_label": "typische Einrichtung",
+            "stat3_num": "1 Ort",
+            "stat3_label": "für Chats und Kontakte",
+            "feat1_title": "Gemeinsamer Posteingang",
+            "feat1_desc": "Weisen Sie Chats zu, antworten Sie und übergeben Sie sie, ohne den Faden zu verlieren.",
+            "feat2_title": "Broadcasts",
+            "feat2_desc": "Erreichen Sie viele Kontakte gleichzeitig mit Taktung und Zustellverfolgung.",
+            "feat3_title": "Automatisierungen",
+            "feat3_desc": "Leiten Sie weiter, antworten Sie und fassen Sie nach mit Flows, die Sie selbst gestalten.",
+            "feat4_title": "Teamkontrolle",
+            "feat4_desc": "Rollen, Berechtigungen und Prüfprotokolle behalten jeden Workspace im Griff.",
+            "inside_heading": "In Ihrem Workspace",
+            "chip1": "Posteingang",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Kontakte",
+            "chip5": "Berichte",
+            "chip6": "Vorlagen"
+          },
+          "register": {
+            "hero_title": "Kostenlos starten",
+            "hero_desc": "Richten Sie zuerst Ihren Workspace ein und wählen Sie einen Tarif, wenn Sie bereit sind.",
+            "stat1_num": "3 Schritte",
+            "stat1_label": "zum funktionierenden Workspace",
+            "stat2_num": "5 Min.",
+            "stat2_label": "typische Einrichtung",
+            "stat3_num": "Tag 1",
+            "stat3_label": "Team einladen",
+            "feat1_title": "Schnelle Einrichtung",
+            "feat1_desc": "Benennen Sie Ihren Workspace, legen Sie Ihre Zeitzone fest, und schon sind Sie drin.",
+            "feat2_title": "Holen Sie Ihr Team dazu",
+            "feat2_desc": "Laden Sie Kollegen ein und geben Sie jedem genau den Zugriff, den er braucht.",
+            "feat3_title": "Kanäle verbinden",
+            "feat3_desc": "Verknüpfen Sie Ihre Messaging-Nummern und beginnen Sie, mit Kunden zu sprechen.",
+            "feat4_title": "Behalten Sie die Kontrolle",
+            "feat4_desc": "Zwei-Faktor-Anmeldung und Sitzungskontrollen schützen jedes Konto.",
+            "inside_heading": "Das erhalten Sie",
+            "chip1": "Gemeinsamer Posteingang",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Kontakte",
+            "chip5": "Berichte",
+            "chip6": "Teamrollen"
+          },
+          "forgot": {
+            "hero_title": "Ein neuer Link, einmal nutzbar",
+            "hero_desc": "Wir senden Ihnen per E-Mail einen sicheren Link, der nur einmal funktioniert und bald abläuft."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Team-Posteingang für WhatsApp",
+            "heading": "Jeder Kundenchat,",
+            "headingAccent": "ein ruhiger Workspace",
+            "subheading": "Broadcasts, Automatisierungen und ein gemeinsamer Posteingang für Teams, die schnell antworten."
+          },
+          "register": {
+            "eyebrow": "In Minuten starten",
+            "heading": "Richten Sie Ihren",
+            "headingAccent": "Workspace ein",
+            "subheading": "Erstellen Sie Ihren Workspace und holen Sie dann Ihr Team und Ihren ersten Kanal dazu."
+          },
+          "forgot": {
+            "eyebrow": "Kontowiederherstellung",
+            "heading": "In einer",
+            "headingAccent": "Minute zurück",
+            "subheading": "Geben Sie Ihre E-Mail-Adresse ein, und wir senden Ihnen einen sicheren Link zur Wahl eines neuen Passworts."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Sprache",
+        "theme": "Design wechseln",
+        "themeToLight": "Hell",
+        "themeToDark": "Dunkel"
+      },
+      "pages": {
+        "login": {
+          "title": "Anmelden"
+        },
+        "signup": {
+          "title": "Konto erstellen"
+        },
+        "verifyOtp": {
+          "title": "Nummer bestätigen",
+          "eyebrow": "Nummer bestätigen",
+          "heading": "Prüfen Sie Ihr",
+          "accent": "WhatsApp",
+          "subtitle": "Geben Sie den Einmalcode ein, den wir gesendet haben, um die Erstellung Ihres Workspace abzuschließen."
+        },
+        "forgot": {
+          "title": "Passwort zurücksetzen"
+        },
+        "reset": {
+          "title": "Neues Passwort wählen",
+          "eyebrow": "Passwort zurücksetzen",
+          "heading": "Wählen Sie ein neues",
+          "accent": "Passwort",
+          "subtitle": "Wählen Sie ein starkes Passwort. Sie melden sich gleich danach damit an.",
+          "panel": {
+            "heroTitle": "Ein neues Passwort",
+            "heroDesc": "Wählen Sie eines, das Sie sich merken können. Ihr Workspace verlangt möglicherweise eine Mindestlänge.",
+            "eyebrow": "Kontowiederherstellung",
+            "heading": "Ein neuer",
+            "accent": "Anfang",
+            "subheading": "Sobald Ihr neues Passwort gespeichert ist, können Sie sich sofort damit anmelden."
+          }
+        },
+        "verifyEmail": {
+          "title": "E-Mail-Adresse bestätigen",
+          "eyebrow": "E-Mail-Bestätigung",
+          "heading": "Bestätigen Sie Ihre",
+          "accent": "E-Mail-Adresse",
+          "subtitle": "Diese Seite prüft den Link, den Sie aus Ihrem Posteingang geöffnet haben.",
+          "panel": {
+            "heroTitle": "Adresse bestätigen",
+            "heroDesc": "Ein einziger Klick beweist, dass dieser Posteingang Ihnen gehört.",
+            "eyebrow": "E-Mail-Bestätigung",
+            "heading": "Ihr Link",
+            "accent": "wird geprüft",
+            "subheading": "Wir bestätigen die Adresse aus der E-Mail, die Sie geöffnet haben."
+          }
+        },
+        "findWorkspace": {
+          "title": "Meinen Workspace finden",
+          "eyebrow": "Meinen Workspace finden",
+          "heading": "Finden Sie Ihren",
+          "accent": "Workspace",
+          "subtitle": "Geben Sie Ihre E-Mail-Adresse ein, und wir senden Ihnen die Workspace-Adressen, bei denen Sie sich anmelden können."
+        },
+        "confirmEmailChange": {
+          "title": "Neue E-Mail-Adresse bestätigen",
+          "eyebrow": "E-Mail-Änderung",
+          "heading": "Bestätigen Sie Ihre",
+          "accent": "neue E-Mail-Adresse",
+          "subtitle": "Diese Seite prüft den Link, den Sie aus Ihrem Posteingang geöffnet haben.",
+          "panel": {
+            "heroTitle": "Neue Anmelde-E-Mail",
+            "heroDesc": "Ihre Adresse ändert sich, sobald Sie sie bestätigen.",
+            "eyebrow": "E-Mail-Änderung",
+            "heading": "Ihre neue",
+            "accent": "E-Mail-Adresse wird bestätigt",
+            "subheading": "Wir prüfen den Link aus der Nachricht, die Sie geöffnet haben."
+          }
+        },
+        "socialCallback": {
+          "title": "Sie werden angemeldet",
+          "eyebrow": "Anmeldung über Dienst",
+          "heading": "Sie werden",
+          "accent": "angemeldet",
+          "subtitle": "Ihre Anmeldung wird abgeschlossen."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Diese Angaben stimmen nicht überein. Prüfen Sie Workspace, E-Mail-Adresse und Passwort.",
+        "locked": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+        "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
+        "suspended": "Dieses Konto ist gesperrt. Wenden Sie sich an Ihren Workspace-Administrator.",
+        "captcha": "Bitte lösen Sie das Captcha und versuchen Sie es erneut.",
+        "signupClosed": "Die Registrierung ist geschlossen. Bitten Sie einen Administrator um eine Einladung.",
+        "slugTaken": "Diese Workspace-Adresse ist bereits vergeben.",
+        "emailTaken": "Diese E-Mail-Adresse wird in diesem Workspace bereits verwendet.",
+        "passwordPolicy": "Das Passwort erfüllt die Sicherheitsrichtlinie nicht:",
+        "tokenInvalid": "Dieser Link ist ungültig oder abgelaufen.",
+        "emailUnverified": "Bestätigen Sie zuerst Ihre E-Mail-Adresse.",
+        "mfaInvalid": "Der Code ist ungültig. Prüfen Sie den Code und versuchen Sie es erneut.",
+        "mfaExpired": "Ihre Bestätigung ist abgelaufen. Melden Sie sich erneut an.",
+        "otpInvalid": "Der Code ist nicht korrekt. Versuchen Sie es erneut.",
+        "otpExpired": "Der Code ist abgelaufen. Fordern Sie einen neuen an.",
+        "otpTooMany": "Zu viele Versuche. Fordern Sie einen neuen Code an.",
+        "otpCooldown": "Bitte warten Sie einen Moment, bevor Sie einen weiteren Code anfordern.",
+        "otpSendFailed": "Der Bestätigungscode konnte nicht gesendet werden. Prüfen Sie die Nummer und versuchen Sie es erneut.",
+        "socialUnavailable": "Diese Anmeldemethode ist nicht verfügbar.",
+        "socialExpired": "Die Anmeldung ist abgelaufen. Bitte versuchen Sie es erneut.",
+        "socialFailed": "Die Anmeldung über {provider} konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
+        "socialNoEmail": "Dieses Konto hat keine E-Mail-Adresse freigegeben. Verwenden Sie stattdessen E-Mail und Passwort.",
+        "ipBlocked": "Die Anmeldung aus diesem Netzwerk ist nicht erlaubt.",
+        "workspaceUnavailable": "Dieser Workspace ist nicht verfügbar.",
+        "workspaceRequired": "Diese E-Mail-Adresse wird in mehr als einem Workspace verwendet. Geben Sie Ihren Workspace ein, um fortzufahren.",
+        "validation": "Bitte prüfen Sie die markierten Felder.",
+        "sessionExpired": "Ihre Sitzung ist aus Sicherheitsgründen abgelaufen. Bitte versuchen Sie es erneut.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
+        "requestId": "Anfrage-ID",
+        "signupExpired": "Bitte beginnen Sie die Registrierung erneut.",
+        "policyRules": {
+          "min_length": "Verwenden Sie mindestens {min, plural, one {# Zeichen} other {# Zeichen}}.",
+          "upper_lower": "Mischen Sie Groß- und Kleinbuchstaben.",
+          "number": "Fügen Sie mindestens eine Zahl ein.",
+          "symbol": "Fügen Sie mindestens ein Sonderzeichen ein.",
+          "common": "Das Passwort ist zu leicht zu erraten."
+        },
+        "socialNoAccount": "Zu dieser {provider}-Anmeldung gehört kein Konto. Melden Sie sich mit E-Mail und Passwort an oder erstellen Sie ein Konto.",
+        "forbidden": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut."
+      },
+      "validation": {
+        "orgSlug": "Geben Sie Ihre Workspace-Adresse ein (Buchstaben, Zahlen, Bindestrich oder Unterstrich).",
+        "orgSlugForSocial": "Geben Sie zuerst Ihre Workspace-Adresse ein, damit wir wissen, wo wir Sie anmelden sollen.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "password": "Geben Sie ein Passwort ein, das die angezeigten Anforderungen erfüllt.",
+        "passwordRequired": "Geben Sie Ihr Passwort ein.",
+        "fullName": "Geben Sie Ihren vollständigen Namen ein.",
+        "orgName": "Benennen Sie Ihren Workspace (mindestens 2 Zeichen).",
+        "orgNameForSocial": "Benennen Sie zuerst Ihren Workspace und fahren Sie dann mit Google oder Facebook fort.",
+        "phoneRequired": "Geben Sie Ihre Mobilnummer ein.",
+        "phone": "Geben Sie eine gültige Mobilnummer für das gewählte Land ein.",
+        "newPassword": "Verwenden Sie mindestens {min, plural, one {# Zeichen} other {# Zeichen}}.",
+        "confirmPassword": "Die beiden Passwörter stimmen nicht überein.",
+        "acceptTerms": "Sie müssen die Bedingungen akzeptieren, um fortzufahren.",
+        "referralCode": "Empfehlungscodes bestehen nur aus Buchstaben und Zahlen.",
+        "code": "Geben Sie den {length}-stelligen Code ein."
+      },
+      "legal": {
+        "login": "Mit der Anmeldung stimmen Sie unseren <terms>Nutzungsbedingungen</terms> und der <privacy>Datenschutzerklärung</privacy> zu.",
+        "signup": "Ich stimme den <terms>Nutzungsbedingungen</terms> und der <privacy>Datenschutzerklärung</privacy> zu.",
+        "cookies": "<cookies>Cookie-Richtlinie</cookies>"
+      },
+      "captcha": {
+        "protected": "Diese Website ist durch reCAPTCHA geschützt. Es gelten die <privacy>Datenschutzerklärung</privacy> und die <terms>Nutzungsbedingungen</terms> von Google."
+      },
+      "social": {
+        "divider": "oder per E-Mail",
+        "redirecting": "Anbieter wird geöffnet",
+        "login": {
+          "google": "Weiter mit Google",
+          "facebook": "Weiter mit Facebook"
+        },
+        "signup": {
+          "google": "Mit Google registrieren",
+          "facebook": "Mit Facebook registrieren"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Workspace",
+        "workspaceHint": "Die Adresse, die Ihr Team verwendet, z. B. acme.",
+        "chooseTitle": "Workspace wählen",
+        "chooseSubtitle": "Ihre E-Mail-Adresse gehört zu mehr als einem Workspace. Wählen Sie den, den Sie öffnen möchten.",
+        "chooseMembers": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+        "chooseOpen": "Öffnen",
+        "chooseBack": "Anderes Konto verwenden",
+        "chooseExpired": "Das hat zu lange gedauert. Melden Sie sich erneut an.",
+        "workspacePlaceholder": "ihr-workspace",
+        "email": "E-Mail",
+        "emailPlaceholder": "sie@firma.de",
+        "password": "Passwort",
+        "forgot": "Passwort vergessen?",
+        "showPassword": "Passwort anzeigen",
+        "hidePassword": "Passwort verbergen",
+        "remember": "30 Tage lang angemeldet bleiben",
+        "submit": "Anmelden",
+        "submitting": "Anmeldung läuft",
+        "newHere": "Neu hier?",
+        "createAccount": "Konto erstellen",
+        "lostWorkspace": "Sie kennen Ihre Workspace-Adresse nicht?",
+        "findWorkspace": "Meinen Workspace finden",
+        "loggedOut": "Sie wurden abgemeldet.",
+        "flashReset": "Passwort zurückgesetzt. Melden Sie sich mit Ihrem neuen Passwort an.",
+        "flashExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+        "flashIdle": "Sie wurden nach {minutes, plural, one {# Minute} other {# Minuten}} ohne Aktivität abgemeldet. Melden Sie sich erneut an, um fortzufahren.",
+        "mfaExpired": "Ihre Bestätigung hat zu lange gedauert. Melden Sie sich erneut an.",
+        "flashDeleted": "Ihr Konto wurde gelöscht."
+      },
+      "mfa": {
+        "title": "Bestätigung in zwei Schritten",
+        "descriptionCode": "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.",
+        "descriptionRecovery": "Geben Sie einen Ihrer einmalig verwendbaren Wiederherstellungscodes ein.",
+        "codeLabel": "Authenticator-Code",
+        "recoveryLabel": "Wiederherstellungscode",
+        "recoveryHint": "Jeder Wiederherstellungscode gilt nur einmal.",
+        "invalidCode": "Geben Sie den 6-stelligen Code ein.",
+        "invalidRecovery": "Geben Sie einen Wiederherstellungscode ein (8 bis 32 Zeichen).",
+        "verify": "Bestätigen",
+        "verifying": "Wird überprüft",
+        "useRecovery": "Stattdessen einen Wiederherstellungscode verwenden",
+        "useApp": "Stattdessen den Authenticator-Code verwenden",
+        "back": "Zurück zur Anmeldung",
+        "expiresIn": "Die Bestätigung läuft in {time} ab"
+      },
+      "signup": {
+        "steps": {
+          "label": "Registrierungsfortschritt",
+          "account": "Konto",
+          "workspace": "Workspace",
+          "plan": "Tarif"
+        },
+        "fullName": "Vollständiger Name",
+        "fullNamePlaceholder": "Ihr Name",
+        "email": "Geschäftliche E-Mail",
+        "orgName": "Workspace-Name",
+        "orgNamePlaceholder": "Acme GmbH",
+        "orgNameHint": "Ihr Team meldet sich mit der Adresse {slug} an.",
+        "orgNameHintEmpty": "Dies ist der Name, den Ihr Team sieht.",
+        "customiseSlug": "Eigene Workspace-Adresse wählen",
+        "orgSlug": "Workspace-Adresse",
+        "orgSlugHint": "Buchstaben, Zahlen, Bindestrich oder Unterstrich. Ihr Team gibt sie bei der Anmeldung ein.",
+        "orgSlugPlaceholder": "ihr-workspace",
+        "phone": "Mobilnummer",
+        "phoneHint": "Wir nutzen sie, um Ihr Konto zu bestätigen und für wichtige Neuigkeiten.",
+        "phonePlaceholder": "Nummer ohne Landesvorwahl",
+        "country": "Land",
+        "referral": "Empfehlungscode",
+        "optional": "optional",
+        "referralPlaceholder": "Sie haben den Code eines Freundes?",
+        "password": "Passwort",
+        "confirmPassword": "Passwort bestätigen",
+        "submit": "Weiter",
+        "submitting": "Ihr Konto wird erstellt",
+        "haveAccount": "Sie haben bereits ein Konto?",
+        "signIn": "Anmelden",
+        "closedBody": "Die Registrierung ist geschlossen. Bitten Sie einen Administrator um eine Einladung.",
+        "closedBack": "Zurück zur Anmeldung",
+        "restart": "Bitte beginnen Sie die Registrierung erneut.",
+        "countryButton": "Landesvorwahl +{dial}",
+        "countrySearch": "Länder suchen",
+        "countryEmpty": "Kein Land gefunden"
+      },
+      "otp": {
+        "sentTo": "Wir haben einen Code gesendet an",
+        "code": "Bestätigungscode",
+        "expiresIn": "Der Code läuft in {time} ab.",
+        "expired": "Dieser Code ist abgelaufen. Fordern Sie einen neuen an.",
+        "verify": "Bestätigen und fortfahren",
+        "verifying": "Wird überprüft",
+        "resend": "Code erneut senden",
+        "resendIn": "Code erneut senden in {time}",
+        "resending": "Wird gesendet",
+        "resent": "Ein neuer Code ist auf dem Weg zu Ihrem WhatsApp.",
+        "wrongNumber": "Falsche Nummer?",
+        "goBack": "Zurück",
+        "addressTakenHint": "Diese Workspace-Adresse wurde vergeben, während Sie die Bestätigung durchgeführt haben. Wählen Sie eine andere, und wir senden Ihnen einen neuen Code.",
+        "chooseAnotherAddress": "Andere Adresse wählen"
+      },
+      "forgot": {
+        "submit": "Link zum Zurücksetzen senden",
+        "submitting": "Wird gesendet",
+        "remembered": "Wieder eingefallen?",
+        "back": "Zurück zur Anmeldung",
+        "doneTitle": "Prüfen Sie Ihren Posteingang",
+        "doneBody": "Wenn diese E-Mail-Adresse zu einem Konto in diesem Workspace gehört, ist ein Link zum Zurücksetzen unterwegs. Er funktioniert nur einmal und läuft bald ab.",
+        "doneHint": "Noch nichts? Prüfen Sie Ihren Spam-Ordner oder versuchen Sie es in einer Minute erneut.",
+        "tryAnother": "Andere E-Mail-Adresse verwenden"
+      },
+      "reset": {
+        "password": "Neues Passwort",
+        "confirmPassword": "Neues Passwort bestätigen",
+        "submit": "Neues Passwort speichern",
+        "submitting": "Wird gespeichert",
+        "back": "Zurück zur Anmeldung",
+        "invalidTitle": "Dieser Link funktioniert nicht mehr",
+        "invalidBody": "Links zum Zurücksetzen funktionieren nur einmal und laufen nach kurzer Zeit ab. Fordern Sie einen neuen an, um fortzufahren.",
+        "requestNew": "Neuen Link anfordern"
+      },
+      "verifyEmail": {
+        "working": "Ihre E-Mail-Adresse wird bestätigt",
+        "doneTitle": "E-Mail-Adresse bestätigt",
+        "doneBody": "Danke, Ihre Adresse ist bestätigt. Melden Sie sich an, um fortzufahren.",
+        "failedTitle": "Ihre E-Mail-Adresse konnte nicht bestätigt werden",
+        "failedHint": "Melden Sie sich an und fordern Sie über das Banner oben in der App eine neue Bestätigungs-E-Mail an.",
+        "signIn": "Zur Anmeldung"
+      },
+      "confirmEmailChange": {
+        "working": "Ihre neue E-Mail-Adresse wird bestätigt",
+        "doneTitle": "E-Mail-Adresse aktualisiert",
+        "doneBody": "Verwenden Sie bei Ihrer nächsten Anmeldung Ihre neue Adresse.",
+        "failedTitle": "Die Änderung konnte nicht bestätigt werden",
+        "failedHint": "Melden Sie sich an und starten Sie die E-Mail-Änderung auf Ihrer Kontoseite erneut.",
+        "signIn": "Zur Anmeldung"
+      },
+      "findWorkspace": {
+        "submit": "Meine Workspaces per E-Mail senden",
+        "submitting": "Wird gesendet",
+        "back": "Zurück zur Anmeldung",
+        "doneTitle": "Prüfen Sie Ihren Posteingang",
+        "doneBody": "Wenn diese Adresse zu einem bestätigten Konto gehört, haben wir Ihnen die Workspace-Adressen gesendet, bei denen Sie sich anmelden können.",
+        "doneHint": "Noch nichts? Prüfen Sie Ihren Spam-Ordner oder versuchen Sie eine andere E-Mail-Adresse.",
+        "tryAnother": "Andere E-Mail-Adresse verwenden"
+      },
+      "callback": {
+        "working": "Ihre Anmeldung wird abgeschlossen",
+        "failedTitle": "Die Anmeldung wurde nicht abgeschlossen",
+        "cancelled": "Die Anmeldung wurde abgebrochen.",
+        "backToSignIn": "Zurück zur Anmeldung",
+        "createAccount": "Stattdessen Konto erstellen"
+      },
+      "layout": {
+        "noscript": "JavaScript ist in diesem Browser deaktiviert. Aktivieren Sie es, um sich anzumelden oder ein Konto zu erstellen."
+      },
+      "consent": {
+        "label": "Cookie-Hinweis",
+        "title": "Wir verwenden Cookies",
+        "message": "Wir verwenden Cookies, um Sie angemeldet zu halten und zu verstehen, wie diese Website genutzt wird. Akzeptieren Sie alle, lehnen Sie die optionalen ab oder wählen Sie, was Sie erlauben.",
+        "learnMore": "Mehr erfahren",
+        "decline": "Ablehnen",
+        "customize": "Anpassen",
+        "acceptAll": "Alle akzeptieren",
+        "prefsTitle": "Ihre Datenschutzeinstellungen",
+        "necessary": "Unbedingt erforderlich",
+        "necessaryHint": "Für Anmeldung und Sicherheit erforderlich. Immer aktiv.",
+        "analytics": "Analysen",
+        "analyticsHint": "Hilft uns zu sehen, welche Seiten funktionieren und welche nicht.",
+        "marketing": "Marketing",
+        "marketingHint": "Wird verwendet, um auf anderen Websites passende Angebote anzuzeigen.",
+        "rejectAll": "Alle ablehnen",
+        "save": "Auswahl speichern"
+      },
+      "policy": {
+        "minLength": "Mindestens {min, plural, one {# Zeichen} other {# Zeichen}}.",
+        "mixedCase": "Mischen Sie Groß- und Kleinbuchstaben.",
+        "number": "Fügen Sie eine Zahl ein.",
+        "symbol": "Fügen Sie ein Sonderzeichen ein.",
+        "placeholder": "Mindestens {min, plural, one {# Zeichen} other {# Zeichen}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Ihr Konto ist",
+        "titleAccent": "gesperrt"
+      },
+      "verify": {
+        "titleLead": "Bitte",
+        "titleAccent": "bestätigen Sie Ihre E-Mail-Adresse"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Schritt 2 von 3 / Workspace",
+            "title": "Erstellen Sie Ihren",
+            "accent": "Workspace"
+          },
+          "step3": {
+            "eyebrow": "Schritt 3 von 3 / Tarif",
+            "title": "Wählen Sie einen",
+            "accent": "Tarif",
+            "subtitle": "Jeder Tarif enthält ein monatliches Nachrichtenkontingent. Beginnen Sie mit dem kostenlosen Tarif oder wählen Sie einen mit mehr Spielraum."
+          }
+        },
+        "timezonePlaceholder": "Zeitzone suchen...",
+        "timezoneEmpty": "Keine Zeitzone entspricht Ihrer Suche.",
+        "timezoneLabel": "Zeitzone",
+        "phonePlaceholder": "Nummer ohne Landesvorwahl",
+        "plan": {
+          "credits": "Ihr Tarif enthält jeden Monat eine bestimmte Anzahl an Nachrichten. Ist das Kontingent bei aktivem Tarif aufgebraucht, werden zusätzliche Sendungen mit Guthaben abgerechnet, zu <rate>{credits, plural, one {# Credit} other {# Credits}} pro Nachricht</rate>. Wenn der Tarif endet, pausiert der Versand bis zur Verlängerung.",
+          "topUpPrompt": "Kontingent überschritten?",
+          "topUp": "Nachrichten-Credits hinzufügen"
+        }
+      }
+    }
+  }
+}

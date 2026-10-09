@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Sklep / Zamówienia",
+      "title": "Wszystkie zamówienia",
+      "subtitle": "Każde zamówienie z każdego kanału: WhatsApp, witryna sklepowa, Twilio i ręczne.",
+      "loading": "Wczytywanie zamówień",
+      "statusTabs": "Status zamówienia",
+      "searchLabel": "Szukaj zamówień",
+      "searchPlaceholder": "Szukaj po telefonie, nazwie lub numerze zamówienia",
+      "sourceLabel": "Źródło",
+      "allSources": "Wszystkie źródła",
+      "paymentLabel": "Płatność",
+      "allPayments": "Wszystkie płatności",
+      "fromLabel": "Od",
+      "toLabel": "Do",
+      "shopLabel": "Sklep",
+      "invertedRange": "Data początkowa jest po końcowej, więc żadne zamówienie nie może pasować.",
+      "clearFilters": "Wyczyść filtry",
+      "cols": {
+        "order": "Zamówienie",
+        "customer": "Klient",
+        "items": "Pozycje",
+        "total": "Suma",
+        "payment": "Płatność",
+        "status": "Status",
+        "source": "Źródło",
+        "created": "Utworzono",
+        "actions": "Działania"
+      },
+      "itemsCount": "{count, plural, one {# pozycja} few {# pozycje} many {# pozycji} other {# pozycji}}",
+      "anonymous": "Anonimowy",
+      "openOrder": "Otwórz zamówienie nr {no}",
+      "changeStatus": "Zmień status zamówienia nr {no}",
+      "deleteOrder": "Usuń zamówienie nr {no}",
+      "deleteTitle": "Usunąć zamówienie nr {no}?",
+      "deleteMessage": "Zamówienie i jego pozycje zostaną usunięte na stałe. Tej operacji nie można cofnąć.",
+      "deleteConfirm": "Usuń zamówienie",
+      "deleted": "Zamówienie nr {no} zostało usunięte.",
+      "statusChanged": "Zamówienie nr {no} ma teraz status: {status}.",
+      "buyerNotified": "Wysłano wiadomość do kupującego.",
+      "confirmStatusTitle": "Oznaczyć zamówienie nr {no} jako: {status}?",
+      "confirmStatusMessage": "Kupujący zostanie poinformowany o nowym statusie. Później nadal możesz przenieść zamówienie do innego statusu.",
+      "confirmStatusConfirm": "Zaktualizuj status",
+      "emptyTitle": "Brak zamówień",
+      "emptyMessage": "Gdy klienci złożą zamówienie w witrynie sklepowej lub przez WhatsApp, pojawią się tutaj. Udostępnij link do sklepu, aby otrzymać pierwsze.",
+      "emptyAction": "Otwórz przegląd sklepu",
+      "noMatchTitle": "Żadne zamówienie nie pasuje do tych filtrów",
+      "noMatchMessage": "Spróbuj innego wyszukiwania, statusu lub zakresu dat albo wyczyść filtry, aby zobaczyć wszystkie zamówienia."
+    },
+    "orderDetail": {
+      "back": "Wróć do zamówień",
+      "title": "Zamówienie nr {no}",
+      "placed": "Złożono {when}",
+      "loading": "Wczytywanie zamówienia",
+      "readOnly": "Możesz zobaczyć to zamówienie, ale nie możesz go zmienić.",
+      "items": {
+        "title": "Pozycje",
+        "empty": "To zamówienie nie ma pozycji.",
+        "qty": "Ilość: {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} za sztukę"
+      },
+      "totals": {
+        "title": "Sumy",
+        "subtotal": "Suma częściowa",
+        "shipping": "Wysyłka",
+        "tax": "Podatek",
+        "taxInclusive": "Wliczony w ceny",
+        "discount": "Rabat",
+        "discountCoupon": "Rabat ({code})",
+        "total": "Suma"
+      },
+      "customer": {
+        "title": "Klient",
+        "anonymous": "Anonimowy",
+        "phone": "Telefon",
+        "email": "E-mail",
+        "address": "Adres dostawy",
+        "noAddress": "Nie zapisano adresu dla tego zamówienia.",
+        "notes": "Notatki"
+      },
+      "meta": {
+        "title": "Szczegóły zamówienia",
+        "orderId": "Identyfikator zamówienia",
+        "source": "Źródło",
+        "shop": "Sklep",
+        "paymentMethod": "Metoda płatności",
+        "updated": "Ostatnia aktualizacja"
+      },
+      "rto": {
+        "title": "Ryzyko zwrotu do nadawcy",
+        "summary": "{band} ({score})",
+        "low": "Niskie",
+        "medium": "Średnie",
+        "high": "Wysokie"
+      },
+      "timeline": {
+        "title": "Oś czasu",
+        "empty": "Nic jeszcze nie wydarzyło się w tym zamówieniu.",
+        "kind": {
+          "created": "Zamówienie złożone",
+          "status_changed": "Status zmieniony",
+          "payment_link": "Link do płatności",
+          "paid": "Płatność otrzymana",
+          "invoice": "Faktura",
+          "note": "Notatka",
+          "updated": "Zamówienie zaktualizowane"
+        },
+        "actor": {
+          "user": "Przez członka zespołu",
+          "system": "Automatycznie",
+          "customer": "Przez klienta"
+        }
+      },
+      "payments": {
+        "title": "Płatności",
+        "empty": "Nie zarejestrowano żadnej płatności dla tego zamówienia.",
+        "kind": {
+          "gateway": "Płatność online",
+          "payment_link": "Link do płatności",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Płatność przy odbiorze",
+          "manual": "Zarejestrowano ręcznie"
+        },
+        "reference": "Numer referencyjny {ref}",
+        "openLink": "Otwórz link"
+      },
+      "form": {
+        "title": "Zaktualizuj status",
+        "status": "Status",
+        "suggestion": "Zwykle następny krok: {status}",
+        "notes": "Notatki",
+        "paymentLink": "Link do płatności",
+        "optional": "opcjonalnie",
+        "paymentLinkHint": "Nowy link zostanie wysłany kupującemu wraz z aktualizacją.",
+        "invalidLink": "Wpisz link internetowy zaczynający się od http:// lub https://.",
+        "save": "Zapisz zmiany",
+        "saving": "Zapisywanie",
+        "saved": "Zamówienie nr {no} zaktualizowane.",
+        "notified": "Wysłano wiadomość do kupującego.",
+        "notNotified": "Nie wysłano wiadomości do kupującego.",
+        "reload": "Wczytaj zamówienie ponownie"
+      },
+      "pay": {
+        "title": "Link do płatności",
+        "current": "Bieżący link do płatności",
+        "sendTitle": "Wyślij posiadany już link",
+        "sendLabel": "Adres URL linku do płatności",
+        "sendButton": "Wyślij link do płatności",
+        "sent": "Link do płatności został wysłany kupującemu.",
+        "savedNotSent": "Link został zapisany, ale nie udało się go wysłać kupującemu.",
+        "generateTitle": "Wygeneruj link do kasy",
+        "generateHint": "Tworzy hostowany link do płatności w Twojej bramce płatności i wysyła go kupującemu w WhatsApp.",
+        "gatewayLabel": "Bramka",
+        "generateButton": "Wygeneruj link i wyślij",
+        "noGatewayTitle": "Nie skonfigurowano bramki płatności",
+        "noGatewayMessage": "Aby wygenerować link do kasy, trzeba najpierw skonfigurować bramkę płatności.",
+        "noGatewayAction": "Skonfiguruj bramkę",
+        "resultTitle": "Link do płatności gotowy",
+        "copyLink": "Kopiuj link",
+        "resultSent": "Wysłano kupującemu w WhatsApp.",
+        "resultNotSent": "Zapisano w zamówieniu, ale nie udało się wysłać go kupującemu. Udostępnij go samodzielnie."
+      },
+      "invoice": {
+        "title": "Faktura",
+        "description": "Zamień to zamówienie na fakturę i zamówienie sprzedaży w Sprzedaży.",
+        "create": "Utwórz fakturę",
+        "creating": "Tworzenie",
+        "created": "Faktura {number} utworzona.",
+        "createdNoNumber": "Faktura utworzona.",
+        "existing": "Dla tego zamówienia wystawiono już fakturę.",
+        "viewInvoice": "Faktura",
+        "viewSalesOrder": "Zamówienie sprzedaży"
+      },
+      "delete": {
+        "title": "Usunąć zamówienie nr {no}?",
+        "message": "Zamówienie i jego pozycje zostaną usunięte na stałe. Tej operacji nie można cofnąć.",
+        "confirm": "Usuń zamówienie",
+        "deleted": "Zamówienie nr {no} zostało usunięte."
+      }
+    }
+  }
+}

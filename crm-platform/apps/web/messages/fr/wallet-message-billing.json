@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Dépenses, portefeuille et relevé",
+      "description": "Suivez vos dépenses : votre solde de messages, vos recharges, chaque débit et le relevé complet.",
+      "keywords": "solde portefeuille recharge ajouter argent crédits relevé facturation dépenses dépense dépenses frais coûts utilisation transactions historique grand livre"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "Identifiant de la requête",
+      "cancel": "Annuler",
+      "back": "Retour",
+      "close": "Fermer",
+      "dismiss": "Ignorer",
+      "on": "Activé",
+      "off": "Désactivé",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pagination": "Pagination",
+      "pageN": "Page {page}",
+      "deniedTitle": "Vous n’avez pas accès à ceci",
+      "deniedBody": "Demandez à un administrateur de l’espace de travail l’autorisation « {permission} »."
+    },
+    "errors": {
+      "noteRequired": "Un motif d’au moins 5 caractères est requis.",
+      "amountInvalid": "Ce montant n’est pas accepté. Saisissez un montant positif, avec 2 décimales au maximum.",
+      "insufficient": "Le solde est insuffisant pour cette opération.",
+      "notFound": "Cet espace de travail n’a pas de portefeuille.",
+      "rateInvalid": "Un tarif n’a pas pu être enregistré. Vérifiez le pays, la catégorie et les montants.",
+      "importFailed": "La grille tarifaire n’a pas pu être lue ou ne contient aucune ligne exploitable.",
+      "syncFailed": "La liste de prix de Meta n’a pas pu être lue et aucune grille intégrée n’est disponible.",
+      "conflict": "Cet élément a été modifié par un autre utilisateur. Actualisez la page et réessayez.",
+      "forbidden": "Seuls les super administrateurs peuvent effectuer cette action.",
+      "validation": "Vérifiez les champs signalés.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "generic": "Une erreur s’est produite. Réessayez.",
+      "currencyUnsupported": "Cette devise ne peut pas encore être utilisée : importez d’abord la grille tarifaire de Meta pour elle (Tarification des messages, grilles tarifaires Meta)."
+    },
+    "types": {
+      "topup": "Recharge",
+      "earn": "Gain",
+      "refund": "Remboursement",
+      "spend": "Débit de message",
+      "admin_adjust": "Ajustement"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Utilitaire",
+      "authentication": "Authentification",
+      "service": "Service"
+    },
+    "modes": {
+      "wallet": "Paiement par message",
+      "plan": "Offre"
+    },
+    "chip": {
+      "balance": "Solde",
+      "low": "Votre solde est faible"
+    },
+    "wallet": {
+      "title": "Portefeuille",
+      "subtitle": "Votre solde de messages, vos dépenses et gains des 30 derniers jours, et comment ajouter de l’argent.",
+      "fullStatement": "Relevé complet",
+      "lowBalanceTitle": "Votre solde est en train de s’épuiser",
+      "lowBalanceBody": "Il est égal ou inférieur à {threshold}. Ajoutez de l’argent pour que vos campagnes et réponses continuent d’être envoyées.",
+      "kpi": {
+        "balance": "Solde",
+        "available": "Disponible maintenant",
+        "approx": "environ {count, plural, one {# message} other {# messages}}",
+        "spent": "Dépensé",
+        "earned": "Gagné",
+        "last30": "30 derniers jours"
+      },
+      "add": {
+        "title": "Ajouter de l’argent",
+        "amount": "Montant",
+        "hint": "Montants entiers uniquement, à partir de 1.",
+        "invalid": "Saisissez un montant entier de 1 ou plus.",
+        "submit": "Ajouter de l’argent",
+        "quick": "Montants rapides"
+      },
+      "how": {
+        "title": "Fonctionnement de la facturation",
+        "wallet": {
+          "body": "Chaque message distribué est débité de votre portefeuille au tarif de son pays et de sa catégorie. Les messages en échec ne sont pas facturés.",
+          "funded": "Quand le solde est épuisé, les envois en masse sont suspendus jusqu’à ce que vous ajoutiez de l’argent."
+        },
+        "plan": {
+          "allowance": "Votre offre comprend {limit} messages par mois.",
+          "used": "{used} utilisés ce mois-ci.",
+          "ends": "Votre offre se termine le {date}.",
+          "extra": "Les messages au-delà du quota mensuel sont débités de votre portefeuille.",
+          "ended": "Votre offre est terminée : les envois sont suspendus jusqu’à son renouvellement."
+        },
+        "generic": "Vos messages sont couverts par votre offre. Votre portefeuille paie ce que l’offre ne comprend pas."
+      },
+      "activity": {
+        "title": "Activité récente",
+        "fullStatement": "Ouvrir le relevé complet",
+        "emptyTitle": "Aucune activité pour le moment",
+        "emptyBody": "Les recharges, débits de messages et remboursements apparaissent ici."
+      }
+    },
+    "activity": {
+      "description": "Description",
+      "type": "Type",
+      "date": "Date",
+      "amount": "Montant",
+      "balance": "Solde",
+      "noDescription": "Mouvement du portefeuille",
+      "reason": "Motif"
+    },
+    "pricingPanel": {
+      "title": "Tarification des messages",
+      "badge": "Par message",
+      "free": "Gratuit",
+      "noCharge": "Sans frais",
+      "perMessage": "par message",
+      "footer": "Débité lorsqu’un message est distribué. Le prix dépend du pays du destinataire et de la catégorie du message."
+    },
+    "statement": {
+      "title": "Relevé du portefeuille",
+      "subtitle": "Chaque mouvement sur votre portefeuille. Les totaux couvrent toutes les entrées correspondant aux filtres, pas seulement cette page.",
+      "back": "Retour au portefeuille",
+      "breadcrumbLabel": "Fil d’Ariane",
+      "breadcrumbWallet": "Portefeuille",
+      "breadcrumbStatement": "Relevé",
+      "export": "Exporter en CSV",
+      "exporting": "Exportation en cours",
+      "exported": "Enregistré : {fileName}",
+      "emptyTitle": "Aucune transaction",
+      "emptyFiltered": "Aucun résultat ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
+      "emptyNone": "Les mouvements de votre portefeuille apparaîtront ici.",
+      "filters": {
+        "type": "Type",
+        "from": "Du",
+        "to": "Au",
+        "rangeInverted": "La date de fin est antérieure à la date de début.",
+        "search": "Rechercher",
+        "searchPlaceholder": "Description ou motif",
+        "apply": "Appliquer",
+        "reset": "Réinitialiser"
+      },
+      "typeFilter": {
+        "all": "Tous",
+        "topup": "Recharges",
+        "earn": "Gains",
+        "spend": "Frais de messages",
+        "refund": "Remboursements",
+        "admin_adjust": "Ajustements"
+      },
+      "summary": {
+        "balance": "Solde actuel",
+        "in": "Entrées",
+        "out": "Sorties",
+        "net": "Mouvement net",
+        "count": "{count, plural, one {# transaction} other {# transactions}}"
+      },
+      "columns": {
+        "label": "Relevé du portefeuille",
+        "date": "Date",
+        "description": "Description",
+        "type": "Type",
+        "in": "Entrées",
+        "out": "Sorties",
+        "balance": "Solde",
+        "none": "Aucun"
+      },
+      "context": {
+        "reason": "Motif",
+        "to": "Destinataire",
+        "template": "Modèle"
+      },
+      "channels": {
+        "campaign": "Campagne",
+        "broadcast": "Diffusion",
+        "flow": "Flux",
+        "scheduled": "Programmé",
+        "auto_reply": "Réponse automatique",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Admin",
+      "wallet": "Portefeuille",
+      "workspacesLabel": "Espaces de travail",
+      "breadcrumb": "Fil d’Ariane",
+      "readOnly": "Vous êtes connecté en tant que {role}. Seuls les super administrateurs peuvent modifier les paramètres, les prix ou les soldes des portefeuilles.",
+      "nav": {
+        "overview": "Portefeuille",
+        "pricing": "Tarification des messages",
+        "workspaces": "Portefeuilles des espaces de travail",
+        "logs": "Journaux du portefeuille",
+        "margins": "Marges",
+        "packages": "Forfaits de crédit"
+      },
+      "overview": {
+        "title": "Vue d’ensemble du portefeuille",
+        "subtitle": "Les fonds détenus dans les portefeuilles des espaces de travail et les mouvements des 30 derniers jours.",
+        "linkWorkspaces": "Portefeuilles des espaces de travail",
+        "linkPricing": "Tarification des messages",
+        "linkLogs": "Journaux du portefeuille",
+        "float": "Fonds en portefeuille",
+        "floatHint": "Détenus dans tous les espaces de travail",
+        "holding": "Espaces de travail avec un solde",
+        "low": "Solde faible",
+        "last30": "30 derniers jours",
+        "toppedUp": "Rechargés",
+        "charged": "Facturés",
+        "refunded": "Remboursés",
+        "adjustedIn": "Ajoutés manuellement",
+        "adjustedOut": "Déduits manuellement",
+        "chargedMessages": "Messages facturés",
+        "freeMessages": "Messages gratuits",
+        "reconcile": {
+          "title": "Vérifier les soldes par rapport aux registres",
+          "body": "Recalcule chaque portefeuille à partir de son registre et liste tout solde qui ne correspond pas.",
+          "button": "Vérifier les soldes par rapport aux registres",
+          "running": "Vérification en cours",
+          "ok": "{count, plural, one {# portefeuille correspond à son registre.} other {Les # portefeuilles correspondent à leur registre.}}",
+          "mismatches": "{count} sur {checked} portefeuilles ne correspondent pas à leur registre.",
+          "workspace": "Espace de travail",
+          "balance": "Solde",
+          "ledger": "Registre",
+          "difference": "Écart"
+        },
+        "otherCurrencies": "Portefeuilles dans d’autres devises",
+        "otherCurrenciesNote": "Les espaces de travail facturés dans une autre devise détiennent des fonds dans cette devise. Les chiffres ci-dessus concernent uniquement {currency} ; chaque autre devise figure sur sa propre ligne.",
+        "other": {
+          "currency": "Devise",
+          "float": "Fonds détenus",
+          "holding": "Espaces de travail avec un solde",
+          "toppedUp": "Rechargés, 30 jours",
+          "charged": "Facturés, 30 jours"
+        }
+      },
+      "pricing": {
+        "title": "Tarification des messages",
+        "crumb": "Tarification des messages",
+        "subtitle": "Ce que coûte un message à vos clients, comment les nouveaux portefeuilles sont protégés et la grille tarifaire par pays.",
+        "kpi": {
+          "signup": "Récompense de parrainage",
+          "cost": "Coût par message",
+          "costHint": "Prix forfaitaire lorsque la tarification par pays est désactivée",
+          "spending": "Dépenses réelles",
+          "spendingHint": "Messages que {amount} permet d’acheter au prix forfaitaire",
+          "lowBalance": "Alerte de solde faible"
+        },
+        "economics": {
+          "title": "Économie",
+          "liveKeys": "Prend effet immédiatement",
+          "flatPrice": "Prix forfaitaire par message",
+          "flatPriceHint": "Au moins 0,01. Utilisez la grille tarifaire pour les messages gratuits.",
+          "referralSignup": "Récompense de parrainage",
+          "referralSignupHint": "Versée au parrain lors de la première commande payée du filleul.",
+          "lowBalance": "Alerte de solde faible à",
+          "lowBalanceHint": "Les espaces de travail dont le solde est égal ou inférieur à ce montant reçoivent un avertissement.",
+          "coverage": "Couverture de lancement",
+          "coverageHint": "Un envoi en masse est refusé sauf si le portefeuille couvre cette part de son coût estimé. 0 refuse uniquement un portefeuille vide.",
+          "rewardSentence": "Une récompense de {reward} permet de payer {count, plural, one {# message} other {# messages}} au prix forfaitaire.",
+          "save": "Enregistrer les paramètres économiques",
+          "saving": "Enregistrement",
+          "saved": "Paramètres économiques enregistrés.",
+          "problems": {
+            "invalid": "Saisissez un montant avec 2 décimales au maximum.",
+            "flatZero": "Le prix forfaitaire ne peut pas être 0.",
+            "percent": "Saisissez un nombre entier de 0 à 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Tarification par pays",
+            "on": "Activée : chaque message est facturé selon le pays et la catégorie du destinataire, d’après la grille tarifaire.",
+            "off": "Désactivée : chaque message est facturé au prix forfaitaire.",
+            "save": "Enregistrer",
+            "confirmTitle": "Modifier la tarification par pays ?",
+            "confirmOn": "Les messages seront facturés par pays et par catégorie à partir du prochain envoi.",
+            "confirmOff": "Les messages seront facturés au prix forfaitaire à partir du prochain envoi.",
+            "confirm": "Oui, modifier",
+            "savedOn": "La tarification par pays est activée.",
+            "savedOff": "La tarification par pays est désactivée."
+          },
+          "payPerMessage": {
+            "label": "Facturation par message",
+            "on": "Activée : les espaces de travail sans forfait incluant des messages paient chaque message remis depuis leur portefeuille.",
+            "off": "Désactivée : les messages ne sont pas facturés aux portefeuilles.",
+            "save": "Enregistrer",
+            "confirmTitle": "Modifier la facturation par message ?",
+            "confirmOn": "Les messages remis seront désormais facturés aux portefeuilles.",
+            "confirmOff": "Les portefeuilles ne seront plus facturés pour les messages. Cela concerne tous les espaces de travail.",
+            "confirm": "Oui, modifier",
+            "savedOn": "La facturation par message est activée.",
+            "savedOff": "La facturation par message est désactivée."
+          }
+        },
+        "grid": {
+          "title": "Grille tarifaire",
+          "modeOn": "La tarification par pays est activée : ces prix sont utilisés.",
+          "modeOff": "La tarification par pays est désactivée : ces prix sont enregistrés, mais le prix forfaitaire est facturé.",
+          "empty": "Aucun tarif pour le moment. Ajoutez une ligne, importez une grille tarifaire ou réinitialisez la grille de départ.",
+          "country": "Pays",
+          "category": "Catégorie",
+          "charge": "Vous facturez",
+          "metaCost": "Meta vous facture",
+          "margin": "Marge",
+          "marginUnknown": "Inconnu",
+          "actions": "Actions",
+          "anyCountry": "Tous les pays",
+          "anyCategory": "Toutes les catégories",
+          "serviceFree": "Service (gratuit)",
+          "addRow": "Ajouter une ligne",
+          "remove": "Supprimer",
+          "cancel": "Annuler",
+          "removeTitle": "Supprimer ce tarif ?",
+          "removeBody": "Le tarif pour {country} est supprimé. Les messages utilisent le tarif correspondant suivant.",
+          "removed": "Tarif supprimé.",
+          "save": "Enregistrer les tarifs",
+          "saving": "Enregistrement",
+          "saved": "{count, plural, one {# tarif enregistré.} other {# tarifs enregistrés.}}",
+          "savedSome": "{saved} enregistré(s), {skipped} ignoré(s). Consultez le motif sur chaque ligne ignorée.",
+          "unsaved": "{count, plural, one {# ligne non enregistrée} other {# lignes non enregistrées}}",
+          "tooMany": "Trop de lignes modifiées pour un seul enregistrement. Enregistrez par lots plus petits.",
+          "problems": {
+            "price": "Saisissez un prix avec 2 décimales au maximum.",
+            "metaCost": "Saisissez un coût avec 6 décimales au maximum.",
+            "country": "Utilisez un code pays à 2 lettres, ou laissez vide pour tous les pays.",
+            "empty": "Saisissez un prix ou un coût Meta.",
+            "duplicate": "Cette combinaison pays et catégorie existe déjà."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Synchroniser les coûts Meta",
+            "title": "Synchroniser les coûts Meta",
+            "loading": "Lecture de la liste de prix de Meta",
+            "source": "Source",
+            "version": "Version",
+            "noVersion": "Aucune",
+            "currency": "Devise",
+            "added": "Lignes à ajouter",
+            "updated": "Lignes à mettre à jour",
+            "untouched": "Vos prix ne sont pas modifiés. Seul le coût facturé par Meta est mis à jour.",
+            "bundledNote": "Aucune liste de prix Meta en direct n’est connectée ; la grille intégrée est utilisée.",
+            "apply": "Appliquer",
+            "applying": "Application en cours",
+            "done": "Coûts Meta synchronisés : {added} ajouté(s), {updated} mis à jour."
+          },
+          "import": {
+            "button": "Importer une grille tarifaire",
+            "title": "Importer une grille tarifaire",
+            "intro": "Importez une grille tarifaire au format CSV. Vous voyez ce qui changerait avant tout enregistrement.",
+            "file": "Fichier CSV",
+            "limit": "Jusqu’à 4 Mo.",
+            "reading": "Lecture du fichier",
+            "shape": "Mise en page",
+            "shapes": {
+              "wide": "Une colonne par catégorie",
+              "long": "Une ligne par catégorie"
+            },
+            "added": "À ajouter",
+            "updated": "À mettre à jour",
+            "skipped": "Ignorées",
+            "currencyNote": "Les prix sont lus en {currency}.",
+            "problems": "Lignes qui seront ignorées",
+            "line": "Ligne {line} :",
+            "fileProblems": {
+              "notCsv": "Choisissez un fichier .csv.",
+              "tooBig": "Le fichier dépasse 4 Mo.",
+              "unreadable": "Le fichier n’a pas pu être lu."
+            },
+            "apply": "Appliquer l’importation",
+            "applying": "Importation en cours",
+            "done": "Grille tarifaire importée : {added} ajouté(s), {updated} mis à jour, {skipped} ignoré(s)."
+          },
+          "seed": {
+            "button": "Réinitialiser la grille de départ",
+            "title": "Réinitialiser la grille tarifaire de départ ?",
+            "warning": "Cette action écrit les prix de la grille intégrée par-dessus les lignes existantes pour le même pays et la même catégorie. Les prix que vous avez saisis manuellement pour ces lignes seront remplacés.",
+            "confirm": "Réinitialiser",
+            "done": "{count, plural, one {# tarif écrit} other {# tarifs écrits}} à partir de la grille de départ."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Envois transfrontaliers",
+            "body": "Le prix dépend du pays du destinataire, et non de celui de l’espace de travail. Ajoutez une ligne pour chaque pays vers lequel vous envoyez."
+          },
+          "how": {
+            "title": "Comment un prix est déterminé",
+            "body": "Le portefeuille recherche le pays du destinataire et la catégorie du message dans cette grille. Une catégorie ou un pays vide correspond à tout."
+          },
+          "order": {
+            "title": "Quelle ligne l’emporte",
+            "body": "La correspondance exacte pays et catégorie est utilisée en premier, puis le pays avec n’importe quelle catégorie, puis n’importe quel pays, puis le prix forfaitaire."
+          }
+        },
+        "mode": {
+          "title": "Comment les clients sont tarifés",
+          "current": "Actuel : {mode}",
+          "intro": "Choisissez ce que coûte un message à vos clients. Cela s’applique à tous les espaces de travail et est enregistré séparément.",
+          "fixed": {
+            "label": "Prix fixes",
+            "body": "Vous saisissez un prix pour chaque pays et catégorie de la grille ci-dessous. Les marges sont enregistrées mais non utilisées."
+          },
+          "margin": {
+            "label": "Coût Meta + marge",
+            "body": "Le client paie le coût Meta plus votre marge, définie par pays et par catégorie. Lorsque le coût Meta est inconnu, le prix fixe saisi est facturé."
+          },
+          "save": "Enregistrer le mode de tarification",
+          "manage": "Définir les marges",
+          "confirmTitle": "Modifier la manière de tarifer les clients ?",
+          "confirmFixed": "Tous les espaces de travail seront facturés aux prix fixes de la grille à partir du prochain message. Les marges restent enregistrées mais ne s’appliquent plus.",
+          "confirmMargin": "Tous les espaces de travail seront facturés au coût Meta plus la marge qui leur correspond (dérogation de l’espace de travail, puis son forfait, puis la valeur par défaut de la plateforme) à partir du prochain message. Lorsque le coût Meta est inconnu, le prix fixe est tout de même facturé.",
+          "confirm": "Oui, modifier",
+          "savedFixed": "Les clients sont désormais tarifés aux prix fixes.",
+          "savedMargin": "Les clients sont désormais tarifés au coût Meta plus la marge."
+        },
+        "metaCards": {
+          "title": "Grilles tarifaires Meta",
+          "intro": "Meta publie une liste de prix par devise et ne la modifie que le 1er janvier, le 1er avril, le 1er juillet et le 1er octobre. Un espace de travail facturé en INR est tarifé selon la liste INR de Meta et débité de son portefeuille INR, jamais à partir de la liste USD convertie. Importez chaque fichier tel que Meta le publie. Les prix saisis et le prix forfaitaire sont conservés dans la devise de la plateforme et convertis au taux de change enregistré pour un espace de travail facturé dans une autre devise.",
+          "none": "Aucune grille tarifaire Meta n’est encore enregistrée. Importez le fichier que Meta publie pour votre devise.",
+          "view": "Afficher",
+          "hide": "Masquer",
+          "usedPricing": "Tarification, marges et compte de résultat revendeur, et espaces de travail facturés dans la devise de la plateforme",
+          "usedWorkspaces": "Tarifs des espaces de travail facturés en {currency}",
+          "columns": {
+            "currency": "Devise",
+            "effective": "En vigueur",
+            "checked": "Dernier import",
+            "markets": "Marchés",
+            "usedFor": "Utilisée pour",
+            "status": "Statut",
+            "actions": "Actions"
+          },
+          "freshness": {
+            "current": "À jour",
+            "upcoming": "À vérifier bientôt",
+            "due": "Vérifier maintenant"
+          },
+          "reminder": {
+            "link": "Ouvrir la page tarifaire de Meta",
+            "current": "À jour. Meta pourrait modifier ses prix le {date}.",
+            "dueTitle": "Un nouveau trimestre a commencé le {date} : Meta a peut-être modifié ses prix.",
+            "dueBody": "Téléchargez les nouveaux fichiers tarifaires (un par devise utilisée) et importez-les ici. Jusque-là, les coûts et les marges utilisent l’ancienne grille.",
+            "upcomingTitle": "Meta pourrait modifier ses prix le {date} ({days, plural, one {dans # jour} other {dans # jours}}).",
+            "upcomingBody": "Préparez les nouveaux fichiers à importer ce jour-là.",
+            "missingTitle": "Aucune grille tarifaire Meta pour {currencies}.",
+            "missingBody": "Les espaces de travail configurés sur cette devise n’ont aucune liste de prix Meta à afficher. Importez le fichier que Meta publie pour elle."
+          },
+          "table": {
+            "heading": "Grille {currency} de Meta",
+            "note": "Prix catalogue par message remis, tel que publié par Meta. Les pays que Meta ne nomme pas sont tarifés comme « Autres ».",
+            "market": "Marché",
+            "everyOther": "Tous les autres pays",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utilitaire",
+              "authentication": "Authentification",
+              "authentication_international": "Auth. internationale",
+              "service": "Service"
+            }
+          },
+          "import": {
+            "button": "Importer une grille tarifaire Meta",
+            "title": "Importer une grille tarifaire Meta",
+            "intro": "Choisissez le fichier que Meta publie pour une devise (un classeur Excel, même si le lien indique CSV). La devise et la date d’entrée en vigueur sont lues dans le fichier. Vous voyez ce qui changerait avant tout enregistrement.",
+            "file": "Fichier de grille Meta (.xlsx ou .csv)",
+            "hint": "Une devise par fichier. Un nouveau fichier remplace entièrement la grille de cette devise. 2 Mo maximum.",
+            "reading": "Lecture du fichier…",
+            "applying": "Importation en cours",
+            "apply": "Importer la grille",
+            "done": "La grille {currency} a été importée.",
+            "fileProblems": {
+              "wrongType": "Choisissez le fichier .xlsx publié par Meta, ou un CSV enregistré à partir de celui-ci.",
+              "tooBig": "Le fichier dépasse 2 Mo, ce qui ne correspond pas à une grille tarifaire Meta.",
+              "unreadable": "Le fichier n’a pas pu être lu."
+            },
+            "summary": {
+              "currency": "Devise",
+              "effective": "En vigueur",
+              "added": "Nouvelles lignes",
+              "changed": "Modifiées",
+              "unchanged": "Inchangées",
+              "removed": "Supprimées"
+            },
+            "replaces": "Remplace la grille en vigueur au {date}.",
+            "appliesToPricing": "Il s’agit de la grille {currency}, la devise de votre plateforme. Son import actualise aussi le coût Meta utilisé pour la tarification, les marges et le compte de résultat revendeur ({added} nouvelle(s), {updated} mise(s) à jour). Les prix clients ne sont pas modifiés.",
+            "storedOnly": "Ce n’est pas la devise de la plateforme. Elle est enregistrée et affichée, et tarife chaque espace de travail facturé en {currency}. Le coût Meta de la grille ci-dessous reste dans la devise de la plateforme.",
+            "biggest": "Changements les plus importants",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utilitaire",
+              "authentication": "Authentification",
+              "authentication_international": "Auth. internationale",
+              "service": "Service"
+            },
+            "problems": "Lignes ignorées"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Portefeuilles des espaces de travail",
+        "crumb": "Portefeuilles des espaces de travail",
+        "subtitle": "Chaque espace de travail avec son solde. Ouvrez-en un pour voir ses écritures ou l’ajuster.",
+        "search": "Rechercher",
+        "searchPlaceholder": "Nom ou slug de l’espace de travail",
+        "lowOnly": "Solde faible uniquement",
+        "apply": "Appliquer",
+        "totalWorkspaces": "Espaces de travail",
+        "totalFloat": "Total détenu",
+        "totalLow": "Solde faible",
+        "emptyTitle": "Aucun espace de travail trouvé",
+        "emptyBody": "Modifiez la recherche ou effacez le filtre de solde faible.",
+        "loadMore": "Charger plus",
+        "loadingMore": "Chargement en cours",
+        "columns": {
+          "label": "Portefeuilles des espaces de travail",
+          "workspace": "Espace de travail",
+          "mode": "Facturation",
+          "balance": "Solde",
+          "low": "Faible",
+          "activity": "Dernière activité",
+          "never": "Jamais"
+        },
+        "totalFloatIn": "Fonds détenus ({currency})"
+      },
+      "detail": {
+        "crumb": "Espace de travail",
+        "adjust": "Ajuster le solde",
+        "balance": "Solde",
+        "lowBalance": "Solde faible",
+        "threshold": "Alerte à {amount}",
+        "recent": "Écritures récentes",
+        "emptyTitle": "Aucune écriture pour le moment",
+        "emptyBody": "Les mouvements de ce portefeuille apparaîtront ici.",
+        "columns": {
+          "label": "Écritures récentes du portefeuille",
+          "date": "Date",
+          "type": "Type",
+          "amount": "Montant",
+          "balanceAfter": "Solde après",
+          "who": "Effectué par",
+          "reason": "Motif",
+          "customer": "Client",
+          "operator": "Opérateur",
+          "system": "Système"
+        },
+        "result": {
+          "appliedAdd": "{applied} ajouté(s). Le solde est maintenant de {balance}.",
+          "appliedDeduct": "{applied} déduit(s). Le solde est maintenant de {balance}.",
+          "partial": "Seul {applied} sur {requested} a été appliqué, car le solde ne peut pas descendre sous 0. Le solde est maintenant de {balance}.",
+          "replayed": "(Cette demande a déjà été appliquée.)"
+        },
+        "pricing": {
+          "title": "Tarification de cet espace de travail",
+          "subtitle": "Les dérogations de marge priment sur le forfait de l’espace de travail et sur la valeur par défaut de la plateforme, pour cet espace de travail uniquement.",
+          "plan": "Forfait",
+          "planLoading": "Chargement du forfait",
+          "planUnknown": "Impossible à lire",
+          "noPlan": "Aucun forfait",
+          "overrides": "Dérogations de marge",
+          "overridesHint": "Seules les lignes listées ici sont dérogées. Tout le reste suit le forfait et la valeur par défaut de la plateforme.",
+          "empty": "Aucune dérogation. Cet espace de travail suit son forfait et la valeur par défaut de la plateforme.",
+          "reason": {
+            "label": "Motif (conservé dans le journal d’audit)",
+            "hint": "Obligatoire pour toute modification ou suppression, de 5 à 500 caractères.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Indiquez le motif en au moins 5 caractères.",
+              "long": "Limitez le motif à 500 caractères ou moins."
+            }
+          },
+          "save": "Enregistrer les dérogations",
+          "saving": "Enregistrement",
+          "saveHint": "Corrigez les lignes en surbrillance et indiquez un motif pour enregistrer.",
+          "saved": "{saved} enregistré(s), {removed} supprimé(s).",
+          "savedSome": "{saved} enregistré(s), {skipped} ignoré(s). Consultez le motif sur chaque ligne ignorée.",
+          "preview": {
+            "title": "Aperçu du prix",
+            "hint": "Voyez comment un message adressé à cet espace de travail serait tarifé et quel niveau l’a défini.",
+            "country": "Pays",
+            "category": "Catégorie",
+            "run": "Aperçu du prix",
+            "running": "Calcul du prix en cours",
+            "result": {
+              "label": "Résultat de l’aperçu du prix",
+              "metaCost": "Coût Meta",
+              "unknownCost": "Inconnu",
+              "margin": "Marge",
+              "noMargin": "Aucune",
+              "layer": "Défini par",
+              "noLayer": "Aucune marge correspondante",
+              "layers": {
+                "workspace": "Dérogation de l’espace de travail",
+                "plan": "Marge du forfait",
+                "platform": "Valeur par défaut de la plateforme"
+              },
+              "price": "Prix client",
+              "basis": "Base",
+              "bases": {
+                "margin": "Coût Meta + marge",
+                "fixed": "Prix fixe"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Devise de facturation",
+          "intro": "Les messages sont tarifés selon la grille Meta pour cette devise et débités du portefeuille de l’espace de travail dans cette devise. Les recharges sont saisies et créditées dans cette devise également.",
+          "billedIn": "Facturé en",
+          "change": "Changer de devise",
+          "otherWallets": "Autres portefeuilles détenus par cet espace de travail",
+          "notUsed": "Non utilisés pour la facturation ; les fonds restent ici.",
+          "dialog": {
+            "title": "Changer la devise de facturation",
+            "currency": "Facturer en",
+            "effect": "À partir de maintenant, les messages sont tarifés selon la grille Meta {to} et débités du portefeuille {to}. Rien n’est converti : le portefeuille {from} conserve son solde.",
+            "left": "{amount} reste dans le portefeuille {from} et n’est pas utilisé tant que l’espace de travail n’est pas rebasculé.",
+            "reason": "Motif",
+            "reasonHint": "Affiché dans la piste d’audit et le journal du portefeuille de l’espace de travail. 5 caractères au minimum.",
+            "confirm": "Facturer en {currency}",
+            "saving": "Enregistrement",
+            "done": "Désormais facturé en {to} (précédemment {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Ajuster le solde",
+        "current": "Solde actuel",
+        "direction": "Action",
+        "add": "Ajouter des fonds",
+        "deduct": "Déduire",
+        "amount": "Montant",
+        "amountHint": "Jusqu’à 2 décimales.",
+        "reason": "Motif",
+        "reasonHint": "Obligatoire, de 5 à 500 caractères. L’espace de travail voit ce motif sur son relevé.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Ce montant dépasse le solde de {balance}. Seul le montant disponible sera déduit ; le solde s’arrête à 0.",
+        "review": "Vérifier",
+        "confirmAdd": "Ajouter des fonds",
+        "confirmDeduct": "Déduire",
+        "posting": "Enregistrement de l’écriture",
+        "summaryAdd": "Ajouter {amount} à {workspace}.",
+        "summaryDeduct": "Déduire {amount} de {workspace}.",
+        "newBalance": "Nouveau solde : {balance}",
+        "summaryReason": "Motif : {reason}",
+        "visibleNote": "Le motif est affiché à l’espace de travail et conservé dans le journal d’audit.",
+        "problems": {
+          "amount": {
+            "required": "Saisissez un montant.",
+            "invalid": "Saisissez un montant positif avec 2 décimales au maximum.",
+            "zero": "Le montant doit être supérieur à 0.",
+            "tooLarge": "Ce montant dépasse la limite pour un seul ajustement."
+          },
+          "note": {
+            "short": "Indiquez le motif en au moins {min} caractères.",
+            "long": "Limitez le motif à moins de {max} caractères."
+          }
+        }
+      },
+      "logs": {
+        "title": "Journaux du portefeuille",
+        "crumb": "Journaux du portefeuille",
+        "subtitle": "Ce qui est arrivé aux portefeuilles et ce que les opérateurs ont modifié.",
+        "scope": "Périmètre",
+        "scopes": {
+          "all": "Tous",
+          "workspace": "Événements des espaces de travail",
+          "platform": "Modifications de la plateforme"
+        },
+        "event": "Événement",
+        "anyEvent": "Tous les événements",
+        "severity": "Gravité",
+        "anySeverity": "Toutes les gravités",
+        "severities": {
+          "info": "Info",
+          "warning": "Avertissement",
+          "error": "Erreur"
+        },
+        "workspaceId": "Identifiant de l’espace de travail",
+        "workspaceIdInvalid": "Saisissez un identifiant d’espace de travail (un UUID).",
+        "search": "Rechercher",
+        "from": "Du",
+        "to": "Au",
+        "apply": "Appliquer",
+        "reset": "Réinitialiser",
+        "emptyTitle": "Aucune entrée de journal",
+        "emptyBody": "Aucun résultat ne correspond à ces filtres.",
+        "loadMore": "Charger plus",
+        "loadingMore": "Chargement en cours",
+        "platform": "Plateforme",
+        "showDetails": "Afficher les détails",
+        "hideDetails": "Masquer les détails",
+        "requestId": "Identifiant de la requête",
+        "columns": {
+          "time": "Heure",
+          "severity": "Gravité",
+          "event": "Événement",
+          "workspace": "Espace de travail",
+          "actor": "Acteur",
+          "message": "Message"
+        },
+        "actors": {
+          "operator": "Opérateur",
+          "customer": "Client",
+          "system": "Système"
+        }
+      },
+      "margins": {
+        "title": "Marges",
+        "crumb": "Marges",
+        "subtitle": "Ce que les clients paient en plus du coût Meta, par pays et par catégorie de message.",
+        "retry": "Réessayer",
+        "ratesFailed": "Les coûts Meta n’ont pas pu être chargés ; les prix des nouvelles lignes ne peuvent donc pas être affichés.",
+        "mode": {
+          "current": "Les clients sont tarifés selon",
+          "inactive": "Le mode de tarification est Prix fixes : ces marges ne sont donc pas encore appliquées. Elles sont enregistrées et s’appliqueront lorsque vous passerez à Coût Meta + marge.",
+          "switchLink": "Aller au sélecteur de mode de tarification"
+        },
+        "scope": {
+          "label": "Marges pour",
+          "hint": "La valeur par défaut de la plateforme s’applique à chaque forfait. La marge propre à un forfait prime sur elle.",
+          "platform": "Valeur par défaut de la plateforme (s’applique à chaque forfait)"
+        },
+        "grid": {
+          "country": "Pays",
+          "searchCountry": "Rechercher des pays",
+          "category": "Catégorie",
+          "margin": "Marge %",
+          "metaCost": "Coût Meta",
+          "price": "Prix client",
+          "note": "Motif",
+          "setBy": "Défini par",
+          "actions": "Actions",
+          "anyCountry": "Tous les pays",
+          "anyCategory": "Toutes les catégories",
+          "unknownCost": "Le coût Meta n’est pas connu ici ; le prix fixe saisi s’applique donc.",
+          "priceInvalid": "Saisissez une marge entre -100 et 1000, avec 2 décimales au maximum.",
+          "removedPending": "Sera supprimé à l’enregistrement.",
+          "addRow": "Ajouter une ligne",
+          "remove": "Supprimer",
+          "undo": "Annuler la modification",
+          "cancel": "Annuler",
+          "empty": "Aucune marge pour le moment. Ajoutez une ligne pour en définir une.",
+          "removeTitle": "Supprimer cette marge ?",
+          "removeBody": "La marge pour {country} est supprimée. Les prix utilisent la marge correspondante suivante.",
+          "removed": "Marge supprimée.",
+          "save": "Enregistrer les marges",
+          "saving": "Enregistrement",
+          "saved": "{count, plural, one {# marge enregistrée.} other {# marges enregistrées.}}",
+          "savedSome": "{saved} enregistrée(s), {skipped} ignorée(s). Consultez le motif sur chaque ligne ignorée.",
+          "unsaved": "{count, plural, one {# ligne non enregistrée} other {# lignes non enregistrées}}",
+          "tooMany": "Trop de lignes modifiées pour un seul enregistrement. Enregistrez par lots plus petits.",
+          "problems": {
+            "margin": "Saisissez un pourcentage entre -100 et 1000, avec 2 décimales au maximum. -100 signifie gratuit.",
+            "duplicate": "Cette combinaison pays et catégorie existe déjà."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Quelle marge l’emporte",
+            "body": "La dérogation d’un espace de travail prime sur la marge de son forfait, qui prime sur la valeur par défaut de la plateforme. Chaque niveau est lu en entier avant le suivant."
+          },
+          "specific": {
+            "title": "Le plus précis d’abord",
+            "body": "Au sein d’un niveau, la correspondance pays et catégorie est utilisée en premier, puis le pays avec n’importe quelle catégorie, puis la catégorie dans n’importe quel pays, puis la ligne par défaut."
+          },
+          "unknown": {
+            "title": "Lorsque le coût Meta est inconnu",
+            "body": "Le prix est le coût Meta plus la marge, arrondi au centime le plus proche et d’au moins 0,01, sauf si la marge est de -100 % (gratuit). Lorsque le coût Meta est inconnu, le prix fixe saisi s’applique à la place."
+          }
+        }
+      },
+      "packages": {
+        "title": "Forfaits de crédit",
+        "crumb": "Forfaits de crédit",
+        "subtitle": "Offres facultatives : payez ce montant, obtenez ce montant de crédit de portefeuille. Un crédit supérieur au prix est un bonus de recharge.",
+        "new": "Nouveau forfait",
+        "edit": "Modifier",
+        "enable": "Activer",
+        "disable": "Désactiver",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "enabled": "{name} est activé.",
+        "disabled": "{name} est désactivé.",
+        "deleted": "Forfait supprimé.",
+        "deleteTitle": "Supprimer le forfait ?",
+        "deleteBody": "Supprimer ce forfait ? Les achats existants conservent leurs lignes de registre.",
+        "bonus": "Bonus de +{percent} %",
+        "status": {
+          "active": "Actif",
+          "inactive": "Inactif",
+          "featured": "En vedette"
+        },
+        "empty": {
+          "title": "Aucun forfait de crédit pour le moment",
+          "body": "Aucun forfait n’a été créé.",
+          "bodyWrite": "Créez le premier forfait pour proposer une recharge de portefeuille avec bonus."
+        },
+        "columns": {
+          "label": "Forfaits de crédit",
+          "name": "Nom",
+          "slug": "Slug",
+          "price": "Prix",
+          "credit": "Crédit du portefeuille",
+          "badge": "Badge",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "form": {
+          "newTitle": "Nouveau forfait de crédit",
+          "editTitle": "Modifier le forfait de crédit",
+          "newCrumb": "Nouveau forfait",
+          "editCrumb": "Modifier le forfait",
+          "notFound": "Ce forfait n’existe plus.",
+          "back": "Retour aux forfaits de crédit",
+          "sections": {
+            "identity": "Identité",
+            "pricing": "Tarification",
+            "display": "Affichage"
+          },
+          "name": "Nom",
+          "slug": "Slug (facultatif)",
+          "slugHint": "Lettres, chiffres, tirets et tirets bas. Laissez vide pour le générer à partir du nom.",
+          "description": "Description",
+          "price": "Prix",
+          "priceHint": "Ce que paie le client.",
+          "currency": "Devise",
+          "walletCredit": "Crédit du portefeuille",
+          "walletCreditHint": "Ce qui est versé dans le portefeuille.",
+          "bonusLine": "Bonus de {percent} % : le client paie {price} et reçoit {credit}.",
+          "badge": "Badge",
+          "badgeHint": "Une courte étiquette, par exemple Meilleur rapport.",
+          "sortOrder": "Ordre d’affichage",
+          "sortOrderHint": "Le plus petit en premier.",
+          "active": "Actif",
+          "featured": "En vedette",
+          "create": "Créer le forfait",
+          "save": "Enregistrer les modifications",
+          "saving": "Enregistrement",
+          "created": "{name} créé.",
+          "saved": "{name} enregistré.",
+          "stale": {
+            "title": "Ce forfait a été modifié par quelqu’un d’autre",
+            "body": "Vos modifications n’ont pas été enregistrées, donc rien n’a été écrasé. Rechargez la dernière version, puis refaites votre modification.",
+            "reload": "Recharger la dernière version"
+          },
+          "problems": {
+            "name": "Saisissez un nom de 96 caractères maximum.",
+            "slug": "Utilisez uniquement des lettres, des chiffres, des tirets et des tirets bas.",
+            "description": "Limitez la description à 500 caractères ou moins.",
+            "price": "Saisissez un montant avec 2 décimales au maximum.",
+            "currency": "Choisissez l’une des devises proposées.",
+            "walletCredit": "Saisissez un montant supérieur à 0, avec 2 décimales au maximum.",
+            "badge": "Limitez le badge à 32 caractères ou moins.",
+            "sortOrder": "Saisissez un nombre entier de 0 à 9999."
+          }
+        }
+      }
+    }
+  }
+}
