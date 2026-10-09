@@ -364,6 +364,10 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
   ai_call: { save: { assistantId: '12' }, reads: { assistantId: 12 } },
   google_meet: { save: { durationMinutes: '45' }, reads: { durationMinutes: 45, leadMinutes: 5 } },
   wa_form: { save: { flowVariable: '{{form}}' }, reads: { flowVariable: 'form' } },
+  api_library: {
+    save: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', save: '{{res}}' },
+    reads: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', variable: 'res' },
+  },
   google_sheets: { save: { saveAs: '{{row}}' }, reads: { saveAs: 'row', mode: 'write' } },
   google_docs: { save: { saveAs: '{{u}}' }, reads: { saveAs: 'u', shareable: true } },
   google_form: { save: { expiresInSec: '60' }, reads: { expiresInSec: 60 } },
