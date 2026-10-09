@@ -25,7 +25,7 @@ The panel on the right shows a live preview of the message and the recipients, s
 
 **Build with AI** (top right) opens a short brief: the AI model, your business name, product, goal, tone, call to action, audience and offer. It writes a name, message, footer, link button and up to three quick replies into the Compose step for you to review and edit. It needs an AI provider that your workspace or the platform has switched on; the model list is empty otherwise.
 
-> A verified Meta number keeps the same five steps but fills them with the guided logic instead: a template dropdown with its variables, contacts, groups, segments or a CSV, scheduling, recurring sends and retries, a credit check and a test message. See [Create a campaign](help:campaigns-create). Past, scheduled and recurring campaigns are listed under **Campaign history**, **Scheduled campaigns** and **Recurring campaigns** in the menu; see [Campaign history](help:campaigns-history).
+> A verified Meta number keeps the same five steps but fills them with the guided logic instead: a template dropdown with its variables, contacts, groups, segments or a CSV, scheduling, recurring sends and retries, a credit check and a test message. See [Create a campaign](help:campaigns-create). Past, scheduled and recurring campaigns are all on the **Campaigns** list, each with its state.
 
 ## Options and settings
 
